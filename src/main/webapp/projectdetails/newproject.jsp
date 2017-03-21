@@ -67,7 +67,7 @@ int company_size=0;
   	  state_list = stateList.getStateByCountryId(country_id);
   	  state_size = state_list.size();
   	  city_id=city_list.get(0).getId();
-  	  locality_list =new LocalityNamesImp().getLocalityByCityId(city_id);
+  	  locality_list = new LocalityNamesImp().getLocalityByCity(city_id);
   	  locality_size=locality_list.size();
     }
     List<BuilderProjectType> projectType = new BuilderProjectTypeDAO().getBuilderCompany();
