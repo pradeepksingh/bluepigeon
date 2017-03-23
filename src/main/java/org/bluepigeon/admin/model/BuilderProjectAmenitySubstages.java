@@ -1,6 +1,8 @@
 package org.bluepigeon.admin.model;
-// Generated 16 Mar, 2017 3:30:20 PM by Hibernate Tools 4.0.0
+// Generated 23 Mar, 2017 10:55:42 AM by Hibernate Tools 4.0.0
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +11,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -22,15 +25,17 @@ public class BuilderProjectAmenitySubstages implements java.io.Serializable {
 	private BuilderProjectAmenityStages builderProjectAmenityStages;
 	private String name;
 	private Byte status;
+	private Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos = new HashSet<BuilderProjectAmenityInfo>(0);
 
 	public BuilderProjectAmenitySubstages() {
 	}
 
 	public BuilderProjectAmenitySubstages(BuilderProjectAmenityStages builderProjectAmenityStages, String name,
-			Byte status) {
+			Byte status, Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos) {
 		this.builderProjectAmenityStages = builderProjectAmenityStages;
 		this.name = name;
 		this.status = status;
+		this.builderProjectAmenityInfos = builderProjectAmenityInfos;
 	}
 
 	@Id
@@ -71,6 +76,15 @@ public class BuilderProjectAmenitySubstages implements java.io.Serializable {
 
 	public void setStatus(Byte status) {
 		this.status = status;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProjectAmenitySubstages")
+	public Set<BuilderProjectAmenityInfo> getBuilderProjectAmenityInfos() {
+		return this.builderProjectAmenityInfos;
+	}
+
+	public void setBuilderProjectAmenityInfos(Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos) {
+		this.builderProjectAmenityInfos = builderProjectAmenityInfos;
 	}
 
 }

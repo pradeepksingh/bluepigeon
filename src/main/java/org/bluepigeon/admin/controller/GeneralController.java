@@ -164,7 +164,17 @@ public class GeneralController {
 		CityNamesImp cityImp = new CityNamesImp();
 		return cityImp.getCityByStateId(state_id);
 	}
-
+	
+	@GET
+	@Path("/locality/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Locality> getLocality(@QueryParam("city_id") int city_id) {
+		
+		LocalityNamesImp localityNamesImp= new LocalityNamesImp();
+		System.out.println("City id :: "+city_id);
+		System.out.println("Locality Name data size :: "+localityNamesImp.getLocalityByCityId(city_id).get(0).getName());
+		return localityNamesImp.getLocalityByCityId(city_id);
+	}
 	@POST
 	@Path("/locality/save")
 	@Produces(MediaType.APPLICATION_JSON)

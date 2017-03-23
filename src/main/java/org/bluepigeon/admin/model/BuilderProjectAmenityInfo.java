@@ -1,5 +1,5 @@
 package org.bluepigeon.admin.model;
-// Generated 16 Mar, 2017 3:30:20 PM by Hibernate Tools 4.0.0
+// Generated 23 Mar, 2017 10:55:42 AM by Hibernate Tools 4.0.0
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,14 +19,15 @@ import javax.persistence.Table;
 public class BuilderProjectAmenityInfo implements java.io.Serializable {
 
 	private Integer id;
-	private BuilderProjectAmenity builderProjectAmenity;
+	private BuilderProjectAmenitySubstages builderProjectAmenitySubstages;
 	private BuilderProject builderProject;
 
 	public BuilderProjectAmenityInfo() {
 	}
 
-	public BuilderProjectAmenityInfo(BuilderProjectAmenity builderProjectAmenity, BuilderProject builderProject) {
-		this.builderProjectAmenity = builderProjectAmenity;
+	public BuilderProjectAmenityInfo(BuilderProjectAmenitySubstages builderProjectAmenitySubstages,
+			BuilderProject builderProject) {
+		this.builderProjectAmenitySubstages = builderProjectAmenitySubstages;
 		this.builderProject = builderProject;
 	}
 
@@ -44,12 +45,12 @@ public class BuilderProjectAmenityInfo implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "amenity_id")
-	public BuilderProjectAmenity getBuilderProjectAmenity() {
-		return this.builderProjectAmenity;
+	public BuilderProjectAmenitySubstages getBuilderProjectAmenitySubstages() {
+		return this.builderProjectAmenitySubstages;
 	}
 
-	public void setBuilderProjectAmenity(BuilderProjectAmenity builderProjectAmenity) {
-		this.builderProjectAmenity = builderProjectAmenity;
+	public void setBuilderProjectAmenitySubstages(BuilderProjectAmenitySubstages builderProjectAmenitySubstages) {
+		this.builderProjectAmenitySubstages = builderProjectAmenitySubstages;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)

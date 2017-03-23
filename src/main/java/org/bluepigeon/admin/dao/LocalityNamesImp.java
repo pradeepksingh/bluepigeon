@@ -107,7 +107,26 @@ public class LocalityNamesImp {
 		session.close();
 		return result;
 	}
-	
+	public List<Locality> getLocalityByCityId(int cityId)
+	{
+		String hql = "from Locality where city.id = :city_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("city_id", cityId);
+		List<Locality> result = query.list();
+		session.close();
+		
+		List<Locality> localities = new ArrayList<Locality>();
+		Locality locality = new Locality();
+		for(int i=0; i<result.size(); i++){
+			Locality locality2 = new Locality();
+			locality2.setId(result.get(i).getId());
+			locality2.setName(result.get(i).getName());
+			localities.add(locality2);
+		}
+		return localities;
+	}
 	public List<Locality> getLocalityDetailById(int id){
 		String hql = "from Locality where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();

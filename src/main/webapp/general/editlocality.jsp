@@ -43,7 +43,7 @@
 		}
 	}
 %>				<input type="hidden" name="locality_id" id="ulocality_id" value="<% out.print(locality.getId()); %>"/>
-				<div class="row" style=padding:20px">
+				<div class="row" style="padding:20px">
               		<div class="col-xs-12">
                   		<div class="form-group">
                        		<label for="password" class="control-label">Select Country</label>

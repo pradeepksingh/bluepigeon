@@ -1,5 +1,5 @@
 package org.bluepigeon.admin.model;
-// Generated 16 Mar, 2017 3:30:20 PM by Hibernate Tools 4.0.0
+// Generated 23 Mar, 2017 10:55:42 AM by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,18 +24,15 @@ public class BuilderProjectAmenity implements java.io.Serializable {
 	private Byte status;
 	private Set<BuilderProjectAmenityStages> builderProjectAmenityStageses = new HashSet<BuilderProjectAmenityStages>(
 			0);
-	private Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos = new HashSet<BuilderProjectAmenityInfo>(0);
 
 	public BuilderProjectAmenity() {
 	}
 
 	public BuilderProjectAmenity(String name, Byte status,
-			Set<BuilderProjectAmenityStages> builderProjectAmenityStageses,
-			Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos) {
+			Set<BuilderProjectAmenityStages> builderProjectAmenityStageses) {
 		this.name = name;
 		this.status = status;
 		this.builderProjectAmenityStageses = builderProjectAmenityStageses;
-		this.builderProjectAmenityInfos = builderProjectAmenityInfos;
 	}
 
 	@Id
@@ -75,15 +72,6 @@ public class BuilderProjectAmenity implements java.io.Serializable {
 
 	public void setBuilderProjectAmenityStageses(Set<BuilderProjectAmenityStages> builderProjectAmenityStageses) {
 		this.builderProjectAmenityStageses = builderProjectAmenityStageses;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProjectAmenity")
-	public Set<BuilderProjectAmenityInfo> getBuilderProjectAmenityInfos() {
-		return this.builderProjectAmenityInfos;
-	}
-
-	public void setBuilderProjectAmenityInfos(Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos) {
-		this.builderProjectAmenityInfos = builderProjectAmenityInfos;
 	}
 
 }

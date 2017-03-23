@@ -69,9 +69,10 @@ int builder_size=builder_list.size();
 </div>
 <%@include file="../footer.jsp"%>
 		<!-- inline scripts related to this page -->
+		<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 		<script type="text/javascript">
 			function editProject(id){
-				window.location.href = "${baseUrl}/projectdetails/editproject.jsp?id="+id;
+				window.location.href = "${baseUrl}/projectdetails/editproject.jsp?project_id="+id;
 			}
 		</script>
 	</body>

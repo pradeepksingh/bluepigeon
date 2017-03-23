@@ -67,7 +67,7 @@ int company_size=0;
   	  state_list = stateList.getStateByCountryId(country_id);
   	  state_size = state_list.size();
   	  city_id=city_list.get(0).getId();
-  	  locality_list = new LocalityNamesImp().getLocalityByCity(city_id);
+  	  locality_list = new LocalityNamesImp().getLocalityByCityId(city_id);
   	  locality_size=locality_list.size();
     }
     List<BuilderProjectType> projectType = new BuilderProjectTypeDAO().getBuilderCompany();
@@ -94,7 +94,7 @@ int company_size=0;
     }
  // }
 %>
-		<div class="main-content">
+			<div class="main-content">
 			<div class="main-content-inner">
 				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 					<ul class="breadcrumb">
@@ -148,7 +148,7 @@ int company_size=0;
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Builder Company Name</label>
 									<div class="col-sm-4">
 										<select id="searchcompanyid" name="company" class="form-control">
-											<option value="0">Select Builder Company</option>
+											<option value="0">Select Company Name</option>
 										</select>
 									</div>
 								</div>
@@ -454,7 +454,7 @@ int company_size=0;
 						<div class="inline-checkboxes-holder" id="project_type">
 						
 						<label class="checkbox"> <input type="checkbox"
-							id="bproject_id" name="bprojectapproval[]"
+							id="bprojectapproval_id" name="bprojectapproval[]"
 							value="<%out.print(builderProjectType.getId());%>"> <%
 								out.print(builderProjectType.getName());
 							%>
@@ -965,6 +965,8 @@ int company_size=0;
 
 						<%@include file="../footer.jsp"%>
 						<!-- inline scripts related to this page -->
+						
+
 						<script type="text/javascript">
 			
 						$("#searchbuilderid").change(function(){
@@ -1027,16 +1029,54 @@ int company_size=0;
 		    var projectTypeData = getProjectTypeData();
 		    var propertyConfigData = getPropertyConfigData();
 	        var project_data = getProjectData();
-	        var project_amenity_data=  getProjectAmenityData();
+	        var project_amenity_info=  getProjectAmenityData();
 		    var project_loan_bank = getHomeLoanBankData();
-		   var project_approval_data= getProjectApprovalData();
+		   var project_approval_info= getProjectApprovalData();
 		   var loan_bank_data = getHomeLoanBankData();
 		   var price_data =  getPriceData();
 		   var payment_schedule= getPaymentSchedule();
 		   var offers = getAddedOffers();
+		//   var property_type= getProjectType();
+		   var propertyTypeId=null;
+		   var builderProjectPropertyTypeItems=null;
+			var builderProjectPropertyType=null;
+			var builderProjectPropertyTypeInfo=[];
+			 var countCheckedCheckboxes = $('input[name="bpropertytype[]"]:checked').filter(
+	            ':checked').length;
+			 $('input[name="bpropertytype[]"]:checked').each(function(){
+				 builderProjectPropertyTypeItems={builderPropertyType:{id:$(this).val()},value:$("#property_"+$(this).val()).val()};
+				 builderProjectPropertyTypeInfo.push(builderProjectPropertyTypeItems);
+			 });
+			
+			 
+			 alert("lenght :: "+countCheckedCheckboxes);
+// 			 ,value:$("#property_"+$(this).val()).val();
 		   var final_data=[];
-		       final_data={builderProject:project_data,builderProjectPropertyConfigurationInfo:propertyConfigData,builderProjectOfferInfos:offers,builderProjectBankInfos:loan_bank_data,builderProjectPriceInfos:price_data,builderProjectPaymentInfos:payment_schedule,builderProjectProjectTypes:projectTypeData,builderProjectAmenityInfos:project_amenity_data}
-		    }
+		       final_data={builderProject:project_data,builderProjectPropertyConfigurationInfos:propertyConfigData,builderProjectOfferInfos:offers,builderProjectBankInfos:loan_bank_data,builderProjectPriceInfos:price_data,builderProjectPaymentInfos:payment_schedule,builderProjectProjectTypes:projectTypeData,builderProjectAmenityInfos:project_amenity_info,builderProjectApprovalInfos:project_approval_info,builderProjectPropertyTypes:builderProjectPropertyTypeInfo}
+		       $.ajax({
+				    url: '${baseUrl}/webapi/create/project/new/save/',
+				    type: 'POST',
+				    data: JSON.stringify(final_data),
+				    contentType: 'application/json; charset=utf-8',
+				    dataType: 'json',
+				    async: false,
+				    success: function(data) {
+						if (data.status == 0) {
+							alert(data.message);
+							
+						} else {
+							alert(data.message);
+							 clearAllFields();
+							 window.location.href ="${baseUrl}/projectdetails/addprojects.jsp";
+						}
+					},
+					error : function(data)
+					{
+						alert("Fail to save data"+JSON.stringify(data,null,2));
+					}
+					
+				});
+		       }
 		  
 		    for(var i=1;i<=count;i++){
 		    	 $("#property_"+i).hide();
@@ -1155,41 +1195,37 @@ int company_size=0;
 		    	var homeLoanBanks = null;
 				var homeLoanBanksItem =null;
 				var home_loan_bank_data = [];
-				$('input[name="bprojectapproval[]"]:checked').each(function() {
+				$('input[name="bankname[]"]:checked').each(function() {
 						
-					builderProjectApprovalTypeItem = {builderProjectApprovalType:{id:$(this).val()}};
-					project_approval_data.push(builderProjectApprovalTypeItem);
+					homeLoanBanksItem = {homeLoanBanks:{id:$(this).val()}};
+					home_loan_bank_data.push(homeLoanBanksItem);
 				});
-				return project_approval_data;
+				return home_loan_bank_data;
 		    }
-			function getAdminUser(){
-				var adminId = <%out.print(user_id6);%>
-				adminUser = {adminUser:{id:adminId}};
-				return adminUser;
-			}
 			
 			function getProjectData(){
-				var admin_user = getAdminUser();
+				var adminId = <%out.print(user_id6);%>
+				
 				var project_data={
 						builder:{id:$("#searchbuilderid").val()},
-						builderCompanyName:{id:$("#searchcompanyid").val()},
+						builderCompanyNames:{id:$("#searchcompanyid").val()},
 						name:$("#bname").val(),
-						addr_1:$("#addr_1").val(),
-						addr_2:$("#addr_2").val(),
+						addr1:$("#addr_1").val(),
+						addr2:$("#addr_2").val(),
 						locality:{id:$("#searchlocalityId").val()},
 						city:{id:$("#searchcityId").val()},
 						state:{id:$("#searchstateId").val()},
-						country:{id:("#searchcountryId").val()},
+						country:{id:$("#searchcountryId").val()},
 						pincode:$("#pincode").val(),
 						status:$("#status").val(),
 						latitude:$("#latitude").val(),
 						longitude:$("#longitude").val(),
 						description:$("#description").val(),
 						highlights:$("#highlights").val(),
-						launchDate:$("#ldate").val(),
+						launchDate:new Date($("#ldate").val()),
 						projectArea:$("#projectarea").val(),
 						areaUnit:{id:$("#searchareaunitid").val()},
-						adminUser:admin_user,
+						adminUser:{id:adminId},
 						status:$("#status").val()
 						}
 				return project_data;
@@ -1209,7 +1245,7 @@ int company_size=0;
 						vat:$("#vat").val(),
 						fee:$("#tfee").val()
 				}
-				return price_data;
+				return priceData;
 			}
 		    function getAddedOffers(){
 		      var add_offers = [];
@@ -1217,7 +1253,7 @@ int company_size=0;
 		      for(var i=1;i<=batch_count;i++){
 		    	  var title = "#title-"+i;
 		    	  var odiscount = "#odiscount-"+i;
-		    	  var damt = "#damt"+i;
+		    	  var damt = "#damt-"+i;
 		    	  var aon = "#aon-"+i;
 		    	  var apply = "#apply-"+i;
 		    	  if($("#title-"+i).val()!="" || typeof $("#title-"+i).val()!="undefined"){
@@ -1226,8 +1262,8 @@ int company_size=0;
 				   if($("#odiscount-"+i).val()!="" || typeof $("#odiscount-"+i).val()!="undefined"){
 					   odiscount=$("#odiscount-"+i).val();
 				  }
-				   if($("#damt"+i).val()!="" || typeof $("#damt"+i).val()!="undefined"){
-					   damt=$("#damt"+i).val();
+				   if($("#damt-"+i).val()!="" || typeof $("#damt-"+i).val()!="undefined"){
+					   damt=$("#damt-"+i).val();
 				  }
 				   if($("#aon-"+i).val()!="" || typeof $("#aon-"+i).val()!="undefined"){
 					   aon=$("#aon-"+i).val();
@@ -1242,14 +1278,15 @@ int company_size=0;
 		    }
 		    
 		    function getProjectType(){
-		    	var homeLoanBanks = null;
-				var homeLoanBanksItem =null;
-				var home_loan_bank_data = [];
+				var builderPropertyType =null;
+				var builderProjectPropertyTypeItems =null;
+				var project_proprty_type = [];
 				$('input[name="bpropertytype[]"]:checked').each(function() {
-					builderProjectApprovalTypeItems={builderProjectPropertyType:{builderProjectApprovalType:{id:$(this).val()}},value:$("#property_"+$(this).val()).val()};
-					project_approval_data.push(builderProjectApprovalTypeItems);
+					
+					builderProjectApprovalTypeItems={builderPropertyType:{id:$(this).val()}};
+					project_proprty_type.push(builderProjectPropertyTypeItems);
 				});
-				return project_approval_data;
+				return project_proprty_type;
 		    }
 		    
 		    function getPaymentSchedule(){
@@ -1276,4 +1313,5 @@ int company_size=0;
 		    	return payment_data;
 		    }
 		    </script>
+
 

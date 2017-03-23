@@ -39,7 +39,9 @@ import org.bluepigeon.admin.dao.BuilderProjectTypeDAO;
 import org.bluepigeon.admin.dao.BuilderPropertyTypeDAO;
 import org.bluepigeon.admin.dao.BuilderSellerTypeDAO;
 import org.bluepigeon.admin.dao.BuilderTaxTypeDAO;
+import org.bluepigeon.admin.dao.ProjectDetailsDAO;
 import org.bluepigeon.admin.data.BuilderDetails;
+import org.bluepigeon.admin.data.ProjectDetails;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.BuilderBuildingAmenity;
 import org.bluepigeon.admin.model.BuilderBuildingAmenityStages;
@@ -93,6 +95,26 @@ public class CreateProjectController {
 		 BuilderDetailsDAO builderDetalsDAO = new BuilderDetailsDAO();
 		  return  builderDetalsDAO.update(builderDetails);
 	}
+	
+	@POST
+	@Path("/project/new/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ResponseMessage addProject(ProjectDetails projectDetails) {
+		System.err.println("Project name :: "+projectDetails.getBuilderProject().getName());
+		System.err.println("Config id :: "+projectDetails.getBuilderProjectPropertyConfigurationInfos().iterator().next().getId());
+		ProjectDetailsDAO projectDetailsDAO = new ProjectDetailsDAO();
+		  return  projectDetailsDAO.save(projectDetails);
+	
+	}
+
+	@POST
+	@Path("/project/new/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateProject(ProjectDetails builderDetails) {
+		ProjectDetailsDAO builderDetalsDAO = new ProjectDetailsDAO();
+		  return  builderDetalsDAO.update(builderDetails);
+	}
 
 	@DELETE
 	@Path("/builder/new/delete")
@@ -102,7 +124,6 @@ public class CreateProjectController {
 		BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
 		builderBuildingAmenity.setId(amenityid);
 		builderBuildingAmenity.setIsDeleted(isDeleted);
-		System.out.println("Hi from Bulder amenity delete id :: " + amenityid);
 		BuilderBuildingAmenityDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityDAO();
 		return builderBuildingAmenityDAO.delete(builderBuildingAmenity);
 	}
