@@ -27,6 +27,8 @@
 <%@page import="org.bluepigeon.admin.model.Locality"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectType"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectPropertyType"%>
+<%@page import="org.bluepigeon.admin.dao.BuilderProjectPropertyTypeDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
@@ -43,6 +45,7 @@ Builder builder_list=null;
 BuilderCompanyNames builderCompanyNames=null;
 BuilderProject builderProject=null;
 BuilderProjectPriceInfo builderProjectPriceInfo=null;
+List<BuilderProjectPropertyType> projectPropertyTypes = null;
 Set<BuilderProjectBankInfo> bankInfo=null;
 project_id=Integer.parseInt(request.getParameter("project_id"));
  List<BuilderProject> builder_project_list = new ProjectDetailsDAO().getBuilderProjectById(project_id);
@@ -52,6 +55,7 @@ if(builder_project_list.size()>0){
     builderCompanyNames = builder_list.getBuilderCompanyNames().iterator().next();
     builderProjectPriceInfo = builder_project_list.get(0).getBuilderProjectPriceInfos().iterator().next();
     bankInfo = builder_project_list.get(0).getBuilderProjectBankInfos();
+    projectPropertyTypes = new BuilderProjectPropertyTypeDAO().getBuilderProjectPropertyTypes(project_id);
 }
  
  
@@ -358,18 +362,26 @@ if(builder_project_list.size()>0){
                                                     if (pBuilderPropertyTypes.size() > 0) {
                                                         for (int i = 0, j = 0; i < pBuilderPropertyTypes.size(); i++) {
                                                             BuilderPropertyType builderProjectType = pBuilderPropertyTypes.get(i);
+                                                            String is_checked = "";
+                                                            int typeValue = 0;
+                                                            for(int pt = 0; pt < projectPropertyTypes.size(); pt++) {
+                                                            	if(projectPropertyTypes.get(pt).getBuilderPropertyType().getId() == builderProjectType.getId()) {
+                                                            		is_checked = "checked";
+                                                            		typeValue = projectPropertyTypes.get(pt).getValue();
+                                                            	}
+                                                            }
                                                 %>
                                                 <div class="col-sm-4"> 
                                                     <div class="inline-checkboxes-holder" id="property_type">
                                                         <label class="checkbox"> 
                                                             <input type="checkbox" id="check<%out.print(builderProjectType.getId());%>" onchange="javascript:valueChanged(<%out.print(builderProjectType.getId());%>)" name="bpropertytype[]"
-                                                                value="<%out.print(builderProjectType.getId());%>"> 
+                                                                value="<%out.print(builderProjectType.getId());%>" <% out.print(is_checked); %>> 
                                                                 <% out.print(builderProjectType.getName()); %> 
                                                         </label>
                                                     <script>
                                                         count++;
                                                     </script>
-                                                        <input type="text" id="property_<%out.print(builderProjectType.getId());%>" name="txtBox<%out.print(builderProjectType.getId());%>" placeholder="No. of <%out.print(builderProjectType.getName());%>"/>
+                                                        <input type="text" id="property_<%out.print(builderProjectType.getId());%>" name="txtBox<%out.print(builderProjectType.getId());%>" placeholder="No. of <%out.print(builderProjectType.getName());%>" style="display:<% if(is_checked != "") {%>block<% } else { %>none<% } %>;" value="<% out.print(typeValue);%>"/>
                                                     </div>
                             
                                                 </div>
@@ -1142,9 +1154,6 @@ if(builder_project_list.size()>0){
      			}
      	    });
             
-            for(var i=1;i<=count;i++){
-                 $("#property_"+i).hide();
-            }
            
             function valueChanged(id)
             {
