@@ -1047,10 +1047,7 @@ int company_size=0;
 				 builderProjectPropertyTypeItems={builderPropertyType:{id:$(this).val()},value:$("#property_"+$(this).val()).val()};
 				 builderProjectPropertyTypeInfo.push(builderProjectPropertyTypeItems);
 			 });
-			
-			 
-			 alert("lenght :: "+countCheckedCheckboxes);
-// 			 ,value:$("#property_"+$(this).val()).val();
+	
 		   var final_data=[];
 		       final_data={builderProject:project_data,builderProjectPropertyConfigurationInfos:propertyConfigData,builderProjectOfferInfos:offers,builderProjectBankInfos:loan_bank_data,builderProjectPriceInfos:price_data,builderProjectPaymentInfos:payment_schedule,builderProjectProjectTypes:projectTypeData,builderProjectAmenityInfos:project_amenity_info,builderProjectApprovalInfos:project_approval_info,builderProjectPropertyTypes:builderProjectPropertyTypeInfo}
 		       $.ajax({

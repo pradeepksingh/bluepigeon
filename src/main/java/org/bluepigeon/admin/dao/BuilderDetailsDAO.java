@@ -88,8 +88,8 @@ public class BuilderDetailsDAO {
 			newsession.update(builder);
 			newsession.getTransaction().commit();
 			newsession.close();
-			
-			 
+			Set<BuilderCompanyNames> builderCompanyNames= builderDetails.getBuilderCompanyNames();
+			 if(builderCompanyNames.size()>0){
 			String deleteBuilderCompanyName = "DELETE from BuilderCompanyNames where builder.id = :builder_id";
 			Session newsession1 = hibernateUtil.openSession();
 			newsession1.beginTransaction();
@@ -102,7 +102,7 @@ public class BuilderDetailsDAO {
 			
 			Session session2 = hibernateUtil.openSession();
 			session2.beginTransaction();
-			Set<BuilderCompanyNames> builderCompanyNames= builderDetails.getBuilderCompanyNames();
+			
 			if(builderCompanyNames.size()>0){
 				Iterator<BuilderCompanyNames> bIterator = builderCompanyNames.iterator();
 				while(bIterator.hasNext()){
@@ -116,6 +116,7 @@ public class BuilderDetailsDAO {
 			session2.close();
 			response.setStatus(1);
 			response.setMessage("Builder Updated Successfully");
+		  }
 		}
 		return response;
 	}

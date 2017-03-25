@@ -1,3 +1,11 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectPaymentInfo"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectOfferInfo"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectAmenityInfo"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectProjectType"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectApprovalInfo"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectPropertyConfigurationInfo"%>
 <%@page import="java.util.Set"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectBankInfo"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectPriceInfo"%>
@@ -36,30 +44,51 @@
 <%@include file="../head.jsp"%>
 <%@include file="../leftnav.jsp"%>
 <%
-  int builder_id=0;
+int builder_id=0;
 int company_id = 0;
 int company_size=0;
 int project_id=0;
+int selected_country_id=0,selected_state_id=0,selected_city_id=0,selected_locality_id=0;
 int builder_project_id=0;
 Builder builder_list=null;
-BuilderCompanyNames builderCompanyNames=null;
+List<BuilderCompanyNames> builderCompanyNames=null;
 BuilderProject builderProject=null;
-BuilderProjectPriceInfo builderProjectPriceInfo=null;
+List<BuilderProjectPriceInfo> builderProjectPriceInfos=null;
 List<BuilderProjectPropertyType> projectPropertyTypes = null;
-Set<BuilderProjectBankInfo> bankInfo=null;
+List<BuilderProjectApprovalInfo> builderProjectApprovalInfos =null;
+ProjectDetailsDAO projectDetailsDAO = new ProjectDetailsDAO();
+List<BuilderProjectBankInfo> bankInfo=null;
+List<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos =null;
+List<BuilderProjectAmenityInfo> builderProjectAmenityInfos=null;
+List<BuilderProjectProjectType> builderProjectProjectTypes=null;
+List<BuilderProjectOfferInfo> builderProjectOfferInfos =null;
+List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = null;
 project_id=Integer.parseInt(request.getParameter("project_id"));
- List<BuilderProject> builder_project_list = new ProjectDetailsDAO().getBuilderProjectById(project_id);
+List<BuilderProject> builder_project_list = projectDetailsDAO.getBuilderProjectById(project_id);
+
 if(builder_project_list.size()>0){
     builderProject = builder_project_list.get(0);
     builder_list=builderProject.getBuilder();
-    builderCompanyNames = builder_list.getBuilderCompanyNames().iterator().next();
-    builderProjectPriceInfo = builder_project_list.get(0).getBuilderProjectPriceInfos().iterator().next();
-    bankInfo = builder_project_list.get(0).getBuilderProjectBankInfos();
+    builderCompanyNames = new BuilderDetailsDAO().getBuilderCompanyNameList(builderProject.getBuilder().getId());
+    builderProjectPriceInfos = projectDetailsDAO.getBuilderProjectPriceInfoByProjectId(project_id);
     projectPropertyTypes = new BuilderProjectPropertyTypeDAO().getBuilderProjectPropertyTypes(project_id);
+    bankInfo = projectDetailsDAO.getBuilderProjectBankInfoByProjectId(project_id);
+    builderProjectPropertyConfigurationInfos = projectDetailsDAO.getBuilderProjectPropertyConfigurationInfoByProjectId(project_id);
+    builderProjectApprovalInfos = projectDetailsDAO.getBuilderProjectApprovalInfoByProjectId(project_id);
+    builderProjectProjectTypes = projectDetailsDAO.getBuilderProjectProjectTypeByProjectId(project_id);
+    builderProjectAmenityInfos = projectDetailsDAO.getBuilderProjectAmenityInfoByProjectId(project_id);
+    builderProjectOfferInfos = projectDetailsDAO.getBuilderProjectOfferInfoByProjectId(project_id);
+    builderProjectPaymentInfos = projectDetailsDAO.getBuilderProjectPaymentInfoByProjectId(project_id);
+    selected_country_id=builderProject.getCountry().getId();
+    selected_state_id=builderProject.getState().getId();
+    selected_city_id=builderProject.getCity().getId();
+    selected_locality_id=builderProject.getLocality().getId();
 }
  
- 
- 
+ Date date=(java.util.Date) builderProject.getLaunchDate();
+ builderProject.getLaunchDate().toString();
+ SimpleDateFormat sdf = new SimpleDateFormat("dd MMM YYYY");
+ String stringDate = sdf.format(date);
  List<BuilderCompanyNames> builderCompanyNamesList = null;
   List<Builder> builders = new BuilderDetailsDAO().getBuilderList();
   if(builders.size()>0){
@@ -69,35 +98,26 @@ if(builder_project_list.size()>0){
       company_id = builderCompanyNamesList.get(0).getId();
   }
   
-  List<Locality> locality_list = null;
  
-  int city_id=0;
-  int state_id=0;
   int city_size =0;
   int country_size = 0;
   int state_size = 0;
-  int locality_id=0;
   int locality_size=0;
   int country_id = 0;
   List<City> city_list = null;
-  List<State> state_list = null;
   List<Country> country_list = null;
   CountryDAOImp countryService = new CountryDAOImp();
   List<Country> listCountry = countryService.getCountryList();
-  StateImp stateList = new StateImp();
+  List<State> stateList = null;
+  State state=null;
+  List<Locality> localityList=null;
+  stateList=new StateImp().getStateList();
+   city_list = new CityNamesImp().getCityNames();
+   city_size=city_list.size();
   country_size = listCountry.size(); 
-//   if (request.getParameterMap().containsKey("state_id")) {
-//     state_id = Integer.parseInt(request.getParameter("state_id"));
-    city_list = new CityNamesImp().getCityNamesByStateId(state_id);
-    city_size = city_list.size(); 
-    if(city_size > 0) {
-      country_id = city_list.get(0).getState().getCountry().getId();
-      state_list = stateList.getStateByCountryId(country_id);
-      state_size = state_list.size();
-      city_id=city_list.get(0).getId();
-      locality_list = new LocalityNamesImp().getLocalityByCityId(city_id);
-      locality_size=locality_list.size();
-    }
+  state_size = stateList.size();
+  localityList =new LocalityNamesImp().getLocalityList();
+  locality_size = localityList.size();
     List<BuilderProjectType> projectType = new BuilderProjectTypeDAO().getBuilderCompany();
     List<BuilderPropertyType> pBuilderPropertyTypes = new BuilderPropertyTypeDAO().getBuilderCompany();
     List<BuilderProjectPropertyConfiguration> builderProjectPropertyConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderCompany();
@@ -106,6 +126,7 @@ if(builder_project_list.size()>0){
     List<BuilderProjectApprovalType> builderProjectApprovalTypes = new BuilderProjectApprovalTypeDAO().getBuilderCompany();
     List<HomeLoanBanks> homeLoanBanks = new HomeLoanBanksDAO().getHomeLoanBanksList();
     
+  
      session = request.getSession(false);
      AdminUser adminuser6 = new AdminUser();
     int user_id6 = 0;
@@ -181,7 +202,7 @@ if(builder_project_list.size()>0){
                                                     for (int i = 0; i < builderCompanyNamesList.size(); i++) {
                                                 BuilderCompanyNames builderCompanyNames2 = builderCompanyNamesList.get(i);
                                             %>
-                                            <option value="<%out.print(builderCompanyNames2.getId());%>" <%if(builderCompanyNames.getId()==builderCompanyNames2.getId()){ %>selected<%} %>>
+                                            <option value="<%out.print(builderCompanyNames2.getId());%>" <%if(builderCompanyNames.get(i).getId()==builderCompanyNames2.getId()){ %>selected<%} %>>
                                             <%
                                                 out.print(builderCompanyNames2.getName());
                                             %>
@@ -236,9 +257,14 @@ if(builder_project_list.size()>0){
                                     <div class="col-sm-4">
                                           <select name="searchstateId" id="searchstateId" class="form-control">
                                                 <option value="0">Select State</option>
-                                                <% for(int i=0; i < state_size ; i++){ %>
-                                                <option value="<% out.print(state_list.get(i).getId());%>" <% if(builderProject.getState().getId() ==state_list.get(i).getId()) { %>selected<% } %>><% out.print(state_list.get(i).getName());%></option>
-                                                <% } %>
+                                                <% if(state_size>0){
+                                                for(int i=0; i < state_size ; i++){ 
+                                                %>
+                                                <option value="<% out.print(stateList.get(i).getId());%>" <% if(selected_state_id == stateList.get(i).getId()) { %>selected<% } %>><% out.print(stateList.get(i).getName());%></option>
+                                                <% 
+                                                		}	
+                                                	} 
+                                                %>
                                             </select>
                                     </div>
                                 </div>
@@ -248,7 +274,7 @@ if(builder_project_list.size()>0){
                                              <select name="searchcityId" id="searchcityId" class="form-control">
                                                     <option value="0">Select City</option>
                                                     <% for(int i=0; i < city_size ; i++){ %>
-                                                    <option value="<% out.print(city_list.get(i).getId());%>" <% if(builderProject.getCity().getId() == city_list.get(i).getId()) { %>selected<% } %>><% out.print(city_list.get(i).getName());%></option>
+                                                    <option value="<% out.print(city_list.get(i).getId());%>" <% if(selected_city_id == city_list.get(i).getId()) { %>selected<% } %>><% out.print(city_list.get(i).getName());%></option>
                                                     <% } %>
                                               </select>
                                         </div>
@@ -261,9 +287,9 @@ if(builder_project_list.size()>0){
                                     <div class="col-sm-4">
                                  <select name="searchlocalityId" id="searchlocalityId" class="form-control">
                                                 <option value="0">Select Locality</option>
-<%--                                                <% for(int i=0; i < locality_size ; i++){ %> --%>
-<%--                                                <option value="<% out.print(locality_list.get(i).getId());%>"><% out.print(locality_list.get(i).getName());%></option> --%>
-<%--                                                <% } %> --%>
+                                               <% for(int i=0; i < locality_size ; i++){ %>
+                                               <option value="<% out.print(localityList.get(i).getId());%>" <%if(selected_locality_id==localityList.get(i).getId()){ %>selected<%}%>><% out.print(localityList.get(i).getName());%></option>
+                                               <% } %>
                                             </select>
                                     </div>
                                 </div>
@@ -332,12 +358,19 @@ if(builder_project_list.size()>0){
                         if (projectType.size() > 0) {
                             for (int i = 0, j = 0; i < projectType.size(); i++) {
                                 BuilderProjectType builderProjectType = projectType.get(i);
+                                String is_checked="";
+                                for(int pt=0;pt<builderProjectProjectTypes.size();pt++){
+                                	if(builderProjectProjectTypes.get(pt).getBuilderProjectType().getId()==builderProjectType.getId()){
+                                		is_checked="checked";
+                                	}
+                                }
+                               
                     %><div class="col-sm-3">
                         <div class="inline-checkboxes-holder" id="project_type">
                         
                         <label class="checkbox"> <input type="checkbox"
                             id="bproject_id" name="bproject[]"
-                            value="<%out.print(builderProjectType.getId());%>"> <%
+                            value="<%out.print(builderProjectType.getId());%>" <%out.print(is_checked); %>> <%
                                 out.print(builderProjectType.getName());
                             %>
                         </label>
@@ -404,12 +437,18 @@ if(builder_project_list.size()>0){
                         if (builderProjectPropertyConfigurations.size() > 0) {
                             for (int i = 0, j = 0; i < builderProjectPropertyConfigurations.size(); i++) {
                                 BuilderProjectPropertyConfiguration builderProjectType = builderProjectPropertyConfigurations.get(i);
+                                String is_checked="";
+                                for(int pc=0;pc<builderProjectPropertyConfigurationInfos.size();pc++){
+                                	if(builderProjectPropertyConfigurationInfos.get(pc).getBuilderProjectPropertyConfiguration().getId()==builderProjectType.getId()) {
+                                		is_checked = "checked";
+                                	}
+                                }
                     %><div class="col-sm-3">
                         <div class="inline-checkboxes-holder" id="project_type">
                         
                         <label class="checkbox"> <input type="checkbox"
                             id="bprojectconfig_id" name="bprojectconfig[]"
-                            value="<%out.print(builderProjectType.getId());%>"> <%
+                            value="<%out.print(builderProjectType.getId());%>" <%out.print(is_checked); %>> <%
                                 out.print(builderProjectType.getName());
                             %>
                         </label>
@@ -432,12 +471,18 @@ if(builder_project_list.size()>0){
                         if (builderProjectAmenitySubstages.size() > 0) {
                             for (int i = 0, j = 0; i < builderProjectAmenitySubstages.size(); i++) {
                                 BuilderProjectAmenitySubstages builderProjectType = builderProjectAmenitySubstages.get(i);
+                                String is_checked="";
+                                for(int pa=0;pa<builderProjectAmenityInfos.size();pa++){
+                                	if(builderProjectAmenityInfos.get(pa).getBuilderProjectAmenitySubstages().getId()==builderProjectType.getId()){
+                                		is_checked="checked";
+                                	}
+                                }
                     %><div class="col-sm-3">
                         <div class="inline-checkboxes-holder" id="project_substage">
                         
                         <label class="checkbox"> <input type="checkbox"
                             id="bprojectsubstage_id" name="bprojectsubstage[]"
-                            value="<%out.print(builderProjectType.getId());%>"> <%
+                            value="<%out.print(builderProjectType.getId());%>" <%out.print(is_checked); %>> <%
                                 out.print(builderProjectType.getName());
                             %>
                         </label>
@@ -486,7 +531,7 @@ if(builder_project_list.size()>0){
                                     <label class="col-sm-3 control-label no-padding-right"
                                         for="form-field-1" for="form-field-11">Launch Date</label>
                                     <div class="col-sm-4">
-                                        <input type="text" id="ldate" />
+                                        <input type="text" id="ldate" value="<%out.print(stringDate);%>"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -499,12 +544,18 @@ if(builder_project_list.size()>0){
                         if (builderProjectApprovalTypes.size() > 0) {
                             for (int i = 0, j = 0; i < builderProjectApprovalTypes.size(); i++) {
                                 BuilderProjectApprovalType builderProjectType = builderProjectApprovalTypes.get(i);
+                                String is_checked="";
+                                for(int apt=0;apt<builderProjectApprovalInfos.size();apt++){
+                                	if(builderProjectApprovalInfos.get(apt).getBuilderProjectApprovalType().getId()== builderProjectType.getId()){
+                                		is_checked="checked";
+                                	}
+                                }
                     %><div class="col-sm-3">
                         <div class="inline-checkboxes-holder" id="project_type">
                         
                         <label class="checkbox"> <input type="checkbox"
                             id="bprojectapproval_id" name="bprojectapproval[]"
-                            value="<%out.print(builderProjectType.getId());%>"> <%
+                            value="<%out.print(builderProjectType.getId());%>" <%out.print(is_checked); %>> <%
                                 out.print(builderProjectType.getName());
                             %>
                         </label>
@@ -533,12 +584,18 @@ if(builder_project_list.size()>0){
 //                         	}
                             for (int i = 0, j = 0; i < homeLoanBanks.size(); i++) {
                                 HomeLoanBanks homeLoanBanks2 = homeLoanBanks.get(i);
+                                String is_checked="";
+                                for(int pt=0;pt<bankInfo.size();pt++){
+                                	if(bankInfo.get(pt).getHomeLoanBanks().getId()==homeLoanBanks2.getId()){
+                                		is_checked="checked";
+                                	}
+                                }
                     %><div class="col-sm-3">
                         <div class="inline-checkboxes-holder" id="loan_banks">
                         
                         <label class="checkbox"> <input type="checkbox"
                             id="bank_id" name="bankname[]"
-                            value="<%out.print(homeLoanBanks2.getId());%>"> <%
+                            value="<%out.print(homeLoanBanks2.getId());%>" <% out.print(is_checked); %>> <%
                                 out.print(homeLoanBanks2.getName());
                             %>
                         </label>
@@ -556,13 +613,18 @@ if(builder_project_list.size()>0){
                                             <label class="col-sm-3 control-label no-padding-right"
                                         for="form-field-1"> <b>Pricing Data</b></label>
                                 </div>  
+                                <%
+                                	if(builderProjectPriceInfos.size()>0){
+                                		for(int i=0;i<builderProjectPriceInfos.size();i++){
+                                	
+                                %>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right"
                                         for="form-field-1"> Base Rate </label>
 
                                     <div class="col-sm-4">
                                         <input type="text" id="brates" placeholder="Enter base rates"
-                                         value="<%out.print(builderProjectPriceInfo.getBasePrice()); %>"   class="col-xs-10 col-sm-5" />
+                                         value="<%out.print(builderProjectPriceInfos.get(i).getBasePrice()); %>"   class="col-xs-10 col-sm-5" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -571,7 +633,7 @@ if(builder_project_list.size()>0){
 
                                     <div class="col-sm-4">
                                         <input type="text" id="frrate" placeholder="Enter floor rise rate"
-                                           value="<%out.print(builderProjectPriceInfo.getRiseRate()); %>"    />
+                                           value="<%out.print(builderProjectPriceInfos.get(i).getRiseRate()); %>"    />
                                     </div>
                                     
                                 </div>
@@ -581,7 +643,7 @@ if(builder_project_list.size()>0){
 
                                     <div class="col-sm-4">
                                         <input type="text" id="apost" placeholder="enter no of floors"
-                                         value="<%out.print(builderProjectPriceInfo.getPost()); %>"      />
+                                         value="<%out.print(builderProjectPriceInfos.get(i).getPost()); %>"      />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -590,7 +652,7 @@ if(builder_project_list.size()>0){
 
                                     <div class="col-sm-4">
                                         <input type="text" id="maintenance" placeholder="Enter Maintenance charges"
-                                           value="<%out.print(builderProjectPriceInfo.getMaintenance()); %>"   />
+                                           value="<%out.print(builderProjectPriceInfos.get(i).getMaintenance()); %>"   />
                                     </div>
                                 </div>
                                     <div class="form-group">
@@ -598,7 +660,7 @@ if(builder_project_list.size()>0){
                                         for="form-field-1"> Tenure </label>
 
                                     <div class="col-sm-4">
-                                        <input type="text" id="tenure" placeholder="Enter Tenure in Months"  value="<%out.print(builderProjectPriceInfo.getTenure()); %>" />
+                                        <input type="text" id="tenure" placeholder="Enter Tenure in Months"  value="<%out.print(builderProjectPriceInfos.get(i).getTenure()); %>" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -607,7 +669,7 @@ if(builder_project_list.size()>0){
 
                                     <div class="col-sm-4">
                                         <input type="text" id="parking" placeholder="Enter Parking Rate"
-                                             value="<%out.print(builderProjectPriceInfo.getParking()); %>"  />
+                                             value="<%out.print(builderProjectPriceInfos.get(i).getParking()); %>"  />
                                     </div>
                                 </div>
                             
@@ -617,7 +679,7 @@ if(builder_project_list.size()>0){
 
                                     <div class="col-sm-4">
                                         <input type="text" id="sduty" placeholder="Enter Stamp Duty"
-                                            value="<%out.print(builderProjectPriceInfo.getStampDuty()); %>"   />
+                                            value="<%out.print(builderProjectPriceInfos.get(i).getStampDuty()); %>"   />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -626,7 +688,7 @@ if(builder_project_list.size()>0){
 
                                     <div class="col-sm-4">
                                         <input type="text" id="afrate" placeholder="Enter Amenities Facing Rate"
-                                             value="<%out.print(builderProjectPriceInfo.getAmenityRate()); %>"  />
+                                             value="<%out.print(builderProjectPriceInfos.get(i).getAmenityRate()); %>"  />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -635,7 +697,7 @@ if(builder_project_list.size()>0){
 
                                     <div class="col-sm-4">
                                         <input type="text" id="tax" placeholder="Enter TAX"
-                                           value="<%out.print(builderProjectPriceInfo.getTax()); %>"    />
+                                           value="<%out.print(builderProjectPriceInfos.get(i).getTax()); %>"    />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -644,7 +706,7 @@ if(builder_project_list.size()>0){
 
                                     <div class="col-sm-4">
                                         <input type="text" id="vat" placeholder="Enter VAT"
-                                            value="<%out.print(builderProjectPriceInfo.getVat()); %>"   />
+                                            value="<%out.print(builderProjectPriceInfos.get(i).getVat()); %>"   />
                                     </div>
                                 </div>
                             
@@ -655,23 +717,30 @@ if(builder_project_list.size()>0){
 
                                     <div class="col-sm-4">
                                         <input type="text" id="tfee" placeholder="Enter Tech Fee"
-                                            value="<%out.print(builderProjectPriceInfo.getFee()); %>"   />
+                                            value="<%out.print(builderProjectPriceInfos.get(i).getFee()); %>"   />
                                     </div>
                                 </div>
-                                    
+                                    <%
+                                			}
+                                		}
+                                    %>
                                      <div class="form-group">
                                             <label class="col-sm-3 control-label no-padding-right"
                                         for="form-field-1"> <b>Add Offers </b></label>
                                       </div>
-                                    
+                                    <%
+                                    if(builderProjectOfferInfos.size()>0){
+                                    	for(int i=0;i<builderProjectOfferInfos.size();i++){
+                                            BuilderProjectOfferInfo builderProjectOfferInfo = builderProjectOfferInfos.get(i);
+                                    %>
                                     <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right"
                                         for="form-field-1">Offer Title </label>
 
                                     <div class="col-sm-4">
                                         
-                            <input type="text" id="title-1" placeholder="Enter offer title"
-                                        name="title[]"  class="col-xs-10 col-sm-5" />
+                            <input type="text" id="title-<%out.print(builderProjectOfferInfo.getId()); %>" placeholder="Enter offer title"
+                                      value="<%out.print(builderProjectOfferInfo.getTitle()); %>"  name="title[]"  class="col-xs-10 col-sm-5" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -680,8 +749,8 @@ if(builder_project_list.size()>0){
 
                                     <div class="col-sm-4">
                                         
-                            <input type="text" id="odiscount-1" placeholder="Enter offer descount(%)"
-                                        name="odiscount[]"  class="col-xs-10 col-sm-5" />
+                            <input type="text" id="odiscount-<%out.print(builderProjectOfferInfo.getId()); %>" placeholder="Enter offer descount(%)"
+                                    value="<%out.print(builderProjectOfferInfo.getPer()); %>""    name="odiscount[]"  class="col-xs-10 col-sm-5" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -690,26 +759,29 @@ if(builder_project_list.size()>0){
 
                                     <div class="col-sm-4">
                                         
-                            <input type="text" id="damt-1" placeholder="Enter offer discount amount(Rs)"
-                                        name="damt[]"   class="col-xs-10 col-sm-5" />
+                            <input type="text" id="damt-<%out.print(builderProjectOfferInfo.getId()); %>" placeholder="Enter offer discount amount(Rs)"
+                                    value="<%out.print(builderProjectOfferInfo.getAmount()); %>"    name="damt[]"   class="col-xs-10 col-sm-5" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1">Applicable on </label>
                                     <div class="col-sm-4">
-                                        <input type="text" id="aon-1" name="aon[]"placeholder="Enter applicable on" class="col-xs-10 col-sm-5" />
+                                        <input type="text"  value="<%out.print(builderProjectOfferInfo.getApplicable()); %>" id="aon-<%out.print(builderProjectOfferInfo.getId()); %>" name="aon[]"placeholder="Enter applicable on" class="col-xs-10 col-sm-5" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1">Apply </label>
                                     <div class="col-sm-4">
-                                        <select name="apply[]" id="apply-1" class="form-control">
-                                            <option value="1"> Yes </option>
-                                            <option value="0"> No </option>
+                                        <select name="apply[]" id="apply-<%out.print(builderProjectOfferInfo.getId()); %>" class="form-control">
+                                            <option value="1" <%if(builderProjectOfferInfo.getApply()==1) {%>selected<%} %>> Yes </option>
+                                            <option value="0" <%if(builderProjectOfferInfo.getApply()==0) {%>selected<%} %>> No </option>
                                         </select>
                                     </div>
                                 </div>
-                                
+                                <%
+                                    	}
+                                    }
+                                %>
                                 <div id="addOffers"></div>
                                     <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> </label>
@@ -721,273 +793,37 @@ if(builder_project_list.size()>0){
                                             <label class="col-sm-3 control-label no-padding-right"
                                         for="form-field-1"> <b> Payment Schedule </b></label>
                                 </div>
+                                <%
+                          			if(builderProjectPaymentInfos.size()>0){
+                          				int count=0;
+                          			 for(int i=0;i<builderProjectPaymentInfos.size();i++){
+                          				 
+                          			 	BuilderProjectPaymentInfo builderProjectPaymentInfo = builderProjectPaymentInfos.get(i);
+                                %>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right"
                                         for="form-field-1"> Milestone </label>
                                     <div class="col-sm-4">
-                                        <input type="text" id="psm-1" placeholder="Enter Payment Schedule Milestone"/>
+                                        <input type="text" id="psm-<%out.print(count);%>"  value="<%out.print(builderProjectPaymentInfo.getSchedule()); %>" placeholder="Enter Payment Schedule Milestone"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right"  for="form-field-1"> % of Net Payable </label>
                                     <div class="col-sm-4">
-                                        <input type="text" id="netpayable-1" placeholder="Enter Net Payable"/>
+                                        <input type="text" id="netpayable-<%out.print(count); %>" value="<%out.print(builderProjectPaymentInfo.getPayable()); %>" placeholder="Enter Net Payable"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right"  for="form-field-1"> Amount </label>
                                     <div class="col-sm-4">
-                                        <input type="text" id="amount-1" placeholder="Enter Amount" />
+                                        <input type="text" id="amount-<%out.print(count); %>" value="<%out.print(builderProjectPaymentInfo.getAmount()); %>" placeholder="Enter Amount" />
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Milestone </label>
-                                    <div class="col-sm-4">
-                                        <input type="text" id="psm-2" placeholder="Enter Payment Schedule Milestone"/>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> % of Net Payable </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="netpayable-2" placeholder="Enter Net Payable"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Amount </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="amount-2" placeholder="Enter Amount"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Milestone </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="psm-3" placeholder="Enter Payment Schedule Milestone"
-                                            />
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> % of Net Payable </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="netpayable-3" placeholder="Enter Net Payable"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Amount </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="amount-3" placeholder="Enter Amount"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Milestone </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="psm-4" placeholder="Enter Payment Schedule Milestone"
-                                            />
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> % of Net Payable </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="netpayable-4" placeholder="Enter Net Payable"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Amount </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="amount-4" placeholder="Enter Amount"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Milestone </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="psm-5" placeholder="Enter Payment Schedule Milestone"
-                                            />
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> % of Net Payable </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="netpayable-5" placeholder="Enter Net Payable"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Amount </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="amount-5" placeholder="Enter Amount"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Milestone </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="psm-6" placeholder="Enter Payment Schedule Milestone"
-                                            />
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> % of Net Payable </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="netpayable-6" placeholder="Enter Net Payable"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Amount </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="amount-6" placeholder="Enter Amount"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1">  Milestone </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="psm-7" placeholder="Enter Payment Schedule Milestone"
-                                            />
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> % of Net Payable </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="netpayable-7" placeholder="Enter Net Payable"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Amount </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="amount-7" placeholder="Enter Amount"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1">  Milestone </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="psm-8" placeholder="Enter Payment Schedule Milestone"
-                                            />
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> % of Net Payable </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="netpayable-8" placeholder="Enter Net Payable"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Amount </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="amount-8" placeholder="Enter Amount"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Milestone </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="psm-9" placeholder="Enter Payment Schedule Milestone"
-                                            />
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> % of Net Payable </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="netpayable-9" placeholder="Enter Net Payable"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Amount </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="amount-9" placeholder="Enter Amount"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1">  Milestone </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="psm-10" placeholder="Enter Payment Schedule Milestone"
-                                            />
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> % of Net Payable </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="netpayable-10" placeholder="Enter Net Payable"
-                                            />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                        for="form-field-1"> Amount </label>
-
-                                    <div class="col-sm-4">
-                                        <input type="text" id="amount-10" placeholder="Enter Amount"
-                                            />
-                                    </div>
-                                </div>
+                                <%
+                                			count++;
+                          				}
+                          			}
+                                %>
                                     <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right"
                                         for="form-field-1">Status </label>
@@ -995,8 +831,8 @@ if(builder_project_list.size()>0){
                                     <div class="col-sm-4">
                                         
                             <select name="status" id="status" class="form-control">
-                                <option value="1"> Active </option>
-                                <option value="0"> Inactive </option>
+                                <option value="1" <% if(builderProject.getStatus() == 1) { %>selected<% } %>> Active </option>
+                                <option value="0" <% if(builderProject.getStatus() == 0) { %>selected<% } %>> Inactive </option>
                             </select>
                                     </div>
                                 </div>
@@ -1004,8 +840,8 @@ if(builder_project_list.size()>0){
 
                                     <div class="col-md-offset-3 col-md-9">
                                         
-                                        <button id="saveProject" class="btn btn-info" type="button">
-                                            <i class="ace-icon fa fa-check bigger-110"></i> Submit
+                                        <button id="updateProject" class="btn btn-info" type="button">
+                                            <i class="ace-icon fa fa-check bigger-110"></i> Update
                                         </button>
 
                                         &nbsp; &nbsp; &nbsp;
@@ -1024,62 +860,16 @@ if(builder_project_list.size()>0){
 
                         <script type="text/javascript">
             
-                        $("#searchbuilderid").change(function(){
-                            $.get("${baseUrl}/webapi/create/project/list/",{ builder_id: $("#searchbuilderid").val() }, function(data){
-                                var html = '<option value="">Select Company Name</option>';
-                                $(data).each(function(index){
-                                    
-                                    html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-                                });
-                                $("#searchcompanyid").html(html);
-                            },'json');
-                        });
-                        
-                
             function ValidateEmail(email) {
                 var expr = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
                 return expr.test(email);
             };
-            $("#searchcountryId").change(function(){
-                $.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#searchcountryId").val() }, function(data){
-                    var html = '<option value="">Select State</option>';
-                    $(data).each(function(index){
-                        html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-                    });
-                    $("#searchstateId").html(html);
-                },'json');
-            });
 
-            $("#searchstateId").change(function(){
-                $.get("${baseUrl}/webapi/general/city/list",{ state_id: $("#searchstateId").val() }, function(data){
-                    var html = '<option value="">Select City</option>';
-                    $(data).each(function(index){
-                        html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-                    });
-                    $("#searchcityId").html(html);
-                },'json');
-                
-            });
-
-            $("#searchcityId").change(function(){
-                
-                 $.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#searchcityId").val() }, function(data){
-                
-                        var html = '<option value="">Select Locality</option>';
-                        $(data).each(function(index){
-                            
-                            html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-                        });
-                        $("#searchlocalityId").html(html);
-                    },'json');
-            });
-            
-            
-           
-            $("#saveProject").click(function(){
-                saveNewProject();
+            $("#updateProject").click(function(){
+            	alert("Hi from update");
+                updateNewProject();
             })
-            function saveNewProject(){
+            function updateNewProject(){
                 
             var projectTypeData = getProjectTypeData();
             var propertyConfigData = getPropertyConfigData();
@@ -1099,17 +889,15 @@ if(builder_project_list.size()>0){
              var countCheckedCheckboxes = $('input[name="bpropertytype[]"]:checked').filter(
                 ':checked').length;
              $('input[name="bpropertytype[]"]:checked').each(function(){
-                 builderProjectPropertyTypeItems={builderPropertyType:{id:$(this).val()},value:$("#property_"+$(this).val()).val()};
+                 builderProjectPropertyTypeItems={builderPropertyType:{id:$(this).val()},value:$("#property_"+$(this).val()).val(),builderProject:{id:$("#project_id").val()}};
                  builderProjectPropertyTypeInfo.push(builderProjectPropertyTypeItems);
              });
             
              
-             alert("lenght :: "+countCheckedCheckboxes);
-//           ,value:$("#property_"+$(this).val()).val();
            var final_data=[];
                final_data={builderProject:project_data,builderProjectPropertyConfigurationInfos:propertyConfigData,builderProjectOfferInfos:offers,builderProjectBankInfos:loan_bank_data,builderProjectPriceInfos:price_data,builderProjectPaymentInfos:payment_schedule,builderProjectProjectTypes:projectTypeData,builderProjectAmenityInfos:project_amenity_info,builderProjectApprovalInfos:project_approval_info,builderProjectPropertyTypes:builderProjectPropertyTypeInfo}
                $.ajax({
-                    url: '${baseUrl}/webapi/create/project/new/save/',
+                    url: '${baseUrl}/webapi/create/project/new/update/',
                     type: 'POST',
                     data: JSON.stringify(final_data),
                     contentType: 'application/json; charset=utf-8',
@@ -1132,29 +920,8 @@ if(builder_project_list.size()>0){
                     
                 });
                }
+<%--             $('[name=searchstateId]').val(<%out.print(selected_state_id);%>); --%>
           
-            $('input[name="bankname[]"]').each(function() {
-            	
-               var count = <%out.print(homeLoanBanks.size());%>
-    			for(var i = 1; i <= count; i++){
-    				if($(this).val() ==<%out.print(bankInfo.iterator().next().getHomeLoanBanks().getId());%>){
-    		    		$(this).prop('checked', true);
-    				}
-    			}
-    	    });
-            
-            
-            $('input[name="bprojectconfig[]"]').each(function() {
-            	
-                var count = <%out.print(builderProjectPropertyConfigurations.size());%>
-     			for(var i = 0; i < count; i++){
-     				if($(this).val() ==<%out.print(builderProject.getBuilderProjectPropertyConfigurationInfos().iterator().next().getBuilderProjectPropertyConfiguration().getId());%>){
-     		    		$(this).prop('checked', true);
-     				}
-     			}
-     	    });
-            
-           
             function valueChanged(id)
             {
               if($('#check'+id).is(":checked")) 
@@ -1218,13 +985,14 @@ if(builder_project_list.size()>0){
             $('#ldate').datepicker({
                 format: "d M yyyy"
             });
-            
+           
+           
             function getProjectTypeData() {
                 var builderProjectType = null;
                 var projectTypeItem =null;
                 var project_type_data = [];
                 $('input[name="bproject[]"]:checked').each(function() {
-                    projectTypeItem = {builderProjectType:{id:$(this).val()}};
+                    projectTypeItem = {builderProjectType:{id:$(this).val()},builderProject:{id:$("#project_id").val()}};
                     project_type_data.push(projectTypeItem);
                 });
                 return project_type_data;
@@ -1235,7 +1003,7 @@ if(builder_project_list.size()>0){
                 var propertyConfigurationItem =null;
                 var property_config_data = [];
                 $('input[name="bprojectconfig[]"]:checked').each(function() {
-                    propertyConfigurationItem = {builderProjectPropertyConfiguration:{id:$(this).val()}};
+                    propertyConfigurationItem = {builderProjectPropertyConfiguration:{id:$(this).val()},builderProject:{id:$("#project_id").val()}};
                     property_config_data.push(propertyConfigurationItem);
                 });
                 return property_config_data;
@@ -1246,7 +1014,7 @@ if(builder_project_list.size()>0){
                 var builderProjectAmenitySubstagesItem =null;
                 var project_amenity_data = [];
                 $('input[name="bprojectsubstage[]"]:checked').each(function() {
-                    builderProjectAmenitySubstagesItem = {builderProjectAmenitySubstages:{id:$(this).val()}};
+                    builderProjectAmenitySubstagesItem = {builderProjectAmenitySubstages:{id:$(this).val()},builderProject:{id:$("#project_id").val()}};
                     project_amenity_data.push(builderProjectAmenitySubstagesItem);
                 });
                 return project_amenity_data;
@@ -1258,7 +1026,7 @@ if(builder_project_list.size()>0){
                 var project_approval_data = [];
                 $('input[name="bprojectapproval[]"]:checked').each(function() {
                         
-                    builderProjectApprovalTypeItem = {builderProjectApprovalType:{id:$(this).val()}};
+                    builderProjectApprovalTypeItem = {builderProjectApprovalType:{id:$(this).val()},builderProject:{id:$("#project_id").val()}};
                     project_approval_data.push(builderProjectApprovalTypeItem);
                 });
                 return project_approval_data;
@@ -1270,7 +1038,7 @@ if(builder_project_list.size()>0){
                 var home_loan_bank_data = [];
                 $('input[name="bankname[]"]:checked').each(function() {
                         
-                    homeLoanBanksItem = {homeLoanBanks:{id:$(this).val()}};
+                    homeLoanBanksItem = {homeLoanBanks:{id:$(this).val()},builderProject:{id:$("#project_id").val()}};
                     home_loan_bank_data.push(homeLoanBanksItem);
                 });
                 return home_loan_bank_data;
@@ -1280,6 +1048,7 @@ if(builder_project_list.size()>0){
                 var adminId = <%out.print(user_id6);%>
                 
                 var project_data={
+                		id:$("#project_id").val(),
                         builder:{id:$("#searchbuilderid").val()},
                         builderCompanyNames:{id:$("#searchcompanyid").val()},
                         name:$("#bname").val(),
@@ -1307,6 +1076,7 @@ if(builder_project_list.size()>0){
             function getPriceData(){
                 var priceData = {
                         basePrice : $("#brates").val(),
+                        builderProject:{id:$("#project_id").val()},
                         riseRate:$("#frrate").val(),
                         post:$("#apost").val(),
                         amenityRate:$("#afrate").val(),
@@ -1344,7 +1114,7 @@ if(builder_project_list.size()>0){
                    if($("#apply-"+i).val()!="" || typeof $("#apply-"+i).val()!="undefined"){
                        apply=$("#apply-"+i).val();
                   }
-                  offers= {title:title,per:odiscount,amount:damt,applicable:aon,apply:apply}
+                  offers= {title:title,per:odiscount,amount:damt,applicable:aon,apply:apply,builderProject:{id:$("#project_id").val()}};
                   add_offers.push(offers);
               }
               return add_offers;
@@ -1356,7 +1126,7 @@ if(builder_project_list.size()>0){
                 var project_proprty_type = [];
                 $('input[name="bpropertytype[]"]:checked').each(function() {
                     
-                    builderProjectApprovalTypeItems={builderPropertyType:{id:$(this).val()}};
+                    builderProjectApprovalTypeItems={builderPropertyType:{id:$(this).val()},builderProject:{id:$("#project_id").val()}};
                     project_proprty_type.push(builderProjectPropertyTypeItems);
                 });
                 return project_proprty_type;
@@ -1380,7 +1150,7 @@ if(builder_project_list.size()>0){
                        if($("#amount-"+i).val()!="" || typeof $("#amount-"+i).val()!="undefined"){
                            amount=$("#amount-"+i).val();
                       }
-                       payment={schedule:psm,payable:netpayable,amount:amount};
+                       payment={schedule:psm,payable:netpayable,amount:amount,builderProject:{id:$("#project_id").val()}};
                        payment_data.push(payment);
                 }
                 return payment_data;

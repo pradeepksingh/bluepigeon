@@ -1,3 +1,4 @@
+<%@page import="java.util.Set"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -10,10 +11,12 @@
 <%
 int id = Integer.parseInt(request.getParameter("id"));	
 Builder builder=null;
+List<BuilderCompanyNames> builderCompanyNames = null;
 if(id>0){
 List<Builder> builder_list=new BuilderDetailsDAO().getBuilderById(id);
 if(builder_list.size()>0){
-	builder=builder_list.get(0);			
+	builder=builder_list.get(0);	
+	builderCompanyNames = new BuilderDetailsDAO().getBuilderCompanyNameList(id);
 }
 }
 %>
@@ -97,11 +100,9 @@ if(builder_list.size()>0){
 											class="autosize-transition form-control"><%out.print(builder.getAboutBuilder());%></textarea>
 									</div>
 								</div>
-								<% if(builder.getBuilderCompanyNames().size()>0) {
-									int i=1;
-								Iterator<BuilderCompanyNames> bIterator=	builder.getBuilderCompanyNames().iterator();
-								while(bIterator.hasNext()){
-									BuilderCompanyNames builderCompanyNames=bIterator.next();
+								<% if(builderCompanyNames.size()>0) {
+										for(int i=0;i<builderCompanyNames.size();i++){
+											BuilderCompanyNames builderCompanyNames1=builderCompanyNames.get(i);
 								%>
 								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right"
@@ -109,7 +110,7 @@ if(builder_list.size()>0){
 
 									<div class="col-sm-9">
 										<input type="text" id="ucname-<%out.print(i); %>" name="cname[]"
-										value="<%out.print(builderCompanyNames.getName()); %>"	placeholder="Company Name" class="col-xs-10 col-sm-5" />
+										value="<%out.print(builderCompanyNames1.getName()); %>"	placeholder="Company Name" class="col-xs-10 col-sm-5" />
 									</div>
 								</div>
 								<div class="form-group">
@@ -118,7 +119,9 @@ if(builder_list.size()>0){
 
 									<div class="col-sm-9">
 										<input type="text" id="ucontact-<%out.print(i); %>" name="contact[]"
-											value="<%out.print(builderCompanyNames.getContact()); %>" placeholder="Contact number" class="col-xs-10 col-sm-5" />
+											value="<%out.print(builderCompanyNames1.getContact());
+												  System.err.print(builderCompanyNames1.getContact());
+												%>" placeholder="Contact number" class="col-xs-10 col-sm-5" />
 									</div>
 								</div>
 								<div class="form-group">
@@ -127,7 +130,7 @@ if(builder_list.size()>0){
 
 									<div class="col-sm-9">
 										<input type="text" id="ucemail-<%out.print(i); %>" name="email[]" placeholder="Email"
-											value="<%out.print(builderCompanyNames.getEmail()); %>"class="col-xs-10 col-sm-5" />
+											value="<%out.print(builderCompanyNames1.getEmail()); %>"class="col-xs-10 col-sm-5" />
 									</div>
 								</div>
 								<% i++;}} %>

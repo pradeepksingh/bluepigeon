@@ -191,4 +191,13 @@ public class LocalityNamesImp {
 		session.close();
 		return localities;
 	}
+	public List<Locality> getLocalityList(){
+		String hql = "from Locality";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<Locality> result = query.list();
+		session.close();
+		return result;
+	}
 }

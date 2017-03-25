@@ -51,6 +51,7 @@ int builder_size=builder_list.size();
                                             <td><% if(builder_list.get(i).getStatus() == 1) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
                                             <td class="alignRight">
                                             	<a href="javascript:editProject(<% out.print(builder_list.get(i).getId()); %>);" class="btn btn-success btn-xs icon-btn"><i class="fa fa-pencil"></i></a>
+                                            	<a href="javascript:editProjects(<% out.print(builder_list.get(i).getId()); %>);" class="btn btn-success btn-xs icon-btn"><i class="fa fa-eye"></i></a>
 <%--                                             	<a href="javascript:deleteBuildingAmenity(<% out.print(amenity_list.get(i).getId()); %>);" class="btn btn-danger btn-xs icon-btn"><i class="fa fa-trash-o"></i></a> --%>
                                             </td>
                                             
@@ -73,6 +74,9 @@ int builder_size=builder_list.size();
 		<script type="text/javascript">
 			function editProject(id){
 				window.location.href = "${baseUrl}/projectdetails/editproject.jsp?project_id="+id;
+			}
+			function editProjects(id){
+				window.location.href = "${baseUrl}/projectconfigtabs.jsp?project_id="+id;
 			}
 		</script>
 	</body>

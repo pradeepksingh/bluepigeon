@@ -77,7 +77,7 @@ public class Country implements java.io.Serializable {
 		this.sortOrder = sortOrder;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "country")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
 	public Set<State> getStates() {
 		return this.states;
 	}
@@ -86,7 +86,7 @@ public class Country implements java.io.Serializable {
 		this.states = states;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "country")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
 	public Set<BuilderProject> getBuilderProjects() {
 		return this.builderProjects;
 	}
