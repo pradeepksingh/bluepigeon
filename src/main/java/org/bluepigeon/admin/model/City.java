@@ -88,7 +88,7 @@ public class City implements java.io.Serializable {
 		this.builderProjects = builderProjects;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "city")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "city")
 	public Set<Locality> getLocalities() {
 		return this.localities;
 	}

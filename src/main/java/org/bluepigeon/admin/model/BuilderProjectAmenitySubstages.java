@@ -25,7 +25,6 @@ public class BuilderProjectAmenitySubstages implements java.io.Serializable {
 	private BuilderProjectAmenityStages builderProjectAmenityStages;
 	private String name;
 	private Byte status;
-	private Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos = new HashSet<BuilderProjectAmenityInfo>(0);
 
 	public BuilderProjectAmenitySubstages() {
 	}
@@ -35,7 +34,6 @@ public class BuilderProjectAmenitySubstages implements java.io.Serializable {
 		this.builderProjectAmenityStages = builderProjectAmenityStages;
 		this.name = name;
 		this.status = status;
-		this.builderProjectAmenityInfos = builderProjectAmenityInfos;
 	}
 
 	@Id
@@ -76,15 +74,6 @@ public class BuilderProjectAmenitySubstages implements java.io.Serializable {
 
 	public void setStatus(Byte status) {
 		this.status = status;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProjectAmenitySubstages")
-	public Set<BuilderProjectAmenityInfo> getBuilderProjectAmenityInfos() {
-		return this.builderProjectAmenityInfos;
-	}
-
-	public void setBuilderProjectAmenityInfos(Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos) {
-		this.builderProjectAmenityInfos = builderProjectAmenityInfos;
 	}
 
 }

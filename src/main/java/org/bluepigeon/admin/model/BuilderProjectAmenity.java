@@ -3,11 +3,14 @@ package org.bluepigeon.admin.model;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -22,8 +25,8 @@ public class BuilderProjectAmenity implements java.io.Serializable {
 	private Integer id;
 	private String name;
 	private Byte status;
-	private Set<BuilderProjectAmenityStages> builderProjectAmenityStageses = new HashSet<BuilderProjectAmenityStages>(
-			0);
+	private Set<BuilderProjectAmenityStages> builderProjectAmenityStageses = new HashSet<BuilderProjectAmenityStages>(0);
+	private Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos = new HashSet<BuilderProjectAmenityInfo>(0);
 
 	public BuilderProjectAmenity() {
 	}
@@ -72,6 +75,15 @@ public class BuilderProjectAmenity implements java.io.Serializable {
 
 	public void setBuilderProjectAmenityStageses(Set<BuilderProjectAmenityStages> builderProjectAmenityStageses) {
 		this.builderProjectAmenityStageses = builderProjectAmenityStageses;
+	}
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProjectAmenity")
+	public Set<BuilderProjectAmenityInfo> getBuilderProjectAmenityInfos() {
+		return this.builderProjectAmenityInfos;
+	}
+
+	public void setBuilderProjectAmenityInfos(Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos) {
+		this.builderProjectAmenityInfos = builderProjectAmenityInfos;
 	}
 
 }

@@ -504,16 +504,18 @@
 		</ul>
 		</li>
 		<li class="active open">
-						<a href="#" class="dropdown-toggle"> 
-							<i class="menu-icon fa fa-pencil-square-o"></i> 
-							<span class="menu-text"> Project </span> <b class="arrow fa fa-angle-down"></b>
-						</a> 
-						<b class="arrow"></b>
-						<ul class="submenu">
-						<li class="active"><a href="${baseUrl}/projectdetails/addprojects.jsp"> <i
-				class="menu-icon fa fa-caret-right"></i> Add Project
-		</a> <b class="arrow"></b></li>
-		</ul>
+			<a href="#" class="dropdown-toggle"> 
+				<i class="menu-icon fa fa-pencil-square-o"></i> 
+				<span class="menu-text"> Project </span> <b class="arrow fa fa-angle-down"></b>
+			</a> 
+			<b class="arrow"></b>
+			<ul class="submenu">
+				<li class="active">
+					<a href="${baseUrl}/admin/project/list.jsp"> 
+						<i class="menu-icon fa fa-caret-right"></i> Manage Projects
+					</a> <b class="arrow"></b>
+				</li>
+			</ul>
 		</li>
 			<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
 				<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"

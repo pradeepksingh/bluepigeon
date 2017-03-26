@@ -90,6 +90,16 @@ public class BuilderProjectApprovalTypeDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<BuilderProjectApprovalType> getBuilderProjectApprovalTypes() {
+		String hql = "from BuilderProjectApprovalType";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderProjectApprovalType> result = query.list();
+		session.close();
+		return result;
+	}
 
 	public List<BuilderProjectApprovalType> getCountryById(int id) {
 		String hql = "from BuilderProjectApprovalType where id = :id";
