@@ -19,21 +19,19 @@ import javax.persistence.Table;
 public class BuilderProjectAmenityInfo implements java.io.Serializable {
 
 	private Integer id;
-	private BuilderProjectAmenitySubstages builderProjectAmenitySubstages;
+	private BuilderProjectAmenity builderProjectAmenity;
 	private BuilderProject builderProject;
 
 	public BuilderProjectAmenityInfo() {
 	}
 
-	public BuilderProjectAmenityInfo(BuilderProjectAmenitySubstages builderProjectAmenitySubstages,
-			BuilderProject builderProject) {
-		this.builderProjectAmenitySubstages = builderProjectAmenitySubstages;
+	public BuilderProjectAmenityInfo(BuilderProjectAmenity builderProjectAmenity, BuilderProject builderProject) {
+		this.builderProjectAmenity = builderProjectAmenity;
 		this.builderProject = builderProject;
 	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "id", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -45,12 +43,12 @@ public class BuilderProjectAmenityInfo implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "amenity_id")
-	public BuilderProjectAmenitySubstages getBuilderProjectAmenitySubstages() {
-		return this.builderProjectAmenitySubstages;
+	public BuilderProjectAmenity getBuilderProjectAmenity() {
+		return this.builderProjectAmenity;
 	}
 
-	public void setBuilderProjectAmenitySubstages(BuilderProjectAmenitySubstages builderProjectAmenitySubstages) {
-		this.builderProjectAmenitySubstages = builderProjectAmenitySubstages;
+	public void setBuilderProjectAmenity(BuilderProjectAmenity builderProjectAmenity) {
+		this.builderProjectAmenity = builderProjectAmenity;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)

@@ -90,6 +90,16 @@ public class BuilderPropertyTypeDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<BuilderPropertyType> getBuilderPropertyTypes() {
+		String hql = "from BuilderPropertyType";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderPropertyType> result = query.list();
+		session.close();
+		return result;
+	}
 
 	public List<BuilderPropertyType> getCountryById(int id) {
 		String hql = "from BuilderPropertyType where id = :id";

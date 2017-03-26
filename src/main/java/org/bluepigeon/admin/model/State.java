@@ -91,7 +91,7 @@ public class State implements java.io.Serializable {
 		this.sortOrder = sortOrder;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "state")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "state")
 	public Set<City> getCities() {
 		return this.cities;
 	}
