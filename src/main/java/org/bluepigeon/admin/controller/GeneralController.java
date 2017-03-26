@@ -165,6 +165,39 @@ public class GeneralController {
 		return cityImp.getCityByStateId(state_id);
 	}
 	
+	@POST
+	@Path("/city/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addCity(@FormParam("name") String name, @FormParam("state_id") int stateId,
+			@FormParam("sortorder") int sortOrder, @FormParam("status") byte status
+	) {
+		State state = new State();
+		state.setId(stateId);
+		City city = new City();
+		city.setName(name);
+		city.setState(state);
+		city.setStatus(status);
+		CityNamesImp cityNamesImp = new CityNamesImp();
+		return cityNamesImp.save(city);
+	}
+	
+	@POST
+	@Path("/city/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addCity(@FormParam("id") int id,@FormParam("name") String name, @FormParam("state_id") int stateId,
+			@FormParam("sortorder") int sortOrder, @FormParam("status") byte status
+	) {
+		State state = new State();
+		state.setId(stateId);
+		City city = new City();
+		city.setId(id);
+		city.setName(name);
+		city.setState(state);
+		city.setStatus(status);
+		CityNamesImp cityNamesImp = new CityNamesImp();
+		return cityNamesImp.update(city);
+	}
+	
 	@GET
 	@Path("/locality/list")
 	@Produces(MediaType.APPLICATION_JSON)
