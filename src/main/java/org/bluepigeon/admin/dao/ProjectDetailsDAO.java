@@ -265,7 +265,7 @@ public class ProjectDetailsDAO {
 					session3.getTransaction().commit();
 					session3.close();
 					
-					 }
+			 }
 			 
 			 if(builderProjectAmenityInfos.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectAmenityInfo where builderProject.id = :project_id";
@@ -290,7 +290,7 @@ public class ProjectDetailsDAO {
 					session5.getTransaction().commit();
 					session5.close();
 					
-					 }
+			 }
 			 
 			 if(builderProjectBankInfos.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectBankInfo where builderProject.id = :project_id";
@@ -315,7 +315,7 @@ public class ProjectDetailsDAO {
 					session7.getTransaction().commit();
 					session7.close();
 					
-					 }
+			 }
 			 
 			 if(builderProjectPriceInfos.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectPriceInfo where builderProject.id = :project_id";
@@ -340,7 +340,7 @@ public class ProjectDetailsDAO {
 					session9.getTransaction().commit();
 					session9.close();
 					
-					 }
+			 }
 			 
 			 if(builderProjectPaymentInfos.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectPaymentInfo where builderProject.id = :project_id";
@@ -365,7 +365,7 @@ public class ProjectDetailsDAO {
 					session11.getTransaction().commit();
 					session11.close();
 					
-					 }
+			 }
 			 
 			 if(builderProjectProjectTypes.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectProjectType where builderProject.id = :project_id";
@@ -384,14 +384,10 @@ public class ProjectDetailsDAO {
 							BuilderProjectProjectType builderCompanyNames2 = bIterator.next();
 							builderCompanyNames2.setBuilderProject(builderProject);
 							session13.save(builderCompanyNames2);
-							
 						}
-					
 					session13.getTransaction().commit();
 					session13.close();
-					
-					 }
-			 
+			 }
 			 if(builderProjectApprovalInfos.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectApprovalInfo where builderProject.id = :project_id";
 					Session newsession14 = hibernateUtil.openSession();
@@ -415,7 +411,7 @@ public class ProjectDetailsDAO {
 					session15.getTransaction().commit();
 					session15.close();
 					
-					 }
+			 }
 			 
 			 if(builderProjectPropertyTypes.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectPropertyType where builderProject.id = :project_id";
