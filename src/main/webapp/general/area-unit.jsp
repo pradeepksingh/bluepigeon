@@ -41,6 +41,7 @@ int area_unit_size=arae_unit_list.size();
                                     <thead>
                                         <tr>
                                             <th>Name</th>
+                                            <th>Sqft Value</th>
                                             <th>Status</th>
                                             <th class="alignRight">Actions</th>
                                         </tr>
@@ -51,6 +52,7 @@ int area_unit_size=arae_unit_list.size();
                                         %>
                                         <tr>
                                             <td><% out.print(arae_unit_list.get(i).getName()); %></td>
+                                            <td><% out.print(arae_unit_list.get(i).getSqft_value()); %></td>
                                             <td><% if(arae_unit_list.get(i).getStatus() == 1) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
                                             <td class="alignRight">
                                             	<a href="javascript:editAreaUnit(<% out.print(arae_unit_list.get(i).getId()); %>);" class="btn btn-success btn-xs icon-btn"><i class="fa fa-pencil"></i></a>
@@ -83,6 +85,12 @@ int area_unit_size=arae_unit_list.size();
                   		<div class="form-group">
                        		<label for="password" class="control-label">Area Unit</label>
                        		<input type="text" name="name" id="name" class="form-control" placeholder="Enter area unit"/>
+                  		</div>
+              		</div>
+              		<div class="col-xs-12">
+                  		<div class="form-group">
+                       		<label for="password" class="control-label">Value In Square feet.</label>
+                       		<input type="text" name="sqft_value" id="sqft_value" class="form-control" placeholder="Enter square feet value"/>
                   		</div>
               		</div>
               	</div>
@@ -129,7 +137,7 @@ $(document).ready(function(){
     });
 });
 function addAreaUnit() {
-	$.post("${baseUrl}/webapi/general/area/save/",{ name: $("#name").val(), status: $("#status").val()}, function(data){
+	$.post("${baseUrl}/webapi/general/area/save/",{ name: $("#name").val(), sqft_value: $("#sqft_value").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
 	},'json');
@@ -143,7 +151,7 @@ function editAreaUnit(areaunitid) {
 }
 
 function updateAreaUnit() {
-	$.post("${baseUrl}/webapi/general/area/update/",{ id: $("#uareaunit_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
+	$.post("${baseUrl}/webapi/general/area/update/",{ id: $("#uareaunit_id").val(), name: $("#uname").val(), sqft_value: $("#usqft_value").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
 	},'json');

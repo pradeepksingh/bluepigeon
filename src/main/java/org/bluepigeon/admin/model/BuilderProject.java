@@ -338,7 +338,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.status = status;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProject")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
 	public Set<BuilderProjectPropertyConfigurationInfo> getBuilderProjectPropertyConfigurationInfos() {
 		return this.builderProjectPropertyConfigurationInfos;
 	}
@@ -348,7 +348,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.builderProjectPropertyConfigurationInfos = builderProjectPropertyConfigurationInfos;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProject")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
 	public Set<BuilderProjectOfferInfo> getBuilderProjectOfferInfos() {
 		return this.builderProjectOfferInfos;
 	}
@@ -357,7 +357,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.builderProjectOfferInfos = builderProjectOfferInfos;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProject")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
 	public Set<BuilderProjectAmenityInfo> getBuilderProjectAmenityInfos() {
 		return this.builderProjectAmenityInfos;
 	}
@@ -366,7 +366,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.builderProjectAmenityInfos = builderProjectAmenityInfos;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProject")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
 	public Set<BuilderProjectBankInfo> getBuilderProjectBankInfos() {
 		return this.builderProjectBankInfos;
 	}
@@ -375,7 +375,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.builderProjectBankInfos = builderProjectBankInfos;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProject")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
 	public Set<BuilderProjectPriceInfo> getBuilderProjectPriceInfos() {
 		return this.builderProjectPriceInfos;
 	}
@@ -384,7 +384,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.builderProjectPriceInfos = builderProjectPriceInfos;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProject")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
 	public Set<BuilderProjectPaymentInfo> getBuilderProjectPaymentInfos() {
 		return this.builderProjectPaymentInfos;
 	}
@@ -393,7 +393,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.builderProjectPaymentInfos = builderProjectPaymentInfos;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProject")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
 	public Set<BuilderProjectProjectType> getBuilderProjectProjectTypes() {
 		return this.builderProjectProjectTypes;
 	}
@@ -402,7 +402,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.builderProjectProjectTypes = builderProjectProjectTypes;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProject")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
 	public Set<BuilderProjectApprovalInfo> getBuilderProjectApprovalInfos() {
 		return this.builderProjectApprovalInfos;
 	}
@@ -411,7 +411,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.builderProjectApprovalInfos = builderProjectApprovalInfos;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProject")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
 	public Set<BuilderProjectPropertyType> getBuilderProjectPropertyTypes() {
 		return this.builderProjectPropertyTypes;
 	}
