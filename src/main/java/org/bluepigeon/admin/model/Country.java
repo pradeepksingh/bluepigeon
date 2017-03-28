@@ -1,5 +1,5 @@
 package org.bluepigeon.admin.model;
-// Generated 16 Mar, 2017 3:30:20 PM by Hibernate Tools 4.0.0
+// Generated 27 Mar, 2017 5:55:47 PM by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
@@ -77,7 +77,7 @@ public class Country implements java.io.Serializable {
 		this.sortOrder = sortOrder;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "country")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
 	public Set<State> getStates() {
 		return this.states;
 	}
@@ -86,7 +86,7 @@ public class Country implements java.io.Serializable {
 		this.states = states;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "country")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
 	public Set<BuilderProject> getBuilderProjects() {
 		return this.builderProjects;
 	}

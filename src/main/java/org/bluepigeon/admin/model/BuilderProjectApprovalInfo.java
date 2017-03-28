@@ -1,5 +1,5 @@
 package org.bluepigeon.admin.model;
-// Generated 16 Mar, 2017 3:30:20 PM by Hibernate Tools 4.0.0
+// Generated 27 Mar, 2017 5:55:47 PM by Hibernate Tools 4.0.0
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,7 +53,7 @@ public class BuilderProjectApprovalInfo implements java.io.Serializable {
 		this.builderProjectApprovalType = builderProjectApprovalType;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "project_id")
 	public BuilderProject getBuilderProject() {
 		return this.builderProject;

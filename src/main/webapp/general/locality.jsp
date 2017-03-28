@@ -126,7 +126,7 @@ if (request.getParameterMap().containsKey("city_id")) {
                                         %>
                                         <tr>
                                             <td><% out.print(locality_list.get(i).getName()); %></td>
-                                            <td><% if(locality_list.get(i).getStatus() == 1) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
+                                            <td><% if(locality_list.get(i).getStatus()) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
                                             <td class="alignRight">
                                             	<a href="javascript:editLocality(<% out.print(locality_list.get(i).getId()); %>);" class="btn btn-success btn-xs icon-btn"><i class="fa fa-pencil"></i></a>
                                             </td>

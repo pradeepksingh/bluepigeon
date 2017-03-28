@@ -40,9 +40,11 @@ import org.bluepigeon.admin.dao.BuilderPropertyTypeDAO;
 import org.bluepigeon.admin.dao.BuilderSellerTypeDAO;
 import org.bluepigeon.admin.dao.BuilderTaxTypeDAO;
 import org.bluepigeon.admin.dao.ProjectDetailsDAO;
+import org.bluepigeon.admin.dao.ProjectLeadDAO;
 import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.ProjectDetails;
 import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuildingAmenity;
 import org.bluepigeon.admin.model.BuilderBuildingAmenityStages;
 import org.bluepigeon.admin.model.BuilderBuildingAmenitySubstages;
@@ -1368,5 +1370,13 @@ public class CreateProjectController {
 	public List<BuilderCompanyNames> getCompanyName(@QueryParam("builder_id") int builder_id) {
 		BuilderDetailsDAO builderBuildingAmenityDAO = new BuilderDetailsDAO();
 		return builderBuildingAmenityDAO.getBuilderCompanyNameList(builder_id);
+	}
+	@GET
+	@Path("/building/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderBuilding> getBuildingList(@QueryParam("project_id") int project_id) {
+		ProjectLeadDAO projectLeadDAO = new ProjectLeadDAO();
+		System.out.println("ProjectLeadDAO::");
+		return projectLeadDAO.getBuildingByProjectId(project_id);
 	}
 }

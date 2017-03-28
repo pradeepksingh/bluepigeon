@@ -1,5 +1,5 @@
 package org.bluepigeon.admin.model;
-// Generated 16 Mar, 2017 3:30:20 PM by Hibernate Tools 4.0.0
+// Generated 27 Mar, 2017 5:55:47 PM by Hibernate Tools 4.0.0
 
 import java.util.Date;
 import java.util.HashSet;
@@ -33,6 +33,10 @@ public class AdminUser implements java.io.Serializable {
 	private int status;
 	private Date createdDate;
 	private Long createdBy;
+	private Set<BuilderFlatType> builderFlatTypes = new HashSet<BuilderFlatType>(0);
+	private Set<BuilderLead> builderLeads = new HashSet<BuilderLead>(0);
+	private Set<BuilderBuilding> builderBuildings = new HashSet<BuilderBuilding>(0);
+	private Set<BuilderFlat> builderFlats = new HashSet<BuilderFlat>(0);
 	private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
 
 	public AdminUser() {
@@ -50,7 +54,8 @@ public class AdminUser implements java.io.Serializable {
 	}
 
 	public AdminUser(AdminUserRole adminUserRole, String name, String email, String password, String mobile, int status,
-			Date createdDate, Long createdBy, Set<BuilderProject> builderProjects) {
+			Date createdDate, Long createdBy, Set<BuilderFlatType> builderFlatTypes, Set<BuilderLead> builderLeads,
+			Set<BuilderBuilding> builderBuildings, Set<BuilderFlat> builderFlats, Set<BuilderProject> builderProjects) {
 		this.adminUserRole = adminUserRole;
 		this.name = name;
 		this.email = email;
@@ -59,6 +64,10 @@ public class AdminUser implements java.io.Serializable {
 		this.status = status;
 		this.createdDate = createdDate;
 		this.createdBy = createdBy;
+		this.builderFlatTypes = builderFlatTypes;
+		this.builderLeads = builderLeads;
+		this.builderBuildings = builderBuildings;
+		this.builderFlats = builderFlats;
 		this.builderProjects = builderProjects;
 	}
 
@@ -146,6 +155,42 @@ public class AdminUser implements java.io.Serializable {
 
 	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "adminUser")
+	public Set<BuilderFlatType> getBuilderFlatTypes() {
+		return this.builderFlatTypes;
+	}
+
+	public void setBuilderFlatTypes(Set<BuilderFlatType> builderFlatTypes) {
+		this.builderFlatTypes = builderFlatTypes;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "adminUser")
+	public Set<BuilderLead> getBuilderLeads() {
+		return this.builderLeads;
+	}
+
+	public void setBuilderLeads(Set<BuilderLead> builderLeads) {
+		this.builderLeads = builderLeads;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "adminUser")
+	public Set<BuilderBuilding> getBuilderBuildings() {
+		return this.builderBuildings;
+	}
+
+	public void setBuilderBuildings(Set<BuilderBuilding> builderBuildings) {
+		this.builderBuildings = builderBuildings;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "adminUser")
+	public Set<BuilderFlat> getBuilderFlats() {
+		return this.builderFlats;
+	}
+
+	public void setBuilderFlats(Set<BuilderFlat> builderFlats) {
+		this.builderFlats = builderFlats;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "adminUser")

@@ -143,7 +143,7 @@
 														<select id="company_id" name="company_id" class="form-control">
 															<option value="">Select Builder Company</option>
 															<% for (Builder builder : builders) { %>
-															<% for (BuilderCompanyNames builderCompanyNames : builder.getBuilderCompanyNames()) { %>
+															<% for (BuilderCompanyNames builderCompanyNames : builder.getBuilderCompanyNameses()) { %>
 															<% if(builderProject.getBuilder().getId() ==  builder.getId()) { %>
 															<option value="<%out.print(builderCompanyNames.getId());%>" <% if(builderProject.getBuilderCompanyNames().getId() ==  builderCompanyNames.getId()) { %>selected<% } %>> <% out.print(builderCompanyNames.getName()); %> </option>
 															<% } %>

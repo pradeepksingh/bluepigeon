@@ -206,8 +206,6 @@ public class ProjectDetailsDAO {
 			newsession.getTransaction().commit();
 			newsession.close();
 			
-			
-			
 			Set<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos = projectDetails.getBuilderProjectPropertyConfigurationInfos();
 					
 			 Set<BuilderProjectOfferInfo> builderProjectOfferInfos = projectDetails.getBuilderProjectOfferInfos();
@@ -246,201 +244,197 @@ public class ProjectDetailsDAO {
 			 
 			 if(builderProjectOfferInfos.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectOfferInfo where builderProject.id = :project_id";
-					Session newsession1 = hibernateUtil.openSession();
-					newsession1.beginTransaction();
-					Query smdelete = newsession1.createQuery(deleteBuilderCompanyName);
+					Session newsession21 = hibernateUtil.openSession();
+					newsession21.beginTransaction();
+					Query smdelete = newsession21.createQuery(deleteBuilderCompanyName);
 					smdelete.setParameter("project_id", builderProject.getId());
 					smdelete.executeUpdate();
-					newsession1.getTransaction().commit();
-					newsession1.close();
+					newsession21.getTransaction().commit();
+					newsession21.close();
 					
-					Session session2 = hibernateUtil.openSession();
-					session2.beginTransaction();
+					Session session3 = hibernateUtil.openSession();
+					session3.beginTransaction();
 						Iterator<BuilderProjectOfferInfo> bIterator = builderProjectOfferInfos.iterator();
 						while(bIterator.hasNext()){
 							BuilderProjectOfferInfo builderCompanyNames2 = bIterator.next();
 							builderCompanyNames2.setBuilderProject(builderProject);
-							session2.save(builderCompanyNames2);
+							session3.save(builderCompanyNames2);
 							
 						}
 					
-					session2.getTransaction().commit();
-					session2.close();
+					session3.getTransaction().commit();
+					session3.close();
 					
-					 }
+			 }
 			 
 			 if(builderProjectAmenityInfos.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectAmenityInfo where builderProject.id = :project_id";
-					Session newsession1 = hibernateUtil.openSession();
-					newsession1.beginTransaction();
-					Query smdelete = newsession1.createQuery(deleteBuilderCompanyName);
+					Session newsession4 = hibernateUtil.openSession();
+					newsession4.beginTransaction();
+					Query smdelete = newsession4.createQuery(deleteBuilderCompanyName);
 					smdelete.setParameter("project_id", builderProject.getId());
 					smdelete.executeUpdate();
-					newsession1.getTransaction().commit();
-					newsession1.close();
+					newsession4.getTransaction().commit();
+					newsession4.close();
 					
-					Session session2 = hibernateUtil.openSession();
-					session2.beginTransaction();
+					Session session5 = hibernateUtil.openSession();
+					session5.beginTransaction();
 						Iterator<BuilderProjectAmenityInfo> bIterator = builderProjectAmenityInfos.iterator();
 						while(bIterator.hasNext()){
 							BuilderProjectAmenityInfo builderCompanyNames2 = bIterator.next();
 							builderCompanyNames2.setBuilderProject(builderProject);
-							session2.save(builderCompanyNames2);
+							session5.save(builderCompanyNames2);
 							
 						}
 					
-					session2.getTransaction().commit();
-					session2.close();
+					session5.getTransaction().commit();
+					session5.close();
 					
-					 }
+			 }
 			 
 			 if(builderProjectBankInfos.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectBankInfo where builderProject.id = :project_id";
-					Session newsession1 = hibernateUtil.openSession();
-					newsession1.beginTransaction();
-					Query smdelete = newsession1.createQuery(deleteBuilderCompanyName);
+					Session newsession6 = hibernateUtil.openSession();
+					newsession6.beginTransaction();
+					Query smdelete = newsession6.createQuery(deleteBuilderCompanyName);
 					smdelete.setParameter("project_id", builderProject.getId());
 					smdelete.executeUpdate();
-					newsession1.getTransaction().commit();
-					newsession1.close();
+					newsession6.getTransaction().commit();
+					newsession6.close();
 					
-					Session session2 = hibernateUtil.openSession();
-					session2.beginTransaction();
+					Session session7 = hibernateUtil.openSession();
+					session7.beginTransaction();
 						Iterator<BuilderProjectBankInfo> bIterator = builderProjectBankInfos.iterator();
 						while(bIterator.hasNext()){
 							BuilderProjectBankInfo builderCompanyNames2 = bIterator.next();
 							builderCompanyNames2.setBuilderProject(builderProject);
-							session2.save(builderCompanyNames2);
+							session7.save(builderCompanyNames2);
 							
 						}
 					
-					session2.getTransaction().commit();
-					session2.close();
+					session7.getTransaction().commit();
+					session7.close();
 					
-					 }
+			 }
 			 
 			 if(builderProjectPriceInfos.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectPriceInfo where builderProject.id = :project_id";
-					Session newsession1 = hibernateUtil.openSession();
-					newsession1.beginTransaction();
-					Query smdelete = newsession1.createQuery(deleteBuilderCompanyName);
+					Session newsession8 = hibernateUtil.openSession();
+					newsession8.beginTransaction();
+					Query smdelete = newsession8.createQuery(deleteBuilderCompanyName);
 					smdelete.setParameter("project_id", builderProject.getId());
 					smdelete.executeUpdate();
-					newsession1.getTransaction().commit();
-					newsession1.close();
+					newsession8.getTransaction().commit();
+					newsession8.close();
 					
-					Session session2 = hibernateUtil.openSession();
-					session2.beginTransaction();
+					Session session9 = hibernateUtil.openSession();
+					session9.beginTransaction();
 						Iterator<BuilderProjectPriceInfo> bIterator = builderProjectPriceInfos.iterator();
 						while(bIterator.hasNext()){
 							BuilderProjectPriceInfo builderCompanyNames2 = bIterator.next();
 							builderCompanyNames2.setBuilderProject(builderProject);
-							session2.save(builderCompanyNames2);
+							session9.save(builderCompanyNames2);
 							
 						}
 					
-					session2.getTransaction().commit();
-					session2.close();
+					session9.getTransaction().commit();
+					session9.close();
 					
-					 }
+			 }
 			 
 			 if(builderProjectPaymentInfos.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectPaymentInfo where builderProject.id = :project_id";
-					Session newsession1 = hibernateUtil.openSession();
-					newsession1.beginTransaction();
-					Query smdelete = newsession1.createQuery(deleteBuilderCompanyName);
+					Session newsession10 = hibernateUtil.openSession();
+					newsession10.beginTransaction();
+					Query smdelete = newsession10.createQuery(deleteBuilderCompanyName);
 					smdelete.setParameter("project_id", builderProject.getId());
 					smdelete.executeUpdate();
-					newsession1.getTransaction().commit();
-					newsession1.close();
+					newsession10.getTransaction().commit();
+					newsession10.close();
 					
-					Session session2 = hibernateUtil.openSession();
-					session2.beginTransaction();
+					Session session11 = hibernateUtil.openSession();
+					session11.beginTransaction();
 						Iterator<BuilderProjectPaymentInfo> bIterator = builderProjectPaymentInfos.iterator();
 						while(bIterator.hasNext()){
 							BuilderProjectPaymentInfo builderCompanyNames2 = bIterator.next();
 							builderCompanyNames2.setBuilderProject(builderProject);
-							session2.save(builderCompanyNames2);
+							session11.save(builderCompanyNames2);
 							
 						}
 					
-					session2.getTransaction().commit();
-					session2.close();
+					session11.getTransaction().commit();
+					session11.close();
 					
-					 }
+			 }
 			 
 			 if(builderProjectProjectTypes.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectProjectType where builderProject.id = :project_id";
-					Session newsession1 = hibernateUtil.openSession();
-					newsession1.beginTransaction();
-					Query smdelete = newsession1.createQuery(deleteBuilderCompanyName);
+					Session newsession12 = hibernateUtil.openSession();
+					newsession12.beginTransaction();
+					Query smdelete = newsession12.createQuery(deleteBuilderCompanyName);
 					smdelete.setParameter("project_id", builderProject.getId());
 					smdelete.executeUpdate();
-					newsession1.getTransaction().commit();
-					newsession1.close();
+					newsession12.getTransaction().commit();
+					newsession12.close();
 					
-					Session session2 = hibernateUtil.openSession();
-					session2.beginTransaction();
+					Session session13 = hibernateUtil.openSession();
+					session13.beginTransaction();
 						Iterator<BuilderProjectProjectType> bIterator = builderProjectProjectTypes.iterator();
 						while(bIterator.hasNext()){
 							BuilderProjectProjectType builderCompanyNames2 = bIterator.next();
 							builderCompanyNames2.setBuilderProject(builderProject);
-							session2.save(builderCompanyNames2);
-							
+							session13.save(builderCompanyNames2);
 						}
-					
-					session2.getTransaction().commit();
-					session2.close();
-					
-					 }
-			 
+					session13.getTransaction().commit();
+					session13.close();
+			 }
 			 if(builderProjectApprovalInfos.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectApprovalInfo where builderProject.id = :project_id";
-					Session newsession1 = hibernateUtil.openSession();
-					newsession1.beginTransaction();
-					Query smdelete = newsession1.createQuery(deleteBuilderCompanyName);
+					Session newsession14 = hibernateUtil.openSession();
+					newsession14.beginTransaction();
+					Query smdelete = newsession14.createQuery(deleteBuilderCompanyName);
 					smdelete.setParameter("project_id", builderProject.getId());
 					smdelete.executeUpdate();
-					newsession1.getTransaction().commit();
-					newsession1.close();
+					newsession14.getTransaction().commit();
+					newsession14.close();
 					
-					Session session2 = hibernateUtil.openSession();
-					session2.beginTransaction();
+					Session session15 = hibernateUtil.openSession();
+					session15.beginTransaction();
 						Iterator<BuilderProjectApprovalInfo> bIterator = builderProjectApprovalInfos.iterator();
 						while(bIterator.hasNext()){
 							BuilderProjectApprovalInfo builderCompanyNames2 = bIterator.next();
 							builderCompanyNames2.setBuilderProject(builderProject);
-							session2.save(builderCompanyNames2);
+							session15.save(builderCompanyNames2);
 							
 						}
 					
-					session2.getTransaction().commit();
-					session2.close();
+					session15.getTransaction().commit();
+					session15.close();
 					
-					 }
+			 }
 			 
 			 if(builderProjectPropertyTypes.size()>0){
 					String deleteBuilderCompanyName = "DELETE from BuilderProjectPropertyType where builderProject.id = :project_id";
-					Session newsession1 = hibernateUtil.openSession();
-					newsession1.beginTransaction();
-					Query smdelete = newsession1.createQuery(deleteBuilderCompanyName);
+					Session newsession16 = hibernateUtil.openSession();
+					newsession16.beginTransaction();
+					Query smdelete = newsession16.createQuery(deleteBuilderCompanyName);
 					smdelete.setParameter("project_id", builderProject.getId());
 					smdelete.executeUpdate();
-					newsession1.getTransaction().commit();
-					newsession1.close();
+					newsession16.getTransaction().commit();
+					newsession16.close();
 					
-					Session session2 = hibernateUtil.openSession();
-					session2.beginTransaction();
+					Session session17 = hibernateUtil.openSession();
+					session17.beginTransaction();
 						Iterator<BuilderProjectPropertyType> bIterator = builderProjectPropertyTypes.iterator();
 						while(bIterator.hasNext()){
 							BuilderProjectPropertyType builderCompanyNames2 = bIterator.next();
 							builderCompanyNames2.setBuilderProject(builderProject);
-							session2.save(builderCompanyNames2);
+							session17.save(builderCompanyNames2);
 							
 						}
 					
-					session2.getTransaction().commit();
-					session2.close();
+					session17.getTransaction().commit();
+					session17.close();
 					
 					 }
 			 
@@ -468,6 +462,86 @@ public class ProjectDetailsDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
 		List<BuilderProject> result = query.list();
+		session.close();
+		return result;
+	}
+	public List<BuilderProjectBankInfo> getBuilderProjectBankInfoByProjectId(int projectId){
+		String hql = "from BuilderProjectBankInfo where project_id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		List<BuilderProjectBankInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	public List<BuilderProjectPropertyConfigurationInfo> getBuilderProjectPropertyConfigurationInfoByProjectId(int projectId){
+		String hql = "from BuilderProjectPropertyConfigurationInfo where project_id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		List<BuilderProjectPropertyConfigurationInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	public List<BuilderProjectApprovalInfo> getBuilderProjectApprovalInfoByProjectId(int projectId){
+		String hql = "from BuilderProjectApprovalInfo where project_id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		List<BuilderProjectApprovalInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	public List<BuilderProjectProjectType> getBuilderProjectProjectTypeByProjectId(int projectId){
+		String hql = "from BuilderProjectProjectType where project_id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		List<BuilderProjectProjectType> result = query.list();
+		session.close();
+		return result;
+	}
+	public List<BuilderProjectAmenityInfo> getBuilderProjectAmenityInfoByProjectId(int projectId){
+		String hql = "from BuilderProjectAmenityInfo where project_id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		List<BuilderProjectAmenityInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	public List<BuilderProjectOfferInfo> getBuilderProjectOfferInfoByProjectId(int projectId){
+		String hql = "from BuilderProjectOfferInfo where project_id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		List<BuilderProjectOfferInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	public List<BuilderProjectPaymentInfo> getBuilderProjectPaymentInfoByProjectId(int projectId){
+		String hql = "from BuilderProjectPaymentInfo where project_id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		List<BuilderProjectPaymentInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	public List<BuilderProjectPriceInfo> getBuilderProjectPriceInfoByProjectId(int projectId){
+		String hql = "from BuilderProjectPriceInfo where project_id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		List<BuilderProjectPriceInfo> result = query.list();
 		session.close();
 		return result;
 	}

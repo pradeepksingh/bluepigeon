@@ -1,5 +1,5 @@
 package org.bluepigeon.admin.model;
-// Generated 16 Mar, 2017 3:30:20 PM by Hibernate Tools 4.0.0
+// Generated 27 Mar, 2017 5:55:47 PM by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,14 +23,17 @@ public class BuilderPropertyType implements java.io.Serializable {
 	private String name;
 	private Byte status;
 	private Set<BuilderProjectPropertyType> builderProjectPropertyTypes = new HashSet<BuilderProjectPropertyType>(0);
+	private Set<BuilderLead> builderLeads = new HashSet<BuilderLead>(0);
 
 	public BuilderPropertyType() {
 	}
 
-	public BuilderPropertyType(String name, Byte status, Set<BuilderProjectPropertyType> builderProjectPropertyTypes) {
+	public BuilderPropertyType(String name, Byte status, Set<BuilderProjectPropertyType> builderProjectPropertyTypes,
+			Set<BuilderLead> builderLeads) {
 		this.name = name;
 		this.status = status;
 		this.builderProjectPropertyTypes = builderProjectPropertyTypes;
+		this.builderLeads = builderLeads;
 	}
 
 	@Id
@@ -70,6 +73,15 @@ public class BuilderPropertyType implements java.io.Serializable {
 
 	public void setBuilderProjectPropertyTypes(Set<BuilderProjectPropertyType> builderProjectPropertyTypes) {
 		this.builderProjectPropertyTypes = builderProjectPropertyTypes;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderPropertyType")
+	public Set<BuilderLead> getBuilderLeads() {
+		return this.builderLeads;
+	}
+
+	public void setBuilderLeads(Set<BuilderLead> builderLeads) {
+		this.builderLeads = builderLeads;
 	}
 
 }

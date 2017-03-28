@@ -219,8 +219,12 @@ public class GeneralController {
 	@Path("/locality/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addLocality(@FormParam("name") String name, @FormParam("city_id") int cityId,
-			@FormParam("sortorder") byte sortOrder, @FormParam("status") Integer status,
+			@FormParam("sortorder") byte sortOrder, @FormParam("status") Integer sstatus,
 			@FormParam("latitude") String latitude, @FormParam("longitude") String longitude) {
+		boolean status = false;
+		if(sstatus==1){
+			status=true;
+		}
 		City city = new City();
 		city.setId(cityId);
 		Locality locality = new Locality();
@@ -239,8 +243,12 @@ public class GeneralController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateLocality(@FormParam("id") int id, @FormParam("name") String name,
 			@FormParam("city_id") int cityId, @FormParam("sortorder") byte sortOrder,
-			@FormParam("status") Integer status, @FormParam("latitude") String latitude,
+			@FormParam("status") Integer sstatus, @FormParam("latitude") String latitude,
 			@FormParam("longitude") String longitude) {
+		boolean status=false;
+		if(sstatus==1){
+			status=true;
+		}
 		City city = new City();
 		city.setId(cityId);
 		Locality locality = new Locality();

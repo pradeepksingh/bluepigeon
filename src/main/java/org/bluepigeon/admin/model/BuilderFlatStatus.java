@@ -1,11 +1,15 @@
 package org.bluepigeon.admin.model;
-// Generated 16 Mar, 2017 3:30:20 PM by Hibernate Tools 4.0.0
+// Generated 27 Mar, 2017 5:55:47 PM by Hibernate Tools 4.0.0
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -18,13 +22,15 @@ public class BuilderFlatStatus implements java.io.Serializable {
 	private Integer id;
 	private String name;
 	private Byte status;
+	private Set<BuilderFlat> builderFlats = new HashSet<BuilderFlat>(0);
 
 	public BuilderFlatStatus() {
 	}
 
-	public BuilderFlatStatus(String name, Byte status) {
+	public BuilderFlatStatus(String name, Byte status, Set<BuilderFlat> builderFlats) {
 		this.name = name;
 		this.status = status;
+		this.builderFlats = builderFlats;
 	}
 
 	@Id
@@ -55,6 +61,15 @@ public class BuilderFlatStatus implements java.io.Serializable {
 
 	public void setStatus(Byte status) {
 		this.status = status;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderFlatStatus")
+	public Set<BuilderFlat> getBuilderFlats() {
+		return this.builderFlats;
+	}
+
+	public void setBuilderFlats(Set<BuilderFlat> builderFlats) {
+		this.builderFlats = builderFlats;
 	}
 
 }
