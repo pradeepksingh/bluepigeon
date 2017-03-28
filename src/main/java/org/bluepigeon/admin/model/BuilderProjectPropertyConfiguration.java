@@ -1,5 +1,5 @@
 package org.bluepigeon.admin.model;
-// Generated 16 Mar, 2017 3:30:20 PM by Hibernate Tools 4.0.0
+// Generated 27 Mar, 2017 5:55:47 PM by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,16 +22,18 @@ public class BuilderProjectPropertyConfiguration implements java.io.Serializable
 	private Integer id;
 	private String name;
 	private Byte status;
+	private Set<BuilderFlatType> builderFlatTypes = new HashSet<BuilderFlatType>(0);
 	private Set<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos = new HashSet<BuilderProjectPropertyConfigurationInfo>(
 			0);
 
 	public BuilderProjectPropertyConfiguration() {
 	}
 
-	public BuilderProjectPropertyConfiguration(String name, Byte status,
+	public BuilderProjectPropertyConfiguration(String name, Byte status, Set<BuilderFlatType> builderFlatTypes,
 			Set<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos) {
 		this.name = name;
 		this.status = status;
+		this.builderFlatTypes = builderFlatTypes;
 		this.builderProjectPropertyConfigurationInfos = builderProjectPropertyConfigurationInfos;
 	}
 
@@ -63,6 +65,15 @@ public class BuilderProjectPropertyConfiguration implements java.io.Serializable
 
 	public void setStatus(Byte status) {
 		this.status = status;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProjectPropertyConfiguration")
+	public Set<BuilderFlatType> getBuilderFlatTypes() {
+		return this.builderFlatTypes;
+	}
+
+	public void setBuilderFlatTypes(Set<BuilderFlatType> builderFlatTypes) {
+		this.builderFlatTypes = builderFlatTypes;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProjectPropertyConfiguration")

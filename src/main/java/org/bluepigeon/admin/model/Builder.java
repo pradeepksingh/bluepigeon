@@ -1,5 +1,5 @@
 package org.bluepigeon.admin.model;
-// Generated 16 Mar, 2017 3:30:20 PM by Hibernate Tools 4.0.0
+// Generated 27 Mar, 2017 5:55:47 PM by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,13 +27,15 @@ public class Builder implements java.io.Serializable {
 	private String aboutBuilder;
 	private Byte status;
 	private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
-	private Set<BuilderCompanyNames> builderCompanyNames = new HashSet<BuilderCompanyNames>(0);
+	private Set<BuilderCompanyNames> builderCompanyNameses = new HashSet<BuilderCompanyNames>(0);
+	private Set<BuilderFlatType> builderFlatTypes = new HashSet<BuilderFlatType>(0);
 
 	public Builder() {
 	}
 
 	public Builder(String name, String headOffice, String email, String mobile, String aboutBuilder, Byte status,
-			Set<BuilderProject> builderProjects, Set<BuilderCompanyNames> builderCompanyNames) {
+			Set<BuilderProject> builderProjects, Set<BuilderCompanyNames> builderCompanyNameses,
+			Set<BuilderFlatType> builderFlatTypes) {
 		this.name = name;
 		this.headOffice = headOffice;
 		this.email = email;
@@ -41,7 +43,8 @@ public class Builder implements java.io.Serializable {
 		this.aboutBuilder = aboutBuilder;
 		this.status = status;
 		this.builderProjects = builderProjects;
-		this.builderCompanyNames = builderCompanyNames;
+		this.builderCompanyNameses = builderCompanyNameses;
+		this.builderFlatTypes = builderFlatTypes;
 	}
 
 	@Id
@@ -120,12 +123,21 @@ public class Builder implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builder")
-	public Set<BuilderCompanyNames> getBuilderCompanyNames() {
-		return this.builderCompanyNames;
+	public Set<BuilderCompanyNames> getBuilderCompanyNameses() {
+		return this.builderCompanyNameses;
 	}
 
-	public void setBuilderCompanyNames(Set<BuilderCompanyNames> builderCompanyNames) {
-		this.builderCompanyNames = builderCompanyNames;
+	public void setBuilderCompanyNameses(Set<BuilderCompanyNames> builderCompanyNameses) {
+		this.builderCompanyNameses = builderCompanyNameses;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builder")
+	public Set<BuilderFlatType> getBuilderFlatTypes() {
+		return this.builderFlatTypes;
+	}
+
+	public void setBuilderFlatTypes(Set<BuilderFlatType> builderFlatTypes) {
+		this.builderFlatTypes = builderFlatTypes;
 	}
 
 }

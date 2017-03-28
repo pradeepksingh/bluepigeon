@@ -1,5 +1,5 @@
 package org.bluepigeon.admin.model;
-// Generated 23 Mar, 2017 10:55:42 AM by Hibernate Tools 4.0.0
+// Generated 27 Mar, 2017 5:55:47 PM by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;

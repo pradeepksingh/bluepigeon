@@ -1,5 +1,5 @@
 package org.bluepigeon.admin.model;
-// Generated 16 Mar, 2017 3:30:20 PM by Hibernate Tools 4.0.0
+// Generated 27 Mar, 2017 5:55:47 PM by Hibernate Tools 4.0.0
 
 import java.util.Date;
 import java.util.HashSet;
@@ -29,7 +29,7 @@ public class Locality implements java.io.Serializable {
 	private String name;
 	private String latitude;
 	private String longitude;
-	private Integer status;
+	private Boolean status;
 	private Byte sortOrder;
 	private Date lastUpdatedOn;
 	private Integer lastUpdatedBy;
@@ -38,7 +38,7 @@ public class Locality implements java.io.Serializable {
 	public Locality() {
 	}
 
-	public Locality(City city, String name, String latitude, String longitude, Integer status, Byte sortOrder,
+	public Locality(City city, String name, String latitude, String longitude, Boolean status, Byte sortOrder,
 			Date lastUpdatedOn, Integer lastUpdatedBy, Set<BuilderProject> builderProjects) {
 		this.city = city;
 		this.name = name;
@@ -101,11 +101,11 @@ public class Locality implements java.io.Serializable {
 	}
 
 	@Column(name = "status")
-	public Integer getStatus() {
+	public Boolean getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(Boolean status) {
 		this.status = status;
 	}
 

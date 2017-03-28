@@ -1,5 +1,5 @@
 package org.bluepigeon.admin.model;
-// Generated 16 Mar, 2017 3:30:20 PM by Hibernate Tools 4.0.0
+// Generated 27 Mar, 2017 5:55:47 PM by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,16 +27,19 @@ public class City implements java.io.Serializable {
 	private Byte status;
 	private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
 	private Set<Locality> localities = new HashSet<Locality>(0);
+	private Set<BuilderLead> builderLeads = new HashSet<BuilderLead>(0);
 
 	public City() {
 	}
 
-	public City(State state, String name, Byte status, Set<BuilderProject> builderProjects, Set<Locality> localities) {
+	public City(State state, String name, Byte status, Set<BuilderProject> builderProjects, Set<Locality> localities,
+			Set<BuilderLead> builderLeads) {
 		this.state = state;
 		this.name = name;
 		this.status = status;
 		this.builderProjects = builderProjects;
 		this.localities = localities;
+		this.builderLeads = builderLeads;
 	}
 
 	@Id
@@ -95,6 +98,15 @@ public class City implements java.io.Serializable {
 
 	public void setLocalities(Set<Locality> localities) {
 		this.localities = localities;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "city")
+	public Set<BuilderLead> getBuilderLeads() {
+		return this.builderLeads;
+	}
+
+	public void setBuilderLeads(Set<BuilderLead> builderLeads) {
+		this.builderLeads = builderLeads;
 	}
 
 }
