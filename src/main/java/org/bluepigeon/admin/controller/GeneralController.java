@@ -35,11 +35,13 @@ public class GeneralController {
 	@POST
 	@Path("/area/save")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage saveAreaUnit(@FormParam("name") String name, @FormParam("status") byte status) {
-
+	public ResponseMessage saveAreaUnit(@FormParam("name") String name, @FormParam("sqft_value") Double sqft_value,@FormParam("status") byte status) {
+		Byte is_deleted = 0;
 		AreaUnit areaUnit = new AreaUnit();
 		areaUnit.setName(name);
+		areaUnit.setSqft_value(sqft_value);
 		areaUnit.setStatus(status);
+		areaUnit.setIsDeleted(is_deleted);
 		AreaUnitDAO areaUnitDAOImpl = new AreaUnitDAO();
 		return areaUnitDAOImpl.save(areaUnit);
 	}
@@ -47,14 +49,19 @@ public class GeneralController {
 	@POST
 	@Path("/area/update")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage updateAraeUnit(@FormParam("id") Short id, @FormParam("name") String name,
-			@FormParam("status") byte status) {
-
+	public ResponseMessage updateAraeUnit(
+			@FormParam("id") Short id, 
+			@FormParam("name") String name,
+			@FormParam("sqft_value") Double sqft_value,
+			@FormParam("status") byte status
+	) {
+		Byte is_deleted = 0;
 		AreaUnit areaUnit = new AreaUnit();
 		areaUnit.setId(id);
 		areaUnit.setName(name);
+		areaUnit.setSqft_value(sqft_value);
 		areaUnit.setStatus(status);
-
+		areaUnit.setIsDeleted(is_deleted);
 		AreaUnitDAO areaUnitDAOImpl = new AreaUnitDAO();
 		return areaUnitDAOImpl.update(areaUnit);
 	}

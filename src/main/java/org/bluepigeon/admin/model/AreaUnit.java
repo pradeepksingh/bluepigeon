@@ -21,6 +21,7 @@ public class AreaUnit implements java.io.Serializable {
 
 	private Short id;
 	private String name;
+	private Double sqft_value;
 	private Byte status;
 	private Byte isDeleted;
 	private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
@@ -54,6 +55,15 @@ public class AreaUnit implements java.io.Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@Column(name = "sqft_value", precision = 22, scale = 2)
+	public Double getSqft_value() {
+		return sqft_value;
+	}
+
+	public void setSqft_value(Double sqft_value) {
+		this.sqft_value = sqft_value;
 	}
 
 	@Column(name = "status")

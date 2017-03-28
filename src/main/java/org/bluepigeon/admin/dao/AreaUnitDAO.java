@@ -132,7 +132,7 @@ public class AreaUnitDAO {
 		return result;
 	}
 
-	public List<AreaUnit> getAreaUnitById(int id) {
+	public List<AreaUnit> getAreaUnitById(Short id) {
 		String hql = "from AreaUnit where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();

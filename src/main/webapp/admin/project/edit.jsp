@@ -539,20 +539,23 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-name">
-													<label class="control-label col-sm-4">Base Rate <span class='text-danger'>*</span></label>
+											<div class="col-lg-6">
+												<div class="form-group" id="error-base_unit">
+													<label class="control-label col-sm-4">Pricing Unit <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="base_rate" name="base_rate" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
+														<select name="base_unit" id="base_unit" class="form-control">
+															<% for(AreaUnit areaUnit :areaUnits) { %>
+															<option value="<% out.print(areaUnit.getId()); %>" <% if(projectPriceInfo.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
+															<% } %>
+														</select>
 													</div>
-													<div class="messageContainer"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Parking </label>
+												<div class="form-group" id="error-base_rate">
+													<label class="control-label col-sm-4">Base Rate <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="parking" name="parking" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
+														<input type="text" class="form-control" id="base_rate" name="base_rate" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -571,8 +574,9 @@
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-post">
 													<label class="control-label col-sm-4">Applicable Post </label>
-													<div class="col-sm-8">
+													<div class="col-sm-8 input-group" style="padding: 0px 12px;">
 														<input type="text" class="form-control" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
+														<span class="input-group-addon">floor</span>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -591,8 +595,9 @@
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-tenure">
 													<label class="control-label col-sm-4">Tenure </label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="tenure" name="tenure" value="<% if(projectPriceInfo.getTenure() != null){ out.print(projectPriceInfo.getTenure());}%>"/>
+													<div class="col-sm-8 input-group" style="padding: 0px 12px;">
+														<input type="text" class="form-control" id="tenure" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>"/>
+														<span class="input-group-addon">Months</span>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -610,6 +615,17 @@
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-4">Parking </label>
+													<div class="col-sm-8">
+														<input type="text" class="form-control" id="parking" name="parking" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
+													</div>
+													<div class="messageContainer"></div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Stamp Duty </label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());}%>"/>
@@ -617,8 +633,6 @@
 													<div class="messageContainer"></div>
 												</div>
 											</div>
-										</div>
-										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-tax">
 													<label class="control-label col-sm-4">Tax</label>
@@ -628,6 +642,8 @@
 													<div class="messageContainer"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-vat">
 													<label class="control-label col-sm-4">VAT </label>
@@ -637,8 +653,6 @@
 													<div class="messageContainer"></div>
 												</div>
 											</div>
-										</div>
-										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-tech_fee">
 													<label class="control-label col-sm-4">Tech Fees</label>
@@ -673,10 +687,10 @@
 												for(BuilderProjectPaymentInfo projectPaymentInfo :projectPaymentInfos) { 
 											%>
 											<div class="row" id="schedule-<% out.print(i); %>">
-												<div class="col-lg-12" style="padding-bottom:5px;">
-													<span class="pull-right"><a href="javascript:removeSchedule(<% out.print(i); %>);" class="btn btn-danger btn-xs">x</a></span>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<% if(i > 1) { %>
+												<hr/>
+												<% } %>
+												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-schedule">
 														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
@@ -685,23 +699,26 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-payable">
-														<label class="control-label col-sm-4">% of Net Payable </label>
-														<div class="col-sm-8">
+														<label class="control-label col-sm-8">% of Net Payable </label>
+														<div class="col-sm-4">
 															<input type="text" class="form-control" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-amount">
-														<label class="control-label col-sm-4">Amount </label>
-														<div class="col-sm-8">
+														<label class="control-label col-sm-6">Amount </label>
+														<div class="col-sm-6">
 															<input type="text" class="form-control" id="amount" name="amount[]" value="<% if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
+												</div>
+												<div class="col-lg-1">
+													<span><a href="javascript:removeSchedule(<% out.print(i); %>);" class="btn btn-danger btn-xs">x</a></span>
 												</div>
 											</div>
 											<% i++; } %>
@@ -709,10 +726,7 @@
 												<% if(i > 1) { %>
 												<hr/>
 												<% } %>
-												<div class="col-lg-12" style="padding-bottom:5px;">
-													<span class="pull-right"><a href="javascript:removeSchedule(<% out.print(i);%>);" class="btn btn-danger btn-xs">x</a></span>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-schedule">
 														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
@@ -721,23 +735,26 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-payable">
-														<label class="control-label col-sm-4">% of Net Payable </label>
-														<div class="col-sm-8">
+														<label class="control-label col-sm-8">% of Net Payable </label>
+														<div class="col-sm-4">
 															<input type="text" class="form-control" id="payable" name="payable[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-amount">
-														<label class="control-label col-sm-4">Amount </label>
-														<div class="col-sm-8">
+														<label class="control-label col-sm-6">Amount </label>
+														<div class="col-sm-6">
 															<input type="text" class="form-control" id="amount" name="amount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
+												</div>
+												<div class="col-lg-1">
+													<span><a href="javascript:removeSchedule(<% out.print(i);%>);" class="btn btn-danger btn-xs">x</a></span>
 												</div>
 											</div>
 										</div>
@@ -1107,6 +1124,13 @@ $('#pricingfrm').bootstrapValidator({
               	}
             }
         },
+        base_unit: {
+    		validators: {
+                notEmpty: {
+                    message: 'Pricing Unit is required and cannot be empty'
+                },
+            }
+        },
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
@@ -1357,10 +1381,7 @@ function addMoreSchedule() {
 	schedule_count++;
 	var html = '<div class="row" id="schedule-'+schedule_count+'">'
 				+'<hr/>'
-				+'<div class="col-lg-12" style="padding-bottom:5px;">'
-				+'<span class="pull-right"><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span>'
-				+'</div>'
-				+'<div class="col-lg-6 margin-bottom-5">'
+				+'<div class="col-lg-5 margin-bottom-5">'
 				+'<div class="form-group" id="error-schedule">'
 				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
@@ -1369,22 +1390,25 @@ function addMoreSchedule() {
 				+'<div class="messageContainer"></div>'
 				+'</div>'
 				+'</div>'
-				+'<div class="col-lg-6 margin-bottom-5">'
+				+'<div class="col-lg-3 margin-bottom-5">'
 				+'<div class="form-group" id="error-payable">'
-				+'<label class="control-label col-sm-4">% of Net Payable </label>'
-				+'<div class="col-sm-8">'
+				+'<label class="control-label col-sm-8">% of Net Payable </label>'
+				+'<div class="col-sm-4">'
 				+'<input type="text" class="form-control" id="payable" name="payable[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 				+'</div>'
 				+'</div>'
-				+'<div class="col-lg-6 margin-bottom-5">'
+				+'<div class="col-lg-3 margin-bottom-5">'
 				+'<div class="form-group" id="error-amount">'
-				+'<label class="control-label col-sm-4">Amount </label>'
-				+'<div class="col-sm-8">'
+				+'<label class="control-label col-sm-6">Amount </label>'
+				+'<div class="col-sm-6">'
 				+'<input type="text" class="form-control" id="amount" name="amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
+				+'</div>'
+				+'<div class="col-lg-1">'
+				+'<span><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span>'
 				+'</div>'
 				+'</div>'
 			+'</div>';

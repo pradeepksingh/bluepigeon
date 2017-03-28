@@ -194,15 +194,18 @@ public class ProjectController {
 			@FormParam("parking") Double parking,
 			@FormParam("post") int post,
 			@FormParam("maintenance") Double maintenance,
-			@FormParam("tenure") String tenure,
+			@FormParam("tenure") Integer tenure,
 			@FormParam("amenity_rate") Double amenityRate,
 			@FormParam("stamp_duty") Double stampDuty,
 			@FormParam("tax") Double tax,
 			@FormParam("vat") Double vat,
-			@FormParam("tech_fee") Double fee
+			@FormParam("tech_fee") Double fee,
+			@FormParam("base_unit") Short base_unit
 	) {
 		BuilderProject builderProject = new BuilderProject();
 		builderProject.setId(project_id);
+		AreaUnit areaUnit = new AreaUnit();
+		areaUnit.setId(base_unit);
 		
 		BuilderProjectPriceInfo builderProjectPriceInfo = new BuilderProjectPriceInfo();
 		builderProjectPriceInfo.setId(id);
@@ -218,6 +221,7 @@ public class ProjectController {
 		builderProjectPriceInfo.setTax(tax);
 		builderProjectPriceInfo.setVat(vat);
 		builderProjectPriceInfo.setFee(fee);
+		builderProject.setAreaUnit(areaUnit);
 		ResponseMessage resp = new ProjectDAO().updatePriceInfo(builderProjectPriceInfo); 
 		return resp;
 	}

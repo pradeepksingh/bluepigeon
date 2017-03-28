@@ -6,7 +6,7 @@
 	List<AreaUnit> amenity_list = null;
 	AreaUnitDAO areaUnitDAOImpl = new AreaUnitDAO();
 	
-	int areaunit_id = Integer.parseInt(request.getParameter("areaunit_id"));
+	Short areaunit_id = Short.parseShort(request.getParameter("areaunit_id"));
 	AreaUnit areaUnit = null;
 	if (areaunit_id > 0) {
 		amenity_list = areaUnitDAOImpl.getAreaUnitById(areaunit_id);
@@ -17,7 +17,15 @@
               		<div class="col-xs-12">
                   		<div class="form-group">
                        		<label for="password" class="control-label">Area Unit</label>
-                       		<input type="text" name="name" id="uname" value="<% out.print(areaUnit.getName()); %>" class="form-control" placeholder="Enter building amenity Name"/>
+                       		<input type="text" name="name" id="uname" value="<% out.print(areaUnit.getName()); %>" class="form-control" placeholder="Enter unit Name"/>
+                  		</div>
+              		</div>
+              	</div>
+              	<div class="row">
+              		<div class="col-xs-12">
+                  		<div class="form-group">
+                       		<label for="password" class="control-label">Value In Square feet.</label>
+                       		<input type="text" name="sqft_value" id="usqft_value" value="<% out.print(areaUnit.getSqft_value()); %>" class="form-control" placeholder="Enter suare feet value"/>
                   		</div>
               		</div>
               	</div>
