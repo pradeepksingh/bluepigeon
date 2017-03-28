@@ -24,13 +24,13 @@ public class BuilderProjectOfferInfo implements java.io.Serializable {
 	private Double per;
 	private Double amount;
 	private Double applicable;
-	private Byte apply;
+	private Integer apply;
 
 	public BuilderProjectOfferInfo() {
 	}
 
 	public BuilderProjectOfferInfo(BuilderProject builderProject, String title, Double per, Double amount,
-			Double applicable, Byte apply) {
+			Double applicable, Integer apply) {
 		this.builderProject = builderProject;
 		this.title = title;
 		this.per = per;
@@ -51,7 +51,7 @@ public class BuilderProjectOfferInfo implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "project_id")
 	public BuilderProject getBuilderProject() {
 		return this.builderProject;
@@ -98,11 +98,11 @@ public class BuilderProjectOfferInfo implements java.io.Serializable {
 	}
 
 	@Column(name = "apply")
-	public Byte getApply() {
+	public Integer getApply() {
 		return this.apply;
 	}
 
-	public void setApply(Byte apply) {
+	public void setApply(Integer apply) {
 		this.apply = apply;
 	}
 

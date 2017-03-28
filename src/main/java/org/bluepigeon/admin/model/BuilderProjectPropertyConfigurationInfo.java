@@ -57,7 +57,7 @@ public class BuilderProjectPropertyConfigurationInfo implements java.io.Serializ
 		this.builderProjectPropertyConfiguration = builderProjectPropertyConfiguration;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "project_id")
 	public BuilderProject getBuilderProject() {
 		return this.builderProject;

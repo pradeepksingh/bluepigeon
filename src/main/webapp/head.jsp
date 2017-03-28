@@ -4,6 +4,26 @@
 <c:set var="url">${req.requestURL}</c:set>
 <c:set var="uri" value="${req.requestURI}" />
 <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
+<%@page import="org.bluepigeon.admin.model.AdminUser"%>
+<%
+session = request.getSession(false);
+	AdminUser mainadmin = new AdminUser();
+	int session_uid = 0;
+	if(session!=null)
+	{
+		if(session.getAttribute("uname") != null)
+		{
+			mainadmin  = (AdminUser)session.getAttribute("uname");
+			session_uid = mainadmin.getId();
+		}
+   	}
+	if(session_uid <= 0) {
+		String url = request.getRequestURL().toString();
+		String site = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath() + "/";
+	   	response.setStatus(response.SC_MOVED_TEMPORARILY);
+	   	response.setHeader("Location", site);
+	}
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>

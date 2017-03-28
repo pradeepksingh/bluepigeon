@@ -7,7 +7,6 @@ import javax.servlet.http.*;
 
 import org.bluepigeon.admin.dao.LoginValidationImp;
 import org.bluepigeon.admin.exception.ResponseMessage;
-import org.bluepigeon.admin.model.ErrorMessages;
 import org.bluepigeon.admin.model.AdminUser;
 
 public class ServiceLoginValidate implements ServiceLoginDAO {

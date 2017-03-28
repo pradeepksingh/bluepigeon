@@ -473,7 +473,7 @@ if(builder_project_list.size()>0){
                                 BuilderProjectAmenitySubstages builderProjectType = builderProjectAmenitySubstages.get(i);
                                 String is_checked="";
                                 for(int pa=0;pa<builderProjectAmenityInfos.size();pa++){
-                                	if(builderProjectAmenityInfos.get(pa).getBuilderProjectAmenitySubstages().getId()==builderProjectType.getId()){
+                                	if(builderProjectAmenityInfos.get(pa).getBuilderProjectAmenity().getId()==builderProjectType.getId()){
                                 		is_checked="checked";
                                 	}
                                 }

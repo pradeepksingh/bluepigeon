@@ -5,7 +5,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.OneToOne;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -27,17 +30,18 @@ public class BuilderProjectPriceInfo implements java.io.Serializable {
 	private Double parking;
 	private Double maintenance;
 	private Double stampDuty;
-	private String tenure;
+	private Integer tenure;
 	private Double tax;
 	private Double vat;
 	private Double fee;
+	private AreaUnit areaUnit;
 
 	public BuilderProjectPriceInfo() {
 	}
 
 	public BuilderProjectPriceInfo(BuilderProject builderProject, Double basePrice, Double riseRate, Integer post,
-			Double amenityRate, Double parking, Double maintenance, Double stampDuty, String tenure, Double tax,
-			Double vat, Double fee) {
+			Double amenityRate, Double parking, Double maintenance, Double stampDuty, Integer tenure, Double tax,
+			Double vat, Double fee, AreaUnit areaUnit) {
 		this.builderProject = builderProject;
 		this.basePrice = basePrice;
 		this.riseRate = riseRate;
@@ -50,6 +54,7 @@ public class BuilderProjectPriceInfo implements java.io.Serializable {
 		this.tax = tax;
 		this.vat = vat;
 		this.fee = fee;
+		this.areaUnit = areaUnit;
 	}
 
 	@Id
@@ -64,7 +69,7 @@ public class BuilderProjectPriceInfo implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "project_id")
 	public BuilderProject getBuilderProject() {
 		return this.builderProject;
@@ -74,7 +79,7 @@ public class BuilderProjectPriceInfo implements java.io.Serializable {
 		this.builderProject = builderProject;
 	}
 
-	@Column(name = "base_price", precision = 22, scale = 0)
+	@Column(name = "base_price", precision = 21, scale = 2)
 	public Double getBasePrice() {
 		return this.basePrice;
 	}
@@ -83,7 +88,7 @@ public class BuilderProjectPriceInfo implements java.io.Serializable {
 		this.basePrice = basePrice;
 	}
 
-	@Column(name = "rise_rate", precision = 22, scale = 0)
+	@Column(name = "rise_rate", precision = 22, scale = 2)
 	public Double getRiseRate() {
 		return this.riseRate;
 	}
@@ -101,7 +106,7 @@ public class BuilderProjectPriceInfo implements java.io.Serializable {
 		this.post = post;
 	}
 
-	@Column(name = "amenity_rate", precision = 22, scale = 0)
+	@Column(name = "amenity_rate", precision = 22, scale = 2)
 	public Double getAmenityRate() {
 		return this.amenityRate;
 	}
@@ -110,7 +115,7 @@ public class BuilderProjectPriceInfo implements java.io.Serializable {
 		this.amenityRate = amenityRate;
 	}
 
-	@Column(name = "parking", precision = 22, scale = 0)
+	@Column(name = "parking", precision = 22, scale = 2)
 	public Double getParking() {
 		return this.parking;
 	}
@@ -119,7 +124,7 @@ public class BuilderProjectPriceInfo implements java.io.Serializable {
 		this.parking = parking;
 	}
 
-	@Column(name = "maintenance", precision = 22, scale = 0)
+	@Column(name = "maintenance", precision = 22, scale = 2)
 	public Double getMaintenance() {
 		return this.maintenance;
 	}
@@ -128,7 +133,7 @@ public class BuilderProjectPriceInfo implements java.io.Serializable {
 		this.maintenance = maintenance;
 	}
 
-	@Column(name = "stamp_duty", precision = 22, scale = 0)
+	@Column(name = "stamp_duty", precision = 22, scale = 2)
 	public Double getStampDuty() {
 		return this.stampDuty;
 	}
@@ -137,16 +142,16 @@ public class BuilderProjectPriceInfo implements java.io.Serializable {
 		this.stampDuty = stampDuty;
 	}
 
-	@Column(name = "tenure", length = 15)
-	public String getTenure() {
+	@Column(name = "tenure")
+	public Integer getTenure() {
 		return this.tenure;
 	}
 
-	public void setTenure(String tenure) {
+	public void setTenure(Integer tenure) {
 		this.tenure = tenure;
 	}
 
-	@Column(name = "tax", precision = 22, scale = 0)
+	@Column(name = "tax", precision = 22, scale = 2)
 	public Double getTax() {
 		return this.tax;
 	}
@@ -155,7 +160,7 @@ public class BuilderProjectPriceInfo implements java.io.Serializable {
 		this.tax = tax;
 	}
 
-	@Column(name = "vat", precision = 22, scale = 0)
+	@Column(name = "vat", precision = 22, scale = 2)
 	public Double getVat() {
 		return this.vat;
 	}
@@ -164,13 +169,23 @@ public class BuilderProjectPriceInfo implements java.io.Serializable {
 		this.vat = vat;
 	}
 
-	@Column(name = "fee", precision = 22, scale = 0)
+	@Column(name = "fee", precision = 22, scale = 2)
 	public Double getFee() {
 		return this.fee;
 	}
 
 	public void setFee(Double fee) {
 		this.fee = fee;
+	}
+	
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "base_unit")
+	public AreaUnit getAreaUnit() {
+		return this.areaUnit;
+	}
+
+	public void setAreaUnit(AreaUnit areaUnit) {
+		this.areaUnit = areaUnit;
 	}
 
 }

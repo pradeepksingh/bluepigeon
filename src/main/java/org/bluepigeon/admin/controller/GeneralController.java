@@ -35,11 +35,13 @@ public class GeneralController {
 	@POST
 	@Path("/area/save")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage saveAreaUnit(@FormParam("name") String name, @FormParam("status") byte status) {
-
+	public ResponseMessage saveAreaUnit(@FormParam("name") String name, @FormParam("sqft_value") Double sqft_value,@FormParam("status") byte status) {
+		Byte is_deleted = 0;
 		AreaUnit areaUnit = new AreaUnit();
 		areaUnit.setName(name);
+		areaUnit.setSqft_value(sqft_value);
 		areaUnit.setStatus(status);
+		areaUnit.setIsDeleted(is_deleted);
 		AreaUnitDAO areaUnitDAOImpl = new AreaUnitDAO();
 		return areaUnitDAOImpl.save(areaUnit);
 	}
@@ -47,14 +49,19 @@ public class GeneralController {
 	@POST
 	@Path("/area/update")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage updateAraeUnit(@FormParam("id") Short id, @FormParam("name") String name,
-			@FormParam("status") byte status) {
-
+	public ResponseMessage updateAraeUnit(
+			@FormParam("id") Short id, 
+			@FormParam("name") String name,
+			@FormParam("sqft_value") Double sqft_value,
+			@FormParam("status") byte status
+	) {
+		Byte is_deleted = 0;
 		AreaUnit areaUnit = new AreaUnit();
 		areaUnit.setId(id);
 		areaUnit.setName(name);
+		areaUnit.setSqft_value(sqft_value);
 		areaUnit.setStatus(status);
-
+		areaUnit.setIsDeleted(is_deleted);
 		AreaUnitDAO areaUnitDAOImpl = new AreaUnitDAO();
 		return areaUnitDAOImpl.update(areaUnit);
 	}
@@ -163,6 +170,39 @@ public class GeneralController {
 	public List<CityData> cityList(@QueryParam("state_id") int state_id) {
 		CityNamesImp cityImp = new CityNamesImp();
 		return cityImp.getCityByStateId(state_id);
+	}
+	
+	@POST
+	@Path("/city/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addCity(@FormParam("name") String name, @FormParam("state_id") int stateId,
+			@FormParam("sortorder") int sortOrder, @FormParam("status") byte status
+	) {
+		State state = new State();
+		state.setId(stateId);
+		City city = new City();
+		city.setName(name);
+		city.setState(state);
+		city.setStatus(status);
+		CityNamesImp cityNamesImp = new CityNamesImp();
+		return cityNamesImp.save(city);
+	}
+	
+	@POST
+	@Path("/city/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addCity(@FormParam("id") int id,@FormParam("name") String name, @FormParam("state_id") int stateId,
+			@FormParam("sortorder") int sortOrder, @FormParam("status") byte status
+	) {
+		State state = new State();
+		state.setId(stateId);
+		City city = new City();
+		city.setId(id);
+		city.setName(name);
+		city.setState(state);
+		city.setStatus(status);
+		CityNamesImp cityNamesImp = new CityNamesImp();
+		return cityNamesImp.update(city);
 	}
 	
 	@GET
