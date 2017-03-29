@@ -31,13 +31,15 @@ public class BuilderLead implements java.io.Serializable {
 	private Integer addedBy;
 	private String discountOffered;
 	private Integer status;
+	private Integer interestedIn;
+	private BuilderPropertyType builderPropertyType;
 
 	public BuilderLead() {
 	}
 
 	public BuilderLead(BuilderProject builderProject, BuilderBuilding builderBuilding,
 			BuilderFlat builderFlat, String city, String name, String mobile, String email, String area, 
-			Integer source, Integer addedBy, String discountOffered, Integer status) {
+			Integer source, Integer addedBy, String discountOffered, Integer status,Integer interestedIn) {
 		this.builderProject = builderProject;
 		this.builderBuilding = builderBuilding;
 		this.builderFlat = builderFlat;
@@ -50,6 +52,7 @@ public class BuilderLead implements java.io.Serializable {
 		this.addedBy = addedBy;
 		this.discountOffered = discountOffered;
 		this.status = status;
+		this.interestedIn = interestedIn;
 	}
 
 	@Id
@@ -92,7 +95,17 @@ public class BuilderLead implements java.io.Serializable {
 	public void setBuilderFlat(BuilderFlat builderFlat) {
 		this.builderFlat = builderFlat;
 	}
-	@Column(name = "city", length = 128)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "type_id")
+	public BuilderPropertyType getBuilderPropertyType() {
+		return builderPropertyType;
+	}
+
+	public void setBuilderPropertyType(BuilderPropertyType builderPropertyType) {
+		this.builderPropertyType = builderPropertyType;
+	}
+	@ManyToOne(fetch = FetchType.EAGER)
+	@Column(name = "city_id")
 	public String getCity() {
 		return city;
 	}
@@ -171,6 +184,14 @@ public class BuilderLead implements java.io.Serializable {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	@Column(name = "interested_in")
+	public Integer getInterestedIn() {
+		return interestedIn;
+	}
+
+	public void setInterestedIn(Integer interestedIn) {
+		this.interestedIn = interestedIn;
 	}
 
 	

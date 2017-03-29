@@ -1,3 +1,7 @@
+<%@page import="org.bluepigeon.admin.model.City"%>
+<%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
+<%@page import="org.bluepigeon.admin.model.BuilderPropertyType"%>
+<%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
 <%@page import="java.util.Set"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="org.bluepigeon.admin.model.BuilderLead"%>
@@ -9,6 +13,10 @@
 <%@include file="../../leftnav.jsp"%>
 <%
 	int lead_id = 0;
+    int type_size = 0;
+    int flat_size =	0;
+    int building_size = 0;
+    int city_size = 0;
 	lead_id = Integer.parseInt(request.getParameter("lead_id"));
 	BuilderLead builderLead = null;
 	if(lead_id > 0) {
@@ -16,9 +24,27 @@
 	}
 	
 	int project_size = 0;
+	int builder_id = 0;
+	List<BuilderBuilding> builderBuildings = null;
+	List<BuilderFlat> builderFlats = null;
  	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
- 	if(builderProjects.size()>0)
+ 	if(builderProjects.size()>0){
     	project_size = builderProjects.size();
+ 		builderBuildings = new ProjectLeadDAO().getBuildingByProjectId(builderProjects.get(0).getId());
+ 	}
+ 	if(builderBuildings.size()>0){
+ 		building_size =	builderBuildings.size();
+ 		builderFlats = new ProjectDAO().getBuilderProjectBuildingFlats(builderBuildings.get(0).getId());
+ 	}
+ 	if(builderFlats.size()>0)
+ 		flat_size = builderFlats.size();
+ 	List<City> cities = new	ProjectLeadDAO().getAllCity();
+ 	if(cities.size()>0)
+ 		city_size =	cities.size();
+ 	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
+ 	if(builderPropertyTypes.size()>0)
+ 		type_size = builderPropertyTypes.size();
+ 	
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -26,12 +52,12 @@
 			<ul class="breadcrumb">
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
 				<li><a href="#">Project Lead</a></li>
-				<li class="active">Add New Lead</li>
+				<li class="active">Update New Lead</li>
 			</ul>
 		</div>
 		<div class="page-content">
 			<div class="page-header">
-				<h1>Add New Lead</h1>
+				<h1>Update New Lead</h1>
 			</div>
 			<div class="row">
 				<div class="col-lg-12">
@@ -45,7 +71,7 @@
 											<select name="project_id" id="project_id" class="form-control">
 						                 	   	<option value="0">Select Project</option>
 						                  	   	<% for(int i=0; i < project_size ; i++){ %>
-												<option value="<% out.print(builderProjects.get(i).getId());%>"><% out.print(builderProjects.get(i).getName());%></option>
+												<option value="<% out.print(builderProjects.get(i).getId());%>"<%if(builderProjects.get(i).getId() == builderLead.getBuilderProject().getId()) {%>selected<%} %> ><% out.print(builderProjects.get(i).getName());%></option>
 											  	<% } %>
 								       	  	</select>
 										</div>
@@ -58,6 +84,9 @@
 										<div class="col-sm-9">
 											<select name="building_id" id="building_id" class="form-control">
 						                 	   	<option value="0">Select Building</option>
+						                 	   	<% for(int i=0; i < building_size ; i++){ %>
+												<option value="<% out.print(builderBuildings.get(i).getId());%>"<%if(builderBuildings.get(i).getId() == builderLead.getBuilderBuilding().getId()) {%>selected<%} %> ><% out.print(builderBuildings.get(i).getName());%></option>
+											  	<% } %>
 								       	  	</select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
@@ -69,6 +98,9 @@
 										<div class="col-sm-9">
 											<select name="flat_id" id="flat_id" class="form-control">
 						                 	   	<option value="0">Select Flat</option>
+						                 	   	<% for(int i=0; i < flat_size; i++){ %>
+												<option value="<% out.print(builderFlats.get(i).getId());%>"<%if(builderFlats.get(i).getId() == builderLead.getBuilderFlat().getId()) {%>selected<%} %> ><% out.print(builderFlats.get(i).getFlatNo());%></option>
+											  	<% } %>
 								       	  	</select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
@@ -78,7 +110,7 @@
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Lead Name </label>
 										<div class="col-sm-9">
-											<input type="text" id="name" name="name" placeholder="Enter lead name" class="form-control" />
+											<input type="text" id="name" name="name" value="<%out.print(builderLead.getName()); %>"	placeholder="Enter lead name" class="form-control" />
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
@@ -87,7 +119,7 @@
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Mobile </label>
 										<div class="col-sm-9">
-											<input type="text" id="mobile" name="mobile" placeholder="Enter lead phone number" class="form-control" />
+											<input type="text" id="mobile" name="mobile" value="<%out.print(builderLead.getMobile()); %>" placeholder="Enter lead phone number" class="form-control" />
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
@@ -96,7 +128,7 @@
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Email </label>
 										<div class="col-sm-9">
-											<input type="text" id="email" name="email" placeholder="Enter lead email" class="form-control" />
+											<input type="text" id="email" name="email" value="<%out.print(builderLead.getEmail()); %>" placeholder="Enter lead email" class="form-control" />
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
@@ -105,7 +137,7 @@
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right"	for="form-field-1">City </label>
 										<div class="col-sm-9">
-											<input type="text" id="city" name="city" placeholder="Enter city name" class="form-control" />
+											<input type="text" id="city" name="city" value="<%out.print(builderLead.getCity()); %>"	 placeholder="Enter city name" class="form-control" />
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
@@ -114,7 +146,7 @@
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Area </label>
 										<div class="col-sm-9">
-											<input type="text" id="area" name="area" placeholder="Enter lead area" class="form-control" />
+											<input type="text" id="area" name="area" placeholder="Enter lead area" value="<%out.print(builderLead.getArea()); %>" class="form-control" />
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
@@ -125,10 +157,38 @@
 										<div class="col-sm-9">
 										 	<select name="source" id="source" class="form-control">
 							                    <option value="0">Select Source</option>
-							                    <option value="1">App</option>
-							                    <option value="2">Website</option>
-							                    <option value="3">Google</option>
-							                    <option value="4">Facebook</option>
+							                    <option value="1" <%if(builderLead.getSource() == 1){ %>selected<%} %>>App</option>
+							                    <option value="2" <%if(builderLead.getSource() == 2){ %>selected<%} %>>Website</option>
+							                    <option value="3" <%if(builderLead.getSource() == 3){ %>selected<%} %>>Google</option>
+							                    <option value="4" <%if(builderLead.getSource() == 4){ %>selected<%} %>>Facebook</option>
+							                </select>
+										</div>
+										<div class="messageContainer col-sm-offset-3"></div>
+									</div>
+								</div>
+								<div class="col-lg-6 margin-bottom-5">
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Interested in </label>
+										<div class="col-sm-9">
+										 	<select name="interest" id="interest" class="form-control">
+							                    <option value="0">Select Interest</option>
+							                    <option value="1"<%if(builderLead.getInterestedIn() == 1){ %>selected<%} %>>Buy</option>
+							                    <option value="2"<%if(builderLead.getInterestedIn() == 2){ %>selected<%} %>>Rental</option>
+							                    <option value="3"<%if(builderLead.getInterestedIn() == 3){ %>selected<%} %>>Resale</option>
+							                </select>
+										</div>
+										<div class="messageContainer col-sm-offset-3"></div>
+									</div>
+								</div>
+								<div class="col-lg-6 margin-bottom-5">
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select Type </label>
+										<div class="col-sm-9">
+										 	<select name="type_id" id="type_id" class="form-control">
+							                    <option value="0">Select Type</option>
+							                   	<% for(int i=0; i < type_size ; i++){ %>
+												<option value="<% out.print(builderPropertyTypes.get(i).getId());%>" <%if(builderPropertyTypes.get(i).getId() == builderLead.getBuilderPropertyType().getId()){ %>selected<%} %> ><% out.print(builderPropertyTypes.get(i).getName());%></option>
+											  	<% } %>
 							                </select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
@@ -138,7 +198,7 @@
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Discount Offered </label>
 										<div class="col-sm-9">
-											<textarea id="discount_offered" name="discount_offered" placeholder="Enter Discount " class="form-control" ></textarea>
+											<textarea id="discount_offered" name="discount_offered" placeholder="Enter Discount " class="form-control" ><%out.print(builderLead.getDiscountOffered());%></textarea>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
@@ -148,8 +208,8 @@
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Status </label>
 										<div class="col-sm-9">
 				                       		<select name="status" id="status" class="form-control">
-												<option value="1"> Active </option>
-												<option value="0"> Inactive </option>
+												<option value="1"<%if(builderLead.getStatus() == 1){ %>selected<%} %>> Active </option>
+												<option value="0" <%if(builderLead.getStatus() == 0){ %>selected<%} %>> Inactive </option>
 											</select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
@@ -159,7 +219,7 @@
 								<div class="col-lg-12 margin-bottom-5">
 									<div class="clearfix form-actions">
 										<div class="pull-right">
-											<button type="submit" class="btn btn-success">Submit</button>
+											<button type="submit" class="btn btn-success">Update</button>
 										</div>
 									</div>
 								</div>

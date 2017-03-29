@@ -497,7 +497,7 @@ public class ProjectDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
-		newsession.save(builderLead);
+		newsession.update(builderLead);
 		newsession.getTransaction().commit();
 		newsession.close();
 		response.setId(builderLead.getId());
