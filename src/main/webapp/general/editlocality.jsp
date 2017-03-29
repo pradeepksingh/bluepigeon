@@ -95,8 +95,8 @@
                   		<div class="form-group">
                        		<label for="password" class="control-label">Status</label>
                        		<select name="status" id="ustatus" class="form-control">
-								<option value="1" <% if(locality.getStatus() == 1) { %>selected<% } %>> Active </option>
-								<option value="0" <% if(locality.getStatus() == 0) { %>selected<% } %>> Inactive </option>
+								<option value="1" <% if(locality.getStatus() == true) { %>selected<% } %>> Active </option>
+								<option value="0" <% if(locality.getStatus() == false) { %>selected<% } %>> Inactive </option>
 							</select>
                   		</div>
               		</div>

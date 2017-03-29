@@ -34,7 +34,6 @@ public class AdminUser implements java.io.Serializable {
 	private Date createdDate;
 	private Long createdBy;
 	private Set<BuilderFlatType> builderFlatTypes = new HashSet<BuilderFlatType>(0);
-	private Set<BuilderLead> builderLeads = new HashSet<BuilderLead>(0);
 	private Set<BuilderBuilding> builderBuildings = new HashSet<BuilderBuilding>(0);
 	private Set<BuilderFlat> builderFlats = new HashSet<BuilderFlat>(0);
 	private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
@@ -54,7 +53,7 @@ public class AdminUser implements java.io.Serializable {
 	}
 
 	public AdminUser(AdminUserRole adminUserRole, String name, String email, String password, String mobile, int status,
-			Date createdDate, Long createdBy, Set<BuilderFlatType> builderFlatTypes, Set<BuilderLead> builderLeads,
+			Date createdDate, Long createdBy, Set<BuilderFlatType> builderFlatTypes,
 			Set<BuilderBuilding> builderBuildings, Set<BuilderFlat> builderFlats, Set<BuilderProject> builderProjects) {
 		this.adminUserRole = adminUserRole;
 		this.name = name;
@@ -65,7 +64,6 @@ public class AdminUser implements java.io.Serializable {
 		this.createdDate = createdDate;
 		this.createdBy = createdBy;
 		this.builderFlatTypes = builderFlatTypes;
-		this.builderLeads = builderLeads;
 		this.builderBuildings = builderBuildings;
 		this.builderFlats = builderFlats;
 		this.builderProjects = builderProjects;
@@ -164,15 +162,6 @@ public class AdminUser implements java.io.Serializable {
 
 	public void setBuilderFlatTypes(Set<BuilderFlatType> builderFlatTypes) {
 		this.builderFlatTypes = builderFlatTypes;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "adminUser")
-	public Set<BuilderLead> getBuilderLeads() {
-		return this.builderLeads;
-	}
-
-	public void setBuilderLeads(Set<BuilderLead> builderLeads) {
-		this.builderLeads = builderLeads;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "adminUser")

@@ -10,6 +10,9 @@ import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.data.ProjectOffer;
 import org.bluepigeon.admin.data.ProjectPaymentSchedule;
 import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.model.BuilderBuilding;
+import org.bluepigeon.admin.model.BuilderFlat;
+import org.bluepigeon.admin.model.BuilderLead;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.BuilderProjectAmenityInfo;
 import org.bluepigeon.admin.model.BuilderProjectApprovalInfo;
@@ -441,4 +444,87 @@ public class ProjectDAO {
 		session.close();
 		return result.get(0);
 	}
+	
+	/* ********************* Project Buildings ****************** */
+	
+	public List<BuilderBuilding> getBuilderProjectBuildings(int project_id) {
+		String hql = "from BuilderBuilding where builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", project_id);
+		List<BuilderBuilding> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	
+	/* ******************** Project Floors ******************** */
+	
+	
+	
+	/* ******************** Project Flats ******************** */
+	
+	public List<BuilderFlat> getBuilderProjectBuildingFlats(int building_id) {
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuilderFlat> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	/* ***************** Project Leads ********************** */
+	
+	public ResponseMessage addProjectLead(BuilderLead builderLead) {
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.save(builderLead);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setId(builderLead.getId());
+		response.setStatus(1);
+		response.setMessage("Project Lead Added Successfully.");
+		return response;
+	}
+	
+	public ResponseMessage updateProjectLead(BuilderLead builderLead) {
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.save(builderLead);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setId(builderLead.getId());
+		response.setStatus(1);
+		response.setMessage("Project Lead Updated Successfully.");
+		return response;
+	}
+	
+	public List<BuilderLead> getBuilderProjectLeads() {
+		String hql = "from BuilderLead order by id desc";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderLead> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public BuilderLead getBuilderProjectLeadById(int id) {
+		String hql = "from BuilderLead where id= :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<BuilderLead> result = query.list();
+		session.close();
+		return result.get(0);
+	}
+	
 }
