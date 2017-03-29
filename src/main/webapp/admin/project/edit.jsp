@@ -1407,9 +1407,9 @@ function addMoreSchedule() {
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 				+'</div>'
+				+'</div>'
 				+'<div class="col-lg-1">'
 				+'<span><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span>'
-				+'</div>'
 				+'</div>'
 			+'</div>';
 	$("#payment_schedule").append(html);

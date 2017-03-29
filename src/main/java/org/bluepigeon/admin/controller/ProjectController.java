@@ -1,5 +1,6 @@
 package org.bluepigeon.admin.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -22,7 +23,10 @@ import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
 import org.bluepigeon.admin.model.AreaUnit;
 import org.bluepigeon.admin.model.Builder;
+import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
+import org.bluepigeon.admin.model.BuilderFlat;
+import org.bluepigeon.admin.model.BuilderLead;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.BuilderProjectPriceInfo;
 import org.bluepigeon.admin.model.BuilderProjectProjectType;
@@ -244,4 +248,85 @@ public class ProjectController {
 		return resp;
 	}
 	
+	/* *************** Project buildings ************** */
+	
+	@GET
+	@Path("/building/names/{project_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderBuilding> getProjectBuildingNames(@PathParam("project_id") int project_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		List<BuilderBuilding> buildings = projectDAO.getBuilderProjectBuildings(project_id);
+		List<BuilderBuilding> newbuildings = new ArrayList<BuilderBuilding>();
+		for(BuilderBuilding builderBuilding :buildings) {
+			BuilderBuilding building = new BuilderBuilding();
+			building.setId(builderBuilding.getId());
+			building.setName(builderBuilding.getName());
+			newbuildings.add(building);
+		}
+		return newbuildings;
+	}
+	
+	@GET
+	@Path("/building/flat/names/{building_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderFlat> getProjectBuildingFlatNames(@PathParam("building_id") int building_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		List<BuilderFlat> flats = projectDAO.getBuilderProjectBuildingFlats(building_id);
+		List<BuilderFlat> newflats = new ArrayList<BuilderFlat>();
+		for(BuilderFlat builderFlat :flats) {
+			BuilderFlat flat = new BuilderFlat();
+			flat.setId(builderFlat.getId());
+			flat.setFlatNo(builderFlat.getFlatNo());
+			newflats.add(flat);
+		}
+		return newflats;
+	}
+	
+	
+	/* ********* Project Leads ************** */
+	
+	@POST
+	@Path("/lead/add")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addProjectLead (
+			@FormParam("project_id") int project_id,
+			@FormParam("building_id") int building_id, 
+			@FormParam("flat_id") int flat_id,
+			@FormParam("name") String name,
+			@FormParam("mobile") String mobile,
+			@FormParam("email") String email,
+			@FormParam("city") String city,
+			@FormParam("area") String area,
+			@FormParam("source") int source,
+			@FormParam("discount_offered") String discount_offered,
+			@FormParam("status") int status,
+			@FormParam("added_by") int added_by
+	) {
+		BuilderProject builderProject = new BuilderProject();
+		builderProject.setId(project_id);
+		
+		BuilderLead builderLead = new BuilderLead();
+		builderLead.setBuilderProject(builderProject);
+		if(building_id > 0) {
+			BuilderBuilding builderBuilding = new BuilderBuilding();
+			builderBuilding.setId(building_id);
+			builderLead.setBuilderBuilding(builderBuilding);
+		}
+		if(flat_id > 0) {
+			BuilderFlat builderFlat = new BuilderFlat();
+			builderFlat.setId(flat_id);
+			builderLead.setBuilderFlat(builderFlat);
+		}
+		builderLead.setName(name);
+		builderLead.setMobile(mobile);
+		builderLead.setEmail(email);
+		builderLead.setCity(city);
+		builderLead.setArea(area);
+		builderLead.setSource(source);
+		builderLead.setDiscountOffered(discount_offered);
+		builderLead.setStatus(status);
+		builderLead.setAddedBy(added_by);
+		ResponseMessage resp = new ProjectDAO().addProjectLead(builderLead); 
+		return resp;
+	}
 }

@@ -19,38 +19,41 @@ import javax.persistence.Table;
 public class BuilderLead implements java.io.Serializable {
 
 	private Integer id;
-	private BuilderSellerType builderSellerType;
-	private AdminUser adminUser;
-	private BuilderPropertyType builderPropertyType;
-	private City city;
+	private BuilderProject builderProject;
+	private BuilderBuilding builderBuilding;
 	private BuilderFlat builderFlat;
+	private String city;
 	private String name;
 	private String mobile;
 	private String email;
 	private String area;
-	private Byte status;
+	private Integer source;
+	private Integer addedBy;
+	private String discountOffered;
+	private Integer status;
 
 	public BuilderLead() {
 	}
 
-	public BuilderLead(BuilderSellerType builderSellerType, AdminUser adminUser,
-			BuilderPropertyType builderPropertyType, City city, BuilderFlat builderFlat, String name, String mobile,
-			String email, String area, Byte status) {
-		this.builderSellerType = builderSellerType;
-		this.adminUser = adminUser;
-		this.builderPropertyType = builderPropertyType;
-		this.city = city;
+	public BuilderLead(BuilderProject builderProject, BuilderBuilding builderBuilding,
+			BuilderFlat builderFlat, String city, String name, String mobile, String email, String area, 
+			Integer source, Integer addedBy, String discountOffered, Integer status) {
+		this.builderProject = builderProject;
+		this.builderBuilding = builderBuilding;
 		this.builderFlat = builderFlat;
+		this.city = city;
 		this.name = name;
 		this.mobile = mobile;
 		this.email = email;
 		this.area = area;
+		this.source = source;
+		this.addedBy = addedBy;
+		this.discountOffered = discountOffered;
 		this.status = status;
 	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "id", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -61,76 +64,64 @@ public class BuilderLead implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "seller_id")
-	public BuilderSellerType getBuilderSellerType() {
-		return this.builderSellerType;
+	@JoinColumn(name = "project_id")
+	public BuilderProject getBuilderProject() {
+		return builderProject;
 	}
 
-	public void setBuilderSellerType(BuilderSellerType builderSellerType) {
-		this.builderSellerType = builderSellerType;
-	}
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "source")
-	public AdminUser getAdminUser() {
-		return this.adminUser;
-	}
-
-	public void setAdminUser(AdminUser adminUser) {
-		this.adminUser = adminUser;
+	public void setBuilderProject(BuilderProject builderProject) {
+		this.builderProject = builderProject;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "type")
-	public BuilderPropertyType getBuilderPropertyType() {
-		return this.builderPropertyType;
+	@JoinColumn(name = "building_id")
+	public BuilderBuilding getBuilderBuilding() {
+		return builderBuilding;
 	}
 
-	public void setBuilderPropertyType(BuilderPropertyType builderPropertyType) {
-		this.builderPropertyType = builderPropertyType;
-	}
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "city_id")
-	public City getCity() {
-		return this.city;
-	}
-
-	public void setCity(City city) {
-		this.city = city;
+	public void setBuilderBuilding(BuilderBuilding builderBuilding) {
+		this.builderBuilding = builderBuilding;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "flat_id")
 	public BuilderFlat getBuilderFlat() {
-		return this.builderFlat;
+		return builderFlat;
 	}
 
 	public void setBuilderFlat(BuilderFlat builderFlat) {
 		this.builderFlat = builderFlat;
 	}
+	@Column(name = "city", length = 128)
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
 
 	@Column(name = "name", length = 128)
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	@Column(name = "mobile", length = 225)
+	@Column(name = "mobile", length = 10)
 	public String getMobile() {
-		return this.mobile;
+		return mobile;
 	}
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
 
-	@Column(name = "email", length = 225)
+	@Column(name = "email", length = 128)
 	public String getEmail() {
-		return this.email;
+		return email;
 	}
 
 	public void setEmail(String email) {
@@ -139,20 +130,49 @@ public class BuilderLead implements java.io.Serializable {
 
 	@Column(name = "area", length = 128)
 	public String getArea() {
-		return this.area;
+		return area;
 	}
 
 	public void setArea(String area) {
 		this.area = area;
 	}
 
-	@Column(name = "status")
-	public Byte getStatus() {
-		return this.status;
+	@Column(name = "source")
+	public Integer getSource() {
+		return source;
 	}
 
-	public void setStatus(Byte status) {
+	public void setSource(Integer source) {
+		this.source = source;
+	}
+
+	@Column(name = "added_by", length = 128)
+	public Integer getAddedBy() {
+		return addedBy;
+	}
+
+	public void setAddedBy(Integer addedBy) {
+		this.addedBy = addedBy;
+	}
+
+	@Column(name = "discount_offered", length = 255)
+	public String getDiscountOffered() {
+		return discountOffered;
+	}
+
+	public void setDiscountOffered(String discountOffered) {
+		this.discountOffered = discountOffered;
+	}
+
+	@Column(name = "status")
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
+
+	
 
 }

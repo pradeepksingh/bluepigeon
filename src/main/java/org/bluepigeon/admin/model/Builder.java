@@ -122,7 +122,7 @@ public class Builder implements java.io.Serializable {
 		this.builderProjects = builderProjects;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builder")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "builder")
 	public Set<BuilderCompanyNames> getBuilderCompanyNameses() {
 		return this.builderCompanyNameses;
 	}

@@ -23,17 +23,14 @@ public class BuilderPropertyType implements java.io.Serializable {
 	private String name;
 	private Byte status;
 	private Set<BuilderProjectPropertyType> builderProjectPropertyTypes = new HashSet<BuilderProjectPropertyType>(0);
-	private Set<BuilderLead> builderLeads = new HashSet<BuilderLead>(0);
 
 	public BuilderPropertyType() {
 	}
 
-	public BuilderPropertyType(String name, Byte status, Set<BuilderProjectPropertyType> builderProjectPropertyTypes,
-			Set<BuilderLead> builderLeads) {
+	public BuilderPropertyType(String name, Byte status, Set<BuilderProjectPropertyType> builderProjectPropertyTypes) {
 		this.name = name;
 		this.status = status;
 		this.builderProjectPropertyTypes = builderProjectPropertyTypes;
-		this.builderLeads = builderLeads;
 	}
 
 	@Id
@@ -73,15 +70,6 @@ public class BuilderPropertyType implements java.io.Serializable {
 
 	public void setBuilderProjectPropertyTypes(Set<BuilderProjectPropertyType> builderProjectPropertyTypes) {
 		this.builderProjectPropertyTypes = builderProjectPropertyTypes;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderPropertyType")
-	public Set<BuilderLead> getBuilderLeads() {
-		return this.builderLeads;
-	}
-
-	public void setBuilderLeads(Set<BuilderLead> builderLeads) {
-		this.builderLeads = builderLeads;
 	}
 
 }

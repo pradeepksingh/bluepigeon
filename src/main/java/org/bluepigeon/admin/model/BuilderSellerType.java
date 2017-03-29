@@ -22,15 +22,13 @@ public class BuilderSellerType implements java.io.Serializable {
 	private Integer id;
 	private String name;
 	private Byte status;
-	private Set<BuilderLead> builderLeads = new HashSet<BuilderLead>(0);
 
 	public BuilderSellerType() {
 	}
 
-	public BuilderSellerType(String name, Byte status, Set<BuilderLead> builderLeads) {
+	public BuilderSellerType(String name, Byte status) {
 		this.name = name;
 		this.status = status;
-		this.builderLeads = builderLeads;
 	}
 
 	@Id
@@ -61,15 +59,6 @@ public class BuilderSellerType implements java.io.Serializable {
 
 	public void setStatus(Byte status) {
 		this.status = status;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderSellerType")
-	public Set<BuilderLead> getBuilderLeads() {
-		return this.builderLeads;
-	}
-
-	public void setBuilderLeads(Set<BuilderLead> builderLeads) {
-		this.builderLeads = builderLeads;
 	}
 
 }
