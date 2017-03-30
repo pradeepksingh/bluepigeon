@@ -333,7 +333,7 @@ public class ProjectController {
 		builderLead.setSource(source);
 		builderLead.setCity(city);
 		builderLead.setDiscountOffered(discount_offered);
-		builderLead.setInterestedIn(interest);
+		builderLead.setIntrestedIn(interest);
 		builderLead.setStatus(status);
 		builderLead.setAddedBy(added_by);
 		ResponseMessage resp = new ProjectDAO().addProjectLead(builderLead); 
@@ -344,6 +344,7 @@ public class ProjectController {
 	@Path("/lead/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateProjectLead (
+			@FormParam("lead_id") int lead_id,
 			@FormParam("project_id") int project_id,
 			@FormParam("building_id") int building_id, 
 			@FormParam("flat_id") int flat_id,
@@ -380,6 +381,7 @@ public class ProjectController {
 			builderLead.setBuilderPropertyType(builderPropertyType);
 		}
 		
+		builderLead.setId(lead_id);
 		builderLead.setName(name);
 		builderLead.setMobile(mobile);
 		builderLead.setEmail(email);
@@ -387,7 +389,7 @@ public class ProjectController {
 		builderLead.setCity(city);
 		builderLead.setSource(source);
 		builderLead.setDiscountOffered(discount_offered);
-		builderLead.setInterestedIn(interest);
+		builderLead.setIntrestedIn(interest);
 		builderLead.setStatus(status);
 		builderLead.setAddedBy(added_by);
 		ResponseMessage resp = new ProjectDAO().updateProjectLead(builderLead);

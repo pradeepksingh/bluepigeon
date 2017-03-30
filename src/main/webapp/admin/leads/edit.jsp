@@ -59,6 +59,7 @@
 			<div class="page-header">
 				<h1>Update New Lead</h1>
 			</div>
+			<input type="hidden" id="lead_id" value="<%out.print(builderLead.getId()); %>" >
 			<div class="row">
 				<div class="col-lg-12">
 					<form id="updatelead" name="updatelead" class="form-horizontal" action="" method="post">
@@ -172,9 +173,9 @@
 										<div class="col-sm-9">
 										 	<select name="interest" id="interest" class="form-control">
 							                    <option value="0">Select Interest</option>
-							                    <option value="1"<%if(builderLead.getInterestedIn() == 1){ %>selected<%} %>>Buy</option>
-							                    <option value="2"<%if(builderLead.getInterestedIn() == 2){ %>selected<%} %>>Rental</option>
-							                    <option value="3"<%if(builderLead.getInterestedIn() == 3){ %>selected<%} %>>Resale</option>
+							                    <option value="1"<%if(builderLead.getIntrestedIn() == 1){ %>selected<%} %>>Buy</option>
+							                    <option value="2"<%if(builderLead.getIntrestedIn() == 2){ %>selected<%} %>>Rental</option>
+							                    <option value="3"<%if(builderLead.getIntrestedIn() == 3){ %>selected<%} %>>Resale</option>
 							                </select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
@@ -320,7 +321,7 @@ $('#updatelead').bootstrapValidator({
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
-	addLead();
+	updateLead();
 });
 
 function updateLead() {
