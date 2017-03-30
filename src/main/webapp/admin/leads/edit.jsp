@@ -59,7 +59,6 @@
 			<div class="page-header">
 				<h1>Update New Lead</h1>
 			</div>
-			<input type="hidden" id="lead_id" value="<%out.print(builderLead.getId()); %>" >
 			<div class="row">
 				<div class="col-lg-12">
 					<form id="updatelead" name="updatelead" class="form-horizontal" action="" method="post">
@@ -79,6 +78,7 @@
 										<div class="messageContainer col-sm-offset-3"></div>
 								  	</div>
 							  	</div>
+							  	<input type="hidden" id="lead_id" name="lead_id" value="<%out.print(lead_id); %>" >
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select Building </label>
