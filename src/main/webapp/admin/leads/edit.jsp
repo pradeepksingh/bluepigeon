@@ -240,7 +240,6 @@ $("#project_id").change(function(){
 	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
 		$(data).each(function(index){
-			
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		});
 		$("#building_id").html(html);

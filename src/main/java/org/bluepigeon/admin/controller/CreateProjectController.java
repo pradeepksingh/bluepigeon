@@ -93,9 +93,11 @@ public class CreateProjectController {
 	@POST
 	@Path("/builder/new/update")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuilder(BuilderDetails builderDetails) {
+		
 		 BuilderDetailsDAO builderDetalsDAO = new BuilderDetailsDAO();
-		  return  builderDetalsDAO.update(builderDetails);
+		  return builderDetalsDAO.update(builderDetails);
 	}
 	
 	@POST
