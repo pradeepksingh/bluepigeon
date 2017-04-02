@@ -41,6 +41,7 @@ import org.bluepigeon.admin.dao.BuilderSellerTypeDAO;
 import org.bluepigeon.admin.dao.BuilderTaxTypeDAO;
 import org.bluepigeon.admin.dao.ProjectDetailsDAO;
 import org.bluepigeon.admin.dao.ProjectLeadDAO;
+import org.bluepigeon.admin.dao.TaxDAO;
 import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.ProjectDetails;
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -73,6 +74,7 @@ import org.bluepigeon.admin.model.BuilderProjectType;
 import org.bluepigeon.admin.model.BuilderPropertyType;
 import org.bluepigeon.admin.model.BuilderSellerType;
 import org.bluepigeon.admin.model.BuilderTaxType;
+import org.bluepigeon.admin.model.Tax;
 
 import com.fasterxml.jackson.databind.deser.BuilderBasedDeserializer;
 
@@ -1381,4 +1383,33 @@ public class CreateProjectController {
 		System.out.println("ProjectLeadDAO::");
 		return projectLeadDAO.getBuildingByProjectId(project_id);
 	}
+	@POST
+	@Path("/tax/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addTax(@FormParam("pincode") String pincode,@FormParam("tax") double tax,@FormParam("sduty") double stampDuty,@FormParam("vat") double vat) {
+		TaxDAO taxDAO = new TaxDAO();
+		 Tax tax2 = new Tax();
+		 tax2.setPincode(pincode);
+		 tax2.setStampDuty(stampDuty);
+		 tax2.setTax(tax);
+		 tax2.setVat(vat);
+		 return  taxDAO.save(tax2);
+	
+	}
+
+	@POST
+	@Path("/tax/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateTax(@FormParam("id") int id,@FormParam("pincode") String pincode,@FormParam("tax") double tax,@FormParam("sduty") double stampDuty,@FormParam("vat") double vat) {
+		
+		TaxDAO taxDAO = new TaxDAO();
+		 Tax tax2 = new Tax();
+		 tax2.setId(id);
+		 tax2.setPincode(pincode);
+		 tax2.setStampDuty(stampDuty);
+		 tax2.setTax(tax);
+		 tax2.setVat(vat);
+		 return taxDAO.update(tax2);
+	}
+	
 }

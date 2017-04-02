@@ -49,6 +49,7 @@
         <mapping class="org.bluepigeon.admin.model.BuilderFlatAmenity" />
         <mapping class="org.bluepigeon.admin.model.ProjectPanoramicImage" />
 <!--         <mapping class="org.bluepigeon.admin.model.BuilderFloorStatus" /> -->
+		<mapping class="org.bluepigeon.admin.model.Tax" />
         <mapping class="org.bluepigeon.admin.model.AdminUser" />
         <mapping class="org.bluepigeon.admin.model.BuilderPropertyType" />
         <mapping class="org.bluepigeon.admin.model.BuilderFlat" />
