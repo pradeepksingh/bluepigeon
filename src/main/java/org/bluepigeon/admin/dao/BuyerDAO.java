@@ -2,6 +2,7 @@ package org.bluepigeon.admin.dao;
 
 import java.util.List;
 
+import org.bluepigeon.admin.data.BuyerData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.BuyerDocuments;
@@ -38,7 +39,7 @@ public class BuyerDAO {
 				newsession.getTransaction().commit();
 				newsession.close();
 				response.setStatus(1);
-				response.setMessage("Success");
+				response.setMessage("Buyer Added Successfully");
 			}
 		}
 		return response;
@@ -69,7 +70,7 @@ public class BuyerDAO {
 		newsession.getTransaction().commit();
 		newsession.close();
 		response.setStatus(1);
-		response.setMessage("Success");
+		response.setMessage("Buying Details Added Successfully");
 		return response;
 	}
 	
@@ -85,7 +86,7 @@ public class BuyerDAO {
 			newsession.getTransaction().commit();
 			newsession.close();
 			response.setStatus(1);
-			response.setMessage("Success");
+			response.setMessage("Buyer Offer Added Successfully");
 		}
 		return response;
 	}
@@ -101,7 +102,7 @@ public class BuyerDAO {
 			newsession.getTransaction().commit();
 			newsession.close();
 			response.setStatus(1);
-			response.setMessage("Success");
+			response.setMessage("Buyer Payment Added Successfully");
 		}
 		return response;
 		
@@ -188,5 +189,130 @@ public class BuyerDAO {
 		List<BuyerUploadDocuments> result = query.list();
 		session.close();
 		return result;
+	}
+	public ResponseMessage updateBuyer(BuyerData buyerData){
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Buyer buyer = buyerData.getBuyer();
+		String hql = "from Buyer where name = :name and id != :id";
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("name", buyer.getName());
+		query.setParameter("id", buyer.getId());
+		// System.out.println("Country status ::"+country.getStatus());
+		// query.setParameter("status", country.getStatus());
+		List<Buyer> result = query.list();
+		session.close();
+		if (result.size() > 0) {
+			response.setStatus(0);
+			response.setMessage("Buyer name already exists");
+		} else {
+			Session newsession = hibernateUtil.openSession();
+			newsession.beginTransaction();
+			newsession.update(buyer);
+			newsession.getTransaction().commit();
+			newsession.close();
+			
+			String delete_buyer_documents = "DELETE from  BuyerDocuments where buyer.id = :buyer_id";
+			Session newsession1 = hibernateUtil.openSession();
+			newsession1.beginTransaction();
+			Query smdelete = newsession1.createQuery(delete_buyer_documents);
+			smdelete.setParameter("buyer_id", buyer.getId());
+			smdelete.executeUpdate();
+			newsession1.getTransaction().commit();
+			newsession1.close();
+			
+			List<BuyerDocuments> buyerDocuments = buyerData.getBuyerDocuments();
+			if(buyerDocuments.size()>0){
+				Session session2 = hibernateUtil.openSession();
+				session2.beginTransaction();
+				for(int i=0;i<buyerDocuments.size();i++){
+					BuyerDocuments buyerDocuments2 = new BuyerDocuments();
+					buyerDocuments2.setBuyer(buyer);
+					session2.save(buyerDocuments2);
+				}
+				session2.getTransaction().commit();
+				session2.close();
+			}
+			
+			response.setStatus(1);
+			response.setMessage("Buyer Updated Successfully");
+		}
+		return response;
+	}
+	
+	public ResponseMessage updateBuyingDetails(BuyingDetails buyingDetails){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		ResponseMessage responseMessage = new ResponseMessage();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.update(buyingDetails);
+		newsession.getTransaction().commit();
+		newsession.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Buying Details Updated Successfully");
+		return responseMessage;
+	}
+	
+	public ResponseMessage updateBuyerOffers(List<BuyerOffer> buyerOffers){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		ResponseMessage responseMessage = new ResponseMessage();
+		
+		/***************** Delete entry from Buyer Offers *************************/
+		String delete_buyer_documents = "DELETE from  BuyerOffer where buyer.id = :buyer_id";
+		Session newsession1 = hibernateUtil.openSession();
+		newsession1.beginTransaction();
+		Query smdelete = newsession1.createQuery(delete_buyer_documents);
+		smdelete.setParameter("buyer_id", buyerOffers.get(0).getBuyer().getId());
+		smdelete.executeUpdate();
+		newsession1.getTransaction().commit();
+		newsession1.close();
+		
+		/**********************Save Buyer Offers new entries *************************/ 
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		if(buyerOffers.size()>0){
+			for(int i=0;i<buyerOffers.size();i++){
+				newsession.save(buyerOffers.get(i));
+			}
+			newsession.getTransaction().commit();
+			newsession.close();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Buyer Offers Updated Successfully");
+		}
+		
+		return responseMessage;
+	}
+	
+	public ResponseMessage updateBuyerPayments(List<BuyerPayment> buyerPayment){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		ResponseMessage responseMessage = new ResponseMessage();
+		
+		String delete_buyer_documents = "DELETE from  BuyerPayment where buyer.id = :buyer_id";
+		Session newsession1 = hibernateUtil.openSession();
+		newsession1.beginTransaction();
+		Query smdelete = newsession1.createQuery(delete_buyer_documents);
+		smdelete.setParameter("buyer_id", buyerPayment.get(0).getBuyer().getId());
+		smdelete.executeUpdate();
+		newsession1.getTransaction().commit();
+		newsession1.close();
+		
+		
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		if(buyerPayment.size()>0){
+			for(int i=0;i<buyerPayment.size();i++){
+				newsession.save(buyerPayment.get(i));
+			}
+			newsession.getTransaction().commit();
+			newsession.close();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Buyer Offers Updated Successfully");
+		}
+		return responseMessage;
+	}
+	
+	public ResponseMessage updateBuyerUploadDocuments(BuyerUploadDocuments buyerUploadDocuments){
+		return null;
 	}
 }
