@@ -24,7 +24,7 @@
 		<property name="net.sf.ehcache.configurationResourceName">/ehcache.xml</property>
 		<property name="hibernate.connection.pool_size">25</property>
 		<property name="show_sql">false</property>
-	  	   <mapping class="org.bluepigeon.admin.model.BuilderProjectAmenitySubstages" />
+	  	<mapping class="org.bluepigeon.admin.model.BuilderProjectAmenitySubstages" />
         <mapping class="org.bluepigeon.admin.model.Agreement" />
         <mapping class="org.bluepigeon.admin.model.BuilderBuilding" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloorAmenity" />
