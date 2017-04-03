@@ -307,12 +307,36 @@ public class BuyerDAO {
 			newsession.getTransaction().commit();
 			newsession.close();
 			responseMessage.setStatus(1);
-			responseMessage.setMessage("Buyer Offers Updated Successfully");
+			responseMessage.setMessage("Buyer Payment Updated Successfully");
 		}
 		return responseMessage;
 	}
 	
-	public ResponseMessage updateBuyerUploadDocuments(BuyerUploadDocuments buyerUploadDocuments){
-		return null;
+	public ResponseMessage updateBuyerUploadDocuments(List<BuyerUploadDocuments> buyerUploadDocuments){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		ResponseMessage responseMessage = new ResponseMessage();
+		
+		String delete_buyer_documents = "DELETE from  BuyerUploadDocuments where buyer.id = :buyer_id";
+		Session newsession1 = hibernateUtil.openSession();
+		newsession1.beginTransaction();
+		Query smdelete = newsession1.createQuery(delete_buyer_documents);
+		smdelete.setParameter("buyer_id", buyerUploadDocuments.get(0).getBuyer().getId());
+		smdelete.executeUpdate();
+		newsession1.getTransaction().commit();
+		newsession1.close();
+		
+		
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		if(buyerUploadDocuments.size()>0){
+			for(int i=0;i<buyerUploadDocuments.size();i++){
+				newsession.save(buyerUploadDocuments.get(i));
+			}
+			newsession.getTransaction().commit();
+			newsession.close();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Buyer documents Updated Successfully");
+		}
+		return responseMessage;
 	}
 }

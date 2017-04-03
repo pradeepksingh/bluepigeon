@@ -18,6 +18,7 @@ import javax.persistence.Table;
 public class Buyer implements java.io.Serializable {
 
 	private Integer id;
+	private AdminUser adminUser;
 	private BuilderBuilding builderBuilding;
 	private BuilderFlat builderFlat;
 	private BuilderProject builderProject;
@@ -34,9 +35,10 @@ public class Buyer implements java.io.Serializable {
 	public Buyer() {
 	}
 
-	public Buyer(BuilderBuilding builderBuilding, BuilderFlat builderFlat, BuilderProject builderProject, String name,
-			String contact, String email, String pan, String address, String photo, Short agreement, Short possession,
-			Short status) {
+	public Buyer(AdminUser adminUser, BuilderBuilding builderBuilding, BuilderFlat builderFlat,
+			BuilderProject builderProject, String name, String contact, String email, String pan, String address,
+			String photo, Short agreement, Short possession, Short status) {
+		this.adminUser = adminUser;
 		this.builderBuilding = builderBuilding;
 		this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
@@ -63,7 +65,17 @@ public class Buyer implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "emp_id")
+	public AdminUser getAdminUser() {
+		return this.adminUser;
+	}
+
+	public void setAdminUser(AdminUser adminUser) {
+		this.adminUser = adminUser;
+	}
+	
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "building_id")
 	public BuilderBuilding getBuilderBuilding() {
 		return this.builderBuilding;
@@ -73,7 +85,7 @@ public class Buyer implements java.io.Serializable {
 		this.builderBuilding = builderBuilding;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "flat_id")
 	public BuilderFlat getBuilderFlat() {
 		return this.builderFlat;
@@ -83,7 +95,7 @@ public class Buyer implements java.io.Serializable {
 		this.builderFlat = builderFlat;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "project_id")
 	public BuilderProject getBuilderProject() {
 		return this.builderProject;

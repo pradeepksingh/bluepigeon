@@ -25,6 +25,7 @@ public class BuyingDetails implements java.io.Serializable {
 	private Double amenityFacingRate;
 	private Double parkingRate;
 	private Double maintenance;
+	private String tenure;
 	private Double stampDuty;
 	private Double registration;
 	private Double taxes;
@@ -34,7 +35,8 @@ public class BuyingDetails implements java.io.Serializable {
 	}
 
 	public BuyingDetails(Buyer buyer, Date bookingDate, Double baseRate, Double floorRiseRate, Double amenityFacingRate,
-			Double parkingRate, Double maintenance, Double stampDuty, Double registration, Double taxes, Double vat) {
+			Double parkingRate, Double maintenance, String tenure, Double stampDuty, Double registration, Double taxes,
+			Double vat) {
 		this.buyer = buyer;
 		this.bookingDate = bookingDate;
 		this.baseRate = baseRate;
@@ -42,6 +44,7 @@ public class BuyingDetails implements java.io.Serializable {
 		this.amenityFacingRate = amenityFacingRate;
 		this.parkingRate = parkingRate;
 		this.maintenance = maintenance;
+		this.tenure = tenure;
 		this.stampDuty = stampDuty;
 		this.registration = registration;
 		this.taxes = taxes;
@@ -125,6 +128,15 @@ public class BuyingDetails implements java.io.Serializable {
 		this.maintenance = maintenance;
 	}
 
+	@Column(name = "tenure", length = 15)
+	public String getTenure() {
+		return this.tenure;
+	}
+
+	public void setTenure(String tenure) {
+		this.tenure = tenure;
+	}
+	
 	@Column(name = "stamp_duty", precision = 22, scale = 0)
 	public Double getStampDuty() {
 		return this.stampDuty;
