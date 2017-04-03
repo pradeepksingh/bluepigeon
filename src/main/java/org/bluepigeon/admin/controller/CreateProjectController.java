@@ -138,8 +138,9 @@ public class CreateProjectController {
 	@Path("/builder/building/amenity/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addBuilderBuildingAmenity(@FormParam("name") String name, @FormParam("status") byte status) {
+		byte isDeleted = 0;
 		BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
-
+        builderBuildingAmenity.setIsDeleted(isDeleted);
 		builderBuildingAmenity.setName(name);
 		builderBuildingAmenity.setStatus(status);
 		BuilderBuildingAmenityDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityDAO();

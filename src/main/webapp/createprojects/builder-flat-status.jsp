@@ -135,7 +135,7 @@ function addFlatStatus() {
 	},'json');
 }
 
-function editFlatStatus(building_status_id) {
+function editFlatStatus(flat_status_id) {
 	$.get("${baseUrl}/createprojects/editbuilderflatstatus.jsp?flat_status_id="+flat_status_id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editFlatStatus").modal('show');

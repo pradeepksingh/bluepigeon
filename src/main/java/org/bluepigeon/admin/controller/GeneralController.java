@@ -286,5 +286,38 @@ public class GeneralController {
 	public List<LocalityData> getLocalityByCity(@PathParam("city_id") int city_id) {
 		return new LocalityNamesImp().getLocalityName(city_id);
 	}
+	/**************************** Home Loan Banks *************************************/
+	@POST
+	@Path("/bank/save/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addHomeLoanBanks(@FormParam("name") String name, @FormParam("location") String location,
+			@FormParam("email") String email,@FormParam("contact_name") String contactPerson,@FormParam("phone") String phone,
+			@FormParam("status") byte status) {
+		HomeLoanBanks homeLoanBanks = new HomeLoanBanks();
+		homeLoanBanks.setName(name);
+		homeLoanBanks.setLocation(location);
+		homeLoanBanks.setEmail(email);
+		homeLoanBanks.setContactPerson(contactPerson);
+		homeLoanBanks.setPhone(phone);
+	
+		return new HomeLoanBanksDAO().save(homeLoanBanks);
+	}
+	
+	@POST
+	@Path("/bank/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateHomeLoanBanks(@FormParam("bank_id") int bankId,@FormParam("name") String name, @FormParam("location") String location,
+			@FormParam("email") String email,@FormParam("contact_name") String contactPerson,@FormParam("phone") String phone,
+			@FormParam("status") byte status) {
+		HomeLoanBanks homeLoanBanks = new HomeLoanBanks();
+		homeLoanBanks.setId(bankId);
+		homeLoanBanks.setName(name);
+		homeLoanBanks.setLocation(location);
+		homeLoanBanks.setEmail(email);
+		homeLoanBanks.setContactPerson(contactPerson);
+		homeLoanBanks.setPhone(phone);
+	
+		return new HomeLoanBanksDAO().update(homeLoanBanks);
+	}
 	
 }
