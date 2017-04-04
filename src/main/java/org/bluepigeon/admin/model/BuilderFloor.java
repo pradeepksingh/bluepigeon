@@ -23,102 +23,80 @@ public class BuilderFloor implements java.io.Serializable {
 
 	private Integer id;
 	private BuilderBuilding builderBuilding;
-	private BuilderFloorStatus builderFloorStatus;
+	private BuilderProject builderProject;
 	private String name;
 	private Integer floorNo;
-	private Integer totalFloor;
+	private String floorStatus;
 	private Byte status;
-	private Set<BuilderFlat> builderFlats = new HashSet<BuilderFlat>(0);
-
-	public BuilderFloor() {
-	}
-
-	public BuilderFloor(BuilderBuilding builderBuilding, BuilderFloorStatus builderFloorStatus, String name,
-			Integer floorNo, Integer totalFloor, Byte status, Set<BuilderFlat> builderFlats) {
+	public BuilderFloor(BuilderBuilding builderBuilding, BuilderProject builderProject, String name, Integer floorNo,
+			String floorStatus, Byte status) {
+		super();
 		this.builderBuilding = builderBuilding;
-		this.builderFloorStatus = builderFloorStatus;
+		this.builderProject = builderProject;
 		this.name = name;
 		this.floorNo = floorNo;
-		this.totalFloor = totalFloor;
+		this.floorStatus = floorStatus;
 		this.status = status;
-		this.builderFlats = builderFlats;
 	}
-
+	public BuilderFloor() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 
 	@Column(name = "id", unique = true, nullable = false)
 	public Integer getId() {
-		return this.id;
+		return id;
 	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "building_id")
 	public BuilderBuilding getBuilderBuilding() {
-		return this.builderBuilding;
+		return builderBuilding;
 	}
-
 	public void setBuilderBuilding(BuilderBuilding builderBuilding) {
 		this.builderBuilding = builderBuilding;
 	}
-
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "status_id")
-	public BuilderFloorStatus getBuilderFloorStatus() {
-		return this.builderFloorStatus;
+	@JoinColumn(name = "project_id")
+	public BuilderProject getBuilderProject() {
+		return builderProject;
 	}
-
-	public void setBuilderFloorStatus(BuilderFloorStatus builderFloorStatus) {
-		this.builderFloorStatus = builderFloorStatus;
+	public void setBuilderProject(BuilderProject builderProject) {
+		this.builderProject = builderProject;
 	}
-
 	@Column(name = "name", length = 128)
 	public String getName() {
-		return this.name;
+		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	@Column(name = "floor_no")
 	public Integer getFloorNo() {
-		return this.floorNo;
+		return floorNo;
 	}
-
 	public void setFloorNo(Integer floorNo) {
 		this.floorNo = floorNo;
 	}
-
-	@Column(name = "total_floor")
-	public Integer getTotalFloor() {
-		return this.totalFloor;
+	@Column(name = "floor_status")
+	public String getFloorStatus() {
+		return floorStatus;
 	}
-
-	public void setTotalFloor(Integer totalFloor) {
-		this.totalFloor = totalFloor;
+	public void setFloorStatus(String floorStatus) {
+		this.floorStatus = floorStatus;
 	}
-
 	@Column(name = "status")
 	public Byte getStatus() {
-		return this.status;
+		return status;
 	}
-
 	public void setStatus(Byte status) {
 		this.status = status;
 	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderFloor")
-	public Set<BuilderFlat> getBuilderFlats() {
-		return this.builderFlats;
-	}
-
-	public void setBuilderFlats(Set<BuilderFlat> builderFlats) {
-		this.builderFlats = builderFlats;
-	}
+	
+	
 
 }

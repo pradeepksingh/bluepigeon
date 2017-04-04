@@ -27,19 +27,16 @@ public class City implements java.io.Serializable {
 	private Byte status;
 	private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
 	private Set<Locality> localities = new HashSet<Locality>(0);
-	private Set<BuilderLead> builderLeads = new HashSet<BuilderLead>(0);
 
 	public City() {
 	}
 
-	public City(State state, String name, Byte status, Set<BuilderProject> builderProjects, Set<Locality> localities,
-			Set<BuilderLead> builderLeads) {
+	public City(State state, String name, Byte status, Set<BuilderProject> builderProjects, Set<Locality> localities) {
 		this.state = state;
 		this.name = name;
 		this.status = status;
 		this.builderProjects = builderProjects;
 		this.localities = localities;
-		this.builderLeads = builderLeads;
 	}
 
 	@Id
@@ -99,14 +96,4 @@ public class City implements java.io.Serializable {
 	public void setLocalities(Set<Locality> localities) {
 		this.localities = localities;
 	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "city")
-	public Set<BuilderLead> getBuilderLeads() {
-		return this.builderLeads;
-	}
-
-	public void setBuilderLeads(Set<BuilderLead> builderLeads) {
-		this.builderLeads = builderLeads;
-	}
-
 }

@@ -9,6 +9,7 @@ import org.bluepigeon.admin.model.BuilderFloor;
 import org.bluepigeon.admin.model.BuilderLead;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.BuilderProjectPropertyConfiguration;
+import org.bluepigeon.admin.model.BuilderPropertyType;
 import org.bluepigeon.admin.model.BuilderSellerType;
 import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.util.HibernateUtil;
@@ -28,7 +29,7 @@ public class ProjectLeadDAO {
 			return result;
 	  }
 	  public List<BuilderBuilding> getBuildingByProjectId(int projectId){
-		  String hql = "from BuilderBuilding where project.id = :project_id";
+		  String hql = "from BuilderBuilding where builderProject.id = :project_id";
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
@@ -86,6 +87,15 @@ public class ProjectLeadDAO {
 			session.close();
 			return result;
 	  }
+	  public List<BuilderPropertyType> getBuilderPropertyType() {
+			String hql = "from BuilderPropertyType";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			List<BuilderPropertyType> result = query.list();
+			session.close();
+			return result;
+		}
 	  public List<BuilderSellerType> getSellerTypeList(){
 		  String hql = "from BuilderSellerType";
 			HibernateUtil hibernateUtil = new HibernateUtil();

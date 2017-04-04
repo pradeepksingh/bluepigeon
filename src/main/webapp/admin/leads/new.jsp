@@ -1,3 +1,6 @@
+<%@page import="org.bluepigeon.admin.model.City"%>
+<%@page import="org.bluepigeon.admin.dao.BuilderPropertyTypeDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderPropertyType"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectLeadDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
@@ -6,9 +9,14 @@
 <%@include file="../../leftnav.jsp"%>
 <%
  	int project_size = 0;
+	int type_size = 0;
+	int city_size = 0;
  	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
+ 	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
  	if(builderProjects.size()>0)
     	project_size = builderProjects.size();
+ 	if(builderPropertyTypes.size()>0)
+ 		type_size = builderPropertyTypes.size();
    	session = request.getSession(false);
     AdminUser adminuserproject = new AdminUser();
  	int p_user_id = 0;
@@ -105,9 +113,9 @@
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right"	for="form-field-1">City </label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">City </label>
 										<div class="col-sm-9">
-											<input type="text" id="city" name="city" placeholder="Enter city name" class="form-control" />
+											<input type="text" id="city" name="city" placeholder="Enter City" class="form-control" />
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
@@ -131,6 +139,34 @@
 							                    <option value="2">Website</option>
 							                    <option value="3">Google</option>
 							                    <option value="4">Facebook</option>
+							                </select>
+										</div>
+										<div class="messageContainer col-sm-offset-3"></div>
+									</div>
+								</div>
+								<div class="col-lg-6 margin-bottom-5">
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Interested in </label>
+										<div class="col-sm-9">
+										 	<select name="interest" id="interest" class="form-control">
+							                    <option value="0">Select Interest</option>
+							                    <option value="1">Buy</option>
+							                    <option value="2">Rental</option>
+							                    <option value="3">Resale</option>
+							                </select>
+										</div>
+										<div class="messageContainer col-sm-offset-3"></div>
+									</div>
+								</div>
+								<div class="col-lg-6 margin-bottom-5">
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select Type </label>
+										<div class="col-sm-9">
+										 	<select name="type_id" id="type_id" class="form-control">
+							                    <option value="0">Select Type</option>
+							                   	<% for(int i=0; i < type_size ; i++){ %>
+												<option value="<% out.print(builderPropertyTypes.get(i).getId());%>"><% out.print(builderPropertyTypes.get(i).getName());%></option>
+											  	<% } %>
 							                </select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>

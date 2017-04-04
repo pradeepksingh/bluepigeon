@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.bluepigeon.admin.data.FloorDetail;
+import org.bluepigeon.admin.data.FloorImageData;
+import org.bluepigeon.admin.data.FloorPanoData;
 import org.bluepigeon.admin.data.ProjectDetail;
 import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.data.ProjectOffer;
@@ -12,6 +15,8 @@ import org.bluepigeon.admin.data.ProjectPaymentSchedule;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderFlat;
+import org.bluepigeon.admin.model.BuilderFloor;
+import org.bluepigeon.admin.model.BuilderFloorAmenity;
 import org.bluepigeon.admin.model.BuilderLead;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.BuilderProjectAmenityInfo;
@@ -23,9 +28,13 @@ import org.bluepigeon.admin.model.BuilderProjectPriceInfo;
 import org.bluepigeon.admin.model.BuilderProjectProjectType;
 import org.bluepigeon.admin.model.BuilderProjectPropertyConfigurationInfo;
 import org.bluepigeon.admin.model.BuilderProjectPropertyType;
+import org.bluepigeon.admin.model.FloorAmenityInfo;
+import org.bluepigeon.admin.model.FloorImageGallery;
+import org.bluepigeon.admin.model.FloorPanoramicImage;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
+
 
 public class ProjectDAO {
 	
@@ -460,9 +469,330 @@ public class ProjectDAO {
 	
 	
 	/* ******************** Project Floors ******************** */
+	/**
+	 * Save Floor data
+	 * @author pankaj
+	 * @param request
+	 * @return response
+	 */
+	public ResponseMessage saveFloor(FloorDetail floorDetail){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		BuilderFloor builderFloor = floorDetail.getBuilderFloor();
+		String hql = "from BuilderFloor where name = :name AND builderFloor.builderBuilding.id = :building_id";
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("name", builderFloor.getName());
+		query.setParameter("building_id", builderFloor.getBuilderBuilding().getId());
+		List<BuilderFloor> result = query.list();
+		session.close();
+		if (result.size() > 0) {
+			 responseMessage.setStatus(0);
+			 responseMessage.setMessage("Project name already exists");
+		} else {
+			Session newsession = hibernateUtil.openSession();
+			newsession.beginTransaction();
+			newsession.save(builderFloor);
+			newsession.getTransaction().commit();
+			newsession.close();
+			 responseMessage.setId(builderFloor.getId());
+			List<FloorAmenityInfo> floorAmenityInfos = floorDetail.getFloorAmenityInfos();
+			if(floorAmenityInfos.size()>0){
+				Session newsession1 = hibernateUtil.openSession();
+				newsession1.beginTransaction();
+				for(int i=0;i<floorAmenityInfos.size();i++){
+					FloorAmenityInfo floorAmenityInfo = new FloorAmenityInfo();
+					floorAmenityInfo.setBuilderFloor(builderFloor);
+					floorAmenityInfo.setBuilderFloorAmenity(floorAmenityInfos.get(i).getBuilderFloorAmenity());
+					newsession1.save(floorAmenityInfo);
+				}
+				newsession1.getTransaction().commit();
+				newsession1.close();
+				responseMessage.setStatus(1);
+				responseMessage.setMessage("Floor Added Successfully.");
+			}
+		}
+		return responseMessage;
+	}
 	
+	/**
+	 * save Floor image data
+	 * @author pankaj
+	 * @param request
+	 * @return response
+	 */
+	public ResponseMessage saveFloorImageGallery(FloorImageData floorImageData){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		BuilderFloor builderFloor = floorImageData.getBuilderFloor();
+		List<FloorImageGallery> floorImageGalleries = floorImageData.getFloorImageGallery();
+		if(floorImageGalleries.size()>0){
+			Session newsession1 = hibernateUtil.openSession();
+			newsession1.beginTransaction();
+			for(int i=0;i<floorImageGalleries.size();i++){
+				FloorImageGallery floorImageGallery = new FloorImageGallery();
+				floorImageGallery.setBuilderFloor(builderFloor);
+				floorImageGallery.setImage(floorImageGalleries.get(i).getImage());
+				newsession1.save(floorImageGallery);
+			}
+			newsession1.getTransaction().commit();
+			newsession1.close();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Floor Image Added Successfully.");
+		}
+		return responseMessage;
+	}
+	/**
+	 * save Floor Pano images
+	 * @author pankaj
+	 * @param request
+	 * @return response
+	 */
+	public ResponseMessage saveFloorPanoImage(FloorPanoData floorPanoData){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		List<FloorPanoramicImage> floorPanoramicImages = floorPanoData.getFloorPanoramicImages();
+		if(floorPanoramicImages.size()>0){
+			Session newsession1 = hibernateUtil.openSession();
+			newsession1.beginTransaction();
+			for(int i=0;i<floorPanoramicImages.size();i++){
+				FloorPanoramicImage floorPanoramicImage = new FloorPanoramicImage();
+				floorPanoramicImage.setBuilderFloor(floorPanoData.getBuilderFloor());
+				floorPanoramicImage.setPanoImage(floorPanoramicImages.get(i).getPanoImage());
+				newsession1.save(floorPanoramicImage);
+			}
+			newsession1.getTransaction().commit();
+			newsession1.close();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Floor Image Added Successfully.");
+		}
+		return responseMessage;
+	}
+	/**
+	 * update Floor
+	 * @author pankaj
+	 * @param request
+	 * @return response
+	 */
+	public ResponseMessage updateFloor(FloorDetail floorDetail){
+		ResponseMessage response = new ResponseMessage();
+		BuilderFloor builderFloor = floorDetail.getBuilderFloor();
+		
+		/******* delete enteries **********/
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String delete_floor_amenity_type = "DELETE from FloorAmenityInfo where builderFloor.id = :floor_id";
+		Session newsession1 = hibernateUtil.openSession();
+		newsession1.beginTransaction();
+		Query smdelete = newsession1.createQuery(delete_floor_amenity_type);
+		smdelete.setParameter("floor_id", builderFloor.getId());
+		smdelete.executeUpdate();
+		newsession1.getTransaction().commit();
+		newsession1.close();
+		
+		/***** Add New Enteries *******/
+		List<FloorAmenityInfo> floorAmenityInfos = floorDetail.getFloorAmenityInfos();
+		if(floorAmenityInfos.size()>0){
+			Session addsession1 = hibernateUtil.openSession();
+			addsession1.beginTransaction();
+			for(int i=0;i<floorAmenityInfos.size();i++){
+				FloorAmenityInfo floorAmenityInfo = new FloorAmenityInfo();
+				floorAmenityInfo.setBuilderFloor(builderFloor);
+				floorAmenityInfo.setBuilderFloorAmenity(floorAmenityInfos.get(i).getBuilderFloorAmenity());
+				addsession1.save(floorAmenityInfo);
+			}
+			addsession1.getTransaction().commit();
+			addsession1.close();
+			response.setStatus(1);
+			response.setMessage("Floor Updated sucessfuly");
+		}
+		return response;
+	}
+	/**
+	 * update Floor Image
+	 * @author pankaj
+	 * @param request
+	 * @return response
+	 */
+	public ResponseMessage updateFloorImage(FloorImageData floorImageData){
+		ResponseMessage response = new ResponseMessage();
+		BuilderFloor builderFloor = floorImageData.getBuilderFloor();
+		/******* delete enteries **********/
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String delete_floor_image_gallery = "DELETE from FloorImageGallery where builderFloor.id = :floor_id";
+		Session newsession1 = hibernateUtil.openSession();
+		newsession1.beginTransaction();
+		Query smdelete = newsession1.createQuery(delete_floor_image_gallery);
+		smdelete.setParameter("floor_id", builderFloor.getId());
+		smdelete.executeUpdate();
+		newsession1.getTransaction().commit();
+		newsession1.close();
+		
+		/***** Add New Enteries *******/
+		List<FloorImageGallery> floorImageGalleries = floorImageData.getFloorImageGallery();
+		if(floorImageGalleries.size()>0){
+			Session addsession1 = hibernateUtil.openSession();
+			addsession1.beginTransaction();
+			for(int i=0;i<floorImageGalleries.size();i++){
+				FloorImageGallery floorImageGallery = new FloorImageGallery();
+				floorImageGallery.setBuilderFloor(builderFloor);
+				floorImageGallery.setImage(floorImageGalleries.get(i).getImage());;
+				addsession1.save(floorImageGallery);
+			}
+			addsession1.getTransaction().commit();
+			addsession1.close();
+			response.setStatus(1);
+			response.setMessage("Floor Image Updated sucessfuly");
+		}
+		return response;
+	}
+	/**
+	 * update Floor Pano Image
+	 * @author pankaj
+	 * @param request
+	 * @return response
+	 */
+	public ResponseMessage updateFloorPanoImage(FloorPanoData floorPanoData){
+		ResponseMessage response = new ResponseMessage();
+		BuilderFloor builderFloor = floorPanoData.getBuilderFloor();
+		
+		/******* delete enteries **********/
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String delete_floor_pano_images = "DELETE from FloorPanoramicImage where builderFloor.id = :floor_id";
+		Session newsession1 = hibernateUtil.openSession();
+		newsession1.beginTransaction();
+		Query smdelete = newsession1.createQuery(delete_floor_pano_images);
+		smdelete.setParameter("floor_id", builderFloor.getId());
+		smdelete.executeUpdate();
+		newsession1.getTransaction().commit();
+		newsession1.close();
+		
+		/***** Add New Enteries *******/
+		List<FloorPanoramicImage> floorPanoramicImages = floorPanoData.getFloorPanoramicImages();
+		if(floorPanoramicImages.size()>0){
+			Session addsession1 = hibernateUtil.openSession();
+			addsession1.beginTransaction();
+			for(int i=0;i<floorPanoramicImages.size();i++){
+				FloorPanoramicImage floorPanoramicImage = new FloorPanoramicImage();
+				floorPanoramicImage.setBuilderFloor(builderFloor);
+				floorPanoramicImage.setPanoImage(floorPanoramicImages.get(i).getPanoImage());
+				addsession1.save(floorPanoramicImage);
+			}
+			addsession1.getTransaction().commit();
+			addsession1.close();
+			response.setStatus(1);
+			response.setMessage("Floor Pano Image Updated sucessfuly");
+		}
+		return response;
+	}
+	/**
+	 * Get all floors
+	 * @author pankaj
+	 * @return list
+	 */
+	public List<BuilderFloor> getBuilderFloorList(){
+		String hql = "from BuilderFloor";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderFloor> result = query.list();
+		session.close();
+		return result;
+	}
 	
+	/**
+	 * Get Active Floor Amenity List 
+	 * @author pankaj
+	 * @return list
+	 */
+	public List<BuilderFloorAmenity> getAllFloorAmenity(){
+		String hql = "from BuilderFloorAmenity where status=0";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderFloorAmenity> result = query.list();
+		session.close();
+		return result;
+	}
 	
+	/**
+	 * Get Floor by id
+	 * @author pankaj
+	 * @param floor_id
+	 * @return floor object
+	 */
+	public BuilderFloor getFloorById(int id){
+		String hql = "from BuilderFloor where id= :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<BuilderFloor> result = query.list();
+		session.close();
+		return result.get(0);
+	}
+	/**
+	 * Get Floor by building id
+	 * @author pankaj
+	 * @param building_id
+	 * @return Floor object
+	 */
+	public BuilderFloor getFloorByBuildingId(int building_id){
+		String hql = "from BuilderFloor where builderFloor.builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuilderFloor> result = query.list();
+		session.close();
+		return result.get(0);
+	}
+	/**
+	 * Get Floor image by floor id
+	 * @author pankaj
+	 * @param floor_id 
+	 * @return image 
+	 */
+	public List<FloorImageGallery> getAllFloorImagesById(int floor_id){
+		String hql = "from FloorImageGallery where BuilderFloor.id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", floor_id);
+		List<FloorImageGallery> result = query.list();
+		session.close();
+		List<FloorImageGallery> floorImageGalleries = new ArrayList<FloorImageGallery>();
+		for(int i=0; i<result.size(); i++){
+			FloorImageGallery floorImageGallery = new FloorImageGallery();
+			floorImageGallery.setId(result.get(i).getId());
+			floorImageGallery.setBuilderFloor(result.get(i).getBuilderFloor());
+			floorImageGallery.setImage(result.get(i).getImage());
+			floorImageGalleries.add(floorImageGallery);
+		}
+		return floorImageGalleries;
+	}
+	/**
+	 * Get Floor Pano images by floor id
+	 * @author pankaj
+	 * @param floor_id
+	 * @return Pano images
+	 */
+	public List<FloorPanoramicImage> getFloorPanoImagesByFloodId(int floor_id){
+		String hql = "from FloorPanoramicImage where BuilderFloor.id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", floor_id);
+		List<FloorPanoramicImage> result = query.list();
+		session.close();
+		List<FloorPanoramicImage> floorPanoramicImages = new ArrayList<FloorPanoramicImage>();
+		for(int i=0; i<result.size(); i++){
+			FloorPanoramicImage floorPanoramicImage = new FloorPanoramicImage();
+			floorPanoramicImage.setId(result.get(i).getId());
+			floorPanoramicImage.setBuilderFloor(result.get(i).getBuilderFloor());
+			floorPanoramicImage.setPanoImage(result.get(i).getPanoImage());
+		}
+		return floorPanoramicImages;
+	}
 	/* ******************** Project Flats ******************** */
 	
 	public List<BuilderFlat> getBuilderProjectBuildingFlats(int building_id) {
@@ -497,7 +827,7 @@ public class ProjectDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
-		newsession.save(builderLead);
+		newsession.update(builderLead);
 		newsession.getTransaction().commit();
 		newsession.close();
 		response.setId(builderLead.getId());
