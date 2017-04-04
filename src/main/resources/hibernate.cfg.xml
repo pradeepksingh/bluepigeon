@@ -95,6 +95,7 @@
         <mapping class="org.bluepigeon.admin.model.BuilderOverallProjectStagesAndSubStages" />
         <mapping class="org.bluepigeon.admin.model.BuildingPaymentInfo" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloor" />
+         <mapping class="org.bluepigeon.admin.model.BuilderFloorStatus" />
         <mapping class="org.bluepigeon.admin.model.FloorImageGallery" />
         <mapping class="org.bluepigeon.admin.model.BuildingOfferInfo" />
         <mapping class="org.bluepigeon.admin.model.City" />
