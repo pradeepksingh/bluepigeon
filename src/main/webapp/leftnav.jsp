@@ -486,8 +486,11 @@
 			<li class=""><a href="${baseUrl}/createprojects/builder-seller-type.jsp"> <i
 				class="menu-icon fa fa-caret-right"></i> seller type
 		</a> <b class="arrow"></b></li>
-			<li class=""><a href="${baseUrl}/createprojects/builder-tax-type.jsp"> <i
-				class="menu-icon fa fa-caret-right"></i> Tax type
+<%-- 			<li class=""><a href="${baseUrl}/createprojects/builder-tax-type.jsp"> <i --%>
+<!-- 				class="menu-icon fa fa-caret-right"></i> Tax type -->
+<!-- 		</a> <b class="arrow"></b></li> -->
+		<li class=""><a href="${baseUrl}/createprojects/tax.jsp"> <i
+				class="menu-icon fa fa-caret-right"></i> Tax
 		</a> <b class="arrow"></b></li>
 						</ul>
 					</li>

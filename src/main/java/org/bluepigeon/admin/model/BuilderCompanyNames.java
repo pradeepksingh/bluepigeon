@@ -26,18 +26,18 @@ public class BuilderCompanyNames implements java.io.Serializable {
 	private String name;
 	private String contact;
 	private String email;
-	private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
+	//private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
 
 	public BuilderCompanyNames() {
 	}
 
-	public BuilderCompanyNames(Builder builder, String name, String contact, String email,
-			Set<BuilderProject> builderProjects) {
+	public BuilderCompanyNames(Builder builder, String name, String contact, String email){
+			//Set<BuilderProject> builderProjects) {
 		this.builder = builder;
 		this.name = name;
 		this.contact = contact;
 		this.email = email;
-		this.builderProjects = builderProjects;
+		//this.builderProjects = builderProjects;
 	}
 
 	@Id
@@ -89,13 +89,13 @@ public class BuilderCompanyNames implements java.io.Serializable {
 		this.email = email;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderCompanyNames")
-	public Set<BuilderProject> getBuilderProjects() {
-		return this.builderProjects;
-	}
-
-	public void setBuilderProjects(Set<BuilderProject> builderProjects) {
-		this.builderProjects = builderProjects;
-	}
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderCompanyNames")
+//	public Set<BuilderProject> getBuilderProjects() {
+//		return this.builderProjects;
+//	}
+//
+//	public void setBuilderProjects(Set<BuilderProject> builderProjects) {
+//		this.builderProjects = builderProjects;
+//	}
 
 }

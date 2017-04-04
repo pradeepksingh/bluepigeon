@@ -44,6 +44,7 @@ public class BuilderDetailsDAO {
 				newsession.close();
 				
 				Set<BuilderCompanyNames> builderCompanyNames = builderDetails.getBuilderCompanyNames();
+				if(builderCompanyNames.size()>0){
 				Session session2 = hibernateUtil.openSession();
 				session2.beginTransaction();
 				
@@ -62,6 +63,11 @@ public class BuilderDetailsDAO {
 				
 				response.setStatus(1);
 				response.setMessage("Builder added Successfully");
+				}
+				else{
+					response.setStatus(0);
+					response.setMessage("Unable to update company details. Please try again");
+				}
 			}
 		}
 		return response;
@@ -108,6 +114,7 @@ public class BuilderDetailsDAO {
 				while(bIterator.hasNext()){
 					BuilderCompanyNames builderCompanyNames2 = bIterator.next();
 					builderCompanyNames2.setBuilder(builder);
+					System.out.println("BuilderComapanyName : "+builderCompanyNames2.getName()+"\nEmail :: "+builderCompanyNames2.getEmail()+"\nContact :: "+builderCompanyNames2.getContact());
 					session2.save(builderCompanyNames2);
 					
 				}
@@ -161,5 +168,15 @@ public class BuilderDetailsDAO {
 		session.close();
 		return builderCompanyNamesList;
 	}
-
+	
+	public List<BuilderCompanyNames> getAllBuilderCompanyNameByBuilderId(int builderId) {
+		String hql = "from BuilderCompanyNames where builder.id=:builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		List<BuilderCompanyNames> result = query.list();
+		session.close();
+		return result;
+	}
 }

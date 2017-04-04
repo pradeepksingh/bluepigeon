@@ -41,27 +41,23 @@ public class BuilderFloor implements java.io.Serializable {
 		this.floorNo = floorNo;
 		this.totalFlats = totalFlats;
 		this.status = status;
-		this.builderFlats = builderFlats;
 	}
-
+	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 
 	@Column(name = "id", unique = true, nullable = false)
 	public Integer getId() {
-		return this.id;
+		return id;
 	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "building_id")
 	public BuilderBuilding getBuilderBuilding() {
-		return this.builderBuilding;
+		return builderBuilding;
 	}
-
 	public void setBuilderBuilding(BuilderBuilding builderBuilding) {
 		this.builderBuilding = builderBuilding;
 	}
@@ -71,25 +67,20 @@ public class BuilderFloor implements java.io.Serializable {
 	public BuilderFloorStatus getBuilderFloorStatus() {
 		return this.builderFloorStatus;
 	}
-
 	public void setBuilderFloorStatus(BuilderFloorStatus builderFloorStatus) {
 		this.builderFloorStatus = builderFloorStatus;
 	}
-
 	@Column(name = "name", length = 128)
 	public String getName() {
-		return this.name;
+		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	@Column(name = "floor_no")
 	public Integer getFloorNo() {
-		return this.floorNo;
+		return floorNo;
 	}
-
 	public void setFloorNo(Integer floorNo) {
 		this.floorNo = floorNo;
 	}
@@ -102,23 +93,14 @@ public class BuilderFloor implements java.io.Serializable {
 	public void setTotalFlats(Integer totalFlats) {
 		this.totalFlats = totalFlats;
 	}
-
 	@Column(name = "status")
 	public Byte getStatus() {
-		return this.status;
+		return status;
 	}
-
 	public void setStatus(Byte status) {
 		this.status = status;
 	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderFloor")
-	public Set<BuilderFlat> getBuilderFlats() {
-		return this.builderFlats;
-	}
-
-	public void setBuilderFlats(Set<BuilderFlat> builderFlats) {
-		this.builderFlats = builderFlats;
-	}
+	
+	
 
 }
