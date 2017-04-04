@@ -30,9 +30,9 @@ public class BuilderFlat implements java.io.Serializable {
 	private BuilderFloor builderFloor;
 	private BuilderFlatStatus builderFlatStatus;
 	private String flatNo;
-	private String bedroom;
-	private String bathroom;
-	private String balcony;
+	private Integer bedroom;
+	private Integer bathroom;
+	private Integer balcony;
 	private Double totalInventory;
 	private Double inventorySold;
 	private Double revenue;
@@ -44,7 +44,7 @@ public class BuilderFlat implements java.io.Serializable {
 	}
 
 	public BuilderFlat(BuilderFlatType builderFlatType, AdminUser adminUser, BuilderFloor builderFloor,
-			BuilderFlatStatus builderFlatStatus, String flatNo, String bedroom, String bathroom, String balcony,
+			BuilderFlatStatus builderFlatStatus, String flatNo, Integer bedroom, Integer bathroom, Integer balcony,
 			Double totalInventory, Double inventorySold, Double revenue, Date possessionDate, Byte status,
 			Set<BuilderLead> builderLeads) {
 		this.builderFlatType = builderFlatType;
@@ -125,29 +125,29 @@ public class BuilderFlat implements java.io.Serializable {
 	}
 
 	@Column(name = "bedroom", length = 225)
-	public String getBedroom() {
+	public Integer getBedroom() {
 		return this.bedroom;
 	}
 
-	public void setBedroom(String bedroom) {
+	public void setBedroom(Integer bedroom) {
 		this.bedroom = bedroom;
 	}
 
 	@Column(name = "bathroom", length = 225)
-	public String getBathroom() {
+	public Integer getBathroom() {
 		return this.bathroom;
 	}
 
-	public void setBathroom(String bathroom) {
+	public void setBathroom(Integer bathroom) {
 		this.bathroom = bathroom;
 	}
 
 	@Column(name = "balcony", length = 225)
-	public String getBalcony() {
+	public Integer getBalcony() {
 		return this.balcony;
 	}
 
-	public void setBalcony(String balcony) {
+	public void setBalcony(Integer balcony) {
 		this.balcony = balcony;
 	}
 

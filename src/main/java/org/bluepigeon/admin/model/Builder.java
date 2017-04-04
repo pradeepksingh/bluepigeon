@@ -28,14 +28,13 @@ public class Builder implements java.io.Serializable {
 	private Byte status;
 	private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
 	private Set<BuilderCompanyNames> builderCompanyNameses = new HashSet<BuilderCompanyNames>(0);
-	private Set<BuilderFlatType> builderFlatTypes = new HashSet<BuilderFlatType>(0);
 
 	public Builder() {
 	}
 
 	public Builder(String name, String headOffice, String email, String mobile, String aboutBuilder, Byte status,
-			Set<BuilderProject> builderProjects, Set<BuilderCompanyNames> builderCompanyNameses,
-			Set<BuilderFlatType> builderFlatTypes) {
+			Set<BuilderProject> builderProjects, Set<BuilderCompanyNames> builderCompanyNameses
+	) {
 		this.name = name;
 		this.headOffice = headOffice;
 		this.email = email;
@@ -44,7 +43,6 @@ public class Builder implements java.io.Serializable {
 		this.status = status;
 		this.builderProjects = builderProjects;
 		this.builderCompanyNameses = builderCompanyNameses;
-		this.builderFlatTypes = builderFlatTypes;
 	}
 
 	@Id
@@ -131,13 +129,5 @@ public class Builder implements java.io.Serializable {
 		this.builderCompanyNameses = builderCompanyNameses;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builder")
-	public Set<BuilderFlatType> getBuilderFlatTypes() {
-		return this.builderFlatTypes;
-	}
-
-	public void setBuilderFlatTypes(Set<BuilderFlatType> builderFlatTypes) {
-		this.builderFlatTypes = builderFlatTypes;
-	}
 
 }

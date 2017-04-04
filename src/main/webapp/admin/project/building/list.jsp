@@ -1,8 +1,26 @@
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
 <%@page import="java.util.List"%>
 <%@include file="../../../head.jsp"%>
 <%@include file="../../../leftnav.jsp"%>
+<%
+	int project_id = 0;
+	int p_user_id = 0;
+	project_id = Integer.parseInt(request.getParameter("project_id"));
+	session = request.getSession(false);
+	AdminUser adminuserproject = new AdminUser();
+	if(session!=null)
+	{
+		if(session.getAttribute("uname") != null)
+		{
+			adminuserproject  = (AdminUser)session.getAttribute("uname");
+			p_user_id = adminuserproject.getId();
+		}
+	}
+	List<BuilderBuilding> builderBuildings = new ProjectDAO().getBuilderProjectBuildings(project_id);
+%>
 <div class="main-content">
 	<div class="main-content-inner">
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -18,7 +36,7 @@
 			<div class="page-header">
 				<h1>
 					Building List 
-					<a href="${baseUrl}/admin/project/building/new.jsp" class="btn btn-primary btn-sm pull-right" role="button" ><i class="fa fa-plus"></i> New Building</a>
+					<a href="${baseUrl}/admin/project/building/new.jsp?project_id=<% out.print(project_id); %>" class="btn btn-primary btn-sm pull-right" role="button" ><i class="fa fa-plus"></i> New Building</a>
 				</h1>
 			</div>
 			<div class="">
@@ -36,6 +54,19 @@
 									</tr>
 								</thead>
 								<tbody class="project_table">
+								<% for(BuilderBuilding builderBuilding :builderBuildings) { %>
+									<tr>
+										<th><% out.print(builderBuilding.getName()); %></th>
+										<th><% out.print(builderBuilding.getBuilderProject().getName()); %></th>
+										<th><% out.print(builderBuilding.getBuilderProject().getBuilder().getName()); %></th>
+										<th><% out.print(builderBuilding.getBuilderBuildingStatus().getName()); %></th>
+										<th>
+											<a href="${baseUrl}/admin/project/building/edit.jsp?building_id=<% out.print(builderBuilding.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+											<a href="${baseUrl}/admin/project/building/floor/list.jsp?building_id=<% out.print(builderBuilding.getId());%>" class="btn btn-info icon-btn btn-xs"><i class="fa fa-list"></i> Floors</a>
+											<a href="${baseUrl}/admin/project/building/flattype/list.jsp?building_id=<% out.print(builderBuilding.getId());%>" class="btn btn-info icon-btn btn-xs"><i class="fa fa-list"></i> Flat Types</a>
+										</th>
+									</tr>
+								<% } %>
 								</tbody>
 							</table>
 						</div>

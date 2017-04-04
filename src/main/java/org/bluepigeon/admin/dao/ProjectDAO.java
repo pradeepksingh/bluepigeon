@@ -15,6 +15,7 @@ import org.bluepigeon.admin.data.ProjectPaymentSchedule;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderFlat;
+import org.bluepigeon.admin.model.BuilderFlatType;
 import org.bluepigeon.admin.model.BuilderFloor;
 import org.bluepigeon.admin.model.BuilderFloorAmenity;
 import org.bluepigeon.admin.model.BuilderLead;
@@ -28,12 +29,22 @@ import org.bluepigeon.admin.model.BuilderProjectPriceInfo;
 import org.bluepigeon.admin.model.BuilderProjectProjectType;
 import org.bluepigeon.admin.model.BuilderProjectPropertyConfigurationInfo;
 import org.bluepigeon.admin.model.BuilderProjectPropertyType;
+import org.bluepigeon.admin.model.BuildingAmenityInfo;
+import org.bluepigeon.admin.model.BuildingImageGallery;
+import org.bluepigeon.admin.model.BuildingOfferInfo;
+import org.bluepigeon.admin.model.BuildingPanoramicImage;
+import org.bluepigeon.admin.model.BuildingPaymentInfo;
+import org.bluepigeon.admin.model.FlatAmenityInfo;
+import org.bluepigeon.admin.model.FlatPaymentSchedule;
+import org.bluepigeon.admin.model.FlatTypeImage;
 import org.bluepigeon.admin.model.FloorAmenityInfo;
+import org.bluepigeon.admin.model.FloorLayoutImage;
 import org.bluepigeon.admin.model.FloorImageGallery;
 import org.bluepigeon.admin.model.FloorPanoramicImage;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 
 public class ProjectDAO {
@@ -467,6 +478,268 @@ public class ProjectDAO {
 		return result;
 	}
 	
+	public List<BuilderBuilding> getBuilderProjectBuildingById(int building_id) {
+		String hql = "from BuilderBuilding where id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuilderBuilding> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<BuildingImageGallery> getBuilderBuildingImagesById(int building_id) {
+		String hql = "from BuildingImageGallery where builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuildingImageGallery> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<BuildingPanoramicImage> getBuilderBuildingElevationImagesById(int building_id) {
+		String hql = "from BuildingPanoramicImage where builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuildingPanoramicImage> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<BuildingPaymentInfo> getBuilderBuildingPaymentInfoById(int building_id) {
+		String hql = "from BuildingPaymentInfo where builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuildingPaymentInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<BuildingOfferInfo> getBuilderBuildingOfferInfoById(int building_id) {
+		String hql = "from BuildingOfferInfo where builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuildingOfferInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<BuildingAmenityInfo> getBuilderBuildingAmenityInfoById(int building_id) {
+		String hql = "from BuildingAmenityInfo where builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuildingAmenityInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public ResponseMessage addBuilding(BuilderBuilding builderBuilding) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.save(builderBuilding);
+		newsession.getTransaction().commit();
+		newsession.close();
+		resp.setId(builderBuilding.getId());
+		resp.setMessage("Building added successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public ResponseMessage addBuildingImageGallery(List<BuildingImageGallery> buildingImageGalleries) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(BuildingImageGallery buildingImageGallery :buildingImageGalleries) {
+			newsession.save(buildingImageGallery);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage addBuildingPanoImage(List<BuildingPanoramicImage> buildingPanoramicImages) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(BuildingPanoramicImage buildingPanoramicImage :buildingPanoramicImages) {
+			newsession.save(buildingPanoramicImage);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage addBuildingPaymentInfo(List<BuildingPaymentInfo> buildingPaymentInfos) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(BuildingPaymentInfo buildingPaymentInfo :buildingPaymentInfos) {
+			newsession.save(buildingPaymentInfo);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage addBuildingOfferInfo(List<BuildingOfferInfo> buildingOfferInfos) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) {
+			newsession.save(buildingOfferInfo);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage addBuildingAmenityInfo(List<BuildingAmenityInfo> buildingAmenityInfos) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(BuildingAmenityInfo buildingAmenityInfo :buildingAmenityInfos) {
+			newsession.save(buildingAmenityInfo);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage updateBuilding(BuilderBuilding builderBuilding) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.update(builderBuilding);
+		newsession.getTransaction().commit();
+		newsession.close();
+		resp.setId(builderBuilding.getId());
+		resp.setMessage("Building updated successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public void deleteBuildingAmenityInfo(int building_id) {
+		String hql = "delete from BuildingAmenityInfo where builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public ResponseMessage deleteBuildingImage(int image_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		String hql = "delete from BuildingImageGallery where id = :image_id";
+		Query query = session.createQuery(hql);
+		query.setInteger("image_id", image_id);
+		query.executeUpdate();
+		//query.executeUpdate();
+		transaction.commit();
+		session.close();
+		resp.setMessage("Building image deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public ResponseMessage deleteBuildingElevationImage(int image_id) {
+		ResponseMessage resp = new ResponseMessage();
+		String hql = "delete from BuildingPanoramicImage where id = :image_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("image_id", image_id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		resp.setMessage("Building elevation image deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public ResponseMessage updateBuildingPaymentInfo(List<BuildingPaymentInfo> buildingPaymentInfos) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(BuildingPaymentInfo buildingPaymentInfo :buildingPaymentInfos) {
+			newsession.update(buildingPaymentInfo);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage updateBuildingOfferInfo(List<BuildingOfferInfo> buildingOfferInfos) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) {
+			newsession.update(buildingOfferInfo);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage deleteBuildingPaymentInfo(int id) {
+		ResponseMessage resp = new ResponseMessage();
+		String hql = "delete from BuildingPaymentInfo where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		resp.setMessage("Building payment deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public ResponseMessage deleteBuildingOfferInfo(int id) {
+		ResponseMessage resp = new ResponseMessage();
+		String hql = "delete from BuildingOfferInfo where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		resp.setMessage("Building offer deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
 	
 	/* ******************** Project Floors ******************** */
 	/**
@@ -515,6 +788,514 @@ public class ProjectDAO {
 		return responseMessage;
 	}
 	
+	public ResponseMessage addBuildingFloor(BuilderFloor builderFloor) {
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.save(builderFloor);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setId(builderFloor.getId());
+		response.setStatus(1);
+		response.setMessage("Building floor Added Successfully.");
+		return response;
+	}
+	
+	public ResponseMessage updateBuildingFloor(BuilderFloor builderFloor) {
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.update(builderFloor);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setId(builderFloor.getId());
+		response.setStatus(1);
+		response.setMessage("Building floor updated Successfully.");
+		return response;
+	}
+	
+	public ResponseMessage addBuildingFloorPlan(List<FloorLayoutImage> floorLayoutImages) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FloorLayoutImage floorLayoutImage :floorLayoutImages) {
+			newsession.save(floorLayoutImage);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage addBuildingFloorAmenityInfo(List<FloorAmenityInfo> floorAmenityInfos) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FloorAmenityInfo floorAmenityInfo :floorAmenityInfos) {
+			newsession.save(floorAmenityInfo);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public List<BuilderFloor> getBuildingFloors(int building_id) {
+		String hql = "from BuilderFloor where builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuilderFloor> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<BuilderFloor> getBuildingFloorById(int floor_id) {
+		String hql = "from BuilderFloor where id = :floor_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floor_id);
+		List<BuilderFloor> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<FloorAmenityInfo> getBuildingFloorAmenityInfo(int floor_id) {
+		String hql = "from FloorAmenityInfo where builderFloor.id = :floor_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floor_id);
+		List<FloorAmenityInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<FloorLayoutImage> getBuildingFloorPlanInfo(int floor_id) {
+		String hql = "from FloorLayoutImage where builderFloor.id = :floor_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floor_id);
+		List<FloorLayoutImage> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public void deleteFloorAmenityInfo(int floor_id) {
+		String hql = "delete from FloorAmenityInfo where builderFloor.id = :floor_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floor_id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public ResponseMessage deleteFloorPlan(int image_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		String hql = "delete from FloorLayoutImage where id = :image_id";
+		Query query = session.createQuery(hql);
+		query.setInteger("image_id", image_id);
+		query.executeUpdate();
+		//query.executeUpdate();
+		transaction.commit();
+		session.close();
+		resp.setMessage("Floor plan deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	/* ******************** Project Flat Types ******************** */
+	
+	public List<BuilderFlatType> getBuilderBuildingFlatTypes(int building_id) {
+		String hql = "from BuilderFlatType where builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuilderFlatType> result = query.list();
+		session.close();
+		return result;
+	} 
+	
+	public List<BuilderFlatType> getBuilderBuildingFlatTypeById(int flat_type_id) {
+		String hql = "from BuilderFlatType where id = :flat_type_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_type_id", flat_type_id);
+		List<BuilderFlatType> result = query.list();
+		session.close();
+		return result;
+	} 
+	
+	public List<FlatTypeImage> getBuildingFlatTypeImages(int flat_type_id) {
+		String hql = "from FlatTypeImage where builderFlatType.id = :flat_type_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_type_id", flat_type_id);
+		List<FlatTypeImage> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public ResponseMessage addBuildingFlatType(BuilderFlatType builderFlatType) {
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.save(builderFlatType);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setId(builderFlatType.getId());
+		response.setStatus(1);
+		response.setMessage("Building flat type Added Successfully.");
+		return response;
+	}
+	
+	public ResponseMessage updateBuildingFlatType(BuilderFlatType builderFlatType) {
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.update(builderFlatType);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setId(builderFlatType.getId());
+		response.setStatus(1);
+		response.setMessage("Building flat type Updated Successfully.");
+		return response;
+	}
+	
+	public ResponseMessage addFlatTypeImages(List<FlatTypeImage> flatTypeImages) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FlatTypeImage flatTypeImage :flatTypeImages) {
+			newsession.save(flatTypeImage);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage deleteFlatTypeImage(int id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		String hql = "delete from FlatTypeImage where id = :id";
+		Query query = session.createQuery(hql);
+		query.setInteger("id", id);
+		query.executeUpdate();
+		//query.executeUpdate();
+		transaction.commit();
+		session.close();
+		resp.setMessage("Flat type image deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	
+	/**
+	 * Get Floor by id
+	 * @author pankaj
+	 * @param floor_id
+	 * @return floor object
+	 */
+	public BuilderFloor getFloorById(int id){
+		String hql = "from BuilderFloor where id= :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<BuilderFloor> result = query.list();
+		session.close();
+		return result.get(0);
+	}
+	/**
+	 * Get Floor by building id
+	 * @author pankaj
+	 * @param building_id
+	 * @return Floor object
+	 */
+	public BuilderFloor getFloorByBuildingId(int building_id){
+		String hql = "from BuilderFloor where builderFloor.builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuilderFloor> result = query.list();
+		session.close();
+		return result.get(0);
+	}
+	/**
+	 * Get Floor image by floor id
+	 * @author pankaj
+	 * @param floor_id 
+	 * @return image 
+	 */
+	public List<FloorImageGallery> getAllFloorImagesById(int floor_id){
+		String hql = "from FloorImageGallery where BuilderFloor.id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", floor_id);
+		List<FloorImageGallery> result = query.list();
+		session.close();
+		List<FloorImageGallery> floorImageGalleries = new ArrayList<FloorImageGallery>();
+		for(int i=0; i<result.size(); i++){
+			FloorImageGallery floorImageGallery = new FloorImageGallery();
+			floorImageGallery.setId(result.get(i).getId());
+			floorImageGallery.setBuilderFloor(result.get(i).getBuilderFloor());
+			floorImageGallery.setImage(result.get(i).getImage());
+			floorImageGalleries.add(floorImageGallery);
+		}
+		return floorImageGalleries;
+	}
+	/**
+	 * Get Floor Pano images by floor id
+	 * @author pankaj
+	 * @param floor_id
+	 * @return Pano images
+	 */
+	public List<FloorPanoramicImage> getFloorPanoImagesByFloodId(int floor_id){
+		String hql = "from FloorPanoramicImage where BuilderFloor.id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", floor_id);
+		List<FloorPanoramicImage> result = query.list();
+		session.close();
+		List<FloorPanoramicImage> floorPanoramicImages = new ArrayList<FloorPanoramicImage>();
+		for(int i=0; i<result.size(); i++){
+			FloorPanoramicImage floorPanoramicImage = new FloorPanoramicImage();
+			floorPanoramicImage.setId(result.get(i).getId());
+			floorPanoramicImage.setBuilderFloor(result.get(i).getBuilderFloor());
+			floorPanoramicImage.setPanoImage(result.get(i).getPanoImage());
+		}
+		return floorPanoramicImages;
+	}
+	/* ******************** Project Flats ******************** */
+	
+	public List<BuilderFlat> getBuilderProjectBuildingFlats(int building_id) {
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuilderFlat> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<BuilderFlat> getBuildingFlatById(int flat_id) {
+		String hql = "from BuilderFlat where id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flat_id);
+		List<BuilderFlat> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<BuilderFlat> getBuilderFloorFlats(int floor_id) {
+		String hql = "from BuilderFlat where builderFloor.id = :floor_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floor_id);
+		List<BuilderFlat> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<FlatAmenityInfo> getBuilderFlatAmenityInfos(int flat_id) {
+		String hql = "from FlatAmenityInfo where builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flat_id);
+		List<FlatAmenityInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<FlatPaymentSchedule> getBuilderFlatPaymentSchedules(int flat_id) {
+		String hql = "from FlatPaymentSchedule where builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flat_id);
+		List<FlatPaymentSchedule> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public ResponseMessage addBuildingFlat(BuilderFlat builderFlat) {
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.save(builderFlat);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setId(builderFlat.getId());
+		response.setStatus(1);
+		response.setMessage("Building flat Added Successfully.");
+		return response;
+	}
+	
+	public ResponseMessage updateBuildingFlat(BuilderFlat builderFlat) {
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.update(builderFlat);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setId(builderFlat.getId());
+		response.setStatus(1);
+		response.setMessage("Building flat Updated Successfully.");
+		return response;
+	}
+	
+	public ResponseMessage addFlatAmenityInfo(List<FlatAmenityInfo> flatAmenityInfos) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FlatAmenityInfo flatAmenityInfo :flatAmenityInfos) {
+			newsession.save(flatAmenityInfo);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage addFlatPaymentInfo(List<FlatPaymentSchedule> flatPaymentSchedules) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FlatPaymentSchedule flatPaymentSchedule :flatPaymentSchedules) {
+			newsession.save(flatPaymentSchedule);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage updateFlatPaymentInfo(List<FlatPaymentSchedule> flatPaymentSchedules) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FlatPaymentSchedule flatPaymentSchedule :flatPaymentSchedules) {
+			newsession.update(flatPaymentSchedule);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage deleteFlatAmenityInfo(int flat_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		String hql = "delete from FlatAmenityInfo where builderFlat.id = :flat_id";
+		Query query = session.createQuery(hql);
+		query.setInteger("flat_id", flat_id);
+		query.executeUpdate();
+		transaction.commit();
+		session.close();
+		resp.setMessage("Flat Amenity deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public ResponseMessage deleteFlatPaymentInfo(int id) {
+		ResponseMessage resp = new ResponseMessage();
+		String hql = "delete from FlatPaymentSchedule where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		resp.setMessage("Flat payment deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	/* ***************** Project Leads ********************** */
+	
+	public ResponseMessage addProjectLead(BuilderLead builderLead) {
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.save(builderLead);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setId(builderLead.getId());
+		response.setStatus(1);
+		response.setMessage("Project Lead Added Successfully.");
+		return response;
+	}
+	
+	public ResponseMessage updateProjectLead(BuilderLead builderLead) {
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.update(builderLead);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setId(builderLead.getId());
+		response.setStatus(1);
+		response.setMessage("Project Lead Updated Successfully.");
+		return response;
+	}
+	
+	public List<BuilderLead> getBuilderProjectLeads() {
+		String hql = "from BuilderLead order by id desc";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderLead> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public BuilderLead getBuilderProjectLeadById(int id) {
+		String hql = "from BuilderLead where id= :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<BuilderLead> result = query.list();
+		session.close();
+		return result.get(0);
+	}
+	
+	/* **** code by pankaj ********** */
 	/**
 	 * save Floor image data
 	 * @author pankaj
@@ -712,149 +1493,6 @@ public class ProjectDAO {
 		List<BuilderFloorAmenity> result = query.list();
 		session.close();
 		return result;
-	}
-	
-	/**
-	 * Get Floor by id
-	 * @author pankaj
-	 * @param floor_id
-	 * @return floor object
-	 */
-	public BuilderFloor getFloorById(int id){
-		String hql = "from BuilderFloor where id= :id";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("id", id);
-		List<BuilderFloor> result = query.list();
-		session.close();
-		return result.get(0);
-	}
-	/**
-	 * Get Floor by building id
-	 * @author pankaj
-	 * @param building_id
-	 * @return Floor object
-	 */
-	public BuilderFloor getFloorByBuildingId(int building_id){
-		String hql = "from BuilderFloor where builderFloor.builderBuilding.id = :building_id";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("building_id", building_id);
-		List<BuilderFloor> result = query.list();
-		session.close();
-		return result.get(0);
-	}
-	/**
-	 * Get Floor image by floor id
-	 * @author pankaj
-	 * @param floor_id 
-	 * @return image 
-	 */
-	public List<FloorImageGallery> getAllFloorImagesById(int floor_id){
-		String hql = "from FloorImageGallery where BuilderFloor.id = :id";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("id", floor_id);
-		List<FloorImageGallery> result = query.list();
-		session.close();
-		List<FloorImageGallery> floorImageGalleries = new ArrayList<FloorImageGallery>();
-		for(int i=0; i<result.size(); i++){
-			FloorImageGallery floorImageGallery = new FloorImageGallery();
-			floorImageGallery.setId(result.get(i).getId());
-			floorImageGallery.setBuilderFloor(result.get(i).getBuilderFloor());
-			floorImageGallery.setImage(result.get(i).getImage());
-			floorImageGalleries.add(floorImageGallery);
-		}
-		return floorImageGalleries;
-	}
-	/**
-	 * Get Floor Pano images by floor id
-	 * @author pankaj
-	 * @param floor_id
-	 * @return Pano images
-	 */
-	public List<FloorPanoramicImage> getFloorPanoImagesByFloodId(int floor_id){
-		String hql = "from FloorPanoramicImage where BuilderFloor.id = :id";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("id", floor_id);
-		List<FloorPanoramicImage> result = query.list();
-		session.close();
-		List<FloorPanoramicImage> floorPanoramicImages = new ArrayList<FloorPanoramicImage>();
-		for(int i=0; i<result.size(); i++){
-			FloorPanoramicImage floorPanoramicImage = new FloorPanoramicImage();
-			floorPanoramicImage.setId(result.get(i).getId());
-			floorPanoramicImage.setBuilderFloor(result.get(i).getBuilderFloor());
-			floorPanoramicImage.setPanoImage(result.get(i).getPanoImage());
-		}
-		return floorPanoramicImages;
-	}
-	/* ******************** Project Flats ******************** */
-	
-	public List<BuilderFlat> getBuilderProjectBuildingFlats(int building_id) {
-		String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("building_id", building_id);
-		List<BuilderFlat> result = query.list();
-		session.close();
-		return result;
-	}
-	
-	/* ***************** Project Leads ********************** */
-	
-	public ResponseMessage addProjectLead(BuilderLead builderLead) {
-		ResponseMessage response = new ResponseMessage();
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session newsession = hibernateUtil.openSession();
-		newsession.beginTransaction();
-		newsession.save(builderLead);
-		newsession.getTransaction().commit();
-		newsession.close();
-		response.setId(builderLead.getId());
-		response.setStatus(1);
-		response.setMessage("Project Lead Added Successfully.");
-		return response;
-	}
-	
-	public ResponseMessage updateProjectLead(BuilderLead builderLead) {
-		ResponseMessage response = new ResponseMessage();
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session newsession = hibernateUtil.openSession();
-		newsession.beginTransaction();
-		newsession.update(builderLead);
-		newsession.getTransaction().commit();
-		newsession.close();
-		response.setId(builderLead.getId());
-		response.setStatus(1);
-		response.setMessage("Project Lead Updated Successfully.");
-		return response;
-	}
-	
-	public List<BuilderLead> getBuilderProjectLeads() {
-		String hql = "from BuilderLead order by id desc";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		List<BuilderLead> result = query.list();
-		session.close();
-		return result;
-	}
-	
-	public BuilderLead getBuilderProjectLeadById(int id) {
-		String hql = "from BuilderLead where id= :id";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("id", id);
-		List<BuilderLead> result = query.list();
-		session.close();
-		return result.get(0);
 	}
 	
 }

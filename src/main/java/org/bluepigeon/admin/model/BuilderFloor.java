@@ -23,25 +23,26 @@ public class BuilderFloor implements java.io.Serializable {
 
 	private Integer id;
 	private BuilderBuilding builderBuilding;
-	private BuilderProject builderProject;
+	private BuilderFloorStatus builderFloorStatus;
 	private String name;
 	private Integer floorNo;
-	private String floorStatus;
+	private Integer totalFlats;
 	private Byte status;
-	public BuilderFloor(BuilderBuilding builderBuilding, BuilderProject builderProject, String name, Integer floorNo,
-			String floorStatus, Byte status) {
-		super();
+	private Set<BuilderFlat> builderFlats = new HashSet<BuilderFlat>(0);
+
+	public BuilderFloor() {
+	}
+
+	public BuilderFloor(BuilderBuilding builderBuilding, BuilderFloorStatus builderFloorStatus, String name,
+			Integer floorNo, Integer totalFlats, Byte status, Set<BuilderFlat> builderFlats) {
 		this.builderBuilding = builderBuilding;
-		this.builderProject = builderProject;
+		this.builderFloorStatus = builderFloorStatus;
 		this.name = name;
 		this.floorNo = floorNo;
-		this.floorStatus = floorStatus;
+		this.totalFlats = totalFlats;
 		this.status = status;
 	}
-	public BuilderFloor() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 
@@ -60,13 +61,14 @@ public class BuilderFloor implements java.io.Serializable {
 	public void setBuilderBuilding(BuilderBuilding builderBuilding) {
 		this.builderBuilding = builderBuilding;
 	}
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "project_id")
-	public BuilderProject getBuilderProject() {
-		return builderProject;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "status_id")
+	public BuilderFloorStatus getBuilderFloorStatus() {
+		return this.builderFloorStatus;
 	}
-	public void setBuilderProject(BuilderProject builderProject) {
-		this.builderProject = builderProject;
+	public void setBuilderFloorStatus(BuilderFloorStatus builderFloorStatus) {
+		this.builderFloorStatus = builderFloorStatus;
 	}
 	@Column(name = "name", length = 128)
 	public String getName() {
@@ -82,12 +84,14 @@ public class BuilderFloor implements java.io.Serializable {
 	public void setFloorNo(Integer floorNo) {
 		this.floorNo = floorNo;
 	}
-	@Column(name = "floor_status")
-	public String getFloorStatus() {
-		return floorStatus;
+
+	@Column(name = "total_flats")
+	public Integer getTotalFlats() {
+		return this.totalFlats;
 	}
-	public void setFloorStatus(String floorStatus) {
-		this.floorStatus = floorStatus;
+
+	public void setTotalFlats(Integer totalFlats) {
+		this.totalFlats = totalFlats;
 	}
 	@Column(name = "status")
 	public Byte getStatus() {

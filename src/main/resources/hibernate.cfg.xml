@@ -101,6 +101,16 @@
         <mapping class="org.bluepigeon.admin.model.AdminUserRole" />
         <mapping class="org.bluepigeon.admin.model.BuilderFlatAmenityStages" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloorAmenityStages" />
+        <mapping class="org.bluepigeon.admin.model.BuildingPaymentInfo" />
+        <mapping class="org.bluepigeon.admin.model.BuildingOfferInfo" />
+        <mapping class="org.bluepigeon.admin.model.BuildingPanoramicImage" />
+        <mapping class="org.bluepigeon.admin.model.BuildingImageGallery" />
+        <mapping class="org.bluepigeon.admin.model.BuildingAmenityInfo" />
+        <mapping class="org.bluepigeon.admin.model.FloorLayoutImage" />
+        <mapping class="org.bluepigeon.admin.model.FloorAmenityInfo" />
+        <mapping class="org.bluepigeon.admin.model.FlatTypeImage" />
+        <mapping class="org.bluepigeon.admin.model.FlatAmenityInfo" />
+        <mapping class="org.bluepigeon.admin.model.FlatPaymentSchedule" />
 	</session-factory>
 
 </hibernate-configuration>

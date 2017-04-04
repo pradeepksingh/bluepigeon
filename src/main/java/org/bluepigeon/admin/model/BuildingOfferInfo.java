@@ -21,22 +21,24 @@ public class BuildingOfferInfo implements java.io.Serializable {
 	private Integer id;
 	private BuilderBuilding builderBuilding;
 	private String title;
-	private Double per;
+	private Double discount;
 	private Double amount;
-	private Double applicable;
-	private Byte apply;
+	private String description;
+	private Byte type;
+	private Byte status;
 
 	public BuildingOfferInfo() {
 	}
 
-	public BuildingOfferInfo(BuilderBuilding builderBuilding, String title, Double per, Double amount,
-			Double applicable, Byte apply) {
+	public BuildingOfferInfo(BuilderBuilding builderBuilding, String title, Double discount, Double amount,
+			String description, Byte type, Byte status) {
 		this.builderBuilding = builderBuilding;
 		this.title = title;
-		this.per = per;
+		this.discount = discount;
 		this.amount = amount;
-		this.applicable = applicable;
-		this.apply = apply;
+		this.description = description;
+		this.type = type;
+		this.status = status;
 	}
 
 	@Id
@@ -70,13 +72,13 @@ public class BuildingOfferInfo implements java.io.Serializable {
 		this.title = title;
 	}
 
-	@Column(name = "per", precision = 22, scale = 0)
-	public Double getPer() {
-		return this.per;
+	@Column(name = "discount", precision = 22, scale = 0)
+	public Double getDiscount() {
+		return this.discount;
 	}
 
-	public void setPer(Double per) {
-		this.per = per;
+	public void setDiscount(Double discount) {
+		this.discount = discount;
 	}
 
 	@Column(name = "amount", precision = 22, scale = 0)
@@ -88,22 +90,31 @@ public class BuildingOfferInfo implements java.io.Serializable {
 		this.amount = amount;
 	}
 
-	@Column(name = "applicable", precision = 22, scale = 0)
-	public Double getApplicable() {
-		return this.applicable;
+	@Column(name = "description", length = 255)
+	public String getDescription() {
+		return this.description;
 	}
 
-	public void setApplicable(Double applicable) {
-		this.applicable = applicable;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	@Column(name = "apply")
-	public Byte getApply() {
-		return this.apply;
+	@Column(name = "type")
+	public Byte getType() {
+		return this.type;
 	}
 
-	public void setApply(Byte apply) {
-		this.apply = apply;
+	public void setType(Byte type) {
+		this.type = type;
+	}
+	
+	@Column(name = "status")
+	public Byte getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(Byte status) {
+		this.status = status;
 	}
 
 }
