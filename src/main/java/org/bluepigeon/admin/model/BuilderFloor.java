@@ -26,7 +26,7 @@ public class BuilderFloor implements java.io.Serializable {
 	private BuilderFloorStatus builderFloorStatus;
 	private String name;
 	private Integer floorNo;
-	private Integer totalFloor;
+	private Integer totalFlats;
 	private Byte status;
 	private Set<BuilderFlat> builderFlats = new HashSet<BuilderFlat>(0);
 
@@ -34,12 +34,12 @@ public class BuilderFloor implements java.io.Serializable {
 	}
 
 	public BuilderFloor(BuilderBuilding builderBuilding, BuilderFloorStatus builderFloorStatus, String name,
-			Integer floorNo, Integer totalFloor, Byte status, Set<BuilderFlat> builderFlats) {
+			Integer floorNo, Integer totalFlats, Byte status, Set<BuilderFlat> builderFlats) {
 		this.builderBuilding = builderBuilding;
 		this.builderFloorStatus = builderFloorStatus;
 		this.name = name;
 		this.floorNo = floorNo;
-		this.totalFloor = totalFloor;
+		this.totalFlats = totalFlats;
 		this.status = status;
 		this.builderFlats = builderFlats;
 	}
@@ -66,7 +66,7 @@ public class BuilderFloor implements java.io.Serializable {
 		this.builderBuilding = builderBuilding;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "status_id")
 	public BuilderFloorStatus getBuilderFloorStatus() {
 		return this.builderFloorStatus;
@@ -94,13 +94,13 @@ public class BuilderFloor implements java.io.Serializable {
 		this.floorNo = floorNo;
 	}
 
-	@Column(name = "total_floor")
-	public Integer getTotalFloor() {
-		return this.totalFloor;
+	@Column(name = "total_flats")
+	public Integer getTotalFlats() {
+		return this.totalFlats;
 	}
 
-	public void setTotalFloor(Integer totalFloor) {
-		this.totalFloor = totalFloor;
+	public void setTotalFlats(Integer totalFlats) {
+		this.totalFlats = totalFlats;
 	}
 
 	@Column(name = "status")

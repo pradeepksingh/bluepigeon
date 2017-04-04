@@ -3,32 +3,32 @@ package org.bluepigeon.admin.dao;
 import java.util.List;
 
 import org.bluepigeon.admin.exception.ResponseMessage;
-import org.bluepigeon.admin.model.BuilderFlatStatus;
+import org.bluepigeon.admin.model.BuilderFloorStatus;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-public class BuilderFlatStatusDAO {
-	public ResponseMessage save(BuilderFlatStatus buildingAmeneties) {
+public class BuilderFloorStatusDAO {
+	public ResponseMessage save(BuilderFloorStatus builderFloorStatus) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		if (buildingAmeneties.getName() == null || buildingAmeneties.getName().trim().length() == 0) {
+		if (builderFloorStatus.getName() == null || builderFloorStatus.getName().trim().length() == 0) {
 			response.setStatus(0);
-			response.setMessage("Please enter flat status");
+			response.setMessage("Please enter floor status");
 		} else {
-			String hql = "from BuilderFlatStatus where name = :name";
+			String hql = "from BuilderFloorStatus where name = :name";
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
-			query.setParameter("name", buildingAmeneties.getName());
-			List<BuilderFlatStatus> result = query.list();
+			query.setParameter("name", builderFloorStatus.getName());
+			List<BuilderFloorStatus> result = query.list();
 			session.close();
 			if (result.size() > 0) {
 				response.setStatus(0);
-				response.setMessage("Flat status already exists");
+				response.setMessage("Floor status already exists");
 			} else {
 				Session newsession = hibernateUtil.openSession();
 				newsession.beginTransaction();
-				newsession.save(buildingAmeneties);
+				newsession.save(builderFloorStatus);
 				newsession.getTransaction().commit();
 				newsession.close();
 				response.setStatus(1);
@@ -38,24 +38,24 @@ public class BuilderFlatStatusDAO {
 		return response;
 	}
 
-	public ResponseMessage update(BuilderFlatStatus buildingAmeneties) {
+	public ResponseMessage update(BuilderFloorStatus builderFloorStatus) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		String hql = "from BuilderFlatStatus where name = :name and id != :id";
+		String hql = "from BuilderFloorStatus where name = :name and id != :id";
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setParameter("name", buildingAmeneties.getName());
-		query.setParameter("id", buildingAmeneties.getId());
+		query.setParameter("name", builderFloorStatus.getName());
+		query.setParameter("id", builderFloorStatus.getId());
 		
-		List<BuilderFlatStatus> result = query.list();
+		List<BuilderFloorStatus> result = query.list();
 		session.close();
 		if (result.size() > 0) {
 			response.setStatus(0);
-			response.setMessage("Flat status already exists");
+			response.setMessage("Floor status already exists");
 		} else {
 			Session newsession = hibernateUtil.openSession();
 			newsession.beginTransaction();
-			newsession.update(buildingAmeneties);
+			newsession.update(builderFloorStatus);
 			newsession.getTransaction().commit();
 			newsession.close();
 			response.setStatus(1);
@@ -64,14 +64,14 @@ public class BuilderFlatStatusDAO {
 		return response;
 	}
 
-	public ResponseMessage delete(BuilderFlatStatus buildingAmeneties) {
+	public ResponseMessage delete(BuilderFloorStatus builderFloorStatus) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		String hql = "delete from BuilderFlatStatus where id = :id";
+		String hql = "delete from BuilderFloorStatus where id = :id";
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
-		query.setParameter("id", buildingAmeneties.getId());
+		query.setParameter("id", builderFloorStatus.getId());
 		query.executeUpdate();
 		session.getTransaction().commit();
 		session.close();
@@ -81,35 +81,24 @@ public class BuilderFlatStatusDAO {
 		return response;
 	}
 
-	public List<BuilderFlatStatus> getBuilderCompany() {
-		String hql = "from BuilderFlatStatus";
+	public List<BuilderFloorStatus> getFloorStatus() {
+		String hql = "from BuilderFloorStatus";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		List<BuilderFlatStatus> result = query.list();
-		session.close();
-		return result;
-	}
-	
-	public List<BuilderFlatStatus> getBuilderFlatStatus() {
-		String hql = "from BuilderFlatStatus";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		List<BuilderFlatStatus> result = query.list();
+		List<BuilderFloorStatus> result = query.list();
 		session.close();
 		return result;
 	}
 
-	public List<BuilderFlatStatus> getCountryById(int id) {
-		String hql = "from BuilderFlatStatus where id = :id";
+	public List<BuilderFloorStatus> getFloorStatusById(int id) {
+		String hql = "from BuilderFloorStatus where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
-		List<BuilderFlatStatus> result = query.list();
+		List<BuilderFloorStatus> result = query.list();
 		session.close();
 		return result;
 	}
-
 }

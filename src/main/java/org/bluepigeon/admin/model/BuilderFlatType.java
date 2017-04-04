@@ -22,34 +22,30 @@ import javax.persistence.Table;
 public class BuilderFlatType implements java.io.Serializable {
 
 	private Integer id;
-	private Builder builder;
+	private BuilderBuilding builderBuilding;
 	private AdminUser adminUser;
 	private BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration;
 	private BuilderProject builderProject;
 	private String name;
-	private String superBuiltUp;
-	private String builtUp;
-	private Double carpetArea;
-	private String dryBalcony;
+	private Double floorArea;
+	private Integer floorUsed;
 	private Byte status;
 	private Set<BuilderFlat> builderFlats = new HashSet<BuilderFlat>(0);
 
 	public BuilderFlatType() {
 	}
 
-	public BuilderFlatType(Builder builder, AdminUser adminUser,
+	public BuilderFlatType(BuilderBuilding builderBuilding, AdminUser adminUser,
 			BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration, BuilderProject builderProject,
-			String name, String superBuiltUp, String builtUp, Double carpetArea, String dryBalcony, Byte status,
+			String name, Double floorArea, Integer floorUsed, Byte status,
 			Set<BuilderFlat> builderFlats) {
-		this.builder = builder;
+		this.builderBuilding = builderBuilding;
 		this.adminUser = adminUser;
 		this.builderProjectPropertyConfiguration = builderProjectPropertyConfiguration;
 		this.builderProject = builderProject;
 		this.name = name;
-		this.superBuiltUp = superBuiltUp;
-		this.builtUp = builtUp;
-		this.carpetArea = carpetArea;
-		this.dryBalcony = dryBalcony;
+		this.floorArea = floorArea;
+		this.floorUsed = floorUsed;
 		this.status = status;
 		this.builderFlats = builderFlats;
 	}
@@ -67,13 +63,13 @@ public class BuilderFlatType implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "builder_id")
-	public Builder getBuilder() {
-		return this.builder;
+	@JoinColumn(name = "building_id")
+	public BuilderBuilding getBuilderBuilding() {
+		return this.builderBuilding;
 	}
 
-	public void setBuilder(Builder builder) {
-		this.builder = builder;
+	public void setBuilderBuilding(BuilderBuilding builderBuilding) {
+		this.builderBuilding = builderBuilding;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -116,40 +112,22 @@ public class BuilderFlatType implements java.io.Serializable {
 		this.name = name;
 	}
 
-	@Column(name = "super_built_up", length = 225)
-	public String getSuperBuiltUp() {
-		return this.superBuiltUp;
+	@Column(name = "floor_area")
+	public Double getFloorArea() {
+		return this.floorArea;
 	}
 
-	public void setSuperBuiltUp(String superBuiltUp) {
-		this.superBuiltUp = superBuiltUp;
+	public void setFloorArea(Double floorArea) {
+		this.floorArea = floorArea;
 	}
 
-	@Column(name = "built_up", length = 225)
-	public String getBuiltUp() {
-		return this.builtUp;
+	@Column(name = "floor_used")
+	public Integer getFloorUsed() {
+		return this.floorUsed;
 	}
 
-	public void setBuiltUp(String builtUp) {
-		this.builtUp = builtUp;
-	}
-
-	@Column(name = "carpet_area", precision = 22, scale = 0)
-	public Double getCarpetArea() {
-		return this.carpetArea;
-	}
-
-	public void setCarpetArea(Double carpetArea) {
-		this.carpetArea = carpetArea;
-	}
-
-	@Column(name = "dry_balcony", length = 128)
-	public String getDryBalcony() {
-		return this.dryBalcony;
-	}
-
-	public void setDryBalcony(String dryBalcony) {
-		this.dryBalcony = dryBalcony;
+	public void setFloorUsed(Integer floorUsed) {
+		this.floorUsed = floorUsed;
 	}
 
 	@Column(name = "status")
