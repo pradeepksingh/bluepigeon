@@ -39,6 +39,7 @@ import org.bluepigeon.admin.dao.BuilderProjectTypeDAO;
 import org.bluepigeon.admin.dao.BuilderPropertyTypeDAO;
 import org.bluepigeon.admin.dao.BuilderSellerTypeDAO;
 import org.bluepigeon.admin.dao.BuilderTaxTypeDAO;
+import org.bluepigeon.admin.dao.DemandLettersDAO;
 import org.bluepigeon.admin.dao.ProjectDetailsDAO;
 import org.bluepigeon.admin.dao.ProjectLeadDAO;
 import org.bluepigeon.admin.dao.TaxDAO;
@@ -52,10 +53,12 @@ import org.bluepigeon.admin.model.BuilderBuildingAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderBuildingStatus;
 import org.bluepigeon.admin.model.BuilderCompany;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
+import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderFlatAmenity;
 import org.bluepigeon.admin.model.BuilderFlatAmenityStages;
 import org.bluepigeon.admin.model.BuilderFlatAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderFlatStatus;
+import org.bluepigeon.admin.model.BuilderFloor;
 import org.bluepigeon.admin.model.BuilderFloorAmenity;
 import org.bluepigeon.admin.model.BuilderFloorAmenityStages;
 import org.bluepigeon.admin.model.BuilderFloorAmenitySubstages;
@@ -1384,6 +1387,14 @@ public class CreateProjectController {
 		System.out.println("ProjectLeadDAO::");
 		return projectLeadDAO.getBuildingByProjectId(project_id);
 	}
+	@GET
+	@Path("/building/buyer/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderBuilding> getAllBuildingList(@QueryParam("project_id") int project_id) {
+		DemandLettersDAO projectLeadDAO = new DemandLettersDAO();
+		System.out.println("ProjectLeadDAO::");
+		return projectLeadDAO.getAllBuildingByProjectId(project_id);
+	}
 	@POST
 	@Path("/tax/save")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -1412,5 +1423,4 @@ public class CreateProjectController {
 		 tax2.setVat(vat);
 		 return taxDAO.update(tax2);
 	}
-	
 }
