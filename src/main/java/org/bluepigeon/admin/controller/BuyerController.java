@@ -109,7 +109,7 @@ public class BuyerController {
 								String gallery_name = image.get(i).getFormDataContentDisposition().getFileName();
 								long millis = System.currentTimeMillis() % 1000;
 								gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-								gallery_name = "images/project/buyer/images/"+gallery_name;
+								gallery_name = "/images/project/buyer/images/"+gallery_name;
 								String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
 								this.imageUploader.writeToFile(image.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
 								buyer.setPhoto(gallery_name);

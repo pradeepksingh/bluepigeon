@@ -105,7 +105,7 @@
 											<% } %>
 										</td>
 										<td>
-											<% if(buyer.getPossesion() == 0) { %>
+											<% if(buyer.getPossession() == 0) { %>
 											<span class='label label-warning'>No</span>
 											<% } else { %>
 											<span class='label label-success'>Yes</span>
@@ -119,7 +119,7 @@
 											<% } %>
 										</td>
 										<td>
-<%-- 											<a href="${baseUrl}/admin/project/edit.jsp?project_id=<% out.print(project.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
+											<a href="${baseUrl}/admin/buyer/edit.jsp?buyer_id=<% out.print(buyer.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>
 <%-- 											<a href="${baseUrl}/admin/project/building/list.jsp?project_id=<% out.print(project.getId());%>" class="btn btn-info icon-btn btn-xs"><i class="fa fa-list"></i> Buildings</a> --%>
 										</td>
 									</tr>
@@ -158,21 +158,27 @@ function searchBuyers() {
 		var oTable = $("#tblProjects").dataTable();
 	    oTable.fnClearTable();
 	    $(data).each(function(index){
-		    var vieworder = '<a href="${baseUrl}/admin/buyer/edit.jsp?project_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
+		    var vieworder = '<a href="${baseUrl}/admin/buyer/edit.jsp?buyer_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
 		    var status = '';
 		    var agreement = '';
 		    var possession = '';
-		    if(data[index].agreement == 1) {
-		    	status = '<span class="label label-success">Yes</span>';
+		    if(data[index].status == 1) {
+		    	status = '<span class="label label-success">Active</span>';
 		    } else {
-		    	status = '<span class="label label-warning">No</span>';
+		    	status = '<span class="label label-warning">Inactive</span>';
+		    }
+		    if(data[index].agreement == 1) {
+		    	agreement = '<span class="label label-success">Yes</span>';
+		    } else {
+		    	agreement = '<span class="label label-warning">No</span>';
 		    }
 		    if(data[index].possession == 1) {
-		    	status = '<span class="label label-success">Yes</span>';
+		    	possession = '<span class="label label-success">Yes</span>';
 		    } else {
-		    	status = '<span class="label label-warning">No</span>';
+		    	possession = '<span class="label label-warning">No</span>';
 		    }
 	    	var row = [];
+	    	
 	    	row.push(data[index].projectName);
 	    	row.push(data[index].name);
 	    	row.push(data[index].phone);
@@ -180,6 +186,7 @@ function searchBuyers() {
 		    row.push(data[index].buildingName+' '+data[index].flatNumber);
 		    row.push(agreement);
 		    row.push(possession);
+		    row.push(status);
 	    	row.push(vieworder);
 	    	oTable.fnAddData(row);
 	    });

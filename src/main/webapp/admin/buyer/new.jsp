@@ -55,7 +55,7 @@
 									<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
 									<div class="row">
 										<div class="col-lg-12 margin-bottom-5">
-											<div class="form-group" id="error-builder_id">
+											<div class="form-group" id="error-name">
 												<label class="control-label col-sm-3">Buyer Name<span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
 													<input type="text" class="form-control" id="name" name="name" />
@@ -66,7 +66,7 @@
 									</div>
 									<div class="row">
 										<div class="col-lg-12 margin-bottom-5">
-											<div class="form-group" id="error-builder_id">
+											<div class="form-group" id="error-contact">
 												<label class="control-label col-sm-3">Contact<span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
 													<input type="text" class="form-control" id="contact" name="contact" />
@@ -77,7 +77,7 @@
 									</div>
 									<div class="row">
 										<div class="col-lg-12 margin-bottom-5">
-											<div class="form-group" id="error-name">
+											<div class="form-group" id="error-email">
 												<label class="control-label col-sm-3">Email <span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
 													<input type="text" class="form-control" id="email" name="email" />
@@ -88,7 +88,7 @@
 									</div>
 									<div class="row">
 										<div class="col-lg-12 margin-bottom-5">
-											<div class="form-group" id="error-builder_id">
+											<div class="form-group" id="error-pan">
 												<label class="control-label col-sm-3">PAN<span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
 													<input type="text" class="form-control" id="pan" name="pan" />
@@ -99,7 +99,7 @@
 									</div>
 									<div class="row">
 										<div class="col-lg-12 margin-bottom-5">
-											<div class="form-group" id="error-builder_id">
+											<div class="form-group" id="error-address">
 												<label class="control-label col-sm-3">Prem. Address<span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
 													<textarea rows="" cols="" class="form-control" id="address" name="address"></textarea>
@@ -201,6 +201,21 @@
 												<div class="col-sm-5">
 													<select name="flat_id" id="flat_id" class="form-control">
 									                    <option value="">Select Flat</option>
+										          	</select>
+												</div>
+												<div class="messageContainer col-sm-4"></div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-12 margin-bottom-5">
+											<div class="form-group" id="error-state_id">
+												<label class="control-label col-sm-3">Status <span class='text-danger'>*</span></label>
+												<div class="col-sm-5">
+													<select name="status" id="status" class="form-control">
+									                    <option value="">Select Status</option>
+									                     <option value="0">Inactive</option>
+									                      <option value="1">Active</option>
 										          	</select>
 												</div>
 												<div class="messageContainer col-sm-4"></div>
