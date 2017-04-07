@@ -160,6 +160,16 @@
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
+												<div class="form-group" id="error-flat_id">
+													<label class="control-label col-sm-4">Remind Every <span class='text-danger'>*</span></label>
+													<div class="col-sm-8">
+														<input type="text" class="form-control" id="remind" name="remind" />
+														<span class="input-group-addon">Days</span>
+													</div>
+													<div class="messageContainer"></div>
+												</div>
+											</div>
+											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-address">
 												<label class="control-label col-sm-4">Content</label>
 												<div class="col-sm-8">
@@ -198,7 +208,7 @@
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script>
-$('#launch_date').datepicker({
+$('#last_date').datepicker({
 	format: "dd MM yyyy"
 });
 $("#project_id").change(function(){

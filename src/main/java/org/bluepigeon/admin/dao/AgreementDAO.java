@@ -91,6 +91,7 @@ public class AgreementDAO {
 		for(Agreement agreement : result){
 			AgreementList agreementList = new AgreementList();
 			agreementList.setBuyerName(agreement.getName());
+			agreementList.setId(agreement.getId());
 			if(agreement.getBuilderProject() != null){
 				Query projectQuery = projectSession.createQuery(project_hql);
 				projectQuery.setParameter("id", agreement.getBuilderProject().getId());
@@ -161,5 +162,19 @@ public class AgreementDAO {
 		response.setStatus(1);
 		response.setMessage("Agreement updated Successfully.");
 		return response;
+	}
+	/**
+	 * Get Agreement Info
+	 * @author pankaj
+	 * @return list
+	 */
+	public List<AgreementInfo> getAllAgreements(){
+		String hql = "from AgreementInfo";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<AgreementInfo> result = query.list();
+		session.close();
+		return result;
 	}
 }

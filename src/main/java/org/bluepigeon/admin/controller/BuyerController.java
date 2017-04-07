@@ -190,15 +190,16 @@ public class BuyerController {
 	@Path("/agreement/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addAgeement(
-			@FormDataParam("project_id") int projectId,
-			@FormDataParam("building_id") int buildingId,
-			@FormDataParam("floor_id") int floorId,
-			@FormDataParam("flat_id") int flatId,
-			@FormDataParam("name") String name,
-			@FormDataParam("contact") String contact,
-			@FormDataParam("email") String email,
-			@FormDataParam("content") String content,
-			@FormDataParam("last_date") String last_date){
+			@FormParam("project_id") int projectId,
+			@FormParam("building_id") int buildingId,
+			@FormParam("floor_id") int floorId,
+			@FormParam("flat_id") int flatId,
+			@FormParam("name") String name,
+			@FormParam("contact") String contact,
+			@FormParam("email") String email,
+			@FormParam("remind") String remind,
+			@FormParam("content") String content,
+			@FormParam("last_date") String last_date){
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
 		Date lastDate = null;
 		try {
@@ -208,6 +209,8 @@ public class BuyerController {
 		}
 		Agreement agreement = new Agreement();
 		agreement.setLastDate(lastDate);
+		agreement.setRemind(remind);
+		agreement.setContent(content);
 		if(projectId > 0){
 			BuilderProject builderProject = new BuilderProject();
 			builderProject.setId(projectId);

@@ -45,25 +45,25 @@
 			<div class="">
 				<div class="panel panel-default" style="padding: 5px;">
 	              	<div>
-	              		<div class="panel panel-default">
-		                   	<div class="panel-body">
-	                            <div class="row" style="padding-bottom:10px;">
-	                             <div class="col-sm-3">
-		                            	<select id="builder_id" name="builder_id" class="form-control">
-											<option value="0">Select Builder Group</option>
-											<% for (Builder builder : builders) { %>
-											<option value="<%out.print(builder.getId());%>"> <% out.print(builder.getName()); %> </option>
-											<% } %>
-										</select>
-		                            </div>
-		                            <div class="col-sm-3">
-		                            	<select id="company_id" name="company_id" class="form-control">
-											<option value="0">Select Builder Company</option>
-										</select>
-		                            </div>
-		                   	</div>
-		               	</div>
-	              	</div>
+<!-- 	              		<div class="panel panel-default"> -->
+<!-- 		                   	<div class="panel-body"> -->
+<!-- 	                            <div class="row" style="padding-bottom:10px;"> -->
+<!-- 	                             <div class="col-sm-3"> -->
+<!-- 		                            	<select id="builder_id" name="builder_id" class="form-control"> -->
+<!-- 											<option value="0">Select Builder Group</option> -->
+<%-- 											<% for (Builder builder : builders) { %> --%>
+<%-- 											<option value="<%out.print(builder.getId());%>"> <% out.print(builder.getName()); %> </option> --%>
+<%-- 											<% } %> --%>
+<!-- 										</select> -->
+<!-- 		                            </div> -->
+<!-- 		                            <div class="col-sm-3"> -->
+<!-- 		                            	<select id="company_id" name="company_id" class="form-control"> -->
+<!-- 											<option value="0">Select Builder Company</option> -->
+<!-- 										</select> -->
+<!-- 		                            </div> -->
+<!-- 		                   		</div> -->
+<!-- 		               		</div> -->
+<!-- 	              		</div> -->
 	               	<div class="panel-body">
 	                	<div class="dataTable_wrapper" style="overflow:auto;">
 	                       	<table class="table table-striped table-bordered table-hover" id="tblProjects">
