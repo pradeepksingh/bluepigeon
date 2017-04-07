@@ -1,6 +1,9 @@
 package org.bluepigeon.admin.controller;
 
 import java.io.InputStream;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +18,16 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.bluepigeon.admin.dao.AgreementDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
+import org.bluepigeon.admin.data.AgreementList;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuyerList;
 import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
+import org.bluepigeon.admin.model.Agreement;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderFloor;
@@ -31,6 +37,7 @@ import org.bluepigeon.admin.model.BuyerDocuments;
 import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.hibernate.validator.metadata.AggregatedMethodMetaData;
 
 @Path("buyer")
 public class BuyerController {
@@ -146,7 +153,6 @@ public class BuyerController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuildingData> getBuildingList(@QueryParam("project_id") int project_id) {
 		BuyerDAO buyerDAO = new BuyerDAO();
-		System.out.println("ProjectLeadDAO::");
 		return buyerDAO.getBuildingByProjectId(project_id);
 	}
 	
@@ -155,7 +161,6 @@ public class BuyerController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<FloorData> getFloorList(@QueryParam("building_id") int building_id) {
 		BuyerDAO buyerDAO = new BuyerDAO();
-		System.out.println("ProjectLeadDAO::");
 		return buyerDAO.getBuilderFloorByBuildingId(building_id);
 	}
 	@GET
@@ -163,7 +168,70 @@ public class BuyerController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<FlatData> getFlatList(@QueryParam("floor_id") int floor_id) {
 		BuyerDAO buyerDAO = new BuyerDAO();
-		System.out.println("ProjectLeadDAO::");
 		return buyerDAO.getBuilderFlatTypeByFloorId(floor_id);
+	}
+	@GET
+	@Path("/flat/booked/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<FlatData> getBookedFlatList(@QueryParam("floor_id") int floor_id) {
+		BuyerDAO buyerDAO = new BuyerDAO();
+		return buyerDAO.getBookedFlatByFloorId(floor_id);
+	}
+	
+	@GET
+	@Path("/flat")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Buyer> getBuyerListByFlatId(@QueryParam("flat_id") int flat_id) {
+		BuyerDAO buyerDAO = new BuyerDAO();
+		return buyerDAO.getBuyerByFlatId(flat_id);
+	}
+	
+	@POST
+	@Path("/agreement/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addAgeement(
+			@FormDataParam("project_id") int projectId,
+			@FormDataParam("building_id") int buildingId,
+			@FormDataParam("floor_id") int floorId,
+			@FormDataParam("flat_id") int flatId,
+			@FormDataParam("name") String name,
+			@FormDataParam("contact") String contact,
+			@FormDataParam("email") String email,
+			@FormDataParam("content") String content,
+			@FormDataParam("last_date") String last_date){
+		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+		Date lastDate = null;
+		try {
+			lastDate = format.parse(last_date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Agreement agreement = new Agreement();
+		agreement.setLastDate(lastDate);
+		if(projectId > 0){
+			BuilderProject builderProject = new BuilderProject();
+			builderProject.setId(projectId);
+			agreement.setBuilderProject(builderProject);
+		}
+		if(buildingId > 0){
+			BuilderBuilding builderBuilding = new BuilderBuilding();
+			builderBuilding.setId(buildingId);
+			agreement.setBuilderBuilding(builderBuilding);
+		}
+		if(floorId > 0){
+			BuilderFloor builderFloor = new BuilderFloor();
+			builderFloor.setId(floorId);
+			agreement.setBuilderFloor(builderFloor);
+		}
+		if(flatId > 0){
+			BuilderFlat builderFlat = new BuilderFlat();
+			builderFlat.setId(flatId);
+			agreement.setBuilderFlat(builderFlat);
+		}
+		agreement.setName(name);
+		agreement.setContact(contact);
+		agreement.setEmail(email);
+		
+		return new AgreementDAO().saveAgreement(agreement);
 	}
 }

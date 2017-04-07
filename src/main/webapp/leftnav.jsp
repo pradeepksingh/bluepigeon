@@ -548,6 +548,20 @@
 				</li>
 			</ul>
 		</li>
+			<li class="active open">
+			<a href="#" class="dropdown-toggle"> 
+				<i class="menu-icon fa fa-pencil-square-o"></i> 
+				<span class="menu-text"> Agreement </span> <b class="arrow fa fa-angle-down"></b>
+			</a> 
+			<b class="arrow"></b>
+			<ul class="submenu">
+				<li class="active">
+					<a href="${baseUrl}/builder/buyer/agreement/list.jsp"> 
+						<i class="menu-icon fa fa-caret-right"></i> Manage Agreement
+					</a> <b class="arrow"></b>
+				</li>
+			</ul>
+		</li>
 			<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
 				<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"
 					data-icon1="ace-icon fa fa-angle-double-left"

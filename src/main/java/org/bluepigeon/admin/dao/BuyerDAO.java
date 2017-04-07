@@ -545,4 +545,44 @@ public class BuyerDAO {
 			return builderFlats;
 		  
 	  }
+	  
+	  public List<FlatData> getBookedFlatByFloorId(int floorId){
+		  String hql = "from BuilderFlat where builderFloor.id = :floor_id and builderFlatStatus.id=2";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("floor_id", floorId);
+			List<BuilderFlat> result = query.list();
+			List<FlatData> builderFlats = new ArrayList<FlatData>();
+			for(BuilderFlat builderFlat : result){
+				FlatData flatData = new FlatData();
+				flatData.setId(builderFlat.getId());
+				flatData.setName(builderFlat.getFlatNo());
+				builderFlats.add(flatData);
+			}
+			session.close();
+			return builderFlats;
+		  
+	  }
+	  public List<Buyer> getBuyerByFlatId(int flatId){
+		 
+		  String hql = "from Buyer where builderFlat.id = :flat_id";
+		  HibernateUtil hibernateUtil = new HibernateUtil();
+		  Session session = hibernateUtil.openSession();
+		  Query query = session.createQuery(hql);
+		  query.setParameter("flat_id", flatId);
+		  List<Buyer> result = query.list();
+		  List<Buyer> buyers = new ArrayList<Buyer>();
+		  for(Buyer buyer : result){
+			  Buyer flatData = new Buyer();
+			  flatData.setId(buyer.getId());
+			  flatData.setName(buyer.getName());
+			  flatData.setContact(buyer.getContact());
+			  flatData.setEmail(buyer.getEmail());
+			  buyers.add(flatData);
+		  }
+		  
+		  session.close();
+		 return buyers;
+	  }
 }
