@@ -1,5 +1,6 @@
 package org.bluepigeon.admin.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bluepigeon.admin.model.AdminUser;
@@ -44,7 +45,7 @@ public class ProjectLeadDAO {
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
-			query.setParameter("builder_id", buildingId);
+			query.setParameter("building_id", buildingId);
 			List<BuilderFloor> result = query.list();
 			session.close();
 			return result;

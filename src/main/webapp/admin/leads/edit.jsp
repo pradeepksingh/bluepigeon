@@ -100,6 +100,9 @@
 											<select name="flat_id" id="flat_id" class="form-control">
 						                 	   	<option value="0">Select Flat</option>
 						                 	   	<% for(int i=0; i < flat_size; i++){ %>
+						                 	   	<script type="text/javascript">
+						                 	   		consloe.log("HI :: "+<%out.print(builderLead.getBuilderFlat().getId());%>);
+						                 	   	</script>
 												<option value="<% out.print(builderFlats.get(i).getId());%>"<%if(builderFlats.get(i).getId() == builderLead.getBuilderFlat().getId()) {%>selected<%} %> ><% out.print(builderFlats.get(i).getFlatNo());%></option>
 											  	<% } %>
 								       	  	</select>

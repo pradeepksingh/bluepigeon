@@ -18,32 +18,32 @@ import javax.persistence.TemporalType;
 public class Agreement implements java.io.Serializable {
 
 	private Integer id;
+	private BuilderFloor builderFloor;
 	private BuilderBuilding builderBuilding;
 	private BuilderFlat builderFlat;
 	private BuilderProject builderProject;
-	private Integer buyerId;
-	private String contact;
+	private String name;
 	private String email;
+	private String contact;
 	private Date lastDate;
 	private String remind;
-	private String docUrl;
 	private String content;
 
 	public Agreement() {
 	}
 
-	public Agreement(BuilderBuilding builderBuilding, BuilderFlat builderFlat, BuilderProject builderProject,
-			Integer buyerId, String contact, String email, Date lastDate, String remind, String docUrl,
+	public Agreement(BuilderFloor builderFloor, BuilderBuilding builderBuilding, BuilderFlat builderFlat,
+			BuilderProject builderProject, String name, String email, String contact, Date lastDate, String remind,
 			String content) {
+		this.builderFloor = builderFloor;
 		this.builderBuilding = builderBuilding;
 		this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
-		this.buyerId = buyerId;
-		this.contact = contact;
+		this.name = name;
 		this.email = email;
+		this.contact = contact;
 		this.lastDate = lastDate;
 		this.remind = remind;
-		this.docUrl = docUrl;
 		this.content = content;
 	}
 
@@ -57,6 +57,16 @@ public class Agreement implements java.io.Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "floor_id")
+	public BuilderFloor getBuilderFloor() {
+		return this.builderFloor;
+	}
+
+	public void setBuilderFloor(BuilderFloor builderFloor) {
+		this.builderFloor = builderFloor;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -89,22 +99,13 @@ public class Agreement implements java.io.Serializable {
 		this.builderProject = builderProject;
 	}
 
-	@Column(name = "buyer_id")
-	public Integer getBuyerId() {
-		return this.buyerId;
+	@Column(name = "name", length = 128)
+	public String getName() {
+		return this.name;
 	}
 
-	public void setBuyerId(Integer buyerId) {
-		this.buyerId = buyerId;
-	}
-
-	@Column(name = "contact", length = 225)
-	public String getContact() {
-		return this.contact;
-	}
-
-	public void setContact(String contact) {
-		this.contact = contact;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Column(name = "email", length = 225)
@@ -114,6 +115,15 @@ public class Agreement implements java.io.Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Column(name = "contact", length = 128)
+	public String getContact() {
+		return this.contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
 	}
 
 	@Temporal(TemporalType.DATE)
@@ -135,15 +145,6 @@ public class Agreement implements java.io.Serializable {
 		this.remind = remind;
 	}
 
-	@Column(name = "doc_url", length = 225)
-	public String getDocUrl() {
-		return this.docUrl;
-	}
-
-	public void setDocUrl(String docUrl) {
-		this.docUrl = docUrl;
-	}
-
 	@Column(name = "content", length = 65535)
 	public String getContent() {
 		return this.content;
@@ -152,5 +153,4 @@ public class Agreement implements java.io.Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-
 }

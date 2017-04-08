@@ -53,7 +53,7 @@ public class BuilderFloor implements java.io.Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "building_id")
 	public BuilderBuilding getBuilderBuilding() {
 		return builderBuilding;
