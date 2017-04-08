@@ -490,7 +490,7 @@
 <!-- 				class="menu-icon fa fa-caret-right"></i> Tax type -->
 <!-- 		</a> <b class="arrow"></b></li> -->
 		<li class=""><a href="${baseUrl}/createprojects/tax.jsp"> <i
-				class="menu-icon fa fa-caret-right"></i> Tax
+				class="menu-icon fa fa-caret-right"></i> Tax By Pincode
 		</a> <b class="arrow"></b></li>
 						</ul>
 					</li>
