@@ -20,12 +20,10 @@ public class DemandLetters implements java.io.Serializable {
 
 	private Integer id;
 	private BuilderBuilding builderBuilding;
+	private Buyer buyer;
 	private BuilderFlat builderFlat;
 	private BuilderProject builderProject;
 	private BuyerPayment buyerPayment;
-	private Integer buyerId;
-	private String contact;
-	private String email;
 	private Date lastDate;
 	private String remind;
 	private String docUrl;
@@ -34,16 +32,14 @@ public class DemandLetters implements java.io.Serializable {
 	public DemandLetters() {
 	}
 
-	public DemandLetters(BuilderBuilding builderBuilding, BuilderFlat builderFlat, BuilderProject builderProject,
-			BuyerPayment buyerPayment, Integer buyerId, String contact, String email, Date lastDate, String remind,
-			String docUrl, String content) {
+	public DemandLetters(BuilderBuilding builderBuilding, Buyer buyer, BuilderFlat builderFlat,
+			BuilderProject builderProject, BuyerPayment buyerPayment, Date lastDate, String remind, String docUrl,
+			String content) {
 		this.builderBuilding = builderBuilding;
+		this.buyer = buyer;
 		this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
 		this.buyerPayment = buyerPayment;
-		this.buyerId = buyerId;
-		this.contact = contact;
-		this.email = email;
 		this.lastDate = lastDate;
 		this.remind = remind;
 		this.docUrl = docUrl;
@@ -70,6 +66,16 @@ public class DemandLetters implements java.io.Serializable {
 
 	public void setBuilderBuilding(BuilderBuilding builderBuilding) {
 		this.builderBuilding = builderBuilding;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "buyer_id")
+	public Buyer getBuyer() {
+		return this.buyer;
+	}
+
+	public void setBuyer(Buyer buyer) {
+		this.buyer = buyer;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -100,33 +106,6 @@ public class DemandLetters implements java.io.Serializable {
 
 	public void setBuyerPayment(BuyerPayment buyerPayment) {
 		this.buyerPayment = buyerPayment;
-	}
-
-	@Column(name = "buyer_id")
-	public Integer getBuyerId() {
-		return this.buyerId;
-	}
-
-	public void setBuyerId(Integer buyerId) {
-		this.buyerId = buyerId;
-	}
-
-	@Column(name = "contact", length = 225)
-	public String getContact() {
-		return this.contact;
-	}
-
-	public void setContact(String contact) {
-		this.contact = contact;
-	}
-
-	@Column(name = "email", length = 225)
-	public String getEmail() {
-		return this.email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	@Temporal(TemporalType.DATE)

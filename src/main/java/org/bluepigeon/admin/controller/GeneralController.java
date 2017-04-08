@@ -299,6 +299,7 @@ public class GeneralController {
 		homeLoanBanks.setEmail(email);
 		homeLoanBanks.setContactPerson(contactPerson);
 		homeLoanBanks.setPhone(phone);
+		homeLoanBanks.setStatus(status);
 	
 		return new HomeLoanBanksDAO().save(homeLoanBanks);
 	}
@@ -313,6 +314,7 @@ public class GeneralController {
 		homeLoanBanks.setId(bankId);
 		homeLoanBanks.setName(name);
 		homeLoanBanks.setLocation(location);
+		homeLoanBanks.setStatus(status);
 		homeLoanBanks.setEmail(email);
 		homeLoanBanks.setContactPerson(contactPerson);
 		homeLoanBanks.setPhone(phone);

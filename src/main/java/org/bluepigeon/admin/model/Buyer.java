@@ -18,6 +18,7 @@ import javax.persistence.Table;
 public class Buyer implements java.io.Serializable {
 
 	private Integer id;
+	private BuilderFloor builderFloor;
 	private AdminUser adminUser;
 	private BuilderBuilding builderBuilding;
 	private BuilderFlat builderFlat;
@@ -28,16 +29,17 @@ public class Buyer implements java.io.Serializable {
 	private String pan;
 	private String address;
 	private String photo;
-	private Short agreement;
-	private Short possession;
-	private Short status;
+	private byte agreement;
+	private byte possession;
+	private byte status;
 	
 	public Buyer() {
 	}
 
-	public Buyer(AdminUser adminUser, BuilderBuilding builderBuilding, BuilderFlat builderFlat,
-			BuilderProject builderProject, String name, String contact, String email, String pan, String address,
-			String photo, Short agreement, Short possession, Short status) {
+	public Buyer(BuilderFloor builderFloor, AdminUser adminUser, BuilderBuilding builderBuilding,
+			BuilderFlat builderFlat, BuilderProject builderProject, String name, String contact, String email,
+			String pan, String address, String photo, byte agreement, byte possession, byte status) {
+		this.builderFloor = builderFloor;
 		this.adminUser = adminUser;
 		this.builderBuilding = builderBuilding;
 		this.builderFlat = builderFlat;
@@ -65,6 +67,15 @@ public class Buyer implements java.io.Serializable {
 		this.id = id;
 	}
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "floor_id")
+	public BuilderFloor getBuilderFloor() {
+		return this.builderFloor;
+	}
+	public void setBuilderFloor(BuilderFloor builderFloor) {
+		this.builderFloor = builderFloor;
+	}
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "emp_id")
 	public AdminUser getAdminUser() {
@@ -160,29 +171,29 @@ public class Buyer implements java.io.Serializable {
 	}
 
 	@Column(name = "agreement")
-	public Short getAgreement() {
+	public byte getAgreement() {
 		return this.agreement;
 	}
 
-	public void setAgreement(Short agreement) {
+	public void setAgreement(byte agreement) {
 		this.agreement = agreement;
 	}
 
 	@Column(name = "possession")
-	public Short getPossession() {
+	public byte getPossession() {
 		return this.possession;
 	}
 
-	public void setPossession(Short possession) {
+	public void setPossession(byte possession) {
 		this.possession = possession;
 	}
 
 	@Column(name = "status")
-	public Short getStatus() {
+	public byte getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(Short status) {
+	public void setStatus(byte status) {
 		this.status = status;
 	}
 }
