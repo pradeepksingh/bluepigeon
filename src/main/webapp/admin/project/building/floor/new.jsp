@@ -1,6 +1,7 @@
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderFloorStatusDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderFloorAmenityDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFloorStatus"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFloorAmenity"%>
@@ -12,6 +13,7 @@
 <%
 	int building_id = 0;
 	int p_user_id = 0;
+	int project_id = 0;
 	building_id = Integer.parseInt(request.getParameter("building_id"));
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
@@ -23,13 +25,17 @@
 			p_user_id = adminuserproject.getId();
 		}
 	}
+	List<BuilderBuilding> buildings = null;
 	BuilderBuilding builderBuilding = null;
 	List<BuilderBuilding> builderBuildings = new ProjectDAO().getBuilderProjectBuildingById(building_id);
 	if(builderBuildings.size() > 0) {
 		builderBuilding = builderBuildings.get(0);
+		project_id = builderBuilding.getBuilderProject().getId();
+		buildings = new ProjectDAO().getBuilderProjectBuildings(project_id);
 	}
 	List<BuilderFloorStatus> builderFloorStatuses = new BuilderFloorStatusDAO().getFloorStatus();
 	List<BuilderFloorAmenity> builderFloorAmenities = new BuilderFloorAmenityDAO().getBuilderFloorAmenityList();
+	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderAllProjects();
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -37,10 +43,11 @@
 			<ul class="breadcrumb">
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
 				</li>
-
-				<li><a href="#">Floor</a></li>
+				<li><a href="${baseUrl}/admin/project/building/list.jsp">Building</a></li>
+				<li><a href="${baseUrl}/admin/project/building/floor/list.jsp">Floor</a></li>
 				<li class="active">Add</li>
 			</ul>
+			<span class="pull-right"><a href="${baseUrl}/admin/project/list.jsp"> << Project List</a></span>
 		</div>
 		<div class="page-content">
 			<div class="page-header">
@@ -60,7 +67,6 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
-										<input type="hidden" name="building_id" id="building_id" value="<% out.print(building_id);%>"/>
 										<input type="hidden" name="img_count" id="img_count" value="2"/>
 										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
@@ -83,18 +89,31 @@
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-5">Building Name </label>
-													<div class="col-sm-7">
-														<input type="text" class="form-control" id="building_name" name="building_name" value="<% out.print(builderBuilding.getName()); %>" disabled="disabled"/>
+													<label class="control-label col-sm-6">Project Name </label>
+													<div class="col-sm-6">
+														<select id="project_id" name="project_id" class="form-control">
+															<option value="0">Select Project</option>
+															<% for(BuilderProject builderProject :builderProjects) { %>
+															<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
+															<% } %>
+														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-6">Project Name </label>
-													<div class="col-sm-6">
-														<input type="text" class="form-control" id="project_name" name="project_name" value="<% out.print(builderBuilding.getBuilderProject().getName()); %>" disabled="disabled"/>
+													<label class="control-label col-sm-5">Building Name </label>
+													<div class="col-sm-7">
+														<select id="building_id" name="building_id" class="form-control">
+															<% if(buildings != null) { %>
+															<% for(BuilderBuilding builderBuilding2 :buildings) { %>
+															<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName());%></option>
+															<% } %>
+															<% } else { %>
+															<option value="0">Select Building</option>
+															<% } %>
+														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
@@ -292,6 +311,17 @@ function removeImage(id) {
 function showDetailTab() {
 	$('#buildingTabs a[href="#floorimages"]').tab('show');
 }
+
+$("#project_id").change(function(){
+	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{},function(data){
+		var html = '<option value="0">Select Building</option>';
+		$(data).each(function(index){
+			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
+		});
+		$("#building_id").html(html);
+	},'json');
+	
+});
 
 </script>
 </body>

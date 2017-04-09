@@ -28,10 +28,11 @@ public class BuilderPaymentSubstagesDAO {
              response.setMessage("Please select Payment Stage name");
         }
         else {
-            String hql = "from BuilderPaymentSubstages where name = :name";
+            String hql = "from BuilderPaymentSubstages where name = :name and builderPaymentStages.id = :stage_id";
             Session session = hibernateUtil.openSession();
             Query query = session.createQuery(hql);
             query.setParameter("name", builderPaymentSubstages.getName());
+            query.setParameter("stage_id", builderPaymentSubstages.getBuilderPaymentStages().getId());
             List<BuilderPaymentSubstages> result = query.list();
             session.close();
             if (result.size() > 0) {

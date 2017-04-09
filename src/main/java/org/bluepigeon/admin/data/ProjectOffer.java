@@ -24,4 +24,5 @@ public class ProjectOffer {
 	public void setBuilderProjectOfferInfos(Set<BuilderProjectOfferInfo> builderProjectProjectTypes) {
 		this.builderProjectOfferInfos = builderProjectOfferInfos;
 	}
+	
 }

@@ -22,30 +22,38 @@ import javax.persistence.Table;
 public class BuilderFlatType implements java.io.Serializable {
 
 	private Integer id;
-	private BuilderBuilding builderBuilding;
 	private AdminUser adminUser;
 	private BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration;
 	private BuilderProject builderProject;
 	private String name;
-	private Double floorArea;
-	private Integer floorUsed;
+	private Double superBuiltupArea;
+	private Double builtupArea;
+	private Double carpetArea;
+	private Byte bedroom;
+	private Byte bathroom;
+	private Byte balcony;
+	private Byte drybalcony;
 	private Byte status;
 	private Set<BuilderFlat> builderFlats = new HashSet<BuilderFlat>(0);
 
 	public BuilderFlatType() {
 	}
 
-	public BuilderFlatType(BuilderBuilding builderBuilding, AdminUser adminUser,
+	public BuilderFlatType(AdminUser adminUser, Double superBuiltupArea, Double builtupArea, Double carpetArea,
 			BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration, BuilderProject builderProject,
-			String name, Double floorArea, Integer floorUsed, Byte status,
+			String name, Byte bedroom, Byte bathroom, Byte balcony, Byte drybalcony, Byte status,
 			Set<BuilderFlat> builderFlats) {
-		this.builderBuilding = builderBuilding;
 		this.adminUser = adminUser;
 		this.builderProjectPropertyConfiguration = builderProjectPropertyConfiguration;
 		this.builderProject = builderProject;
 		this.name = name;
-		this.floorArea = floorArea;
-		this.floorUsed = floorUsed;
+		this.superBuiltupArea = superBuiltupArea;
+		this.builtupArea = builtupArea;
+		this.carpetArea = carpetArea;
+		this.bedroom = bedroom;
+		this.bathroom = bathroom;
+		this.balcony = balcony;
+		this.drybalcony = drybalcony;
 		this.status = status;
 		this.builderFlats = builderFlats;
 	}
@@ -62,16 +70,6 @@ public class BuilderFlatType implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "building_id")
-	public BuilderBuilding getBuilderBuilding() {
-		return this.builderBuilding;
-	}
-
-	public void setBuilderBuilding(BuilderBuilding builderBuilding) {
-		this.builderBuilding = builderBuilding;
-	}
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "emp_id")
 	public AdminUser getAdminUser() {
@@ -82,7 +80,7 @@ public class BuilderFlatType implements java.io.Serializable {
 		this.adminUser = adminUser;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "config_id")
 	public BuilderProjectPropertyConfiguration getBuilderProjectPropertyConfiguration() {
 		return this.builderProjectPropertyConfiguration;
@@ -93,7 +91,7 @@ public class BuilderFlatType implements java.io.Serializable {
 		this.builderProjectPropertyConfiguration = builderProjectPropertyConfiguration;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "project_id")
 	public BuilderProject getBuilderProject() {
 		return this.builderProject;
@@ -111,23 +109,68 @@ public class BuilderFlatType implements java.io.Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	@Column(name = "floor_area")
-	public Double getFloorArea() {
-		return this.floorArea;
+	
+	@Column(name = "super_builtup_area")
+	public Double getSuperBuiltupArea() {
+		return superBuiltupArea;
 	}
 
-	public void setFloorArea(Double floorArea) {
-		this.floorArea = floorArea;
+	public void setSuperBuiltupArea(Double superBuiltupArea) {
+		this.superBuiltupArea = superBuiltupArea;
 	}
 
-	@Column(name = "floor_used")
-	public Integer getFloorUsed() {
-		return this.floorUsed;
+	@Column(name = "builtup_area")
+	public Double getBuiltupArea() {
+		return builtupArea;
 	}
 
-	public void setFloorUsed(Integer floorUsed) {
-		this.floorUsed = floorUsed;
+	public void setBuiltupArea(Double builtupArea) {
+		this.builtupArea = builtupArea;
+	}
+
+	@Column(name = "carpet_area")
+	public Double getCarpetArea() {
+		return carpetArea;
+	}
+
+	public void setCarpetArea(Double carpetArea) {
+		this.carpetArea = carpetArea;
+	}
+
+	@Column(name = "bedroom")
+	public Byte getBedroom() {
+		return bedroom;
+	}
+
+	public void setBedroom(Byte bedroom) {
+		this.bedroom = bedroom;
+	}
+
+	@Column(name = "bathroom")
+	public Byte getBathroom() {
+		return bathroom;
+	}
+
+	public void setBathroom(Byte bathroom) {
+		this.bathroom = bathroom;
+	}
+
+	@Column(name = "balcony")
+	public Byte getBalcony() {
+		return balcony;
+	}
+
+	public void setBalcony(Byte balcony) {
+		this.balcony = balcony;
+	}
+
+	@Column(name = "drybalcony")
+	public Byte getDrybalcony() {
+		return drybalcony;
+	}
+
+	public void setDrybalcony(Byte drybalcony) {
+		this.drybalcony = drybalcony;
 	}
 
 	@Column(name = "status")

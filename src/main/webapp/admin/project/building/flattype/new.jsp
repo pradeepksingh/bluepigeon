@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectPropertyConfigurationDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
@@ -8,9 +9,9 @@
 <%@include file="../../../../head.jsp"%>
 <%@include file="../../../../leftnav.jsp"%>
 <%
-	int building_id = 0;
+	int project_id = 0;
 	int p_user_id = 0;
-	building_id = Integer.parseInt(request.getParameter("building_id"));
+	project_id = Integer.parseInt(request.getParameter("project_id"));
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
 	if(session!=null)
@@ -21,11 +22,7 @@
 			p_user_id = adminuserproject.getId();
 		}
 	}
-	BuilderBuilding builderBuilding = null;
-	List<BuilderBuilding> builderBuildings = new ProjectDAO().getBuilderProjectBuildingById(building_id);
-	if(builderBuildings.size() > 0) {
-		builderBuilding = builderBuildings.get(0);
-	}
+	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderAllProjects();
 	List<BuilderProjectPropertyConfiguration> projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderProjectConfigurations();
 %>
 <div class="main-content">
@@ -34,8 +31,7 @@
 			<ul class="breadcrumb">
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
 				</li>
-
-				<li><a href="#">Flat Type</a></li>
+				<li><a href="${baseUrl}/admin/project/building/flattype/list.jsp">Flat Type</a></li>
 				<li class="active">Add</li>
 			</ul>
 		</div>
@@ -43,6 +39,7 @@
 			<div class="page-header">
 				<h1>
 					Flat Type Add 
+					<span class="pull-right"><a href="${baseUrl}/admin/project/list.jsp" class="btn btn-default btn-sm"> << Project List</a></span>
 				</h1>
 			</div>
 			<ul class="nav nav-tabs" id="buildingTabs">
@@ -57,56 +54,27 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
-										<input type="hidden" name="building_id" id="building_id" value="<% out.print(building_id);%>"/>
-										<input type="hidden" name="project_id" id="project_id" value="<% out.print(builderBuilding.getBuilderProject().getId());%>"/>
 										<input type="hidden" name="img_count" id="img_count" value="2"/>
 										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-name">
-													<label class="control-label col-sm-5">Flat Type <span class='text-danger'>*</span></label>
+													<label class="control-label col-sm-5">Select Project <span class='text-danger'>*</span></label>
+													<div class="col-sm-7">
+														<select id="project_id" name="project_id" class="form-control">
+															<option value="0">Select Project</option>
+														<% for(BuilderProject builderProject :builderProjects) { %>
+															<option value="<% out.print(builderProject.getId());%>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
+														<% } %>
+														</select>
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-name">
+													<label class="control-label col-sm-5">Flat Type Name <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="name" name="name" value="" />
-													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
-												</div>
-											</div>
-											<div class="col-lg-4 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-5">Building Name </label>
-													<div class="col-sm-7">
-														<input type="text" class="form-control" id="building_name" name="building_name" value="<% out.print(builderBuilding.getName()); %>" disabled="disabled"/>
-													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
-												</div>
-											</div>
-											<div class="col-lg-4 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-5">Project Name </label>
-													<div class="col-sm-7">
-														<input type="text" class="form-control" id="project_name" name="project_name" value="<% out.print(builderBuilding.getBuilderProject().getName()); %>" disabled="disabled"/>
-													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
-												</div>
-											</div>
-											<div class="col-lg-4 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-5">Flat Area <span class='text-danger'>*</span></label>
-													<div class="col-sm-7">
-														<input type="text" class="form-control" id="floor_area" name="floor_area" value="" />
-													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
-												</div>
-											</div>
-											<div class="col-lg-4 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-5">Floor Used </label>
-													<div class="col-sm-7">
-														<select id="floor_used" name="floor_used" class="form-control">
-															<option value="1">Odd Floor</option>
-															<option value="2">Even Floor</option>
-															<option value="3">Single Floor</option>
-															<option value="4">All Floor</option>
-														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
@@ -123,6 +91,82 @@
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
+											</div>
+											<div class="col-lg-12">
+												<hr>
+												<div class="form-group" id="error-name">
+													<label class="control-label col-sm-2">Select Building <span class='text-danger'>*</span></label>
+													<div class="col-sm-10" id="buildings">
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+												<hr>
+											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-5">Super BuiltUp <span class='text-danger'>*</span></label>
+													<div class="col-sm-7">
+														<input type="text" class="form-control" id="super_builtup_area" name="super_builtup_area" value="" />
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-5">BuiltUp Area <span class='text-danger'>*</span></label>
+													<div class="col-sm-7">
+														<input type="text" class="form-control" id="builtup_area" name="builtup_area" value="" />
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-5">Carpet Area <span class='text-danger'>*</span></label>
+													<div class="col-sm-7">
+														<input type="text" class="form-control" id="carpet_area" name="carpet_area" value="" />
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-5">Rooms <span class='text-danger'>*</span></label>
+													<div class="col-sm-7">
+														<input type="text" class="form-control" id="bedroom" name="bedroom" value="" />
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-5">Bathroom <span class='text-danger'>*</span></label>
+													<div class="col-sm-7">
+														<input type="text" class="form-control" id="bathroom" name="bathroom" value="" />
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-5">Balcony <span class='text-danger'>*</span></label>
+													<div class="col-sm-7">
+														<input type="text" class="form-control" id="balcony" name="balcony" value="" />
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-5">Dry Balcony <span class='text-danger'>*</span></label>
+													<div class="col-sm-7">
+														<input type="text" class="form-control" id="drybalcony" name="drybalcony" value="" />
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+											<div class="col-lg-12" id="rooms">
+											
 											</div>
 										</div>
 									</div>
@@ -200,10 +244,10 @@ $('#addfloor').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-    	building_id: {
+    	project_id: {
             validators: {
                 notEmpty: {
-                    message: 'Building ID is required and cannot be empty'
+                    message: 'Project Name is required and cannot be empty'
                 }
             }
         },
@@ -214,10 +258,31 @@ $('#addfloor').bootstrapValidator({
                 }
             }
         },
-        floor_area: {
+        super_builtup_area: {
             validators: {
                 notEmpty: {
-                    message: 'Floor Area is required and cannot be empty'
+                    message: 'Super BuiltUp Area is required and cannot be empty'
+                }
+            }
+        },
+        builtup_area: {
+            validators: {
+                notEmpty: {
+                    message: 'BuiltUp Area is required and cannot be empty'
+                }
+            }
+        },
+        carpet_area: {
+            validators: {
+                notEmpty: {
+                    message: 'Carpet Area is required and cannot be empty'
+                }
+            }
+        },
+        bedroom: {
+            validators: {
+                notEmpty: {
+                    message: 'Rooms is required and cannot be empty'
                 }
             }
         },
@@ -258,7 +323,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/admin/project/building/flattype/list.jsp?building_id="+$("#building_id").val();
+        window.location.href = "${baseUrl}/admin/project/building/flattype/list.jsp?project_id="+$("#project_id").val();
   	}
 }
 
@@ -288,6 +353,35 @@ function removeImage(id) {
 function showDetailTab() {
 	$('#buildingTabs a[href="#floorimages"]').tab('show');
 }
+
+$("#project_id").change(function(){
+	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{},function(data){
+		var html = "";
+		$(data).each(function(index){
+			html = html + '<div class="col-sm-3"><input type="checkbox" name="building_id[]" value="'+data[index].id+'"> '+data[index].name+'</div>';
+		});
+		$("#buildings").html(html);
+	},'json');
+	
+});
+
+$("#bedroom").focusout(function(){
+	var bedrooms = parseInt($("#bedroom").val());
+	var row = "";
+	for(i = 1; i <= bedrooms; i++) {
+		row = row + '<hr><div class="col-sm-12"><div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Room Name</label><div class="col-sm-6"><input type="text" class="form-control" name="room_name[]" value="Room '+i+'"/></div></div></div>'
+				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Length</label><div class="col-sm-6"><input type="text" name="length[]" class="form-control"/></div></div></div>'
+				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Breadth</label><div class="col-sm-6"><input type="text" name="breadth[]" class="form-control"/></div></div></div>'
+				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Unit</label><div class="col-sm-6"><select name="length_unit[]" class="form-control">'
+				+'<option value="1">Feet</option>'
+				+'<option value="2">Meter</option>'
+				+'<option value="3">Inch</option>'
+				+'<option value="4">Yard</option>'
+				+'</select></div></div></div>'
+				+'</div>';
+	}
+	$("#rooms").html(row);
+});
 
 </script>
 </body>

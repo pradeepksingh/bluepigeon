@@ -50,8 +50,6 @@ public class HomeLoanBanksDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("name", homeLoanBanks.getName());
 		query.setParameter("id", homeLoanBanks.getId());
-		// System.out.println("Country status ::"+country.getStatus());
-		// query.setParameter("status", country.getStatus());
 		List<HomeLoanBanks> result = query.list();
 		session.close();
 		if (result.size() > 0) {
@@ -119,7 +117,6 @@ public class HomeLoanBanksDAO {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		List<HomeLoanBanks> result = query.list();
-		
 		session.close();
 		return result;
 	}

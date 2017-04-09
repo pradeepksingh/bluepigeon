@@ -6,9 +6,9 @@
 <%@include file="../../../../head.jsp"%>
 <%@include file="../../../../leftnav.jsp"%>
 <%
-	int building_id = 0;
+	int project_id = 0;
 	int p_user_id = 0;
-	building_id = Integer.parseInt(request.getParameter("building_id"));
+	List<BuilderFlatType> builderFlatTypes = null;
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
 	if(session!=null)
@@ -19,7 +19,15 @@
 			p_user_id = adminuserproject.getId();
 		}
 	}
-	List<BuilderFlatType> builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypes(building_id);
+	if (request.getParameterMap().containsKey("project_id")) {
+		project_id = Integer.parseInt(request.getParameter("project_id"));
+		if(project_id > 0) {
+			builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypes(project_id);
+		}
+	} else {
+		builderFlatTypes = new ProjectDAO().getBuilderAllFlatTypes();
+	}
+	System.out.println("Flat Types: "+builderFlatTypes.size());
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -36,7 +44,7 @@
 			<div class="page-header">
 				<h1>
 					Flat Type List 
-					<a href="${baseUrl}/admin/project/building/flattype/new.jsp?building_id=<% out.print(building_id); %>" class="btn btn-primary btn-sm pull-right" role="button" ><i class="fa fa-plus"></i> New Floor</a>
+					<a href="${baseUrl}/admin/project/building/flattype/new.jsp?project_id=<% out.print(project_id); %>" class="btn btn-primary btn-sm pull-right" role="button" ><i class="fa fa-plus"></i> New Flat Type</a>
 				</h1>
 			</div>
 			<div class="">
@@ -47,8 +55,9 @@
 								<thead class="bg-info">
 									<tr>
 										<th>Flat Type</th>
-										<th>Building Name</th>
-										<th>Flat Area</th>
+										<th>Project Name</th>
+										<th>Configuration</th>
+										<th>Carpet Area</th>
 										<th>Status</th>
 										<th>Actions</th>
 									</tr>
@@ -57,8 +66,9 @@
 								<% for(BuilderFlatType builderFlatType :builderFlatTypes) { %>
 									<tr>
 										<th><% out.print(builderFlatType.getName()); %></th>
-										<th><% out.print(builderFlatType.getBuilderBuilding().getName()); %></th>
-										<th><% out.print(builderFlatType.getFloorArea()); %></th>
+										<th><% out.print(builderFlatType.getBuilderProject().getName()); %></th>
+										<th><% out.print(builderFlatType.getBuilderProjectPropertyConfiguration().getName()); %></th>
+										<th><% out.print(builderFlatType.getSuperBuiltupArea()); %></th>
 										<th><% if(builderFlatType.getStatus() == 1) { %>Active<% } else { %>Inactive<% } %></th>
 										<th>
 											<a href="${baseUrl}/admin/project/building/flattype/edit.jsp?flat_type_id=<% out.print(builderFlatType.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>

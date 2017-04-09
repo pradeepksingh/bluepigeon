@@ -22,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.ProjectDAO;
+import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.ProjectDetail;
 import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.data.ProjectOffer;
@@ -32,6 +33,8 @@ import org.bluepigeon.admin.model.AreaUnit;
 import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuildingAmenity;
+import org.bluepigeon.admin.model.BuilderBuildingFlatType;
+import org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom;
 import org.bluepigeon.admin.model.BuilderBuildingStatus;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderFlat;
@@ -258,7 +261,7 @@ public class ProjectController extends ResourceConfig {
 		builderProjectPriceInfo.setTax(tax);
 		builderProjectPriceInfo.setVat(vat);
 		builderProjectPriceInfo.setFee(fee);
-		builderProject.setAreaUnit(areaUnit);
+		builderProjectPriceInfo.setAreaUnit(areaUnit);
 		ResponseMessage resp = new ProjectDAO().updatePriceInfo(builderProjectPriceInfo); 
 		return resp;
 	}
@@ -1018,6 +1021,13 @@ public class ProjectController extends ResourceConfig {
 		return msg;
 	}
 	
+	@GET
+	@Path("/building/floor/names/{building_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<FloorData> getBuilderFloorById(@PathParam("building_id") int building_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		return projectDAO.getBuildingFloorNamesByBuildingId(building_id);
+	}
 	/* ********* Flat Types ************** */
 	
 	@POST
@@ -1025,13 +1035,22 @@ public class ProjectController extends ResourceConfig {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage addBuildingFlatType (
-			@FormDataParam("building_id") int building_id,
 			@FormDataParam("project_id") int project_id,
 			@FormDataParam("name") String name, 
-			@FormDataParam("floor_area") Double floor_area,
-			@FormDataParam("floor_used") int floor_used,
+			@FormDataParam("super_builtup_area") Double super_builtup_area,
+			@FormDataParam("builtup_area") Double builtup_area,
+			@FormDataParam("carpet_area") Double carpet_area,
+			@FormDataParam("bedroom") byte bedroom,
+			@FormDataParam("bathroom") byte bathroom,
+			@FormDataParam("balcony") byte balcony,
+			@FormDataParam("drybalcony") byte drybalcony,
 			@FormDataParam("config_id") int config_id,
 			@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
+			@FormDataParam("building_id[]") List<FormDataBodyPart> buildings,
+			@FormDataParam("room_name[]") List<FormDataBodyPart> room_name,
+			@FormDataParam("length[]") List<FormDataBodyPart> length,
+			@FormDataParam("breadth[]") List<FormDataBodyPart> breadth,
+			@FormDataParam("length_unit[]") List<FormDataBodyPart> length_unit,
 			@FormDataParam("admin_id") int admin_id
 	) {
 		byte floor_status = 1;
@@ -1043,13 +1062,15 @@ public class ProjectController extends ResourceConfig {
 		adminUser.setId(admin_id);
 		BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration = new BuilderProjectPropertyConfiguration();
 		builderProjectPropertyConfiguration.setId(config_id);
-		BuilderBuilding builderBuilding = new BuilderBuilding();
-		builderBuilding.setId(building_id);
 		BuilderFlatType builderFlatType = new BuilderFlatType();
-		builderFlatType.setBuilderBuilding(builderBuilding);
 		builderFlatType.setStatus(floor_status);
-		builderFlatType.setFloorArea(floor_area);
-		builderFlatType.setFloorUsed(floor_used);
+		builderFlatType.setSuperBuiltupArea(super_builtup_area);
+		builderFlatType.setBuiltupArea(builtup_area);
+		builderFlatType.setCarpetArea(carpet_area);
+		builderFlatType.setBedroom(bedroom);
+		builderFlatType.setBathroom(bathroom);
+		builderFlatType.setBalcony(balcony);
+		builderFlatType.setDrybalcony(drybalcony);
 		builderFlatType.setName(name);
 		builderFlatType.setBuilderProjectPropertyConfiguration(builderProjectPropertyConfiguration);
 		builderFlatType.setBuilderProject(builderProject);
@@ -1057,6 +1078,46 @@ public class ProjectController extends ResourceConfig {
 		msg = projectDAO.addBuildingFlatType(builderFlatType);
 		if(msg.getId() > 0) {
 			builderFlatType.setId(msg.getId());
+			//add building flat types
+			if (buildings.size() > 0) {
+				List<BuilderBuildingFlatType> builderBuildingFlatTypes = new ArrayList<BuilderBuildingFlatType>();
+				for(FormDataBodyPart building : buildings)
+				{
+					if(building.getValueAs(Integer.class) != null && building.getValueAs(Integer.class) != 0) {
+						BuilderBuilding builderBuilding = new BuilderBuilding();
+						builderBuilding.setId(building.getValueAs(Integer.class));
+						BuilderBuildingFlatType builderBuildingFlatType = new BuilderBuildingFlatType();
+						builderBuildingFlatType.setBuilderBuilding(builderBuilding);
+						builderBuildingFlatType.setBuilderFlatType(builderFlatType);
+						builderBuildingFlatTypes.add(builderBuildingFlatType);
+					}
+				}
+				if(builderBuildingFlatTypes.size() > 0) {
+					projectDAO.addBuilderBuildingFlatType(builderBuildingFlatTypes);
+				}
+			}
+			
+			//add builder building flat type rooms
+			if (room_name.size() > 0) {
+				List<BuilderBuildingFlatTypeRoom> builderBuildingFlatTypeRooms = new ArrayList<BuilderBuildingFlatTypeRoom>();
+				int i = 0;
+				for(FormDataBodyPart room : room_name)
+				{
+					if(room.getValueAs(String.class).toString() != null && !room.getValueAs(String.class).isEmpty()) {
+						BuilderBuildingFlatTypeRoom builderBuildingFlatTypeRoom = new BuilderBuildingFlatTypeRoom();
+						builderBuildingFlatTypeRoom.setBuilderFlatType(builderFlatType);
+						builderBuildingFlatTypeRoom.setRoomName(room.getValueAs(String.class).toString());
+						builderBuildingFlatTypeRoom.setLength(length.get(i).getValueAs(Double.class));
+						builderBuildingFlatTypeRoom.setBreadth(breadth.get(i).getValueAs(Double.class));
+						builderBuildingFlatTypeRoom.setLengthUnit(length_unit.get(i).getValueAs(Byte.class));
+						builderBuildingFlatTypeRooms.add(builderBuildingFlatTypeRoom);
+					}
+					i++;
+				}
+				if(builderBuildingFlatTypeRooms.size() > 0) {
+					projectDAO.addBuilderBuildingFlatTypeRoom(builderBuildingFlatTypeRooms);
+				}
+			}
 			//add gallery images
 			try {	
 				List<FlatTypeImage> flatTypeImages = new ArrayList<FlatTypeImage>();
@@ -1100,13 +1161,22 @@ public class ProjectController extends ResourceConfig {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updateBuildingFlatType (
 			@FormDataParam("flat_type_id") int flat_type_id,
-			@FormDataParam("building_id") int building_id,
 			@FormDataParam("project_id") int project_id,
 			@FormDataParam("name") String name, 
-			@FormDataParam("floor_area") Double floor_area,
-			@FormDataParam("floor_used") int floor_used,
+			@FormDataParam("super_builtup_area") Double super_builtup_area,
+			@FormDataParam("builtup_area") Double builtup_area,
+			@FormDataParam("carpet_area") Double carpet_area,
+			@FormDataParam("bedroom") byte bedroom,
+			@FormDataParam("bathroom") byte bathroom,
+			@FormDataParam("balcony") byte balcony,
+			@FormDataParam("drybalcony") byte drybalcony,
 			@FormDataParam("config_id") int config_id,
 			@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
+			@FormDataParam("building_id[]") List<FormDataBodyPart> buildings,
+			@FormDataParam("room_name[]") List<FormDataBodyPart> room_name,
+			@FormDataParam("length[]") List<FormDataBodyPart> length,
+			@FormDataParam("breadth[]") List<FormDataBodyPart> breadth,
+			@FormDataParam("length_unit[]") List<FormDataBodyPart> length_unit,
 			@FormDataParam("admin_id") int admin_id
 	) {
 		byte floor_status = 1;
@@ -1118,20 +1188,64 @@ public class ProjectController extends ResourceConfig {
 		adminUser.setId(admin_id);
 		BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration = new BuilderProjectPropertyConfiguration();
 		builderProjectPropertyConfiguration.setId(config_id);
-		BuilderBuilding builderBuilding = new BuilderBuilding();
-		builderBuilding.setId(building_id);
 		BuilderFlatType builderFlatType = new BuilderFlatType();
 		builderFlatType.setId(flat_type_id);
-		builderFlatType.setBuilderBuilding(builderBuilding);
 		builderFlatType.setStatus(floor_status);
-		builderFlatType.setFloorArea(floor_area);
-		builderFlatType.setFloorUsed(floor_used);
+		builderFlatType.setSuperBuiltupArea(super_builtup_area);
+		builderFlatType.setBuiltupArea(builtup_area);
+		builderFlatType.setCarpetArea(carpet_area);
+		builderFlatType.setBedroom(bedroom);
+		builderFlatType.setBathroom(bathroom);
+		builderFlatType.setBalcony(balcony);
+		builderFlatType.setDrybalcony(drybalcony);
 		builderFlatType.setName(name);
 		builderFlatType.setBuilderProjectPropertyConfiguration(builderProjectPropertyConfiguration);
 		builderFlatType.setBuilderProject(builderProject);
 		builderFlatType.setAdminUser(adminUser);
 		msg = projectDAO.updateBuildingFlatType(builderFlatType);
 		if(msg.getId() > 0) {
+			//add building flat types
+			if (buildings.size() > 0) {
+				List<BuilderBuildingFlatType> builderBuildingFlatTypes = new ArrayList<BuilderBuildingFlatType>();
+				for(FormDataBodyPart building : buildings)
+				{
+					if(building.getValueAs(Integer.class) != null && building.getValueAs(Integer.class) != 0) {
+						BuilderBuilding builderBuilding = new BuilderBuilding();
+						builderBuilding.setId(building.getValueAs(Integer.class));
+						BuilderBuildingFlatType builderBuildingFlatType = new BuilderBuildingFlatType();
+						builderBuildingFlatType.setBuilderBuilding(builderBuilding);
+						builderBuildingFlatType.setBuilderFlatType(builderFlatType);
+						builderBuildingFlatTypes.add(builderBuildingFlatType);
+					}
+				}
+				if(builderBuildingFlatTypes.size() > 0) {
+					projectDAO.deleteBuilderBuildingFlatType(flat_type_id);
+					projectDAO.addBuilderBuildingFlatType(builderBuildingFlatTypes);
+				}
+			}
+			
+			//add builder building flat type rooms
+			if (room_name.size() > 0) {
+				List<BuilderBuildingFlatTypeRoom> builderBuildingFlatTypeRooms = new ArrayList<BuilderBuildingFlatTypeRoom>();
+				int i = 0;
+				for(FormDataBodyPart room : room_name)
+				{
+					if(room.getValueAs(String.class).toString() != null && !room.getValueAs(String.class).isEmpty()) {
+						BuilderBuildingFlatTypeRoom builderBuildingFlatTypeRoom = new BuilderBuildingFlatTypeRoom();
+						builderBuildingFlatTypeRoom.setBuilderFlatType(builderFlatType);
+						builderBuildingFlatTypeRoom.setRoomName(room.getValueAs(String.class).toString());
+						builderBuildingFlatTypeRoom.setLength(length.get(i).getValueAs(Double.class));
+						builderBuildingFlatTypeRoom.setBreadth(breadth.get(i).getValueAs(Double.class));
+						builderBuildingFlatTypeRoom.setLengthUnit(length_unit.get(i).getValueAs(Byte.class));
+						builderBuildingFlatTypeRooms.add(builderBuildingFlatTypeRoom);
+					}
+					i++;
+				}
+				if(builderBuildingFlatTypeRooms.size() > 0) {
+					projectDAO.deleteBuilderBuildingFlatTypeRoom(flat_type_id);
+					projectDAO.addBuilderBuildingFlatTypeRoom(builderBuildingFlatTypeRooms);
+				}
+			}
 			//add gallery images
 			try {	
 				List<FlatTypeImage> flatTypeImages = new ArrayList<FlatTypeImage>();
@@ -1178,6 +1292,14 @@ public class ProjectController extends ResourceConfig {
 		ProjectDAO projectDAO = new ProjectDAO();
 		msg = projectDAO.deleteFlatTypeImage(imgae_id);
 		return msg;
+	}
+	
+	@GET
+	@Path("/building/flattype/names/{building_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<FloorData> getBuilderFlatTypeNamesByBuildingId(@PathParam("building_id") int building_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		return projectDAO.getBuildingFlatTypeNamesByBuildingId(building_id);
 	}
 	
 	
@@ -1359,40 +1481,44 @@ public class ProjectController extends ResourceConfig {
 					projectDAO.addFlatAmenityInfo(flatAmenityInfos);
 				}
 			}
-			if (schedule.size() > 0) {
-				List<FlatPaymentSchedule> flatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
-				List<FlatPaymentSchedule> newFlatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
-				int i = 0;
-				for(FormDataBodyPart milestone : schedule)
-				{
-					if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
-						if(payment_id.get(i).getValueAs(Integer.class) != 0 && payment_id.get(i).getValueAs(Integer.class) != null) {
-							Byte milestone_status = 0;
-							FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
-							flatPaymentSchedule.setId(payment_id.get(i).getValueAs(Integer.class));
-							flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
-							flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
-							flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
-							flatPaymentSchedule.setStatus(milestone_status);
-							flatPaymentSchedule.setBuilderFlat(builderFlat);
-							flatPaymentSchedules.add(flatPaymentSchedule);
-						} else {
-							Byte milestone_status = 0;
-							FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
-							flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
-							flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
-							flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
-							flatPaymentSchedule.setStatus(milestone_status);
-							flatPaymentSchedule.setBuilderFlat(builderFlat);
-							newFlatPaymentSchedules.add(flatPaymentSchedule);
+			try{
+				if (schedule.size() > 0) {
+					List<FlatPaymentSchedule> flatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
+					List<FlatPaymentSchedule> newFlatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
+					int i = 0;
+					for(FormDataBodyPart milestone : schedule)
+					{
+						if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
+							if(payment_id.get(i).getValueAs(Integer.class) != 0 && payment_id.get(i).getValueAs(Integer.class) != null) {
+								Byte milestone_status = 0;
+								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+								flatPaymentSchedule.setId(payment_id.get(i).getValueAs(Integer.class));
+								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
+								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
+								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
+								flatPaymentSchedule.setStatus(milestone_status);
+								flatPaymentSchedule.setBuilderFlat(builderFlat);
+								flatPaymentSchedules.add(flatPaymentSchedule);
+							} else {
+								Byte milestone_status = 0;
+								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
+								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
+								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
+								flatPaymentSchedule.setStatus(milestone_status);
+								flatPaymentSchedule.setBuilderFlat(builderFlat);
+								newFlatPaymentSchedules.add(flatPaymentSchedule);
+							}
 						}
+						i++;
 					}
-					i++;
+					if(flatPaymentSchedules.size() > 0) {
+						projectDAO.updateFlatPaymentInfo(flatPaymentSchedules);
+						projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
+					}
 				}
-				if(flatPaymentSchedules.size() > 0) {
-					projectDAO.updateFlatPaymentInfo(flatPaymentSchedules);
-					projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
-				}
+			} catch(Exception e) {
+				
 			}
 		} else {
 			msg.setMessage("Failed to update flat.");

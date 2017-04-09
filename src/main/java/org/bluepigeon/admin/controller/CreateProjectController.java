@@ -155,11 +155,12 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuilderBuildingAmenity(@FormParam("id") int id, @FormParam("name") String name,
 			@FormParam("status") byte status) {
-
+		byte isDeleted = 0;
 		BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
 		builderBuildingAmenity.setId(id);
 		builderBuildingAmenity.setName(name);
 		builderBuildingAmenity.setStatus(status);
+		builderBuildingAmenity.setIsDeleted(isDeleted);
 
 		BuilderBuildingAmenityDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityDAO();
 		return builderBuildingAmenityDAO.update(builderBuildingAmenity);
