@@ -969,6 +969,16 @@ public class ProjectDAO {
 	}
 	
 	/* ******************** Project Flat Types ******************** */
+	public List<BuilderFlatType> getBuilderBuildingFlatTypes(int project_id) {
+		String hql = "from BuilderFlatType where builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", project_id);
+		List<BuilderFlatType> result = query.list();
+		session.close();
+		return result;
+	}
 	
 	public List<BuilderBuildingFlatType> getBuilderBuildingFlatTypeByBuildingId(int building_id) {
 		String hql = "from BuilderBuildingFlatType where builderBuilding.id = :building_id";
