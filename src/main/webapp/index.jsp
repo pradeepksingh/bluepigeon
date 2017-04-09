@@ -195,7 +195,7 @@
 						if(status==1)
 							{
 							$('#error').empty();
-								window.location.href="../bluepigeon/general/country.jsp";	
+								window.location.href="../bluepigeon/admin/general/country.jsp";	
 							}
 						
 						else if(status == 0)

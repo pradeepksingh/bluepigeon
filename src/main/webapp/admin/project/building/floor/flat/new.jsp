@@ -1,4 +1,4 @@
-<%@page import="org.bluepigeon.admin.model.BuilderFlatType"%>
+<%@page import="org.bluepigeon.admin.model.BuilderBuildingFlatType"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFloor"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderFlatStatusDAO"%>
@@ -31,7 +31,7 @@
 	BuilderFloor builderFloor = null;
 	List<BuilderBuilding> buildings = null;
 	List<BuilderFloor> floors = null;
-	List<BuilderFlatType> builderFlatTypes = null;
+	List<BuilderBuildingFlatType> builderFlatTypes = null;
 	List<BuilderFloor> builderFloors = new ProjectDAO().getBuildingFloorById(floor_id);
 	if(builderFloors.size() > 0) {
 		builderFloor = builderFloors.get(0);
@@ -39,7 +39,7 @@
 		project_id = builderFloor.getBuilderBuilding().getBuilderProject().getId();
 		buildings = new ProjectDAO().getBuilderProjectBuildings(builderFloor.getBuilderBuilding().getBuilderProject().getId());
 		floors = new ProjectDAO().getBuildingFloors(builderFloor.getBuilderBuilding().getId());
-		builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypes(builderFloor.getBuilderBuilding().getId());
+		builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeByBuildingId(builderFloor.getBuilderBuilding().getId());
 	}
 	List<BuilderFlatStatus> builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderFlatStatus();
 	List<BuilderFlatAmenity> builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderFlatAmenityList();
@@ -140,8 +140,8 @@
 													<div class="col-sm-7">
 														<select id="flat_type_id" name="flat_type_id" class="form-control">
 															<% if(builderFlatTypes != null) { %>
-															<% for(BuilderFlatType builderFlatType :builderFlatTypes) { %>
-															<option value="<% out.print(builderFlatType.getId());%>"><% out.print(builderFlatType.getName());%></option>
+															<% for(BuilderBuildingFlatType builderFlatType :builderFlatTypes) { %>
+															<option value="<% out.print(builderFlatType.getBuilderFlatType().getId());%>"><% out.print(builderFlatType.getBuilderFlatType().getName());%></option>
 															<% } %>
 															<% } else { %>
 															<option value="0">Select Flat Type</option>
