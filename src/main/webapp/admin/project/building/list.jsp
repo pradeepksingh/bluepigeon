@@ -8,7 +8,6 @@
 <%
 	int project_id = 0;
 	int p_user_id = 0;
-	project_id = Integer.parseInt(request.getParameter("project_id"));
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
 	if(session!=null)
@@ -19,7 +18,15 @@
 			p_user_id = adminuserproject.getId();
 		}
 	}
-	List<BuilderBuilding> builderBuildings = new ProjectDAO().getBuilderProjectBuildings(project_id);
+	List<BuilderBuilding> builderBuildings = null;
+	if (request.getParameterMap().containsKey("project_id")) {
+		project_id = Integer.parseInt(request.getParameter("project_id"));
+		if(project_id > 0) {
+			builderBuildings = new ProjectDAO().getBuilderProjectBuildings(project_id);
+		}
+	} else {
+		builderBuildings = new ProjectDAO().getBuilderBuildings();
+	}
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -27,10 +34,10 @@
 			<ul class="breadcrumb">
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
 				</li>
-
 				<li><a href="#">Building</a></li>
 				<li class="active">List</li>
 			</ul>
+			<span class="pull-right"><a href="${baseUrl}/admin/project/list.jsp"> << Project List</a></span>
 		</div>
 		<div class="page-content">
 			<div class="page-header">
@@ -63,7 +70,7 @@
 										<th>
 											<a href="${baseUrl}/admin/project/building/edit.jsp?building_id=<% out.print(builderBuilding.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>
 											<a href="${baseUrl}/admin/project/building/floor/list.jsp?building_id=<% out.print(builderBuilding.getId());%>" class="btn btn-info icon-btn btn-xs"><i class="fa fa-list"></i> Floors</a>
-											<a href="${baseUrl}/admin/project/building/flattype/list.jsp?building_id=<% out.print(builderBuilding.getId());%>" class="btn btn-info icon-btn btn-xs"><i class="fa fa-list"></i> Flat Types</a>
+											<a href="${baseUrl}/admin/project/building/flattype/list.jsp?project_id=<% out.print(builderBuilding.getBuilderProject().getId());%>" class="btn btn-info icon-btn btn-xs"><i class="fa fa-list"></i> Flat Types</a>
 										</th>
 									</tr>
 								<% } %>

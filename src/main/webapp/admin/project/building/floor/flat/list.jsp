@@ -8,7 +8,7 @@
 <%
 	int floor_id = 0;
 	int p_user_id = 0;
-	floor_id = Integer.parseInt(request.getParameter("floor_id"));
+	List<BuilderFlat> builderFlats = null;
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
 	if(session!=null)
@@ -19,7 +19,14 @@
 			p_user_id = adminuserproject.getId();
 		}
 	}
-	List<BuilderFlat> builderFlats = new ProjectDAO().getBuilderFloorFlats(floor_id);
+	if (request.getParameterMap().containsKey("building_id")) {
+		floor_id = Integer.parseInt(request.getParameter("floor_id"));
+		if(floor_id > 0) {
+			builderFlats = new ProjectDAO().getBuilderFloorFlats(floor_id);
+		}
+	} else {
+		builderFlats = new ProjectDAO().getBuilderAllFlats();
+	}
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -27,8 +34,9 @@
 			<ul class="breadcrumb">
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
 				</li>
-
-				<li><a href="#">Flat</a></li>
+				<li><a href="${baseUrl}/admin/project/building/list.jsp">Building</a></li>
+				<li><a href="${baseUrl}/admin/project/building/floor/list.jsp">Floor</a></li>
+				<li><a href="${baseUrl}/admin/project/building/floor/flat/list.jsp">Flat</a></li>
 				<li class="active">List</li>
 			</ul>
 		</div>
@@ -36,7 +44,7 @@
 			<div class="page-header">
 				<h1>
 					Flat List 
-					<a href="${baseUrl}/admin/project/building/floor/flat/new.jsp?floor_id=<% out.print(floor_id); %>" class="btn btn-primary btn-sm pull-right" role="button" ><i class="fa fa-plus"></i> New Floor</a>
+					<a href="${baseUrl}/admin/project/building/floor/flat/new.jsp?floor_id=<% out.print(floor_id); %>" class="btn btn-primary btn-sm pull-right" role="button" ><i class="fa fa-plus"></i> New Flat</a>
 				</h1>
 			</div>
 			<div class="">

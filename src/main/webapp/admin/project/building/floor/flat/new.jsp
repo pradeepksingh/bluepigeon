@@ -3,6 +3,7 @@
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderFlatStatusDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderFlatAmenityDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFlatStatus"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFlatAmenity"%>
@@ -14,6 +15,8 @@
 <%
 	int floor_id = 0;
 	int p_user_id = 0;
+	int building_id = 0;
+	int project_id = 0;
 	floor_id = Integer.parseInt(request.getParameter("floor_id"));
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
@@ -26,13 +29,21 @@
 		}
 	}
 	BuilderFloor builderFloor = null;
+	List<BuilderBuilding> buildings = null;
+	List<BuilderFloor> floors = null;
+	List<BuilderFlatType> builderFlatTypes = null;
 	List<BuilderFloor> builderFloors = new ProjectDAO().getBuildingFloorById(floor_id);
 	if(builderFloors.size() > 0) {
 		builderFloor = builderFloors.get(0);
+		building_id = builderFloor.getBuilderBuilding().getId();
+		project_id = builderFloor.getBuilderBuilding().getBuilderProject().getId();
+		buildings = new ProjectDAO().getBuilderProjectBuildings(builderFloor.getBuilderBuilding().getBuilderProject().getId());
+		floors = new ProjectDAO().getBuildingFloors(builderFloor.getBuilderBuilding().getId());
+		builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypes(builderFloor.getBuilderBuilding().getId());
 	}
 	List<BuilderFlatStatus> builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderFlatStatus();
 	List<BuilderFlatAmenity> builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderFlatAmenityList();
-	List<BuilderFlatType> builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypes(builderFloor.getBuilderBuilding().getId());
+	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderAllProjects();
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -40,8 +51,9 @@
 			<ul class="breadcrumb">
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
 				</li>
-
-				<li><a href="#">Flat</a></li>
+				<li><a href="${baseUrl}/admin/project/building/list.jsp">Building</a></li>
+				<li><a href="${baseUrl}/admin/project/building/floor/list.jsp">Floor</a></li>
+				<li><a href="${baseUrl}/admin/project/building/floor/flat/list.jsp">Flat</a></li>
 				<li class="active">Add</li>
 			</ul>
 		</div>
@@ -63,7 +75,6 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
-										<input type="hidden" name="floor_id" id="floor_id" value="<% out.print(floor_id);%>"/>
 										<input type="hidden" name="img_count" id="img_count" value="2"/>
 										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
@@ -76,23 +87,15 @@
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
-												<div class="form-group" id="error-name">
-													<label class="control-label col-sm-5">Flat Type <span class='text-danger'>*</span></label>
-													<div class="col-sm-7">
-														<select id="flat_type_id" name="flat_type_id" class="form-control">
-															<% for(BuilderFlatType builderFlatType :builderFlatTypes) { %>
-															<option value="<% out.print(builderFlatType.getId());%>"><% out.print(builderFlatType.getName());%> - <% if(builderFlatType.getFloorUsed() == 2) { %>Even<% } else { %>Odd<% } %></option>
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-6">Project Name </label>
+													<div class="col-sm-6">
+														<select id="project_id" name="project_id" class="form-control">
+															<option value="0">Select Project</option>
+															<% for(BuilderProject builderProject :builderProjects) { %>
+															<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
 															<% } %>
 														</select>
-													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
-												</div>
-											</div>
-											<div class="col-lg-4 margin-bottom-5">
-												<div class="form-group" id="error-name">
-													<label class="control-label col-sm-5">Floor No. <span class='text-danger'>*</span></label>
-													<div class="col-sm-7">
-														<input type="text" class="form-control" id="floor_no" name="floor_no" value="<% out.print(builderFloor.getName()); %>" disabled="disabled" />
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
@@ -101,16 +104,49 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Building Name </label>
 													<div class="col-sm-7">
-														<input type="text" class="form-control" id="building_name" name="building_name" value="<% out.print(builderFloor.getBuilderBuilding().getName()); %>" disabled="disabled"/>
+														<select id="building_id" name="building_id" class="form-control">
+															<% if(buildings != null) { %>
+															<% for(BuilderBuilding builderBuilding2 :buildings) { %>
+															<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName());%></option>
+															<% } %>
+															<% } else { %>
+															<option value="0">Select Building</option>
+															<% } %>
+														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-5">Project Name </label>
+													<label class="control-label col-sm-5">Floor No. </label>
 													<div class="col-sm-7">
-														<input type="text" class="form-control" id="project_name" name="project_name" value="<% out.print(builderFloor.getBuilderBuilding().getBuilderProject().getName()); %>" disabled="disabled"/>
+														<select id="floor_id" name="floor_id" class="form-control">
+															<% if(floors != null) { %>
+															<% for(BuilderFloor builderFloor2 :floors) { %>
+															<option value="<% out.print(builderFloor2.getId());%>" <% if(builderFloor2.getId() == floor_id) { %>selected<% } %>><% out.print(builderFloor2.getName());%></option>
+															<% } %>
+															<% } else { %>
+															<option value="0">Select Floor</option>
+															<% } %>
+														</select>
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-name">
+													<label class="control-label col-sm-5">Flat Type <span class='text-danger'>*</span></label>
+													<div class="col-sm-7">
+														<select id="flat_type_id" name="flat_type_id" class="form-control">
+															<% if(builderFlatTypes != null) { %>
+															<% for(BuilderFlatType builderFlatType :builderFlatTypes) { %>
+															<option value="<% out.print(builderFlatType.getId());%>"><% out.print(builderFlatType.getName());%></option>
+															<% } %>
+															<% } else { %>
+															<option value="0">Select Flat Type</option>
+															<% } %>
+														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
@@ -297,6 +333,13 @@ $('#addfloor').bootstrapValidator({
                 }
             }
         },
+        'amenity_type[]': {
+        	validators: {
+                notEmpty: {
+                    message: 'Please select amenity'
+                }
+            }
+        }
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
@@ -386,7 +429,33 @@ function removeSchedule(id) {
 function showDetailTab() {
 	$('#buildingTabs a[href="#payment"]').tab('show');
 }
-
+$("#project_id").change(function(){
+	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{},function(data){
+		var html = '<option value="0">Select Building</option>';
+		$(data).each(function(index){
+			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
+		});
+		$("#building_id").html(html);
+	},'json');
+	
+});
+$("#building_id").change(function(){
+	$.get("${baseUrl}/webapi/project/building/floor/names/"+$("#building_id").val(),{},function(data){
+		var html = '<option value="0">Select Floor</option>';
+		$(data).each(function(index){
+			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
+		});
+		$("#floor_id").html(html);
+	},'json');
+	$.get("${baseUrl}/webapi/project/building/flattype/names/"+$("#building_id").val(),{},function(data){
+		var html = '<option value="0">Select Flat Type</option>';
+		$(data).each(function(index){
+			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
+		});
+		$("#flat_type_id").html(html);
+	},'json');
+	
+});
 </script>
 </body>
 </html>

@@ -23,7 +23,7 @@
 			p_user_id = adminuserproject.getId();
 		}
 	}
-	BuilderProject builderProject = new ProjectDAO().getBuilderProjectById(project_id);
+	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderAllProjects();
 	List<BuilderBuildingStatus> builderBuildingStatusList = new BuilderBuildingStatusDAO().getBuilderBuildingStatus();
 	List<BuilderBuildingAmenity> builderBuildingAmenities = new BuilderBuildingAmenityDAO().getBuilderBuildingAmenityList();
 %>
@@ -34,9 +34,10 @@
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
 				</li>
 
-				<li><a href="#">Building</a></li>
+				<li><a href="${baseUrl}/admin/project/building/list.jsp">Building</a></li>
 				<li class="active">Add</li>
 			</ul>
+			<span class="pull-right"><a href="${baseUrl}/admin/project/list.jsp"> << Project List</a></span>
 		</div>
 		<div class="page-content">
 			<div class="page-header">
@@ -58,7 +59,6 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
-										<input type="hidden" name="project_id" id="project_id" value="<% out.print(project_id);%>"/>
 										<input type="hidden" name="img_count" id="img_count" value="2"/>
 										<input type="hidden" name="elvimg_count" id="elvimg_count" value="2"/>
 										<div class="row">
@@ -66,7 +66,12 @@
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-5">Project Name <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
-														<input type="text" class="form-control" id="project_name" name="project_name" value="<% out.print(builderProject.getName()); %>" disabled="disabled"/>
+														<select id="project_id" name="project_id" class="form-control">
+															<option value="0">Select Project</option>
+															<% for(BuilderProject builderProject :builderProjects) { %>
+															<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
+															<% } %>
+														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>

@@ -27,10 +27,11 @@ public class BuilderFlatAmenitySubstagesDAO {
              response.setMessage("Please select Amenity stage name");
         }
         else {
-            String hql = "from BuilderFlatAmenitySubstages where name = :name";
+            String hql = "from BuilderFlatAmenitySubstages where name = :name and builderFlatAmenityStages.id = :stage_id";
             Session session = hibernateUtil.openSession();
             Query query = session.createQuery(hql);
             query.setParameter("name", builderFlatAmenitySubstages.getName());
+            query.setParameter("stage_id", builderFlatAmenitySubstages.getBuilderFlatAmenityStages().getId());
             List<BuilderFlatAmenitySubstages> result = query.list();
             session.close();
             if (result.size() > 0) {

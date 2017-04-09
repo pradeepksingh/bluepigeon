@@ -37,8 +37,8 @@ public class BuilderBuildingAmenityDAO {
 					response.setStatus(1);
 					response.setMessage("Building amenity Added Successfully");
 				}else{
-				response.setStatus(0);
-				response.setMessage("Building amenity name already exists");
+					response.setStatus(0);
+					response.setMessage("Building amenity name already exists");
 				}
 			} else {
 				Session newsession = hibernateUtil.openSession();

@@ -8,7 +8,7 @@
 <%
 	int building_id = 0;
 	int p_user_id = 0;
-	building_id = Integer.parseInt(request.getParameter("building_id"));
+	List<BuilderFloor> builderFloors = null;
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
 	if(session!=null)
@@ -19,7 +19,14 @@
 			p_user_id = adminuserproject.getId();
 		}
 	}
-	List<BuilderFloor> builderFloors = new ProjectDAO().getBuildingFloors(building_id);
+	if (request.getParameterMap().containsKey("building_id")) {
+		building_id = Integer.parseInt(request.getParameter("building_id"));
+		if(building_id > 0) {
+			builderFloors = new ProjectDAO().getBuildingFloors(building_id);
+		}
+	} else {
+		builderFloors = new ProjectDAO().getAllFloors();
+	}
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -27,10 +34,11 @@
 			<ul class="breadcrumb">
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
 				</li>
-
-				<li><a href="#">Floor</a></li>
+				<li><a href="${baseUrl}/admin/project/building/list.jsp">Building</a></li>
+				<li><a href="${baseUrl}/admin/project/building/floor/list.jsp">Floor</a></li>
 				<li class="active">List</li>
 			</ul>
+			<span class="pull-right"><a href="${baseUrl}/admin/project/list.jsp"> << Project List</a></span>
 		</div>
 		<div class="page-content">
 			<div class="page-header">

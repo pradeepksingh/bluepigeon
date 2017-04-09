@@ -94,7 +94,7 @@
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
 				</li>
 
-				<li><a href="#">Project</a></li>
+				<li><a href="${baseUrl}/admin/project/list.jsp">Project</a></li>
 				<li class="active">Update</li>
 			</ul>
 		</div>
@@ -102,6 +102,7 @@
 			<div class="page-header">
 				<h1>
 					Project Update 
+					<span class="pull-right"><a href="${baseUrl}/admin/project/list.jsp" class="btn btn-default btn-sm"> << Project List</a></span>
 				</h1>
 			</div>
 			<ul class="nav nav-tabs">
@@ -782,7 +783,7 @@
 				</div>
 				<div id="offer" class="tab-pane fade">
 					<form id="offerfrm" name="offerfrm" method="post">
-						<input type="hidden" name="offer_count" id="offer_count" value="<%out.print(projectOfferInfos.size()+1); %>"/>
+						<input type="hidden" name="offer_count" id="offer_count" value="<%out.print(projectOfferInfos.size()+10000); %>"/>
 			 			<div class="row">
 							<div class="col-lg-12">
 								<div class="panel panel-default">
@@ -791,53 +792,67 @@
 											<% 	int j = 1;
 												for(BuilderProjectOfferInfo projectOfferInfo :projectOfferInfos) { 
 											%>
-											<div class="row" id="offer-<% out.print(j);%>">
+											<div class="row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
+												<input type="hidden" name="offer_id[]" value="<% out.print(projectOfferInfo.getId()); %>" />
 												<div class="col-lg-12" style="padding-bottom:5px;">
-													<span class="pull-right"><a href="javascript:removeOffer(<% out.print(j);%>);" class="btn btn-danger btn-xs">x</a></span>
+													<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(projectOfferInfo.getId()); %>);" class="btn btn-danger btn-xs">x</a></span>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-offer_title">
 														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% if(projectOfferInfo.getTitle() != null) { out.print(projectOfferInfo.getTitle());}%>"/>
+															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-discount">
-														<label class="control-label col-sm-4">Offer Discount(%) <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="discount" name="discount[]" value="<% if(projectOfferInfo.getPer() != null) { out.print(projectOfferInfo.getPer());}%>"/>
+														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
+														<div class="col-sm-6">
+															<input type="text" class="form-control" id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-4 margin-bottom-5">
 													<div class="form-group" id="error-discount_amount">
-														<label class="control-label col-sm-4">Offer Discount Amount </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% if(projectOfferInfo.getAmount() != null) { out.print(projectOfferInfo.getAmount());}%>"/>
+														<label class="control-label col-sm-6">Discount Amount </label>
+														<div class="col-sm-6">
+															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-applicable_on">
-														<label class="control-label col-sm-4">Applicable on </label>
+														<label class="control-label col-sm-4">Description </label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="applicable_on" name="applicable_on[]" value="<% if(projectOfferInfo.getApplicable() != null) { out.print(projectOfferInfo.getApplicable());}%>"/>
+															<textarea class="form-control" id="description" name="description[]" ><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
+													<div class="form-group" id="error-applicable_on">
+														<label class="control-label col-sm-6">Offer Type </label>
+														<div class="col-sm-6">
+															<select class="form-control" id="offer_type" name="offer_type[]">
+																<option value="1" <% if(projectOfferInfo.getType().toString() == "1") { %>selected<% } %>>Percentage</option>
+																<option value="2" <% if(projectOfferInfo.getType().toString() == "2") { %>selected<% } %>>Flat Amount</option>
+																<option value="3" <% if(projectOfferInfo.getType().toString() == "3") { %>selected<% } %>>Other</option>
+															</select>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
 													<div class="form-group" id="error-apply">
-														<label class="control-label col-sm-4">Apply </label>
-														<div class="col-sm-8">
-															<select class="form-control" id="apply" name="apply[]">
-																<option value="1" <% if(projectOfferInfo.getApply() == 1) { %>selected<% } %>>Yes</option>
-																<option value="0" <% if(projectOfferInfo.getApply() == 0) { %>selected<% } %>>No</option>
+														<label class="control-label col-sm-6">Status </label>
+														<div class="col-sm-6">
+															<select class="form-control" id="offer_status" name="offer_status[]">
+																<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
+																<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
 															</select>
 														</div>
 														<div class="messageContainer"></div>
@@ -850,9 +865,9 @@
 												<hr/>
 												<% } %>
 												<div class="col-lg-12" style="padding-bottom:5px;">
-													<span class="pull-right"><a href="javascript:removeOffer(<% out.print(j);%>);" class="btn btn-danger btn-xs">x</a></span>
+													<span class="pull-right"><a href="javascript:removeOffer(1);" class="btn btn-danger btn-xs">x</a></span>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-offer_title">
 														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
@@ -861,40 +876,53 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-discount">
-														<label class="control-label col-sm-4">Offer Discount(%) <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
+														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
+														<div class="col-sm-6">
 															<input type="text" class="form-control" id="discount" name="discount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-4 margin-bottom-5">
 													<div class="form-group" id="error-discount_amount">
-														<label class="control-label col-sm-4">Offer Discount Amount </label>
-														<div class="col-sm-8">
+														<label class="control-label col-sm-6">Discount Amount </label>
+														<div class="col-sm-6">
 															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-applicable_on">
-														<label class="control-label col-sm-4">Applicable on </label>
+														<label class="control-label col-sm-4">Description </label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="applicable_on" name="applicable_on[]" value=""/>
+															<textarea class="form-control" id="description" name="description[]" ></textarea>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-6 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
+													<div class="form-group" id="error-applicable_on">
+														<label class="control-label col-sm-6">Offer Type </label>
+														<div class="col-sm-6">
+															<select class="form-control" id="offer_type" name="offer_type[]">
+																<option value="1">Percentage</option>
+																<option value="2">Flat Amount</option>
+																<option value="3">Other</option>
+															</select>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
 													<div class="form-group" id="error-apply">
-														<label class="control-label col-sm-4">Apply </label>
-														<div class="col-sm-8">
-															<select class="form-control" id="apply" name="apply[]">
-																<option value="1" >Yes</option>
-																<option value="0" >No</option>
+														<label class="control-label col-sm-6">Status </label>
+														<div class="col-sm-6">
+															<select class="form-control" id="offer_status" name="offer_status[]">
+																<option value="1" >Active</option>
+																<option value="0" >Inactive</option>
 															</select>
 														</div>
 														<div class="messageContainer"></div>
@@ -1268,23 +1296,27 @@ $("#offerbtn").click(function(){
 	var offerInfo = [];
 	var discount = [];
 	var amount = [];
-	var applicable = [];
-	var apply = [];
+	var description = [];
+	var type = [];
+	var status = [];
 	$('input[name="discount[]"]').each(function(index) {
 		discount.push($(this).val());
 	});
 	$('input[name="discount_amount[]"]').each(function(index) {
 		amount.push($(this).val());
 	});
-	$('input[name="applicable_on[]"]').each(function(index) {
-		applicable.push($(this).val());
+	$('input[name="description[]"]').each(function(index) {
+		description.push($(this).val());
 	});
-	$('select[name="apply[]"] option:selected').each(function(index) {
-		apply.push($(this).val());
+	$('select[name="offer_type[]"] option:selected').each(function(index) {
+		type.push($(this).val());
+	});
+	$('select[name="offer_status[]"] option:selected').each(function(index) {
+		status.push($(this).val());
 	});
 	$('input[name="offer_title[]"]').each(function(index) {
 		if($(this).val() != "") {
-			offerInfo.push({title:$(this).val(),per:discount[index],amount:amount[index],applicable:applicable[index],apply:apply[index],builderProject:{id:$("#id").val()}});
+			offerInfo.push({title:$(this).val(),per:discount[index],amount:amount[index],description:description[index],type:type[index],status:status[index],builderProject:{id:$("#id").val()}});
 		}
 	});
 	var project = {id:$("#id").val()};
@@ -1318,9 +1350,9 @@ $("#offerbtn").click(function(){
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
-	var html = '<div class="row" id="offer-'+offers+'"><hr/>'
+	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="0" />'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs">x</a></span></div>'
-		+'<div class="col-lg-6 margin-bottom-5">'
+		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
@@ -1329,40 +1361,53 @@ function addMoreOffer() {
 				+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
-		+'<div class="col-lg-6 margin-bottom-5">'
+		+'<div class="col-lg-3 margin-bottom-5">'
 			+'<div class="form-group" id="error-discount">'
-				+'<label class="control-label col-sm-4">Offer Discount(%) <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
+				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-6">'
 					+'<input type="text" class="form-control" id="discount" name="discount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
-		+'<div class="col-lg-6 margin-bottom-5">'
+		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-discount_amount">'
-				+'<label class="control-label col-sm-4">Offer Discount Amount </label>'
-				+'<div class="col-sm-8">'
+				+'<label class="control-label col-sm-6">Discount Amount </label>'
+				+'<div class="col-sm-6">'
 					+'<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
-		+'<div class="col-lg-6 margin-bottom-5">'
+		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-applicable_on">'
-			+'<label class="control-label col-sm-4">Applicable on </label>'
+			+'<label class="control-label col-sm-4">Description </label>'
 			+'<div class="col-sm-8">'
-			+'<input type="text" class="form-control" id="applicable_on" name="applicable_on[]" value=""/>'
+			+'<textarea class="form-control" id="description" name="description[]" ></textarea>'
 			+'</div>'
 			+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
-		+'<div class="col-lg-6 margin-bottom-5">'
+		+'<div class="col-lg-3 margin-bottom-5">'
+		+'<div class="form-group" id="error-applicable_on">'
+		+'<label class="control-label col-sm-6">Offer Type </label>'
+		+'<div class="col-sm-6">'
+		+'<select class="form-control" id="offer_type" name="offer_type[]">'
+		+'<option value="1">Percentage</option>'
+		+'<option value="2">Flat Amount</option>'
+		+'<option value="3">Other</option>'
+		+'</select>'
+		+'</div>'
+		+'<div class="messageContainer"></div>'
+		+'</div>'
+		+'</div>'
+		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-apply">'
-			+'<label class="control-label col-sm-4">Apply </label>'
-			+'<div class="col-sm-8">'
-			+'<select class="form-control" id="apply" name="apply[]">'
-			+'<option value="1">Yes</option>'
-			+'<option value="0">No</option>'
+			+'<label class="control-label col-sm-6">Status </label>'
+			+'<div class="col-sm-6">'
+			+'<select class="form-control" id="offer_status" name="offer_status[]">'
+			+'<option value="1">Active</option>'
+			+'<option value="0">Inactive</option>'
 			+'</select>'
 			+'</div>'
 			+'<div class="messageContainer"></div>'

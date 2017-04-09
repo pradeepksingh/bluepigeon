@@ -29,10 +29,11 @@ public class BuilderBuildingAmenityStagesDAO {
              response.setMessage("Please select Amenity name");
         }
         else {
-        	String hql = "from BuilderBuildingAmenityStages where name = :name";
+        	String hql = "from BuilderBuildingAmenityStages where name = :name and builderBuildingAmenity.id = :amenity_id";
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
 			query.setParameter("name", builderBuildingAmenityStages.getName());
+			query.setParameter("amenity_id", builderBuildingAmenityStages.getBuilderBuildingAmenity().getId());
 			List<BuilderBuildingAmenityStages> result = query.list();
 			session.close();
 			if (result.size() > 0) {
@@ -90,18 +91,6 @@ public class BuilderBuildingAmenityStagesDAO {
         return response;
     }
     public ResponseMessage delete(BuilderBuildingAmenityStages builderBuildingAmenityStages) {
-	/*	ResponseMessage response = new ResponseMessage();
-		HibernateUtil hibernateUtil = new org.bluepigeon.admin.util.HibernateUtil();
-		String hql = "delete from BuilderBuildingAmenityStages where id = :id";
-		Session session = hibernateUtil.openSession();
-		session.beginTransaction();
-		Query query = session.createQuery(hql);
-		query.setParameter("id", builderBuildingAmenityStages.getId());
-		query.executeUpdate();
-		session.getTransaction().commit();
-		session.close();
-		response.setStatus(1);
-		response.setMessage("Success");*/
 		
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new org.bluepigeon.admin.util.HibernateUtil();

@@ -30,3 +30,26 @@
 <script src="${baseUrl}/js/grid.locale-en.js"></script>
 <script src="${baseUrl}/js/ace-elements.min.js"></script>
 <script src="${baseUrl}/js/ace.min.js"></script>
+<script>
+$(function() {
+	var main_url = window.location.href;
+	main_urls = main_url.split("?");
+	var url_parts = main_urls[0].split("/");
+	var target_page = url_parts[url_parts.length - 1];
+	if(target_page == "edit.jsp" || target_page == "new.jsp") {
+		url_parts[url_parts.length - 1] = 'list.jsp';
+	}
+    var pgurl = url_parts.join("/");
+    
+    $("ul.submenu li a").each(function(){
+   	  var target_li = $(this).closest("li");
+         if($(this).attr("href") == pgurl || $(this).attr("href") == '' ) {
+       	  	target_li.addClass("active");
+       	  	var tagetul = target_li.closest("ul");
+   	  	  	if(tagetul.closest("li")) {
+   	  			tagetul.closest("li").addClass("open");
+   	  	  	}
+         }
+    });
+});
+</script>

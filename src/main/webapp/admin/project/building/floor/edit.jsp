@@ -1,6 +1,8 @@
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderFloorStatusDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderFloorAmenityDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProject"%>
+<%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFloor"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFloorStatus"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFloorAmenity"%>
@@ -26,14 +28,17 @@
 		}
 	}
 	BuilderFloor builderFloor = null;
+	List<BuilderBuilding> buildings = null;
 	List<BuilderFloor> builderFloors = new ProjectDAO().getBuildingFloorById(floor_id);
 	if(builderFloors.size() > 0) {
 		builderFloor = builderFloors.get(0);
+		buildings = new ProjectDAO().getBuilderProjectBuildings(builderFloor.getBuilderBuilding().getBuilderProject().getId());
 	}
 	List<FloorAmenityInfo> floorAmenityInfos = new ProjectDAO().getBuildingFloorAmenityInfo(floor_id);
 	List<FloorLayoutImage> floorLayoutImages = new ProjectDAO().getBuildingFloorPlanInfo(floor_id);
 	List<BuilderFloorStatus> builderFloorStatuses = new BuilderFloorStatusDAO().getFloorStatus();
 	List<BuilderFloorAmenity> builderFloorAmenities = new BuilderFloorAmenityDAO().getBuilderFloorAmenityList();
+	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderAllProjects();
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -41,10 +46,11 @@
 			<ul class="breadcrumb">
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
 				</li>
-
-				<li><a href="#">Floor</a></li>
+				<li><a href="${baseUrl}/admin/project/building/list.jsp">Building</a></li>
+				<li><a href="${baseUrl}/admin/project/building/floor/list.jsp">Floor</a></li>
 				<li class="active">Update</li>
 			</ul>
+			<span class="pull-right"><a href="${baseUrl}/admin/project/list.jsp"> << Project List</a></span>
 		</div>
 		<div class="page-content">
 			<div class="page-header">
@@ -64,7 +70,6 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
-										<input type="hidden" name="building_id" id="building_id" value="<% out.print(builderFloor.getBuilderBuilding().getId());%>"/>
 										<input type="hidden" name="floor_id" id="floor_id" value="<% out.print(floor_id);%>"/>
 										<input type="hidden" name="img_count" id="img_count" value="2"/>
 										<div class="row">
@@ -88,26 +93,39 @@
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-5">Project Name </label>
+													<div class="col-sm-7">
+														<select id="project_id" name="project_id" class="form-control">
+															<option value="0">Select Project</option>
+															<% for(BuilderProject builderProject :builderProjects) { %>
+															<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == builderFloor.getBuilderBuilding().getBuilderProject().getId()) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
+															<% } %>
+														</select>
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Building Name </label>
 													<div class="col-sm-7">
-														<input type="text" class="form-control" id="building_name" name="building_name" value="<% out.print(builderFloor.getBuilderBuilding().getName()); %>" disabled="disabled"/>
+														<select id="building_id" name="building_id" class="form-control">
+															<% if(buildings != null) { %>
+															<% for(BuilderBuilding builderBuilding2 :buildings) { %>
+															<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == builderFloor.getBuilderBuilding().getId()) { %>selected<% } %>><% out.print(builderBuilding2.getName());%></option>
+															<% } %>
+															<% } else { %>
+															<option value="0">Select Building</option>
+															<% } %>
+														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-6">Project Name </label>
-													<div class="col-sm-6">
-														<input type="text" class="form-control" id="project_name" name="project_name" value="<% out.print(builderFloor.getBuilderBuilding().getBuilderProject().getName()); %>" disabled="disabled"/>
-													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
-												</div>
-											</div>
-											<div class="col-lg-4 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-6">Status </label>
-													<div class="col-sm-6">
+													<label class="control-label col-sm-5">Status </label>
+													<div class="col-sm-7">
 														<select id="status" name="status" class="form-control">
 															<% for(BuilderFloorStatus builderFloorStatus :builderFloorStatuses) { %>
 															<option value="<% out.print(builderFloorStatus.getId());%>" <% if(builderFloor.getBuilderFloorStatus().getId() == builderFloorStatus.getId()) { %>selected<% } %>><% out.print(builderFloorStatus.getName()); %></option>
@@ -317,7 +335,16 @@ function removeImage(id) {
 function showDetailTab() {
 	$('#buildingTabs a[href="#floorimages"]').tab('show');
 }
-
+$("#project_id").change(function(){
+	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{},function(data){
+		var html = "";
+		$(data).each(function(index){
+			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
+		});
+		$("#building_id").html(html);
+	},'json');
+	
+});
 </script>
 </body>
 </html>

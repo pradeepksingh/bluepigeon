@@ -45,6 +45,7 @@ public class GeneralController {
 		AreaUnitDAO areaUnitDAOImpl = new AreaUnitDAO();
 		return areaUnitDAOImpl.save(areaUnit);
 	}
+	
 
 	@POST
 	@Path("/area/update")
@@ -307,7 +308,7 @@ public class GeneralController {
 	@POST
 	@Path("/bank/update")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage updateHomeLoanBanks(@FormParam("bank_id") int bankId,@FormParam("name") String name, @FormParam("location") String location,
+	public ResponseMessage updateHomeLoanBanks(@FormParam("id") int bankId,@FormParam("name") String name, @FormParam("location") String location,
 			@FormParam("email") String email,@FormParam("contact_name") String contactPerson,@FormParam("phone") String phone,
 			@FormParam("status") byte status) {
 		HomeLoanBanks homeLoanBanks = new HomeLoanBanks();

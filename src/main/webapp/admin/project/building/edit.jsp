@@ -1,6 +1,7 @@
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderBuildingStatusDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderBuildingAmenityDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
 <%@page import="org.bluepigeon.admin.model.BuildingImageGallery"%>
 <%@page import="org.bluepigeon.admin.model.BuildingPanoramicImage"%>
@@ -36,6 +37,7 @@
 	if(builderBuildings.size() > 0) {
 		builderBuilding = builderBuildings.get(0);
 	}
+	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderAllProjects();
 	List<BuilderBuildingStatus> builderBuildingStatusList = new BuilderBuildingStatusDAO().getBuilderBuildingStatus();
 	List<BuilderBuildingAmenity> builderBuildingAmenities = new BuilderBuildingAmenityDAO().getBuilderBuildingAmenityList();
 	List<BuildingImageGallery> buildingImageGalleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
@@ -51,9 +53,10 @@
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
 				</li>
 
-				<li><a href="#">Building</a></li>
+				<li><a href="${baseUrl}/admin/project/building/list.jsp">Building</a></li>
 				<li class="active">Update</li>
 			</ul>
+			<span class="pull-right"><a href="${baseUrl}/admin/project/list.jsp"> << Project List</a></span>
 		</div>
 		<div class="page-content">
 			<div class="page-header">
@@ -77,13 +80,17 @@
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
 										<input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
-										<input type="hidden" name="project_id" id="project_id" value="<% out.print(builderBuilding.getBuilderProject().getId());%>"/>
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-4">Project Name <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="project_name" name="project_name" value="<% out.print(builderBuilding.getBuilderProject().getName()); %>" disabled="disabled"/>
+														<select id="project_id" name="project_id" class="form-control">
+															<option value="0">Select Project</option>
+															<% for(BuilderProject builderProject :builderProjects) { %>
+															<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == builderBuilding.getBuilderProject().getId()) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
+															<% } %>
+														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
@@ -107,28 +114,28 @@
 												</div>
 											</div>
 											<% SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy"); %>
-											<div class="col-lg-4 margin-bottom-5">
+											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-name">
-													<label class="control-label col-sm-6">Launch Date <span class='text-danger'>*</span></label>
-													<div class="col-sm-6">
+													<label class="control-label col-sm-4">Launch Date <span class='text-danger'>*</span></label>
+													<div class="col-sm-8">
 														<input type="text" class="form-control" id="launch_date" name="launch_date" value="<% if(builderBuilding.getLaunchDate() != null) { out.print(dt1.format(builderBuilding.getLaunchDate()));}%>"/>
 													</div>
 													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
 											</div>
-											<div class="col-lg-4 margin-bottom-5">
+											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-6">Possession Date </label>
-													<div class="col-sm-6">
+													<label class="control-label col-sm-4">Possession Date </label>
+													<div class="col-sm-8">
 														<input type="text" class="form-control" id="possession_date" name="possession_date" value="<% if(builderBuilding.getPossessionDate() != null) { out.print(dt1.format(builderBuilding.getPossessionDate()));}%>"/>
 													</div>
 													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
 											</div>
-											<div class="col-lg-4 margin-bottom-5">
+											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-6">Status </label>
-													<div class="col-sm-6">
+													<label class="control-label col-sm-4">Status </label>
+													<div class="col-sm-8">
 														<select id="status" name="status" class="form-control">
 															<% 	for(BuilderBuildingStatus builderBuildingStatus :builderBuildingStatusList) { %>
 															<option value="<% out.print(builderBuildingStatus.getId());%>" <% if(builderBuildingStatus.getId() == builderBuilding.getBuilderBuildingStatus().getId()) { %>selected<% } %>><% out.print(builderBuildingStatus.getName()); %></option>
@@ -147,7 +154,6 @@
 													<div class="col-sm-10">
 														<% 	for(BuilderBuildingAmenity builderBuildingAmenity :builderBuildingAmenities) {  
 															String is_selected = "";
-															out.print(buildingAmenityInfos.size());
 															if(buildingAmenityInfos.size() > 0) { 
 																for(BuildingAmenityInfo buildingAmenityInfo :buildingAmenityInfos) {
 																	if(buildingAmenityInfo.getBuilderBuildingAmenity().getId() == builderBuildingAmenity.getId()) {

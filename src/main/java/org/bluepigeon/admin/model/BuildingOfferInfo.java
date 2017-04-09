@@ -116,5 +116,6 @@ public class BuildingOfferInfo implements java.io.Serializable {
 	public void setStatus(Byte status) {
 		this.status = status;
 	}
+	
 
 }

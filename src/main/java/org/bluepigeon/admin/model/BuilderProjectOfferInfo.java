@@ -5,7 +5,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,20 +25,22 @@ public class BuilderProjectOfferInfo implements java.io.Serializable {
 	private String title;
 	private Double per;
 	private Double amount;
-	private Double applicable;
-	private Integer apply;
+	private String description;
+	private Byte type;
+	private Byte status;
 
 	public BuilderProjectOfferInfo() {
 	}
 
 	public BuilderProjectOfferInfo(BuilderProject builderProject, String title, Double per, Double amount,
-			Double applicable, Integer apply) {
+			String description, Byte type, Byte status) {
 		this.builderProject = builderProject;
 		this.title = title;
 		this.per = per;
 		this.amount = amount;
-		this.applicable = applicable;
-		this.apply = apply;
+		this.description = description;
+		this.type = type;
+		this.status = status;
 	}
 
 	@Id
@@ -88,22 +92,31 @@ public class BuilderProjectOfferInfo implements java.io.Serializable {
 		this.amount = amount;
 	}
 
-	@Column(name = "applicable", precision = 22, scale = 0)
-	public Double getApplicable() {
-		return this.applicable;
+	@Column(name = "description", length = 255)
+	public String getDescription() {
+		return this.description;
 	}
 
-	public void setApplicable(Double applicable) {
-		this.applicable = applicable;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	@Column(name = "apply")
-	public Integer getApply() {
-		return this.apply;
+	@Column(name = "type")
+	public Byte getType() {
+		return this.type;
 	}
 
-	public void setApply(Integer apply) {
-		this.apply = apply;
+	public void setType(Byte type) {
+		this.type = type;
+	}
+	
+	@Column(name = "status")
+	public Byte getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(Byte status) {
+		this.status = status;
 	}
 
 }

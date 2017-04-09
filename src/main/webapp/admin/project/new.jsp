@@ -30,7 +30,7 @@
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
 				</li>
 
-				<li><a href="#">Project</a></li>
+				<li><a href="${baseUrl}/admin/project/list.jsp">Project</a></li>
 				<li class="active">Add</li>
 			</ul>
 		</div>
@@ -38,6 +38,7 @@
 			<div class="page-header">
 				<h1>
 					Project Add 
+					<span class="pull-right"><a href="${baseUrl}/admin/project/list.jsp" class="btn btn-default btn-sm"> << Project List</a></span>
 				</h1>
 			</div>
 			<form id="addproject" name="addproject" action="" method="post">
