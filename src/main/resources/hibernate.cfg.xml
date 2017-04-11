@@ -11,8 +11,8 @@
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="hibernate.connection.username">root</property>
 <!-- 		<property name="hibernate.connection.password">olocafe@2017</property> -->
- 		<property name="hibernate.connection.password">Freight@123#</property> 
-<!-- 		<property name="hibernate.connection.password">root</property>   -->
+<!--  		<property name="hibernate.connection.password">Freight@123#</property>  -->
+		<property name="hibernate.connection.password">root</property>  
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/blue_pigeon</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="hibernate.cache.use_second_level_cache">false</property>
@@ -46,6 +46,7 @@
         <mapping class="org.bluepigeon.admin.model.BuilderBuildingStatus" />
         <mapping class="org.bluepigeon.admin.model.Buyer" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectProjectType" />
+        <mapping class="org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom" />
         <mapping class="org.bluepigeon.admin.model.Tax" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectAmenityInfo" />
         <mapping class="org.bluepigeon.admin.model.BuyerUploadDocuments" />
@@ -65,6 +66,7 @@
         <mapping class="org.bluepigeon.admin.model.BuilderProjectPropertyType" />
         <mapping class="org.bluepigeon.admin.model.BuilderProject" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectApprovalInfo" />
+        <mapping class="org.bluepigeon.admin.model.BuilderBuildingFlatType" />
         <mapping class="org.bluepigeon.admin.model.Builder" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectPropertyConfiguration" />
         <mapping class="org.bluepigeon.admin.model.BuilderFlatStatus" />
@@ -75,7 +77,6 @@
         <mapping class="org.bluepigeon.admin.model.DemandLetters" />
         <mapping class="org.bluepigeon.admin.model.BuildingAmenityInfo" />
         <mapping class="org.bluepigeon.admin.model.State" />
-        <mapping class="org.bluepigeon.admin.model.DemandLettersInfo" />
         <mapping class="org.bluepigeon.admin.model.BuilderCompanyNames" />
         <mapping class="org.bluepigeon.admin.model.BuilderLead" />
         <mapping class="org.bluepigeon.admin.model.BuyerPayment" />
@@ -102,21 +103,9 @@
         <mapping class="org.bluepigeon.admin.model.AgreementInfo" />
         <mapping class="org.bluepigeon.admin.model.FlatPaymentSchedule" />
         <mapping class="org.bluepigeon.admin.model.AdminUserRole" />
+        <mapping class="org.bluepigeon.admin.model.BuilderBuyer" />
         <mapping class="org.bluepigeon.admin.model.BuilderFlatAmenityStages" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloorAmenityStages" />
-        <mapping class="org.bluepigeon.admin.model.BuildingPaymentInfo" />
-        <mapping class="org.bluepigeon.admin.model.BuildingOfferInfo" />
-        <mapping class="org.bluepigeon.admin.model.BuildingPanoramicImage" />
-        <mapping class="org.bluepigeon.admin.model.BuildingImageGallery" />
-        <mapping class="org.bluepigeon.admin.model.BuildingAmenityInfo" />
-        <mapping class="org.bluepigeon.admin.model.FloorLayoutImage" />
-        <mapping class="org.bluepigeon.admin.model.FloorAmenityInfo" />
-        <mapping class="org.bluepigeon.admin.model.FlatTypeImage" />
-        <mapping class="org.bluepigeon.admin.model.FlatAmenityInfo" />
-        <mapping class="org.bluepigeon.admin.model.FlatPaymentSchedule" />
-        <mapping class="org.bluepigeon.admin.model.BuilderFloorStatus" />
-        <mapping class="org.bluepigeon.admin.model.BuilderBuildingFlatType" />
-        <mapping class="org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom" />
 	</session-factory>
 
 </hibernate-configuration>

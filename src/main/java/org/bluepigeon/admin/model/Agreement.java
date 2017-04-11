@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 public class Agreement implements java.io.Serializable {
 
 	private Integer id;
-	private BuilderFloor builderFloor;
+//	private BuilderFloor builderFloor;
 	private BuilderBuilding builderBuilding;
 	private BuilderFlat builderFlat;
 	private BuilderProject builderProject;
@@ -32,10 +32,11 @@ public class Agreement implements java.io.Serializable {
 	public Agreement() {
 	}
 
-	public Agreement(BuilderFloor builderFloor, BuilderBuilding builderBuilding, BuilderFlat builderFlat,
+	public Agreement(//BuilderFloor builderFloor, 
+			BuilderBuilding builderBuilding, BuilderFlat builderFlat,
 			BuilderProject builderProject, String name, String email, String contact, Date lastDate, String remind,
 			String content) {
-		this.builderFloor = builderFloor;
+		//this.builderFloor = builderFloor;
 		this.builderBuilding = builderBuilding;
 		this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
@@ -59,15 +60,15 @@ public class Agreement implements java.io.Serializable {
 		this.id = id;
 	}
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "floor_id")
-	public BuilderFloor getBuilderFloor() {
-		return this.builderFloor;
-	}
-
-	public void setBuilderFloor(BuilderFloor builderFloor) {
-		this.builderFloor = builderFloor;
-	}
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name = "floor_id")
+//	public BuilderFloor getBuilderFloor() {
+//		return this.builderFloor;
+//	}
+//
+//	public void setBuilderFloor(BuilderFloor builderFloor) {
+//		this.builderFloor = builderFloor;
+//	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "building_id")

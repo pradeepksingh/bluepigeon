@@ -244,9 +244,18 @@ $("#floor_id").change(function(){
 $("#flat_id").change(function(){
 	$.get("${baseUrl}/webapi/buyer/flat/",{ flat_id: $("#flat_id").val() }, function(data){
 		$(data).each(function(index){
-			$("#name").val(data[index].name);
-			$("#contact").val(data[index].contact);
-			$("#email").val(data[index].email);
+			if(data[index].name != "")
+				$("#name").val(data[index].name);
+			else
+				$("#name").val("");
+			if(data[index].contact !="")
+				$("#contact").val(data[index].contact);
+			else
+				$("#contact").val("");
+			if(data[index].email!="")
+				$("#email").val(data[index].email);
+			else
+				$("#email").val("");
 		});
 	},'json');
 });

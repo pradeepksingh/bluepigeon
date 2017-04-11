@@ -5,7 +5,7 @@ public class AgreementList {
 	private String buyerName;
 	private String projectName;
 	private String buildingName;
-	private String FloorNo;
+	//private String FloorNo;
 	private String flatNo;
 	public int getId() {
 		return id;
@@ -33,12 +33,12 @@ public class AgreementList {
 		this.buildingName = buildingName;
 	}
 	
-	public String getFloorNo() {
-		return FloorNo;
-	}
-	public void setFloorNo(String floorNo) {
-		FloorNo = floorNo;
-	}
+//	public String getFloorNo() {
+//		return FloorNo;
+//	}
+//	public void setFloorNo(String floorNo) {
+//		FloorNo = floorNo;
+//	}
 	
 	public String getFlatNo() {
 		return flatNo;
