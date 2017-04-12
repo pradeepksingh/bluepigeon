@@ -13,6 +13,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -20,7 +21,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.AgreementDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
-import org.bluepigeon.admin.data.AgreementList;
+import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuyerList;
 import org.bluepigeon.admin.data.FlatData;
@@ -30,14 +31,14 @@ import org.bluepigeon.admin.model.AdminUser;
 import org.bluepigeon.admin.model.Agreement;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderFlat;
-import org.bluepigeon.admin.model.BuilderFloor;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.BuyerDocuments;
 import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.hibernate.validator.metadata.AggregatedMethodMetaData;
+
+import javassist.expr.NewArray;
 
 @Path("buyer")
 public class BuyerController {
@@ -58,75 +59,93 @@ public class BuyerController {
 	@Path("/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public ResponseMessage addBuyerInfo (
+	public ResponseMessage addBuyerInfoNew (
+			@FormDataParam("admin_id") int emp_id,
+			@FormDataParam("buyer_name[]") List<FormDataBodyPart>  name,
+			@FormDataParam("contact[]") List<FormDataBodyPart>  contact,
+			@FormDataParam("email[]") List<FormDataBodyPart>  email,
+			@FormDataParam("pan[]") List<FormDataBodyPart>  pan,
+			@FormDataParam("address[]") List<FormDataBodyPart>  address,
+			@FormDataParam("is_primary[]") List<FormDataBodyPart>  is_primary,
+			@FormDataParam("document_type[]") List<FormDataBodyPart> douments ,
 			@FormDataParam("project_id") int project_id,
 			@FormDataParam("building_id") int building_id,
-			@FormDataParam("floor_id") int floor_id,
 			@FormDataParam("flat_id") int flat_id,
-			@FormDataParam("name") String name,
-			@FormDataParam("admin_id") int emp_id,
-			@FormDataParam("contact") String contact,
-			@FormDataParam("email") String email,
-			@FormDataParam("pan") String pan,
-			@FormDataParam("address") String address,
-			@FormDataParam("status") byte status,
-			@FormDataParam("buyer_image[]") List<FormDataBodyPart> image,
-			@FormDataParam("document_type[]") List<FormDataBodyPart> douments 
+			//@FormDataParam("agreement") Short agreement,
+			//@FormDataParam("possession") Short possession,
+			@FormDataParam("status") Short status
+			//@FormDataParam("buyer_image[]") List<FormDataBodyPart> image,
 			){
 				ResponseMessage msg = new ResponseMessage();
 				BuyerDAO buyerDAO = new BuyerDAO();
 				AdminUser adminUser = new AdminUser();
 				adminUser.setId(emp_id);
+				Short agreement=0;
+				Short possession=0;
+				Buyer buyer = null;
+				List<Buyer> buyerList = new ArrayList<Buyer>();
 				
+				if(name.size()>0){
 				
-				
-				Buyer buyer = new Buyer();
-				buyer.setName(name);
-				buyer.setAdminUser(adminUser);
-				buyer.setPan(pan);
-				buyer.setEmail(email);
-				buyer.setContact(contact);
-				buyer.setAddress(address);
-				buyer.setStatus(status);
-				if(project_id>0){
-					BuilderProject builderProject = new BuilderProject();
-					builderProject.setId(project_id);
-					buyer.setBuilderProject(builderProject);
-				}
-				if(building_id>0){
-					BuilderBuilding builderBuilding = new BuilderBuilding();
-					builderBuilding.setId(building_id);
-					buyer.setBuilderBuilding(builderBuilding);
-				}
-				if(floor_id>0){
-					BuilderFloor builderFloor = new BuilderFloor();
-					builderFloor.setId(floor_id);
-					buyer.setBuilderFloor(builderFloor);
-				}
-				if(flat_id>0){
-					BuilderFlat builderFlat = new BuilderFlat();
-					builderFlat.setId(flat_id);
-					buyer.setBuilderFlat(builderFlat);
-				}
-				if(image.size()>0){
-					try{
-						for(int i=0 ;i < image.size();i++)
-						{
-							if(image.get(i).getFormDataContentDisposition().getFileName() != null && !image.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-								String gallery_name = image.get(i).getFormDataContentDisposition().getFileName();
-								long millis = System.currentTimeMillis() % 1000;
-								gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-								gallery_name = "/images/project/buyer/images/"+gallery_name;
-								String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-								this.imageUploader.writeToFile(image.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-								buyer.setPhoto(gallery_name);
-							}
+					int i=0;
+					for(FormDataBodyPart buyers : name){
+						buyer = new Buyer();
+						buyer.setAdminUser(adminUser);
+						buyer.setStatus(status);
+						buyer.setAgreement(agreement);
+						buyer.setPossession(possession);
+						if(project_id>0){
+							BuilderProject builderProject = new BuilderProject();
+							builderProject.setId(project_id);
+							buyer.setBuilderProject(builderProject);
 						}
-					}catch(Exception e){
-						msg.setStatus(0);
-						msg.setMessage("Unable to save image");
+						
+						if(flat_id>0){
+							BuilderFlat builderFlat = new BuilderFlat();
+							builderFlat.setId(flat_id);
+							buyer.setBuilderFlat(builderFlat);
+						}
+						if(buyers.getValueAs(String.class).toString()!=null || !buyers.getValueAs(String.class).isEmpty()){
+							buyer.setName(name.get(i).getValueAs(String.class).toString());
+							buyer.setContact(contact.get(i).getValueAs(String.class).toString());
+							buyer.setEmail(email.get(i).getValueAs(String.class).toString());
+							buyer.setAddress(address.get(i).getValueAs(String.class).toString());
+							buyer.setPan(pan.get(i).getValueAs(String.class).toString());
+						}
+						//if(buyers.getValueAs(Short.class) != null)
+							buyer.setIsPrimary(is_primary.get(i).getValueAs(Short.class).shortValue());
+						buyerList.add(buyer);
+						
+						i++;	
 					}
-					msg = buyerDAO.saveBuyer(buyer);
+				}
+				
+				//buyer.setPan(pan);
+				//buyer.setEmail(email);
+//				buyer.setContact(contact);
+//				buyer.setAddress(address);
+				
+				
+//				if(image.size()>0){
+//					try{
+//						for(int i=0 ;i < image.size();i++)
+//						{
+//							if(image.get(i).getFormDataContentDisposition().getFileName() != null && !image.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+//								String gallery_name = image.get(i).getFormDataContentDisposition().getFileName();
+//								long millis = System.currentTimeMillis() % 1000;
+//								gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+//								gallery_name = "/images/project/buyer/images/"+gallery_name;
+//								String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+//								this.imageUploader.writeToFile(image.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+//								buyer.setPhoto(gallery_name);
+//							}
+//						}
+//					}catch(Exception e){
+//						msg.setStatus(0);
+//						msg.setMessage("Unable to save image");
+//					}
+				
+					msg = buyerDAO.saveBuyer(buyerList);
 					if(msg.getId()>0){
 						buyer.setId(msg.getId());
 						if(douments.size()>0){
@@ -145,13 +164,20 @@ public class BuyerController {
 						}
 					}
 				
-				}
+				//}
+//				if(image.isEmpty()){
+//					msg.setStatus(0);
+//					msg.setMessage("Unable to save image");
+//				}
+//				msg.setStatus(0);
+//				msg.setMessage("Unable to save image");
 				return msg;
 	}
 	@GET
 	@Path("/building/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuildingData> getBuildingList(@QueryParam("project_id") int project_id) {
+		System.out.println("BuilderBuilding ProjectId :: "+project_id);
 		BuyerDAO buyerDAO = new BuyerDAO();
 		return buyerDAO.getBuildingByProjectId(project_id);
 	}
@@ -184,6 +210,33 @@ public class BuyerController {
 	public List<Buyer> getBuyerListByFlatId(@QueryParam("flat_id") int flat_id) {
 		BuyerDAO buyerDAO = new BuyerDAO();
 		return buyerDAO.getBuyerByFlatId(flat_id);
+	}
+	
+	@GET
+	@Path("/building/available/flat/names/{building_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<FlatData> getProjectBuildingFlatNames(@PathParam("building_id") int building_id) {
+		return new BuyerDAO().getBuilderProjectBuildingFlats(building_id);
+	}
+	/**
+	 * Get Building List by passing project id
+	 * @param project_id
+	 * @return
+	 */
+	@GET
+	@Path("/buildings/names/{project_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuildingData> getProjectBuildingNames(@PathParam("project_id") int project_id) {
+		BuyerDAO projectDAO = new BuyerDAO();
+		List<BuildingData> buildings = projectDAO.getBuildingsByProjectId(project_id);
+//				List<BuilderBuilding> newbuildings = new ArrayList<BuilderBuilding>();
+//				for(BuilderBuilding builderBuilding :buildings) {
+//					BuilderBuilding building = new BuilderBuilding();
+//					building.setId(builderBuilding.getId());
+//					building.setName(builderBuilding.getName());
+//					newbuildings.add(building);
+//				}
+		return buildings;
 	}
 	
 	@POST
@@ -221,11 +274,11 @@ public class BuyerController {
 			builderBuilding.setId(buildingId);
 			agreement.setBuilderBuilding(builderBuilding);
 		}
-		if(floorId > 0){
-			BuilderFloor builderFloor = new BuilderFloor();
-			builderFloor.setId(floorId);
-			agreement.setBuilderFloor(builderFloor);
-		}
+//		if(floorId > 0){
+//			BuilderFloor builderFloor = new BuilderFloor();
+//			builderFloor.setId(floorId);
+//			agreement.setBuilderFloor(builderFloor);
+//		}
 		if(flatId > 0){
 			BuilderFlat builderFlat = new BuilderFlat();
 			builderFlat.setId(flatId);

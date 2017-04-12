@@ -8,9 +8,9 @@ public class BuyerList {
 	private String email;
 	private String buildingName;
 	private String flatNumber;
-	private byte agreement;
-	private byte possession;
-	private byte status;
+	private Short agreement;
+	private Short possession;
+	private Short status;
 	public int getId() {
 		return id;
 	}
@@ -55,23 +55,23 @@ public class BuyerList {
 	public void setFlatNumber(String flatNumber) {
 		this.flatNumber = flatNumber;
 	}
-	public byte getAgreement() {
+	public Short getAgreement() {
 		return agreement;
 	}
-	public void setAgreement(byte agreement) {
-		this.agreement = agreement;
+	public void setAgreement(Short agreements) {
+		this.agreement = agreements;
 	}
 	
-	public byte getPossession() {
+	public Short getPossession() {
 		return possession;
 	}
-	public void setPossession(byte possession) {
+	public void setPossession(Short possession) {
 		this.possession = possession;
 	}
-	public byte getStatus() {
+	public Short getStatus() {
 		return status;
 	}
-	public void setStatus(byte status) {
+	public void setStatus(Short status) {
 		this.status = status;
 	}
 	

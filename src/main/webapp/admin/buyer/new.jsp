@@ -10,7 +10,7 @@
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
 <%@include file="../../head.jsp"%>
-<%@include file="../../leftnav.jsp"%>
+<%@include file="../../../leftnav.jsp"%>
 <%
 	List<Builder> builders = new BuilderDetailsDAO().getBuilderList();
 	CountryDAOImp countryService = new CountryDAOImp();
@@ -46,103 +46,112 @@
 					Buyer Add 
 				</h1>
 			</div>
-			<form id="addbuyer" name="addbuyer" action="" method="post">
+			<form id="addbuyer" name="addbuyer" action="" method="post" enctype="multipart/form-data">
 				<div id="basic" class="tab-pane fade in active">
-					<div class="row">
+					<div class="row" id="buyer-1">
 						<div class="col-lg-12">
 							<div class="panel panel-default">
 								<div class="panel-body">
 									<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
-									<div class="row">
-										<div class="col-lg-12 margin-bottom-5">
-											<div class="form-group" id="error-name">
-												<label class="control-label col-sm-3">Buyer Name<span class='text-danger'>*</span></label>
-												<div class="col-sm-5">
-													<input type="text" class="form-control" id="name" name="name" />
-												</div>
-												<div class="messageContainer col-sm-4"></div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-12 margin-bottom-5">
-											<div class="form-group" id="error-contact">
-												<label class="control-label col-sm-3">Contact<span class='text-danger'>*</span></label>
-												<div class="col-sm-5">
-													<input type="text" class="form-control" id="contact" name="contact" />
-												</div>
-												<div class="messageContainer col-sm-4"></div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-12 margin-bottom-5">
-											<div class="form-group" id="error-email">
-												<label class="control-label col-sm-3">Email <span class='text-danger'>*</span></label>
-												<div class="col-sm-5">
-													<input type="text" class="form-control" id="email" name="email" />
-												</div>
-												<div class="messageContainer col-sm-4"></div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-12 margin-bottom-5">
-											<div class="form-group" id="error-pan">
-												<label class="control-label col-sm-3">PAN<span class='text-danger'>*</span></label>
-												<div class="col-sm-5">
-													<input type="text" class="form-control" id="pan" name="pan" />
-												</div>
-												<div class="messageContainer col-sm-4"></div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-12 margin-bottom-5">
-											<div class="form-group" id="error-address">
-												<label class="control-label col-sm-3">Prem. Address<span class='text-danger'>*</span></label>
-												<div class="col-sm-5">
-													<textarea rows="" cols="" class="form-control" id="address" name="address"></textarea>
-												</div>
-												<div class="messageContainer col-sm-4"></div>
-											</div>
-										</div>
-									</div>
-									<div class="row" id="project_images">
-										<div class="col-lg-6 margin-bottom-5" id="imgdiv-2">
-											<div class="form-group" id="error-landmark">
-												<label class="control-label col-sm-4">Select Image </label>
-												<div class="col-sm-8 input-group" style="padding:0px 12px;">
-													<input type="file" class="form-control" id="buyer_image" name="buyer_image[]" />
-													<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a></span>
-												</div>
-												<div class="messageContainer col-sm-offset-3"></div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-12 margin-bottom-5">
-											<div class="form-group" id="error-project_type">
-												<label class="control-label col-sm-2">Documents <span class='text-danger'>*</span></label>
-												<div class="col-sm-12">
-													<div class="col-sm-3">
-														<input type="checkbox" name="document_type[]" value="1" />PAN 
-													</div>
-													<div class="col-sm-3">
-														<input type="checkbox" name="document_type[]" value="2" />Aadhar 
-													</div>
-													<div class="col-sm-3">
-														<input type="checkbox" name="document_type[]" value="3" />Passport 
-													</div>
-													<div class="col-sm-3">
-														<input type="checkbox" name="document_type[]" value="4" />Registered Rent Agreement 
-													</div>
-													<div class="col-sm-3">
-														<input type="checkbox" name="document_type[]" value="5" />Vote ID 
+									<div id="buyer_area">
+									<input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
+										<div class="row" id="buyer-1">
+											<div class="row">
+												<div class="col-lg-5 margin-bottom-5">
+													<div class="form-group" id="error-buyer_name">
+													<label class="control-label col-sm-4">Buyer Name <span class="text-danger">*</span></label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="buyer_name" name="buyer_name[]" value=""/>
+														</div>
+														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="messageContainer"></div>
+												<div class="col-lg-5 margin-bottom-6">
+													<div class="form-group" id="error-contact">
+														<label class="control-label col-sm-4">Contact <span class="text-danger">*</span></label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="contact" name="contact[]" value=""/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+										    </div>
+										    <div class="row">
+												<div class="col-lg-5 margin-bottom-6">
+													<div class="form-group" id="error-email">
+														<label class="control-label col-sm-4">Email <span class="text-danger">*</span></label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="email" name="email[]" value=""/>
+														</div>
+														<div class="messageContainer"></div><br/>
+													</div>
+												</div>
+												<div class="col-lg-5 margin-bottom-6">
+													<div class="form-group" id="error-email">
+														<label class="control-label col-sm-4">PAN <span class="text-danger">*</span></label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="pan" name="pan[]" value=""/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
 											</div>
+											<div class="row">
+												<div class="col-lg-5 margin-bottom-5">
+													<div class="form-group" id="error-applicable_on">
+													<label class="control-label col-sm-4"> Prem. Address <span class="text-danger">*</span></label>
+													<div class="col-sm-8">
+													<textarea class="form-control" id="address" name="address[]" ></textarea>
+													</div>
+													<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-5 margin-bottom-6">
+													<div class="form-group" id="error-state_id">
+														<label class="control-label col-sm-4">Owner <span class='text-danger'>*</span></label>
+														<div class="col-sm-8">
+															<select name="is_primary[]" id="is_primary" class="form-control">
+											                    <option value="">Select Owner</option>
+											                     <option value="0">Co-Owner</option>
+											                      <option value="1">Owner</option>
+												          	</select>
+														</div>
+														<div class="messageContainer col-sm-4"></div>
+													</div>
+												</div>
+											</div>
+											<hr>
+											<div class="col-lg-12 margin-bottom-6">
+													<div class="form-group" id="error-project_type">
+														<label class="control-label col-sm-2">Documents <span class='text-danger'>*</span></label>
+														<div class="col-sm-10">
+															<div class="col-sm-4">
+																<input type="checkbox" name="document_type[]" value="1" />PAN Card
+															</div>
+															<div class="col-sm-4">
+																<input type="checkbox" name="document_type[]" value="2" />Aadhar Card
+															</div>
+															<div class="col-sm-4">
+																<input type="checkbox" name="document_type[]" value="3" />Passport 
+															</div>
+															<div class="col-sm-4">
+																<input type="checkbox" name="document_type[]" value="4" />Registered Rent Agreement 
+															</div>
+															<div class="col-sm-4">
+																<input type="checkbox" name="document_type[]" value="5" />Vote ID 
+															</div>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									<hr>
+									<div>
+										<div class="col-lg-12">
+											<span class="pull-right">
+												<a href="javascript:addMoreBuyers();" class="btn btn-info btn-xs">+ Add More Buyers</a>
+											</span>
 										</div>
 									</div>
 									<div class="row">
@@ -153,7 +162,7 @@
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-12 margin-bottom-5">
+										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group" id="error-country_id">
 												<label class="control-label col-sm-3">Project <span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
@@ -167,9 +176,7 @@
 												<div class="messageContainer col-sm-4"></div>
 											</div>
 										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-12 margin-bottom-5">
+										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group" id="error-state_id">
 												<label class="control-label col-sm-3">Building <span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
@@ -182,20 +189,7 @@
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-12 margin-bottom-5">
-											<div class="form-group" id="error-state_id">
-												<label class="control-label col-sm-3">Floor <span class='text-danger'>*</span></label>
-												<div class="col-sm-5">
-													<select name="floor_id" id="floor_id" class="form-control">
-									                    <option value="">Select Floor</option>
-										          	</select>
-												</div>
-												<div class="messageContainer col-sm-4"></div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-12 margin-bottom-5">
+										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group" id="error-state_id">
 												<label class="control-label col-sm-3">Flat <span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
@@ -206,9 +200,35 @@
 												<div class="messageContainer col-sm-4"></div>
 											</div>
 										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-12 margin-bottom-5">
+<!-- 										<div class="col-lg-6 margin-bottom-5"> -->
+<!-- 											<div class="form-group" id="error-state_id"> -->
+<!-- 												<label class="control-label col-sm-3">Agreement <span class='text-danger'>*</span></label> -->
+<!-- 												<div class="col-sm-5"> -->
+<!-- 													<select name="agreement" id="agreement" class="form-control"> -->
+<!-- 									                    <option value="">Select Agreement</option> -->
+<!-- 									                     <option value="0">No</option> -->
+<!-- 									                      <option value="1">Yes</option> -->
+<!-- 										          	</select> -->
+<!-- 												</div> -->
+<!-- 												<div class="messageContainer col-sm-4"></div> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 									<div class="row"> -->
+<!-- 										<div class="col-lg-6 margin-bottom-5"> -->
+<!-- 											<div class="form-group" id="error-state_id"> -->
+<!-- 												<label class="control-label col-sm-3">Possession <span class='text-danger'>*</span></label> -->
+<!-- 												<div class="col-sm-5"> -->
+<!-- 													<select name="possession" id="possession" class="form-control"> -->
+<!-- 									                    <option value="">Select Possession</option> -->
+<!-- 									                     <option value="0">No</option> -->
+<!-- 									                      <option value="1">Yes</option> -->
+<!-- 										          	</select> -->
+<!-- 												</div> -->
+<!-- 												<div class="messageContainer col-sm-4"></div> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group" id="error-state_id">
 												<label class="control-label col-sm-3">Status <span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
@@ -222,13 +242,18 @@
 											</div>
 										</div>
 									</div>
+									<div class="col-lg-12 margin-bottom-5">
+										<div class="clearfix form-actions">
+											<div class="pull-right">
+												<button type="submit" class="btn btn-success">Submit</button>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div id="response"></div>
-				<button type="submit" class="btn btn-success">Submit</button>
 				<br> <br>
 			</form>
 		</div>
@@ -245,30 +270,20 @@
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script>
 $("#project_id").change(function(){
-	if($("#project_id").val() != "") {
-		$.get("${baseUrl}/webapi/buyer/building/list/",{ project_id: $("#project_id").val() }, function(data){
-			var html = '<option value="">Select Building</option>';
-			$(data).each(function(index){
-				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-			});
-			$("#building_id").html(html);
-		},'json');
-	}
-});
-
-$("#building_id").change(function(){
-	$.get("${baseUrl}/webapi/buyer/floor/list/",{ building_id: $("#building_id").val() }, function(data){
-		var html = '<option value="">Select Floor</option>';
+	$.get("${baseUrl}/webapi/buyer/buildings/names/"+$("#project_id").val(),{ }, function(data){
+		var html = '<option value="0">Select Building</option>';
 		$(data).each(function(index){
+			
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		});
-		$("#floor_id").html(html);
+		$("#building_id").html(html);
 	},'json');
 });
-$("#floor_id").change(function(){
-	$.get("${baseUrl}/webapi/buyer/flat/list/",{ floor_id: $("#floor_id").val() }, function(data){
-		var html = '<option value="">Select Flat</option>';
+$("#building_id").change(function(){
+	$.get("${baseUrl}/webapi/buyer/building/available/flat/names/"+$("#building_id").val(),{ }, function(data){
+		var html = '<option value="0">Select Flat</option>';
 		$(data).each(function(index){
+			
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		});
 		$("#flat_id").html(html);
@@ -388,6 +403,108 @@ function showAddResponse(resp, statusText, xhr, $form){
   	}
 }
 
+function addMoreBuyers() {
+	var buyers = parseInt($("#buyer_count").val());
+	buyers++;
+	var html = '<div class="row" id="buyer-'+buyers+'"><hr>'
+		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeBuyer('+buyers+');" class="btn btn-danger btn-xs">x</a></span></div>'
+			+'<div class="row">'
+		+'<div class="col-lg-5 margin-bottom-5">'
+			+'<div class="form-group" id="error-buyer_name">'
+			+'<label class="control-label col-sm-4">Buyer Name <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-8">'
+					+'<input type="text" class="form-control" id="buyer_name" name="buyer_name[]" value=""/>'
+				+'</div>'
+				+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-5 margin-bottom-6">'
+			+'<div class="form-group" id="error-contact">'
+				+'<label class="control-label col-sm-4">Contact <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-8">'
+					+'<input type="text" class="form-control" id="contact" name="contact[]" value=""/>'
+				+'</div>'
+				+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+	+'</div>'
+	+'<div class="row">'
+		+'<div class="col-lg-5 margin-bottom-6">'
+			+'<div class="form-group" id="error-email">'
+				+'<label class="control-label col-sm-4">Email <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-8">'
+					+'<input type="text" class="form-control" id="email" name="email[]" value=""/>'
+				+'</div>'
+				+'<div class="messageContainer"></div><br/>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-5 margin-bottom-6">'
+			+'<div class="form-group" id="error-email">'
+				+'<label class="control-label col-sm-4">PAN <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-8">'
+					+'<input type="text" class="form-control" id="pan" name="pan[]" value=""/>'
+				+'</div>'
+				+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+	+'</div>'
+	+'<div class="row">'
+		+'<div class="col-lg-5 margin-bottom-5">'
+			+'<div class="form-group" id="error-applicable_on">'
+			+'<label class="control-label col-sm-4"> Prem. Address <span class="text-danger">*</span></label>'
+			+'<div class="col-sm-8">'
+			+'<textarea class="form-control" id="address" name="address[]" ></textarea>'
+			+'</div>'
+			+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-5 margin-bottom-6">'
+			+'<div class="form-group" id="error-state_id">'
+				+'<label class="control-label col-sm-4">Owner <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-8">'
+					+'<select name="is_primary[]" id="is_primary" class="form-control">'
+	                    +'<option value="">Owner</option>'
+	                     +'<option value="0">Co-Owner</option>'
+	                      +'<option value="1">Owner</option>'
+		          	+'</select>'
+				+'</div>'
+				+'<div class="messageContainer col-sm-4"></div>'
+			+'</div>'
+		+'</div>'
+	+'</div>'
+	+'<hr>'
+	+'<div class="col-lg-12 margin-bottom-6">'
+			+'<div class="form-group" id="error-project_type">'
+				+'<label class="control-label col-sm-2">Documents <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-10">'
+					+'<div class="col-sm-4">'
+						+'<input type="checkbox" name="document_type[]" value="1" />PAN'
+					+'</div>'
+					+'<div class="col-sm-4">'
+						+'<input type="checkbox" name="document_type[]" value="2" />Aadhar' 
+					+'</div>'
+					+'<div class="col-sm-4">'
+						+'<input type="checkbox" name="document_type[]" value="3" />Passport' 
+					+'</div>'
+					+'<div class="col-sm-4">'
+						+'<input type="checkbox" name="document_type[]" value="4" />Registered Rent Agreement' 
+					+'</div>'
+					+'<div class="col-sm-4">'
+						+'<input type="checkbox" name="document_type[]" value="5" />Vote ID' 
+					+'</div>'
+				+'</div>'
+				+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+	+'</div>'
+	+'</div>'
+	+'</div>';
+	$("#buyer_area").append(html);
+	$("#buyer_count").val(buyers);
+}
+function removeBuyer(id) {
+	$("#buyer-"+id).remove();
+}
 
 </script>
 </body>
