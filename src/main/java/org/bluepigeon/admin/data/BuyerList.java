@@ -58,8 +58,8 @@ public class BuyerList {
 	public Short getAgreement() {
 		return agreement;
 	}
-	public void setAgreement(Short agreement) {
-		this.agreement = agreement;
+	public void setAgreement(Short agreements) {
+		this.agreement = agreements;
 	}
 	
 	public Short getPossession() {

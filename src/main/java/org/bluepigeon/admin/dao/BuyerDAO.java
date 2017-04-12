@@ -10,6 +10,7 @@ import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.BuilderBuilding;
+import org.bluepigeon.admin.model.BuilderBuyer;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderFloor;
 import org.bluepigeon.admin.model.BuilderProject;
@@ -25,36 +26,79 @@ import org.hibernate.Session;
 
 public class BuyerDAO {
 	
-	public ResponseMessage saveBuyer(Buyer buyer){
+	public ResponseMessage saveBuyer(List<Buyer> buyers){
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		if (buyer.getName() == null || buyer.getName().trim().length() == 0) {
-			response.setStatus(0);
-			response.setMessage("Please enter tax type");
-		} else {
-			String hql = "from Buyer where name = :name";
-			Session session = hibernateUtil.openSession();
-			Query query = session.createQuery(hql);
-			query.setParameter("name", buyer.getName());
-			List<Buyer> result = query.list();
-			session.close();
-			if (result.size() > 0) {
+		List<ResponseMessage> responseList = new ArrayList<ResponseMessage>();
+		String hql = "from Buyer where name = :name";
+		String get_builder = "from BuilderProject where id = :id";
+		Session session = hibernateUtil.openSession();
+		Session builderSession = hibernateUtil.openSession();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(Buyer buyerList:buyers){
+			if (buyerList.getName() == null || buyerList.getName().trim().length() == 0) {
 				response.setStatus(0);
-				response.setMessage("Buyer name already exists");
+				response.setMessage("Please enter buyer name");
+				//responseList.add(response);
 			} else {
-				Session newsession = hibernateUtil.openSession();
-				newsession.beginTransaction();
-				newsession.save(buyer);
-				newsession.getTransaction().commit();
-				newsession.close();
-				response.setId(buyer.getId());
-				response.setStatus(1);
-				response.setMessage("Buyer Added Successfully");
+				
+				Query query = session.createQuery(hql);
+				query.setParameter("name", buyerList.getName());
+				List<Buyer> result = query.list();
+				if (result.size() > 0) {
+					response.setStatus(0);
+					response.setMessage("Buyer name already exists");
+					//responseList.add(response);
+				} else {
+					Query builderQuery = builderSession.createQuery(get_builder);
+					builderQuery.setParameter("id", buyerList.getBuilderProject().getId());
+					BuilderProject builderProject = (BuilderProject)builderQuery.list().get(0);
+					buyerList.setBuilder(builderProject.getBuilder());
+					newsession.save(buyerList);
+					response.setId(buyerList.getId());
+					response.setStatus(1);
+					response.setMessage("Buyer Added Successfully");
+					//responseList.add(response);
+					}
+					
+				}
 			}
-		}
+		newsession.getTransaction().commit();
+		session.close();
+		newsession.close();
+		builderSession.close();
+		updateFlatStatus(buyers.get(0).getBuilderFlat().getId());
+		insertBuilderBuyer(buyers);
 		return response;
 	}
 	
+	public void updateFlatStatus(int flatId){
+		String hql = "UPDATE BuilderFlat set status_id = 2 "  + 
+	             "WHERE id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		org.hibernate.Transaction tx=session.beginTransaction();  
+		Query query = session.createQuery(hql);
+		query.setParameter("id", flatId);
+		query.executeUpdate();
+		tx.commit();
+	}
+	
+	public void insertBuilderBuyer(List<Buyer> buyers){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(int i=0;i<buyers.size();i++){
+			BuilderBuyer builderBuyer = new BuilderBuyer();
+			builderBuyer.setBuyer(buyers.get(i));
+			builderBuyer.setBuilderFlat(buyers.get(i).getBuilderFlat());
+			builderBuyer.setBuilder(buyers.get(i).getBuilder());
+			newsession.save(builderBuyer);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+	}
 	public ResponseMessage saveBuyerDocuments(List<BuyerDocuments> buyerDocuments){
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -136,7 +180,7 @@ public class BuyerDAO {
 		}
 
 	public List<BuyerList> getBuyerList(){
-		String hql = "from Buyer order by id desc";
+		String hql = "from Buyer where is_primary=1 order by id desc ";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -177,6 +221,8 @@ public class BuyerDAO {
 				buyerList.setBuildingName("");
 				buyerList.setFlatNumber("");
 			}
+			buyerList.setAgreement(buyer.getAgreement());
+			buyerList.setPossession(buyer.getPossession());
 			buyerList.setPhone(buyer.getContact());
 			buyerList.setEmail(buyer.getEmail());
 			buyerList.setStatus(buyer.getStatus());
@@ -616,5 +662,23 @@ public class BuyerDAO {
 			}
 			session.close();
 			return flatDatas;
+		}
+	  
+		public List<BuildingData> getBuildingsByProjectId(int project_id) {
+			String hql = "from BuilderBuilding where builderProject.id = :project_id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("project_id", project_id);
+			List<BuilderBuilding> result = query.list();
+			List<BuildingData> buildingDataList = new ArrayList<BuildingData>();
+			for(BuilderBuilding builderBuilding : result){
+				BuildingData buildingData = new BuildingData();
+				buildingData.setId(builderBuilding.getId());
+				buildingData.setName(builderBuilding.getName());
+				buildingDataList.add(buildingData);
+			}
+			session.close();
+			return buildingDataList;
 		}
 }

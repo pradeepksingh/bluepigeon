@@ -18,17 +18,16 @@ import javax.persistence.Table;
 public class Buyer implements java.io.Serializable {
 
 	private Integer id;
+	private Builder builder;
 	private AdminUser adminUser;
 	private BuilderFlat builderFlat;
 	private BuilderProject builderProject;
-	private Integer builderId;
 	private Short isPrimary;
 	private String name;
 	private String contact;
 	private String email;
 	private String pan;
 	private String address;
-	private String photo;
 	private Short agreement;
 	private Short possession;
 	private Short status;
@@ -36,20 +35,19 @@ public class Buyer implements java.io.Serializable {
 	public Buyer() {
 	}
 
-	public Buyer(AdminUser adminUser, BuilderFlat builderFlat, BuilderProject builderProject, Integer builderId,
-			Short isPrimary, String name, String contact, String email, String pan, String address, String photo,
-			Short agreement, Short possession, Short status) {
+	public Buyer(Builder builder, AdminUser adminUser, BuilderFlat builderFlat, BuilderProject builderProject,
+			Short isPrimary, String name, String contact, String email, String pan, String address, Short agreement,
+			Short possession, Short status) {
+		this.builder = builder;
 		this.adminUser = adminUser;
 		this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
-		this.builderId = builderId;
 		this.isPrimary = isPrimary;
 		this.name = name;
 		this.contact = contact;
 		this.email = email;
 		this.pan = pan;
 		this.address = address;
-		this.photo = photo;
 		this.agreement = agreement;
 		this.possession = possession;
 		this.status = status;
@@ -97,13 +95,14 @@ public class Buyer implements java.io.Serializable {
 		this.builderProject = builderProject;
 	}
 
-	@Column(name = "builder_id")
-	public Integer getBuilderId() {
-		return this.builderId;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "builder_id")
+	public Builder getBuilder() {
+		return this.builder;
 	}
 
-	public void setBuilderId(Integer builderId) {
-		this.builderId = builderId;
+	public void setBuilder(Builder builder) {
+		this.builder = builder;
 	}
 
 	@Column(name = "is_primary")
@@ -158,15 +157,6 @@ public class Buyer implements java.io.Serializable {
 
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	@Column(name = "photo", length = 225)
-	public String getPhoto() {
-		return this.photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
 	}
 
 	@Column(name = "agreement")

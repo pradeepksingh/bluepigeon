@@ -46,7 +46,7 @@
 					Buyer Add 
 				</h1>
 			</div>
-			<form id="addbuyer" name="addbuyer" action="" method="post">
+			<form id="addbuyer" name="addbuyer" action="" method="post" enctype="multipart/form-data">
 				<div id="basic" class="tab-pane fade in active">
 					<div class="row" id="buyer-1">
 						<div class="col-lg-12">
@@ -200,6 +200,34 @@
 												<div class="messageContainer col-sm-4"></div>
 											</div>
 										</div>
+<!-- 										<div class="col-lg-6 margin-bottom-5"> -->
+<!-- 											<div class="form-group" id="error-state_id"> -->
+<!-- 												<label class="control-label col-sm-3">Agreement <span class='text-danger'>*</span></label> -->
+<!-- 												<div class="col-sm-5"> -->
+<!-- 													<select name="agreement" id="agreement" class="form-control"> -->
+<!-- 									                    <option value="">Select Agreement</option> -->
+<!-- 									                     <option value="0">No</option> -->
+<!-- 									                      <option value="1">Yes</option> -->
+<!-- 										          	</select> -->
+<!-- 												</div> -->
+<!-- 												<div class="messageContainer col-sm-4"></div> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 									<div class="row"> -->
+<!-- 										<div class="col-lg-6 margin-bottom-5"> -->
+<!-- 											<div class="form-group" id="error-state_id"> -->
+<!-- 												<label class="control-label col-sm-3">Possession <span class='text-danger'>*</span></label> -->
+<!-- 												<div class="col-sm-5"> -->
+<!-- 													<select name="possession" id="possession" class="form-control"> -->
+<!-- 									                    <option value="">Select Possession</option> -->
+<!-- 									                     <option value="0">No</option> -->
+<!-- 									                      <option value="1">Yes</option> -->
+<!-- 										          	</select> -->
+<!-- 												</div> -->
+<!-- 												<div class="messageContainer col-sm-4"></div> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group" id="error-state_id">
 												<label class="control-label col-sm-3">Status <span class='text-danger'>*</span></label>
@@ -242,7 +270,7 @@
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script>
 $("#project_id").change(function(){
-	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{ }, function(data){
+	$.get("${baseUrl}/webapi/buyer/buildings/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
 		$(data).each(function(index){
 			
@@ -374,8 +402,9 @@ function showAddResponse(resp, statusText, xhr, $form){
         window.location.href = "${baseUrl}/admin/buyer/list.jsp";
   	}
 }
-var buyers = parseInt($("#buyer_count").val());
+
 function addMoreBuyers() {
+	var buyers = parseInt($("#buyer_count").val());
 	buyers++;
 	var html = '<div class="row" id="buyer-'+buyers+'"><hr>'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeBuyer('+buyers+');" class="btn btn-danger btn-xs">x</a></span></div>'
@@ -475,7 +504,6 @@ function addMoreBuyers() {
 }
 function removeBuyer(id) {
 	$("#buyer-"+id).remove();
-	buyers--;
 }
 
 </script>
