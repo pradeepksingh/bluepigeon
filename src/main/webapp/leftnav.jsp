@@ -329,8 +329,22 @@ if(session!=null)
 					<b class="arrow"></b>
 					<ul class="submenu">
 						<li class="active">
-							<a href="${baseUrl}/builder/buyer/agreement/list.jsp"> 
+							<a href="${baseUrl}/admin/buyer/agreement/list.jsp"> 
 								<i class="menu-icon fa fa-caret-right"></i> Manage Agreement
+							</a> <b class="arrow"></b>
+						</li>
+					</ul>
+				</li>
+				<li class="active">
+					<a href="#" class="dropdown-toggle"> 
+						<i class="menu-icon fa fa-pencil-square-o"></i> 
+						<span class="menu-text"> Campaign </span> <b class="arrow fa fa-angle-down"></b>
+					</a> 
+					<b class="arrow"></b>
+					<ul class="submenu">
+						<li class="active">
+							<a href="${baseUrl}/admin/campaign/list.jsp"> 
+								<i class="menu-icon fa fa-caret-right"></i> Manage Campaign
 							</a> <b class="arrow"></b>
 						</li>
 					</ul>

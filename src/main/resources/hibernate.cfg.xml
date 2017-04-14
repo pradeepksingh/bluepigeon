@@ -106,6 +106,8 @@
         <mapping class="org.bluepigeon.admin.model.BuilderBuyer" />
         <mapping class="org.bluepigeon.admin.model.BuilderFlatAmenityStages" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloorAmenityStages" />
+        <mapping class="org.bluepigeon.admin.model.Campaign" />
+        <mapping class="org.bluepigeon.admin.model.CampaignBuyer" />
 	</session-factory>
 
 </hibernate-configuration>

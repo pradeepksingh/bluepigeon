@@ -68,6 +68,16 @@ public class AgreementDAO {
 		session.close();
 		return result.get(0);
 	}
+	
+	public List<AgreementInfo> getAgreementInfoByAgreementId(int id){
+		String hql = "from AgreementInfo where agreement.id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<AgreementInfo> result = query.list();
+		return result;
+	}
 	/**
 	 * @author pankaj
 	 * @return list of agreement
@@ -131,15 +141,16 @@ public class AgreementDAO {
 	 * @param agreementInfo
 	 * @return
 	 */
-	public ResponseMessage saveAgreementDocuments(AgreementInfo agreementInfo){
+	public ResponseMessage saveAgreementDocuments(List<AgreementInfo> agreementInfo){
 		ResponseMessage responseMessage = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
-		newsession.save(agreementInfo);
+		for(int i=0;i<agreementInfo.size();i++)
+			newsession.save(agreementInfo.get(i));
 		newsession.getTransaction().commit();
 		newsession.close();
-		responseMessage.setId(agreementInfo.getId());
+		responseMessage.setId(agreementInfo.get(0).getAgreement().getId());
 		responseMessage.setStatus(1);
 		responseMessage.setMessage("Agreement Added Successfully.");
 		return responseMessage;
@@ -177,4 +188,24 @@ public class AgreementDAO {
 		session.close();
 		return result;
 	}
+	
+
+	public List<BuilderFlat> getBuilderProjectBuildingFlats(int building_id) {
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuilderFlat> result = query.list();
+		List<BuilderFlat> builderFlats = new ArrayList<>();
+		for(BuilderFlat builderFlat : result){
+			BuilderFlat builderFlat1 = new BuilderFlat();
+			builderFlat1.setId(builderFlat.getId());
+			builderFlat1.setFlatNo(builderFlat.getFlatNo());
+			builderFlats.add(builderFlat1);
+		}
+		session.close();
+		return builderFlats;
+	}
+	
 }

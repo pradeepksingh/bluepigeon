@@ -119,7 +119,7 @@
 											<% } %>
 										</td>
 										<td>
-											<a href="${baseUrl}/admin/buyer/edit.jsp?buyer_id=<% out.print(buyer.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+<%-- 											<a href="${baseUrl}/admin/buyer/edit.jsp?buyer_id=<% out.print(buyer.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
 <%-- 											<a href="${baseUrl}/admin/project/building/list.jsp?project_id=<% out.print(project.getId());%>" class="btn btn-info icon-btn btn-xs"><i class="fa fa-list"></i> Buildings</a> --%>
 										</td>
 									</tr>

@@ -575,7 +575,7 @@ public class BuyerDAO {
 			return floorDatas;
 	  }
 	  public List<FlatData> getBuilderFlatTypeByFloorId(int floorId){
-		  String hql = "from BuilderFlat where builderFloor.id = :floor_id";
+		  String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :floor_id";
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);

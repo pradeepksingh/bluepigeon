@@ -1,7 +1,7 @@
 package org.bluepigeon.admin.controller;
 
-import java.io.InputStream;
 import java.util.Date;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,7 +21,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.AgreementDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
-import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuyerList;
 import org.bluepigeon.admin.data.FlatData;
@@ -29,16 +28,16 @@ import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
 import org.bluepigeon.admin.model.Agreement;
+import org.bluepigeon.admin.model.AgreementInfo;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderProject;
+import org.bluepigeon.admin.model.BuildingImageGallery;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.BuyerDocuments;
 import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-
-import javassist.expr.NewArray;
 
 @Path("buyer")
 public class BuyerController {
@@ -185,17 +184,17 @@ public class BuyerController {
 	@GET
 	@Path("/floor/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<FloorData> getFloorList(@QueryParam("building_id") int building_id) {
+	public List<FlatData> getFloorList(@QueryParam("building_id") int building_id) {
 		BuyerDAO buyerDAO = new BuyerDAO();
-		return buyerDAO.getBuilderFloorByBuildingId(building_id);
+		return buyerDAO.getBuilderFlatTypeByFloorId(building_id);
 	}
-	@GET
-	@Path("/flat/list")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<FlatData> getFlatList(@QueryParam("floor_id") int floor_id) {
-		BuyerDAO buyerDAO = new BuyerDAO();
-		return buyerDAO.getBuilderFlatTypeByFloorId(floor_id);
-	}
+//	@GET
+//	@Path("/flat/list")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public List<FlatData> getFlatList(@QueryParam("floor_id") int floor_id) {
+//		BuyerDAO buyerDAO = new BuyerDAO();
+//		return buyerDAO.getBuilderFlatTypeByFloorId(floor_id);
+//	}
 	@GET
 	@Path("/flat/booked/list")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -238,7 +237,6 @@ public class BuyerController {
 //				}
 		return buildings;
 	}
-	
 	@POST
 	@Path("/agreement/save")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -290,4 +288,94 @@ public class BuyerController {
 		
 		return new AgreementDAO().saveAgreement(agreement);
 	}
+	
+	@POST
+	@Path("/agreement/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addAgeement(
+			@FormDataParam("project_id") int projectId,
+			@FormDataParam("building_id") int buildingId,
+			//@FormParam("floor_id") int floorId,
+			@FormDataParam("flat_id") int flatId,
+			@FormDataParam("name") String name,
+			@FormDataParam("contact") String contact,
+			@FormDataParam("email") String email,
+			@FormDataParam("remind") String remind,
+			@FormDataParam("content") String content,
+			@FormDataParam("last_date") String last_date,
+			@FormDataParam("agreement_document[]")List<FormDataBodyPart> agreementDocument
+			){
+		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+		Date lastDate = null;
+		try {
+			lastDate = format.parse(last_date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Agreement agreement = new Agreement();
+		agreement.setLastDate(lastDate);
+		agreement.setRemind(remind);
+		agreement.setContent(content);
+		if(projectId > 0){
+			BuilderProject builderProject = new BuilderProject();
+			builderProject.setId(projectId);
+			agreement.setBuilderProject(builderProject);
+		}
+		if(buildingId > 0){
+			BuilderBuilding builderBuilding = new BuilderBuilding();
+			builderBuilding.setId(buildingId);
+			agreement.setBuilderBuilding(builderBuilding);
+		}
+//		if(floorId > 0){
+//			BuilderFloor builderFloor = new BuilderFloor();
+//			builderFloor.setId(floorId);
+//			agreement.setBuilderFloor(builderFloor);
+//		}
+		if(flatId > 0){
+			BuilderFlat builderFlat = new BuilderFlat();
+			builderFlat.setId(flatId);
+			agreement.setBuilderFlat(builderFlat);
+		}
+		agreement.setName(name);
+		agreement.setContact(contact);
+		agreement.setEmail(email);
+		ResponseMessage msg = new AgreementDAO().saveAgreement(agreement);
+		if(msg.getId() > 0) {
+			agreement.setId(msg.getId());
+		//add gallery images
+		try {	
+			List<AgreementInfo> buildingImageGalleries = new ArrayList<AgreementInfo>();
+			//for multiple inserting images.
+			if (agreementDocument.size() > 0) {
+				for(int i=0 ;i < agreementDocument.size();i++)
+				{
+					if(agreementDocument.get(i).getFormDataContentDisposition().getFileName() != null && !agreementDocument.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						AgreementInfo buildingImageGallery = new AgreementInfo();
+						String gallery_name = agreementDocument.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/building/images/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						//System.out.println("for loop image path: "+uploadGalleryLocation);
+						this.imageUploader.writeToFile(agreementDocument.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						buildingImageGallery.setDocUrl(gallery_name);
+						buildingImageGallery.setAgreement(agreement);
+						buildingImageGalleries.add(buildingImageGallery);
+					}
+				}
+				if(buildingImageGalleries.size() > 0) {
+					new AgreementDAO().saveAgreementDocuments(buildingImageGalleries);
+				}
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save image");
+		}
+		
+	}
+		return msg;
 }
+}
+	
+	
