@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.AgreementDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
+import org.bluepigeon.admin.dao.PossessionDAO;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuyerList;
 import org.bluepigeon.admin.data.FlatData;
@@ -35,6 +36,8 @@ import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.BuildingImageGallery;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.BuyerDocuments;
+import org.bluepigeon.admin.model.Possession;
+import org.bluepigeon.admin.model.PossessionInfo;
 import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -293,7 +296,7 @@ public class BuyerController {
 	@Path("/agreement/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public ResponseMessage addAgeement(
+	public ResponseMessage updateAgeement(
 			@FormDataParam("project_id") int projectId,
 			@FormDataParam("building_id") int buildingId,
 			//@FormParam("floor_id") int floorId,
@@ -371,11 +374,149 @@ public class BuyerController {
 		} catch(Exception e) {
 			msg.setStatus(0);
 			msg.setMessage("Unable to save image");
+			}
 		}
-		
-	}
 		return msg;
-}
+	}
+	
+	@POST
+	@Path("/possession/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addPossession(
+			@FormParam("project_id") int projectId,
+			@FormParam("building_id") int buildingId,
+			@FormParam("floor_id") int floorId,
+			@FormParam("flat_id") int flatId,
+			@FormParam("name") String name,
+			@FormParam("contact") String contact,
+			@FormParam("email") String email,
+			@FormParam("remind") String remind,
+			@FormParam("content") String content,
+			@FormParam("last_date") String last_date){
+		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+		Date lastDate = null;
+		try {
+			lastDate = format.parse(last_date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Possession possession = new Possession();
+		possession.setLastDate(lastDate);
+		possession.setRemind(remind);
+		possession.setContent(content);
+		if(projectId > 0){
+			BuilderProject builderProject = new BuilderProject();
+			builderProject.setId(projectId);
+			possession.setBuilderProject(builderProject);
+		}
+		if(buildingId > 0){
+			BuilderBuilding builderBuilding = new BuilderBuilding();
+			builderBuilding.setId(buildingId);
+			possession.setBuilderBuilding(builderBuilding);
+		}
+//		if(floorId > 0){
+//			BuilderFloor builderFloor = new BuilderFloor();
+//			builderFloor.setId(floorId);
+//			agreement.setBuilderFloor(builderFloor);
+//		}
+		if(flatId > 0){
+			BuilderFlat builderFlat = new BuilderFlat();
+			builderFlat.setId(flatId);
+			possession.setBuilderFlat(builderFlat);
+		}
+		possession.setName(name);
+		possession.setContact(contact);
+		possession.setEmail(email);
+		
+		return new PossessionDAO().saveAgreement(possession);
+	}
+	
+	@POST
+	@Path("/possession/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updatePossession(
+			@FormDataParam("project_id") int projectId,
+			@FormDataParam("building_id") int buildingId,
+			//@FormParam("floor_id") int floorId,
+			@FormDataParam("flat_id") int flatId,
+			@FormDataParam("name") String name,
+			@FormDataParam("contact") String contact,
+			@FormDataParam("email") String email,
+			@FormDataParam("remind") String remind,
+			@FormDataParam("content") String content,
+			@FormDataParam("last_date") String last_date,
+			@FormDataParam("possession_document[]")List<FormDataBodyPart> possessionDocument
+			){
+		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+		Date lastDate = null;
+		try {
+			lastDate = format.parse(last_date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Possession possession = new Possession();
+		possession.setLastDate(lastDate);
+		possession.setRemind(remind);
+		possession.setContent(content);
+		if(projectId > 0){
+			BuilderProject builderProject = new BuilderProject();
+			builderProject.setId(projectId);
+			possession.setBuilderProject(builderProject);
+		}
+		if(buildingId > 0){
+			BuilderBuilding builderBuilding = new BuilderBuilding();
+			builderBuilding.setId(buildingId);
+			possession.setBuilderBuilding(builderBuilding);
+		}
+//		if(floorId > 0){
+//			BuilderFloor builderFloor = new BuilderFloor();
+//			builderFloor.setId(floorId);
+//			agreement.setBuilderFloor(builderFloor);
+//		}
+		if(flatId > 0){
+			BuilderFlat builderFlat = new BuilderFlat();
+			builderFlat.setId(flatId);
+			possession.setBuilderFlat(builderFlat);
+		}
+		possession.setName(name);
+		possession.setContact(contact);
+		possession.setEmail(email);
+		ResponseMessage msg = new PossessionDAO().saveAgreement(possession);
+		if(msg.getId() > 0) {
+			possession.setId(msg.getId());
+		//add gallery images
+		try {	
+			List<PossessionInfo> buildingImageGalleries = new ArrayList<PossessionInfo>();
+			//for multiple inserting images.
+			if (possessionDocument.size() > 0) {
+				for(int i=0 ;i < possessionDocument.size();i++)
+				{
+					if(possessionDocument.get(i).getFormDataContentDisposition().getFileName() != null && !possessionDocument.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						PossessionInfo buildingImageGallery = new PossessionInfo();
+						String gallery_name = possessionDocument.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/building/images/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						//System.out.println("for loop image path: "+uploadGalleryLocation);
+						this.imageUploader.writeToFile(possessionDocument.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						buildingImageGallery.setDocUrl(gallery_name);
+						buildingImageGallery.setPossession(possession);
+						buildingImageGalleries.add(buildingImageGallery);
+					}
+				}
+				if(buildingImageGalleries.size() > 0) {
+					new PossessionDAO().saveAgreementDocuments(buildingImageGalleries);
+				}
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save image");
+			}
+		}
+		return msg;
+	}
 }
 	
 	

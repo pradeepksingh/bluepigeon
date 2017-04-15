@@ -8,7 +8,7 @@ public class PossessionList {
 	private int buildingId;
 	private String buildingName;
 	private int floorId;
-	private String FloorNo;
+	//private String FloorNo;
 	private int flatId;
 	private String flatNo;
 	public int getId() {
@@ -53,12 +53,12 @@ public class PossessionList {
 	public void setFloorId(int floorId) {
 		this.floorId = floorId;
 	}
-	public String getFloorNo() {
-		return FloorNo;
-	}
-	public void setFloorNo(String floorNo) {
-		FloorNo = floorNo;
-	}
+//	public String getFloorNo() {
+//		return FloorNo;
+//	}
+//	public void setFloorNo(String floorNo) {
+//		FloorNo = floorNo;
+//	}
 	public int getFlatId() {
 		return flatId;
 	}

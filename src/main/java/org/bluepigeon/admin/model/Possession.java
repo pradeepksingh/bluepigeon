@@ -21,29 +21,31 @@ import javax.persistence.TemporalType;
 public class Possession implements java.io.Serializable {
 
 	private Integer id;
+//	private BuilderFloor builderFloor;
 	private BuilderBuilding builderBuilding;
 	private BuilderFlat builderFlat;
 	private BuilderProject builderProject;
-	private Integer buyerId;
-	private String contact;
+	private String name;
 	private String email;
+	private String contact;
 	private Date lastDate;
 	private String remind;
 	private String docUrl;
 	private String content;
-
+	
 	public Possession() {
 	}
 
-	public Possession(BuilderBuilding builderBuilding, BuilderFlat builderFlat, BuilderProject builderProject,
-			Integer buyerId, String contact, String email, Date lastDate, String remind, String docUrl,
-			String content) {
+	public Possession(BuilderFloor builderFloor, BuilderBuilding builderBuilding, BuilderFlat builderFlat,
+			BuilderProject builderProject, String name, String email, String contact, Date lastDate, String remind,
+			String docUrl, String content) {
+	//	this.builderFloor = builderFloor;
 		this.builderBuilding = builderBuilding;
 		this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
-		this.buyerId = buyerId;
-		this.contact = contact;
+		this.name = name;
 		this.email = email;
+		this.contact = contact;
 		this.lastDate = lastDate;
 		this.remind = remind;
 		this.docUrl = docUrl;
@@ -92,22 +94,13 @@ public class Possession implements java.io.Serializable {
 		this.builderProject = builderProject;
 	}
 
-	@Column(name = "buyer_id")
-	public Integer getBuyerId() {
-		return this.buyerId;
+	@Column(name = "name", length = 128)
+	public String getName() {
+		return this.name;
 	}
 
-	public void setBuyerId(Integer buyerId) {
-		this.buyerId = buyerId;
-	}
-
-	@Column(name = "contact", length = 225)
-	public String getContact() {
-		return this.contact;
-	}
-
-	public void setContact(String contact) {
-		this.contact = contact;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Column(name = "email", length = 225)
@@ -117,6 +110,15 @@ public class Possession implements java.io.Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Column(name = "contact", length = 128)
+	public String getContact() {
+		return this.contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
 	}
 
 	@Temporal(TemporalType.DATE)
