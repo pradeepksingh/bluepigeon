@@ -324,6 +324,20 @@ if(session!=null)
 				<li class="active">
 					<a href="#" class="dropdown-toggle"> 
 						<i class="menu-icon fa fa-pencil-square-o"></i> 
+						<span class="menu-text"> DemandLetters </span> <b class="arrow fa fa-angle-down"></b>
+					</a> 
+					<b class="arrow"></b>
+					<ul class="submenu">
+						<li class="active">
+							<a href="${baseUrl}/admin/buyer/demandletters/list.jsp"> 
+								<i class="menu-icon fa fa-caret-right"></i> Manage Demand Letters
+							</a> <b class="arrow"></b>
+						</li>
+					</ul>
+				</li>
+				<li class="active">
+					<a href="#" class="dropdown-toggle"> 
+						<i class="menu-icon fa fa-pencil-square-o"></i> 
 						<span class="menu-text"> Agreement </span> <b class="arrow fa fa-angle-down"></b>
 					</a> 
 					<b class="arrow"></b>

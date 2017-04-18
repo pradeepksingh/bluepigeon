@@ -15,6 +15,7 @@ import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class AgreementDAO {
 	/**
@@ -159,20 +160,34 @@ public class AgreementDAO {
 	 * Update Agreement documents
 	 * @author pankaj
 	 * @param agreementInfo
-	 * @return
+	 * @return message
 	 */
-	public ResponseMessage updateAgreementDocuments(AgreementInfo agreementInfo){
-		ResponseMessage response = new ResponseMessage();
+	public ResponseMessage updateAgreementDocuments(List<AgreementInfo> agreementInfo){
 		HibernateUtil hibernateUtil = new HibernateUtil();
+		ResponseMessage responseMessage = new ResponseMessage();
+		/******************** Delete old Agreement documents *****************************************/
+		String delete_buyer_documents = "DELETE from  AgreementInfo where agreement.id = :agreement_id";
+		Session newsession1 = hibernateUtil.openSession();
+		newsession1.beginTransaction();
+		Query smdelete = newsession1.createQuery(delete_buyer_documents);
+		smdelete.setParameter("agreement_id", agreementInfo.get(0).getAgreement().getId());
+		smdelete.executeUpdate();
+		newsession1.getTransaction().commit();
+		newsession1.close();
+		
+		/************************ Save new Agreement Documents ****************************************/
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
-		newsession.update(agreementInfo);
-		newsession.getTransaction().commit();
-		newsession.close();
-		response.setId(agreementInfo.getId());
-		response.setStatus(1);
-		response.setMessage("Agreement updated Successfully.");
-		return response;
+		if(agreementInfo.size()>0){
+			for(int i=0;i<agreementInfo.size();i++){
+				newsession.save(agreementInfo.get(i));
+			}
+			newsession.getTransaction().commit();
+			newsession.close();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Agreement documents Updated Successfully");
+		}
+		return responseMessage;
 	}
 	/**
 	 * Get Agreement Info
@@ -189,7 +204,23 @@ public class AgreementDAO {
 		return result;
 	}
 	
-
+	public ResponseMessage deleteAgreementDoc(int agreement_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		String hql = "delete from AgreementInfo where agreement.id = :agreement_id";
+		Query query = session.createQuery(hql);
+		query.setInteger("agreement_id", agreement_id);
+		query.executeUpdate();
+		//query.executeUpdate();
+		transaction.commit();
+		session.close();
+		resp.setMessage("Agreement Doucment deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
 	public List<BuilderFlat> getBuilderProjectBuildingFlats(int building_id) {
 		String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();

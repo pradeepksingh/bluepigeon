@@ -87,6 +87,7 @@
         <mapping class="org.bluepigeon.admin.model.BuilderPaymentStages" />
         <mapping class="org.bluepigeon.admin.model.Possession" />
         <mapping class="org.bluepigeon.admin.model.ProjectImageGallery" />
+        <mapping class="org.bluepigeon.admin.model.DemandLettersInfo" />
         <mapping class="org.bluepigeon.admin.model.FlatAmenityInfo" />
         <mapping class="org.bluepigeon.admin.model.BuilderPaymentSubstages" />
         <mapping class="org.bluepigeon.admin.model.BuilderGroup" />
