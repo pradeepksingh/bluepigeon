@@ -23,6 +23,7 @@ import org.bluepigeon.admin.model.BuyingDetails;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class BuyerDAO {
 	
@@ -554,7 +555,6 @@ public class BuyerDAO {
 				buildingDatas.add(buildingData);
 			}
 			session.close();
-			System.out.println("Return");
 			return buildingDatas;
 	  }
 	  public List<FloorData> getBuilderFloorByBuildingId(int buildingId){
@@ -664,6 +664,24 @@ public class BuyerDAO {
 			return flatDatas;
 		}
 	  
+	  
+	  public List<FlatData> getBookedFlats(int building_id) {
+			String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id and builderFlatStatus.id=2";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("building_id", building_id);
+			List<BuilderFlat> result = query.list();
+			List<FlatData> flatDatas = new ArrayList<FlatData>();
+			for(BuilderFlat builderFlat : result){
+				FlatData flatData = new FlatData();
+				flatData.setId(builderFlat.getId());
+				flatData.setName(builderFlat.getFlatNo());
+				flatDatas.add(flatData);
+			}
+			session.close();
+			return flatDatas;
+		}
 		public List<BuildingData> getBuildingsByProjectId(int project_id) {
 			String hql = "from BuilderBuilding where builderProject.id = :project_id";
 			HibernateUtil hibernateUtil = new HibernateUtil();
@@ -681,4 +699,5 @@ public class BuyerDAO {
 			session.close();
 			return buildingDataList;
 		}
+		
 }

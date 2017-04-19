@@ -21,10 +21,15 @@ import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.AgreementDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
+import org.bluepigeon.admin.dao.DemandLettersDAO;
 import org.bluepigeon.admin.dao.PossessionDAO;
+import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.data.BuildingData;
+import org.bluepigeon.admin.data.BuildingPaymentList;
 import org.bluepigeon.admin.data.BuyerList;
+import org.bluepigeon.admin.data.BuyerPaymentList;
 import org.bluepigeon.admin.data.FlatData;
+import org.bluepigeon.admin.data.FlatPaymentList;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
@@ -36,6 +41,8 @@ import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.BuildingImageGallery;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.BuyerDocuments;
+import org.bluepigeon.admin.model.DemandLetters;
+import org.bluepigeon.admin.model.DemandLettersInfo;
 import org.bluepigeon.admin.model.Possession;
 import org.bluepigeon.admin.model.PossessionInfo;
 import org.bluepigeon.admin.service.ImageUploader;
@@ -297,6 +304,7 @@ public class BuyerController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updateAgeement(
+			@FormDataParam("agreement_id") int id,
 			@FormDataParam("project_id") int projectId,
 			@FormDataParam("building_id") int buildingId,
 			//@FormParam("floor_id") int floorId,
@@ -307,7 +315,7 @@ public class BuyerController {
 			@FormDataParam("remind") String remind,
 			@FormDataParam("content") String content,
 			@FormDataParam("last_date") String last_date,
-			@FormDataParam("agreement_document[]")List<FormDataBodyPart> agreementDocument
+			@FormDataParam("agreement_doc[]")List<FormDataBodyPart> agreementDocument
 			){
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
 		Date lastDate = null;
@@ -317,6 +325,7 @@ public class BuyerController {
 			e.printStackTrace();
 		}
 		Agreement agreement = new Agreement();
+		agreement.setId(id);
 		agreement.setLastDate(lastDate);
 		agreement.setRemind(remind);
 		agreement.setContent(content);
@@ -343,7 +352,7 @@ public class BuyerController {
 		agreement.setName(name);
 		agreement.setContact(contact);
 		agreement.setEmail(email);
-		ResponseMessage msg = new AgreementDAO().saveAgreement(agreement);
+		ResponseMessage msg = new AgreementDAO().updateAgreement(agreement);
 		if(msg.getId() > 0) {
 			agreement.setId(msg.getId());
 		//add gallery images
@@ -368,14 +377,24 @@ public class BuyerController {
 					}
 				}
 				if(buildingImageGalleries.size() > 0) {
-					new AgreementDAO().saveAgreementDocuments(buildingImageGalleries);
+					new AgreementDAO().updateAgreementDocuments(buildingImageGalleries);
 				}
 			}
 		} catch(Exception e) {
 			msg.setStatus(0);
-			msg.setMessage("Unable to save image");
+			msg.setMessage("Unable to save Agreement Documents");
 			}
 		}
+		return msg;
+	}
+	
+	@GET
+	@Path("/agreement/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteFloorPlan(@PathParam("id") int agreement_id) {
+		ResponseMessage msg = new ResponseMessage();
+		AgreementDAO agreementDAO = new AgreementDAO();
+		msg = agreementDAO.deleteAgreementDoc(agreement_id);
 		return msg;
 	}
 	
@@ -428,7 +447,7 @@ public class BuyerController {
 		possession.setContact(contact);
 		possession.setEmail(email);
 		
-		return new PossessionDAO().saveAgreement(possession);
+		return new PossessionDAO().savePossession(possession);
 	}
 	
 	@POST
@@ -436,6 +455,7 @@ public class BuyerController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updatePossession(
+			@FormDataParam("possession_id") int id,
 			@FormDataParam("project_id") int projectId,
 			@FormDataParam("building_id") int buildingId,
 			//@FormParam("floor_id") int floorId,
@@ -446,7 +466,7 @@ public class BuyerController {
 			@FormDataParam("remind") String remind,
 			@FormDataParam("content") String content,
 			@FormDataParam("last_date") String last_date,
-			@FormDataParam("possession_document[]")List<FormDataBodyPart> possessionDocument
+			@FormDataParam("possession_doc[]")List<FormDataBodyPart> agreementDocument
 			){
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
 		Date lastDate = null;
@@ -456,6 +476,7 @@ public class BuyerController {
 			e.printStackTrace();
 		}
 		Possession possession = new Possession();
+		possession.setId(id);
 		possession.setLastDate(lastDate);
 		possession.setRemind(remind);
 		possession.setContent(content);
@@ -482,40 +503,179 @@ public class BuyerController {
 		possession.setName(name);
 		possession.setContact(contact);
 		possession.setEmail(email);
-		ResponseMessage msg = new PossessionDAO().saveAgreement(possession);
+		ResponseMessage msg = new PossessionDAO().updatePossession(possession);
 		if(msg.getId() > 0) {
 			possession.setId(msg.getId());
 		//add gallery images
 		try {	
 			List<PossessionInfo> buildingImageGalleries = new ArrayList<PossessionInfo>();
 			//for multiple inserting images.
-			if (possessionDocument.size() > 0) {
-				for(int i=0 ;i < possessionDocument.size();i++)
+			if (agreementDocument.size() > 0) {
+				for(int i=0 ;i < agreementDocument.size();i++)
 				{
-					if(possessionDocument.get(i).getFormDataContentDisposition().getFileName() != null && !possessionDocument.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+					if(agreementDocument.get(i).getFormDataContentDisposition().getFileName() != null && !agreementDocument.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
 						PossessionInfo buildingImageGallery = new PossessionInfo();
-						String gallery_name = possessionDocument.get(i).getFormDataContentDisposition().getFileName();
+						String gallery_name = agreementDocument.get(i).getFormDataContentDisposition().getFileName();
 						long millis = System.currentTimeMillis() % 1000;
 						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
 						gallery_name = "images/project/building/images/"+gallery_name;
 						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-						//System.out.println("for loop image path: "+uploadGalleryLocation);
-						this.imageUploader.writeToFile(possessionDocument.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						System.out.println("for loop image path: "+uploadGalleryLocation);
+						this.imageUploader.writeToFile(agreementDocument.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
 						buildingImageGallery.setDocUrl(gallery_name);
 						buildingImageGallery.setPossession(possession);
 						buildingImageGalleries.add(buildingImageGallery);
 					}
 				}
 				if(buildingImageGalleries.size() > 0) {
-					new PossessionDAO().saveAgreementDocuments(buildingImageGalleries);
+					new PossessionDAO().updateAgreementDocuments(buildingImageGalleries);
 				}
 			}
 		} catch(Exception e) {
 			msg.setStatus(0);
-			msg.setMessage("Unable to save image");
+			msg.setMessage("Unable to update Possession Documents");
 			}
 		}
 		return msg;
+	}
+	
+	@GET
+	@Path("/possession/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deletePossessionPlan(@PathParam("id") int possession_id) {
+		ResponseMessage msg = new ResponseMessage();
+		PossessionDAO agreementDAO = new PossessionDAO();
+		msg = agreementDAO.deletePossessionDoc(possession_id);
+		return msg;
+	}
+	
+	@GET
+	@Path("/demandletter/building/{project_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public  List<BuildingPaymentList> getDemandLetterByProjectId(@PathParam("project_id") int projectId){
+		DemandLettersDAO demandLettersDAO = new DemandLettersDAO();
+		return demandLettersDAO.getPaymentByProejctId(projectId);
+	}
+	
+	@GET
+	@Path("/demandletter/flat/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public  List<FlatPaymentList> getDemandLetterByBuildingId(@QueryParam("building_id") int buildingId){
+		DemandLettersDAO demandLettersDAO = new DemandLettersDAO();
+		return demandLettersDAO.getPaymentByBuildingId(buildingId);
+	}
+	
+	@GET
+	@Path("/demandletter/flat/buyer")
+	@Produces(MediaType.APPLICATION_JSON)
+	public  List<BuyerPaymentList> getDemandLetterByFlatId(@QueryParam("flat_id") int flatId){
+		DemandLettersDAO demandLettersDAO = new DemandLettersDAO();
+		return demandLettersDAO.getBuyerPaymentByFlatId(flatId);
+	}
+	
+
+	@POST
+	@Path("/demandletter/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateDemandletter(
+			@FormDataParam("demandletter_id") int id,
+			@FormDataParam("project_id") int projectId,
+			@FormDataParam("building_id") int buildingId,
+			//@FormParam("floor_id") int floorId,
+			@FormDataParam("milestone_id") int milestone_id,
+			@FormDataParam("flat_id") int flatId,
+			@FormDataParam("name") String name,
+			@FormDataParam("contact") String contact,
+			@FormDataParam("email") String email,
+			@FormDataParam("remind") String remind,
+			@FormDataParam("content") String content,
+			@FormDataParam("last_date") String last_date,
+			@FormDataParam("demandletter_doc[]")List<FormDataBodyPart> demandletterDocument
+			){
+		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+		Date lastDate = null;
+		try {
+			lastDate = format.parse(last_date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		DemandLetters demandLetters = new DemandLetters();
+		demandLetters.setId(id);
+		demandLetters.setLastDate(lastDate);
+		demandLetters.setRemind(remind);
+		demandLetters.setContent(content);
+		if(projectId > 0){
+			BuilderProject builderProject = new BuilderProject();
+			builderProject.setId(projectId);
+			demandLetters.setBuilderProject(builderProject);
+		}
+		if(buildingId > 0){
+			BuilderBuilding builderBuilding = new BuilderBuilding();
+			builderBuilding.setId(buildingId);
+			demandLetters.setBuilderBuilding(builderBuilding);
+		}
+		else{
+			demandLetters.setBuilderBuilding(null);
+		}
+//		if(floorId > 0){
+//			BuilderFloor builderFloor = new BuilderFloor();
+//			builderFloor.setId(floorId);
+//			agreement.setBuilderFloor(builderFloor);
+//		}
+		if(flatId > 0){
+			BuilderFlat builderFlat = new BuilderFlat();
+			builderFlat.setId(flatId);
+			demandLetters.setBuilderFlat(builderFlat);
+		}
+		else{
+			demandLetters.setBuilderFlat(null);
+		}
+		demandLetters.setPaymentId(milestone_id);
+		demandLetters.setName(name);
+		demandLetters.setContact(contact);
+		demandLetters.setEmail(email);
+		ResponseMessage msg = new DemandLettersDAO().updateDemandLetters(demandLetters);
+		if(msg.getId() > 0) {
+			demandLetters.setId(msg.getId());
+		//add gallery images
+		try {	
+			List<DemandLettersInfo> buildingImageGalleries = new ArrayList<DemandLettersInfo>();
+			//for multiple inserting images.
+			if (demandletterDocument.size() > 0) {
+				for(int i=0 ;i < demandletterDocument.size();i++)
+				{
+					if(demandletterDocument.get(i).getFormDataContentDisposition().getFileName() != null && !demandletterDocument.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						DemandLettersInfo buildingImageGallery = new DemandLettersInfo();
+						String gallery_name = demandletterDocument.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/building/images/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						//System.out.println("for loop image path: "+uploadGalleryLocation);
+						this.imageUploader.writeToFile(demandletterDocument.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						buildingImageGallery.setDocUrl(gallery_name);
+						buildingImageGallery.setDemandLetters(demandLetters);
+						buildingImageGalleries.add(buildingImageGallery);
+					}
+				}
+				if(buildingImageGalleries.size() > 0) {
+					new DemandLettersDAO().updateDemandLetterDocuments(buildingImageGalleries);
+				}
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to update Demand Letter Documents");
+			}
+		}
+		return msg;
+	}
+	
+	@GET
+	@Path("/demandletter/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteDemandletterPlan(@PathParam("id") int demandletter_id) {
+		return new DemandLettersDAO().deleteDemandLettersDoc(demandletter_id);
 	}
 }
 	
