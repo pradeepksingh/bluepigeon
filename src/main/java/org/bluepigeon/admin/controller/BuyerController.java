@@ -154,24 +154,28 @@ public class BuyerController {
 //						msg.setMessage("Unable to save image");
 //					}
 				
-					msg = buyerDAO.saveBuyer(buyerList);
-					if(msg.getId()>0){
-						buyer.setId(msg.getId());
+				//	msg = buyerDAO.saveBuyer(buyerList);
+					
+					//if(msg.getId()>0){
+						//Buyer msgBuyer = (Buyer)msg.getData();
+						//System.out.println("Buyer data :: "+msgBuyer.getId());
+					//	buyer.setId(msg.getId());
 						if(douments.size()>0){
 							List<BuyerDocuments> buyerDocumentsList = new ArrayList<BuyerDocuments>();
 							for(FormDataBodyPart buyerDocuments : douments ){
 								if(buyerDocuments.getValueAs(Integer.class) != null && buyerDocuments.getValueAs(Integer.class) != 0) {
-									BuyerDocuments buyerDocuments2 = new BuyerDocuments();
-									buyerDocuments2.setBuyer(buyer);
-									buyerDocuments2.setDocuments(buyerDocuments.getValue());
-									buyerDocumentsList.add(buyerDocuments2);
+								//	BuyerDocuments buyerDocuments2 = new BuyerDocuments();
+								//	buyerDocuments2.setBuyer(buyer);
+								//	buyerDocuments2.setDocuments(buyerDocuments.getValue());
+									System.out.println("<script>console.log(Douments :: "+buyerDocuments.getValueAs(Integer.class)+");<script>");
+								//	buyerDocumentsList.add(buyerDocuments2);
 								}
 							}
 							if(buyerDocumentsList.size()>0){
-								buyerDAO.saveBuyerDocuments(buyerDocumentsList);
+								//buyerDAO.saveBuyerDocuments(buyerDocumentsList);
 							}
 						}
-					}
+					//}
 				
 				//}
 //				if(image.isEmpty()){
@@ -180,7 +184,8 @@ public class BuyerController {
 //				}
 //				msg.setStatus(0);
 //				msg.setMessage("Unable to save image");
-				return msg;
+			//	return msg;
+	return msg;
 	}
 	@GET
 	@Path("/building/list")

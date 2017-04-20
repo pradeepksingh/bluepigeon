@@ -58,6 +58,7 @@ public class BuyerDAO {
 					buyerList.setBuilder(builderProject.getBuilder());
 					newsession.save(buyerList);
 					response.setId(buyerList.getId());
+					response.setData(buyerList);
 					response.setStatus(1);
 					response.setMessage("Buyer Added Successfully");
 					//responseList.add(response);
@@ -331,7 +332,7 @@ public class BuyerDAO {
 			return buyer;
 		}
 	}
-	public BuyerDocuments getBuyerDocumentsByBuyerId(int buyerId){
+	public List<BuyerDocuments> getBuyerDocumentsByBuyerId(int buyerId){
 		String hql = "from BuyerDocuments where buyer.id = :buyer_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -339,7 +340,7 @@ public class BuyerDAO {
 		query.setParameter("buyer_id", buyerId);
 		List<BuyerDocuments> result = query.list();
 		session.close();
-		return result.get(0);
+		return result;
 	}
 	
 	public BuyingDetails getBuyingDetailsByBuyerId(int buyerId){
