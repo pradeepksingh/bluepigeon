@@ -268,6 +268,51 @@ public class DemandLettersDAO {
 		session.close();
 		return result;
 	}
+	/**
+	 * Get Demand Letter Info by project Id
+	 * @author pankaj
+	 * @return demand letter documents as list
+	 */
+	public List<BuilderProjectPaymentInfo> getAllBuilderProjectPaymentInfo(int projectId){
+		String hql = "from BuilderProjectPaymentInfo where builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		List<BuilderProjectPaymentInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	/**
+	 * Get Demand Letter Info by building Id
+	 * @author pankaj
+	 * @return demand letter documents as list
+	 */
+	public List<BuildingPaymentInfo> getBuildingPaymentInfo(int buildingId){
+		String hql = "from BuildingPaymentInfo where builderBuilding.id = :buildingId";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("buildingId", buildingId);
+		List<BuildingPaymentInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	/**
+	 * Get Demand Letter Info by flat id
+	 * @author pankaj
+	 * @return demand letter documents as list
+	 */
+	public List<FlatPaymentSchedule> getFlatPaymentSchedule(int flatId){
+		String hql = "from FlatPaymentSchedule where builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flatId);
+		List<FlatPaymentSchedule> result = query.list();
+		session.close();
+		return result;
+	}
 	public ResponseMessage deleteDemandLettersDoc(int demandLetters_id) {
 		ResponseMessage resp = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
