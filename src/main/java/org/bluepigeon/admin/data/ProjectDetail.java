@@ -10,6 +10,7 @@ import org.bluepigeon.admin.model.BuilderProjectBankInfo;
 import org.bluepigeon.admin.model.BuilderProjectProjectType;
 import org.bluepigeon.admin.model.BuilderProjectPropertyConfigurationInfo;
 import org.bluepigeon.admin.model.BuilderProjectPropertyType;
+import org.bluepigeon.admin.model.ProjectAmenityWeightage;
 
 public class ProjectDetail {
 	private BuilderProject builderProject;
@@ -19,6 +20,7 @@ public class ProjectDetail {
 	private Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos = new HashSet<BuilderProjectAmenityInfo>(0);
 	private Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos = new HashSet<BuilderProjectApprovalInfo>(0);
 	private Set<BuilderProjectBankInfo> builderProjectBankInfos = new HashSet<BuilderProjectBankInfo>(0);
+	private Set<ProjectAmenityWeightage> projectAmenityWeightages = new HashSet<ProjectAmenityWeightage>(0);
 	
 	public BuilderProject getBuilderProject() {
 		return builderProject;
@@ -72,6 +74,15 @@ public class ProjectDetail {
 
 	public void setBuilderProjectBankInfos(Set<BuilderProjectBankInfo> builderProjectBankInfos) {
 		this.builderProjectBankInfos = builderProjectBankInfos;
+	}
+	
+	public Set<ProjectAmenityWeightage> getProjectAmenityWeightages() {
+		return projectAmenityWeightages;
+	}
+
+	public void setProjectAmenityWeightages(
+			Set<ProjectAmenityWeightage> projectAmenityWeightages) {
+		this.projectAmenityWeightages = projectAmenityWeightages;
 	}
 
 }

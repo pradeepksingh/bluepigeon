@@ -33,17 +33,22 @@ import org.bluepigeon.admin.model.BuilderProjectProjectType;
 import org.bluepigeon.admin.model.BuilderProjectPropertyConfigurationInfo;
 import org.bluepigeon.admin.model.BuilderProjectPropertyType;
 import org.bluepigeon.admin.model.BuildingAmenityInfo;
+import org.bluepigeon.admin.model.BuildingAmenityWeightage;
 import org.bluepigeon.admin.model.BuildingImageGallery;
 import org.bluepigeon.admin.model.BuildingOfferInfo;
 import org.bluepigeon.admin.model.BuildingPanoramicImage;
 import org.bluepigeon.admin.model.BuildingPaymentInfo;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
+import org.bluepigeon.admin.model.FlatAmenityWeightage;
 import org.bluepigeon.admin.model.FlatPaymentSchedule;
 import org.bluepigeon.admin.model.FlatTypeImage;
 import org.bluepigeon.admin.model.FloorAmenityInfo;
+import org.bluepigeon.admin.model.FloorAmenityWeightage;
 import org.bluepigeon.admin.model.FloorLayoutImage;
 import org.bluepigeon.admin.model.FloorImageGallery;
 import org.bluepigeon.admin.model.FloorPanoramicImage;
+import org.bluepigeon.admin.model.ProjectAmenityWeightage;
+import org.bluepigeon.admin.model.Tax;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -167,6 +172,15 @@ public class ProjectDAO {
 		newsession6.getTransaction().commit();
 		newsession6.close();
 		
+		String delete_weightage = "DELETE from ProjectAmenityWeightage where builderProject.id = :project_id";
+		Session newsession7 = hibernateUtil.openSession();
+		newsession7.beginTransaction();
+		Query smdelete7 = newsession7.createQuery(delete_weightage);
+		smdelete7.setParameter("project_id", builderProject.getId());
+		smdelete7.executeUpdate();
+		newsession7.getTransaction().commit();
+		newsession7.close();
+		
 		/***** Add New Enteries *******/
 		
 		Set<BuilderProjectProjectType> builderProjectProjectTypes = projectDetail.getBuilderProjectProjectTypes();
@@ -241,6 +255,18 @@ public class ProjectDAO {
 		session6.getTransaction().commit();
 		session6.close();
 		
+		Set<ProjectAmenityWeightage> ProjectAmenityWeightages = projectDetail.getProjectAmenityWeightages();
+		Session session7 = hibernateUtil.openSession();
+		session7.beginTransaction();
+		Iterator<ProjectAmenityWeightage> sIterator7 = ProjectAmenityWeightages.iterator();
+		while(sIterator7.hasNext())
+		{
+			ProjectAmenityWeightage projectAmenityWeightage = sIterator7.next();
+			session7.save(projectAmenityWeightage);
+		}
+		session7.getTransaction().commit();
+		session7.close();
+		
 		/* updateProject */
 		String hql = "from BuilderProject where id = :project_id";
 		Session session = hibernateUtil.openSession();
@@ -252,11 +278,11 @@ public class ProjectDAO {
 		newBuilderProject.setProjectArea(builderProject.getProjectArea());
 		newBuilderProject.setAreaUnit(builderProject.getAreaUnit());
 		newBuilderProject.setLaunchDate(builderProject.getLaunchDate());
-		Session session7 = hibernateUtil.openSession();
-		session7.beginTransaction();
-		session7.update(newBuilderProject);
-		session7.getTransaction().commit();
-		session7.close();
+		Session session8 = hibernateUtil.openSession();
+		session8.beginTransaction();
+		session8.update(newBuilderProject);
+		session8.getTransaction().commit();
+		session8.close();
 		
 		response.setId(builderProject.getId());
 		response.setStatus(1);
@@ -385,6 +411,17 @@ public class ProjectDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<Tax> getProjectTaxByPincode(String pincode) {
+		String hql = "from Tax where pincode = :pincode";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("pincode", pincode);
+		List<Tax> result = query.list();
+		session.close();
+		return result;
+	}
 
 	public List<ProjectList> getBuilderProjects(int builder_id, int company_id, String name, int country_id, int state_id, int city_id) {
 		String hql = "from BuilderProject where ";
@@ -480,6 +517,17 @@ public class ProjectDAO {
 		return result.get(0);
 	}
 	
+	public List<ProjectAmenityWeightage> getProjectAmenityWeightageByProjectId(int project_id) {
+		String hql = "from ProjectAmenityWeightage where builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", project_id);
+		List<ProjectAmenityWeightage> result = query.list();
+		session.close();
+		return result;
+	}
+	
 	/* ********************* Project Buildings ****************** */
 	
 	public List<BuilderBuilding> getBuilderProjectBuildings(int project_id) {
@@ -569,6 +617,17 @@ public class ProjectDAO {
 		return result;
 	}
 	
+	public List<BuildingAmenityWeightage> getBuilderBuildingAmenityWeightageById(int building_id) {
+		String hql = "from BuildingAmenityWeightage where builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuildingAmenityWeightage> result = query.list();
+		session.close();
+		return result;
+	}
+	
 	public ResponseMessage addBuilding(BuilderBuilding builderBuilding) {
 		ResponseMessage resp = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -648,6 +707,19 @@ public class ProjectDAO {
 		return resp;
 	}
 	
+	public ResponseMessage addBuildingAmenityWeightage(List<BuildingAmenityWeightage> buildingAmenityWeightages) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(BuildingAmenityWeightage buildingAmenityWeightage :buildingAmenityWeightages) {
+			newsession.save(buildingAmenityWeightage);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
 	public ResponseMessage updateBuilding(BuilderBuilding builderBuilding) {
 		ResponseMessage resp = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -664,6 +736,18 @@ public class ProjectDAO {
 	
 	public void deleteBuildingAmenityInfo(int building_id) {
 		String hql = "delete from BuildingAmenityInfo where builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public void deleteBuildingAmenityWeightage(int building_id) {
+		String hql = "delete from BuildingAmenityWeightage where builderBuilding.id = :building_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
@@ -867,6 +951,19 @@ public class ProjectDAO {
 		return resp;
 	}
 	
+	public ResponseMessage addFloorAmenityWeightage(List<FloorAmenityWeightage> floorAmenityWeightages) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FloorAmenityWeightage floorAmenityWeightage :floorAmenityWeightages) {
+			newsession.save(floorAmenityWeightage);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
 	public List<BuilderFloor> getBuildingFloors(int building_id) {
 		String hql = "from BuilderFloor where builderBuilding.id = :building_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -910,6 +1007,17 @@ public class ProjectDAO {
 		return result;
 	}
 	
+	public List<FloorAmenityWeightage> getFloorAmenityWeightages(int floor_id) {
+		String hql = "from FloorAmenityWeightage where builderFloor.id = :floor_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floor_id);
+		List<FloorAmenityWeightage> result = query.list();
+		session.close();
+		return result;
+	}
+	
 	public List<FloorLayoutImage> getBuildingFloorPlanInfo(int floor_id) {
 		String hql = "from FloorLayoutImage where builderFloor.id = :floor_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -923,6 +1031,18 @@ public class ProjectDAO {
 	
 	public void deleteFloorAmenityInfo(int floor_id) {
 		String hql = "delete from FloorAmenityInfo where builderFloor.id = :floor_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floor_id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public void deleteFloorAmenityWeightage(int floor_id) {
+		String hql = "delete from FloorAmenityWeightage where builderFloor.id = :floor_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
@@ -1310,6 +1430,17 @@ public class ProjectDAO {
 		return result;
 	}
 	
+	public List<FlatAmenityWeightage> getFlatAmenityWeightageByFloorId(int flat_id) {
+		String hql = "from FlatAmenityWeightage where builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flat_id);
+		List<FlatAmenityWeightage> result = query.list();
+		session.close();
+		return result;
+	}
+	
 	public List<FlatPaymentSchedule> getBuilderFlatPaymentSchedules(int flat_id) {
 		String hql = "from FlatPaymentSchedule where builderFlat.id = :flat_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -1362,6 +1493,19 @@ public class ProjectDAO {
 		return resp;
 	}
 	
+	public ResponseMessage addFlatAmenityWeightage(List<FlatAmenityWeightage> flatAmenityWeightages) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FlatAmenityWeightage flatAmenityWeightage :flatAmenityWeightages) {
+			newsession.save(flatAmenityWeightage);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
 	public ResponseMessage addFlatPaymentInfo(List<FlatPaymentSchedule> flatPaymentSchedules) {
 		ResponseMessage resp = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -1402,6 +1546,18 @@ public class ProjectDAO {
 		resp.setMessage("Flat Amenity deleted successfully.");
 		resp.setStatus(1);
 		return resp;
+	}
+	
+	public void deleteFlatAmenityWeightage(int flat_id) {
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		String hql = "delete from FlatAmenityWeightage where builderFlat.id = :flat_id";
+		Query query = session.createQuery(hql);
+		query.setInteger("flat_id", flat_id);
+		query.executeUpdate();
+		transaction.commit();
+		session.close();
 	}
 	
 	public ResponseMessage deleteFlatPaymentInfo(int id) {

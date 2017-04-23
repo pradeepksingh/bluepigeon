@@ -11,8 +11,8 @@
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="hibernate.connection.username">root</property>
 <!-- 		<property name="hibernate.connection.password">olocafe@2017</property> -->
-<!--  		<property name="hibernate.connection.password">Freight@123#</property>  -->
-		<property name="hibernate.connection.password">root</property>  
+ 		<property name="hibernate.connection.password">Freight@123#</property> 
+<!-- 		<property name="hibernate.connection.password">root</property>   -->
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/blue_pigeon</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="hibernate.cache.use_second_level_cache">false</property>
@@ -109,6 +109,21 @@
         <mapping class="org.bluepigeon.admin.model.BuilderFloorAmenityStages" />
         <mapping class="org.bluepigeon.admin.model.Campaign" />
         <mapping class="org.bluepigeon.admin.model.CampaignBuyer" />
+        <mapping class="org.bluepigeon.admin.model.BuildingPanoramicImage" />
+        <mapping class="org.bluepigeon.admin.model.BuildingImageGallery" />
+        <mapping class="org.bluepigeon.admin.model.BuildingAmenityInfo" />
+        <mapping class="org.bluepigeon.admin.model.FloorLayoutImage" />
+        <mapping class="org.bluepigeon.admin.model.FloorAmenityInfo" />
+        <mapping class="org.bluepigeon.admin.model.FlatTypeImage" />
+        <mapping class="org.bluepigeon.admin.model.FlatAmenityInfo" />
+        <mapping class="org.bluepigeon.admin.model.FlatPaymentSchedule" />
+        <mapping class="org.bluepigeon.admin.model.BuilderFloorStatus" />
+        <mapping class="org.bluepigeon.admin.model.BuilderBuildingFlatType" />
+        <mapping class="org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom" />
+        <mapping class="org.bluepigeon.admin.model.ProjectAmenityWeightage" />
+        <mapping class="org.bluepigeon.admin.model.BuildingAmenityWeightage" />
+        <mapping class="org.bluepigeon.admin.model.FloorAmenityWeightage" />
+        <mapping class="org.bluepigeon.admin.model.FlatAmenityWeightage" />
 	</session-factory>
 
 </hibernate-configuration>
