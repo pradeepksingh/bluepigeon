@@ -3,88 +3,91 @@ package org.bluepigeon.admin.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bluepigeon.admin.data.AgreementList;
+import org.bluepigeon.admin.data.PossessionList;
 import org.bluepigeon.admin.exception.ResponseMessage;
-import org.bluepigeon.admin.model.Agreement;
-import org.bluepigeon.admin.model.AgreementInfo;
+import org.bluepigeon.admin.model.Possession;
+import org.bluepigeon.admin.model.PossessionInfo;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderFlat;
-import org.bluepigeon.admin.model.BuilderFloor;
 import org.bluepigeon.admin.model.BuilderProject;
-import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-public class AgreementDAO {
+public class PossessionDAO {
 	/**
 	 * @author pankaj
-	 * @param agreement
+	 * @param possession
 	 * @return response
 	 */
-	public ResponseMessage saveAgreement(Agreement agreement){
+	public ResponseMessage savePossession(Possession possession){
 		ResponseMessage responseMessage = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
-		newsession.save(agreement);
+		newsession.save(possession);
 		newsession.getTransaction().commit();
 		newsession.close();
-		responseMessage.setId(agreement.getId());
+		responseMessage.setId(possession.getId());
 		responseMessage.setStatus(1);
-		responseMessage.setMessage("Agreement Added Successfully.");
+		responseMessage.setMessage("Possession Added Successfully.");
 		return responseMessage;
 	}
 	/**
 	 * @author pankaj
-	 * @param agreement
+	 * @param possession
 	 * @return response
 	 */
-	public ResponseMessage updateAgreement(Agreement agreement){
+	public ResponseMessage updatePossession(Possession possession){
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
-		newsession.update(agreement);
+		newsession.update(possession);
 		newsession.getTransaction().commit();
 		newsession.close();
-		response.setId(agreement.getId());
+		response.setId(possession.getId());
 		response.setStatus(1);
-		response.setMessage("Agreement updated Successfully.");
+		response.setMessage("Possession updated Successfully.");
 		return response;
 	}
 	/**
 	 * @author pankaj
 	 * @param id
-	 * @return agreement's object
+	 * @return possession's object
 	 */
-	public Agreement getAgreementById(int id){
-		String hql = "from Agreement where id = :id";
+	public Possession getPossessionById(int id){
+		String hql = "from Possession where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
-		List<Agreement> result = query.list();
+		List<Possession> result = query.list();
 		session.close();
 		return result.get(0);
 	}
-	
-	public List<AgreementInfo> getAgreementInfoByAgreementId(int id){
-		String hql = "from AgreementInfo where agreement.id = :id";
+	/**
+	 * Get Possession info by Possession Id
+	 * @author pankaj
+	 * @param id
+	 * @return list of possession info's object
+	 */
+	public List<PossessionInfo> getPossessionInfoByPossessionId(int id){
+		String hql = "from PossessionInfo where possession.id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
-		List<AgreementInfo> result = query.list();
+		List<PossessionInfo> result = query.list();
 		return result;
 	}
 	/**
 	 * @author pankaj
-	 * @return list of agreement
+	 * @return list of possession
 	 */
-	public List<AgreementList> getAllAgreement(){
-		String hql = "from Agreement";
+	public List<PossessionList> getAllAgreement(){
+		String hql = "from Possession";
 		String project_hql= "from BuilderProject where id = :id";
 		String building_hql = "from BuilderBuilding where id = :id";
 		String floor_hql = "from BuilderFloor where id = :id";
@@ -97,23 +100,23 @@ public class AgreementDAO {
 		Session flatSession = hibernateUtil.openSession();
 		
 		Query query = session.createQuery(hql);
-		List<Agreement> result = query.list();
-		List<AgreementList> agreement_list = new ArrayList<AgreementList>();
-		for(Agreement agreement : result){
-			AgreementList agreementList = new AgreementList();
-			agreementList.setBuyerName(agreement.getName());
-			agreementList.setId(agreement.getId());
-			if(agreement.getBuilderProject() != null){
+		List<Possession> result = query.list();
+		List<PossessionList> possession_list = new ArrayList<PossessionList>();
+		for(Possession possession : result){
+			PossessionList possessionList = new PossessionList();
+			possessionList.setBuyerName(possession.getName());
+			possessionList.setId(possession.getId());
+			if(possession.getBuilderProject() != null){
 				Query projectQuery = projectSession.createQuery(project_hql);
-				projectQuery.setParameter("id", agreement.getBuilderProject().getId());
+				projectQuery.setParameter("id", possession.getBuilderProject().getId());
 				BuilderProject project = (BuilderProject)projectQuery.list().get(0);
-				agreementList.setProjectName(project.getName());
+				possessionList.setProjectName(project.getName());
 			}
-			if(agreement.getBuilderBuilding() != null){
+			if(possession.getBuilderBuilding() != null){
 				Query buildingQuery = buildingSession.createQuery(building_hql);
-				buildingQuery.setParameter("id", agreement.getBuilderBuilding().getId());
+				buildingQuery.setParameter("id", possession.getBuilderBuilding().getId());
 				BuilderBuilding builderBuilding = (BuilderBuilding)buildingQuery.list().get(0);
-				agreementList.setBuildingName(builderBuilding.getName());
+				possessionList.setBuildingName(builderBuilding.getName());
 			}
 //			if(agreement.getBuilderFloor() != null){
 //				Query floorQuery = floorSession.createQuery(floor_hql);
@@ -121,102 +124,102 @@ public class AgreementDAO {
 //				BuilderFloor builderFloor = (BuilderFloor)floorQuery.list().get(0);
 //				agreementList.setFloorNo(builderFloor.getName());
 //			}
-			if(agreement.getBuilderFlat() != null){
+			if(possession.getBuilderFlat() != null){
 				Query flatQuery = flatSession.createQuery(flat_hql);
-				flatQuery.setParameter("id", agreement.getBuilderFlat().getId());
+				flatQuery.setParameter("id", possession.getBuilderFlat().getId());
 				BuilderFlat builderFlat = (BuilderFlat)flatQuery.list().get(0);
-				agreementList.setFlatNo(builderFlat.getFlatNo());
+				possessionList.setFlatNo(builderFlat.getFlatNo());
 			}
-			agreement_list.add(agreementList);
+			possession_list.add(possessionList);
 		}
 		session.close();
 		projectSession.close();
 		buildingSession.close();
 		floorSession.close();
 		flatSession.close();
-		return agreement_list;
+		return possession_list;
 	}
 	/**
-	 * Save agreement document
+	 * Save possession document
 	 * @author pankaj
-	 * @param agreementInfo
-	 * @return
+	 * @param possessionInfo
+	 * @return message
 	 */
-	public ResponseMessage saveAgreementDocuments(List<AgreementInfo> agreementInfo){
+	public ResponseMessage savePossessionDocuments(List<PossessionInfo> possessionInfo){
 		ResponseMessage responseMessage = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
-		for(int i=0;i<agreementInfo.size();i++)
-			newsession.save(agreementInfo.get(i));
+		for(int i=0;i<possessionInfo.size();i++)
+			newsession.save(possessionInfo.get(i));
 		newsession.getTransaction().commit();
 		newsession.close();
-		responseMessage.setId(agreementInfo.get(0).getAgreement().getId());
+		responseMessage.setId(possessionInfo.get(0).getPossession().getId());
 		responseMessage.setStatus(1);
-		responseMessage.setMessage("Agreement Added Successfully.");
+		responseMessage.setMessage("Possession Added Successfully.");
 		return responseMessage;
 	}
 	/**
-	 * Update Agreement documents
+	 * Update Possession documents
 	 * @author pankaj
-	 * @param agreementInfo
+	 * @param possessionInfo
 	 * @return message
 	 */
-	public ResponseMessage updateAgreementDocuments(List<AgreementInfo> agreementInfo){
+	public ResponseMessage updateAgreementDocuments(List<PossessionInfo> possessionInfo){
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		ResponseMessage responseMessage = new ResponseMessage();
-		/******************** Delete old Agreement documents *****************************************/
-		String delete_buyer_documents = "DELETE from  AgreementInfo where agreement.id = :agreement_id";
+		/******************** Delete old Possession documents *****************************************/
+		String delete_buyer_documents = "DELETE from  PossessionInfo where possession.id = :possession_id";
 		Session newsession1 = hibernateUtil.openSession();
 		newsession1.beginTransaction();
 		Query smdelete = newsession1.createQuery(delete_buyer_documents);
-		smdelete.setParameter("agreement_id", agreementInfo.get(0).getAgreement().getId());
+		smdelete.setParameter("possession_id", possessionInfo.get(0).getPossession().getId());
 		smdelete.executeUpdate();
 		newsession1.getTransaction().commit();
 		newsession1.close();
 		
-		/************************ Save new Agreement Documents ****************************************/
+		/************************ Save new Possession Documents ****************************************/
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
-		if(agreementInfo.size()>0){
-			for(int i=0;i<agreementInfo.size();i++){
-				newsession.save(agreementInfo.get(i));
+		if(possessionInfo.size()>0){
+			for(int i=0;i<possessionInfo.size();i++){
+				newsession.save(possessionInfo.get(i));
 			}
 			newsession.getTransaction().commit();
 			newsession.close();
 			responseMessage.setStatus(1);
-			responseMessage.setMessage("Agreement documents Updated Successfully");
+			responseMessage.setMessage("Possession documents Updated Successfully");
 		}
 		return responseMessage;
 	}
 	/**
-	 * Get Agreement Info
+	 * Get Possession Info
 	 * @author pankaj
 	 * @return list
 	 */
-	public List<AgreementInfo> getAllAgreements(){
-		String hql = "from AgreementInfo";
+	public List<PossessionInfo> getAllPossessions(){
+		String hql = "from Possession";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		List<AgreementInfo> result = query.list();
+		List<PossessionInfo> result = query.list();
 		session.close();
 		return result;
 	}
 	
-	public ResponseMessage deleteAgreementDoc(int agreement_id) {
+	public ResponseMessage deletePossessionDoc(int possession_id) {
 		ResponseMessage resp = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Transaction transaction = session.beginTransaction();
-		String hql = "delete from AgreementInfo where agreement.id = :agreement_id";
+		String hql = "delete from PossessionInfo where possession.id = :possession_id";
 		Query query = session.createQuery(hql);
-		query.setInteger("agreement_id", agreement_id);
+		query.setInteger("possession_id", possession_id);
 		query.executeUpdate();
 		//query.executeUpdate();
 		transaction.commit();
 		session.close();
-		resp.setMessage("Agreement Doucment deleted successfully.");
+		resp.setMessage("Possession Doucment deleted successfully.");
 		resp.setStatus(1);
 		return resp;
 	}

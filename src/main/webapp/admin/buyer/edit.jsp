@@ -66,7 +66,7 @@
  		builderFlats = new ProjectDAO().getBuilderProjectBuildingFlats(builderBuildings.get(0).getId());
  	}
  	Buyer buyer =  new BuyerDAO().getBuyerById(buyer_id);
- 	BuyerDocuments buyerDocuments = new BuyerDAO().getBuyerDocumentsByBuyerId(buyer_id);
+ 	List<BuyerDocuments> buyerDocuments = new BuyerDAO().getBuyerDocumentsByBuyerId(buyer_id);
  	BuyingDetails buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyer_id);
  	List<BuyerOffer> buyerOffersList = new BuyerDAO().getBuyerOffersByBuyerId(buyer_id);
  	List<BuyerPayment> buyerPaymentsList = new BuyerDAO().getBuyerPaymentsByBuyerId(buyer_id);
@@ -118,212 +118,205 @@
 			  	<div id="basic" class="tab-pane fade in active">
 			  		<form id="basicfrm" name="basicfrm" method="post" enctype="multipart/form-data" action="">
 			  			<div id="basicresponse"></div>
-						<div class="row">
+						<div class="row" id="buyer-1">
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
-										<input type="hidden" name="id" id="id" value="<% out.print(buyer_id);%>"/>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-name">
-													<label class="control-label col-sm-4">Buyer Name <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="name" value="<%out.print(buyer.getName()); %>" name="name" />
+										<div id="buyer_area">
+										<input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
+										<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(buyer_id);%>"/>
+											<div class="row" id="buyer-1">
+												<div class="row">
+													<div class="col-lg-5 margin-bottom-5">
+														<div class="form-group" id="error-buyer_name">
+														<label class="control-label col-sm-4">Buyer Name <span class="text-danger">*</span></label>
+															<div class="col-sm-8">
+																<input type="text" class="form-control" id="buyer_name" name="buyer_name[]" value=""/>
+															</div>
+															<div class="messageContainer"></div>
+														</div>
 													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-contact">
-													<label class="control-label col-sm-4">Contact <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="contact" value="<%out.print(buyer.getContact()); %>" name="contact" />
+													<div class="col-lg-5 margin-bottom-6">
+														<div class="form-group" id="error-contact">
+															<label class="control-label col-sm-4">Contact <span class="text-danger">*</span></label>
+															<div class="col-sm-8">
+																<input type="text" class="form-control" id="contact" name="contact[]" value=""/>
+															</div>
+															<div class="messageContainer"></div>
+														</div>
 													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-email">
-													<label class="control-label col-sm-4">Email <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="email" value="<%out.print(buyer.getEmail()); %>" name="email" />
+											    </div>
+											    <div class="row">
+													<div class="col-lg-5 margin-bottom-6">
+														<div class="form-group" id="error-email">
+															<label class="control-label col-sm-4">Email <span class="text-danger">*</span></label>
+															<div class="col-sm-8">
+																<input type="text" class="form-control" id="email" name="email[]" value=""/>
+															</div>
+															<div class="messageContainer"></div><br/>
+														</div>
 													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-pan">
-													<label class="control-label col-sm-4">PAN Card </label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="pan" value="<%out.print(buyer.getPan()); %>" name="pan" />
+													<div class="col-lg-5 margin-bottom-6">
+														<div class="form-group" id="error-email">
+															<label class="control-label col-sm-4">PAN <span class="text-danger">*</span></label>
+															<div class="col-sm-8">
+																<input type="text" class="form-control" id="pan" name="pan[]" value=""/>
+															</div>
+															<div class="messageContainer"></div>
+														</div>
 													</div>
-													<div class="messageContainer"></div>
 												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-address">
-												<label class="control-label col-sm-4">Prem. Address<span class='text-danger'>*</span></label>
-												<div class="col-sm-8">
-													<textarea rows="" cols="" class="form-control" id="address" name="address"><%out.print(buyer.getAddress()); %></textarea>
-												</div>
-												<div class="messageContainer col-sm-4"></div>
-											</div>
-											</div>
-											<div class="col-lg-4 margin-bottom-5" id="b_image<% out.print(buyer.getId()); %>">
-												<div class="form-group" id="error-landmark">
-													<div class="col-sm-12">
-														<img alt="Building Images" src="${baseUrl}/<% out.print(buyer.getPhoto()); %>" width="200px;">
+												<div class="row">
+													<div class="col-lg-5 margin-bottom-5">
+														<div class="form-group" id="error-applicable_on">
+														<label class="control-label col-sm-4"> Prem. Address <span class="text-danger">*</span></label>
+														<div class="col-sm-8">
+														<textarea class="form-control" id="address" name="address[]" ></textarea>
+														</div>
+														<div class="messageContainer"></div>
+														</div>
 													</div>
-													<label class="col-sm-12 text-left"><a href="javascript:deleteImage(<% out.print(buyer.getId()); %>);" class="btn btn-danger btn-sm">x Delete Plan</a> </label>
-													<div class="messageContainer col-sm-offset-4"></div>
+													<div class="col-lg-5 margin-bottom-6">
+														<div class="form-group" id="error-state_id">
+															<label class="control-label col-sm-4">Owner <span class='text-danger'>*</span></label>
+															<div class="col-sm-8">
+																<select name="is_primary[]" id="is_primary" class="form-control">
+												                    <option value="">Select Owner</option>
+												                     <option value="0">Co-Owner</option>
+												                      <option value="1">Owner</option>
+													          	</select>
+															</div>
+															<div class="messageContainer col-sm-4"></div>
+														</div>
+													</div>
+												</div>
+												<hr>
+												<div class="col-lg-12 margin-bottom-6">
+														<div class="form-group" id="error-project_type">
+															<label class="control-label col-sm-2">Documents <span class='text-danger'>*</span></label>
+															<div class="col-sm-10">
+																<div class="col-sm-4">
+																	<input type="checkbox" name="document_type[]" value="1" />PAN Card
+																</div>
+																<div class="col-sm-4">
+																	<input type="checkbox" name="document_type[]" value="2" />Aadhar Card
+																</div>
+																<div class="col-sm-4">
+																	<input type="checkbox" name="document_type[]" value="3" />Passport 
+																</div>
+																<div class="col-sm-4">
+																	<input type="checkbox" name="document_type[]" value="4" />Registered Rent Agreement 
+																</div>
+																<div class="col-sm-4">
+																	<input type="checkbox" name="document_type[]" value="5" />Vote ID 
+																</div>
+															</div>
+															<div class="messageContainer"></div>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div class="col-lg-6 margin-bottom-5" id="imgdiv-2">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Select Image </label>
-													<div class="col-sm-8 input-group" style="padding:0px 12px;">
-														<input type="file" class="form-control" id="building_image" name="building_image[]" />
-														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a></span>
-													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
-												</div>
+										<hr>
+										<div>
+											<div class="col-lg-12">
+												<span class="pull-right">
+													<a href="javascript:addMoreBuyers();" class="btn btn-info btn-xs">+ Add More Buyers</a>
+												</span>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-lg-12 margin-bottom-5">
-												<div class="form-group" id="error-project_type">
-													<label class="control-label col-sm-2">Documents <span class='text-danger'>*</span></label>
-												<div class="col-sm-12">
-													<div class="col-sm-3">
-														<input type="checkbox" name="document_type[]" value="1" <%if(buyerDocuments.getDocuments().equals("1")){ %>checked<%} %> />PAN 
-													</div>
-													<div class="col-sm-3">
-														<input type="checkbox" name="document_type[]" value="2" <%if(buyerDocuments.getDocuments()=="2"){ %>checked<%} %>/>Aadhar 
-													</div>
-													<div class="col-sm-3">
-														<input type="checkbox" name="document_type[]" value="3" <%if(buyerDocuments.getDocuments()=="3"){ %>checked<%} %>/>Passport 
-													</div>
-													<div class="col-sm-3">
-														<input type="checkbox" name="document_type[]" value="4" <%if(buyerDocuments.getDocuments()=="4"){ %>checked<%} %>/>Registered Rent Agreement 
-													</div>
-													<div class="col-sm-3">
-														<input type="checkbox" name="document_type[]" value="5" <%if(buyerDocuments.getDocuments()=="5"){ %>checked<%} %>/>Vote ID 
-													</div>
-												</div>
-												<div class="messageContainer"></div>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-lg-12 margin-bottom-5">
-													<div class="form-group" id="error-country_id">
-														<label class="control-label col-sm-3"><b>Project Details</b><span class='text-danger'>*</span></label>
-													</div>
+												<div class="form-group" id="error-country_id">
+													<label class="control-label col-sm-3"><b>Project Details</b><span class='text-danger'>*</span></label>
 												</div>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-locality_id">
-													<label class="control-label col-sm-4">Project <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
+												<div class="form-group" id="error-country_id">
+													<label class="control-label col-sm-3">Project <span class='text-danger'>*</span></label>
+													<div class="col-sm-5">
 														<select name="project_id" id="project_id" class="form-control">
-										                	<option value="">Select Project</option>
-										                	<% 	for(BuilderProject builderProjectList : project_list) { %>
-															<option value="<% out.print(builderProjectList.getId());%>" <% if(builderProjectList.getId() == buyer.getBuilderProject().getId()) { %>selected<% } %>><% out.print(builderProjectList.getName()); %></option>
+										                    <option value="">Select Project</option>
+										                    <% for(BuilderProject builderProject : builderProjects){ %>
+															<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option>
 															<% } %>
-											          	</select>
+											             </select>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-state_id">
-													<label class="control-label col-sm-4">Building <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
+													<label class="control-label col-sm-3">Building <span class='text-danger'>*</span></label>
+													<div class="col-sm-5">
 														<select name="building_id" id="building_id" class="form-control">
 										                    <option value="">Select Building</option>
-										                   <% 	for(BuilderFlat buildingDataList : builderFlats) { %>
-															<option value="<% out.print(buildingDataList.getId());%>" <% if(buildingDataList.getId() == builderFlats.getId()) { %>selected<% } %>><% out.print(buildingDataList.getName()); %></option>
-															<% } %>
 											          	</select>
 													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-<!-- 											<div class="col-lg-6 margin-bottom-5"> -->
-<!-- 												<div class="form-group" id="error-state_id"> -->
-<!-- 													<label class="control-label col-sm-4">Floor <span class='text-danger'>*</span></label> -->
-<!-- 													<div class="col-sm-8"> -->
-<!-- 														<select name="floor_id" id="floor_id" class="form-control"> -->
-<!-- 										                    <option value="">Select Floor</option> -->
-<%-- 										                   <% 	for(FloorData FloorDataList : floor_list) { %> --%>
-<%-- 															<option value="<% out.print(FloorDataList.getId());%>" <% if(FloorDataList.getId() == buyer.getBuilderFloor().getId()) { %>selected<% } %>><% out.print(FloorDataList.getName()); %></option> --%>
-<%-- 															<% } %> --%>
-<!-- 											          	</select> -->
-<!-- 													</div> -->
-<!-- 													<div class="messageContainer"></div> -->
-<!-- 												</div> -->
-<!-- 											</div> -->
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-flat_id">
-													<label class="control-label col-sm-4">Flat <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-														<select name="flat_id" id="flat_id" class="form-control">
-										                	<option value="">Select Flat</option>
-										                    <% 	for(FlatData FlatDataList : flat_list) { %>
-															<option value="<% out.print(FlatDataList.getId());%>" <% if(FlatDataList.getId() == buyer.getBuilderFlat().getId()) { %>selected<% } %>><% out.print(FlatDataList.getName()); %></option>
-															<% } %>
-											          	</select>
-													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-4"></div>
 												</div>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-highlight">
-													<label class="control-label col-sm-4">Agreement </label>
-													<div class="col-sm-8">
-														<select id="status" name="status" class="form-control">
-															<option value="0" <% if(buyer.getAgreement() == 0) { %>selected<% } %>>No</option>
-															<option value="1" <% if(buyer.getAgreement() == 1) { %>selected<% } %>>Yes</option>
-														</select>
+												<div class="form-group" id="error-state_id">
+													<label class="control-label col-sm-3">Flat <span class='text-danger'>*</span></label>
+													<div class="col-sm-5">
+														<select name="flat_id" id="flat_id" class="form-control">
+										                    <option value="">Select Flat</option>
+											          	</select>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-4"></div>
 												</div>
 											</div>
+	<!-- 										<div class="col-lg-6 margin-bottom-5"> -->
+	<!-- 											<div class="form-group" id="error-state_id"> -->
+	<!-- 												<label class="control-label col-sm-3">Agreement <span class='text-danger'>*</span></label> -->
+	<!-- 												<div class="col-sm-5"> -->
+	<!-- 													<select name="agreement" id="agreement" class="form-control"> -->
+	<!-- 									                    <option value="">Select Agreement</option> -->
+	<!-- 									                     <option value="0">No</option> -->
+	<!-- 									                      <option value="1">Yes</option> -->
+	<!-- 										          	</select> -->
+	<!-- 												</div> -->
+	<!-- 												<div class="messageContainer col-sm-4"></div> -->
+	<!-- 											</div> -->
+	<!-- 										</div> -->
+	<!-- 									</div> -->
+	<!-- 									<div class="row"> -->
+	<!-- 										<div class="col-lg-6 margin-bottom-5"> -->
+	<!-- 											<div class="form-group" id="error-state_id"> -->
+	<!-- 												<label class="control-label col-sm-3">Possession <span class='text-danger'>*</span></label> -->
+	<!-- 												<div class="col-sm-5"> -->
+	<!-- 													<select name="possession" id="possession" class="form-control"> -->
+	<!-- 									                    <option value="">Select Possession</option> -->
+	<!-- 									                     <option value="0">No</option> -->
+	<!-- 									                      <option value="1">Yes</option> -->
+	<!-- 										          	</select> -->
+	<!-- 												</div> -->
+	<!-- 												<div class="messageContainer col-sm-4"></div> -->
+	<!-- 											</div> -->
+	<!-- 										</div> -->
 											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-highlight">
-													<label class="control-label col-sm-4">Possession </label>
-													<div class="col-sm-8">
-														<select id="status" name="status" class="form-control">
-															<option value="0" <% if(buyer.getPossession() == 0) { %>selected<% } %>>No</option>
-															<option value="1" <% if(buyer.getPossession() == 1) { %>selected<% } %>>Yes</option>
-														</select>
+												<div class="form-group" id="error-state_id">
+													<label class="control-label col-sm-3">Status <span class='text-danger'>*</span></label>
+													<div class="col-sm-5">
+														<select name="status" id="status" class="form-control">
+										                    <option value="">Select Status</option>
+										                     <option value="0">Inactive</option>
+										                      <option value="1">Active</option>
+											          	</select>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-4"></div>
 												</div>
 											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-highlight">
-													<label class="control-label col-sm-4">Status </label>
-													<div class="col-sm-8">
-														<select id="status" name="status" class="form-control">
-															<option value="0" <% if(buyer.getStatus() == 0) { %>selected<% } %>>Inactive</option>
-															<option value="1" <% if(buyer.getStatus() == 1) { %>selected<% } %>>Active</option>
-														</select>
-													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-											<div class="col-lg-6">
-												<div class="col-sm-12">
-													<button type="submit" name="basicbtn" class="btn btn-success btn-sm">Submit</button>
+										</div>
+										<div class="col-lg-12 margin-bottom-5">
+											<div class="clearfix form-actions">
+												<div class="pull-right">
+													<button type="submit" class="btn btn-success">Submit</button>
 												</div>
 											</div>
 										</div>
@@ -1092,66 +1085,107 @@ $("#offerbtn").click(function(){
 		alert("Please enter offer details");
 	}
 });
-
-function addMoreOffer() {
-	var offers = parseInt($("#offer_count").val());
-	offers++;
-	var html = '<div class="row" id="offer-'+offers+'"><hr/>'
-		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs">x</a></span></div>'
-		+'<div class="col-lg-6 margin-bottom-5">'
-			+'<div class="form-group" id="error-offer_title">'
-			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
+function addMoreBuyers() {
+	var buyers = parseInt($("#buyer_count").val());
+	buyers++;
+	var html = '<div class="row" id="buyer-'+buyers+'"><hr>'
+		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeBuyer('+buyers+');" class="btn btn-danger btn-xs">x</a></span></div>'
+			+'<div class="row">'
+		+'<div class="col-lg-5 margin-bottom-5">'
+			+'<div class="form-group" id="error-buyer_name">'
+			+'<label class="control-label col-sm-4">Buyer Name <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control" id="buyer_name" name="buyer_name[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
-		+'<div class="col-lg-6 margin-bottom-5">'
-			+'<div class="form-group" id="error-discount">'
-				+'<label class="control-label col-sm-4">Offer Discount(%) <span class="text-danger">*</span></label>'
+		+'<div class="col-lg-5 margin-bottom-6">'
+			+'<div class="form-group" id="error-contact">'
+				+'<label class="control-label col-sm-4">Contact <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="discount" name="discount[]" value=""/>'
+					+'<input type="text" class="form-control" id="contact" name="contact[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
-		+'<div class="col-lg-6 margin-bottom-5">'
-			+'<div class="form-group" id="error-discount_amount">'
-				+'<label class="control-label col-sm-4">Offer Discount Amount </label>'
+	+'</div>'
+	+'<div class="row">'
+		+'<div class="col-lg-5 margin-bottom-6">'
+			+'<div class="form-group" id="error-email">'
+				+'<label class="control-label col-sm-4">Email <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control" id="email" name="email[]" value=""/>'
+				+'</div>'
+				+'<div class="messageContainer"></div><br/>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-5 margin-bottom-6">'
+			+'<div class="form-group" id="error-email">'
+				+'<label class="control-label col-sm-4">PAN <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-8">'
+					+'<input type="text" class="form-control" id="pan" name="pan[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
-		+'<div class="col-lg-6 margin-bottom-5">'
+	+'</div>'
+	+'<div class="row">'
+		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-applicable_on">'
-			+'<label class="control-label col-sm-4">Applicable on </label>'
+			+'<label class="control-label col-sm-4"> Prem. Address <span class="text-danger">*</span></label>'
 			+'<div class="col-sm-8">'
-			+'<input type="text" class="form-control" id="applicable_on" name="applicable_on[]" value=""/>'
+			+'<textarea class="form-control" id="address" name="address[]" ></textarea>'
 			+'</div>'
 			+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
-		+'<div class="col-lg-6 margin-bottom-5">'
-			+'<div class="form-group" id="error-apply">'
-			+'<label class="control-label col-sm-4">Apply </label>'
-			+'<div class="col-sm-8">'
-			+'<select class="form-control" id="apply" name="apply[]">'
-			+'<option value="1">Yes</option>'
-			+'<option value="0">No</option>'
-			+'</select>'
-			+'</div>'
-			+'<div class="messageContainer"></div>'
+		+'<div class="col-lg-5 margin-bottom-6">'
+			+'<div class="form-group" id="error-state_id">'
+				+'<label class="control-label col-sm-4">Owner <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-8">'
+					+'<select name="is_primary[]" id="is_primary" class="form-control">'
+	                    +'<option value="">Select Owner</option>'
+	                     +'<option value="0">Co-Owner</option>'
+	                      +'<option value="1">Owner</option>'
+		          	+'</select>'
+				+'</div>'
+				+'<div class="messageContainer col-sm-4"></div>'
 			+'</div>'
 		+'</div>'
-		+'</div>';
-	$("#offer_area").append(html);
-	$("#offer_count").val(offers);
+	+'</div>'
+	+'<hr>'
+	+'<div class="col-lg-12 margin-bottom-6">'
+			+'<div class="form-group" id="error-project_type">'
+				+'<label class="control-label col-sm-2">Documents <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-10">'
+					+'<div class="col-sm-4">'
+						+'<input type="checkbox" name="document_type[]" value="1" />PAN Card'
+					+'</div>'
+					+'<div class="col-sm-4">'
+						+'<input type="checkbox" name="document_type[]" value="2" />Aadhar Card' 
+					+'</div>'
+					+'<div class="col-sm-4">'
+						+'<input type="checkbox" name="document_type[]" value="3" />Passport' 
+					+'</div>'
+					+'<div class="col-sm-4">'
+						+'<input type="checkbox" name="document_type[]" value="4" />Registered Rent Agreement' 
+					+'</div>'
+					+'<div class="col-sm-4">'
+						+'<input type="checkbox" name="document_type[]" value="5" />Vote ID' 
+					+'</div>'
+				+'</div>'
+				+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+	+'</div>'
+	+'</div>'
+	+'</div>';
+	$("#buyer_area").append(html);
+	$("#buyer_count").val(buyers);
 }
-function removeOffer(id) {
-	$("#offer-"+id).remove();
+function removeBuyer(id) {
+	$("#buyer-"+id).remove();
 }
 function deleteImage(id) {
 	var flag = confirm("Are you sure ? You want to delete plan ?");

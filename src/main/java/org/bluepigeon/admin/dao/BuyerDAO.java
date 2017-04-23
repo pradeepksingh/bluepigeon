@@ -23,6 +23,7 @@ import org.bluepigeon.admin.model.BuyingDetails;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class BuyerDAO {
 	
@@ -57,6 +58,7 @@ public class BuyerDAO {
 					buyerList.setBuilder(builderProject.getBuilder());
 					newsession.save(buyerList);
 					response.setId(buyerList.getId());
+					response.setData(buyerList);
 					response.setStatus(1);
 					response.setMessage("Buyer Added Successfully");
 					//responseList.add(response);
@@ -330,7 +332,7 @@ public class BuyerDAO {
 			return buyer;
 		}
 	}
-	public BuyerDocuments getBuyerDocumentsByBuyerId(int buyerId){
+	public List<BuyerDocuments> getBuyerDocumentsByBuyerId(int buyerId){
 		String hql = "from BuyerDocuments where buyer.id = :buyer_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -338,7 +340,7 @@ public class BuyerDAO {
 		query.setParameter("buyer_id", buyerId);
 		List<BuyerDocuments> result = query.list();
 		session.close();
-		return result.get(0);
+		return result;
 	}
 	
 	public BuyingDetails getBuyingDetailsByBuyerId(int buyerId){
@@ -554,7 +556,6 @@ public class BuyerDAO {
 				buildingDatas.add(buildingData);
 			}
 			session.close();
-			System.out.println("Return");
 			return buildingDatas;
 	  }
 	  public List<FloorData> getBuilderFloorByBuildingId(int buildingId){
@@ -575,7 +576,7 @@ public class BuyerDAO {
 			return floorDatas;
 	  }
 	  public List<FlatData> getBuilderFlatTypeByFloorId(int floorId){
-		  String hql = "from BuilderFlat where builderFloor.id = :floor_id";
+		  String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :floor_id";
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
@@ -664,6 +665,24 @@ public class BuyerDAO {
 			return flatDatas;
 		}
 	  
+	  
+	  public List<FlatData> getBookedFlats(int building_id) {
+			String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id and builderFlatStatus.id=2";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("building_id", building_id);
+			List<BuilderFlat> result = query.list();
+			List<FlatData> flatDatas = new ArrayList<FlatData>();
+			for(BuilderFlat builderFlat : result){
+				FlatData flatData = new FlatData();
+				flatData.setId(builderFlat.getId());
+				flatData.setName(builderFlat.getFlatNo());
+				flatDatas.add(flatData);
+			}
+			session.close();
+			return flatDatas;
+		}
 		public List<BuildingData> getBuildingsByProjectId(int project_id) {
 			String hql = "from BuilderBuilding where builderProject.id = :project_id";
 			HibernateUtil hibernateUtil = new HibernateUtil();
@@ -681,4 +700,5 @@ public class BuyerDAO {
 			session.close();
 			return buildingDataList;
 		}
+		
 }

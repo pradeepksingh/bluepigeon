@@ -1388,14 +1388,14 @@ public class CreateProjectController {
 		System.out.println("ProjectLeadDAO::");
 		return projectLeadDAO.getBuildingByProjectId(project_id);
 	}
-	@GET
-	@Path("/building/buyer/list")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<BuilderBuilding> getAllBuildingList(@QueryParam("project_id") int project_id) {
-		DemandLettersDAO projectLeadDAO = new DemandLettersDAO();
-		System.out.println("ProjectLeadDAO::");
-		return projectLeadDAO.getAllBuildingByProjectId(project_id);
-	}
+//	@GET
+//	@Path("/building/buyer/list")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public List<BuilderBuilding> getAllBuildingList(@QueryParam("project_id") int project_id) {
+//		DemandLettersDAO projectLeadDAO = new DemandLettersDAO();
+//		System.out.println("ProjectLeadDAO::");
+//		return projectLeadDAO.getAllBuildingByProjectId(project_id);
+//	}
 	@POST
 	@Path("/tax/save")
 	@Produces(MediaType.APPLICATION_JSON)

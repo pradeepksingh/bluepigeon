@@ -19,32 +19,38 @@ import javax.persistence.TemporalType;
 public class DemandLetters implements java.io.Serializable {
 
 	private Integer id;
+	//private BuilderFloor builderFloor;
 	private BuilderBuilding builderBuilding;
-	private Buyer buyer;
 	private BuilderFlat builderFlat;
 	private BuilderProject builderProject;
-	private BuyerPayment buyerPayment;
+	private String name;
+	private String email;
+	private String contact;
+	private Integer paymentId;
 	private Date lastDate;
 	private String remind;
-	private String docUrl;
 	private String content;
-
 	public DemandLetters() {
 	}
 
-	public DemandLetters(BuilderBuilding builderBuilding, Buyer buyer, BuilderFlat builderFlat,
-			BuilderProject builderProject, BuyerPayment buyerPayment, Date lastDate, String remind, String docUrl,
-			String content) {
+	public DemandLetters(//BuilderFloor builderFloor,
+			BuilderBuilding builderBuilding, BuilderFlat builderFlat,
+			BuilderProject builderProject, String name, String email, String contact, Integer paymentId, Date lastDate,
+			String remind, String content) {
+		//this.builderFloor = builderFloor;
 		this.builderBuilding = builderBuilding;
-		this.buyer = buyer;
 		this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
-		this.buyerPayment = buyerPayment;
+		this.name = name;
+		this.email = email;
+		this.contact = contact;
+		this.paymentId = paymentId;
 		this.lastDate = lastDate;
 		this.remind = remind;
-		this.docUrl = docUrl;
 		this.content = content;
 	}
+
+
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -58,6 +64,16 @@ public class DemandLetters implements java.io.Serializable {
 		this.id = id;
 	}
 
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "floor_id")
+//	public BuilderFloor getBuilderFloor() {
+//		return this.builderFloor;
+//	}
+//
+//	public void setBuilderFloor(BuilderFloor builderFloor) {
+//		this.builderFloor = builderFloor;
+//	}
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "building_id")
 	public BuilderBuilding getBuilderBuilding() {
@@ -68,15 +84,7 @@ public class DemandLetters implements java.io.Serializable {
 		this.builderBuilding = builderBuilding;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "buyer_id")
-	public Buyer getBuyer() {
-		return this.buyer;
-	}
-
-	public void setBuyer(Buyer buyer) {
-		this.buyer = buyer;
-	}
+	
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "flat_id")
@@ -98,16 +106,40 @@ public class DemandLetters implements java.io.Serializable {
 		this.builderProject = builderProject;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "payment_id")
-	public BuyerPayment getBuyerPayment() {
-		return this.buyerPayment;
+	@Column(name = "name", length = 128)
+	public String getName() {
+		return this.name;
 	}
 
-	public void setBuyerPayment(BuyerPayment buyerPayment) {
-		this.buyerPayment = buyerPayment;
+	public void setName(String name) {
+		this.name = name;
 	}
 
+	@Column(name = "email", length = 225)
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Column(name = "contact", length = 128)
+	public String getContact() {
+		return this.contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+	@Column(name = "payment_id")
+	public Integer getPaymentId() {
+		return this.paymentId;
+	}
+
+	public void setPaymentId(Integer paymentId) {
+		this.paymentId = paymentId;
+	}
 	@Temporal(TemporalType.DATE)
 	@Column(name = "last_date", length = 10)
 	public Date getLastDate() {
@@ -125,15 +157,6 @@ public class DemandLetters implements java.io.Serializable {
 
 	public void setRemind(String remind) {
 		this.remind = remind;
-	}
-
-	@Column(name = "doc_url", length = 225)
-	public String getDocUrl() {
-		return this.docUrl;
-	}
-
-	public void setDocUrl(String docUrl) {
-		this.docUrl = docUrl;
 	}
 
 	@Column(name = "content", length = 65535)
