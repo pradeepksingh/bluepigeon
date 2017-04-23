@@ -21,6 +21,7 @@ import org.bluepigeon.admin.model.BuilderProjectPropertyType;
 import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.Locality;
+import org.bluepigeon.admin.model.ProjectAmenityWeightage;
 import org.bluepigeon.admin.model.State;
 
 public class ProjectDetails {
@@ -35,6 +36,7 @@ public class ProjectDetails {
 	private Set<BuilderProjectProjectType> builderProjectProjectTypes = new HashSet<BuilderProjectProjectType>(0);
 	private Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos = new HashSet<BuilderProjectApprovalInfo>(0);
 	private Set<BuilderProjectPropertyType> builderProjectPropertyTypes = new HashSet<BuilderProjectPropertyType>(0);
+	private Set<ProjectAmenityWeightage> projectAmenityWeightages = new HashSet<ProjectAmenityWeightage>(0);
 	public BuilderProject getBuilderProject() {
 		return builderProject;
 	}
@@ -114,6 +116,15 @@ public class ProjectDetails {
 
 	public void setBuilderProjectPropertyTypes(Set<BuilderProjectPropertyType> builderProjectPropertyTypes) {
 		this.builderProjectPropertyTypes = builderProjectPropertyTypes;
+	}
+
+	public Set<ProjectAmenityWeightage> getProjectAmenityWeightages() {
+		return projectAmenityWeightages;
+	}
+
+	public void setProjectAmenityWeightages(
+			Set<ProjectAmenityWeightage> projectAmenityWeightages) {
+		this.projectAmenityWeightages = projectAmenityWeightages;
 	}
 
 }

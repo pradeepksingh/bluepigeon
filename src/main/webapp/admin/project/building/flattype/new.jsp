@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectPropertyConfigurationDAO"%>
@@ -11,9 +12,15 @@
 <%
 	int project_id = 0;
 	int p_user_id = 0;
-	project_id = Integer.parseInt(request.getParameter("project_id"));
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
+	List<BuilderBuilding> buildings = new ArrayList<BuilderBuilding>();
+	if (request.getParameterMap().containsKey("project_id")) {
+		project_id = Integer.parseInt(request.getParameter("project_id"));
+		if(project_id > 0) {
+			buildings = new ProjectDAO().getBuilderProjectBuildings(project_id);
+		}
+	}
 	if(session!=null)
 	{
 		if(session.getAttribute("uname") != null)
@@ -97,6 +104,9 @@
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-2">Select Building <span class='text-danger'>*</span></label>
 													<div class="col-sm-10" id="buildings">
+													<% for(BuilderBuilding builderBuilding :buildings) { %>
+														<div class="col-sm-3"><input type="checkbox" name="building_id[]" value="<% out.print(builderBuilding.getId());%>" > <% out.print(builderBuilding.getName()); %></div>
+													<% } %>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
