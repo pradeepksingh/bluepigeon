@@ -19,7 +19,7 @@
 			p_user_id = adminuserproject.getId();
 		}
 	}
-	if (request.getParameterMap().containsKey("building_id")) {
+	if (request.getParameterMap().containsKey("floor_id")) {
 		floor_id = Integer.parseInt(request.getParameter("floor_id"));
 		if(floor_id > 0) {
 			builderFlats = new ProjectDAO().getBuilderFloorFlats(floor_id);
@@ -57,6 +57,7 @@
 										<th>Flat No</th>
 										<th>Floor No</th>
 										<th>Building Name</th>
+										<th>Project Name</th>
 										<th>Status</th>
 										<th>Actions</th>
 									</tr>
@@ -67,6 +68,7 @@
 										<th><% out.print(builderFlat.getFlatNo()); %></th>
 										<th><% out.print(builderFlat.getBuilderFloor().getName()); %></th>
 										<th><% out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getName()); %></th>
+										<th><% out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName()); %></th>
 										<th><% out.print(builderFlat.getBuilderFlatStatus().getName()); %></th>
 										<th>
 											<a href="${baseUrl}/admin/project/building/floor/flat/edit.jsp?flat_id=<% out.print(builderFlat.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>

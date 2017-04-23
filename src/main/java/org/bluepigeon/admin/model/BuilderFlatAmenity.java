@@ -63,7 +63,7 @@ public class BuilderFlatAmenity implements java.io.Serializable {
 		this.status = status;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderFlatAmenity")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "builderFlatAmenity")
 	public Set<BuilderFlatAmenityStages> getBuilderFlatAmenityStageses() {
 		return this.builderFlatAmenityStageses;
 	}

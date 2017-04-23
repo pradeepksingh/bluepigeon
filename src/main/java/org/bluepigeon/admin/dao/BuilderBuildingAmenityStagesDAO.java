@@ -49,8 +49,8 @@ public class BuilderBuildingAmenityStagesDAO {
 					response.setStatus(1);
 					response.setMessage("Building Amenity Stage Added Successfully");
 				}else{
-				response.setStatus(0);
-				response.setMessage("Building Amenity Stage name already exists");
+					response.setStatus(0);
+					response.setMessage("Building Amenity Stage name already exists");
 				}
             } else {
                 Session newsession = hibernateUtil.openSession();

@@ -76,7 +76,7 @@ public class BuilderBuildingAmenity implements java.io.Serializable {
 		this.isDeleted = isDeleted;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderBuildingAmenity")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "builderBuildingAmenity")
 	public Set<BuilderBuildingAmenityStages> getBuilderBuildingAmenityStageses() {
 		return this.builderBuildingAmenityStageses;
 	}

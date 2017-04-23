@@ -33,16 +33,22 @@ import org.bluepigeon.admin.model.AreaUnit;
 import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuildingAmenity;
+import org.bluepigeon.admin.model.BuilderBuildingAmenityStages;
+import org.bluepigeon.admin.model.BuilderBuildingAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderBuildingFlatType;
 import org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom;
 import org.bluepigeon.admin.model.BuilderBuildingStatus;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderFlatAmenity;
+import org.bluepigeon.admin.model.BuilderFlatAmenityStages;
+import org.bluepigeon.admin.model.BuilderFlatAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderFlatStatus;
 import org.bluepigeon.admin.model.BuilderFlatType;
 import org.bluepigeon.admin.model.BuilderFloor;
 import org.bluepigeon.admin.model.BuilderFloorAmenity;
+import org.bluepigeon.admin.model.BuilderFloorAmenityStages;
+import org.bluepigeon.admin.model.BuilderFloorAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderFloorStatus;
 import org.bluepigeon.admin.model.BuilderLead;
 import org.bluepigeon.admin.model.BuilderProject;
@@ -50,6 +56,7 @@ import org.bluepigeon.admin.model.BuilderProjectPriceInfo;
 import org.bluepigeon.admin.model.BuilderProjectProjectType;
 import org.bluepigeon.admin.model.BuilderProjectPropertyConfiguration;
 import org.bluepigeon.admin.model.BuildingAmenityInfo;
+import org.bluepigeon.admin.model.BuildingAmenityWeightage;
 import org.bluepigeon.admin.model.BuildingImageGallery;
 import org.bluepigeon.admin.model.BuildingOfferInfo;
 import org.bluepigeon.admin.model.BuildingPanoramicImage;
@@ -58,9 +65,11 @@ import org.bluepigeon.admin.model.BuilderPropertyType;
 import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
+import org.bluepigeon.admin.model.FlatAmenityWeightage;
 import org.bluepigeon.admin.model.FlatPaymentSchedule;
 import org.bluepigeon.admin.model.FlatTypeImage;
 import org.bluepigeon.admin.model.FloorAmenityInfo;
+import org.bluepigeon.admin.model.FloorAmenityWeightage;
 import org.bluepigeon.admin.model.FloorLayoutImage;
 import org.bluepigeon.admin.model.Locality;
 import org.bluepigeon.admin.model.State;
@@ -309,8 +318,11 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("description[]") List<FormDataBodyPart> description,
 			@FormDataParam("offer_type[]") List<FormDataBodyPart> offer_type,
 			@FormDataParam("offer_status[]") List<FormDataBodyPart> offer_status,
-			@FormDataParam("admin_id") int admin_id
+			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("amenity_wt") String amenity_wts
 	) {
+		String [] amenityWeightages = amenity_wts.split(",");
+		List<BuildingAmenityWeightage> baws = new ArrayList<BuildingAmenityWeightage>();
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
 		Date launchDate = null,possessionDate = null;
 		try {
@@ -424,6 +436,35 @@ public class ProjectController extends ResourceConfig {
 					projectDAO.addBuildingAmenityInfo(buildingAmenityInfos);
 				}
 			}
+			if(amenity_wts != "") {
+				for(String aw :amenityWeightages) {
+					BuildingAmenityWeightage baw = new BuildingAmenityWeightage();
+					String [] amenityWeightage = aw.split("#");
+					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
+					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
+					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
+					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
+					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
+					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
+					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+					BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
+					builderBuildingAmenity.setId(amenity_id);
+					BuilderBuildingAmenityStages builderBuildingAmenityStages = new BuilderBuildingAmenityStages();
+					builderBuildingAmenityStages.setId(stage_id);
+					BuilderBuildingAmenitySubstages builderBuildingAmenitySubstages = new BuilderBuildingAmenitySubstages();
+					builderBuildingAmenitySubstages.setId(substage_id);
+					baw.setBuilderBuildingAmenity(builderBuildingAmenity);
+					baw.setAmenityWeightage(amenity_weightage);
+					baw.setBuilderBuildingAmenityStages(builderBuildingAmenityStages);
+					baw.setStageWeightage(stage_weightage);
+					baw.setBuilderBuildingAmenitySubstages(builderBuildingAmenitySubstages);
+					baw.setSubstageWeightage(substage_weightage);
+					baw.setStatus(wstatus);
+					baw.setBuilderBuilding(builderBuilding);
+					baws.add(baw);
+				}
+				projectDAO.addBuildingAmenityWeightage(baws);
+			}
 			if (schedule.size() > 0) {
 				List<BuildingPaymentInfo> buildingPaymentInfos = new ArrayList<BuildingPaymentInfo>();
 				int i = 0;
@@ -488,8 +529,11 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("possession_date") String possession_date,
 			@FormDataParam("status") Integer status,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
-			@FormDataParam("admin_id") int admin_id
+			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("amenity_wt") String amenity_wts
 	) {
+		String [] amenityWeightages = amenity_wts.split(",");
+		List<BuildingAmenityWeightage> baws = new ArrayList<BuildingAmenityWeightage>();
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
 		Date launchDate = null,possessionDate = null;
 		try {
@@ -538,6 +582,36 @@ public class ProjectController extends ResourceConfig {
 					projectDAO.deleteBuildingAmenityInfo(building_id);
 					projectDAO.addBuildingAmenityInfo(buildingAmenityInfos);
 				}
+			}
+			if(amenity_wts != "") {
+				for(String aw :amenityWeightages) {
+					BuildingAmenityWeightage baw = new BuildingAmenityWeightage();
+					String [] amenityWeightage = aw.split("#");
+					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
+					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
+					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
+					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
+					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
+					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
+					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+					BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
+					builderBuildingAmenity.setId(amenity_id);
+					BuilderBuildingAmenityStages builderBuildingAmenityStages = new BuilderBuildingAmenityStages();
+					builderBuildingAmenityStages.setId(stage_id);
+					BuilderBuildingAmenitySubstages builderBuildingAmenitySubstages = new BuilderBuildingAmenitySubstages();
+					builderBuildingAmenitySubstages.setId(substage_id);
+					baw.setBuilderBuildingAmenity(builderBuildingAmenity);
+					baw.setAmenityWeightage(amenity_weightage);
+					baw.setBuilderBuildingAmenityStages(builderBuildingAmenityStages);
+					baw.setStageWeightage(stage_weightage);
+					baw.setBuilderBuildingAmenitySubstages(builderBuildingAmenitySubstages);
+					baw.setSubstageWeightage(substage_weightage);
+					baw.setStatus(wstatus);
+					baw.setBuilderBuilding(builderBuilding);
+					baws.add(baw);
+				}
+				projectDAO.deleteBuildingAmenityWeightage(building_id);
+				projectDAO.addBuildingAmenityWeightage(baws);
 			}
 		} else {
 			msg.setMessage("Failed to update building info.");
@@ -840,8 +914,11 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("status") Integer status,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
 			@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
-			@FormDataParam("admin_id") int admin_id
+			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("amenity_wt") String amenity_wts
 	) {
+		String [] amenityWeightages = amenity_wts.split(",");
+		List<FloorAmenityWeightage> baws = new ArrayList<FloorAmenityWeightage>();
 		byte floor_status = 1;
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
@@ -911,6 +988,35 @@ public class ProjectController extends ResourceConfig {
 					projectDAO.addBuildingFloorAmenityInfo(floorAmenityInfos);
 				}
 			}
+			if(amenity_wts != "") {
+				for(String aw :amenityWeightages) {
+					FloorAmenityWeightage baw = new FloorAmenityWeightage();
+					String [] amenityWeightage = aw.split("#");
+					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
+					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
+					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
+					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
+					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
+					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
+					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+					BuilderFloorAmenity builderFloorAmenity = new BuilderFloorAmenity();
+					builderFloorAmenity.setId(amenity_id);
+					BuilderFloorAmenityStages builderFloorAmenityStages = new BuilderFloorAmenityStages();
+					builderFloorAmenityStages.setId(stage_id);
+					BuilderFloorAmenitySubstages builderFloorAmenitySubstages = new BuilderFloorAmenitySubstages();
+					builderFloorAmenitySubstages.setId(substage_id);
+					baw.setBuilderFloorAmenity(builderFloorAmenity);
+					baw.setAmenityWeightage(amenity_weightage);
+					baw.setBuilderFloorAmenityStages(builderFloorAmenityStages);
+					baw.setStageWeightage(stage_weightage);
+					baw.setBuilderFloorAmenitySubstages(builderFloorAmenitySubstages);
+					baw.setSubstageWeightage(substage_weightage);
+					baw.setStatus(wstatus);
+					baw.setBuilderFloor(builderFloor);
+					baws.add(baw);
+				}
+				projectDAO.addFloorAmenityWeightage(baws);
+			}
 		} else {
 			msg.setMessage("Failed to add floor.");
 			msg.setStatus(0);
@@ -931,8 +1037,11 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("status") Integer status,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
 			@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
-			@FormDataParam("admin_id") int admin_id
+			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("amenity_wt") String amenity_wts
 	) {
+		String [] amenityWeightages = amenity_wts.split(",");
+		List<FloorAmenityWeightage> baws = new ArrayList<FloorAmenityWeightage>();
 		byte floor_status = 1;
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
@@ -1002,6 +1111,36 @@ public class ProjectController extends ResourceConfig {
 					projectDAO.deleteFloorAmenityInfo(floor_id);
 					projectDAO.addBuildingFloorAmenityInfo(floorAmenityInfos);
 				}
+			}
+			if(amenity_wts != "") {
+				for(String aw :amenityWeightages) {
+					FloorAmenityWeightage baw = new FloorAmenityWeightage();
+					String [] amenityWeightage = aw.split("#");
+					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
+					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
+					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
+					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
+					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
+					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
+					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+					BuilderFloorAmenity builderFloorAmenity = new BuilderFloorAmenity();
+					builderFloorAmenity.setId(amenity_id);
+					BuilderFloorAmenityStages builderFloorAmenityStages = new BuilderFloorAmenityStages();
+					builderFloorAmenityStages.setId(stage_id);
+					BuilderFloorAmenitySubstages builderFloorAmenitySubstages = new BuilderFloorAmenitySubstages();
+					builderFloorAmenitySubstages.setId(substage_id);
+					baw.setBuilderFloorAmenity(builderFloorAmenity);
+					baw.setAmenityWeightage(amenity_weightage);
+					baw.setBuilderFloorAmenityStages(builderFloorAmenityStages);
+					baw.setStageWeightage(stage_weightage);
+					baw.setBuilderFloorAmenitySubstages(builderFloorAmenitySubstages);
+					baw.setSubstageWeightage(substage_weightage);
+					baw.setStatus(wstatus);
+					baw.setBuilderFloor(builderFloor);
+					baws.add(baw);
+				}
+				projectDAO.deleteFloorAmenityWeightage(floor_id);
+				projectDAO.addFloorAmenityWeightage(baws);
 			}
 		} else {
 			msg.setMessage("Failed to update floor.");
@@ -1322,8 +1461,11 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
 			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
 			@FormDataParam("amount[]") List<FormDataBodyPart> amount,
-			@FormDataParam("admin_id") int admin_id
+			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("amenity_wt") String amenity_wts
 	) {
+		String [] amenityWeightages = amenity_wts.split(",");
+		List<FlatAmenityWeightage> baws = new ArrayList<FlatAmenityWeightage>();
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
 		Date possessionDate = null;
 		try {
@@ -1380,6 +1522,35 @@ public class ProjectController extends ResourceConfig {
 					projectDAO.addFlatAmenityInfo(flatAmenityInfos);
 				}
 			}
+			if(amenity_wts != "") {
+				for(String aw :amenityWeightages) {
+					FlatAmenityWeightage baw = new FlatAmenityWeightage();
+					String [] amenityWeightage = aw.split("#");
+					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
+					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
+					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
+					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
+					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
+					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
+					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+					BuilderFlatAmenity builderFlatAmenity = new BuilderFlatAmenity();
+					builderFlatAmenity.setId(amenity_id);
+					BuilderFlatAmenityStages builderFlatAmenityStages = new BuilderFlatAmenityStages();
+					builderFlatAmenityStages.setId(stage_id);
+					BuilderFlatAmenitySubstages builderFlatAmenitySubstages = new BuilderFlatAmenitySubstages();
+					builderFlatAmenitySubstages.setId(substage_id);
+					baw.setBuilderFlatAmenity(builderFlatAmenity);
+					baw.setAmenityWeightage(amenity_weightage);
+					baw.setBuilderFlatAmenityStages(builderFlatAmenityStages);
+					baw.setStageWeightage(stage_weightage);
+					baw.setBuilderFlatAmenitySubstages(builderFlatAmenitySubstages);
+					baw.setSubstageWeightage(substage_weightage);
+					baw.setStatus(wstatus);
+					baw.setBuilderFlat(builderFlat);
+					baws.add(baw);
+				}
+				projectDAO.addFlatAmenityWeightage(baws);
+			}
 			if (schedule.size() > 0) {
 				List<FlatPaymentSchedule> flatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
 				int i = 0;
@@ -1427,8 +1598,11 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
 			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
 			@FormDataParam("amount[]") List<FormDataBodyPart> amount,
-			@FormDataParam("admin_id") int admin_id
+			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("amenity_wt") String amenity_wts
 	) {
+		String [] amenityWeightages = amenity_wts.split(",");
+		List<FlatAmenityWeightage> baws = new ArrayList<FlatAmenityWeightage>();
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
 		Date possessionDate = null;
 		try {
@@ -1480,6 +1654,36 @@ public class ProjectController extends ResourceConfig {
 					projectDAO.deleteFlatAmenityInfo(flat_id);
 					projectDAO.addFlatAmenityInfo(flatAmenityInfos);
 				}
+			}
+			if(amenity_wts != "") {
+				for(String aw :amenityWeightages) {
+					FlatAmenityWeightage baw = new FlatAmenityWeightage();
+					String [] amenityWeightage = aw.split("#");
+					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
+					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
+					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
+					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
+					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
+					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
+					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+					BuilderFlatAmenity builderFlatAmenity = new BuilderFlatAmenity();
+					builderFlatAmenity.setId(amenity_id);
+					BuilderFlatAmenityStages builderFlatAmenityStages = new BuilderFlatAmenityStages();
+					builderFlatAmenityStages.setId(stage_id);
+					BuilderFlatAmenitySubstages builderFlatAmenitySubstages = new BuilderFlatAmenitySubstages();
+					builderFlatAmenitySubstages.setId(substage_id);
+					baw.setBuilderFlatAmenity(builderFlatAmenity);
+					baw.setAmenityWeightage(amenity_weightage);
+					baw.setBuilderFlatAmenityStages(builderFlatAmenityStages);
+					baw.setStageWeightage(stage_weightage);
+					baw.setBuilderFlatAmenitySubstages(builderFlatAmenitySubstages);
+					baw.setSubstageWeightage(substage_weightage);
+					baw.setStatus(wstatus);
+					baw.setBuilderFlat(builderFlat);
+					baws.add(baw);
+				}
+				projectDAO.deleteFlatAmenityWeightage(flat_id);
+				projectDAO.addFlatAmenityWeightage(baws);
 			}
 			try{
 				if (schedule.size() > 0) {

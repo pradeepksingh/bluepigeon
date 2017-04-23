@@ -1,9 +1,13 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectAmenitySubstages"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectAmenityStages"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="org.bluepigeon.admin.model.Tax"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.model.BuilderCompanyNames"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
@@ -27,6 +31,7 @@
 <%@page import="org.bluepigeon.admin.model.BuilderProjectPriceInfo"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectPaymentInfo"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectOfferInfo"%>
+<%@page import="org.bluepigeon.admin.model.ProjectAmenityWeightage"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
@@ -61,6 +66,7 @@
 	Set<State> states = null;
 	Set<City> cities = null;
 	Set<Locality> localities = null;
+	List<Tax> taxes = new ArrayList<Tax>();
 	if(session!=null)
 	{
 		if(session.getAttribute("uname") != null)
@@ -85,6 +91,10 @@
 	BuilderProjectPriceInfo projectPriceInfo = new BuilderProjectPriceInfoDAO().getBuilderProjectPriceInfo(project_id);
 	List<BuilderProjectPaymentInfo> projectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(project_id);
 	List<BuilderProjectOfferInfo> projectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderProjectOfferInfo(project_id);
+	List<ProjectAmenityWeightage> amenityWeightages = new ProjectDAO().getProjectAmenityWeightageByProjectId(project_id);
+	if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
+		taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
+	}
 	
 %>
 <div class="main-content">
@@ -443,6 +453,71 @@
 										<hr/>
 										<div class="row">
 											<div class="col-lg-12 margin-bottom-5">
+												<div class="form-group" id="error-amenity_type">
+													<label class="control-label col-sm-2">Project Amenities Weightage </label>
+													<div class="col-sm-10">
+														<% 	for(BuilderProjectAmenity projectAmenity : projectAmenities) { 
+															String is_checked = "";
+															for(BuilderProjectAmenityInfo projectAmenityInfo :projectAmenityInfos) {
+																if(projectAmenity.getId() == projectAmenityInfo.getBuilderProjectAmenity().getId()) {
+																	is_checked = "checked";
+																}
+															}
+															Double amenity_wt = 0.0;
+															for(ProjectAmenityWeightage projectAmenityWeightage :amenityWeightages) {
+																if(projectAmenity.getId() == projectAmenityWeightage.getBuilderProjectAmenity().getId()) {
+																	amenity_wt = projectAmenityWeightage.getAmenityWeightage();
+																}
+															}
+														%>
+														<div class="col-sm-12" id="amenity_stage<% out.print(projectAmenity.getId());%>" style="<% if(is_checked == "checked") {%>display:block;<% } else { %>display:none;<% } %>margin-bottom:5px;">
+															<div class="row">
+																<label class="control-label col-sm-3" style="padding-top:5px;"><strong><% out.print(projectAmenity.getName());%></strong></label>
+																<div class="col-sm-4">
+																	<input type="text" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(projectAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
+																</div>
+															</div>
+															<% 	for(BuilderProjectAmenityStages bpaStages :projectAmenity.getBuilderProjectAmenityStageses()) { 
+																Double stage_wt = 0.0;
+																for(ProjectAmenityWeightage projectAmenityWeightage :amenityWeightages) {
+																	if(bpaStages.getId() == projectAmenityWeightage.getBuilderProjectAmenityStages().getId()) {
+																		stage_wt = projectAmenityWeightage.getStageWeightage();
+																	}
+																}
+															%>
+															<fieldset class="scheduler-border">
+																<legend class="scheduler-border">Stages</legend>
+																<div class="col-sm-12">
+																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %></b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(projectAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																	<fieldset class="scheduler-border" style="margin-bottom:0px !important">
+																		<legend class="scheduler-border">Sub Stages</legend>
+																	<% 	for(BuilderProjectAmenitySubstages bpaSubstage :bpaStages.getBuilderProjectAmenitySubstageses()) { 
+																		Double substage_wt = 0.0;
+																		for(ProjectAmenityWeightage projectAmenityWeightage :amenityWeightages) {
+																			if(bpaSubstage.getId() == projectAmenityWeightage.getBuilderProjectAmenitySubstages().getId()) {
+																				substage_wt = projectAmenityWeightage.getSubstageWeightage();
+																			}
+																		}
+																	%>
+																		<div class="col-sm-3">
+																			<% out.print(bpaSubstage.getName()); %><br>
+																			<input type="text" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																		</div>
+																	<% } %>
+																	</fieldset>
+																</div>
+															</fieldset>
+															<% } %>
+														</div>
+														<% } %>
+													</div>
+													<div class="messageContainer"></div>
+												</div>
+											</div>
+										</div>
+										<hr/>
+										<div class="row">
+											<div class="col-lg-12 margin-bottom-5">
 												<div class="form-group" id="error-approval_type">
 													<label class="control-label col-sm-2">Project Approvals </label>
 													<div class="col-sm-10">
@@ -629,7 +704,7 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Stamp Duty </label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());}%>"/>
+														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -638,7 +713,7 @@
 												<div class="form-group" id="error-tax">
 													<label class="control-label col-sm-4">Tax</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());}%>"/>
+														<input type="text" class="form-control" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -649,7 +724,7 @@
 												<div class="form-group" id="error-vat">
 													<label class="control-label col-sm-4">VAT </label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="vat" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());}%>"/>
+														<input type="text" class="form-control" id="vat" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -966,6 +1041,19 @@
 	.margin-bottom-5 {
 		padding-bottom:5px;
 	}
+	fieldset.scheduler-border {
+	    border: 1px groove #ddd !important;
+	    padding: 0 1.4em 1.4em 1.4em !important;
+	    margin: 0 0 1.5em 0 !important;
+	    -webkit-box-shadow:  0px 0px 0px 0px #000;
+	            box-shadow:  0px 0px 0px 0px #000;
+	}
+	legend.scheduler-border {
+	    width:inherit; /* Or auto */
+	    padding:0 10px; /* To give a bit of padding on the left and right */
+	    border-bottom:none;
+	    margin-bottom:5px;
+	}
 </style>
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
@@ -1199,13 +1287,33 @@ function showPriceResponse(resp, statusText, xhr, $form){
   	}
 }
 
+$('input[name="amenity_type[]"]').click(function() {
+	if($(this).prop("checked")) {
+		$("#amenity_stage"+$(this).val()).show();
+	} else {
+		$("#amenity_stage"+$(this).val()).hide();
+	}
+});
+
 $("#detailbtn").click(function(){
+	var amenityWeightage = [];
 	var projectType = [];
 	var propertyType = [];
 	var configuration = [];
 	var amenityType = [];
 	var approvalType = [];
 	var homeLoanInfo = [];
+	var paw = null;
+	$('input[name="amenity_type[]"]:checked').each(function() {
+		amenity_id = $(this).val();
+		$('input[name="stage_weightage'+amenity_id+'[]"]').each(function() {
+			stage_id = $(this).attr("id");
+			stage_weightage = $(this).val();
+			$('input[name="substage'+stage_id+'[]"]').each(function() {
+				amenityWeightage.push({builderProject:{id:$("#id").val()},builderProjectAmenity:{id:amenity_id},amenityWeightage:$("#amenity_weightage"+amenity_id).val(),builderProjectAmenityStages:{id:stage_id},stageWeightage:stage_weightage,builderProjectAmenitySubstages:{id:$(this).attr("id")},substageWeightage:$(this).val(),status:false});
+			});
+		});
+	});
 	var project = {id:$("#id").val(),projectArea:$("#project_area").val(),areaUnit:{id:$("#area_unit").val()},launchDate:new Date($("#launch_date").val())};
 	$('input[name="project_type[]"]:checked').each(function() {
 		projectType.push({builderProjectType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
@@ -1226,7 +1334,7 @@ $("#detailbtn").click(function(){
 	$('input[name="homeloan_bank[]"]:checked').each(function() {
 		homeLoanInfo.push({homeLoanBanks:{id:$(this).val()},builderProject:{id:$("#id").val()}});
 	});
-	var final_data = {builderProject:project,builderProjectProjectTypes:projectType,builderProjectPropertyTypes:propertyType,builderProjectPropertyConfigurationInfos:configuration,builderProjectAmenityInfos:amenityType,builderProjectApprovalInfos:approvalType,builderProjectBankInfos:homeLoanInfo}
+	var final_data = {builderProject:project,builderProjectProjectTypes:projectType,builderProjectPropertyTypes:propertyType,builderProjectPropertyConfigurationInfos:configuration,builderProjectAmenityInfos:amenityType,builderProjectApprovalInfos:approvalType,builderProjectBankInfos:homeLoanInfo,projectAmenityWeightages:amenityWeightage}
 	$.ajax({
 	    url: '${baseUrl}/webapi/project/detail/update',
 	    type: 'POST',

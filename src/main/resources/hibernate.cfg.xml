@@ -117,6 +117,10 @@
         <mapping class="org.bluepigeon.admin.model.BuilderFloorStatus" />
         <mapping class="org.bluepigeon.admin.model.BuilderBuildingFlatType" />
         <mapping class="org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom" />
+        <mapping class="org.bluepigeon.admin.model.ProjectAmenityWeightage" />
+        <mapping class="org.bluepigeon.admin.model.BuildingAmenityWeightage" />
+        <mapping class="org.bluepigeon.admin.model.FloorAmenityWeightage" />
+        <mapping class="org.bluepigeon.admin.model.FlatAmenityWeightage" />
 	</session-factory>
 
 </hibernate-configuration>

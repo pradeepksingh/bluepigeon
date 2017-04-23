@@ -5,6 +5,8 @@
 <%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFloorStatus"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFloorAmenity"%>
+<%@page import="org.bluepigeon.admin.model.BuilderFloorAmenityStages"%>
+<%@page import="org.bluepigeon.admin.model.BuilderFloorAmenitySubstages"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
@@ -67,6 +69,7 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
+										<input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
 										<input type="hidden" name="img_count" id="img_count" value="2"/>
 										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
@@ -147,6 +150,44 @@
 													<div class="messageContainer"></div>
 												</div>
 											</div>
+											<div class="col-lg-12 margin-bottom-5">
+												<div class="form-group" id="error-amenity_type">
+													<label class="control-label col-sm-2">Floor Amenities Weightage </label>
+													<div class="col-sm-10">
+														<% 	for(BuilderFloorAmenity builderFloorAmenity :builderFloorAmenities) { 
+														%>
+														<div class="col-sm-12" id="amenity_stage<% out.print(builderFloorAmenity.getId());%>" style="display:none;margin-bottom:5px;">
+															<div class="row">
+																<label class="control-label col-sm-3" style="padding-top:5px;text-align:left;"><strong><% out.print(builderFloorAmenity.getName());%></strong></label>
+																<div class="col-sm-4">
+																	<input type="text" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderFloorAmenity.getId());%>" placeholder="Amenity Weightage" value="">
+																</div>
+															</div>
+															<% 	for(BuilderFloorAmenityStages bpaStages :builderFloorAmenity.getBuilderFloorAmenityStageses()) { 
+															%>
+															<fieldset class="scheduler-border">
+																<legend class="scheduler-border">Stages</legend>
+																<div class="col-sm-12">
+																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %></b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(builderFloorAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value=""/></div></div>
+																	<fieldset class="scheduler-border" style="margin-bottom:0px !important">
+																		<legend class="scheduler-border">Sub Stages</legend>
+																	<% 	for(BuilderFloorAmenitySubstages bpaSubstage :bpaStages.getBuilderFloorAmenitySubstageses()) { 
+																	%>
+																		<div class="col-sm-3">
+																			<% out.print(bpaSubstage.getName()); %><br>
+																			<input type="text" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value=""/>
+																		</div>
+																	<% } %>
+																	</fieldset>
+																</div>
+															</fieldset>
+															<% } %>
+														</div>
+														<% } %>
+													</div>
+													<div class="messageContainer"></div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -210,6 +251,19 @@
 	.row {
 		margin-bottom:5px;
 	}
+	fieldset.scheduler-border {
+	    border: 1px groove #ddd !important;
+	    padding: 0 1.4em 1.4em 1.4em !important;
+	    margin: 0 0 1.5em 0 !important;
+	    -webkit-box-shadow:  0px 0px 0px 0px #000;
+	            box-shadow:  0px 0px 0px 0px #000;
+	}
+	legend.scheduler-border {
+	    width:inherit; /* Or auto */
+	    padding:0 10px; /* To give a bit of padding on the left and right */
+	    border-bottom:none;
+	    margin-bottom:5px;
+	}
 </style>
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
@@ -252,6 +306,22 @@ $('#addfloor').bootstrapValidator({
 });
 
 function addFloor() {
+	var amenityWeightage = "";
+	$('input[name="amenity_type[]"]:checked').each(function() {
+		amenity_id = $(this).val();
+		$('input[name="stage_weightage'+amenity_id+'[]"]').each(function() {
+			stage_id = $(this).attr("id");
+			stage_weightage = $(this).val();
+			$('input[name="substage'+stage_id+'[]"]').each(function() {
+				if(amenityWeightage != "") {
+					amenityWeightage = amenityWeightage + "," + amenity_id + "#" + $("#amenity_weightage"+amenity_id).val() + "#" + stage_id + "#" + stage_weightage + "#" + $(this).attr("id") + "#" + $(this).val() + "#" + false;
+				} else {
+					amenityWeightage = amenity_id + "#" + $("#amenity_weightage"+amenity_id).val() + "#" + stage_id + "#" + stage_weightage + "#" + $(this).attr("id") + "#" + $(this).val() + "#" + false;
+				}
+			});
+		});
+	});
+	$("#amenity_wt").val(amenityWeightage);
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -321,6 +391,13 @@ $("#project_id").change(function(){
 		$("#building_id").html(html);
 	},'json');
 	
+});
+$('input[name="amenity_type[]"]').click(function() {
+	if($(this).prop("checked")) {
+		$("#amenity_stage"+$(this).val()).show();
+	} else {
+		$("#amenity_stage"+$(this).val()).hide();
+	}
 });
 
 </script>
