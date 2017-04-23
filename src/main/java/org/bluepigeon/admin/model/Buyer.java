@@ -18,38 +18,36 @@ import javax.persistence.Table;
 public class Buyer implements java.io.Serializable {
 
 	private Integer id;
-	private BuilderFloor builderFloor;
+	private Builder builder;
 	private AdminUser adminUser;
-	private BuilderBuilding builderBuilding;
 	private BuilderFlat builderFlat;
 	private BuilderProject builderProject;
+	private Short isPrimary;
 	private String name;
 	private String contact;
 	private String email;
 	private String pan;
 	private String address;
-	private String photo;
-	private byte agreement;
-	private byte possession;
-	private byte status;
+	private Short agreement;
+	private Short possession;
+	private Short status;
 	
 	public Buyer() {
 	}
 
-	public Buyer(BuilderFloor builderFloor, AdminUser adminUser, BuilderBuilding builderBuilding,
-			BuilderFlat builderFlat, BuilderProject builderProject, String name, String contact, String email,
-			String pan, String address, String photo, byte agreement, byte possession, byte status) {
-		this.builderFloor = builderFloor;
+	public Buyer(Builder builder, AdminUser adminUser, BuilderFlat builderFlat, BuilderProject builderProject,
+			Short isPrimary, String name, String contact, String email, String pan, String address, Short agreement,
+			Short possession, Short status) {
+		this.builder = builder;
 		this.adminUser = adminUser;
-		this.builderBuilding = builderBuilding;
 		this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
+		this.isPrimary = isPrimary;
 		this.name = name;
 		this.contact = contact;
 		this.email = email;
 		this.pan = pan;
 		this.address = address;
-		this.photo = photo;
 		this.agreement = agreement;
 		this.possession = possession;
 		this.status = status;
@@ -68,15 +66,6 @@ public class Buyer implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "floor_id")
-	public BuilderFloor getBuilderFloor() {
-		return this.builderFloor;
-	}
-	public void setBuilderFloor(BuilderFloor builderFloor) {
-		this.builderFloor = builderFloor;
-	}
-	
-	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "emp_id")
 	public AdminUser getAdminUser() {
 		return this.adminUser;
@@ -84,16 +73,6 @@ public class Buyer implements java.io.Serializable {
 
 	public void setAdminUser(AdminUser adminUser) {
 		this.adminUser = adminUser;
-	}
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "building_id")
-	public BuilderBuilding getBuilderBuilding() {
-		return this.builderBuilding;
-	}
-
-	public void setBuilderBuilding(BuilderBuilding builderBuilding) {
-		this.builderBuilding = builderBuilding;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -114,6 +93,25 @@ public class Buyer implements java.io.Serializable {
 
 	public void setBuilderProject(BuilderProject builderProject) {
 		this.builderProject = builderProject;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "builder_id")
+	public Builder getBuilder() {
+		return this.builder;
+	}
+
+	public void setBuilder(Builder builder) {
+		this.builder = builder;
+	}
+
+	@Column(name = "is_primary")
+	public Short getIsPrimary() {
+		return this.isPrimary;
+	}
+
+	public void setIsPrimary(Short isPrimary) {
+		this.isPrimary = isPrimary;
 	}
 
 	@Column(name = "name", length = 128)
@@ -161,39 +159,30 @@ public class Buyer implements java.io.Serializable {
 		this.address = address;
 	}
 
-	@Column(name = "photo", length = 225)
-	public String getPhoto() {
-		return this.photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
-
 	@Column(name = "agreement")
-	public byte getAgreement() {
+	public Short getAgreement() {
 		return this.agreement;
 	}
 
-	public void setAgreement(byte agreement) {
+	public void setAgreement(Short agreement) {
 		this.agreement = agreement;
 	}
 
 	@Column(name = "possession")
-	public byte getPossession() {
+	public Short getPossession() {
 		return this.possession;
 	}
 
-	public void setPossession(byte possession) {
+	public void setPossession(Short possession) {
 		this.possession = possession;
 	}
 
 	@Column(name = "status")
-	public byte getStatus() {
+	public Short getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(byte status) {
+	public void setStatus(Short status) {
 		this.status = status;
 	}
 }

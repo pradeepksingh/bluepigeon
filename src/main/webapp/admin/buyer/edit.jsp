@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.dao.ProjectLeadDAO"%>
 <%@page import="org.bluepigeon.admin.data.FlatData"%>
 <%@page import="org.bluepigeon.admin.data.FloorData"%>
 <%@page import="org.bluepigeon.admin.data.BuildingData"%>
@@ -25,14 +26,19 @@
 <%@include file="../../head.jsp"%>
 <%@include file="../../leftnav.jsp"%>
 <%
+	int lead_id = 0;
+	int type_size = 0;
+	int flat_size =	0;
+	int building_size = 0;
+	int city_size = 0;
 	int buyer_id = 0;
 	int projectId = 0;
 	int buildingId = 0;
-	int floorId = 0;
+	//int floorId = 0;
 	int flatId = 0;
 	int p_user_id = 0;
 	List<BuildingData> building_list = null;
-	List<FloorData> floor_list = null;
+	//List<FloorData> floor_list = null;
 	List<FlatData> flat_list = null;
 	buyer_id = Integer.parseInt(request.getParameter("buyer_id"));
 	session = request.getSession(false);
@@ -45,31 +51,44 @@
 			p_user_id = adminuserproject.getId();
 		}
    	}
-	Buyer buyer =  new BuyerDAO().getBuyerById(buyer_id);
-	BuyerDocuments buyerDocuments = new BuyerDAO().getBuyerDocumentsByBuyerId(buyer_id);
-	BuyingDetails buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyer_id);
-	List<BuyerOffer> buyerOffersList = new BuyerDAO().getBuyerOffersByBuyerId(buyer_id);
-	List<BuyerPayment> buyerPaymentsList = new BuyerDAO().getBuyerPaymentsByBuyerId(buyer_id);
-	List<BuyerUploadDocuments> buyerUploadDocumentsList = new BuyerDAO().getBuyerUploadDocumentsByBuyerId(buyer_id);
-	List<BuilderProject> project_list = new ProjectDetailsDAO().getBuilderProjectList();
-	if(project_list.size()>0){
-		for(BuilderProject builderProject: project_list){
-	    projectId = builderProject.getId();
-	    System.out.println("Project Size :: "+project_list.size());
-	    building_list = new BuyerDAO().getBuildingByProjectId(projectId);
-		    if(building_list.size()>0){
-		    	for(BuildingData buildingData : building_list){
-		    		System.out.println("Building Size :: "+building_list.size());
-			    	buildingId = buildingData.getId();
-			    	floor_list = new BuyerDAO().getBuilderFloorByBuildingId(buildingId);
-			    	if(floor_list.size()>0){
-			    		floorId = floor_list.get(0).getId();
-			    		flat_list = new BuyerDAO().getBuilderFlatTypeByFloorId(floorId);
-			    	}
-		    	}	
-		    }  	
-		}
-	}
+	
+	int project_size = 0;
+	int builder_id = 0;
+	List<BuilderBuilding> builderBuildings = null;
+	List<BuilderFlat> builderFlats = null;
+ 	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
+ 	if(builderProjects.size()>0){
+    	project_size = builderProjects.size();
+ 		builderBuildings = new ProjectLeadDAO().getBuildingByProjectId(builderProjects.get(0).getId());
+ 	}
+ 	if(builderBuildings.size()>0){
+ 		building_size =	builderBuildings.size();
+ 		builderFlats = new ProjectDAO().getBuilderProjectBuildingFlats(builderBuildings.get(0).getId());
+ 	}
+ 	Buyer buyer =  new BuyerDAO().getBuyerById(buyer_id);
+ 	BuyerDocuments buyerDocuments = new BuyerDAO().getBuyerDocumentsByBuyerId(buyer_id);
+ 	BuyingDetails buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyer_id);
+ 	List<BuyerOffer> buyerOffersList = new BuyerDAO().getBuyerOffersByBuyerId(buyer_id);
+ 	List<BuyerPayment> buyerPaymentsList = new BuyerDAO().getBuyerPaymentsByBuyerId(buyer_id);
+ 	List<BuyerUploadDocuments> buyerUploadDocumentsList = new BuyerDAO().getBuyerUploadDocumentsByBuyerId(buyer_id);
+// 	List<BuilderProject> project_list = new ProjectDetailsDAO().getBuilderProjectList();
+// 	if(project_list.size()>0){
+// 		for(BuilderProject builderProject: project_list){
+// 	    projectId = builderProject.getId();
+// 	    building_list = new BuyerDAO().getBuildingByProjectId(projectId);
+// 		    if(building_list.size()>0){
+// 		    	for(BuildingData buildingData : building_list){
+// 		    		System.out.println("Building Size :: "+building_list.size());
+// 			    	buildingId = buildingData.getId();
+// 			    	floor_list = new BuyerDAO().getBuilderFloorByBuildingId(buildingId);
+// 			    	if(floor_list.size()>0){
+// 			    		floorId = floor_list.get(0).getId();
+// 			    		flat_list = new BuyerDAO().getBuilderFlatTypeByFloorId(floorId);
+// 			    	}
+// 		    	}	
+// 		    }  	
+// 		}
+// 	}
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -228,28 +247,28 @@
 													<div class="col-sm-8">
 														<select name="building_id" id="building_id" class="form-control">
 										                    <option value="">Select Building</option>
-										                   <% 	for(BuildingData buildingDataList : building_list) { %>
-															<option value="<% out.print(buildingDataList.getId());%>" <% if(buildingDataList.getId() == buyer.getBuilderBuilding().getId()) { %>selected<% } %>><% out.print(buildingDataList.getName()); %></option>
+										                   <% 	for(BuilderFlat buildingDataList : builderFlats) { %>
+															<option value="<% out.print(buildingDataList.getId());%>" <% if(buildingDataList.getId() == builderFlats.getId()) { %>selected<% } %>><% out.print(buildingDataList.getName()); %></option>
 															<% } %>
 											          	</select>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
 											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-state_id">
-													<label class="control-label col-sm-4">Floor <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-														<select name="floor_id" id="floor_id" class="form-control">
-										                    <option value="">Select Floor</option>
-										                   <% 	for(FloorData FloorDataList : floor_list) { %>
-															<option value="<% out.print(FloorDataList.getId());%>" <% if(FloorDataList.getId() == buyer.getBuilderFloor().getId()) { %>selected<% } %>><% out.print(FloorDataList.getName()); %></option>
-															<% } %>
-											          	</select>
-													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
+<!-- 											<div class="col-lg-6 margin-bottom-5"> -->
+<!-- 												<div class="form-group" id="error-state_id"> -->
+<!-- 													<label class="control-label col-sm-4">Floor <span class='text-danger'>*</span></label> -->
+<!-- 													<div class="col-sm-8"> -->
+<!-- 														<select name="floor_id" id="floor_id" class="form-control"> -->
+<!-- 										                    <option value="">Select Floor</option> -->
+<%-- 										                   <% 	for(FloorData FloorDataList : floor_list) { %> --%>
+<%-- 															<option value="<% out.print(FloorDataList.getId());%>" <% if(FloorDataList.getId() == buyer.getBuilderFloor().getId()) { %>selected<% } %>><% out.print(FloorDataList.getName()); %></option> --%>
+<%-- 															<% } %> --%>
+<!-- 											          	</select> -->
+<!-- 													</div> -->
+<!-- 													<div class="messageContainer"></div> -->
+<!-- 												</div> -->
+<!-- 											</div> -->
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-flat_id">
 													<label class="control-label col-sm-4">Flat <span class='text-danger'>*</span></label>

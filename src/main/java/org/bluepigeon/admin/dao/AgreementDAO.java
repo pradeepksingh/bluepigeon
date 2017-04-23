@@ -104,12 +104,12 @@ public class AgreementDAO {
 				BuilderBuilding builderBuilding = (BuilderBuilding)buildingQuery.list().get(0);
 				agreementList.setBuildingName(builderBuilding.getName());
 			}
-			if(agreement.getBuilderFloor() != null){
-				Query floorQuery = floorSession.createQuery(floor_hql);
-				floorQuery.setParameter("id", agreement.getBuilderFloor().getId());
-				BuilderFloor builderFloor = (BuilderFloor)floorQuery.list().get(0);
-				agreementList.setFloorNo(builderFloor.getName());
-			}
+//			if(agreement.getBuilderFloor() != null){
+//				Query floorQuery = floorSession.createQuery(floor_hql);
+//				floorQuery.setParameter("id", agreement.getBuilderFloor().getId());
+//				BuilderFloor builderFloor = (BuilderFloor)floorQuery.list().get(0);
+//				agreementList.setFloorNo(builderFloor.getName());
+//			}
 			if(agreement.getBuilderFlat() != null){
 				Query flatQuery = flatSession.createQuery(flat_hql);
 				flatQuery.setParameter("id", agreement.getBuilderFlat().getId());

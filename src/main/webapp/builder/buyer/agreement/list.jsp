@@ -71,7 +71,6 @@
 									<tr>
 										<th>Project Name</th>
 										<th>Building Name</th>
-										<th>Floor</th>
 										<th>Flat No</th>
 										<th>Buyer Name</th>
 										<th>Actions</th>
@@ -85,9 +84,6 @@
 										</td>
 										<td>
 											<% out.print(agreementList.getBuildingName()); %>
- 										</td> 
- 										<td> 
- 											<% out.print(agreementList.getFloorNo()); %> 
  										</td> 
  										<td> 
  											<% out.print(agreementList.getFlatNo()); %> 
@@ -121,18 +117,18 @@ $(document).ready(function(){
 });
 $("#builder_id").change(function(){
 	$.get("${baseUrl}/webapi/create/project/list/",{ builder_id: $("#builder_id").val() }, function(data){
-		var html = '<option value="">Select Builder Comapny</optio>';
+		var html = '<option value="">Select Builder Comapny</option>';
 		$(data).each(function(index){
-			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
+			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		});
 		$("#company_id").html(html);
 	},'json');
 });
 $("#country_id").change(function(){
 	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#country_id").val() }, function(data){
-		var html = '<option value="">Select State</optio>';
+		var html = '<option value="">Select State</option>';
 		$(data).each(function(index){
-			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
+			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		});
 		$("#state_id").html(html);
 	},'json');
@@ -140,7 +136,7 @@ $("#country_id").change(function(){
 
 $("#state_id").change(function(){
 	$.get("${baseUrl}/webapi/general/city/list",{ state_id: $("#state_id").val() }, function(data){
-		var html = '<option value="">Select City</optio>';
+		var html = '<option value="">Select City</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 		});
