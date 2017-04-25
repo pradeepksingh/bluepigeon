@@ -85,6 +85,8 @@ public class BuyerController {
 			@FormDataParam("status") Short status
 			//@FormDataParam("buyer_image[]") List<FormDataBodyPart> image,
 			){
+				int flag =0;
+				Short isPrimary =0;
 				ResponseMessage msg = new ResponseMessage();
 				BuyerDAO buyerDAO = new BuyerDAO();
 				AdminUser adminUser = new AdminUser();
@@ -122,7 +124,13 @@ public class BuyerController {
 							buyer.setPan(pan.get(i).getValueAs(String.class).toString());
 						}
 						//if(buyers.getValueAs(Short.class) != null)
+						if(is_primary.get(i).getValueAs(Short.class).shortValue() == 1){
+							flag++;
 							buyer.setIsPrimary(is_primary.get(i).getValueAs(Short.class).shortValue());
+						}
+						if(flag>1){
+							buyer.setIsPrimary(isPrimary);
+						}
 						buyerList.add(buyer);
 						
 						i++;	
