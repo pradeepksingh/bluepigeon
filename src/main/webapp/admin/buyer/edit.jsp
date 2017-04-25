@@ -271,34 +271,6 @@
 													<div class="messageContainer col-sm-4"></div>
 												</div>
 											</div>
-	<!-- 										<div class="col-lg-6 margin-bottom-5"> -->
-	<!-- 											<div class="form-group" id="error-state_id"> -->
-	<!-- 												<label class="control-label col-sm-3">Agreement <span class='text-danger'>*</span></label> -->
-	<!-- 												<div class="col-sm-5"> -->
-	<!-- 													<select name="agreement" id="agreement" class="form-control"> -->
-	<!-- 									                    <option value="">Select Agreement</option> -->
-	<!-- 									                     <option value="0">No</option> -->
-	<!-- 									                      <option value="1">Yes</option> -->
-	<!-- 										          	</select> -->
-	<!-- 												</div> -->
-	<!-- 												<div class="messageContainer col-sm-4"></div> -->
-	<!-- 											</div> -->
-	<!-- 										</div> -->
-	<!-- 									</div> -->
-	<!-- 									<div class="row"> -->
-	<!-- 										<div class="col-lg-6 margin-bottom-5"> -->
-	<!-- 											<div class="form-group" id="error-state_id"> -->
-	<!-- 												<label class="control-label col-sm-3">Possession <span class='text-danger'>*</span></label> -->
-	<!-- 												<div class="col-sm-5"> -->
-	<!-- 													<select name="possession" id="possession" class="form-control"> -->
-	<!-- 									                    <option value="">Select Possession</option> -->
-	<!-- 									                     <option value="0">No</option> -->
-	<!-- 									                      <option value="1">Yes</option> -->
-	<!-- 										          	</select> -->
-	<!-- 												</div> -->
-	<!-- 												<div class="messageContainer col-sm-4"></div> -->
-	<!-- 											</div> -->
-	<!-- 										</div> -->
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-state_id">
 													<label class="control-label col-sm-3">Status <span class='text-danger'>*</span></label>

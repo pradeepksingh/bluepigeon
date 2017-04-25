@@ -3,6 +3,7 @@ package org.bluepigeon.admin.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bluepigeon.admin.data.PropertyManagerData;
 import org.bluepigeon.admin.data.PropertyManagerList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
@@ -41,15 +42,16 @@ public class PropertyManagerDAO {
 	 * @param propertyManagerPhotos
 	 * @return
 	 */
-	public ResponseMessage saveManagerPhoto(PropertyManagerPhotos propertyManagerPhotos){
+	public ResponseMessage saveManagerPhoto(List<PropertyManagerPhotos> propertyManagerPhotos){
 		ResponseMessage responseMessage = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
-		newsession.save(propertyManagerPhotos);
+		for(PropertyManagerPhotos photos : propertyManagerPhotos)
+			newsession.save(photos);
 		newsession.getTransaction().commit();
 		newsession.close();
-		responseMessage.setId(propertyManagerPhotos.getId());
+		responseMessage.setId(propertyManagerPhotos.get(0).getId());
 		responseMessage.setStatus(1);
 		responseMessage.setMessage("Property Manager Photo Added Successfully.");
 		return responseMessage;
@@ -73,17 +75,21 @@ public class PropertyManagerDAO {
 	 * Get Admin user by id
 	 * @author pankaj
 	 * @param id
-	 * @return admin user object
+	 * @return property manager object
 	 */
-	public AdminUser getAdminUserById(int id){
+	public PropertyManagerData getAdminUserById(int id){
 		String hql = "from AdminUser where id=:id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
 		AdminUser adminUser = (AdminUser)query.list().get(0);
+		PropertyManagerData propertyManagerData = new PropertyManagerData();
+		propertyManagerData.setId(adminUser.getId());
+		propertyManagerData.setContact(adminUser.getMobile());
+		propertyManagerData.setEmail(adminUser.getEmail());
 		session.close();
-		return adminUser;
+		return propertyManagerData;
 	}
 	/**
 	 * Get All city name
@@ -127,9 +133,9 @@ public class PropertyManagerDAO {
 		for(PropertyManager propertyManager : result){
 			PropertyManagerList propertyManagerList = new PropertyManagerList();
 			propertyManagerList.setId(propertyManager.getId());
-			propertyManagerList.setName(propertyManager.getAdminUser().getName());
-			propertyManagerList.setContact(propertyManager.getAdminUser().getMobile());
-			propertyManagerList.setEmail(propertyManager.getAdminUser().getEmail());
+			propertyManagerList.setName(propertyManager.getAdminUserByAdminUserId().getName());
+			propertyManagerList.setContact(propertyManager.getAdminUserByAdminUserId().getMobile());
+			propertyManagerList.setEmail(propertyManager.getAdminUserByAdminUserId().getEmail());
 			propertyManagerList.setRoleName(propertyManager.getAdminUserRole().getRoleName());
 			managerList.add(propertyManagerList);
 		}

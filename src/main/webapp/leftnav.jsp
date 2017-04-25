@@ -17,7 +17,7 @@ if(session!=null)
                         
 %>
 <body class="no-skin">
-	<div id="navbar" class="navbar navbar-default          ace-save-state">
+	<div id="navbar" class="navbar navbar-default ace-save-state">
 		<div class="navbar-container ace-save-state" id="navbar-container">
 			<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
 				<span class="sr-only">Toggle sidebar</span>
@@ -289,6 +289,20 @@ if(session!=null)
 						<li class="">
 							<a href="${baseUrl}/admin/project/building/floor/flat/list.jsp"> 
 								<i class="menu-icon fa fa-caret-right"></i> Manage Flats
+							</a> <b class="arrow"></b>
+						</li>
+					</ul>
+				</li>
+				<li class="active">
+					<a href="#" class="dropdown-toggle"> 
+						<i class="menu-icon fa fa-pencil-square-o"></i> 
+						<span class="menu-text"> Property Manager </span> <b class="arrow fa fa-angle-down"></b>
+					</a> 
+					<b class="arrow"></b>
+					<ul class="submenu">
+						<li class="active">
+							<a href="${baseUrl}/admin/employee/list.jsp"> 
+								<i class="menu-icon fa fa-caret-right"></i> Manage Property Manager
 							</a> <b class="arrow"></b>
 						</li>
 					</ul>

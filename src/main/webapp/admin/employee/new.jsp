@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.AdminUserRole"%>
 <%@page import="org.bluepigeon.admin.dao.PropertyManagerDAO"%>
 <%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
 <%@page import="org.bluepigeon.admin.model.City"%>
@@ -7,10 +8,9 @@
 <%@include file="../../head.jsp"%>
 <%@include file="../../leftnav.jsp"%>
 <%
- 
+
+	List<AdminUserRole> adminUserRoles = new PropertyManagerDAO().getAdminUserRoles();
 	List<AdminUser> adminUsers = new PropertyManagerDAO().getAminUserList();
-    
- 
    	session = request.getSession(false);
     AdminUser adminuserproject = new AdminUser();
  	int p_user_id = 0;
@@ -37,146 +37,147 @@
 			<div class="page-header">
 				<h1>Add New Property manager</h1>
 			</div>
-			<div class="row">
-				<div class="col-lg-12">
-					<form id="addpropertymanager" name="addpropertymanager" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-						<div class="panel panel-default">
-							<div class="panel-body">
-								<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
-								<div class="col-lg-6 margin-bottom-5">
-									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Name</label>
-										<div class="col-sm-9">
-											<select name="manager_type" id="manager_type" class="form-control">
-						                 	   	<option value="0">Select Name</option>
-						                 	   	 <% for(AdminUser adminUser : adminUsers){ %>
-												<option value="<% out.print(adminUser.getId());%>"><% out.print(adminUser.getName());%></option>
-												<% } %>
-								       	  	</select>
+			<ul class="nav nav-tabs" id="managerTabs">
+			  	<li class="active"><a data-toggle="tab" href="#basic">Basic Details</a></li>
+			  	<li><a data-toggle="tab" href="#managerdetail">Manager Photo</a></li>
+			</ul>
+			<form id="addmanager" name="addmanager" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+			<div class="tab-content">
+				<div id="basic" class="tab-pane fade in active">
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
+										<div class="col-lg-6 margin-bottom-5">
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Name</label>
+												<div class="col-sm-9">
+													<select name="manager_id" id="manager_id" class="form-control">
+								                 	   	<option value="0">Select Name</option>
+								                 	   	 <% for(AdminUser adminUser : adminUsers){ %>
+														<option value="<% out.print(adminUser.getId());%>"><% out.print(adminUser.getName());%></option>
+														<% } %>
+										       	  	</select>
+												</div>
+												<div class="messageContainer col-sm-offset-3"></div>
+										  	</div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
-								  	</div>
-							  	</div>
-								<div class="col-lg-6 margin-bottom-5">
-									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Campaign Type </label>
-										<div class="col-sm-9">
-											<select name="campaign_type" id="campaign_type" class="form-control">
-						                 	   	<option value="0">Select Campaign</option>
-								       	  	</select>
+										<div class="col-lg-6 margin-bottom-5">
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Phone</label>
+												<div class="col-sm-9">
+													<select name="phone" id="phone" class="form-control">
+								                 	   	<option value="0">Select Contact No.</option>
+										       	  	</select>
+												</div>
+												<div class="messageContainer col-sm-offset-3"></div>
+											</div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
-									</div>
-								</div>
-								<div class="col-lg-6 margin-bottom-5">
-									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Set date </label>
-										<div class="col-sm-9">
-											<select name="campaign_type" id="campaign_type" class="form-control">
-						                 	   	<option value="0">Select Campaign</option>
-								       	  	</select>
+										<div class="col-lg-6 margin-bottom-5">
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Email </label>
+												<div class="col-sm-9">
+													<select name="email" id="email" class="form-control">
+								                 	   	<option value="0">Select Email</option>
+										       	  	</select>
+												</div>
+												<div class="messageContainer col-sm-offset-3"></div>
+											</div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
-									</div>
-								</div>
-								<div class="col-lg-6 margin-bottom-5">
-									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Content</label>
-										<div class="col-sm-9">
-											<textarea id="content" name="content" placeholder="Enter content " class="form-control" ></textarea>
+										<div class="col-lg-6 margin-bottom-5">
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Current Address</label>
+												<div class="col-sm-9">
+													<textarea id="current_address" name="current_address" placeholder="Enter current Address" class="form-control" ></textarea>
+												</div>
+												<div class="messageContainer col-sm-offset-3"></div>
+											</div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
-									</div>
-								</div>
-								<div class="col-lg-6 margin-bottom-5">
-									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Terms</label>
-										<div class="col-sm-9">
-											<textarea id="terms" name="terms" placeholder="Enter terms" class="form-control" ></textarea>
+										<div class="col-lg-6 margin-bottom-5">
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Permanent Address</label>
+												<div class="col-sm-9">
+													<textarea id="permanent_address" name="permanent_address" placeholder="Enter Permanent Address" class="form-control" ></textarea>
+												</div>
+												<div class="messageContainer col-sm-offset-3"></div>
+											</div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
-									</div>
-								</div>
-								<div class="col-lg-6 margin-bottom-5">
-									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Recipient Type </label>
-										<div class="col-sm-9">
-										 	<select name="recipient_type_id" id="recipient_type_id" class="form-control">
-							                    <option value="0">Select Recipient Type</option>
-							                     <option value="1">Lead</option>
-							                     <option value="2">Buyer</option>
-							                </select>
+										<div class="col-lg-6 margin-bottom-5">
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">City </label>
+												<div class="col-sm-9">
+												 	<select name="city_id" id="city_id" class="form-control">
+									                    <option value="0">Select City</option>
+									                     <% for(City city : city_list){ %>
+														<option value="<% out.print(city.getId());%>"><% out.print(city.getName());%></option>
+														<% } %>
+									                </select>
+												</div>
+												<div class="messageContainer col-sm-offset-3"></div>
+											</div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
-									</div>
-								</div>
-								<div class="col-lg-6 margin-bottom-5">
-									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select City </label>
-										<div class="col-sm-9">
-										 	<select name="city_id" id="city_id" class="form-control">
-							                    <option value="0">Select City</option>
-							                     <% for(City city : city_list){ %>
-												<option value="<% out.print(city.getId());%>"><% out.print(city.getName());%></option>
-												<% } %>
-							                </select>
+										<div class="col-lg-6 margin-bottom-5">
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Access type </label>
+												<div class="col-sm-9">
+												 	<select name="access_id" id="access_id" class="form-control">
+									                    <option value="0">Access Type</option>
+									                     <% for(AdminUserRole adminUser : adminUserRoles){ %>
+														<option value="<% out.print(adminUser.getId());%>"><% out.print(adminUser.getRoleName());%></option>
+														<% } %>
+									                </select>
+												</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+											</div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
-									</div>
-								</div>
-								<div class="col-lg-6 margin-bottom-5">
-									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select Project </label>
-										<div class="col-sm-9">
-										 	<select name="project_id" id="project_id" class="form-control">
-							                    <option value="0">Select Project</option>
-							                </select>
-										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
-									</div>
-								</div>
-								<div class="col-lg-6 margin-bottom-5">
-									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select Building </label>
-										<div class="col-sm-9">
-										 	<select name="building_id" id="building_id" class="form-control">
-							                    <option value="0">Select Building</option>
-							                </select>
-										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
-									</div>
-								</div>
-								<div class="col-lg-6 margin-bottom-5">
-									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select Flat </label>
-										<div class="col-sm-9">
-										 	<select name="flat_id" id="flat_id" class="form-control">
-							                    <option value="0">Select Flat</option>
-							                </select>
-										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
-									</div>
-								</div>
-								<div class="col-lg-12 margin-bottom-6">
-									<div class="form-group" id="error-project_type">
-										<label class="control-label col-sm-2">Recipient <span class='text-danger'>*</span></label>
-											<div id="appendbuyer"></div>
-										</div>
-										<div class="messageContainer"></div>
-									</div>
-								</div>
-								<input type="hidden" name="added_by" id="added_by" value="1"/>
-								<div class="col-lg-12 margin-bottom-5">
-									<div class="clearfix form-actions">
-										<div class="pull-right">
-											<button type="submit" class="btn btn-success">Submit</button>
+										<input type="hidden" name="added_by" id="added_by" value="1"/>
+										<div class="col-lg-12 margin-bottom-5">
+											<div class="clearfix form-actions">
+												<div class="pull-right">
+													<button type="button" onclick="showDetailTab()" class="btn btn-success btn-small">Submit</button>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-					</form>
+						</div>	
+<!-- 						</form> -->
+					</div>
+					<div id="managerdetail" class="tab-pane fade">
+	<!-- 					<form id="updateimage" name="updateimage" action="" method="post" class="form-horizontal" enctype="multipart/form-data"> -->
+						<div class="row">
+							<div id="imageresponse"></div>
+							<div class="col-lg-12">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h3>Upload manager Photo</h3>
+										<br>
+										<div class="row" id="manager_images">
+											<div class="col-lg-6 margin-bottom-5" id="imgdiv-'+img_count+'">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-4">Select Image </label>
+													<div class="col-sm-8 input-group" style="padding:0px 12px;">
+													<input type="file" class="form-control" id="manager_image" name="manager_image[]" />
+								<!-- 					<a href="javascript:removeImage('+img_count+');" class="input-group-addon btn-danger">x</a></span> -->
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<span class="pull-right">
+									<button type="submit" name="imagebtn" class="btn btn-success">SAVE</button>
+								</span>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 	</div>
 </div>
@@ -184,90 +185,23 @@
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script type="text/javascript">
-$("#manager_type").change(function(){
-	$.get("${baseUrl}/webapi/employee/list/"+$("#manager_id").val(),{ }, function(data){
-		var html = '<option value="0">Select Project</option>';
-		var checkbox = '<div class="col-sm-10">';
-		$("#appendbuyer").empty();
-		$(data).each(function(index){
-			html = html + '<option value="'+data[index].projectId+'">'+data[index].projectName+'</option>';
-			$(data[index].buyer).each(function(key, value){
-				checkbox += '<div class="col-sm-4"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
-				checkbox +='</div>';
-			});
-		});
-		checkbox+='</div>';
-		$("#project_id").html(html);
- 		$("#appendbuyer").html(checkbox);
-	},'json');
-});
-$("#city_id").change(function(){
-	$.get("${baseUrl}/webapi/campaign/projectlist/"+$("#city_id").val(),{ }, function(data){
-		var html = '<option value="0">Select Project</option>';
-		var checkbox = '<div class="col-sm-10">';
-		$("#appendbuyer").empty();
-		$(data).each(function(index){
-			html = html + '<option value="'+data[index].projectId+'">'+data[index].projectName+'</option>';
-			$(data[index].buyer).each(function(key, value){
-				checkbox += '<div class="col-sm-4"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
-				checkbox +='</div>';
-			});
-		});
-		checkbox+='</div>';
-		$("#project_id").html(html);
- 		$("#appendbuyer").html(checkbox);
-	},'json');
+$("#manager_id").change(function(){
+	if($("#manager_id").val() > 0){
+		$.get("${baseUrl}/webapi/employee/list/"+$("#manager_id").val(),{ }, function(data){
+			var phone = phone + '<option value="'+data.id+'">'+data.contact+'</option>';
+			var email = email + '<option value = "'+data.id+'">'+data.email+'</option>';
+			$("#email").html(email);
+			$("#phone").html(phone);
+		},'json');
+	}else{
+		var phone = phone + '<option value="0">Select Contact No.</option>';
+		var email = email + '<option value = "0">Select Email</option>';
+		$("#email").html(email);
+		$("#phone").html(phone);
+	}
 });
 
-$("#project_id").change(function(){
-	$.get("${baseUrl}/webapi/campaign/building/names/"+$("#project_id").val(),{ }, function(data){
-		var html = '<option value="0">Select Building</option>';
-		var checkbox = '<div class="col-sm-10">';
-		$("#appendbuyer").empty();
-		$(data).each(function(index){
-			html = html + '<option value="'+data[index].buildingId+'">'+data[index].buildingName+'</option>';
-			$(data[index].buyer).each(function(key, value){
-				checkbox += '<div class="col-sm-4"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
-				checkbox +='</div>';
-			});
-		});
-		$("#building_id").html(html);
-		checkbox+='</div>';
-		$("#appendbuyer").html(checkbox);
-	},'json');
-});
-$("#building_id").change(function(){
-	$.get("${baseUrl}/webapi/campaign/building/flat/names/"+$("#building_id").val(),{ }, function(data){
-		var html = '<option value="0">Select Flat</option>';
-		var checkbox = '<div class="col-sm-10">';
-		$("#appendbuyer").empty();
-		$(data).each(function(index){
-			html = html + '<option value="'+data[index].flatId+'">'+data[index].flatNo+'</option>';
-			$(data[index].buyer).each(function(key, value){
-				checkbox += '<div class="col-sm-4"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
-				checkbox +='</div>';
-			});
-		});
-		$("#flat_id").html(html);
-		checkbox+='</div>';
-		$("#appendbuyer").html(checkbox);
-	},'json');
-});
-
-$("#flat_id").change(function(){
-	$.get("${baseUrl}/webapi/campaign/flat/buyer/names/"+$("#flat_id").val(),{ }, function(data){
-		var checkbox = '<div class="col-sm-10">';
-		$("#appendbuyer").empty();
-		$(data).each(function(index){
-				checkbox += '<div class="col-sm-4"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+data[index].id+'" />'+'&nbsp;'+data[index].name
-				checkbox +='</div>';
-		});
-		checkbox+='</div>';
-		$("#appendbuyer").html(checkbox);
-	},'json');
-});
-						
-$('#addpropertymanager').bootstrapValidator({
+$('#addmanager').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},
@@ -294,17 +228,17 @@ $('#addpropertymanager').bootstrapValidator({
                 }
             }
         },
-        email: {
-        	validators: {
-            	notEmpty: {
-                    message: 'The Email is required and cannot be empty'
-                },
-                regexp: {
-                    regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
-                    message: 'The value is not a valid email address'
-                }
-            }
-        },
+//         email: {
+//         	validators: {
+//             	notEmpty: {
+//                     message: 'The Email is required and cannot be empty'
+//                 },
+//                 regexp: {
+//                     regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
+//                     message: 'The value is not a valid email address'
+//                 }
+//             }
+//         },
         project_id: {
             validators: {
                 notEmpty: {
@@ -337,11 +271,11 @@ function addPropertyManager() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/propertymanager/save',
+	 		url : '${baseUrl}/webapi/employee/save',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
-   	$('#addpropertymanager').ajaxSubmit(options);
+   	$('#addmanager').ajaxSubmit(options);
 }
 
 function showAddRequest(formData, jqForm, options){
@@ -364,6 +298,10 @@ function showAddResponse(resp, statusText, xhr, $form){
         alert(resp.message);
         window.location.href = "${baseUrl}/admin/employee/list.jsp";
   	}
+}
+
+function showDetailTab() {
+	$('#managerTabs a[href="#managerdetail"]').tab('show');
 }
 </script>
 

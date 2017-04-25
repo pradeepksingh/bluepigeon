@@ -23,19 +23,20 @@ public class PropertyManager implements java.io.Serializable {
 
 	private Integer id;
 	private AdminUserRole adminUserRole;
-	private AdminUser adminUser;
+	private AdminUser adminUserByAdminUserId;
 	private City city;
+	private AdminUser adminUserByAddedBy;
 	private String currentAddress;
 	private String permanentAddress;
-
 	public PropertyManager() {
 	}
 
-	public PropertyManager(AdminUserRole adminUserRole, AdminUser adminUser, City city, String currentAddress,
-			String permanentAddress) {
+	public PropertyManager(AdminUserRole adminUserRole, AdminUser adminUserByAdminUserId, City city,
+			AdminUser adminUserByAddedBy, String currentAddress, String permanentAddress) {
 		this.adminUserRole = adminUserRole;
-		this.adminUser = adminUser;
+		this.adminUserByAdminUserId = adminUserByAdminUserId;
 		this.city = city;
+		this.adminUserByAddedBy = adminUserByAddedBy;
 		this.currentAddress = currentAddress;
 		this.permanentAddress = permanentAddress;
 	}
@@ -64,12 +65,12 @@ public class PropertyManager implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "admin_user_id")
-	public AdminUser getAdminUser() {
-		return this.adminUser;
+	public AdminUser getAdminUserByAdminUserId() {
+		return this.adminUserByAdminUserId;
 	}
 
-	public void setAdminUser(AdminUser adminUser) {
-		this.adminUser = adminUser;
+	public void setAdminUserByAdminUserId(AdminUser adminUserByAdminUserId) {
+		this.adminUserByAdminUserId = adminUserByAdminUserId;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -82,6 +83,15 @@ public class PropertyManager implements java.io.Serializable {
 		this.city = city;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "added_by")
+	public AdminUser getAdminUserByAddedBy() {
+		return this.adminUserByAddedBy;
+	}
+
+	public void setAdminUserByAddedBy(AdminUser adminUserByAddedBy) {
+		this.adminUserByAddedBy = adminUserByAddedBy;
+	}
 	@Column(name = "current_address", length = 65535)
 	public String getCurrentAddress() {
 		return this.currentAddress;
