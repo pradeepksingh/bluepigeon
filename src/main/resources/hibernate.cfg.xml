@@ -124,6 +124,9 @@
         <mapping class="org.bluepigeon.admin.model.BuildingAmenityWeightage" />
         <mapping class="org.bluepigeon.admin.model.FloorAmenityWeightage" />
         <mapping class="org.bluepigeon.admin.model.FlatAmenityWeightage" />
+        <mapping class="org.bluepigeon.admin.model.GlobalBuyer" />
+        <mapping class="org.bluepigeon.admin.model.BuilderEmployeeAccessType" />
+        <mapping class="org.bluepigeon.admin.model.BuilderEmployee" />
 	</session-factory>
 
 </hibernate-configuration>

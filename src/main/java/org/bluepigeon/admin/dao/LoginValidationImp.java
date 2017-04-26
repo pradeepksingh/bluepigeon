@@ -28,7 +28,7 @@ public class LoginValidationImp implements LoginValidateDAO{
 	public boolean isValidEmailId(String email) {
 		boolean isValid = false;
 		String hql = "from AdminUser a where a.email =  :email";
-		HibernateUtil hibernateUtil = new org.bluepigeon.admin.util.HibernateUtil();
+		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		
