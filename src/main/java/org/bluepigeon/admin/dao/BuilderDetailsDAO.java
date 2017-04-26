@@ -10,9 +10,9 @@ import org.hibernate.Session;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
+import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.Locality;
 import org.bluepigeon.admin.data.BuilderDetails;
-
 import org.bluepigeon.admin.util.HibernateUtil;
 
 public class BuilderDetailsDAO {
@@ -179,4 +179,16 @@ public class BuilderDetailsDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<BuilderEmployee> getBuilderEmployees(int builder_id) {
+		String hql = "from BuilderEmployee where builder.id=:builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builder_id);
+		List<BuilderEmployee> result = query.list();
+		session.close();
+		return result;
+	}
+	
 }

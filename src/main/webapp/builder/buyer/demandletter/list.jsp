@@ -17,7 +17,7 @@
 <%@include file="../../../head.jsp"%>
 <%@include file="../../../leftnav.jsp"%>
 <%
-	List<DemandLetters> demand_letter_list = new DemandLettersDAO().getAllDemandLetters();
+	List<DemandLetters> demand_letter_list = new DemandLettersDAO().getDemandLetters();
 	int demand_letter_size = demand_letter_list.size();
 	List<BuilderProject> builderProjects = new ProjectDetailsDAO().getBuilderProjectList();
 	List<Builder> builders = new BuilderDetailsDAO().getBuilderList();
@@ -100,7 +100,7 @@
  										</td> 
  										<td> 
  											<%  
-												int buyerId = demandLetters.getBuyer().getId(); 
+												int buyerId = 1;//demandLetters.getBuyer().getId(); 
  											    Buyer buyer = new Buyer(); 
 											    buyer.setId(buyerId);
 												out.print(buyer.getName()); %> 

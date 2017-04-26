@@ -110,6 +110,26 @@
         <mapping class="org.bluepigeon.admin.model.BuilderBuyer" />
         <mapping class="org.bluepigeon.admin.model.BuilderFlatAmenityStages" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloorAmenityStages" />
+        <mapping class="org.bluepigeon.admin.model.Campaign" />
+        <mapping class="org.bluepigeon.admin.model.CampaignBuyer" />
+        <mapping class="org.bluepigeon.admin.model.BuildingPanoramicImage" />
+        <mapping class="org.bluepigeon.admin.model.BuildingImageGallery" />
+        <mapping class="org.bluepigeon.admin.model.BuildingAmenityInfo" />
+        <mapping class="org.bluepigeon.admin.model.FloorLayoutImage" />
+        <mapping class="org.bluepigeon.admin.model.FloorAmenityInfo" />
+        <mapping class="org.bluepigeon.admin.model.FlatTypeImage" />
+        <mapping class="org.bluepigeon.admin.model.FlatAmenityInfo" />
+        <mapping class="org.bluepigeon.admin.model.FlatPaymentSchedule" />
+        <mapping class="org.bluepigeon.admin.model.BuilderFloorStatus" />
+        <mapping class="org.bluepigeon.admin.model.BuilderBuildingFlatType" />
+        <mapping class="org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom" />
+        <mapping class="org.bluepigeon.admin.model.ProjectAmenityWeightage" />
+        <mapping class="org.bluepigeon.admin.model.BuildingAmenityWeightage" />
+        <mapping class="org.bluepigeon.admin.model.FloorAmenityWeightage" />
+        <mapping class="org.bluepigeon.admin.model.FlatAmenityWeightage" />
+        <mapping class="org.bluepigeon.admin.model.GlobalBuyer" />
+        <mapping class="org.bluepigeon.admin.model.BuilderEmployeeAccessType" />
+        <mapping class="org.bluepigeon.admin.model.BuilderEmployee" />
 	</session-factory>
 
 </hibernate-configuration>
