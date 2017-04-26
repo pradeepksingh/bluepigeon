@@ -8,6 +8,7 @@ import org.bluepigeon.admin.data.BuyerData;
 import org.bluepigeon.admin.data.BuyerList;
 import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FloorData;
+import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuyer;
@@ -581,6 +582,24 @@ public class BuyerDAO {
 		}
 		return responseMessage;
 	}
+	
+	 public List<ProjectData> getProjectByBuilderId(int builderId){
+		  String hql = "from BuilderProject where builder.id = :builder_id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("builder_id", builderId);
+			List<BuilderProject> result = query.list();
+			List<ProjectData> projectDatas = new ArrayList<ProjectData>();
+			for(BuilderProject builderBuilding : result){
+				ProjectData buildingData = new ProjectData();
+				buildingData.setId(builderBuilding.getId());
+				buildingData.setName(builderBuilding.getName());
+				projectDatas.add(buildingData);
+			}
+			session.close();
+			return projectDatas;
+	  }
 	
 	 public List<BuildingData> getBuildingByProjectId(int projectId){
 		  String hql = "from BuilderBuilding where builderProject.id = :project_id";

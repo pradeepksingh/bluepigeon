@@ -33,13 +33,13 @@ public class Locality implements java.io.Serializable {
 	private Byte sortOrder;
 	private Date lastUpdatedOn;
 	private Integer lastUpdatedBy;
-	private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
+	//private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
 
 	public Locality() {
 	}
 
 	public Locality(City city, String name, String latitude, String longitude, Boolean status, Byte sortOrder,
-			Date lastUpdatedOn, Integer lastUpdatedBy, Set<BuilderProject> builderProjects) {
+			Date lastUpdatedOn, Integer lastUpdatedBy){//, Set<BuilderProject> builderProjects) {
 		this.city = city;
 		this.name = name;
 		this.latitude = latitude;
@@ -48,7 +48,7 @@ public class Locality implements java.io.Serializable {
 		this.sortOrder = sortOrder;
 		this.lastUpdatedOn = lastUpdatedOn;
 		this.lastUpdatedBy = lastUpdatedBy;
-		this.builderProjects = builderProjects;
+	//	this.builderProjects = builderProjects;
 	}
 
 	@Id
@@ -137,13 +137,13 @@ public class Locality implements java.io.Serializable {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "locality")
-	public Set<BuilderProject> getBuilderProjects() {
-		return this.builderProjects;
-	}
-
-	public void setBuilderProjects(Set<BuilderProject> builderProjects) {
-		this.builderProjects = builderProjects;
-	}
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "locality")
+//	public Set<BuilderProject> getBuilderProjects() {
+//		return this.builderProjects;
+//	}
+//
+//	public void setBuilderProjects(Set<BuilderProject> builderProjects) {
+//		this.builderProjects = builderProjects;
+//	}
 
 }

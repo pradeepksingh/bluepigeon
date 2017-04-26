@@ -30,16 +30,15 @@ public class AdminUser implements java.io.Serializable {
 	private String email;
 	private String password;
 	private String mobile;
+	private String currentAddress;
+	private String permanentAddress;
 	private int status;
 	private Date createdDate;
 	private Long createdBy;
-	private Set<BuilderFlatType> builderFlatTypes = new HashSet<BuilderFlatType>(0);
-	private Set<BuilderBuilding> builderBuildings = new HashSet<BuilderBuilding>(0);
-	private Set<BuilderFlat> builderFlats = new HashSet<BuilderFlat>(0);
-	private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
 
 	public AdminUser() {
 	}
+
 
 	public AdminUser(AdminUserRole adminUserRole, String name, String email, String password, String mobile, int status,
 			Date createdDate) {
@@ -52,21 +51,19 @@ public class AdminUser implements java.io.Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public AdminUser(AdminUserRole adminUserRole, String name, String email, String password, String mobile, int status,
-			Date createdDate, Long createdBy, Set<BuilderFlatType> builderFlatTypes,
-			Set<BuilderBuilding> builderBuildings, Set<BuilderFlat> builderFlats, Set<BuilderProject> builderProjects) {
+
+	public AdminUser(AdminUserRole adminUserRole, String name, String email, String password, String mobile,
+			String currentAddress, String permanentAddress, int status, Date createdDate, Long createdBy) {
 		this.adminUserRole = adminUserRole;
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.mobile = mobile;
+		this.currentAddress = currentAddress;
+		this.permanentAddress = permanentAddress;
 		this.status = status;
 		this.createdDate = createdDate;
 		this.createdBy = createdBy;
-		this.builderFlatTypes = builderFlatTypes;
-		this.builderBuildings = builderBuildings;
-		this.builderFlats = builderFlats;
-		this.builderProjects = builderProjects;
 	}
 
 	@Id
@@ -126,7 +123,20 @@ public class AdminUser implements java.io.Serializable {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
+	
+	public void setCurrentAddress(String currentAddress) {
+		this.currentAddress = currentAddress;
+	}
 
+	@Column(name = "permanent_address", length = 65535)
+	public String getPermanentAddress() {
+		return this.permanentAddress;
+	}
+
+	public void setPermanentAddress(String permanentAddress) {
+		this.permanentAddress = permanentAddress;
+	}
+	
 	@Column(name = "status", nullable = false)
 	public int getStatus() {
 		return this.status;
@@ -154,41 +164,4 @@ public class AdminUser implements java.io.Serializable {
 	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
 	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "adminUser")
-	public Set<BuilderFlatType> getBuilderFlatTypes() {
-		return this.builderFlatTypes;
-	}
-
-	public void setBuilderFlatTypes(Set<BuilderFlatType> builderFlatTypes) {
-		this.builderFlatTypes = builderFlatTypes;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "adminUser")
-	public Set<BuilderBuilding> getBuilderBuildings() {
-		return this.builderBuildings;
-	}
-
-	public void setBuilderBuildings(Set<BuilderBuilding> builderBuildings) {
-		this.builderBuildings = builderBuildings;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "adminUser")
-	public Set<BuilderFlat> getBuilderFlats() {
-		return this.builderFlats;
-	}
-
-	public void setBuilderFlats(Set<BuilderFlat> builderFlats) {
-		this.builderFlats = builderFlats;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "adminUser")
-	public Set<BuilderProject> getBuilderProjects() {
-		return this.builderProjects;
-	}
-
-	public void setBuilderProjects(Set<BuilderProject> builderProjects) {
-		this.builderProjects = builderProjects;
-	}
-
 }
