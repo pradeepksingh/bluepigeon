@@ -156,6 +156,17 @@ public class DemandLettersDAO {
 		flatSession.close();
 		return demandletter_list;
 	}
+	
+	public List<DemandLetters> getDemandLetters(){
+		String hql = "from DemandLetters";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<DemandLetters> result = query.list();
+		session.close();
+		return result;
+	}
+	
 	/**
 	 * Save demand letter document
 	 * @author pankaj
@@ -391,7 +402,7 @@ public class DemandLettersDAO {
 			buyerPaymentList = new BuyerPaymentList();
 			buyerPaymentList.setName(buyer.getName());
 			buyerPaymentList.setEmail(buyer.getEmail());
-			buyerPaymentList.setContact(buyer.getContact());
+			buyerPaymentList.setContact(buyer.getMobile());
 			buyerPaymentLists.add(buyerPaymentList);
 		}
 		String PaymentHql = "from FlatPaymentSchedule where builderFlat.id = :flat_id and builderFlat.builderFlatStatus.name='booked'";

@@ -35,12 +35,20 @@ import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
 import org.bluepigeon.admin.model.Agreement;
 import org.bluepigeon.admin.model.AgreementInfo;
+import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderBuilding;
+import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.BuildingImageGallery;
+import org.bluepigeon.admin.model.BuildingOfferInfo;
+import org.bluepigeon.admin.model.BuildingPaymentInfo;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.BuyerDocuments;
+import org.bluepigeon.admin.model.BuyerOffer;
+import org.bluepigeon.admin.model.BuyerPayment;
+import org.bluepigeon.admin.model.BuyerUploadDocuments;
+import org.bluepigeon.admin.model.BuyingDetails;
 import org.bluepigeon.admin.model.DemandLetters;
 import org.bluepigeon.admin.model.DemandLettersInfo;
 import org.bluepigeon.admin.model.Possession;
@@ -76,117 +84,255 @@ public class BuyerController {
 			@FormDataParam("pan[]") List<FormDataBodyPart>  pan,
 			@FormDataParam("address[]") List<FormDataBodyPart>  address,
 			@FormDataParam("is_primary[]") List<FormDataBodyPart>  is_primary,
-			@FormDataParam("document_type[]") List<FormDataBodyPart> douments ,
+			@FormDataParam("photo[]") List<FormDataBodyPart>  photos,
+			@FormDataParam("document_pan[]") List<FormDataBodyPart> douments,
+			@FormDataParam("document_aadhar[]") List<FormDataBodyPart> aadhar,
+			@FormDataParam("document_passport[]") List<FormDataBodyPart> passport,
+			@FormDataParam("document_rra[]") List<FormDataBodyPart> rra,
+			@FormDataParam("document_voterid[]") List<FormDataBodyPart> voterid,
+			@FormDataParam("builder_id") int builder_id,
 			@FormDataParam("project_id") int project_id,
 			@FormDataParam("building_id") int building_id,
 			@FormDataParam("flat_id") int flat_id,
-			//@FormDataParam("agreement") Short agreement,
-			//@FormDataParam("possession") Short possession,
-			@FormDataParam("status") Short status
-			//@FormDataParam("buyer_image[]") List<FormDataBodyPart> image,
-			){
-				ResponseMessage msg = new ResponseMessage();
-				BuyerDAO buyerDAO = new BuyerDAO();
-				AdminUser adminUser = new AdminUser();
-				adminUser.setId(emp_id);
-				Short agreement=0;
-				Short possession=0;
-				Buyer buyer = null;
-				List<Buyer> buyerList = new ArrayList<Buyer>();
-				
-				if(name.size()>0){
-				
-					int i=0;
-					for(FormDataBodyPart buyers : name){
-						buyer = new Buyer();
-						buyer.setAdminUser(adminUser);
-						buyer.setStatus(status);
-						buyer.setAgreement(agreement);
-						buyer.setPossession(possession);
-						if(project_id>0){
-							BuilderProject builderProject = new BuilderProject();
-							builderProject.setId(project_id);
-							buyer.setBuilderProject(builderProject);
-						}
-						
-						if(flat_id>0){
-							BuilderFlat builderFlat = new BuilderFlat();
-							builderFlat.setId(flat_id);
-							buyer.setBuilderFlat(builderFlat);
-						}
-						if(buyers.getValueAs(String.class).toString()!=null || !buyers.getValueAs(String.class).isEmpty()){
-							buyer.setName(name.get(i).getValueAs(String.class).toString());
-							buyer.setContact(contact.get(i).getValueAs(String.class).toString());
-							buyer.setEmail(email.get(i).getValueAs(String.class).toString());
-							buyer.setAddress(address.get(i).getValueAs(String.class).toString());
-							buyer.setPan(pan.get(i).getValueAs(String.class).toString());
-						}
-						//if(buyers.getValueAs(Short.class) != null)
-							buyer.setIsPrimary(is_primary.get(i).getValueAs(Short.class).shortValue());
-						buyerList.add(buyer);
-						
-						i++;	
-					}
+			@FormDataParam("booking_date") String booking_date,
+			@FormDataParam("base_rate") Double base_rate,
+			@FormDataParam("rise_rate") Double rise_rate,
+			@FormDataParam("amenity_rate") Double amenity_rate,
+			@FormDataParam("maintenance") Double maintenance,
+			@FormDataParam("tenure") Integer tenure,
+			@FormDataParam("registration") Double registration,
+			@FormDataParam("parking") Double parking,
+			@FormDataParam("stamp_duty") Double stamp_duty,
+			@FormDataParam("tax") Double tax,
+			@FormDataParam("vat") Double vat,
+			@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_title,
+			@FormDataParam("discount[]") List<FormDataBodyPart> discount,
+			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amount,
+			@FormDataParam("applicable_on[]") List<FormDataBodyPart> applicable_on,
+			@FormDataParam("apply[]") List<FormDataBodyPart> apply,
+			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
+			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
+			@FormDataParam("amount[]") List<FormDataBodyPart> amount,
+			@FormDataParam("doc_name[]") List<FormDataBodyPart> doc_name,
+			@FormDataParam("doc_url[]") List<FormDataBodyPart> doc_url
+	){
+		ResponseMessage msg = new ResponseMessage();
+		BuyerDAO buyerDAO = new BuyerDAO();
+		BuilderEmployee builderEmployee = new BuilderEmployee();
+		builderEmployee.setId(emp_id);
+		Short agreement=0;
+		Short possession=0;
+		Buyer buyer = null;
+		List<Buyer> buyerList = new ArrayList<Buyer>();
+		Buyer primaryBuyer = new Buyer();
+		if(name.size()>0){
+			int i=0;
+			for(FormDataBodyPart buyers : name){
+				buyer = new Buyer();
+				buyer.setBuilderEmployee(builderEmployee);
+				buyer.setAgreement(agreement);
+				buyer.setPossession(possession);
+				if(builder_id > 0){
+					Builder builder = new Builder();
+					builder.setId(builder_id);
+					buyer.setBuilder(builder);
 				}
 				
-				//buyer.setPan(pan);
-				//buyer.setEmail(email);
-//				buyer.setContact(contact);
-//				buyer.setAddress(address);
+				if(project_id > 0){
+					BuilderProject builderProject = new BuilderProject();
+					builderProject.setId(project_id);
+					buyer.setBuilderProject(builderProject);
+				}
 				
+				if(building_id > 0){
+					BuilderBuilding builderBuilding = new BuilderBuilding();
+					builderBuilding.setId(building_id);
+					buyer.setBuilderBuilding(builderBuilding);
+				}
 				
-//				if(image.size()>0){
-//					try{
-//						for(int i=0 ;i < image.size();i++)
-//						{
-//							if(image.get(i).getFormDataContentDisposition().getFileName() != null && !image.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-//								String gallery_name = image.get(i).getFormDataContentDisposition().getFileName();
-//								long millis = System.currentTimeMillis() % 1000;
-//								gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-//								gallery_name = "/images/project/buyer/images/"+gallery_name;
-//								String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-//								this.imageUploader.writeToFile(image.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-//								buyer.setPhoto(gallery_name);
-//							}
-//						}
-//					}catch(Exception e){
-//						msg.setStatus(0);
-//						msg.setMessage("Unable to save image");
-//					}
+				if(flat_id > 0){
+					BuilderFlat builderFlat = new BuilderFlat();
+					builderFlat.setId(flat_id);
+					buyer.setBuilderFlat(builderFlat);
+				}
+				if(buyers.getValueAs(String.class).toString()!=null && !buyers.getValueAs(String.class).isEmpty()){
+					buyer.setName(name.get(i).getValueAs(String.class).toString());
+				}
+				if(contact.get(i).getValueAs(String.class).toString()!=null && !contact.get(i).getValueAs(String.class).isEmpty()) {
+					buyer.setMobile(contact.get(i).getValueAs(String.class).toString());
+				}
+				buyer.setEmail(email.get(i).getValueAs(String.class).toString());
+				if(address.get(i).getValueAs(String.class).toString()!=null && !address.get(i).getValueAs(String.class).isEmpty()){
+					buyer.setAddress(address.get(i).getValueAs(String.class).toString());
+				}
+				if(pan.get(i).getValueAs(String.class).toString()!=null && !pan.get(i).getValueAs(String.class).isEmpty()){
+					buyer.setPancard(pan.get(i).getValueAs(String.class).toString());
+				}
+				if(is_primary.get(i).getValueAs(Integer.class).intValue() == 1) {
+					buyer.setIsPrimary(true);
+				} else {
+					buyer.setIsPrimary(false);
+				}
+				buyer.setStatus(agreement);
+				try {
+					if(photos.get(i).getFormDataContentDisposition().getFileName() != null && !photos.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = photos.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/buyer/images/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(photos.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						buyer.setPhoto(gallery_name);
+					}
+				} catch(Exception e) {
+					buyer.setPhoto("");
+				}
+				msg = buyerDAO.addBuyer(buyer);
+				buyer.setId(msg.getId());
+				List<BuyerDocuments> buyerDocumentsList = new ArrayList<BuyerDocuments>();
+				if(douments != null && douments.size() > 0) {
+					if(douments.get(i).getValueAs(String.class).toString()!=null && !douments.get(i).getValueAs(String.class).isEmpty()){
+						BuyerDocuments buyerDocuments = new BuyerDocuments();
+						buyerDocuments.setDocuments(douments.get(i).getValueAs(String.class).toString());
+						buyerDocuments.setBuyer(buyer);
+						buyerDocumentsList.add(buyerDocuments);
+					}
+				}
+				if(aadhar != null && aadhar.size() > 0) {
+					if(aadhar.get(i).getValueAs(String.class).toString()!=null && !aadhar.get(i).getValueAs(String.class).isEmpty()){
+						BuyerDocuments buyerDocuments = new BuyerDocuments();
+						buyerDocuments.setDocuments(aadhar.get(i).getValueAs(String.class).toString());
+						buyerDocuments.setBuyer(buyer);
+						buyerDocumentsList.add(buyerDocuments);
+					}
+				}
+				if(passport != null && passport.size() > 0) {
+					if(passport.get(i).getValueAs(String.class).toString()!=null && !passport.get(i).getValueAs(String.class).isEmpty()){
+						BuyerDocuments buyerDocuments = new BuyerDocuments();
+						buyerDocuments.setDocuments(passport.get(i).getValueAs(String.class).toString());
+						buyerDocuments.setBuyer(buyer);
+						buyerDocumentsList.add(buyerDocuments);
+					}
+				}
+				if(rra != null && rra.size() > 0) {
+					if(rra.get(i).getValueAs(String.class).toString()!=null && !rra.get(i).getValueAs(String.class).isEmpty()){
+						BuyerDocuments buyerDocuments = new BuyerDocuments();
+						buyerDocuments.setDocuments(rra.get(i).getValueAs(String.class).toString());
+						buyerDocuments.setBuyer(buyer);
+						buyerDocumentsList.add(buyerDocuments);
+					}
+				}
+				if(voterid != null && voterid.size() > 0) {
+					if(voterid.get(i).getValueAs(String.class).toString()!=null && !voterid.get(i).getValueAs(String.class).isEmpty()){
+						BuyerDocuments buyerDocuments = new BuyerDocuments();
+						buyerDocuments.setDocuments(voterid.get(i).getValueAs(String.class).toString());
+						buyerDocuments.setBuyer(buyer);
+						buyerDocumentsList.add(buyerDocuments);
+					}
+				}
+				buyerDAO.saveBuyerDocuments(buyerDocumentsList);
+				System.out.println("Primary ID:"+buyer.getIsPrimary());
+				if(buyer.getIsPrimary()) {
+					primaryBuyer = buyer;
+				}
 				
-				//	msg = buyerDAO.saveBuyer(buyerList);
-					
-					//if(msg.getId()>0){
-						//Buyer msgBuyer = (Buyer)msg.getData();
-						//System.out.println("Buyer data :: "+msgBuyer.getId());
-					//	buyer.setId(msg.getId());
-						if(douments.size()>0){
-							List<BuyerDocuments> buyerDocumentsList = new ArrayList<BuyerDocuments>();
-							for(FormDataBodyPart buyerDocuments : douments ){
-								if(buyerDocuments.getValueAs(Integer.class) != null && buyerDocuments.getValueAs(Integer.class) != 0) {
-								//	BuyerDocuments buyerDocuments2 = new BuyerDocuments();
-								//	buyerDocuments2.setBuyer(buyer);
-								//	buyerDocuments2.setDocuments(buyerDocuments.getValue());
-									System.out.println("<script>console.log(Douments :: "+buyerDocuments.getValueAs(Integer.class)+");<script>");
-								//	buyerDocumentsList.add(buyerDocuments2);
-								}
-							}
-							if(buyerDocumentsList.size()>0){
-								//buyerDAO.saveBuyerDocuments(buyerDocumentsList);
-							}
-						}
-					//}
-				
-				//}
-//				if(image.isEmpty()){
-//					msg.setStatus(0);
-//					msg.setMessage("Unable to save image");
-//				}
-//				msg.setStatus(0);
-//				msg.setMessage("Unable to save image");
-			//	return msg;
-	return msg;
+				i++;	
+			}
+			if(primaryBuyer.getId() > 0) {
+				SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+				Date bookingDate = null;
+				try {
+					bookingDate = format.parse(booking_date);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				BuyingDetails buyingDetails = new BuyingDetails();
+				buyingDetails.setBuyer(primaryBuyer);
+				buyingDetails.setAmenityFacingRate(amenity_rate);
+				buyingDetails.setBaseRate(base_rate);
+				buyingDetails.setBookingDate(bookingDate);
+				buyingDetails.setFloorRiseRate(rise_rate);
+				buyingDetails.setMaintenance(maintenance);
+				buyingDetails.setParkingRate(parking);
+				buyingDetails.setRegistration(registration);
+				buyingDetails.setStampDuty(stamp_duty);
+				buyingDetails.setTaxes(tax);
+				buyingDetails.setTenure(tenure);
+				buyingDetails.setVat(vat);
+				buyerDAO.saveBuyingDetails(buyingDetails);
+			}
+			if (schedule.size() > 0) {
+				List<BuyerPayment> buyerPayments = new ArrayList<BuyerPayment>();
+				i = 0;
+				for(FormDataBodyPart milestone : schedule)
+				{
+					if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
+						boolean isPaid = false;
+						BuyerPayment buyerPayment = new BuyerPayment();
+						buyerPayment.setMilestone(milestone.getValueAs(String.class).toString());
+						buyerPayment.setNetPayable(payable.get(i).getValueAs(Double.class));
+						buyerPayment.setAmount(amount.get(i).getValueAs(Double.class));
+						buyerPayment.setPaid(isPaid);
+						buyerPayment.setBuyer(primaryBuyer);
+						buyerPayments.add(buyerPayment);
+					}
+					i++;
+				}
+				if(buyerPayments.size() > 0) {
+					buyerDAO.saveBuyerPayment(buyerPayments);
+				}
+			}
+			
+			if (offer_title.size() > 0) {
+				List<BuyerOffer> buyerOffers = new ArrayList<BuyerOffer>();
+				i = 0;
+				for(FormDataBodyPart title : offer_title)
+				{
+					if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
+						BuyerOffer buyerOffer = new BuyerOffer();
+						buyerOffer.setTitle(title.getValueAs(String.class).toString());
+						buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
+						buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
+						buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
+						buyerOffer.setStatus(apply.get(i).getValueAs(Byte.class));
+						buyerOffer.setBuyer(primaryBuyer);
+						buyerOffers.add(buyerOffer);
+					}
+					i++;
+				}
+				if(buyerOffers.size() > 0) {
+					buyerDAO.saveBuyerOffers(buyerOffers);
+				}
+			}
+			try {
+				List<BuyerUploadDocuments> buyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
+				i = 0;
+				for(FormDataBodyPart title : offer_title)
+				{
+					BuyerUploadDocuments buDocuments = new BuyerUploadDocuments();
+					if(doc_url.get(i).getFormDataContentDisposition().getFileName() != null && !doc_url.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = doc_url.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/buyer/docs/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(photos.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						buDocuments.setDocUrl(gallery_name);
+						buDocuments.setBuyer(primaryBuyer);
+						buDocuments.setName(doc_name.get(i).getValueAs(String.class).toString());
+						buDocuments.setBuilderdoc(true);
+						buDocuments.setUploadedDate(new Date());
+					}
+					buyerUploadDocuments.add(buDocuments);
+				}
+				buyerDAO.saveBuyerUploadDouments(buyerUploadDocuments);
+			} catch(Exception e) {
+				buyer.setPhoto("");
+			}
+		}
+		return msg;
 	}
+	
 	@GET
 	@Path("/building/list")
 	@Produces(MediaType.APPLICATION_JSON)

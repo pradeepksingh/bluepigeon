@@ -20,6 +20,7 @@ import org.bluepigeon.admin.model.BuyerOffer;
 import org.bluepigeon.admin.model.BuyerPayment;
 import org.bluepigeon.admin.model.BuyerUploadDocuments;
 import org.bluepigeon.admin.model.BuyingDetails;
+import org.bluepigeon.admin.model.GlobalBuyer;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -72,6 +73,46 @@ public class BuyerDAO {
 		builderSession.close();
 		updateFlatStatus(buyers.get(0).getBuilderFlat().getId());
 		insertBuilderBuyer(buyers);
+		return response;
+	}
+	
+	public ResponseMessage addBuyer(Buyer buyer){
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "from GlobalBuyer where pancard = :pancard ";
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("pancard", buyer.getPancard());
+		List<GlobalBuyer> result = query.list();
+		
+		GlobalBuyer globalBuyer = new GlobalBuyer();
+		if(result.size() <= 0) {
+			Session newsession = hibernateUtil.openSession();
+			globalBuyer.setName(buyer.getName());
+			globalBuyer.setPancard(buyer.getPancard());
+			globalBuyer.setMobile(buyer.getMobile());
+			globalBuyer.setEmail(buyer.getEmail());
+			globalBuyer.setAvatar(buyer.getPhoto());
+			globalBuyer.setOtp("");
+			globalBuyer.setPassword("");
+			globalBuyer.setStatus(false);
+			newsession.beginTransaction();
+			newsession.save(globalBuyer);
+			newsession.getTransaction().commit();
+			newsession.close();
+		} else {
+			globalBuyer = result.get(0);
+		}
+		
+		buyer.setGlobalBuyer(globalBuyer);
+		Session buyerSession = hibernateUtil.openSession();
+		buyerSession.beginTransaction();
+		buyerSession.save(buyer);
+		buyerSession.getTransaction().commit();
+		buyerSession.close();
+		response.setId(buyer.getId());
+		response.setStatus(1);
+		response.setMessage("Buyer Added Successfully");
 		return response;
 	}
 	
@@ -225,7 +266,7 @@ public class BuyerDAO {
 			}
 			buyerList.setAgreement(buyer.getAgreement());
 			buyerList.setPossession(buyer.getPossession());
-			buyerList.setPhone(buyer.getContact());
+			buyerList.setPhone(buyer.getMobile());
 			buyerList.setEmail(buyer.getEmail());
 			buyerList.setStatus(buyer.getStatus());
 			buyerLists.add(buyerList);
@@ -279,7 +320,7 @@ public class BuyerDAO {
 				buyerList.setProjectName(buyer.getBuilderProject().getName());
 				buyerList.setId(buyer.getId());
 				buyerList.setName(buyer.getName());
-				buyerList.setPhone(buyer.getContact());
+				buyerList.setPhone(buyer.getMobile());
 				buyerList.setEmail(buyer.getEmail());
 				buyerList.setAgreement(buyer.getAgreement());
 				System.out.println("Possession :: "+buyer.getPossession());
@@ -625,7 +666,7 @@ public class BuyerDAO {
 				  Buyer flatData = new Buyer();
 				  flatData.setId(buyer.getId());
 				  flatData.setName(buyer.getName());
-				  flatData.setContact(buyer.getContact());
+				  flatData.setMobile(buyer.getMobile());
 				  flatData.setEmail(buyer.getEmail());
 				  buyers.add(flatData);
 			  }
@@ -634,7 +675,7 @@ public class BuyerDAO {
 			  Buyer flatData = new Buyer();
 			  flatData.setId(0);
 			  flatData.setName("");
-			  flatData.setContact("");
+			  flatData.setMobile("");
 			  flatData.setEmail("");
 			  buyers.add(flatData);
 		  }

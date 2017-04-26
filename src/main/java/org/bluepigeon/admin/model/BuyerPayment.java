@@ -22,6 +22,7 @@ public class BuyerPayment implements java.io.Serializable {
 	private String milestone;
 	private Double netPayable;
 	private Double amount;
+	private boolean isPaid;
 
 	public BuyerPayment() {
 	}
@@ -81,4 +82,14 @@ public class BuyerPayment implements java.io.Serializable {
 	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
+	
+	@Column(name = "is_paid")
+	public boolean isPaid() {
+		return this.isPaid;
+	}
+
+	public void setPaid(boolean isPaid) {
+		this.isPaid = isPaid;
+	}
+	
 }
