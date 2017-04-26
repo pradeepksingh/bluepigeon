@@ -31,6 +31,7 @@ import org.bluepigeon.admin.data.BuyerPaymentList;
 import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatPaymentList;
 import org.bluepigeon.admin.data.FloorData;
+import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
 import org.bluepigeon.admin.model.Agreement;
@@ -195,6 +196,15 @@ public class BuyerController {
 			//	return msg;
 	return msg;
 	}
+	
+	@GET
+	@Path("/project/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectData> getProjectList(@QueryParam("builder_id") int builder_id) {
+		BuyerDAO buyerDAO = new BuyerDAO();
+		return buyerDAO.getProjectByBuilderId(builder_id);
+	}
+	
 	@GET
 	@Path("/building/list")
 	@Produces(MediaType.APPLICATION_JSON)

@@ -14,14 +14,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.bluepigeon.admin.dao.PropertyManagerDAO;
+import org.bluepigeon.admin.dao.AdminUserDAO;
 import org.bluepigeon.admin.data.PropertyManagerData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
+import org.bluepigeon.admin.model.AdminUserPhotos;
 import org.bluepigeon.admin.model.AdminUserRole;
 import org.bluepigeon.admin.model.City;
-import org.bluepigeon.admin.model.PropertyManager;
-import org.bluepigeon.admin.model.PropertyManagerPhotos;
 import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -34,7 +33,7 @@ public class EmployeeController {
 	@Path("/list/{manager_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public PropertyManagerData getManagerListNames(@PathParam("manager_id") int manager_id) {
-		PropertyManagerDAO propertyManagerDAO = new PropertyManagerDAO();
+		AdminUserDAO propertyManagerDAO = new AdminUserDAO();
 		propertyManagerDAO.getAdminUserById(manager_id);
 		return propertyManagerDAO.getAdminUserById(manager_id);
 	}
@@ -43,26 +42,20 @@ public class EmployeeController {
 	@Path("/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public ResponseMessage saveBPEmployees(@FormDataParam("manager_id") int adminUserId,
+	public ResponseMessage saveBPEmployees(
 			@FormDataParam("contact") int contact,
 			@FormDataParam("email") int email,
 			@FormDataParam("current_address") String currentAddress,
 			@FormDataParam("permanent_address") String permanentAddress,
 			@FormDataParam("city_id") int cityId,
 			@FormDataParam("access_id") int accessId,
-			@FormDataParam("admin_id") int adminId,
+			@FormDataParam("admin_id") Long adminId,
 			@FormDataParam("manager_image[]") List<FormDataBodyPart> managerImage){
 		
-		PropertyManager propertyManager = new PropertyManager();
-		if(adminUserId > 0){
-			AdminUser adminUser = new AdminUser();
-			adminUser.setId(adminUserId);
-			propertyManager.setAdminUserByAdminUserId(adminUser);
-		}
+		AdminUser propertyManager = new AdminUser();
+		
 		if(adminId > 0){
-			AdminUser adminUser = new AdminUser();
-			adminUser.setId(adminId);
-			propertyManager.setAdminUserByAddedBy(adminUser);
+			propertyManager.setCreatedBy(adminId);
 		}
 		propertyManager.setCurrentAddress(currentAddress);
 		propertyManager.setPermanentAddress(permanentAddress);
@@ -76,18 +69,18 @@ public class EmployeeController {
 			adminUserRole.setId(accessId);
 			propertyManager.setAdminUserRole(adminUserRole);
 		}
-		ResponseMessage msg = new PropertyManagerDAO().save(propertyManager);
+		ResponseMessage msg = new AdminUserDAO().save(propertyManager);
 		if(msg.getId() > 0) {
 			propertyManager.setId(msg.getId());
 		//add gallery images
 		try {	
-			List<PropertyManagerPhotos> buildingImageGalleries = new ArrayList<PropertyManagerPhotos>();
+			List<AdminUserPhotos> buildingImageGalleries = new ArrayList<AdminUserPhotos>();
 			//for multiple inserting images.
 			if (managerImage.size() > 0) {
 				for(int i=0 ;i < managerImage.size();i++)
 				{
 					if(managerImage.get(i).getFormDataContentDisposition().getFileName() != null && !managerImage.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-						PropertyManagerPhotos buildingImageGallery = new PropertyManagerPhotos();
+						AdminUserPhotos buildingImageGallery = new AdminUserPhotos();
 						String gallery_name = managerImage.get(i).getFormDataContentDisposition().getFileName();
 						long millis = System.currentTimeMillis() % 1000;
 						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();

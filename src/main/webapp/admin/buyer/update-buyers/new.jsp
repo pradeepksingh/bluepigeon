@@ -1,20 +1,15 @@
-<%@page import="org.bluepigeon.admin.model.AdminUserRole"%>
-<%@page import="org.bluepigeon.admin.dao.PropertyManagerDAO"%>
-<%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
-<%@page import="org.bluepigeon.admin.model.City"%>
-<%@page import="org.bluepigeon.admin.dao.ProjectLeadDAO"%>
+<%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
-<%@include file="../../head.jsp"%>
-<%@include file="../../leftnav.jsp"%>
+<%@include file="../../../head.jsp"%>
+<%@include file="../../../leftnav.jsp"%>
 <%
-
-	List<AdminUserRole> adminUserRoles = new PropertyManagerDAO().getAdminUserRoles();
-	List<AdminUser> adminUsers = new PropertyManagerDAO().getAminUserList();
+	List<Builder> builderList = new BuilderDetailsDAO().getBuilderList();
    	session = request.getSession(false);
     AdminUser adminuserproject = new AdminUser();
  	int p_user_id = 0;
- 	List<City> city_list = new CityNamesImp().getCityNames();
 	if(session!=null)
 	{
 		if(session.getAttribute("uname") != null)
@@ -29,21 +24,19 @@
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
-				<li><a href="#">PropertyManager</a></li>
-				<li class="active">Add New Property manager</li>
+				<li><a href="#">Project Update</a></li>
+				<li class="active">Add New Project update</li>
 			</ul>
 		</div>
 		<div class="page-content">
 			<div class="page-header">
-				<h1>Add New Property manager</h1>
+				<h1>Add New Project update
+				<span class="pull-right"><a href="${baseUrl}/admin/buyer/update-buyers/list.jsp" class="btn btn-default btn-sm"> << Project Update List</a></span>
+				</h1>
 			</div>
-			<ul class="nav nav-tabs" id="managerTabs">
-			  	<li class="active"><a data-toggle="tab" href="#basic">Basic Details</a></li>
-			  	<li><a data-toggle="tab" href="#managerdetail">Manager Photo</a></li>
-			</ul>
 			<form id="addmanager" name="addmanager" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-			<div class="tab-content">
-				<div id="basic" class="tab-pane fade in active">
+				<div class="tab-content">
+					<div id="basic" class="tab-pane fade in active">
 						<div class="row">
 							<div class="col-lg-12">
 								<div class="panel panel-default">
@@ -51,58 +44,46 @@
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Name</label>
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Builder Name</label>
 												<div class="col-sm-9">
-													<input type="text" class="form-control" id="name" name="name" />
+													<select name="builder_id" id="builder_id" class="form-control">
+								                 	   	<option value="0">Select Name</option>
+								                 	   	 <% for(Builder builder : builderList){ %>
+														<option value="<% out.print(builder.getId());%>"><% out.print(builder.getName());%></option>
+														<% } %>
+										       	  	</select>
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
 										  	</div>
 										</div>
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Phone</label>
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Project</label>
 												<div class="col-sm-9">
-													<input type="text" class="form-control" id="phone" name="phone" />
+													<select name="project_id" id="project_id" class="form-control">
+								                 	   	<option value="0">Select Project</option>
+										       	  	</select>
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
 											</div>
 										</div>
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Email </label>
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Building </label>
 												<div class="col-sm-9">
-													<input type="text" class="form-control" id="email" name="email" />
+													<select name="building_id" id="building_id" class="form-control">
+								                 	   	<option value="0">Select Building</option>
+										       	  	</select>
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
 											</div>
 										</div>
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Current Address</label>
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Floor </label>
 												<div class="col-sm-9">
-													<textarea id="current_address" name="current_address" placeholder="Enter current Address" class="form-control" ></textarea>
-												</div>
-												<div class="messageContainer col-sm-offset-3"></div>
-											</div>
-										</div>
-										<div class="col-lg-6 margin-bottom-5">
-											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Permanent Address</label>
-												<div class="col-sm-9">
-													<textarea id="permanent_address" name="permanent_address" placeholder="Enter Permanent Address" class="form-control" ></textarea>
-												</div>
-												<div class="messageContainer col-sm-offset-3"></div>
-											</div>
-										</div>
-										<div class="col-lg-6 margin-bottom-5">
-											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">City </label>
-												<div class="col-sm-9">
-												 	<select name="city_id" id="city_id" class="form-control">
-									                    <option value="0">Select City</option>
-									                     <% for(City city : city_list){ %>
-														<option value="<% out.print(city.getId());%>"><% out.print(city.getName());%></option>
-														<% } %>
+												 	<select name="floor_id" id="floor_id" class="form-control">
+									                    <option value="0">Select Floor</option>
 									                </select>
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
@@ -110,23 +91,29 @@
 										</div>
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Access type </label>
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Flat </label>
 												<div class="col-sm-9">
-												 	<select name="access_id" id="access_id" class="form-control">
-									                    <option value="0">Access Type</option>
-									                     <% for(AdminUserRole adminUser : adminUserRoles){ %>
-														<option value="<% out.print(adminUser.getId());%>"><% out.print(adminUser.getRoleName());%></option>
-														<% } %>
+												 	<select name="flat_id" id="flat_id" class="form-control">
+									                    <option value="0">Select flat</option>
 									                </select>
 												</div>
 													<div class="messageContainer col-sm-offset-3"></div>
+											</div>
+										</div>
+										<div class="col-lg-6 margin-bottom-5">
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Description</label>
+												<div class="col-sm-9">
+													<textarea id="description" name="description" placeholder="Enter description" class="form-control" ></textarea>
+												</div>
+												<div class="messageContainer col-sm-offset-3"></div>
 											</div>
 										</div>
 										<input type="hidden" name="added_by" id="added_by" value="1"/>
 										<div class="col-lg-12 margin-bottom-5">
 											<div class="clearfix form-actions">
 												<div class="pull-right">
-													<button type="button" onclick="showDetailTab()" class="btn btn-success btn-small">Submit</button>
+													<button type="submit" class="btn btn-success btn-small">Submit</button>
 												</div>
 											</div>
 										</div>
@@ -134,62 +121,24 @@
 								</div>
 							</div>
 						</div>	
-<!-- 						</form> -->
-					</div>
-					<div id="managerdetail" class="tab-pane fade">
-	<!-- 					<form id="updateimage" name="updateimage" action="" method="post" class="form-horizontal" enctype="multipart/form-data"> -->
-						<div class="row">
-							<div id="imageresponse"></div>
-							<div class="col-lg-12">
-								<div class="panel panel-default">
-									<div class="panel-body">
-										<h3>Upload manager Photo</h3>
-										<br>
-										<div class="row" id="manager_images">
-											<div class="col-lg-6 margin-bottom-5" id="imgdiv-'+img_count+'">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Select Image </label>
-													<div class="col-sm-8 input-group" style="padding:0px 12px;">
-													<input type="file" class="form-control" id="manager_image" name="manager_image[]" />
-								<!-- 					<a href="javascript:removeImage('+img_count+');" class="input-group-addon btn-danger">x</a></span> -->
-													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-sm-12">
-								<span class="pull-right">
-									<button type="submit" name="imagebtn" class="btn btn-success">SAVE</button>
-								</span>
-							</div>
-						</div>
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
 </div>
-<%@include file="../../footer.jsp"%>
+<%@include file="../../../footer.jsp"%>
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script type="text/javascript">
-$("#manager_id").change(function(){
-	if($("#manager_id").val() > 0){
-		$.get("${baseUrl}/webapi/employee/list/"+$("#manager_id").val(),{ }, function(data){
-			var phone = phone + '<option value="'+data.id+'">'+data.contact+'</option>';
-			var email = email + '<option value = "'+data.id+'">'+data.email+'</option>';
-			$("#email").html(email);
-			$("#phone").html(phone);
-		},'json');
-	}else{
-		var phone = phone + '<option value="0">Select Contact No.</option>';
-		var email = email + '<option value = "0">Select Email</option>';
+$("#buyer_id").change(function(){
+	var html = "<option value='0'>Select flat</option>";
+	$.get("${baseUrl}/webapi/buyer/project/list/"+$("#buyer_id").val(),{ }, function(data){
+		var phone = phone + '<option value="'+data.id+'">'+data.contact+'</option>';
+		var email = email + '<option value = "'+data.id+'">'+data.email+'</option>';
 		$("#email").html(email);
 		$("#phone").html(phone);
-	}
+	},'json');
 });
 
 $('#addmanager').bootstrapValidator({

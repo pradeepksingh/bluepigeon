@@ -7,53 +7,52 @@ import org.bluepigeon.admin.data.PropertyManagerData;
 import org.bluepigeon.admin.data.PropertyManagerList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
+import org.bluepigeon.admin.model.AdminUserPhotos;
 import org.bluepigeon.admin.model.AdminUserRole;
 import org.bluepigeon.admin.model.City;
-import org.bluepigeon.admin.model.PropertyManager;
-import org.bluepigeon.admin.model.PropertyManagerPhotos;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-public class PropertyManagerDAO {
+public class AdminUserDAO {
 
 	/**
 	 * Save Property Manager
 	 * @author pankaj
-	 * @param propertyManager
+	 * @param adminUser
 	 * @return message
 	 */
-	public ResponseMessage save(PropertyManager propertyManager){
+	public ResponseMessage save(AdminUser adminUser){
 		ResponseMessage responseMessage = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
-		newsession.save(propertyManager);
+		newsession.save(adminUser);
 		newsession.getTransaction().commit();
 		newsession.close();
-		responseMessage.setId(propertyManager.getId());
+		responseMessage.setId(adminUser.getId());
 		responseMessage.setStatus(1);
-		responseMessage.setMessage("Property Manager Added Successfully.");
+		responseMessage.setMessage("Empolyee Added Successfully.");
 		return responseMessage;
 	}
 	/**
 	 * Save manager photo
 	 * @author pankaj
-	 * @param propertyManagerPhotos
+	 * @param adminUserPhotos
 	 * @return
 	 */
-	public ResponseMessage saveManagerPhoto(List<PropertyManagerPhotos> propertyManagerPhotos){
+	public ResponseMessage saveManagerPhoto(List<AdminUserPhotos> propertyManagerPhotos){
 		ResponseMessage responseMessage = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
-		for(PropertyManagerPhotos photos : propertyManagerPhotos)
+		for(AdminUserPhotos photos : propertyManagerPhotos)
 			newsession.save(photos);
 		newsession.getTransaction().commit();
 		newsession.close();
 		responseMessage.setId(propertyManagerPhotos.get(0).getId());
 		responseMessage.setStatus(1);
-		responseMessage.setMessage("Property Manager Photo Added Successfully.");
+		responseMessage.setMessage("Employee Photo Added Successfully.");
 		return responseMessage;
 	}
 	/**
@@ -124,18 +123,18 @@ public class PropertyManagerDAO {
 	 * @return list of property
 	 */
 	public List<PropertyManagerList> getProperyManagers(){
-		String hql = "from PropertyManager";
+		String hql = "from AdminUser";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		List<PropertyManager> result = query.list();
+		List<AdminUser> result = query.list();
 		List<PropertyManagerList> managerList = new ArrayList<PropertyManagerList>();
-		for(PropertyManager propertyManager : result){
+		for(AdminUser propertyManager : result){
 			PropertyManagerList propertyManagerList = new PropertyManagerList();
 			propertyManagerList.setId(propertyManager.getId());
-			propertyManagerList.setName(propertyManager.getAdminUserByAdminUserId().getName());
-			propertyManagerList.setContact(propertyManager.getAdminUserByAdminUserId().getMobile());
-			propertyManagerList.setEmail(propertyManager.getAdminUserByAdminUserId().getEmail());
+			propertyManagerList.setName(propertyManager.getName());
+			propertyManagerList.setContact(propertyManager.getMobile());
+			propertyManagerList.setEmail(propertyManager.getEmail());
 			propertyManagerList.setRoleName(propertyManager.getAdminUserRole().getRoleName());
 			managerList.add(propertyManagerList);
 		}

@@ -29,6 +29,7 @@
         <mapping class="org.bluepigeon.admin.model.Agreement" />
         <mapping class="org.bluepigeon.admin.model.BuilderBuilding" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloorAmenity" />
+        <mapping class="org.bluepigeon.admin.model.BuyerProjectUpdate" />
         <mapping class="org.bluepigeon.admin.model.FloorPanoramicImage" />
         <mapping class="org.bluepigeon.admin.model.Locality" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectType" />
@@ -40,7 +41,6 @@
         <mapping class="org.bluepigeon.admin.model.BuyingDetails" />
         <mapping class="org.bluepigeon.admin.model.BuilderBuildingAmenityStages" />
         <mapping class="org.bluepigeon.admin.model.PossessionInfo" />
-        <mapping class="org.bluepigeon.admin.model.PropertyManager" />
         <mapping class="org.bluepigeon.admin.model.FloorAmenityInfo" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectAmenity" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectOfferInfo" />
@@ -92,13 +92,11 @@
         <mapping class="org.bluepigeon.admin.model.ProjectImageGallery" />
         <mapping class="org.bluepigeon.admin.model.FlatAmenityInfo" />
         <mapping class="org.bluepigeon.admin.model.BuilderPaymentSubstages" />
-        <mapping class="org.bluepigeon.admin.model.PropertyManagerPhotos" />
         <mapping class="org.bluepigeon.admin.model.BuilderGroup" />
         <mapping class="org.bluepigeon.admin.model.BuilderBuildingAmenity" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectAmenityStages" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectPropertyConfigurationInfo" />
         <mapping class="org.bluepigeon.admin.model.BuilderFlatType" />
-        <mapping class="org.bluepigeon.admin.model.ManageProjects" />
         <mapping class="org.bluepigeon.admin.model.BuilderOverallProjectStagesAndSubStages" />
         <mapping class="org.bluepigeon.admin.model.BuildingPaymentInfo" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloor" />

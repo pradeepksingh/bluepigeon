@@ -32,7 +32,7 @@ campaignLists = new PropertyManagerDAO().getProperyManagers();
 		<div class="page-content">
 			<div class="page-header">
 				<h1>
-					Property manager 
+					Property Manager 
 					<a href="${baseUrl}/admin/employee/new.jsp" class="btn btn-primary btn-sm pull-right" role="button" data-toggle="modal"><i class="fa fa-plus"></i> New Employee</a>
 				</h1>
 			</div>
