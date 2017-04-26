@@ -130,6 +130,8 @@
         <mapping class="org.bluepigeon.admin.model.GlobalBuyer" />
         <mapping class="org.bluepigeon.admin.model.BuilderEmployeeAccessType" />
         <mapping class="org.bluepigeon.admin.model.BuilderEmployee" />
+        
+        
 	</session-factory>
 
 </hibernate-configuration>
