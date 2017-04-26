@@ -43,8 +43,10 @@ public class EmployeeController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage saveBPEmployees(
-			@FormDataParam("contact") int contact,
-			@FormDataParam("email") int email,
+			@FormDataParam("name") String name,
+			@FormDataParam("phone") String contact,
+			@FormDataParam("email") String email,
+			@FormDataParam("password") String password,
 			@FormDataParam("current_address") String currentAddress,
 			@FormDataParam("permanent_address") String permanentAddress,
 			@FormDataParam("city_id") int cityId,
@@ -57,7 +59,12 @@ public class EmployeeController {
 		if(adminId > 0){
 			propertyManager.setCreatedBy(adminId);
 		}
+		propertyManager.setName(name);
+		propertyManager.setMobile(contact);
+		propertyManager.setEmail(email);
+		propertyManager.setPassword(password);
 		propertyManager.setCurrentAddress(currentAddress);
+		propertyManager.setCreatedDate(new java.util.Date());
 		propertyManager.setPermanentAddress(permanentAddress);
 		if(cityId > 0){
 			City city = new City();
@@ -89,12 +96,12 @@ public class EmployeeController {
 						System.out.println("for loop image path: "+uploadGalleryLocation);
 						this.imageUploader.writeToFile(managerImage.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
 						buildingImageGallery.setPhotoUrl(gallery_name);
-						buildingImageGallery.setPropertyManager(propertyManager);
+						buildingImageGallery.setAdminUser(propertyManager);
 						buildingImageGalleries.add(buildingImageGallery);
 					}
 				}
 				if(buildingImageGalleries.size() > 0) {
-					new PropertyManagerDAO().saveManagerPhoto(buildingImageGalleries);
+					new AdminUserDAO().saveManagerPhoto(buildingImageGalleries);
 				}
 			}
 		} catch(Exception e) {

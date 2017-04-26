@@ -17,7 +17,7 @@ import org.hibernate.Session;
 public class AdminUserDAO {
 
 	/**
-	 * Save Property Manager
+	 * Save Admin User
 	 * @author pankaj
 	 * @param adminUser
 	 * @return message

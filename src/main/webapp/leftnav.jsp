@@ -296,13 +296,13 @@ if(session!=null)
 				<li class="active">
 					<a href="#" class="dropdown-toggle"> 
 						<i class="menu-icon fa fa-pencil-square-o"></i> 
-						<span class="menu-text"> Property Manager </span> <b class="arrow fa fa-angle-down"></b>
+						<span class="menu-text"> Employees </span> <b class="arrow fa fa-angle-down"></b>
 					</a> 
 					<b class="arrow"></b>
 					<ul class="submenu">
 						<li class="active">
 							<a href="${baseUrl}/admin/employee/list.jsp"> 
-								<i class="menu-icon fa fa-caret-right"></i> Manage Property Manager
+								<i class="menu-icon fa fa-caret-right"></i> Manage Employees
 							</a> <b class="arrow"></b>
 						</li>
 					</ul>

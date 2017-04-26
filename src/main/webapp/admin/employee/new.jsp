@@ -1,6 +1,6 @@
+<%@page import="org.bluepigeon.admin.dao.AdminUserDAO"%>
 <%@page import="org.bluepigeon.admin.model.AdminUserRole"%>
-<%@page import="org.bluepigeon.admin.dao.PropertyManagerDAO"%>
-<%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
+        <%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
 <%@page import="org.bluepigeon.admin.model.City"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectLeadDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
@@ -9,8 +9,8 @@
 <%@include file="../../leftnav.jsp"%>
 <%
 
-	List<AdminUserRole> adminUserRoles = new PropertyManagerDAO().getAdminUserRoles();
-	List<AdminUser> adminUsers = new PropertyManagerDAO().getAminUserList();
+	List<AdminUserRole> adminUserRoles = new AdminUserDAO().getAdminUserRoles();
+	List<AdminUser> adminUsers = new AdminUserDAO().getAminUserList();
    	session = request.getSession(false);
     AdminUser adminuserproject = new AdminUser();
  	int p_user_id = 0;
@@ -72,6 +72,15 @@
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Email </label>
 												<div class="col-sm-9">
 													<input type="text" class="form-control" id="email" name="email" />
+												</div>
+												<div class="messageContainer col-sm-offset-3"></div>
+											</div>
+										</div>
+										<div class="col-lg-6 margin-bottom-5">
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Password </label>
+												<div class="col-sm-9">
+													<input type="password" class="form-control" id="password" name="password" />
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
 											</div>

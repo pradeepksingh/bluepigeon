@@ -25,6 +25,7 @@ import javax.persistence.TemporalType;
 public class AdminUser implements java.io.Serializable {
 
 	private Integer id;
+	private City city;
 	private AdminUserRole adminUserRole;
 	private String name;
 	private String email;
@@ -52,15 +53,14 @@ public class AdminUser implements java.io.Serializable {
 	}
 
 
-	public AdminUser(AdminUserRole adminUserRole, String name, String email, String password, String mobile,
-			String currentAddress, String permanentAddress, int status, Date createdDate, Long createdBy) {
+	public AdminUser(City city, AdminUserRole adminUserRole, String name, String email, String password, String mobile,
+			int status, Date createdDate, Long createdBy) {
+		this.city = city;
 		this.adminUserRole = adminUserRole;
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.mobile = mobile;
-		this.currentAddress = currentAddress;
-		this.permanentAddress = permanentAddress;
 		this.status = status;
 		this.createdDate = createdDate;
 		this.createdBy = createdBy;
@@ -76,6 +76,16 @@ public class AdminUser implements java.io.Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "city_id")
+	public City getCity() {
+		return this.city;
+	}
+
+	public void setCity(City city) {
+		this.city = city;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -124,6 +134,11 @@ public class AdminUser implements java.io.Serializable {
 		this.mobile = mobile;
 	}
 	
+	@Column(name = "current_address", length = 65535)
+	public String getCurrentAddress() {
+		return this.currentAddress;
+	}
+
 	public void setCurrentAddress(String currentAddress) {
 		this.currentAddress = currentAddress;
 	}
