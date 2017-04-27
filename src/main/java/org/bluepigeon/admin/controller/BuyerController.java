@@ -124,7 +124,7 @@ public class BuyerController {
 		Short agreement=0;
 		Short possession=0;
 		Buyer buyer = null;
-		List<Buyer> buyerList = new ArrayList<Buyer>();
+		//List<Buyer> buyerList = new ArrayList<Buyer>();
 		Buyer primaryBuyer = new Buyer();
 		if(name.size()>0){
 			int i=0;

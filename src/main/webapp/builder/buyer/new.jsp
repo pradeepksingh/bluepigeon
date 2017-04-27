@@ -260,7 +260,7 @@
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-rise_rate">
-													<label class="control-label col-sm-4">Floor Rise Rate</label>
+													<label class="control-label col-sm-4">Floor Rise Rate<span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="rise_rate" name="rise_rate"/>
 													</div>
@@ -269,7 +269,7 @@
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-amenity_rate">
-													<label class="control-label col-sm-4">Amenities Facing Rate</label>
+													<label class="control-label col-sm-4">Amenities Facing Rate<span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" />
 													</div>
@@ -280,18 +280,18 @@
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-maintenance">
-													<label class="control-label col-sm-4">Maintenance Charge </label>
+													<label class="control-label col-sm-4">Maintenance Charge <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="maintenance" name="maintenance" "/>
+														<input type="text" class="form-control" id="maintenance" name="maintenance" />
 													</div>
 													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-tenure">
-													<label class="control-label col-sm-4">Tenure </label>
+													<label class="control-label col-sm-4">Tenure <span class='text-danger'>*</span></label>
 													<div class="col-sm-8 input-group" style="padding: 0px 12px;">
-														<input type="text" class="form-control" id="tenure" name="tenure" "/>
+														<input type="text" class="form-control" id="tenure" name="tenure" />
 														<span class="input-group-addon">Months</span>
 													</div>
 													<div class="messageContainer col-sm-offset-4"></div>
@@ -301,7 +301,7 @@
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-amenity_rate">
-													<label class="control-label col-sm-4">Registration</label>
+													<label class="control-label col-sm-4">Registration<span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="registration" name="registration" />
 													</div>
@@ -310,7 +310,7 @@
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Parking </label>
+													<label class="control-label col-sm-4">Parking <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="parking" name="parking" />
 													</div>
@@ -321,7 +321,7 @@
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Stamp Duty </label>
+													<label class="control-label col-sm-4">Stamp Duty <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" />
 													</div>
@@ -330,7 +330,7 @@
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-tax">
-													<label class="control-label col-sm-4">Tax</label>
+													<label class="control-label col-sm-4">Tax<span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="tax" name="tax" />
 													</div> 
@@ -341,7 +341,7 @@
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-vat">
-													<label class="control-label col-sm-4">VAT </label>
+													<label class="control-label col-sm-4">VAT <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="vat" name="vat" />
 													</div>

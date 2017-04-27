@@ -13,6 +13,7 @@ import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuyer;
 import org.bluepigeon.admin.model.BuilderFlat;
+import org.bluepigeon.admin.model.BuilderFlatStatus;
 import org.bluepigeon.admin.model.BuilderFloor;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Buyer;
@@ -32,7 +33,6 @@ public class BuyerDAO {
 	public ResponseMessage saveBuyer(List<Buyer> buyers){
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		List<ResponseMessage> responseList = new ArrayList<ResponseMessage>();
 		String hql = "from Buyer where name = :name";
 		String get_builder = "from BuilderProject where id = :id";
 		Session session = hibernateUtil.openSession();
@@ -118,15 +118,17 @@ public class BuyerDAO {
 	}
 	
 	public void updateFlatStatus(int flatId){
-		String hql = "UPDATE BuilderFlat set status_id = 2 "  + 
-	             "WHERE id = :id";
+		System.out.println("FlatId :: "+flatId);
+		String hql = "UPDATE BuilderFlat set status_id = 2 WHERE id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		org.hibernate.Transaction tx=session.beginTransaction();  
 		Query query = session.createQuery(hql);
-		query.setParameter("id", flatId);
+		query.setParameter("id",flatId);
+		org.hibernate.Transaction tx=session.beginTransaction();  
 		query.executeUpdate();
+	//	session.getTransaction().commit();
 		tx.commit();
+		session.close();
 	}
 	
 	public void insertBuilderBuyer(List<Buyer> buyers){
@@ -358,21 +360,36 @@ public class BuyerDAO {
 		return result;
 	}
 	
-	public Buyer getBuyerById(int id){
+	public List<Buyer> getBuyerById(int id){
 		String hql = "from Buyer where id = :id";
+		String coownerHql = "from Buyer where builderFlat.id = :flat_id";
+		List<Buyer> buyers = new ArrayList<Buyer>();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
+		Session coownerSession = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
-		List<Buyer> result = query.list();
-		session.close();
-		if(result.size()>0){
-		return result.get(0);
-		}else{
-			Buyer buyer = new Buyer();
-			buyer.setId(0);
-			return buyer;
+		Buyer result = (Buyer)query.list().get(0);
+		if(result != null){
+			Query coownerQuery = coownerSession.createQuery(coownerHql);
+			coownerQuery.setParameter("flat_id", result.getBuilderFlat().getId());
+			List<Buyer> buyerList = coownerQuery.list();
+			for(Buyer buyer : buyerList){
+				Buyer newBuyer = new Buyer();
+				newBuyer.setId(buyer.getId());
+				newBuyer.setName(buyer.getName());
+				newBuyer.setMobile(buyer.getMobile());
+				newBuyer.setEmail(buyer.getEmail());
+				newBuyer.setAddress(buyer.getAddress());
+				newBuyer.setPancard(buyer.getPancard());
+				newBuyer.setIsPrimary(buyer.getIsPrimary());
+				newBuyer.setPhoto(buyer.getPhoto());
+				buyers.add(newBuyer);
+			}
+			
 		}
+		session.close();
+		return buyers;
 	}
 	public List<BuyerDocuments> getBuyerDocumentsByBuyerId(int buyerId){
 		String hql = "from BuyerDocuments where buyer.id = :buyer_id";
@@ -708,7 +725,7 @@ public class BuyerDAO {
 	   * @return List of available flats
 	   */
 	  public List<FlatData> getBuilderProjectBuildingFlats(int building_id) {
-			String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id and builderFlatStatus.name='available'";
+			String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id and builderFlatStatus.id=1";
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
