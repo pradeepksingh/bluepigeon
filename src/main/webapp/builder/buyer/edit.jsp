@@ -65,7 +65,7 @@
  		building_size =	builderBuildings.size();
  		builderFlats = new ProjectDAO().getBuilderProjectBuildingFlats(builderBuildings.get(0).getId());
  	}
- 	Buyer buyer =  new BuyerDAO().getBuyerById(buyer_id);
+ //	Buyer buyer =  new BuyerDAO().getBuyerById(buyer_id);
  	List<BuyerDocuments> buyerDocuments = new BuyerDAO().getBuyerDocumentsByBuyerId(buyer_id);
  	BuyingDetails buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyer_id);
  	List<BuyerOffer> buyerOffersList = new BuyerDAO().getBuyerOffersByBuyerId(buyer_id);
