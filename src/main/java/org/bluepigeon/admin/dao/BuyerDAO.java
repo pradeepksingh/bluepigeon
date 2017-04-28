@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuyerData;
+import org.bluepigeon.admin.data.BuyerDocList;
 import org.bluepigeon.admin.data.BuyerList;
 import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FloorData;
@@ -45,7 +46,6 @@ public class BuyerDAO {
 				response.setMessage("Please enter buyer name");
 				//responseList.add(response);
 			} else {
-				
 				Query query = session.createQuery(hql);
 				query.setParameter("name", buyerList.getName());
 				List<Buyer> result = query.list();
@@ -123,7 +123,7 @@ public class BuyerDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setParameter("id",flatId);
+		query.setInteger("id",flatId);
 		org.hibernate.Transaction tx=session.beginTransaction();  
 		query.executeUpdate();
 	//	session.getTransaction().commit();
@@ -360,13 +360,25 @@ public class BuyerDAO {
 		return result;
 	}
 	
-	public List<Buyer> getBuyerById(int id){
+	public Buyer getBuyerById(int id){
+		String hql = "from Buyer where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		Buyer result = (Buyer)query.list().get(0);
+		return result;
+	}
+
+	public List<BuyerDocList> getBuyerDocListById(int id){
 		String hql = "from Buyer where id = :id";
 		String coownerHql = "from Buyer where builderFlat.id = :flat_id";
-		List<Buyer> buyers = new ArrayList<Buyer>();
+		String docHql = "from BuyerDocuments where buyer.id = :buyer_id";
+		List<BuyerDocList> buyerDocLists = new ArrayList<BuyerDocList>();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Session coownerSession = hibernateUtil.openSession();
+		Session docSession = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
 		Buyer result = (Buyer)query.list().get(0);
@@ -375,21 +387,34 @@ public class BuyerDAO {
 			coownerQuery.setParameter("flat_id", result.getBuilderFlat().getId());
 			List<Buyer> buyerList = coownerQuery.list();
 			for(Buyer buyer : buyerList){
-				Buyer newBuyer = new Buyer();
-				newBuyer.setId(buyer.getId());
-				newBuyer.setName(buyer.getName());
-				newBuyer.setMobile(buyer.getMobile());
-				newBuyer.setEmail(buyer.getEmail());
-				newBuyer.setAddress(buyer.getAddress());
-				newBuyer.setPancard(buyer.getPancard());
-				newBuyer.setIsPrimary(buyer.getIsPrimary());
-				newBuyer.setPhoto(buyer.getPhoto());
-				buyers.add(newBuyer);
+				BuyerDocList buyerDocList = new BuyerDocList();
+				buyerDocList.setId(buyer.getId());
+				buyerDocList.setName(buyer.getName());
+				buyerDocList.setMobile(buyer.getMobile());
+				buyerDocList.setEmail(buyer.getEmail());
+				buyerDocList.setAddress(buyer.getAddress());
+				buyerDocList.setPanCard(buyer.getPancard());
+				buyerDocList.setPrimary(buyer.getIsPrimary());
+				buyerDocList.setPhoto(buyer.getPhoto());
+				buyerDocList.setProjectId(buyer.getBuilderProject().getId());
+				buyerDocList.setBuildingId(buyer.getBuilderBuilding().getId());
+				buyerDocList.setFlatId(buyer.getBuilderFlat().getId());
+				buyerDocList.setStatus(buyer.getStatus());
+				Query docQuery = docSession.createQuery(docHql);
+				docQuery.setParameter("buyer_id",buyer.getId());
+				List<BuyerDocuments> docList = docQuery.list();
+				for(BuyerDocuments documents : docList){
+					List<String> docLists = new ArrayList<String>();
+					docLists.add(documents.getDocuments());
+					buyerDocList.setDocResult(docLists);
+				}
+				buyerDocLists.add(buyerDocList);
 			}
-			
 		}
 		session.close();
-		return buyers;
+		coownerSession.close();
+		docSession.close();
+		return buyerDocLists;
 	}
 	public List<BuyerDocuments> getBuyerDocumentsByBuyerId(int buyerId){
 		String hql = "from BuyerDocuments where buyer.id = :buyer_id";
@@ -452,10 +477,10 @@ public class BuyerDAO {
 		session.close();
 		return result;
 	}
-	public ResponseMessage updateBuyer(BuyerData buyerData){
+	
+	public ResponseMessage updateBuyer(Buyer buyer){
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		Buyer buyer = buyerData.getBuyer();
 		String hql = "from Buyer where name = :name and id != :id";
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -464,40 +489,10 @@ public class BuyerDAO {
 		List<Buyer> result = query.list();
 		session.close();
 		if (result.size() > 0) {
+			response.setId(result.get(0).getId());
 			response.setStatus(0);
 			response.setMessage("Buyer name already exists");
-		} else {
-			Session newsession = hibernateUtil.openSession();
-			newsession.beginTransaction();
-			newsession.update(buyer);
-			newsession.getTransaction().commit();
-			newsession.close();
-			
-			String delete_buyer_documents = "DELETE from  BuyerDocuments where buyer.id = :buyer_id";
-			Session newsession1 = hibernateUtil.openSession();
-			newsession1.beginTransaction();
-			Query smdelete = newsession1.createQuery(delete_buyer_documents);
-			smdelete.setParameter("buyer_id", buyer.getId());
-			smdelete.executeUpdate();
-			newsession1.getTransaction().commit();
-			newsession1.close();
-			
-			List<BuyerDocuments> buyerDocuments = buyerData.getBuyerDocuments();
-			if(buyerDocuments.size()>0){
-				Session session2 = hibernateUtil.openSession();
-				session2.beginTransaction();
-				for(int i=0;i<buyerDocuments.size();i++){
-					BuyerDocuments buyerDocuments2 = new BuyerDocuments();
-					buyerDocuments2.setBuyer(buyer);
-					session2.save(buyerDocuments2);
-				}
-				session2.getTransaction().commit();
-				session2.close();
-			}
-			
-			response.setStatus(1);
-			response.setMessage("Buyer Updated Successfully");
-		}
+		} 
 		return response;
 	}
 	
@@ -513,6 +508,37 @@ public class BuyerDAO {
 		responseMessage.setMessage("Buying Details Updated Successfully");
 		return responseMessage;
 	}
+	
+	public ResponseMessage updateBuyerDocuments(List<BuyerDocuments> buyerOffers){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		ResponseMessage responseMessage = new ResponseMessage();
+		
+		/***************** Delete entry from Buyer Offers *************************/
+		String delete_buyer_documents = "DELETE from  BuyerDocuments where buyer.id = :buyer_id";
+		Session newsession1 = hibernateUtil.openSession();
+		newsession1.beginTransaction();
+		Query smdelete = newsession1.createQuery(delete_buyer_documents);
+		smdelete.setParameter("buyer_id", buyerOffers.get(0).getBuyer().getId());
+		smdelete.executeUpdate();
+		newsession1.getTransaction().commit();
+		newsession1.close();
+		
+		/**********************Save Buyer Offers new entries *************************/ 
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		if(buyerOffers.size()>0){
+			for(int i=0;i<buyerOffers.size();i++){
+				newsession.save(buyerOffers.get(i));
+			}
+			newsession.getTransaction().commit();
+			newsession.close();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Buyer Documents Updated Successfully");
+		}
+		
+		return responseMessage;
+	}
+	
 	
 	public ResponseMessage updateBuyerOffers(List<BuyerOffer> buyerOffers){
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -777,5 +803,4 @@ public class BuyerDAO {
 			session.close();
 			return buildingDataList;
 		}
-		
 }
