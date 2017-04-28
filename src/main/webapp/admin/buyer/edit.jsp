@@ -828,7 +828,7 @@
 							<div class="row">
 								<div class="col-lg-12">
 									<div class="col-sm-12">
-										<button type="submit" name="updatebuyer" class="btn btn-success btn-sm" id="updatebuyer">Update</button>
+										<button type="submit" name="updatedoc" class="btn btn-success btn-sm" id="updatedoc">Update</button>
 									</div>
 								</div>
 							</div>
@@ -1068,55 +1068,55 @@ function showPriceResponse(resp, statusText, xhr, $form){
   	}
 }
 
-$("#detailbtn").click(function(){
-	var projectType = [];
-	var propertyType = [];
-	var configuration = [];
-	var amenityType = [];
-	var approvalType = [];
-	var homeLoanInfo = [];
-	var project = {id:$("#id").val(),projectArea:$("#project_area").val(),areaUnit:{id:$("#area_unit").val()},launchDate:new Date($("#launch_date").val())};
-	$('input[name="project_type[]"]:checked').each(function() {
-		projectType.push({builderProjectType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="property_type[]"]:checked').each(function() {
-		val = $("#property_type"+$(this).val()).val();
-		propertyType.push({value:val,builderPropertyType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="configuration[]"]:checked').each(function() {
-		configuration.push({builderProjectPropertyConfiguration:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="amenity_type[]"]:checked').each(function() {
-		amenityType.push({builderProjectAmenity:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="approval_type[]"]:checked').each(function() {
-		approvalType.push({builderProjectApprovalType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="homeloan_bank[]"]:checked').each(function() {
-		homeLoanInfo.push({homeLoanBanks:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	var final_data = {builderProject:project,builderProjectProjectTypes:projectType,builderProjectPropertyTypes:propertyType,builderProjectPropertyConfigurationInfos:configuration,builderProjectAmenityInfos:amenityType,builderProjectApprovalInfos:approvalType,builderProjectBankInfos:homeLoanInfo}
-	$.ajax({
-	    url: '${baseUrl}/webapi/project/detail/update',
-	    type: 'POST',
-	    data: JSON.stringify(final_data),
-	    contentType: 'application/json; charset=utf-8',
-	    dataType: 'json',
-	    async: false,
-	    success: function(data) {
-			if (data.status == 0) {
-				alert(data.message);
-			} else {
-				alert(data.message);
-			}
-		},
-		error : function(data)
-		{
-			alert("Fail to save data");
-		}
+// $("#detailbtn").click(function(){
+// 	var projectType = [];
+// 	var propertyType = [];
+// 	var configuration = [];
+// 	var amenityType = [];
+// 	var approvalType = [];
+// 	var homeLoanInfo = [];
+// 	var project = {id:$("#id").val(),projectArea:$("#project_area").val(),areaUnit:{id:$("#area_unit").val()},launchDate:new Date($("#launch_date").val())};
+// 	$('input[name="project_type[]"]:checked').each(function() {
+// 		projectType.push({builderProjectType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
+// 	});
+// 	$('input[name="property_type[]"]:checked').each(function() {
+// 		val = $("#property_type"+$(this).val()).val();
+// 		propertyType.push({value:val,builderPropertyType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
+// 	});
+// 	$('input[name="configuration[]"]:checked').each(function() {
+// 		configuration.push({builderProjectPropertyConfiguration:{id:$(this).val()},builderProject:{id:$("#id").val()}});
+// 	});
+// 	$('input[name="amenity_type[]"]:checked').each(function() {
+// 		amenityType.push({builderProjectAmenity:{id:$(this).val()},builderProject:{id:$("#id").val()}});
+// 	});
+// 	$('input[name="approval_type[]"]:checked').each(function() {
+// 		approvalType.push({builderProjectApprovalType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
+// 	});
+// 	$('input[name="homeloan_bank[]"]:checked').each(function() {
+// 		homeLoanInfo.push({homeLoanBanks:{id:$(this).val()},builderProject:{id:$("#id").val()}});
+// 	});
+// 	var final_data = {builderProject:project,builderProjectProjectTypes:projectType,builderProjectPropertyTypes:propertyType,builderProjectPropertyConfigurationInfos:configuration,builderProjectAmenityInfos:amenityType,builderProjectApprovalInfos:approvalType,builderProjectBankInfos:homeLoanInfo}
+// 	$.ajax({
+// 	    url: '${baseUrl}/webapi/project/detail/update',
+// 	    type: 'POST',
+// 	    data: JSON.stringify(final_data),
+// 	    contentType: 'application/json; charset=utf-8',
+// 	    dataType: 'json',
+// 	    async: false,
+// 	    success: function(data) {
+// 			if (data.status == 0) {
+// 				alert(data.message);
+// 			} else {
+// 				alert(data.message);
+// 			}
+// 		},
+// 		error : function(data)
+// 		{
+// 			alert("Fail to save data");
+// 		}
 		
-	});
-});
+// 	});
+// });
 
 $("#paymentbtn").click(function(){
 	var paymentInfo = [];
@@ -1313,17 +1313,17 @@ function addMoreBuyers() {
 function removeBuyer(id) {
 	$("#buyer-"+id).remove();
 }
-function deleteImage(id) {
-	var flag = confirm("Are you sure ? You want to delete plan ?");
-	if(flag) {
-		$.get("${baseUrl}/webapi/project/buyer/"+id, { }, function(data){
-			alert(data.message);
-			if(data.status == 1) {
-				$("#b_image"+id).remove();
-			}
-		},'json');
-	}
-}
+// function deleteImage(id) {
+// 	var flag = confirm("Are you sure ? You want to delete plan ?");
+// 	if(flag) {
+// 		$.get("${baseUrl}/webapi/project/buyer/"+id, { }, function(data){
+// 			alert(data.message);
+// 			if(data.status == 1) {
+// 				$("#b_image"+id).remove();
+// 			}
+// 		},'json');
+// 	}
+// }
 
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
