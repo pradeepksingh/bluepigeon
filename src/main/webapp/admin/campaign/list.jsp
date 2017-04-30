@@ -1,10 +1,5 @@
 <%@page import="org.bluepigeon.admin.dao.CampaignDAO"%>
 <%@page import="org.bluepigeon.admin.data.CampaignList"%>
-<%@page import="org.bluepigeon.admin.model.BuilderFloor"%>
-<%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
-<%@page import="org.bluepigeon.admin.model.BuilderLead"%>
-<%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
-<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>

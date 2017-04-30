@@ -32,6 +32,7 @@ if(builder_list.size()>0){
 			<!-- /.breadcrumb -->
 		</div>
 		<input type="hidden" value="<% out.print(builder.getId()); %>" name="ubuilder_id" id="ubuilder_id">
+		<input type="hidden" value="<%out.print(builder.getLoginStatus()); %> name="uloginstatus" id="uloginstatus"/>
 		<div class="page-content">
 			<div class="page-header">
 				<h1>Update Builder</h1>
@@ -72,6 +73,14 @@ if(builder_list.size()>0){
 							<label class="col-sm-3 control-label no-padding-right"	for="form-field-1"> Email </label>
 							<div class="col-sm-9">
 								<input type="text" id="uhemail" name="uhemail" placeholder="Email ids" value="<% out.print(builder.getEmail()); %>" class="col-xs-10 col-sm-5" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right"
+								for="form-field-1"> Password </label>
+							<div class="col-sm-9">
+								<input type="password" id="password" name="password" value="<%out.print(builder.getPassword()); %>" placeholder="password"
+									class="col-xs-10 col-sm-5" />
 							</div>
 						</div>
 						<div class="form-group">
@@ -184,9 +193,9 @@ function updateNewBuilder(){
 }
 function getBuilderData(){
 	if($("#ubuilder_id").val()>0){
-		var  builder_info = {id:$("#ubuilder_id").val(),name:$("#ubname").val(),status:$("#ustatus").val(),headOffice:$("#uhoffice").val(),email:$("#uhemail").val(),mobile:$("#uhphno").val(),aboutBuilder:$("#uabuilder").val()}
+		var  builder_info = {id:$("#ubuilder_id").val(),name:$("#ubname").val(),status:$("#ustatus").val(),password:$("#password").val(),loginStatus:$("#uloginstatus").val(),headOffice:$("#uhoffice").val(),email:$("#uhemail").val(),mobile:$("#uhphno").val(),aboutBuilder:$("#uabuilder").val()}
 	}else{
-		var  builder_info = {name:$("#ubname").val(),status:$("#ustatus").val(),headOffice:$("#uhoffice").val(),email:$("#uhemail").val(),mobile:$("#uhphno").val(),aboutBuilder:$("#uabuilder").val()}
+		var  builder_info = {name:$("#ubname").val(),status:$("#ustatus").val(),headOffice:$("#uhoffice").val(),password:$("#password").val(),loginStatus:$("#uloginstatus").val(),email:$("#uhemail").val(),mobile:$("#uhphno").val(),aboutBuilder:$("#uabuilder").val()}
 	}
    	return builder_info;
 }

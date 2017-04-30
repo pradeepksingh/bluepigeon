@@ -1,30 +1,14 @@
 <%@page import="org.bluepigeon.admin.data.PossessionList"%>
 <%@page import="org.bluepigeon.admin.dao.PossessionDAO"%>
-<%@page import="org.bluepigeon.admin.dao.AgreementDAO"%>
-<%@page import="org.bluepigeon.admin.data.AgreementList"%>
-<%@page import="org.bluepigeon.admin.model.Buyer"%>
-<%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
-<%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
-<%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>
-<%@page import="org.bluepigeon.admin.model.BuilderProject"%>
-<%@page import="org.bluepigeon.admin.dao.DemandLettersDAO"%>
-<%@page import="org.bluepigeon.admin.model.DemandLetters"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
-<%@page import="org.bluepigeon.admin.data.ProjectList"%>
 <%@page import="java.util.List"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
-<%@page import="org.bluepigeon.admin.model.Country"%>
-<%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
-<%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
 <%@include file="../../../head.jsp"%>
 <%@include file="../../../leftnav.jsp"%>
 <%
 	List<PossessionList> agreement_list = new PossessionDAO().getAllAgreement();
 	int agreement_size = agreement_list.size();
-	List<BuilderProject> builderProjects = new ProjectDetailsDAO().getBuilderProjectList();
-	List<Builder> builders = new BuilderDetailsDAO().getBuilderList();
 %>
 <div class="main-content">
 	<div class="main-content-inner">

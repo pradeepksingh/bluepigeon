@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
+    <title>Elite Admin - Real Estate Admin Dashboard</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+    <!-- animation CSS -->
+    <link href="../css/animate.css" rel="stylesheet">
+    <!-- Menu CSS -->
+    <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+    <!-- animation CSS -->
+    <link href="../css/animate.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- color CSS -->
+    <link href="../css/colors/megna.css" id="theme" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+     <link href="../plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
+    <link href="../plugins/bower_components/switchery/dist/switchery.min.css" rel="stylesheet" />
+    <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="../plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
+    <link href="../plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <link href="../plugins/bower_components/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
+    <!-- animation CSS -->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+    <!-- jQuery -->
+    <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script>
+    $(function() {
+        $("#sidebar1").load("partial/sidebar.jsp");
+        $("#header").load("partial/header1.jsp");
+
+        $("#footer").load("partial/footer.html");
+    });
+    </script>
+    <script type="text/javascript">
+    $('input[type=checkbox]').click(function() {
+        if ($(this).is(':checked')) {
+            var tb = $('<input type=text />');
+            $(this).after(tb);
+        } else if ($(this).siblings('input[type=text]').length > 0) {
+            $(this).siblings('input[type=text]').remove();
+        }
+    })
+    </script>
+</head>
+
+<body class="fix-sidebar">
+    <!-- Preloader -->
+    <div class="preloader" style="display: none;">
+        <div class="cssload-speeding-wheel"></div>
+    </div>
+    <div id="wrapper">
+        <!-- Top Navigation -->
+        <div id="header"></div>
+        <!-- End Top Navigation -->
+        <!-- Left navbar-header -->
+        <div id="sidebar1"> </div>
+        <!-- Left navbar-header end -->
+        <!-- Page Content -->
+        <div id="page-wrapper" style="min-height: 2038px;">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">Add Project</h4>
+                       
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="white-box">
+                            
+                            <br>
+                                 <div class="col-12">
+                                            <form class="">
+                                                <div class="form-group row">
+                                                    <label for="example-text-input" class="col-4 col-form-label">Builder Group</label>
+                                                    <div class="col-8">
+                                                       <select class="form-control selectpicker" multiple data-style="form-control">
+                                        <option>Mustard</option>
+                                        <option>Ketchup</option>
+                                        <option>Relish</option>
+                                    </select>
+                                     </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="example-search-input" class="col-4 col-form-label">Builder Company</label>
+                                                    <div class="col-8">
+                                                           <select class="form-control selectpicker" multiple data-style="form-control">
+                                        <option>Mustard</option>
+                                        <option>Ketchup</option>
+                                        <option>Relish</option>
+                                    </select> </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="example-tel-input" class="col-4 col-form-label">Project Name</label>
+                                                    <div class="col-8">
+                                                        <input class="form-control" type="text" value="" id="example-search-input">
+                                                    </div>
+                                                </div>
+                                                  <div class="form-group row">
+                                                    <label for="example-tel-input" class="col-4 col-form-label">LandMark</label>
+                                                    <div class="col-8">
+                                                        <input class="form-control" type="text" value="" id="example-search-input">
+                                                    </div>
+                                                </div>
+                                                  <div class="form-group row">
+                                                    <label for="example-tel-input" class="col-4 col-form-label">Sub Location</label>
+                                                    <div class="col-8">
+                                                        <input class="form-control" type="text" value="" id="example-search-input">
+                                                    </div>
+                                                </div>
+                                            
+                                               <div class="form-group row">
+                                                    <label for="example-tel-input" class="col-4 col-form-label">Country</label>
+                                                    <div class="col-8">
+                                                          <select class="form-control selectpicker" multiple data-style="form-control">
+                                        <option>Mustard</option>
+                                        <option>Ketchup</option>
+                                        <option>Relish</option>
+                                    </select></div>
+                                                </div>
+                                                  <div class="form-group row">
+                                                    <label for="example-search-input" class="col-4 col-form-label">State</label>
+                                                    <div class="col-8">
+                                                          <select class="form-control selectpicker" multiple data-style="form-control">
+                                        <option>Mustard</option>
+                                        <option>Ketchup</option>
+                                        <option>Relish</option>
+                                    </select> </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="example-tel-input" class="col-4 col-form-label">City</label>
+                                                    <div class="col-8">
+                                                          <select class="form-control selectpicker" multiple data-style="form-control">
+                                        <option>Mustard</option>
+                                        <option>Ketchup</option>
+                                        <option>Relish</option>
+                                    </select> </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="example-tel-input" class="col-4 col-form-label">Locality</label>
+                                                    <div class="col-8">
+                                                        <input class="form-control" type="text" value="" id="example-search-input">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="example-tel-input" class="col-4 col-form-label">Pin code</label>
+                                                    <div class="col-8">
+                                                        <input class="form-control" type="text" value="" id="example-search-input">
+                                                    </div>
+                                                </div>
+                                                  <div class="form-group row">
+                                                    <label for="example-tel-input" class="col-4 col-form-label">Project Name</label>
+                                                    <div class="col-8">
+                                                        <input class="form-control" type="text" value="" id="example-search-input">
+                                                    </div>
+                                                </div>
+                                                  <div class="form-group row">
+                                                    <label for="example-tel-input" class="col-4 col-form-label">Latitude</label>
+                                                    <div class="col-8">
+                                                        <input class="form-control" type="text" value="" id="example-search-input">
+                                                    </div>
+                                                </div>
+                                                  <div class="form-group row">
+                                                    <label for="example-tel-input" class="col-4 col-form-label">Longitude</label>
+                                                    <div class="col-8">
+                                                        <input class="form-control" type="text" value="" id="example-search-input">
+                                                    </div>
+                                                </div>
+                                                  <div class="form-group row">
+                                                    <label for="example-tel-input" class="col-4 col-form-label">Description</label>
+                                                    <div class="col-8">
+                                                   <textarea class="form-control"></textarea> </div>
+                                                </div>
+                                                 <div class="form-group row">
+                                                    <label for="example-tel-input" class="col-4 col-form-label">Highlight (USP)</label>
+                                                    <div class="col-8">
+                                                       <textarea class="form-control"></textarea> </div>
+                                                </div>
+
+                                          <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Submit</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                        </div>
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+        <!-- /.container-fluid -->
+        <footer id="footer"> </footer>
+       
+    <script src="../plugins/bower_components/switchery/dist/switchery.min.js"></script>
+    <script src="../plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
+    <script src="../plugins/bower_components/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="../plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+    <script src="../plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../plugins/bower_components/multiselect/js/jquery.multi-select.js"></script>
+    <script>
+    jQuery(document).ready(function() {
+        // Switchery
+        var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+        $('.js-switch').each(function() {
+            new Switchery($(this)[0], $(this).data());
+
+        });
+        // For select 2
+
+        $(".select2").select2();
+        $('.selectpicker').selectpicker();
+
+        //Bootstrap-TouchSpin
+        $(".vertical-spin").TouchSpin({
+            verticalbuttons: true,
+            verticalupclass: 'ti-plus',
+            verticaldownclass: 'ti-minus'
+        });
+        var vspinTrue = $(".vertical-spin").TouchSpin({
+            verticalbuttons: true
+        });
+        if (vspinTrue) {
+            $('.vertical-spin').prev('.bootstrap-touchspin-prefix').remove();
+        }
+
+        $("input[name='tch1']").TouchSpin({
+            min: 0,
+            max: 100,
+            step: 0.1,
+            decimals: 2,
+            boostat: 5,
+            maxboostedstep: 10,
+            postfix: '%'
+        });
+        $("input[name='tch2']").TouchSpin({
+            min: -1000000000,
+            max: 1000000000,
+            stepinterval: 50,
+            maxboostedstep: 10000000,
+            prefix: '$'
+        });
+        $("input[name='tch3']").TouchSpin();
+
+        $("input[name='tch3_22']").TouchSpin({
+            initval: 40
+        });
+
+        $("input[name='tch5']").TouchSpin({
+            prefix: "pre",
+            postfix: "post"
+        });
+
+        // For multiselect
+
+        $('#pre-selected-options').multiSelect();
+        $('#optgroup').multiSelect({
+            selectableOptgroup: true
+        });
+
+        $('#public-methods').multiSelect();
+        $('#select-all').click(function() {
+            $('#public-methods').multiSelect('select_all');
+            return false;
+        });
+        $('#deselect-all').click(function() {
+            $('#public-methods').multiSelect('deselect_all');
+            return false;
+        });
+        $('#refresh').on('click', function() {
+            $('#public-methods').multiSelect('refresh');
+            return false;
+        });
+        $('#add-option').on('click', function() {
+            $('#public-methods').multiSelect('addOption', {
+                value: 42,
+                text: 'test 42',
+                index: 0
+            });
+            return false;
+        });
+
+    });
+    </script>
+</body>
+
+</html>

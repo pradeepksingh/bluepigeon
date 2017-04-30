@@ -21,8 +21,8 @@
 <%
 	List<AgreementList> agreement_list = new AgreementDAO().getAllAgreement();
 	int agreement_size = agreement_list.size();
-	List<BuilderProject> builderProjects = new ProjectDetailsDAO().getBuilderProjectList();
-	List<Builder> builders = new BuilderDetailsDAO().getBuilderList();
+	//List<BuilderProject> builderProjects = new ProjectDetailsDAO().getBuilderProjectList();
+	//List<Builder> builders = new BuilderDetailsDAO().getBuilderList();
 %>
 <div class="main-content">
 	<div class="main-content-inner">

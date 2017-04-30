@@ -187,11 +187,9 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
-											
 											<div class="col-lg-12">
 												<hr/>
 											</div>
-											
 										</div>
 									</div>
 								</div>

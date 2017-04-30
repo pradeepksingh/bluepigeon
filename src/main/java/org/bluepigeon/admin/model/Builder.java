@@ -26,6 +26,8 @@ public class Builder implements java.io.Serializable {
 	private String mobile;
 	private String aboutBuilder;
 	private Byte status;
+	private int loginStatus;
+	private String password;
 	private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
 	private Set<BuilderCompanyNames> builderCompanyNameses = new HashSet<BuilderCompanyNames>(0);
 
@@ -33,14 +35,16 @@ public class Builder implements java.io.Serializable {
 	}
 
 	public Builder(String name, String headOffice, String email, String mobile, String aboutBuilder, Byte status,
-			Set<BuilderProject> builderProjects, Set<BuilderCompanyNames> builderCompanyNameses
-	) {
+			int loginStatus, String password, Integer empLevel, Set<Buyer> buyers,Set<BuilderProject> builderProjects,
+			Set<BuilderCompanyNames> builderCompanyNameses) {
 		this.name = name;
 		this.headOffice = headOffice;
 		this.email = email;
 		this.mobile = mobile;
 		this.aboutBuilder = aboutBuilder;
 		this.status = status;
+		this.loginStatus = loginStatus;
+		this.password = password;
 		this.builderProjects = builderProjects;
 		this.builderCompanyNameses = builderCompanyNameses;
 	}
@@ -109,6 +113,24 @@ public class Builder implements java.io.Serializable {
 
 	public void setStatus(Byte status) {
 		this.status = status;
+	}
+
+	@Column(name = "login_status")
+	public int getLoginStatus() {
+		return this.loginStatus;
+	}
+
+	public void setLoginStatus(int loginStatus) {
+		this.loginStatus = loginStatus;
+	}
+
+	@Column(name = "password", length = 128)
+	public String getPassword() {
+		return this.password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builder")

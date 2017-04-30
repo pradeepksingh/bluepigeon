@@ -191,4 +191,38 @@ public class BuilderDetailsDAO {
 		return result;
 	}
 	
+	public ResponseMessage updateBuilderPassword(String oldPassword, String newPassword){
+		ResponseMessage responseMessage = new ResponseMessage();
+		String passwordHql = "from Builder where password = :password";
+		String hql = "UPDATE Builder set password = :password, loginStatus=1 "  + 
+	             "WHERE id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session passwordSession = hibernateUtil.openSession();
+		Session updatePasswordSession = hibernateUtil.openSession();
+		Query passwordQuery = passwordSession.createQuery(passwordHql);
+		passwordQuery.setParameter("password", oldPassword);
+		Builder builder = (Builder) passwordQuery.list().get(0);
+		if(builder != null){
+			updatePasswordSession.beginTransaction();
+			Query query = updatePasswordSession.createQuery(hql);
+			query.setParameter("password", newPassword);
+			query.setParameter("id", builder.getId());
+			int result = query.executeUpdate();
+			updatePasswordSession.getTransaction().commit();
+			System.out.println("Rows affected: " + result);
+			if(result >0){
+				responseMessage.setStatus(1);
+				responseMessage.setMessage("Your Password is suceessfuly change");
+			}else{
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("Fail to update you password. Please try again");
+			}
+		}else{
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Fail to update you password. Please try again");
+		}
+		passwordSession.close();
+		updatePasswordSession.close();
+		return responseMessage;
+	}
 }

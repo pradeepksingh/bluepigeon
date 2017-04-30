@@ -85,9 +85,13 @@
 										<div class="col-sm-9">
 											<select name="building_id" id="building_id" class="form-control">
 						                 	   	<option value="0">Select Building</option>
-						                 	   	<% for(int i=0; i < building_size ; i++){ %>
+						                 	   	<%	
+						                 	   		if(building_size>0){
+						                 	   		for(int i=0; i < building_size ; i++){ 
+						                 	   			if(builderLead.getBuilderBuilding() != null){
+						                 	   		%>
 												<option value="<% out.print(builderBuildings.get(i).getId());%>"<%if(builderBuildings.get(i).getId() == builderLead.getBuilderBuilding().getId()) {%>selected<%} %> ><% out.print(builderBuildings.get(i).getName());%></option>
-											  	<% } %>
+											  	<% } }}%>
 								       	  	</select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
