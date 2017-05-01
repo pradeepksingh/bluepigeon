@@ -72,6 +72,7 @@
 										<th><% out.print(builderFlat.getBuilderFlatStatus().getName()); %></th>
 										<th>
 											<a href="${baseUrl}/admin/project/building/floor/flat/edit.jsp?flat_id=<% out.print(builderFlat.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+											<a href="${baseUrl}/admin/project/building/floor/flat/updates.jsp?flat_id=<% out.print(builderFlat.getId());%>" class="btn btn-warning icon-btn btn-xs"><i class="fa fa-pencil"></i> Updates</a>
 										</th>
 									</tr>
 								<% } %>
