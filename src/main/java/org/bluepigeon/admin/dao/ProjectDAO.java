@@ -40,6 +40,8 @@ import org.bluepigeon.admin.model.BuildingPanoramicImage;
 import org.bluepigeon.admin.model.BuildingPaymentInfo;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
 import org.bluepigeon.admin.model.FlatAmenityWeightage;
+import org.bluepigeon.admin.model.FlatImageGallery;
+import org.bluepigeon.admin.model.FlatPanoramicImage;
 import org.bluepigeon.admin.model.FlatPaymentSchedule;
 import org.bluepigeon.admin.model.FlatTypeImage;
 import org.bluepigeon.admin.model.FloorAmenityInfo;
@@ -48,6 +50,8 @@ import org.bluepigeon.admin.model.FloorLayoutImage;
 import org.bluepigeon.admin.model.FloorImageGallery;
 import org.bluepigeon.admin.model.FloorPanoramicImage;
 import org.bluepigeon.admin.model.ProjectAmenityWeightage;
+import org.bluepigeon.admin.model.ProjectImageGallery;
+import org.bluepigeon.admin.model.ProjectPanoramicImage;
 import org.bluepigeon.admin.model.Tax;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
@@ -518,7 +522,7 @@ public class ProjectDAO {
 	}
 	
 	public List<ProjectAmenityWeightage> getProjectAmenityWeightageByProjectId(int project_id) {
-		String hql = "from ProjectAmenityWeightage where builderProject.id = :project_id";
+		String hql = "from ProjectAmenityWeightage where builderProject.id = :project_id order by builderProjectAmenity.id ASC, builderProjectAmenityStages.id ASC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -526,6 +530,113 @@ public class ProjectDAO {
 		List<ProjectAmenityWeightage> result = query.list();
 		session.close();
 		return result;
+	}
+	
+	public List<ProjectImageGallery> getProjectImagesByProjectId(int project_id) {
+		String hql = "from ProjectImageGallery where builderProject.id = :project_id ";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", project_id);
+		List<ProjectImageGallery> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<ProjectPanoramicImage> getProjectPanoromicImagesByProjectId(int project_id) {
+		String hql = "from ProjectPanoramicImage where builderProject.id = :project_id ";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", project_id);
+		List<ProjectPanoramicImage> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public ResponseMessage deleteProjectImage(int image_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		String hql = "delete from ProjectImageGallery where id = :image_id";
+		Query query = session.createQuery(hql);
+		query.setInteger("image_id", image_id);
+		query.executeUpdate();
+		//query.executeUpdate();
+		transaction.commit();
+		session.close();
+		resp.setMessage("Project image deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public ResponseMessage deleteProjectElevationImage(int image_id) {
+		ResponseMessage resp = new ResponseMessage();
+		String hql = "delete from ProjectPanoramicImage where id = :image_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("image_id", image_id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		resp.setMessage("Project elevation image deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public ResponseMessage updateProjectAmenityWeightage(List<ProjectAmenityWeightage> projectAmenityWeightages, int project_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		String hql1 = "UPDATE ProjectAmenityWeightage set status = 0 where builderProject.id = :project_id";
+		Query query1 = session1.createQuery(hql1);
+		query1.setParameter("project_id", project_id);
+		query1.executeUpdate();
+		session1.getTransaction().commit();
+		session1.close();
+		Session session = hibernateUtil.openSession();
+		for(ProjectAmenityWeightage projectAmenityWeightage :projectAmenityWeightages) {
+			session.beginTransaction();
+			String hql = "UPDATE ProjectAmenityWeightage set status=1 where id = :id";
+			Query query = session.createQuery(hql);
+			query.setParameter("id", projectAmenityWeightage.getId());
+			query.executeUpdate();
+			session.getTransaction().commit();
+		}
+		session.close();
+		resp.setMessage("Project status updated.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public ResponseMessage addProjectImageGallery(List<ProjectImageGallery> projectImageGalleries) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(ProjectImageGallery projectImageGallery :projectImageGalleries) {
+			newsession.save(projectImageGallery);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage addProjectPanoImage(List<ProjectPanoramicImage> projectPanoramicImages) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(ProjectPanoramicImage projectPanoramicImage :projectPanoramicImages) {
+			newsession.save(projectPanoramicImage);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
 	}
 	
 	/* ********************* Project Buildings ****************** */
@@ -849,6 +960,31 @@ public class ProjectDAO {
 		return resp;
 	}
 	
+	public ResponseMessage updateBuildingAmenityWeightage(List<BuildingAmenityWeightage> buildingAmenityWeightages, int building_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		String hql1 = "UPDATE BuildingAmenityWeightage set status = 0 where builderBuilding.id = :building_id";
+		Query query1 = session1.createQuery(hql1);
+		query1.setParameter("building_id", building_id);
+		query1.executeUpdate();
+		session1.getTransaction().commit();
+		session1.close();
+		Session session = hibernateUtil.openSession();
+		for(BuildingAmenityWeightage buildingAmenityWeightage :buildingAmenityWeightages) {
+			session.beginTransaction();
+			String hql = "UPDATE BuildingAmenityWeightage set status=1 where id = :id";
+			Query query = session.createQuery(hql);
+			query.setParameter("id", buildingAmenityWeightage.getId());
+			query.executeUpdate();
+			session.getTransaction().commit();
+		}
+		session.close();
+		resp.setMessage("Building status updated.");
+		resp.setStatus(1);
+		return resp;
+	}
 	
 	/* ******************** Project Floors ******************** */
 	/**
@@ -1088,6 +1224,90 @@ public class ProjectDAO {
 		return floorDatas;
 	}
 	
+	public ResponseMessage updateFloorAmenityWeightage(List<FloorAmenityWeightage> floorAmenityWeightages, int floor_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		String hql1 = "UPDATE FloorAmenityWeightage set status = 0 where builderFloor.id = :floor_id";
+		Query query1 = session1.createQuery(hql1);
+		query1.setParameter("floor_id", floor_id);
+		query1.executeUpdate();
+		session1.getTransaction().commit();
+		session1.close();
+		Session session = hibernateUtil.openSession();
+		for(FloorAmenityWeightage floorAmenityWeightage :floorAmenityWeightages) {
+			session.beginTransaction();
+			String hql = "UPDATE FloorAmenityWeightage set status=1 where id = :id";
+			Query query = session.createQuery(hql);
+			query.setParameter("id", floorAmenityWeightage.getId());
+			query.executeUpdate();
+			session.getTransaction().commit();
+		}
+		session.close();
+		resp.setMessage("Floor status updated.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public ResponseMessage addFloorImageGallery(List<FloorImageGallery> floorImageGalleries) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FloorImageGallery floorImageGallery :floorImageGalleries) {
+			newsession.save(floorImageGallery);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage addFloorPanoImage(List<FloorPanoramicImage> floorPanoramicImages) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FloorPanoramicImage floorPanoramicImage :floorPanoramicImages) {
+			newsession.save(floorPanoramicImage);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage deleteFloorImageGallery(int image_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		String hql = "delete from FloorImageGallery where id = :image_id";
+		Query query = session.createQuery(hql);
+		query.setInteger("image_id", image_id);
+		query.executeUpdate();
+		transaction.commit();
+		session.close();
+		resp.setMessage("Floor image deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public ResponseMessage deleteFloorPanoImage(int image_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		String hql = "delete from FloorPanoramicImage where id = :image_id";
+		Query query = session.createQuery(hql);
+		query.setInteger("image_id", image_id);
+		query.executeUpdate();
+		transaction.commit();
+		session.close();
+		resp.setMessage("Floor elevation image deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
 	/* ******************** Project Flat Types ******************** */
 	public List<BuilderFlatType> getBuilderBuildingFlatTypes(int project_id) {
 		String hql = "from BuilderFlatType where builderProject.id = :project_id";
@@ -1315,7 +1535,7 @@ public class ProjectDAO {
 	 * @return image 
 	 */
 	public List<FloorImageGallery> getAllFloorImagesById(int floor_id){
-		String hql = "from FloorImageGallery where BuilderFloor.id = :id";
+		String hql = "from FloorImageGallery where builderFloor.id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -1339,7 +1559,7 @@ public class ProjectDAO {
 	 * @return Pano images
 	 */
 	public List<FloorPanoramicImage> getFloorPanoImagesByFloodId(int floor_id){
-		String hql = "from FloorPanoramicImage where BuilderFloor.id = :id";
+		String hql = "from FloorPanoramicImage where builderFloor.id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -1352,6 +1572,7 @@ public class ProjectDAO {
 			floorPanoramicImage.setId(result.get(i).getId());
 			floorPanoramicImage.setBuilderFloor(result.get(i).getBuilderFloor());
 			floorPanoramicImage.setPanoImage(result.get(i).getPanoImage());
+			floorPanoramicImages.add(floorPanoramicImage);
 		}
 		return floorPanoramicImages;
 	}
@@ -1572,6 +1793,128 @@ public class ProjectDAO {
 		session.getTransaction().commit();
 		session.close();
 		resp.setMessage("Flat payment deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public List<FlatImageGallery> getAllFlatImagesById(int flat_id){
+		String hql = "from FlatImageGallery where builderFlat.id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", flat_id);
+		List<FlatImageGallery> result = query.list();
+		session.close();
+		List<FlatImageGallery> flatImageGalleries = new ArrayList<FlatImageGallery>();
+		for(int i=0; i<result.size(); i++){
+			FlatImageGallery flatImageGallery = new FlatImageGallery();
+			flatImageGallery.setId(result.get(i).getId());
+			flatImageGallery.setBuilderFlat(result.get(i).getBuilderFlat());
+			flatImageGallery.setImage(result.get(i).getImage());
+			flatImageGalleries.add(flatImageGallery);
+		}
+		return flatImageGalleries;
+	}
+	
+	public List<FlatPanoramicImage> getFlatPanoImagesByFlatId(int flat_id){
+		String hql = "from FlatPanoramicImage where builderFlat.id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", flat_id);
+		List<FlatPanoramicImage> result = query.list();
+		session.close();
+		List<FlatPanoramicImage> flatPanoramicImages = new ArrayList<FlatPanoramicImage>();
+		for(int i=0; i<result.size(); i++){
+			FlatPanoramicImage flatPanoramicImage = new FlatPanoramicImage();
+			flatPanoramicImage.setId(result.get(i).getId());
+			flatPanoramicImage.setBuilderFlat(result.get(i).getBuilderFlat());
+			flatPanoramicImage.setPanoImage(result.get(i).getPanoImage());
+			flatPanoramicImages.add(flatPanoramicImage);
+		}
+		return flatPanoramicImages;
+	}
+	
+	public ResponseMessage updateFlatAmenityWeightage(List<FlatAmenityWeightage> flatAmenityWeightages, int flat_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		String hql1 = "UPDATE FlatAmenityWeightage set status = 0 where builderFlat.id = :flat_id";
+		Query query1 = session1.createQuery(hql1);
+		query1.setParameter("flat_id", flat_id);
+		query1.executeUpdate();
+		session1.getTransaction().commit();
+		session1.close();
+		Session session = hibernateUtil.openSession();
+		for(FlatAmenityWeightage flatAmenityWeightage :flatAmenityWeightages) {
+			session.beginTransaction();
+			String hql = "UPDATE FlatAmenityWeightage set status=1 where id = :id";
+			Query query = session.createQuery(hql);
+			query.setParameter("id", flatAmenityWeightage.getId());
+			query.executeUpdate();
+			session.getTransaction().commit();
+		}
+		session.close();
+		resp.setMessage("Flat status updated.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public ResponseMessage addFlatImageGallery(List<FlatImageGallery> flatImageGalleries) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FlatImageGallery flatImageGallery :flatImageGalleries) {
+			newsession.save(flatImageGallery);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage addFlatPanoImage(List<FlatPanoramicImage> flatPanoramicImages) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FlatPanoramicImage flatPanoramicImage :flatPanoramicImages) {
+			newsession.save(flatPanoramicImage);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage deleteFlatImageGallery(int image_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		String hql = "delete from FlatImageGallery where id = :image_id";
+		Query query = session.createQuery(hql);
+		query.setInteger("image_id", image_id);
+		query.executeUpdate();
+		transaction.commit();
+		session.close();
+		resp.setMessage("Flat image deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public ResponseMessage deleteFlatPanoImage(int image_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		String hql = "delete from FlatPanoramicImage where id = :image_id";
+		Query query = session.createQuery(hql);
+		query.setInteger("image_id", image_id);
+		query.executeUpdate();
+		transaction.commit();
+		session.close();
+		resp.setMessage("Flat elevation image deleted successfully.");
 		resp.setStatus(1);
 		return resp;
 	}

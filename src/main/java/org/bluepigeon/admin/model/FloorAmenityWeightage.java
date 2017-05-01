@@ -64,7 +64,7 @@ public class FloorAmenityWeightage {
 		this.builderFloor = builderFloor;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "amenity_id")
 	public BuilderFloorAmenity getBuilderFloorAmenity() {
 		return builderFloorAmenity;
@@ -83,7 +83,7 @@ public class FloorAmenityWeightage {
 		this.amenityWeightage = amenityWeightage;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "stage_id")
 	public BuilderFloorAmenityStages getBuilderFloorAmenityStages() {
 		return builderFloorAmenityStages;
@@ -103,7 +103,7 @@ public class FloorAmenityWeightage {
 		this.stageWeightage = stageWeightage;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "substage_id")
 	public BuilderFloorAmenitySubstages getBuilderFloorAmenitySubstages() {
 		return builderFloorAmenitySubstages;

@@ -69,6 +69,7 @@
 										<th><% out.print(builderBuilding.getBuilderBuildingStatus().getName()); %></th>
 										<th>
 											<a href="${baseUrl}/admin/project/building/edit.jsp?building_id=<% out.print(builderBuilding.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+											<a href="${baseUrl}/admin/project/building/updates.jsp?building_id=<% out.print(builderBuilding.getId());%>" class="btn btn-warning icon-btn btn-xs"><i class="fa fa-list"></i> Updates</a>
 											<a href="${baseUrl}/admin/project/building/floor/list.jsp?building_id=<% out.print(builderBuilding.getId());%>" class="btn btn-info icon-btn btn-xs"><i class="fa fa-list"></i> Floors</a>
 											<a href="${baseUrl}/admin/project/building/flattype/list.jsp?project_id=<% out.print(builderBuilding.getBuilderProject().getId());%>" class="btn btn-info icon-btn btn-xs"><i class="fa fa-list"></i> Flat Types</a>
 										</th>

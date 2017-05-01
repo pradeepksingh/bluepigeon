@@ -66,12 +66,19 @@ import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
 import org.bluepigeon.admin.model.FlatAmenityWeightage;
+import org.bluepigeon.admin.model.FlatImageGallery;
+import org.bluepigeon.admin.model.FlatPanoramicImage;
 import org.bluepigeon.admin.model.FlatPaymentSchedule;
 import org.bluepigeon.admin.model.FlatTypeImage;
 import org.bluepigeon.admin.model.FloorAmenityInfo;
 import org.bluepigeon.admin.model.FloorAmenityWeightage;
+import org.bluepigeon.admin.model.FloorImageGallery;
 import org.bluepigeon.admin.model.FloorLayoutImage;
+import org.bluepigeon.admin.model.FloorPanoramicImage;
 import org.bluepigeon.admin.model.Locality;
+import org.bluepigeon.admin.model.ProjectAmenityWeightage;
+import org.bluepigeon.admin.model.ProjectImageGallery;
+import org.bluepigeon.admin.model.ProjectPanoramicImage;
 import org.bluepigeon.admin.model.State;
 import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -291,6 +298,119 @@ public class ProjectController extends ResourceConfig {
 	public ResponseMessage updateProjectOffer(ProjectOffer projectOffer) {
 		ResponseMessage resp = new ProjectDAO().updateOfferInfo(projectOffer); 
 		return resp;
+	}
+	
+	@GET
+	@Path("/image/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteProjectImage(@PathParam("id") int imgae_id) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		msg = projectDAO.deleteProjectImage(imgae_id);
+		return msg;
+	}
+	
+	@GET
+	@Path("/elevationimage/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteProjectElevationImage(@PathParam("id") int imgae_id) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		msg = projectDAO.deleteProjectElevationImage(imgae_id);
+		return msg;
+	}
+	
+	@POST
+	@Path("/status/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addBuildingInfo (
+			@FormDataParam("project_id") int project_id,
+			@FormDataParam("substagewt_id[]") List<FormDataBodyPart> substagewt_id,
+			@FormDataParam("project_image[]") List<FormDataBodyPart> project_images,
+			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
+			@FormDataParam("admin_id") int admin_id
+	) {
+		Boolean bstatus = true;
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		BuilderProject builderProject = new BuilderProject();
+		builderProject.setId(project_id);
+		List<ProjectAmenityWeightage> projectAmenityWeightages = new ArrayList<ProjectAmenityWeightage>();
+		for(int i=0 ;i < substagewt_id.size();i++) {
+			ProjectAmenityWeightage baw = new ProjectAmenityWeightage();
+			baw.setId(substagewt_id.get(i).getValueAs(Integer.class));
+			baw.setStatus(bstatus);
+			projectAmenityWeightages.add(baw);
+		}
+		if(projectAmenityWeightages.size() > 0) {
+			msg = projectDAO.updateProjectAmenityWeightage(projectAmenityWeightages, project_id);
+		}
+		
+		try {	
+			List<ProjectImageGallery> projectImageGalleries = new ArrayList<ProjectImageGallery>();
+			//for multiple inserting images.
+			if (project_images.size() > 0) {
+				for(int i=0 ;i < project_images.size();i++)
+				{
+					if(project_images.get(i).getFormDataContentDisposition().getFileName() != null && !project_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						ProjectImageGallery projectImageGallery = new ProjectImageGallery();
+						String gallery_name = project_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/images/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						//System.out.println("for loop image path: "+uploadGalleryLocation);
+						this.imageUploader.writeToFile(project_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						projectImageGallery.setImage(gallery_name);
+						projectImageGallery.setTitle("New Image");
+						projectImageGallery.setBuilderProject(builderProject);
+						projectImageGalleries.add(projectImageGallery);
+					}
+				}
+				if(projectImageGalleries.size() > 0) {
+					projectDAO.addProjectImageGallery(projectImageGalleries);
+				}
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save image");
+		}
+		//add elevation images
+		try {	
+			List<ProjectPanoramicImage> projectPanoramicImages = new ArrayList<ProjectPanoramicImage>();
+			//for multiple inserting images.
+			if (elevation_images.size() > 0) {
+				for(int i=0 ;i < elevation_images.size();i++)
+				{
+					if(elevation_images.get(i).getFormDataContentDisposition().getFileName() != null && !elevation_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						System.out.println("Image:"+elevation_images.get(i).getFormDataContentDisposition().getFileName());
+						ProjectPanoramicImage projectPanoramicImage = new ProjectPanoramicImage();
+						String elv_name = elevation_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						elv_name = Long.toString(millis) + elv_name.replaceAll(" ", "_").toLowerCase();
+						elv_name = "images/project/elevation/"+elv_name;
+						String uploadElevationLocation = this.context.getInitParameter("building_elevation_url")+elv_name;
+						//System.out.println("for loop image path: "+uploadElevationLocation);
+						this.imageUploader.writeToFile(elevation_images.get(i).getValueAs(InputStream.class), uploadElevationLocation);
+						projectPanoramicImage.setPanoImage(elv_name);
+						projectPanoramicImage.setTitle("New Image");
+						projectPanoramicImage.setBuilderProject(builderProject);
+						projectPanoramicImages.add(projectPanoramicImage);
+					}
+				}
+				if(projectPanoramicImages.size() > 0) {
+					projectDAO.addProjectPanoImage(projectPanoramicImages);
+				}
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save image");
+		}
+		
+		msg.setMessage("Updated successfully.");
+		msg.setStatus(1);
+		return msg;
 	}
 	
 	/* *************** Project buildings ************** */
@@ -899,6 +1019,99 @@ public class ProjectController extends ResourceConfig {
 		return newflats;
 	}
 	
+	@POST
+	@Path("/building/status/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateBuildingStatus (
+			@FormDataParam("building_id") int building_id,
+			@FormDataParam("substagewt_id[]") List<FormDataBodyPart> substagewt_id,
+			@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
+			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
+			@FormDataParam("admin_id") int admin_id
+	) {
+		Boolean bstatus = true;
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		BuilderBuilding builderBuilding = new BuilderBuilding();
+		builderBuilding.setId(building_id);
+		List<BuildingAmenityWeightage> buildingAmenityWeightages = new ArrayList<BuildingAmenityWeightage>();
+		for(int i=0 ;i < substagewt_id.size();i++) {
+			BuildingAmenityWeightage baw = new BuildingAmenityWeightage();
+			baw.setId(substagewt_id.get(i).getValueAs(Integer.class));
+			baw.setStatus(bstatus);
+			buildingAmenityWeightages.add(baw);
+		}
+		if(buildingAmenityWeightages.size() > 0) {
+			msg = projectDAO.updateBuildingAmenityWeightage(buildingAmenityWeightages, building_id);
+		}
+		
+		try {	
+			List<BuildingImageGallery> buildingImageGalleries = new ArrayList<BuildingImageGallery>();
+			//for multiple inserting images.
+			if (building_images.size() > 0) {
+				for(int i=0 ;i < building_images.size();i++)
+				{
+					if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						BuildingImageGallery buildingImageGallery = new BuildingImageGallery();
+						String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/building/images/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						//System.out.println("for loop image path: "+uploadGalleryLocation);
+						this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						buildingImageGallery.setImage(gallery_name);
+						buildingImageGallery.setTitle("New Image");
+						buildingImageGallery.setBuilderBuilding(builderBuilding);
+						buildingImageGalleries.add(buildingImageGallery);
+					}
+				}
+				if(buildingImageGalleries.size() > 0) {
+					projectDAO.addBuildingImageGallery(buildingImageGalleries);
+				}
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save image");
+		}
+		//add elevation images
+		try {	
+			List<BuildingPanoramicImage> buildingPanoramicImages = new ArrayList<BuildingPanoramicImage>();
+			//for multiple inserting images.
+			if (elevation_images.size() > 0) {
+				for(int i=0 ;i < elevation_images.size();i++)
+				{
+					if(elevation_images.get(i).getFormDataContentDisposition().getFileName() != null && !elevation_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						System.out.println("Image:"+elevation_images.get(i).getFormDataContentDisposition().getFileName());
+						BuildingPanoramicImage buildingPanoramicImage = new BuildingPanoramicImage();
+						String elv_name = elevation_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						elv_name = Long.toString(millis) + elv_name.replaceAll(" ", "_").toLowerCase();
+						elv_name = "images/project/building/elevation/"+elv_name;
+						String uploadElevationLocation = this.context.getInitParameter("building_elevation_url")+elv_name;
+						//System.out.println("for loop image path: "+uploadElevationLocation);
+						this.imageUploader.writeToFile(elevation_images.get(i).getValueAs(InputStream.class), uploadElevationLocation);
+						buildingPanoramicImage.setPanoImage(elv_name);
+						buildingPanoramicImage.setTitle("New Image");
+						buildingPanoramicImage.setBuilderBuilding(builderBuilding);
+						buildingPanoramicImages.add(buildingPanoramicImage);
+					}
+				}
+				if(buildingPanoramicImages.size() > 0) {
+					projectDAO.addBuildingPanoImage(buildingPanoramicImages);
+				}
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save image");
+		}
+		
+		msg.setMessage("Updated successfully.");
+		msg.setStatus(1);
+		return msg;
+	}
+	
 	
 	/* *************** Building Floors ************** */
 	
@@ -1167,6 +1380,118 @@ public class ProjectController extends ResourceConfig {
 		ProjectDAO projectDAO = new ProjectDAO();
 		return projectDAO.getBuildingFloorNamesByBuildingId(building_id);
 	}
+	
+	@POST
+	@Path("/building/floor/status/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateFloorStatus (
+			@FormDataParam("floor_id") int floor_id,
+			@FormDataParam("substagewt_id[]") List<FormDataBodyPart> substagewt_id,
+			@FormDataParam("floor_image[]") List<FormDataBodyPart> building_images,
+			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
+			@FormDataParam("admin_id") int admin_id
+	) {
+		Boolean bstatus = true;
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		BuilderFloor builderFloor = new BuilderFloor();
+		builderFloor.setId(floor_id);
+		List<FloorAmenityWeightage> floorAmenityWeightages = new ArrayList<FloorAmenityWeightage>();
+		for(int i=0 ;i < substagewt_id.size();i++) {
+			FloorAmenityWeightage baw = new FloorAmenityWeightage();
+			baw.setId(substagewt_id.get(i).getValueAs(Integer.class));
+			baw.setStatus(bstatus);
+			floorAmenityWeightages.add(baw);
+		}
+		if(floorAmenityWeightages.size() > 0) {
+			msg = projectDAO.updateFloorAmenityWeightage(floorAmenityWeightages, floor_id);
+		}
+		
+		try {	
+			List<FloorImageGallery> floorImageGalleries = new ArrayList<FloorImageGallery>();
+			//for multiple inserting images.
+			if (building_images.size() > 0) {
+				for(int i=0 ;i < building_images.size();i++)
+				{
+					if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						FloorImageGallery floorImageGallery = new FloorImageGallery();
+						String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/floor/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						//System.out.println("for loop image path: "+uploadGalleryLocation);
+						this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						floorImageGallery.setImage(gallery_name);
+						floorImageGallery.setBuilderFloor(builderFloor);
+						floorImageGalleries.add(floorImageGallery);
+					}
+				}
+				if(floorImageGalleries.size() > 0) {
+					projectDAO.addFloorImageGallery(floorImageGalleries);
+				}
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save image");
+		}
+		//add elevation images
+		try {	
+			List<FloorPanoramicImage> floorPanoramicImages = new ArrayList<FloorPanoramicImage>();
+			//for multiple inserting images.
+			if (elevation_images.size() > 0) {
+				for(int i=0 ;i < elevation_images.size();i++)
+				{
+					if(elevation_images.get(i).getFormDataContentDisposition().getFileName() != null && !elevation_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						System.out.println("Image:"+elevation_images.get(i).getFormDataContentDisposition().getFileName());
+						FloorPanoramicImage floorPanoramicImage = new FloorPanoramicImage();
+						String elv_name = elevation_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						elv_name = Long.toString(millis) + elv_name.replaceAll(" ", "_").toLowerCase();
+						elv_name = "images/project/floor/"+elv_name;
+						String uploadElevationLocation = this.context.getInitParameter("building_elevation_url")+elv_name;
+						//System.out.println("for loop image path: "+uploadElevationLocation);
+						this.imageUploader.writeToFile(elevation_images.get(i).getValueAs(InputStream.class), uploadElevationLocation);
+						floorPanoramicImage.setPanoImage(elv_name);
+						floorPanoramicImage.setBuilderFloor(builderFloor);
+						floorPanoramicImages.add(floorPanoramicImage);
+					}
+				}
+				if(floorPanoramicImages.size() > 0) {
+					projectDAO.addFloorPanoImage(floorPanoramicImages);
+				}
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save image");
+		}
+		
+		msg.setMessage("Updated successfully.");
+		msg.setStatus(1);
+		return msg;
+	}
+	
+	@GET
+	@Path("/building/floor/image/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteFloorImageGallery(@PathParam("id") int imgae_id) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		msg = projectDAO.deleteFloorImageGallery(imgae_id);
+		return msg;
+	}
+	
+	@GET
+	@Path("/building/floor/elevationimage/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteFloorPanoImage(@PathParam("id") int imgae_id) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		msg = projectDAO.deleteFloorPanoImage(imgae_id);
+		return msg;
+	}
+	
 	/* ********* Flat Types ************** */
 	
 	@POST
@@ -1738,6 +2063,117 @@ public class ProjectController extends ResourceConfig {
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		msg = projectDAO.deleteFlatPaymentInfo(id);
+		return msg;
+	}
+	
+	@POST
+	@Path("/building/floor/flat/status/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateFlatStatus (
+			@FormDataParam("flat_id") int flat_id,
+			@FormDataParam("substagewt_id[]") List<FormDataBodyPart> substagewt_id,
+			@FormDataParam("flat_image[]") List<FormDataBodyPart> building_images,
+			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
+			@FormDataParam("admin_id") int admin_id
+	) {
+		Boolean bstatus = true;
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		BuilderFlat builderFlat = new BuilderFlat();
+		builderFlat.setId(flat_id);
+		List<FlatAmenityWeightage> flatAmenityWeightages = new ArrayList<FlatAmenityWeightage>();
+		for(int i=0 ;i < substagewt_id.size();i++) {
+			FlatAmenityWeightage baw = new FlatAmenityWeightage();
+			baw.setId(substagewt_id.get(i).getValueAs(Integer.class));
+			baw.setStatus(bstatus);
+			flatAmenityWeightages.add(baw);
+		}
+		if(flatAmenityWeightages.size() > 0) {
+			msg = projectDAO.updateFlatAmenityWeightage(flatAmenityWeightages, flat_id);
+		}
+		
+		try {	
+			List<FlatImageGallery> flatImageGalleries = new ArrayList<FlatImageGallery>();
+			//for multiple inserting images.
+			if (building_images.size() > 0) {
+				for(int i=0 ;i < building_images.size();i++)
+				{
+					if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						FlatImageGallery flatImageGallery = new FlatImageGallery();
+						String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/flat/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						//System.out.println("for loop image path: "+uploadGalleryLocation);
+						this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						flatImageGallery.setImage(gallery_name);
+						flatImageGallery.setBuilderFlat(builderFlat);
+						flatImageGalleries.add(flatImageGallery);
+					}
+				}
+				if(flatImageGalleries.size() > 0) {
+					projectDAO.addFlatImageGallery(flatImageGalleries);
+				}
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save image");
+		}
+		//add elevation images
+		try {	
+			List<FlatPanoramicImage> flatPanoramicImages = new ArrayList<FlatPanoramicImage>();
+			//for multiple inserting images.
+			if (elevation_images.size() > 0) {
+				for(int i=0 ;i < elevation_images.size();i++)
+				{
+					if(elevation_images.get(i).getFormDataContentDisposition().getFileName() != null && !elevation_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						System.out.println("Image:"+elevation_images.get(i).getFormDataContentDisposition().getFileName());
+						FlatPanoramicImage flatPanoramicImage = new FlatPanoramicImage();
+						String elv_name = elevation_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						elv_name = Long.toString(millis) + elv_name.replaceAll(" ", "_").toLowerCase();
+						elv_name = "images/project/flat/"+elv_name;
+						String uploadElevationLocation = this.context.getInitParameter("building_elevation_url")+elv_name;
+						//System.out.println("for loop image path: "+uploadElevationLocation);
+						this.imageUploader.writeToFile(elevation_images.get(i).getValueAs(InputStream.class), uploadElevationLocation);
+						flatPanoramicImage.setPanoImage(elv_name);
+						flatPanoramicImage.setBuilderFlat(builderFlat);
+						flatPanoramicImages.add(flatPanoramicImage);
+					}
+				}
+				if(flatPanoramicImages.size() > 0) {
+					projectDAO.addFlatPanoImage(flatPanoramicImages);
+				}
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save image");
+		}
+		
+		msg.setMessage("Updated successfully.");
+		msg.setStatus(1);
+		return msg;
+	}
+	
+	@GET
+	@Path("/building/floor/flat/image/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteFlatImageGallery(@PathParam("id") int imgae_id) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		msg = projectDAO.deleteFlatImageGallery(imgae_id);
+		return msg;
+	}
+	
+	@GET
+	@Path("/building/floor/flat/elevationimage/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteFlatPanoImage(@PathParam("id") int imgae_id) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		msg = projectDAO.deleteFlatPanoImage(imgae_id);
 		return msg;
 	}
 	
