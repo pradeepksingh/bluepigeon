@@ -103,7 +103,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       <% for(PossessionList possessionList : possession_list) { %>
+                                       <%
+                                       	if(possession_list != null){
+                                       		for(PossessionList possessionList : possession_list) { %>
 									<tr>
 										<td>
 											<% out.print(possessionList.getProjectName()); %> 
@@ -121,7 +123,10 @@
 <%--  											<a href="${baseUrl}/admin/buyer/possession/edit.jsp?possession_id=<% out.print(agreementList.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
 										</td>
 									</tr>
- 									<% } %> 
+ 									<% 
+ 										} 
+                                      }
+ 									%> 
                                     </tbody>
                                 </table>
                             </div>

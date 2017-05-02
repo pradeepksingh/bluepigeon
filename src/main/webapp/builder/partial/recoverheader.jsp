@@ -50,7 +50,7 @@ session = request.getSession(false);
 <nav class="navbar navbar-default navbar-static-top m-b-0">
             <div class="navbar-header">
                 
-                <div class="top-left-part"><a class="logo" href="index.html"><b><img src="plugins/images/eliteadmin-logo.png" alt="logo" /></b><span class="hidden-xs"><strong>Blue</strong>Pigeon</span></a></div>
+                <div class="top-left-part"><a class="logo" href="index.jsp"><b><img src="plugins/images/eliteadmin-logo.png" alt="logo" /></b><span class="hidden-xs"><strong>Blue</strong>Pigeon</span></a></div>
                 <ul class="nav navbar-top-links navbar-right pull-right">
                    <li><a href="${baseUrl }/webapi/validate/logoutbuilder"><b class="hidden-xs">logout</b></a></li>
                    <li></li>

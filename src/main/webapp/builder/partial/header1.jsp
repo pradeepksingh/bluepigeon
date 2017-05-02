@@ -19,9 +19,11 @@ session = request.getSession(false);
    	}
 	if(session_uid <= 0) {
 		String url = request.getRequestURL().toString();
-		String site = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath() + "/";
+		System.out.println("URL :: "+url);
+		String site = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath() + "/builder/";
 	   	response.setStatus(response.SC_MOVED_TEMPORARILY);
 	   	response.setHeader("Location1", site);
+	   	System.out.println("Site :: "+site);
 	}
 %>
 

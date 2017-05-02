@@ -104,7 +104,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      <% for(ProjectList project : project_list) { %>
+                                      <%
+                                      if(project_list != null){
+                                      	for(ProjectList project : project_list) { %>
 									<tr>
 										<td>
 											<% out.print(project.getName()); %>
@@ -123,7 +125,10 @@
 											<span class='label label-warning'>Inactive</span>
 											<% } else { %>
 											<span class='label label-success'>Active</span>
-											<% } %>
+											<% 
+												} 
+                                      		}
+											%>
 										</td>
 										<td>
 <%-- 											<a href="${baseUrl}/admin/project/edit.jsp?project_id=<% out.print(project.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
