@@ -138,7 +138,7 @@ session = request.getSession(false);
 <!--                     </li> -->
                     <!-- /.dropdown -->
                     <li class="dropdown">
-                        <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="../plugins/images/users/1.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs">Steave</b> </a>
+                        <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="../plugins/images/users/1.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs"><%out.print(mainadmin.getName()); %></b> </a>
                         <ul class="dropdown-menu dropdown-user animated flipInY">
 <!--                             <li><a href="javascript:void(0)"><i class="ti-user"></i>  My Profile</a></li> -->
 <!--                             <li><a href="javascript:void(0)"><i class="ti-email"></i>  Inbox</a></li> -->

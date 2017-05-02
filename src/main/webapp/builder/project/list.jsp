@@ -25,6 +25,7 @@
 	}
 %>
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,7 +35,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="../plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -55,7 +56,7 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-   
+  
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script>
     $(function() {
@@ -87,24 +88,23 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box"><br>
-                          <center><h1> Manage Projects </h1></center> 
-                           <br>
-                          <a href=""> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add </span></a>
-                           <br><br><br>
+                          <center><h1>Manage Projects</h1></center> <br>
+                          <a href=""> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add new Project</span></a>
+                          <br><br><br>
                             <div class="table-responsive">
                                 <table id="myTable" class="table table-striped">
                                     <thead>
                                         <tr>
-                                         <th>Project Name</th>
-										<th>Builder</th>
-										<th>City</th>
-										<th>Locality</th>
-										<th>Status</th>
-										<th>Actions</th>
+                                         <th>Project name</th>
+                                            <th>Builder Name</th>
+                                            <th>City Name</th>
+                                            <th>Locality</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      <%
+                                        <%
                                       if(project_list != null){
                                       	for(ProjectList project : project_list) { %>
 									<tr>
@@ -125,17 +125,17 @@
 											<span class='label label-warning'>Inactive</span>
 											<% } else { %>
 											<span class='label label-success'>Active</span>
-											<% 
-												} 
-                                      		}
+											<% 	
+											   }
 											%>
 										</td>
 										<td>
-<%-- 											<a href="${baseUrl}/admin/project/edit.jsp?project_id=<% out.print(project.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
-<%-- 											<a href="${baseUrl}/admin/project/building/list.jsp?project_id=<% out.print(project.getId());%>" class="btn btn-info icon-btn btn-xs"><i class="fa fa-list"></i> Buildings</a> --%>
+										<a href=""> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span></a>
 										</td>
-									</tr>
-									<% } %> 
+										<% 	
+											} 
+                                      	}
+										%>
                                     </tbody>
                                 </table>
                             </div>
@@ -153,7 +153,11 @@
     <!-- start - This is for export functionality only -->
     <script src="../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
     <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
-    
+    <script src="../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {

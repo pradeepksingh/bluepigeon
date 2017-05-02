@@ -85,9 +85,9 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box"><br>
-                          <center><h1>Manage Possession</h1></center> 
+                          <center><h1>Manage Possession Letters</h1></center> 
                            <br>
-                          <a href=""> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add </span></a>
+                          <a href=""> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add Possession List</span></a>
                            <br><br><br>
                             <div class="table-responsive">
                                 <table id="myTable" class="table table-striped">
