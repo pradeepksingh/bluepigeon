@@ -337,7 +337,7 @@ public class BuyerController {
 	@GET
 	@Path("/project/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProjectData> getProjectList(@QueryParam("builder_id") int builder_id) {
+	public List<ProjectData> getProjectList(@PathParam("builder_id") int builder_id) {
 		BuyerDAO buyerDAO = new BuyerDAO();
 		return buyerDAO.getProjectByBuilderId(builder_id);
 	}

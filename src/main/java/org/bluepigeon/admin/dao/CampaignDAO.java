@@ -170,6 +170,30 @@ public class CampaignDAO {
 		}
 		return campaignLists;
 	}
+	
+	/**
+	 * Get all campaign list
+	 * @author pankaj
+	 * @return campaign list
+	 */
+	public List<CampaignList> getCampaignListByBuilderId(int builderId){
+		List<CampaignList> campaignLists = new ArrayList<>();
+		String hql = "from Campaign where builderProject.builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		List<Campaign> campaigns = query.list();
+		for(Campaign campaign : campaigns){
+			CampaignList campaignList = new CampaignList();
+			campaignList.setCampaignId(campaign.getId());
+			campaignList.setTitle(campaign.getTitle());
+			campaignList.setCampaignType(campaign.getType());
+			campaignList.setSetdate(campaign.getSetDate());
+			campaignLists.add(campaignList);
+		}
+		return campaignLists;
+	}
 	public ResponseMessage saveCampaign(Campaign campaign){
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();

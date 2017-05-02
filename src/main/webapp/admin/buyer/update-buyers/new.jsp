@@ -131,6 +131,13 @@
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script type="text/javascript">
+$("#builder_id").change(function(){
+	var project = "<option value='0'>Select Project</option>";
+	$.get("${baseUrl}/webapi/buyer/project/list/"+$("#builder_id").val(),{ }, function(data){
+		 project = project + '<option value="'+data.id+'">'+data.name+'</option>';
+		$("#project_id").html(project);
+	},'json');
+});
 $("#buyer_id").change(function(){
 	var html = "<option value='0'>Select flat</option>";
 	$.get("${baseUrl}/webapi/buyer/project/list/"+$("#buyer_id").val(),{ }, function(data){
@@ -140,7 +147,6 @@ $("#buyer_id").change(function(){
 		$("#phone").html(phone);
 	},'json');
 });
-
 $('#addmanager').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');

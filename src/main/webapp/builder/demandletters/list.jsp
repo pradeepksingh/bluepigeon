@@ -5,14 +5,14 @@
 <%
 	List<DemandLetterList> demandletters_list  = null;
 	session = request.getSession(false);
-	Builder mainadmin = new Builder();
+	Builder builder = new Builder();
 	int session_uid = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			mainadmin  = (Builder)session.getAttribute("ubname");
-			session_uid = mainadmin.getId();
+			builder  = (Builder)session.getAttribute("ubname");
+			session_uid = builder.getId();
 		}
    	}
 	if(session_uid > 0){
@@ -55,10 +55,10 @@
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script>
     $(function() {
-        $("#sidebar1").load("../partial/sidebar.jsp");
-        $("#header").load("../partial/header1.jsp");
+      //  $("#sidebar1").load("../partial/sidebar.jsp");
+     //   $("#header").load("../partial/header1.jsp");
 
-        $("#footer").load("../partial/footer.html");
+       // $("#footer").load("../partial/footer.html");
     });
     </script>
    

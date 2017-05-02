@@ -72,6 +72,15 @@
 <!--                             <li> <a href="inbox.html">Cancellation</a></li> -->
 <!--                         </ul> -->
 <!--                     </li> -->
+ 						 <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="F" class="linea-icon linea-software fa-fw"></i><span class="hide-menu">Manage Campaign<span class="fa arrow"></span></span></a>
+                        <ul class="nav nav-second-level">
+                            <li> <a href="${baseUrl }/bluepigeon/builder/campaign/list.jsp">Campaign</a></li>
+<!--                             <li> <a href="inbox-detail.html">Manage Leads</a></li> -->
+<!--                             <li> <a href="inbox.html">Demand Letter Release</a></li> -->
+<!--                             <li> <a href="inbox.html">Allot Possession</a></li> -->
+<!--                             <li> <a href="inbox.html">Cancellation</a></li> -->
+                        </ul>
+                    </li>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="icon-envelope p-r-10"></i> <span class="hide-menu">Create Letters <span class="fa arrow"></span></span></a>
                      <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/bluepigeon/builder/demandletters/list.jsp">Manage Demand Letters</a></li>
