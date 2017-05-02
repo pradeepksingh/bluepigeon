@@ -79,7 +79,7 @@ function changePassword(){
 			if(status==1)
 				{
 				$('#error').empty();
-					window.location.href="../builder/project/list";	
+					window.location.href="../builder/project/list.jsp";	
 				}
 			
 			else if(status == 0)
