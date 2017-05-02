@@ -2170,4 +2170,31 @@ public class ProjectDAO {
 		return result;
 	}
 	
+	public List<ProjectList> getBuilderProjectsByBuilderId(int builderId) {
+		String hql = "from BuilderProject where builder.id = :builder_id order by id desc";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setFirstResult(0);
+		query.setMaxResults(100);
+		query.setParameter("builder_id", builderId);
+		List<BuilderProject> result = query.list();
+		List<ProjectList> projects = new ArrayList<ProjectList>();
+		for(BuilderProject builderproject : result) {
+			ProjectList newproject = new ProjectList();
+			newproject.setId(builderproject.getId());
+			newproject.setName(builderproject.getName());
+			newproject.setStatus(builderproject.getStatus());
+			newproject.setBuilderId(builderproject.getBuilder().getId());
+			newproject.setBuilderName(builderproject.getBuilder().getName());
+			newproject.setCityId(builderproject.getCity().getId());
+			newproject.setCityName(builderproject.getCity().getName());
+			newproject.setLocalityId(builderproject.getLocality().getId());
+			newproject.setLocalityName(builderproject.getLocality().getName());
+			projects.add(newproject);
+			
+		}
+		session.close();
+		return projects;
+	}
 }

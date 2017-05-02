@@ -139,6 +139,64 @@ public class PossessionDAO {
 		flatSession.close();
 		return possession_list;
 	}
+	
+	/**
+	 * @author pankaj
+	 * @return list of possession
+	 */
+	public List<PossessionList> getAllPossessionByBuilderId(int builderId){
+		String hql = "from Possession";
+		String project_hql= "from BuilderProject where builder.id = :id";
+		String building_hql = "from BuilderBuilding where id = :id";
+		String floor_hql = "from BuilderFloor where id = :id";
+		String flat_hql = "from BuilderFlat where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Session projectSession = hibernateUtil.openSession();
+		Session buildingSession = hibernateUtil.openSession();
+		Session floorSession = hibernateUtil.openSession();
+		Session flatSession = hibernateUtil.openSession();
+		
+		Query query = session.createQuery(hql);
+		List<Possession> result = query.list();
+		List<PossessionList> possession_list = new ArrayList<PossessionList>();
+		for(Possession possession : result){
+			PossessionList possessionList = new PossessionList();
+			possessionList.setBuyerName(possession.getName());
+			possessionList.setId(possession.getId());
+			if(possession.getBuilderProject() != null){
+				Query projectQuery = projectSession.createQuery(project_hql);
+				projectQuery.setParameter("id", builderId);
+				BuilderProject project = (BuilderProject)projectQuery.list().get(0);
+				possessionList.setProjectName(project.getName());
+			}
+			if(possession.getBuilderBuilding() != null){
+				Query buildingQuery = buildingSession.createQuery(building_hql);
+				buildingQuery.setParameter("id", possession.getBuilderBuilding().getId());
+				BuilderBuilding builderBuilding = (BuilderBuilding)buildingQuery.list().get(0);
+				possessionList.setBuildingName(builderBuilding.getName());
+			}
+//			if(agreement.getBuilderFloor() != null){
+//				Query floorQuery = floorSession.createQuery(floor_hql);
+//				floorQuery.setParameter("id", agreement.getBuilderFloor().getId());
+//				BuilderFloor builderFloor = (BuilderFloor)floorQuery.list().get(0);
+//				agreementList.setFloorNo(builderFloor.getName());
+//			}
+			if(possession.getBuilderFlat() != null){
+				Query flatQuery = flatSession.createQuery(flat_hql);
+				flatQuery.setParameter("id", possession.getBuilderFlat().getId());
+				BuilderFlat builderFlat = (BuilderFlat)flatQuery.list().get(0);
+				possessionList.setFlatNo(builderFlat.getFlatNo());
+			}
+			possession_list.add(possessionList);
+		}
+		session.close();
+		projectSession.close();
+		buildingSession.close();
+		floorSession.close();
+		flatSession.close();
+		return possession_list;
+	}
 	/**
 	 * Save possession document
 	 * @author pankaj

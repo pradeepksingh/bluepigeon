@@ -1,25 +1,19 @@
 package org.bluepigeon.admin.dao;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.bluepigeon.admin.data.AgreementList;
 import org.bluepigeon.admin.data.BuildingPaymentList;
 import org.bluepigeon.admin.data.BuyerPaymentList;
 import org.bluepigeon.admin.data.DemandLetterList;
 import org.bluepigeon.admin.data.FlatPaymentList;
 import org.bluepigeon.admin.exception.ResponseMessage;
-import org.bluepigeon.admin.model.Agreement;
-import org.bluepigeon.admin.model.AgreementInfo;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderFlat;
-import org.bluepigeon.admin.model.BuilderFloor;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.BuilderProjectPaymentInfo;
 import org.bluepigeon.admin.model.BuildingPaymentInfo;
 import org.bluepigeon.admin.model.Buyer;
-import org.bluepigeon.admin.model.BuyerOffer;
 import org.bluepigeon.admin.model.BuyerPayment;
 import org.bluepigeon.admin.model.DemandLetters;
 import org.bluepigeon.admin.model.DemandLettersInfo;
@@ -126,6 +120,64 @@ public class DemandLettersDAO {
 			if(demandLetters.getBuilderProject() != null){
 				Query projectQuery = projectSession.createQuery(project_hql);
 				projectQuery.setParameter("id", demandLetters.getBuilderProject().getId());
+				BuilderProject project = (BuilderProject)projectQuery.list().get(0);
+				demandLetteList.setProjectName(project.getName());
+			}
+			if(demandLetters.getBuilderBuilding() != null){
+				Query buildingQuery = buildingSession.createQuery(building_hql);
+				buildingQuery.setParameter("id", demandLetters.getBuilderBuilding().getId());
+				BuilderBuilding builderBuilding = (BuilderBuilding)buildingQuery.list().get(0);
+				demandLetteList.setBuildingName(builderBuilding.getName());
+			}
+//			if(agreement.getBuilderFloor() != null){
+//				Query floorQuery = floorSession.createQuery(floor_hql);
+//				floorQuery.setParameter("id", agreement.getBuilderFloor().getId());
+//				BuilderFloor builderFloor = (BuilderFloor)floorQuery.list().get(0);
+//				agreementList.setFloorNo(builderFloor.getName());
+//			}
+			if(demandLetters.getBuilderFlat() != null){
+				Query flatQuery = flatSession.createQuery(flat_hql);
+				flatQuery.setParameter("id", demandLetters.getBuilderFlat().getId());
+				BuilderFlat builderFlat = (BuilderFlat)flatQuery.list().get(0);
+				demandLetteList.setFlatname(builderFlat.getFlatNo());
+			}
+			demandletter_list.add(demandLetteList);
+		}
+		session.close();
+		projectSession.close();
+		buildingSession.close();
+		floorSession.close();
+		flatSession.close();
+		return demandletter_list;
+	}
+	
+	/**
+	 * @author pankaj
+	 * @return list of demand letters
+	 */
+	public List<DemandLetterList> getAllDemandLettersByBuilderId(int builderId){
+		String hql = "from DemandLetters";
+		String project_hql= "from BuilderProject where builder.id = :id";
+		String building_hql = "from BuilderBuilding where id = :id";
+		String floor_hql = "from BuilderFloor where id = :id";
+		String flat_hql = "from BuilderFlat where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Session projectSession = hibernateUtil.openSession();
+		Session buildingSession = hibernateUtil.openSession();
+		Session floorSession = hibernateUtil.openSession();
+		Session flatSession = hibernateUtil.openSession();
+		
+		Query query = session.createQuery(hql);
+		List<DemandLetters> result = query.list();
+		List<DemandLetterList> demandletter_list = new ArrayList<DemandLetterList>();
+		for(DemandLetters demandLetters : result){
+			DemandLetterList demandLetteList = new DemandLetterList();
+			demandLetteList.setBuyerName(demandLetters.getName());
+			demandLetteList.setId(demandLetters.getId());
+			if(demandLetters.getBuilderProject() != null){
+				Query projectQuery = projectSession.createQuery(project_hql);
+				projectQuery.setParameter("id", builderId);
 				BuilderProject project = (BuilderProject)projectQuery.list().get(0);
 				demandLetteList.setProjectName(project.getName());
 			}

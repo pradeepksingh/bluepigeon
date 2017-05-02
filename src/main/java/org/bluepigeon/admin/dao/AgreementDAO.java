@@ -9,9 +9,7 @@ import org.bluepigeon.admin.model.Agreement;
 import org.bluepigeon.admin.model.AgreementInfo;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderFlat;
-import org.bluepigeon.admin.model.BuilderFloor;
 import org.bluepigeon.admin.model.BuilderProject;
-import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -106,6 +104,64 @@ public class AgreementDAO {
 			if(agreement.getBuilderProject() != null){
 				Query projectQuery = projectSession.createQuery(project_hql);
 				projectQuery.setParameter("id", agreement.getBuilderProject().getId());
+				BuilderProject project = (BuilderProject)projectQuery.list().get(0);
+				agreementList.setProjectName(project.getName());
+			}
+			if(agreement.getBuilderBuilding() != null){
+				Query buildingQuery = buildingSession.createQuery(building_hql);
+				buildingQuery.setParameter("id", agreement.getBuilderBuilding().getId());
+				BuilderBuilding builderBuilding = (BuilderBuilding)buildingQuery.list().get(0);
+				agreementList.setBuildingName(builderBuilding.getName());
+			}
+//			if(agreement.getBuilderFloor() != null){
+//				Query floorQuery = floorSession.createQuery(floor_hql);
+//				floorQuery.setParameter("id", agreement.getBuilderFloor().getId());
+//				BuilderFloor builderFloor = (BuilderFloor)floorQuery.list().get(0);
+//				agreementList.setFloorNo(builderFloor.getName());
+//			}
+			if(agreement.getBuilderFlat() != null){
+				Query flatQuery = flatSession.createQuery(flat_hql);
+				flatQuery.setParameter("id", agreement.getBuilderFlat().getId());
+				BuilderFlat builderFlat = (BuilderFlat)flatQuery.list().get(0);
+				agreementList.setFlatNo(builderFlat.getFlatNo());
+			}
+			agreement_list.add(agreementList);
+		}
+		session.close();
+		projectSession.close();
+		buildingSession.close();
+		floorSession.close();
+		flatSession.close();
+		return agreement_list;
+	}
+	
+	/**
+	 * @author pankaj
+	 * @return list of agreement
+	 */
+	public List<AgreementList> getAgreementsByBuilderId(int builderId){
+		String hql = "from Agreement";
+		String project_hql= "from BuilderProject where builder.id = :id";
+		String building_hql = "from BuilderBuilding where id = :id";
+		String floor_hql = "from BuilderFloor where id = :id";
+		String flat_hql = "from BuilderFlat where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Session projectSession = hibernateUtil.openSession();
+		Session buildingSession = hibernateUtil.openSession();
+		Session floorSession = hibernateUtil.openSession();
+		Session flatSession = hibernateUtil.openSession();
+		
+		Query query = session.createQuery(hql);
+		List<Agreement> result = query.list();
+		List<AgreementList> agreement_list = new ArrayList<AgreementList>();
+		for(Agreement agreement : result){
+			AgreementList agreementList = new AgreementList();
+			agreementList.setBuyerName(agreement.getName());
+			agreementList.setId(agreement.getId());
+			if(agreement.getBuilderProject() != null){
+				Query projectQuery = projectSession.createQuery(project_hql);
+				projectQuery.setParameter("id", builderId);
 				BuilderProject project = (BuilderProject)projectQuery.list().get(0);
 				agreementList.setProjectName(project.getName());
 			}

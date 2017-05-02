@@ -1,4 +1,4 @@
-<%@page import="org.bluepigeon.admin.dao.PropertyManagerDAO"%>
+<%@page import="org.bluepigeon.admin.dao.AdminUserDAO"%>
 <%@page import="org.bluepigeon.admin.data.PropertyManagerList"%>
 <%@page import="org.bluepigeon.admin.dao.CampaignDAO"%>
 <%@page import="org.bluepigeon.admin.data.CampaignList"%>
@@ -16,7 +16,7 @@
 <%@include file="../../leftnav.jsp"%>
 <%
 List<PropertyManagerList> campaignLists = null;
-campaignLists = new PropertyManagerDAO().getProperyManagers();
+campaignLists = new AdminUserDAO().getProperyManagers();
 %>
 			<div class="main-content">
 	<div class="main-content-inner">
@@ -25,14 +25,14 @@ campaignLists = new PropertyManagerDAO().getProperyManagers();
 				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
 				</li>
 
-				<li><a href="#">Property Manager </a></li>
+				<li><a href="#">Employee </a></li>
 				<li class="active">List</li>
 			</ul>
 		</div>
 		<div class="page-content">
 			<div class="page-header">
 				<h1>
-					Property Manager 
+					Employees List 
 					<a href="${baseUrl}/admin/employee/new.jsp" class="btn btn-primary btn-sm pull-right" role="button" data-toggle="modal"><i class="fa fa-plus"></i> New Employee</a>
 				</h1>
 			</div>

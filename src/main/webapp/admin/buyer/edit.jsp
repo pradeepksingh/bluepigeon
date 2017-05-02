@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.BuyerDocList"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectLeadDAO"%>
 <%@page import="org.bluepigeon.admin.data.FlatData"%>
 <%@page import="org.bluepigeon.admin.data.FloorData"%>
@@ -53,7 +54,7 @@
    	}
 	
 	int project_size = 0;
-	int builder_id = 0;
+	int builder_id = 1;
 	List<BuilderBuilding> builderBuildings = null;
 	List<BuilderFlat> builderFlats = null;
  	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
@@ -65,8 +66,9 @@
  		building_size =	builderBuildings.size();
  		builderFlats = new ProjectDAO().getBuilderProjectBuildingFlats(builderBuildings.get(0).getId());
  	}
- 	Buyer buyer =  new BuyerDAO().getBuyerById(buyer_id);
- 	List<BuyerDocuments> buyerDocuments = new BuyerDAO().getBuyerDocumentsByBuyerId(buyer_id);
+ 	BuyerDAO buyerDAO = new BuyerDAO();
+ 	Buyer updateBuyer = buyerDAO.getBuyerById(buyer_id);
+ 	List<BuyerDocList> buyers = buyerDAO.getBuyerDocListById(buyer_id);
  	BuyingDetails buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyer_id);
  	List<BuyerOffer> buyerOffersList = new BuyerDAO().getBuyerOffersByBuyerId(buyer_id);
  	List<BuyerPayment> buyerPaymentsList = new BuyerDAO().getBuyerPaymentsByBuyerId(buyer_id);
@@ -123,16 +125,23 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
+										<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id);%>"/>
 										<div id="buyer_area">
-										<input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
+										<%
+											if(buyers.size()>0){
+												int i = 0;
+												for(BuyerDocList buyer:buyers){	
+										%>
+										<input type="hidden" name="buyer_count" id="buyer_count" value="<%out.print(i);%>"/>
 										<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(buyer_id);%>"/>
-											<div class="row" id="buyer-1">
+											<div class="row" id="buyer-<%out.print(i);%>">
+<%-- 											<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeBuyer(<%out.print(i); %>);" class="btn btn-danger btn-xs">x</a></span></div> --%>
 												<div class="row">
 													<div class="col-lg-5 margin-bottom-5">
 														<div class="form-group" id="error-buyer_name">
 														<label class="control-label col-sm-4">Buyer Name <span class="text-danger">*</span></label>
 															<div class="col-sm-8">
-																<input type="text" class="form-control" id="buyer_name" name="buyer_name[]" value=""/>
+																<input type="text" class="form-control" id="buyer_name" name="buyer_name[]" value="<%out.print(buyer.getName()); %>"/>
 															</div>
 															<div class="messageContainer"></div>
 														</div>
@@ -141,7 +150,7 @@
 														<div class="form-group" id="error-contact">
 															<label class="control-label col-sm-4">Contact <span class="text-danger">*</span></label>
 															<div class="col-sm-8">
-																<input type="text" class="form-control" id="contact" name="contact[]" value=""/>
+																<input type="text" class="form-control" id="contact" name="contact[]" value="<%out.print(buyer.getMobile());%>"/>
 															</div>
 															<div class="messageContainer"></div>
 														</div>
@@ -152,7 +161,7 @@
 														<div class="form-group" id="error-email">
 															<label class="control-label col-sm-4">Email <span class="text-danger">*</span></label>
 															<div class="col-sm-8">
-																<input type="text" class="form-control" id="email" name="email[]" value=""/>
+																<input type="text" class="form-control" id="email" name="email[]" value="<%out.print(buyer.getEmail());%>"/>
 															</div>
 															<div class="messageContainer"></div><br/>
 														</div>
@@ -161,7 +170,7 @@
 														<div class="form-group" id="error-email">
 															<label class="control-label col-sm-4">PAN <span class="text-danger">*</span></label>
 															<div class="col-sm-8">
-																<input type="text" class="form-control" id="pan" name="pan[]" value=""/>
+																<input type="text" class="form-control" id="pan" name="pan[]" value="<%out.print(buyer.getPanCard());%>"/>
 															</div>
 															<div class="messageContainer"></div>
 														</div>
@@ -172,19 +181,19 @@
 														<div class="form-group" id="error-applicable_on">
 														<label class="control-label col-sm-4"> Prem. Address <span class="text-danger">*</span></label>
 														<div class="col-sm-8">
-														<textarea class="form-control" id="address" name="address[]" ></textarea>
+														<textarea class="form-control" id="address" name="address[]" ><%out.print(buyer.getAddress()); %></textarea>
 														</div>
 														<div class="messageContainer"></div>
 														</div>
 													</div>
 													<div class="col-lg-5 margin-bottom-6">
 														<div class="form-group" id="error-state_id">
-															<label class="control-label col-sm-4">Owner <span class='text-danger'>*</span></label>
+															<label class="col-sm-4">Owner <span class='text-danger'>*</span></label>
 															<div class="col-sm-8">
 																<select name="is_primary[]" id="is_primary" class="form-control">
 												                    <option value="">Select Owner</option>
-												                     <option value="0">Co-Owner</option>
-												                      <option value="1">Owner</option>
+												                     <option value="0" <%if(buyer.isPrimary() == false){ %>selected<%} %>>Co-Owner</option>
+												                      <option value="1"<% if(buyer.isPrimary() == true){%>selected<%} %>>Owner</option>
 													          	</select>
 															</div>
 															<div class="messageContainer col-sm-4"></div>
@@ -192,31 +201,41 @@
 													</div>
 												</div>
 												<hr>
+												<hr>
+												<%
+													if(buyer != null){
+														
+												%>
 												<div class="col-lg-12 margin-bottom-6">
 														<div class="form-group" id="error-project_type">
 															<label class="control-label col-sm-2">Documents <span class='text-danger'>*</span></label>
 															<div class="col-sm-10">
 																<div class="col-sm-4">
-																	<input type="checkbox" name="document_type[]" value="1" />PAN Card
+																	<input type="checkbox" name="document_pan[]" value="1" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 1) { %> checked <% } %> />PAN Card
 																</div>
 																<div class="col-sm-4">
-																	<input type="checkbox" name="document_type[]" value="2" />Aadhar Card
+																	<input type="checkbox" name="document_aadhar[]" value="2" <%if(Integer.parseInt(buyer.getDocResult().get(i)) == 2) {%>checked<%} %>/>Aadhar Card
 																</div>
 																<div class="col-sm-4">
-																	<input type="checkbox" name="document_type[]" value="3" />Passport 
+																	<input type="checkbox" name="document_passport[]" value="3" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 3) {%>checked<%} %>/>Passport 
 																</div>
 																<div class="col-sm-4">
-																	<input type="checkbox" name="document_type[]" value="4" />Registered Rent Agreement 
+																	<input type="checkbox" name="document_rra[]" value="4" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 4) {%>checked<%} %> />Registered Rent Agreement 
 																</div>
 																<div class="col-sm-4">
-																	<input type="checkbox" name="document_type[]" value="5" />Vote ID 
+																	<input type="checkbox" name="document_voterid[]" value="5" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 5) {%>checked<%} %> />Vote ID 
 																</div>
 															</div>
 															<div class="messageContainer"></div>
 														</div>
 													</div>
-												</div>
+													<%
+																}
+															}
+														}
+													%>
 											</div>
+										</div>
 										<hr>
 										<div>
 											<div class="col-lg-12">
@@ -240,7 +259,7 @@
 														<select name="project_id" id="project_id" class="form-control">
 										                    <option value="">Select Project</option>
 										                    <% for(BuilderProject builderProject : builderProjects){ %>
-															<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option>
+															<option value="<% out.print(builderProject.getId());%>" <%if(builderProject.getId() == buyers.get(0).getProjectId()){ %> selected <% } %>><% out.print(builderProject.getName());%></option>
 															<% } %>
 											             </select>
 													</div>
@@ -253,6 +272,9 @@
 													<div class="col-sm-5">
 														<select name="building_id" id="building_id" class="form-control">
 										                    <option value="">Select Building</option>
+										                    <% for(BuilderBuilding builderBuilding : builderBuildings){ %>
+															<option value="<% out.print(builderBuilding.getId());%>" <%if(builderBuilding.getId() == buyers.get(0).getBuildingId()){ %> selected <% } %>><% out.print(builderBuilding.getName());%></option>
+															<% } %>
 											          	</select>
 													</div>
 													<div class="messageContainer col-sm-4"></div>
@@ -266,19 +288,50 @@
 													<div class="col-sm-5">
 														<select name="flat_id" id="flat_id" class="form-control">
 										                    <option value="">Select Flat</option>
+										                    <% for(BuilderFlat builderFlat : builderFlats){ %>
+															<option value="<% out.print(builderFlat.getId());%>" <%if(builderFlat.getId() == buyers.get(0).getFlatId()){ %> selected <% } %>><% out.print(builderFlat.getFlatNo());%></option>
+															<% } %>
 											          	</select>
 													</div>
 													<div class="messageContainer col-sm-4"></div>
 												</div>
 											</div>
+	<!-- 										<div class="col-lg-6 margin-bottom-5"> -->
+	<!-- 											<div class="form-group" id="error-state_id"> -->
+	<!-- 												<label class="control-label col-sm-3">Agreement <span class='text-danger'>*</span></label> -->
+	<!-- 												<div class="col-sm-5"> -->
+	<!-- 													<select name="agreement" id="agreement" class="form-control"> -->
+	<!-- 									                    <option value="">Select Agreement</option> -->
+	<!-- 									                     <option value="0">No</option> -->
+	<!-- 									                      <option value="1">Yes</option> -->
+	<!-- 										          	</select> -->
+	<!-- 												</div> -->
+	<!-- 												<div class="messageContainer col-sm-4"></div> -->
+	<!-- 											</div> -->
+	<!-- 										</div> -->
+	<!-- 									</div> -->
+	<!-- 									<div class="row"> -->
+	<!-- 										<div class="col-lg-6 margin-bottom-5"> -->
+	<!-- 											<div class="form-group" id="error-state_id"> -->
+	<!-- 												<label class="control-label col-sm-3">Possession <span class='text-danger'>*</span></label> -->
+	<!-- 												<div class="col-sm-5"> -->
+	<!-- 													<select name="possession" id="possession" class="form-control"> -->
+	<!-- 									                    <option value="">Select Possession</option> -->
+	<!-- 									                     <option value="0">No</option> -->
+	<!-- 									                      <option value="1">Yes</option> -->
+	<!-- 										          	</select> -->
+	<!-- 												</div> -->
+	<!-- 												<div class="messageContainer col-sm-4"></div> -->
+	<!-- 											</div> -->
+	<!-- 										</div> -->
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-state_id">
 													<label class="control-label col-sm-3">Status <span class='text-danger'>*</span></label>
 													<div class="col-sm-5">
 														<select name="status" id="status" class="form-control">
 										                    <option value="">Select Status</option>
-										                     <option value="0">Inactive</option>
-										                      <option value="1">Active</option>
+										                     <option value="0" <%if(updateBuyer.getStatus() == 0) { %> selected <% } %>>Inactive</option>
+										                      <option value="1" <%if(updateBuyer.getStatus() == 1) { %> selected <% } %>>Active</option>
 											          	</select>
 													</div>
 													<div class="messageContainer col-sm-4"></div>
@@ -315,7 +368,7 @@
 												<div class="form-group" id="error-base_unit">
 													<label class="control-label col-sm-4">Booking Date <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
-															<input type="text" class="form-control" id="booking_date" name="booking_date" value="<% //if(builderProject.getLaunchDate() != null) { out.print(dt1.format(builderProject.getLaunchDate()));} %>"/>
+															<input type="text" class="form-control" id="booking_date" name="booking_date" value="<% if(buyingDetails.getBookingDate() != null) { out.print(dt1.format(buyingDetails.getBookingDate()));} %>"/>
 													</div>
 												</div>
 											</div>
@@ -323,7 +376,7 @@
 												<div class="form-group" id="error-base_rate">
 													<label class="control-label col-sm-4">Base Rate <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="base_rate" name="base_rate" />
+														<input type="text" class="form-control" id="base_rate" name="base_rate" value="<%out.print(buyingDetails.getBaseRate()); %>" />
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -334,7 +387,7 @@
 												<div class="form-group" id="error-rise_rate">
 													<label class="control-label col-sm-4">Floor Rise Rate</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="rise_rate" name="rise_rate"/>
+														<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<%out.print(buyingDetails.getFloorRiseRate());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -343,7 +396,7 @@
 												<div class="form-group" id="error-amenity_rate">
 													<label class="control-label col-sm-4">Amenities Facing Rate</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" />
+														<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<%out.print(buyingDetails.getAmenityFacingRate()); %>" />
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -354,7 +407,7 @@
 												<div class="form-group" id="error-maintenance">
 													<label class="control-label col-sm-4">Maintenance Charge </label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="maintenance" name="maintenance" "/>
+														<input type="text" class="form-control" id="maintenance" name="maintenance" value="<%out.print(buyingDetails.getMaintenance());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -363,7 +416,7 @@
 												<div class="form-group" id="error-tenure">
 													<label class="control-label col-sm-4">Tenure </label>
 													<div class="col-sm-8 input-group" style="padding: 0px 12px;">
-														<input type="text" class="form-control" id="tenure" name="tenure" "/>
+														<input type="text" class="form-control" id="tenure" name="tenure" value="<%out.print(buyingDetails.getTenure());%>"/>
 														<span class="input-group-addon">Months</span>
 													</div>
 													<div class="messageContainer"></div>
@@ -375,7 +428,7 @@
 												<div class="form-group" id="error-amenity_rate">
 													<label class="control-label col-sm-4">Registration</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="registration" name="registration" />
+														<input type="text" class="form-control" id="registration" name="registration" value="<%out.print(buyingDetails.getRegistration());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -384,7 +437,7 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Parking </label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="parking" name="parking" />
+														<input type="text" class="form-control" id="parking" name="parking" value="<%out.print(buyingDetails.getParkingRate());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -395,7 +448,7 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Stamp Duty </label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" />
+														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<%out.print(buyingDetails.getStampDuty());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -404,7 +457,7 @@
 												<div class="form-group" id="error-tax">
 													<label class="control-label col-sm-4">Tax</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="tax" name="tax" />
+														<input type="text" class="form-control" id="tax" name="tax" value="<%out.print(buyingDetails.getTaxes());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -415,7 +468,7 @@
 												<div class="form-group" id="error-vat">
 													<label class="control-label col-sm-4">VAT </label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="vat" name="vat" />
+														<input type="text" class="form-control" id="vat" name="vat" value="<%out.print(buyingDetails.getVat());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -682,6 +735,106 @@
 						</div>
 					</form>
 				</div>
+				<div id="documents" class="tab-pane fade">
+					<form id="buyerdoc" name="buyerdoc" method="post" enctype="multipart/form-data">
+						<input type="hidden" name="doc_count" id="doc_count" value="1"/>
+			 			<div class="row">
+							<div class="col-lg-12">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div>
+											<div class="row">
+												<div class="col-lg-12" style="padding-bottom:5px;">
+<!-- 													<span class="pull-right"><a href="javascript:removeOffer(1);" class="btn btn-danger btn-xs">x</a></span> -->
+												</div>
+												<div class="row" id="doc_area">
+													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
+														<div class="form-group" id="error-offer_title">
+															<input type="hidden" name="doc_name[]" value="Agreement" />
+															<label class="control-label col-sm-5">Agreement <span class='text-danger'>*</span></label>
+															<div class="col-sm-7">
+																<input type="file" class="form-control" name="doc_url[]" />
+															</div>
+															<div class="messageContainer col-sm-offset-5"></div>
+														</div>
+													</div>
+													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
+														<div class="form-group" id="error-offer_title">
+															<input type="hidden" name="doc_name[]" value="Index 2" />
+															<label class="control-label col-sm-5">Index 2 <span class='text-danger'>*</span></label>
+															<div class="col-sm-7">
+																<input type="file" class="form-control" name="doc_url[]" />
+															</div>
+															<div class="messageContainer col-sm-offset-5"></div>
+														</div>
+													</div>
+													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
+														<div class="form-group" id="error-offer_title">
+															<input type="hidden" name="doc_name[]" value="Receipts with Date and time and Name" />
+															<label class="control-label col-sm-5">Receipts with Date and time and Name </label>
+															<div class="col-sm-7">
+																<input type="file" class="form-control" name="doc_url[]" />
+															</div>
+															<div class="messageContainer col-sm-offset-5"></div>
+														</div>
+													</div>
+													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
+														<div class="form-group" id="error-offer_title">
+															<input type="hidden" name="doc_name[]" value="Electrical and Plumbing lines map" />
+															<label class="control-label col-sm-5">Electrical and Plumbing lines map </label>
+															<div class="col-sm-7">
+																<input type="file" class="form-control" name="doc_url[]" />
+															</div>
+															<div class="messageContainer col-sm-offset-5"></div>
+														</div>
+													</div>
+													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
+														<div class="form-group" id="error-offer_title">
+															<input type="hidden" name="doc_name[]" value="Possession grant letter" />
+															<label class="control-label col-sm-5">Possession grant letter </label>
+															<div class="col-sm-7">
+																<input type="file" class="form-control" name="doc_url[]" />
+															</div>
+															<div class="messageContainer col-sm-offset-5"></div>
+														</div>
+													</div>
+													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;" id="doc-1">
+														<div class="form-group" id="error-offer_title">
+															<label class="control-label col-sm-5">Other Documents </label>
+															<div class="col-sm-3">
+																<input type="text" name="doc_name[]" class="form-control" value="" placeholder="Enter Document Name"/>
+															</div>
+															<div class="col-sm-3">
+																<input type="file" class="form-control" name="doc_url[]" />
+															</div>
+															<div class="messageContainer col-sm-offset-5"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div class="col-lg-12">
+													<span class="pull-right">
+														<a href="javascript:addMoreDoc();" class="btn btn-info btn-xs">+ Add More Document</a>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="col-sm-12">
+										<button type="submit" name="updatedoc" class="btn btn-success btn-sm" id="updatedoc">Update</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 			<br> <br>
 		</div>
@@ -717,15 +870,6 @@ $("#project_id").change(function(){
 
 $("#building_id").change(function(){
 	$.get("${baseUrl}/webapi/buyer/floor/list/",{ building_id: $("#building_id").val() }, function(data){
-		var html = '<option value="">Select Floor</option>';
-		$(data).each(function(index){
-			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-		});
-		$("#floor_id").html(html);
-	},'json');
-});
-$("#floor_id").change(function(){
-	$.get("${baseUrl}/webapi/buyer/flat/list/",{ floor_id: $("#floor_id").val() }, function(data){
 		var html = '<option value="">Select Flat</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
@@ -733,6 +877,15 @@ $("#floor_id").change(function(){
 		$("#flat_id").html(html);
 	},'json');
 });
+// $("#floor_id").change(function(){
+// 	$.get("${baseUrl}/webapi/buyer/flat/list/",{ floor_id: $("#floor_id").val() }, function(data){
+// 		var html = '<option value="">Select Flat</option>';
+// 		$(data).each(function(index){
+// 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+// 		});
+// 		$("#flat_id").html(html);
+// 	},'json');
+// });
 $('#basicfrm').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -810,15 +963,15 @@ $('#basicfrm').bootstrapValidator({
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
-	updateProject();
+	updateBuyer();
 });
 
-function updateProject() {
+function updateBuyer() {
 	var options = {
 	 		target : '#basicresponse', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/project/basic/update',
+	 		url : '${baseUrl}/webapi/buyer/update/basic',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -879,6 +1032,7 @@ $('#pricingfrm').bootstrapValidator({
 	// Prevent form submission
 	event.preventDefault();
 	updateProjectPrice();
+	
 });
 
 function updateProjectPrice() {
@@ -886,7 +1040,7 @@ function updateProjectPrice() {
 	 		target : '#pricingresponse', 
 	 		beforeSubmit : showPriceRequest,
 	 		success :  showPriceResponse,
-	 		url : '${baseUrl}/webapi/project/price/update',
+	 		url : '${baseUrl}/webapi/buyer/update/price',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -914,55 +1068,55 @@ function showPriceResponse(resp, statusText, xhr, $form){
   	}
 }
 
-$("#detailbtn").click(function(){
-	var projectType = [];
-	var propertyType = [];
-	var configuration = [];
-	var amenityType = [];
-	var approvalType = [];
-	var homeLoanInfo = [];
-	var project = {id:$("#id").val(),projectArea:$("#project_area").val(),areaUnit:{id:$("#area_unit").val()},launchDate:new Date($("#launch_date").val())};
-	$('input[name="project_type[]"]:checked').each(function() {
-		projectType.push({builderProjectType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="property_type[]"]:checked').each(function() {
-		val = $("#property_type"+$(this).val()).val();
-		propertyType.push({value:val,builderPropertyType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="configuration[]"]:checked').each(function() {
-		configuration.push({builderProjectPropertyConfiguration:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="amenity_type[]"]:checked').each(function() {
-		amenityType.push({builderProjectAmenity:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="approval_type[]"]:checked').each(function() {
-		approvalType.push({builderProjectApprovalType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="homeloan_bank[]"]:checked').each(function() {
-		homeLoanInfo.push({homeLoanBanks:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	var final_data = {builderProject:project,builderProjectProjectTypes:projectType,builderProjectPropertyTypes:propertyType,builderProjectPropertyConfigurationInfos:configuration,builderProjectAmenityInfos:amenityType,builderProjectApprovalInfos:approvalType,builderProjectBankInfos:homeLoanInfo}
-	$.ajax({
-	    url: '${baseUrl}/webapi/project/detail/update',
-	    type: 'POST',
-	    data: JSON.stringify(final_data),
-	    contentType: 'application/json; charset=utf-8',
-	    dataType: 'json',
-	    async: false,
-	    success: function(data) {
-			if (data.status == 0) {
-				alert(data.message);
-			} else {
-				alert(data.message);
-			}
-		},
-		error : function(data)
-		{
-			alert("Fail to save data");
-		}
+// $("#detailbtn").click(function(){
+// 	var projectType = [];
+// 	var propertyType = [];
+// 	var configuration = [];
+// 	var amenityType = [];
+// 	var approvalType = [];
+// 	var homeLoanInfo = [];
+// 	var project = {id:$("#id").val(),projectArea:$("#project_area").val(),areaUnit:{id:$("#area_unit").val()},launchDate:new Date($("#launch_date").val())};
+// 	$('input[name="project_type[]"]:checked').each(function() {
+// 		projectType.push({builderProjectType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
+// 	});
+// 	$('input[name="property_type[]"]:checked').each(function() {
+// 		val = $("#property_type"+$(this).val()).val();
+// 		propertyType.push({value:val,builderPropertyType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
+// 	});
+// 	$('input[name="configuration[]"]:checked').each(function() {
+// 		configuration.push({builderProjectPropertyConfiguration:{id:$(this).val()},builderProject:{id:$("#id").val()}});
+// 	});
+// 	$('input[name="amenity_type[]"]:checked').each(function() {
+// 		amenityType.push({builderProjectAmenity:{id:$(this).val()},builderProject:{id:$("#id").val()}});
+// 	});
+// 	$('input[name="approval_type[]"]:checked').each(function() {
+// 		approvalType.push({builderProjectApprovalType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
+// 	});
+// 	$('input[name="homeloan_bank[]"]:checked').each(function() {
+// 		homeLoanInfo.push({homeLoanBanks:{id:$(this).val()},builderProject:{id:$("#id").val()}});
+// 	});
+// 	var final_data = {builderProject:project,builderProjectProjectTypes:projectType,builderProjectPropertyTypes:propertyType,builderProjectPropertyConfigurationInfos:configuration,builderProjectAmenityInfos:amenityType,builderProjectApprovalInfos:approvalType,builderProjectBankInfos:homeLoanInfo}
+// 	$.ajax({
+// 	    url: '${baseUrl}/webapi/project/detail/update',
+// 	    type: 'POST',
+// 	    data: JSON.stringify(final_data),
+// 	    contentType: 'application/json; charset=utf-8',
+// 	    dataType: 'json',
+// 	    async: false,
+// 	    success: function(data) {
+// 			if (data.status == 0) {
+// 				alert(data.message);
+// 			} else {
+// 				alert(data.message);
+// 			}
+// 		},
+// 		error : function(data)
+// 		{
+// 			alert("Fail to save data");
+// 		}
 		
-	});
-});
+// 	});
+// });
 
 $("#paymentbtn").click(function(){
 	var paymentInfo = [];
@@ -983,7 +1137,7 @@ $("#paymentbtn").click(function(){
 	var final_data = {builderProjectPaymentInfos:paymentInfo,builderProject:project}
 	if(paymentInfo.length > 0) {
 		$.ajax({
-		    url: '${baseUrl}/webapi/project/payment/update',
+		    url: '${baseUrl}/webapi/buyer/payment/update',
 		    type: 'POST',
 		    data: JSON.stringify(final_data),
 		    contentType: 'application/json; charset=utf-8',
@@ -1031,10 +1185,10 @@ $("#offerbtn").click(function(){
 		}
 	});
 	var project = {id:$("#id").val()};
-	var final_data = {builderProjectOfferInfos:offerInfo,builderProject:project}
+	var final_data = {buyerOffer:offerInfo,builderProject:project}
 	if(offerInfo.length > 0) {
 		$.ajax({
-		    url: '${baseUrl}/webapi/project/offer/update',
+		    url: '${baseUrl}/webapi/buyer/offer/update',
 		    type: 'POST',
 		    data: JSON.stringify(final_data),
 		    contentType: 'application/json; charset=utf-8',
@@ -1159,17 +1313,17 @@ function addMoreBuyers() {
 function removeBuyer(id) {
 	$("#buyer-"+id).remove();
 }
-function deleteImage(id) {
-	var flag = confirm("Are you sure ? You want to delete plan ?");
-	if(flag) {
-		$.get("${baseUrl}/webapi/project/buyer/"+id, { }, function(data){
-			alert(data.message);
-			if(data.status == 1) {
-				$("#b_image"+id).remove();
-			}
-		},'json');
-	}
-}
+// function deleteImage(id) {
+// 	var flag = confirm("Are you sure ? You want to delete plan ?");
+// 	if(flag) {
+// 		$.get("${baseUrl}/webapi/project/buyer/"+id, { }, function(data){
+// 			alert(data.message);
+// 			if(data.status == 1) {
+// 				$("#b_image"+id).remove();
+// 			}
+// 		},'json');
+// 	}
+// }
 
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
