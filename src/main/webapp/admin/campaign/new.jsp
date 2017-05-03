@@ -52,7 +52,7 @@
 								<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Campaign Title </label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Campaign Title <span class="text-danger">*</span> </label>
 										<div class="col-sm-9">
 											<input type="text" id="title" name="title" placeholder="Enter Campaign title" class="form-control" />
 										</div>
@@ -61,10 +61,10 @@
 							  	</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Campaign Type </label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Campaign Type <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
 											<select name="campaign_type" id="campaign_type" class="form-control">
-						                 	   	<option value="0">Select Campaign</option>
+						                 	   	<option value="">Select Campaign</option>
 						                 	   	<option value="1">New Project</option>
 						                 	   	<option value="2">New Property</option>
 						                 	   	<option value="3">Offers</option>
@@ -77,7 +77,7 @@
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Set date </label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Set date <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
 											<input type="text" id="set_date" name="set_date" placeholder="Enter Campaign start date" class="form-control" />
 										</div>
@@ -86,7 +86,7 @@
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Content</label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Content <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
 											<textarea id="content" name="content" placeholder="Enter content " class="form-control" ></textarea>
 										</div>
@@ -95,7 +95,7 @@
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Terms</label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Terms <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
 											<textarea id="terms" name="terms" placeholder="Enter terms" class="form-control" ></textarea>
 										</div>
@@ -104,7 +104,7 @@
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Recipient Type </label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Recipient Type <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
 										 	<select name="recipient_type_id" id="recipient_type_id" class="form-control">
 							                    <option value="0">Select Recipient Type</option>
@@ -117,7 +117,7 @@
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select City </label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select City <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
 										 	<select name="city_id" id="city_id" class="form-control">
 							                    <option value="0">Select City</option>
@@ -131,7 +131,7 @@
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select Project </label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select Project <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
 										 	<select name="project_id" id="project_id" class="form-control">
 							                    <option value="0">Select Project</option>
@@ -268,34 +268,52 @@ $('#addcampaign').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-    	name: {
+    	title: {
             validators: {
                 notEmpty: {
                     message: 'Lead name is required and cannot be empty'
                 }
             }
         },
-        mobile: {
-        	validators: {
-            	notEmpty: {
-                    message: 'The Mobile is required and cannot be empty'
-                },
-                regexp: {
-                    regexp: '^[7-9][0-9]{9}$',
-                    message: 'Invalid Mobile Number'
-                }
-            }
+        campaign_type:{
+        	validators:{
+        		notEmpty: {
+        			message:'campaign type is required and cannot be empty'
+        		}
+        	}
         },
-        email: {
-        	validators: {
-            	notEmpty: {
-                    message: 'The Email is required and cannot be empty'
-                },
-                regexp: {
-                    regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
-                    message: 'The value is not a valid email address'
-                }
-            }
+        set_date:{
+        	 excluded: false,
+             validators: {
+                 notEmpty: {
+                     message: 'The date is required'
+                 },
+                 date: {
+                     format: 'dd/mm/yyyy',
+                     message: 'The date is not a valid'
+                 }
+             }
+        },
+        content:{
+        	validators:{
+        		notEmpty:{
+        			message: 'content is required and cannot be empty'
+        		}
+        	}
+        },
+        terms:{
+        	validators:{
+        		notEmpty:{
+        			message: 'term is required and cannot be empty'
+        		}
+        	}
+        },
+        recipient_type_id:{
+        	validators:{
+        		notEmpty:{
+        			message: 'recipient type is required and cannot be empty'
+        		}
+        	}
         },
         project_id: {
             validators: {
@@ -304,17 +322,10 @@ $('#addcampaign').bootstrapValidator({
                 }
             }
         },
-        city: {
+        city_id: {
             validators: {
                 notEmpty: {
                     message: 'City Name is required and cannot be empty'
-                }
-            }
-        },
-        area: {
-            validators: {
-                notEmpty: {
-                    message: 'Locality Name is required and cannot be empty'
                 }
             }
         }

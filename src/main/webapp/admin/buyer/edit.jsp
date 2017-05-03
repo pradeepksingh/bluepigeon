@@ -959,6 +959,14 @@ $('#basicfrm').bootstrapValidator({
            		}
             }
         },
+        pan:{
+        	validators:{
+        		notEmpty:{
+        			message : 'Pan Card number is required and cannot be empty'
+        		},
+        		
+        	}
+        }
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission

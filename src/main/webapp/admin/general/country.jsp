@@ -82,6 +82,7 @@ int country_size=country_list.size();
               		<div class="col-xs-12">
                   		<div class="form-group">
                        		<label for="password" class="control-label">Country Name</label>
+                       		<p id="error" class="bg-danger nopadding" ></p>
                        		<input type="text" name="name" id="name" class="form-control" placeholder="Enter country name"/>
                   		</div>
               		</div>
@@ -128,11 +129,19 @@ $(document).ready(function(){
         "aaSorting": []
     });
 });
+
 function addCountry() {
-	$.post("${baseUrl}/webapi/general/country/save",{ name: $("#name").val(), status: $("#status").val()}, function(data){
-		alert(data.message);
-		window.location.reload();
-	},'json');
+		$.post("${baseUrl}/webapi/general/country/save",{ name: $("#name").val(), status: $("#status").val()}, function(data){
+			if(data.status == 1){
+				$('#error').empty();
+				alert(data.message);
+				window.location.reload();
+			}else{
+				//alert(data.message);
+				$('#error').empty();
+				$("#error").append(data.message);
+			}
+		},'json');
 }
 
 function editCountry(countryid) {
@@ -140,6 +149,9 @@ function editCountry(countryid) {
 		$("#modalarea").html(data);
 		$("#editCountry").modal('show');
 	},'html');
+}
+function hello(){
+	alert("Hi");
 }
 
 function updateCountry() {

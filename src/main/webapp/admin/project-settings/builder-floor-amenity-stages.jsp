@@ -70,6 +70,7 @@ amenity_size = amenity_list.size();
                                 <table class="table table-striped table-bordered" id="flooramenitystagetable">
                                     <thead>
                                         <tr>
+                                        	<th>Amenity Name</th>
                                             <th>Name</th>
                                             <th>Status</th>
                                             <th class="alignRight">Actions</th>
@@ -80,6 +81,7 @@ amenity_size = amenity_list.size();
                                         for(int i=0; i < amenity_stage_size; i++){
                                         %>
                                         <tr>
+                                        	<td><%out.print(amenity_stage_list.get(i).getBuilderFloorAmenity().getName()); %></td>
                                             <td><% out.print(amenity_stage_list.get(i).getName()); %></td>
                                             <td><% if(amenity_stage_list.get(i).getStatus() == 1) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
                                             <td class="alignRight">

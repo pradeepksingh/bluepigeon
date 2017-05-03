@@ -92,6 +92,8 @@ if (request.getParameterMap().containsKey("stage_id")) {
                                 <table class="table table-striped table-bordered" id="projectamenitysubstagetable">
                                     <thead>
                                         <tr>
+                                        	<th>Amenity Name</th>
+                                        	<th>Amenity Stage Name</th>
                                             <th>Name</th>
                                             <th>Status</th>
                                             <th class="alignRight">Actions</th>
@@ -102,6 +104,8 @@ if (request.getParameterMap().containsKey("stage_id")) {
                                         for(int i=0; i < substage_size; i++){
                                         %>
                                         <tr>
+                                        	<td><% out.print(substage_list.get(i).getBuilderProjectAmenityStages().getBuilderProjectAmenity().getName()); %></td>
+                                        	<td><% out.print(substage_list.get(i).getBuilderProjectAmenityStages().getName()); %></td>
                                             <td><% out.print(substage_list.get(i).getName()); %></td>
                                             <td><% if(substage_list.get(i).getStatus() == 1) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
                                             <td class="alignRight">
