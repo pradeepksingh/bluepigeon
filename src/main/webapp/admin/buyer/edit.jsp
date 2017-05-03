@@ -57,17 +57,17 @@
 	int builder_id = 1;
 	List<BuilderBuilding> builderBuildings = null;
 	List<BuilderFlat> builderFlats = null;
+	BuyerDAO buyerDAO = new BuyerDAO();
+ 	Buyer updateBuyer = buyerDAO.getBuyerById(buyer_id);
  	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
  	if(builderProjects.size()>0){
     	project_size = builderProjects.size();
- 		builderBuildings = new ProjectLeadDAO().getBuildingByProjectId(builderProjects.get(0).getId());
+ 		builderBuildings = new ProjectLeadDAO().getBuildingByProjectId(updateBuyer.getBuilderProject().getId());
  	}
  	if(builderBuildings.size()>0){
  		building_size =	builderBuildings.size();
  		builderFlats = new ProjectDAO().getBuilderProjectBuildingFlats(builderBuildings.get(0).getId());
  	}
- 	BuyerDAO buyerDAO = new BuyerDAO();
- 	Buyer updateBuyer = buyerDAO.getBuyerById(buyer_id);
  	List<BuyerDocList> buyers = buyerDAO.getBuyerDocListById(buyer_id);
  	BuyingDetails buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyer_id);
  	List<BuyerOffer> buyerOffersList = new BuyerDAO().getBuyerOffersByBuyerId(buyer_id);

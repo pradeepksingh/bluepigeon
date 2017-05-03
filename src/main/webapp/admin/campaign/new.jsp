@@ -287,10 +287,6 @@ $('#addcampaign').bootstrapValidator({
              validators: {
                  notEmpty: {
                      message: 'The date is required'
-                 },
-                 date: {
-                     format: 'dd/mm/yyyy',
-                     message: 'The date is not a valid'
                  }
              }
         },

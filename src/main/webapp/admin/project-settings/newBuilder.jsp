@@ -5,141 +5,138 @@
 <%@page import="org.bluepigeon.admin.model.BuilderCompanyNames"%>
 <%@include file="../../head.jsp"%>
 <%@include file="../../leftnav.jsp"%>
-		<div class="main-content">
-			<div class="main-content-inner">
-				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
-						</li>
+<div class="main-content">
+	<div class="main-content-inner">
+		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+			<ul class="breadcrumb">
+				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
+				</li>
 
-						<li><a href="#">Forms</a></li>
-						<li class="active">New Builder</li>
-					</ul>
-					<!-- /.breadcrumb -->
+				<li><a href="#">Forms</a></li>
+				<li class="active">New Builder</li>
+			</ul>
+			<!-- /.breadcrumb -->
 
-				</div>
-<input type="hidden" value="" name="builder_id" id="builder_id">
-				<div class="page-content">
-					<div class="page-header">
-						<h1>New Builder</h1>
+		</div>
+		<input type="hidden" value="" name="builder_id" id="builder_id">
+		<div class="page-content">
+			<div class="page-header">
+				<h1>New Builder</h1>
+			</div>
+			<!-- /.page-header -->
+		
+		<div class="row">
+			<div class="col-xs-12">
+				<!-- PAGE CONTENT BEGINS -->
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right"
+						for="form-field-1">Builder Name </label>
+		
+					<div class="col-sm-9">
+						<input type="text" id="bname" placeholder="Builder Name"
+							class="col-xs-10 col-sm-5" />
 					</div>
-					<!-- /.page-header -->
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right"
+						for="form-field-1">Status </label>
+					<div class="col-sm-4">
+		             	<select name="status" id="status" class="form-control">
+							<option value="1"> Active </option>
+							<option value="0"> Inactive </option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right"
+						for="form-field-1" for="form-field-11">Head Office</label>
+					<div class="col-sm-4">
+						<textarea id="hoffice"
+							class="autosize-transition form-control"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right"
+						for="form-field-1"> Phone Number </label>
+		
+					<div class="col-sm-9">
+						<input type="text" id="hphno"
+							placeholder="Phone Numbers" class="col-xs-10 col-sm-5" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right"
+						for="form-field-1"> Email </label>
+		
+					<div class="col-sm-9">
+						<input type="text" id="hemail" placeholder="Email ids"
+							class="col-xs-10 col-sm-5" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right"
+						for="form-field-1" for="form-field-11">About Builder</label>
+					<div class="col-sm-4">
+						<textarea id="abuilder"
+							class="autosize-transition form-control"></textarea>
+					</div>
+				</div>
+				<hr>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right"
+						for="form-field-1">Company Name </label>
+		
+					<div class="col-sm-9">
+						<input type="text" id="cname-1" name="cname[]"
+							placeholder="Company Name" class="col-xs-10 col-sm-5" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right"
+						for="form-field-1">Contact </label>
+		
+					<div class="col-sm-9">
+						<input type="text" id="contact-1" name="contact[]"
+							placeholder="Contact number" class="col-xs-10 col-sm-5" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right"
+						for="form-field-1">Email </label>
+		
+					<div class="col-sm-9">
+						<input type="text" id="cemail-1" name="email[]" placeholder="Email"
+							class="col-xs-10 col-sm-5" />
+					</div>
+				</div>
+				<div id="addCompanyName"></div>
+		
+				<div class="clearfix form-actions">
+		
+					<div class="col-md-offset-3 col-md-9">
+						 <input type="button" id="addBuilder" value="Add Company" onclick="javascript:addBuilderCompanyName()"
+							class="btn btn-info ">
+							
+						&nbsp; &nbsp; &nbsp;
+						<button id="saveBuilder" class="btn btn-info" type="button">
+							<i class="ace-icon fa fa-check bigger-110"></i> Submit
+						</button>
+		
+						&nbsp; &nbsp; &nbsp;
+						<button class="btn" type="reset">
+							<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+						</button>
+					</div>
+				</div>
+		
+		
+		
+			</form>
 
-					<div class="row">
-						<div class="col-xs-12">
-							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form">
-								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right"
-										for="form-field-1">Builder Name </label>
-
-									<div class="col-sm-9">
-										<input type="text" id="bname" placeholder="Builder Name"
-											class="col-xs-10 col-sm-5" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right"
-										for="form-field-1">Status </label>
-
-									<div class="col-sm-4">
-										
-                       		<select name="status" id="status" class="form-control">
-								<option value="1"> Active </option>
-								<option value="0"> Inactive </option>
-							</select>
-									</div>
-								</div>
-								    	
-								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right"
-										for="form-field-1" for="form-field-11">Head Office</label>
-									<div class="col-sm-4">
-										<textarea id="hoffice"
-											class="autosize-transition form-control"></textarea>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right"
-										for="form-field-1"> Phone Number </label>
-
-									<div class="col-sm-9">
-										<input type="text" id="hphno"
-											placeholder="Phone Numbers" class="col-xs-10 col-sm-5" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right"
-										for="form-field-1"> Email </label>
-
-									<div class="col-sm-9">
-										<input type="text" id="hemail" placeholder="Email ids"
-											class="col-xs-10 col-sm-5" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right"
-										for="form-field-1" for="form-field-11">About Builder</label>
-									<div class="col-sm-4">
-										<textarea id="abuilder"
-											class="autosize-transition form-control"></textarea>
-									</div>
-								</div>
-								<hr>
-								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right"
-										for="form-field-1">Company Name </label>
-
-									<div class="col-sm-9">
-										<input type="text" id="cname-1" name="cname[]"
-											placeholder="Company Name" class="col-xs-10 col-sm-5" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right"
-										for="form-field-1">Contact </label>
-
-									<div class="col-sm-9">
-										<input type="text" id="contact-1" name="contact[]"
-											placeholder="Contact number" class="col-xs-10 col-sm-5" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right"
-										for="form-field-1">Email </label>
-
-									<div class="col-sm-9">
-										<input type="text" id="cemail-1" name="email[]" placeholder="Email"
-											class="col-xs-10 col-sm-5" />
-									</div>
-								</div>
-								<div id="addCompanyName"></div>
-
-								<div class="clearfix form-actions">
-
-									<div class="col-md-offset-3 col-md-9">
-										 <input type="button" id="addBuilder" value="Add Company" onclick="javascript:addBuilderCompanyName()"
-											class="btn btn-info ">
-											
-										&nbsp; &nbsp; &nbsp;
-										<button id="saveBuilder" class="btn btn-info" type="button">
-											<i class="ace-icon fa fa-check bigger-110"></i> Submit
-										</button>
-
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn" type="reset">
-											<i class="ace-icon fa fa-undo bigger-110"></i> Reset
-										</button>
-									</div>
-								</div>
-
-
-
-							</form>
-
-						<%@include file="../../footer.jsp"%>
-						<!-- inline scripts related to this page -->
-						<script type="text/javascript">
+<%@include file="../../footer.jsp"%>
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
 			
 				
 			function ValidateEmail(email) {
@@ -249,11 +246,9 @@
 			company ={name : cname, contact:ccontact,email:cemail}
 			  contact_company.push(company);  
 		  }
-		
 		  return contact_company;
 		    	
 		    }
-		    
 		    function clearAllFields(){
 		    	 for(var i=1;i<=batch_count;i++){
 		    		 $("#cname-"+i).val("");
