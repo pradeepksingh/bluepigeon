@@ -157,7 +157,7 @@ public class CampaignDAO {
 	 * @return campaign list
 	 */
 	public List<CampaignList> getCampaignList(){
-		List<CampaignList> campaignLists = new ArrayList<>();
+		List<CampaignList> campaignLists = new ArrayList<CampaignList>();
 		String hql = "from Campaign";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -181,7 +181,7 @@ public class CampaignDAO {
 	 * @return campaign list
 	 */
 	public List<CampaignList> getCampaignListByBuilderId(int builderId){
-		List<CampaignList> campaignLists = new ArrayList<>();
+		List<CampaignList> campaignLists = new ArrayList<CampaignList>();
 		String hql = "from Campaign where builderProject.builder.id = :builder_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();

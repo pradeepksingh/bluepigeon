@@ -1,3 +1,9 @@
+input[type="checkbox"] {
+   margin: 4px 0 0; !important
+   margin-top: 1px \9;
+   line-height: normal;
+   width: 50px; !important
+}
 .padtop1{
      padding-top: 30%;
 }

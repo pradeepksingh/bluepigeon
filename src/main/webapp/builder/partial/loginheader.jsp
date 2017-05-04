@@ -21,7 +21,7 @@
     <script src="plugins/bower_components/styleswitcher/jQuery.style.switcher.js"></script>
 <nav class="navbar navbar-default navbar-static-top m-b-0">
             <div class="navbar-header">
-                <div class="top-left-part"><a class="logo" href="index.jsp"><b><img src="plugins/images/eliteadmin-logo.png" alt="logo" /></b><span class="hidden-xs"><strong>Blue</strong>Pigeon</span></a></div>
+                <div class="top-left-part"><a class="logo" href="index.jsp"><b><img src="plugins/images/bpadmin-logo.png" alt="logo" width="100px" height="60px"/></b><span class="hidden-xs"></a></div>
                 <ul class="nav navbar-top-links navbar-left hidden-xs">
                 </ul>
             </div>
