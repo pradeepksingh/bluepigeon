@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="css/custom1.css" />
  <script src="bootstrap/dist/js/tether.min.js"></script>
     <script src="bootstrap/dist/js/bootstrap.min.js"></script>
        <script src="plugins/bower_components/bootstrap-extension/js/bootstrap-extension.min.js"></script>

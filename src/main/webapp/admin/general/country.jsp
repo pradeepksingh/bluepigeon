@@ -150,9 +150,6 @@ function editCountry(countryid) {
 		$("#editCountry").modal('show');
 	},'html');
 }
-function hello(){
-	alert("Hi");
-}
 
 function updateCountry() {
 	$.post("${baseUrl}/webapi/general/country/update/",{ id: $("#ucountry_id").val(), name: $("#uname").val(), status: $("#ustatus").val(), sortOrder:1}, function(data){

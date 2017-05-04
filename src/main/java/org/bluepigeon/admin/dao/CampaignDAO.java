@@ -124,6 +124,8 @@ public class CampaignDAO {
 			}
 			buyerFlatLists.add(buyerFlatList);		
 		}
+		session.close();
+		buyerSession.close();
 		return buyerFlatLists;
 	}
 	/**
@@ -146,6 +148,7 @@ public class CampaignDAO {
 			b.setName(buyer.getName());
 			buyerList.add(b);
 		}
+		session.close();
 		return buyerList;
 	}
 	/**
@@ -160,6 +163,7 @@ public class CampaignDAO {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		List<Campaign> campaigns = query.list();
+		session.close();
 		for(Campaign campaign : campaigns){
 			CampaignList campaignList = new CampaignList();
 			campaignList.setCampaignId(campaign.getId());
@@ -192,6 +196,7 @@ public class CampaignDAO {
 			campaignList.setSetdate(campaign.getSetDate());
 			campaignLists.add(campaignList);
 		}
+		session.close();
 		return campaignLists;
 	}
 	public ResponseMessage saveCampaign(Campaign campaign){

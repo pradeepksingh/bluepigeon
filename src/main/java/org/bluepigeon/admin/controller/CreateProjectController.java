@@ -900,11 +900,8 @@ public class CreateProjectController {
 	@Path("/builder/project/satges/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addBuilderOverallProjectStagesAndSubStages(@FormParam("name") String name,
-			@FormParam("stock") String sstatus) {
+			@FormParam("status") byte status) {
 		BuilderOverallProjectStagesAndSubStages buildingAmenetiesType = new BuilderOverallProjectStagesAndSubStages();
-		byte status = 0;
-		if (sstatus.equals("Yes"))
-			status = 1;
 		buildingAmenetiesType.setName(name);
 		buildingAmenetiesType.setStatus(status);
 		BuilderOverallProjectStagesAndSubStagesDAO stateImp = new BuilderOverallProjectStagesAndSubStagesDAO();
@@ -915,10 +912,8 @@ public class CreateProjectController {
 	@Path("/builder/project/satges/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuilderOverallProjectStagesAndSubStages(@FormParam("id") int id,
-			@FormParam("name") String name, @FormParam("stock") String sstatus) {
-		byte status = 0;
-		if (sstatus.equals("Yes"))
-			status = 1;
+			@FormParam("name") String name, @FormParam("status") byte status) {
+		
 		BuilderOverallProjectStagesAndSubStages state = new BuilderOverallProjectStagesAndSubStages();
 		state.setId(id);
 		state.setName(name);

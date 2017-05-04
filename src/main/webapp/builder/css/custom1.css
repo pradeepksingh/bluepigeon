@@ -1,0 +1,10 @@
+.padtop1{
+     padding-top: 30%;
+}
+
+.loginbgimg{
+    background-image: url("../plugins/images/loginbg.png");
+    background-size: 100% 100%;
+    height: 575px;
+    background-repeat: no-repeat;
+}
