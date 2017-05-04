@@ -22,7 +22,7 @@
     <script>
     $(function() {
      
-        $("#header").load("partial/header1.jsp");
+        $("#header").load("partial/recoverheader.jsp");
 
         $("#footer").load("partial/footer.html");
     });
@@ -53,28 +53,25 @@
         
         <div class="form-group">
           <div class="col-xs-12">
-            <input class="form-control" type="password" required="" placeholder="Old Password">
+            <input class="form-control"  id="opassword" type="password" required="" placeholder="Old Password">
           </div>
         </div>
          <div class="form-group">
           <div class="col-xs-12">
-            <input class="form-control" type="password" required="" placeholder="New Password">
+            <input class="form-control" id="npassword" type="password" required="" placeholder="New Password">
           </div>
         </div>
          <div class="form-group">
           <div class="col-xs-12">
-            <input class="form-control" type="password" required="" placeholder="Confirm Password">
+            <input class="form-control" id="cpassword" type="password" required="" placeholder="Confirm Password">
           </div>
         </div>
-     
         <div class="form-group text-center m-t-20">
           <div class="col-xs-12">
-            <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Reset Password</button>
+            <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" id="updatepassword" type="button">Reset Password</button>
           </div>
         </div>
-       
       </form>
-   
     </div>
    </center>
   </div>

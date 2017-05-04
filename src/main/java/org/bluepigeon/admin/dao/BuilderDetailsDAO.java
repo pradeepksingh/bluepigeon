@@ -48,7 +48,6 @@ public class BuilderDetailsDAO {
 				Session session2 = hibernateUtil.openSession();
 				session2.beginTransaction();
 				
-				
 				Iterator<BuilderCompanyNames> sIterator = builderCompanyNames.iterator();
 				while(sIterator.hasNext())
 				{
@@ -58,9 +57,6 @@ public class BuilderDetailsDAO {
 				}
 				session2.getTransaction().commit();
 				session2.close();
-				
-				
-				
 				response.setStatus(1);
 				response.setMessage("Builder added Successfully");
 				}
@@ -206,6 +202,8 @@ public class BuilderDetailsDAO {
 			Query query = updatePasswordSession.createQuery(hql);
 			query.setParameter("password", newPassword);
 			query.setParameter("id", builder.getId());
+			System.out.println("Password in DB ::: "+oldPassword);
+			System.out.println("New Password ::: "+newPassword);
 			int result = query.executeUpdate();
 			updatePasswordSession.getTransaction().commit();
 			System.out.println("Rows affected: " + result);

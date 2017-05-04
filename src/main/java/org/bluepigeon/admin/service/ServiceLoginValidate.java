@@ -142,13 +142,16 @@ public class ServiceLoginValidate implements ServiceLoginDAO {
 			LoginValidationImp loginValidationImp = new LoginValidationImp();
 			if(loginValidationImp.isValidBuilderEmailId(registration.getEmail()))
 			{
-				List<Builder> emailList = loginValidationImp.getBuilderByEmail(registration.getEmail());
-				if(emailList.size() > 0)
+				Builder emailList = loginValidationImp.getBuilderByEmail(registration.getEmail());
+				if(emailList != null)
 				{
 					ubuilder = new Builder();
-					ubuilder = emailList.get(0);
+					ubuilder = emailList;
+					System.out.println("Builder Password :::: "+registration.getPassword());
+					System.out.println("DB Builder Password :::: "+ubuilder.getPassword());
 					if(ubuilder.getPassword().equals(registration.getPassword()))
 					{
+						System.out.println(":::::::::::::::Builder Builder Password ::::::::::");
 						System.out.println("DB PASS:"+ubuilder.getPassword());
 						System.out.println("Input PASS: "+registration.getPassword());
 						if(ubuilder.getLoginStatus()==1)

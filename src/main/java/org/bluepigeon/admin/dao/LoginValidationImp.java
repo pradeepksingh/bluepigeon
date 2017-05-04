@@ -112,18 +112,18 @@ public class LoginValidationImp implements LoginValidateDAO{
 		return result;
 	}
 
-	/***************************************buider login *********************************/
+	/***************************************builder login *********************************/
 	@Override
-	public List<Builder> getBuilderByEmail(String email) {
+	public Builder getBuilderByEmail(String email) {
 		String hql = "from Builder a where a.email =  :email1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		
 		query.setString("email1", email);
-		List<Builder> result = query.list();
+		Builder result = (Builder)query.list().get(0);
 		session.close();
-		System.out.println("Email Id DB :: "+result.get(0).getEmail());
+		System.out.println("Email Id DB :: "+result.getEmail());
 		return result;
 		
 	}

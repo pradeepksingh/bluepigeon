@@ -174,7 +174,7 @@ public class LoginController {
 	@Path("/builder/password")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuilderPassword(@FormParam("oldpassword") String oldPassword,@FormParam("password") String password){
-		
+		System.out.println("Input password :: "+oldPassword);
 		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
 		return builderDetailsDAO.updateBuilderPassword(oldPassword,password);
 	}
