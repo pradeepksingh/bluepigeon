@@ -15,6 +15,7 @@
 <!-- Custom CSS -->
 <link href="css/style.css" rel="stylesheet">
 <link href="css/custom.css" rel="stylesheet">
+<link href="css/custom1.css" rel="stylesheet">
 <!-- color CSS -->
 <link href="css/colors/default.css" id="theme"  rel="stylesheet">
 
@@ -54,7 +55,8 @@
 	
 	
       <form class="form-horizontal form-material" id="loginform" action="">
-        <h3 class="box-title m-b-20">Blue Pigeon</h3>
+        <h2 class="box-title m-b-20">Blue Pigeon</h2>
+        <br>
         <div class="form-group ">
           <div class="col-xs-12">
             <input class="form-control" name="bname" id="bname" type="text" required="" placeholder="Username">

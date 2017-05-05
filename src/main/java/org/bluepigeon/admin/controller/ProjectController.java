@@ -20,8 +20,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.bluepigeon.admin.dao.BuilderCompanyDAO;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
+import org.bluepigeon.admin.dao.CityNamesImp;
+import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
+import org.bluepigeon.admin.dao.StateImp;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.ProjectDetail;
 import org.bluepigeon.admin.data.ProjectList;
@@ -38,6 +42,7 @@ import org.bluepigeon.admin.model.BuilderBuildingAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderBuildingFlatType;
 import org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom;
 import org.bluepigeon.admin.model.BuilderBuildingStatus;
+import org.bluepigeon.admin.model.BuilderCompany;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderFlatAmenity;
@@ -2287,6 +2292,83 @@ public class ProjectController extends ResourceConfig {
 		builderLead.setStatus(status);
 		builderLead.setAddedBy(added_by);
 		ResponseMessage resp = new ProjectDAO().updateProjectLead(builderLead);
+		return resp;
+	}
+	
+	@POST
+	@Path("/new")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage newProject(
+			@FormParam("builder_id") int builder_id, 
+			@FormParam("name") String name,
+			@FormParam("locality_id") int locality_id
+	) {
+		
+		System.err.println("Hi builder");
+		System.err.println("Builder id "+builder_id);
+		System.err.println("name "+name);
+		System.err.println("locality_id : "+locality_id);
+		Byte status = 1;
+		Short unit = 1;
+		int stateId = 0;
+		int cityId = 0;
+		int countryId = 0;
+		Builder builder = new Builder();
+		builder.setId(builder_id);
+		Locality locality = new Locality();
+		BuilderProject builderProject = new BuilderProject();
+		locality.setId(locality_id);
+		if(locality_id > 0){
+			City city = new City(); 
+			Locality localities = new LocalityNamesImp().getCityById(locality_id);
+			cityId = localities.getCity().getId();
+			city.setId(cityId);
+			builderProject.setCity(city);
+		}
+		if(cityId > 0){
+			State state = new State();
+			List<City> city = new CityNamesImp().getCityById(cityId);
+			stateId = city.get(0).getState().getId();
+			state.setId(stateId);
+			builderProject.setState(state);
+		}
+		if(stateId > 0){
+			Country country = new Country();
+			List<State> state_list = new StateImp().getStateById(stateId);
+			countryId = state_list.get(0).getCountry().getId();
+			country.setId(countryId);
+			builderProject.setCountry(country);
+		}
+		BuilderCompanyNames builderCompanyNames = new BuilderCompanyNames();
+		List<BuilderCompanyNames> list = new BuilderDetailsDAO().getAllBuilderCompanyNameByBuilderId(builder_id);
+		int companyId = list.get(0).getId();
+		builderCompanyNames.setId(companyId);
+		builderProject.setBuilderCompanyNames(builderCompanyNames);
+		AreaUnit areaUnit = new AreaUnit();
+		areaUnit.setId(unit);
+		AdminUser adminUser =new AdminUser();
+		adminUser.setId(1);
+		builderProject.setAdminUser(adminUser);
+		
+		builderProject.setAddr1("");
+		builderProject.setAddr2("");
+		builderProject.setPincode("");
+		builderProject.setPossessionDate(null);
+		builderProject.setDescription("");
+		builderProject.setHighlights("");
+		builderProject.setInventorySold(0.0);
+		builderProject.setLatitude("");
+		builderProject.setLongitude(null);
+		builderProject.setRevenue(0.0);
+		builderProject.setTotalInventory(0.0);
+		builderProject.setLaunchDate(null);
+		builderProject.setName(name);
+		builderProject.setBuilder(builder);
+		builderProject.setLocality(locality);
+		builderProject.setProjectArea(0.0);
+		builderProject.setStatus(status);
+		builderProject.setAreaUnit(areaUnit);
+		ResponseMessage resp = new ProjectDAO().saveProject(builderProject); 
 		return resp;
 	}
 }

@@ -112,7 +112,7 @@
 			<div class="page-header">
 				<h1>
 					Project Update 
-					<span class="pull-right"><a href="${baseUrl}/admin/project/list.jsp" class="btn btn-default btn-sm"> << Project List</a></span>
+					<span class="pull-right"><a href="${baseUrl}/bluepigeon/builder/project/list.jsp" class="btn btn-default btn-sm"> << Project List</a></span>
 				</h1>
 			</div>
 			<ul class="nav nav-tabs">
@@ -395,7 +395,7 @@
 																<input type="checkbox" name="property_type[]" value="<% out.print(builderPropertyType.getId());%>" <% out.print(is_checked); %>/> <% out.print(builderPropertyType.getName());%>
 															</div>
 															<div>
-																<input type="text" class="form-control" id="property_type<% out.print(builderPropertyType.getId());%>" name="property_type<% out.print(builderPropertyType.getId());%>" value="<% out.print(prop_value); %>" placeholder="No. Of <% out.print(builderPropertyType.getName());%>"/>
+																<input type="hidden" class="form-control" id="property_type<% out.print(builderPropertyType.getId());%>" name="property_type<% out.print(builderPropertyType.getId());%>" value="<% out.print(prop_value); %>" placeholder="No. Of <% out.print(builderPropertyType.getName());%>"/>
 															</div>
 														</div>
 														<% } %>
@@ -1087,9 +1087,9 @@ $("#country_id").change(function(){
 $("#state_id").change(function(){
 	if($("#state_id").val() != "") {
 		$.get("${baseUrl}/webapi/general/city/list",{ state_id: $("#state_id").val() }, function(data){
-			var html = '<option value="">Select City</optio>';
+			var html = '<option value="">Select City</option>';
 			$(data).each(function(index){
-				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
+				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 			});
 			$("#city_id").html(html);
 		},'json');
