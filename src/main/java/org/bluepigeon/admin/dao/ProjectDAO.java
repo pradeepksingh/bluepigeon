@@ -86,6 +86,7 @@ public class ProjectDAO {
 			AreaUnit areaUnit = new AreaUnit();
 			areaUnit.setId(builderProject.getAreaUnit().getId());
 			builderProjectPriceInfo.setAreaUnit(areaUnit);
+			builderProjectPriceInfo.setTenure(0);
 			builderProjectPriceInfo.setBuilderProject(builderProject);
 			Session newsession1 = hibernateUtil.openSession();
 			newsession1.beginTransaction();
