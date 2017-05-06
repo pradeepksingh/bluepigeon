@@ -2304,71 +2304,48 @@ public class ProjectController extends ResourceConfig {
 			@FormParam("locality_id") int locality_id
 	) {
 		
-		System.err.println("Hi builder");
-		System.err.println("Builder id "+builder_id);
-		System.err.println("name "+name);
-		System.err.println("locality_id : "+locality_id);
-		Byte status = 1;
-		Short unit = 1;
-		int stateId = 0;
-		int cityId = 0;
-		int countryId = 0;
+		ResponseMessage resp = new ResponseMessage();
+		AdminUser adminUser = new AdminUser();
+		adminUser.setId(1);
+		Short areaunit = 1;
+		Byte status = 0;
+		AreaUnit areaUnit = new AreaUnit();
+		areaUnit.setId(areaunit);
+		Locality locality = new Locality();
+		locality.setId(locality_id);
+		Locality newLocality = new LocalityNamesImp().getLocality(locality_id);
+		City city = newLocality.getCity();
+		State state = newLocality.getCity().getState();
+		Country country = newLocality.getCity().getState().getCountry();
 		Builder builder = new Builder();
 		builder.setId(builder_id);
-		Locality locality = new Locality();
-		BuilderProject builderProject = new BuilderProject();
-		locality.setId(locality_id);
-		if(locality_id > 0){
-			City city = new City(); 
-			Locality localities = new LocalityNamesImp().getCityById(locality_id);
-			cityId = localities.getCity().getId();
-			city.setId(cityId);
-			builderProject.setCity(city);
-		}
-		if(cityId > 0){
-			State state = new State();
-			List<City> city = new CityNamesImp().getCityById(cityId);
-			stateId = city.get(0).getState().getId();
-			state.setId(stateId);
-			builderProject.setState(state);
-		}
-		if(stateId > 0){
-			Country country = new Country();
-			List<State> state_list = new StateImp().getStateById(stateId);
-			countryId = state_list.get(0).getCountry().getId();
-			country.setId(countryId);
-			builderProject.setCountry(country);
-		}
-		BuilderCompanyNames builderCompanyNames = new BuilderCompanyNames();
-		List<BuilderCompanyNames> list = new BuilderDetailsDAO().getAllBuilderCompanyNameByBuilderId(builder_id);
-		int companyId = list.get(0).getId();
-		builderCompanyNames.setId(companyId);
-		builderProject.setBuilderCompanyNames(builderCompanyNames);
-		AreaUnit areaUnit = new AreaUnit();
-		areaUnit.setId(unit);
-		AdminUser adminUser =new AdminUser();
-		adminUser.setId(1);
-		builderProject.setAdminUser(adminUser);
+		BuilderCompanyNames builderCompanyNames = new BuilderDetailsDAO().getAllBuilderCompanyNameByBuilderId(builder_id).get(0);
 		
+		BuilderProject builderProject = new BuilderProject();
 		builderProject.setAddr1("");
 		builderProject.setAddr2("");
-		builderProject.setPincode("");
-		builderProject.setPossessionDate(null);
+		builderProject.setAdminUser(adminUser);
+		builderProject.setAreaUnit(areaUnit);
+		builderProject.setBuilder(builder);
+		builderProject.setBuilderCompanyNames(builderCompanyNames);
+		builderProject.setCity(city);
+		builderProject.setCountry(country);
 		builderProject.setDescription("");
 		builderProject.setHighlights("");
 		builderProject.setInventorySold(0.0);
 		builderProject.setLatitude("");
-		builderProject.setLongitude(null);
-		builderProject.setRevenue(0.0);
-		builderProject.setTotalInventory(0.0);
 		builderProject.setLaunchDate(null);
-		builderProject.setName(name);
-		builderProject.setBuilder(builder);
 		builderProject.setLocality(locality);
+		builderProject.setLongitude("");
+		builderProject.setName(name);
+		builderProject.setPincode("");
+		builderProject.setPossessionDate(null);
 		builderProject.setProjectArea(0.0);
+		builderProject.setRevenue(0.0);
+		builderProject.setState(state);
+		builderProject.setTotalInventory(0.0);
 		builderProject.setStatus(status);
-		builderProject.setAreaUnit(areaUnit);
-		ResponseMessage resp = new ProjectDAO().saveProject(builderProject); 
+		resp = new ProjectDAO().saveProject(builderProject); 
 		return resp;
 	}
 }
