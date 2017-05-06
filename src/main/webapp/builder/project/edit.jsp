@@ -205,7 +205,7 @@
 	                              <div id="vimessages" class="tab-pane active" aria-expanded="false">
 	                                <div class="col-12">
 	                                <form id="basicfrm" name="basicfrm" method="post">
-	                                
+	                                <input type="hidden" name="project_id" value="<% out.print(project_id);%>"/>
 	                                <div class="form-group row">
 	                                    <label for="example-text-input" class="col-3 col-form-label">Builder Group*</label>
 	                                    <div class="col-3">
