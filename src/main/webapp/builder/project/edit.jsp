@@ -127,20 +127,9 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-    
+	<![endif]-->
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-  
-     <script> 
- 
-$(function(){
-$("#sidebar1").load("../partial/sidebar.jsp");
-  $("#header").load("../partial/header1.jsp"); 
-
-  $("#footer").load("../partial/footer.html"); 
-});
-</script>
 <script type="text/javascript">
     $('input[type=checkbox]').click(function(){
     if($(this).is(':checked')){
@@ -161,10 +150,14 @@ $("#sidebar1").load("../partial/sidebar.jsp");
     </div>
     <div id="wrapper">
         <!-- Top Navigation -->
-        <div id="header"></div>
+        <div id="header">
+        <%@include file="../partial/header.jsp"%>
+        </div>
         <!-- End Top Navigation -->
         <!-- Left navbar-header -->
-       <div id="sidebar1"> </div>
+       <div id="sidebar1"> 
+       <%@include file="../partial/sidebar.jsp"%>
+       </div>
     
         <!-- Left navbar-header end -->
         <!-- Page Content -->
@@ -804,7 +797,9 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                      </div>
                  </div>
              </div>
-                
+         	<div id="sidebar1"> 
+		       <%@include file="../partial/footer.jsp"%>
+			</div>   
                 
                 <!-- /.row -->
                 <!-- .row -->
