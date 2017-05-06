@@ -993,6 +993,16 @@ public class ProjectController extends ResourceConfig {
 	}
 	
 	@GET
+	@Path("/offer/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteProjectOfferInfo(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		msg = projectDAO.deleteProjectOfferInfo(id);
+		return msg;
+	}
+	
+	@GET
 	@Path("/building/names/{project_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuilderBuilding> getProjectBuildingNames(@PathParam("project_id") int project_id) {

@@ -130,17 +130,17 @@
 	<![endif]-->
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript">
-    $('input[type=checkbox]').click(function(){
-    if($(this).is(':checked')){
-          var tb = $('<input type=text />');    
-          $(this).after(tb)  ;
-    }
-    else if($(this).siblings('input[type=text]').length>0){
-        $(this).siblings('input[type=text]').remove();
-    }
-})
-</script>
+	<script type="text/javascript">
+	    $('input[type=checkbox]').click(function(){
+	    if($(this).is(':checked')){
+	          var tb = $('<input type=text />');    
+	          $(this).after(tb)  ;
+	    }
+	    else if($(this).siblings('input[type=text]').length>0){
+	        $(this).siblings('input[type=text]').remove();
+	    }
+	})
+	</script>
 </head>
 
 <body class="fix-sidebar">
@@ -158,429 +158,453 @@
        <div id="sidebar1"> 
        <%@include file="../partial/sidebar.jsp"%>
        </div>
-    
-        <!-- Left navbar-header end -->
-        <!-- Page Content -->
         <div id="page-wrapper" style="min-height: 2038px;">
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                         <h4 class="page-title">Update Project</h4>
                     </div>
-                  
-                    <!-- /.col-lg-12 -->
                 </div>
-             
-        
-
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
                              <h4 class="page-title">Update Project</h4>
                              <br>
-                                <ul class="nav tabs-horizontal">
-                                    <li class="tab nav-item" aria-expanded="false">
-                                        <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"> <span>Basic Information</span></a>
-                                    </li>
-                                     <li class="tab nav-item">
-                                        <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages1"><span>Project Details</span></a>
-                                    </li>
-                                    <li class="tab nav-item">
-                                        <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages2"><span>Pricing Details</span></a>
-                                    </li>
+                             <ul class="nav tabs-horizontal">
+                                 <li class="tab nav-item" aria-expanded="false">
+                                     <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"> <span>Basic Information</span></a>
+                                 </li>
+                                  <li class="tab nav-item">
+                                     <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages1"><span>Project Details</span></a>
+                                 </li>
+                                 <li class="tab nav-item">
+                                     <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages2"><span>Pricing Details</span></a>
+                                 </li>
 <!--                                      <li class="tab nav-item"> -->
 <!--                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages3"><span>Payment Schedules</span></a> -->
 <!--                                     </li> -->
-                                    <li class="tab nav-item">
-                                        <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages4"><span>Offers</span></a>
-                                    </li>
-                                    <!--   <li class="tab nav-item">
-                                        <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a>
-                                    </li>-->
-                                </ul>
-                                
-                                
+                                 <li class="tab nav-item">
+                                     <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages4"><span>Offers</span></a>
+                                 </li>
+                                 <!--   <li class="tab nav-item">
+                                     <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a>
+                                 </li>-->
+                             </ul>
                               <div class="tab-content"> 
-                              
 	                              <div id="vimessages" class="tab-pane active" aria-expanded="false">
 	                                <div class="col-12">
-	                                <form id="basicfrm" name="basicfrm" method="post">
-	                                <input type="hidden" name="project_id" value="<% out.print(project_id);%>"/>
-	                                <div class="form-group row">
-	                                    <label for="example-text-input" class="col-3 col-form-label">Builder Group*</label>
-	                                    <div class="col-3">
-	                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
-	                                        <select id="builder_id" name="builder_id" class="form-control">
-												<option value="">Select Builder Group</option>
-<%-- 												<% for (Builder builder : builders) { %> --%>
-<%-- 												<option value="<%out.print(builder.getId());%>" <% if(builderProject.getBuilder().getId() ==  builder.getId()) { %>selected<% } %>> <% out.print(builder.getName()); %> </option> --%>
-<%-- 												<% } %> --%>
-												<option value="<%out.print(adminuserproject.getId()); %>" selected><%out.print(adminuserproject.getName()); %>
-											</select>
-	                                    </div>
-	<!--                                     <div class="messageContainer"></div> -->
-	                                    <label for="example-text-input" class="col-3 col-form-label">Builder Company*</label>
-	                                    <div class="col-3">
-	                                       <select id="company_id" name="company_id" class="form-control">
-												<option value="">Select Builder Company</option>
-												<% for (Builder builder : builders) { %>
-												<% for (BuilderCompanyNames builderCompanyNames : builder.getBuilderCompanyNameses()) { %>
-												<% if(builderProject.getBuilder().getId() ==  builder.getId()) { %>
-												<option value="<%out.print(builderCompanyNames.getId());%>" <% if(builderProject.getBuilderCompanyNames().getId() ==  builderCompanyNames.getId()) { %>selected<% } %>> <% out.print(builderCompanyNames.getName()); %> </option>
-												<% } %>
-												<% } %>
-												<% } %>
-											</select>
-	                                    </div>
-	<!--                                     <div class="messageContainer"></div> -->
-	                                </div>
+		                                <form id="basicfrm" name="basicfrm" method="post">
+		                                <input type="hidden" id="id" name="id" value="<% out.print(project_id);%>"/>
+			                                <div class="form-group row">
+			                                    <label for="example-text-input" class="col-3 col-form-label">Builder Group*</label>
+			                                    <div class="col-3">
+			                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
+			                                        <select id="builder_id" name="builder_id" class="form-control">
+														<option value="">Select Builder Group</option>
+		<%-- 												<% for (Builder builder : builders) { %> --%>
+		<%-- 												<option value="<%out.print(builder.getId());%>" <% if(builderProject.getBuilder().getId() ==  builder.getId()) { %>selected<% } %>> <% out.print(builder.getName()); %> </option> --%>
+		<%-- 												<% } %> --%>
+														<option value="<%out.print(adminuserproject.getId()); %>" selected><%out.print(adminuserproject.getName()); %>
+													</select>
+			                                    </div>
+			<!--                                     <div class="messageContainer"></div> -->
+			                                    <label for="example-text-input" class="col-3 col-form-label">Builder Company*</label>
+			                                    <div class="col-3">
+			                                       <select id="company_id" name="company_id" class="form-control">
+														<option value="">Select Builder Company</option>
+														<% for (Builder builder : builders) { %>
+														<% for (BuilderCompanyNames builderCompanyNames : builder.getBuilderCompanyNameses()) { %>
+														<% if(builderProject.getBuilder().getId() ==  builder.getId()) { %>
+														<option value="<%out.print(builderCompanyNames.getId());%>" <% if(builderProject.getBuilderCompanyNames().getId() ==  builderCompanyNames.getId()) { %>selected<% } %>> <% out.print(builderCompanyNames.getName()); %> </option>
+														<% } %>
+														<% } %>
+														<% } %>
+													</select>
+			                                    </div>
+			<!--                                     <div class="messageContainer"></div> -->
+			                                </div>
+			                                
+			                                <div class="form-group row">
+			                                    <label for="example-search-input" class="col-3 col-form-label">Project Name*</label>
+			                                    <div class="col-3">
+			                                        <input class="form-control" type="text" id="name" name="name" value="<% out.print(builderProject.getName());%>">
+			                                    </div>
+			                                    <div class="messageContainer"></div>
+			                                    <label for="example-search-input" class="col-3 col-form-label">Landmark</label>
+			                                    <div class="col-3">
+			                                        <input class="form-control" type="text" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>">
+			                                    </div>
+			<!--                                     <div class="messageContainer"></div> -->
+			                                </div>
+			                                
+			                                 <div class="form-group row">
+			                                    <label for="example-tel-input" class="col-3 col-form-label">Sub Location</label>
+			                                    <div class="col-3">
+			                                        <input class="form-control" type="text" id="sublocation" name="sublocation" value="<% out.print(builderProject.getAddr2());%>">
+			                                    </div>
+			                                    <label for="example-tel-input" class="col-3 col-form-label">Country</label>
+			                                    <div class="col-3">
+			                                        <select name="country_id" id="country_id" class="form-control">
+													    <option value="">Select Country</option>
+									                    <% for(Country country : listCountry){ %>
+									                    <% 	if(builderProject.getCountry().getId() == country.getId()) { 
+									                    		states = country.getStates();
+									                    	}
+									                    %>
+														<option value="<% out.print(country.getId());%>" <% if(builderProject.getCountry().getId() == country.getId()) { %>selected<% } %>><% out.print(country.getName());%></option>
+														<% } %>
+										             </select>
+			                                    </div>
+			<!--                                     <div class="messageContainer"></div> -->
+			                                </div>
+			
+			                                <div class="form-group row">
+			                                    <label for="example-tel-input" class="col-3 col-form-label">State</label>
+			                                    <div class="col-3">
+			                                         <select name="state_id" id="state_id" class="form-control">
+									                    <option value="">Select State</option>
+									                    <% for(State state : states) { %>
+									                    <% 	if(builderProject.getState().getId() == state.getId()) {
+									                    		cities = state.getCities();
+									                    		out.print(state.getName());
+									                    	}
+									                    %>
+														<option value="<% out.print(state.getId());%>" <% if(builderProject.getState().getId() == state.getId()) { %>selected<% } %>><% out.print(state.getName());%></option>
+														<% } %>
+										          	</select>
+			                                    </div>
+			<!--                                     <div class="messageContainer"></div> -->
+			                                    <label for="example-tel-input" class="col-3 col-form-label">City</label>
+			                                    <div class="col-3">
+			                                         <select name="city_id" id="city_id" class="form-control">
+									                	<option value="">Select City</option>
+									                    <% for(City city : cities){ %>
+									                    <% 	if(builderProject.getCity().getId() == city.getId()) { 
+									                    		localities = city.getLocalities();
+									                    	}
+									                    %>
+														<option value="<% out.print(city.getId());%>" <% if(builderProject.getCity().getId() == city.getId()) { %>selected<% } %>><% out.print(city.getName());%></option>
+														<% } %>
+										          	</select>
+			                                    </div>
+			<!--                                     <div class="messageContainer"></div> -->
+			                                </div>
+			                                
+			                                <div class="form-group row">
+			                                    <label for="example-text-input" class="col-3 col-form-label">Locality</label>
+			                                    <div class="col-3">
+			                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
+			                                        <select name="locality_id" id="locality_id" class="form-control">
+									                	<option value="">Select Locality</option>
+									                	<% for(Locality locality : localities){ %>
+														<option value="<% out.print(locality.getId());%>" <% if(builderProject.getLocality().getId() == locality.getId()) { %>selected<% } %>><% out.print(locality.getName());%></option>
+														<% } %>
+										          	</select>
+												</div>
+			<!-- 									<div class="messageContainer"></div> -->
+			                                    <label for="example-text-input" class="col-3 col-form-label">Pincode</label>
+			                                    <div class="col-3">
+			                                        <input class="form-control" type="text" id="pincode" name="pincode" autocomplete="off" value="<% out.print(builderProject.getPincode());%>"/>
+			                                    </div>
+			<!--                                     <div class="messageContainer"></div> -->
+			                                </div>
+			                                
+			                                <div class="form-group row">
+			                                    <label for="example-search-input" class="col-3 col-form-label">Latitude</label>
+			                                    <div class="col-3">
+			                                        <input class="form-control" type="text" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
+			                                    </div>
+			<!--                                     <div class="messageContainer"></div> -->
+			                                    <label for="example-search-input" class="col-3 col-form-label">Longitude</label>
+			                                    <div class="col-3">
+			                                        <input class="form-control" type="text" id="longitude" name="longitude" autocomplete="off" value="<% out.print(builderProject.getLongitude());%>"/>
+			                                    </div>
+			<!--                                     <div class="messageContainer"></div> -->
+			                                </div>
+			                                
+			                                 <div class="form-group row">
+			                                    <label for="example-tel-input" class="col-3 col-form-label">Description</label>
+			                                    <div class="col-3">
+			                                        <textarea class="form-control" id="description" name="description"><% out.print(builderProject.getDescription());%></textarea>
+			                                    </div>
+			                                    <label for="example-tel-input" class="col-3 col-form-label">Highlight(USP)</label>
+			                                    <div class="col-3">
+			                                    	<textarea class="form-control" id="highlight" name="highlight"><% out.print(builderProject.getHighlights());%></textarea>
+			                                    </div>
+			<!--                                     <div class="messageContainer"></div> -->
+			                                </div>
+			                                
+			                                <div class="form-group row">
+			                                    <label for="example-search-input" class="col-3 col-form-label">Status</label>
+			                                    <div class="col-3">
+			                                        <select id="status" name="status" class="form-control">
+														<option value="0" <% if(builderProject.getStatus() == 0) { %>selected<% } %>>Inactive</option>
+														<option value="1" <% if(builderProject.getStatus() == 1) { %>selected<% } %>>Active</option>
+													</select>
+			                                    </div>
+			<!--                                     <div class="messageContainer"></div> -->
+			                                   <!--   <label for="example-search-input" class="col-3 col-form-label">Longitude</label>
+			                                    <div class="col-3">
+			                                        <input class="form-control" type="text" value="How do I shoot web" id="example-search-input">
+			                                    </div>-->
+			                                </div>
+		                                	<div class="offset-sm-5 col-sm-7">
+		                                        <button type="submit" name="basicbtn" class="btn btn-success btn-sm">Submit</button>
+		                                 	</div>
+		                               </form>
+	                               </div>
+                             </div>
+                             <div id="vimessages1" class="tab-pane" aria-expanded="false">
+	                          	 <form  id="detailfrm" name="detailfrm" method="post">
+	                               <div class="form-group row">
+	                                  <label for="example-text-input" class="col-3 col-form-label">Project Type*</label>
+	                                  <% 	for(BuilderProjectType builderProjectType : projectTypes) { 
+									String is_checked = "";
+									for(BuilderProjectProjectType projectProjectType :projectProjectTypes) {
+										if(builderProjectType.getId() == projectProjectType.getBuilderProjectType().getId()) {
+											is_checked = "checked";
+										}
+									}
+								%>
+	                                  <div class="col-9">
+	                                      <input type="checkbox" name="project_type[]" value="<% out.print(builderProjectType.getId());%>" <% out.print(is_checked); %>/> <% out.print(builderProjectType.getName());%>
+	                                  </div>
+	                                  <% } %>
+	                                  <% 	for(BuilderProjectAmenity projectAmenity : projectAmenities) { 
+										String is_checked = "";
+											for(BuilderProjectAmenityInfo projectAmenityInfo :projectAmenityInfos) {
+												if(projectAmenity.getId() == projectAmenityInfo.getBuilderProjectAmenity().getId()) {
+														is_checked = "checked";
+												}
+											}
+											Double amenity_wt = 0.0;
+											for(ProjectAmenityWeightage projectAmenityWeightage :amenityWeightages) {
+												if(projectAmenity.getId() == projectAmenityWeightage.getBuilderProjectAmenity().getId()) {
+														amenity_wt = projectAmenityWeightage.getAmenityWeightage();
+												}
+											}
+								%>
+									<input type="hidden" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(projectAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
+									
+								<% 	for(BuilderProjectAmenityStages bpaStages :projectAmenity.getBuilderProjectAmenityStageses()) { 
+										Double stage_wt = 0.0;
+										for(ProjectAmenityWeightage projectAmenityWeightage :amenityWeightages) {
+											if(bpaStages.getId() == projectAmenityWeightage.getBuilderProjectAmenityStages().getId()) {
+												stage_wt = projectAmenityWeightage.getStageWeightage();
+											}
+										}
+								%>
+								<% 	for(BuilderProjectAmenitySubstages bpaSubstage :bpaStages.getBuilderProjectAmenitySubstageses()) { 
+										Double substage_wt = 0.0;
+										for(ProjectAmenityWeightage projectAmenityWeightage :amenityWeightages) {
+											if(bpaSubstage.getId() == projectAmenityWeightage.getBuilderProjectAmenitySubstages().getId()) {
+												substage_wt = projectAmenityWeightage.getSubstageWeightage();
+											}
+										}
+								%>
+									<input name="stage_weightage<% out.print(projectAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="hidden" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/>
+									<input type="hidden" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+								<% 
+									}
+									}
+								}
+								%>
+								
+	                              </div><hr>
 	                                
 	                                <div class="form-group row">
-	                                    <label for="example-search-input" class="col-3 col-form-label">Project Name*</label>
-	                                    <div class="col-3">
-	                                        <input class="form-control" type="text" id="name" name="name" value="<% out.print(builderProject.getName());%>">
+	                                  <label for="example-text-input" class="col-3 col-form-label">Property Type*</label>
+	                                  <% 	for(BuilderPropertyType builderPropertyType : propertyTypes) { 
+											String is_checked = "";
+											int prop_value = 0;
+											for(BuilderProjectPropertyType projectPropertyType :projectPropertyTypes) {
+												if(builderPropertyType.getId() == projectPropertyType.getBuilderPropertyType().getId()) {
+													is_checked = "checked";
+													if(projectPropertyType.getValue() != null)
+													prop_value = projectPropertyType.getValue();
+												}
+											}
+										%>
+	                                    <div class="col-9">
+	                                        <input type="checkbox" name="property_type[]" value="<% out.print(builderPropertyType.getId());%>" <% out.print(is_checked); %>/> <% out.print(builderPropertyType.getName());%>
 	                                    </div>
-	                                    <div class="messageContainer"></div>
-	                                    <label for="example-search-input" class="col-3 col-form-label">Landmark</label>
-	                                    <div class="col-3">
-	                                        <input class="form-control" type="text" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>">
-	                                    </div>
-	<!--                                     <div class="messageContainer"></div> -->
-	                                </div>
 	                                
+	                                <%} %>
+	                                </div><hr>
 	                                 <div class="form-group row">
-	                                    <label for="example-tel-input" class="col-3 col-form-label">Sub Location</label>
-	                                    <div class="col-3">
-	                                        <input class="form-control" type="text" id="sublocation" name="sublocation" value="<% out.print(builderProject.getAddr2());%>">
+	                                    <label for="example-text-input" class="col-3 col-form-label">Configurations*</label>
+	                                    <% 	for(BuilderProjectPropertyConfiguration projectConfiguration : projectConfigurations) { 
+											String is_checked = "";
+											for(BuilderProjectPropertyConfigurationInfo projectConfigurationInfo :projectConfigurationInfos) {
+												if(projectConfiguration.getId() == projectConfigurationInfo.getBuilderProjectPropertyConfiguration().getId()) {
+													is_checked = "checked";
+												}
+											}
+										%>
+	                                    <div class="col-9">
+	                                        <input type="checkbox" name="configuration[]" value="<% out.print(projectConfiguration.getId());%>" <% out.print(is_checked); %>/> <% out.print(projectConfiguration.getName());%>
 	                                    </div>
-	                                    <label for="example-tel-input" class="col-3 col-form-label">Country</label>
-	                                    <div class="col-3">
-	                                        <select name="country_id" id="country_id" class="form-control">
-											    <option value="">Select Country</option>
-							                    <% for(Country country : listCountry){ %>
-							                    <% 	if(builderProject.getCountry().getId() == country.getId()) { 
-							                    		states = country.getStates();
-							                    	}
-							                    %>
-												<option value="<% out.print(country.getId());%>" <% if(builderProject.getCountry().getId() == country.getId()) { %>selected<% } %>><% out.print(country.getName());%></option>
-												<% } %>
-								             </select>
-	                                    </div>
-	<!--                                     <div class="messageContainer"></div> -->
-	                                </div>
+	                                    <% } %>
+	                                </div><hr>
 	
 	                                <div class="form-group row">
-	                                    <label for="example-tel-input" class="col-3 col-form-label">State</label>
-	                                    <div class="col-3">
-	                                         <select name="state_id" id="state_id" class="form-control">
-							                    <option value="">Select State</option>
-							                    <% for(State state : states) { %>
-							                    <% 	if(builderProject.getState().getId() == state.getId()) {
-							                    		cities = state.getCities();
-							                    		out.print(state.getName());
-							                    	}
-							                    %>
-												<option value="<% out.print(state.getId());%>" <% if(builderProject.getState().getId() == state.getId()) { %>selected<% } %>><% out.print(state.getName());%></option>
-												<% } %>
-								          	</select>
+	                                    <label for="example-text-input" class="col-3 col-form-label">Project Amenities*</label>
+	                                    <% 	for(BuilderProjectAmenity projectAmenity : projectAmenities) { 
+											String is_checked = "";
+											for(BuilderProjectAmenityInfo projectAmenityInfo :projectAmenityInfos) {
+												if(projectAmenity.getId() == projectAmenityInfo.getBuilderProjectAmenity().getId()) {
+													is_checked = "checked";
+												}
+											}
+										%>
+	                                    <div class="col-9">
+	                                        <input type="checkbox" name="amenity_type[]" value="<% out.print(projectAmenity.getId());%>" <% out.print(is_checked); %>/> <% out.print(projectAmenity.getName());%>
 	                                    </div>
-	<!--                                     <div class="messageContainer"></div> -->
-	                                    <label for="example-tel-input" class="col-3 col-form-label">City</label>
-	                                    <div class="col-3">
-	                                         <select name="city_id" id="city_id" class="form-control">
-							                	<option value="">Select City</option>
-							                    <% for(City city : cities){ %>
-							                    <% 	if(builderProject.getCity().getId() == city.getId()) { 
-							                    		localities = city.getLocalities();
-							                    	}
-							                    %>
-												<option value="<% out.print(city.getId());%>" <% if(builderProject.getCity().getId() == city.getId()) { %>selected<% } %>><% out.print(city.getName());%></option>
-												<% } %>
-								          	</select>
-	                                    </div>
-	<!--                                     <div class="messageContainer"></div> -->
-	                                </div>
+	                                    <%} %>
+	                                    <div class="messageContainer"></div>
+	                                </div><hr>
 	                                
 	                                <div class="form-group row">
-	                                    <label for="example-text-input" class="col-3 col-form-label">Locality</label>
-	                                    <div class="col-3">
-	                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
-	                                        <select name="locality_id" id="locality_id" class="form-control">
-							                	<option value="">Select Locality</option>
-							                	<% for(Locality locality : localities){ %>
-												<option value="<% out.print(locality.getId());%>" <% if(builderProject.getLocality().getId() == locality.getId()) { %>selected<% } %>><% out.print(locality.getName());%></option>
-												<% } %>
-								          	</select>
-										</div>
-	<!-- 									<div class="messageContainer"></div> -->
-	                                    <label for="example-text-input" class="col-3 col-form-label">Pincode</label>
-	                                    <div class="col-3">
-	                                        <input class="form-control" type="text" id="pincode" name="pincode" autocomplete="off" value="<% out.print(builderProject.getPincode());%>"/>
+	                                   <label for="example-text-input" class="col-3 col-form-label">Project Approval*</label>
+	                                   <% for(BuilderProjectApprovalType projectApproval : projectApprovals) { 
+											String is_checked1 = "";
+											for(BuilderProjectApprovalInfo projectApprovalInfo :projectApprovalInfos) {
+												if(projectApproval.getId() == projectApprovalInfo.getBuilderProjectApprovalType().getId()) {
+													is_checked1 = "checked";
+												}
+											}
+										%>
+	                                    <div class="col-9">
+	 										<input type="checkbox" name="approval_type[]" value="<% out.print(projectApproval.getId());%>" <% out.print(is_checked1); %>/> <% out.print(projectApproval.getName());%>
 	                                    </div>
-	<!--                                     <div class="messageContainer"></div> -->
-	                                </div>
-	                                
+	                                    <% } %>
+	                                </div><hr>
+	
 	                                <div class="form-group row">
-	                                    <label for="example-search-input" class="col-3 col-form-label">Latitude</label>
-	                                    <div class="col-3">
-	                                        <input class="form-control" type="text" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
+	                                   <label for="example-text-input" class="col-3 col-form-label">Home Loan Banks</label>
+	                                   <% 	for(HomeLoanBanks homeLoanBank : homeLoanBanks) { 
+											String is_checked2 = "";
+											for(BuilderProjectBankInfo projectBankInfo :projectBankInfos) {
+												if(homeLoanBank.getId() == projectBankInfo.getHomeLoanBanks().getId()) {
+													is_checked2 = "checked";
+												}
+											}
+										%>
+	                                    <div class="col-9">
+	                                        <input type="checkbox" name="homeloan_bank[]" value="<% out.print(homeLoanBank.getId());%>" <% out.print(is_checked2); %>/> <% out.print(homeLoanBank.getName());%>
 	                                    </div>
-	<!--                                     <div class="messageContainer"></div> -->
-	                                    <label for="example-search-input" class="col-3 col-form-label">Longitude</label>
-	                                    <div class="col-3">
-	                                        <input class="form-control" type="text" id="longitude" name="longitude" autocomplete="off" value="<% out.print(builderProject.getLongitude());%>"/>
-	                                    </div>
-	<!--                                     <div class="messageContainer"></div> -->
-	                                </div>
+	                                    <% } %>
+	                                </div><hr>
 	                                
 	                                 <div class="form-group row">
-	                                    <label for="example-tel-input" class="col-3 col-form-label">Description</label>
-	                                    <div class="col-3">
-	                                        <textarea class="form-control" id="description" name="description"><% out.print(builderProject.getDescription());%></textarea>
-	                                    </div>
-	                                    <label for="example-tel-input" class="col-3 col-form-label">Highlight(USP)</label>
-	                                    <div class="col-3">
-	                                    	<textarea class="form-control" id="highlight" name="highlight"><% out.print(builderProject.getHighlights());%></textarea>
-	                                    </div>
-	<!--                                     <div class="messageContainer"></div> -->
-	                                </div>
-	                                
-	                                <div class="form-group row">
-	                                    <label for="example-search-input" class="col-3 col-form-label">Status</label>
-	                                    <div class="col-3">
-	                                        <select id="status" name="status" class="form-control">
-												<option value="0" <% if(builderProject.getStatus() == 0) { %>selected<% } %>>Inactive</option>
-												<option value="1" <% if(builderProject.getStatus() == 1) { %>selected<% } %>>Active</option>
-											</select>
-	                                    </div>
-	<!--                                     <div class="messageContainer"></div> -->
-	                                   <!--   <label for="example-search-input" class="col-3 col-form-label">Longitude</label>
-	                                    <div class="col-3">
-	                                        <input class="form-control" type="text" value="How do I shoot web" id="example-search-input">
-	                                    </div>-->
-	                                </div>
-	                                	<div class="offset-sm-5 col-sm-7">
-	                                        <button type="submit" name="basicbtn" class="btn btn-success btn-sm">Submit</button>
-	                                 	</div>
-	                                
-	                               </form>
-	                               </div>
-	                              </div>
-	                             <div id="vimessages1" class="tab-pane" aria-expanded="false">
-                            	 <form  id="detailfrm" name="detailfrm" method="post">
-                                 <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Project Type*</label>
-                                    <% 	for(BuilderProjectType builderProjectType : projectTypes) { 
-										String is_checked = "";
-										for(BuilderProjectProjectType projectProjectType :projectProjectTypes) {
-											if(builderProjectType.getId() == projectProjectType.getBuilderProjectType().getId()) {
-												is_checked = "checked";
-											}
-										}
-									%>
-                                    <div class="col-9">
-                                        <input type="checkbox" name="project_type[]" value="<% out.print(builderProjectType.getId());%>" <% out.print(is_checked); %>/> <% out.print(builderProjectType.getName());%>
-                                    </div>
-                                    <% } %>
-                                </div><hr>
-                                
-                                <div class="form-group row">
-                                  <label for="example-text-input" class="col-3 col-form-label">Property Type*</label>
-                                  <% 	for(BuilderPropertyType builderPropertyType : propertyTypes) { 
-										String is_checked = "";
-										int prop_value = 0;
-										for(BuilderProjectPropertyType projectPropertyType :projectPropertyTypes) {
-											if(builderPropertyType.getId() == projectPropertyType.getBuilderPropertyType().getId()) {
-												is_checked = "checked";
-												if(projectPropertyType.getValue() != null)
-												prop_value = projectPropertyType.getValue();
-											}
-										}
-									%>
-                                    <div class="col-9">
-                                        <input type="checkbox" name="property_type[]" value="<% out.print(builderPropertyType.getId());%>" <% out.print(is_checked); %>/> <% out.print(builderPropertyType.getName());%>
-                                    </div>
-                                
-                                <%} %>
-                                </div><hr>
-                                 <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Configurations*</label>
-                                    <% 	for(BuilderProjectPropertyConfiguration projectConfiguration : projectConfigurations) { 
-										String is_checked = "";
-										for(BuilderProjectPropertyConfigurationInfo projectConfigurationInfo :projectConfigurationInfos) {
-											if(projectConfiguration.getId() == projectConfigurationInfo.getBuilderProjectPropertyConfiguration().getId()) {
-												is_checked = "checked";
-											}
-										}
-									%>
-                                    <div class="col-9">
-                                        <input type="checkbox" name="configuration[]" value="<% out.print(projectConfiguration.getId());%>" <% out.print(is_checked); %>/> <% out.print(projectConfiguration.getName());%>
-                                    </div>
-                                    <% } %>
-                                </div><hr>
-
-                                <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Project Amenities*</label>
-                                    <% 	for(BuilderProjectAmenity projectAmenity : projectAmenities) { 
-										String is_checked = "";
-										for(BuilderProjectAmenityInfo projectAmenityInfo :projectAmenityInfos) {
-											if(projectAmenity.getId() == projectAmenityInfo.getBuilderProjectAmenity().getId()) {
-												is_checked = "checked";
-											}
-										}
-									%>
-                                    <div class="col-9">
-                                        <input type="checkbox" name="amenity_type[]" value="<% out.print(projectAmenity.getId());%>" <% out.print(is_checked); %>/> <% out.print(projectAmenity.getName());%>
-                                    </div>
-                                    <%} %>
-                                    <div class="messageContainer"></div>
-                                </div><hr>
-                                
-                                <div class="form-group row">
-                                   <label for="example-text-input" class="col-3 col-form-label">Project Approval*</label>
-                                   <% for(BuilderProjectApprovalType projectApproval : projectApprovals) { 
-										String is_checked1 = "";
-										for(BuilderProjectApprovalInfo projectApprovalInfo :projectApprovalInfos) {
-											if(projectApproval.getId() == projectApprovalInfo.getBuilderProjectApprovalType().getId()) {
-												is_checked1 = "checked";
-											}
-										}
-									%>
-                                    <div class="col-9">
- 										<input type="checkbox" name="approval_type[]" value="<% out.print(projectApproval.getId());%>" <% out.print(is_checked1); %>/> <% out.print(projectApproval.getName());%>
-                                    </div>
-                                    <% } %>
-                                </div><hr>
-
-                                <div class="form-group row">
-                                   <label for="example-text-input" class="col-3 col-form-label">Home Loan Banks</label>
-                                   <% 	for(HomeLoanBanks homeLoanBank : homeLoanBanks) { 
-										String is_checked2 = "";
-										for(BuilderProjectBankInfo projectBankInfo :projectBankInfos) {
-											if(homeLoanBank.getId() == projectBankInfo.getHomeLoanBanks().getId()) {
-												is_checked2 = "checked";
-											}
-										}
-									%>
-                                    <div class="col-9">
-                                        <input type="checkbox" name="homeloan_bank[]" value="<% out.print(homeLoanBank.getId());%>" <% out.print(is_checked2); %>/> <% out.print(homeLoanBank.getName());%>
-                                    </div>
-                                    <% } %>
-                                </div><hr>
-                                
-                                 <div class="form-group row">
-                                   <label for="example-text-input" class="col-3 col-form-label">Project Area</label>
-                                   <div class="col-9">
-                                    <input class="" type="text" class="col-2" id="project_area" name="project_area" value="<% if(builderProject.getProjectArea() != null) { out.print(builderProject.getProjectArea());}%>"/>
-                                   </div>
-                                   <div class="col-9">
-                                   <select name="area_unit" id="area_unit" class="form-control">
-										<% for(AreaUnit areaUnit :areaUnits) { %>
-										<option value="<% out.print(areaUnit.getId()); %>" <% if(builderProject.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
-										<% } %>
-									</select>
-                                   </div>
-                                 </div>
-                                 <%
-										SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
-								 %>
-                                <div class="offset-sm-5 col-sm-7">
-                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
-                                 </div>
-                                </form>   
-                               </div>
-                               
-
-                               	 <div id="vimessages2" class="tab-pane" aria-expanded="false">
-                                 <div class="col-12">
-                                  <form id="pricingfrm" name="pricingfrm" method="post">
-                                  <input type="hidden" name="id" value="<% out.print(projectPriceInfo.getId());%>"/>
-								  <input type="hidden" name="project_id" value="<% out.print(project_id);%>"/>
-                                <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Pricing Unit*</label>
-                                    <div class="col-3">
-                                        <select name="base_unit" id="base_unit" class="form-control">
+	                                   <label for="example-text-input" class="col-3 col-form-label">Project Area</label>
+	                                   <div class="col-9">
+	                                    <input class="" type="text" class="col-2" id="project_area" name="project_area" value="<% if(builderProject.getProjectArea() != null) { out.print(builderProject.getProjectArea());}%>"/>
+	                                   </div>
+	                                   <div class="col-9">
+	                                   <select name="area_unit" id="area_unit" class="form-control">
 											<% for(AreaUnit areaUnit :areaUnits) { %>
-											<option value="<% out.print(areaUnit.getId()); %>" <% if(projectPriceInfo.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
+											<option value="<% out.print(areaUnit.getId()); %>" <% if(builderProject.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
 											<% } %>
 										</select>
-                                    </div>
-                                    <label for="example-text-input" class="col-3 col-form-label">Base Rate*</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="base_rate" name="base_rate" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
-                                    </div>
-                                    <div class="messageContainer"></div>
-                                </div> 
-                                
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="rise_rate" name="rise_rate" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
-                                    </div>
-                                    <div class="messageContainer"></div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Application Post</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
-                                    </div>
-                                    <div class="messageContainer"></div>
-                                </div>
-                                
-                                 <div class="form-group row">
-                                    <label for="example-tel-input" class="col-3 col-form-label">Maintainence Charge</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="maintenance" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
-                                    </div>
-                                    <div class="messageContainer"></div>
-                                    <label for="example-tel-input" class="col-3 col-form-label">Tenure</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="tenure" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>">
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label for="example-tel-input" class="col-3 col-form-label">Aminities facing Rate</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="amenity_rate" name="amenity_rate" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
-                                    </div>
-                                    <label for="example-tel-input" class="col-3 col-form-label">Parking</label>
-                                    <div class="col-3">
-                                         <input class="form-control" type="text" id="parking" name="parking" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Stamp Duty</label>
-                                    <div class="col-3">
-                                       <input class="form-control" type="text" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
-                                    </div>
-                                    <label for="example-text-input" class="col-3 col-form-label">Tax</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">VAT</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text"id="vat" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Tech Fees</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="tech_fee" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
-                                    </div>
-                                </div>
-                              
-                                <div class="offset-sm-5 col-sm-7">
-                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
-                                 </div>
-                                </form>
-                                </div>
-                               </div>
-
+	                                   </div>
+	                                 </div>
+	                                 <%
+											SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
+									 %>
+	                                <div class="offset-sm-5 col-sm-7">
+	                                        <button type="submit" id="detailbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+	                                 </div>
+	                                </form>   
+	                               </div>
+		                           <div id="vimessages2" class="tab-pane" aria-expanded="false">
+	                                 <div class="col-12">
+	                                 	<form id="pricingfrm" name="pricingfrm" method="post">
+		                                	<input type="hidden" name="id" value="<% out.print(projectPriceInfo.getId());%>"/>
+											<input type="hidden" name="project_id" value="<% out.print(project_id);%>"/>
+	                                	 	<div class="form-group row">
+	                                    		<label for="example-text-input" class="col-3 col-form-label">Pricing Unit*</label>
+	                                    		<div class="col-3">
+	                                        		<select name="base_unit" id="base_unit" class="form-control">
+														<% for(AreaUnit areaUnit :areaUnits) { %>
+															<option value="<% out.print(areaUnit.getId()); %>" <% if(projectPriceInfo.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
+														<% } %>
+													</select>
+	                                    		</div>
+	                                    		<div class="messageContainer"></div>
+	                                    		<label for="example-text-input" class="col-3 col-form-label">Base Rate*</label>
+			                                    <div class="col-3">
+			                                        <input class="form-control" type="text" id="base_rate" name="base_rate" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
+			                                    </div>
+			                                    <div class="messageContainer"></div>
+			                                </div> 
+			                                <div class="form-group row">
+	        		                            <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate</label>
+	                		                    <div class="col-3">
+	                        		                <input class="form-control" type="text" id="rise_rate" name="rise_rate" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
+	                                	        </div>
+	                                   	 		<div class="messageContainer"></div>
+	                                    		<label for="example-search-input" class="col-3 col-form-label">Application Post</label>
+			                                    <div class="col-3">
+			                                        <input class="form-control" type="text" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
+			                                    </div>
+	                                    		<div class="messageContainer"></div>
+	                                		</div>
+	                                 		<div class="form-group row">
+	                                    		<label for="example-tel-input" class="col-3 col-form-label">Maintainence Charge</label>
+	                                    		<div class="col-3">
+	                                        		<input class="form-control" type="text" id="maintenance" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
+	                                    		</div>
+	                                    		<div class="messageContainer"></div>
+	                                    		<label for="example-tel-input" class="col-3 col-form-label">Tenure</label>
+	                                    		<div class="col-3">
+	                                        		<input class="form-control" type="text" id="tenure" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>">
+	                                    		</div>
+	                                    		<div class="messageContainer"></div>
+	                                		</div>
+			                                <div class="form-group row">
+	        		                            <label for="example-tel-input" class="col-3 col-form-label">Aminities facing Rate</label>
+	                		                    <div class="col-3">
+	                        		                <input class="form-control" type="text" id="amenity_rate" name="amenity_rate" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
+	                                		    </div>
+	                                		    <div class="messageContainer"></div>
+	                                    		<label for="example-tel-input" class="col-3 col-form-label">Parking</label>
+	                                    		<div class="col-3">
+	                                         		<input class="form-control" type="text" id="parking" name="parking" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
+	                                    		</div>
+	                                    		<div class="messageContainer"></div>
+	                                		</div>
+			                                <div class="form-group row">
+	        		                            <label for="example-text-input" class="col-3 col-form-label">Stamp Duty</label>
+	                		                    <div class="col-3">
+	                        		               <input class="form-control" type="text" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
+	                                		    </div>
+	                                		    <div class="messageContainer"></div>
+	                                   				<label for="example-text-input" class="col-3 col-form-label">Tax</label>
+	                                    		<div class="col-3">
+	                                        		<input class="form-control" type="text" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
+	                                    		</div>
+	                                    	</div>
+	                                		<div class="form-group row">
+	                                    		<label for="example-search-input" class="col-3 col-form-label">VAT</label>
+	                                    		<div class="col-3">
+	                                        		<input class="form-control" type="text" id="vat" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
+	                                    		</div>
+	                                    			<label for="example-search-input" class="col-3 col-form-label">Tech Fees</label>
+	                                    		<div class="col-3">
+	                                        		<input class="form-control" type="text" id="tech_fee" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
+	                                    		</div>
+	                                		</div>
+			                                <div class="offset-sm-5 col-sm-7">
+	        	                               	<button type="submit" id="pricebtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+	            		                     </div>
+	                    	            </form>
+                                	</div>
+             					</div>
                                  <div id="vimessages3" class="tab-pane" aria-expanded="true">        
-                                   <form id="paymentfrm" name="paymentfrm" method="post">
-                                   <input type="hidden" name="schedule_count" id="schedule_count" value="<% //out.print(projectPaymentInfos.size()+1);%>"/>
-                                   <% 	//int i = 1;
+                                 	<form id="paymentfrm" name="paymentfrm" method="post">
+                                   	<input type="hidden" name="schedule_count" id="schedule_count" value="<% //out.print(projectPaymentInfos.size()+1);%>"/>
+                                   	<% 	//int i = 1;
 											%>
 											<!--  <div class="row" id="schedule- --><% //out.print(i); %>
 											<%// if(i > 1) { %>
@@ -633,166 +657,160 @@
 	                                </div>
 	                                
 	                                <div class="offset-sm-5 col-sm-7">
-                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+                                        <button type="submit" id="paymentbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
                                     </div>
                                 </form>
-                                
-                                </div>
-                                
-                             	  <div id="vimessages4" class="tab-pane" aria-expanded="true">
+                            </div>
+                            <div id="vimessages4" class="tab-pane" aria-expanded="true">
                                <form id="offerfrm" name="offerfrm" method="post">
-                               <div>
-                                  <div class="offset-sm-11 col-sm-7">
-                                    <i class="fa fa-times"></i> 
-                                  </div>
-                                 
-                                  	<% int j = 1;
-											for(BuilderProjectOfferInfo projectOfferInfo :projectOfferInfos) { 
-									%>
-                                   <div class="form-group row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
-	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="offer_title" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>"/>
-	                                    </div>
-	                                    <div class="messageContainer"></div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
-	                                    </div>
-	                                    <div class="messageContainer"></div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
-	                                    </div>
-	                                    <div class="messageContainer"></div>
-	                               <!--  </div>
-	                                <div class="form-group row">-->
-	                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
-	                                    <div class="col-2">
-	                                        <textarea class="form-control" id="description" name="description[]" ><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
-	                                    </div>
-	                                    <div class="messageContainer"></div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
-	                                    <div class="col-2">
-	                                     <select class="form-control" id="offer_type" name="offer_type[]">
-											<option value="1" <% if(projectOfferInfo.getType().toString() == "1") { %>selected<% } %>>Percentage</option>
-											<option value="2" <% if(projectOfferInfo.getType().toString() == "2") { %>selected<% } %>>Flat Amount</option>
-											<option value="3" <% if(projectOfferInfo.getType().toString() == "3") { %>selected<% } %>>Other</option>
-										</select>
-	                                    </div>
-	                                    <div class="messageContainer"></div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Status</label>
-	                                    <div class="col-2">
-	                                     <select class="form-control" id="offer_status" name="offer_status[]">
-											<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
-											<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
-										</select>
-										</div>
-										<div class="messageContainer"></div>
+	                               <div>
+	                                  <div class="offset-sm-11 col-sm-7">
+	                                    <i class="fa fa-times"></i> 
+	                                  </div>
+	                                 
+	                                  	<% int j = 1;
+												for(BuilderProjectOfferInfo projectOfferInfo :projectOfferInfos) { 
+										%>
+	                                   <div class="form-group row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
+	                                 	  <input type="hidden" name="offer_id[]" value="<% out.print(projectOfferInfo.getId()); %>" />
+		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>
+		                                    <div class="col-2">
+		                                        <input class="form-control" type="text" id="offer_title" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>"/>
+		                                    </div>
+		                                    <div class="messageContainer"></div>
+		                                    <label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>
+		                                    <div class="col-2">
+		                                        <input class="form-control" type="text" id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
+		                                    </div>
+		                                    <div class="messageContainer"></div>
+		                                    <label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>
+		                                    <div class="col-2">
+		                                        <input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
+		                                    </div>
+		                                    <div class="messageContainer"></div>
+		                               <!--  </div>
+		                                <div class="form-group row">-->
+		                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
+		                                    <div class="col-2">
+		                                        <textarea class="form-control" id="description" name="description[]" ><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
+		                                    </div>
+		                                    <div class="messageContainer"></div>
+		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
+		                                    <div class="col-2">
+		                                     <select class="form-control" id="offer_type" name="offer_type[]">
+												<option value="1" <% if(projectOfferInfo.getType().toString() == "1") { %>selected<% } %>>Percentage</option>
+												<option value="2" <% if(projectOfferInfo.getType().toString() == "2") { %>selected<% } %>>Flat Amount</option>
+												<option value="3" <% if(projectOfferInfo.getType().toString() == "3") { %>selected<% } %>>Other</option>
+											</select>
+		                                    </div>
+		                                    <div class="messageContainer"></div>
+		                                    <label for="example-search-input" class="col-2 col-form-label">Status</label>
+		                                    <div class="col-2">
+		                                     <select class="form-control" id="offer_status" name="offer_status[]">
+												<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
+												<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
+											</select>
+											</div>
+											<div class="messageContainer"></div>
+		                                </div>
+		                            </div>
+	                             	<div>
+	                                  <div class="offset-sm-11 col-sm-7">
+	                                    <a href="javascript:deleteOffer(<% out.print(projectOfferInfo.getId()); %>);"><i class="fa fa-times"></i></a> 
+	                                  </div>
+	                                  <% j++; } %>
+	                                   <div class="form-group row" id="offer-<% out.print(j);%>">
+										<% if(j > 1) { %>
+											<hr/>
+										<% } %>
+		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>
+		                                    <div class="col-2">
+		                                        <input class="form-control" type="text" id="offer_title" name="offer_title[]" value=""/>
+		                                    </div>
+		                                    <div class="messageContainer"></div>
+		                                    <label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>
+		                                    <div class="col-2">
+		                                        <input class="form-control" type="text" id="discount" name="discount[]" value=""/>
+		                                    </div>
+		                                    <div class="messageContainer"></div>
+		                                    <label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>
+		                                    <div class="col-2">
+		                                        <input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value=""/>
+		                                    </div>
+		                                    <div class="messageContainer"></div>
+		                                <!-- </div>-->
+		                                <!-- <div class="form-group row">-->
+		                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
+		                                    <div class="col-2">
+		                                        <textarea class="form-control" id="description" name="description[]" ></textarea>
+		                                    </div>
+		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
+		                                    <div class="col-2">
+		                                    <select class="form-control" id="offer_type" name="offer_type[]">
+												<option value="1">Percentage</option>
+												<option value="2">Flat Amount</option>
+												<option value="3">Other</option>
+											</select>
+		                                    </div>
+		                                    <label for="example-search-input" class="col-2 col-form-label">Status</label>
+		                                    <div class="col-2">
+		                                     <select class="form-control" id="offer_status" name="offer_status[]">
+												<option value="1" >Active</option>
+												<option value="0" >Inactive</option>
+											</select>
+											</div>
+		                                </div>
+		                             </div>
+		                             <div>
+	                                 	<div class="offset-sm-11 col-sm-7">
+	                                    	<a href="javascript:removeOffer(1);"><i class="fa fa-times"></i></a> 
+	                                  	</div>
+	                                   	<div class="form-group row">
+		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>
+		                                    <div class="col-2">
+		                                        <input class="form-control" type="text" value="" id="example-search-input">
+		                                    </div>
+		                                    <label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>
+		                                    <div class="col-2">
+		                                        <input class="form-control" type="text" value="" id="example-search-input">
+		                                    </div>
+		                                    <label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>
+		                                    <div class="col-2">
+		                                        <input class="form-control" type="text" value="" id="example-search-input">
+		                                    </div>
+		                                </div>
+		                                <div class="form-group row">
+		                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
+		                                    <div class="col-2">
+		                                        <textarea class="form-control" rows="" cols=""></textarea>
+		                                    </div>
+		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
+		                                    <div class="col-2">
+		                                     <select class="form-control">
+											  <option value="">Percentage</option>
+											  <option value="">Discount</option>
+											</select>
+		                                    </div>
+		                                    <label for="example-search-input" class="col-2 col-form-label">Status</label>
+		                                    <div class="col-2">
+		                                     <select class="form-control">
+											  <option value="">Active</option>
+											  <option value="">Inactive</option>
+											</select>
+											</div>
+		                                </div>
+		                             </div>
+		                             <div class="col-lg-12">
+										<span class="pull-right">
+											<a href="javascript:addMoreOffer();" class="btn btn-info btn-ms">+ Add More Offers</a>
+										</span>
+									</div>
+		                            <div class="offset-sm-5 col-sm-7">
+	                                        <button type="button" id="offerbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
 	                                </div>
-	                             </div>
-	                             
-	                             <div>
-                                  <div class="offset-sm-11 col-sm-7">
-                                    <i class="fa fa-times"><a href="javascript:deleteOffer(<% out.print(projectOfferInfo.getId()); %>);"></a></i> 
-                                  </div>
-                                  <% j++; } %>
-                                   <div class="form-group row" id="offer-<% out.print(j);%>">
-									<% if(j > 1) { %>
-										<hr/>
-									<% } %>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="offer_title" name="offer_title[]" value=""/>
-	                                    </div>
-	                                    <div class="messageContainer"></div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="discount" name="discount[]" value=""/>
-	                                    </div>
-	                                    <div class="messageContainer"></div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value=""/>
-	                                    </div>
-	                                    <div class="messageContainer"></div>
-	                                <!-- </div>-->
-	                                <!-- <div class="form-group row">-->
-	                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
-	                                    <div class="col-2">
-	                                        <textarea class="form-control" id="description" name="description[]" ></textarea>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
-	                                    <div class="col-2">
-	                                    <select class="form-control" id="offer_type" name="offer_type[]">
-											<option value="1">Percentage</option>
-											<option value="2">Flat Amount</option>
-											<option value="3">Other</option>
-										</select>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Status</label>
-	                                    <div class="col-2">
-	                                     <select class="form-control" id="offer_status" name="offer_status[]">
-											<option value="1" >Active</option>
-											<option value="0" >Inactive</option>
-										</select>
-										</div>
-	                                </div>
-	                             </div>
-	                             <div>
-                                  <div class="offset-sm-11 col-sm-7">
-                                    <i class="fa fa-times"></i> 
-                                  </div>
-                                   <div class="form-group row">
-	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" value="" id="example-search-input">
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" value="" id="example-search-input">
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" value="" id="example-search-input">
-	                                    </div>
-	                                </div>
-	                                <div class="form-group row">
-	                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
-	                                    <div class="col-2">
-	                                        <textarea class="form-control" rows="" cols=""></textarea>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
-	                                    <div class="col-2">
-	                                     <select class="form-control">
-										  <option value="">Percentage</option>
-										  <option value="">Discount</option>
-										</select>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Status</label>
-	                                    <div class="col-2">
-	                                     <select class="form-control">
-										  <option value="">Active</option>
-										  <option value="">Inactive</option>
-										</select>
-										</div>
-	                                </div>
-	                             </div>
-	                              <div class="offset-sm-10 col-sm-7">
-                                    <span class="pull-right">
-										<a href="javascript:addMoreOffer();" class="btn btn-info btn-xs">+ Add More Offers</a>
-									</span>
-                                  </div>
-	                             <div class="offset-sm-5 col-sm-7">
-                                        <button type="button" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
-                                 </div>
 	                             </form>
-	                             
-                                </div>
-                                
-                                
-                               
-                                </div>
+                              </div>
+                           </div>
                         </div>
                      </div>
                  </div>
@@ -800,20 +818,7 @@
          	<div id="sidebar1"> 
 		       <%@include file="../partial/footer.jsp"%>
 			</div>   
-                
-                <!-- /.row -->
-                <!-- .row -->
-               
-                <!-- /.row -->
-                
-                <!-- .right-sidebar -->
-                <!-- /.right-sidebar -->
-            </div>
-            <!-- /.container-fluid -->
-        
-        <!-- /#page-wrapper -->
-    
-    <!-- /#wrapper -->
+         </div>
     </div>
 </body></html>
 <script src="../js/bootstrapValidator.min.js"></script>
@@ -948,7 +953,6 @@ $('#basicfrm').bootstrapValidator({
 });
 
 function updateProject() {
-	alert("Hi");
 	var options = {
 	 		target : '#basicresponse', 
 	 		beforeSubmit : showAddRequest,
@@ -1098,7 +1102,7 @@ $("#detailbtn").click(function(){
 	});
 	var final_data = {builderProject:project,builderProjectProjectTypes:projectType,builderProjectPropertyTypes:propertyType,builderProjectPropertyConfigurationInfos:configuration,builderProjectAmenityInfos:amenityType,builderProjectApprovalInfos:approvalType,builderProjectBankInfos:homeLoanInfo,projectAmenityWeightages:amenityWeightage}
 	$.ajax({
-	    url: '${baseUrl}/webapi/builder/project/detail/update',
+	    url: '${baseUrl}/webapi/project/detail/update',
 	    type: 'POST',
 	    data: JSON.stringify(final_data),
 	    contentType: 'application/json; charset=utf-8',
@@ -1306,5 +1310,15 @@ function addMoreSchedule() {
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();
 }
-
+function deleteOffer(id) {
+	var flag = confirm("Are you sure ? You want to delete offer ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/project/offer/delete/"+id, { }, function(data){
+			alert(data.message);
+			if(data.status == 1) {
+				$("#offer-"+id).remove();
+			}
+		});
+	}
+}
 </script>
