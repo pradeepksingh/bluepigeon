@@ -2199,4 +2199,25 @@ public class ProjectDAO {
 		session.close();
 		return projects;
 	}
+	
+	public ResponseMessage deleteProjectOfferInfo(int project_id) {
+		String hql = "delete BuilderProjectOfferInfo where builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", project_id);
+		int result = query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		ResponseMessage resp = new ResponseMessage();
+		if(result > 0){
+			resp.setStatus(1);;
+			resp.setMessage("Project Offer deleted succefully");
+		}else{
+			resp.setStatus(0);
+			resp.setMessage("Fail to deleted project offer");
+		}
+		return resp;
+	}
 }

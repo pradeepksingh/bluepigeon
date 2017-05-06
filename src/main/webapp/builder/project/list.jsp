@@ -58,14 +58,12 @@
 <![endif]-->
   
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <script>
-    $(function() {
-        $("#sidebar1").load("../partial/sidebar.jsp");
-        $("#header").load("../partial/header1.jsp");
-
-        $("#footer").load("../partial/footer.html");
-    });
-    </script>
+	   <div id="header">
+	       <%@include file="../partial/header.jsp"%>
+      </div>
+      <div id="sidebar1"> 
+       	<%@include file="../partial/sidebar.jsp"%>
+      </div>
    
     </head>
 
@@ -130,7 +128,7 @@
 											%>
 										</td>
 										<td>
-										<a href="${baseUrl}/bluepigeon/builder/project/edit.jsp?project_id=<% out.print(project.getId());%>"> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span></a>
+										<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(project.getId());%>"> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span></a>
 										</td>
 										<% 	
 											} 
@@ -144,7 +142,9 @@
                </div>
             </div>
             <!-- /.container-fluid -->
-            <footer id="footer">  </footer>
+         	<div id="sidebar1"> 
+	      		<%@include file="../partial/footer.jsp"%>
+			</div> 
         </div>
         <!-- /#page-wrapper -->
     </div>
@@ -213,5 +213,3 @@
     </script>
 </body>
 </html>
-
-        
