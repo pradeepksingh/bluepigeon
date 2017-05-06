@@ -87,7 +87,7 @@
                     <div class="col-sm-12">
                         <div class="white-box"><br>
                           <center><h1>Manage Projects</h1></center> <br>
-                          <a href="${baseUrl}/bluepigeon/builder/project/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add new Project</span></a>
+                          <a href="${baseUrl}/builder/project/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add new Project</span></a>
                           <br><br><br>
                             <div class="table-responsive">
                                 <table id="myTable" class="table table-striped">
