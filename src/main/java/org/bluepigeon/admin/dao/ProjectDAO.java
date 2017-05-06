@@ -14,6 +14,7 @@ import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.data.ProjectOffer;
 import org.bluepigeon.admin.data.ProjectPaymentSchedule;
 import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.model.AreaUnit;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuildingFlatType;
 import org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom;
@@ -82,6 +83,9 @@ public class ProjectDAO {
 			newsession.close();
 			response.setId(builderProject.getId());
 			BuilderProjectPriceInfo builderProjectPriceInfo = new BuilderProjectPriceInfo();
+			AreaUnit areaUnit = new AreaUnit();
+			areaUnit.setId(builderProject.getAreaUnit().getId());
+			builderProjectPriceInfo.setAreaUnit(areaUnit);
 			builderProjectPriceInfo.setBuilderProject(builderProject);
 			Session newsession1 = hibernateUtil.openSession();
 			newsession1.beginTransaction();
