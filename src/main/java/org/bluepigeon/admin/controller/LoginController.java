@@ -178,5 +178,5 @@ public class LoginController {
 		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
 		return builderDetailsDAO.updateBuilderPassword(oldPassword,password);
 	}
-}
 
+}
