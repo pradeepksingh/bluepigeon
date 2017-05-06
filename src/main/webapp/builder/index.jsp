@@ -92,49 +92,43 @@
 </body>
 
 </html>
+
 <script type="text/javascript">
 function login(){
 	$.post('webapi/validate/builder',{email: $("#bname").val(), password: $("#bpassword").val()}, function(data){
 		var success = data.status;
 		var status =parseInt(success);
-		if(status==1)
-			{
+		if(status==1) {
 			$("#perror").empty();
 			$('#error').empty();
-				window.location.href="../builder/project/list.jsp";	
-			}
-		
-		else if(status == 0)
-			{
-				$("#perror").empty();
+			window.location.href="../builder/project/list.jsp";	
+		} else if(status == 0) {
+			$("#perror").empty();
+			$('#error').empty();
+			window.location.href="changepassword.jsp";
+		} else {
+			$('#error').empty();
+			$('#perror').empty();
+			var str = data.message;
+			var e =  str.includes("email");
+			if(e){
 				$('#error').empty();
-				window.location.href="changepassword.jsp";
-			}
-		else
-			{
-				$('#error').empty();
+				$('#error').append(data.message);
+			}else{
 				$('#perror').empty();
-				var str = data.message;
-				var e =  str.includes("email");
-				if(e){
-					$('#error').empty();
-					$('#error').append(data.message);
-				}else{
-					$('#perror').empty();
-					$('#perror').append(data.message);
-				}
+				$('#perror').append(data.message);
 			}
-		
+		}
 	},'json');
 }
-	$('#blogin').click(function(){
+$('#blogin').click(function(){
+	login();
+});
+	
+	
+$("#bpassword").keydown(function (e) {
+	if (e.keyCode == 13) {
 		login();
-	});
-	
-	
-	$("#bpassword").keydown(function (e) {
-		  if (e.keyCode == 13) {
-			  login();
-		  }
-	});
+	}
+});
 </script>
