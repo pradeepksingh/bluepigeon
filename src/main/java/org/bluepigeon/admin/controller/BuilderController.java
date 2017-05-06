@@ -42,10 +42,7 @@ public class BuilderController {
 			@FormParam("locality_id") int locality_id
 	) {
 		
-		System.err.println("Hi builder");
-		System.err.println("Builder id "+builder_id);
-		System.err.println("name "+name);
-		System.err.println("locality_id : "+locality_id);
+		
 		Byte status = 1;
 		Short unit = 1;
 		int stateId = 0;
@@ -58,24 +55,19 @@ public class BuilderController {
 		locality.setId(locality_id);
 		if(locality_id > 0){
 			City city = new City(); 
-			Locality localities = new LocalityNamesImp().getCityById(locality_id);
-			cityId = localities.getCity().getId();
-			city.setId(cityId);
-		}
-		if(cityId > 0){
 			State state = new State();
-			List<City> city = new CityNamesImp().getCityById(cityId);
-			stateId = city.get(0).getState().getId();
-			state.setId(stateId);
-			builderProject.setState(state);
-		}
-		if(stateId > 0){
 			Country country = new Country();
-			List<State> state_list = new StateImp().getStateById(stateId);
-			countryId = state_list.get(0).getCountry().getId();
-			country.setId(countryId);
+			Locality localities = new LocalityNamesImp().getLocality(locality_id);
+			cityId = localities.getCity().getId();
+			stateId = localities.getCity().getState().getId();
+			countryId = localities.getCity().getState().getCountry().getId();
+			city.setId(cityId);
+			builderProject.setLocality(locality);
+			builderProject.setCity(city);
+			builderProject.setState(state);
 			builderProject.setCountry(country);
 		}
+		
 		BuilderCompanyNames builderCompanyNames = new BuilderCompanyNames();
 		builderProject.setBuilderCompanyNames(builderCompanyNames);
 		AreaUnit areaUnit = new AreaUnit();
@@ -84,7 +76,6 @@ public class BuilderController {
 		builderProject.setAdminUser(adminUser);
 		builderProject.setName(name);
 		builderProject.setBuilder(builder);
-		builderProject.setLocality(locality);
 		builderProject.setProjectArea(0.0);
 		builderProject.setStatus(status);
 		builderProject.setAreaUnit(areaUnit);

@@ -1,3 +1,12 @@
+#error{
+	color:red;
+	parent-top:10px;
+}
+#perror{
+	color:red;
+	parent-top:10px;
+}
+
 textarea{
 
 

@@ -48,20 +48,20 @@ public class BuilderProject implements java.io.Serializable {
 	private Double inventorySold;
 	private Double revenue;
 	private Byte status;
-//	private Set<BuilderBuilding> builderBuildings = new HashSet<BuilderBuilding>(0);
-//	private Set<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos = new HashSet<BuilderProjectPropertyConfigurationInfo>(
-//			0);
-//	private Set<ProjectPanoramicImage> projectPanoramicImages = new HashSet<ProjectPanoramicImage>(0);
-//	private Set<BuilderProjectPriceInfo> builderProjectPriceInfos = new HashSet<BuilderProjectPriceInfo>(0);
-//	private Set<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new HashSet<BuilderProjectPaymentInfo>(0);
-//	private Set<ProjectImageGallery> projectImageGalleries = new HashSet<ProjectImageGallery>(0);
-//	private Set<BuilderProjectPropertyType> builderProjectPropertyTypes = new HashSet<BuilderProjectPropertyType>(0);
-//	private Set<BuilderProjectOfferInfo> builderProjectOfferInfos = new HashSet<BuilderProjectOfferInfo>(0);
-//	private Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos = new HashSet<BuilderProjectAmenityInfo>(0);
-//	private Set<BuilderProjectBankInfo> builderProjectBankInfos = new HashSet<BuilderProjectBankInfo>(0);
-//	private Set<BuilderProjectProjectType> builderProjectProjectTypes = new HashSet<BuilderProjectProjectType>(0);
-//	private Set<BuilderFlatType> builderFlatTypes = new HashSet<BuilderFlatType>(0);
-//	private Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos = new HashSet<BuilderProjectApprovalInfo>(0);
+	private Set<BuilderBuilding> builderBuildings = new HashSet<BuilderBuilding>(0);
+	private Set<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos = new HashSet<BuilderProjectPropertyConfigurationInfo>(
+			0);
+	private Set<ProjectPanoramicImage> projectPanoramicImages = new HashSet<ProjectPanoramicImage>(0);
+	private Set<BuilderProjectPriceInfo> builderProjectPriceInfos = new HashSet<BuilderProjectPriceInfo>(0);
+	private Set<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new HashSet<BuilderProjectPaymentInfo>(0);
+	private Set<ProjectImageGallery> projectImageGalleries = new HashSet<ProjectImageGallery>(0);
+	private Set<BuilderProjectPropertyType> builderProjectPropertyTypes = new HashSet<BuilderProjectPropertyType>(0);
+	private Set<BuilderProjectOfferInfo> builderProjectOfferInfos = new HashSet<BuilderProjectOfferInfo>(0);
+	private Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos = new HashSet<BuilderProjectAmenityInfo>(0);
+	private Set<BuilderProjectBankInfo> builderProjectBankInfos = new HashSet<BuilderProjectBankInfo>(0);
+	private Set<BuilderProjectProjectType> builderProjectProjectTypes = new HashSet<BuilderProjectProjectType>(0);
+	private Set<BuilderFlatType> builderFlatTypes = new HashSet<BuilderFlatType>(0);
+	private Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos = new HashSet<BuilderProjectApprovalInfo>(0);
 
 	public BuilderProject() {
 	}
@@ -70,7 +70,7 @@ public class BuilderProject implements java.io.Serializable {
 			City city, Builder builder, BuilderCompanyNames builderCompanyNames, String name, String addr1,
 			String addr2, String pincode, String latitude, String longitude, Double projectArea, String description,
 			String highlights, Date launchDate, Date possessionDate, Double totalInventory, Double inventorySold,
-			Double revenue, Byte status){/*, Set<BuilderBuilding> builderBuildings,
+			Double revenue, Byte status, Set<BuilderBuilding> builderBuildings,
 			Set<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos,
 			Set<ProjectPanoramicImage> projectPanoramicImages, Set<BuilderProjectPriceInfo> builderProjectPriceInfos,
 			Set<BuilderProjectPaymentInfo> builderProjectPaymentInfos, Set<ProjectImageGallery> projectImageGalleries,
@@ -79,7 +79,7 @@ public class BuilderProject implements java.io.Serializable {
 			Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos,
 			Set<BuilderProjectBankInfo> builderProjectBankInfos,
 			Set<BuilderProjectProjectType> builderProjectProjectTypes, Set<BuilderFlatType> builderFlatTypes,
-			Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos) {*/
+			Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos) {
 		this.state = state;
 		this.adminUser = adminUser;
 		this.areaUnit = areaUnit;
@@ -103,7 +103,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.inventorySold = inventorySold;
 		this.revenue = revenue;
 		this.status = status;
-		/*this.builderBuildings = builderBuildings;
+		this.builderBuildings = builderBuildings;
 		this.builderProjectPropertyConfigurationInfos = builderProjectPropertyConfigurationInfos;
 		this.projectPanoramicImages = projectPanoramicImages;
 		this.builderProjectPriceInfos = builderProjectPriceInfos;
@@ -115,7 +115,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.builderProjectBankInfos = builderProjectBankInfos;
 		this.builderProjectProjectTypes = builderProjectProjectTypes;
 		this.builderFlatTypes = builderFlatTypes;
-		this.builderProjectApprovalInfos = builderProjectApprovalInfos;*/
+		this.builderProjectApprovalInfos = builderProjectApprovalInfos;
 	}
 
 	@Id
@@ -347,122 +347,122 @@ public class BuilderProject implements java.io.Serializable {
 		this.status = status;
 	}
 
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
-//	public Set<BuilderBuilding> getBuilderBuildings() {
-//		return this.builderBuildings;
-//	}
-//
-//	public void setBuilderBuildings(Set<BuilderBuilding> builderBuildings) {
-//		this.builderBuildings = builderBuildings;
-//	}
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
-//	public Set<BuilderProjectPropertyConfigurationInfo> getBuilderProjectPropertyConfigurationInfos() {
-//		return this.builderProjectPropertyConfigurationInfos;
-//	}
-//
-//	public void setBuilderProjectPropertyConfigurationInfos(
-//			Set<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos) {
-//		this.builderProjectPropertyConfigurationInfos = builderProjectPropertyConfigurationInfos;
-//	}
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
-//	public Set<ProjectPanoramicImage> getProjectPanoramicImages() {
-//		return this.projectPanoramicImages;
-//	}
-//
-//	public void setProjectPanoramicImages(Set<ProjectPanoramicImage> projectPanoramicImages) {
-//		this.projectPanoramicImages = projectPanoramicImages;
-//	}
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
-//	public Set<BuilderProjectPriceInfo> getBuilderProjectPriceInfos() {
-//		return this.builderProjectPriceInfos;
-//	}
-//
-//	public void setBuilderProjectPriceInfos(Set<BuilderProjectPriceInfo> builderProjectPriceInfos) {
-//		this.builderProjectPriceInfos = builderProjectPriceInfos;
-//	}
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
-//	public Set<BuilderProjectPaymentInfo> getBuilderProjectPaymentInfos() {
-//		return this.builderProjectPaymentInfos;
-//	}
-//
-//	public void setBuilderProjectPaymentInfos(Set<BuilderProjectPaymentInfo> builderProjectPaymentInfos) {
-//		this.builderProjectPaymentInfos = builderProjectPaymentInfos;
-//	}
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
-//	public Set<ProjectImageGallery> getProjectImageGalleries() {
-//		return this.projectImageGalleries;
-//	}
-//
-//	public void setProjectImageGalleries(Set<ProjectImageGallery> projectImageGalleries) {
-//		this.projectImageGalleries = projectImageGalleries;
-//	}
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
-//	public Set<BuilderProjectPropertyType> getBuilderProjectPropertyTypes() {
-//		return this.builderProjectPropertyTypes;
-//	}
-//
-//	public void setBuilderProjectPropertyTypes(Set<BuilderProjectPropertyType> builderProjectPropertyTypes) {
-//		this.builderProjectPropertyTypes = builderProjectPropertyTypes;
-//	}
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
-//	public Set<BuilderProjectOfferInfo> getBuilderProjectOfferInfos() {
-//		return this.builderProjectOfferInfos;
-//	}
-//
-//	public void setBuilderProjectOfferInfos(Set<BuilderProjectOfferInfo> builderProjectOfferInfos) {
-//		this.builderProjectOfferInfos = builderProjectOfferInfos;
-//	}
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
-//	public Set<BuilderProjectAmenityInfo> getBuilderProjectAmenityInfos() {
-//		return this.builderProjectAmenityInfos;
-//	}
-//
-//	public void setBuilderProjectAmenityInfos(Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos) {
-//		this.builderProjectAmenityInfos = builderProjectAmenityInfos;
-//	}
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
-//	public Set<BuilderProjectBankInfo> getBuilderProjectBankInfos() {
-//		return this.builderProjectBankInfos;
-//	}
-//
-//	public void setBuilderProjectBankInfos(Set<BuilderProjectBankInfo> builderProjectBankInfos) {
-//		this.builderProjectBankInfos = builderProjectBankInfos;
-//	}
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
-//	public Set<BuilderProjectProjectType> getBuilderProjectProjectTypes() {
-//		return this.builderProjectProjectTypes;
-//	}
-//
-//	public void setBuilderProjectProjectTypes(Set<BuilderProjectProjectType> builderProjectProjectTypes) {
-//		this.builderProjectProjectTypes = builderProjectProjectTypes;
-//	}
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
-//	public Set<BuilderFlatType> getBuilderFlatTypes() {
-//		return this.builderFlatTypes;
-//	}
-//
-//	public void setBuilderFlatTypes(Set<BuilderFlatType> builderFlatTypes) {
-//		this.builderFlatTypes = builderFlatTypes;
-//	}
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
-//	public Set<BuilderProjectApprovalInfo> getBuilderProjectApprovalInfos() {
-//		return this.builderProjectApprovalInfos;
-//	}
-//
-//	public void setBuilderProjectApprovalInfos(Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos) {
-//		this.builderProjectApprovalInfos = builderProjectApprovalInfos;
-//	}
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
+	public Set<BuilderBuilding> getBuilderBuildings() {
+		return this.builderBuildings;
+	}
+
+	public void setBuilderBuildings(Set<BuilderBuilding> builderBuildings) {
+		this.builderBuildings = builderBuildings;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
+	public Set<BuilderProjectPropertyConfigurationInfo> getBuilderProjectPropertyConfigurationInfos() {
+		return this.builderProjectPropertyConfigurationInfos;
+	}
+
+	public void setBuilderProjectPropertyConfigurationInfos(
+			Set<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos) {
+		this.builderProjectPropertyConfigurationInfos = builderProjectPropertyConfigurationInfos;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
+	public Set<ProjectPanoramicImage> getProjectPanoramicImages() {
+		return this.projectPanoramicImages;
+	}
+
+	public void setProjectPanoramicImages(Set<ProjectPanoramicImage> projectPanoramicImages) {
+		this.projectPanoramicImages = projectPanoramicImages;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
+	public Set<BuilderProjectPriceInfo> getBuilderProjectPriceInfos() {
+		return this.builderProjectPriceInfos;
+	}
+
+	public void setBuilderProjectPriceInfos(Set<BuilderProjectPriceInfo> builderProjectPriceInfos) {
+		this.builderProjectPriceInfos = builderProjectPriceInfos;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
+	public Set<BuilderProjectPaymentInfo> getBuilderProjectPaymentInfos() {
+		return this.builderProjectPaymentInfos;
+	}
+
+	public void setBuilderProjectPaymentInfos(Set<BuilderProjectPaymentInfo> builderProjectPaymentInfos) {
+		this.builderProjectPaymentInfos = builderProjectPaymentInfos;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
+	public Set<ProjectImageGallery> getProjectImageGalleries() {
+		return this.projectImageGalleries;
+	}
+
+	public void setProjectImageGalleries(Set<ProjectImageGallery> projectImageGalleries) {
+		this.projectImageGalleries = projectImageGalleries;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
+	public Set<BuilderProjectPropertyType> getBuilderProjectPropertyTypes() {
+		return this.builderProjectPropertyTypes;
+	}
+
+	public void setBuilderProjectPropertyTypes(Set<BuilderProjectPropertyType> builderProjectPropertyTypes) {
+		this.builderProjectPropertyTypes = builderProjectPropertyTypes;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
+	public Set<BuilderProjectOfferInfo> getBuilderProjectOfferInfos() {
+		return this.builderProjectOfferInfos;
+	}
+
+	public void setBuilderProjectOfferInfos(Set<BuilderProjectOfferInfo> builderProjectOfferInfos) {
+		this.builderProjectOfferInfos = builderProjectOfferInfos;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
+	public Set<BuilderProjectAmenityInfo> getBuilderProjectAmenityInfos() {
+		return this.builderProjectAmenityInfos;
+	}
+
+	public void setBuilderProjectAmenityInfos(Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos) {
+		this.builderProjectAmenityInfos = builderProjectAmenityInfos;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
+	public Set<BuilderProjectBankInfo> getBuilderProjectBankInfos() {
+		return this.builderProjectBankInfos;
+	}
+
+	public void setBuilderProjectBankInfos(Set<BuilderProjectBankInfo> builderProjectBankInfos) {
+		this.builderProjectBankInfos = builderProjectBankInfos;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
+	public Set<BuilderProjectProjectType> getBuilderProjectProjectTypes() {
+		return this.builderProjectProjectTypes;
+	}
+
+	public void setBuilderProjectProjectTypes(Set<BuilderProjectProjectType> builderProjectProjectTypes) {
+		this.builderProjectProjectTypes = builderProjectProjectTypes;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
+	public Set<BuilderFlatType> getBuilderFlatTypes() {
+		return this.builderFlatTypes;
+	}
+
+	public void setBuilderFlatTypes(Set<BuilderFlatType> builderFlatTypes) {
+		this.builderFlatTypes = builderFlatTypes;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderProject")
+	public Set<BuilderProjectApprovalInfo> getBuilderProjectApprovalInfos() {
+		return this.builderProjectApprovalInfos;
+	}
+
+	public void setBuilderProjectApprovalInfos(Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos) {
+		this.builderProjectApprovalInfos = builderProjectApprovalInfos;
+	}
 
 }

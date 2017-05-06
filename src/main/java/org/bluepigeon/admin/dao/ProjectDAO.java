@@ -393,6 +393,7 @@ public class ProjectDAO {
 			newproject.setStatus(builderproject.getStatus());
 			newproject.setBuilderId(builderproject.getBuilder().getId());
 			newproject.setBuilderName(builderproject.getBuilder().getName());
+			System.out.println("Builder Name :: "+newproject.getBuilderName());
 			newproject.setCityId(builderproject.getCity().getId());
 			newproject.setCityName(builderproject.getCity().getName());
 			newproject.setLocalityId(builderproject.getLocality().getId());
@@ -2171,6 +2172,7 @@ public class ProjectDAO {
 	}
 	
 	public List<ProjectList> getBuilderProjectsByBuilderId(int builderId) {
+		System.err.println("builderId :: "+builderId);
 		String hql = "from BuilderProject where builder.id = :builder_id order by id desc";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -2191,8 +2193,8 @@ public class ProjectDAO {
 			newproject.setCityName(builderproject.getCity().getName());
 			newproject.setLocalityId(builderproject.getLocality().getId());
 			newproject.setLocalityName(builderproject.getLocality().getName());
+			System.out.println("Project name :: "+builderproject.getName());
 			projects.add(newproject);
-			
 		}
 		session.close();
 		return projects;

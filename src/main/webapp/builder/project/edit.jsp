@@ -958,7 +958,7 @@ function updateProject() {
 	 		target : '#basicresponse', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/builder/webapi/project/basic/update',
+	 		url : '${baseUrl}/webapi/project/basic/update',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -1026,7 +1026,7 @@ function updateProjectPrice() {
 	 		target : '#pricingresponse', 
 	 		beforeSubmit : showPriceRequest,
 	 		success :  showPriceResponse,
-	 		url : '${baseUrl}/builder/webapi/project/price/update',
+	 		url : '${baseUrl}/webapi/project/price/update',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};

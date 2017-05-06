@@ -185,6 +185,17 @@ public class LocalityNamesImp {
 		return result;
 	}
 	
+	public Locality getLocality(int id){
+		String hql = "from Locality where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<Locality> result = query.list();
+		session.close();
+		return result.get(0);
+	}
+	
 	public List<LocalityData> getLocalityName(int cityId)
 	{
 		String hql = "from Locality where city.id = :city_id";
