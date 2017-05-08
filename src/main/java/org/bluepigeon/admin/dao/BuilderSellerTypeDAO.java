@@ -91,8 +91,8 @@ public class BuilderSellerTypeDAO {
 		return result;
 	}
 
-	public List<BuilderSellerType> getCountryById(int id) {
-		String hql = "from BuilderPropertyType where id = :id";
+	public List<BuilderSellerType> getBuilderSellerTypeById(int id) {
+		String hql = "from BuilderSellerType where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
