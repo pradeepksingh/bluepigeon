@@ -358,7 +358,7 @@
 	                          	 <form  id="detailfrm" name="detailfrm" method="post">
 	                          	  <input type="hidden" id="id" name="id" value="<% out.print(project_id);%>"/>
 	                               <div class="form-group row">
-	                                  <label for="example-text-input" class="col-3 col-form-label">Project Type*</label>
+	                                  <label for="example-text-input" class="col-12 col-form-label">Project Type*</label><br/>
 	                                  <% 	for(BuilderProjectType builderProjectType : projectTypes) { 
 									String is_checked = "";
 									for(BuilderProjectProjectType projectProjectType :projectProjectTypes) {
@@ -367,7 +367,7 @@
 										}
 									}
 								%>
-	                                  <div class="col-9">
+	                                  <div class="col-3">
 	                                      <input type="checkbox" name="project_type[]" value="<% out.print(builderProjectType.getId());%>" <% out.print(is_checked); %>/> <% out.print(builderProjectType.getName());%>
 	                                  </div>
 	                                  <% } %>
@@ -414,7 +414,7 @@
 	                              </div><hr>
 	                                
 	                                <div class="form-group row">
-	                                  <label for="example-text-input" class="col-3 col-form-label">Property Type*</label>
+	                                  <label for="example-text-input" class="col-12 col-form-label">Property Type*</label>
 	                                  <% 	for(BuilderPropertyType builderPropertyType : propertyTypes) { 
 											String is_checked = "";
 											int prop_value = 0;
@@ -426,14 +426,14 @@
 												}
 											}
 										%>
-	                                    <div class="col-9">
+	                                    <div class="col-3">
 	                                        <input type="checkbox" name="property_type[]" value="<% out.print(builderPropertyType.getId());%>" <% out.print(is_checked); %>/> <% out.print(builderPropertyType.getName());%>
 	                                    </div>
 	                                	<input type="hidden" class="form-control" id="property_type<% out.print(builderPropertyType.getId());%>" name="property_type<% out.print(builderPropertyType.getId());%>" value="<% out.print(prop_value); %>" placeholder="No. Of <% out.print(builderPropertyType.getName());%>"/>
 	                                <%} %>
 	                                </div><hr>
 	                                 <div class="form-group row">
-	                                    <label for="example-text-input" class="col-3 col-form-label">Configurations*</label>
+	                                    <label for="example-text-input" class="col-12 col-form-label">Configurations*</label>
 	                                    <% 	for(BuilderProjectPropertyConfiguration projectConfiguration : projectConfigurations) { 
 											String is_checked = "";
 											for(BuilderProjectPropertyConfigurationInfo projectConfigurationInfo :projectConfigurationInfos) {
@@ -442,14 +442,14 @@
 												}
 											}
 										%>
-	                                    <div class="col-9">
+	                                    <div class="col-3">
 	                                        <input type="checkbox" name="configuration[]" value="<% out.print(projectConfiguration.getId());%>" <% out.print(is_checked); %>/> <% out.print(projectConfiguration.getName());%>
 	                                    </div>
 	                                    <% } %>
 	                                </div><hr>
 	
 	                                <div class="form-group row">
-	                                    <label for="example-text-input" class="col-3 col-form-label">Project Amenities*</label>
+	                                    <label for="example-text-input" class="col-12 col-form-label">Project Amenities*</label>
 	                                    <% 	for(BuilderProjectAmenity projectAmenity : projectAmenities) { 
 											String is_checked = "";
 											for(BuilderProjectAmenityInfo projectAmenityInfo :projectAmenityInfos) {
@@ -458,7 +458,7 @@
 												}
 											}
 										%>
-	                                    <div class="col-9">
+	                                    <div class="col-3">
 	                                        <input type="checkbox" name="amenity_type[]" value="<% out.print(projectAmenity.getId());%>" <% out.print(is_checked); %>/> <% out.print(projectAmenity.getName());%>
 	                                    </div>
 	                                    <%} %>
@@ -466,7 +466,7 @@
 	                                </div><hr>
 	                                
 	                                <div class="form-group row">
-	                                   <label for="example-text-input" class="col-3 col-form-label">Project Approval*</label>
+	                                   <label for="example-text-input" class="col-12 col-form-label">Project Approval*</label>
 	                                   <% for(BuilderProjectApprovalType projectApproval : projectApprovals) { 
 											String is_checked1 = "";
 											for(BuilderProjectApprovalInfo projectApprovalInfo :projectApprovalInfos) {
@@ -475,14 +475,14 @@
 												}
 											}
 										%>
-	                                    <div class="col-9">
+	                                    <div class="col-3">
 	 										<input type="checkbox" name="approval_type[]" value="<% out.print(projectApproval.getId());%>" <% out.print(is_checked1); %>/> <% out.print(projectApproval.getName());%>
 	                                    </div>
 	                                    <% } %>
 	                                </div><hr>
 	
 	                                <div class="form-group row">
-	                                   <label for="example-text-input" class="col-3 col-form-label">Home Loan Banks</label>
+	                                   <label for="example-text-input" class="col-12 col-form-label">Home Loan Banks</label>
 	                                   <% 	for(HomeLoanBanks homeLoanBank : homeLoanBanks) { 
 											String is_checked2 = "";
 											for(BuilderProjectBankInfo projectBankInfo :projectBankInfos) {
@@ -491,7 +491,7 @@
 												}
 											}
 										%>
-	                                    <div class="col-9">
+	                                    <div class="col-3">
 	                                        <input type="checkbox" name="homeloan_bank[]" value="<% out.print(homeLoanBank.getId());%>" <% out.print(is_checked2); %>/> <% out.print(homeLoanBank.getName());%>
 	                                    </div>
 	                                    <% } %>
@@ -1276,6 +1276,8 @@ function addMoreOffer() {
 	$("#offer_count").val(offers);
 }
 function removeOffer(id) {
+	var a=$("#offer").val();
+	alert("remove="+a);
 	$("#offer-"+id).remove();
 }
 
@@ -1322,6 +1324,8 @@ function removeSchedule(id) {
 	$("#schedule-"+id).remove();
 }
 function deleteOffer(id) {
+	var b=$("#offer").val();
+	alert("delete="+b);
 	var flag = confirm("Are you sure ? You want to delete offer ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/offer/delete/"+id, { }, function(data){
