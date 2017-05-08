@@ -292,7 +292,7 @@ public class ProjectDAO {
 		session8.update(newBuilderProject);
 		session8.getTransaction().commit();
 		session8.close();
-		
+		System.out.println("Hi from DB Update Project");
 		response.setId(builderProject.getId());
 		response.setStatus(1);
 		response.setMessage("Project Updated Successfully.");
@@ -2205,13 +2205,13 @@ public class ProjectDAO {
 		return projects;
 	}
 	
-	public ResponseMessage deleteProjectOfferInfo(int project_id) {
-		String hql = "delete BuilderProjectOfferInfo where builderProject.id = :project_id";
+	public ResponseMessage deleteProjectOfferInfo(int id) {
+		String hql = "delete from BuilderProjectOfferInfo where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
-		query.setParameter("project_id", project_id);
+		query.setParameter("id", id);
 		int result = query.executeUpdate();
 		session.getTransaction().commit();
 		session.close();

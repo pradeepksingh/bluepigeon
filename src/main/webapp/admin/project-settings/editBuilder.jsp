@@ -31,7 +31,7 @@ if(builder_list.size()>0){
 			</ul>
 			<!-- /.breadcrumb -->
 		</div>
-		<input type="hidden" value="<% out.print(builder.getId()); %>" name="ubuilder_id" id="ubuilder_id">
+		
 		<div class="page-content">
 			<div class="page-header">
 				<h1>Update Builder</h1>
@@ -40,7 +40,9 @@ if(builder_list.size()>0){
 			<div class="row">
 				<div class="col-xs-12">
 				<!-- PAGE CONTENT BEGINS -->
-					<form class="form-horizontal" role="form">
+					<form class="form-horizontal" role="form" method="post" action="" id="updateBuilder" name="updateBuilder" enctype="multipart/form-data">
+						<input type="hidden" value="<% out.print(builder.getId()); %>" name="ubuilder_id" id="ubuilder_id">
+						<input type="hidden" value="<%out.print(builder.getLoginStatus()); %> name="uloginstatus" id="uloginstatus"/>
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Builder Name </label>
 							<div class="col-sm-9">
@@ -75,13 +77,21 @@ if(builder_list.size()>0){
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right"
+								for="form-field-1"> Password </label>
+							<div class="col-sm-9">
+								<input type="password" id="password" name="password" value="<%out.print(builder.getPassword()); %>" placeholder="password"
+									class="col-xs-10 col-sm-5" />
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right"	for="form-field-1" for="form-field-11">About Builder</label>
 							<div class="col-sm-4">
 								<textarea id="uabuilder" name="uabuilder" class="autosize-transition form-control"><%out.print(builder.getAboutBuilder());%></textarea>
 							</div>
 						</div>
 						<% if(builder.getBuilderCompanyNameses().size()>0) {
-							int i=0;
+							int i=1;
 							Set<BuilderCompanyNames> builderCompanyNames = builder.getBuilderCompanyNameses();
 							  Iterator<BuilderCompanyNames> bIterator = builderCompanyNames.iterator();
 							  while(bIterator.hasNext()){
@@ -91,7 +101,7 @@ if(builder_list.size()>0){
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Company Name </label>
 							<div class="col-sm-9">
-								<input type="text" id="ucname-<%out.print(i); %>" name="ucname[]" value="<%out.print(builderCompanyNames1.getName()); %>"	placeholder="Company Name" class="col-xs-10 col-sm-5" />
+								<input type="text" id="uname-<%out.print(i); %>" name="uname[]" value="<%out.print(builderCompanyNames1.getName()); %>"	placeholder="Company Name" class="col-xs-10 col-sm-5" />
 							</div>
 						</div>
 						<div class="form-group">
@@ -103,7 +113,7 @@ if(builder_list.size()>0){
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right"	for="form-field-1">Email </label>
 							<div class="col-sm-9">
-								<input type="text" id="ucemail-<%out.print(i); %>" name="uemail[]" placeholder="Email" value="<%out.print(builderCompanyNames1.getEmail()); %>"class="col-xs-10 col-sm-5" />
+								<input type="text" id="uemail-<%out.print(i); %>" name="uemail[]" placeholder="Email" value="<%out.print(builderCompanyNames1.getEmail()); %>"class="col-xs-10 col-sm-5" />
 							</div>
 						</div>
 						<% i++;}} %>
@@ -112,7 +122,7 @@ if(builder_list.size()>0){
 							<div class="col-md-offset-3 col-md-9">
 								 <input type="button" id="addBuilder" value="Add Company" onclick="javascript:addBuilderCompanyName()" class="btn btn-info ">
 									&nbsp; &nbsp; &nbsp;
-								<button id="updateBuilder" class="btn btn-info" type="button">
+								<button type="submit" name="updatebtn" class="btn btn-info">
 									<i class="ace-icon fa fa-check bigger-110"></i> Update
 								</button>
 									&nbsp; &nbsp; &nbsp;
@@ -138,7 +148,7 @@ function addBuilderCompanyName(){
   	var batch='<div class="form-group">';
   	batch+='<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Company Name </label>';
   	batch+='<div class="col-sm-9">';
-  	batch+='<input type="text" id="ucname-'+batch_count+'" name="ucname[]" placeholder="Company Name" class="col-xs-10 col-sm-5" />';
+  	batch+='<input type="text" id="uname-'+batch_count+'" name="uname[]" placeholder="Company Name" class="col-xs-10 col-sm-5" />';
   	batch+='</div>';
   	batch+='</div>';
   	batch+='<div class="form-group">';
@@ -150,70 +160,163 @@ function addBuilderCompanyName(){
   	batch+='<div class="form-group">';
   	batch+='<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Email </label>';
   	batch+='<div class="col-sm-9">';
-  	batch+='<input type="text" id="ucemail-'+batch_count+'" name="ucemail[]" placeholder="Email" class="col-xs-10 col-sm-5" />';
+  	batch+='<input type="text" id="uemail-'+batch_count+'" name="uemail[]" placeholder="Email" class="col-xs-10 col-sm-5" />';
   	batch+='</div></div>';
   	$("#addCompanyName").append(batch);
 }	
-$("#updateBuilder").click(function(){
-	updateNewBuilder();
-})
-function updateNewBuilder(){
-	company_names=getCompanyNames();
-	var builder_data=getBuilderData();
-	var final_data=[];
-	final_data={builderCompanyNames:company_names,builder:builder_data};
-	$.ajax({
-   		url: '${baseUrl}/webapi/create/builder/new/update/',
-    	type: 'POST',
-    	data: JSON.stringify(final_data),
-    	contentType: 'application/json; charset=utf-8',
-    	dataType: 'json',
-   		async: false,
-    	success: function(data) {
-			if (data.status == 0) {
-				alert(data.message);
-			} else {
-				alert(data.message);
-			 	window.location.href ="${baseUrl}/createbuilder/addbuilder.jsp";
-			}
-		},
-		error : function(data){
-			alert("Fail to save data"+JSON.stringify(data,null,2));
-		}
-	});
+// $("#updateBuilder").click(function(){
+// 	updateNewBuilder();
+// })
+// function updateNewBuilder(){
+// 	company_names=getCompanyNames();
+// 	var builder_data=getBuilderData();
+// 	var final_data=[];
+// 	final_data={builderCompanyNames:company_names,builder:builder_data};
+// 	$.ajax({
+//    		url: '${baseUrl}/webapi/create/builder/new/update/',
+//     	type: 'POST',
+//     	data: JSON.stringify(final_data),
+//     	contentType: 'application/json; charset=utf-8',
+//     	dataType: 'json',
+//    		async: false,
+//     	success: function(data) {
+// 			if (data.status == 0) {
+// 				alert(data.message);
+// 			} else {
+// 				alert(data.message);
+// 			 	window.location.href ="${baseUrl}/createbuilder/addbuilder.jsp";
+// 			}
+// 		},
+// 		error : function(data){
+// 			alert("Fail to save data"+JSON.stringify(data,null,2));
+// 		}
+// 	});
+// }
+// function getBuilderData(){
+// 	if($("#ubuilder_id").val()>0){
+// 		var  builder_info = {id:$("#ubuilder_id").val(),name:$("#ubname").val(),status:$("#ustatus").val(),headOffice:$("#uhoffice").val(),email:$("#uhemail").val(),mobile:$("#uhphno").val(),aboutBuilder:$("#uabuilder").val()}
+// 	}else{
+// 		var  builder_info = {name:$("#ubname").val(),status:$("#ustatus").val(),headOffice:$("#uhoffice").val(),email:$("#uhemail").val(),mobile:$("#uhphno").val(),aboutBuilder:$("#uabuilder").val()}
+// 	}
+//    	return builder_info;
+// }
+// function getCompanyNames(){
+//    	var contact_company=[];
+//    	var company;
+// 	for(var i=1;i<=batch_count;i++){
+//   		var cname="#uname-"+i;
+//   		var ccontact="#ucontact-"+i;
+//   		var cemail ="#uemail-"+i;
+//   		if($("#uname-"+i).val()!="" || (typeof $("#uname-"+i).val()!="undefined")){
+// 	  		cname=$("#uname-"+i).val();
+// 	  		alert(cname);
+//   		}
+//    		if($("#ucontact-"+i).val()!="" || (typeof $("#ucontact-"+i).val()!="undefined")){
+// 		  ccontact=$("#ucontact-"+i).val();
+// 		  alert($("#ucontact-"+i).val());
+// 	    }
+//    		if($("#uemail-"+i).val()!="" || (typeof $("#uemail-"+i).val()!="undefined")){
+// 	  		cemail=$("#uemail-"+i).val();
+// 	  		alert($("#uemail-"+i).val());
+//   		}
+// 		company ={name : cname, contact:ccontact,email:cemail}
+//   		contact_company.push(company);  
+//  	}
+// 	return contact_company;
+// }
+
+$('#updateBuilder').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	ubname: {
+            validators: {
+                notEmpty: {
+                    message: 'Builder Name is required and cannot be empty'
+                }
+            }
+        },
+        ustatus: {
+            validators: {
+                notEmpty: {
+                    message: 'Status  is required and cannot be empty'
+                }
+            }
+        },
+        uhoffice: {
+            validators: {
+                notEmpty: {
+                    message: 'Head Office is required and cannot be empty'
+                }
+            }
+        },
+        uhphno: {
+            validators: {
+                notEmpty: {
+                    message: 'Phone Number is required and cannot be empty'
+                }
+            }
+        },
+        uhemail: {
+            validators: {
+                notEmpty: {
+                    message: 'Email is required and cannot be empty'
+                }
+            }
+        },
+        password: {
+            validators: {
+                notEmpty: {
+                    message: 'password is required and cannot be empty'
+                }
+            }
+        }
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	updateBuilder();
+});
+
+function updateBuilder() {
+	var options = {
+	 		target : '#response', 
+	 		beforeSubmit : showAddRequest,
+	 		success :  showAddResponse,
+	 		url : '${baseUrl}/webapi/create/builder/new/update/',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#updateBuilder').ajaxSubmit(options);
 }
-function getBuilderData(){
-	if($("#ubuilder_id").val()>0){
-		var  builder_info = {id:$("#ubuilder_id").val(),name:$("#ubname").val(),status:$("#ustatus").val(),headOffice:$("#uhoffice").val(),email:$("#uhemail").val(),mobile:$("#uhphno").val(),aboutBuilder:$("#uabuilder").val()}
-	}else{
-		var  builder_info = {name:$("#ubname").val(),status:$("#ustatus").val(),headOffice:$("#uhoffice").val(),email:$("#uhemail").val(),mobile:$("#uhphno").val(),aboutBuilder:$("#uabuilder").val()}
-	}
-   	return builder_info;
+
+function showAddRequest(formData, jqForm, options){
+	$("#response").hide();
+   	var queryString = $.param(formData);
+	return true;
 }
-function getCompanyNames(){
-   	var contact_company=[];
-   	var company;
-	for(var i=1;i<=batch_count;i++){
-  		var cname="#ucname-"+i;
-  		var ccontact="#ucontact-"+i;
-  		var cemail ="#ucemail-"+i;
-  		if($("#ucname-"+i).val()!="" || (typeof $("#ucname-"+i).val()!=undefined)){
-	  		cname=$("#ucname-"+i).val();
-	  		alert($("#ucname-"+i).val());
-  		}
-   		if($("#ucontact-"+i).val()!="" || (typeof $("#ucontact-"+i).val()!="undefined")){
-		  ccontact=$("#ucontact-"+i).val();
-		  alert($("#ucontact-"+i).val());
-	    }
-   		if($("#ucemail-"+i).val()!="" || (typeof $("#ucemail-"+i).val()!="undefined")){
-	  		cemail=$("#ucemail-"+i).val();
-	  		alert($("#ucemail-"+i).val());
-  		}
-		company ={name : cname, contact:ccontact,email:cemail}
-  		contact_company.push(company);  
- 	}
-	return contact_company;
+   	
+function showAddResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#response").removeClass('alert-success');
+       	$("#response").addClass('alert-danger');
+		$("#response").html(resp.message);
+		$("#response").show();
+  	} else {
+  		$("#response").removeClass('alert-danger');
+        $("#response").addClass('alert-success');
+        $("#response").html(resp.message);
+        $("#response").show();
+        alert(resp.message);
+        window.location.href = "${baseUrl}/admin/project-settings/addbuilder.jsp";
+  	}
 }
+
 </script>
 </body>
 </html>
