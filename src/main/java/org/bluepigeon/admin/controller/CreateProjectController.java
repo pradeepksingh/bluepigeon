@@ -1,5 +1,6 @@
 package org.bluepigeon.admin.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -46,6 +47,7 @@ import org.bluepigeon.admin.dao.TaxDAO;
 import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.ProjectDetails;
 import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuildingAmenity;
 import org.bluepigeon.admin.model.BuilderBuildingAmenityStages;
@@ -78,6 +80,8 @@ import org.bluepigeon.admin.model.BuilderPropertyType;
 import org.bluepigeon.admin.model.BuilderSellerType;
 import org.bluepigeon.admin.model.BuilderTaxType;
 import org.bluepigeon.admin.model.Tax;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.fasterxml.jackson.databind.deser.BuilderBasedDeserializer;
 
@@ -98,11 +102,59 @@ public class CreateProjectController {
 	@POST
 	@Path("/builder/new/update")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseMessage updateBuilder(BuilderDetails builderDetails) {
-		
-		 BuilderDetailsDAO builderDetalsDAO = new BuilderDetailsDAO();
-		  return builderDetalsDAO.update(builderDetails);
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateBuilder(
+			@FormDataParam("ubuilder_id") int id,
+			@FormDataParam("ubname") String name,
+			@FormDataParam("ustatus") byte status,
+			@FormDataParam("uhoffice") String headOffice,
+			@FormDataParam("uhphno") String phone,
+			@FormDataParam("uhemail") String uhemail,
+			@FormDataParam("password") String password,
+			@FormDataParam("uabuilder") String aboutBuilder,
+			@FormDataParam("uname[]") List<FormDataBodyPart> cname,
+			@FormDataParam("ucontact[]") List<FormDataBodyPart> ucontact,
+			@FormDataParam("uemail[]") List<FormDataBodyPart> cemail
+			) {
+			Builder builder = new Builder();
+			BuilderDetailsDAO builderDetalsDAO = new BuilderDetailsDAO();
+			ResponseMessage msg = new ResponseMessage();
+			if(id>0){
+				builder.setId(id);
+				builder.setName(name);
+				builder.setStatus(status);
+				builder.setEmail(uhemail);
+				builder.setMobile(phone);
+				builder.setPassword(password);
+				builder.setAboutBuilder(aboutBuilder);
+				builder.setHeadOffice(headOffice);
+				builderDetalsDAO.updateBuilder(builder);
+			}
+			if(cname.size()>0){
+				List<BuilderCompanyNames> builderCompanyNames = new ArrayList<BuilderCompanyNames>();
+				int i=0;
+				for(FormDataBodyPart names : cname)
+				{
+					BuilderCompanyNames builderCompanyNames2 = new BuilderCompanyNames();
+					builderCompanyNames2.setBuilder(builder);
+ 					if(names.getValueAs(String.class) != null || names.getValueAs(String.class).trim().length() > 0){
+						builderCompanyNames2.setName(names.getValueAs(String.class).toString());
+					}
+ 					if(ucontact.get(i).getValueAs(String.class) != null || ucontact.get(i).getValueAs(String.class).trim().length() >0){
+ 						builderCompanyNames2.setContact(ucontact.get(i).getValueAs(String.class).toString());
+ 					}
+ 					if(cemail.get(i).getValueAs(String.class) != null || cemail.get(i).getValueAs(String.class).trim().length() > 0){
+ 						builderCompanyNames2.setEmail(cemail.get(i).getValueAs(String.class).toString());
+ 					}
+ 					builderCompanyNames.add(builderCompanyNames2);
+				}
+				if(builderCompanyNames.size()>0)
+				{
+					msg = builderDetalsDAO.updateBuilderCompanyName(builderCompanyNames);
+				}
+			}
+		 
+		return msg;
 	}
 	
 	@POST
@@ -1147,11 +1199,8 @@ public class CreateProjectController {
 	@POST
 	@Path("/builder/project/status/save")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage addBuilderProjectStatus(@FormParam("name") String name, @FormParam("stock") String sstatus) {
+	public ResponseMessage addBuilderProjectStatus(@FormParam("name") String name, @FormParam("status") byte status) {
 		BuilderProjectStatus buildingAmenetiesType = new BuilderProjectStatus();
-		byte status = 0;
-		if (sstatus.equals("Yes"))
-			status = 1;
 		buildingAmenetiesType.setName(name);
 		buildingAmenetiesType.setStatus(status);
 		BuilderProjectStatusDAO stateImp = new BuilderProjectStatusDAO();
@@ -1162,10 +1211,8 @@ public class CreateProjectController {
 	@Path("/builder/project/status/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuilderProjectStatus(@FormParam("id") int id, @FormParam("name") String name,
-			@FormParam("stock") String sstatus) {
-		byte status = 0;
-		if (sstatus.equals("Yes"))
-			status = 1;
+			@FormParam("status") byte status) {
+		
 		BuilderProjectStatus state = new BuilderProjectStatus();
 		state.setId(id);
 		state.setName(name);
@@ -1189,11 +1236,9 @@ public class CreateProjectController {
 	@POST
 	@Path("/builder/project/type/save")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage addBuilderProjectType(@FormParam("name") String name, @FormParam("stock") String sstatus) {
+	public ResponseMessage addBuilderProjectType(@FormParam("name") String name, @FormParam("status") byte status) {
 		BuilderProjectType buildingAmenetiesType = new BuilderProjectType();
-		byte status = 0;
-		if (sstatus.equals("Yes"))
-			status = 1;
+		
 		buildingAmenetiesType.setName(name);
 		buildingAmenetiesType.setStatus(status);
 		BuilderProjectTypeDAO stateImp = new BuilderProjectTypeDAO();
@@ -1204,10 +1249,8 @@ public class CreateProjectController {
 	@Path("/builder/project/type/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuilderProjectType(@FormParam("id") int id, @FormParam("name") String name,
-			@FormParam("stock") String sstatus) {
-		byte status = 0;
-		if (sstatus.equals("Yes"))
-			status = 1;
+			@FormParam("status") byte status) {
+		
 		BuilderProjectType state = new BuilderProjectType();
 		state.setId(id);
 		state.setName(name);
@@ -1231,11 +1274,9 @@ public class CreateProjectController {
 	@POST
 	@Path("/builder/property/type/save")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage addBuilderPropertyType(@FormParam("name") String name, @FormParam("stock") String sstatus) {
+	public ResponseMessage addBuilderPropertyType(@FormParam("name") String name, @FormParam("status") byte status) {
 		BuilderPropertyType buildingAmenetiesType = new BuilderPropertyType();
-		byte status = 0;
-		if (sstatus.equals("Yes"))
-			status = 1;
+		
 		buildingAmenetiesType.setName(name);
 		buildingAmenetiesType.setStatus(status);
 		BuilderPropertyTypeDAO stateImp = new BuilderPropertyTypeDAO();
@@ -1246,10 +1287,8 @@ public class CreateProjectController {
 	@Path("/builder/property/type/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuilderPropertyType(@FormParam("id") int id, @FormParam("name") String name,
-			@FormParam("stock") String sstatus) {
-		byte status = 0;
-		if (sstatus.equals("Yes"))
-			status = 1;
+			@FormParam("status") byte status) {
+		
 		BuilderPropertyType state = new BuilderPropertyType();
 		state.setId(id);
 		state.setName(name);
@@ -1273,11 +1312,9 @@ public class CreateProjectController {
 	@POST
 	@Path("/builder/seller/type/save")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage addBuilderSellerType(@FormParam("name") String name, @FormParam("stock") String sstatus) {
+	public ResponseMessage addBuilderSellerType(@FormParam("name") String name, @FormParam("status") byte status) {
 		BuilderSellerType buildingAmenetiesType = new BuilderSellerType();
-		byte status = 0;
-		if (sstatus.equals("Yes"))
-			status = 1;
+		
 		buildingAmenetiesType.setName(name);
 		buildingAmenetiesType.setStatus(status);
 		BuilderSellerTypeDAO stateImp = new BuilderSellerTypeDAO();
@@ -1288,10 +1325,8 @@ public class CreateProjectController {
 	@Path("/builder/seller/type/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuilderSellerType(@FormParam("id") int id, @FormParam("name") String name,
-			@FormParam("stock") String sstatus) {
-		byte status = 0;
-		if (sstatus.equals("Yes"))
-			status = 1;
+			@FormParam("status") byte status) {
+		
 		BuilderSellerType state = new BuilderSellerType();
 		state.setId(id);
 		state.setName(name);

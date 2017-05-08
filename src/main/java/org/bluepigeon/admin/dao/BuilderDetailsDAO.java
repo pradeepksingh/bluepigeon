@@ -43,7 +43,7 @@ public class BuilderDetailsDAO {
 				newsession.getTransaction().commit();
 				newsession.close();
 				
-				Set<BuilderCompanyNames> builderCompanyNames = builderDetails.getBuilderCompanyNames();
+				List<BuilderCompanyNames> builderCompanyNames = builderDetails.getBuilderCompanyNames();
 				if(builderCompanyNames.size()>0){
 				Session session2 = hibernateUtil.openSession();
 				session2.beginTransaction();
@@ -90,10 +90,11 @@ public class BuilderDetailsDAO {
 			newsession.update(builder);
 			newsession.getTransaction().commit();
 			newsession.close();
-			Set<BuilderCompanyNames> builderCompanyNames= builderDetails.getBuilderCompanyNames();
+			List<BuilderCompanyNames> builderCompanyNames= builderDetails.getBuilderCompanyNames();
 			 if(builderCompanyNames.size()>0){
-			String deleteBuilderCompanyName = "DELETE from BuilderCompanyNames where builder.id = :builder_id";
+			String deleteBuilderCompanyName = "DELETE from BuilderCompanyNames  where builder.id = :builder_id";
 			Session newsession1 = hibernateUtil.openSession();
+			
 			newsession1.beginTransaction();
 			Query smdelete = newsession1.createQuery(deleteBuilderCompanyName);
 			smdelete.setParameter("builder_id", builder.getId());
@@ -123,7 +124,60 @@ public class BuilderDetailsDAO {
 		}
 		return response;
 	}
-
+     
+	public void updateBuilder(Builder builder){
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.update(builder);
+		newsession.getTransaction().commit();
+		newsession.close();
+	}
+	
+	public ResponseMessage updateBuilderCompanyName(List<BuilderCompanyNames> builderCompanyNames){
+		ResponseMessage msg = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		int count = 0;
+		int objectCount = builderCompanyNames.size();
+		if(builderCompanyNames.size()>0){
+			try{
+				String deleteBuilderCompanyName = "Update from BuilderCompanyNames  set name=:name,email=:email,contact=:contact where builder.id = :builder_id";
+				Session newsession1 = hibernateUtil.openSession();
+				for(BuilderCompanyNames builderCompanyNames2 : builderCompanyNames){
+					newsession1.beginTransaction();
+					Query smupdate = newsession1.createQuery(deleteBuilderCompanyName);
+					smupdate.setParameter("builder_id", builderCompanyNames2.getBuilder().getId());
+					smupdate.setParameter("name", builderCompanyNames2.getName());
+					smupdate.setParameter("email", builderCompanyNames2.getEmail());
+					smupdate.setParameter("contact", builderCompanyNames2.getContact());
+					smupdate.executeUpdate();
+					newsession1.getTransaction().commit();
+					count++;
+				}
+				newsession1.close();
+				msg.setStatus(1);
+				msg.setMessage("Builder updated successfully.");
+			}catch(Exception e){
+			//	org.hibernate.Transaction t;
+				//t.rollback();
+				//throw e;
+				e.printStackTrace();
+				
+//				Session session2 = hibernateUtil.openSession();
+//				session2.beginTransaction();
+//				for(int i=count;count<objectCount;i++){
+//					session2.save(builderCompanyNames.get(i));
+//				}
+//				session2.getTransaction().commit();
+//				session2.close();
+				msg.setStatus(0);
+				msg.setMessage("Builder updated Fail.");
+			}
+			
+		 }
+		return msg;
+	}
 	public List<Builder> getBuilderList() {
 		String hql = "from Builder";
 		HibernateUtil hibernateUtil = new HibernateUtil();
