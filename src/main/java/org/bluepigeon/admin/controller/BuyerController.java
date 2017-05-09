@@ -52,6 +52,7 @@ import org.bluepigeon.admin.model.BuyerUploadDocuments;
 import org.bluepigeon.admin.model.BuyingDetails;
 import org.bluepigeon.admin.model.DemandLetters;
 import org.bluepigeon.admin.model.DemandLettersInfo;
+//import org.bluepigeon.admin.model.GlobalBuyer;
 import org.bluepigeon.admin.model.Possession;
 import org.bluepigeon.admin.model.PossessionInfo;
 import org.bluepigeon.admin.service.ImageUploader;
@@ -365,6 +366,7 @@ public class BuyerController {
 		Short agreement=0;
 		Short possession=0;
 		Buyer buyer = null;
+		//GlobalBuyer globalBuyer = new GlobalBuyer();
 		Buyer primaryBuyer = new Buyer();
 		if(name.size()>0){
 			int i=0;
@@ -375,6 +377,8 @@ public class BuyerController {
 				buyer.setPossession(possession);
 				if(buyer_id>0){
 					buyer.setId(buyer_id);
+				//	globalBuyer.setId(buyer_id);
+				//	buyer.setGlobalBuyer(globalBuyer);
 				}
 				if(builder_id > 0){
 					Builder builder = new Builder();
@@ -626,20 +630,19 @@ public class BuyerController {
 	@POST
 	@Path("/update/price")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updateBuyerPrice (
-			@FormDataParam("buyer_id") int buyer_id,
-			@FormDataParam("booking_date") String booking_date,
-			@FormDataParam("base_rate") Double base_rate,
-			@FormDataParam("rise_rate") Double rise_rate,
-			@FormDataParam("amenity_rate") Double amenity_rate,
-			@FormDataParam("maintenance") Double maintenance,
-			@FormDataParam("tenure") Integer tenure,
-			@FormDataParam("registration") Double registration,
-			@FormDataParam("parking") Double parking,
-			@FormDataParam("stamp_duty") Double stamp_duty,
-			@FormDataParam("tax") Double tax,
-			@FormDataParam("vat") Double vat
+			@FormParam("buyer_id") int buyer_id,
+			@FormParam("booking_date") String booking_date,
+			@FormParam("base_rate") Double base_rate,
+			@FormParam("rise_rate") Double rise_rate,
+			@FormParam("amenity_rate") Double amenity_rate,
+			@FormParam("maintenance") Double maintenance,
+			@FormParam("tenure") Integer tenure,
+			@FormParam("registration") Double registration,
+			@FormParam("parking") Double parking,
+			@FormParam("stamp_duty") Double stamp_duty,
+			@FormParam("tax") Double tax,
+			@FormParam("vat") Double vat
 	){
 		ResponseMessage msg = new ResponseMessage();
 		BuyerDAO buyerDAO = new BuyerDAO();

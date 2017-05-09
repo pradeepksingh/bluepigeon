@@ -132,7 +132,7 @@
 												int i = 0;
 												for(BuyerDocList buyer:buyers){	
 										%>
-										<input type="hidden" name="buyer_count" id="buyer_count" value="<%out.print(i);%>"/>
+										<input type="hidden" name="buyer_count" id="buyer_count" value="<%out.print(i+1);%>"/>
 										<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(buyer_id);%>"/>
 											<div class="row" id="buyer-<%out.print(i);%>">
 <%-- 											<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeBuyer(<%out.print(i); %>);" class="btn btn-danger btn-xs">x</a></span></div> --%>
@@ -201,7 +201,6 @@
 													</div>
 												</div>
 												<hr>
-												<hr>
 												<%
 													if(buyer != null){
 														
@@ -210,30 +209,30 @@
 														<div class="form-group" id="error-project_type">
 															<label class="control-label col-sm-2">Documents <span class='text-danger'>*</span></label>
 															<div class="col-sm-10">
-																<div class="col-sm-4">
-																	<input type="checkbox" name="document_pan[]" value="1" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 1) { %> checked <% } %> />PAN Card
-																</div>
-																<div class="col-sm-4">
-																	<input type="checkbox" name="document_aadhar[]" value="2" <%if(Integer.parseInt(buyer.getDocResult().get(i)) == 2) {%>checked<%} %>/>Aadhar Card
-																</div>
-																<div class="col-sm-4">
-																	<input type="checkbox" name="document_passport[]" value="3" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 3) {%>checked<%} %>/>Passport 
-																</div>
-																<div class="col-sm-4">
-																	<input type="checkbox" name="document_rra[]" value="4" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 4) {%>checked<%} %> />Registered Rent Agreement 
-																</div>
-																<div class="col-sm-4">
-																	<input type="checkbox" name="document_voterid[]" value="5" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 5) {%>checked<%} %> />Vote ID 
-																</div>
+															<div class="col-sm-4">
+																<input type="checkbox" name="document_pan[]" value="1" <%if(Integer.parseInt(buyer.getDocResult().get(i)) == 1) { %> checked <% } %> />PAN Card
 															</div>
-															<div class="messageContainer"></div>
+															<div class="col-sm-4">
+																<input type="checkbox" name="document_aadhar[]" value="2" <%if(Integer.parseInt(buyer.getDocResult().get(i)) == 2) {%>checked<%} %>/>Aadhar Card
+															</div>
+															<div class="col-sm-4">
+																<input type="checkbox" name="document_passport[]" value="3" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 3) {%>checked<%} %>/>Passport 
+															</div>
+															<div class="col-sm-4">
+																<input type="checkbox" name="document_rra[]" value="4" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 4) {%>checked<%} %> />Registered Rent Agreement 
+															</div>
+															<div class="col-sm-4">
+																<input type="checkbox" name="document_voterid[]" value="5" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 5) {%>checked<%} %> />Vote ID 
+															</div>
 														</div>
+														<div class="messageContainer"></div>
 													</div>
-													<%
-																}
-															}
+												</div>
+												<%   		
 														}
-													%>
+													}
+												}
+												%>
 											</div>
 										</div>
 										<hr>
@@ -353,8 +352,7 @@
 				</div>
 				<div id="buyingdetail" class="tab-pane fade">
 					<form id="pricingfrm" name="pricingfrm" method="post">
-						<input type="hidden" name="id" />
-						<input type="hidden" name="project_id" />
+						<input type="hidden" name="id" value="<%out.print(buyer_id); %>" />
 			 			<div class="row">
 			 				<div id="pricingresponse"></div>
 							<div class="col-lg-12">
@@ -1280,7 +1278,7 @@ function addMoreBuyers() {
 				+'<div class="col-sm-8">'
 					+'<select name="is_primary[]" id="is_primary" class="form-control">'
 	                    +'<option value="">Select Owner</option>'
-	                     +'<option value="0">Co-Owner</option>'
+	                     +'<option value="0" selected>Co-Owner</option>'
 	                      +'<option value="1">Owner</option>'
 		          	+'</select>'
 				+'</div>'

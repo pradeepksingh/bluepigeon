@@ -518,7 +518,7 @@
 	                                   </div>
 	                                 </div>
 	                                <div class="offset-sm-5 col-sm-7">
-	                                        <button type="submit" id="detailbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+	                                        <button type="button" id="detailbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
 	                                 </div>
 	                                </form>   
 	                               </div>
@@ -531,9 +531,17 @@
 	                                    		<label for="example-text-input" class="col-3 col-form-label">Pricing Unit*</label>
 	                                    		<div class="col-3">
 	                                        		<select name="base_unit" id="base_unit" class="form-control">
-														<% for(AreaUnit areaUnit :areaUnits) { %>
+														<% for(AreaUnit areaUnit :areaUnits) {
+															if(projectPriceInfo.getAreaUnit() !=null){
+															%>
 															<option value="<% out.print(areaUnit.getId()); %>" <% if(projectPriceInfo.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
-														<% } %>
+														<% } else{
+														%>
+															<option value="<% out.print(areaUnit.getId()); %>"><% out.print(areaUnit.getName()); %></option>
+														<%
+															}
+														}
+														%>	
 													</select>
 	                                    		</div>
 	                                    		<div class="messageContainer"></div>
@@ -668,17 +676,17 @@
                                 </form>
                             </div>
                             <div id="vimessages4" class="tab-pane" aria-expanded="true">
+                            
                                <form id="offerfrm" name="offerfrm" method="post">
                                 <input type="hidden" id="projectid" name="projectid" value="<% out.print(project_id);%>"/>
 	                               <div>
-	                                  <div class="offset-sm-11 col-sm-7">
-	                                    <i class="fa fa-times"></i> 
-	                                  </div>
+	                                 
 	                                 
 	                                  	<% int j = 1;
 												for(BuilderProjectOfferInfo projectOfferInfo :projectOfferInfos) { 
 										%>
 	                                   <div class="form-group row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
+	                                   
 	                                 	  <input type="hidden" name="offer_id[]" value="<% out.print(projectOfferInfo.getId()); %>" />
 		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>
 		                                    <div class="col-2">
@@ -693,10 +701,11 @@
 		                                    <label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>
 		                                    <div class="col-2">
 		                                        <input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
+		                                    
 		                                    </div>
 		                                    <div class="messageContainer"></div>
-		                               <!--  </div>
-		                                <div class="form-group row">-->
+<!--    										</div>  -->
+<!-- 		                                <div class="form-group row">  -->
 		                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
 		                                    <div class="col-2">
 		                                        <textarea class="form-control" id="description" name="description[]" ><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
@@ -717,16 +726,20 @@
 												<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
 												<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
 											</select>
+											
 											</div>
 											<div class="messageContainer"></div>
 		                                </div>
+		                                <hr>
+		                                <br>
 		                            </div>
 	                             	<div>
-	                                  <div class="offset-sm-11 col-sm-7">
-	                                    <a href="javascript:deleteOffer(<% out.print(projectOfferInfo.getId()); %>);"><i class="fa fa-times"></i></a> 
-	                                  </div>
+	                                 
 	                                  <% j++; } %>
 	                                   <div class="form-group row" id="offer-<% out.print(j);%>">
+	                                   <div class="offset-sm-11 col-sm-7">
+	                                    	<a href="javascript:removeOffer(1);"><i class="fa fa-times"></i></a> 
+	                                  	</div>
 										<% if(j > 1) { %>
 											<hr/>
 										<% } %>
@@ -743,10 +756,11 @@
 		                                    <label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>
 		                                    <div class="col-2">
 		                                        <input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value=""/>
+		                                   
 		                                    </div>
 		                                    <div class="messageContainer"></div>
-		                                <!-- </div>-->
-		                                <!-- <div class="form-group row">-->
+		                                </div>
+		                                <div class="form-group row">
 		                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
 		                                    <div class="col-2">
 		                                        <textarea class="form-control" id="description" name="description[]" ></textarea>
@@ -765,14 +779,17 @@
 												<option value="1" >Active</option>
 												<option value="0" >Inactive</option>
 											</select>
+										
 											</div>
 		                                </div>
+		                                <hr><br>
 		                             </div>
 		                             <div>
-	                                 	<div class="offset-sm-11 col-sm-7">
+	                                 	
+	                                   	<div class="form-group row">
+	                                   	<div class="offset-sm-11 col-sm-7">
 	                                    	<a href="javascript:removeOffer(1);"><i class="fa fa-times"></i></a> 
 	                                  	</div>
-	                                   	<div class="form-group row">
 		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>
 		                                    <div class="col-2">
 		                                        <input class="form-control" type="text" value="" id="example-search-input">
