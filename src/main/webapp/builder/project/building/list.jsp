@@ -36,18 +36,18 @@
     <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
-    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
-    <link href="../plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
-    <link href="../cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+    <link href="../../plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
     <!-- Menu CSS -->
     <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
-    <link href="../css/animate.css" rel="stylesheet">
+    <link href="../../css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link href="../css/colors/megna.css" id="theme" rel="stylesheet">
+    <link href="../../css/colors/megna.css" id="theme" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -55,12 +55,12 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
   
-    <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
 	   <div id="header">
-	       <%@include file="../partial/header.jsp"%>
+	       <%@include file="../../partial/header.jsp"%>
       </div>
       <div id="sidebar1"> 
-       	<%@include file="../partial/sidebar.jsp"%>
+       	<%@include file="../../partial/sidebar.jsp"%>
       </div>
    
     </head>
@@ -84,9 +84,20 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box"><br>
-                          <center><h1>Manage Projects</h1></center> <br>
-                          <a href="${baseUrl}/builder/project/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add new Project</span></a>
-                          <br><br><br>
+                          <center><h1>Manage Buildings</h1></center> <br>
+						  	<div class="col-sm-12">
+	                            <div class="form-group">
+					                <label class="col-sm-4 control-label">Select Project</label>
+					                <div class="col-sm-4">
+						                <select name="searchprojectId" id="searchprojectId" class="form-control">
+						                    <option value="0">Select Project</option>
+						                    <% for(int i=0; i < project_list.size() ; i++){ %>
+											<option value="<% out.print(project_list.get(i).getId());%>"><% out.print(project_list.get(i).getName());%></option>
+											<% } %>
+						                </select>
+					                </div>
+				                </div>
+				               </div>                         
                             <div class="table-responsive">
                                 <table id="myTable" class="table table-striped">
                                     <thead>
@@ -141,21 +152,21 @@
             </div>
             <!-- /.container-fluid -->
          	<div id="sidebar1"> 
-	      		<%@include file="../partial/footer.jsp"%>
+	      		<%@include file="../../partial/footer.jsp"%>
 			</div> 
         </div>
         <!-- /#page-wrapper -->
     </div>
     
-    <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <!-- start - This is for export functionality only -->
-    <script src="../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
-    <script src="../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-    <script src="../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-    <script src="../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-    <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
-    <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <script src="../../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="../../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="../../cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="../../cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {

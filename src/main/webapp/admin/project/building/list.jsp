@@ -46,6 +46,7 @@
 					<a href="${baseUrl}/admin/project/building/new.jsp?project_id=<% out.print(project_id); %>" class="btn btn-primary btn-sm pull-right" role="button" ><i class="fa fa-plus"></i> New Building</a>
 				</h1>
 			</div>
+			
 			<div class="">
 				<div class="panel panel-default" style="padding: 5px;">
 	               	<div class="panel-body">
