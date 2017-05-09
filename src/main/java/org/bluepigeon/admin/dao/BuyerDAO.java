@@ -492,7 +492,16 @@ public class BuyerDAO {
 			response.setId(result.get(0).getId());
 			response.setStatus(0);
 			response.setMessage("Buyer name already exists");
-		} 
+		} else{
+			Session updateSession = hibernateUtil.openSession();
+			updateSession.beginTransaction();
+			updateSession.update(buyer);
+			updateSession.getTransaction().commit();
+			updateSession.close();
+			response.setId(buyer.getId());
+			response.setStatus(1);
+			response.setMessage("Buyer updated successfully");
+		}
 		return response;
 	}
 	

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorDetail;
 import org.bluepigeon.admin.data.FloorImageData;
@@ -2224,5 +2225,25 @@ public class ProjectDAO {
 			resp.setMessage("Fail to deleted project offer");
 		}
 		return resp;
+	}
+	
+	public List<BuildingList> getBuildingByProjectId(int projectId){
+		String hql = "from BuilderBuilding where builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("projectId", projectId);
+		List<BuilderBuilding> building_list = query.list();
+		List<BuildingList> buildingList = new ArrayList<BuildingList>();
+		for(BuilderBuilding builderBuilding : building_list){
+			BuildingList bList = new BuildingList();
+			bList.setId(builderBuilding.getId());
+			bList.setProjectName(builderBuilding.getName());
+			bList.setBuilderName(builderBuilding.getBuilderProject().getBuilder().getName());
+			bList.setBuildingName(builderBuilding.getName());
+			bList.setStatus(builderBuilding.getStatus());
+			buildingList.add(bList);
+		}
+		return buildingList;
 	}
 }

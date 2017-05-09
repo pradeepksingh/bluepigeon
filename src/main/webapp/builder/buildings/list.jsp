@@ -69,13 +69,8 @@
     <!-- Preloader -->
    
     <div id="wrapper">
-        <!-- Top Navigation -->
         <div id="header"></div>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
         <div id="sidebar1"> </div>
-        <!-- Left navbar-header end -->
-        <!-- Page Content -->
      </div>
 <div id="page-wrapper">
             <div class="container-fluid">
@@ -84,54 +79,33 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box"><br>
-                          <center><h1>Manage Projects</h1></center> <br>
-                          <a href="${baseUrl}/builder/project/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add new Project</span></a>
-                          <br><br><br>
+                          <center><h1>Manage Buildings</h1></center> <br>
+						  	<div class="col-sm-12">
+	                            <div class="form-group">
+					                <label class="col-sm-4 control-label">Select Project</label>
+					                <div class="col-sm-4">
+						                <select name="searchprojectId" id="searchprojectId" class="form-control">
+						                    <option value="0">Select Project</option>
+						                    <% for(int i=0; i < project_list.size() ; i++){ %>
+											<option value="<% out.print(project_list.get(i).getId());%>"><% out.print(project_list.get(i).getName());%></option>
+											<% } %>
+						                </select>
+					                </div>
+				                </div>
+				               </div>                         
                             <div class="table-responsive">
-                                <table id="myTable" class="table table-striped">
+                                <table id="buildinglistTable" class="table table-striped">
                                     <thead>
                                         <tr>
                                          <th>Project name</th>
                                             <th>Builder Name</th>
-                                            <th>City Name</th>
-                                            <th>Locality</th>
+                                            <th>Builder Name</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <%
-                                      if(project_list != null){
-                                      	for(ProjectList project : project_list) { %>
-									<tr>
-										<td>
-											<% out.print(project.getName()); %>
-										</td>
-										<td>
-											<% out.print(project.getBuilderName()); %>
-										</td>
-										<td>
-											<% out.print(project.getCityName()); %>
-										</td>
-										<td>
-											<% out.print(project.getLocalityName()); %>
-										</td>
-										<td>
-											<% if(project.getStatus() == 0) { %>
-											<span class='label label-warning'>Inactive</span>
-											<% } else { %>
-											<span class='label label-success'>Active</span>
-											<% 	
-											   }
-											%>
-										</td>
-										<td>
-										<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(project.getId());%>"> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span></a>
-										</td>
-										<% 	
-											} 
-                                      	}
-										%>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -145,7 +119,6 @@
 			</div> 
         </div>
         <!-- /#page-wrapper -->
-    </div>
     
     <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <!-- start - This is for export functionality only -->
@@ -159,7 +132,7 @@
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {
-        $('#myTable').DataTable();
+        $('#buildinglistTable').DataTable();
         $(document).ready(function() {
             var table = $('#example').DataTable({
                 "columnDefs": [{
@@ -208,6 +181,15 @@
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
+    $("#searchprojectId").change(function(){
+    	//alert($("#searchprojectId").val());
+    	//window.location.href = "${baseUrl}/builder/building/list.jsp?project_id="+$("#searchprojectId").val();
+    	$.get("${baseUrl}/builder/building/list.jsp?searchprojectId="+searchprojectId,{ }, function(data){
+    		// $('#myTable').DataTable();
+    		alert(data);
+    	},'json');
+    });
+    
     </script>
 </body>
 </html>
