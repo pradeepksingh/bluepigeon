@@ -240,13 +240,14 @@
 												</div>
 												
 											</div>
+											<hr>
 											<%   		
 														}
 													}
 												}
 												%>
 										</div>
-										<hr>
+										
 										<div>
 											<div class="col-lg-12">
 												<span class="pull-right">

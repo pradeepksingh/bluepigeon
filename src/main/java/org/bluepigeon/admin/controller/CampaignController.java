@@ -22,6 +22,9 @@ import org.bluepigeon.admin.data.BuyerFlatList;
 import org.bluepigeon.admin.data.BuyerProjectList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
+import org.bluepigeon.admin.model.Builder;
+import org.bluepigeon.admin.model.BuilderEmployee;
+import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Campaign;
@@ -131,5 +134,76 @@ public class CampaignController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Buyer> getBuyerNamesByFlatId(@PathParam("flat_id") int flat_id) {
 		return new CampaignDAO().getBuyerbyFlatId(flat_id);
+	}
+	@POST
+	@Path("/save1")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addBuyerInfoNew (
+			@FormDataParam("title") String  name,
+			@FormDataParam("campaign_type") int  campaignType,
+			@FormDataParam("set_date") String setDate,
+			@FormDataParam("content") String content,
+			@FormDataParam("terms") String terms,
+			@FormDataParam("city_id") int city_id,
+			@FormDataParam("project_id") int project_id,
+			@FormDataParam("recipient_type_id") int recipientType,
+			@FormDataParam("builder_id") int builderId,
+			@FormDataParam("buyer_name[]") List<FormDataBodyPart> buyerNames
+			){
+				ResponseMessage msg = new ResponseMessage();
+				AdminUser adminUser = new AdminUser();
+				adminUser.setId(1);
+				Builder builder = new Builder();
+				Campaign campaign = new Campaign();
+				campaign.setAdminUser(adminUser);
+				campaign.setTitle(name);
+				campaign.setType(campaignType);
+				campaign.setContent(content);
+				campaign.setTerms(terms);
+				if(builderId > 0){
+					builder.setId(builderId);
+					campaign.setBuilder(builder);
+				}
+				if(city_id > 0){
+					City city = new City();
+					city.setId(city_id);
+					campaign.setCity(city); 
+				}
+				if(project_id > 0){
+					BuilderProject builderProject = new BuilderProject();
+					builderProject.setId(project_id);
+					campaign.setBuilderProject(builderProject);
+				}
+				SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+				Date startDate = null;
+				try {
+					startDate = format.parse(setDate);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				campaign.setSetDate(startDate);
+				campaign.setRecipientType(recipientType);
+				CampaignDAO campaignDAO = new CampaignDAO();
+				msg=campaignDAO.saveCampaign(campaign);
+				if(msg.getId()>0){
+					campaign.setId(msg.getId());
+					List<CampaignBuyer> campaignBuyers = new ArrayList<CampaignBuyer>();
+					
+					for(FormDataBodyPart campaignList :buyerNames ){
+						if(campaignList.getValueAs(Integer.class) != null || campaignList.getValueAs(Integer.class) !=0){
+							CampaignBuyer campaignBuyer = new CampaignBuyer();
+							campaignBuyer.setCampaign(campaign);
+							Buyer buyer = new Buyer();
+							buyer.setId(campaignList.getValueAs(Integer.class));
+							campaignBuyer.setBuyer(buyer);
+							campaignBuyers.add(campaignBuyer);
+						}
+					}
+					if(campaignBuyers.size()>0){
+						msg=campaignDAO.saveBuyerCampaign(campaignBuyers);
+					}
+				}
+				return msg;
 	}
 }

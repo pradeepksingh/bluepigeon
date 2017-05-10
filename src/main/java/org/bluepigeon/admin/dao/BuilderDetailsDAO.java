@@ -276,4 +276,18 @@ public class BuilderDetailsDAO {
 		updatePasswordSession.close();
 		return responseMessage;
 	}
+	
+	public ResponseMessage saveEmployee(BuilderEmployee builderEmployee){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.save(builderEmployee);
+		newsession.getTransaction().commit();
+		newsession.close();
+		responseMessage.setId(builderEmployee.getId());
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Empolyee Added Successfully.");
+		return responseMessage;
+	}
 }
