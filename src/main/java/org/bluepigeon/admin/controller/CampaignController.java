@@ -22,9 +22,11 @@ import org.bluepigeon.admin.data.BuyerFlatList;
 import org.bluepigeon.admin.data.BuyerProjectList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
+import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Campaign;
 import org.bluepigeon.admin.model.CampaignBuyer;
+import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -46,16 +48,31 @@ public class CampaignController {
 			@FormDataParam("content") String content,
 			@FormDataParam("terms") String terms,
 			@FormDataParam("city_id") int city_id,
+			@FormDataParam("project_id") int project_id,
 			@FormDataParam("recipient_type_id") int recipientType,
 			@FormDataParam("buyer_name[]") List<FormDataBodyPart> buyerNames
 			
 			){
 				ResponseMessage msg = new ResponseMessage();
 				AdminUser adminUser = new AdminUser();
+				City city = new City();
+				BuilderProject builderProject = new BuilderProject();
+				
 				adminUser.setId(emp_id);
+				
+				if(city_id > 0){
+				city.setId(city_id);
+				}
+				if(project_id>0){
+				builderProject.setId(project_id);
+				}
 				Campaign campaign = new Campaign();
 				campaign.setAdminUser(adminUser);
+				campaign.setCity(city);
+				campaign.setBuilderProject(builderProject);
 				campaign.setTitle(name);
+				campaign.setContent(content);
+				campaign.setTerms(terms);
 				campaign.setType(campaignType);
 				SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
 				Date startDate = null;
