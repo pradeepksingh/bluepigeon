@@ -366,8 +366,8 @@ public class BuyerDAO {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
-		Buyer result = (Buyer)query.list().get(0);
-		return result;
+		List<Buyer> result = query.list();
+		return result.get(0);
 	}
 
 	public List<BuyerDocList> getBuyerDocListById(int id){

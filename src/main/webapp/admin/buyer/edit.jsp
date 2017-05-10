@@ -69,10 +69,10 @@
  		builderFlats = new ProjectDAO().getBuilderProjectBuildingFlats(builderBuildings.get(0).getId());
  	}
  	List<BuyerDocList> buyers = buyerDAO.getBuyerDocListById(buyer_id);
- 	BuyingDetails buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyer_id);
- 	List<BuyerOffer> buyerOffersList = new BuyerDAO().getBuyerOffersByBuyerId(buyer_id);
- 	List<BuyerPayment> buyerPaymentsList = new BuyerDAO().getBuyerPaymentsByBuyerId(buyer_id);
- 	List<BuyerUploadDocuments> buyerUploadDocumentsList = new BuyerDAO().getBuyerUploadDocumentsByBuyerId(buyer_id);
+ 	BuyingDetails buyingDetails = buyerDAO.getBuyingDetailsByBuyerId(buyer_id);
+ 	List<BuyerOffer> buyerOffersList = buyerDAO.getBuyerOffersByBuyerId(buyer_id);
+ 	List<BuyerPayment> buyerPaymentsList = buyerDAO.getBuyerPaymentsByBuyerId(buyer_id);
+ 	List<BuyerUploadDocuments> buyerUploadDocumentsList = buyerDAO.getBuyerUploadDocumentsByBuyerId(buyer_id);
 // 	List<BuilderProject> project_list = new ProjectDetailsDAO().getBuilderProjectList();
 // 	if(project_list.size()>0){
 // 		for(BuilderProject builderProject: project_list){
@@ -228,12 +228,13 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<%   		
+												
+											</div>
+											<%   		
 														}
 													}
 												}
 												%>
-											</div>
 										</div>
 										<hr>
 										<div>

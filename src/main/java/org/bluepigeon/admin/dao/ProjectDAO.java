@@ -2232,6 +2232,7 @@ public class ProjectDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
+		System.out.println("ProjectId ::: :::: :::: :::: "+projectId);
 		query.setParameter("projectId", projectId);
 		List<BuilderBuilding> building_list = query.list();
 		List<BuildingList> buildingList = new ArrayList<BuildingList>();

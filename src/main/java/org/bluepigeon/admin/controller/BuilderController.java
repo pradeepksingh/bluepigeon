@@ -41,6 +41,7 @@ public class BuilderController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuildingList> addState(@QueryParam("project_id") int project_id) {
 		ProjectDAO projectDAO = new ProjectDAO();
+		System.out.println("projectId ::: "+project_id);
 		return projectDAO.getBuildingByProjectId(project_id);
 	}
 
