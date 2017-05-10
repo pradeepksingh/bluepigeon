@@ -18,11 +18,12 @@
 			builder  = (Builder)session.getAttribute("ubname");
 			builder_uid = builder.getId();
 		}
+		if(builder_uid > 0){
+			project_list = new ProjectDAO().getBuilderProjectsByBuilderId(builder_uid);
+			int builder_size = project_list.size();
+		}
    	}
-	if(builder_uid > 0){
-		project_list = new ProjectDAO().getBuilderProjectsByBuilderId(builder_uid);
-		int builder_size = project_list.size();
-	}
+	
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -86,9 +87,11 @@
 					                <div class="col-sm-4">
 						                <select name="searchprojectId" id="searchprojectId" class="form-control">
 						                    <option value="0">Select Project</option>
-						                    <% for(int i=0; i < project_list.size() ; i++){ %>
+						                    <%
+						                    	if(project_list!=null){
+						                    for(int i=0; i < project_list.size() ; i++){ %>
 											<option value="<% out.print(project_list.get(i).getId());%>"><% out.print(project_list.get(i).getName());%></option>
-											<% } %>
+											<% } }%>
 						                </select>
 					                </div>
 				                </div>
@@ -183,11 +186,11 @@
     });
     $("#searchprojectId").change(function(){
     	//alert($("#searchprojectId").val());
-    	//window.location.href = "${baseUrl}/builder/building/list.jsp?project_id="+$("#searchprojectId").val();
-    	$.get("${baseUrl}/builder/building/list.jsp?searchprojectId="+searchprojectId,{ }, function(data){
-    		// $('#myTable').DataTable();
-    		alert(data);
-    	},'json');
+    	window.location.href = "${baseUrl}/builder/buildings/list.jsp?project_id="+$("#searchprojectId").val();
+//     	$.get("${baseUrl}/builder/building/list.jsp?project_id="+$("#searchprojectId").val(),{ }, function(data){
+//     		// $('#myTable').DataTable();
+     		//alert(data);
+//     	},'json');
     });
     
     </script>

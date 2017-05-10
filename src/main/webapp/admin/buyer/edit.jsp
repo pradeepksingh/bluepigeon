@@ -69,10 +69,10 @@
  		builderFlats = new ProjectDAO().getBuilderProjectBuildingFlats(builderBuildings.get(0).getId());
  	}
  	List<BuyerDocList> buyers = buyerDAO.getBuyerDocListById(buyer_id);
- 	BuyingDetails buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyer_id);
- 	List<BuyerOffer> buyerOffersList = new BuyerDAO().getBuyerOffersByBuyerId(buyer_id);
- 	List<BuyerPayment> buyerPaymentsList = new BuyerDAO().getBuyerPaymentsByBuyerId(buyer_id);
- 	List<BuyerUploadDocuments> buyerUploadDocumentsList = new BuyerDAO().getBuyerUploadDocumentsByBuyerId(buyer_id);
+ 	BuyingDetails buyingDetails = buyerDAO.getBuyingDetailsByBuyerId(buyer_id);
+ 	List<BuyerOffer> buyerOffersList = buyerDAO.getBuyerOffersByBuyerId(buyer_id);
+ 	List<BuyerPayment> buyerPaymentsList = buyerDAO.getBuyerPaymentsByBuyerId(buyer_id);
+ 	List<BuyerUploadDocuments> buyerUploadDocumentsList = buyerDAO.getBuyerUploadDocumentsByBuyerId(buyer_id);
 // 	List<BuilderProject> project_list = new ProjectDetailsDAO().getBuilderProjectList();
 // 	if(project_list.size()>0){
 // 		for(BuilderProject builderProject: project_list){
@@ -92,6 +92,7 @@
 // 		}
 // 	}
 %>
+
 <div class="main-content">
 	<div class="main-content-inner">
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -127,6 +128,15 @@
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
 										<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id);%>"/>
 										<div id="buyer_area">
+										<script type="text/javascript">
+											<%
+											  for(int i=0;i<buyers.size();i++){
+											%>
+												console.log(<%out.print(i);%>);
+											<%
+											  }
+											%>
+										</script>
 										<%
 											if(buyers.size()>0){
 												int i = 0;
@@ -135,7 +145,7 @@
 										<input type="hidden" name="buyer_count" id="buyer_count" value="<%out.print(i+1);%>"/>
 										<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(buyer_id);%>"/>
 											<div class="row" id="buyer-<%out.print(i);%>">
-<%-- 											<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeBuyer(<%out.print(i); %>);" class="btn btn-danger btn-xs">x</a></span></div> --%>
+											<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeBuyer(<%out.print(buyer.getId()); %>);" class="btn btn-danger btn-xs">x</a></span></div>
 												<div class="row">
 													<div class="col-lg-5 margin-bottom-5">
 														<div class="form-group" id="error-buyer_name">
@@ -228,14 +238,16 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<%   		
+												
+											</div>
+											<hr>
+											<%   		
 														}
 													}
 												}
 												%>
-											</div>
 										</div>
-										<hr>
+										
 										<div>
 											<div class="col-lg-12">
 												<span class="pull-right">

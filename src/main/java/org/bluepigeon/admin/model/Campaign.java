@@ -27,6 +27,7 @@ public class Campaign implements java.io.Serializable {
 	private Integer id;
 	private AdminUser adminUser;
 	private BuilderProject builderProject;
+	private Builder builder;
 	private City city;
 	private String title;
 	private Integer type;
@@ -38,7 +39,7 @@ public class Campaign implements java.io.Serializable {
 	public Campaign() {
 	}
 
-	public Campaign(AdminUser adminUser,BuilderProject builderProject, City city, String title, Integer type, Date setDate, String content,
+	public Campaign(AdminUser adminUser,BuilderProject builderProject,Builder builder, City city, String title, Integer type, Date setDate, String content,
 			String terms, Integer recipientType) {
 		this.adminUser = adminUser;
 		this.builderProject = builderProject;
@@ -82,6 +83,15 @@ public class Campaign implements java.io.Serializable {
 
 	public void setBuilderProject(BuilderProject builderProject) {
 		this.builderProject = builderProject;
+	}
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "builder_id")
+	public Builder getBuilder() {
+		return this.builder;
+	}
+
+	public void setBuilder(Builder builder) {
+		this.builder = builder;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
