@@ -184,7 +184,7 @@
 </html>
 <script type="text/javascript">
 $("#project_id").change(function(){
-	$.get("${baseUrl}/bluepigeon/webapi/project/building/names/"+$("#project_id").val(),{ }, function(data){
+	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
 		$(data).each(function(index){
 			
@@ -194,7 +194,7 @@ $("#project_id").change(function(){
 	},'json');
 });
 $("#building_id").change(function(){
-	$.get("${baseUrl}/bluepigeon/webapi/project/building/flat/names/"+$("#building_id").val(),{ }, function(data){
+	$.get("${baseUrl}/webapi/project/building/flat/names/"+$("#building_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Flat</option>';
 		$(data).each(function(index){
 			
@@ -205,7 +205,7 @@ $("#building_id").change(function(){
 });
 
 $("#flat_id").change(function(){
-	$.get("${baseUrl}/bluepigeon/webapi/cancellation/buyer/"+$("#flat_id").val(),{ }, function(data){
+	$.get("${baseUrl}/webapi/cancellation/buyer/"+$("#flat_id").val(),{ }, function(data){
 // 		alert(data.name);
 // 		alert(data.mobile);
 // 		alert(data.pancard);
@@ -285,7 +285,7 @@ function addCancellation() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/bluepigeon/webapi/cancellation/save',
+	 		url : '${baseUrl}/webapi/cancellation/save',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -310,7 +310,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
        // alert(resp.message);
-        window.location.href = "${baseUrl}/bluepigeon/builder/cancellation/new.jsp";
+        window.location.href = "${baseUrl}/builder/cancellation/new.jsp";
   	}
 }
 </script>

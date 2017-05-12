@@ -92,7 +92,8 @@
                                 <table id="myTable" class="table table-striped">
                                     <thead>
                                         <tr>
-                                         <th>Name</th>
+                                        	<th>Sr. No</th>
+                                         	<th>Name</th>
                                             <th>Builder Name</th>
                                             <th>City Name</th>
                                             <th>Locality</th>
@@ -103,8 +104,12 @@
                                     <tbody>
                                         <%
                                       if(project_list != null){
+                                    	  int i=0;
                                       	for(BuilderLead project : project_list) { %>
 									<tr>
+									<td>
+											<% out.print(i); %>
+										</td>
 										<td>
 											<% out.print(project.getName()); %>
 										</td>
@@ -129,7 +134,7 @@
 										<td>
 										<a href="${baseUrl}/builder/leads/edit.jsp?lead_id=<% out.print(project.getId());%>"> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span></a>
 										</td>
-										<% 	
+										<% 	i++;
 											} 
                                       	}
 										%>

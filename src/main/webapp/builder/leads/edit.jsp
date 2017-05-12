@@ -1,4 +1,6 @@
-  <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+  <%@page import="org.bluepigeon.admin.data.ProjectList"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="req" value="${pageContext.request}" />
 <c:set var="url">${req.requestURL}</c:set>
@@ -13,9 +15,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%
+	List<ProjectList> project_list = null;
  	int project_size = 0;
 	int type_size = 0;
 	int city_size = 0;
+	int lead_id = 0;
+	lead_id = Integer.parseInt(request.getParameter("lead_id"));
  	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
  	if(builderProjects.size()>0)
@@ -31,6 +36,10 @@
 		{
 			builder  = (Builder)session.getAttribute("ubname");
 			builder_id = builder.getId();
+		}
+		if(builder_id > 0){
+			project_list = new ProjectDAO().getBuilderProjectsByBuilderId(builder_id);
+			int builder_size = project_list.size();
 		}
    }
 %>
@@ -72,15 +81,6 @@
     <script src="../js/jquery.form.js"></script>
     <script src="../js/bootstrapValidator.min.js"></script>
   
-     <script> 
- 
-$(function(){
-$("#sidebar1").load("../partial/sidebar.jsp");
-  $("#header").load("../partial/header.jsp"); 
-
-  $("#footer").load("../partial/footer.jsp"); 
-});
-</script>
 <script type="text/javascript">
     $('input[type=checkbox]').click(function(){
     if($(this).is(':checked')){
@@ -100,14 +100,12 @@ $("#sidebar1").load("../partial/sidebar.jsp");
         <div class="cssload-speeding-wheel"></div>
     </div>
     <div id="wrapper">
-        <!-- Top Navigation -->
-       <div id="header">
+      <div id="header">
 	       <%@include file="../partial/header.jsp"%>
       </div>
       <div id="sidebar1"> 
        	<%@include file="../partial/sidebar.jsp"%>
       </div>
-    
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper" style="min-height: 2038px;">
@@ -119,9 +117,6 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                   
                     <!-- /.col-lg-12 -->
                 </div>
-             
-        
-
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
@@ -223,13 +218,17 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                 </div>
             </div>
             <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2017 Â© Blue Pigeon</footer>
+            <div id="sidebar1"> 
+	      		<%@include file="../partial/footer.jsp"%>
+			</div> 
         
         <!-- /#page-wrapper -->
     
     <!-- /#wrapper -->
     </div>
-    <script type="text/javascript">
+</body>
+</html>
+   <script type="text/javascript">
 $("#project_id").change(function(){
 	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
@@ -352,6 +351,3 @@ function showAddResponse(resp, statusText, xhr, $form){
   	}
 }
 </script>
-    
-</body>
-</html>

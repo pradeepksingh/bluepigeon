@@ -1,3 +1,9 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri" value="${req.requestURI}" />
+<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <%@page import="org.bluepigeon.admin.dao.BuyerDAO"%>
 <%@page import="org.bluepigeon.admin.data.BuyerList"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
@@ -30,7 +36,7 @@
 			<div class="page-header">
 				<h1>
 					Buyer List 
-					<a href="${baseUrl}/admin/buyer/new.jsp" class="btn btn-primary btn-sm pull-right" role="button" ><i class="fa fa-plus"></i> New Buyer</a>
+					<a href="${baseUrl}/builder/buyer/new.jsp" class="btn btn-primary btn-sm pull-right" role="button" ><i class="fa fa-plus"></i> New Buyer</a>
 				</h1>
 			</div>
 			<div class="">

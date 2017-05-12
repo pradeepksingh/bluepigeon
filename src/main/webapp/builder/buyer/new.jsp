@@ -59,15 +59,7 @@
     <script src="../js/bootstrap-datepicker.min.js"></script>
     <script src="../js/jquery.form.js"></script>
     <script src="../js/bootstrapValidator.min.js"></script>
-     <script> 
- 
-$(function(){
-$("#sidebar1").load("../partial/sidebar.jsp");
-  $("#header").load("../partial/header.jsp"); 
-
-  $("#footer").load("../partial/footer.jsp"); 
-});
-</script>
+     
 <script type="text/javascript">
     $('input[type=checkbox]').click(function(){
     if($(this).is(':checked')){
@@ -87,11 +79,14 @@ $("#sidebar1").load("../partial/sidebar.jsp");
         <div class="cssload-speeding-wheel"></div>
     </div>
     <div id="wrapper">
-        <!-- Top Navigation -->
-        <div id="header"></div>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
-       <div id="sidebar1"> </div>
+         <div id="wrapper">
+         <div id="header">
+	       <%@include file="../partial/header.jsp"%>
+      </div>
+      <div id="sidebar1"> 
+       	<%@include file="../partial/sidebar.jsp"%>
+      </div>
+    
     
         <!-- Left navbar-header end -->
         <!-- Page Content -->
@@ -99,7 +94,7 @@ $("#sidebar1").load("../partial/sidebar.jsp");
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Buyer Update</h4>
+                        <h4 class="page-title">New Buyer</h4>
                     </div>
                   
                     <!-- /.col-lg-12 -->
@@ -108,7 +103,7 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
-                             <h4 class="page-title">Buyer Update</h4>
+                             <h4 class="page-title">New Buyer</h4>
                              <br>
                                 <ul class="nav tabs-horizontal">
                                     <li class="tab nav-item" aria-expanded="false">
@@ -174,34 +169,26 @@ $("#sidebar1").load("../partial/sidebar.jsp");
 							          </select>
                                     </div>
                                 </div>
-                                
-                                	
-															<div class="form-group row" id="error-project_type">
-																<label class="col-12 col-form-label">Documents <span class='text-danger'>*</span></label>
-															
-																	<div class="col-3">
-																		<input type="checkbox" name="document_pan[]" value="1" /> PAN Card
-																	</div>
-																	<div class="col-3">
-																		<input type="checkbox" name="document_aadhar[]" value="2" /> Aadhar Card
-																	</div>
-																	<div class="col-3">
-																		<input type="checkbox" name="document_passport[]" value="3" /> Passport 
-																	</div>
-																	<div class="col-3">
-																		<input type="checkbox" name="document_rra[]" value="4" /> Registered Rent Agreement 
-																	</div>
-																	<div class="col-3">
-																		<input type="checkbox" name="document_voterid[]" value="5" /> Vote ID 
-																	</div>
-																	<div class="messageContainer col-sm-offset-2"></div>
-															
-															</div>
-												
-
-                              
+								<div class="form-group row" id="error-project_type">
+									<label class="col-12 col-form-label">Documents <span class='text-danger'>*</span></label>
+										<div class="col-3">
+											<input type="checkbox" name="document_pan[]" value="1" /> PAN Card
+										</div>
+										<div class="col-3">
+											<input type="checkbox" name="document_aadhar[]" value="2" /> Aadhar Card
+										</div>
+										<div class="col-3">
+											<input type="checkbox" name="document_passport[]" value="3" /> Passport 
+										</div>
+										<div class="col-3">
+											<input type="checkbox" name="document_rra[]" value="4" /> Registered Rent Agreement 
+										</div>
+										<div class="col-3">
+											<input type="checkbox" name="document_voterid[]" value="5" /> Vote ID 
+										</div>
+										<div class="messageContainer col-sm-offset-2"></div>
+								</div>
                                </div>
-                               
                                 <div class="offset-sm-10 col-sm-7">
                                 <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="show();" id="next">Next</button>
                                        <a href="javascript:addMoreBuyers();"> <button type="button" class="btn btn-info waves-effect waves-light m-t-10">+ Add New Buyer</button></a>
@@ -480,13 +467,7 @@ $("#sidebar1").load("../partial/sidebar.jsp");
 	                             <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous4();">Previous</button>
                                         <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
                                  </div>
-	                        
                                 </div>
-                                
-                                
-                            
-                                
-                               
                                 </div>
                                 </form>
                         </div>
@@ -494,96 +475,18 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                         </div>
                     </div>
                 </div>
-                
-                
-                <!-- /.row -->
-                <!-- .row -->
                
-                <!-- /.row -->
-                <!-- .row -->
-                
-                <!-- .right-sidebar -->
-                <div class="right-sidebar" style="overflow: visible;">
-                    <div class="slimScrollDiv" style="position: relative; overflow-x: visible; overflow-y: hidden; width: auto; height: 100%;"><div class="slimscrollright" style="overflow: hidden; width: auto; height: 100%;">
-                        <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
-                        <div class="r-panel-body">
-                            <ul>
-                                <li><b>Layout Options</b></li>
-                                <li>
-                                    <div class="checkbox checkbox-info">
-                                        <input id="checkbox1" type="checkbox" class="fxhdr">
-                                        <label for="checkbox1"> Fix Header </label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="checkbox checkbox-warning">
-                                        <input id="checkbox2" type="checkbox" checked="" class="fxsdr">
-                                        <label for="checkbox2"> Fix Sidebar </label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="checkbox checkbox-success">
-                                        <input id="checkbox4" type="checkbox" class="open-close">
-                                        <label for="checkbox4"> Toggle Sidebar </label>
-                                    </div>
-                                </li>
-                            </ul>
-                            <ul id="themecolors" class="m-t-20">
-                                <li><b>With Light sidebar</b></li>
-                                <li><a href="javascript:void(0)" theme="default" class="default-theme">1</a></li>
-                                <li><a href="javascript:void(0)" theme="green" class="green-theme">2</a></li>
-                                <li><a href="javascript:void(0)" theme="gray" class="yellow-theme">3</a></li>
-                                <li><a href="javascript:void(0)" theme="blue" class="blue-theme">4</a></li>
-                                <li><a href="javascript:void(0)" theme="purple" class="purple-theme">5</a></li>
-                                <li><a href="javascript:void(0)" theme="megna" class="megna-theme working">6</a></li>
-                                <li><b>With Dark sidebar</b></li>
-                                <br>
-                                <li><a href="javascript:void(0)" theme="default-dark" class="default-dark-theme">7</a></li>
-                                <li><a href="javascript:void(0)" theme="green-dark" class="green-dark-theme">8</a></li>
-                                <li><a href="javascript:void(0)" theme="gray-dark" class="yellow-dark-theme">9</a></li>
-                                <li><a href="javascript:void(0)" theme="blue-dark" class="blue-dark-theme">10</a></li>
-                                <li><a href="javascript:void(0)" theme="purple-dark" class="purple-dark-theme">11</a></li>
-                                <li><a href="javascript:void(0)" theme="megna-dark" class="megna-dark-theme">12</a></li>
-                            </ul>
-                            <ul class="m-t-20 chatonline">
-                                <li><b>Chat option</b></li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/varun.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/genu.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/ritesh.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/arijit.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/govinda.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/hritik.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/john.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/pawandeep.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div><div class="slimScrollBar" style="background: rgb(220, 220, 220); width: 5px; position: absolute; top: 0px; opacity: 0.4; display: block; border-radius: 7px; z-index: 99; right: 1px;"></div><div class="slimScrollRail" style="width: 5px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
-                </div>
-                <!-- /.right-sidebar -->
             </div>
             <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2017 Â© Blue Pigeon</footer>
+             <div id="sidebar1"> 
+	      		<%@include file="../partial/footer.jsp"%>
+			</div> 
         
+        </div>
         <!-- /#page-wrapper -->
     
     <!-- /#wrapper -->
-    
+    </div>
 </body>
 </html>
 <script type="text/javascript">
@@ -776,12 +679,12 @@ $('#addbuyer').bootstrapValidator({
 });
 
 function addBuyer1() {
-	alert("inside add");
+	//alert("inside add");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/bluepigeon/webapi/buyer/save',
+	 		url : '${baseUrl}/webapi/buyer/save',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -806,7 +709,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/bluepigeon/builder/buyer/buyer-update.jsp";
+        window.location.href = "${baseUrl}/builder/buyer/new.jsp";
   	}
 }
 
@@ -852,9 +755,13 @@ function addMoreBuyers() {
 						+'</div>'
 						
 				
-						+'<label for="example-text-input" class="col-3 col-form-label">Referral ID</label>'
+						+'<label for="example-text-input" class="col-3 col-form-label">Owner *</label>'
 						+'<div class="col-3">'
-							+'<input class="form-control" type="text" id="referralid" name="referralid[]" value="">'
+							+'<select name="is_primary[]" id="is_primary" class="form-control">'
+                       		+'<option value="">Select Owner</option>'
+                     		+'<option value="0" selected>Co-Owner</option>'
+                      		+'<option value="1">Owner</option>'
+				          +'</select>'
 						+'</div>'
 						+'</div>'
 						

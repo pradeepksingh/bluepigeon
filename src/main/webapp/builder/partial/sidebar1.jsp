@@ -1,3 +1,9 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri" value="${req.requestURI}" />
+<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
      <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse slimscrollsidebar">
                 <ul class="nav" id="side-menu">
@@ -20,18 +26,18 @@
                         </ul>
                     </li>
                     
-                    <li> <a href="index.html" class="waves-effect"><i class="ti-dashboard p-r-10"></i> <span class="hide-menu">Dashboard</span></a> </li>
+                    <li> <a href="${baseUrl }/dashboard.jsp" class="waves-effect"><i class="ti-dashboard p-r-10"></i> <span class="hide-menu">Dashboard</span></a> </li>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="linea-icon linea-basic fa-fw text-danger" data-icon="7"></i> <span class="hide-menu text-danger"> New Project Launch <span class="fa arrow"></span> 
                     </span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/project/list.jsp">Manage Project</a> </li>
                             <li> <a href="${baseUrl }/builder/buildings/list.jsp">Manage Building</a> </li>
-                            <li> <a href="">Manage Flat</a> </li>
+                            <li> <a href="inbox.html">Manage Flat</a> </li>
                         </ul>
                     </li>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu"> Employee<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
-                            <li> <a href="inbox.html">Add Employee</a></li>
+                            <li> <a href="${baseUrl }/builder/employee/new.jsp">Add Employee</a></li>
                             <li> <a href="inbox-detail.html">Manage Employee</a></li>
                         </ul>
                     </li>
@@ -44,17 +50,17 @@
                     </li>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="F" class="linea-icon linea-software fa-fw"></i><span class="hide-menu"> Owner Management<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
-                            <li> <a href="inbox.html">Manage Buyers</a></li>
-                            <li> <a href="inbox-detail.html">Manage Leads</a></li>
+                            <li> <a href="${baseUrl }/builder/buyer/list.jsp">Manage Buyers</a></li>
+                            <li> <a href="${baseUrl }/builder/leads/list.jsp">Manage Leads</a></li>
                             <li> <a href="inbox.html">Demand Letter Release</a></li>
                             <li> <a href="inbox.html">Allot Possession</a></li>
-                            <li> <a href="inbox.html">Cancellation</a></li>
+                            <li> <a href="${baseUrl }/builder/cancellation/new.jsp">Cancellation</a></li>
                         </ul>
                     </li>
  						 <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="F" class="linea-icon linea-software fa-fw"></i><span class="hide-menu">Manage Campaign<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/campaign/list.jsp">Campaign</a></li>
-                            <li> <a href="inbox-detail.html">Manage Leads</a></li>
+                            <li> <a href="${baseUrl }/builder/leads/list.jsp">Manage Leads</a></li>
                             <li> <a href="inbox.html">Demand Letter Release</a></li>
                             <li> <a href="inbox.html">Allot Possession</a></li>
                             <li> <a href="inbox.html">Cancellation</a></li>
