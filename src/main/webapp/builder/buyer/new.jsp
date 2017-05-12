@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
@@ -5,599 +6,600 @@
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
-<%@include file="../../head.jsp"%>
-<%@include file="../../../leftnav.jsp"%>
 <%
 	session = request.getSession(false);
-	AdminUser adminuserproject = new AdminUser();
+	Builder builder = new Builder();
 	List<BuilderProject> project_list = new ProjectDetailsDAO().getBuilderProjectList();
-	int p_user_id = 0;
+	int builder_id = 0;
 	if(session!=null)
 	{
-		if(session.getAttribute("uname") != null)
+		if(session.getAttribute("ubname") != null)
 		{
-			adminuserproject  = (AdminUser)session.getAttribute("uname");
-			p_user_id = adminuserproject.getId();
+			builder  = (Builder)session.getAttribute("ubname");
+			builder_id = builder.getId();
 		}
    }
-	int builder_id = 1;
-	List<BuilderEmployee> builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id);
+	int builder_id1 = 1;
+	List<BuilderEmployee> builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
 %>
-<div class="main-content">
-	<div class="main-content-inner">
-		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-			<ul class="breadcrumb">
-				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
-				</li>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" sizes="16x16" href="../plugins/images/favicon.png">
+    <title>Blue Piegon</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+    <!-- animation CSS -->
+    <link href="../css/animate.css" rel="stylesheet">
+    <!-- Menu CSS -->
+    <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+    <!-- animation CSS -->
+    <link href="../css/animate.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/custom.css" rel="stylesheet">
+    <link href="../css/custom1.css" rel="stylesheet">
+    <!-- color CSS -->
+    <link href="../css/colors/megna.css" id="theme" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+    
+    <!-- jQuery -->
+    <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../js/bootstrap-datepicker.min.js"></script>
+    <script src="../js/jquery.form.js"></script>
+    <script src="../js/bootstrapValidator.min.js"></script>
+     <script> 
+ 
+$(function(){
+$("#sidebar1").load("../partial/sidebar.jsp");
+  $("#header").load("../partial/header.jsp"); 
 
-				<li><a href="#">Buyer</a></li>
-				<li class="active">Add</li>
-			</ul>
-		</div>
-		<div class="page-content">
-			<div class="page-header">
-				<h1>
-					Add Buyer
-				</h1>
-			</div>
-			<ul class="nav nav-tabs">
-			  	<li class="active"><a data-toggle="tab" href="#basic">Basic Details</a></li>
-			  	<li><a data-toggle="tab" href="#buyingdetail">Buying Details</a></li>
-			  	<li><a data-toggle="tab" href="#offer">Offers</a></li>
-			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
-			  	<li><a data-toggle="tab" href="#documents">Documents</a></li>
-			</ul>
-			<form id="addbuyer" name="addbuyer" action="" method="post" enctype="multipart/form-data">
-				<input type="hidden" name="builder_id" value="<% out.print(builder_id); %>" />
-				<div class="tab-content">
-				  	<div id="basic" class="tab-pane fade in active">
-						<div id="basic" class="tab-pane fade in active">
-							<div class="row" id="buyer-1">
-								<div class="col-lg-12">
-									<div class="panel panel-default">
-										<div class="panel-body">
-											<div id="buyer_area">
-											<input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
-												<div class="row" id="buyer-1">
-													<div class="row">
-														<div class="col-lg-6 margin-bottom-5">
-															<div class="form-group" id="error-buyer_name">
-															<label class="control-label col-sm-4">Buyer Name <span class="text-danger">*</span></label>
-																<div class="col-sm-8">
-																	<input type="text" class="form-control" id="buyer_name" name="buyer_name[]" value="" placeholder="Full name"/>
-																</div>
-																<div class="messageContainer col-sm-offset-4"></div>
-															</div>
-														</div>
-														<div class="col-lg-6 margin-bottom-6">
-															<div class="form-group" id="error-contact">
-																<label class="control-label col-sm-4">Contact <span class="text-danger">*</span></label>
-																<div class="col-sm-8">
-																	<input type="text" class="form-control" id="contact" name="contact[]" value="" placeholder="Mobile Number"/>
-																</div>
-																<div class="messageContainer col-sm-offset-4"></div>
-															</div>
-														</div>
-												    </div>
-												    <div class="row">
-														<div class="col-lg-6 margin-bottom-6">
-															<div class="form-group" id="error-email">
-																<label class="control-label col-sm-4">Email </label>
-																<div class="col-sm-8">
-																	<input type="text" class="form-control" id="email" name="email[]" value="" placeholder="Email ID"/>
-																</div>
-																<div class="messageContainer col-sm-offset-4"></div><br/>
-															</div>
-														</div>
-														<div class="col-lg-6 margin-bottom-6">
-															<div class="form-group" id="error-email">
-																<label class="control-label col-sm-4">PAN <span class="text-danger">*</span></label>
-																<div class="col-sm-8">
-																	<input type="text" class="form-control" id="pan" name="pan[]" value="" placeholder="Pancard number"/>
-																</div>
-																<div class="messageContainer col-sm-offset-4"></div>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-lg-6 margin-bottom-5">
-															<div class="form-group" id="error-applicable_on">
-															<label class="control-label col-sm-4"> Premanent Address <span class="text-danger">*</span></label>
-															<div class="col-sm-8">
-															<textarea class="form-control" id="address" name="address[]" placeholder="Permanent Address"></textarea>
-															</div>
-															<div class="messageContainer col-sm-offset-4"></div>
-															</div>
-														</div>
-														<div class="col-lg-6 margin-bottom-6">
-															<div class="form-group" id="error-state_id">
-																<label class="control-label col-sm-4">Owner <span class='text-danger'>*</span></label>
-																<div class="col-sm-8">
-																	<select name="is_primary[]" id="is_primary" class="form-control">
-													                    <option value="">Select Owner</option>
-													                     <option value="0">Co-Owner</option>
-													                      <option value="1" selected>Owner</option>
-														          	</select>
-																</div>
-																<div class="messageContainer col-sm-offset-4"></div>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-lg-6 margin-bottom-5">
-															<div class="form-group" id="error-applicable_on">
-																<label class="control-label col-sm-4"> Upload Buyer Pic <span class="text-danger">*</span></label>
-																<div class="col-sm-8">
-																	<input type="file" name="photo[]" class="form-control" />
-																</div>
-																<div class="messageContainer col-sm-offset-4"></div>
-															</div>
-														</div>
-													</div>
-													<hr>
-													<div class="col-lg-12 margin-bottom-6">
-															<div class="form-group" id="error-project_type">
-																<label class="control-label col-sm-2">Documents <span class='text-danger'>*</span></label>
-																<div class="col-sm-10">
-																	<div class="col-sm-3">
+  $("#footer").load("../partial/footer.jsp"); 
+});
+</script>
+<script type="text/javascript">
+    $('input[type=checkbox]').click(function(){
+    if($(this).is(':checked')){
+          var tb = $('<input type=text />');    
+          $(this).after(tb)  ;
+    }
+    else if($(this).siblings('input[type=text]').length>0){
+        $(this).siblings('input[type=text]').remove();
+    }
+})
+</script>
+</head>
+
+<body class="fix-sidebar">
+    <!-- Preloader -->
+    <div class="preloader" style="display: none;">
+        <div class="cssload-speeding-wheel"></div>
+    </div>
+    <div id="wrapper">
+        <!-- Top Navigation -->
+        <div id="header"></div>
+        <!-- End Top Navigation -->
+        <!-- Left navbar-header -->
+       <div id="sidebar1"> </div>
+    
+        <!-- Left navbar-header end -->
+        <!-- Page Content -->
+        <div id="page-wrapper" style="min-height: 2038px;">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">Buyer Update</h4>
+                    </div>
+                  
+                    <!-- /.col-lg-12 -->
+                </div>
+             
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="white-box">
+                             <h4 class="page-title">Buyer Update</h4>
+                             <br>
+                                <ul class="nav tabs-horizontal">
+                                    <li class="tab nav-item" aria-expanded="false">
+                                        <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"><span>Add New Buyer</span></a>
+                                    </li>
+                                     <li class="tab nav-item">
+                                        <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages1"><span>Project Details</span></a>
+                                    </li>
+                                    <li class="tab nav-item">
+                                        <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages2"><span>Buying Details</span></a>
+                                    </li>
+                                     <li class="tab nav-item">
+                                        <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages3"><span>Payment Schedule</span></a>
+                                    </li>
+                                    <li class="tab nav-item">
+                                        <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages4"><span>Documents</span></a>
+                                    </li>
+                                    <!--   <li class="tab nav-item">
+                                        <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a>
+                                    </li>-->
+                                </ul>
+                                
+                                 <form id="addbuyer" name="addbuyer" action="" method="post" enctype="multipart/form-data"> 
+                              <div class="tab-content"> 
+                              	<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
+                               <div class="tab-pane active" id="111" aria-expanded="false">
+                                <div class="col-12" id="vimessages" >
+                            
+                                <input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-3 col-form-label">Buyer Name*</label>
+                                    <div class="col-3">
+                                        <input class="form-control" type="text" id="buyer_name" name="buyer_name[]" value="">
+                                    </div>
+                                    <label for="example-text-input" class="col-3 col-form-label">Contact*</label>
+                                    <div class="col-3">
+                                        <input class="form-control" type="text" id="contact" name="contact[]" value="">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="example-search-input" class="col-3 col-form-label">Email*</label>
+                                    <div class="col-3">
+                                        <input class="form-control" type="text" id="email" name="email[]" value="">
+                                    </div>
+                                    <label for="example-search-input" class="col-3 col-form-label">Pan*</label>
+                                    <div class="col-3">
+                                        <input class="form-control" type="text" id="pan" name="pan[]" value="">
+                                    </div>
+                                </div>
+                                
+                                 <div class="form-group row">
+                                    <label for="example-tel-input" class="col-3 col-form-label">Permanent Address*</label>
+                                    <div class="col-3">
+                                         <textarea class="form-control" rows="" cols="" id="address" name="address[]"></textarea>
+                                    </div>
+                                    <label for="example-tel-input" class="col-3 col-form-label">Owner*</label>
+                                    <div class="col-3">
+                                      <select name="is_primary[]" id="is_primary" class="form-control">
+			                       		<option value="">Select Owner</option>
+			                     		<option value="0">Co-Owner</option>
+			                      		<option value="1" selected>Owner</option>
+							          </select>
+                                    </div>
+                                </div>
+                                
+                                	
+															<div class="form-group row" id="error-project_type">
+																<label class="col-12 col-form-label">Documents <span class='text-danger'>*</span></label>
+															
+																	<div class="col-3">
 																		<input type="checkbox" name="document_pan[]" value="1" /> PAN Card
 																	</div>
-																	<div class="col-sm-3">
+																	<div class="col-3">
 																		<input type="checkbox" name="document_aadhar[]" value="2" /> Aadhar Card
 																	</div>
-																	<div class="col-sm-3">
+																	<div class="col-3">
 																		<input type="checkbox" name="document_passport[]" value="3" /> Passport 
 																	</div>
-																	<div class="col-sm-3">
+																	<div class="col-3">
 																		<input type="checkbox" name="document_rra[]" value="4" /> Registered Rent Agreement 
 																	</div>
-																	<div class="col-sm-3">
+																	<div class="col-3">
 																		<input type="checkbox" name="document_voterid[]" value="5" /> Vote ID 
 																	</div>
 																	<div class="messageContainer col-sm-offset-2"></div>
-																</div>
+															
 															</div>
-														</div>
-													</div>
-												</div>
-											<hr>
-											<div class="row">
-												<div class="col-lg-12">
-													<label class="control-label col-lg-8"><b>Project Details</b></label>
-													<span class="pull-right">
-														<a href="javascript:addMoreBuyers();" class="btn btn-info btn-xs">+ Add More Buyers</a>
-													</span>
-													<br><br>
-												</div>
-												<br>
-											</div>
-											<div class="row">
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-country_id">
-														<label class="control-label col-sm-4">Project <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<select name="project_id" id="project_id" class="form-control">
+												
+
+                              
+                               </div>
+                               
+                                <div class="offset-sm-10 col-sm-7">
+                                <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="show();" id="next">Next</button>
+                                       <a href="javascript:addMoreBuyers();"> <button type="button" class="btn btn-info waves-effect waves-light m-t-10">+ Add New Buyer</button></a>
+                                 </div>
+                                
+                              </div>
+                              
+                             <div id="vimessages1" class="tab-pane" aria-expanded="false">
+                           
+                                 <div class="form-group row">
+                                    <label for="example-text-input" class="col-3 col-form-label">Project Name</label>
+                                    <div class="col-6">
+                                       <select name="project_id" id="project_id" class="form-control">
 											                    <option value="">Select Project</option>
 											                    <% for(BuilderProject builderProject : project_list){ %>
 																<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option>
 																<% } %>
 												             </select>
-														</div>
-														<div class="messageContainer col-sm-offset-4"></div>
-													</div>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-state_id">
-														<label class="control-label col-sm-4">Building <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<select name="building_id" id="building_id" class="form-control">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                  <label for="example-text-input" class="col-3 col-form-label">Buliding</label>
+                                    <div class="col-6">
+                                       <select name="building_id" id="building_id" class="form-control">
 											                    <option value="">Select Building</option>
 												          	</select>
-														</div>
-														<div class="messageContainer col-sm-offset-4"></div>
-													</div>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-state_id">
-														<label class="control-label col-sm-4">Flat <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<select name="flat_id" id="flat_id" class="form-control">
+                                    </div>
+                                </div>
+                                
+                                 <div class="form-group row">
+                                    <label for="example-text-input" class="col-3 col-form-label">Flat</label>
+                                    <div class="col-6">
+                                       <select name="flat_id" id="flat_id" class="form-control">
 											                    <option value="">Select Flat</option>
 												          	</select>
-														</div>
-														<div class="messageContainer col-sm-offset-4"></div>
-													</div>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-state_id">
-														<label class="control-label col-sm-4">Assign Manager <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<select name="admin_id" id="admin_id" class="form-control">
+                                    </div>
+                                </div>
+                                
+                                 <div class="form-group row">
+                                    <label for="example-text-input" class="col-3 col-form-label">Assign Manager</label>
+                                    <div class="col-6">
+                                      <select name="admin_id" id="admin_id" class="form-control">
 																<% for(BuilderEmployee builderEmployee :builderEmployees) { %>
 											                  	<option value="<% out.print(builderEmployee.getId());%>"><% out.print(builderEmployee.getName());%></option>
 											                  	<% } %>
 												          	</select>
-														</div>
-														<div class="messageContainer col-sm-offset-4"></div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<br> <br>
-					</div>
-					<div id="buyingdetail" class="tab-pane fade">
-			 			<div class="row">
-			 				<div id="pricingresponse"></div>
-							<div class="col-lg-12">
-								<div class="panel panel-default">
-									<div class="panel-body">
-										<div class="row">
-											<div class="col-lg-6">
-												<div class="form-group" id="error-base_unit">
-													<label class="control-label col-sm-4">Booking Date <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-															<input type="text" class="form-control" id="booking_date" name="booking_date" value=""/>
-													</div>
-													<div class="messageContainer col-sm-offset-4"></div>
-												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-base_rate">
-													<label class="control-label col-sm-4">Base Rate <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="base_rate" name="base_rate" />
-													</div>
-													<div class="messageContainer col-sm-offset-4"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-rise_rate">
-													<label class="control-label col-sm-4">Floor Rise Rate</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="rise_rate" name="rise_rate"/>
-													</div>
-													<div class="messageContainer col-sm-offset-4"></div>
-												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-amenity_rate">
-													<label class="control-label col-sm-4">Amenities Facing Rate</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" />
-													</div>
-													<div class="messageContainer col-sm-offset-4"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-maintenance">
-													<label class="control-label col-sm-4">Maintenance Charge </label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="maintenance" name="maintenance" "/>
-													</div>
-													<div class="messageContainer col-sm-offset-4"></div>
-												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-tenure">
-													<label class="control-label col-sm-4">Tenure </label>
-													<div class="col-sm-8 input-group" style="padding: 0px 12px;">
-														<input type="text" class="form-control" id="tenure" name="tenure" "/>
+                                    </div>
+                                </div>
+
+                                <div class="offset-sm-5 col-sm-7">
+                                <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous1();">Previous</button>
+                                        <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next1" onclick="show1();">Next</button>
+                                 </div>
+                             
+                               </div>
+
+                                <div id="vimessages2" class="tab-pane" aria-expanded="false">
+                                 <div class="col-12">
+                           
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-3 col-form-label">Booking Date</label>
+                                    <div class="col-3">
+                                       <input type="text" class="form-control" id="booking_date" name="booking_date" value=""/>
+                                    </div>
+                                    <label for="example-text-input" class="col-3 col-form-label">Base Rate</label>
+                                    <div class="col-3">
+                                        <input type="text" class="form-control" id="base_rate" name="base_rate" />
+                                    </div>
+                                </div> 
+                                
+                                <div class="form-group row">
+                                    <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate</label>
+                                    <div class="col-3">
+                                       <input type="text" class="form-control" id="rise_rate" name="rise_rate"/>
+                                    </div>
+                                    <label for="example-search-input" class="col-3 col-form-label">Aminities Facing Rise Rates</label>
+                                    <div class="col-3">
+                                        <input type="text" class="form-control" id="amenity_rate" name="amenity_rate" />
+                                    </div>
+                                </div>
+                                
+                                 <div class="form-group row">
+                                    <label for="example-tel-input" class="col-3 col-form-label">Parking Rates</label>
+                                    <div class="col-3">
+                                       	<input type="text" class="form-control" id="parking" name="parking" />
+                                    </div>
+                                    <label for="example-tel-input" class="col-3 col-form-label">Maintance</label>
+                                    <div class="col-3">
+                                        <input type="text" class="form-control" id="maintenance" name="maintenance" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="example-tel-input" class="col-3 col-form-label">Stamp Duty</label>
+                                    <div class="col-3">
+                                       <input type="text" class="form-control" id="stamp_duty" name="stamp_duty" />
+                                    </div>
+                                    <label for="example-tel-input" class="col-3 col-form-label">Taxes</label>
+                                    <div class="col-3">
+                                         <input type="text" class="form-control" id="tax" name="tax" />
+                                    </div>
+                                </div>
+                                                              
+                                <div class="form-group row">
+                                    <label for="example-search-input" class="col-3 col-form-label">VAT</label>
+                                    <div class="col-3">
+                                       <input type="text" class="form-control" id="vat" name="vat" />
+                                    </div>
+                                    <label for="example-search-input" class="col-3 col-form-label">Tenure</label>
+                                    <div class="col-3">
+                                      <input type="text" class="form-control" id="tenure" name="tenure" />
 														<span class="input-group-addon">Months</span>
-													</div>
-													<div class="messageContainer col-sm-offset-4"></div>
-												</div>
-											</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="example-search-input" class="col-3 col-form-label">No. of Post</label>
+                                    <div class="col-3">
+                                        <input class="form-control" type="text" value="" id="post" name="post">
+                                    </div>
+                               </div>
+                               
+                               <div class="form-group row">
+                               
+                                    <button type="button" class="col-2" onclick="showOffers()">+ADD offers</button>
+                                  
+                                </div>
+                                
+                                 <div id="displayoffers" style="display:none">
+                                  <div class="offset-sm-11 col-sm-7">
+                                    <i class="fa fa-times"></i> 
+                                  </div>
+                                   <div class="form-group row">
+	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>
+	                                    <div class="col-2">
+	                                        <input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>
+	                                    </div>
+	                                    <label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>
+	                                    <div class="col-2">
+	                                       <input type="text" class="form-control" id="discount" name="discount[]" value=""/>
+	                                    </div>
+	                                    <label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>
+	                                    <div class="col-2">
+	                                       <input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
+	                                    </div>
+	                                </div>
+	                                <div class="form-group row">
+	                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
+	                                    <div class="col-2">
+	                                        <textarea class="form-control" id="description" class="description"></textarea>
+	                                    </div>
+	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
+	                                    <div class="col-2">
+	                                     <select class="form-control" id="offer" name="offer">
+										  <option value="">Percentage</option>
+										  <option value="">Discount</option>
+										</select>
+	                                    </div>
+	                                    <label for="example-search-input" class="col-2 col-form-label">Status</label>
+	                                    <div class="col-2">
+	                                     <select class="form-control" id="status" name="status">
+										  <option value="">Active</option>
+										  <option value="">Inactive</option>
+										</select>
 										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-amenity_rate">
-													<label class="control-label col-sm-4">Registration</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="registration" name="registration" />
-													</div>
-													<div class="messageContainer col-sm-offset-4"></div>
-												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Parking </label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="parking" name="parking" />
-													</div>
-													<div class="messageContainer col-sm-offset-4"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Stamp Duty </label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" />
-													</div>
-													<div class="messageContainer col-sm-offset-4"></div>
-												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-tax">
-													<label class="control-label col-sm-4">Tax</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="tax" name="tax" />
-													</div> 
-													<div class="messageContainer col-sm-offset-4"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-vat">
-													<label class="control-label col-sm-4">VAT </label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="vat" name="vat" />
-													</div>
-													<div class="messageContainer col-sm-offset-4"></div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div id="offer" class="tab-pane fade">
-						<input type="hidden" name="offer_count" id="offer_count" value="1"/>
-			 			<div class="row">
-							<div class="col-lg-12">
-								<div class="panel panel-default">
-									<div class="panel-body">
-										<div id="offer_area">
-											<div class="row" id="offer-1">
-												<div class="col-lg-12" style="padding-bottom:5px;">
-<!-- 													<span class="pull-right"><a href="javascript:removeOffer(1);" class="btn btn-danger btn-xs">x</a></span> -->
-												</div>
-												<div class="row">
-												<div class="col-lg-6 margin-bottom-5" style="margin-bottom:5px;">
-													<div class="form-group" id="error-offer_title">
-														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-discount">
-														<label class="control-label col-sm-4">Offer Discount(%) <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="discount" name="discount[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												</div>
-												<div class="row">
-												<div class="col-lg-6 margin-bottom-5" style="margin-bottom:5px;">
-													<div class="form-group" id="error-discount_amount">
-														<label class="control-label col-sm-4">Offer Discount Amount </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-applicable_on">
-														<label class="control-label col-sm-4">Applicable on </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="applicable_on" name="applicable_on[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												</div>
-												<div class="row">
-												<div class="col-lg-6 margin-bottom-5" style="margin-bottom:5px;">
-													<div class="form-group" id="error-apply">
-														<label class="control-label col-sm-4">Apply </label>
-														<div class="col-sm-8">
-															<select class="form-control" id="apply" name="apply[]">
-																<option value="1" >Yes</option>
-																<option value="0" >No</option>
-															</select>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div id="payment" class="tab-pane fade">
-						<input type="hidden" name="schedule_count" id="schedule_count" value="1"/>
-			 			<div class="row">
-			 				<div id="paymentresponse"></div>
-							<div class="col-lg-12">
-								<div class="panel panel-default">
-									<div class="panel-body">
-										<div id="payment_schedule">
-											<div class="row" id="schedule-1">
-												<div class="col-lg-5 margin-bottom-5">
-													<div class="form-group" id="error-schedule">
-														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-payable">
-														<label class="control-label col-sm-8">% of Net Payable </label>
-														<div class="col-sm-4">
-															<input type="text" class="form-control" id="payable" name="payable[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-amount">
-														<label class="control-label col-sm-6">Amount </label>
-														<div class="col-sm-6">
-															<input type="text" class="form-control" id="amount" name="amount[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-1">
-													<span><a href="javascript:removeSchedule(1);" class="btn btn-danger btn-xs">x</a></span>
-												</div>
-											</div>
-										</div>
-										<div>
-											<div class="col-lg-12">
-												<span class="pull-right">
-													<a href="javascript:addMoreSchedule();" class="btn btn-info btn-xs">+ Add More Schedule</a>
-												</span>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div id="documents" class="tab-pane fade">
-						<input type="hidden" name="doc_count" id="doc_count" value="1"/>
-			 			<div class="row">
-							<div class="col-lg-12">
-								<div class="panel panel-default">
-									<div class="panel-body">
-										<div>
-											<div class="row">
-												<div class="col-lg-12" style="padding-bottom:5px;">
-<!-- 													<span class="pull-right"><a href="javascript:removeOffer(1);" class="btn btn-danger btn-xs">x</a></span> -->
-												</div>
-												<div class="row" id="doc_area">
-													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
-														<div class="form-group" id="error-offer_title">
-															<input type="hidden" name="doc_name[]" value="Agreement" />
-															<label class="control-label col-sm-5">Agreement <span class='text-danger'>*</span></label>
-															<div class="col-sm-7">
-																<input type="file" class="form-control" name="doc_url[]" />
-															</div>
-															<div class="messageContainer col-sm-offset-5"></div>
-														</div>
-													</div>
-													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
-														<div class="form-group" id="error-offer_title">
-															<input type="hidden" name="doc_name[]" value="Index 2" />
-															<label class="control-label col-sm-5">Index 2 <span class='text-danger'>*</span></label>
-															<div class="col-sm-7">
-																<input type="file" class="form-control" name="doc_url[]" />
-															</div>
-															<div class="messageContainer col-sm-offset-5"></div>
-														</div>
-													</div>
-													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
-														<div class="form-group" id="error-offer_title">
-															<input type="hidden" name="doc_name[]" value="Receipts with Date and time and Name" />
-															<label class="control-label col-sm-5">Receipts with Date and time and Name </label>
-															<div class="col-sm-7">
-																<input type="file" class="form-control" name="doc_url[]" />
-															</div>
-															<div class="messageContainer col-sm-offset-5"></div>
-														</div>
-													</div>
-													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
-														<div class="form-group" id="error-offer_title">
-															<input type="hidden" name="doc_name[]" value="Electrical and Plumbing lines map" />
-															<label class="control-label col-sm-5">Electrical and Plumbing lines map </label>
-															<div class="col-sm-7">
-																<input type="file" class="form-control" name="doc_url[]" />
-															</div>
-															<div class="messageContainer col-sm-offset-5"></div>
-														</div>
-													</div>
-													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
-														<div class="form-group" id="error-offer_title">
-															<input type="hidden" name="doc_name[]" value="Possession grant letter" />
-															<label class="control-label col-sm-5">Possession grant letter </label>
-															<div class="col-sm-7">
-																<input type="file" class="form-control" name="doc_url[]" />
-															</div>
-															<div class="messageContainer col-sm-offset-5"></div>
-														</div>
-													</div>
-													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;" id="doc-1">
-														<div class="form-group" id="error-offer_title">
-															<label class="control-label col-sm-5">Other Documents </label>
-															<div class="col-sm-3">
-																<input type="text" name="doc_name[]" class="form-control" value="" placeholder="Enter Document Name"/>
-															</div>
-															<div class="col-sm-3">
-																<input type="file" class="form-control" name="doc_url[]" />
-															</div>
-															<div class="messageContainer col-sm-offset-5"></div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div>
-												<div class="col-lg-12">
-													<span class="pull-right">
-														<a href="javascript:addMoreDoc();" class="btn btn-info btn-xs">+ Add More Document</a>
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div>
-							<div class="row">
-								<div class="col-lg-12">
-									<div class="col-sm-12">
-										<button type="submit" name="addemp" class="btn btn-success btn-sm" id="addemp">SAVE</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-<%@include file="../../footer.jsp"%>
-<!-- inline scripts related to this page -->
-<style>
-	.row {
-		margin-bottom:5px;
-	}
-</style>
-<script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
-<script src="${baseUrl}/js/jquery.form.js"></script>
-<script>
+	                                </div>
+	                             </div>
+                             
+                                <div class="offset-sm-5 col-sm-7">
+                                     <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous2();">Previous</button>
+                                        <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next2" onclick="show2();">Next</button>
+                                 </div>
+                           
+                                </div>
+                               </div>
+
+                                <div id="vimessages3" class="tab-pane" aria-expanded="true">        
+                                <input type="hidden" name="schedule_count" id="schedule_count" value="1"/>
+	                                <div class="form-group row">
+	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
+	                                    <div class="col-2">
+	                                       <input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>
+	                                    </div>
+	                                    <label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
+	                                    <div class="col-2">
+	                                       <input type="text" class="form-control" id="payable" name="payable[]" value=""/>
+	                                    </div>
+	                                    <label for="example-search-input" class="col-1 col-form-label">Amount</label>
+	                                    <div class="col-2">
+	                                       <input type="text" class="form-control" id="amount" name="amount[]" value=""/>
+	                                    </div>
+	                                     <i class="fa fa-times"></i>
+	                                </div>
+	                                <div class="form-group row">
+	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
+	                                    <div class="col-2">
+	                                       <input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>
+	                                    </div>
+	                                    <label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
+	                                    <div class="col-2">
+	                                       <input type="text" class="form-control" id="payable" name="payable[]" value=""/>
+	                                    </div>
+	                                    <label for="example-search-input" class="col-1 col-form-label">Amount</label>
+	                                    <div class="col-2">
+	                                        <input type="text" class="form-control" id="amount" name="amount[]" value=""/>
+	                                    </div>
+	                                     <i class="fa fa-times"></i>
+	                                </div>
+	                                
+	                                 
+	                                <div class="offset-sm-9 col-sm-7">
+                                       <a href="javascript:addMoreSchedule();"> <button type="button" class="">+ Add More Schedules</button></a>
+                                    </div>
+	                                
+	                                <div class="offset-sm-5 col-sm-7">
+                                        <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous3();">Previous</button>
+                                        <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next3" onclick="show3();">Next</button>
+                                    </div>
+                       
+                                
+                                </div>
+                                
+                               <div id="vimessages4" class="tab-pane" aria-expanded="true">
+                           
+                              
+	                              <div class="form-group row">
+	                              <input type="hidden" name="doc_name[]" value="Agreement" />
+                                    <label for="example-text-input" class="col-6 col-form-label">Agreement*</label>
+                                  
+                                      <div class="col-2">  <input type="file" class="form-control" name="doc_url[]" /><!-- <i class="fa fa-upload" aria-hidden="true"></i>--></div>
+<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
+<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
+                                  </div>
+                                  <div class="form-group row">
+                                  <input type="hidden" name="doc_name[]" value="Index 2" />
+                                    <label for="example-text-input" class="col-6 col-form-label">Index 2*</label>
+                                   
+                                      <div class="col-2"> <input type="file" class="form-control" name="doc_url[]" /><!-- <i class="fa fa-upload" aria-hidden="true"></i>--></div>
+<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
+<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
+                                  </div>
+                                  <div class="form-group row">
+                                  <input type="hidden" name="doc_name[]" value="Receipts with Date and time and Name" />
+                                    <label for="example-text-input" class="col-6 col-form-label">Receipts with Date & Time & Name</label>
+                                    
+                                      <div class="col-2"> <input type="file" class="form-control" name="doc_url[]" /><!-- <i class="fa fa-upload" aria-hidden="true"></i>--></div>
+<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
+<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
+                                  </div>
+                                  <div class="form-group row">
+                                  <input type="hidden" name="doc_name[]" value="Electrical and Plumbing lines map" />
+                                    <label for="example-text-input" class="col-6 col-form-label">Electricals & Plumbing lines map</label>
+                                    
+                                      <div class="col-2"><input type="file" class="form-control" name="doc_url[]" /><!-- <i class="fa fa-upload" aria-hidden="true"></i>--></div>
+<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
+<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
+                                  </div>
+                                  <div class="form-group row">
+                                  <input type="hidden" name="doc_name[]" value="Possession grant letter" />
+                                    <label for="example-text-input" class="col-6 col-form-label">Possession grant letter</label>
+                                  
+                                  <div class="col-2"><input type="file" class="form-control" name="doc_url[]" /><!-- <i class="fa fa-upload" aria-hidden="true"></i>--></div>
+<!--                                       <div class="col-2"><i class="fa fa-upload" aria-hidden="true"></i></div> -->
+<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
+<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
+                                  </div>
+                                  <div class="form-group row">
+                                    <label for="example-text-input" class="col-6 col-form-label">Other Documents</label>
+                                       
+                                      <div class="col-2"><input type="text" name="doc_name[]" class="form-control" value="" placeholder="Enter Document Name"/></div>
+                                      <div class="col-2"><input type="file" class="form-control" name="doc_url[]" /><!-- <i class="fa fa-upload" aria-hidden="true">--></div>
+                                     
+                                  </div>
+	                             
+	                             <div class="offset-sm-5 col-sm-7">
+	                             <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous4();">Previous</button>
+                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+                                 </div>
+	                        
+                                </div>
+                                
+                                
+                            
+                                
+                               
+                                </div>
+                                </form>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <!-- /.row -->
+                <!-- .row -->
+               
+                <!-- /.row -->
+                <!-- .row -->
+                
+                <!-- .right-sidebar -->
+                <div class="right-sidebar" style="overflow: visible;">
+                    <div class="slimScrollDiv" style="position: relative; overflow-x: visible; overflow-y: hidden; width: auto; height: 100%;"><div class="slimscrollright" style="overflow: hidden; width: auto; height: 100%;">
+                        <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
+                        <div class="r-panel-body">
+                            <ul>
+                                <li><b>Layout Options</b></li>
+                                <li>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="checkbox1" type="checkbox" class="fxhdr">
+                                        <label for="checkbox1"> Fix Header </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkbox checkbox-warning">
+                                        <input id="checkbox2" type="checkbox" checked="" class="fxsdr">
+                                        <label for="checkbox2"> Fix Sidebar </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkbox checkbox-success">
+                                        <input id="checkbox4" type="checkbox" class="open-close">
+                                        <label for="checkbox4"> Toggle Sidebar </label>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul id="themecolors" class="m-t-20">
+                                <li><b>With Light sidebar</b></li>
+                                <li><a href="javascript:void(0)" theme="default" class="default-theme">1</a></li>
+                                <li><a href="javascript:void(0)" theme="green" class="green-theme">2</a></li>
+                                <li><a href="javascript:void(0)" theme="gray" class="yellow-theme">3</a></li>
+                                <li><a href="javascript:void(0)" theme="blue" class="blue-theme">4</a></li>
+                                <li><a href="javascript:void(0)" theme="purple" class="purple-theme">5</a></li>
+                                <li><a href="javascript:void(0)" theme="megna" class="megna-theme working">6</a></li>
+                                <li><b>With Dark sidebar</b></li>
+                                <br>
+                                <li><a href="javascript:void(0)" theme="default-dark" class="default-dark-theme">7</a></li>
+                                <li><a href="javascript:void(0)" theme="green-dark" class="green-dark-theme">8</a></li>
+                                <li><a href="javascript:void(0)" theme="gray-dark" class="yellow-dark-theme">9</a></li>
+                                <li><a href="javascript:void(0)" theme="blue-dark" class="blue-dark-theme">10</a></li>
+                                <li><a href="javascript:void(0)" theme="purple-dark" class="purple-dark-theme">11</a></li>
+                                <li><a href="javascript:void(0)" theme="megna-dark" class="megna-dark-theme">12</a></li>
+                            </ul>
+                            <ul class="m-t-20 chatonline">
+                                <li><b>Chat option</b></li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="../plugins/images/users/varun.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="../plugins/images/users/genu.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="../plugins/images/users/ritesh.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="../plugins/images/users/arijit.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="../plugins/images/users/govinda.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="../plugins/images/users/hritik.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="../plugins/images/users/john.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="../plugins/images/users/pawandeep.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><div class="slimScrollBar" style="background: rgb(220, 220, 220); width: 5px; position: absolute; top: 0px; opacity: 0.4; display: block; border-radius: 7px; z-index: 99; right: 1px;"></div><div class="slimScrollRail" style="width: 5px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
+                </div>
+                <!-- /.right-sidebar -->
+            </div>
+            <!-- /.container-fluid -->
+            <footer class="footer text-center"> 2017 Â© Blue Pigeon</footer>
+        
+        <!-- /#page-wrapper -->
+    
+    <!-- /#wrapper -->
+    
+</body>
+</html>
+<script type="text/javascript">
+
+function showOffers()
+{
+	$("#displayoffers").show(); 
+}
+
+
 $('#booking_date').datepicker({
 	format: "dd MM yyyy"
 });
 
 $("#project_id").change(function(){
-	$.get("${baseUrl}/webapi/buyer/buildings/names/"+$("#project_id").val(),{ }, function(data){
+	$.get("${baseUrl}/bluepigeon/webapi/buyer/buildings/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
 		$(data).each(function(index){
 			
@@ -607,7 +609,7 @@ $("#project_id").change(function(){
 	},'json');
 });
 $("#building_id").change(function(){
-	$.get("${baseUrl}/webapi/buyer/building/available/flat/names/"+$("#building_id").val(),{ }, function(data){
+	$.get("${baseUrl}/bluepigeon/webapi/buyer/building/available/flat/names/"+$("#building_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Flat</option>';
 		$(data).each(function(index){
 			
@@ -770,15 +772,16 @@ $('#addbuyer').bootstrapValidator({
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
-	addBuyer();
+	addBuyer1();
 });
 
-function addBuyer() {
+function addBuyer1() {
+	alert("inside add");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/buyer/save',
+	 		url : '${baseUrl}/bluepigeon/webapi/buyer/save',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -803,118 +806,85 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/admin/buyer/list.jsp";
+        window.location.href = "${baseUrl}/bluepigeon/builder/buyer/buyer-update.jsp";
   	}
 }
 
 function addMoreBuyers() {
 	var buyers = parseInt($("#buyer_count").val());
 	buyers++;
-	var html = '<div class="row" id="buyer-'+buyers+'"><hr>'
-		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeBuyer('+buyers+');" class="btn btn-danger btn-xs">x</a></span></div>'
-			+'<div class="row">'
-		+'<div class="col-lg-6 margin-bottom-5">'
-			+'<div class="form-group" id="error-buyer_name">'
-			+'<label class="control-label col-sm-4">Buyer Name <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="buyer_name" name="buyer_name[]" value=""/>'
+	
+	var html = '<div class="tab-content" id="buyer-'+buyers+'"><hr>'
+		+'<span class="pull-right">	<a href="javascript:removeBuyer('+buyers+');" class="btn btn-danger btn-xs">x</a></span><br>'
+		+'<div class="col-12">'
+		+'<div class="form-group row">'
+			+'<label for="example-text-input" class="col-3 col-form-label">Buyer Name</label>'
+				+'<div class="col-3">'
+					+' <input class="form-control" type="text" id="buyer_name" name="buyer_name[]" value="">'
 				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
-		+'</div>'
-		+'<div class="col-lg-6 margin-bottom-6">'
-			+'<div class="form-group" id="error-contact">'
-				+'<label class="control-label col-sm-4">Contact <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="contact" name="contact[]" value=""/>'
+				
+		
+				+'<label for="example-text-input" class="col-3 col-form-label">Contact</label>'
+				+'<div class="col-3">'
+					+'<input class="form-control" type="text" id="contact" name="contact[]" value="">'
 				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
-		+'</div>'
-	+'</div>'
-	+'<div class="row">'
-		+'<div class="col-lg-6 margin-bottom-6">'
-			+'<div class="form-group" id="error-email">'
-				+'<label class="control-label col-sm-4">Email </label>'
-				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="email" name="email[]" value=""/>'
 				+'</div>'
-				+'<div class="messageContainer"></div><br/>'
-			+'</div>'
-		+'</div>'
-		+'<div class="col-lg-6 margin-bottom-6">'
-			+'<div class="form-group" id="error-email">'
-				+'<label class="control-label col-sm-4">PAN <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="pan" name="pan[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
-		+'</div>'
-	+'</div>'
-	+'<div class="row">'
-		+'<div class="col-lg-6 margin-bottom-5">'
-			+'<div class="form-group" id="error-applicable_on">'
-			+'<label class="control-label col-sm-4"> Prem. Address <span class="text-danger">*</span></label>'
-			+'<div class="col-sm-8">'
-			+'<textarea class="form-control" id="address" name="address[]" ></textarea>'
-			+'</div>'
-			+'<div class="messageContainer"></div>'
-			+'</div>'
-		+'</div>'
-		+'<div class="col-lg-6 margin-bottom-6">'
-			+'<div class="form-group" id="error-state_id">'
-				+'<label class="control-label col-sm-4">Owner <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-					+'<select name="is_primary[]" id="is_primary" class="form-control">'
-	                    +'<option value="">Select Owner</option>'
-	                     +'<option value="0" selected>Co-Owner</option>'
-	                      +'<option value="1">Owner</option>'
-		          	+'</select>'
-				+'</div>'
-				+'<div class="messageContainer col-sm-4"></div>'
-			+'</div>'
-		+'</div>'
-	+'</div>'
-	+'<div class="row">'
-		+'<div class="col-lg-6 margin-bottom-5">'
-			+'<div class="form-group" id="error-applicable_on">'
-				+'<label class="control-label col-sm-4"> Upload Buyer Pic <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-					+'<input type="file" name="photo[]" class="form-control" />'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
-		+'</div>'
-	+'</div>'
-	+'<hr>'
-	+'<div class="col-lg-12 margin-bottom-6">'
-			+'<div class="form-group" id="error-project_type">'
-				+'<label class="control-label col-sm-2">Documents <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-10">'
-					+'<div class="col-sm-3">'
-						+'<input type="checkbox" name="document_pan[]" value="1" /> PAN Card'
+				
+				+'<div class="form-group row">'
+				
+				+'<label for="example-text-input" class="col-3 col-form-label">Email</label>'
+					+'<div class="col-3">'
+						+' <input class="form-control" type="text" id="email" name="email[]" value="">'
 					+'</div>'
-					+'<div class="col-sm-3">'
-						+'<input type="checkbox" name="document_aadhar[]" value="2" /> Aadhar Card' 
+					
+			
+					+'<label for="example-text-input" class="col-3 col-form-label">PAN</label>'
+					+'<div class="col-3">'
+						+'<input class="form-control" type="text" id="pan" name="pan[]" value="">'
 					+'</div>'
-					+'<div class="col-sm-3">'
-						+'<input type="checkbox" name="document_passport[]" value="3" /> Passport' 
 					+'</div>'
-					+'<div class="col-sm-3">'
-						+'<input type="checkbox" name="document_rra[]" value="4" /> Registered Rent Agreement' 
-					+'</div>'
-					+'<div class="col-sm-3">'
-						+'<input type="checkbox" name="document_voterid[]" value="5" /> Vote ID' 
-					+'</div>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
-		+'</div>'
-	+'</div>'
+					
+					+'<div class="form-group row">'
+					
+					+'<label for="example-text-input" class="col-3 col-form-label"> Perm. Address</label>'
+						+'<div class="col-3">'
+							+' <input class="form-control" type="text" id="address" name="address[]" value="">'
+						+'</div>'
+						
+				
+						+'<label for="example-text-input" class="col-3 col-form-label">Referral ID</label>'
+						+'<div class="col-3">'
+							+'<input class="form-control" type="text" id="referralid" name="referralid[]" value="">'
+						+'</div>'
+						+'</div>'
+						
+					
+			 			+'<div class="form-group row" id="error-project_type">'
+			 				+'<label class="col-12 col-form-label">Documents <span class="text-danger">*</span></label>'
+			 					+'<div class="col-3">'
+			 						+'<input type="checkbox" name="document_pan[]" value="1" /> PAN Card'
+			 					+'</div>'
+			 					+'<div class="col-3">'
+			 						+'<input type="checkbox" name="document_aadhar[]" value="2" /> Aadhar Card' 
+			 					+'</div>'
+			 					+'<div class="col-3">'
+			 						+'<input type="checkbox" name="document_passport[]" value="3" /> Passport' 
+			 					+'</div>'
+			 					+'<div class="col-3">'
+			 						+'<input type="checkbox" name="document_rra[]" value="4" /> Registered Rent Agreement' 
+			 					+'</div>'
+			 					+'<div class="col-3">'
+			 						+'<input type="checkbox" name="document_voterid[]" value="5" /> Vote ID' 
+			 					+'</div>'
+			 			
+			 				+'<div class="messageContainer"></div>'
+			 			+'</div>'
+				
 	+'</div>'
 	+'</div>';
-	$("#buyer_area").append(html);
+
+	
+	$("#vimessages").append(html);
 	$("#buyer_count").val(buyers);
 }
 function removeBuyer(id) {
@@ -924,40 +894,29 @@ function removeBuyer(id) {
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
-	var html = '<div class="row" id="schedule-'+schedule_count+'">'
+	alert(schedule_count);
+	var html = '<div class="tab-content" id="schedule-'+schedule_count+'">'
 				+'<hr/>'
-				+'<div class="col-lg-5 margin-bottom-5">'
-				+'<div class="form-group" id="error-schedule">'
-				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
+				+'<span class="pull-right">	<a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span><br>'
+				+'<div class="col-12">'
+				+'<div class="form-group row">'
+				+'<label for="example-search-input" class="col-2 col-form-label">Milestone</label>'
+				+'<div class="col-2">'
 				+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
 				+'</div>'
-				+'<div class="messageContainer"></div>'
+				+'<label for="example-search-input" class="col-2 col-form-label">% of Net Payable</label>'
+				+'<div class="col-2">'
+				+'<input type="text" class="form-control"  id="payable" name="payable[]" value=""/>'
 				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-payable">'
-				+'<label class="control-label col-sm-8">% of Net Payable </label>'
-				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control" id="payable" name="payable[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-amount">'
-				+'<label class="control-label col-sm-6">Amount </label>'
-				+'<div class="col-sm-6">'
+				+'<label for="example-search-input" class="col-2 col-form-label">Amount</label>'
+				+'<div class="col-2">'
 				+'<input type="text" class="form-control" id="amount" name="amount[]" value=""/>'
 				+'</div>'
-				+'<div class="messageContainer"></div>'
 				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-1">'
-				+'<span><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span>'
-				+'</div>'
+			+'</div>'
+				
 			+'</div>';
-	$("#payment_schedule").append(html);
+	$("#vimessages3").append(html);
 	$("#schedule_count").val(schedule_count);
 }
 function removeSchedule(id) {
@@ -988,6 +947,56 @@ function removeDoc(id) {
 	$("#doc-"+id).remove();
 }
 
+function show()
+{
+	$("#vimessages1").show();
+	$("#111").hide();
+	
+}
+
+function show1()
+{
+	$("#vimessages2").show();
+	$("#vimessages1").hide();
+	
+}
+
+function previous1()
+{
+	$("#vimessages1").hide();
+	$("#111").show();
+}
+
+
+function show2()
+{
+	$("#vimessages3").show();
+	$("#vimessages2").hide();
+	
+}
+function previous2()
+{
+	$("#vimessages2").hide();
+	$("#vimessages1").show();
+	
+}
+
+function show3()
+{
+	$("#vimessages4").show();
+	$("#vimessages3").hide();
+	
+}
+function previous3()
+{
+	$("#vimessages3").hide();
+	$("#vimessages2").show();
+	
+}
+function previous4()
+{
+	$("#vimessages4").hide();
+	$("#vimessages3").show();
+	
+}
 </script>
-</body>
-</html>

@@ -54,7 +54,7 @@
     <script>
     $(function() {
         $("#sidebar1").load("../partial/sidebar.jsp");
-        $("#header").load("../partial/header1.jsp");
+        $("#header").load("../partial/header.jsp");
 
         $("#footer").load("../partial/footer.html");
     });

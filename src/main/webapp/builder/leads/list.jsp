@@ -1,29 +1,29 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:set var="req" value="${pageContext.request}" />
-<c:set var="url">${req.requestURL}</c:set>
-<c:set var="uri" value="${req.requestURI}" />
-<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
-<%@page import="org.bluepigeon.admin.model.Builder"%>
+<%@page import="org.bluepigeon.admin.model.BuilderLead"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.data.ProjectList"%>
+<%@page import="org.bluepigeon.admin.data.PossessionList"%>
+<%@page import="org.bluepigeon.admin.dao.PossessionDAO"%>
+<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
-<%@page import="org.bluepigeon.admin.dao.CampaignDAO"%>
-<%@page import="org.bluepigeon.admin.data.CampaignList"%>
+<%@page import="org.bluepigeon.admin.model.Builder"%>
 <%
-List<CampaignList> campaignLists = null;
-session = request.getSession(false);
-Builder builder = new Builder();
-int session_id = 0;
-if(session!=null)
-{
-	if(session.getAttribute("ubname") != null)
+	List<BuilderLead> project_list = null;
+	session = request.getSession(false);
+	Builder builder = new Builder();
+	int builder_uid = 0;
+	if(session!=null)
 	{
-		builder  = (Builder)session.getAttribute("ubname");
-		session_id = builder.getId();
+		if(session.getAttribute("ubname") != null)
+		{
+			builder  = (Builder)session.getAttribute("ubname");
+			builder_uid = builder.getId();
+		}
+   	}
+	if(builder_uid > 0){
+		project_list = new ProjectDAO().getBuilderLeadByBuilderId(builder_uid);
+		int builder_size = project_list.size();
 	}
-	}
-if(session_id > 0){
-	campaignLists = new CampaignDAO().getCampaignListByBuilderId(session_id); 
-}
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +34,7 @@ if(session_id > 0){
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="../plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -55,9 +55,14 @@ if(session_id > 0){
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-   
+  
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-   
+	   <div id="header">
+	       <%@include file="../partial/header.jsp"%>
+      </div>
+      <div id="sidebar1"> 
+       	<%@include file="../partial/sidebar.jsp"%>
+      </div>
    
     </head>
 
@@ -65,12 +70,13 @@ if(session_id > 0){
     <!-- Preloader -->
    
     <div id="wrapper">
-         <div id="header">
-	       <%@include file="../partial/header.jsp"%>
-      </div>
-      <div id="sidebar1"> 
-       	<%@include file="../partial/sidebar.jsp"%>
-      </div>
+        <!-- Top Navigation -->
+        <div id="header"></div>
+        <!-- End Top Navigation -->
+        <!-- Left navbar-header -->
+        <div id="sidebar1"> </div>
+        <!-- Left navbar-header end -->
+        <!-- Page Content -->
      </div>
 <div id="page-wrapper">
             <div class="container-fluid">
@@ -79,50 +85,54 @@ if(session_id > 0){
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box"><br>
-                          <center><h1>Manage Campaign</h1></center> 
-                           <br>
-                            <a href="${baseUrl}/builder/campaign/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add Campaign</span></a>
-                           <br><br><br>
+                          <center><h1>Manage Leads</h1></center> <br>
+                          <a href="${baseUrl}/builder/leads/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add New Lead</span></a>
+                          <br><br><br>
                             <div class="table-responsive">
                                 <table id="myTable" class="table table-striped">
                                     <thead>
                                         <tr>
-                                          <th>Campaign Title</th>
-                                           	<th>Start Date</th>
-                                            <th>Campaign Type</th>
-                                            <th>Actions</th>
-                                           
+                                         <th>Name</th>
+                                            <th>Builder Name</th>
+                                            <th>City Name</th>
+                                            <th>Locality</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <%
-                                        if(campaignLists != null){
-                                       		for(CampaignList campaignList : campaignLists){
-                                        %>
-                                        <tr>
-                                            <td><% out.print(campaignList.getTitle()); %></td>
-                                            <td><% out.print(campaignList.getSetdate()); %></td>
-                                            <td><% 
-					                 	   	    if(campaignList.getCampaignType() ==1)
-                                            		out.print("New Project");
-					                 	   	    if(campaignList.getCampaignType() == 2)
-					                 	   	    	out.print("New Property");
-					                 	   	    if(campaignList.getCampaignType() == 3)
-					                 	   	    	out.print("Offers");
-					                 	   	    if(campaignList.getCampaignType() == 4)
-					                 	   	    	out.print("Event");
-					                 	   	    if(campaignList.getCampaignType() == 5)
-					                 	   	    	out.print("Referral");
-                                            %></td>
-                                            <td class="alignRight">
-<%--                                             	<a href="${baseUrl}/admin/leads/edit.jsp?lead_id=<% out.print(campaignList.getCampaignId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
-                                            </td>
-                                            
-                                        </tr>
-                                        <% 
-                                        	} 
-                                        }
-                                        %>
+                                      if(project_list != null){
+                                      	for(BuilderLead project : project_list) { %>
+									<tr>
+										<td>
+											<% out.print(project.getName()); %>
+										</td>
+										<td>
+											<% out.print(project.getBuilderProject().getName()); %>
+										</td>
+										<td>
+											<% out.print(project.getMobile()); %>
+										</td>
+										<td>
+											<% out.print(project.getEmail()); %>
+										</td>
+										<td>
+											<% if(project.getStatus() == 0) { %>
+											<span class='label label-warning'>Inactive</span>
+											<% } else { %>
+											<span class='label label-success'>Active</span>
+											<% 	
+											   }
+											%>
+										</td>
+										<td>
+										<a href="${baseUrl}/builder/leads/edit.jsp?lead_id=<% out.print(project.getId());%>"> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span></a>
+										</td>
+										<% 	
+											} 
+                                      	}
+										%>
                                     </tbody>
                                 </table>
                             </div>
@@ -131,8 +141,8 @@ if(session_id > 0){
                </div>
             </div>
             <!-- /.container-fluid -->
-          <div id="sidebar1"> 
-		       <%@include file="../partial/footer.jsp"%>
+         	<div id="sidebar1"> 
+	      		<%@include file="../partial/footer.jsp"%>
 			</div> 
         </div>
         <!-- /#page-wrapper -->
@@ -142,7 +152,11 @@ if(session_id > 0){
     <!-- start - This is for export functionality only -->
     <script src="../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
     <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
-    
+    <script src="../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {
@@ -198,5 +212,3 @@ if(session_id > 0){
     </script>
 </body>
 </html>
-
-        

@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.BuildingList"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.data.ProjectList"%>
 <%@page import="org.bluepigeon.admin.data.PossessionList"%>
@@ -7,7 +8,7 @@
 <%@page import="java.util.List"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%
-	List<ProjectList> project_list = null;
+	List<BuildingList> project_list = null;
 	session = request.getSession(false);
 	Builder builder = new Builder();
 	int builder_uid = 0;
@@ -20,7 +21,7 @@
 		}
    	}
 	if(builder_uid > 0){
-		project_list = new ProjectDAO().getBuilderProjectsByBuilderId(builder_uid);
+		project_list = new ProjectDAO().getBuildingByBuilderId(builder_uid);
 		int builder_size = project_list.size();
 	}
 %>
@@ -92,7 +93,7 @@
 						                <select name="searchprojectId" id="searchprojectId" class="form-control">
 						                    <option value="0">Select Project</option>
 						                    <% for(int i=0; i < project_list.size() ; i++){ %>
-											<option value="<% out.print(project_list.get(i).getId());%>"><% out.print(project_list.get(i).getName());%></option>
+											<option value="<% out.print(project_list.get(i).getId());%>"><% out.print(project_list.get(i).getProjectName());%></option>
 											<% } %>
 						                </select>
 					                </div>
@@ -113,19 +114,16 @@
                                     <tbody>
                                         <%
                                       if(project_list != null){
-                                      	for(ProjectList project : project_list) { %>
+                                      	for(BuildingList project : project_list) { %>
 									<tr>
 										<td>
-											<% out.print(project.getName()); %>
+											<% out.print(project.getProjectName()); %>
 										</td>
 										<td>
 											<% out.print(project.getBuilderName()); %>
 										</td>
 										<td>
-											<% out.print(project.getCityName()); %>
-										</td>
-										<td>
-											<% out.print(project.getLocalityName()); %>
+											<% out.print(project.getBuildingName()); %>
 										</td>
 										<td>
 											<% if(project.getStatus() == 0) { %>
@@ -137,7 +135,7 @@
 											%>
 										</td>
 										<td>
-										<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(project.getId());%>"> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span></a>
+										<a href="${baseUrl}/builder/project/building/edit.jsp?project_id=<% out.print(project.getId());%>"> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span></a>
 										</td>
 										<% 	
 											} 

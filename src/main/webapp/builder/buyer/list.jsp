@@ -9,8 +9,7 @@
 <%@page import="org.bluepigeon.admin.model.Country"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
-<%@include file="../../head.jsp"%>
-<%@include file="../../leftnav.jsp"%>
+
 <%
 	List<BuyerList> buyer_list = new BuyerDAO().getBuyerList();
 	int buyer_size = buyer_list.size();

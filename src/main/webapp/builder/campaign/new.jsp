@@ -1,3 +1,9 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri" value="${req.requestURI}" />
+<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
 <%@page import="org.bluepigeon.admin.model.City"%>
@@ -65,18 +71,10 @@
     
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-   <script src="../js/jquery.form.js"></script>
-  <script src="../js/bootstrapValidator.min.js"></script>
+    <script src="../js/jquery.form.js"></script>
+  	<script src="../js/bootstrapValidator.min.js"></script>
    <script src="../js/bootstrap-datepicker.min.js"></script>
-     <script> 
- 
-$(function(){
-$("#sidebar1").load("../partial/sidebar.jsp");
-  $("#header").load("../partial/header.jsp"); 
 
-  $("#footer").load("../partial/footer.jsp"); 
-});
-</script>
 <script type="text/javascript">
     $('input[type=checkbox]').click(function(){
     if($(this).is(':checked')){
@@ -96,11 +94,14 @@ $("#sidebar1").load("../partial/sidebar.jsp");
         <div class="cssload-speeding-wheel"></div>
     </div>
     <div id="wrapper">
-        <!-- Top Navigation -->
-        <div id="header"></div>
+        <div id="header">
+        <%@include file="../partial/header.jsp"%>
+        </div>
         <!-- End Top Navigation -->
         <!-- Left navbar-header -->
-       <div id="sidebar1"> </div>
+       <div id="sidebar1"> 
+       <%@include file="../partial/sidebar.jsp"%>
+       </div>
     
         <!-- Left navbar-header end -->
         <!-- Page Content -->
@@ -271,96 +272,15 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                         </div>
                     </div>
                 </div>
-                
-                
-                <!-- /.row -->
-                <!-- .row -->
-               
-                <!-- /.row -->
-                <!-- .row -->
-                
-                <!-- .right-sidebar -->
-                <div class="right-sidebar" style="overflow: visible;">
-                    <div class="slimScrollDiv" style="position: relative; overflow-x: visible; overflow-y: hidden; width: auto; height: 100%;"><div class="slimscrollright" style="overflow: hidden; width: auto; height: 100%;">
-                        <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
-                        <div class="r-panel-body">
-                            <ul>
-                                <li><b>Layout Options</b></li>
-                                <li>
-                                    <div class="checkbox checkbox-info">
-                                        <input id="checkbox1" type="checkbox" class="fxhdr">
-                                        <label for="checkbox1"> Fix Header </label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="checkbox checkbox-warning">
-                                        <input id="checkbox2" type="checkbox" checked="" class="fxsdr">
-                                        <label for="checkbox2"> Fix Sidebar </label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="checkbox checkbox-success">
-                                        <input id="checkbox4" type="checkbox" class="open-close">
-                                        <label for="checkbox4"> Toggle Sidebar </label>
-                                    </div>
-                                </li>
-                            </ul>
-                            <ul id="themecolors" class="m-t-20">
-                                <li><b>With Light sidebar</b></li>
-                                <li><a href="javascript:void(0)" theme="default" class="default-theme">1</a></li>
-                                <li><a href="javascript:void(0)" theme="green" class="green-theme">2</a></li>
-                                <li><a href="javascript:void(0)" theme="gray" class="yellow-theme">3</a></li>
-                                <li><a href="javascript:void(0)" theme="blue" class="blue-theme">4</a></li>
-                                <li><a href="javascript:void(0)" theme="purple" class="purple-theme">5</a></li>
-                                <li><a href="javascript:void(0)" theme="megna" class="megna-theme working">6</a></li>
-                                <li><b>With Dark sidebar</b></li>
-                                <br>
-                                <li><a href="javascript:void(0)" theme="default-dark" class="default-dark-theme">7</a></li>
-                                <li><a href="javascript:void(0)" theme="green-dark" class="green-dark-theme">8</a></li>
-                                <li><a href="javascript:void(0)" theme="gray-dark" class="yellow-dark-theme">9</a></li>
-                                <li><a href="javascript:void(0)" theme="blue-dark" class="blue-dark-theme">10</a></li>
-                                <li><a href="javascript:void(0)" theme="purple-dark" class="purple-dark-theme">11</a></li>
-                                <li><a href="javascript:void(0)" theme="megna-dark" class="megna-dark-theme">12</a></li>
-                            </ul>
-                            <ul class="m-t-20 chatonline">
-                                <li><b>Chat option</b></li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/varun.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/genu.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/ritesh.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/arijit.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/govinda.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/hritik.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/john.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../plugins/images/users/pawandeep.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div><div class="slimScrollBar" style="background: rgb(220, 220, 220); width: 5px; position: absolute; top: 0px; opacity: 0.4; display: block; border-radius: 7px; z-index: 99; right: 1px;"></div><div class="slimScrollRail" style="width: 5px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
-                </div>
-                <!-- /.right-sidebar -->
-            </div>
             <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2017 Â© Blue Pigeon</footer>
+          <div id="sidebar1"> 
+		       <%@include file="../partial/footer.jsp"%>
+		  </div> 
         
         <!-- /#page-wrapper -->
-    
+    </div>
     <!-- /#wrapper -->
-    
+    </div>
 </body>
 </html>
 
@@ -370,7 +290,7 @@ $('#set_date').datepicker({
 });
 
 $("#city_id").change(function(){
-	$.get("${baseUrl}/bluepigeon/webapi/campaign/projectlist/"+$("#city_id").val(),{ }, function(data){
+	$.get("${baseUrl}/webapi/campaign/projectlist/"+$("#city_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Project</option>';
 		var checkbox = '<div class="col-sm-10">';
 		$("#appendbuyer").empty();
@@ -405,7 +325,7 @@ $("#project_id").change(function(){
 	},'json');
 });
 $("#building_id").change(function(){
-	$.get("${baseUrl}/bluepigeon/webapi/campaign/building/flat/names/"+$("#building_id").val(),{ }, function(data){
+	$.get("${baseUrl}/webapi/campaign/building/flat/names/"+$("#building_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Flat</option>';
 		var checkbox = '<div class="col-sm-10">';
 		$("#appendbuyer").empty();
@@ -423,7 +343,7 @@ $("#building_id").change(function(){
 });
 
 $("#flat_id").change(function(){
-	$.get("${baseUrl}/bluepigeon/webapi/campaign/flat/buyer/names/"+$("#flat_id").val(),{ }, function(data){
+	$.get("${baseUrl}/webapi/campaign/flat/buyer/names/"+$("#flat_id").val(),{ }, function(data){
 		var checkbox = '<div class="col-sm-10">';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
@@ -512,7 +432,7 @@ function addCampaign() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/bluepigeon/webapi/campaign/save1',
+	 		url : '${baseUrl}/webapi/campaign/save1',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -537,7 +457,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/bluepigeon/builder/campaign/new-campaign.jsp";
+        window.location.href = "${baseUrl}/builder/campaign/list.jsp";
   	}
 }
 

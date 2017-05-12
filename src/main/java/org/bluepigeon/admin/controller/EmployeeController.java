@@ -11,11 +11,14 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.AdminUserDAO;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
+import org.bluepigeon.admin.dao.ProjectDAO;
+import org.bluepigeon.admin.data.ProjectCityData;
 import org.bluepigeon.admin.data.PropertyManagerData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
@@ -42,6 +45,16 @@ public class EmployeeController {
 		AdminUserDAO propertyManagerDAO = new AdminUserDAO();
 		propertyManagerDAO.getAdminUserById(manager_id);
 		return propertyManagerDAO.getAdminUserById(manager_id);
+	}
+	
+	@GET
+	@Path("/projectarea/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectCityData> addCity(@QueryParam("project") int project) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		return projectDAO.getCityareabyproject(project);
+		
+		
 	}
 	
 	@POST

@@ -15,6 +15,7 @@ import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuyer;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderFlatStatus;
+import org.bluepigeon.admin.model.BuilderFlatType;
 import org.bluepigeon.admin.model.BuilderFloor;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Buyer;
@@ -118,16 +119,22 @@ public class BuyerDAO {
 	}
 	
 	public void updateFlatStatus(int flatId){
-		System.out.println("FlatId :: "+flatId);
-		String hql = "UPDATE BuilderFlat set status_id = 2 WHERE id = :id";
+		String hql = "UPDATE BuilderFlat set builderFlatStatus.id=:status_id WHERE id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setInteger("id",flatId);
-		org.hibernate.Transaction tx=session.beginTransaction();  
-		query.executeUpdate();
-	//	session.getTransaction().commit();
-		tx.commit();
+		BuilderFlatType builderFlatType = new BuilderFlatType();
+		builderFlatType.setId(2);
+		BuilderFlat builderFlat = new BuilderFlat();
+		builderFlat.setId(flatId);
+		
+		builderFlat.setBuilderFlatType(builderFlatType);
+		session.beginTransaction();
+//		Query query = session.createQuery(hql);
+//		query.setParameter("status_id",2);
+//		query.setParameter("id",flatId);
+//		query.executeUpdate();
+		session.update(builderFlat);
+		session.getTransaction().commit();
 		session.close();
 	}
 	
@@ -705,7 +712,11 @@ public class BuyerDAO {
 			return builderFlats;
 		  
 	  }
-	  
+	  /**
+	   * @author pankaj
+	   * @param floorId
+	   * @return list of booked flat  
+	   */
 	  public List<FlatData> getBookedFlatByFloorId(int floorId){
 		  String hql = "from BuilderFlat where builderFloor.id = :floor_id and builderFlatStatus.id=2";
 			HibernateUtil hibernateUtil = new HibernateUtil();
@@ -754,7 +765,7 @@ public class BuyerDAO {
 		 return buyers;
 	  }
 	  /**
-	   * Get List of available flats which are not booked/sold
+	   * Get List of flats which are not booked/sold
 	   * @author pankaj
 	   * @param building_id
 	   * @return List of available flats
@@ -777,7 +788,12 @@ public class BuyerDAO {
 			return flatDatas;
 		}
 	  
-	  
+	  /**
+	   * Get List of flats which are booked/sold
+	   * @author pankaj
+	   * @param building_id
+	   * @return List of booked/sold flats
+	   */
 	  public List<FlatData> getBookedFlats(int building_id) {
 			String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id and builderFlatStatus.id=2";
 			HibernateUtil hibernateUtil = new HibernateUtil();

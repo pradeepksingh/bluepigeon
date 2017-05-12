@@ -11,6 +11,7 @@ import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderEmployee;
+import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
 import org.bluepigeon.admin.model.Locality;
 import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.util.HibernateUtil;
@@ -189,6 +190,16 @@ public class BuilderDetailsDAO {
 		return result;
 	}
 
+	public List<BuilderEmployeeAccessType> getBuilderAccessList() {
+		String hql = "from BuilderEmployeeAccessType";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderEmployeeAccessType> result = query.list();
+		session.close();
+		return result;
+	}
+	
 	public List<Builder> getBuilderById(int id) {
 		String hql = "from Builder where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
