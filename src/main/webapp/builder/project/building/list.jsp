@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.BuildingList"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.data.ProjectList"%>
 <%@page import="org.bluepigeon.admin.data.PossessionList"%>
@@ -7,7 +8,7 @@
 <%@page import="java.util.List"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%
-	List<ProjectList> project_list = null;
+	List<BuildingList> project_list = null;
 	session = request.getSession(false);
 	Builder builder = new Builder();
 	int builder_uid = 0;
@@ -20,7 +21,7 @@
 		}
    	}
 	if(builder_uid > 0){
-		project_list = new ProjectDAO().getBuilderProjectsByBuilderId(builder_uid);
+		project_list = new ProjectDAO().getBuildingByBuilderId(builder_uid);
 		int builder_size = project_list.size();
 	}
 %>
@@ -41,7 +42,7 @@
     <link href="../../plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
     <link href="../../cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
     <!-- Menu CSS -->
-    <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+    <link href="../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
     <link href="../../css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -85,27 +86,27 @@
                     <div class="col-sm-12">
                         <div class="white-box"><br>
                           <center><h1>Manage Buildings</h1></center> <br>
-						  	<div class="col-sm-12">
-	                            <div class="form-group">
-					                <label class="col-sm-4 control-label">Select Project</label>
-					                <div class="col-sm-4">
-						                <select name="searchprojectId" id="searchprojectId" class="form-control">
-						                    <option value="0">Select Project</option>
-						                    <% for(int i=0; i < project_list.size() ; i++){ %>
-											<option value="<% out.print(project_list.get(i).getId());%>"><% out.print(project_list.get(i).getName());%></option>
-											<% } %>
-						                </select>
-					                </div>
-				                </div>
-				               </div>                         
+<!-- 						  	<div class="col-sm-12"> -->
+<!-- 	                            <div class="form-group"> -->
+<!-- 					                <label class="col-sm-4 control-label">Select Project</label> -->
+<!-- 					                <div class="col-sm-4"> -->
+<!-- 						                <select name="searchprojectId" id="searchprojectId" class="form-control"> -->
+<!-- 						                    <option value="0">Select Project</option> -->
+<%-- 						                    <% for(int i=0; i < project_list.size() ; i++){ %> --%>
+<%-- 											<option value="<% out.print(project_list.get(i).getId());%>"><% out.print(project_list.get(i).getProjectName());%></option> --%>
+<%-- 											<% } %> --%>
+<!-- 						                </select> -->
+<!-- 					                </div> -->
+<!-- 				                </div> -->
+<!-- 				               </div>                          -->
                             <div class="table-responsive">
                                 <table id="myTable" class="table table-striped">
                                     <thead>
                                         <tr>
-                                         <th>Project name</th>
-                                            <th>Builder Name</th>
-                                            <th>City Name</th>
-                                            <th>Locality</th>
+                                        <th>Sr No.</th>
+                                         <th>Builder name</th>
+                                            <th>Project Name</th>
+                                            <th>Building Name</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -113,19 +114,19 @@
                                     <tbody>
                                         <%
                                       if(project_list != null){
-                                      	for(ProjectList project : project_list) { %>
+                                    	  int i=1;
+                                      	for(BuildingList project : project_list) { %>
 									<tr>
-										<td>
-											<% out.print(project.getName()); %>
-										</td>
+										<td><%out.print(i);%></td>
 										<td>
 											<% out.print(project.getBuilderName()); %>
 										</td>
 										<td>
-											<% out.print(project.getCityName()); %>
+											<% out.print(project.getProjectName()); %>
 										</td>
+										
 										<td>
-											<% out.print(project.getLocalityName()); %>
+											<% out.print(project.getBuildingName()); %>
 										</td>
 										<td>
 											<% if(project.getStatus() == 0) { %>
@@ -137,10 +138,10 @@
 											%>
 										</td>
 										<td>
-										<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(project.getId());%>"> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span></a>
+										<!-- <a href="${baseUrl}/builder/project/building/edit.jsp?project_id=<% out.print(project.getId());%>">--> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span><!-- </a>-->
 										</td>
 										<% 	
-											} 
+											i++;} 
                                       	}
 										%>
                                     </tbody>

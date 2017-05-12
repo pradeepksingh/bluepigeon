@@ -625,19 +625,18 @@
 												<hr/>
 												<%// } %>
 	                                	<div class="form-group row" id="payment_schedule">
-	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
+	                                    <label for="example-search-input" class="col-sm-2 col-form-label">Milestone*</label>
 	                                    <div class="col-2">
 	                                        <input class="form-control" type="text" id="schedule" name="schedule[]" value="<% //if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
 	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
+	                                    <label for="example-search-input" class="col-sm-2 col-form-label">% of net payable</label>
 	                                    <div class="col-2">
 	                                        <input class="form-control" type="text" id="payable" name="payable[]" value="<% //if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 	                                    </div>
-	                                    <label for="example-search-input" class="col-1 col-form-label">Amount</label>
+	                                    <label for="example-search-input" class="col-sm-1 col-form-label">Amount</label>
 	                                    <div class="col-2">
 	                                        <input class="form-control" type="text" id="amount" name="amount[]" value="<% //if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/>
 	                                    </div>
-	                                     <i class="fa fa-times"><a href="javascript:removeSchedule(<% //out.print(i); %>);"></a></i>
 	                                </div>
 	                                <div class="form-group row">
 	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
@@ -680,25 +679,23 @@
                                <form id="offerfrm" name="offerfrm" method="post">
                                 <input type="hidden" id="projectid" name="projectid" value="<% out.print(project_id);%>"/>
 	                               <div>
-	                                 
-	                                 
 	                                  	<% int j = 1;
 												for(BuilderProjectOfferInfo projectOfferInfo :projectOfferInfos) { 
 										%>
 	                                   <div class="form-group row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
 	                                   
 	                                 	  <input type="hidden" name="offer_id[]" value="<% out.print(projectOfferInfo.getId()); %>" />
-		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>
+		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Offer Title*</label>
 		                                    <div class="col-2">
 		                                        <input class="form-control" type="text" id="offer_title" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>"/>
 		                                    </div>
 		                                    <div class="messageContainer"></div>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>
+		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Discount(%)*</label>
 		                                    <div class="col-2">
 		                                        <input class="form-control" type="text" id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
 		                                    </div>
 		                                    <div class="messageContainer"></div>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>
+		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Discount Amount</label>
 		                                    <div class="col-2">
 		                                        <input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
 		                                    
@@ -706,12 +703,12 @@
 		                                    <div class="messageContainer"></div>
 <!--    										</div>  -->
 <!-- 		                                <div class="form-group row">  -->
-		                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
+		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Description</label>
 		                                    <div class="col-2">
 		                                        <textarea class="form-control" id="description" name="description[]" ><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
 		                                    </div>
 		                                    <div class="messageContainer"></div>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
+		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Offer Type</label>
 		                                    <div class="col-2">
 		                                     <select class="form-control" id="offer_type" name="offer_type[]">
 												<option value="1" <% if(projectOfferInfo.getType().toString() == "1") { %>selected<% } %>>Percentage</option>
@@ -720,7 +717,7 @@
 											</select>
 		                                    </div>
 		                                    <div class="messageContainer"></div>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Status</label>
+		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Status</label>
 		                                    <div class="col-2">
 		                                     <select class="form-control" id="offer_status" name="offer_status[]">
 												<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
@@ -734,7 +731,6 @@
 		                                <br>
 		                            </div>
 	                             	<div>
-	                                 
 	                                  <% j++; } %>
 	                                   <div class="form-group row" id="offer-<% out.print(j);%>">
 	                                   <div class="offset-sm-11 col-sm-7">
@@ -743,29 +739,29 @@
 										<% if(j > 1) { %>
 											<hr/>
 										<% } %>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>
+		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Offer Title*</label>
 		                                    <div class="col-2">
 		                                        <input class="form-control" type="text" id="offer_title" name="offer_title[]" value=""/>
 		                                    </div>
 		                                    <div class="messageContainer"></div>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>
+		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Discount(%)*</label>
 		                                    <div class="col-2">
 		                                        <input class="form-control" type="text" id="discount" name="discount[]" value=""/>
 		                                    </div>
 		                                    <div class="messageContainer"></div>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>
+		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Discount Amount</label>
 		                                    <div class="col-2">
 		                                        <input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value=""/>
 		                                   
 		                                    </div>
 		                                    <div class="messageContainer"></div>
-		                                </div>
-		                                <div class="form-group row">
-		                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
+<!-- 		                                </div> -->
+<!-- 		                                <div class="form-group row"> -->
+		                                    <label for="example-search-input" class="col-sm-4 col-form-label">Description</label>
 		                                    <div class="col-2">
 		                                        <textarea class="form-control" id="description" name="description[]" ></textarea>
 		                                    </div>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
+		                                    <label for="example-search-input" class="col-sm-4 col-form-label">Offer Type</label>
 		                                    <div class="col-2">
 		                                    <select class="form-control" id="offer_type" name="offer_type[]">
 												<option value="1">Percentage</option>
@@ -824,7 +820,7 @@
 											</div>
 		                                </div>
 		                             </div>
-		                             <div class="col-lg-12">
+		                             <div class="col-sm-12">
 										<span class="pull-right">
 											<a href="javascript:addMoreOffer();" class="btn btn-info btn-ms">+ Add More Offers</a>
 										</span>
@@ -1342,7 +1338,6 @@ function removeSchedule(id) {
 }
 function deleteOffer(id) {
 	var b=$("#offer").val();
-	alert("delete="+b);
 	var flag = confirm("Are you sure ? You want to delete offer ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/offer/delete/"+id, { }, function(data){

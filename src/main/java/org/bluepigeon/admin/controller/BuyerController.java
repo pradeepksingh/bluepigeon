@@ -768,7 +768,7 @@ public class BuyerController {
 			@FormParam("email") String email,
 			@FormParam("remind") String remind,
 			@FormParam("content") String content,
-			@FormParam("last_date") String last_date){
+			@FormParam("select_date") String last_date){
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
 		Date lastDate = null;
 		try {

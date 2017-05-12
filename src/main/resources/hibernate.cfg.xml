@@ -56,6 +56,10 @@
         <mapping class="org.bluepigeon.admin.model.FlatTypeImage" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectPriceInfo" />
         <mapping class="org.bluepigeon.admin.model.BuyerOffer" />
+         <mapping class="org.bluepigeon.admin.model.Cancellation" />
+         <mapping class="org.bluepigeon.admin.model.AgreementBuyer" />
+         <mapping class="org.bluepigeon.admin.model.DemandBuyer" />
+         <mapping class="org.bluepigeon.admin.model.PossessionBuyer" />
         <mapping class="org.bluepigeon.admin.model.BuilderFlatAmenitySubstages" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectStatus" />
         <mapping class="org.bluepigeon.admin.model.BuilderFlatAmenity" />
@@ -63,7 +67,6 @@
         <mapping class="org.bluepigeon.admin.model.BuilderFloorStatus" />
         <mapping class="org.bluepigeon.admin.model.AdminUser" />
         <mapping class="org.bluepigeon.admin.model.BuilderPropertyType" />
-        <mapping class="org.bluepigeon.admin.model.CampaignBuyer" />
         <mapping class="org.bluepigeon.admin.model.BuilderFlat" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectPropertyType" />
         <mapping class="org.bluepigeon.admin.model.BuilderProject" />

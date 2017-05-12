@@ -10,6 +10,7 @@ import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorDetail;
 import org.bluepigeon.admin.data.FloorImageData;
 import org.bluepigeon.admin.data.FloorPanoData;
+import org.bluepigeon.admin.data.ProjectCityData;
 import org.bluepigeon.admin.data.ProjectDetail;
 import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.data.ProjectOffer;
@@ -2234,6 +2235,57 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		System.out.println("ProjectId ::: :::: :::: :::: "+projectId);
 		query.setParameter("projectId", projectId);
+		List<BuilderBuilding> building_list = query.list();
+		List<BuildingList> buildingList = new ArrayList<BuildingList>();
+		for(BuilderBuilding builderBuilding : building_list){
+			BuildingList bList = new BuildingList();
+			bList.setId(builderBuilding.getId());
+			bList.setProjectName(builderBuilding.getName());
+			bList.setBuilderName(builderBuilding.getBuilderProject().getBuilder().getName());
+			bList.setBuildingName(builderBuilding.getName());
+			bList.setStatus(builderBuilding.getStatus());
+			buildingList.add(bList);
+		}
+		return buildingList;
+	}
+	
+	public List<BuilderLead> getBuilderLeadByBuilderId(int builderId){
+		String hql = "from BuilderLead where builderProject.builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		List<BuilderLead> builderLeads = query.list();
+		session.close();
+		return builderLeads;
+	}
+	
+	public List<ProjectCityData> getCityareabyproject(int project) {
+		String hql = "from BuilderProject where id = :id order by id desc";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", project);
+		List<BuilderProject> result = query.list();
+		List<ProjectCityData> projects = new ArrayList<ProjectCityData>();
+		for(BuilderProject builderproject : result) {
+			ProjectCityData newproject = new ProjectCityData();
+			newproject.setCityId(builderproject.getCity().getId());
+			newproject.setCityName(builderproject.getCity().getName());
+			newproject.setAreaId(builderproject.getLocality().getId());
+			newproject.setAreaName(builderproject.getLocality().getName());
+			projects.add(newproject);
+		}
+		session.close();
+		return projects;
+	}
+	
+	public List<BuildingList> getBuildingByBuilderId(int builderId){
+		String hql = "from BuilderBuilding where builderProject.builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
 		List<BuilderBuilding> building_list = query.list();
 		List<BuildingList> buildingList = new ArrayList<BuildingList>();
 		for(BuilderBuilding builderBuilding : building_list){

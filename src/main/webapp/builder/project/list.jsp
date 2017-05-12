@@ -18,11 +18,12 @@
 			builder  = (Builder)session.getAttribute("ubname");
 			builder_uid = builder.getId();
 		}
+		if(builder_uid > 0){
+			project_list = new ProjectDAO().getBuilderProjectsByBuilderId(builder_uid);
+			int builder_size = project_list.size();
+		}
    	}
-	if(builder_uid > 0){
-		project_list = new ProjectDAO().getBuilderProjectsByBuilderId(builder_uid);
-		int builder_size = project_list.size();
-	}
+	
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -91,6 +92,7 @@
                                 <table id="myTable" class="table table-striped">
                                     <thead>
                                         <tr>
+                                        <th>Sr. No</th>
                                          <th>Project name</th>
                                             <th>Builder Name</th>
                                             <th>City Name</th>
@@ -102,8 +104,12 @@
                                     <tbody>
                                         <%
                                       if(project_list != null){
+                                    	  int i=1;
                                       	for(ProjectList project : project_list) { %>
 									<tr>
+										<td>
+											<% out.print(i); %>
+										</td>
 										<td>
 											<% out.print(project.getName()); %>
 										</td>
@@ -128,7 +134,7 @@
 										<td>
 										<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(project.getId());%>"> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span></a>
 										</td>
-										<% 	
+										<% 	i++;
 											} 
                                       	}
 										%>

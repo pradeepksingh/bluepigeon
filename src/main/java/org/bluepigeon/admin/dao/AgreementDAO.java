@@ -6,10 +6,13 @@ import java.util.List;
 import org.bluepigeon.admin.data.AgreementList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.Agreement;
+import org.bluepigeon.admin.model.AgreementBuyer;
 import org.bluepigeon.admin.model.AgreementInfo;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderProject;
+import org.bluepigeon.admin.model.Campaign;
+import org.bluepigeon.admin.model.CampaignBuyer;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -293,6 +296,36 @@ public class AgreementDAO {
 		}
 		session.close();
 		return builderFlats;
+	}
+	
+	public ResponseMessage saveCampaign(Agreement campaign){
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.save(campaign);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setId(campaign.getId());
+		response.setStatus(1);
+		//response.setMessage("Campaign Added Successfully");
+		return response;
+	}
+	public ResponseMessage saveBuyerAgreement(List<AgreementBuyer> campaignBuyers){
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		if(campaignBuyers.size()>0){
+			Session newsession = hibernateUtil.openSession();
+			newsession.beginTransaction();
+			for(int i=0;i<campaignBuyers.size();i++){
+				newsession.save(campaignBuyers.get(i));
+			}
+			newsession.getTransaction().commit();
+			newsession.close();
+			response.setStatus(1);
+			response.setMessage("Agreement Added Successfully");
+		}
+		return response;
 	}
 	
 }
