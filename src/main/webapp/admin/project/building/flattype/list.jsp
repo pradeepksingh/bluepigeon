@@ -33,10 +33,10 @@
 	<div class="main-content-inner">
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 			<ul class="breadcrumb">
-				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
+				<li><i class="ace-icon fa fa-home home-icon"></i>Home
 				</li>
 
-				<li><a href="#">Falt Type</a></li>
+				<li>Falt Type</li>
 				<li class="active">List</li>
 			</ul>
 		</div>

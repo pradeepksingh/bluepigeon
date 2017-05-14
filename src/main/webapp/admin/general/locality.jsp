@@ -55,10 +55,10 @@ if (request.getParameterMap().containsKey("city_id")) {
 	<div class="main-content-inner">
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 			<ul class="breadcrumb">
-				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
+				<li><i class="ace-icon fa fa-home home-icon"></i>Home
 				</li>
 
-				<li><a href="#">Tables</a></li>
+				<li>Tables</li>
 				<li class="active">Locality</li>
 			</ul>
 		</div>

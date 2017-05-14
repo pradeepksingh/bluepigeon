@@ -47,10 +47,10 @@ if (request.getParameterMap().containsKey("state_id")) {
 	<div class="main-content-inner">
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 			<ul class="breadcrumb">
-				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
+				<li><i class="ace-icon fa fa-home home-icon"></i>Home
 				</li>
 
-				<li><a href="#">General</a></li>
+				<li>General</li>
 				<li class="active">City</li>
 			</ul>
 		</div>

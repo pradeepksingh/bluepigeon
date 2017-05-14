@@ -32,7 +32,7 @@
 	<div class="main-content-inner">
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 			<ul class="breadcrumb">
-				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
+				<li><i class="ace-icon fa fa-home home-icon"></i>Home
 				</li>
 				<li><a href="${baseUrl}/admin/project/building/list.jsp">Building</a></li>
 				<li><a href="${baseUrl}/admin/project/building/floor/list.jsp">Floor</a></li>
