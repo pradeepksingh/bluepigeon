@@ -55,14 +55,7 @@
 <![endif]-->
    
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <script>
-    $(function() {
-        $("#sidebar1").load("../partial/sidebar.jsp");
-        $("#header").load("../partial/header1.jsp");
-
-        $("#footer").load("../partial/footer.html");
-    });
-    </script>
+    
    
     </head>
 
@@ -70,13 +63,12 @@
     <!-- Preloader -->
    
     <div id="wrapper">
-        <!-- Top Navigation -->
-        <div id="header"></div>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
-        <div id="sidebar1"> </div>
-        <!-- Left navbar-header end -->
-        <!-- Page Content -->
+        <div id="header">
+	       <%@include file="../partial/header.jsp"%>
+      	</div>
+      	<div id="sidebar1"> 
+       	   <%@include file="../partial/sidebar.jsp"%>
+      	</div>
      </div>
 <div id="page-wrapper">
             <div class="container-fluid">
@@ -135,7 +127,9 @@
                </div>
             </div>
             <!-- /.container-fluid -->
-            <footer id="footer">  </footer>
+          <div id="sidebar1"> 
+       	   		<%@include file="../partial/footer.jsp"%>
+      		</div>
         </div>
         <!-- /#page-wrapper -->
     </div>

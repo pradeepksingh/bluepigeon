@@ -31,7 +31,7 @@
      
         $("#header").load("partial/loginheader.jsp");
 
-        $("#footer").load("partial/footer.html");
+        $("#footer").load("partial/footer.jsp");
     });
     </script>
  

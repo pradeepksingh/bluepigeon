@@ -178,7 +178,9 @@
                 </div>
             </div>
             <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2017 Â© Blue Pigeon</footer>
+         <div id="sidebar1"> 
+       	   	<%@include file="../partial/footer.jsp"%>
+      	</div>
     </div>
 </body>
 </html>
