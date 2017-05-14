@@ -163,6 +163,7 @@ payment_size = payment_list.size();
 <%@include file="../../footer.jsp"%>
 	</body>
 </html>
+<link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function(){

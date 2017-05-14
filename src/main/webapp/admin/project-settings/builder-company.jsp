@@ -50,6 +50,7 @@ System.out.print("size : "+listCountry.size());
 	</div>
 </div>
 <%@include file="../../footer.jsp"%>
+<link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 <script src="${baseUrl}/js/jquery.builder-company.min.js"></script>
 <!-- inline scripts related to this page -->
 <script type="text/javascript">

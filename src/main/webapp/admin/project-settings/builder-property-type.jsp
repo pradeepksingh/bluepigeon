@@ -118,6 +118,7 @@ List<BuilderPropertyType> builderProjectTList = builderProjectTypeDAO.getBuilder
 <%@include file="../../footer.jsp"%>
 	</body>
 </html>
+<link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function(){
@@ -135,7 +136,7 @@ function addPropertyType() {
 function editPropertyType(typeid) {
 	$.get("${baseUrl}/admin/project-settings/editbuilderpropertytype.jsp?type_id="+typeid,{ }, function(data){
 		$("#modalarea").html(data);
-		$("#editProjectType").modal('show');
+		$("#editPropertyType").modal('show');
 	},'html');
 }
 

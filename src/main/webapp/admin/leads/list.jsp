@@ -83,6 +83,7 @@ builderLeads = new ProjectDAO().getBuilderProjectLeads();
 </div>
 <%@include file="../../footer.jsp"%>
 		<!-- inline scripts related to this page -->
+		<link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 		<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 		<script type="text/javascript">
 			function editProject(id){
