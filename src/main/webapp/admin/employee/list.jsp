@@ -22,10 +22,10 @@ campaignLists = new AdminUserDAO().getProperyManagers();
 	<div class="main-content-inner">
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 			<ul class="breadcrumb">
-				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
+				<li><i class="ace-icon fa fa-home home-icon"></i>Home
 				</li>
 
-				<li><a href="#">Employee </a></li>
+				<li>Employee</li>
 				<li class="active">List</li>
 			</ul>
 		</div>
@@ -82,6 +82,7 @@ campaignLists = new AdminUserDAO().getProperyManagers();
 </div>
 <%@include file="../../footer.jsp"%>
 		<!-- inline scripts related to this page -->
+		<link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 		<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 	</body>
 </html>

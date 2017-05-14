@@ -13,10 +13,10 @@ int project_config_size=property_config_list.size();
 	<div class="main-content-inner">
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 			<ul class="breadcrumb">
-				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
+				<li><i class="ace-icon fa fa-home home-icon"></i>Home
 				</li>
 
-				<li><a href="#">Project Settings</a></li>
+				<li>Project Settings</li>
 				<li class="active">Project Property Configuration</li>
 			</ul>
 		</div>
@@ -118,6 +118,7 @@ int project_config_size=property_config_list.size();
 <%@include file="../../footer.jsp"%>
 	</body>
 </html>
+<link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function(){

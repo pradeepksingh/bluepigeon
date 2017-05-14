@@ -69,19 +69,13 @@ int builder_size=builder_list.size();
 	</div>
 </div>
 <%@include file="../../footer.jsp"%>
-			<script src="${baseUrl}/js/jquery.builder-tax-type.min.js"></script>
-
-		<!-- inline scripts related to this page -->
-		<script type="text/javascript">
-		
-		
-			function editBuilder(id){
-				window.location.href = "${baseUrl}/admin/project-settings/editBuilder.jsp?id="+id;
-			}
-			
-			
-			
-			
-		</script>
+<link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+<script src="${baseUrl}/js/jquery.builder-tax-type.min.js"></script>
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+	function editBuilder(id){
+		window.location.href = "${baseUrl}/admin/project-settings/editBuilder.jsp?id="+id;
+	}
+</script>
 	</body>
 </html>

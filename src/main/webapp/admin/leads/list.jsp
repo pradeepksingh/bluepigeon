@@ -18,10 +18,10 @@ builderLeads = new ProjectDAO().getBuilderProjectLeads();
 	<div class="main-content-inner">
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 			<ul class="breadcrumb">
-				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
+				<li><i class="ace-icon fa fa-home home-icon"></i>Home
 				</li>
 
-				<li><a href="#">Project Leads</a></li>
+				<li>Project Leads</li>
 				<li class="active">Manage leads</li>
 			</ul>
 		</div>
@@ -83,6 +83,7 @@ builderLeads = new ProjectDAO().getBuilderProjectLeads();
 </div>
 <%@include file="../../footer.jsp"%>
 		<!-- inline scripts related to this page -->
+		<link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 		<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 		<script type="text/javascript">
 			function editProject(id){
