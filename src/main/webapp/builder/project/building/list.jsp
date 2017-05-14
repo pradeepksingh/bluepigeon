@@ -1,3 +1,6 @@
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
+<%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
+<%@page import="org.bluepigeon.admin.model.City"%>
 <%@page import="org.bluepigeon.admin.data.BuildingList"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.data.ProjectList"%>
@@ -8,9 +11,11 @@
 <%@page import="java.util.List"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%
-	List<BuildingList> project_list = null;
+	List<BuildingList> building_list = null;
+	List<ProjectData> projectDatas = null;
 	session = request.getSession(false);
 	Builder builder = new Builder();
+	List<City> cityList = new CityNamesImp().getCityNames();
 	int builder_uid = 0;
 	if(session!=null)
 	{
@@ -21,10 +26,12 @@
 		}
    	}
 	if(builder_uid > 0){
-		project_list = new ProjectDAO().getBuildingByBuilderId(builder_uid);
-		int builder_size = project_list.size();
+		building_list = new ProjectDAO().getBuildingByBuilderId(builder_uid);
+		int builder_size = building_list.size();
+		projectDatas = new ProjectDAO().getProjectsByBuilderId(builder_uid);
 	}
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,7 +41,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
     <link href="../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -48,7 +55,7 @@
     <!-- Custom CSS -->
     <link href="../../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link href="../../css/colors/megna.css" id="theme" rel="stylesheet">
+    <link href="../css/colors/megna.css" id="theme" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -57,12 +64,6 @@
 <![endif]-->
   
     <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-	   <div id="header">
-	       <%@include file="../../partial/header.jsp"%>
-      </div>
-      <div id="sidebar1"> 
-       	<%@include file="../../partial/sidebar.jsp"%>
-      </div>
    
     </head>
 
@@ -70,66 +71,81 @@
     <!-- Preloader -->
    
     <div id="wrapper">
-        <!-- Top Navigation -->
-        <div id="header"></div>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
-        <div id="sidebar1"> </div>
-        <!-- Left navbar-header end -->
-        <!-- Page Content -->
-     </div>
+        <div id="header">
+	    	<%@include file="../../partial/header.jsp"%>
+        </div>
+        <div id="sidebar1"> 
+       		<%@include file="../../partial/sidebar.jsp"%>
+    	</div>
+    </div>
 <div id="page-wrapper">
             <div class="container-fluid">
-              
                 <!-- /row -->
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box"><br>
-                          <center><h1>Manage Buildings</h1></center> <br>
-<!-- 						  	<div class="col-sm-12"> -->
-<!-- 	                            <div class="form-group"> -->
-<!-- 					                <label class="col-sm-4 control-label">Select Project</label> -->
-<!-- 					                <div class="col-sm-4"> -->
-<!-- 						                <select name="searchprojectId" id="searchprojectId" class="form-control"> -->
-<!-- 						                    <option value="0">Select Project</option> -->
-<%-- 						                    <% for(int i=0; i < project_list.size() ; i++){ %> --%>
-<%-- 											<option value="<% out.print(project_list.get(i).getId());%>"><% out.print(project_list.get(i).getProjectName());%></option> --%>
-<%-- 											<% } %> --%>
-<!-- 						                </select> -->
-<!-- 					                </div> -->
-<!-- 				                </div> -->
-<!-- 				               </div>                          -->
+                          <h3>Manage Building</h3>
+						<div class="row re white-box">
+							<div class="col-md-3 col-sm-6 col-xs-12">
+								<select name="searchcityId" id="searchcitytId" class="form-control">
+				                    <option value="0">Select City</option>
+				                    <% for(int i=0; i < projectDatas.size() ; i++){ %>
+									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option>
+									<% } %>
+						         </select>   
+							</div>
+							<div class="col-md-3 col-sm-6 col-xs-12">
+							   <select name="searchlocalityId" id="searchlocalityId" class="form-control">
+				                    <option value="0">Locality</option>
+							   </select>
+							</div>
+							<div class="col-md-3 col-sm-6 col-xs-12">
+								<select name="searchprojectId" id="searchprojectId" class="form-control">
+				                    <option value="0">Project</option>
+								</select>
+							</div>
+							
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 							    <select class="form-control"> -->
+<!-- 												<option>Status</option> -->
+<!-- 												<option>1</option> -->
+<!-- 												<option>2</option> -->
+<!-- 								</select>	    -->
+<!-- 							</div> -->
+						</div>
+						
                             <div class="table-responsive">
-                                <table id="myTable" class="table table-striped">
+                                <table id="tblBuilding" class="table table-striped">
                                     <thead>
                                         <tr>
-                                        <th>Sr No.</th>
-                                         <th>Builder name</th>
-                                            <th>Project Name</th>
-                                            <th>Building Name</th>
-                                            <th>Status</th>
+                                            <th>No.</th>
+                                            <th>Builder Name</th>
+                                             <th>Project Name</th>
+                                             <th>Building Name</th>
+                                            <th>status</th>
                                             <th>Action</th>
+                                           
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <%
-                                      if(project_list != null){
+                                       <%
+                                      if(building_list != null){
                                     	  int i=1;
-                                      	for(BuildingList project : project_list) { %>
+                                      	for(BuildingList buildingList : building_list) { %>
 									<tr>
 										<td><%out.print(i);%></td>
 										<td>
-											<% out.print(project.getBuilderName()); %>
+											<% out.print(buildingList.getBuilderName()); %>
 										</td>
 										<td>
-											<% out.print(project.getProjectName()); %>
+											<% out.print(buildingList.getProjectName()); %>
 										</td>
 										
 										<td>
-											<% out.print(project.getBuildingName()); %>
+											<% out.print(buildingList.getBuildingName()); %>
 										</td>
 										<td>
-											<% if(project.getStatus() == 0) { %>
+											<% if(buildingList.getStatus() == 0) { %>
 											<span class='label label-warning'>Inactive</span>
 											<% } else { %>
 											<span class='label label-success'>Active</span>
@@ -138,7 +154,7 @@
 											%>
 										</td>
 										<td>
-										<!-- <a href="${baseUrl}/builder/project/building/edit.jsp?project_id=<% out.print(project.getId());%>">--> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span><!-- </a>-->
+										 <!-- <a href="${baseUrl}/builder/project/building/edit.jsp?building_id=<% out.print(buildingList.getId());%>">--> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span> <!--</a>-->
 										</td>
 										<% 	
 											i++;} 
@@ -152,20 +168,19 @@
                </div>
             </div>
             <!-- /.container-fluid -->
-         	<div id="sidebar1"> 
+           <div id="sidebar1"> 
 	      		<%@include file="../../partial/footer.jsp"%>
 			</div> 
         </div>
         <!-- /#page-wrapper -->
-    </div>
     
     <script src="../../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <!-- start - This is for export functionality only -->
     <script src="../../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
     <script src="../../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
-    <script src="../../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-    <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-    <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<!--     <script src="../../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script> -->
+<!--     <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script> -->
+<!--     <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script> -->
     <script src="../../cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="../../cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <!-- end - This is for export functionality only -->
@@ -220,6 +235,66 @@
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
+//     $("#searchcitytId").change(function(){
+//     	$.get("${baseUrl}/webapi/project/locality/",{ city_id: $("#searchcitytId").val() }, function(data){
+//     		var html = '<option value="">Select Locality</option>';
+    		
+//     		$(data).each(function(index){
+//     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+//     		});
+//     		$("#searchlocalityId").html(html);
+//     	},'json');
+    	
+//     	$.get("${baseUrl}/webapi/project/list/city/",{ city_id: $("#searchcitytId").val() }, function(data){
+//     		var html = '<option value="">Select Project</option>';
+    		
+//     		$(data).each(function(index){
+//     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+//     		});
+//     		$("#searchprojectId").html(html);
+//     	},'json');
+//     	getDataTable();
+//     });
+    
+//     $("#searchlocalitytId").change(function(){
+//     	$.get("${baseUrl}/webapi/project/name/list",{ locality_id: $("#searchlocalitytId").val() }, function(data){
+//     		var html = '<option value="0">Select Project</option>';
+    		
+//     		$(data).each(function(index){
+//     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+//     		});
+//     		$("#searchprojectId").html(html);
+//     	},'json');
+//     	getDataTable();
+//     });
+
+
+    
+    function getDataTable(){
+    	$.post("${baseUrl}/webapi/project/building",{city_id: $("#searchcitytId").val(), locality_id: $("#searchlocalityId").val(), project_id : $("#searchprojectId").val()},function(data){
+    		var oTable = $("#tblBuilding").dataTable();
+    	    oTable.fnClearTable();
+    	    var count=1;
+    	    $(data).each(function(index){
+    		    var vieworder = '<a href="${baseUrl}/builder/project/edit.jsp?project_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
+    		    var status = '';
+    		    if(data[index].status == 1) {
+    		    	status = '<span class="label label-success">Active</span>';
+    		    } else {
+    		    	status = '<span class="label label-warning">Inactive</span>';
+    		    }
+    	    	var row = [];
+    	    	row.push(count);
+    	    	row.push(data[index].builderName);
+    	    	row.push(data[index].projectName);
+    	    	row.push(data[index].buildingName);
+    	    	row.push(status);
+    	    	row.push(vieworder);
+    	    	oTable.fnAddData(row);
+    	    	count++;
+    	    });
+    	},'json');
+    }
     </script>
 </body>
 </html>

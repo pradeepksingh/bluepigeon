@@ -6,17 +6,17 @@
 	List<DemandLetterList> demandletters_list  = null;
 	session = request.getSession(false);
 	Builder builder = new Builder();
-	int session_uid = 0;
+	int session_id = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (Builder)session.getAttribute("ubname");
-			session_uid = builder.getId();
+			session_id = builder.getId();
 		}
    	}
-	if(session_uid > 0){
-		demandletters_list = new DemandLettersDAO().getAllDemandLettersByBuilderId(session_uid);
+	if(session_id > 0){
+		demandletters_list = new DemandLettersDAO().getAllDemandLettersByBuilderId(session_id);
 		int demandletters_size = demandletters_list.size();
 	}
 %>
@@ -53,29 +53,19 @@
 <![endif]-->
    
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <script>
-    $(function() {
-      //  $("#sidebar1").load("../partial/sidebar.jsp");
-     //   $("#header").load("../partial/header1.jsp");
-
-       // $("#footer").load("../partial/footer.html");
-    });
-    </script>
-   
     </head>
 
 <body class="fix-sidebar">
     <!-- Preloader -->
    
     <div id="wrapper">
-        <!-- Top Navigation -->
-        <div id="header"></div>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
-        <div id="sidebar1"> </div>
-        <!-- Left navbar-header end -->
-        <!-- Page Content -->
-     </div>
+         <div id="header">
+	       <%@include file="../partial/header.jsp"%>
+      	</div>
+      	<div id="sidebar1"> 
+       	   <%@include file="../partial/sidebar.jsp"%>
+      	</div>
+    </div>
 <div id="page-wrapper">
             <div class="container-fluid">
               
@@ -133,10 +123,11 @@
                </div>
             </div>
             <!-- /.container-fluid -->
-            <footer id="footer">  </footer>
+          	<div id="sidebar1"> 
+       	   		<%@include file="../partial/footer.jsp"%>
+      		</div>
         </div>
         <!-- /#page-wrapper -->
-    </div>
     
     <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <!-- start - This is for export functionality only -->

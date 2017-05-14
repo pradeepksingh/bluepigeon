@@ -26,7 +26,10 @@ import org.bluepigeon.admin.dao.CityNamesImp;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.dao.StateImp;
+import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.FloorData;
+import org.bluepigeon.admin.data.LocalityData;
+import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectDetail;
 import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.data.ProjectOffer;
@@ -2358,4 +2361,30 @@ public class ProjectController extends ResourceConfig {
 		resp = new ProjectDAO().saveProject(builderProject); 
 		return resp;
 	}
+	
+	@GET
+	@Path("/locality")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<LocalityData> getLocalityList(@QueryParam("city_id") int cityId) {
+		return new LocalityNamesImp().getLocalityName(cityId);
+	}
+	
+	@GET
+	@Path("/list/city")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectData> getProjectList(@QueryParam("city_id") int cityId) {
+		return new ProjectDAO().getProjectsByCityId(cityId);
+	}
+	
+	@POST
+	@Path("/building")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuildingList> getBuildingList(@FormParam("city_id") int city_id, 
+			@FormParam("locality_id") int locality_id,
+			@FormParam("project_id") int project_id
+	) {
+		List<BuildingList> project_list = new ProjectDAO().getBuildingListFilter(city_id, locality_id, project_id);
+		return project_list;
+	}
+	
 }

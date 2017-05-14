@@ -34,7 +34,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="${baseUrl}/builder/plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -57,12 +57,7 @@
 <![endif]-->
   
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-	   <div id="header">
-	       <%@include file="../partial/header.jsp"%>
-      </div>
-      <div id="sidebar1"> 
-       	<%@include file="../partial/sidebar.jsp"%>
-      </div>
+	  
    
     </head>
 
@@ -71,10 +66,12 @@
    
     <div id="wrapper">
         <!-- Top Navigation -->
-        <div id="header"></div>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
-        <div id="sidebar1"> </div>
+      <div id="header">
+	       <%@include file="../partial/header.jsp"%>
+      </div>
+      <div id="sidebar1"> 
+       	<%@include file="../partial/sidebar.jsp"%>
+      </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
      </div>
@@ -151,15 +148,14 @@
 			</div> 
         </div>
         <!-- /#page-wrapper -->
-    </div>
     
     <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <!-- start - This is for export functionality only -->
     <script src="../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
     <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
-    <script src="../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-    <script src="../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-    <script src="../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<!--     <script src="../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script> -->
+<!--     <script src="../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script> -->
+<!--     <script src="../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script> -->
     <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <!-- end - This is for export functionality only -->
