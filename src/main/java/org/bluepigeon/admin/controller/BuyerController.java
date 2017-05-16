@@ -763,7 +763,7 @@ public class BuyerController {
 			@FormParam("building_id") int buildingId,
 			@FormParam("floor_id") int floorId,
 			@FormParam("flat_id") int flatId,
-			@FormParam("name") String name,
+			@FormParam("owner_name") String name,
 			@FormParam("contact") String contact,
 			@FormParam("email") String email,
 			@FormParam("remind") String remind,

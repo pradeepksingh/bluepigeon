@@ -114,7 +114,7 @@ $("#sidebar1").load("../partial/sidebar.jsp");
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Update Lead</h4>
+                        <h4 class="page-title">Add Lead</h4>
                     </div>
                   
                     <!-- /.col-lg-12 -->
@@ -125,7 +125,7 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
-                             <h4 class="page-title">Edit Lead Details</h4><br>
+                             <h4 class="page-title">Add Lead Details</h4><br>
                                 <ul class="nav tabs-horizontal">
                                     <li class="tab nav-item" aria-expanded="false">
                                         <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"></a>
@@ -348,7 +348,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/builder/leads/new.jsp";
+        window.location.href = "${baseUrl}/builder/leads/list.jsp";
   	}
 }
 </script>

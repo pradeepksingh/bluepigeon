@@ -75,7 +75,7 @@
                         <div class="white-box"><br>
                           <center> <h1>Manage Demand Letters</h1> </center> 
                              <br>
-                          <a href=""> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add Demand Letter</span></a>
+                          <a href="${baseUrl}/builder/demantletters/demand-letter.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add Demand Letter</span></a>
                            <br><br><br>
                             <div class="table-responsive">
                                 <table id="myTable" class="table table-striped">
