@@ -151,7 +151,6 @@
 			</div> 
         </div>
         <!-- /#page-wrapper -->
-    </div>
     
     <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <!-- start - This is for export functionality only -->

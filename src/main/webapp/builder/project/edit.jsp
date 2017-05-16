@@ -678,7 +678,7 @@
                             
                                <form id="offerfrm" name="offerfrm" method="post">
                                 <input type="hidden" id="projectid" name="projectid" value="<% out.print(project_id);%>"/>
-	                               <div>
+	                               <div id="offer_area">
 	                                  	<% int j = 1;
 												for(BuilderProjectOfferInfo projectOfferInfo :projectOfferInfos) { 
 										%>
@@ -701,8 +701,8 @@
 		                                    
 		                                    </div>
 		                                    <div class="messageContainer"></div>
-<!--    										</div>  -->
-<!-- 		                                <div class="form-group row">  -->
+   										</div> 
+		                                <div class="form-group row"> 
 		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Description</label>
 		                                    <div class="col-2">
 		                                        <textarea class="form-control" id="description" name="description[]" ><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
@@ -729,8 +729,8 @@
 		                                </div>
 		                                <hr>
 		                                <br>
-		                            </div>
-	                             	<div>
+<!-- 		                            </div> -->
+<!-- 	                             	<div> -->
 	                                  <% j++; } %>
 	                                   <div class="form-group row" id="offer-<% out.print(j);%>">
 	                                   <div class="offset-sm-11 col-sm-7">
@@ -755,8 +755,8 @@
 		                                   
 		                                    </div>
 		                                    <div class="messageContainer"></div>
-<!-- 		                                </div> -->
-<!-- 		                                <div class="form-group row"> -->
+		                                </div>
+		                                <div class="form-group row">
 		                                    <label for="example-search-input" class="col-sm-4 col-form-label">Description</label>
 		                                    <div class="col-2">
 		                                        <textarea class="form-control" id="description" name="description[]" ></textarea>
@@ -779,8 +779,8 @@
 											</div>
 		                                </div>
 		                                <hr><br>
-		                             </div>
-		                             <div>
+<!-- 		                             </div> -->
+<!-- 		                             <div> -->
 	                                 	
 	                                   	<div class="form-group row">
 	                                   	<div class="offset-sm-11 col-sm-7">
@@ -820,11 +820,14 @@
 											</div>
 		                                </div>
 		                             </div>
-		                             <div class="col-sm-12">
-										<span class="pull-right">
-											<a href="javascript:addMoreOffer();" class="btn btn-info btn-ms">+ Add More Offers</a>
-										</span>
-									</div>
+<!-- 		                             <div class="col-sm-12"> -->
+<!-- 										<span class="pull-right"> -->
+<!-- 											<a href="javascript:addMoreOffer();" class="btn btn-info btn-ms">+ Add More Offers</a> -->
+<!-- 										</span> -->
+<!-- 									</div> -->
+									<div class="row">
+                               		  <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="javascript:addMoreOffer();">Add more</button>
+                                  	</div>
 		                            <div class="offset-sm-5 col-sm-7">
 	                                        <button type="button" id="offerbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
 	                                </div>
@@ -1246,6 +1249,7 @@ $("#offerbtn").click(function(){
 });
 
 function addMoreOffer() {
+	alert("Hi");
 	var offers = parseInt($("#offer_count").val());
 	offers++;
 	var html = '<div class="form-group row" id="offer-"'+offers+'>'

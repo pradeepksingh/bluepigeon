@@ -14,6 +14,7 @@ import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
 import org.bluepigeon.admin.model.Locality;
 import org.bluepigeon.admin.data.BuilderDetails;
+import org.bluepigeon.admin.data.EmployeeList;
 import org.bluepigeon.admin.util.HibernateUtil;
 
 public class BuilderDetailsDAO {
@@ -300,5 +301,67 @@ public class BuilderDetailsDAO {
 		responseMessage.setStatus(1);
 		responseMessage.setMessage("Empolyee Added Successfully.");
 		return responseMessage;
+	}
+	public List<EmployeeList> getBuilderEmployeeList(int builder_id) {
+		String hql = "from BuilderEmployee where builder.id=:builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builder_id);
+		List<BuilderEmployee> result = query.list();
+		List<EmployeeList> employeeLists = new ArrayList<EmployeeList>();
+		int count=1;
+		for(BuilderEmployee builderEmployee : result){
+			EmployeeList employeeList = new EmployeeList();
+			employeeList.setCount(count);
+			employeeList.setName(builderEmployee.getName());
+			employeeList.setId(builderEmployee.getId());
+			employeeList.setAccess(builderEmployee.getBuilderEmployeeAccessType().getName());
+			employeeList.setDesgnation(builderEmployee.getDesignation());
+			employeeLists.add(employeeList);
+			count++;
+		}
+		session.close();
+		return employeeLists;
+	}
+	public List<EmployeeList> getEmployeeListFilter(int city_id,int project_id) {
+		String hql = "from BuilderEmployee where ";
+		String where = "";
+		
+		if(project_id > 0) {
+			where = where + "builderProject.id = :project_id ";
+		}
+		if(city_id > 0) {
+			if(where != "") {
+				where = where + "AND builderBuilding.id = :city_id ";
+			} else {
+				where = where + "builderBuilding.id = :city_id ";
+			}
+		}
+		
+		hql = hql + where;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		if(project_id > 0) {
+			query.setParameter("project_id", project_id);
+		}
+		if(city_id > 0) {
+			query.setParameter("city_id", city_id);
+		}
+		
+		List<BuilderEmployee> result = query.list();
+		List<EmployeeList> employeeList = new ArrayList<EmployeeList>();
+		int i=1;
+		for(BuilderEmployee employee : result) {
+			EmployeeList bList = new EmployeeList();
+			bList.setCount(i);
+			bList.setName(employee.getName());
+			bList.setAccess(employee.getBuilderEmployeeAccessType().getName());
+			employeeList.add(bList);
+			i++;
+		}
+		session.close();
+		return employeeList;
 	}
 }

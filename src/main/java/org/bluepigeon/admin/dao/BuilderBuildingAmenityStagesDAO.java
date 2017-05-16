@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.bluepigeon.admin.data.BuildingAmenityList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.BuilderBuildingAmenity;
 import org.bluepigeon.admin.model.BuilderBuildingAmenityStages;
@@ -172,4 +173,24 @@ public class BuilderBuildingAmenityStagesDAO {
         session.close();
         return result;
     }
+    
+    public List<BuildingAmenityList> getBuildingAmenityById(int id) {
+		String hql = "from BuilderBuildingAmenityStages where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<BuilderBuildingAmenityStages> result = query.list();
+		List<BuildingAmenityList> buildingAmenityLists = new ArrayList<BuildingAmenityList>();
+		for(BuilderBuildingAmenityStages builderBuildingAmenity : result){
+			BuildingAmenityList buildingAmenityList = new BuildingAmenityList();
+			buildingAmenityList.setId(builderBuildingAmenity.getId());
+			buildingAmenityList.setBuildingAmenityName(builderBuildingAmenity.getBuilderBuildingAmenity().getName());
+			buildingAmenityList.setBuildingAmenityStageName(builderBuildingAmenity.getName());
+			buildingAmenityList.setStatus(builderBuildingAmenity.getStatus());
+			buildingAmenityLists.add(buildingAmenityList);
+		}
+		session.close();
+		return buildingAmenityLists;
+	}
 }
