@@ -63,23 +63,6 @@ public class CancellationDAO {
 		session.close();
 		return b2;
 	}
-	public List<ProjectData> getCancellationProjectByBuilderId(int builderId){
-		String hql = "from Cancellation where builderProject.builder.id = :builder_id";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("builder_id",builderId );
-		List<Cancellation> cancellationList = query.list();
-		List<ProjectData> projectDataList = new ArrayList<ProjectData>();
-		for(Cancellation cancellation : cancellationList){
-			ProjectData projectData = new ProjectData();
-			projectData.setId(cancellation.getBuilderProject().getId());
-			projectData.setName(cancellation.getBuilderProject().getName());
-			projectDataList.add(projectData);
-		}
-		session.close();
-		return projectDataList;
-	}
 	public List<CancellationList> getCancellationByBuilderId(int builderId){
 		String hql = "from Cancellation where builderProject.builder.id = :builder_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
