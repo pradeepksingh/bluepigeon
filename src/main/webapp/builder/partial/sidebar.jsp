@@ -51,7 +51,7 @@
                     <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu"> Employee<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/employee/new.jsp">Add</a></li>
-                            <li> <a href="inbox-detail.html">Manage</a></li>
+                            <li> <a href="${baseUrl }/builder/employee/list.jsp">Manage</a></li>
                         </ul>
                     </li>
 <!--                      <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Campaign<span class="fa arrow"></span></span></a> -->
@@ -78,7 +78,7 @@
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/demandletters/list.jsp">Demand Letter Release</a></li>
                             <li> <a href="${baseUrl }/builder/possession/list.jsp">Allot Possession</a></li>
-                            <li> <a href="${baseUrl }/builder/cancellation/new.jsp">Cancellation</a></li>
+                            <li> <a href="${baseUrl }/builder/cancellation/list.jsp">Cancellation</a></li>
                         </ul>
                     </li>
  					<li class="nav-small-cap m-t-10">--Support--</li>

@@ -121,91 +121,75 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                                         <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"></a>
                                     </li>
                                 </ul>
-                                
-                              <div class="tab-content"> 
-                              
-                               <div id="vimessages" class="tab-pane active" aria-expanded="false">
-                                <div class="col-12">
-                                 <form id="addagreement" name="addagreement" class="form-horizontal" action="" method="post">
-                                     <input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
-                                 <div class="form-group row">
-                                    <label for="example-tel-input" class="col-3 col-form-label">Project</label>
-                                    <div class="col-3">
-                                         <select name="project_id" id="project_id" class="form-control">
-											                    <option value="">Select Project</option>
-											                    <% for(ProjectData builderProject : project_list){ %>
-																<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option>
-																<% } %>
-												             </select>
-                                    </div>
-                                    <label for="example-text-input" class="col-3 col-form-label">Building</label>
-                                    <div class="col-3">
-                                        <select name="building_id" id="building_id" class="form-control">
-							                    <option value="0">Select Building</option>
-							                </select>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Flat</label>
-                                    <div class="col-3">
-                                        <select name="flat_id" id="flat_id" class="form-control">
-							                    <option value="0">Select Flat</option>
-							                </select>
-                                    </div>
-                                    <label for="example-text-input" class="col-3 col-form-label">Owner Name*</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" value="" id="owner_name" name="owner_name">
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                   
-                                    <label for="example-search-input" class="col-3 col-form-label">Select Date</label>
-                                    <div class="col-3">
-                                    	 <input class="form-control" type="text" value="" id="select_date" name="select_date">
-                                    </div>
-                                </div>
-                                
-                                 <div class="form-group row">
-                                    <div class="col-12">
-                                        <center><label for="example-search-input" class="col-form-label">Recipients Name</label></center><br>
-                                       <div id="appendbuyer" class="col-6"></div>
-                                    </div>
-                                    <input type="hidden" name="added_by" id="added_by" value="1"/>
-                                    
-                                </div>
-                                
-                                 <div class="form-group row">                        
-	                                 <div class="col-4">
-	                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10" style="float: right;">Notify Owner</button>
-	                                 </div>
-	                                  <div class="col-4">
-	                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10" style="float: right;">Save</button>
-	                                 </div>
-                                 </div>
-                                
-                               </form>
-                               </div>
-                              </div>
-                              
-                                </div>
-                        </div>
-
+	                            <div class="tab-content"> 
+		                            <div id="vimessages" class="tab-pane active" aria-expanded="false">
+		                                <div class="col-12">
+		                                 	<form id="addagreement" name="addagreement" class="form-horizontal" action="" method="post">
+		                                     <input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
+			                                 <div class="form-group row">
+			                                    <label for="example-tel-input" class="col-3 col-form-label">Project</label>
+			                                    <div class="col-3">
+			                                         <select name="project_id" id="project_id" class="form-control">
+									                    <option value="">Select Project</option>
+									                    <% for(ProjectData builderProject : project_list){ %>
+														<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option>
+														<% } %>
+										             </select>
+			                                    </div>
+			                                    <label for="example-text-input" class="col-3 col-form-label">Building</label>
+			                                    <div class="col-3">
+			                                        <select name="building_id" id="building_id" class="form-control">
+									                    <option value="0">Select Building</option>
+									                </select>
+			                                    </div>
+			                                  </div>
+			                                  <div class="form-group row">
+			                                      <label for="example-search-input" class="col-3 col-form-label">Flat</label>
+			                                      <div class="col-3">
+				                                        <select name="flat_id" id="flat_id" class="form-control">
+										                    <option value="0">Select Flat</option>
+										                </select>
+			                                      </div>
+			                                      <label for="example-text-input" class="col-3 col-form-label">Owner Name*</label>
+			                                      <div class="col-3">
+			                                      		<input class="form-control" type="text" value="" id="owner_name" name="owner_name">
+			                                      </div>
+			                                  </div>
+			                                  <div class="form-group row">
+			                                      <label for="example-search-input" class="col-3 col-form-label">Select Date</label>
+			                                      <div class="col-3">
+			                                    	   <input class="form-control" type="text" value="" id="select_date" name="select_date">
+			                                      </div>
+			                                 </div>
+			                                 <div class="form-group row">
+			                                    <div class="col-12">
+			                                        <center><label for="example-search-input" class="col-form-label">Recipients Name</label></center><br>
+			                                       <div id="appendbuyer" class="row"></div>
+			                                    </div>
+			                                    <input type="hidden" name="added_by" id="added_by" value="1"/>
+			                                 </div>
+			                                 <div class="form-group row">                        
+				                                 <div class="col-4">
+				                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10" style="float: right;">Notify Owner</button>
+				                                 </div>
+				                                  <div class="col-4">
+				                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10" style="float: right;">Save</button>
+				                                 </div>
+			                                 </div>
+		                               	   </form>
+		                              	</div>
+		                            </div>
+	                             </div>
+                       		 </div>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- /.container-fluid -->
-             <div id="sidebar1"> 
-	      		<%@include file="../partial/footer.jsp"%>
-			</div> 
-        
-        <!-- /#page-wrapper -->
-    
-    <!-- /#wrapper -->
+         <div id="sidebar1"> 
+   			<%@include file="../partial/footer.jsp"%>
+		</div> 
     </div>
-    
 </body>
 </html>
 <script type="text/javascript">
@@ -217,12 +201,12 @@ $('#select_date').datepicker({
 $("#project_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/building/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
-		var checkbox = '<div class="col-sm-10">';
+		var checkbox = '<div class="row">';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].buildingId+'">'+data[index].buildingName+'</option>';
 			$(data[index].buyer).each(function(key, value){
-				checkbox += '<div class="col-sm-4"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
+				checkbox += '<div class="col-sm-3"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
 				checkbox +='</div>';
 			});
 		});
@@ -234,12 +218,12 @@ $("#project_id").change(function(){
 $("#building_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/building/flat/names/"+$("#building_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Flat</option>';
-		var checkbox = '<div class="col-sm-10">';
+		var checkbox = '<div class="row">';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].flatId+'">'+data[index].flatNo+'</option>';
 			$(data[index].buyer).each(function(key, value){
-				checkbox += '<div class="col-sm-4"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
+				checkbox += '<div class="col-sm-3"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
 				checkbox +='</div>';
 			});
 		});
@@ -251,10 +235,10 @@ $("#building_id").change(function(){
 
 $("#flat_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/flat/buyer/names/"+$("#flat_id").val(),{ }, function(data){
-		var checkbox = '<div class="col-sm-10">';
+		var checkbox = '<div class="row">';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
-				checkbox += '<div class="col-sm-4"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+data[index].id+'" />'+'&nbsp;'+data[index].name
+				checkbox += '<div class="col-sm-3"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+data[index].id+'" />'+'&nbsp;'+data[index].name
 				checkbox +='</div>';
 		});
 		checkbox+='</div>';

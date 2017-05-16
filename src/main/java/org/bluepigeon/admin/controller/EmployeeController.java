@@ -48,15 +48,15 @@ public class EmployeeController {
 		return propertyManagerDAO.getAdminUserById(manager_id);
 	}
 	
-	@GET
-	@Path("/projectarea/list")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProjectCityData> addCity(@QueryParam("project") int project) {
-		ProjectDAO projectDAO = new ProjectDAO();
-		return projectDAO.getCityareabyproject(project);
-		
-		
-	}
+//	@GET
+//	@Path("/projectarea/list")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public List<ProjectCityData> addCity(@QueryParam("project") int project) {
+//		ProjectDAO projectDAO = new ProjectDAO();
+//		return projectDAO.getCityareabyproject(project);
+//		
+//		
+//	}
 	
 	@POST
 	@Path("/save")
@@ -202,4 +202,16 @@ public class EmployeeController {
 		List<EmployeeList> project_list = new BuilderDetailsDAO().getEmployeeListFilter(city_id, project_id);
 		return project_list;
 	}
+	
+	
+	@GET
+	@Path("/project/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectCityData> addCity(@QueryParam("project") int project) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		return projectDAO.getCityareabyproject(project);
+		
+		
+	}
+	
 }

@@ -20,33 +20,34 @@
 <%@page import="org.bluepigeon.admin.dao.ProjectLeadDAO"%>
 
 <%
-int project_size = 0;
-int type_size = 0;
-int city_size = 0;
-List<EmployeeList> employeeLists = null;
+	int project_size = 0;
+	int type_size = 0;
+	int city_size = 0;
+	List<EmployeeList> employeeLists = null;
 	List<ProjectData> builderProjects = null; 
 	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
-	if(builderProjects.size()>0)
-	project_size = builderProjects.size();
-	if(builderPropertyTypes.size()>0)
-		type_size = builderPropertyTypes.size();
+	
 	session = request.getSession(false);
 	
-Builder builder = new Builder();
+	Builder builder = new Builder();
 	int p_user_id = 0;
 	List<City> city_list = new CityNamesImp().getCityNames();
-if(session!=null)
-{
-	if(session.getAttribute("ubname") != null)
+	if(session!=null)
 	{
-		builder  = (Builder)session.getAttribute("ubname");
-		p_user_id = builder.getId();
+		if(session.getAttribute("ubname") != null)
+		{
+			builder  = (Builder)session.getAttribute("ubname");
+			p_user_id = builder.getId();
+		}
+		if(p_user_id>0){
+			builderProjects = new ProjectDAO().getProjectsByBuilderId(p_user_id);
+			employeeLists = new BuilderDetailsDAO().getBuilderEmployeeList(p_user_id);
+		}
 	}
-	if(p_user_id>0){
-		builderProjects = new ProjectDAO().getProjectsByBuilderId(p_user_id);
-		employeeLists = new BuilderDetailsDAO().getBuilderEmployeeList(p_user_id);
-	}
-}
+	if(builderProjects.size()>0)
+		project_size = builderProjects.size();
+	if(builderPropertyTypes.size()>0)
+		type_size = builderPropertyTypes.size();
 %>
 
 <!DOCTYPE html>
@@ -101,11 +102,10 @@ if(session!=null)
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box"><br>
-                          <h3>Manage Building</h3>
+                          <h3>Manage Employees</h3>
 						<div class="row re white-box">
 							<div class="col-md-3 col-sm-6 col-xs-12">
 								<select name="city_id" id="city_id" class="form-control">
-				                    <option value="0">Select City</option>
 				                    <option value="0">Select City</option>
 							                     <% for(City city : city_list){ %>
 												<option value="<% out.print(city.getId());%>"><% out.print(city.getName());%></option>

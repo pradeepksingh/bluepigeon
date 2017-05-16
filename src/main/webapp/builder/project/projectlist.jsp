@@ -62,9 +62,6 @@
    <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
     
-    <script src="../plugins/bower_components/raphael/raphael-min.js"></script>
-    <script src="../plugins/bower_components/morrisjs/morris.js"></script>
-    
 </head>
 
 <body class="fix-sidebar">
@@ -133,59 +130,57 @@
                        			for(ProjectList projectList : project_list ){
                        	%>
                        	<div class="col-md-6 col-sm-6 col-xs-12 projectsection">
-	                       <div class="image">
-		                       <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
-		                       <div class="overlay">
-			                       <div class="row">
-				                       <div class="col-md-6 left">
+	                       	<div class="image">
+		                       	<img src="../plugins/images/Untitled-1.png" alt="Project image"/>
+		                       	<div class="overlay">
+			                       	<div class="row">
+				                       	<div class="col-md-6 left">
 					                       <h3><%out.print(projectList.getName()); %></h3>
 					                       <h4><%out.print(projectList.getCityName()); %></h4>
 					                       <br>
 						                       <div class="bottom">
 						                       <h4>50/500 SOLD</h4>
 						                       </div>
-				                       </div>
-				                        <div class="col-md-6 right">
-					                         <div class="chart" id="graph" data-percent="10">
-					                         </div>
-						                        <div class="bottom">
-						                        <h4>10 NEW LEADS</h4>
-						                        </div>
+				                       	</div>
+				                    	<div class="col-md-6 right">
+					                      	<div class="chart" id="graph" data-percent="10"> </div>
+						                  	<div class="bottom">
+						                    	<h4>10 NEW LEADS</h4>
+						                 	</div>
 				                       </div>
 			                       </div>
 	                           </div>
 	                       </div>
-                        <div class="image">
-                          <div class="image">
-	                       <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
-	                       <div class="overlay">
-		                       <div class="row">
-			                       <div class="col-md-6 left">
-				                       <h3><%out.print(projectList.getName());%></h3>
-				                       <h4>Baner</h4>
-				                       <br>
-					                       <div class="bottom">
-					                       <h4>50/500 SOLD</h4>
-					                       </div>
-			                       </div>
-			                        <div class="col-md-6 right">
-				                         <div class="chart" id="graph1" data-percent="50">
-				                         </div>
-					                        <div class="bottom">
-					                        <h4>10 NEW LEADS</h4>
-					                        </div>
-			                       </div>
-		                       </div>
-                           </div>
-                       </div>
-                        </div>
+                        	<!-- div class="image">
+                          		<div class="image">
+	                       			<img src="../plugins/images/Untitled-1.png" alt="Project image"/>
+	                       			<div class="overlay">
+		                       			<div class="row">
+			                       			<div class="col-md-6 left">
+				                       			<h3><%out.print(projectList.getName());%></h3>
+				                       			<h4>Baner</h4>
+				                       			<br>
+					                       		<div class="bottom">
+					                       			<h4>50/500 SOLD</h4>
+					                       		</div>
+			                       			</div>
+			                        		<div class="col-md-6 right">
+				                         		<div class="chart" id="graph1" data-percent="50"> </div>
+				                        		<div class="bottom">
+				                        			<h4>10 NEW LEADS</h4>
+				                        		</div>
+			                       			</div>
+		                       			</div>
+                           			</div>
+                       			</div>
+                        	</div-->
                         </div>
                         <%
                        		}
                        	}
                         %>
                        
-                      <div class="col-md-6 col-sm-6 col-xs-12 projectsection">
+                      <!-- div class="col-md-6 col-sm-6 col-xs-12 projectsection">
                         <div class="image">
 	                       <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
 	                       <div class="overlay">
@@ -328,7 +323,7 @@
 		                       </div>
                            </div>
                          </div>
-                       </div>
+                       </div-->
                        
 	                    <div class="offset-sm-5 col-sm-7">
 	                        <button type="submit" class="btn btn11 btn-info waves-effect waves-light m-t-10">More...</button>
