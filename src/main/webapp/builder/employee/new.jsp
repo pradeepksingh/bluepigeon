@@ -1,15 +1,15 @@
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.model.BuilderEmployeeAccessType"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.data.ProjectList"%>
-<%@page import="org.bluepigeon.admin.data.PossessionList"%>
 <%@page import="org.bluepigeon.admin.dao.PossessionDAO"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%
-	List<ProjectList> project_list = null;
+	List<ProjectData> project_list = null;
 	session = request.getSession(false);
 	Builder builder = new Builder();
 	int builder_uid = 0;
@@ -22,7 +22,7 @@
 		}
    	}
 	if(builder_uid > 0){
-		project_list = new ProjectDAO().getBuilderProjectsByBuilderId(builder_uid);
+		project_list = new ProjectDAO().getProjectsByBuilderId(builder_uid);
 		int builder_size = project_list.size();
 	}
 	
@@ -183,7 +183,7 @@
                                         <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
                                        <select class="form-control" name="project" id="project">
                                           <option value="">Select Project</option>
-														<% for (ProjectList project : project_list) { %>
+														<% for (ProjectData project : project_list) { %>
 														<option value="<%out.print(project.getId());%>"> <% out.print(project.getName()); %> </option>
 														<% } %>
 										</select>
@@ -374,7 +374,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/bluepigeon/builder/employee/new-employee.jsp";
+        window.location.href = "${baseUrl}/bluepigeon/builder/employee/list.jsp";
   	}
 }
 

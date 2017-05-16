@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="req" value="${pageContext.request}" />
@@ -15,7 +17,7 @@
 <%
 	session = request.getSession(false);
 	Builder builder = new Builder();
-	List<BuilderProject> project_list = new ProjectDetailsDAO().getBuilderProjectList();
+	List<ProjectData> project_list = null;
 	int builder_id = 0;
 	if(session!=null)
 	{
@@ -23,6 +25,9 @@
 		{
 			builder  = (Builder)session.getAttribute("ubname");
 			builder_id = builder.getId();
+		}
+		if(builder_id > 0){
+			project_list = new ProjectDAO().getProjectsByBuilderId(builder_id);
 		}
    }
 	int builder_id1 = 1;
@@ -161,9 +166,12 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                                     <div class="col-3">
                                          <select name="project_id" id="project_id" class="form-control">
 											                    <option value="">Select Project</option>
-											                    <% for(BuilderProject builderProject : project_list){ %>
+											                    <%
+											                    if(project_list != null){
+											                    for(ProjectData builderProject : project_list){ %>
 																<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option>
-																<% } %>
+																<% } 
+																}%>
 												             </select>
                                     </div>
                                     
@@ -438,7 +446,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/builder/demandletters/demand-letter.jsp";
+        window.location.href = "${baseUrl}/builder/demandletters/list.jsp";
   	}
 }
 

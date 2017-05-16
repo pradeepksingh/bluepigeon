@@ -91,9 +91,12 @@
 							<div class="col-md-3 col-sm-6 col-xs-12">
 								<select name="project_id" id="project_id" class="form-control">
 				                    <option value="0">Select Project</option>
-				                    <% for(int i=0; i < projectDatas.size() ; i++){ %>
+				                    <%
+				                    if(projectDatas != null){
+				                    for(int i=0; i < projectDatas.size() ; i++){ %>
 									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option>
-									<% } %>
+									<% }
+				                    }%>
 						         </select>   
 							</div>
 							<div class="col-md-3 col-sm-6 col-xs-12">
@@ -106,10 +109,7 @@
 				                    <option value="0">Select Flat</option>
 								</select>
 							</div>
-							
-							
 						</div>
-						
                             <div class="table-responsive">
                                 <table id="tblBuilding" class="table table-striped">
                                     <thead>
@@ -119,7 +119,6 @@
                                              <th>Project Name</th>
                                              <th>Building Name</th>
                                             <th>Flat No</th>
-                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -223,41 +222,7 @@
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
-//     $("#searchcitytId").change(function(){
-//     	$.get("${baseUrl}/webapi/project/locality/",{ city_id: $("#searchcitytId").val() }, function(data){
-//     		var html = '<option value="">Select Locality</option>';
-    		
-//     		$(data).each(function(index){
-//     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-//     		});
-//     		$("#searchlocalityId").html(html);
-//     	},'json');
-    	
-//     	$.get("${baseUrl}/webapi/project/list/city/",{ city_id: $("#searchcitytId").val() }, function(data){
-//     		var html = '<option value="">Select Project</option>';
-    		
-//     		$(data).each(function(index){
-//     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-//     		});
-//     		$("#searchprojectId").html(html);
-//     	},'json');
-//     	getDataTable();
-//     });
-    
-//     $("#searchlocalitytId").change(function(){
-//     	$.get("${baseUrl}/webapi/project/name/list",{ locality_id: $("#searchlocalitytId").val() }, function(data){
-//     		var html = '<option value="0">Select Project</option>';
-    		
-//     		$(data).each(function(index){
-//     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-//     		});
-//     		$("#searchprojectId").html(html);
-//     	},'json');
-//     	getDataTable();
-//     });
 
-
-    
     function getDataTable(){
     	$.post("${baseUrl}/webapi/cancellation/buyer/list",{project_id: $("#project_id").val(), building_id: $("#building_id").val(), flat_id : $("#flat_id").val()},function(data){
     		var oTable = $("#tblBuilding").dataTable();
@@ -275,8 +240,6 @@
     	    });
     	},'json');
     }
-    
-   
     $("#project_id").change(function(){
     	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{ }, function(data){
     		var html = '<option value="0">Select Building</option>';

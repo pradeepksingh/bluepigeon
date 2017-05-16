@@ -24,7 +24,7 @@ int project_size = 0;
 int type_size = 0;
 int city_size = 0;
 List<EmployeeList> employeeLists = null;
-	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
+	List<ProjectData> builderProjects = null; 
 	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
 	if(builderProjects.size()>0)
 	project_size = builderProjects.size();
@@ -43,6 +43,7 @@ if(session!=null)
 		p_user_id = builder.getId();
 	}
 	if(p_user_id>0){
+		builderProjects = new ProjectDAO().getProjectsByBuilderId(p_user_id);
 		employeeLists = new BuilderDetailsDAO().getBuilderEmployeeList(p_user_id);
 	}
 }

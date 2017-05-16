@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="req" value="${pageContext.request}" />
@@ -17,7 +19,7 @@
  	int project_size = 0;
 	int type_size = 0;
 	int city_size = 0;
- 	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
+ 	List<ProjectData> builderProjects = null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
  	if(builderProjects.size()>0)
     	project_size = builderProjects.size();
@@ -34,6 +36,9 @@
 		{
 			builder  = (Builder)session.getAttribute("ubname");
 			p_user_id = builder.getId();
+		}
+		if(p_user_id > 0){
+			builderProjects = new ProjectDAO().getProjectsByBuilderId(p_user_id);
 		}
    	}
 %>
@@ -166,9 +171,6 @@
                                         <input class="form-control" type="text" id="set_date" name="set_date">
                                     </div>
                                 </div>
-                              
-                               
-                                
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">Content</label>
                                     <div class="col-3">
@@ -182,10 +184,7 @@
                               
                                </div>
                               </div>
-                              
                              <div id="vimessages1" class="tab-pane" aria-expanded="false">
-                            
-                                 
                                   <div class="form-group row">
                                        <label for="example-search-input" class="col-3 col-form-label">City</label>
                                     <div class="col-3">
@@ -196,16 +195,13 @@
 												<% } %>
 							                </select>
                                     </div>
-                                    
                                     <label for="example-search-input" class="col-3 col-form-label">Project*</label>
                                     <div class="col-3">
                                         <select name="project_id" id="project_id" class="form-control">
 							                    <option value="0">Select Project</option>
 							                </select>
                                     </div>
-                                
                                 </div>
-                                
                                  <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">Building</label>
                                     <div class="col-3">
@@ -213,18 +209,13 @@
 							                    <option value="0">Select Building</option>
 							                </select>
                                     </div>
-                                    
                                      <label for="example-search-input" class="col-3 col-form-label">flat</label>
                                     <div class="col-3">
                                           <select name="flat_id" id="flat_id" class="form-control">
 							                    <option value="0">Select Flat</option>
 							                </select>
                                     </div>
-                                    
                                 </div>
-                              
-                               
-                                
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">Recipient Type</label>
                                     <div class="col-3">
@@ -235,7 +226,6 @@
 							                </select>
                                     </div>
                                 </div>
-                                
                                 <div class="form-group row">
                                     <div class="col-12">
                                         <center><label for="example-search-input" class="col-form-label">Recipients Name</label></center><br>
@@ -260,15 +250,10 @@
 	                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10" style="float: right;">Publish</button>
 	                                 </div>
                                  </div>
-                                 
-                                
                                </div>
-
-                                
                              </div>
                               </form>  
                         </div>
-
                         </div>
                     </div>
                 </div>
@@ -276,7 +261,6 @@
           <div id="sidebar1"> 
 		       <%@include file="../partial/footer.jsp"%>
 		  </div> 
-        
         <!-- /#page-wrapper -->
     </div>
     <!-- /#wrapper -->

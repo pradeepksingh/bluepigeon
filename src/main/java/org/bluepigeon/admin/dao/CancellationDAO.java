@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bluepigeon.admin.data.CancellationList;
+import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Cancellation;
@@ -59,8 +60,25 @@ public class CancellationDAO {
 		b2.setName(buyer.getName());
 		b2.setPancard(buyer.getPancard());
 		b2.setMobile(buyer.getMobile());
-		
+		session.close();
 		return b2;
+	}
+	public List<ProjectData> getCancellationProjectByBuilderId(int builderId){
+		String hql = "from Cancellation where builderProject.builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id",builderId );
+		List<Cancellation> cancellationList = query.list();
+		List<ProjectData> projectDataList = new ArrayList<ProjectData>();
+		for(Cancellation cancellation : cancellationList){
+			ProjectData projectData = new ProjectData();
+			projectData.setId(cancellation.getBuilderProject().getId());
+			projectData.setName(cancellation.getBuilderProject().getName());
+			projectDataList.add(projectData);
+		}
+		session.close();
+		return projectDataList;
 	}
 	public List<CancellationList> getCancellationByBuilderId(int builderId){
 		String hql = "from Cancellation where builderProject.builder.id = :builder_id";

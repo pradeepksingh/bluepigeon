@@ -1,4 +1,6 @@
-  <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="req" value="${pageContext.request}" />
 <c:set var="url">${req.requestURL}</c:set>
@@ -16,7 +18,7 @@
  	int project_size = 0;
 	int type_size = 0;
 	int city_size = 0;
- 	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
+ 	List<ProjectData> builderProjects =null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
  	if(builderProjects.size()>0)
     	project_size = builderProjects.size();
@@ -31,6 +33,9 @@
 		{
 			builder  = (Builder)session.getAttribute("ubname");
 			builder_id = builder.getId();
+		}
+		if(builder_id > 0){
+			builderProjects = new ProjectDAO().getProjectsByBuilderId(builder_id);
 		}
    }
 %>
@@ -196,7 +201,6 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                                       <input type="text" id="area" name="area" placeholder="Enter lead area" class="form-control" />
                                     </div>
                                 </div>
-                                
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">City</label>
                                     <div class="col-3">
@@ -208,11 +212,9 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                                        <input type="text" id="discount_offered" name="discount_offered" placeholder="Enter Discount" class="form-control" />
                                     </div>
                                 </div>
-                                
                                 <div class="offset-sm-5 col-sm-7">
                                         <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
                                  </div>
-                                
                                </form>
                                </div>
                               </div>

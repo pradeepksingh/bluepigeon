@@ -1,3 +1,6 @@
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.dao.CancellationDAO"%>
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.model.City"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderPropertyTypeDAO"%>
@@ -10,7 +13,7 @@
  	int project_size = 0;
 	int type_size = 0;
 	int city_size = 0;
- 	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
+ 	List<ProjectData> builderProjects = null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
  	if(builderProjects.size()>0)
     	project_size = builderProjects.size();
@@ -25,6 +28,9 @@
 		{
 			builder  = (Builder)session.getAttribute("ubname");
 			builder_id = builder.getId();
+		}
+		if(builder_id > 0){
+			builderProjects = new ProjectDAO().getProjectsByBuilderId(builder_id);
 		}
    }
 %>
@@ -121,9 +127,12 @@
 				                                    <div class="col-3">
 				                                        <select name="project_id" id="project_id" class="form-control">
 									                 	   	<option value="0">Select Project</option>
-									                  	   	<% for(int i=0; i < project_size ; i++){ %>
+									                  	   	<%
+									                  	   	if(builderProjects != null){
+									                  	   	for(int i=0; i < project_size ; i++){ %>
 															<option value="<% out.print(builderProjects.get(i).getId());%>"><% out.print(builderProjects.get(i).getName());%></option>
-												  			<% } %>
+												  			<% }
+									                  	   	}%>
 											       	 	</select>
 				                                    </div>
 				                                    <label for="example-text-input" class="col-3 col-form-label">Building</label>
@@ -312,7 +321,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
        // alert(resp.message);
-        window.location.href = "${baseUrl}/builder/cancellation/new.jsp";
+        window.location.href = "${baseUrl}/builder/cancellation/list.jsp";
   	}
 }
 </script>

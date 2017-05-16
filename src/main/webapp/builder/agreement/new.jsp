@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
@@ -9,7 +11,7 @@
 <%
 	session = request.getSession(false);
 	Builder builder = new Builder();
-	List<BuilderProject> project_list = new ProjectDetailsDAO().getBuilderProjectList();
+	List<ProjectData> project_list = null;
 	int builder_id = 0;
 	if(session!=null)
 	{
@@ -18,7 +20,11 @@
 			builder  = (Builder)session.getAttribute("ubname");
 			builder_id = builder.getId();
 		}
+		if(builder_id > 0){
+			project_list = new ProjectDAO().getProjectsByBuilderId(builder_id);
+		}
    }
+	
 	int builder_id1 = 1;
 	List<BuilderEmployee> builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
 %>
@@ -127,7 +133,7 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                                     <div class="col-3">
                                          <select name="project_id" id="project_id" class="form-control">
 											                    <option value="">Select Project</option>
-											                    <% for(BuilderProject builderProject : project_list){ %>
+											                    <% for(ProjectData builderProject : project_list){ %>
 																<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option>
 																<% } %>
 												             </select>
