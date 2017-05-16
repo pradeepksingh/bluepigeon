@@ -1,5 +1,7 @@
 package org.bluepigeon.admin.data;
 
+import java.util.Date;
+
 public class PossessionList {
 	private int id;
 	private String buyerName;
@@ -9,6 +11,7 @@ public class PossessionList {
 	private String buildingName;
 	private int floorId;
 	//private String FloorNo;
+	private Date possessionDate;
 	private int flatId;
 	private String flatNo;
 	public int getId() {
@@ -53,7 +56,14 @@ public class PossessionList {
 	public void setFloorId(int floorId) {
 		this.floorId = floorId;
 	}
-//	public String getFloorNo() {
+	
+public Date getPossessionDate() {
+		return possessionDate;
+	}
+	public void setPossessionDate(Date possessionDate) {
+		this.possessionDate = possessionDate;
+	}
+	//	public String getFloorNo() {
 //		return FloorNo;
 //	}
 //	public void setFloorNo(String floorNo) {

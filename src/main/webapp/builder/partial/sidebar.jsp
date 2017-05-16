@@ -45,13 +45,13 @@
                      <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="ti-layout fa-fw"></i><span class="hide-menu"> Buyer<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/buyer/new.jsp">Add</a></li>
-                            <li> <a href="index.html">Manage</a></li>
+<!--                             <li> <a href="index.html">Manage</a></li> -->
                         </ul>
                     </li>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu"> Employee<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/employee/new.jsp">Add</a></li>
-                            <li> <a href="inbox-detail.html">Manage</a></li>
+                            <li> <a href="${baseUrl }/builder/employee/list.jsp">Manage</a></li>
                         </ul>
                     </li>
 <!--                      <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Campaign<span class="fa arrow"></span></span></a> -->
@@ -63,22 +63,22 @@
                      <li class="nav-small-cap m-t-10">--Professional--</li>
                      <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Sales<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
-                            <li> <a href="inbox.html">Add</a></li>
-                            <li> <a href="inbox-detail.html">Manage</a></li>
+<!--                             <li> <a href="inbox.html">Add</a></li> -->
+<!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
+                              <li> <a href="${baseUrl }/builder/leads/list.jsp">Manage Leads</a></li>
                              </ul>
                     </li>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Marketing<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
-                            <li> <a href="inbox.html">Manage Updates</a></li>
+<!--                             <li> <a href="inbox.html">Manage Updates</a></li> -->
                             <li> <a href="${baseUrl }/builder/campaign/list.jsp">New Campaign</a></li>
                              </ul>
                     </li>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="F" class="linea-icon linea-software fa-fw"></i><span class="hide-menu"> Inventory<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
-                            <li> <a href="${baseUrl }/builder/leads/list.jsp">Manage Leads</a></li>
                             <li> <a href="${baseUrl }/builder/demandletters/list.jsp">Demand Letter Release</a></li>
                             <li> <a href="${baseUrl }/builder/possession/list.jsp">Allot Possession</a></li>
-                            <li> <a href="${baseUrl }/builder/cancellation/new.jsp">Cancellation</a></li>
+                            <li> <a href="${baseUrl }/builder/cancellation/list.jsp">Cancellation</a></li>
                         </ul>
                     </li>
  					<li class="nav-small-cap m-t-10">--Support--</li>

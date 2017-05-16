@@ -1,11 +1,5 @@
-<%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:set var="req" value="${pageContext.request}" />
-<c:set var="url">${req.requestURL}</c:set>
-<c:set var="uri" value="${req.requestURI}" />
-<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.model.City"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderPropertyTypeDAO"%>
@@ -18,12 +12,9 @@
  	int project_size = 0;
 	int type_size = 0;
 	int city_size = 0;
- 	List<ProjectData> builderProjects =null;
+ 	List<ProjectData> projectDatas = null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
- 	if(builderProjects.size()>0)
-    	project_size = builderProjects.size();
- 	if(builderPropertyTypes.size()>0)
- 		type_size = builderPropertyTypes.size();
+ 	
    	session = request.getSession(false);
    	Builder builder = new Builder();
    	int builder_id = 0;
@@ -35,9 +26,13 @@
 			builder_id = builder.getId();
 		}
 		if(builder_id > 0){
-			builderProjects = new ProjectDAO().getProjectsByBuilderId(builder_id);
+			projectDatas = new ProjectDAO().getProjectsByBuilderId(builder_id);
 		}
    }
+   	if(projectDatas.size()>0)
+    	project_size = projectDatas.size();
+ 	if(builderPropertyTypes.size()>0)
+ 		type_size = builderPropertyTypes.size();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -106,31 +101,27 @@ $("#sidebar1").load("../partial/sidebar.jsp");
     </div>
     <div id="wrapper">
         <!-- Top Navigation -->
-       <div id="header">
-	       <%@include file="../partial/header.jsp"%>
-      </div>
-      <div id="sidebar1"> 
-       	<%@include file="../partial/sidebar.jsp"%>
-      </div>
-    
+        <div id="header"></div>
+        <!-- End Top Navigation -->
+        <!-- Left navbar-header -->
+       <div id="sidebar1"> </div>
+    </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper" style="min-height: 2038px;">
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Add Lead</h4>
+                        <h4 class="page-title">Allot Possession</h4>
                     </div>
                   
                     <!-- /.col-lg-12 -->
                 </div>
              
-        
-
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
-                             <h4 class="page-title">Add Lead Details</h4><br>
+                             <h4 class="page-title">New Possession Release</h4><br>
                                 <ul class="nav tabs-horizontal">
                                     <li class="tab nav-item" aria-expanded="false">
                                         <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"></a>
@@ -141,20 +132,21 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                               
                                <div id="vimessages" class="tab-pane active" aria-expanded="false">
                                 <div class="col-12">
-                               	<form id="addlead" name="addlead" class="form-horizontal" action="" method="post">
-                                <input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id); %>" />
-                                <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Interested In*</label>
+                             <form id="addpossesion" name="addpossesion" action="" method="post" enctype="multipart/form-data">
+                                 <input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id); %>" />
+                                 <div class="form-group row">
+                                    <label for="example-tel-input" class="col-3 col-form-label">Project</label>
                                     <div class="col-3">
-                                       <select name="project_id" id="project_id" class="form-control">
+                                         <select name="project_id" id="project_id" class="form-control">
 						                 	   	<option value="0">Select Project</option>
 						                  	   	<% for(int i=0; i < project_size ; i++){ %>
-												<option value="<% out.print(builderProjects.get(i).getId());%>"><% out.print(builderProjects.get(i).getName());%></option>
+												<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option>
 											  	<% } %>
 								       	  	</select>
                                     </div>
-                                    <label for="example-text-input" class="col-3 col-form-label">Building*</label>
+                                    <label for="example-text-input" class="col-3 col-form-label">Building</label>
                                     <div class="col-3">
+                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
                                        <select name="building_id" id="building_id" class="form-control">
 						                 	   	<option value="0">Select Building</option>
 								       	  	</select>
@@ -162,64 +154,79 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                                 </div>
                                 
                                 <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Flat*</label>
+                                 <label for="example-search-input" class="col-3 col-form-label">Flat</label>
                                     <div class="col-3">
-                                      <select name="flat_id" id="flat_id" class="form-control">
+                                         <select name="flat_id" id="flat_id" class="form-control">
 						                 	   	<option value="0">Select Flat</option>
 								       	  	</select>
                                     </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Lead Name</label>
+                                    <label for="example-text-input" class="col-3 col-form-label">Buyer Name*</label>
                                     <div class="col-3">
-										<input type="text" id="name" name="name" placeholder="Enter lead name" class="form-control" />
+                                          <input class="form-control" type="text" value="" id="buyer_name" name="buyer_name">
                                     </div>
+                                    
                                 </div>
                                 
                                 <div class="form-group row">
-                                    <label for="example-tel-input" class="col-3 col-form-label">Contact</label>
+<!--                                     <label for="example-search-input" class="col-3 col-form-label">Buyer Pan Card*</label> -->
+<!--                                     <div class="col-3"> -->
+<!--                                           <input class="form-control" type="text" value="" id="pan_card" name="pan_card"> -->
+<!--                                     </div> -->
+                                      <label for="example-tel-input" class="col-3 col-form-label">Buyer Contact</label> 
                                     <div class="col-3">
-                                       <input type="text" id="mobile" name="mobile" placeholder="Enter lead phone number" class="form-control" />
+                                       <input class="form-control" type="text" value="" id="buyer_contact" name="buyer_contact" >
                                     </div>
-                                    <label for="example-tel-input" class="col-3 col-form-label">Email</label>
+                                      <label for="example-search-input" class="col-3 col-form-label">Possession Date</label>
                                     <div class="col-3">
-                                         <input type="text" id="email" name="email" placeholder="Enter lead email" class="form-control" />
+                                    	 <input class="form-control" type="text" value="Date" id="possession_date" name="possession_date">
                                     </div>
+                                    
                                 </div>
                                 
                                 <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Source</label>
-                                    <div class="col-3">
-                                       <select name="source" id="source" class="form-control">
-							                    <option value="0">Select Source</option>
-							                    <option value="1">App</option>
-							                    <option value="2">Website</option>
-							                    <option value="3">Google</option>
-							                    <option value="4">Facebook</option>
-							                </select>
+                                    <div class="col-12">
+                                        <center><label for="example-search-input" class="col-form-label">Buyers</label></center><br>
+                                       <div id="appendbuyer" class="row"></div>
                                     </div>
-                                    <label for="example-text-input" class="col-3 col-form-label">Area</label>
-                                    <div class="col-3">
-                                      <input type="text" id="area" name="area" placeholder="Enter lead area" class="form-control" />
-                                    </div>
+                                    <input type="hidden" name="added_by" id="added_by" value="1"/>
+                                    
                                 </div>
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">City</label>
-                                    <div class="col-3">
-                                       <!--  <input class="form-control" type="text" value="City" id="example-search-input">-->
-                                       <input type="text" id="city" name="city" placeholder="Enter City" class="form-control" />
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Discount offered</label>
-                                    <div class="col-3">
-                                       <input type="text" id="discount_offered" name="discount_offered" placeholder="Enter Discount" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="offset-sm-5 col-sm-7">
-                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+                                
+                                 <div class="form-group row">                        
+	                                 <div class="col-4">
+	                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10" style="float: right;">Publish</button>
+	                                 </div>
+	                                  <div class="col-4">
+	                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10" style="float: right;">Save</button>
+	                                 </div>
                                  </div>
+                                
                                </form>
                                </div>
                               </div>
+                              
+                                <div id="vimessages5" class="tab-pane" aria-expanded="true">
+                                         
+                                <div class="form-group row">
+                                    
+                                    <div class="checkbox checkbox-inverse">
+                                        <input id="checkbox6c" type="checkbox">
+                                        <label for="checkbox6c"> Row House </label>
+                                    </div>
+                                    </div>
+                                        <div class="form-group row">
+                                      <div class="checkbox checkbox-inverse">
+                                        <input id="checkbox6c" type="checkbox">
+                                        <label for="checkbox6c"> Buildings </label>
+                                    </div>
+                                    </div>
+                                </div>
+                                
+                                
+                               
                                 </div>
                         </div>
+
                         </div>
                     </div>
                 </div>
@@ -230,31 +237,75 @@ $("#sidebar1").load("../partial/sidebar.jsp");
         <!-- /#page-wrapper -->
     
     <!-- /#wrapper -->
-    </div>
-    <script type="text/javascript">
+    
+</body>
+</html>
+<script type="text/javascript">
+$('#possession_date').datepicker({
+	format: "dd MM yyyy"
+});
+
 $("#project_id").change(function(){
-	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{ }, function(data){
+	$.get("${baseUrl}/bluepigeon/webapi/campaign/building/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
+		var checkbox = '<div class="row">';
+		$("#appendbuyer").empty();
 		$(data).each(function(index){
-			
-			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+			html = html + '<option value="'+data[index].buildingId+'">'+data[index].buildingName+'</option>';
+			$(data[index].buyer).each(function(key, value){
+				checkbox += '<div class="col-sm-3"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
+				checkbox +='</div>';
+			});
 		});
 		$("#building_id").html(html);
+		checkbox+='</div>';
+		$("#appendbuyer").html(checkbox);
 	},'json');
 });
 $("#building_id").change(function(){
-	$.get("${baseUrl}/webapi/project/building/flat/names/"+$("#building_id").val(),{ }, function(data){
+	$.get("${baseUrl}/bluepigeon/webapi/campaign/building/flat/names/"+$("#building_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Flat</option>';
+		var checkbox = '<div class="row">';
+		$("#appendbuyer").empty();
 		$(data).each(function(index){
-			
-			html = html + '<option value="'+data[index].id+'">'+data[index].flatNo+'</option>';
+			html = html + '<option value="'+data[index].flatId+'">'+data[index].flatNo+'</option>';
+			$(data[index].buyer).each(function(key, value){
+				checkbox += '<div class="col-sm-3"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
+				checkbox +='</div>';
+			});
 		});
 		$("#flat_id").html(html);
+		checkbox+='</div>';
+		$("#appendbuyer").html(checkbox);
 	},'json');
 });
+
+$("#flat_id").change(function(){
+	$.get("${baseUrl}/bluepigeon/webapi/campaign/flat/buyer/names/"+$("#flat_id").val(),{ }, function(data){
+		var checkbox = '<div class="row">';
+		$("#appendbuyer").empty();
+		$(data).each(function(index){
+				checkbox += '<div class="col-sm-3"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+data[index].id+'" />'+'&nbsp;'+data[index].name
+				checkbox +='</div>';
+		});
+		checkbox+='</div>';
+		$("#appendbuyer").html(checkbox);
+	},'json');
+	
+	$.get("${baseUrl}/bluepigeon/webapi/cancellation/buyer/"+$("#flat_id").val(),{ }, function(data){
+// 		alert(data.name);
+// 		alert(data.mobile);
+// 		alert(data.pancard);
+		$("#buyer_name").val(data.name);
+		$("#buyer_contact").val(data.mobile);
+		$("#pan_card").val(data.pancard);
+		
+	},'json');
+});
+
 						
 				
-$('#addlead').bootstrapValidator({
+$('#addpossesion').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},
@@ -263,14 +314,14 @@ $('#addlead').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-    	name: {
+    	buyer_name: {
             validators: {
                 notEmpty: {
-                    message: 'Lead name is required and cannot be empty'
+                    message: 'Buyer name is required and cannot be empty'
                 }
             }
         },
-        mobile: {
+        buyer_contact: {
         	validators: {
             	notEmpty: {
                     message: 'The Mobile is required and cannot be empty'
@@ -281,17 +332,7 @@ $('#addlead').bootstrapValidator({
                 }
             }
         },
-        email: {
-        	validators: {
-            	notEmpty: {
-                    message: 'The Email is required and cannot be empty'
-                },
-                regexp: {
-                    regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
-                    message: 'The value is not a valid email address'
-                }
-            }
-        },
+        
         project_id: {
             validators: {
                 notEmpty: {
@@ -299,37 +340,32 @@ $('#addlead').bootstrapValidator({
                 }
             }
         },
-        city: {
+        
+        possession_date: {
             validators: {
                 notEmpty: {
-                    message: 'City Name is required and cannot be empty'
-                }
-            }
-        },
-        area: {
-            validators: {
-                notEmpty: {
-                    message: 'Locality Name is required and cannot be empty'
+                    message: 'Possesion date is required and cannot be empty'
                 }
             }
         }
+        
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
-	addLead();
+	addPossesion();
 });
 
-function addLead() {
+function addPossesion() {
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/project/lead/add',
+	 		url : '${baseUrl}/bluepigeon/webapi/buyer/possession/save',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
-   	$('#addlead').ajaxSubmit(options);
+   	$('#addpossesion').ajaxSubmit(options);
 }
 
 function showAddRequest(formData, jqForm, options){
@@ -349,11 +385,8 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").addClass('alert-success');
         $("#response").html(resp.message);
         $("#response").show();
-        alert(resp.message);
-        window.location.href = "${baseUrl}/builder/leads/list.jsp";
+       // alert(resp.message);
+        window.location.href = "${baseUrl}/bluepigeon/builder/possession/list.jsp";
   	}
 }
 </script>
-    
-</body>
-</html>

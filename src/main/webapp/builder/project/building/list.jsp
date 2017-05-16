@@ -235,40 +235,6 @@
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
-//     $("#searchcitytId").change(function(){
-//     	$.get("${baseUrl}/webapi/project/locality/",{ city_id: $("#searchcitytId").val() }, function(data){
-//     		var html = '<option value="">Select Locality</option>';
-    		
-//     		$(data).each(function(index){
-//     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-//     		});
-//     		$("#searchlocalityId").html(html);
-//     	},'json');
-    	
-//     	$.get("${baseUrl}/webapi/project/list/city/",{ city_id: $("#searchcitytId").val() }, function(data){
-//     		var html = '<option value="">Select Project</option>';
-    		
-//     		$(data).each(function(index){
-//     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-//     		});
-//     		$("#searchprojectId").html(html);
-//     	},'json');
-//     	getDataTable();
-//     });
-    
-//     $("#searchlocalitytId").change(function(){
-//     	$.get("${baseUrl}/webapi/project/name/list",{ locality_id: $("#searchlocalitytId").val() }, function(data){
-//     		var html = '<option value="0">Select Project</option>';
-    		
-//     		$(data).each(function(index){
-//     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-//     		});
-//     		$("#searchprojectId").html(html);
-//     	},'json');
-//     	getDataTable();
-//     });
-
-
     
     function getDataTable(){
     	$.post("${baseUrl}/webapi/project/building",{city_id: $("#searchcitytId").val(), locality_id: $("#searchlocalityId").val(), project_id : $("#searchprojectId").val()},function(data){

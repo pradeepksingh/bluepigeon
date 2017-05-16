@@ -1,4 +1,5 @@
-  <%@page import="org.bluepigeon.admin.data.ProjectList"%>
+  <%@page import="org.bluepigeon.admin.data.ProjectData"%>
+<%@page import="org.bluepigeon.admin.data.ProjectList"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -15,7 +16,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%
-	List<ProjectList> project_list = null;
+	List<ProjectData> project_list = null;
  	int project_size = 0;
 	int type_size = 0;
 	int city_size = 0;
@@ -38,7 +39,7 @@
 			builder_id = builder.getId();
 		}
 		if(builder_id > 0){
-			project_list = new ProjectDAO().getBuilderProjectsByBuilderId(builder_id);
+			project_list = new ProjectDAO().getProjectsByBuilderId(builder_id);
 			int builder_size = project_list.size();
 		}
    }
@@ -133,6 +134,7 @@
                                 <div class="col-12">
                                	<form id="addlead" name="addlead" class="form-horizontal" action="" method="post">
                                 <input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id); %>" />
+                                <input type="hidden" name="lead_id" id="lead_id" value="<%out.print(lead_id);%>"/>
                                 <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Interested In*</label>
                                     <div class="col-3">

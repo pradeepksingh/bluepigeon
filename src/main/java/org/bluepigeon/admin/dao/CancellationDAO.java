@@ -1,7 +1,10 @@
 package org.bluepigeon.admin.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.bluepigeon.admin.data.CancellationList;
+import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Cancellation;
@@ -57,7 +60,80 @@ public class CancellationDAO {
 		b2.setName(buyer.getName());
 		b2.setPancard(buyer.getPancard());
 		b2.setMobile(buyer.getMobile());
-		
+		session.close();
 		return b2;
+	}
+	public List<CancellationList> getCancellationByBuilderId(int builderId){
+		String hql = "from Cancellation where builderProject.builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		List<Cancellation> cancellation_list = query.list();
+		List<CancellationList> cancellationList = new ArrayList<CancellationList>();
+		int i=1;
+		for(Cancellation cancellation : cancellation_list){
+			CancellationList bList = new CancellationList();
+			bList.setCount(i);
+			bList.setProjectName(cancellation.getBuilderProject().getName());
+			bList.setBuyerName(cancellation.getBuyerName());
+			bList.setBuildingName(cancellation.getBuilderBuilding().getName());
+			bList.setFlatNo(cancellation.getBuilderFlat().getFlatNo());
+			cancellationList.add(bList);
+			i++;
+		}
+		session.close();
+		return cancellationList;
+	}
+	
+	public List<CancellationList> getCancellationListFilter(int project_id, int building_id, int flat_id) {
+		String hql = "from Cancellation where ";
+		String where = "";
+		
+		if(project_id > 0) {
+			where = where + "builderProject.id = :project_id ";
+		}
+		if(building_id > 0) {
+			if(where != "") {
+				where = where + "AND builderBuilding.id = :building_id ";
+			} else {
+				where = where + "builderBuilding.id = :building_id ";
+			}
+		}
+		if(flat_id > 0) {
+			if(where != "") {
+				where = where + "AND builderFlat.id = :flat_id ";
+			} else {
+				where = where + "builderFlat.id = :flat_id ";
+			}
+		}
+		hql = hql + where;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		if(project_id > 0) {
+			query.setParameter("project_id", project_id);
+		}
+		if(building_id > 0) {
+			query.setParameter("building_id", building_id);
+		}
+		if(flat_id > 0) {
+			query.setParameter("flat_id", flat_id);
+		}
+		List<Cancellation> result = query.list();
+		List<CancellationList> cancellationList = new ArrayList<CancellationList>();
+		int i=1;
+		for(Cancellation cancellation : result) {
+			CancellationList bList = new CancellationList();
+			bList.setCount(i);
+			bList.setProjectName(cancellation.getBuilderProject().getName());
+			bList.setBuyerName(cancellation.getBuyerName());
+			bList.setBuildingName(cancellation.getBuilderBuilding().getName());
+			bList.setFlatNo(cancellation.getBuilderFlat().getFlatNo());
+			cancellationList.add(bList);
+			i++;
+		}
+		session.close();
+		return cancellationList;
 	}
 }

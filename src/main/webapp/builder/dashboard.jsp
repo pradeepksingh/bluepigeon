@@ -1,4 +1,9 @@
-
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri" value="${req.requestURI}" />
+<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,19 +28,16 @@
     <link href="css/style.css" rel="stylesheet">
     <!-- color CSS -->
     <link href="css/megna.css" id="theme" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/custom.css">
-     <link href="plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
-    <link href="plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
-    <link href="plugins/bower_components/switchery/dist/switchery.min.css" rel="stylesheet" />
-    <link href="plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
-    <link href="plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
-    <link href="plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
-    <link href="plugins/bower_components/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="${baseUrl}/builder/css/custom.css">
+     <link href="${baseUrl}/builder/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="${baseUrl}/builder/plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
+    <link href="${baseUrl}/builder/plugins/bower_components/switchery/dist/switchery.min.css" rel="stylesheet" />
+    <link href="${baseUrl}/builder/plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="${baseUrl}/builder/plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
+    <link href="${baseUrl}/builder/plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <link href="${baseUrl}/builder/plugins/bower_components/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
-    <script src="plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="plugins/bower_components/raphael/raphael-min.js"></script>
-    <script src="plugins/bower_components/morrisjs/morris.js"></script>
-   
+    <script src="${baseUrl}/builder/plugins/bower_components/jquery/dist/jquery.min.js"></script>
   
 </head>
 

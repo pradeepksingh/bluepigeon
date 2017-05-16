@@ -30,6 +30,9 @@ public class DemandLetters implements java.io.Serializable {
 	private Date lastDate;
 	private String remind;
 	private String content;
+	private Integer paymentStatus;
+	private Integer paymentMethod;
+	private double amount;
 	public DemandLetters() {
 	}
 
@@ -140,6 +143,30 @@ public class DemandLetters implements java.io.Serializable {
 	public void setPaymentId(Integer paymentId) {
 		this.paymentId = paymentId;
 	}
+	@Column(name = "payment_status")
+	public Integer getPaymentStatus() {
+		return paymentStatus;
+	}
+	public void setPaymentStatus(Integer paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+	@Column(name = "payment_method")
+	public Integer getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(Integer paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+	@Column(name = "amount")
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+
 	@Temporal(TemporalType.DATE)
 	@Column(name = "last_date", length = 10)
 	public Date getLastDate() {

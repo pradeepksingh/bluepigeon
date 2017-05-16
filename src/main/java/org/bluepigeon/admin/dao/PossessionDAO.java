@@ -106,6 +106,7 @@ public class PossessionDAO {
 			PossessionList possessionList = new PossessionList();
 			possessionList.setBuyerName(possession.getName());
 			possessionList.setId(possession.getId());
+			possessionList.setPossessionDate(possession.getLastDate());
 			if(possession.getBuilderProject() != null){
 				Query projectQuery = projectSession.createQuery(project_hql);
 				projectQuery.setParameter("id", possession.getBuilderProject().getId());

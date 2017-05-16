@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.CancellationDAO;
+import org.bluepigeon.admin.data.CancellationList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderBuilding;
@@ -74,6 +75,17 @@ public class CancellationController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Buyer getBuyerByFlatId(@PathParam("flat_id") int flatId){
 		return new CancellationDAO().getPrimaryBuyerByFlatId(flatId);
+	}
+	
+	@POST
+	@Path("/buyer/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<CancellationList> getBuildingList(@FormParam("project_id") int project_id, 
+			@FormParam("building_id") int building_id,
+			@FormParam("flat_id") int flat_id
+	) {
+		List<CancellationList> project_list = new CancellationDAO().getCancellationListFilter(project_id, building_id, flat_id);
+		return project_list;
 	}
 	
 }
