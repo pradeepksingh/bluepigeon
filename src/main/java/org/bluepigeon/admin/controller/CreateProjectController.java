@@ -45,6 +45,7 @@ import org.bluepigeon.admin.dao.ProjectDetailsDAO;
 import org.bluepigeon.admin.dao.ProjectLeadDAO;
 import org.bluepigeon.admin.dao.TaxDAO;
 import org.bluepigeon.admin.data.BuilderDetails;
+import org.bluepigeon.admin.data.BuildingAmenityList;
 import org.bluepigeon.admin.data.ProjectDetails;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.Builder;
@@ -231,14 +232,22 @@ public class CreateProjectController {
 		return builderBuildingAmenityDAO.delete(builderBuildingAmenity);
 	}
 
+//	@GET
+//	@Path("/builder/building/amenity/list")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public List<BuilderBuildingAmenity> getBuilderBuildingAmenity(@QueryParam("amenity_id") int amenity_id) {
+//		BuilderBuildingAmenityDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityDAO();
+//		return builderBuildingAmenityDAO.getBuilderBuildingAmenityById(amenity_id);
+//	}
+
 	@GET
 	@Path("/builder/building/amenity/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<BuilderBuildingAmenity> getBuilderBuildingAmenity(@QueryParam("amenity_id") int amenity_id) {
-		BuilderBuildingAmenityDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityDAO();
-		return builderBuildingAmenityDAO.getBuilderBuildingAmenityById(amenity_id);
+	public List<BuildingAmenityList> getBuilderBuildingAmenity(@QueryParam("amenity_id") int amenity_id) {
+		BuilderBuildingAmenityStagesDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityStagesDAO();
+		return builderBuildingAmenityDAO.getBuildingAmenityById(amenity_id);
 	}
-
+	
 	@POST
 	@Path("/builder/building/amenity/stages/save")
 	@Produces(MediaType.APPLICATION_JSON)

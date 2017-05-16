@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import org.bluepigeon.admin.dao.AdminUserDAO;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.ProjectDAO;
+import org.bluepigeon.admin.data.EmployeeList;
 import org.bluepigeon.admin.data.ProjectCityData;
 import org.bluepigeon.admin.data.PropertyManagerData;
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -190,5 +191,15 @@ public class EmployeeController {
 		builderEmployee.setStatus(status);
 		
 	return new BuilderDetailsDAO().saveEmployee(builderEmployee);
+	}
+
+	@POST
+	@Path("/emp/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<EmployeeList> getBuildingList(@PathParam("city_id") int city_id, 
+			@PathParam("project_id") int project_id
+	) {
+		List<EmployeeList> project_list = new BuilderDetailsDAO().getEmployeeListFilter(city_id, project_id);
+		return project_list;
 	}
 }
