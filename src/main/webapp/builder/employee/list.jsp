@@ -104,24 +104,24 @@
                         <div class="white-box"><br>
                           <h3>Manage Employees</h3>
 						<div class="row re white-box">
-							<div class="col-md-3 col-sm-6 col-xs-12">
-								<select name="city_id" id="city_id" class="form-control">
-				                    <option value="0">Select City</option>
-							                     <% for(City city : city_list){ %>
-												<option value="<% out.print(city.getId());%>"><% out.print(city.getName());%></option>
-												<% } %>
-						         </select>   
-							</div>
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 								<select name="city_id" id="city_id" class="form-control"> -->
+<!-- 				                    <option value="0">Select City</option> -->
+<%-- 							                     <% for(City city : city_list){ %> --%>
+<%-- 												<option value="<% out.print(city.getId());%>"><% out.print(city.getName());%></option> --%>
+<%-- 												<% } %> --%>
+<!-- 						         </select>    -->
+<!-- 							</div> -->
 <!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
 <!-- 							   <select name="searchlocalityId" id="searchlocalityId" class="form-control"> -->
 <!-- 				                    <option value="0">Locality</option> -->
 <!-- 							   </select> -->
 <!-- 							</div> -->
-							<div class="col-md-3 col-sm-6 col-xs-12">
-								<select name="project_id" id="project_id" class="form-control">
-				                    <option value="0">Project</option>
-								</select>
-							</div>
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 								<select name="project_id" id="project_id" class="form-control"> -->
+<!-- 				                    <option value="0">Project</option> -->
+<!-- 								</select> -->
+<!-- 							</div> -->
 							
 <!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
 <!-- 							    <select class="form-control"> -->

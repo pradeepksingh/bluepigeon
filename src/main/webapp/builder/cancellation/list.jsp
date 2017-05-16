@@ -87,29 +87,31 @@
                     <div class="col-sm-12">
                         <div class="white-box"><br>
                           <h3>Manage Cancellation</h3>
-						<div class="row re white-box">
-							<div class="col-md-3 col-sm-6 col-xs-12">
-								<select name="project_id" id="project_id" class="form-control">
-				                    <option value="0">Select Project</option>
-				                    <%
-				                    if(projectDatas != null){
-				                    for(int i=0; i < projectDatas.size() ; i++){ %>
-									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option>
-									<% }
-				                    }%>
-						         </select>   
-							</div>
-							<div class="col-md-3 col-sm-6 col-xs-12">
-							   <select name="building_id" id="building_id" class="form-control">
-				                    <option value="0">Select Building</option>
-							   </select>
-							</div>
-							<div class="col-md-3 col-sm-6 col-xs-12">
-								<select name="flat_id" id="flat_id" class="form-control">
-				                    <option value="0">Select Flat</option>
-								</select>
-							</div>
-						</div>
+<!-- 						<div class="row re white-box"> -->
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 								<select name="project_id" id="project_id" class="form-control"> -->
+<!-- 				                    <option value="0">Select Project</option> -->
+<%-- 				                    <% --%>
+ 				                  <!--   if(projectDatas != null){-->
+<%-- 				                    for(int i=0; i < projectDatas.size() ; i++){ %> --%>
+<%-- 									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option> --%>
+<%-- 									<% } --%>
+<%-- 				                    }%> --%>
+<!-- 						         </select>    -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 							   <select name="building_id" id="building_id" class="form-control"> -->
+<!-- 				                    <option value="0">Select Building</option> -->
+<!-- 							   </select> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 								<select name="flat_id" id="flat_id" class="form-control"> -->
+<!-- 				                    <option value="0">Select Flat</option> -->
+<!-- 								</select> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+						  <a href="${baseUrl}/builder/cancellation/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">New Cancellation</span></a>
+                          <br><br><br>
                             <div class="table-responsive">
                                 <table id="tblBuilding" class="table table-striped">
                                     <thead>
