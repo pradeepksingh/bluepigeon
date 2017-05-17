@@ -50,7 +50,7 @@ public class FloorSubstage implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "stage_id", nullable = false)
 	public FloorStage getFloorStage() {
 		return this.floorStage;

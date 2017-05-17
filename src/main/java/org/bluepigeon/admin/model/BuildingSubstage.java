@@ -50,7 +50,7 @@ public class BuildingSubstage implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "stage_id", nullable = false)
 	public BuildingStage getBuildingStage() {
 		return this.buildingStage;

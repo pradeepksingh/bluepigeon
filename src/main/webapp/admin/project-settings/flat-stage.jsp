@@ -25,7 +25,7 @@ int flat_stage_size = flat_stage_list.size();
 			<div class="page-header">
 				<h1>
 					Flat Stage
-					<a href="#addFlatStage" class="btn btn-primary btn-sm pull-right" role="button" data-toggle="modal"><i class="fa fa-plus"></i> New Building Stage</a>
+					<a href="#addFlatStage" class="btn btn-primary btn-sm pull-right" role="button" data-toggle="modal"><i class="fa fa-plus"></i> New Flat Stage</a>
 				</h1>
 			</div>
 			<div class="row">
@@ -68,7 +68,7 @@ int flat_stage_size = flat_stage_list.size();
 		</div>
 	</div>
 </div>
-<div id="addFlattage" class="modal fade" style="">
+<div id="addFlatStage" class="modal fade" style="">
     <div id="cancel-overlay" class="modal-dialog" style="opacity:1 ;width:400px ">
       	<div class="modal-content">
           	<div class="modal-header">

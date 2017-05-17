@@ -5,11 +5,8 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.bluepigeon.admin.data.BuildingAmenityList;
 import org.bluepigeon.admin.data.ProjectSubstageList;
 import org.bluepigeon.admin.exception.ResponseMessage;
-import org.bluepigeon.admin.model.BuilderBuildingAmenity;
-import org.bluepigeon.admin.model.BuilderBuildingAmenityStages;
 import org.bluepigeon.admin.model.ProjectSubstage;
 import org.bluepigeon.admin.util.HibernateUtil;
 
@@ -71,11 +68,11 @@ public class ProjectSubstagesDAO {
     public ResponseMessage update(ProjectSubstage projectSubstage){
     	ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		String hql = "from ProjectSubstage where name = :name and projectStatus.id = :status_id and id != :id";
+		String hql = "from ProjectSubstage where name = :name and projectStage.id = :stage_id and id != :id";
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("name", projectSubstage.getName());
-		query.setParameter("amenity_id", projectSubstage.getProjectStage().getId());
+		query.setParameter("stage_id", projectSubstage.getProjectStage().getId());
 		query.setParameter("id", projectSubstage.getId());
 		List<ProjectSubstage> result = query.list();
 		session.close();
@@ -101,7 +98,7 @@ public class ProjectSubstagesDAO {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("id", projectSubstage.getId());
-		List<BuilderBuildingAmenityStages> result = query.list();
+		List<ProjectSubstage> result = query.list();
 		session.close();
 		if (result.size() > 0) {
 			projectSubstage.setName(result.get(0).getName());
@@ -186,7 +183,7 @@ public class ProjectSubstagesDAO {
 			ProjectSubstageList buildingAmenityList = new ProjectSubstageList();
 			buildingAmenityList.setId(projectSubstage.getId());
 			buildingAmenityList.setProjectStageName(projectSubstage.getProjectStage().getName());
-			buildingAmenityList.setProjectStageName(projectSubstage.getName());
+			buildingAmenityList.setProjectSubstageName(projectSubstage.getName());
 			buildingAmenityList.setStatus(projectSubstage.getStatus());
 			buildingAmenityLists.add(buildingAmenityList);
 		}

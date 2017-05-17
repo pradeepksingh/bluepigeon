@@ -137,7 +137,7 @@ public class BuilderBuildingAmenityStagesDAO {
     
     /**
      * Get Building Amenity Stages by amenity id
-     * @param int countryID
+     * @param int amenityId
      * @return List<BuilderBuildingAmenityStages>
      */
     public List<BuilderBuildingAmenityStages> getStateByAmenityId(int amenityId)
