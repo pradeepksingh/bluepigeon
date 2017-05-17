@@ -49,6 +49,7 @@
         <mapping class="org.bluepigeon.admin.model.BuilderProjectProjectType" />
         <mapping class="org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom" />
         <mapping class="org.bluepigeon.admin.model.Tax" />
+         <mapping class="org.bluepigeon.admin.model.FlatSubstage" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectAmenityInfo" />
         <mapping class="org.bluepigeon.admin.model.BuyerUploadDocuments" />
         <mapping class="org.bluepigeon.admin.model.BuildingImageGallery" />
@@ -59,6 +60,9 @@
          <mapping class="org.bluepigeon.admin.model.Cancellation" />
          <mapping class="org.bluepigeon.admin.model.AgreementBuyer" />
          <mapping class="org.bluepigeon.admin.model.DemandBuyer" />
+         <mapping class="org.bluepigeon.admin.model.FloorStage" />
+         <mapping class="org.bluepigeon.admin.model.FlatStage" />
+         <mapping class="org.bluepigeon.admin.model.BuildingStage" />
          <mapping class="org.bluepigeon.admin.model.PossessionBuyer" />
         <mapping class="org.bluepigeon.admin.model.BuilderFlatAmenitySubstages" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectStatus" />
@@ -111,6 +115,11 @@
         <mapping class="org.bluepigeon.admin.model.FlatPaymentSchedule" />
         <mapping class="org.bluepigeon.admin.model.AdminUserRole" />
         <mapping class="org.bluepigeon.admin.model.BuilderBuyer" />
+         <mapping class="org.bluepigeon.admin.model.ProjectStage" />
+         <mapping class="org.bluepigeon.admin.model.ProjectSubstage" />
+         <mapping class="org.bluepigeon.admin.model.BuildingSubstage" />
+        <mapping class="org.bluepigeon.admin.model.FlatSubstage" />
+        <mapping class="org.bluepigeon.admin.model.FloorSubstage" />
         <mapping class="org.bluepigeon.admin.model.BuilderFlatAmenityStages" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloorAmenityStages" />
         <mapping class="org.bluepigeon.admin.model.Campaign" />

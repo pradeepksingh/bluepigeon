@@ -40,9 +40,13 @@ import org.bluepigeon.admin.dao.BuilderProjectTypeDAO;
 import org.bluepigeon.admin.dao.BuilderPropertyTypeDAO;
 import org.bluepigeon.admin.dao.BuilderSellerTypeDAO;
 import org.bluepigeon.admin.dao.BuilderTaxTypeDAO;
+import org.bluepigeon.admin.dao.BuildingStageDAO;
 import org.bluepigeon.admin.dao.DemandLettersDAO;
+import org.bluepigeon.admin.dao.FlatStageDAO;
+import org.bluepigeon.admin.dao.FloorStageDAO;
 import org.bluepigeon.admin.dao.ProjectDetailsDAO;
 import org.bluepigeon.admin.dao.ProjectLeadDAO;
+import org.bluepigeon.admin.dao.ProjectStageDAO;
 import org.bluepigeon.admin.dao.TaxDAO;
 import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.BuildingAmenityList;
@@ -80,6 +84,10 @@ import org.bluepigeon.admin.model.BuilderProjectType;
 import org.bluepigeon.admin.model.BuilderPropertyType;
 import org.bluepigeon.admin.model.BuilderSellerType;
 import org.bluepigeon.admin.model.BuilderTaxType;
+import org.bluepigeon.admin.model.BuildingStage;
+import org.bluepigeon.admin.model.FlatStage;
+import org.bluepigeon.admin.model.FloorStage;
+import org.bluepigeon.admin.model.ProjectStage;
 import org.bluepigeon.admin.model.Tax;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -1463,4 +1471,131 @@ public class CreateProjectController {
 		 tax2.setVat(vat);
 		 return taxDAO.update(tax2);
 	}
+	
+	@POST
+	@Path("/project/stage/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addProjectStage(@FormParam("name") String name, @FormParam("status") byte status) {
+		ProjectStage projectStage  = new ProjectStage();
+
+		projectStage.setName(name);
+		projectStage.setStatus(status);
+		ProjectStageDAO projectStageDAO = new ProjectStageDAO();
+		return projectStageDAO.save(projectStage);
+	}
+	@POST
+	@Path("/project/stage/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateProjectStage(@FormParam("id") int id,@FormParam("name") String name, @FormParam("status") byte status) {
+		ProjectStage projectStage  = new ProjectStage();
+		projectStage.setId(id);
+		projectStage.setName(name);
+		projectStage.setStatus(status);
+		ProjectStageDAO projectStageDAO = new ProjectStageDAO();
+		return projectStageDAO.update(projectStage);
+	}
+	
+	@GET
+	@Path("/project/stage/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ProjectStage getProjectStage(@QueryParam("stage_id") int stage_id) {
+		ProjectStageDAO builderFloorAmenityDAO = new ProjectStageDAO();
+		return builderFloorAmenityDAO.getProjectStageById(stage_id);
+	}
+	
+	@POST
+	@Path("/building/stage/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addBuildingStage(@FormParam("name") String name, @FormParam("status") byte status) {
+		BuildingStage buildingStage  = new BuildingStage();
+
+		buildingStage.setName(name);
+		buildingStage.setStatus(status);
+		BuildingStageDAO buildingStageDAO = new BuildingStageDAO();
+		return buildingStageDAO.save(buildingStage);
+	}
+	@POST
+	@Path("/building/stage/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateBuildingStage(@FormParam("id") int id,@FormParam("name") String name, @FormParam("status") byte status) {
+		BuildingStage buildingStage  = new BuildingStage();
+		buildingStage.setId(id);
+		buildingStage.setName(name);
+		buildingStage.setStatus(status);
+		BuildingStageDAO buildingStageDAO = new BuildingStageDAO();
+		return buildingStageDAO.update(buildingStage);
+	}
+	
+	@GET
+	@Path("/building/stage/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public BuildingStage getBuildingStage(@QueryParam("stage_id") int stage_id) {
+		BuildingStageDAO buildingStageDAO = new BuildingStageDAO();
+		return buildingStageDAO.getBuildingStageById(stage_id);
+	}
+
+	@POST
+	@Path("/floor/stage/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addFloorStage(@FormParam("name") String name, @FormParam("status") byte status) {
+		FloorStage floorStage  = new FloorStage();
+
+		floorStage.setName(name);
+		floorStage.setStatus(status);
+		FloorStageDAO buildingStageDAO = new FloorStageDAO();
+		return buildingStageDAO.save(floorStage);
+	}
+	@POST
+	@Path("/floor/stage/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateFloorStage(@FormParam("id") int id,@FormParam("name") String name, @FormParam("status") byte status) {
+		FloorStage floorStage  = new FloorStage();
+		floorStage.setId(id);
+		floorStage.setName(name);
+		floorStage.setStatus(status);
+		FloorStageDAO floorStageDAO = new FloorStageDAO();
+		return floorStageDAO.update(floorStage);
+	}
+	
+	@GET
+	@Path("/floor/stage/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public FloorStage getFloorStage(@QueryParam("stage_id") int stage_id) {
+		FloorStageDAO floorStageDAO = new FloorStageDAO();
+		return floorStageDAO.getFloorStageById(stage_id);
+	}
+	
+	@POST
+	@Path("/flat/stage/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addFlatStage(@FormParam("name") String name, @FormParam("status") byte status) {
+		FlatStage flatStage  = new FlatStage();
+
+		flatStage.setName(name);
+		flatStage.setStatus(status);
+		FlatStageDAO flatStageDAO = new FlatStageDAO();
+		return flatStageDAO.save(flatStage);
+	}
+	@POST
+	@Path("/flat/stage/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateFlatStage(@FormParam("id") int id,@FormParam("name") String name, @FormParam("status") byte status) {
+		FlatStage flatStage  = new FlatStage();
+		flatStage.setId(id);
+		flatStage.setName(name);
+		flatStage.setStatus(status);
+		FlatStageDAO floorStageDAO = new FlatStageDAO();
+		return floorStageDAO.update(flatStage);
+	}
+	
+	@GET
+	@Path("/flat/stage/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public FlatStage getFlatStage(@QueryParam("stage_id") int stage_id) {
+		FlatStageDAO flatStageDAO = new FlatStageDAO();
+		return flatStageDAO.getFlatStageById(stage_id);
+	}
+
+	
+	
 }
