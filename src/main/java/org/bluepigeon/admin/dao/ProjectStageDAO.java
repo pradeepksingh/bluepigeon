@@ -2,63 +2,61 @@ package org.bluepigeon.admin.dao;
 
 import java.util.List;
 
+import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.model.ProjectStage;
+import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.bluepigeon.admin.exception.ResponseMessage;
-import org.bluepigeon.admin.model.Country;
-import org.bluepigeon.admin.model.State;
-import org.bluepigeon.admin.util.HibernateUtil;
 
-public class CountryDAOImp {
-
-	public ResponseMessage save(Country country) {
+public class ProjectStageDAO {
+	public ResponseMessage save(ProjectStage projectStage){
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		if (country.getName() == null || country.getName().trim().length() == 0) {
+		if (projectStage.getName() == null || projectStage.getName().trim().length() == 0) {
 			response.setStatus(0);
 			response.setMessage("Please enter country name");
 		} else {
-			String hql = "from Country where name = :name";
+			String hql = "from ProjectStage where name = :name";
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
-			query.setParameter("name", country.getName());
-			List<Country> result = query.list();
+			query.setParameter("name", projectStage.getName());
+			List<ProjectStage> result = query.list();
 			session.close();
 			if (result.size() > 0) {
 				response.setStatus(0);
-				response.setMessage("Country name already exists");
+				response.setMessage("Project Stage already exists");
 			} else {
 				Session newsession = hibernateUtil.openSession();
 				newsession.beginTransaction();
-				newsession.save(country);
+				newsession.save(projectStage);
 				newsession.getTransaction().commit();
 				newsession.close();
 				response.setStatus(1);
-				response.setMessage("Success");
+				response.setMessage("Project Stage Updated Successfully");
 			}
 		}
 		return response;
 	}
-
-	public ResponseMessage update(Country country) {
+	
+	public ResponseMessage update(ProjectStage projectStage) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new org.bluepigeon.admin.util.HibernateUtil();
-		String hql = "from Country where name = :name and id != :id";
+		String hql = "from ProjectStage where name = :name and id != :id";
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setParameter("name", country.getName());
-		query.setParameter("id", country.getId());
+		query.setParameter("name", projectStage.getName());
+		query.setParameter("id", projectStage.getId());
 		// System.out.println("Country status ::"+country.getStatus());
 		// query.setParameter("status", country.getStatus());
-		List<Country> result = query.list();
+		List<ProjectStage> result = query.list();
 		session.close();
 		if (result.size() > 0) {
 			response.setStatus(0);
-			response.setMessage("Country name already exists");
+			response.setMessage("Project Stage already exists");
 		} else {
 			Session newsession = hibernateUtil.openSession();
 			newsession.beginTransaction();
-			newsession.update(country);
+			newsession.update(projectStage);
 			newsession.getTransaction().commit();
 			newsession.close();
 			response.setStatus(1);
@@ -66,43 +64,25 @@ public class CountryDAOImp {
 		}
 		return response;
 	}
-
-	public ResponseMessage delete(Country country) {
-		ResponseMessage response = new ResponseMessage();
-		HibernateUtil hibernateUtil = new org.bluepigeon.admin.util.HibernateUtil();
-		String hql = "delete from Country where id = :id";
-		Session session = hibernateUtil.openSession();
-		session.beginTransaction();
-		Query query = session.createQuery(hql);
-		query.setParameter("id", country.getId());
-		query.executeUpdate();
-		session.getTransaction().commit();
-		session.close();
-		response.setStatus(1);
-		response.setMessage("Success");
-
-		return response;
-	}
-
-	public List<Country> getCountryList() {
-		String hql = "from Country";
+	
+	public List<ProjectStage> getProjectStageList() {
+		String hql = "from ProjectStage";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		List<Country> result = query.list();
+		List<ProjectStage> result = query.list();
 		session.close();
 		return result;
 	}
 
-	public List<Country> getCountryById(int id) {
-		String hql = "from Country where id = :id";
+	public ProjectStage getProjectStageById(int id) {
+		String hql = "from ProjectStage where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
-		List<Country> result = query.list();
+		List<ProjectStage> result = query.list();
 		session.close();
-		return result;
+		return result.get(0);
 	}
-
 }

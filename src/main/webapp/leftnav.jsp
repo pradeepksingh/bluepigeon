@@ -119,6 +119,51 @@ if(session!=null)
 					<b class="arrow"></b>
 					<ul class="submenu">
 						<li class="">
+							<a href="${baseUrl}/admin/project-settings/project-stage.jsp"> 
+								<i class="menu-icon fa fa-caret-right"></i> Project Stage
+							</a> <b class="arrow"></b>
+						</li>
+						<li class="">
+							<a href="${baseUrl}/admin/project-settings/project-substages.jsp"> 
+								<i class="menu-icon fa fa-caret-right"></i> Project Substage
+							</a> <b class="arrow"></b>
+						</li>
+						<li class="">
+							<a href="${baseUrl}/admin/project-settings/building-stage.jsp"> 
+								<i class="menu-icon fa fa-caret-right"></i> Building Stage
+							</a> <b class="arrow"></b>
+						</li>
+						<li class="">
+							<a href="${baseUrl}/admin/project-settings/building-substages.jsp"> 
+								<i class="menu-icon fa fa-caret-right"></i> Building Substage
+							</a> <b class="arrow"></b>
+						</li>
+						<li class="">
+							<a href="${baseUrl}/admin/project-settings/floor-stage.jsp"> 
+								<i class="menu-icon fa fa-caret-right"></i> Floor Stage
+							</a> <b class="arrow"></b>
+						</li>
+						<li class="">
+							<a href="${baseUrl}/admin/project-settings/floor-substages.jsp"> 
+								<i class="menu-icon fa fa-caret-right"></i> Floor Substage
+							</a> <b class="arrow"></b>
+						</li>
+						<li class="">
+							<a href="${baseUrl}/admin/project-settings/flat-stage.jsp"> 
+								<i class="menu-icon fa fa-caret-right"></i> Flat Stage
+							</a> <b class="arrow"></b>
+						</li>
+						<li class="">
+							<a href="${baseUrl}/admin/project-settings/flat-substages.jsp"> 
+								<i class="menu-icon fa fa-caret-right"></i> Flat Substage
+							</a> <b class="arrow"></b>
+						</li>
+						<li class="">
+							<a href="${baseUrl}/admin/project-settings/builder-project-amenity.jsp"> 
+								<i class="menu-icon fa fa-caret-right"></i> Project Amenity
+							</a> <b class="arrow"></b>
+						</li>
+						<li class="">
 							<a href="${baseUrl}/admin/project-settings/builder-project-amenity.jsp"> 
 								<i class="menu-icon fa fa-caret-right"></i> Project Amenity
 							</a> <b class="arrow"></b>
