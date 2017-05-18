@@ -2400,4 +2400,15 @@ public class ProjectDAO {
 		session.close();
 		return projectDataList;
 	}
+	
+	public List<BuilderBuilding> getBuildingsByBuilderId(int builder_id) {
+		String hql = "from BuilderBuilding where builderProject.builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builder_id);
+		List<BuilderBuilding> result = query.list();
+		session.close();
+		return result;
+	}
 }

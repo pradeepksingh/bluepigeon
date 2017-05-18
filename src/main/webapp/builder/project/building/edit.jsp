@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderBuildingStatusDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderBuildingAmenityDAO"%>
@@ -48,6 +49,7 @@
 	List<BuildingOfferInfo> buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
 	List<BuildingAmenityWeightage> buildingAmenityWeightages = new ProjectDAO().getBuilderBuildingAmenityWeightageById(building_id);
 %>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -57,7 +59,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="../../plugins/images/favicon.png">
-    <title>Blue Pigeon</title>
+    <title>Blue Piegon</title>
     <!-- Bootstrap Core CSS -->
     <link href="../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
@@ -82,8 +84,9 @@
     
     <!-- jQuery -->
     <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-  
-    
+    <script src="../../js/jquery.form.js"></script>
+    <script src="../../js/bootstrap-datepicker.min.js"></script>
+  <script src="../../js/bootstrapValidator.min.js"></script>
 <script type="text/javascript">
     $('input[type=checkbox]').click(function(){
     if($(this).is(':checked')){
@@ -103,16 +106,13 @@
         <div class="cssload-speeding-wheel"></div>
     </div>
     <div id="wrapper">
-        <!-- Top Navigation -->
         <div id="header">
         <%@include file="../../partial/header.jsp"%>
         </div>
        <div id="sidebar1"> 
        	<%@include file="../../partial/sidebar.jsp"%>
        </div>
-    
-        <!-- Left navbar-header end -->
-        <!-- Page Content -->
+       </div>
         <div id="page-wrapper" style="min-height: 2038px;">
             <div class="container-fluid">
                 <div class="row bg-title">
@@ -122,9 +122,6 @@
                   
                     <!-- /.col-lg-12 -->
                 </div>
-             
-        
-
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
@@ -142,257 +139,298 @@
                                     </li>
                                      
                                 </ul>
-                                
-                                
                               <div class="tab-content"> 
-                              
                                <div id="vimessages" class="tab-pane active" aria-expanded="false">
+                               <div id="basicresponse" class="col-sm-12"></div><br>
                                 <div class="col-12">
-                                <form>
-                                <input type="hidden" name="builder_id" id="builder_id" value="<% out.print(p_user_id);%>"/>
-								<input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
-								<input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Project Name*</label>
-                                    <div class="col-6">
-                                   		<select id="project_id" name="project_id" class="form-control">
-	                                        <!-- <input class="form-control" type="text" value="project" id="example-search-input">-->
-	                                        <option value="0">Select Project</option>
-											<% for(BuilderProject builderProject :builderProjects) { %>
-											<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == builderBuilding.getBuilderProject().getId()) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
-											<% } %>
-										</select>
-                                    </div>
-                                </div>
-                              
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Building Name</label>
-                                    <div class="col-6">
-                                        <input type="text" class="form-control" id="name" name="name" value="<% out.print(builderBuilding.getName()); %>" />
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Total Floors</label>
-                                    <div class="col-6">
-                                       <input type="text" class="form-control" id="total_floor" name="total_floor" value="<% out.print(builderBuilding.getTotalFloor());%>"/>
-                                    </div>
-                                </div>
-                                
-                                <div class="offset-sm-5 col-sm-7">
-                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">Save</button>
-                                 </div>
-                                
+                                	<form id="updatebuilding" name="updatebuilding" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+                                		<input type="hidden" name="admin_id" id="admin_id" value="1"/>
+										<input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
+										
+                                		<div class="form-group row">
+                                  		  <label for="example-search-input" class="col-3 col-form-label">Project Name*</label>
+                                   		  <div class="col-6">
+                                     	   <!-- <input class="form-control" type="text" value="project" id="example-search-input">-->
+                                     		  <select id="project_id" name="project_id" class="form-control">
+												  <% for(BuilderProject builderProject :builderProjects) { %>
+												  <option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == builderBuilding.getBuilderProject().getId()) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
+												  <% } %>
+											  </select>
+                                    	  </div>
+                                    	  <div class="messageContainer col-6"></div>
+                                      </div>
+                                      <div class="form-group row">
+                                         <label for="example-search-input" class="col-3 col-form-label">Total Floors</label>
+                                         <div class="col-6">
+                                             <input class="form-control" type="text" id="total_floor" name="total_floor" value="<% out.print(builderBuilding.getTotalFloor());%>"/>
+                                         </div>
+                                         <div class="messageContainer col-6"></div>
+                                     </div>
+	                                 <div class="form-group row">
+	                                    <label for="example-search-input" class="col-3 col-form-label">Building Name</label>
+	                                    <div class="col-6">
+											<input class="form-control" type="text" id="name" name="name" value="<% out.print(builderBuilding.getName()); %>">
+	                                    </div>
+	                                    <div class="messageContainer col-6"></div>
+	                                 </div>
+	                                 <div class="offset-sm-5 col-sm-7">
+	                                        <button type="submit" name="basicdetail"  class="btn btn-info waves-effect waves-light m-t-10">Save</button>
+	                                 </div>
                                </form>
                                </div>
                               </div>
-                              
+                              <% SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy"); %>
                              <div id="vimessages1" class="tab-pane" aria-expanded="false">
-                             <form>
-                             <input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
-                              <% SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy"); %>   
-                                 <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Building Launch Date*</label>
-                                    <div class="col-6">
-                                        <input class="form-control" type="text" id="launch_date" name="launch_date" value="<% if(builderBuilding.getLaunchDate() != null) { out.print(dt1.format(builderBuilding.getLaunchDate()));}%>"/>
-                                    </div>
-                                    
-                                </div>
-                                                               
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Possession</label>
-                                    <div class="col-6">
-                                        <input class="form-control" type="text" id="possession_date" name="possession_date" value="<% if(builderBuilding.getPossessionDate() != null) { out.print(dt1.format(builderBuilding.getPossessionDate()));}%>"/>
-                                    </div>
-                                   
-                                </div>
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Project Name*</label>
-                                    <div class="col-6">
-                                   		<select id="status" name="status" class="form-control">
-											<% 	for(BuilderBuildingStatus builderBuildingStatus :builderBuildingStatusList) { %>
-											<option value="<% out.print(builderBuildingStatus.getId());%>" <% if(builderBuildingStatus.getId() == builderBuilding.getBuilderBuildingStatus().getId()) { %>selected<% } %>><% out.print(builderBuildingStatus.getName()); %></option>
-											<% } %>
-										</select>
-                                    </div>
-                                </div>
-                                <% 	for(BuilderBuildingAmenity builderBuildingAmenity :builderBuildingAmenities) {  
-										String is_selected = "";
-										if(buildingAmenityInfos.size() > 0) { 
-											for(BuildingAmenityInfo buildingAmenityInfo :buildingAmenityInfos) {
-												if(buildingAmenityInfo.getBuilderBuildingAmenity().getId() == builderBuildingAmenity.getId()) {
-													is_selected = "checked";
+                                <div id="offerresponse" class="col-sm-12"></div><br>
+								<form id="updateoffer" name="updateoffer" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+								<input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
+								<input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
+										<div class="form-group row">
+		                                    <label for="example-search-input" class="col-3 col-form-label">Building Launch Date*</label>
+		                                    <div class="col-6">
+		                                        <input class="form-control" type="text" id="launch_date" name="launch_date" value="<% if(builderBuilding.getLaunchDate() != null) { out.print(dt1.format(builderBuilding.getLaunchDate()));}%>">
+		                                    </div>
+		                                    
+		                                </div>
+		                                <div class="form-group row">
+		                                    <label for="example-search-input" class="col-3 col-form-label">Possession</label>
+		                                    <div class="col-6">
+		                                        <input class="form-control" type="text" id="possession_date" name="possession_date" value="<% if(builderBuilding.getPossessionDate() != null) { out.print(dt1.format(builderBuilding.getPossessionDate()));}%>"/>
+		                                    </div>
+		                                   
+		                                </div>
+		                                <div class="form-group row">
+                                    		<label for="example-search-input" class="col-3 col-form-label">Status *</label>
+                                   			<div class="col-6">
+	                                        <!-- <input class="form-control" type="text" value="project" id="example-search-input">-->
+	                                     		 <select id="status" name="status" class="form-control">
+													<% 	for(BuilderBuildingStatus builderBuildingStatus :builderBuildingStatusList) { %>
+													<option value="<% out.print(builderBuildingStatus.getId());%>" <% if(builderBuildingStatus.getId() == builderBuilding.getBuilderBuildingStatus().getId()) { %>selected<% } %>><% out.print(builderBuildingStatus.getName()); %></option>
+													<% } %>
+												</select>
+		                              		</div>
+		                                </div>
+		                               <% 	for(BuilderBuildingAmenity builderBuildingAmenity :builderBuildingAmenities) {  
+											String is_selected = "";
+											if(buildingAmenityInfos.size() > 0) { 
+												for(BuildingAmenityInfo buildingAmenityInfo :buildingAmenityInfos) {
+													if(buildingAmenityInfo.getBuilderBuildingAmenity().getId() == builderBuildingAmenity.getId()) {
+														is_selected = "checked";
+													}
 												}
 											}
-										}
-								%>
-								<input type="hidden" name="amenity_type[]" value="<% out.print(builderBuildingAmenity.getId());%>" <% out.print(is_selected); %>/> <% //out.print(builderBuildingAmenity.getName());%>
-								<% } %>
-								<% 	for(BuilderBuildingAmenity builderBuildingAmenity : builderBuildingAmenities) { 
-										String is_checked = "";
-										if(buildingAmenityInfos.size() > 0) { 
-											for(BuildingAmenityInfo buildingAmenityInfo :buildingAmenityInfos) {
-												if(buildingAmenityInfo.getBuilderBuildingAmenity().getId() == builderBuildingAmenity.getId()) {
-													is_checked = "checked";
+										%>
+											<input type="hidden" name="amenity_type[]" value="<% out.print(builderBuildingAmenity.getId());%>" <% out.print(is_selected); %>/> <%// out.print(builderBuildingAmenity.getName());%>
+										<%} %>
+										<% 	for(BuilderBuildingAmenity builderBuildingAmenity : builderBuildingAmenities) { 
+											String is_checked = "";
+											if(buildingAmenityInfos.size() > 0) { 
+												for(BuildingAmenityInfo buildingAmenityInfo :buildingAmenityInfos) {
+													if(buildingAmenityInfo.getBuilderBuildingAmenity().getId() == builderBuildingAmenity.getId()) {
+														is_checked = "checked";
+													}
 												}
 											}
-										}
-										Double amenity_wt = 0.0;
-										for(BuildingAmenityWeightage buildingAmenityWeightage :buildingAmenityWeightages) {
-											if(builderBuildingAmenity.getId() == buildingAmenityWeightage.getBuilderBuildingAmenity().getId()) {
-												amenity_wt = buildingAmenityWeightage.getAmenityWeightage();
+											Double amenity_wt = 0.0;
+											for(BuildingAmenityWeightage buildingAmenityWeightage :buildingAmenityWeightages) {
+												if(builderBuildingAmenity.getId() == buildingAmenityWeightage.getBuilderBuildingAmenity().getId()) {
+													amenity_wt = buildingAmenityWeightage.getAmenityWeightage();
+												}
 											}
-										}
-								%>
-								<input type="hidden" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderBuildingAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
-								<% 	for(BuilderBuildingAmenityStages bpaStages :builderBuildingAmenity.getBuilderBuildingAmenityStageses()) { 
-										Double stage_wt = 0.0;
-										for(BuildingAmenityWeightage buildingAmenityWeightage :buildingAmenityWeightages) {
-											if(bpaStages.getId() == buildingAmenityWeightage.getBuilderBuildingAmenityStages().getId()) {
-												stage_wt = buildingAmenityWeightage.getStageWeightage();
+										%>
+											<input type="hidden" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderBuildingAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
+										<% 	for(BuilderBuildingAmenityStages bpaStages :builderBuildingAmenity.getBuilderBuildingAmenityStageses()) { 
+												Double stage_wt = 0.0;
+												for(BuildingAmenityWeightage buildingAmenityWeightage :buildingAmenityWeightages) {
+													if(bpaStages.getId() == buildingAmenityWeightage.getBuilderBuildingAmenityStages().getId()) {
+														stage_wt = buildingAmenityWeightage.getStageWeightage();
+													}
+												}
+											%>
+												<input name="stage_weightage<% out.print(builderBuildingAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="hidden" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/>
+											<% 	for(BuilderBuildingAmenitySubstages bpaSubstage :bpaStages.getBuilderBuildingAmenitySubstageses()) { 
+												Double substage_wt = 0.0;
+												for(BuildingAmenityWeightage buildingAmenityWeightage :buildingAmenityWeightages) {
+													if(bpaSubstage.getId() == buildingAmenityWeightage.getBuilderBuildingAmenitySubstages().getId()) {
+														substage_wt = buildingAmenityWeightage.getSubstageWeightage();
+													}
+												}
+											%>
+												<input type="hidden" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+											<% } 
 											}
-										}
-								%>
-								<input name="stage_weightage<% out.print(builderBuildingAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="hidden" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/>
-								<% 	for(BuilderBuildingAmenitySubstages bpaSubstage :bpaStages.getBuilderBuildingAmenitySubstageses()) { 
-										Double substage_wt = 0.0;
-										for(BuildingAmenityWeightage buildingAmenityWeightage :buildingAmenityWeightages) {
-											if(bpaSubstage.getId() == buildingAmenityWeightage.getBuilderBuildingAmenitySubstages().getId()) {
-												substage_wt = buildingAmenityWeightage.getSubstageWeightage();
-											}
-										}
-								%>
-								<input type="hidden" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
-								<% } %>
-								<% } %>
-								<% } %>
-                                <div class="form-group row">
-                                    <button type="button" class="col-2" onclick="showOffers()">+ADD offers</button>
-                                   <!-- <label for="example-search-input" class="col-3 col-form-label">ADD offers</label>
-									<div class="col-6">
-                                        <input class="form-control" type="text" value="Active" id="example-search-input">
-                                    </div>-->
-                                </div>
-                                
-                                 <div id="displayoffers" style="display:none">
-                                  <div class="offset-sm-11 col-sm-7">
-                                    <i class="fa fa-times"></i> 
-                                  </div>
-                                   <div class="form-group row">
-	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" value="Free Parking" id="example-search-input">
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" value="100.0" id="example-search-input">
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" value="200000.0" id="example-search-input">
-	                                    </div>
-<!-- 	                                </div> -->
-<!-- 	                                <div class="form-group row"> -->
-	                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
-	                                    <div class="col-2">
-	                                        <textarea class="form-control" rows="" cols=""></textarea>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
-	                                    <div class="col-2">
-	                                     <select class="form-control">
-										  <option value="">Percentage</option>
-										  <option value="">Discount</option>
-										</select>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Status</label>
-	                                    <div class="col-2">
-	                                     <select class="form-control">
-										  <option value="">Active</option>
-										  <option value="">Inactive</option>
-										</select>
-										</div>
-	                                </div>
-	                             </div>
-                                
-                                 <div class="form-group row">
-                                    <button type="button" class="col-3" id="demandletter" onclick="showDemand()">Demand Letter Breakage</button>
-                                    <div class="col-6">
-                                        <input class="form-control" style="display:none" type="file" id="demandfile">
-                                    </div>
-                                   
-                                 </div>
-                                
-                                <div class="offset-sm-10 col-sm-7">
-                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">Approve</button>
-                                 </div>
-                                 
-                                </form>   
-                               </div>
-
+											}%>
+					                   		<div id="offer" class="tab-pane fade active in">
+											<input type="hidden" name="offer_count" id="offer_count" value="10002">
+								 			<div class="row">
+												<div class="col-lg-12">
+													<div class="panel panel-default">
+														<div class="panel-body">
+															<div id="offer_area">
+																<% for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) { %>
+																<div class="row" id="offer-<% out.print(buildingOfferInfo.getId()); %>">
+																	
+																	<div class="col-lg-12" style="padding-bottom:5px;">
+																		<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(buildingOfferInfo.getId()); %>);" class="btn btn-primary btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span>
+																	</div>
+																	<div class="col-lg-5 margin-bottom-5">
+																		<div class="form-group" id="error-offer_title">
+																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
+																			<div class="col-sm-8">
+																				<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>">
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-3 margin-bottom-5">
+																		<div class="form-group" id="error-discount">
+																			<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>
+																			<div class="col-sm-6">
+																				<input type="text" class="form-control" id="discount" name="discount[]" value="<% out.print(buildingOfferInfo.getDiscount()); %>">
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-4 margin-bottom-5">
+																		<div class="form-group" id="error-discount_amount">
+																			<label class="control-label col-sm-6">Discount Amount </label>
+																			<div class="col-sm-6">
+																				<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% out.print(buildingOfferInfo.getAmount()); %>">
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-5 margin-bottom-5">
+																		<div class="form-group" id="error-applicable_on">
+																			<label class="control-label col-sm-4">Description </label>
+																			<div class="col-sm-8">
+																				<textarea class="form-control" id="description" name="description[]"><% out.print(buildingOfferInfo.getDescription()); %></textarea>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-3 margin-bottom-5">
+																		<div class="form-group" id="error-applicable_on">
+																			<label class="control-label col-sm-6">Offer Type </label>
+																			<div class="col-sm-6">
+																				<select class="form-control" id="offer_type" name="offer_type[]">
+																					<option value="1" <% if(buildingOfferInfo.getType().toString() == "1") { %>selected<% } %>>Percentage</option>
+																					<option value="2" <% if(buildingOfferInfo.getType().toString() == "2") { %>selected<% } %>>Flat Amount</option>
+																					<option value="3" <% if(buildingOfferInfo.getType().toString() == "3") { %>selected<% } %>>Other</option>
+																				</select>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-4 margin-bottom-5">
+																		<div class="form-group" id="error-apply">
+																			<label class="control-label col-sm-6">Status </label>
+																			<div class="col-sm-6">
+																				<select class="form-control" id="offer_status" name="offer_status[]">
+																					<option value="1" <% if(buildingOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
+																					<option value="0" <% if(buildingOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
+																				</select>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																</div>
+																<% } %>
+															</div>
+															<div>
+																<div class="col-lg-12">
+																	<span class="pull-right">
+																		<a href="javascript:addMoreOffer();" class="btn btn-info btn-lg">+ Add More Offers</a>
+																	</span>
+																</div>
+															</div>
+															<div>
+																<div class="row">
+																	<div class="col-lg-12">
+																		<div class="col-sm-12">
+																			<button type="button" class="btn btn-success btn-lg" id="offerbtn" onclick="updateBuildingOffers();">Approve</button>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											</div>
+										</form>
+									</div>
                                 <div id="vimessages2" class="tab-pane" aria-expanded="false">
                                  <div class="col-12">
-                                  <form>
-                                <div class="form-group row" id="project_images">
-                                <% for (BuildingImageGallery buildingImageGallery :buildingImageGalleries) { %>
+                                <form id="updateimage" name="updateimage" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+                                <input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
+                                <div class="form-group row">
+                                <div id="imageresponse"></div>
                                     <label for="example-text-input" class="col-3 col-form-label">Upload Project Images</label>
-                                    <div class="col-sm-12">
-                                    	<img alt="Building Images" src="${baseUrl}/<% out.print(buildingImageGallery.getImage()); %>" width="200px;">
-                                    </div>
-                                    <label class="col-sm-12 text-left"><a href="javascript:deleteImage(<% out.print(buildingImageGallery.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
-                                    <div class="col-6">
-                                        <input class="form-control" type="file" value="Acre" id="example-text-input">
-                                    </div>
+                                    <div class="row" id="project_images">
+											<% for (BuildingImageGallery buildingImageGallery :buildingImageGalleries) { %>
+											<div class="col-lg-4 margin-bottom-5" id="b_image<% out.print(buildingImageGallery.getId()); %>">
+												<div class="form-group" id="error-landmark">
+													<div class="col-sm-12">
+														<img alt="Building Images" src="${baseUrl}/<% out.print(buildingImageGallery.getImage()); %>" width="200px;">
+													</div>
+													<label class="col-sm-12 text-left"><a href="javascript:deleteImage(<% out.print(buildingImageGallery.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
+													<div class="messageContainer col-sm-offset-4"></div>
+												</div>
+											</div>
+											<% } %>
+										</div>
+										<div class="row">
+											<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-lg"> + Add More</a></span>
+										</div>
+										<hr/>
                                 </div> 
-                                <% } %>
-                                <div class="row">
-									<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-xs"> + Add More</a></span>
-								</div>
-                                 <div class="form-group row" id="elevation_images">
-                                 <% for (BuildingPanoramicImage buildingPanoramicImage :buildingPanoramicImages) { %>
-	                                <label for="example-text-input" class="col-3 col-form-label">Upload Elavation Images</label>
-	                                <div class="col-sm-12">
-	                                	<img alt="Building Images" src="${baseUrl}/<% out.print(buildingPanoramicImage.getPanoImage()); %>" width="100%;">
-	                                </div>
-	                                <label class="col-sm-12 text-left"><a href="javascript:deleteElvImage(<%out.print(buildingPanoramicImage.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
-	                                    <div class="col-6">
-	                                        <input class="form-control" type="file" value="5000.0" id="example-text-input">
-	                                    </div>
-                                </div> 
-                              <% } %>
-                               <div class="row">
-									<span class="pull-right"><a href="javascript:addMoreElvImages();" class="btn btn-info btn-xs"> + Add More</a></span>
-							   </div> 
+                                
+                                 <div class="form-group row">
+                                <label for="example-text-input" class="col-3 col-form-label">Upload Elavation Images</label>
+                                    <div class="row" id="elevation_images">
+											<% for (BuildingPanoramicImage buildingPanoramicImage :buildingPanoramicImages) { %>
+											<div class="col-lg-4 margin-bottom-5" id="b_elv_image<% out.print(buildingPanoramicImage.getId()); %>">
+												<div class="form-group" id="error-landmark">
+													<div class="col-sm-12">
+														<img alt="Building Images" src="${baseUrl}/<% out.print(buildingPanoramicImage.getPanoImage()); %>" width="100%;">
+													</div>
+													<label class="col-sm-12 text-left"><a href="javascript:deleteElvImage(<% out.print(buildingPanoramicImage.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+											<% } %>
+										</div>
+										<div class="row">
+											<span class="pull-right"><a href="javascript:addMoreElvImages();" class="btn btn-info btn-lg"> + Add More</a></span>
+										</div>
+                                  </div>  
+                              
                                 <div class="offset-sm-5 col-sm-7">
-                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+                                        <button type="button" name="imagebtn" class="btn btn-info waves-effect waves-light m-t-10"  onclick="updateBuildingImages();">SAVE</button>
                                  </div>
                                 </form>
                                 </div>
                                </div>
-
-                                
-                                
                              </div>
                         </div>
-
                         </div>
                     </div>
                 </div>
-                
-                
             </div>
             <!-- /.container-fluid -->
-          <div id="sidebar1"> 
+            <div id="sidebar1"> 
 	      		<%@include file="../../partial/footer.jsp"%>
 			</div> 
-        
-        <!-- /#page-wrapper -->
-    </div>
-    <!-- /#wrapper -->
-    
 </body>
 </html>
 <script type="text/javascript">
-
+$('#possession_date').datepicker({
+	format: "dd MM yyyy"
+});
+$('#launch_date').datepicker({
+	format: "dd MM yyyy"
+});
 function showDemand()
 {
 	 $("#demandfile").show(); 
@@ -403,307 +441,11 @@ function showOffers()
 	$("#displayoffers").show(); 
 }
 
-</script>
-<script>
-$('#possession_date').datepicker({
-	format: "dd MM yyyy"
-});
-$('#launch_date').datepicker({
-	format: "dd MM yyyy"
-});
-$('#updatebuilding').bootstrapValidator({
-	container: function($field, validator) {
-		return $field.parent().next('.messageContainer');
-   	},
-    feedbackIcons: {
-        validating: 'glyphicon glyphicon-refresh'
-    },
-    excluded: ':disabled',
-    fields: {
-    	project_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Project ID is required and cannot be empty'
-                }
-            }
-        },
-    	name: {
-            validators: {
-                notEmpty: {
-                    message: 'Building Name is required and cannot be empty'
-                }
-            }
-        },
-        launch_date: {
-            validators: {
-                notEmpty: {
-                    message: 'Launch Date is required and cannot be empty'
-                }
-            }
-        },
-        possession_date: {
-            validators: {
-                notEmpty: {
-                    message: 'Possession Date is required and cannot be empty'
-                }
-            }
-        },
-    }
-}).on('success.form.bv', function(event,data) {
-	// Prevent form submission
-	event.preventDefault();
-	updateBuilding();
-});
-
-function updateBuilding() {
-	var amenityWeightage = "";
-	$('input[name="amenity_type[]"]:checked').each(function() {
-		amenity_id = $(this).val();
-		$('input[name="stage_weightage'+amenity_id+'[]"]').each(function() {
-			stage_id = $(this).attr("id");
-			stage_weightage = $(this).val();
-			$('input[name="substage'+stage_id+'[]"]').each(function() {
-				if(amenityWeightage != "") {
-					amenityWeightage = amenityWeightage + "," + amenity_id + "#" + $("#amenity_weightage"+amenity_id).val() + "#" + stage_id + "#" + stage_weightage + "#" + $(this).attr("id") + "#" + $(this).val() + "#" + false;
-				} else {
-					amenityWeightage = amenity_id + "#" + $("#amenity_weightage"+amenity_id).val() + "#" + stage_id + "#" + stage_weightage + "#" + $(this).attr("id") + "#" + $(this).val() + "#" + false;
-				}
-			});
-		});
-	});
-	$("#amenity_wt").val(amenityWeightage);
-	var options = {
-	 		target : '#basicresponse', 
-	 		beforeSubmit : showAddRequest,
-	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/project/building/info/update',
-	 		semantic : true,
-	 		dataType : 'json'
-	 	};
-   	$('#updatebuilding').ajaxSubmit(options);
-}
-
-function showAddRequest(formData, jqForm, options){
-	$("#basicresponse").hide();
-   	var queryString = $.param(formData);
-	return true;
-}
-   	
-function showAddResponse(resp, statusText, xhr, $form){
-	if(resp.status == '0') {
-		$("#basicresponse").removeClass('alert-success');
-       	$("#basicresponse").addClass('alert-danger');
-		$("#basicresponse").html(resp.message);
-		$("#basicresponse").show();
-  	} else {
-  		$("#basicresponse").removeClass('alert-danger');
-        $("#basicresponse").addClass('alert-success');
-        $("#basicresponse").html(resp.message);
-        $("#basicresponse").show();
-        alert(resp.message);
-  	}
-}
-
-
-function updateBuildingImages() {
-	var options = {
-	 		target : '#imageresponse', 
-	 		beforeSubmit : showAddImageRequest,
-	 		success :  showAddImageResponse,
-	 		url : '${baseUrl}/webapi/project/building/images/update',
-	 		semantic : true,
-	 		dataType : 'json'
-	 	};
-   	$('#updateimage').ajaxSubmit(options);
-}
-
-function showAddImageRequest(formData, jqForm, options){
-	$("#imageresponse").hide();
-   	var queryString = $.param(formData);
-	return true;
-}
-   	
-function showAddImageResponse(resp, statusText, xhr, $form){
-	if(resp.status == '0') {
-		$("#imageresponse").removeClass('alert-success');
-       	$("#imageresponse").addClass('alert-danger');
-		$("#imageresponse").html(resp.message);
-		$("#imageresponse").show();
-  	} else {
-  		$("#imageresponse").removeClass('alert-danger');
-        $("#imageresponse").addClass('alert-success');
-        $("#imageresponse").html(resp.message);
-        $("#imageresponse").show();
-        alert(resp.message);
-  	}
-}
-
-function updateBuildingPayments() {
-	var options = {
-	 		target : '#imageresponse', 
-	 		beforeSubmit : showAddPaymentRequest,
-	 		success :  showAddPaymentResponse,
-	 		url : '${baseUrl}/webapi/project/building/payment/update',
-	 		semantic : true,
-	 		dataType : 'json'
-	 	};
-   	$('#updatepayment').ajaxSubmit(options);
-}
-
-function showAddPaymentRequest(formData, jqForm, options){
-	$("#paymentresponse").hide();
-   	var queryString = $.param(formData);
-	return true;
-}
-   	
-function showAddPaymentResponse(resp, statusText, xhr, $form){
-	if(resp.status == '0') {
-		$("#paymentresponse").removeClass('alert-success');
-       	$("#paymentresponse").addClass('alert-danger');
-		$("#paymentresponse").html(resp.message);
-		$("#paymentresponse").show();
-  	} else {
-  		$("#paymentresponse").removeClass('alert-danger');
-        $("#paymentresponse").addClass('alert-success');
-        $("#paymentresponse").html(resp.message);
-        $("#paymentresponse").show();
-        alert(resp.message);
-  	}
-}
-
-function updateBuildingOffers() {
-	var options = {
-	 		target : '#imageresponse', 
-	 		beforeSubmit : showAddOfferRequest,
-	 		success :  showAddOfferResponse,
-	 		url : '${baseUrl}/webapi/project/building/offer/update',
-	 		semantic : true,
-	 		dataType : 'json'
-	 	};
-   	$('#updateoffer').ajaxSubmit(options);
-}
-
-function showAddOfferRequest(formData, jqForm, options){
-	$("#offerresponse").hide();
-   	var queryString = $.param(formData);
-	return true;
-}
-   	
-function showAddOfferResponse(resp, statusText, xhr, $form){
-	if(resp.status == '0') {
-		$("#offerresponse").removeClass('alert-success');
-       	$("#offerresponse").addClass('alert-danger');
-		$("#offerresponse").html(resp.message);
-		$("#offerresponse").show();
-  	} else {
-  		$("#offerresponse").removeClass('alert-danger');
-        $("#offerresponse").addClass('alert-success');
-        $("#offerresponse").html(resp.message);
-        $("#offerresponse").show();
-        alert(resp.message);
-  	}
-}
-
-function deleteImage(id) {
-	var flag = confirm("Are you sure ? You want to delete image ?");
-	if(flag) {
-		$.get("${baseUrl}/webapi/project/building/image/delete/"+id, { }, function(data){
-			alert(data.message);
-			if(data.status == 1) {
-				$("#b_image"+id).remove();
-			}
-		},'json');
-	}
-}
-
-function deleteElvImage(id) {
-	var flag = confirm("Are you sure ? You want to delete Elevation Image ?");
-	if(flag) {
-		$.get("${baseUrl}/webapi/project/building/elevationimage/delete/"+id, { }, function(data){
-			alert(data.message);
-			if(data.status == 1) {
-				$("#b_elv_image"+id).remove();
-			}
-		});
-	}
-}
-
-function deletePayment(id) {
-	var flag = confirm("Are you sure ? You want to delete payment slab ?");
-	if(flag) {
-		$.get("${baseUrl}/webapi/project/building/payment/delete/"+id, { }, function(data){
-			alert(data.message);
-			if(data.status == 1) {
-				$("#schedule-"+id).remove();
-			}
-		},'json');
-	}
-}
-
-function deleteOffer(id) {
-	var flag = confirm("Are you sure ? You want to delete offer ?");
-	if(flag) {
-		$.get("${baseUrl}/webapi/project/building/offer/delete/"+id, { }, function(data){
-			alert(data.message);
-			if(data.status == 1) {
-				$("#offer-"+id).remove();
-			}
-		});
-	}
-}
-
-
-function addMoreImages() {
-	var img_count = parseInt($("img_count").val());
-	img_count++;
-	var html = '<div class="col-lg-6 margin-bottom-5" id="imgdiv-'+img_count+'">'
-					+'<div class="form-group" id="error-landmark">'
-					+'<label class="control-label col-sm-4">Select Image </label>'
-					+'<div class="col-sm-8 input-group" style="padding:0px 12px;">'
-					+'<input type="file" class="form-control" id="building_image" name="building_image[]" />'
-					+'<a href="javascript:removeImage('+img_count+');" class="input-group-addon btn-danger">x</a></span>'
-					+'</div>'
-					+'<div class="messageContainer col-sm-offset-3"></div>'
-					+'</div>'
-				+'</div>';
-	$("#project_images").append(html);
-	$("#img_count").val(img_count);
-}
-
-function removeImage(id) {
-	$("#imgdiv-"+id).remove();
-}
-
-function addMoreElvImages() {
-	var elvimg_count = parseInt($("elvimg_count").val());
-	elvimg_count++;
-	var html = '<div class="col-lg-6 margin-bottom-5" id="elvimgdiv-'+elvimg_count+'"><input type="hidden" name="payment_id[]" value="0" />'
-					+'<div class="form-group" id="error-landmark">'
-					+'<label class="control-label col-sm-4">Select Image </label>'
-					+'<div class="col-sm-8 input-group" style="padding:0px 12px;">'
-					+'<input type="file" class="form-control" id="elevation_image" name="elevation_image[]" />'
-					+'<a href="javascript:removeElvImage('+elvimg_count+');" class="input-group-addon btn-danger">x</a></span>'
-					+'</div>'
-					+'<div class="messageContainer col-sm-offset-3"></div>'
-					+'</div>'
-				+'</div>';
-	$("#elevation_images").append(html);
-	$("#elvimg_count").val(elvimg_count);
-}
-
-function removeElvImage(id) {
-	$("#elvimgdiv-"+id).remove();
-}
-
-function showDetailTab() {
-	$('#buildingTabs a[href="#buildingdetail"]').tab('show');
-}
-
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
 	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="0" />'
-		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs">x</a></span></div>'
+		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-primary btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>'
 		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
@@ -769,59 +511,284 @@ function addMoreOffer() {
 	$("#offer_area").append(html);
 	$("#offer_count").val(offers);
 }
+
 function removeOffer(id) {
 	$("#offer-"+id).remove();
 }
 
-function addMoreSchedule() {
-	var schedule_count = parseInt($("#schedule_count").val());
-	schedule_count++;
-	var html = '<div class="row" id="schedule-'+schedule_count+'"><input type="hidden" name="payment_id[]" value="0" />'
-				+'<hr/>'
-				+'<div class="col-lg-5 margin-bottom-5">'
-				+'<div class="form-group" id="error-schedule">'
-				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-				+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-payable">'
-				+'<label class="control-label col-sm-8">% of Net Payable </label>'
-				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control" id="payable" name="payable[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-amount">'
-				+'<label class="control-label col-sm-6">Amount </label>'
-				+'<div class="col-sm-6">'
-				+'<input type="text" class="form-control" id="amount" name="amount[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-1">'
-				+'<span><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span>'
-				+'</div>'
-			+'</div>';
-	$("#payment_schedule").append(html);
-	$("#schedule_count").val(schedule_count);
+function updateBuildingImages() {
+	var options = {
+	 		target : '#imageresponse', 
+	 		beforeSubmit : showAddImageRequest,
+	 		success :  showAddImageResponse,
+	 		url : '${baseUrl}/webapi/project/building/images/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#updateimage').ajaxSubmit(options);
 }
-function removeSchedule(id) {
-	$("#schedule-"+id).remove();
+function showAddImageRequest(formData, jqForm, options){
+	$("#imageresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddImageResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#imageresponse").removeClass('alert-success');
+       	$("#imageresponse").addClass('alert-danger');
+		$("#imageresponse").html(resp.message);
+		$("#imageresponse").show();
+  	} else {
+  		$("#imageresponse").removeClass('alert-danger');
+        $("#imageresponse").addClass('alert-success');
+        $("#imageresponse").html(resp.message);
+        $("#imageresponse").show();
+        alert(resp.message);
+  	}
+}
+$('#updateoffer').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	possession_date: {
+            validators: {
+                notEmpty: {
+                    message: 'possession date is required and cannot be empty'
+                }
+            }
+        },
+        launch_date: {
+            validators: {
+                notEmpty: {
+                    message: 'launch date is required and cannot be empty'
+                }
+            }
+        },
+        total_floor: {
+            validators: {
+                notEmpty: {
+                    message: 'Total floor number is required and cannot be empty'
+                }
+            }
+        }
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	updateBuildingOffers();
+});
+function updateBuildingOffers() {
+	var amenityWeightage = "";
+	$('input[name="amenity_type[]"]:checked').each(function() {
+		amenity_id = $(this).val();
+		$('input[name="stage_weightage'+amenity_id+'[]"]').each(function() {
+			stage_id = $(this).attr("id");
+			stage_weightage = $(this).val();
+			$('input[name="substage'+stage_id+'[]"]').each(function() {
+				if(amenityWeightage != "") {
+					amenityWeightage = amenityWeightage + "," + amenity_id + "#" + $("#amenity_weightage"+amenity_id).val() + "#" + stage_id + "#" + stage_weightage + "#" + $(this).attr("id") + "#" + $(this).val() + "#" + false;
+				} else {
+					amenityWeightage = amenity_id + "#" + $("#amenity_weightage"+amenity_id).val() + "#" + stage_id + "#" + stage_weightage + "#" + $(this).attr("id") + "#" + $(this).val() + "#" + false;
+				}
+			});
+		});
+	});
+	$("#amenity_wt").val(amenityWeightage);
+	var options = {
+	 		target : '#offerresponse', 
+	 		beforeSubmit : showAddOfferRequest,
+	 		success :  showAddOfferResponse,
+	 		url : '${baseUrl}/webapi/builder/building/offer/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#updateoffer').ajaxSubmit(options);
+}
+function showAddOfferRequest(formData, jqForm, options){
+	$("#offerresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddOfferResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#offerresponse").removeClass('alert-success');
+       	$("#offerresponse").addClass('alert-danger');
+		$("#offerresponse").html(resp.message);
+		$("#offerresponse").show();
+  	} else {
+  		$("#offerresponse").removeClass('alert-danger');
+        $("#offerresponse").addClass('alert-success');
+        $("#offerresponse").html(resp.message);
+        $("#offerresponse").show();
+        alert(resp.message);
+  	}
+}
+function deleteImage(id) {
+	var flag = confirm("Are you sure ? You want to delete image ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/project/building/image/delete/"+id, { }, function(data){
+			alert(data.message);
+			if(data.status == 1) {
+				$("#b_image"+id).remove();
+			}
+		},'json');
+	}
 }
 
-$('input[name="amenity_type[]"]').click(function() {
-	if($(this).prop("checked")) {
-		$("#amenity_stage"+$(this).val()).show();
-	} else {
-		$("#amenity_stage"+$(this).val()).hide();
+function deleteElvImage(id) {
+	var flag = confirm("Are you sure ? You want to delete Elevation Image ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/project/building/elevationimage/delete/"+id, { }, function(data){
+			alert(data.message);
+			if(data.status == 1) {
+				$("#b_elv_image"+id).remove();
+			}
+		});
 	}
+}
+
+function deletePayment(id) {
+	var flag = confirm("Are you sure ? You want to delete payment slab ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/project/building/payment/delete/"+id, { }, function(data){
+			alert(data.message);
+			if(data.status == 1) {
+				$("#schedule-"+id).remove();
+			}
+		},'json');
+	}
+}
+
+function deleteOffer(id) {
+	var flag = confirm("Are you sure ? You want to delete offer ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/project/building/offer/delete/"+id, { }, function(data){
+			alert(data.message);
+			if(data.status == 1) {
+				$("#offer-"+id).remove();
+			}
+		});
+	}
+}
+
+function addMoreImages() {
+	var img_count = parseInt($("img_count").val());
+	img_count++;
+	var html = '<div class="col-lg-6 margin-bottom-5" id="imgdiv-'+img_count+'">'
+					+'<div class="form-group" id="error-landmark">'
+					+'<label class="control-label col-sm-4">Select Image </label>'
+					+'<div class="col-sm-8 input-group" style="padding:0px 12px;">'
+					+'<input type="file" class="form-control" id="building_image" name="building_image[]" />'
+					+'<a href="javascript:removeImage('+img_count+');" class="input-group-addon btn-danger">x</a></span>'
+					+'</div>'
+					+'<div class="messageContainer col-sm-offset-3"></div>'
+					+'</div>'
+				+'</div>';
+	$("#project_images").append(html);
+	$("#img_count").val(img_count);
+}
+
+function removeImage(id) {
+	$("#imgdiv-"+id).remove();
+}
+
+function addMoreElvImages() {
+	var elvimg_count = parseInt($("elvimg_count").val());
+	elvimg_count++;
+	var html = '<div class="col-lg-6 margin-bottom-5" id="elvimgdiv-'+elvimg_count+'"><input type="hidden" name="payment_id[]" value="0" />'
+					+'<div class="form-group" id="error-landmark">'
+					+'<label class="control-label col-sm-4">Select Image </label>'
+					+'<div class="col-sm-8 input-group" style="padding:0px 12px;">'
+					+'<input type="file" class="form-control" id="elevation_image" name="elevation_image[]" />'
+					+'<a href="javascript:removeElvImage('+elvimg_count+');" class="input-group-addon btn-danger">x</a></span>'
+					+'</div>'
+					+'<div class="messageContainer col-sm-offset-3"></div>'
+					+'</div>'
+				+'</div>';
+	$("#elevation_images").append(html);
+	$("#elvimg_count").val(elvimg_count);
+}
+
+function removeElvImage(id) {
+	$("#elvimgdiv-"+id).remove();
+}
+
+$('#updatebuilding').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	project_id: {
+            validators: {
+                notEmpty: {
+                    message: 'Project ID is required and cannot be empty'
+                }
+            }
+        },
+    	name: {
+            validators: {
+                notEmpty: {
+                    message: 'Building Name is required and cannot be empty'
+                }
+            }
+        },
+        total_floor: {
+            validators: {
+                notEmpty: {
+                    message: 'Total floor number is required and cannot be empty'
+                }
+            }
+        }
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	updateBuilding();
 });
+
+function updateBuilding() {
+
+	var options = {
+	 		target : '#basicresponse', 
+	 		beforeSubmit : showAddRequest,
+	 		success :  showAddResponse,
+	 		url : '${baseUrl}/webapi/builder/building/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#updatebuilding').ajaxSubmit(options);
+}
+
+function showAddRequest(formData, jqForm, options){
+	$("#basicresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#basicresponse").removeClass('alert-success');
+       	$("#basicresponse").addClass('alert-danger');
+		$("#basicresponse").html(resp.message);
+		$("#basicresponse").show();
+  	} else {
+  		$("#basicresponse").removeClass('alert-danger');
+        $("#basicresponse").addClass('alert-success');
+        $("#basicresponse").html(resp.message);
+        $("#basicresponse").show();
+        alert(resp.message);
+  	}
+}
 
 </script>
