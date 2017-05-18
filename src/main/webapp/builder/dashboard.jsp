@@ -38,7 +38,7 @@
     <link href="${baseUrl}/builder/plugins/bower_components/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
     <script src="${baseUrl}/builder/plugins/bower_components/jquery/dist/jquery.min.js"></script>
-  
+    
 </head>
 
 <body class="fix-sidebar">
@@ -314,6 +314,8 @@
     <script src="plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
     <script src="plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="plugins/bower_components/multiselect/js/jquery.multi-select.js"></script>
+    <script src="${baseUrl}/builder/plugins/bower_components/morrisjs/morris.js"></script>
+    <script src="${baseUrl}/builder/js/real-estate.js"></script>
     <script>
     jQuery(document).ready(function() {
         // Switchery

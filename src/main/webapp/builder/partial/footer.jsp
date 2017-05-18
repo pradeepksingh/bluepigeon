@@ -26,5 +26,3 @@
 <!--Style Switcher -->
 <script src="${baseUrl}/builder/plugins/bower_components/styleswitcher/jQuery.style.switcher.js"></script>
 <script src="${baseUrl}/builder/plugins/bower_components/raphael/raphael-min.js"></script>
-<script src="${baseUrl}/builder/plugins/bower_components/morrisjs/morris.js"></script>
- <script src="${baseUrl}/builder/js/real-estate.js"></script>

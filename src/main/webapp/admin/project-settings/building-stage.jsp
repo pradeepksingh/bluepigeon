@@ -51,7 +51,7 @@ int building_stage_size = building_stage_list.size();
                                             <td><% out.print(building_stage_list.get(i).getName()); %></td>
                                             <td><% if(building_stage_list.get(i).getStatus() == 1) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
                                             <td class="alignRight">
-                                            	<a href="javascript:editProjectStage(<% out.print(building_stage_list.get(i).getId()); %>);" class="btn btn-success btn-xs icon-btn"><i class="fa fa-pencil"></i></a>
+                                            	<a href="javascript:editBuildingStage(<% out.print(building_stage_list.get(i).getId()); %>);" class="btn btn-success btn-xs icon-btn"><i class="fa fa-pencil"></i></a>
 <%--                                             	<a href="javascript:deleteBuildingAmenity(<% out.print(amenity_list.get(i).getId()); %>);" class="btn btn-danger btn-xs icon-btn"><i class="fa fa-trash-o"></i></a> --%>
                                             </td>
                                             
