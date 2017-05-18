@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
 <%@page import="org.bluepigeon.admin.model.City"%>
@@ -13,6 +14,7 @@
 <%
 	List<BuildingList> building_list = null;
 	List<ProjectData> projectDatas = null;
+	int project_id=0;
 	session = request.getSession(false);
 	Builder builder = new Builder();
 	List<City> cityList = new CityNamesImp().getCityNames();
@@ -25,9 +27,16 @@
 			builder_uid = builder.getId();
 		}
    	}
-	if(builder_uid > 0){
-		building_list = new ProjectDAO().getBuildingByBuilderId(builder_uid);
-		int builder_size = building_list.size();
+	
+	List<BuilderBuilding> builderBuildings = null;
+	if (request.getParameterMap().containsKey("project_id")) {
+		project_id = Integer.parseInt(request.getParameter("project_id"));
+		if(project_id > 0) {
+			builderBuildings = new ProjectDAO().getBuilderProjectBuildings(project_id);
+		}
+	} else {
+		builderBuildings = new ProjectDAO().getBuildingsByBuilderId(builder_uid);
+		int builder_size = builderBuildings.size();
 		projectDatas = new ProjectDAO().getProjectsByBuilderId(builder_uid);
 	}
 %>
@@ -89,9 +98,14 @@
 							<div class="col-md-3 col-sm-6 col-xs-12">
 								<select name="searchcityId" id="searchcitytId" class="form-control">
 				                    <option value="0">Select City</option>
-				                    <% for(int i=0; i < projectDatas.size() ; i++){ %>
+				                    <%
+				                    if(projectDatas != null){
+				                    for(int i=0; i < projectDatas.size() ; i++){ %>
 									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option>
-									<% } %>
+									<% 	
+										}
+				                    }
+				                    %>
 						         </select>   
 							</div>
 							<div class="col-md-3 col-sm-6 col-xs-12">
@@ -124,37 +138,22 @@
                                              <th>Building Name</th>
                                             <th>status</th>
                                             <th>Action</th>
-                                           
                                         </tr>
                                     </thead>
                                     <tbody>
                                        <%
-                                      if(building_list != null){
+                                      if(builderBuildings != null){
                                     	  int i=1;
-                                      	for(BuildingList buildingList : building_list) { %>
+                                      	for(BuilderBuilding buildingList : builderBuildings) { %>
 									<tr>
-										<td><%out.print(i);%></td>
+										<th><% out.print(i); %></th>
+										<th><% out.print(buildingList.getBuilderProject().getBuilder().getName()); %></th>
+										<th><% out.print(buildingList.getBuilderProject().getName()); %></th>
+										<th><% out.print(buildingList.getName()); %></th>
+										<th><% out.print(buildingList.getBuilderBuildingStatus().getName()); %></th>
+										<th>
 										<td>
-											<% out.print(buildingList.getBuilderName()); %>
-										</td>
-										<td>
-											<% out.print(buildingList.getProjectName()); %>
-										</td>
-										
-										<td>
-											<% out.print(buildingList.getBuildingName()); %>
-										</td>
-										<td>
-											<% if(buildingList.getStatus() == 0) { %>
-											<span class='label label-warning'>Inactive</span>
-											<% } else { %>
-											<span class='label label-success'>Active</span>
-											<% 	
-											   }
-											%>
-										</td>
-										<td>
-										 <!-- <a href="${baseUrl}/builder/project/building/edit.jsp?building_id=<% out.print(buildingList.getId());%>">--> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span> <!--</a>-->
+										  <a href="${baseUrl}/builder/project/building/edit.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
 										</td>
 										<% 	
 											i++;} 
@@ -186,7 +185,7 @@
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {
-        $('#myTable').DataTable();
+        $('#tblBuilding').DataTable();
         $(document).ready(function() {
             var table = $('#example').DataTable({
                 "columnDefs": [{

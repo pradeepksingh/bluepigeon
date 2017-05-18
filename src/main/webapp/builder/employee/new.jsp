@@ -245,7 +245,7 @@
 $("#project").change(function(){
 	var a=$("#project").val();
 	//alert(a);
-	$.get("${baseUrl}/bluepigeon/webapi/employee/projectarea/list",{ project: $("#project").val() }, function(data){
+	$.get("${baseUrl}/webapi/employee/projectarea/list",{ project: $("#project").val() }, function(data){
 	//	alert(data);
 		var html = '<option value="">Select City</option>';
 		$(data).each(function(index){
@@ -349,7 +349,7 @@ function addEmployee() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/bluepigeon/webapi/employee/save1',
+	 		url : '${baseUrl}/webapi/employee/save1',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -374,7 +374,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/bluepigeon/builder/employee/list.jsp";
+        window.location.href = "${baseUrl}/builder/employee/list.jsp";
   	}
 }
 

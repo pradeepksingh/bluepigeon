@@ -1,10 +1,9 @@
 package org.bluepigeon.admin.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -12,7 +11,6 @@ import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
-import org.bluepigeon.admin.model.Locality;
 import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.EmployeeList;
 import org.bluepigeon.admin.util.HibernateUtil;
@@ -363,5 +361,45 @@ public class BuilderDetailsDAO {
 		}
 		session.close();
 		return employeeList;
+	}
+	
+	public ResponseMessage updateProjectDetails(int buildingId,int projectId,String name,int totalFloor){
+		ResponseMessage msg = new ResponseMessage();
+		String hql = "update BuilderBuilding set builderProject.id=:project_id, name=:name,total_floor = :total_floor where id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", buildingId);
+		query.setParameter("project_id", projectId);
+		query.setParameter("name", name);
+		query.setParameter("total_floor", totalFloor);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		msg.setStatus(1);
+		msg.setMessage("Updated Successfully");
+		return msg;
+	}
+	
+	public ResponseMessage updateBuilding(int buildingId, Date launchDate,Date possessionDate,Integer status) {
+		ResponseMessage resp = new ResponseMessage();
+		String hql = "update BuilderBuilding set launch_date=:launch_date,possession_date = :possession_date,builderBuildingStatus.id=:status_id  where id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		Query query = newsession.createQuery(hql);
+		query.setParameter("building_id", buildingId);
+		query.setParameter("launch_date", launchDate);
+		query.setParameter("possession_date", possessionDate);
+		query.setParameter("status_id", status);
+		query.executeUpdate();
+		newsession.getTransaction().commit();
+		newsession.close();
+		
+		resp.setId(buildingId);
+		resp.setMessage("Building updated successfully.");
+		resp.setStatus(1);
+		return resp;
 	}
 }
