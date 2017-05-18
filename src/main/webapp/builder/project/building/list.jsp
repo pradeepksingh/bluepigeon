@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
 <%@page import="org.bluepigeon.admin.model.City"%>
@@ -13,6 +14,7 @@
 <%
 	List<BuildingList> building_list = null;
 	List<ProjectData> projectDatas = null;
+	int project_id=0;
 	session = request.getSession(false);
 	Builder builder = new Builder();
 	List<City> cityList = new CityNamesImp().getCityNames();
@@ -25,7 +27,14 @@
 			builder_uid = builder.getId();
 		}
    	}
-	if(builder_uid > 0){
+	
+	List<BuilderBuilding> builderBuildings = null;
+	if (request.getParameterMap().containsKey("project_id")) {
+		project_id = Integer.parseInt(request.getParameter("project_id"));
+		if(project_id > 0) {
+			builderBuildings = new ProjectDAO().getBuilderProjectBuildings(project_id);
+		}
+	} else {
 		building_list = new ProjectDAO().getBuildingByBuilderId(builder_uid);
 		int builder_size = building_list.size();
 		projectDatas = new ProjectDAO().getProjectsByBuilderId(builder_uid);
