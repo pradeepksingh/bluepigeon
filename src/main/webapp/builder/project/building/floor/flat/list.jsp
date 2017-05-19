@@ -82,36 +82,36 @@
                     <div class="col-sm-12">
                         <div class="white-box"><br>
                           <h3>Manage Flat</h3>
-						<div class="row re white-box">
-							<div class="col-md-3 col-sm-6 col-xs-12">
-								<select class="form-control">
-												<option>Building Name</option>
-												<option>Kumar</option>
-												<option>ganga</option>
-								</select>	   
-							</div>
-							<div class="col-md-3 col-sm-6 col-xs-12">
-								<select class="form-control">
-												<option>City</option>
-												<option>Pune</option>
-												<option>Mumbai</option>
-								</select>
-							</div>
-							<div class="col-md-3 col-sm-6 col-xs-12">
-							    <select class="form-control">
-												<option>Locality</option>
-												<option>S.B Road</option>
-												<option>Kothrud</option>
-								</select>	  
-							</div>
-							<div class="col-md-3 col-sm-6 col-xs-12">
-							    <select class="form-control">
-												<option>Status</option>
-												<option>1</option>
-												<option>2</option>
-								</select>	   
-							</div>
-						</div>
+<!-- 						<div class="row re white-box"> -->
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 								<select class="form-control"> -->
+<!-- 												<option>Building Name</option> -->
+<!-- 												<option>Kumar</option> -->
+<!-- 												<option>ganga</option> -->
+<!-- 								</select>	    -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 								<select class="form-control"> -->
+<!-- 												<option>City</option> -->
+<!-- 												<option>Pune</option> -->
+<!-- 												<option>Mumbai</option> -->
+<!-- 								</select> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 							    <select class="form-control"> -->
+<!-- 												<option>Locality</option> -->
+<!-- 												<option>S.B Road</option> -->
+<!-- 												<option>Kothrud</option> -->
+<!-- 								</select>	   -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 							    <select class="form-control"> -->
+<!-- 												<option>Status</option> -->
+<!-- 												<option>1</option> -->
+<!-- 												<option>2</option> -->
+<!-- 								</select>	    -->
+<!-- 							</div> -->
+<!-- 						</div> -->
 						
                             <div class="table-responsive">
                                 <table id="myTable" class="table table-striped">
