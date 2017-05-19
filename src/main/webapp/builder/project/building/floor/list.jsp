@@ -1,46 +1,34 @@
-<%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
-<%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
-<%@page import="org.bluepigeon.admin.model.City"%>
-<%@page import="org.bluepigeon.admin.data.BuildingList"%>
-<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
-<%@page import="org.bluepigeon.admin.data.ProjectList"%>
-<%@page import="org.bluepigeon.admin.data.PossessionList"%>
-<%@page import="org.bluepigeon.admin.dao.PossessionDAO"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderFloor"%>
 <%@page import="java.util.List"%>
-<%@page import="org.bluepigeon.admin.model.Builder"%>
 <%
-	List<BuildingList> building_list = null;
+	int building_id = 0;
+	int p_user_id = 0;
+	List<BuilderFloor> builderFloors = null;
 	List<ProjectData> projectDatas = null;
-	int project_id=0;
 	session = request.getSession(false);
-	Builder builder = new Builder();
-	List<City> cityList = new CityNamesImp().getCityNames();
-	int builder_uid = 0;
+	Builder adminuserproject = new Builder();
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			builder  = (Builder)session.getAttribute("ubname");
-			builder_uid = builder.getId();
+			adminuserproject  = (Builder)session.getAttribute("ubname");
+			p_user_id = adminuserproject.getId();
 		}
-   	}
-	
-	List<BuilderBuilding> builderBuildings = null;
-	if (request.getParameterMap().containsKey("project_id")) {
-		project_id = Integer.parseInt(request.getParameter("project_id"));
-		if(project_id > 0) {
-			builderBuildings = new ProjectDAO().getBuilderProjectBuildings(project_id);
+	}
+	if (request.getParameterMap().containsKey("building_id")) {
+		building_id = Integer.parseInt(request.getParameter("building_id"));
+		if(building_id > 0) {
+			builderFloors = new ProjectDAO().getBuildingFloors(building_id);
 		}
 	} else {
-		builderBuildings = new ProjectDAO().getBuildingsByBuilderId(builder_uid);
-		int builder_size = builderBuildings.size();
-		projectDatas = new ProjectDAO().getProjectsByBuilderId(builder_uid);
+		builderFloors = new ProjectDAO().getAllFloorsByBuilderId(p_user_id);
+		projectDatas = new ProjectDAO().getProjectsByBuilderId(p_user_id);
 	}
 %>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,21 +38,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="../../plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../../plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
-    <link href="../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
-    <link href="../../plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+    <link href="../../../plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../../cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
     <!-- Menu CSS -->
-    <link href="../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+    <link href="../../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
-    <link href="../../css/animate.css" rel="stylesheet">
+    <link href="../../../css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../../css/style.css" rel="stylesheet">
+    <link href="../../../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link href="../../css/colors/megna.css" id="theme" rel="stylesheet">
+    <link href="../../../css/colors/megna.css" id="theme" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -72,7 +60,7 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
   
-    <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
    
     </head>
 
@@ -81,10 +69,10 @@
    
     <div id="wrapper">
         <div id="header">
-	    	<%@include file="../../partial/header.jsp"%>
+	    	<%@include file="../../../partial/header.jsp"%>
         </div>
         <div id="sidebar1"> 
-       		<%@include file="../../partial/sidebar.jsp"%>
+       		<%@include file="../../../partial/sidebar.jsp"%>
     	</div>
     </div>
 <div id="page-wrapper">
@@ -93,18 +81,18 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box"><br>
-                          <h3>Manage Building</h3>
+                          <h3>Manage Floor</h3>
 						<div class="row re white-box">
 <!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 								<select name="searchcityId" id="searchcitytId" class="form-control"> -->
-<!-- 				                    <option value="0">Select City</option> -->
+<!-- 								<select name="searchprojectId" id="searchprojecttId" class="form-control"> -->
+<!-- 				                    <option value="0">Select Project</option> -->
 <%-- 				                    <% --%>
 <!--  				                    if(projectDatas != null){ -->
 <%-- 				                    for(int i=0; i < projectDatas.size() ; i++){ %> --%>
 <%-- 									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option> --%>
 <%-- 									<% 	 --%>
 <!--  										} -->
-<!-- 				                    } -->
+<!--  				                    } -->
 <%-- 				                    %> --%>
 <!-- 						         </select>    -->
 <!-- 							</div> -->
@@ -142,24 +130,23 @@
                                     </thead>
                                     <tbody>
                                        <%
-                                      if(builderBuildings != null){
+                                      if(builderFloors != null){
                                     	  int i=1;
-                                      	for(BuilderBuilding buildingList : builderBuildings) { %>
-									<tr>
-										<th><% out.print(i); %></th>
-										<th><% out.print(buildingList.getBuilderProject().getBuilder().getName()); %></th>
-										<th><% out.print(buildingList.getBuilderProject().getName()); %></th>
-										<th><% out.print(buildingList.getName()); %></th>
-										<th><% out.print(buildingList.getBuilderBuildingStatus().getName()); %></th>
-										<th>
-										<td>
-										  <a href="${baseUrl}/builder/project/building/edit.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
-										   <a href="${baseUrl}/builder/project/building/floor/list.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Floor</span></a>
-										</td>
-										<% 	
-											i++;} 
-                                      	}
-										%>
+                                    	  for(BuilderFloor builderFloor :builderFloors) { %>
+      									<tr>
+      										<th><%out.print(i); %>
+      										<th><% out.print(builderFloor.getName()); %></th>
+      										<th><% out.print(builderFloor.getBuilderBuilding().getName()); %></th>
+      										<th><% out.print(builderFloor.getBuilderBuilding().getBuilderProject().getName()); %></th>
+      										<th><% out.print(builderFloor.getBuilderFloorStatus().getName()); %></th>
+      										<th>
+      											<a href="${baseUrl}/builder/project/building/floor/edit.jsp?floor_id=<% out.print(builderFloor.getId());%>"><span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
+<%--       											<a href="${baseUrl}/admin/project/building/floor/updates.jsp?floor_id=<% out.print(builderFloor.getId());%>" class="btn btn-warning icon-btn btn-xs"><i class="fa fa-pencil"></i> Updates</a> --%>
+      											<a href="${baseUrl}/builder/project/building/floor/flat/list.jsp?floor_id=<% out.print(builderFloor.getId());%>" ><span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Flat</span></a>
+      										</th>
+      									</tr>
+      								<% i++;} 
+      								}%>
                                     </tbody>
                                 </table>
                             </div>
@@ -169,7 +156,7 @@
             </div>
             <!-- /.container-fluid -->
            <div id="sidebar1"> 
-	      		<%@include file="../../partial/footer.jsp"%>
+	      		<%@include file="../../../partial/footer.jsp"%>
 			</div> 
         </div>
         <!-- /#page-wrapper -->

@@ -33,12 +33,22 @@ import org.bluepigeon.admin.model.BuilderBuildingAmenityStages;
 import org.bluepigeon.admin.model.BuilderBuildingAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderBuildingStatus;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
+import org.bluepigeon.admin.model.BuilderFlat;
+import org.bluepigeon.admin.model.BuilderFlatAmenity;
+import org.bluepigeon.admin.model.BuilderFlatAmenityStages;
+import org.bluepigeon.admin.model.BuilderFlatAmenitySubstages;
+import org.bluepigeon.admin.model.BuilderFlatStatus;
+import org.bluepigeon.admin.model.BuilderFlatType;
+import org.bluepigeon.admin.model.BuilderFloor;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.BuildingAmenityInfo;
 import org.bluepigeon.admin.model.BuildingAmenityWeightage;
 import org.bluepigeon.admin.model.BuildingOfferInfo;
 import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.model.Country;
+import org.bluepigeon.admin.model.FlatAmenityInfo;
+import org.bluepigeon.admin.model.FlatAmenityWeightage;
+import org.bluepigeon.admin.model.FlatPaymentSchedule;
 import org.bluepigeon.admin.model.Locality;
 import org.bluepigeon.admin.model.State;
 import org.bluepigeon.admin.service.ImageUploader;
@@ -215,12 +225,164 @@ public class BuilderController {
 				projectDAO.addBuildingOfferInfo(newBuildingOfferInfos);
 			}
 			msg.setStatus(1);
-			msg.setMessage("Builing offer updated successfully.");
+			msg.setMessage("Builing Details updated successfully.");
 		} else {
-			msg.setMessage("Failed to update building offers.");
+			msg.setMessage("Failed to update building Details.");
 			msg.setStatus(0);
 		}
 		
+		return msg;
+	}
+	
+	@POST
+	@Path("/building/floor/flat/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateBuildingFloorFlat (
+			@FormDataParam("flat_id") int flat_id,
+			@FormDataParam("floor_id") int floor_id,
+			@FormDataParam("flat_type_id") int flat_type_id,
+			@FormDataParam("flat_no") String flat_no, 
+			@FormDataParam("bedroom") Integer bedroom,
+			@FormDataParam("bathroom") Integer bathroom,
+			@FormDataParam("balcony") Integer balcony,
+			@FormDataParam("status") Integer status,
+			@FormDataParam("possession_date") String possession_date
+//			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
+//			@FormDataParam("payment_id[]") List<FormDataBodyPart> payment_id,
+//			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
+//			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
+//			@FormDataParam("amount[]") List<FormDataBodyPart> amount,
+//			@FormDataParam("admin_id") int admin_id,
+//			@FormDataParam("amenity_wt") String amenity_wts
+	) {
+		//String [] amenityWeightages = amenity_wts.split(",");
+		List<FlatAmenityWeightage> baws = new ArrayList<FlatAmenityWeightage>();
+		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+		Date possessionDate = null;
+		try {
+			possessionDate = format.parse(possession_date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		byte floor_status = 1;
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		BuilderFloor builderFloor = new BuilderFloor();
+		builderFloor.setId(floor_id);
+//		AdminUser adminUser = new AdminUser();
+//		adminUser.setId(admin_id);
+		BuilderFlatStatus builderFlatStatus = new BuilderFlatStatus();
+		builderFlatStatus.setId(status);
+		BuilderFlatType builderFlatType = new BuilderFlatType();
+		builderFlatType.setId(flat_type_id);
+		BuilderFlat builderFlat = projectDAO.getBuildingFlatById(flat_id).get(0);
+		builderFlat.setBuilderFloor(builderFloor);
+		builderFlat.setBuilderFlatStatus(builderFlatStatus);
+		builderFlat.setBuilderFlatType(builderFlatType);
+		builderFlat.setFlatNo(flat_no);
+		builderFlat.setBedroom(bedroom);
+		builderFlat.setBathroom(bathroom);
+		builderFlat.setBalcony(balcony);
+		builderFlat.setPossessionDate(possessionDate);
+	//	builderFlat.setAdminUser(adminUser);
+		msg = projectDAO.updateBuildingFlat(builderFlat);
+		if(msg.getId() > 0) {
+			//add gallery images
+//			if (amenity_type.size() > 0) {
+//				List<FlatAmenityInfo> flatAmenityInfos = new ArrayList<FlatAmenityInfo>();
+//				int i = 0;
+//				for(FormDataBodyPart amenity : amenity_type)
+//				{
+//					if(amenity.getValueAs(Integer.class) != null && amenity.getValueAs(Integer.class) != 0) {
+//						Byte milestone_status = 0;
+//						BuilderFlatAmenity builderFlatAmenity = new BuilderFlatAmenity();
+//						builderFlatAmenity.setId(amenity.getValueAs(Integer.class));
+//						FlatAmenityInfo amenityInfo = new FlatAmenityInfo();
+//						amenityInfo.setBuilderFlatAmenity(builderFlatAmenity);
+//						amenityInfo.setBuilderFlat(builderFlat);
+//						flatAmenityInfos.add(amenityInfo);
+//					}
+//					i++;
+//				}
+//				if(flatAmenityInfos.size() > 0) {
+//					projectDAO.deleteFlatAmenityInfo(flat_id);
+//					projectDAO.addFlatAmenityInfo(flatAmenityInfos);
+//				}
+//			}
+//			if(amenity_wts != "") {
+//				for(String aw :amenityWeightages) {
+//					FlatAmenityWeightage baw = new FlatAmenityWeightage();
+//					String [] amenityWeightage = aw.split("#");
+//					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
+//					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
+//					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
+//					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
+//					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
+//					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
+//					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+//					BuilderFlatAmenity builderFlatAmenity = new BuilderFlatAmenity();
+//					builderFlatAmenity.setId(amenity_id);
+//					BuilderFlatAmenityStages builderFlatAmenityStages = new BuilderFlatAmenityStages();
+//					builderFlatAmenityStages.setId(stage_id);
+//					BuilderFlatAmenitySubstages builderFlatAmenitySubstages = new BuilderFlatAmenitySubstages();
+//					builderFlatAmenitySubstages.setId(substage_id);
+//					baw.setBuilderFlatAmenity(builderFlatAmenity);
+//					baw.setAmenityWeightage(amenity_weightage);
+//					baw.setBuilderFlatAmenityStages(builderFlatAmenityStages);
+//					baw.setStageWeightage(stage_weightage);
+//					baw.setBuilderFlatAmenitySubstages(builderFlatAmenitySubstages);
+//					baw.setSubstageWeightage(substage_weightage);
+//					baw.setStatus(wstatus);
+//					baw.setBuilderFlat(builderFlat);
+//					baws.add(baw);
+//				}
+//				projectDAO.deleteFlatAmenityWeightage(flat_id);
+//				projectDAO.addFlatAmenityWeightage(baws);
+//			}
+//			try{
+//				if (schedule.size() > 0) {
+//					List<FlatPaymentSchedule> flatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
+//					List<FlatPaymentSchedule> newFlatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
+//					int i = 0;
+//					for(FormDataBodyPart milestone : schedule)
+//					{
+//						if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
+//							if(payment_id.get(i).getValueAs(Integer.class) != 0 && payment_id.get(i).getValueAs(Integer.class) != null) {
+//								Byte milestone_status = 0;
+//								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+//								flatPaymentSchedule.setId(payment_id.get(i).getValueAs(Integer.class));
+//								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
+//								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
+//								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
+//								flatPaymentSchedule.setStatus(milestone_status);
+//								flatPaymentSchedule.setBuilderFlat(builderFlat);
+//								flatPaymentSchedules.add(flatPaymentSchedule);
+//							} else {
+//								Byte milestone_status = 0;
+//								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+//								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
+//								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
+//								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
+//								flatPaymentSchedule.setStatus(milestone_status);
+//								flatPaymentSchedule.setBuilderFlat(builderFlat);
+//								newFlatPaymentSchedules.add(flatPaymentSchedule);
+//							}
+//						}
+//						i++;
+//					}
+//					if(flatPaymentSchedules.size() > 0) {
+//						projectDAO.updateFlatPaymentInfo(flatPaymentSchedules);
+//						projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
+//					}
+//				}
+//			} catch(Exception e) {
+//				
+//			}
+		} else {
+			msg.setMessage("Failed to update flat.");
+			msg.setStatus(0);
+		}
 		return msg;
 	}
 }

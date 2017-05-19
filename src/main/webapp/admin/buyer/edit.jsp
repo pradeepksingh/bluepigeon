@@ -128,15 +128,6 @@
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
 										<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id);%>"/>
 										<div id="buyer_area">
-										<script type="text/javascript">
-											<%
-											  for(int i=0;i<buyers.size();i++){
-											%>
-												console.log(<%out.print(i);%>);
-											<%
-											  }
-											%>
-										</script>
 										<%
 											if(buyers.size()>0){
 												int i = 0;
@@ -145,7 +136,7 @@
 										<input type="hidden" name="buyer_count" id="buyer_count" value="<%out.print(i+1);%>"/>
 										<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(buyer_id);%>"/>
 											<div class="row" id="buyer-<%out.print(i);%>">
-											<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeBuyer(<%out.print(buyer.getId()); %>);" class="btn btn-danger btn-xs">x</a></span></div>
+											<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:deleteBuyer(<%out.print(buyer.getId()); %>);" class="btn btn-danger btn-xs">x</a></span></div>
 												<div class="row">
 													<div class="col-lg-5 margin-bottom-5">
 														<div class="form-group" id="error-buyer_name">
@@ -1340,6 +1331,18 @@ function removeBuyer(id) {
 // 				$("#b_image"+id).remove();
 // 			}
 // 		},'json');
+// 	}
+// }
+
+// function deleteBuyer(id){
+// 	var flag = confirm("Are you sure? You want to delete buyer ?");
+// 	if(flag){
+// 		$.get("${baseUrl}/webapi/project/buyer/"+id,{ }, function(data){
+// 			alert(data.message);
+// 			if(data.status == 1){
+// 				$("buyer-"+id).remove();
+// 			}
+// 		});
 // 	}
 // }
 

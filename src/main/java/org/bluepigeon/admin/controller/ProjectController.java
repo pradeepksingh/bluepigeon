@@ -2387,4 +2387,14 @@ public class ProjectController extends ResourceConfig {
 		return project_list;
 	}
 	
+	@GET
+	@Path("/buyer/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteBuyerById(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		msg = projectDAO.deleteBuildingPaymentInfo(id);
+		return msg;
+	}
+	
 }

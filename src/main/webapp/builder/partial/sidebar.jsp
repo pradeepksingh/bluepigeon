@@ -33,7 +33,8 @@
 <%--                             <li> <a href="${baseUrl }/builder/project/new.jsp">Add</a> </li> --%>
                             <li> <a href="${baseUrl }/builder/project/list.jsp">Manage Project</a></li>
                              <li> <a href="${baseUrl }/builder/project/building/list.jsp">Manage Buildings</a></li>
-                             <li> <a href="${baseUrl }/builder/project/buildings/flat/list.jsp">Manage Flat</a></li>
+                              <li> <a href="${baseUrl }/builder/project/building/floor/list.jsp">Manage Floor</a></li>
+                             <li> <a href="${baseUrl }/builder/project/building/floor/flat/list.jsp">Manage Flat</a></li>
                          </ul>
                     </li>
 <!--                      <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="ti-home fa-fw"></i><span class="hide-menu">Building<span class="fa arrow"></span></span></a> -->
@@ -45,7 +46,7 @@
                      <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="ti-layout fa-fw"></i><span class="hide-menu"> Buyer<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/buyer/new.jsp">Add</a></li>
-<!--                             <li> <a href="index.html">Manage</a></li> -->
+                            <li> <a href="${baseUrl }/builder/buyer/list.jsp">Manage</a></li>
                         </ul>
                     </li>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu"> Employee<span class="fa arrow"></span></span></a>

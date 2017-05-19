@@ -2411,4 +2411,27 @@ public class ProjectDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<BuilderFloor> getAllFloorsByBuilderId(int builderId) {
+		String hql = "from BuilderFloor where builderBuilding.builderProject.builder.id = :builder_id order by builderBuilding.builderProject.id DESC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id",builderId);
+		List<BuilderFloor> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<BuilderFlat> getBuilderAllFlatsByBuilderId(int builderId) {
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id order by builderFloor.builderBuilding.builderProject.id DESC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		List<BuilderFlat> result = query.list();
+		session.close();
+		return result;
+	}
+	
 }
