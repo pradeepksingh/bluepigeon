@@ -414,7 +414,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/admin/project/building/floor/flat/list.jsp?floor_id="+$("#floor_id").val();
+        window.location.href = "${baseUrl}/builder/project/building/floor/flat/list.jsp?floor_id="+$("#floor_id").val();
   	}
 }
 
