@@ -84,6 +84,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../css/custom.css">
  
     <script src="../../../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../../../../js/jquery.form.js"></script>
+    <script src="../../../../js/bootstrap-datepicker.min.js"></script>
+    <script src="../../../../js/bootstrapValidator.min.js"></script>
     <script type="text/javascript">
     $('input[type=checkbox]').click(function() {
         if ($(this).is(':checked')) {
@@ -122,6 +125,7 @@
                               <div class="col-12">
                                    <form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
                                    		 <input type="hidden" name="flat_id" id="flat_id" value="<% out.print(flat_id);%>"/>
+                                   		 <input type="hidden" name="admin_id" id="admin_id" value="1"/>
 										 <input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
 										 <input type="hidden" name="img_count" id="img_count" value="2"/>
                                          <div class="form-group row">

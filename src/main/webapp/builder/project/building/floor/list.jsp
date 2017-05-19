@@ -142,7 +142,7 @@
       										<th>
       											<a href="${baseUrl}/builder/project/building/floor/edit.jsp?floor_id=<% out.print(builderFloor.getId());%>"><span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
 <%--       											<a href="${baseUrl}/admin/project/building/floor/updates.jsp?floor_id=<% out.print(builderFloor.getId());%>" class="btn btn-warning icon-btn btn-xs"><i class="fa fa-pencil"></i> Updates</a> --%>
-<%--       											<a href="${baseUrl}/admin/project/building/floor/flat/list.jsp?floor_id=<% out.print(builderFloor.getId());%>" class="btn btn-info icon-btn btn-xs"><i class="fa fa-list"></i> Flats</a> --%>
+      											<a href="${baseUrl}/builder/project/building/floor/flat/list.jsp?floor_id=<% out.print(builderFloor.getId());%>" ><span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Flat</span></a>
       										</th>
       									</tr>
       								<% i++;} 

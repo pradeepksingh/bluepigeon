@@ -154,6 +154,7 @@
 										<th>
 										<td>
 										  <a href="${baseUrl}/builder/project/building/edit.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
+										   <a href="${baseUrl}/builder/project/building/floor/list.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Floor</span></a>
 										</td>
 										<% 	
 											i++;} 
