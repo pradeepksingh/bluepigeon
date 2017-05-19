@@ -215,9 +215,9 @@ public class BuilderController {
 				projectDAO.addBuildingOfferInfo(newBuildingOfferInfos);
 			}
 			msg.setStatus(1);
-			msg.setMessage("Builing offer updated successfully.");
+			msg.setMessage("Builing Details updated successfully.");
 		} else {
-			msg.setMessage("Failed to update building offers.");
+			msg.setMessage("Failed to update building Details.");
 			msg.setStatus(0);
 		}
 		

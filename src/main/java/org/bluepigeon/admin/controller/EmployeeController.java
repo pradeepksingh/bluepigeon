@@ -48,15 +48,15 @@ public class EmployeeController {
 		return propertyManagerDAO.getAdminUserById(manager_id);
 	}
 	
-//	@GET
-//	@Path("/projectarea/list")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public List<ProjectCityData> addCity(@QueryParam("project") int project) {
-//		ProjectDAO projectDAO = new ProjectDAO();
-//		return projectDAO.getCityareabyproject(project);
-//		
-//		
-//	}
+	@GET
+	@Path("/projectarea/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectCityData> getProjectList(@QueryParam("project") int project) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		return projectDAO.getCityareabyproject(project);
+		
+		
+	}
 	
 	@POST
 	@Path("/save")
