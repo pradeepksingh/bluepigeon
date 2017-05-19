@@ -178,8 +178,8 @@
 														}
 													}
 											 %>
-												<div class="col-sm-3">
-													<input type="checkbox" name="amenity_type[]" value="<% out.print(builderFloorAmenity.getId());%>" <% out.print(is_checked); %>/> <% out.print(builderFloorAmenity.getName());%>
+												<div class="checkbox checkbox-inverse">
+													<input id="checkbox1c" type="checkbox" name="amenity_type[]" value="<% out.print(builderFloorAmenity.getId());%>" <% out.print(is_checked); %>/> <label for="checkbox1c"><% out.print(builderFloorAmenity.getName());%></label>
 												</div>
 											<% } %>
                                             </div>
@@ -248,20 +248,19 @@
 											<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-ms"> + Add More</a></span>
 										</div>
 									</div>
-                                          <button type="submit" name="floorupdate" class="btn btn-success waves-effect waves-light m-r-10">Submit</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                        </div>
+                                          <button type="submit" name="floorupdate" class="btn btn-success waves-effect waves-light m-r-10">Update</button>
+                                   </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-          
         </div>
         <!-- /.container-fluid -->
-        <div id="sidebar1"> 
-	      	<%@include file="../../../partial/footer.jsp"%>
-		</div> 
+     <div id="sidebar1"> 
+      	<%@include file="../../../partial/footer.jsp"%>
+	</div> 
 </body>
 
 </html>
