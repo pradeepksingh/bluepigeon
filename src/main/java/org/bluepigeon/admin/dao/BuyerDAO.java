@@ -811,6 +811,7 @@ public class BuyerDAO {
 			session.close();
 			return flatDatas;
 		}
+	  
 		public List<BuildingData> getBuildingsByProjectId(int project_id) {
 			String hql = "from BuilderBuilding where builderProject.id = :project_id";
 			HibernateUtil hibernateUtil = new HibernateUtil();
@@ -827,5 +828,70 @@ public class BuyerDAO {
 			}
 			session.close();
 			return buildingDataList;
+		}
+		
+		public ResponseMessage deleteBuyerById(int id){
+			ResponseMessage resp = new ResponseMessage();
+			String hql = "from Buyer where id = :id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("id", id);
+			List<Buyer> buyerList = query.list();
+			session.close();
+			if(buyerList.get(0).getIsPrimary()){
+				//remove all the data from database.
+				//first remove co-owner related with primary buyer.Then delete primary buyer.
+				//code
+				//Delete buyer's buying details from buying details table
+				String delete_buying_details = "Delete from BuyingDetail where buyer.id = :buyer_id";
+				Session newsession1 = hibernateUtil.openSession();
+				newsession1.beginTransaction();
+				Query smdelete = newsession1.createQuery(delete_buying_details);
+				smdelete.setParameter("buyer_id", buyerList.get(0).getId());
+				smdelete.executeUpdate();
+				newsession1.getTransaction().commit();
+				newsession1.close();
+				//delete buyer's offer from buyer offer table
+				String delete_buyer_offer = "Delete from BuyerOffer where buyer.id = :buyer_id";
+				Session session_delete_buyer_offer = hibernateUtil.openSession();
+				session_delete_buyer_offer.beginTransaction();
+				Query query_delete_buyer_offer = session_delete_buyer_offer.createQuery(delete_buyer_offer);
+				query_delete_buyer_offer.setParameter("buyer_id", buyerList);
+				query_delete_buyer_offer.executeUpdate();
+				session_delete_buyer_offer.getTransaction().commit();
+				session_delete_buyer_offer.close();
+				//delete buyer's payment details from buyer payment table
+				String delete_buyer_payment_hql = "Delete from BuyerPayment where buyer.id = :buyer_id";
+				Session session_delete_buyer_payment = hibernateUtil.openSession();
+				session_delete_buyer_payment.beginTransaction();
+				Query query_delete_buyer_payment = session_delete_buyer_payment.createQuery(delete_buyer_payment_hql);
+				query_delete_buyer_payment.setParameter("buyer_id", buyerList.get(0).getId());
+				query_delete_buyer_payment.executeUpdate();
+				session_delete_buyer_payment.getTransaction().commit();
+				session_delete_buyer_payment.close();
+				
+				//delete buyer's document from buyer documents table
+				//String delete
+				
+				
+			}
+			resp.setMessage("Buyer deleted successfully.");
+			resp.setStatus(1);
+			return resp;
+		}
+		
+		/**
+		 * 
+		 */
+		public List<Buyer> getAllBuyerByBuilderId(int builderId){
+			String hql = "from Buyer where builder.id = :builder_id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("builder_id", builderId);
+			List<Buyer> result = query.list();
+			session.close();
+			return result;
 		}
 }
