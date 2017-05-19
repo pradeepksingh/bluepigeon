@@ -33,7 +33,8 @@
 <%--                             <li> <a href="${baseUrl }/builder/project/new.jsp">Add</a> </li> --%>
                             <li> <a href="${baseUrl }/builder/project/list.jsp">Manage Project</a></li>
                              <li> <a href="${baseUrl }/builder/project/building/list.jsp">Manage Buildings</a></li>
-                             <li> <a href="${baseUrl }/builder/project/buildings/flat/list.jsp">Manage Flat</a></li>
+                              <li> <a href="${baseUrl }/builder/project/building/floor/list.jsp">Manage Floor</a></li>
+                             <li> <a href="${baseUrl }/builder/project/building/flat/list.jsp">Manage Flat</a></li>
                          </ul>
                     </li>
 <!--                      <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="ti-home fa-fw"></i><span class="hide-menu">Building<span class="fa arrow"></span></span></a> -->

@@ -249,13 +249,13 @@ $("#project").change(function(){
 	//	alert(data);
 		var html = '<option value="">Select City</option>';
 		$(data).each(function(index){
-			html = html + '<option value="'+data[index].city_id+'">'+data[index].city_name+'</option>';
+			html = html + '<option value="'+data[index].cityId+'">'+data[index].cityName+'</option>';
 		});
 		$("#city").html(html);
 		
 		var html1 = '<option value="">Select Area</option>';
 		$(data).each(function(index){
-			html1 = html1 + '<option value="'+data[index].area_id+'">'+data[index].area_name+'</option>';
+			html1 = html1 + '<option value="'+data[index].areaId+'">'+data[index].areaName+'</option>';
 		});
 		$("#area").html(html1);
 	},'json');
