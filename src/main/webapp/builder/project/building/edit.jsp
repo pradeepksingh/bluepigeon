@@ -269,7 +269,7 @@
 															<div id="offer_area">
 																<% for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) { %>
 																<div class="row" id="offer-<% out.print(buildingOfferInfo.getId()); %>">
-																	
+																	<input type="hidden" name="offer_id[]" value="<% out.print(buildingOfferInfo.getId()); %>" />
 																	<div class="col-lg-12" style="padding-bottom:5px;">
 																		<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(buildingOfferInfo.getId()); %>);" class="btn btn-primary btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span>
 																	</div>
