@@ -133,7 +133,7 @@
 						</div>
 						
                             <div class="table-responsive">
-                                <table id="tblBuilding" class="table table-striped">
+                                <table id="tblEmployee" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Sr No.</th>
@@ -146,7 +146,7 @@
                                     <tbody>
                                        <%
                                      if(employeeLists != null){
-                                    	  int i=1;
+                                    	  
                                       	for(EmployeeList employeeList: employeeLists) { %>
 									<tr>
 										<td><%out.print(employeeList.getCount());%></td>
@@ -161,10 +161,10 @@
 											<%out.print(employeeList.getAccess()); %>
 										</td>
 										<td>
-											<!-- <a href="${baseUrl}/builder/buyer/agreement/edit.jsp?agreement_id=<% out.print(employeeList.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>-->
+											 <a href="${baseUrl}/builder/employee/edit.jsp?emp_id=<% out.print(employeeList.getId());%>" ><span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
 										</td>
 										<% 	
-											i++;} 
+											} 
                                       	}
 										%>
                                     </tbody>
@@ -188,7 +188,7 @@
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {
-        $('#myTable').DataTable();
+        $('#tblEmployee').DataTable();
         $(document).ready(function() {
             var table = $('#example').DataTable({
                 "columnDefs": [{

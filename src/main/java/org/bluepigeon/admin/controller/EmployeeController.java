@@ -192,6 +192,69 @@ public class EmployeeController {
 		
 	return new BuilderDetailsDAO().saveEmployee(builderEmployee);
 	}
+	
+	@POST
+	@Path("/builder/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateEmployees(
+			@FormDataParam("emp_id") int emp_id,
+			@FormDataParam("name") String name,
+			@FormDataParam("contact") String mobile,
+			@FormDataParam("email") String email,
+			@FormDataParam("address") String currentAddress,
+			@FormDataParam("address1") String permanentAddress,
+			@FormDataParam("designation") String designation,
+			@FormDataParam("access") int accessId,
+			@FormDataParam("empid") String employeeId,
+			@FormDataParam("project") int projectId,
+			@FormDataParam("area") int areaId,
+			@FormDataParam("city") int cityId,
+			@FormDataParam("builder_id") int builderId){
+		
+		BuilderEmployeeAccessType employeeAccessType = new BuilderEmployeeAccessType();
+		
+		Builder builder = new Builder();
+		BuilderEmployee builderEmployee = new BuilderEmployee();
+		Locality locality = new Locality();
+		boolean status = false;
+		
+		if(builderId > 0){
+			builder.setId(builderId);
+			builderEmployee.setBuilder(builder); 
+		}
+		
+		if(cityId > 0){
+			City city = new City();
+			city.setId(cityId);
+			builderEmployee.setCity(city); 
+		}
+		if(accessId > 0){
+			
+			employeeAccessType.setId(accessId);
+			builderEmployee.setBuilderEmployeeAccessType(employeeAccessType);
+		}
+		if(areaId > 0){
+			locality.setId(areaId);
+			builderEmployee.setLocality(locality);
+		}
+		if(projectId > 0){
+			BuilderProject builderProject = new BuilderProject();
+			builderProject.setId(projectId);
+			builderEmployee.setBuilderProject(builderProject);
+		}
+		builderEmployee.setId(emp_id);
+		builderEmployee.setName(name);
+		builderEmployee.setEmail(email);
+		builderEmployee.setMobile(mobile);
+		builderEmployee.setCurrentAddress(currentAddress);
+		builderEmployee.setPermanentAddress(permanentAddress);
+		builderEmployee.setDesignation(designation);
+		builderEmployee.setEmployeeId(employeeId);
+		builderEmployee.setStatus(status);
+		
+	return new BuilderDetailsDAO().updateBuilderEmployee(builderEmployee);
+	}
 
 	@POST
 	@Path("/emp/list")

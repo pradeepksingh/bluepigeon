@@ -1,3 +1,8 @@
+<%@page import="org.bluepigeon.admin.dao.LocalityNamesImp"%>
+<%@page import="org.bluepigeon.admin.model.Locality"%>
+<%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
+<%@page import="org.bluepigeon.admin.model.City"%>
+<%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.model.BuilderEmployeeAccessType"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
@@ -13,6 +18,8 @@
 	session = request.getSession(false);
 	Builder builder = new Builder();
 	int builder_uid = 0;
+	int emp_id = 0;
+	emp_id = Integer.parseInt(request.getParameter("emp_id"));
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -25,10 +32,11 @@
 		project_list = new ProjectDAO().getProjectsByBuilderId(builder_uid);
 		int builder_size = project_list.size();
 	}
-	
+	BuilderEmployee builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
 	BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
 	List<BuilderEmployeeAccessType> access_list = builderDetailsDAO.getBuilderAccessList();
-	
+	List<City> cityList = new CityNamesImp().getCityNames();
+	List<Locality> localityList = new LocalityNamesImp().getLocalityList();
 	 
 	
 %>
@@ -101,113 +109,119 @@
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">New Employee</h4>
+                        <h4 class="page-title">Update Employee</h4>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
-                             <h4 class="page-title">+ New Employee</h4><br>
+                             <h4 class="page-title"> Update Employee</h4><br>
                                 <ul class="nav tabs-horizontal">
                                     <li class="tab nav-item" aria-expanded="false">
                                         <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"></a>
                                     </li>
                                 </ul>
-                                <div class="tab-content"> 
+                               <div class="tab-content"> 
                                		<div id="vimessages" class="tab-pane active" aria-expanded="false">
                                 		<div class="col-12">
                                				<form id="addemployee" name="addemployee" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
                                 				<input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_uid); %>" />
-                                					<div class="form-group row">
-                                    					<label for="example-text-input" class="col-3 col-form-label">Name*</label>
-                                    					<div class="col-3">
-                                        					<input class="form-control" type="text" value="" id="name" name="name">
-                                    					</div>
-                                  						<div class="messageContainer"></div>
-                                    					<label for="example-text-input" class="col-3 col-form-label">Contact*</label>
-                                    					<div class="col-3">
-                                       						<input class="form-control" type="text" value="" id="contact" name="contact">
-                                    					</div>
-                                   		 				<div class="messageContainer"></div>
-                               			 			</div>
-                                					<div class="form-group row">
-                                    					<label for="example-search-input" class="col-3 col-form-label">Email*</label>
-                                    					<div class="col-3">
-                                        					<input class="form-control" type="text" value="" id="email" name="email">
-                                    					</div>
-                                    					<label for="example-search-input" class="col-3 col-form-label">Current Address</label>
-                                    					<div class="col-3">
-															<textarea rows="" cols="" class="form-control" id="address" name="address"></textarea>
-                                    					</div>
-                               		 				</div>
-                                 					<div class="form-group row">
-                                    					<label for="example-tel-input" class="col-3 col-form-label">Permanent Address</label>
-                                    					<div class="col-3">
-                                        					<textarea rows="" cols="" class="form-control" id="address1" name="address1"></textarea>
-                                    					</div>
-                                    					<label for="example-tel-input" class="col-3 col-form-label">Designation</label>
-                                    					<div class="col-3">
-                                        					<input class="form-control" type="text" value="" name="designation" id="designation">
-                                    					</div>
-                                					</div>
-                                					<div class="form-group row">
-                                    					<label for="example-tel-input" class="col-3 col-form-label">Access Type</label>
-                                    					<div class="col-3">
-                                         					<select class="form-control" name="access" id="access">
-                                          						<option value="">Select Access</option>
-																<% for (BuilderEmployeeAccessType access : access_list) { %>
-																<option value="<%out.print(access.getId());%>"> <% out.print(access.getName()); %> </option>
-																<% } %>
-															</select>
-                                    					</div>
-                                    					<label for="example-tel-input" class="col-3 col-form-label">Employee ID</label>
-                                    					<div class="col-3">
-                                         					<input class="form-control" type="text" value="" id="empid" name="empid">
-                                    					</div>
-                                					</div>
-                                					<div class="form-group row">
-                                    					<label for="example-text-input" class="col-3 col-form-label">Project</label>
-                                    					<div class="col-3">
-                                       						<select class="form-control" name="project" id="project">
-                                          						<option value="">Select Project</option>
-																	<% for (ProjectData project : project_list) { %>
-																	<option value="<%out.print(project.getId());%>"> <% out.print(project.getName()); %> </option>
-																	<% } %>
-															</select>
-                                   			 			</div>
-                                    					<label for="example-text-input" class="col-3 col-form-label">Area</label>
-                                    					<div class="col-3">
-                                      						<select name="area" id="area" class="form-control">
-																<option value=""> Select Area </option>
-															</select>
-                                    					</div>
-                                					</div>
-                                					<div class="form-group row">
-                                    					<label for="example-search-input" class="col-3 col-form-label">City</label>
-                                    					<div class="col-3">
-                                         					<select name="city" id="city" class="form-control">
-																<option value=""> Select City </option>
-															</select>
-                                    					</div>
-                                					</div>
-                                					<div class="offset-sm-5 col-sm-7">
-                                        				<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
-                                 					</div>
-                               					</form>
-                              				 </div>
-                              			</div>
-                                	</div>
-                        		</div>
-                        	</div>
-                    	</div>
-                	</div>
-            	</div>
-            <div id="sidebar1"> 
-		       <%@include file="../partial/footer.jsp"%>
-			</div> 
-	</body>
+                                 				<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>" />
+                                				<div class="form-group row">
+                                    				<label for="example-text-input" class="col-3 col-form-label">Name*</label>
+                                    				<div class="col-3">
+                                        				<input class="form-control" type="text" value="<%out.print(builderEmployee.getName()); %>" id="name" name="name">
+                                    				</div>
+                                  					<div class="messageContainer"></div>
+                                    				<label for="example-text-input" class="col-3 col-form-label">Contact*</label>
+                                    				<div class="col-3">
+                                        				<input class="form-control" type="text" value="<%out.print(builderEmployee.getMobile()); %>" id="contact" name="contact">
+                                    				</div>
+                                    				<div class="messageContainer"></div>
+                                				</div>
+                                				<div class="form-group row">
+                                    				<label for="example-search-input" class="col-3 col-form-label">Email*</label>
+                                    				<div class="col-3">
+                                        				<input class="form-control" type="text" value="<%out.print(builderEmployee.getEmail()); %>" id="email" name="email">
+                                    				</div>
+                                    				<label for="example-search-input" class="col-3 col-form-label">Current Address</label>
+                                    				<div class="col-3">
+														<textarea rows="" cols="" class="form-control" id="address" name="address"><%out.print(builderEmployee.getCurrentAddress()); %></textarea>
+                                    				</div>
+                                				</div>
+                                 				<div class="form-group row">
+                                    				<label for="example-tel-input" class="col-3 col-form-label">Permanent Address</label>
+                                    				<div class="col-3">
+                                        				<textarea rows="" cols="" class="form-control" id="address1" name="address1"><%out.print(builderEmployee.getPermanentAddress()); %></textarea>
+                                    				</div>
+                                    				<label for="example-tel-input" class="col-3 col-form-label">Designation</label>
+                                    				<div class="col-3">
+                                        				<input class="form-control" type="text" value="<%out.print(builderEmployee.getDesignation());%>" name="designation" id="designation">
+                                    				</div>
+                                				</div>
+                                				<div class="form-group row">
+                                    				<label for="example-tel-input" class="col-3 col-form-label">Access Type</label>
+                                    				<div class="col-3">
+                                         				<select class="form-control" name="access" id="access">
+					                                          <option value="0">Select Access</option>
+															  <% for (BuilderEmployeeAccessType access : access_list) { %>
+															  <option value="<%out.print(access.getId());%>" <%if(access.getId() == builderEmployee.getBuilderEmployeeAccessType().getId()){%>selected<%} %>> <% out.print(access.getName()); %> </option>
+															  <% } %>
+														</select>
+				                                    </div>
+                                    				<label for="example-tel-input" class="col-3 col-form-label">Employee ID</label>
+                                    				<div class="col-3">
+                                         				<input class="form-control" type="text" value="<%out.print(builderEmployee.getEmployeeId()); %>" id="empid" name="empid">
+                                    				</div>
+                                				</div>
+                                				<div class="form-group row">
+                                    				<label for="example-text-input" class="col-3 col-form-label">Project</label>
+                                    				<div class="col-3">
+                                       				<select class="form-control" name="project" id="project">
+				                                          <option value="0">Select Project</option>
+														  <% for (ProjectData project : project_list) { %>
+														  <option value="<%out.print(project.getId());%>" <%if(project.getId() == builderEmployee.getBuilderProject().getId()) {%>selected<%} %>> <% out.print(project.getName()); %> </option>
+														  <% } %>
+													</select>
+                                    			</div>
+                                    			<label for="example-text-input" class="col-3 col-form-label">Area</label>
+			                                    <div class="col-3">
+			                                      <select name="area" id="area" class="form-control">
+														<option value="0"> Select Area </option>
+														<%for(Locality locality: localityList){ %>
+														<option value="<%out.print(locality.getId()); %>" <%if(locality.getId() == builderEmployee.getLocality().getId()){ %>selected<%} %>><%out.print(locality.getName()); %></option>
+														<%} %>
+												 </select>
+			                                   </div>
+                                			</div >
+                                			<div class="form-group row">
+                                   		 		<label for="example-search-input" class="col-3 col-form-label">City</label>
+                                    			<div class="col-3">
+			                                      <select name="city" id="city" class="form-control">
+														<option value="0"> Select City </option>
+														<% for(City city :cityList){%>
+														<option value="<%out.print(city.getId()); %>" <%if(city.getId() == builderEmployee.getCity().getId()){ %>selected<%} %>><%out.print(city.getName()); %></option>
+														<%}%>
+												  </select>
+			                                   </div>
+                                			</div>
+                                			<div class="offset-sm-5 col-sm-7">
+                                        		<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">Update</button>
+                                 			</div>
+                               			</form>
+                               		</div>
+                              	</div>
+                           	</div>
+                        </div>
+                     </div>
+                  </div>
+              </div>
+          </div>
+         <div id="sidebar1"> 
+      		<%@include file="../partial/footer.jsp"%>
+	  </div> 
+</body>
 </html>
-
 <script type="text/javascript">
 $("#project").change(function(){
 	var a=$("#project").val();
@@ -308,15 +322,14 @@ $('#addemployee').bootstrapValidator({
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
-	addEmployee();
+	updateEmployee();
 });
-function addEmployee() {
-	alert("inside emp");
+function updateEmployee() {
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/employee/save1',
+	 		url : '${baseUrl}/webapi/employee/builder/update',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
