@@ -187,9 +187,13 @@
 										<div class="col-sm-9">
 										 	<select name="type_id" id="type_id" class="form-control">
 							                    <option value="0">Select Type</option>
-							                   	<% for(int i=0; i < type_size ; i++){ %>
+							                   	<% if(builderLead.getBuilderPropertyType()!=null){ 
+							                   	for(int i=0; i < type_size ; i++){ %>
 												<option value="<% out.print(builderPropertyTypes.get(i).getId());%>" <%if(builderPropertyTypes.get(i).getId() == builderLead.getBuilderPropertyType().getId()){ %>selected<%} %> ><% out.print(builderPropertyTypes.get(i).getName());%></option>
-											  	<% } %>
+											  	<% } }else{
+											  	for(int i=0; i < type_size ; i++){%>
+											  	<option value="<% out.print(builderPropertyTypes.get(i).getId());%>"><% out.print(builderPropertyTypes.get(i).getName());%></option>
+											  	<% }}%>
 							                </select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
