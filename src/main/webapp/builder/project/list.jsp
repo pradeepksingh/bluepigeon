@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
+<%@page import="org.bluepigeon.admin.model.Country"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.data.ProjectList"%>
@@ -24,6 +26,7 @@
 			int builder_size = project_list.size();
 		}
    	}
+	List<Country> countryList = new CountryDAOImp().getCountryList();
 	
 %>
 <!DOCTYPE html>
@@ -90,30 +93,25 @@
                 <!--.row -->
                
                    <div class="row re white-box">
-<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!--                         <select class="selectpicker" data-style="form-control"> -->
-<!--                                         <option>Project Name</option> -->
-<!--                                         <option>Kumar</option> -->
-<!--                                         <option>ganga</option> -->
-<!--                            </select> -->
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <select class="selectpicker" data-style="form-control" id="country_id" name="country_id">
+                                  <option value="0">Country</option>
+                                  <% for(Country country : countryList){%>
+                                  <option value="<%out.print(country.getId());%>"><%out.print(country.getName()); %></option>
+                                  <%} %>
+                           </select>
                                
-<!--                     </div> -->
-<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!--                       <select class="selectpicker" data-style="form-control"> -->
-<!--                                         <option>City</option> -->
-<!--                                         <option>Pune</option> -->
-<!--                                         <option>Mumbai</option> -->
-<!--                           </select> -->
-                             
-<!--                     </div> -->
-<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!--                        <select class="selectpicker" data-style="form-control"> -->
-<!--                                         <option>Locality</option> -->
-<!--                                         <option>S.B Road</option> -->
-<!--                                         <option>Kothrud</option> -->
-<!--                          </select> -->
-                              
-<!--                     </div> -->
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                      <select class="selectpicker" data-style="form-control" id="state_id" name="state_id" >
+                      		<option value="0">State</option>
+                          </select>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                       <select class="selectpicker" data-style="form-control" id="city_id" name="city_id">
+                                        <option value="0">City</option>
+                         </select>
+                    </div>
 <!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
 <!--                        <select class="selectpicker" data-style="form-control"> -->
 <!--                                         <option>Status</option> -->
@@ -127,9 +125,10 @@
                        
                        	<%
                        		if(project_list !=null){
+                       			int i=1;
                        			for(ProjectList projectList : project_list ){
                        	%>
-                       	<div class="col-md-6 col-sm-6 col-xs-12 projectsection">
+                       	<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">
 	                       	<div class="image">
 		                       	<img src="../plugins/images/Untitled-1.png" alt="Project image"/>
 		                       	<div class="overlay">
@@ -153,31 +152,8 @@
 			                       </div>
 	                           </div>
 	                       </div>
-                        	<!-- div class="image">
-                          		<div class="image">
-	                       			<img src="../plugins/images/Untitled-1.png" alt="Project image"/>
-	                       			<div class="overlay">
-		                       			<div class="row">
-			                       			<div class="col-md-6 left">
-				                       			<h3><%//out.print(projectList.getName());%></h3>
-				                       			<h4>Baner</h4>
-				                       			<br>
-					                       		<div class="bottom">
-					                       			<h4>50/500 SOLD</h4>
-					                       		</div>
-			                       			</div>
-			                        		<div class="col-md-6 right">
-				                         		<div class="chart" id="graph1" data-percent="50"> </div>
-				                        		<div class="bottom">
-				                        			<h4>10 NEW LEADS</h4>
-				                        		</div>
-			                       			</div>
-		                       			</div>
-                           			</div>
-                       			</div>
-                        	</div-->
                         </div>
-                        <%
+                        <%  i++;
                        		}
                        	}
                         %>
@@ -336,7 +312,6 @@
                 
                 </div>
                 </div>
-                </div>
         <!-- /.container-fluid -->
        		<div id="sidebar1"> 
 	      		<%@include file="../partial/footer.jsp"%>
@@ -431,6 +406,29 @@
         });
 
     });
+    
+    $("#country_id").change(function(){
+    	alert("Country Id : "+$("#country_id").val());
+    	//$("#projectlist").remove();
+    	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#country_id").val() }, function(data){
+    		var html = '<option value="">Select State</option>';
+    		$(data).each(function(index){
+    			alert(data[index].name);
+    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+    		});
+    		$("#state_id").html(html);
+    	},'json');
+    	//getProjectList();
+    });
+    
+   function getProjectList(){
+	   $.post("${baseUrl}/webapi/project/list",{builder_id: $("#builder_id").val(), company_id: $("#company_id").val(), country_id: $("#country_id").val(), city_id: $("#city_id").val(), state_id: $("#state_id").val(),project_name: $("#project_name").val()},function(data){
+			alert(data);
+		    $(data).each(function(index){
+		    	alert(data[index].id);
+		    });
+	   },'json');
+   }
     </script>
     <script>
    

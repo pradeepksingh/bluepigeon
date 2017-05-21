@@ -95,19 +95,19 @@
                         <div class="white-box"><br>
                           <h3>Manage Building</h3>
 						<div class="row re white-box">
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 								<select name="searchcityId" id="searchcitytId" class="form-control"> -->
-<!-- 				                    <option value="0">Select City</option> -->
-<%-- 				                    <% --%>
-<!--  				                    if(projectDatas != null){ -->
-<%-- 				                    for(int i=0; i < projectDatas.size() ; i++){ %> --%>
-<%-- 									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option> --%>
-<%-- 									<% 	 --%>
-<!--  										} -->
-<!-- 				                    } -->
-<%-- 				                    %> --%>
-<!-- 						         </select>    -->
-<!-- 							</div> -->
+							<div class="col-md-3 col-sm-6 col-xs-12">
+								<select name="searchprojectId" id="searchprojectId" class="form-control">
+				                    <option value="0">Project</option>
+				                    <%
+    				                    if(projectDatas != null){  
+  				                    for(int i=0; i < projectDatas.size() ; i++){ %>  
+									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option>
+									<% 	
+    										}
+   				                    } 
+  				                    %>  
+						         </select>   
+							</div>
 <!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
 <!-- 							   <select name="searchlocalityId" id="searchlocalityId" class="form-control"> -->
 <!-- 				                    <option value="0">Locality</option> -->
@@ -129,7 +129,7 @@
 						</div>
 						
                             <div class="table-responsive">
-                                <table id="tblBuilding" class="table table-striped">
+                                <table id="tblbuildings" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>No.</th>
@@ -154,12 +154,13 @@
 										<th>
 										<td>
 										  <a href="${baseUrl}/builder/project/building/edit.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
-										   <a href="${baseUrl}/builder/project/building/floor/list.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Floor</span></a>
+										   <a href="${baseUrl}/builder/project/building/floor/list.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-info pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Floor</span></a>
 										</td>
 										<% 	
 											i++;} 
                                       	}
 										%>
+										</tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -186,7 +187,7 @@
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {
-        $('#tblBuilding').DataTable();
+        $('#tblbuildings').DataTable();
         $(document).ready(function() {
             var table = $('#example').DataTable({
                 "columnDefs": [{
@@ -236,6 +237,9 @@
         ]
     });
     
+    $("#searchprojectId").change(function(){
+    	alert("ID :: "+$("#searchprojectId").val());
+    });
     function getDataTable(){
     	$.post("${baseUrl}/webapi/project/building",{city_id: $("#searchcitytId").val(), locality_id: $("#searchlocalityId").val(), project_id : $("#searchprojectId").val()},function(data){
     		var oTable = $("#tblBuilding").dataTable();

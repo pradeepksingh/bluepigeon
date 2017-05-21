@@ -52,7 +52,7 @@
     <!-- Custom CSS -->
     <link href="../../../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link href="../../../css/colors/megna.css" id="theme" rel="stylesheet">
+<!--     <link href="../../../css/colors/megna.css" id="theme" rel="stylesheet"> -->
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -83,19 +83,19 @@
                         <div class="white-box"><br>
                           <h3>Manage Floor</h3>
 						<div class="row re white-box">
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 								<select name="searchprojectId" id="searchprojecttId" class="form-control"> -->
-<!-- 				                    <option value="0">Select Project</option> -->
-<%-- 				                    <% --%>
-<!--  				                    if(projectDatas != null){ -->
-<%-- 				                    for(int i=0; i < projectDatas.size() ; i++){ %> --%>
-<%-- 									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option> --%>
-<%-- 									<% 	 --%>
-<!--  										} -->
-<!--  				                    } -->
-<%-- 				                    %> --%>
-<!-- 						         </select>    -->
-<!-- 							</div> -->
+							<div class="col-md-3 col-sm-6 col-xs-12">
+								<select name="searchprojectId" id="searchprojectId" class="form-control">
+				                    <option value="0">Select Project</option>
+				                    <%
+  				                    if(projectDatas != null){ 
+ 				                    for(int i=0; i < projectDatas.size() ; i++){ %> 
+									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option>
+									<% 	
+  										} 
+  				                    } 
+ 				                    %> 
+						         </select>   
+							</div>
 <!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
 <!-- 							   <select name="searchlocalityId" id="searchlocalityId" class="form-control"> -->
 <!-- 				                    <option value="0">Locality</option> -->
@@ -117,7 +117,7 @@
 						</div>
 						
                             <div class="table-responsive">
-                                <table id="tblBuilding" class="table table-striped">
+                                <table id="tblfloor" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>No.</th>
@@ -142,7 +142,7 @@
       										<th>
       											<a href="${baseUrl}/builder/project/building/floor/edit.jsp?floor_id=<% out.print(builderFloor.getId());%>"><span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
 <%--       											<a href="${baseUrl}/admin/project/building/floor/updates.jsp?floor_id=<% out.print(builderFloor.getId());%>" class="btn btn-warning icon-btn btn-xs"><i class="fa fa-pencil"></i> Updates</a> --%>
-      											<a href="${baseUrl}/builder/project/building/floor/flat/list.jsp?floor_id=<% out.print(builderFloor.getId());%>" ><span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Flat</span></a>
+      											<a href="${baseUrl}/builder/project/building/floor/flat/list.jsp?floor_id=<% out.print(builderFloor.getId());%>" ><span class="btn btn-info pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Flat</span></a>
       										</th>
       									</tr>
       								<% i++;} 
@@ -161,19 +161,19 @@
         </div>
         <!-- /#page-wrapper -->
     
-    <script src="../../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <!-- start - This is for export functionality only -->
-    <script src="../../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="../../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="../../../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="../../../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
 <!--     <script src="../../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script> -->
 <!--     <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script> -->
 <!--     <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script> -->
-    <script src="../../cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
-    <script src="../../cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <script src="../../../cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="../../../cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {
-        $('#tblBuilding').DataTable();
+        $('#tblfloor').DataTable();
         $(document).ready(function() {
             var table = $('#example').DataTable({
                 "columnDefs": [{
@@ -221,6 +221,10 @@
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
+    });
+    
+    $("#searchprojectId").change(function(){
+    	alert("ID :: "+$("#searchprojectId").val());
     });
     
     function getDataTable(){

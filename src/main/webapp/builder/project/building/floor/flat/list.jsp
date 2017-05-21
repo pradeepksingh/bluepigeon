@@ -114,7 +114,7 @@
 <!-- 						</div> -->
 						
                             <div class="table-responsive">
-                                <table id="myTable" class="table table-striped">
+                                <table id="tblflat" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>No.</th>
@@ -159,7 +159,6 @@
 			</div> 
         </div>
         <!-- /#page-wrapper -->
-    </div>
     
     <script src="../../../../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <!-- start - This is for export functionality only -->
@@ -173,7 +172,7 @@
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {
-        $('#myTable').DataTable();
+        $('#tblflat').DataTable();
         $(document).ready(function() {
             var table = $('#example').DataTable({
                 "columnDefs": [{

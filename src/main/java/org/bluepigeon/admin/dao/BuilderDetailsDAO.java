@@ -11,6 +11,7 @@ import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
+import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.EmployeeList;
 import org.bluepigeon.admin.util.HibernateUtil;
@@ -401,5 +402,28 @@ public class BuilderDetailsDAO {
 		resp.setMessage("Building updated successfully.");
 		resp.setStatus(1);
 		return resp;
+	}
+	
+	public BuilderEmployee getBuilderEmployeeById(int id) {
+		String hql = "from BuilderEmployee where id=:id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<BuilderEmployee> result = query.list();
+		session.close();
+		return result.get(0);
+	}
+	public ResponseMessage updateBuilderEmployee(BuilderEmployee builderEmployee){
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.update(builderEmployee);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setStatus(1);
+		response.setMessage("Employee updated Successfully");
+		return response;
 	}
 }

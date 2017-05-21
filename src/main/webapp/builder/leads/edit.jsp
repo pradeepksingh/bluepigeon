@@ -1,4 +1,7 @@
-  <%@page import="org.bluepigeon.admin.data.ProjectData"%>
+  <%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
+<%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
+<%@page import="org.bluepigeon.admin.model.BuilderLead"%>
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.data.ProjectList"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -21,6 +24,10 @@
 	int type_size = 0;
 	int city_size = 0;
 	int lead_id = 0;
+//	int type_size = 0;
+	int flat_size =	0;
+	List<BuilderBuilding> builderBuildings = null;
+	List<BuilderFlat> builderFlats = null;
 	lead_id = Integer.parseInt(request.getParameter("lead_id"));
  	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
@@ -30,7 +37,10 @@
  		type_size = builderPropertyTypes.size();
    	session = request.getSession(false);
    	Builder builder = new Builder();
+   	BuilderLead builderLead = null;
    	int builder_id = 0;
+   	int builder_size = 0;
+    int building_size = 0;
    	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -39,10 +49,26 @@
 			builder_id = builder.getId();
 		}
 		if(builder_id > 0){
+			builderLead = new ProjectDAO().getBuilderLeadByBuilderId(builder_id).get(0);
 			project_list = new ProjectDAO().getProjectsByBuilderId(builder_id);
-			int builder_size = project_list.size();
+		    builder_size = project_list.size();
 		}
+		if(builderLead !=null){
+			builderBuildings = new ProjectLeadDAO().getBuildingByProjectId(builderLead.getBuilderProject().getId());
+		}
+		
    }
+   	if(builderBuildings.size()>0){
+ 		building_size =	builderBuildings.size();
+ 		builderFlats = new ProjectDAO().getBuilderProjectBuildingFlats(builderBuildings.get(0).getId());
+ 	}
+ 	if(builderFlats.size()>0)
+ 		flat_size = builderFlats.size();
+ 	List<City> cities = new	ProjectLeadDAO().getAllCity();
+ 	if(cities.size()>0)
+ 		city_size =	cities.size();
+ 	if(builderPropertyTypes.size()>0)
+ 		type_size = builderPropertyTypes.size();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -133,7 +159,7 @@
                                <div id="vimessages" class="tab-pane active" aria-expanded="false">
                                 <div class="col-12">
                                	<form id="addlead" name="addlead" class="form-horizontal" action="" method="post">
-                                <input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id); %>" />
+                                <input type="hidden" name="added_by" id="added_by" value="<% out.print(builder_id); %>" />
                                 <input type="hidden" name="lead_id" id="lead_id" value="<%out.print(lead_id);%>"/>
                                 <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Interested In*</label>
@@ -141,7 +167,7 @@
                                        <select name="project_id" id="project_id" class="form-control">
 						                 	   	<option value="0">Select Project</option>
 						                  	   	<% for(int i=0; i < project_size ; i++){ %>
-												<option value="<% out.print(builderProjects.get(i).getId());%>"><% out.print(builderProjects.get(i).getName());%></option>
+												<option value="<% out.print(builderProjects.get(i).getId());%>" <%if(builderProjects.get(i).getId() == builderLead.getBuilderProject().getId()){ %>selected<%} %>><% out.print(builderProjects.get(i).getName());%></option>
 											  	<% } %>
 								       	  	</select>
                                     </div>
@@ -149,6 +175,9 @@
                                     <div class="col-3">
                                        <select name="building_id" id="building_id" class="form-control">
 						                 	   	<option value="0">Select Building</option>
+						                 	   	<% for(int i=0; i < building_size ; i++){ %>
+												<option value="<% out.print(builderBuildings.get(i).getId());%>"<%if(builderBuildings.get(i).getId() == builderLead.getBuilderBuilding().getId()) {%>selected<%} %> ><% out.print(builderBuildings.get(i).getName());%></option>
+											  	<% } %>
 								       	  	</select>
                                     </div>
                                 </div>
@@ -158,39 +187,43 @@
                                     <div class="col-3">
                                       <select name="flat_id" id="flat_id" class="form-control">
 						                 	   	<option value="0">Select Flat</option>
+						                 	   	<% for(int i=0; i < flat_size; i++){ %>
+												<option value="<% out.print(builderFlats.get(i).getId());%>"<%if(builderFlats.get(i).getId() == builderLead.getBuilderFlat().getId()) {%>selected<%} %> ><% out.print(builderFlats.get(i).getFlatNo());%></option>
+											  	<% } %>
 								       	  	</select>
                                     </div>
                                     <label for="example-search-input" class="col-3 col-form-label">Lead Name</label>
                                     <div class="col-3">
-										<input type="text" id="name" name="name" placeholder="Enter lead name" class="form-control" />
+										<input type="text" id="name" name="name" value="<%out.print(builderLead.getName()); %>" placeholder="Enter lead name" class="form-control" />
                                     </div>
                                 </div>
                                 
                                 <div class="form-group row">
                                     <label for="example-tel-input" class="col-3 col-form-label">Contact</label>
                                     <div class="col-3">
-                                       <input type="text" id="mobile" name="mobile" placeholder="Enter lead phone number" class="form-control" />
+                                       <input type="text" id="mobile" name="mobile" value="<%out.print(builderLead.getMobile()); %>"placeholder="Enter lead phone number" class="form-control" />
                                     </div>
                                     <label for="example-tel-input" class="col-3 col-form-label">Email</label>
                                     <div class="col-3">
-                                         <input type="text" id="email" name="email" placeholder="Enter lead email" class="form-control" />
+                                         <input type="text"  id="email" name="email" value="<%out.print(builderLead.getEmail()); %>" placeholder="Enter lead email" class="form-control" />
                                     </div>
                                 </div>
                                 
                                 <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Source</label>
-                                    <div class="col-3">
-                                       <select name="source" id="source" class="form-control">
-							                    <option value="0">Select Source</option>
-							                    <option value="1">App</option>
-							                    <option value="2">Website</option>
-							                    <option value="3">Google</option>
-							                    <option value="4">Facebook</option>
-							                </select>
+                                    <div class="col-3 form-control-static">
+                                       <select name="source" id="source" class="form-control" disabled>
+                                       
+						                    <option value="0">Select Source</option>
+						                    <option value="1" <%if(builderLead.getSource() == 1){ %>selected<%} %> >App</option>
+						                    <option value="2" <%if(builderLead.getSource() == 2){ %>selected<%} %> >Website</option>
+						                    <option value="3" <%if(builderLead.getSource() == 3){ %>selected<%} %> >Google</option>
+						                    <option value="4" <%if(builderLead.getSource() == 4){ %>selected<%} %>>Facebook</option>
+							             </select>
                                     </div>
                                     <label for="example-text-input" class="col-3 col-form-label">Area</label>
                                     <div class="col-3">
-                                      <input type="text" id="area" name="area" placeholder="Enter lead area" class="form-control" />
+                                      <input type="text" id="area" name="area" value="<%out.print(builderLead.getArea()); %>" placeholder="Enter lead area" class="form-control" />
                                     </div>
                                 </div>
                                 
@@ -198,16 +231,16 @@
                                     <label for="example-search-input" class="col-3 col-form-label">City</label>
                                     <div class="col-3">
                                        <!--  <input class="form-control" type="text" value="City" id="example-search-input">-->
-                                       <input type="text" id="city" name="city" placeholder="Enter City" class="form-control" />
+                                       <input type="text"  id="city" name="city" value="<%out.print(builderLead.getCity()); %>"	 placeholder="Enter City" class="form-control" />
                                     </div>
                                     <label for="example-search-input" class="col-3 col-form-label">Discount offered</label>
                                     <div class="col-3">
-                                       <input type="text" id="discount_offered" name="discount_offered" placeholder="Enter Discount" class="form-control" />
+                                       <input type="text" id="discount_offered" name="discount_offered" placeholder="Enter Discount" <%out.print(builderLead.getDiscountOffered());%> class="form-control" />
                                     </div>
                                 </div>
                                 
                                 <div class="offset-sm-5 col-sm-7">
-                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">Update</button>
                                  </div>
                                 
                                </form>
@@ -324,7 +357,7 @@ function addLead() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/project/lead/add',
+	 		url : '${baseUrl}/webapi/project/lead/update',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -349,7 +382,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/builder/leads/new.jsp";
+        window.location.href = "${baseUrl}/builder/leads/list.jsp";
   	}
 }
 </script>
