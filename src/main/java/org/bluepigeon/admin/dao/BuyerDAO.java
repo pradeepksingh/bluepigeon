@@ -35,7 +35,6 @@ public class BuyerDAO {
 	public ResponseMessage saveBuyer(List<Buyer> buyers){
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		String hql = "from Buyer where name = :name";
 		String get_builder = "from BuilderProject where id = :id";
 		Session session = hibernateUtil.openSession();
 		Session builderSession = hibernateUtil.openSession();
@@ -47,28 +46,19 @@ public class BuyerDAO {
 				response.setMessage("Please enter buyer name");
 				//responseList.add(response);
 			} else {
-				Query query = session.createQuery(hql);
-				query.setParameter("name", buyerList.getName());
-				List<Buyer> result = query.list();
-				if (result.size() > 0) {
-					response.setStatus(0);
-					response.setMessage("Buyer name already exists");
-					//responseList.add(response);
-				} else {
-					Query builderQuery = builderSession.createQuery(get_builder);
-					builderQuery.setParameter("id", buyerList.getBuilderProject().getId());
-					BuilderProject builderProject = (BuilderProject)builderQuery.list().get(0);
-					buyerList.setBuilder(builderProject.getBuilder());
-					newsession.save(buyerList);
-					response.setId(buyerList.getId());
-					response.setData(buyerList);
-					response.setStatus(1);
-					response.setMessage("Buyer Added Successfully");
-					//responseList.add(response);
-					}
-					
-				}
+				Query builderQuery = builderSession.createQuery(get_builder);
+				builderQuery.setParameter("id", buyerList.getBuilderProject().getId());
+				BuilderProject builderProject = (BuilderProject)builderQuery.list().get(0);
+				buyerList.setBuilder(builderProject.getBuilder());
+				newsession.save(buyerList);
+				response.setId(buyerList.getId());
+				response.setData(buyerList);
+				response.setStatus(1);
+				response.setMessage("Buyer Added Successfully");
+				//responseList.add(response);
 			}
+				
+		}
 		newsession.getTransaction().commit();
 		session.close();
 		newsession.close();
@@ -107,6 +97,8 @@ public class BuyerDAO {
 		}
 		
 		buyer.setGlobalBuyer(globalBuyer);
+		Short isDeleted = 0;
+		buyer.setIsDeleted(isDeleted);
 		Session buyerSession = hibernateUtil.openSession();
 		buyerSession.beginTransaction();
 		buyerSession.save(buyer);
@@ -410,11 +402,11 @@ public class BuyerDAO {
 				Query docQuery = docSession.createQuery(docHql);
 				docQuery.setParameter("buyer_id",buyer.getId());
 				List<BuyerDocuments> docList = docQuery.list();
+				List<String> docLists = new ArrayList<String>();
 				for(BuyerDocuments documents : docList){
-					List<String> docLists = new ArrayList<String>();
 					docLists.add(documents.getDocuments());
-					buyerDocList.setDocResult(docLists);
 				}
+				buyerDocList.setDocResult(docLists);
 				buyerDocLists.add(buyerDocList);
 			}
 		}
@@ -488,27 +480,52 @@ public class BuyerDAO {
 	public ResponseMessage updateBuyer(Buyer buyer){
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		String hql = "from Buyer where name = :name and id != :id";
+		String hql = "from GlobalBuyer where pancard = :pancard ";
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setParameter("name", buyer.getName());
-		query.setParameter("id", buyer.getId());
-		List<Buyer> result = query.list();
-		session.close();
-		if (result.size() > 0) {
-			response.setId(result.get(0).getId());
-			response.setStatus(0);
-			response.setMessage("Buyer name already exists");
-		} else{
+		query.setParameter("pancard", buyer.getPancard());
+		List<GlobalBuyer> result = query.list();
+		
+		GlobalBuyer globalBuyer = new GlobalBuyer();
+		if(result.size() <= 0) {
+			Session newsession = hibernateUtil.openSession();
+			globalBuyer.setName(buyer.getName());
+			globalBuyer.setPancard(buyer.getPancard());
+			globalBuyer.setMobile(buyer.getMobile());
+			globalBuyer.setEmail(buyer.getEmail());
+			globalBuyer.setAvatar(buyer.getPhoto());
+			globalBuyer.setOtp("");
+			globalBuyer.setPassword("");
+			globalBuyer.setStatus(false);
+			newsession.beginTransaction();
+			newsession.save(globalBuyer);
+			newsession.getTransaction().commit();
+			newsession.close();
+		} else {
+			globalBuyer = result.get(0);
+		}
+		if(buyer.getId() != null) {
+			Short isDeleted = 0;
+			buyer.setGlobalBuyer(globalBuyer);
+			buyer.setIsDeleted(isDeleted);
 			Session updateSession = hibernateUtil.openSession();
 			updateSession.beginTransaction();
 			updateSession.update(buyer);
 			updateSession.getTransaction().commit();
 			updateSession.close();
-			response.setId(buyer.getId());
-			response.setStatus(1);
-			response.setMessage("Buyer updated successfully");
+		} else {
+			Short isDeleted = 0;
+			buyer.setGlobalBuyer(globalBuyer);
+			buyer.setIsDeleted(isDeleted);
+			Session updateSession = hibernateUtil.openSession();
+			updateSession.beginTransaction();
+			updateSession.save(buyer);
+			updateSession.getTransaction().commit();
+			updateSession.close();
 		}
+		response.setId(buyer.getId());
+		response.setStatus(1);
+		response.setMessage("Buyer updated successfully");
 		return response;
 	}
 	
@@ -839,42 +856,16 @@ public class BuyerDAO {
 			query.setParameter("id", id);
 			List<Buyer> buyerList = query.list();
 			session.close();
-			if(buyerList.get(0).getIsPrimary()){
-				//remove all the data from database.
-				//first remove co-owner related with primary buyer.Then delete primary buyer.
-				//code
-				//Delete buyer's buying details from buying details table
-				String delete_buying_details = "Delete from BuyingDetail where buyer.id = :buyer_id";
-				Session newsession1 = hibernateUtil.openSession();
-				newsession1.beginTransaction();
-				Query smdelete = newsession1.createQuery(delete_buying_details);
-				smdelete.setParameter("buyer_id", buyerList.get(0).getId());
-				smdelete.executeUpdate();
-				newsession1.getTransaction().commit();
-				newsession1.close();
-				//delete buyer's offer from buyer offer table
-				String delete_buyer_offer = "Delete from BuyerOffer where buyer.id = :buyer_id";
-				Session session_delete_buyer_offer = hibernateUtil.openSession();
-				session_delete_buyer_offer.beginTransaction();
-				Query query_delete_buyer_offer = session_delete_buyer_offer.createQuery(delete_buyer_offer);
-				query_delete_buyer_offer.setParameter("buyer_id", buyerList);
-				query_delete_buyer_offer.executeUpdate();
-				session_delete_buyer_offer.getTransaction().commit();
-				session_delete_buyer_offer.close();
-				//delete buyer's payment details from buyer payment table
-				String delete_buyer_payment_hql = "Delete from BuyerPayment where buyer.id = :buyer_id";
-				Session session_delete_buyer_payment = hibernateUtil.openSession();
-				session_delete_buyer_payment.beginTransaction();
-				Query query_delete_buyer_payment = session_delete_buyer_payment.createQuery(delete_buyer_payment_hql);
-				query_delete_buyer_payment.setParameter("buyer_id", buyerList.get(0).getId());
-				query_delete_buyer_payment.executeUpdate();
-				session_delete_buyer_payment.getTransaction().commit();
-				session_delete_buyer_payment.close();
-				
-				//delete buyer's document from buyer documents table
-				//String delete
-				
-				
+			if(!buyerList.get(0).getIsPrimary()){
+				Short isDeleted = 1;
+				Buyer secondaryBuyer = new Buyer();
+				secondaryBuyer = buyerList.get(0);
+				secondaryBuyer.setIsDeleted(isDeleted);
+				Session newsession = hibernateUtil.openSession();
+				newsession.beginTransaction();
+				newsession.update(secondaryBuyer);
+				newsession.getTransaction().commit();
+				newsession.close();
 			}
 			resp.setMessage("Buyer deleted successfully.");
 			resp.setStatus(1);

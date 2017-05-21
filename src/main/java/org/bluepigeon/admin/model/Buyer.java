@@ -33,6 +33,7 @@ public class Buyer implements java.io.Serializable {
 	private String address;
 	private Short agreement;
 	private Short possession;
+	private Short isDeleted;
 	private Short status;
 	
 	public Buyer() {
@@ -42,7 +43,7 @@ public class Buyer implements java.io.Serializable {
 			GlobalBuyer globalBuyer, Builder builder, BuilderEmployee builderEmployee, BuilderProject builderProject,
 			BuilderBuilding builderBuilding, BuilderFlat builderFlat, boolean isPrimary, String name, 
 			String mobile, String email, String pancard, String photo, String address, Short agreement,
-			Short possession, Short status
+			Short possession, Short isDeleted, Short status
 	) {
 		this.globalBuyer = globalBuyer;
 		this.builder = builder;
@@ -59,6 +60,7 @@ public class Buyer implements java.io.Serializable {
 		this.address = address;
 		this.agreement = agreement;
 		this.possession = possession;
+		this.isDeleted = isDeleted;
 		this.status = status;
 	}
 
@@ -214,6 +216,15 @@ public class Buyer implements java.io.Serializable {
 
 	public void setPossession(Short possession) {
 		this.possession = possession;
+	}
+
+	@Column(name = "is_deleted")
+	public Short getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Short isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 
 	@Column(name = "status")
