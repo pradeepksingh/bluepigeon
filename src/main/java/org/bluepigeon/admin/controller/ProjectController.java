@@ -22,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.BuilderCompanyDAO;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
+import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.CityNamesImp;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
@@ -2388,12 +2389,12 @@ public class ProjectController extends ResourceConfig {
 	}
 	
 	@GET
-	@Path("/buyer/{id}")
+	@Path("/buyer/delete/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage deleteBuyerById(@PathParam("id") int id) {
 		ResponseMessage msg = new ResponseMessage();
-		ProjectDAO projectDAO = new ProjectDAO();
-		msg = projectDAO.deleteBuildingPaymentInfo(id);
+		BuyerDAO buyerDAO = new BuyerDAO();
+		msg = buyerDAO.deleteBuyerById(id);
 		return msg;
 	}
 	
