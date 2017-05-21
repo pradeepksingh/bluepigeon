@@ -204,7 +204,7 @@
 												<hr>
 												<%
 													if(buyer != null){
-														
+														if(buyer.getDocResult() != null){
 												%>
 												<div class="col-lg-12 margin-bottom-6">
 														<div class="form-group" id="error-project_type">
@@ -232,7 +232,7 @@
 												
 											</div>
 											<hr>
-											<%   		
+											<%   			}
 														}
 													}
 												}
@@ -1334,7 +1334,8 @@ function removeBuyer(id) {
 // 	}
 // }
 
-// function deleteBuyer(id){
+function deleteBuyer(id){
+	alert("hello");
 // 	var flag = confirm("Are you sure? You want to delete buyer ?");
 // 	if(flag){
 // 		$.get("${baseUrl}/webapi/project/buyer/"+id,{ }, function(data){
@@ -1344,7 +1345,7 @@ function removeBuyer(id) {
 // 			}
 // 		});
 // 	}
-// }
+}
 
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());

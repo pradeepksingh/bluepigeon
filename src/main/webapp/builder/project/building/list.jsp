@@ -96,36 +96,36 @@
                           <h3>Manage Building</h3>
 						<div class="row re white-box">
 							<div class="col-md-3 col-sm-6 col-xs-12">
-								<select name="searchcityId" id="searchcitytId" class="form-control">
-				                    <option value="0">Select City</option>
-				                    <%
-  				                    if(projectDatas != null){ 
- 				                    for(int i=0; i < projectDatas.size() ; i++){ %> 
-									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option>
-									<% 	
-  										}
- 				                    } 
- 				                    %> 
-						         </select>   
-							</div>
-							<div class="col-md-3 col-sm-6 col-xs-12">
-							   <select name="searchlocalityId" id="searchlocalityId" class="form-control">
-				                    <option value="0">Locality</option>
-							   </select>
-							</div>
-							<div class="col-md-3 col-sm-6 col-xs-12">
 								<select name="searchprojectId" id="searchprojectId" class="form-control">
 				                    <option value="0">Project</option>
-								</select>
+				                    <%
+    				                    if(projectDatas != null){  
+  				                    for(int i=0; i < projectDatas.size() ; i++){ %>  
+									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option>
+									<% 	
+    										}
+   				                    } 
+  				                    %>  
+						         </select>   
 							</div>
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 							   <select name="searchlocalityId" id="searchlocalityId" class="form-control"> -->
+<!-- 				                    <option value="0">Locality</option> -->
+<!-- 							   </select> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 								<select name="searchprojectId" id="searchprojectId" class="form-control"> -->
+<!-- 				                    <option value="0">Project</option> -->
+<!-- 								</select> -->
+<!-- 							</div> -->
 							
-							<div class="col-md-3 col-sm-6 col-xs-12">
-							    <select class="form-control">
-												<option>Status</option>
-												<option>1</option>
-												<option>2</option>
-								</select>	   
-							</div>
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 							    <select class="form-control"> -->
+<!-- 												<option>Status</option> -->
+<!-- 												<option>1</option> -->
+<!-- 												<option>2</option> -->
+<!-- 								</select>	    -->
+<!-- 							</div> -->
 						</div>
 						
                             <div class="table-responsive">
@@ -237,6 +237,9 @@
         ]
     });
     
+    $("#searchprojectId").change(function(){
+    	alert("ID :: "+$("#searchprojectId").val());
+    });
     function getDataTable(){
     	$.post("${baseUrl}/webapi/project/building",{city_id: $("#searchcitytId").val(), locality_id: $("#searchlocalityId").val(), project_id : $("#searchprojectId").val()},function(data){
     		var oTable = $("#tblBuilding").dataTable();

@@ -379,7 +379,7 @@ public class BuyerDAO {
 
 	public List<BuyerDocList> getBuyerDocListById(int id){
 		String hql = "from Buyer where id = :id";
-		String coownerHql = "from Buyer where builderFlat.id = :flat_id";
+		String coownerHql = "from Buyer where builderFlat.id = :flat_id and is_deleted=0";
 		String docHql = "from BuyerDocuments where buyer.id = :buyer_id";
 		List<BuyerDocList> buyerDocLists = new ArrayList<BuyerDocList>();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -736,7 +736,7 @@ public class BuyerDAO {
 	  }
 	  public List<Buyer> getBuyerByFlatId(int flatId){
 		 
-		  String hql = "from Buyer where builderFlat.id = :flat_id";
+		  String hql = "from Buyer where builderFlat.id = :flat_id and is_deleted=0;";
 		  HibernateUtil hibernateUtil = new HibernateUtil();
 		  Session session = hibernateUtil.openSession();
 		  Query query = session.createQuery(hql);
@@ -885,7 +885,7 @@ public class BuyerDAO {
 		 * 
 		 */
 		public List<Buyer> getAllBuyerByBuilderId(int builderId){
-			String hql = "from Buyer where builder.id = :builder_id";
+			String hql = "from Buyer where builder.id = :builder_id and is_deleted=0;";
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
