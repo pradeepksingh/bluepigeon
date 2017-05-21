@@ -340,8 +340,7 @@ public class BuyerController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updateBuyerInfoNew (
-			@FormDataParam("buyer_id") int buyer_id,
-			@FormDataParam("admin_id") int emp_id,
+			@FormDataParam("buyer_id[]") List<FormDataBodyPart> buyer_id,
 			@FormDataParam("buyer_name[]") List<FormDataBodyPart>  name,
 			@FormDataParam("contact[]") List<FormDataBodyPart>  contact,
 			@FormDataParam("email[]") List<FormDataBodyPart>  email,
@@ -349,6 +348,7 @@ public class BuyerController {
 			@FormDataParam("address[]") List<FormDataBodyPart>  address,
 			@FormDataParam("is_primary[]") List<FormDataBodyPart>  is_primary,
 			@FormDataParam("photo[]") List<FormDataBodyPart>  photos,
+			@FormDataParam("doc_pan") String docs,
 			@FormDataParam("document_pan[]") List<FormDataBodyPart> douments,
 			@FormDataParam("document_aadhar[]") List<FormDataBodyPart> aadhar,
 			@FormDataParam("document_passport[]") List<FormDataBodyPart> passport,
@@ -357,12 +357,13 @@ public class BuyerController {
 			@FormDataParam("builder_id") int builder_id,
 			@FormDataParam("project_id") int project_id,
 			@FormDataParam("building_id") int building_id,
-			@FormDataParam("flat_id") int flat_id
+			@FormDataParam("flat_id") int flat_id,
+			@FormDataParam("employee_id") int employee_id
 	){
 		ResponseMessage msg = new ResponseMessage();
 		BuyerDAO buyerDAO = new BuyerDAO();
 		BuilderEmployee builderEmployee = new BuilderEmployee();
-		builderEmployee.setId(emp_id);
+		builderEmployee.setId(employee_id);
 		Short agreement=0;
 		Short possession=0;
 		Buyer buyer = null;
@@ -370,15 +371,14 @@ public class BuyerController {
 		Buyer primaryBuyer = new Buyer();
 		if(name.size()>0){
 			int i=0;
+			String[] doc_pan = docs.split(",");
 			for(FormDataBodyPart buyers : name){
 				buyer = new Buyer();
 				buyer.setBuilderEmployee(builderEmployee);
 				buyer.setAgreement(agreement);
 				buyer.setPossession(possession);
-				if(buyer_id>0){
-					buyer.setId(buyer_id);
-				//	globalBuyer.setId(buyer_id);
-				//	buyer.setGlobalBuyer(globalBuyer);
+				if(buyer_id.get(i).getValueAs(Integer.class).intValue() != 0) {
+					buyer.setId(buyer_id.get(i).getValueAs(Integer.class).intValue());
 				}
 				if(builder_id > 0){
 					Builder builder = new Builder();
@@ -438,10 +438,19 @@ public class BuyerController {
 				msg = buyerDAO.updateBuyer(buyer);
 				buyer.setId(msg.getId());
 				List<BuyerDocuments> buyerDocumentsList = new ArrayList<BuyerDocuments>();
-				if(douments != null && douments.size() > 0) {
+				/*if(douments != null && douments.size() > 0) {
 					if(douments.get(i).getValueAs(String.class).toString()!=null && !douments.get(i).getValueAs(String.class).isEmpty()){
 						BuyerDocuments buyerDocuments = new BuyerDocuments();
 						buyerDocuments.setDocuments(douments.get(i).getValueAs(String.class).toString());
+						buyerDocuments.setBuyer(buyer);
+						buyerDocumentsList.add(buyerDocuments);
+					}
+				}*/
+				if(docs != "") {
+					if(doc_pan[i].toString().equals("1") ){
+						System.out.println("System doc:"+doc_pan[i]);
+						BuyerDocuments buyerDocuments = new BuyerDocuments();
+						buyerDocuments.setDocuments(doc_pan[i].toString());
 						buyerDocuments.setBuyer(buyer);
 						buyerDocumentsList.add(buyerDocuments);
 					}

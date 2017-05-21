@@ -127,6 +127,8 @@
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
 										<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id);%>"/>
+										<input type="hidden" name="employee_id" id="employee_id" value="<% out.print(updateBuyer.getBuilderEmployee().getId());%>"/>
+										<input type="hidden" name="doc_pan" id="doc_pan" value="" />
 										<div id="buyer_area">
 										<%
 											if(buyers.size()>0){
@@ -134,9 +136,9 @@
 												for(BuyerDocList buyer:buyers){	
 										%>
 										<input type="hidden" name="buyer_count" id="buyer_count" value="<%out.print(i+1);%>"/>
-										<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(buyer_id);%>"/>
+										<input type="hidden" name="buyer_id[]" id="buyer_id" value="<%out.print(buyer_id);%>"/>
 											<div class="row" id="buyer-<%out.print(i);%>">
-											<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:deleteBuyer(<%out.print(buyer.getId()); %>);" class="btn btn-danger btn-xs">x</a></span></div>
+											<div class="col-lg-12" style="padding-bottom:5px;"><% if(!buyer.isPrimary()) { %><span class="pull-right"><a href="javascript:deleteBuyer(<%out.print(buyer.getId()); %>);" class="btn btn-danger btn-xs">x</a></span><% } %></div>
 												<div class="row">
 													<div class="col-lg-5 margin-bottom-5">
 														<div class="form-group" id="error-buyer_name">
@@ -205,25 +207,47 @@
 												<%
 													if(buyer != null){
 														if(buyer.getDocResult() != null){
+															boolean is_pan = false;
+															boolean is_aadhar = false;
+															boolean is_passport = false;
+															boolean is_rra = false;
+															boolean is_voterid = false;
+															for(String bd :buyer.getDocResult()) {
+																if(Integer.parseInt(bd) == 1) {
+																	is_pan = true;
+																}
+																if(Integer.parseInt(bd) == 2) {
+																	is_aadhar = true;
+																}
+																if(Integer.parseInt(bd) == 3) {
+																	is_passport = true;
+																}
+																if(Integer.parseInt(bd) == 4) {
+																	is_rra = true;
+																}
+																if(Integer.parseInt(bd) == 5) {
+																	is_voterid = true;
+																}
+															}
 												%>
 												<div class="col-lg-12 margin-bottom-6">
 														<div class="form-group" id="error-project_type">
 															<label class="control-label col-sm-2">Documents <span class='text-danger'>*</span></label>
 															<div class="col-sm-10">
 															<div class="col-sm-4">
-																<input type="checkbox" name="document_pan[]" value="1" <%if(Integer.parseInt(buyer.getDocResult().get(i)) == 1) { %> checked <% } %> />PAN Card
+																<input type="checkbox" name="document_pan[]" value="1" <%if(is_pan) { %> checked <% } %> />PAN Card
 															</div>
 															<div class="col-sm-4">
-																<input type="checkbox" name="document_aadhar[]" value="2" <%if(Integer.parseInt(buyer.getDocResult().get(i)) == 2) {%>checked<%} %>/>Aadhar Card
+																<input type="checkbox" name="document_aadhar[]" value="2" <%if(is_aadhar) {%>checked<%} %>/>Aadhar Card
 															</div>
 															<div class="col-sm-4">
-																<input type="checkbox" name="document_passport[]" value="3" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 3) {%>checked<%} %>/>Passport 
+																<input type="checkbox" name="document_passport[]" value="3" <% if(is_passport) {%>checked<%} %>/>Passport 
 															</div>
 															<div class="col-sm-4">
-																<input type="checkbox" name="document_rra[]" value="4" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 4) {%>checked<%} %> />Registered Rent Agreement 
+																<input type="checkbox" name="document_rra[]" value="4" <% if(is_rra) {%>checked<%} %> />Registered Rent Agreement 
 															</div>
 															<div class="col-sm-4">
-																<input type="checkbox" name="document_voterid[]" value="5" <% if(Integer.parseInt(buyer.getDocResult().get(i)) == 5) {%>checked<%} %> />Vote ID 
+																<input type="checkbox" name="document_voterid[]" value="5" <% if(is_voterid) {%>checked<%} %> />Vote ID 
 															</div>
 														</div>
 														<div class="messageContainer"></div>
@@ -896,78 +920,62 @@ $('#basicfrm').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-    	builder_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Builder Group is required and cannot be empty'
-                }
-            }
-        },
-    	company_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Company Name is required and cannot be empty'
-                }
-            }
-        },
-        name: {
+    	project_id: {
             validators: {
                 notEmpty: {
                     message: 'Project Name is required and cannot be empty'
                 }
             }
         },
-        country_id: {
+    	building_id: {
             validators: {
                 notEmpty: {
-                    message: 'Country Name is required and cannot be empty'
+                    message: 'Building Name is required and cannot be empty'
                 }
             }
         },
-        state_id: {
+        flat_id: {
             validators: {
                 notEmpty: {
-                    message: 'State Name is required and cannot be empty'
+                    message: 'Flat Name is required and cannot be empty'
                 }
             }
         },
-        city_id: {
+        'buyer_name[]': {
             validators: {
                 notEmpty: {
-                    message: 'City Name is required and cannot be empty'
+                    message: 'Buyer Name is required and cannot be empty'
                 }
             }
         },
-        locality_id: {
+        'contact[]': {
             validators: {
                 notEmpty: {
-                    message: 'Locality Name is required and cannot be empty'
+                    message: 'Buyer contact is required and cannot be empty'
                 }
             }
         },
-        pincode: {
+        'email[]': {
             validators: {
                 notEmpty: {
-                    message: 'The Pincode is required and cannot be empty'
-                },
-                stringLength: {
-                    max: 6,
-                    min: 6,
-                    message: 'Invalid pin code.'
-                },
-                integer: {
-                    message: 'Invalid pin code.'
-           		}
+                    message: 'Buyer Email is required and cannot be empty'
+                }
             }
         },
-        pan:{
-        	validators:{
-        		notEmpty:{
-        			message : 'Pan Card number is required and cannot be empty'
-        		},
-        		
-        	}
-        }
+        'pancard[]': {
+            validators: {
+                notEmpty: {
+                    message: 'Pancard is required and cannot be empty'
+                }
+            }
+        },
+        'address[]': {
+            validators: {
+                notEmpty: {
+                    message: 'Permanent address is required and cannot be empty'
+                }
+            }
+        },
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
@@ -976,6 +984,23 @@ $('#basicfrm').bootstrapValidator({
 });
 
 function updateBuyer() {
+	var doc_pan = "";
+	$('input[name="document_pan[]"]').each(function(index) {
+		if(doc_pan == "") {
+			if($(this).is(':checked')) {
+				doc_pan = $(this).val();
+			} else {
+				doc_pan = "0";
+			}
+		} else {
+			if($(this).is(':checked')) {
+				doc_pan = doc_pan + ","+$(this).val();
+			} else {
+				doc_pan = doc_pan + ",0";
+			}
+		}
+	});
+	$("#doc_pan").val(doc_pan);
 	var options = {
 	 		target : '#basicresponse', 
 	 		beforeSubmit : showAddRequest,
@@ -1225,7 +1250,7 @@ function addMoreBuyers() {
 	buyers++;
 	var html = '<div class="row" id="buyer-'+buyers+'"><hr>'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeBuyer('+buyers+');" class="btn btn-danger btn-xs">x</a></span></div>'
-			+'<div class="row">'
+			+'<div class="row"><input type="hidden" name="buyer_id[]" value="0" />'
 		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-buyer_name">'
 			+'<label class="control-label col-sm-4">Buyer Name <span class="text-danger">*</span></label>'
@@ -1295,19 +1320,19 @@ function addMoreBuyers() {
 				+'<label class="control-label col-sm-2">Documents <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-10">'
 					+'<div class="col-sm-4">'
-						+'<input type="checkbox" name="document_type[]" value="1" />PAN Card'
+						+'<input type="checkbox" name="document_pan[]" value="1" />PAN Card'
 					+'</div>'
 					+'<div class="col-sm-4">'
-						+'<input type="checkbox" name="document_type[]" value="2" />Aadhar Card' 
+						+'<input type="checkbox" name="document_aadhar[]" value="2" />Aadhar Card' 
 					+'</div>'
 					+'<div class="col-sm-4">'
-						+'<input type="checkbox" name="document_type[]" value="3" />Passport' 
+						+'<input type="checkbox" name="document_passport[]" value="3" />Passport' 
 					+'</div>'
 					+'<div class="col-sm-4">'
-						+'<input type="checkbox" name="document_type[]" value="4" />Registered Rent Agreement' 
+						+'<input type="checkbox" name="document_rra[]" value="4" />Registered Rent Agreement' 
 					+'</div>'
 					+'<div class="col-sm-4">'
-						+'<input type="checkbox" name="document_type[]" value="5" />Vote ID' 
+						+'<input type="checkbox" name="document_voterid[]" value="5" />Vote ID' 
 					+'</div>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
@@ -1335,16 +1360,15 @@ function removeBuyer(id) {
 // }
 
 function deleteBuyer(id){
-	alert("hello");
-// 	var flag = confirm("Are you sure? You want to delete buyer ?");
-// 	if(flag){
-// 		$.get("${baseUrl}/webapi/project/buyer/"+id,{ }, function(data){
-// 			alert(data.message);
-// 			if(data.status == 1){
-// 				$("buyer-"+id).remove();
-// 			}
-// 		});
-// 	}
+	var flag = confirm("Are you sure? You want to delete buyer ?");
+	if(flag){
+		$.get("${baseUrl}/webapi/project/buyer/delete/"+id,{ }, function(data){
+			alert(data.message);
+			if(data.status == 1){
+				$("buyer-"+id).remove();
+			}
+		});
+	}
 }
 
 function addMoreSchedule() {
