@@ -688,6 +688,7 @@ public class BuyerController {
 	@Path("/update/price")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuyerPrice (
+			@FormParam("id") int id,
 			@FormParam("buyer_id") int buyer_id,
 			@FormParam("booking_date") String booking_date,
 			@FormParam("base_rate") Double base_rate,
@@ -703,16 +704,21 @@ public class BuyerController {
 	){
 		ResponseMessage msg = new ResponseMessage();
 		BuyerDAO buyerDAO = new BuyerDAO();
-		
-		Buyer buyer = new Buyer();
+		System.out.println("Buyer Id :: "+buyer_id);
+		Buyer buyer =null;
 		Buyer primaryBuyer = new Buyer();
-		
+	     buyer = buyerDAO.getBuyerById(buyer_id);
 			if(buyer_id>0){
 				buyer.setId(buyer_id);
 			}
+			System.err.println("Buyer is primary ? "+buyer.getIsPrimary());
+			System.err.println("Primary Buyer ?");
 			if(buyer.getIsPrimary()) {
+				System.out.println("Yes");
 				primaryBuyer = buyer;
+				primaryBuyer.setId(buyer.getId());
 			}
+			System.out.println("No");
 			if(primaryBuyer.getId() > 0) {
 				SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
 				Date bookingDate = null;
@@ -722,6 +728,7 @@ public class BuyerController {
 					e.printStackTrace();
 				}
 				BuyingDetails buyingDetails = new BuyingDetails();
+				buyingDetails.setId(id);
 				buyingDetails.setBuyer(primaryBuyer);
 				buyingDetails.setAmenityFacingRate(amenity_rate);
 				buyingDetails.setBaseRate(base_rate);

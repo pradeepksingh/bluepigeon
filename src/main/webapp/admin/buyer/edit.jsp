@@ -371,7 +371,7 @@
 										<div class="col-lg-12 margin-bottom-5">
 											<div class="clearfix form-actions">
 												<div class="pull-right">
-													<button type="submit" class="btn btn-success">Submit</button>
+													<button type="submit" class="btn btn-success">Update</button>
 												</div>
 											</div>
 										</div>
@@ -383,7 +383,8 @@
 				</div>
 				<div id="buyingdetail" class="tab-pane fade">
 					<form id="pricingfrm" name="pricingfrm" method="post">
-						<input type="hidden" name="id" value="<%out.print(buyer_id); %>" />
+						<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(buyer_id); %>" />
+						<input type="hidden" name="id" id="id" value="<%out.print(buyingDetails.getId()); %>" />
 			 			<div class="row">
 			 				<div id="pricingresponse"></div>
 							<div class="col-lg-12">
@@ -405,7 +406,7 @@
 												<div class="form-group" id="error-base_rate">
 													<label class="control-label col-sm-4">Base Rate <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="base_rate" name="base_rate" value="<%out.print(buyingDetails.getBaseRate()); %>" />
+														<input type="text" class="form-control" id="base_rate" name="base_rate" value="<%if(buyingDetails.getBaseRate() != null)out.print(buyingDetails.getBaseRate()); %>" />
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -416,7 +417,7 @@
 												<div class="form-group" id="error-rise_rate">
 													<label class="control-label col-sm-4">Floor Rise Rate</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<%out.print(buyingDetails.getFloorRiseRate());%>"/>
+														<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<%if(buyingDetails.getFloorRiseRate()!=null)out.print(buyingDetails.getFloorRiseRate());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -425,7 +426,7 @@
 												<div class="form-group" id="error-amenity_rate">
 													<label class="control-label col-sm-4">Amenities Facing Rate</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<%out.print(buyingDetails.getAmenityFacingRate()); %>" />
+														<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<%if(buyingDetails.getAmenityFacingRate()!=null)out.print(buyingDetails.getAmenityFacingRate()); %>" />
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -436,7 +437,7 @@
 												<div class="form-group" id="error-maintenance">
 													<label class="control-label col-sm-4">Maintenance Charge </label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="maintenance" name="maintenance" value="<%out.print(buyingDetails.getMaintenance());%>"/>
+														<input type="text" class="form-control" id="maintenance" name="maintenance" value="<%if(buyingDetails.getMaintenance()!=null)out.print(buyingDetails.getMaintenance());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -445,7 +446,7 @@
 												<div class="form-group" id="error-tenure">
 													<label class="control-label col-sm-4">Tenure </label>
 													<div class="col-sm-8 input-group" style="padding: 0px 12px;">
-														<input type="text" class="form-control" id="tenure" name="tenure" value="<%out.print(buyingDetails.getTenure());%>"/>
+														<input type="text" class="form-control" id="tenure" name="tenure" value="<%if(buyingDetails.getTenure()!=null)out.print(buyingDetails.getTenure());%>"/>
 														<span class="input-group-addon">Months</span>
 													</div>
 													<div class="messageContainer"></div>
@@ -457,7 +458,7 @@
 												<div class="form-group" id="error-amenity_rate">
 													<label class="control-label col-sm-4">Registration</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="registration" name="registration" value="<%out.print(buyingDetails.getRegistration());%>"/>
+														<input type="text" class="form-control" id="registration" name="registration" value="<%if(buyingDetails.getRegistration()!=null)out.print(buyingDetails.getRegistration());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -466,7 +467,7 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Parking </label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="parking" name="parking" value="<%out.print(buyingDetails.getParkingRate());%>"/>
+														<input type="text" class="form-control" id="parking" name="parking" value="<%if(buyingDetails.getParkingRate()!=null)out.print(buyingDetails.getParkingRate());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -477,7 +478,7 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Stamp Duty </label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<%out.print(buyingDetails.getStampDuty());%>"/>
+														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<%if(buyingDetails.getStampDuty()!=null)out.print(buyingDetails.getStampDuty());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -486,7 +487,7 @@
 												<div class="form-group" id="error-tax">
 													<label class="control-label col-sm-4">Tax</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="tax" name="tax" value="<%out.print(buyingDetails.getTaxes());%>"/>
+														<input type="text" class="form-control" id="tax" name="tax" value="<%if(buyingDetails.getTaxes()!=null)out.print(buyingDetails.getTaxes());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -497,14 +498,14 @@
 												<div class="form-group" id="error-vat">
 													<label class="control-label col-sm-4">VAT </label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="vat" name="vat" value="<%out.print(buyingDetails.getVat());%>"/>
+														<input type="text" class="form-control" id="vat" name="vat" value="<%if(buyingDetails.getVat()!=null)out.print(buyingDetails.getVat());%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="col-sm-12">
-													<button type="submit" class="btn btn-success btn-sm" id="pricebtn">SAVE</button>
+													<button type="submit" class="btn btn-success btn-sm" id="pricebtn">Update</button>
 												</div>
 											</div>
 										</div>
@@ -609,7 +610,7 @@
 											<div class="row">
 												<div class="col-lg-12">
 													<div class="col-sm-12">
-														<button type="button" class="btn btn-success btn-sm" id="paymentbtn">SAVE</button>
+														<button type="button" class="btn btn-success btn-sm" id="paymentbtn">Update</button>
 													</div>
 												</div>
 											</div>
@@ -753,7 +754,7 @@
 											<div class="row">
 												<div class="col-lg-12">
 													<div class="col-sm-12">
-														<button type="button" class="btn btn-success btn-sm" id="offerbtn">SAVE</button>
+														<button type="button" class="btn btn-success btn-sm" id="offerbtn">Update</button>
 													</div>
 												</div>
 											</div>
@@ -767,6 +768,7 @@
 				<div id="documents" class="tab-pane fade">
 					<form id="buyerdoc" name="buyerdoc" method="post" enctype="multipart/form-data">
 						<input type="hidden" name="doc_count" id="doc_count" value="1"/>
+						<input type="hidden" id="buyer_id" name="buyer_id" value="<%out.print(updateBuyer.getId());%>"/>
 			 			<div class="row">
 							<div class="col-lg-12">
 								<div class="panel panel-default">
@@ -777,16 +779,23 @@
 <!-- 													<span class="pull-right"><a href="javascript:removeOffer(1);" class="btn btn-danger btn-xs">x</a></span> -->
 												</div>
 												<div class="row" id="doc_area">
+												<%
+													if(buyerUploadDocumentsList !=null){
+													for(BuyerUploadDocuments buyerUploadDocuments :buyerUploadDocumentsList){
+												%>
 													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
 														<div class="form-group" id="error-offer_title">
-															<input type="hidden" name="doc_name[]" value="Agreement" />
+															<input type="hidden" id="id" name="id" value="<%out.print(buyerUploadDocuments.getId());%>"/>
+															<input type="hidden" name="doc_name[]" value="<%out.print(buyerUploadDocuments.getName()); %>" />
 															<label class="control-label col-sm-5">Agreement <span class='text-danger'>*</span></label>
 															<div class="col-sm-7">
-																<input type="file" class="form-control" name="doc_url[]" />
+															<a href="${baseUrl}/<%out.print(buyerUploadDocuments.getDocUrl()); %>" target=""></a>
+																<input type="file" class="form-control" name="doc_url[]"/>
 															</div>
 															<div class="messageContainer col-sm-offset-5"></div>
 														</div>
 													</div>
+													<%}} %>
 													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
 														<div class="form-group" id="error-offer_title">
 															<input type="hidden" name="doc_name[]" value="Index 2" />
@@ -839,6 +848,7 @@
 															<div class="messageContainer col-sm-offset-5"></div>
 														</div>
 													</div>
+													
 												</div>
 											</div>
 											<div>
@@ -1440,9 +1450,9 @@ function deleteBuyer(id){
 	var flag = confirm("Are you sure? You want to delete buyer ?");
 	if(flag){
 		$.get("${baseUrl}/webapi/project/buyer/delete/"+id,{ }, function(data){
-			alert(data.message);
 			if(data.status == 1){
-				$("buyer-"+id).remove();
+				alert(data.message);
+				 location.reload(true);
 			}
 		});
 	}

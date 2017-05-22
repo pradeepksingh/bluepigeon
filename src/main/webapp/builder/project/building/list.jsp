@@ -238,7 +238,7 @@
     });
     
     $("#searchprojectId").change(function(){
-    	alert("ID :: "+$("#searchprojectId").val());
+    	//alert("ID :: "+$("#searchprojectId").val());
     });
     function getDataTable(){
     	$.post("${baseUrl}/webapi/project/building",{city_id: $("#searchcitytId").val(), locality_id: $("#searchlocalityId").val(), project_id : $("#searchprojectId").val()},function(data){

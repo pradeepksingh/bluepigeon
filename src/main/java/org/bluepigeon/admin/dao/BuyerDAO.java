@@ -123,7 +123,6 @@ public class BuyerDAO {
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
 		query.setParameter("id",flatId);
-		query.setParameter("status_id",2);
 		query.executeUpdate();
 //		session.update(builderFlat);
 		session.getTransaction().commit();
@@ -360,7 +359,7 @@ public class BuyerDAO {
 	}
 	
 	public Buyer getBuyerById(int id){
-		String hql = "from Buyer where id = :id";
+		String hql = "from Buyer where id = :id and is_deleted=0";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -370,7 +369,7 @@ public class BuyerDAO {
 	}
 
 	public List<BuyerDocList> getBuyerDocListById(int id){
-		String hql = "from Buyer where id = :id";
+		String hql = "from Buyer where id = :id and is_deleted=0";
 		String coownerHql = "from Buyer where builderFlat.id = :flat_id and is_deleted=0";
 		String docHql = "from BuyerDocuments where buyer.id = :buyer_id";
 		List<BuyerDocList> buyerDocLists = new ArrayList<BuyerDocList>();
@@ -534,7 +533,10 @@ public class BuyerDAO {
 		ResponseMessage responseMessage = new ResponseMessage();
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
-		newsession.update(buyingDetails);
+		if(buyingDetails.getId() > 0)
+			newsession.update(buyingDetails);
+		else
+			newsession.save(buyingDetails);
 		newsession.getTransaction().commit();
 		newsession.close();
 		responseMessage.setStatus(1);
@@ -871,12 +873,33 @@ public class BuyerDAO {
 			resp.setStatus(1);
 			return resp;
 		}
+		/**
+		 * @author pankaj
+		 * Delete buyer by id
+		 * @param id
+		 * @return response message
+		 */
+		public ResponseMessage deleteSecondaryBuyerById(int id){
+			ResponseMessage resp = new ResponseMessage();
+			String hql = "Update Buyer set is_deleted=1 where id = :id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setParameter("id", id);
+			query.executeUpdate();
+			session.getTransaction().commit();
+			session.close();
+			resp.setMessage("Buyer deleted successfully.");
+			resp.setStatus(1);
+			return resp;
+		}
 		
 		/**
 		 * 
 		 */
 		public List<Buyer> getAllBuyerByBuilderId(int builderId){
-			String hql = "from Buyer where builder.id = :builder_id and is_deleted=0;";
+			String hql = "from Buyer where builder.id = :builder_id and is_deleted=0 and is_primary=1";
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);

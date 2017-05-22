@@ -408,7 +408,7 @@
     });
     
     $("#country_id").change(function(){
-    	alert("Country Id : "+$("#country_id").val());
+    //	alert("Country Id : "+$("#country_id").val());
     	//$("#projectlist").remove();
     	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#country_id").val() }, function(data){
     		var html = '<option value="">Select State</option>';
@@ -422,7 +422,6 @@
     	//getProjectList();
     });
     $("#state_id").change(function(){
-    	alert("state Id :: "+$("#state_id").val());
     	$.get("${baseUrl}/webapi/general/city/list",{ state_id: $("#state_id").val() }, function(data){
     		var html = '<option value="">Select City</optio>';
     		$(data).each(function(index){
@@ -433,7 +432,7 @@
     	},'json');
     });
     $("#city_id").change(function(){
-    	alert("City Id :: "+$("#city_id").val());
+    	
     })
    function getProjectList(){
 	   $.post("${baseUrl}/webapi/project/list",{builder_id: $("#builder_id").val(), company_id: $("#company_id").val(), country_id: $("#country_id").val(), city_id: $("#city_id").val(), state_id: $("#state_id").val(),project_name: $("#project_name").val()},function(data){
