@@ -129,6 +129,10 @@
 										<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id);%>"/>
 										<input type="hidden" name="employee_id" id="employee_id" value="<% out.print(updateBuyer.getBuilderEmployee().getId());%>"/>
 										<input type="hidden" name="doc_pan" id="doc_pan" value="" />
+										<input type="hidden" name="doc_aadhar" id="doc_aadhar" value="" />
+										<input type="hidden" name="doc_passport" id="doc_passport" value="" />
+										<input type="hidden" name="doc_rra" id="doc_rra" value="" />
+										<input type="hidden" name="doc_voterid" id="doc_voterid" value="" />
 										<div id="buyer_area">
 										<%
 											if(buyers.size()>0){
@@ -136,7 +140,7 @@
 												for(BuyerDocList buyer:buyers){	
 										%>
 										<input type="hidden" name="buyer_count" id="buyer_count" value="<%out.print(i+1);%>"/>
-										<input type="hidden" name="buyer_id[]" id="buyer_id" value="<%out.print(buyer_id);%>"/>
+										<input type="hidden" name="buyer_id[]" id="buyer_id" value="<%out.print(buyer.getId());%>"/>
 											<div class="row" id="buyer-<%out.print(i);%>">
 											<div class="col-lg-12" style="padding-bottom:5px;"><% if(!buyer.isPrimary()) { %><span class="pull-right"><a href="javascript:deleteBuyer(<%out.print(buyer.getId()); %>);" class="btn btn-danger btn-xs">x</a></span><% } %></div>
 												<div class="row">
@@ -1001,6 +1005,78 @@ function updateBuyer() {
 		}
 	});
 	$("#doc_pan").val(doc_pan);
+	var doc_aadhar = "";
+	$('input[name="document_aadhar[]"]').each(function(index) {
+		if(doc_aadhar == "") {
+			if($(this).is(':checked')) {
+				doc_aadhar = $(this).val();
+			} else {
+				doc_aadhar = "0";
+			}
+		} else {
+			if($(this).is(':checked')) {
+				doc_aadhar = doc_aadhar + ","+$(this).val();
+			} else {
+				doc_aadhar = doc_aadhar + ",0";
+			}
+		}
+	});
+	$("#doc_aadhar").val(doc_aadhar);
+	
+	var doc_passport = "";
+	$('input[name="document_passport[]"]').each(function(index) {
+		if(doc_passport == "") {
+			if($(this).is(':checked')) {
+				doc_passport = $(this).val();
+			} else {
+				doc_passport = "0";
+			}
+		} else {
+			if($(this).is(':checked')) {
+				doc_passport = doc_passport + ","+$(this).val();
+			} else {
+				doc_passport = doc_passport + ",0";
+			}
+		}
+	});
+	$("#doc_passport").val(doc_passport);
+	
+	var doc_rra = "";
+	$('input[name="document_rra[]"]').each(function(index) {
+		if(doc_rra == "") {
+			if($(this).is(':checked')) {
+				doc_rra = $(this).val();
+			} else {
+				doc_rra = "0";
+			}
+		} else {
+			if($(this).is(':checked')) {
+				doc_rra = doc_rra + ","+$(this).val();
+			} else {
+				doc_rra = doc_rra + ",0";
+			}
+		}
+	});
+	$("#doc_rra").val(doc_rra);
+	
+	var doc_voterid = "";
+	$('input[name="document_voterid[]"]').each(function(index) {
+		if(doc_voterid == "") {
+			if($(this).is(':checked')) {
+				doc_voterid = $(this).val();
+			} else {
+				doc_voterid = "0";
+			}
+		} else {
+			if($(this).is(':checked')) {
+				doc_voterid = doc_voterid + ","+$(this).val();
+			} else {
+				doc_voterid = doc_voterid + ",0";
+			}
+		}
+	});
+	$("#doc_voterid").val(doc_voterid);
+	
 	var options = {
 	 		target : '#basicresponse', 
 	 		beforeSubmit : showAddRequest,
@@ -1030,6 +1106,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#basicresponse").html(resp.message);
         $("#basicresponse").show();
         alert(resp.message);
+        location.reload(true);
   	}
 }
 

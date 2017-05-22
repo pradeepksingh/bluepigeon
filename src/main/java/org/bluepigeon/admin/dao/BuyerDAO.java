@@ -542,26 +542,26 @@ public class BuyerDAO {
 		return responseMessage;
 	}
 	
-	public ResponseMessage updateBuyerDocuments(List<BuyerDocuments> buyerOffers){
+	public ResponseMessage updateBuyerDocuments(List<BuyerDocuments> buyerDocuments){
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		ResponseMessage responseMessage = new ResponseMessage();
 		
-		/***************** Delete entry from Buyer Offers *************************/
+		/***************** Delete entry from Buyer Documents *************************/
 		String delete_buyer_documents = "DELETE from  BuyerDocuments where buyer.id = :buyer_id";
 		Session newsession1 = hibernateUtil.openSession();
 		newsession1.beginTransaction();
 		Query smdelete = newsession1.createQuery(delete_buyer_documents);
-		smdelete.setParameter("buyer_id", buyerOffers.get(0).getBuyer().getId());
+		smdelete.setParameter("buyer_id", buyerDocuments.get(0).getBuyer().getId());
 		smdelete.executeUpdate();
 		newsession1.getTransaction().commit();
 		newsession1.close();
 		
-		/**********************Save Buyer Offers new entries *************************/ 
+		/**********************Save Buyer Documents new entries *************************/ 
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
-		if(buyerOffers.size()>0){
-			for(int i=0;i<buyerOffers.size();i++){
-				newsession.save(buyerOffers.get(i));
+		if(buyerDocuments.size()>0){
+			for(int i=0;i<buyerDocuments.size();i++){
+				newsession.save(buyerDocuments.get(i));
 			}
 			newsession.getTransaction().commit();
 			newsession.close();
