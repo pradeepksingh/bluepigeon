@@ -335,7 +335,7 @@
 
         $(".select2").select2();
         $('.selectpicker').selectpicker();
-
+		
         //Bootstrap-TouchSpin
         $(".vertical-spin").TouchSpin({
             verticalbuttons: true,
@@ -408,7 +408,7 @@
     });
     
     $("#country_id").change(function(){
-    	alert("Country Id : "+$("#country_id").val());
+    //	alert("Country Id : "+$("#country_id").val());
     	//$("#projectlist").remove();
     	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#country_id").val() }, function(data){
     		var html = '<option value="">Select State</option>';
@@ -417,10 +417,23 @@
     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
     		});
     		$("#state_id").html(html);
+    		$('.selectpicker').selectpicker('refresh');
     	},'json');
     	//getProjectList();
     });
-    
+    $("#state_id").change(function(){
+    	$.get("${baseUrl}/webapi/general/city/list",{ state_id: $("#state_id").val() }, function(data){
+    		var html = '<option value="">Select City</optio>';
+    		$(data).each(function(index){
+    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+    		});
+    		$("#city_id").html(html);
+    		$('.selectpicker').selectpicker('refresh');
+    	},'json');
+    });
+    $("#city_id").change(function(){
+    	
+    })
    function getProjectList(){
 	   $.post("${baseUrl}/webapi/project/list",{builder_id: $("#builder_id").val(), company_id: $("#company_id").val(), country_id: $("#country_id").val(), city_id: $("#city_id").val(), state_id: $("#state_id").val(),project_name: $("#project_name").val()},function(data){
 			alert(data);

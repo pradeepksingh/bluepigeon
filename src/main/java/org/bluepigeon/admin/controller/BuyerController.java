@@ -349,11 +349,15 @@ public class BuyerController {
 			@FormDataParam("is_primary[]") List<FormDataBodyPart>  is_primary,
 			@FormDataParam("photo[]") List<FormDataBodyPart>  photos,
 			@FormDataParam("doc_pan") String docs,
-			@FormDataParam("document_pan[]") List<FormDataBodyPart> douments,
-			@FormDataParam("document_aadhar[]") List<FormDataBodyPart> aadhar,
-			@FormDataParam("document_passport[]") List<FormDataBodyPart> passport,
-			@FormDataParam("document_rra[]") List<FormDataBodyPart> rra,
-			@FormDataParam("document_voterid[]") List<FormDataBodyPart> voterid,
+			@FormDataParam("doc_aadhar") String aadhar,
+			@FormDataParam("doc_rra") String rra,
+			@FormDataParam("doc_passport") String passport,
+			@FormDataParam("doc_voterid") String voterid,
+//			@FormDataParam("document_pan[]") List<FormDataBodyPart> douments,
+//			@FormDataParam("document_aadhar[]") List<FormDataBodyPart> aadhar,
+//			@FormDataParam("document_passport[]") List<FormDataBodyPart> passport,
+//			@FormDataParam("document_rra[]") List<FormDataBodyPart> rra,
+//			@FormDataParam("document_voterid[]") List<FormDataBodyPart> voterid,
 			@FormDataParam("builder_id") int builder_id,
 			@FormDataParam("project_id") int project_id,
 			@FormDataParam("building_id") int building_id,
@@ -372,6 +376,10 @@ public class BuyerController {
 		if(name.size()>0){
 			int i=0;
 			String[] doc_pan = docs.split(",");
+			String[] doc_aadhar = aadhar.split(",");
+			String[] doc_passport = passport.split(",");
+			String[] doc_rra = rra.split(",");
+			String[] doc_voterid = voterid.split(",");
 			for(FormDataBodyPart buyers : name){
 				buyer = new Buyer();
 				buyer.setBuilderEmployee(builderEmployee);
@@ -404,16 +412,20 @@ public class BuyerController {
 					buyer.setBuilderFlat(builderFlat);
 				}
 				if(buyers.getValueAs(String.class).toString()!=null && !buyers.getValueAs(String.class).isEmpty()){
+					System.out.println("Buyer name :: "+name.get(i).getValueAs(String.class).toString());
 					buyer.setName(name.get(i).getValueAs(String.class).toString());
 				}
 				if(contact.get(i).getValueAs(String.class).toString()!=null && !contact.get(i).getValueAs(String.class).isEmpty()) {
+					System.out.println("Buyer contact :: "+contact.get(i).getValueAs(String.class).toString());
 					buyer.setMobile(contact.get(i).getValueAs(String.class).toString());
 				}
 				buyer.setEmail(email.get(i).getValueAs(String.class).toString());
 				if(address.get(i).getValueAs(String.class).toString()!=null && !address.get(i).getValueAs(String.class).isEmpty()){
+					System.out.println("Buyer email :: "+email.get(i).getValueAs(String.class).toString());
 					buyer.setAddress(address.get(i).getValueAs(String.class).toString());
 				}
 				if(pan.get(i).getValueAs(String.class).toString()!=null && !pan.get(i).getValueAs(String.class).isEmpty()){
+					System.out.println("Buyer pan :: "+pan.get(i).getValueAs(String.class).toString());
 					buyer.setPancard(pan.get(i).getValueAs(String.class).toString());
 				}
 				if(is_primary.get(i).getValueAs(Integer.class).intValue() == 1) {
@@ -455,38 +467,74 @@ public class BuyerController {
 						buyerDocumentsList.add(buyerDocuments);
 					}
 				}
-				if(aadhar != null && aadhar.size() > 0) {
-					if(aadhar.get(i).getValueAs(String.class).toString()!=null && !aadhar.get(i).getValueAs(String.class).isEmpty()){
+				if(aadhar != "") {
+					if(doc_aadhar[i].toString().equals("2") ){
 						BuyerDocuments buyerDocuments = new BuyerDocuments();
-						buyerDocuments.setDocuments(aadhar.get(i).getValueAs(String.class).toString());
+						buyerDocuments.setDocuments(doc_aadhar[i].toString());
 						buyerDocuments.setBuyer(buyer);
 						buyerDocumentsList.add(buyerDocuments);
 					}
 				}
-				if(passport != null && passport.size() > 0) {
-					if(passport.get(i).getValueAs(String.class).toString()!=null && !passport.get(i).getValueAs(String.class).isEmpty()){
+				if(passport != "") {
+					if(doc_passport[i].toString().equals("3") ){
 						BuyerDocuments buyerDocuments = new BuyerDocuments();
-						buyerDocuments.setDocuments(passport.get(i).getValueAs(String.class).toString());
+						buyerDocuments.setDocuments(doc_passport[i].toString());
 						buyerDocuments.setBuyer(buyer);
 						buyerDocumentsList.add(buyerDocuments);
 					}
 				}
-				if(rra != null && rra.size() > 0) {
-					if(rra.get(i).getValueAs(String.class).toString()!=null && !rra.get(i).getValueAs(String.class).isEmpty()){
+				if(rra != "") {
+					if(doc_rra[i].toString().equals("4") ){
+						System.out.println("System doc:"+doc_rra[i]);
 						BuyerDocuments buyerDocuments = new BuyerDocuments();
-						buyerDocuments.setDocuments(rra.get(i).getValueAs(String.class).toString());
+						buyerDocuments.setDocuments(doc_rra[i].toString());
 						buyerDocuments.setBuyer(buyer);
 						buyerDocumentsList.add(buyerDocuments);
 					}
 				}
-				if(voterid != null && voterid.size() > 0) {
-					if(voterid.get(i).getValueAs(String.class).toString()!=null && !voterid.get(i).getValueAs(String.class).isEmpty()){
+				
+				if(voterid != "") {
+					if(doc_voterid[i].toString().equals("5") ){
+						System.out.println("System doc:"+doc_voterid[i]);
 						BuyerDocuments buyerDocuments = new BuyerDocuments();
-						buyerDocuments.setDocuments(voterid.get(i).getValueAs(String.class).toString());
+						buyerDocuments.setDocuments(doc_voterid[i].toString());
 						buyerDocuments.setBuyer(buyer);
 						buyerDocumentsList.add(buyerDocuments);
 					}
 				}
+				
+//				if(aadhar != null && aadhar.size() > 0) {
+//					if(aadhar.get(i).getValueAs(String.class).toString()!=null && !aadhar.get(i).getValueAs(String.class).isEmpty()){
+//						BuyerDocuments buyerDocuments = new BuyerDocuments();
+//						buyerDocuments.setDocuments(aadhar.get(i).getValueAs(String.class).toString());
+//						buyerDocuments.setBuyer(buyer);
+//						buyerDocumentsList.add(buyerDocuments);
+//					}
+//				}
+//				if(passport != null && passport.size() > 0) {
+//					if(passport.get(i).getValueAs(String.class).toString()!=null && !passport.get(i).getValueAs(String.class).isEmpty()){
+//						BuyerDocuments buyerDocuments = new BuyerDocuments();
+//						buyerDocuments.setDocuments(passport.get(i).getValueAs(String.class).toString());
+//						buyerDocuments.setBuyer(buyer);
+//						buyerDocumentsList.add(buyerDocuments);
+//					}
+//				}
+//				if(rra != null && rra.size() > 0) {
+//					if(rra.get(i).getValueAs(String.class).toString()!=null && !rra.get(i).getValueAs(String.class).isEmpty()){
+//						BuyerDocuments buyerDocuments = new BuyerDocuments();
+//						buyerDocuments.setDocuments(rra.get(i).getValueAs(String.class).toString());
+//						buyerDocuments.setBuyer(buyer);
+//						buyerDocumentsList.add(buyerDocuments);
+//					}
+//				}
+//				if(voterid != null && voterid.size() > 0) {
+//					if(voterid.get(i).getValueAs(String.class).toString()!=null && !voterid.get(i).getValueAs(String.class).isEmpty()){
+//						BuyerDocuments buyerDocuments = new BuyerDocuments();
+//						buyerDocuments.setDocuments(voterid.get(i).getValueAs(String.class).toString());
+//						buyerDocuments.setBuyer(buyer);
+//						buyerDocumentsList.add(buyerDocuments);
+//					}
+//				}
 				buyerDAO.updateBuyerDocuments(buyerDocumentsList);
 				System.out.println("Primary ID:"+buyer.getIsPrimary());
 				if(buyer.getIsPrimary()) {
@@ -640,6 +688,7 @@ public class BuyerController {
 	@Path("/update/price")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuyerPrice (
+			@FormParam("id") int id,
 			@FormParam("buyer_id") int buyer_id,
 			@FormParam("booking_date") String booking_date,
 			@FormParam("base_rate") Double base_rate,
@@ -655,16 +704,21 @@ public class BuyerController {
 	){
 		ResponseMessage msg = new ResponseMessage();
 		BuyerDAO buyerDAO = new BuyerDAO();
-		
-		Buyer buyer = new Buyer();
+		System.out.println("Buyer Id :: "+buyer_id);
+		Buyer buyer =null;
 		Buyer primaryBuyer = new Buyer();
-		
+	     buyer = buyerDAO.getBuyerById(buyer_id);
 			if(buyer_id>0){
 				buyer.setId(buyer_id);
 			}
+			System.err.println("Buyer is primary ? "+buyer.getIsPrimary());
+			System.err.println("Primary Buyer ?");
 			if(buyer.getIsPrimary()) {
+				System.out.println("Yes");
 				primaryBuyer = buyer;
+				primaryBuyer.setId(buyer.getId());
 			}
+			System.out.println("No");
 			if(primaryBuyer.getId() > 0) {
 				SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
 				Date bookingDate = null;
@@ -674,6 +728,7 @@ public class BuyerController {
 					e.printStackTrace();
 				}
 				BuyingDetails buyingDetails = new BuyingDetails();
+				buyingDetails.setId(id);
 				buyingDetails.setBuyer(primaryBuyer);
 				buyingDetails.setAmenityFacingRate(amenity_rate);
 				buyingDetails.setBaseRate(base_rate);

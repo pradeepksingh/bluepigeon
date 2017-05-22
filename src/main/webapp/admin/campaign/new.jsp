@@ -165,7 +165,7 @@
 								<div class="col-lg-12 margin-bottom-6">
 									<div class="form-group" id="error-project_type">
 										<label class="control-label col-sm-2">Recipient <span class='text-danger'>*</span></label>
-											<div id="appendbuyer"></div>
+											<div id="appendbuyer" class="row"></div>
 										</div>
 										<div class="messageContainer"></div>
 									</div>
@@ -196,12 +196,12 @@ $('#set_date').datepicker({
 $("#city_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/projectlist/"+$("#city_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Project</option>';
-		var checkbox = '<div class="col-sm-10">';
+		var checkbox = '<div class="row">';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].projectId+'">'+data[index].projectName+'</option>';
 			$(data[index].buyer).each(function(key, value){
-				checkbox += '<div class="col-sm-4"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
+				checkbox += '<div class="col-sm-3"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
 				checkbox +='</div>';
 			});
 		});
@@ -214,12 +214,12 @@ $("#city_id").change(function(){
 $("#project_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/building/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
-		var checkbox = '<div class="col-sm-10">';
+		var checkbox = '<div class="row">';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].buildingId+'">'+data[index].buildingName+'</option>';
 			$(data[index].buyer).each(function(key, value){
-				checkbox += '<div class="col-sm-4"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
+				checkbox += '<div class="col-sm-3"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
 				checkbox +='</div>';
 			});
 		});
@@ -231,12 +231,12 @@ $("#project_id").change(function(){
 $("#building_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/building/flat/names/"+$("#building_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Flat</option>';
-		var checkbox = '<div class="col-sm-10">';
+		var checkbox = '<div class="row">';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].flatId+'">'+data[index].flatNo+'</option>';
 			$(data[index].buyer).each(function(key, value){
-				checkbox += '<div class="col-sm-4"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
+				checkbox += '<div class="col-sm-3"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+value.id+'" />'+'&nbsp;'+value.name
 				checkbox +='</div>';
 			});
 		});
@@ -248,10 +248,10 @@ $("#building_id").change(function(){
 
 $("#flat_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/flat/buyer/names/"+$("#flat_id").val(),{ }, function(data){
-		var checkbox = '<div class="col-sm-10">';
+		var checkbox = '<div class="row">';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
-				checkbox += '<div class="col-sm-4"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+data[index].id+'" />'+'&nbsp;'+data[index].name
+				checkbox += '<div class="col-sm-3"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+data[index].id+'" />'+'&nbsp;'+data[index].name
 				checkbox +='</div>';
 		});
 		checkbox+='</div>';
