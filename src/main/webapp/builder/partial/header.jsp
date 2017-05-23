@@ -22,7 +22,7 @@ session = request.getSession(false);
 		System.out.println("URL :: "+url);
 		String site = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath() + "/builder/";
 	   	response.setStatus(response.SC_MOVED_TEMPORARILY);
-	   	response.setHeader("Location1", site);
+	   	response.setHeader("Location", site);
 	   	System.out.println("Site :: "+site);
 	}
 %>
