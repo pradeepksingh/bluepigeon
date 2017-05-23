@@ -144,9 +144,5 @@
         <mapping class="org.bluepigeon.admin.model.BuilderEmployee" />
         <mapping class="org.bluepigeon.admin.model.FlatImageGallery" />
         <mapping class="org.bluepigeon.admin.model.FlatPanoramicImage" />
-        
-        
-        
 	</session-factory>
-
 </hibernate-configuration>

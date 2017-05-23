@@ -597,44 +597,65 @@ public class BuyerController {
 	@POST
 	@Path("/payment/update")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updateBuyerPayment(
 			@FormDataParam("buyer_id") int buyer_id,
+			@FormDataParam("payment_id[]") List<FormDataBodyPart> payment_id,
 			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
 			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
 			@FormDataParam("amount[]") List<FormDataBodyPart> amount
 			) {
-		Buyer buyer = null;
+		Buyer buyer =new BuyerDAO().getBuyerById(buyer_id);
 		Buyer primaryBuyer = new Buyer();
 		BuyerDAO buyerDAO = new BuyerDAO();
 		ResponseMessage resp = new ResponseMessage();
 		  if(buyer_id > 0){
-			  buyer = new Buyer();
 			  buyer.setId(buyer_id);
 		  }
 		  if(buyer.getIsPrimary()){
 			  primaryBuyer = buyer;
 		  }
 		  if (schedule.size() > 0) {
-				List<BuyerPayment> buyerPayments = new ArrayList<BuyerPayment>();
+				List<BuyerPayment> updateBuyerPayments = new ArrayList<BuyerPayment>();
+				List<BuyerPayment> newBuyerPayments = new ArrayList<BuyerPayment>();
 				int i = 0;
 				for(FormDataBodyPart milestone : schedule)
 				{
 					if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
-						boolean isPaid = false;
-						BuyerPayment buyerPayment = new BuyerPayment();
-						buyerPayment.setMilestone(milestone.getValueAs(String.class).toString());
-						buyerPayment.setNetPayable(payable.get(i).getValueAs(Double.class));
-						buyerPayment.setAmount(amount.get(i).getValueAs(Double.class));
-						buyerPayment.setPaid(isPaid);
-						buyerPayment.setBuyer(primaryBuyer);
-						buyerPayments.add(buyerPayment);
+						if(payment_id!=null){
+							if(payment_id.get(i).getValueAs(Integer.class) != null && payment_id.get(i).getValueAs(Integer.class) !=0) {
+								boolean isPaid = false;
+								BuyerPayment buyerPayment = new BuyerPayment();
+								buyerPayment.setId(payment_id.get(i).getValueAs(Integer.class));
+								buyerPayment.setMilestone(milestone.getValueAs(String.class).toString());
+								buyerPayment.setNetPayable(payable.get(i).getValueAs(Double.class));
+								buyerPayment.setAmount(amount.get(i).getValueAs(Double.class));
+								buyerPayment.setPaid(isPaid);
+								buyerPayment.setBuyer(primaryBuyer);
+								updateBuyerPayments.add(buyerPayment);
+						}
+						}else{
+								boolean isPaid = false;
+								BuyerPayment buyerPayment = new BuyerPayment();
+								buyerPayment.setMilestone(milestone.getValueAs(String.class).toString());
+								buyerPayment.setNetPayable(payable.get(i).getValueAs(Double.class));
+								buyerPayment.setAmount(amount.get(i).getValueAs(Double.class));
+								buyerPayment.setPaid(isPaid);
+								buyerPayment.setBuyer(primaryBuyer);
+								newBuyerPayments.add(buyerPayment);
+					}
 					}
 					i++;
+				
 				}
-				if(buyerPayments.size() > 0) {
-					resp = buyerDAO.updateBuyerPayments(buyerPayments);
+				if(updateBuyerPayments.size() > 0) {
+					buyerDAO.updateBuyerPayments(updateBuyerPayments);
 				}
+				if(newBuyerPayments.size() > 0){
+					buyerDAO.saveBuyerPayment(newBuyerPayments);
+				}
+				resp.setStatus(1);
+				resp.setMessage("Buyer payment updated successfully.");
 	  }
 		  return resp;
  }
@@ -642,16 +663,17 @@ public class BuyerController {
 	@POST
 	@Path("/offer/update")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updateBuyerOffer(
 			@FormDataParam("buyer_id") int buyer_id,
+			@FormDataParam("offer_id[]") List<FormDataBodyPart> offer_id,
 			@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_title,
 			@FormDataParam("discount[]") List<FormDataBodyPart> discount,
 			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amount,
 			@FormDataParam("applicable_on[]") List<FormDataBodyPart> applicable_on,
 			@FormDataParam("apply[]") List<FormDataBodyPart> apply
 			) {
-			Buyer buyer = new Buyer();
+			Buyer buyer = new BuyerDAO().getBuyerById(buyer_id);
 			Buyer primaryBuyer = new Buyer();
 			BuyerDAO buyerDAO = new BuyerDAO();
 			ResponseMessage resp = new ResponseMessage();
@@ -659,29 +681,50 @@ public class BuyerController {
 				buyer.setId(buyer_id);
 			if(buyer.getIsPrimary())
 				primaryBuyer = buyer;
-			List<BuyerOffer> buyerOfferList = new ArrayList<BuyerOffer>();
 			if (offer_title.size() > 0) {
-				List<BuyerOffer> buyerOffers = new ArrayList<BuyerOffer>();
+				List<BuyerOffer> updateBuyerOffers = new ArrayList<BuyerOffer>();
+				List<BuyerOffer> addBuyerOffers = new ArrayList<BuyerOffer>();
 				int i = 0;
 				for(FormDataBodyPart title : offer_title)
 				{
 					if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
-						BuyerOffer buyerOffer = new BuyerOffer();
-						buyerOffer.setTitle(title.getValueAs(String.class).toString());
-						buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
-						buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
-						buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
-						buyerOffer.setStatus(apply.get(i).getValueAs(Byte.class));
-						buyerOffer.setBuyer(primaryBuyer);
-						buyerOffers.add(buyerOffer);
-					}
+						if(offer_id!=null){
+						if( offer_id.get(i).getValueAs(Integer.class) != 0 && offer_id.get(i).getValueAs(Integer.class) != null) {
+							BuyerOffer buyerOffer = new BuyerOffer();
+							buyerOffer.setId(offer_id.get(i).getValueAs(Integer.class) );
+							buyerOffer.setTitle(title.getValueAs(String.class).toString());
+							buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
+							buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
+							buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
+							buyerOffer.setStatus(apply.get(i).getValueAs(Byte.class));
+							buyerOffer.setBuyer(primaryBuyer);
+							updateBuyerOffers.add(buyerOffer);
+						}}else{
+							BuyerOffer buyerOffer = new BuyerOffer();
+							buyerOffer.setTitle(title.getValueAs(String.class).toString());
+							buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
+							buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
+							buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
+							buyerOffer.setStatus(apply.get(i).getValueAs(Byte.class));
+							buyerOffer.setBuyer(primaryBuyer);
+							addBuyerOffers.add(buyerOffer);
+						}
+				}
 					i++;
+			}
+				if(updateBuyerOffers.size() > 0) {
+					resp=buyerDAO.updateBuyerOffers(updateBuyerOffers);
+					
 				}
-				if(buyerOffers.size() > 0) {
-					resp=buyerDAO.updateBuyerOffers(buyerOffers);
-				//	buyerDAO.saveBuyerOffers(buyerOffers);
+				if(addBuyerOffers.size() > 0){
+					buyerDAO.saveBuyerOffers(addBuyerOffers);
 				}
-			} 
+				resp.setStatus(1);
+				resp.setMessage("Buyer Offers updated successfully");
+			} else{
+				resp.setStatus(0);
+				resp.setMessage("Failed to update Buyer Offers");
+			}
 			return resp;
 	}
 	@POST
@@ -1249,6 +1292,26 @@ public class BuyerController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage deleteDemandletterPlan(@PathParam("id") int demandletter_id) {
 		return new DemandLettersDAO().deleteDemandLettersDoc(demandletter_id);
+	}
+	
+	@GET
+	@Path("/offer/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteBuildingOfferInfo(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		BuyerDAO buyerDAO = new BuyerDAO();
+		msg = buyerDAO.deleteBuyerOfferInfo(id);
+		return msg;
+	}
+	
+	@GET
+	@Path("/payment/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteBuildingPaymentInfo(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		BuyerDAO buyerDAO = new BuyerDAO();
+		msg = buyerDAO.deleteBuyerPaymentById(id);
+		return msg;
 	}
 }
 	

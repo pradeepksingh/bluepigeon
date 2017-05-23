@@ -150,7 +150,7 @@
 															<div class="col-sm-8">
 																<input type="text" class="form-control" id="buyer_name" name="buyer_name[]" value="<%out.print(buyer.getName()); %>"/>
 															</div>
-															<div class="messageContainer"></div>
+															<div class="messageContainer col-sm-8"></div>
 														</div>
 													</div>
 													<div class="col-lg-5 margin-bottom-6">
@@ -159,7 +159,7 @@
 															<div class="col-sm-8">
 																<input type="text" class="form-control" id="contact" name="contact[]" value="<%out.print(buyer.getMobile());%>"/>
 															</div>
-															<div class="messageContainer"></div>
+															<div class="messageContainer col-sm-8"></div>
 														</div>
 													</div>
 											    </div>
@@ -170,7 +170,7 @@
 															<div class="col-sm-8">
 																<input type="text" class="form-control" id="email" name="email[]" value="<%out.print(buyer.getEmail());%>"/>
 															</div>
-															<div class="messageContainer"></div><br/>
+															<div class="messageContainer col-sm-8"></div><br/>
 														</div>
 													</div>
 													<div class="col-lg-5 margin-bottom-6">
@@ -179,7 +179,7 @@
 															<div class="col-sm-8">
 																<input type="text" class="form-control" id="pan" name="pan[]" value="<%out.print(buyer.getPanCard());%>"/>
 															</div>
-															<div class="messageContainer"></div>
+															<div class="messageContainer col-sm-8"></div>
 														</div>
 													</div>
 												</div>
@@ -190,7 +190,7 @@
 														<div class="col-sm-8">
 														<textarea class="form-control" id="address" name="address[]" ><%out.print(buyer.getAddress()); %></textarea>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-8"></div>
 														</div>
 													</div>
 													<div class="col-lg-5 margin-bottom-6">
@@ -203,7 +203,7 @@
 												                      <option value="1"<% if(buyer.isPrimary() == true){%>selected<%} %>>Owner</option>
 													          	</select>
 															</div>
-															<div class="messageContainer col-sm-4"></div>
+															<div class="messageContainer col-sm-8"></div>
 														</div>
 													</div>
 												</div>
@@ -254,7 +254,7 @@
 																<input type="checkbox" name="document_voterid[]" value="5" <% if(is_voterid) {%>checked<%} %> />Vote ID 
 															</div>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												
@@ -277,7 +277,7 @@
 										<div class="row">
 											<div class="col-lg-12 margin-bottom-5">
 												<div class="form-group" id="error-country_id">
-													<label class="control-label col-sm-3"><b>Project Details</b><span class='text-danger'>*</span></label>
+													<label class="control-label col-sm-8"><b>Project Details</b><span class='text-danger'>*</span></label>
 												</div>
 											</div>
 										</div>
@@ -293,7 +293,7 @@
 															<% } %>
 											             </select>
 													</div>
-													<div class="messageContainer col-sm-4"></div>
+													<div class="messageContainer col-sm-8"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -307,7 +307,7 @@
 															<% } %>
 											          	</select>
 													</div>
-													<div class="messageContainer col-sm-4"></div>
+													<div class="messageContainer col-sm-8"></div>
 												</div>
 											</div>
 										</div>
@@ -323,7 +323,7 @@
 															<% } %>
 											          	</select>
 													</div>
-													<div class="messageContainer col-sm-4"></div>
+													<div class="messageContainer col-sm-8"></div>
 												</div>
 											</div>
 	<!-- 										<div class="col-lg-6 margin-bottom-5"> -->
@@ -364,7 +364,7 @@
 										                      <option value="1" <%if(updateBuyer.getStatus() == 1) { %> selected <% } %>>Active</option>
 											          	</select>
 													</div>
-													<div class="messageContainer col-sm-4"></div>
+													<div class="messageContainer col-sm-8"></div>
 												</div>
 											</div>
 										</div>
@@ -408,7 +408,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="base_rate" name="base_rate" value="<%if(buyingDetails.getBaseRate() != null)out.print(buyingDetails.getBaseRate()); %>" />
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-8"></div>
 												</div>
 											</div>
 										</div>
@@ -419,7 +419,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<%if(buyingDetails.getFloorRiseRate()!=null)out.print(buyingDetails.getFloorRiseRate());%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-8"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -428,7 +428,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<%if(buyingDetails.getAmenityFacingRate()!=null)out.print(buyingDetails.getAmenityFacingRate()); %>" />
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-8"></div>
 												</div>
 											</div>
 										</div>
@@ -439,7 +439,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="maintenance" name="maintenance" value="<%if(buyingDetails.getMaintenance()!=null)out.print(buyingDetails.getMaintenance());%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-8"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -449,7 +449,7 @@
 														<input type="text" class="form-control" id="tenure" name="tenure" value="<%if(buyingDetails.getTenure()!=null)out.print(buyingDetails.getTenure());%>"/>
 														<span class="input-group-addon">Months</span>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-8"></div>
 												</div>
 											</div>
 										</div>
@@ -460,7 +460,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="registration" name="registration" value="<%if(buyingDetails.getRegistration()!=null)out.print(buyingDetails.getRegistration());%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-8"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -469,7 +469,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="parking" name="parking" value="<%if(buyingDetails.getParkingRate()!=null)out.print(buyingDetails.getParkingRate());%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-8"></div>
 												</div>
 											</div>
 										</div>
@@ -480,7 +480,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<%if(buyingDetails.getStampDuty()!=null)out.print(buyingDetails.getStampDuty());%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-8"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -489,7 +489,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="tax" name="tax" value="<%if(buyingDetails.getTaxes()!=null)out.print(buyingDetails.getTaxes());%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-8"></div>
 												</div>
 											</div>
 										</div>
@@ -516,8 +516,9 @@
 					</form>
 				</div>
 				<div id="payment" class="tab-pane fade">
-					<form id="paymentfrm" name="paymentfrm" method="post">
+					<form id="paymentfrm" name="paymentfrm" method="post" enctype="multipart/form-data">
 						<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(buyerPaymentsList.size()+1);%>"/>
+						<input type="hidden" id="buyer_id" name="buyer_id" value="<%out.print(buyer_id);%>"/>
 			 			<div class="row">
 			 				<div id="paymentresponse"></div>
 							<div class="col-lg-12">
@@ -527,7 +528,8 @@
 											<% 	int i = 1;
 												for(BuyerPayment buyerPayment :buyerPaymentsList) { 
 											%>
-											<div class="row" id="schedule-<% out.print(i); %>">
+										<input type="hidden"  name="payment_id[]" value="<%out.print(buyerPayment.getId());%>"/>
+											<div class="row" id="schedule-<% out.print(buyerPayment.getId()); %>">
 												<% if(i > 1) { %>
 												<hr/>
 												<% } %>
@@ -559,7 +561,7 @@
 													</div>
 												</div>
 												<div class="col-lg-1">
-													<span><a href="javascript:removeSchedule(<% out.print(i); %>);" class="btn btn-danger btn-xs">x</a></span>
+													<span><a href="javascript:deleteSchedule(<% out.print(buyerPayment.getId()); %>);" class="btn btn-danger btn-xs">x</a></span>
 												</div>
 											</div>
 											<% i++; } %>
@@ -610,7 +612,7 @@
 											<div class="row">
 												<div class="col-lg-12">
 													<div class="col-sm-12">
-														<button type="button" class="btn btn-success btn-sm" id="paymentbtn">Update</button>
+														<button type="button" class="btn btn-success btn-sm" id="paymentbtn" onclick="updateBuyerPayments();">Update</button>
 													</div>
 												</div>
 											</div>
@@ -622,9 +624,11 @@
 					</form>
 				</div>
 				<div id="offer" class="tab-pane fade">
-					<form id="offerfrm" name="offerfrm" method="post">
+					<form id="offerfrm" name="offerfrm" method="post"  enctype="multipart/form-data">
 						<input type="hidden" name="offer_count" id="offer_count" value="<%out.print(buyerOffersList.size()+1); %>"/>
+						<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(buyer_id);%>"/>
 			 			<div class="row">
+			 			<div id="offerresponse"></div>
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
@@ -632,9 +636,10 @@
 											<% 	int j = 1;
 												for(BuyerOffer buyerOffer :buyerOffersList) { 
 											%>
-											<div class="row" id="offer-<% out.print(j);%>">
+											<input type="hidden"  name="offer_id[]" value="<%out.print(buyerOffer.getId());%>"/>
+											<div class="row" id="offer-<% out.print(buyerOffer.getId());%>">
 												<div class="col-lg-12" style="padding-bottom:5px;">
-													<span class="pull-right"><a href="javascript:removeOffer(<% out.print(j);%>);" class="btn btn-danger btn-xs">x</a></span>
+													<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(buyerOffer.getId());%>);" class="btn btn-danger btn-xs">x</a></span>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
 													<div class="form-group" id="error-offer_title">
@@ -642,7 +647,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% if(buyerOffer.getTitle() != null) { out.print(buyerOffer.getTitle());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -651,7 +656,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="discount" name="discount[]" value="<% if(buyerOffer.getOfferPercentage() != null) { out.print(buyerOffer.getOfferPercentage());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -660,7 +665,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% if(buyerOffer.getOfferPercentage() != null) { out.print(buyerOffer.getOfferAmount());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -669,7 +674,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="applicable_on" name="applicable_on[]" value="<% if(buyerOffer.getApplicable() != null) { out.print(buyerOffer.getApplicable());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -681,7 +686,7 @@
 																<option value="0" <% if(buyerOffer.getApplicable() == 0) { %>selected<% } %>>No</option>
 															</select>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 											</div>
@@ -699,7 +704,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -708,7 +713,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="discount" name="discount[]" value=""/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -717,7 +722,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -726,7 +731,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="applicable_on" name="applicable_on[]" value=""/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -738,7 +743,7 @@
 																<option value="0" >No</option>
 															</select>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 											</div>
@@ -754,7 +759,7 @@
 											<div class="row">
 												<div class="col-lg-12">
 													<div class="col-sm-12">
-														<button type="button" class="btn btn-success btn-sm" id="offerbtn">Update</button>
+														<button type="button" class="btn btn-success btn-sm" id="offerbtn" onclick="updateBuyerOffer();">Update</button>
 													</div>
 												</div>
 											</div>
@@ -976,7 +981,7 @@ $('#basicfrm').bootstrapValidator({
                 }
             }
         },
-        'pancard[]': {
+        'pan[]': {
             validators: {
                 notEmpty: {
                     message: 'Pancard is required and cannot be empty'
@@ -1119,7 +1124,37 @@ function showAddResponse(resp, statusText, xhr, $form){
         location.reload(true);
   	}
 }
-
+function updateBuyerOffer(){
+	var options = {
+	 		target : '#offerresponse', 
+	 		beforeSubmit : showAddOfferRequest,
+	 		success :  showAddOfferResponse,
+	 		url : '${baseUrl}/webapi/buyer/offer/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#offerfrm').ajaxSubmit(options);
+}
+function showAddOfferRequest(formData, jqForm, options){
+	$("#offerresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddOfferResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#offerresponse").removeClass('alert-success');
+       	$("#offerresponse").addClass('alert-danger');
+		$("#offerresponse").html(resp.message);
+		$("#offerresponse").show();
+  	} else {
+  		$("#offerresponse").removeClass('alert-danger');
+        $("#offerresponse").addClass('alert-success');
+        $("#offerresponse").html(resp.message);
+        $("#offerresponse").show();
+        alert(resp.message);
+  	}
+}
 $('#pricingfrm').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -1240,97 +1275,134 @@ function showPriceResponse(resp, statusText, xhr, $form){
 // });
 
 $("#paymentbtn").click(function(){
-	var paymentInfo = [];
-	var payable = [];
-	var amount = [];
-	$('input[name="payable[]"]').each(function(index) {
-		payable.push($(this).val());
-	});
-	$('input[name="amount[]"]').each(function(index) {
-		amount.push($(this).val());
-	});
-	$('input[name="schedule[]"]').each(function(index) {
-		if($(this).val() != "") {
-			paymentInfo.push({schedule:$(this).val(),payable:payable[index],amount:amount[index],status:1,builderProject:{id:$("#id").val()}});
-		}
-	});
-	var project = {id:$("#id").val()};
-	var final_data = {builderProjectPaymentInfos:paymentInfo,builderProject:project}
-	if(paymentInfo.length > 0) {
-		$.ajax({
-		    url: '${baseUrl}/webapi/buyer/payment/update',
-		    type: 'POST',
-		    data: JSON.stringify(final_data),
-		    contentType: 'application/json; charset=utf-8',
-		    dataType: 'json',
-		    async: false,
-		    success: function(data) {
-				if (data.status == 0) {
-					alert(data.message);
-				} else {
-					alert(data.message);
-				}
-			},
-			error : function(data)
-			{
-				alert("Fail to save data");
-			}
+// 	var paymentInfo = [];
+// 	var payable = [];
+// 	var amount = [];
+// 	$('input[name="payable[]"]').each(function(index) {
+// 		payable.push($(this).val());
+// 	});
+// 	$('input[name="amount[]"]').each(function(index) {
+// 		amount.push($(this).val());
+// 	});
+// 	$('input[name="schedule[]"]').each(function(index) {
+// 		if($(this).val() != "") {
+// 			paymentInfo.push({schedule:$(this).val(),payable:payable[index],amount:amount[index],status:1,builderProject:{id:$("#id").val()}});
+// 		}
+// 	});
+// 	var project = {id:$("#id").val()};
+// 	var final_data = {builderProjectPaymentInfos:paymentInfo,builderProject:project}
+// 	if(paymentInfo.length > 0) {
+// 		$.ajax({
+// 		    url: '${baseUrl}/webapi/buyer/payment/update',
+// 		    type: 'POST',
+// 		    data: JSON.stringify(final_data),
+// 		    contentType: 'application/json; charset=utf-8',
+// 		    dataType: 'json',
+// 		    async: false,
+// 		    success: function(data) {
+// 				if (data.status == 0) {
+// 					alert(data.message);
+// 				} else {
+// 					alert(data.message);
+// 				}
+// 			},
+// 			error : function(data)
+// 			{
+// 				alert("Fail to save data");
+// 			}
 			
-		});
-	} else {
-		alert("Please enter payment schedule details");
-	}
+// 		});
+// 	} else {
+// 		alert("Please enter payment schedule details");
+// 	}
 });
 
+function updateBuyerPayments() {
+	var options = {
+	 		target : '#imageresponse', 
+	 		beforeSubmit : showAddPaymentRequest,
+	 		success :  showAddPaymentResponse,
+	 		url : '${baseUrl}/webapi/buyer/payment/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#paymentfrm').ajaxSubmit(options);
+}
+function showAddPaymentRequest(formData, jqForm, options){
+	$("#paymentresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddPaymentResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#paymentresponse").removeClass('alert-success');
+       	$("#paymentresponse").addClass('alert-danger');
+		$("#paymentresponse").html(resp.message);
+		$("#paymentresponse").show();
+  	} else {
+  		$("#paymentresponse").removeClass('alert-danger');
+        $("#paymentresponse").addClass('alert-success');
+        $("#paymentresponse").html(resp.message);
+        $("#paymentresponse").show();
+        alert(resp.message);
+  	}
+}
 $("#offerbtn").click(function(){
-	var offerInfo = [];
-	var discount = [];
-	var amount = [];
-	var applicable = [];
-	var apply = [];
-	$('input[name="discount[]"]').each(function(index) {
-		discount.push($(this).val());
-	});
-	$('input[name="discount_amount[]"]').each(function(index) {
-		amount.push($(this).val());
-	});
-	$('input[name="applicable_on[]"]').each(function(index) {
-		applicable.push($(this).val());
-	});
-	$('select[name="apply[]"] option:selected').each(function(index) {
-		apply.push($(this).val());
-	});
-	$('input[name="offer_title[]"]').each(function(index) {
-		if($(this).val() != "") {
-			offerInfo.push({title:$(this).val(),per:discount[index],amount:amount[index],applicable:applicable[index],apply:apply[index],builderProject:{id:$("#id").val()}});
-		}
-	});
-	var project = {id:$("#id").val()};
-	var final_data = {buyerOffer:offerInfo,builderProject:project}
-	if(offerInfo.length > 0) {
-		$.ajax({
-		    url: '${baseUrl}/webapi/buyer/offer/update',
-		    type: 'POST',
-		    data: JSON.stringify(final_data),
-		    contentType: 'application/json; charset=utf-8',
-		    dataType: 'json',
-		    async: false,
-		    success: function(data) {
-				if (data.status == 0) {
-					alert(data.message);
-				} else {
-					alert(data.message);
-				}
-			},
-			error : function(data)
-			{
-				alert("Fail to save data");
-			}
+// 	var offerInfo = [];
+// 	var discount = [];
+// 	var amount = [];
+// 	var applicable = [];
+// 	var apply = [];
+// 	var offer_id = [];
+// 	$('input[name="offer_id[]"]').each(function(index){
+// 		offer_id.push($(this).val());
+// 	});
+// 	$('input[name="discount[]"]').each(function(index) {
+// 		discount.push($(this).val());
+// 	});
+// 	$('input[name="discount_amount[]"]').each(function(index) {
+// 		amount.push($(this).val());
+// 	});
+// 	$('input[name="applicable_on[]"]').each(function(index) {
+// 		applicable.push($(this).val());
+// 	});
+// 	$('select[name="apply[]"] option:selected').each(function(index) {
+// 		apply.push($(this).val());
+// 	});
+// 	$('input[name="offer_title[]"]').each(function(index) {
+// 		if($(this).val() != "") {
+// 				offerInfo.push({title:$(this).val(),offer_percentage:discount[index],offer_amount:amount[index],applicable:applicable[index],status:apply[index],buyer:{id:$("#buyer_id").val()}});
+// 			}
+		
+// 	});
+// 	var buyer = {id: $("#buyer_id").val()};
+// 	alert("Buyer Id :: "+$("#buyer_id").val());
+// 	var final_data = {buyerOffer:offerInfo}
+// 	if(offerInfo.length > 0) {
+// 		$.ajax({
+// 		    url: '${baseUrl}/webapi/buyer/offer/update',
+// 		    type: 'POST',
+// 		    data: JSON.stringify(final_data),
+// 		    contentType: 'application/json; charset=utf-8',
+// 		    dataType: 'json',
+// 		    async: false,
+// 		    success: function(data) {
+// 				if (data.status == 0) {
+// 					alert(data.message);
+// 				} else {
+// 					alert(data.message);
+// 				}
+// 			},
+// 			error : function(data)
+// 			{
+// 				alert("Fail to save data");
+// 			}
 			
-		});
-	} else {
-		alert("Please enter offer details");
-	}
+// 		});
+// 	} else {
+// 		alert("Please enter offer details");
+// 	}
 });
 function addMoreBuyers() {
 	var buyers = parseInt($("#buyer_count").val());
@@ -1434,6 +1506,10 @@ function addMoreBuyers() {
 function removeBuyer(id) {
 	$("#buyer-"+id).remove();
 }
+
+function removeOffer(id) {
+	$("#offer-"+id).remove();
+}
 // function deleteImage(id) {
 // 	var flag = confirm("Are you sure ? You want to delete plan ?");
 // 	if(flag) {
@@ -1462,7 +1538,7 @@ function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
 	var html = '<div class="row" id="schedule-'+schedule_count+'">'
-				+'<hr/>'
+				+'<hr/><input type="hidden" name="payment_id[]" value="0" />'
 				+'<div class="col-lg-5 margin-bottom-5">'
 				+'<div class="form-group" id="error-schedule">'
 				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
@@ -1499,6 +1575,91 @@ function addMoreSchedule() {
 }
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();
+}
+function deleteSchedule(id){
+	var flag = confirm("Are you sure ? You want to delete offer ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/buyer/payment/delete/"+id, { }, function(data){
+			
+			if(data.status == 1) {
+				alert(data.message);
+				$("#schedule-"+id).remove();
+			}
+		});
+	}
+}
+function addMoreOffer() {
+	var offers = parseInt($("#offer_count").val());
+	offers++;
+	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="0" />'
+		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs">x</a></span></div>'
+		+'<div class="col-lg-6 margin-bottom-5">'
+			+'<div class="form-group" id="error-offer_title">'
+			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-8">'
+					+'<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>'
+				+'</div>'
+				+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-6 margin-bottom-5">'
+			+'<div class="form-group" id="error-discount">'
+				+'<label class="control-label col-sm-4">Offer Discount(%) <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-8">'
+					+'<input type="text" class="form-control" id="discount" name="discount[]" value=""/>'
+				+'</div>'
+				+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-6 margin-bottom-5">'
+			+'<div class="form-group" id="error-discount_amount">'
+				+'<label class="control-label col-sm-4">Offer Discount Amount </label>'
+				+'<div class="col-sm-8">'
+					+'<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>'
+				+'</div>'
+				+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-6 margin-bottom-5">'
+			+'<div class="form-group" id="error-applicable_on">'
+			+'<label class="control-label col-sm-4">Applicable on </label>'
+			+'<div class="col-sm-8">'
+			+'<input type="text" class="form-control" id="applicable_on" name="applicable_on[]" value=""/>'
+			+'</div>'
+			+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-6 margin-bottom-5">'
+		+'<div class="form-group" id="error-applicable_on">'
+		+'<label class="control-label col-sm-4">Apply </label>'
+		+'<div class="col-sm-8">'
+		+'<select class="form-control" id="apply" name="apply[]">'
+		+'<option value="1">Yes</option>'
+		+'<option value="0">No</option>'
+		+'</select>'
+		+'</div>'
+		+'<div class="messageContainer"></div>'
+		+'</div>'
+		+'</div>';
+		
+	$("#offer_area").append(html);
+	$("#offer_count").val(offers);
+}
+function removeOffer(id) {
+	$("#offer-"+id).remove();
+}
+
+function deleteOffer(id) {
+	var flag = confirm("Are you sure ? You want to delete offer ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/buyer/offer/delete/"+id, { }, function(data){
+			
+			if(data.status == 1) {
+				alert(data.message);
+				$("#offer-"+id).remove();
+			}
+		});
+	}
 }
 
 </script>
