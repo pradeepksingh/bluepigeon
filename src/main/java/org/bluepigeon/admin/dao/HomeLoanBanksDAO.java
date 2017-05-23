@@ -120,6 +120,16 @@ public class HomeLoanBanksDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<HomeLoanBanks> getActiveHomeLoanBanksList() {
+		String hql = "from HomeLoanBanks where status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<HomeLoanBanks> result = query.list();
+		session.close();
+		return result;
+	}
 
 	public List<HomeLoanBanks> getHomeLoanBanksById(int id) {
 		String hql = "from HomeLoanBanks where id = :id";

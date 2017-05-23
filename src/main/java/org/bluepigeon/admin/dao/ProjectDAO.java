@@ -425,6 +425,18 @@ public class ProjectDAO {
 		return result;
 	}
 	
+	public List<BuilderProject> getBuilderActiveProjects() {
+		String hql = "from BuilderProject where status = 1 order by id desc";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setFirstResult(0);
+		query.setMaxResults(100);
+		List<BuilderProject> result = query.list();
+		session.close();
+		return result;
+	}
+	
 	public List<Tax> getProjectTaxByPincode(String pincode) {
 		String hql = "from Tax where pincode = :pincode";
 		HibernateUtil hibernateUtil = new HibernateUtil();

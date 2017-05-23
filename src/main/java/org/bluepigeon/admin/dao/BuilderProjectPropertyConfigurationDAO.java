@@ -100,6 +100,16 @@ public class BuilderProjectPropertyConfigurationDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<BuilderProjectPropertyConfiguration> getBuilderActiveProjectConfigurations() {
+		String hql = "from BuilderProjectPropertyConfiguration where status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderProjectPropertyConfiguration> result = query.list();
+		session.close();
+		return result;
+	}
 
 	public List<BuilderProjectPropertyConfiguration> getCountryById(int id) {
 		String hql = "from BuilderProjectPropertyConfiguration where id = :id";

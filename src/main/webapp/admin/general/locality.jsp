@@ -10,7 +10,7 @@
 <%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
 <%@page import="org.bluepigeon.admin.model.Country"%>
 <%@page import="org.bluepigeon.admin.model.City"%>
-<%@page import="org.bluepigeon.admin.service.CityNamesService"%>
+<%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
 <%@page import="org.bluepigeon.admin.model.State"%>
 <%@page import="org.bluepigeon.admin.dao.StateImp"%>
 <%@page import="org.bluepigeon.admin.model.Locality"%>
@@ -31,7 +31,7 @@ List<City> city_list = null;
 List<State> state_list = null;
 List<Country> country_list = null;
 CountryDAOImp countryService = new CountryDAOImp();
-List<Country> listCountry = countryService.getCountryList();
+List<Country> listCountry = countryService.getActiveCountryList();
 StateImp stateList = new StateImp();
 country_size = listCountry.size(); 
 if (request.getParameterMap().containsKey("city_id")) {
@@ -40,10 +40,10 @@ if (request.getParameterMap().containsKey("city_id")) {
 	locality_size = locality_list.size();
   	if(locality_size > 0) {
   		state_id = locality_list.get(0).getCity().getState().getId();
-  		city_list = new CityNamesService().getAllCityNamesByStateId(state_id);
+  		city_list = new CityNamesImp().getActiveCityNamesByStateId(state_id);
   	  	city_size = city_list.size(); 
 	  	country_id = city_list.get(0).getState().getCountry().getId();
-	  	state_list = stateList.getStateByCountryId(country_id);
+	  	state_list = stateList.getActiveStateByCountryId(country_id);
 	  	state_size = state_list.size();
   	}
 } else {

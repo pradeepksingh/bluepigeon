@@ -162,7 +162,7 @@ public class GeneralController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<State> addState(@QueryParam("country_id") int country_id) {
 		StateImp stateImp = new StateImp();
-		return stateImp.getStateByCountryId(country_id);
+		return stateImp.getActiveStateByCountryId(country_id);
 	}
 	
 	@GET

@@ -7,7 +7,7 @@
 <%@include file="../../leftnav.jsp"%>
 <%
 BuilderProjectTypeDAO builderProjectTypeDAO = new BuilderProjectTypeDAO();
-List<BuilderProjectType> builderProjectTList = builderProjectTypeDAO.getBuilderProjectTypes();
+List<BuilderProjectType> builderProjectTList = builderProjectTypeDAO.getBuilderAllProjectTypes();
 %>
 <div class="main-content">
 	<div class="main-content-inner">

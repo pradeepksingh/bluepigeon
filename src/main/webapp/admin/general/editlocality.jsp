@@ -23,7 +23,7 @@
 	int city_size = 0;
 	List<Country> country_list = null;
 	CountryDAOImp countryService = new CountryDAOImp();
-	List<Country> listCountry = countryService.getCountryList();
+	List<Country> listCountry = countryService.getActiveCountryList();
 	country_size = listCountry.size(); 
 	List<State> state_list = null;
 	List<City> city_list = null;
@@ -36,9 +36,9 @@
 		locality_detail = new LocalityNamesImp().getLocalityById(locality_id);
 		if(locality_detail.size() > 0) {
 			locality = locality_detail.get(0);
-			state_list = stateList.getStateByCountryId(locality.getCity().getState().getCountry().getId());
+			state_list = stateList.getActiveStateByCountryId(locality.getCity().getState().getCountry().getId());
 			state_size = state_list.size();
-			city_list = cityList.getCityNamesByStateId(locality.getCity().getState().getId());
+			city_list = cityList.getActiveCityNamesByStateId(locality.getCity().getState().getId());
 			city_size = city_list.size();
 		}
 	}

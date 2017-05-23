@@ -91,6 +91,17 @@ public class BuilderFlatAmenityDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<BuilderFlatAmenity> getBuilderActiveFlatAmenityList() {
+		String hql = "from BuilderFlatAmenity where status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderFlatAmenity> result = query.list();
+		
+		session.close();
+		return result;
+	}
 
 	public List<BuilderFlatAmenity> getBuilderFlatAmenityById(int id) {
 		String hql = "from BuilderFlatAmenity where id = :id";

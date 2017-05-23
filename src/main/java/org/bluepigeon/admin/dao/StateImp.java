@@ -120,6 +120,29 @@ public class StateImp {
         System.out.println("Size1="+result.size());
         return states;
     }
+    
+    public List<State> getActiveStateByCountryId(int countryId)
+    {
+        System.out.println("country="+countryId);
+        String hql = "from State where country.id = :countryId and status=1";
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        Session session = hibernateUtil.openSession();
+        Query query = session.createQuery(hql);
+        query.setParameter("countryId", countryId);
+        List<State> result = query.list();
+        List<State> states = new ArrayList<State>();
+        for(int i=0; i<result.size(); i++){
+        	State state = new State();
+        	state.setId(result.get(i).getId());
+        	state.setName(result.get(i).getName());
+        	state.setStatus(result.get(i).getStatus());
+        	states.add(state);
+        }
+        session.close();
+        System.out.println("Size1="+result.size());
+        return states;
+    }
+    
     /**
      * Get State by Country id
      * @param countryId

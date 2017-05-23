@@ -108,6 +108,18 @@ public class CityNamesImp {
 		return result;
 	}
 	
+	public List<City> getActiveCityNamesByStateId(int stateId)
+	{
+		String hql = "from City where state.id = :stateId and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("stateId", stateId);
+		List<City> result = query.list();
+		session.close();
+		return result;
+	}
+	
 	public List<City> getCityById(int id)
 	{
 		String hql = "from City where id = :id";
@@ -131,7 +143,7 @@ public class CityNamesImp {
 		return result;
 	}
 	public List<CityData> getCityByStateId(int stateId){
-		String hql = "from City where state.id = :state_id";
+		String hql = "from City where state.id = :state_id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
