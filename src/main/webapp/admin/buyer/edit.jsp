@@ -1538,7 +1538,7 @@ function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
 	var html = '<div class="row" id="schedule-'+schedule_count+'">'
-				+'<hr/>'
+				+'<hr/><input type="hidden" name="payment_id[]" value="0" />'
 				+'<div class="col-lg-5 margin-bottom-5">'
 				+'<div class="form-group" id="error-schedule">'
 				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
@@ -1576,7 +1576,18 @@ function addMoreSchedule() {
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();
 }
-
+function deleteSchedule(id){
+	var flag = confirm("Are you sure ? You want to delete offer ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/buyer/payment/delete/"+id, { }, function(data){
+			
+			if(data.status == 1) {
+				alert(data.message);
+				$("#schedule-"+id).remove();
+			}
+		});
+	}
+}
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;

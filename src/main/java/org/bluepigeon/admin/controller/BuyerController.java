@@ -623,7 +623,7 @@ public class BuyerController {
 				{
 					if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
 						if(payment_id!=null){
-							if(payment_id.get(i).getValueAs(Integer.class) != null) {
+							if(payment_id.get(i).getValueAs(Integer.class) != null && payment_id.get(i).getValueAs(Integer.class) !=0) {
 								boolean isPaid = false;
 								BuyerPayment buyerPayment = new BuyerPayment();
 								buyerPayment.setId(payment_id.get(i).getValueAs(Integer.class));
@@ -689,7 +689,7 @@ public class BuyerController {
 				{
 					if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
 						if(offer_id!=null){
-						if( offer_id.get(i).getValueAs(Integer.class) != null) {
+						if( offer_id.get(i).getValueAs(Integer.class) != 0 && offer_id.get(i).getValueAs(Integer.class) != null) {
 							BuyerOffer buyerOffer = new BuyerOffer();
 							buyerOffer.setId(offer_id.get(i).getValueAs(Integer.class) );
 							buyerOffer.setTitle(title.getValueAs(String.class).toString());
@@ -1301,6 +1301,16 @@ public class BuyerController {
 		ResponseMessage msg = new ResponseMessage();
 		BuyerDAO buyerDAO = new BuyerDAO();
 		msg = buyerDAO.deleteBuyerOfferInfo(id);
+		return msg;
+	}
+	
+	@GET
+	@Path("/payment/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteBuildingPaymentInfo(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		BuyerDAO buyerDAO = new BuyerDAO();
+		msg = buyerDAO.deleteBuyerPaymentById(id);
 		return msg;
 	}
 }

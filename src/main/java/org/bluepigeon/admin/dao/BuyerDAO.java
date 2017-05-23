@@ -919,4 +919,20 @@ public class BuyerDAO {
 			resp.setStatus(1);
 			return resp;
 		}
+		
+		public ResponseMessage deleteBuyerPaymentById(int id) {
+			ResponseMessage resp = new ResponseMessage();
+			String hql = "delete from BuyerPayment where id = :id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setParameter("id", id);
+			query.executeUpdate();
+			session.getTransaction().commit();
+			session.close();
+			resp.setMessage("Buyer payment deleted successfully.");
+			resp.setStatus(1);
+			return resp;
+		}
 }
