@@ -189,6 +189,17 @@ public class BuilderDetailsDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<Builder> getActiveBuilderList() {
+		String hql = "from Builder where status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<Builder> result = query.list();
+		
+		session.close();
+		return result;
+	}
 
 	public List<BuilderEmployeeAccessType> getBuilderAccessList() {
 		String hql = "from BuilderEmployeeAccessType";

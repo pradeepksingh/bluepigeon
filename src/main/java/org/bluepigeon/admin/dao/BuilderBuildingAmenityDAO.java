@@ -132,11 +132,16 @@ public class BuilderBuildingAmenityDAO {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		List<BuilderBuildingAmenity> result = query.list();
-		// System.out.println("Result : "+result.size());
-		for (int i = 0; i < result.size(); i++) {
-			BuilderBuildingAmenity builderBuildingAmenity = result.get(i);
-			System.out.println(builderBuildingAmenity.getName());
-		}
+		session.close();
+		return result;
+	}
+	
+	public List<BuilderBuildingAmenity> getBuilderActiveBuildingAmenityList() {
+		String hql = "from BuilderBuildingAmenity where isDeleted=0 and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderBuildingAmenity> result = query.list();
 		session.close();
 		return result;
 	}

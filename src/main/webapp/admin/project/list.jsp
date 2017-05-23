@@ -12,9 +12,9 @@
 <%
 	List<ProjectList> project_list = new ProjectDAO().getBuilderProjects();
 	int builder_size = project_list.size();
-	List<Builder> builders = new BuilderDetailsDAO().getBuilderList();
+	List<Builder> builders = new BuilderDetailsDAO().getActiveBuilderList();
 	CountryDAOImp countryService = new CountryDAOImp();
-	List<Country> listCountry = countryService.getCountryList();
+	List<Country> listCountry = countryService.getActiveCountryList();
 %>
 <div class="main-content">
 	<div class="main-content-inner">

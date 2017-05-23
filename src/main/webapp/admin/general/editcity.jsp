@@ -19,7 +19,7 @@
 	int state_size = 0;
 	List<Country> country_list = null;
 	CountryDAOImp countryService = new CountryDAOImp();
-	List<Country> listCountry = countryService.getCountryList();
+	List<Country> listCountry = countryService.getActiveCountryList();
 	country_size = listCountry.size(); 
 	List<State> state_list = null;
 	StateImp stateList = new StateImp();
@@ -30,7 +30,7 @@
 		city_detail = new CityNamesService().getCityDetailById(city_id);
 		if(city_detail.size() > 0)
 		city = city_detail.get(0);
-		state_list = stateList.getStateByCountryId(city.getState().getCountry().getId());
+		state_list = stateList.getActiveStateByCountryId(city.getState().getCountry().getId());
 		state_size = state_list.size();
 	}
 %>				<input type="hidden" name="city_id" id="ucity_id" value="<% out.print(city.getId()); %>"/>

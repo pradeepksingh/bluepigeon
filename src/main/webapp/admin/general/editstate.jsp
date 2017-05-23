@@ -15,7 +15,7 @@ if (state_id > 0) {
 	if(state_detail.size() > 0)
 		state = state_detail.get(0);
 }
-country_list = new CountryDAOImp().getCountryList();
+country_list = new CountryDAOImp().getActiveCountryList();
 country_size = country_list.size();
 %>				<input type="hidden" name="state_id" id="ustate_id" value="<% out.print(state.getId()); %>"/>
 				<div class="row" style=padding:20px">

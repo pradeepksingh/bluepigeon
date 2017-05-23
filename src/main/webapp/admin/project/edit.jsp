@@ -58,9 +58,9 @@
 	int p_user_id = 0;
 	project_id = Integer.parseInt(request.getParameter("project_id"));
 	BuilderProject builderProject = new ProjectDAO().getBuilderProjectById(project_id);
-	List<Builder> builders = new BuilderDetailsDAO().getBuilderList();
+	List<Builder> builders = new BuilderDetailsDAO().getActiveBuilderList();
 	CountryDAOImp countryService = new CountryDAOImp();
-	List<Country> listCountry = countryService.getCountryList();
+	List<Country> listCountry = countryService.getActiveCountryList();
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
 	Set<State> states = null;
@@ -76,12 +76,12 @@
 		}
    	}
 	List<BuilderProjectType> projectTypes = new BuilderProjectTypeDAO().getBuilderProjectTypes();
-	List<BuilderPropertyType> propertyTypes = new BuilderPropertyTypeDAO().getBuilderPropertyTypes();
-	List<BuilderProjectPropertyConfiguration> projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderProjectConfigurations();
-	List<BuilderProjectAmenity> projectAmenities = new BuilderProjectAmenityDAO().getBuilderProjectAmenityList();
-	List<BuilderProjectApprovalType> projectApprovals = new BuilderProjectApprovalTypeDAO().getBuilderProjectApprovalTypes();
-	List<HomeLoanBanks> homeLoanBanks = new HomeLoanBanksDAO().getHomeLoanBanksList();
-	List<AreaUnit> areaUnits = new AreaUnitDAO().getAreaUnitList();
+	List<BuilderPropertyType> propertyTypes = new BuilderPropertyTypeDAO().getBuilderActivePropertyTypes();
+	List<BuilderProjectPropertyConfiguration> projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderActiveProjectConfigurations();
+	List<BuilderProjectAmenity> projectAmenities = new BuilderProjectAmenityDAO().getBuilderActiveProjectAmenityList();
+	List<BuilderProjectApprovalType> projectApprovals = new BuilderProjectApprovalTypeDAO().getBuilderActiveProjectApprovalTypes();
+	List<HomeLoanBanks> homeLoanBanks = new HomeLoanBanksDAO().getActiveHomeLoanBanksList();
+	List<AreaUnit> areaUnits = new AreaUnitDAO().getActiveAreaUnitList();
 	List<BuilderProjectAmenityInfo> projectAmenityInfos = new BuilderProjectAmenityInfoDAO().getBuilderProjectAmenityInfo(project_id);
 	List<BuilderProjectProjectType> projectProjectTypes = new BuilderProjectProjectTypeDAO().getBuilderProjectProjectTypes(project_id);
 	List<BuilderProjectPropertyType> projectPropertyTypes = new BuilderProjectPropertyTypeDAO().getBuilderProjectPropertyTypes(project_id);
@@ -227,9 +227,10 @@
 										                    		cities = state.getCities();
 										                    		out.print(state.getName());
 										                    	}
+										                    	if(state.getStatus() == 1) {
 										                    %>
 															<option value="<% out.print(state.getId());%>" <% if(builderProject.getState().getId() == state.getId()) { %>selected<% } %>><% out.print(state.getName());%></option>
-															<% } %>
+															<% }} %>
 											          	</select>
 													</div>
 													<div class="messageContainer"></div>
@@ -245,9 +246,10 @@
 										                    <% 	if(builderProject.getCity().getId() == city.getId()) { 
 										                    		localities = city.getLocalities();
 										                    	}
+										                    	if(city.getStatus() == 1) {
 										                    %>
 															<option value="<% out.print(city.getId());%>" <% if(builderProject.getCity().getId() == city.getId()) { %>selected<% } %>><% out.print(city.getName());%></option>
-															<% } %>
+															<% }} %>
 											          	</select>
 													</div>
 													<div class="messageContainer"></div>
@@ -261,9 +263,11 @@
 													<div class="col-sm-8">
 														<select name="locality_id" id="locality_id" class="form-control">
 										                	<option value="">Select Locality</option>
-										                	<% for(Locality locality : localities){ %>
+										                	<% for(Locality locality : localities){ 
+										                		if(locality.getStatus()) {
+										                	%>
 															<option value="<% out.print(locality.getId());%>" <% if(builderProject.getLocality().getId() == locality.getId()) { %>selected<% } %>><% out.print(locality.getName());%></option>
-															<% } %>
+															<% }} %>
 											          	</select>
 													</div>
 													<div class="messageContainer"></div>
@@ -472,7 +476,7 @@
 														%>
 														<div class="col-sm-12" id="amenity_stage<% out.print(projectAmenity.getId());%>" style="<% if(is_checked == "checked") {%>display:block;<% } else { %>display:none;<% } %>margin-bottom:5px;">
 															<div class="row">
-																<label class="control-label col-sm-3" style="padding-top:5px;"><strong><% out.print(projectAmenity.getName());%></strong></label>
+																<label class="control-label col-sm-3" style="padding-top:5px;"><strong><% out.print(projectAmenity.getName());%> (%)</strong></label>
 																<div class="col-sm-4">
 																	<input type="text" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(projectAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
 																</div>
@@ -488,7 +492,7 @@
 															<fieldset class="scheduler-border">
 																<legend class="scheduler-border">Stages</legend>
 																<div class="col-sm-12">
-																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %></b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(projectAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(projectAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
 																	<fieldset class="scheduler-border" style="margin-bottom:0px !important">
 																		<legend class="scheduler-border">Sub Stages</legend>
 																	<% 	for(BuilderProjectAmenitySubstages bpaSubstage :bpaStages.getBuilderProjectAmenitySubstageses()) { 
@@ -500,7 +504,7 @@
 																		}
 																	%>
 																		<div class="col-sm-3">
-																			<% out.print(bpaSubstage.getName()); %><br>
+																			<% out.print(bpaSubstage.getName()); %> (%)<br>
 																			<input type="text" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
 																		</div>
 																	<% } %>

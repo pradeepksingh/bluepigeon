@@ -91,6 +91,17 @@ public class BuilderFloorAmenityDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<BuilderFloorAmenity> getBuilderActiveFloorAmenityList() {
+		String hql = "from BuilderFloorAmenity where status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderFloorAmenity> result = query.list();
+		
+		session.close();
+		return result;
+	}
 
 	public List<BuilderFloorAmenity> getBuilderFloorAmenityById(int id) {
 		String hql = "from BuilderFloorAmenity where id = :id";

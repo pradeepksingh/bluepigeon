@@ -29,8 +29,8 @@
 			p_user_id = adminuserproject.getId();
 		}
 	}
-	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderAllProjects();
-	List<BuilderProjectPropertyConfiguration> projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderProjectConfigurations();
+	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderActiveProjects();
+	List<BuilderProjectPropertyConfiguration> projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderActiveProjectConfigurations();
 %>
 <div class="main-content">
 	<div class="main-content-inner">

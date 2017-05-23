@@ -131,6 +131,17 @@ public class AreaUnitDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<AreaUnit> getActiveAreaUnitList() {
+		String hql = "from AreaUnit where isDeleted=0 and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<AreaUnit> result = query.list();
+		
+		session.close();
+		return result;
+	}
 
 	public List<AreaUnit> getAreaUnitById(Short id) {
 		String hql = "from AreaUnit where id = :id";

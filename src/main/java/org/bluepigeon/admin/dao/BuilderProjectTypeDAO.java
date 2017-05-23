@@ -101,6 +101,16 @@ public class BuilderProjectTypeDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<BuilderProjectType> getBuilderAllProjectTypes() {
+		String hql = "from BuilderProjectType";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderProjectType> result = query.list();
+		session.close();
+		return result;
+	}
 
 	public List<BuilderProjectType> getCountryById(int id) {
 		String hql = "from BuilderProjectType where id = :id";

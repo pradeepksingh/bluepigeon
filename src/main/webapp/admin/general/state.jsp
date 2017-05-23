@@ -25,7 +25,7 @@ if (request.getParameterMap().containsKey("country_id")) {
 	state_size = state_list.size();
 }
 
-country_list = new CountryDAOImp().getCountryList();
+country_list = new CountryDAOImp().getActiveCountryList();
 country_size = country_list.size();
 %>
 <div class="main-content">

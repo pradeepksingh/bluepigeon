@@ -93,6 +93,16 @@ public class CountryDAOImp {
 		session.close();
 		return result;
 	}
+	
+	public List<Country> getActiveCountryList() {
+		String hql = "from Country where status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<Country> result = query.list();
+		session.close();
+		return result;
+	}
 
 	public List<Country> getCountryById(int id) {
 		String hql = "from Country where id = :id";

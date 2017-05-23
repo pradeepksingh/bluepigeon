@@ -26,7 +26,7 @@ List<City> city_list = null;
 List<State> state_list = null;
 List<Country> country_list = null;
 CountryDAOImp countryService = new CountryDAOImp();
-List<Country> listCountry = countryService.getCountryList();
+List<Country> listCountry = countryService.getActiveCountryList();
 StateImp stateList = new StateImp();
 country_size = listCountry.size(); 
 if (request.getParameterMap().containsKey("state_id")) {
@@ -35,7 +35,7 @@ if (request.getParameterMap().containsKey("state_id")) {
   city_size = city_list.size(); 
   if(city_size > 0) {
 	  country_id = city_list.get(0).getState().getCountry().getId();
-	  state_list = stateList.getStateByCountryId(country_id);
+	  state_list = stateList.getActiveStateByCountryId(country_id);
 	  state_size = state_list.size();
   }
 } else {

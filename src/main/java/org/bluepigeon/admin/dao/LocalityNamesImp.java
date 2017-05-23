@@ -109,7 +109,7 @@ public class LocalityNamesImp {
 	}
 	public List<Locality> getLocalityByCityId(int cityId)
 	{
-		String hql = "from Locality where city.id = :city_id";
+		String hql = "from Locality where city.id = :city_id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);

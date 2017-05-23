@@ -8,9 +8,9 @@
 <%@include file="../../head.jsp"%>
 <%@include file="../../leftnav.jsp"%>
 <%
-	List<Builder> builders = new BuilderDetailsDAO().getBuilderList();
+	List<Builder> builders = new BuilderDetailsDAO().getActiveBuilderList();
 	CountryDAOImp countryService = new CountryDAOImp();
-	List<Country> listCountry = countryService.getCountryList();
+	List<Country> listCountry = countryService.getActiveCountryList();
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
 	int p_user_id = 0;

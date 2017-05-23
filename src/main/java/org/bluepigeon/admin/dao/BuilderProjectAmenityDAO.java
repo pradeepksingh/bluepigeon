@@ -91,6 +91,17 @@ public class BuilderProjectAmenityDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<BuilderProjectAmenity> getBuilderActiveProjectAmenityList() {
+		String hql = "from BuilderProjectAmenity where status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderProjectAmenity> result = query.list();
+		
+		session.close();
+		return result;
+	}
 
 	public List<BuilderProjectAmenity> getBuilderProjectAmenityById(int id) {
 		String hql = "from BuilderProjectAmenity where id = :id";

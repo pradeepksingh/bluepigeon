@@ -27,13 +27,13 @@
 			p_user_id = adminuserproject.getId();
 		}
 	}
-	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderAllProjects();
+	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderActiveProjects();
 	BuilderFlatType builderFlatType = null;
 	List<BuilderFlatType> builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeById(flat_type_id);
 	if(builderFlatTypes.size() > 0) {
 		builderFlatType = builderFlatTypes.get(0);
 	}
-	List<BuilderProjectPropertyConfiguration> projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderProjectConfigurations();
+	List<BuilderProjectPropertyConfiguration> projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderActiveProjectConfigurations();
 	List<FlatTypeImage> flatTypeImages = new ProjectDAO().getBuildingFlatTypeImages(flat_type_id);
 	List<BuilderBuildingFlatType> builderBuildingFlatTypes = new ProjectDAO().getBuildingFlatTypes(flat_type_id);
 	List<BuilderBuildingFlatTypeRoom> builderBuildingFlatTypeRooms = new ProjectDAO().getBuildingFlatTypeRooms(flat_type_id);
