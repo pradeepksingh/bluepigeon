@@ -3,6 +3,12 @@ package org.bluepigeon.admin.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuyerData;
 import org.bluepigeon.admin.data.BuyerDocList;
@@ -598,21 +604,21 @@ public class BuyerDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		ResponseMessage responseMessage = new ResponseMessage();
 		
-		String delete_buyer_documents = "DELETE from  BuyerPayment where buyer.id = :buyer_id";
-		Session newsession1 = hibernateUtil.openSession();
-		newsession1.beginTransaction();
-		Query smdelete = newsession1.createQuery(delete_buyer_documents);
-		smdelete.setParameter("buyer_id", buyerPayment.get(0).getBuyer().getId());
-		smdelete.executeUpdate();
-		newsession1.getTransaction().commit();
-		newsession1.close();
+//		String delete_buyer_documents = "DELETE from  BuyerPayment where buyer.id = :buyer_id";
+//		Session newsession1 = hibernateUtil.openSession();
+//		newsession1.beginTransaction();
+//		Query smdelete = newsession1.createQuery(delete_buyer_documents);
+//		smdelete.setParameter("buyer_id", buyerPayment.get(0).getBuyer().getId());
+//		smdelete.executeUpdate();
+//		newsession1.getTransaction().commit();
+//		newsession1.close();
 		
 		
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
 		if(buyerPayment.size()>0){
 			for(int i=0;i<buyerPayment.size();i++){
-				newsession.save(buyerPayment.get(i));
+				newsession.update(buyerPayment.get(i));
 			}
 			newsession.getTransaction().commit();
 			newsession.close();
@@ -896,5 +902,21 @@ public class BuyerDAO {
 			List<Buyer> result = query.list();
 			session.close();
 			return result;
+		}
+		
+		public ResponseMessage deleteBuyerOfferInfo(int id) {
+			ResponseMessage resp = new ResponseMessage();
+			String hql = "delete from BuyerOffer where id = :id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setParameter("id", id);
+			query.executeUpdate();
+			session.getTransaction().commit();
+			session.close();
+			resp.setMessage("Buyer offer deleted successfully.");
+			resp.setStatus(1);
+			return resp;
 		}
 }

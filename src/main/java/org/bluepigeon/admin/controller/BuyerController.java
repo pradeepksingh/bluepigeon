@@ -597,44 +597,65 @@ public class BuyerController {
 	@POST
 	@Path("/payment/update")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updateBuyerPayment(
 			@FormDataParam("buyer_id") int buyer_id,
+			@FormDataParam("payment_id[]") List<FormDataBodyPart> payment_id,
 			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
 			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
 			@FormDataParam("amount[]") List<FormDataBodyPart> amount
 			) {
-		Buyer buyer = null;
+		Buyer buyer =new BuyerDAO().getBuyerById(buyer_id);
 		Buyer primaryBuyer = new Buyer();
 		BuyerDAO buyerDAO = new BuyerDAO();
 		ResponseMessage resp = new ResponseMessage();
 		  if(buyer_id > 0){
-			  buyer = new Buyer();
 			  buyer.setId(buyer_id);
 		  }
 		  if(buyer.getIsPrimary()){
 			  primaryBuyer = buyer;
 		  }
 		  if (schedule.size() > 0) {
-				List<BuyerPayment> buyerPayments = new ArrayList<BuyerPayment>();
+				List<BuyerPayment> updateBuyerPayments = new ArrayList<BuyerPayment>();
+				List<BuyerPayment> newBuyerPayments = new ArrayList<BuyerPayment>();
 				int i = 0;
 				for(FormDataBodyPart milestone : schedule)
 				{
 					if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
-						boolean isPaid = false;
-						BuyerPayment buyerPayment = new BuyerPayment();
-						buyerPayment.setMilestone(milestone.getValueAs(String.class).toString());
-						buyerPayment.setNetPayable(payable.get(i).getValueAs(Double.class));
-						buyerPayment.setAmount(amount.get(i).getValueAs(Double.class));
-						buyerPayment.setPaid(isPaid);
-						buyerPayment.setBuyer(primaryBuyer);
-						buyerPayments.add(buyerPayment);
+						if(payment_id!=null){
+							if(payment_id.get(i).getValueAs(Integer.class) != null) {
+								boolean isPaid = false;
+								BuyerPayment buyerPayment = new BuyerPayment();
+								buyerPayment.setId(payment_id.get(i).getValueAs(Integer.class));
+								buyerPayment.setMilestone(milestone.getValueAs(String.class).toString());
+								buyerPayment.setNetPayable(payable.get(i).getValueAs(Double.class));
+								buyerPayment.setAmount(amount.get(i).getValueAs(Double.class));
+								buyerPayment.setPaid(isPaid);
+								buyerPayment.setBuyer(primaryBuyer);
+								updateBuyerPayments.add(buyerPayment);
+						}
+						}else{
+								boolean isPaid = false;
+								BuyerPayment buyerPayment = new BuyerPayment();
+								buyerPayment.setMilestone(milestone.getValueAs(String.class).toString());
+								buyerPayment.setNetPayable(payable.get(i).getValueAs(Double.class));
+								buyerPayment.setAmount(amount.get(i).getValueAs(Double.class));
+								buyerPayment.setPaid(isPaid);
+								buyerPayment.setBuyer(primaryBuyer);
+								newBuyerPayments.add(buyerPayment);
+					}
 					}
 					i++;
+				
 				}
-				if(buyerPayments.size() > 0) {
-					resp = buyerDAO.updateBuyerPayments(buyerPayments);
+				if(updateBuyerPayments.size() > 0) {
+					buyerDAO.updateBuyerPayments(updateBuyerPayments);
 				}
+				if(newBuyerPayments.size() > 0){
+					buyerDAO.saveBuyerPayment(newBuyerPayments);
+				}
+				resp.setStatus(1);
+				resp.setMessage("Buyer payment updated successfully.");
 	  }
 		  return resp;
  }
@@ -1271,6 +1292,16 @@ public class BuyerController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage deleteDemandletterPlan(@PathParam("id") int demandletter_id) {
 		return new DemandLettersDAO().deleteDemandLettersDoc(demandletter_id);
+	}
+	
+	@GET
+	@Path("/offer/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteBuildingOfferInfo(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		BuyerDAO buyerDAO = new BuyerDAO();
+		msg = buyerDAO.deleteBuyerOfferInfo(id);
+		return msg;
 	}
 }
 	
