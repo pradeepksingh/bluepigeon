@@ -150,7 +150,7 @@
 															<div class="col-sm-8">
 																<input type="text" class="form-control" id="buyer_name" name="buyer_name[]" value="<%out.print(buyer.getName()); %>"/>
 															</div>
-															<div class="messageContainer"></div>
+															<div class="messageContainer col-sm-3"></div>
 														</div>
 													</div>
 													<div class="col-lg-5 margin-bottom-6">
@@ -159,7 +159,7 @@
 															<div class="col-sm-8">
 																<input type="text" class="form-control" id="contact" name="contact[]" value="<%out.print(buyer.getMobile());%>"/>
 															</div>
-															<div class="messageContainer"></div>
+															<div class="messageContainer col-sm-3"></div>
 														</div>
 													</div>
 											    </div>
@@ -170,7 +170,7 @@
 															<div class="col-sm-8">
 																<input type="text" class="form-control" id="email" name="email[]" value="<%out.print(buyer.getEmail());%>"/>
 															</div>
-															<div class="messageContainer"></div><br/>
+															<div class="messageContainer col-sm-3"></div><br/>
 														</div>
 													</div>
 													<div class="col-lg-5 margin-bottom-6">
@@ -179,7 +179,7 @@
 															<div class="col-sm-8">
 																<input type="text" class="form-control" id="pan" name="pan[]" value="<%out.print(buyer.getPanCard());%>"/>
 															</div>
-															<div class="messageContainer"></div>
+															<div class="messageContainer col-sm-3"></div>
 														</div>
 													</div>
 												</div>
@@ -190,7 +190,7 @@
 														<div class="col-sm-8">
 														<textarea class="form-control" id="address" name="address[]" ><%out.print(buyer.getAddress()); %></textarea>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 														</div>
 													</div>
 													<div class="col-lg-5 margin-bottom-6">
@@ -203,7 +203,7 @@
 												                      <option value="1"<% if(buyer.isPrimary() == true){%>selected<%} %>>Owner</option>
 													          	</select>
 															</div>
-															<div class="messageContainer col-sm-4"></div>
+															<div class="messageContainer col-sm-3"></div>
 														</div>
 													</div>
 												</div>
@@ -254,7 +254,7 @@
 																<input type="checkbox" name="document_voterid[]" value="5" <% if(is_voterid) {%>checked<%} %> />Vote ID 
 															</div>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												
@@ -622,9 +622,11 @@
 					</form>
 				</div>
 				<div id="offer" class="tab-pane fade">
-					<form id="offerfrm" name="offerfrm" method="post">
+					<form id="offerfrm" name="offerfrm" method="post"  enctype="multipart/form-data">
 						<input type="hidden" name="offer_count" id="offer_count" value="<%out.print(buyerOffersList.size()+1); %>"/>
+						<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(buyer_id);%>"/>
 			 			<div class="row">
+			 			<div id="offerresponse"></div>
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
@@ -632,9 +634,10 @@
 											<% 	int j = 1;
 												for(BuyerOffer buyerOffer :buyerOffersList) { 
 											%>
+											<input type="hidden"  name="offer_id[]" value="<%out.print(buyerOffer.getId());%>"/>
 											<div class="row" id="offer-<% out.print(j);%>">
 												<div class="col-lg-12" style="padding-bottom:5px;">
-													<span class="pull-right"><a href="javascript:removeOffer(<% out.print(j);%>);" class="btn btn-danger btn-xs">x</a></span>
+													<span class="pull-right"><a href="javascript:removeOffer(<% out.print(buyerOffer.getId());%>);" class="btn btn-danger btn-xs">x</a></span>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
 													<div class="form-group" id="error-offer_title">
@@ -642,7 +645,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% if(buyerOffer.getTitle() != null) { out.print(buyerOffer.getTitle());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -651,7 +654,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="discount" name="discount[]" value="<% if(buyerOffer.getOfferPercentage() != null) { out.print(buyerOffer.getOfferPercentage());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -660,7 +663,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% if(buyerOffer.getOfferPercentage() != null) { out.print(buyerOffer.getOfferAmount());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -669,7 +672,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="applicable_on" name="applicable_on[]" value="<% if(buyerOffer.getApplicable() != null) { out.print(buyerOffer.getApplicable());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -681,7 +684,7 @@
 																<option value="0" <% if(buyerOffer.getApplicable() == 0) { %>selected<% } %>>No</option>
 															</select>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 											</div>
@@ -699,7 +702,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -708,7 +711,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="discount" name="discount[]" value=""/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -717,7 +720,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -726,7 +729,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="applicable_on" name="applicable_on[]" value=""/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -738,7 +741,7 @@
 																<option value="0" >No</option>
 															</select>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-3"></div>
 													</div>
 												</div>
 											</div>
@@ -754,7 +757,7 @@
 											<div class="row">
 												<div class="col-lg-12">
 													<div class="col-sm-12">
-														<button type="button" class="btn btn-success btn-sm" id="offerbtn">Update</button>
+														<button type="button" class="btn btn-success btn-sm" id="offerbtn" onclick="updateBuyerOffer();">Update</button>
 													</div>
 												</div>
 											</div>
@@ -976,7 +979,7 @@ $('#basicfrm').bootstrapValidator({
                 }
             }
         },
-        'pancard[]': {
+        pan: {
             validators: {
                 notEmpty: {
                     message: 'Pancard is required and cannot be empty'
@@ -1119,7 +1122,37 @@ function showAddResponse(resp, statusText, xhr, $form){
         location.reload(true);
   	}
 }
-
+function updateBuyerOffer(){
+	var options = {
+	 		target : '#offerresponse', 
+	 		beforeSubmit : showAddOfferRequest,
+	 		success :  showAddOfferResponse,
+	 		url : '${baseUrl}/webapi/buyer/offer/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#offerfrm').ajaxSubmit(options);
+}
+function showAddOfferRequest(formData, jqForm, options){
+	$("#offerresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddOfferResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#offerresponse").removeClass('alert-success');
+       	$("#offerresponse").addClass('alert-danger');
+		$("#offerresponse").html(resp.message);
+		$("#offerresponse").show();
+  	} else {
+  		$("#offerresponse").removeClass('alert-danger');
+        $("#offerresponse").addClass('alert-success');
+        $("#offerresponse").html(resp.message);
+        $("#offerresponse").show();
+        alert(resp.message);
+  	}
+}
 $('#pricingfrm').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -1288,6 +1321,10 @@ $("#offerbtn").click(function(){
 	var amount = [];
 	var applicable = [];
 	var apply = [];
+	var offer_id = [];
+	$('input[name="offer_id[]"]').each(function(index){
+		offer_id.push($(this).val());
+	});
 	$('input[name="discount[]"]').each(function(index) {
 		discount.push($(this).val());
 	});
@@ -1302,35 +1339,37 @@ $("#offerbtn").click(function(){
 	});
 	$('input[name="offer_title[]"]').each(function(index) {
 		if($(this).val() != "") {
-			offerInfo.push({title:$(this).val(),per:discount[index],amount:amount[index],applicable:applicable[index],apply:apply[index],builderProject:{id:$("#id").val()}});
-		}
-	});
-	var project = {id:$("#id").val()};
-	var final_data = {buyerOffer:offerInfo,builderProject:project}
-	if(offerInfo.length > 0) {
-		$.ajax({
-		    url: '${baseUrl}/webapi/buyer/offer/update',
-		    type: 'POST',
-		    data: JSON.stringify(final_data),
-		    contentType: 'application/json; charset=utf-8',
-		    dataType: 'json',
-		    async: false,
-		    success: function(data) {
-				if (data.status == 0) {
-					alert(data.message);
-				} else {
-					alert(data.message);
-				}
-			},
-			error : function(data)
-			{
-				alert("Fail to save data");
+				offerInfo.push({title:$(this).val(),offer_percentage:discount[index],offer_amount:amount[index],applicable:applicable[index],status:apply[index],buyer:{id:$("#buyer_id").val()}});
 			}
+		
+	});
+	var buyer = {id: $("#buyer_id").val()};
+	alert("Buyer Id :: "+$("#buyer_id").val());
+	var final_data = {buyerOffer:offerInfo}
+// 	if(offerInfo.length > 0) {
+// 		$.ajax({
+// 		    url: '${baseUrl}/webapi/buyer/offer/update',
+// 		    type: 'POST',
+// 		    data: JSON.stringify(final_data),
+// 		    contentType: 'application/json; charset=utf-8',
+// 		    dataType: 'json',
+// 		    async: false,
+// 		    success: function(data) {
+// 				if (data.status == 0) {
+// 					alert(data.message);
+// 				} else {
+// 					alert(data.message);
+// 				}
+// 			},
+// 			error : function(data)
+// 			{
+// 				alert("Fail to save data");
+// 			}
 			
-		});
-	} else {
-		alert("Please enter offer details");
-	}
+// 		});
+// 	} else {
+// 		alert("Please enter offer details");
+// 	}
 });
 function addMoreBuyers() {
 	var buyers = parseInt($("#buyer_count").val());
@@ -1433,6 +1472,10 @@ function addMoreBuyers() {
 }
 function removeBuyer(id) {
 	$("#buyer-"+id).remove();
+}
+
+function removeOffer(id) {
+	$("#offer-"+id).remove();
 }
 // function deleteImage(id) {
 // 	var flag = confirm("Are you sure ? You want to delete plan ?");

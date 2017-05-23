@@ -578,23 +578,12 @@ public class BuyerDAO {
 	public ResponseMessage updateBuyerOffers(List<BuyerOffer> buyerOffers){
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		ResponseMessage responseMessage = new ResponseMessage();
-		
-		/***************** Delete entry from Buyer Offers *************************/
-		String delete_buyer_documents = "DELETE from  BuyerOffer where buyer.id = :buyer_id";
-		Session newsession1 = hibernateUtil.openSession();
-		newsession1.beginTransaction();
-		Query smdelete = newsession1.createQuery(delete_buyer_documents);
-		smdelete.setParameter("buyer_id", buyerOffers.get(0).getBuyer().getId());
-		smdelete.executeUpdate();
-		newsession1.getTransaction().commit();
-		newsession1.close();
-		
-		/**********************Save Buyer Offers new entries *************************/ 
+		/**********************Update Buyer Offers new entries *************************/ 
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
 		if(buyerOffers.size()>0){
 			for(int i=0;i<buyerOffers.size();i++){
-				newsession.save(buyerOffers.get(i));
+				newsession.update(buyerOffers.get(i));
 			}
 			newsession.getTransaction().commit();
 			newsession.close();

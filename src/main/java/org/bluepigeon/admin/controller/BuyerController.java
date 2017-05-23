@@ -642,16 +642,17 @@ public class BuyerController {
 	@POST
 	@Path("/offer/update")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updateBuyerOffer(
 			@FormDataParam("buyer_id") int buyer_id,
+			@FormDataParam("offer_id[]") List<FormDataBodyPart> offer_id,
 			@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_title,
 			@FormDataParam("discount[]") List<FormDataBodyPart> discount,
 			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amount,
 			@FormDataParam("applicable_on[]") List<FormDataBodyPart> applicable_on,
 			@FormDataParam("apply[]") List<FormDataBodyPart> apply
 			) {
-			Buyer buyer = new Buyer();
+			Buyer buyer = new BuyerDAO().getBuyerById(buyer_id);
 			Buyer primaryBuyer = new Buyer();
 			BuyerDAO buyerDAO = new BuyerDAO();
 			ResponseMessage resp = new ResponseMessage();
@@ -659,29 +660,50 @@ public class BuyerController {
 				buyer.setId(buyer_id);
 			if(buyer.getIsPrimary())
 				primaryBuyer = buyer;
-			List<BuyerOffer> buyerOfferList = new ArrayList<BuyerOffer>();
 			if (offer_title.size() > 0) {
-				List<BuyerOffer> buyerOffers = new ArrayList<BuyerOffer>();
+				List<BuyerOffer> updateBuyerOffers = new ArrayList<BuyerOffer>();
+				List<BuyerOffer> addBuyerOffers = new ArrayList<BuyerOffer>();
 				int i = 0;
 				for(FormDataBodyPart title : offer_title)
 				{
 					if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
-						BuyerOffer buyerOffer = new BuyerOffer();
-						buyerOffer.setTitle(title.getValueAs(String.class).toString());
-						buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
-						buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
-						buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
-						buyerOffer.setStatus(apply.get(i).getValueAs(Byte.class));
-						buyerOffer.setBuyer(primaryBuyer);
-						buyerOffers.add(buyerOffer);
-					}
+						if(offer_id!=null){
+						if( offer_id.get(i).getValueAs(Integer.class) != null) {
+							BuyerOffer buyerOffer = new BuyerOffer();
+							buyerOffer.setId(offer_id.get(i).getValueAs(Integer.class) );
+							buyerOffer.setTitle(title.getValueAs(String.class).toString());
+							buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
+							buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
+							buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
+							buyerOffer.setStatus(apply.get(i).getValueAs(Byte.class));
+							buyerOffer.setBuyer(primaryBuyer);
+							updateBuyerOffers.add(buyerOffer);
+						}}else{
+							BuyerOffer buyerOffer = new BuyerOffer();
+							buyerOffer.setTitle(title.getValueAs(String.class).toString());
+							buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
+							buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
+							buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
+							buyerOffer.setStatus(apply.get(i).getValueAs(Byte.class));
+							buyerOffer.setBuyer(primaryBuyer);
+							addBuyerOffers.add(buyerOffer);
+						}
+				}
 					i++;
+			}
+				if(updateBuyerOffers.size() > 0) {
+					resp=buyerDAO.updateBuyerOffers(updateBuyerOffers);
+					
 				}
-				if(buyerOffers.size() > 0) {
-					resp=buyerDAO.updateBuyerOffers(buyerOffers);
-				//	buyerDAO.saveBuyerOffers(buyerOffers);
+				if(addBuyerOffers.size() > 0){
+					buyerDAO.saveBuyerOffers(addBuyerOffers);
 				}
-			} 
+				resp.setStatus(1);
+				resp.setMessage("Buyer Offers updated successfully");
+			} else{
+				resp.setStatus(0);
+				resp.setMessage("Failed to update Buyer Offers");
+			}
 			return resp;
 	}
 	@POST
