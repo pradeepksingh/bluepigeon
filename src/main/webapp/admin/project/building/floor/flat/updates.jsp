@@ -30,7 +30,7 @@
    	}
 	if (request.getParameterMap().containsKey("flat_id")) {
 		flat_id = Integer.parseInt(request.getParameter("flat_id"));
-		amenityWeightages = new ProjectDAO().getFlatAmenityWeightageByFloorId(flat_id);
+		amenityWeightages = new ProjectDAO().getFlatAmenityWeightageByFlatId(flat_id);
 		imageGaleries = new ProjectDAO().getAllFlatImagesById(flat_id);
 		panoromicImages = new ProjectDAO().getFlatPanoImagesByFlatId(flat_id);
 	}
