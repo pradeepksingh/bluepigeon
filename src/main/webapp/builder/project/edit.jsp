@@ -56,10 +56,10 @@
 	int project_id = 0;
 	int p_user_id = 0;
 	project_id = Integer.parseInt(request.getParameter("project_id"));
-	BuilderProject builderProject = new ProjectDAO().getBuilderProjectById(project_id);
-	List<Builder> builders = new BuilderDetailsDAO().getBuilderList();
+	BuilderProject builderProject = new ProjectDAO().getBuilderActiveProjectById(project_id);
+	List<Builder> builders = new BuilderDetailsDAO().getActiveBuilderList();
 	CountryDAOImp countryService = new CountryDAOImp();
-	List<Country> listCountry = countryService.getCountryList();
+	List<Country> listCountry = countryService.getActiveCountryList();
 	session = request.getSession(false);
 	Builder adminuserproject = new Builder();
 	Set<State> states = null;
@@ -76,10 +76,10 @@
 		}
    	}
 	List<BuilderProjectType> projectTypes = new BuilderProjectTypeDAO().getBuilderProjectTypes();
-	List<BuilderPropertyType> propertyTypes = new BuilderPropertyTypeDAO().getBuilderPropertyTypes();
-	List<BuilderProjectPropertyConfiguration> projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderProjectConfigurations();
-	List<BuilderProjectAmenity> projectAmenities = new BuilderProjectAmenityDAO().getBuilderProjectAmenityList();
-	List<BuilderProjectApprovalType> projectApprovals = new BuilderProjectApprovalTypeDAO().getBuilderProjectApprovalTypes();
+	List<BuilderPropertyType> propertyTypes = new BuilderPropertyTypeDAO().getBuilderActivePropertyTypes();
+	List<BuilderProjectPropertyConfiguration> projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderActiveProjectConfigurations();
+	List<BuilderProjectAmenity> projectAmenities = new BuilderProjectAmenityDAO().getBuilderActiveProjectAmenityList();
+	List<BuilderProjectApprovalType> projectApprovals = new BuilderProjectApprovalTypeDAO().getBuilderActiveProjectApprovalTypes();
 	List<HomeLoanBanks> homeLoanBanks = new HomeLoanBanksDAO().getHomeLoanBanksList();
 	List<AreaUnit> areaUnits = new AreaUnitDAO().getAreaUnitList();
 	List<BuilderProjectAmenityInfo> projectAmenityInfos = new BuilderProjectAmenityInfoDAO().getBuilderProjectAmenityInfo(project_id);
