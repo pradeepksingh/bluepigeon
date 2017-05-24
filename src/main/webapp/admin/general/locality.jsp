@@ -37,15 +37,20 @@ country_size = listCountry.size();
 if (request.getParameterMap().containsKey("city_id")) {
 	city_id = Integer.parseInt(request.getParameter("city_id"));
 	locality_list = new LocalityNamesImp().getLocalityByCity(city_id);
+	List<City> cities =  new CityNamesImp().getCityById(city_id);
+	if(cities.size() > 0) {
+		state_id = cities.get(0).getState().getId();
+		country_id = cities.get(0).getState().getCountry().getId();
+	}
 	locality_size = locality_list.size();
   	if(locality_size > 0) {
   		state_id = locality_list.get(0).getCity().getState().getId();
-  		city_list = new CityNamesImp().getActiveCityNamesByStateId(state_id);
-  	  	city_size = city_list.size(); 
-	  	country_id = city_list.get(0).getState().getCountry().getId();
-	  	state_list = stateList.getActiveStateByCountryId(country_id);
-	  	state_size = state_list.size();
+  		country_id = locality_list.get(0).getCity().getState().getCountry().getId();
   	}
+  	city_list = new CityNamesImp().getActiveCityNamesByStateId(state_id);
+	city_size = city_list.size(); 
+  	state_list = stateList.getActiveStateByCountryId(country_id);
+  	state_size = state_list.size();
 } else {
 	locality_list = new LocalityNamesImp().getLocalityList();
 	locality_size = locality_list.size();

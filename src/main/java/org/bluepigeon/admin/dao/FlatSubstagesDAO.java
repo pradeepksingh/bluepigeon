@@ -163,6 +163,18 @@ public class FlatSubstagesDAO {
         return flatSubstageList;
     }
     
+    public List<FlatSubstage> getFlatSubstagesByStageId(int stageId)
+    {
+        String hql = "from FlatSubstage where flatStage.id = :stageId and isDeleted=0";
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        Session session = hibernateUtil.openSession();
+        Query query = session.createQuery(hql);
+        query.setParameter("stageId",stageId);
+        List<FlatSubstage> result = query.list();
+        session.close();
+        return result;
+    }
+    
     public List<FlatSubstage> getFlatSubstageById(int id)
     {
         String hql = "from FlatSubstage where id = :id";

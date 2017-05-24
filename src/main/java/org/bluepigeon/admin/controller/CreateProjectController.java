@@ -1486,9 +1486,10 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addProjectStage(@FormParam("name") String name, @FormParam("status") byte status) {
 		ProjectStage projectStage  = new ProjectStage();
-
+		byte isDeleted = 0;
 		projectStage.setName(name);
 		projectStage.setStatus(status);
+		projectStage.setIsDeleted(isDeleted);
 		ProjectStageDAO projectStageDAO = new ProjectStageDAO();
 		return projectStageDAO.save(projectStage);
 	}
@@ -1497,9 +1498,11 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateProjectStage(@FormParam("id") int id,@FormParam("name") String name, @FormParam("status") byte status) {
 		ProjectStage projectStage  = new ProjectStage();
+		byte isDeleted = 0;
 		projectStage.setId(id);
 		projectStage.setName(name);
 		projectStage.setStatus(status);
+		projectStage.setIsDeleted(isDeleted);
 		ProjectStageDAO projectStageDAO = new ProjectStageDAO();
 		return projectStageDAO.update(projectStage);
 	}
@@ -1517,9 +1520,10 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addBuildingStage(@FormParam("name") String name, @FormParam("status") byte status) {
 		BuildingStage buildingStage  = new BuildingStage();
-
+		byte isDeleted = 0;
 		buildingStage.setName(name);
 		buildingStage.setStatus(status);
+		buildingStage.setIsDeleted(isDeleted);
 		BuildingStageDAO buildingStageDAO = new BuildingStageDAO();
 		return buildingStageDAO.save(buildingStage);
 	}
@@ -1528,9 +1532,11 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuildingStage(@FormParam("id") int id,@FormParam("name") String name, @FormParam("status") byte status) {
 		BuildingStage buildingStage  = new BuildingStage();
+		byte isDeleted = 0;
 		buildingStage.setId(id);
 		buildingStage.setName(name);
 		buildingStage.setStatus(status);
+		buildingStage.setIsDeleted(isDeleted);
 		BuildingStageDAO buildingStageDAO = new BuildingStageDAO();
 		return buildingStageDAO.update(buildingStage);
 	}
@@ -1548,9 +1554,10 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addFloorStage(@FormParam("name") String name, @FormParam("status") byte status) {
 		FloorStage floorStage  = new FloorStage();
-
+		byte isDeleted = 0;
 		floorStage.setName(name);
 		floorStage.setStatus(status);
+		floorStage.setIsDeleted(isDeleted);
 		FloorStageDAO buildingStageDAO = new FloorStageDAO();
 		return buildingStageDAO.save(floorStage);
 	}
@@ -1559,9 +1566,11 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateFloorStage(@FormParam("id") int id,@FormParam("name") String name, @FormParam("status") byte status) {
 		FloorStage floorStage  = new FloorStage();
+		byte isDeleted = 0;
 		floorStage.setId(id);
 		floorStage.setName(name);
 		floorStage.setStatus(status);
+		floorStage.setIsDeleted(isDeleted);
 		FloorStageDAO floorStageDAO = new FloorStageDAO();
 		return floorStageDAO.update(floorStage);
 	}
@@ -1579,9 +1588,10 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addFlatStage(@FormParam("name") String name, @FormParam("status") byte status) {
 		FlatStage flatStage  = new FlatStage();
-
+		byte isDeleted = 0;
 		flatStage.setName(name);
 		flatStage.setStatus(status);
+		flatStage.setIsDeleted(isDeleted);
 		FlatStageDAO flatStageDAO = new FlatStageDAO();
 		return flatStageDAO.save(flatStage);
 	}
@@ -1590,9 +1600,11 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateFlatStage(@FormParam("id") int id,@FormParam("name") String name, @FormParam("status") byte status) {
 		FlatStage flatStage  = new FlatStage();
+		byte isDeleted = 0;
 		flatStage.setId(id);
 		flatStage.setName(name);
 		flatStage.setStatus(status);
+		flatStage.setIsDeleted(isDeleted);
 		FlatStageDAO floorStageDAO = new FlatStageDAO();
 		return floorStageDAO.update(flatStage);
 	}
@@ -1610,12 +1622,11 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addProjectSubstages(@FormParam("stage_id") int stageId,
 			@FormParam("name") String name, @FormParam("status") byte status) {
-
 		ProjectStage projectStage = new ProjectStage();
+		byte isDeleted = 0;
 		projectStage.setId(stageId);
-
 		ProjectSubstage projectSubstage = new ProjectSubstage();
-
+		projectSubstage.setIsDeleted(isDeleted);
 		projectSubstage.setName(name);
 		projectSubstage.setStatus(status);
 		projectSubstage.setProjectStage(projectStage);;
@@ -1628,14 +1639,14 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateProjectSubtages(@FormParam("stage_id") int stageId,
 			@FormParam("id") int id, @FormParam("name") String name, @FormParam("status") byte status) {
-
 		ProjectStage projectStage = new ProjectStage();
+		byte isDeleted = 0;
 		projectStage.setId(stageId);
-
 		ProjectSubstage projectSubstage = new ProjectSubstage();
 		projectSubstage.setId(id);
 		projectSubstage.setName(name);
 		projectSubstage.setStatus(status);
+		projectSubstage.setIsDeleted(isDeleted);
 		projectSubstage.setProjectStage(projectStage);
 		ProjectSubstagesDAO projectSubstagesDAO = new ProjectSubstagesDAO();
 		return projectSubstagesDAO.update(projectSubstage);
@@ -1647,14 +1658,13 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addBuildingSubstages(@FormParam("stage_id") int stageId,
 			@FormParam("name") String name, @FormParam("status") byte status) {
-
 		BuildingStage buildingStage = new BuildingStage();
+		byte isDeleted = 0;
 		buildingStage.setId(stageId);
-
 		BuildingSubstage buildingSubstage = new BuildingSubstage();
-
 		buildingSubstage.setName(name);
 		buildingSubstage.setStatus(status);
+		buildingSubstage.setIsDeleted(isDeleted);
 		buildingSubstage.setBuildingStage(buildingStage);;
 		BuildingSubstagesDAO buildingSubstagesDAO = new BuildingSubstagesDAO();
 		return buildingSubstagesDAO.save(buildingSubstage);
@@ -1665,14 +1675,14 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuildingSubtages(@FormParam("stage_id") int stageId,
 			@FormParam("id") int id, @FormParam("name") String name, @FormParam("status") byte status) {
-
 		BuildingStage buildingStage = new BuildingStage();
+		byte isDeleted = 0;
 		buildingStage.setId(stageId);
-
 		BuildingSubstage buildingSubstage = new BuildingSubstage();
 		buildingSubstage.setId(id);
 		buildingSubstage.setName(name);
 		buildingSubstage.setStatus(status);
+		buildingSubstage.setIsDeleted(isDeleted);
 		buildingSubstage.setBuildingStage(buildingStage);
 		BuildingSubstagesDAO buildingSubstagesDAO = new BuildingSubstagesDAO();
 		return buildingSubstagesDAO.update(buildingSubstage);
@@ -1683,14 +1693,13 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addFloorSubstages(@FormParam("stage_id") int stageId,
 			@FormParam("name") String name, @FormParam("status") byte status) {
-
 		FloorStage floorStage = new FloorStage();
+		byte isDeleted = 0;
 		floorStage.setId(stageId);
-
 		FloorSubstage floorSubstage = new FloorSubstage();
-
 		floorSubstage.setName(name);
 		floorSubstage.setStatus(status);
+		floorSubstage.setIsDeleted(isDeleted);
 		floorSubstage.setFloorStage(floorStage);;
 		FloorSubstagesDAO floorSubstagesDAO = new FloorSubstagesDAO();
 		return floorSubstagesDAO.save(floorSubstage);
@@ -1701,14 +1710,14 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateFloorSubtages(@FormParam("stage_id") int stageId,
 			@FormParam("id") int id, @FormParam("name") String name, @FormParam("status") byte status) {
-
 		FloorStage floorStage = new FloorStage();
+		byte isDeleted = 0;
 		floorStage.setId(stageId);
-
 		FloorSubstage floorSubstage = new FloorSubstage();
 		floorSubstage.setId(id);
 		floorSubstage.setName(name);
 		floorSubstage.setStatus(status);
+		floorSubstage.setIsDeleted(isDeleted);
 		floorSubstage.setFloorStage(floorStage);
 		FloorSubstagesDAO projectSubstagesDAO = new FloorSubstagesDAO();
 		return projectSubstagesDAO.update(floorSubstage);
@@ -1720,14 +1729,13 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addFlatSubstages(@FormParam("stage_id") int stageId,
 			@FormParam("name") String name, @FormParam("status") byte status) {
-
 		FlatStage flatStage = new FlatStage();
+		byte isDeleted = 0;
 		flatStage.setId(stageId);
-
 		FlatSubstage flatSubstage = new FlatSubstage();
-
 		flatSubstage.setName(name);
 		flatSubstage.setStatus(status);
+		flatSubstage.setIsDeleted(isDeleted);
 		flatSubstage.setFlatStage(flatStage);;
 		FlatSubstagesDAO flatSubstagesDAO = new FlatSubstagesDAO();
 		return flatSubstagesDAO.save(flatSubstage);
@@ -1738,14 +1746,14 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateFlatSubtages(@FormParam("stage_id") int stageId,
 			@FormParam("id") int id, @FormParam("name") String name, @FormParam("status") byte status) {
-
 		FlatStage flatStage = new FlatStage();
+		byte isDeleted = 0;
 		flatStage.setId(stageId);
-
 		FlatSubstage flatSubstage = new FlatSubstage();
 		flatSubstage.setId(id);
 		flatSubstage.setName(name);
 		flatSubstage.setStatus(status);
+		flatSubstage.setIsDeleted(isDeleted);
 		flatSubstage.setFlatStage(flatStage);
 		FlatSubstagesDAO flatSubstagesDAO = new FlatSubstagesDAO();
 		return flatSubstagesDAO.update(flatSubstage);

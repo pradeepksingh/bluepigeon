@@ -141,7 +141,7 @@ public class ProjectSubstagesDAO {
      */
     public List<ProjectSubstage> getProjectSubstageByStageId(int stageId)
     {
-        String hql = "from ProjectSubstage where projectStage.id = :stageId";
+        String hql = "from ProjectSubstage where projectStage.id = :stageId and isDeleted=0";
         HibernateUtil hibernateUtil = new HibernateUtil();
         Session session = hibernateUtil.openSession();
         Query query = session.createQuery(hql);
@@ -157,6 +157,18 @@ public class ProjectSubstagesDAO {
         }
         session.close();
         return projectSubstageList;
+    }
+    
+    public List<ProjectSubstage> getProjectSubstagesByStageId(int stageId)
+    {
+        String hql = "from ProjectSubstage where projectStage.id = :stageId and isDeleted=0";
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        Session session = hibernateUtil.openSession();
+        Query query = session.createQuery(hql);
+        query.setParameter("stageId",stageId);
+        List<ProjectSubstage> result = query.list();
+        session.close();
+        return result;
     }
     
     public List<ProjectSubstage> getProjectSubstageById(int id)

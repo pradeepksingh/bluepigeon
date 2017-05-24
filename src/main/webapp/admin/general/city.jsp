@@ -30,14 +30,17 @@ List<Country> listCountry = countryService.getActiveCountryList();
 StateImp stateList = new StateImp();
 country_size = listCountry.size(); 
 if (request.getParameterMap().containsKey("state_id")) {
-  state_id = Integer.parseInt(request.getParameter("state_id"));
-  city_list = new CityNamesImp().getCityNamesByStateId(state_id);
-  city_size = city_list.size(); 
-  if(city_size > 0) {
-	  country_id = city_list.get(0).getState().getCountry().getId();
-	  state_list = stateList.getActiveStateByCountryId(country_id);
-	  state_size = state_list.size();
-  }
+  	state_id = Integer.parseInt(request.getParameter("state_id"));
+  	List<State> states = stateList.getStateById(state_id);
+  	city_list = new CityNamesImp().getCityNamesByStateId(state_id);
+  	city_size = city_list.size(); 
+  	if(states.size() > 0)
+  	country_id = states.get(0).getCountry().getId();
+  	if(city_size > 0) {
+	  	country_id = city_list.get(0).getState().getCountry().getId();
+  	}
+  	state_list = stateList.getActiveStateByCountryId(country_id);
+  	state_size = state_list.size();
 } else {
 	city_list = new CityNamesImp().getCityNames();
 	city_size = city_list.size(); 

@@ -21,7 +21,7 @@ if (request.getParameterMap().containsKey("stage_id")) {
 	stage_id = Integer.parseInt(request.getParameter("stage_id"));
 	
 	if (stage_id > 0) {
-		flat_substage_list = new FlatSubstagesDAO().getFlatSubstageById(stage_id);
+		flat_substage_list = new FlatSubstagesDAO().getFlatSubstagesByStageId(stage_id);
 		flat_substage_size = flat_substage_list.size(); 
 	}
 } else {

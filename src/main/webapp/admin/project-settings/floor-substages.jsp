@@ -18,7 +18,7 @@ if (request.getParameterMap().containsKey("stage_id")) {
 	stage_id = Integer.parseInt(request.getParameter("stage_id"));
 	
 	if (stage_id > 0) {
-		floor_substage_list = new FloorSubstagesDAO().getFloorSubstageById(stage_id);
+		floor_substage_list = new FloorSubstagesDAO().getFloorSubstagesByStageId(stage_id);
 		floor_substage_size = floor_substage_list.size(); 
 	}
 } else {
