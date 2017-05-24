@@ -55,7 +55,7 @@
 	List<FlatPaymentSchedule> flatPaymentSchedules = new ProjectDAO().getBuilderFlatPaymentSchedules(flat_id);
 	List<BuilderBuildingFlatType> builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeByBuildingId(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
 	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderActiveProjects();
-	List<FlatAmenityWeightage> flatAmenityWeightages = new ProjectDAO().getFlatAmenityWeightageByFloorId(flat_id);
+	List<FlatAmenityWeightage> flatAmenityWeightages = new ProjectDAO().getFlatAmenityWeightageByFlatId(flat_id);
 %>
 <div class="main-content">
 	<div class="main-content-inner">
