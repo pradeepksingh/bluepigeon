@@ -286,6 +286,7 @@ public class GeneralController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<LocalityData> getLocalityByCity(@PathParam("city_id") int city_id) {
 		return new LocalityNamesImp().getLocalityName(city_id);
+		//return null;
 	}
 	/**************************** Home Loan Banks *************************************/
 	@POST

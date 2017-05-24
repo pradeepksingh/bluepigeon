@@ -118,7 +118,6 @@ public class LocalityNamesImp {
 		session.close();
 		
 		List<Locality> localities = new ArrayList<Locality>();
-		Locality locality = new Locality();
 		for(int i=0; i<result.size(); i++){
 			Locality locality2 = new Locality();
 			locality2.setId(result.get(i).getId());

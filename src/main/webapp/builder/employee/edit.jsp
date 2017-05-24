@@ -32,7 +32,7 @@
 		project_list = new ProjectDAO().getProjectsByBuilderId(builder_uid);
 		int builder_size = project_list.size();
 	}
-	BuilderEmployee builderEmployee = new BuilderDetailsDAO().getBuilderActiveEmployeeById(emp_id);
+	BuilderEmployee builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
 	BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
 	List<BuilderEmployeeAccessType> access_list = builderDetailsDAO.getBuilderAccessList();
 	List<City> cityList = new CityNamesImp().getCityActiveNames();
