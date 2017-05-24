@@ -17,7 +17,7 @@
 	int project_id=0;
 	session = request.getSession(false);
 	Builder builder = new Builder();
-	List<City> cityList = new CityNamesImp().getCityNames();
+	List<City> cityList = new CityNamesImp().getCityActiveNames();
 	int builder_uid = 0;
 	if(session!=null)
 	{

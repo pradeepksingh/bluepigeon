@@ -144,7 +144,7 @@ public class AgreementDAO {
 	 */
 	public List<AgreementList> getAgreementsByBuilderId(int builderId){
 		String hql = "from Agreement";
-		String project_hql= "from BuilderProject where builder.id = :id";
+		String project_hql= "from BuilderProject where builder.id = :id and status=1";
 		String building_hql = "from BuilderBuilding where id = :id";
 		String floor_hql = "from BuilderFloor where id = :id";
 		String flat_hql = "from BuilderFlat where id = :id";

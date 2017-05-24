@@ -531,6 +531,17 @@ public class ProjectDAO {
 		return projects;
 	}
 	
+	public BuilderProject getBuilderProjectById(int project_id) {
+		String hql = "from BuilderProject where id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", project_id);
+		List<BuilderProject> result = query.list();
+		session.close();
+		return result.get(0);
+	}
+	
 	public BuilderProject getBuilderActiveProjectById(int project_id) {
 		String hql = "from BuilderProject where id = :project_id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -544,6 +555,17 @@ public class ProjectDAO {
 	
 	public List<ProjectAmenityWeightage> getProjectAmenityWeightageByProjectId(int project_id) {
 		String hql = "from ProjectAmenityWeightage where builderProject.id = :project_id order by builderProjectAmenity.id ASC, builderProjectAmenityStages.id ASC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", project_id);
+		List<ProjectAmenityWeightage> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<ProjectAmenityWeightage> getActiveProjectAmenityWeightageByProjectId(int project_id) {
+		String hql = "from ProjectAmenityWeightage where builderProject.id = :project_id and status=1 order by builderProjectAmenity.id ASC, builderProjectAmenityStages.id ASC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -672,7 +694,12 @@ public class ProjectDAO {
 		session.close();
 		return result;
 	}
-	
+	/**
+	 * Get all active buildings by project id
+	 * @author pankaj
+	 * @param project_id
+	 * @return
+	 */
 	public List<BuilderBuilding> getBuilderActiveProjectBuildings(int project_id) {
 		String hql = "from BuilderBuilding where builderProject.id = :project_id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -2230,7 +2257,12 @@ public class ProjectDAO {
 		session.close();
 		return projects;
 	}
-	
+	/**
+	 * Get all active projects by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return List<BuilderProject>
+	 */
 	public List<ProjectList> getBuilderActiveProjectsByBuilderId(int builderId) {
 		System.err.println("builderId :: "+builderId);
 		String hql = "from BuilderProject where builder.id = :builder_id and status=1 order by id desc";
@@ -2452,7 +2484,12 @@ public class ProjectDAO {
 		session.close();
 		return projectDataList;
 	}
-	
+	/**
+	 * Get all active project list by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return List<ProjectData>
+	 */
 	public List<ProjectData> getActiveProjectsByBuilderId(int builderId){
 		String hql = "from BuilderProject where builder.id = :builder_id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -2481,7 +2518,12 @@ public class ProjectDAO {
 		session.close();
 		return result;
 	}
-	
+	/**
+	 * Get all active buildings by builder id
+	 * @author pankaj
+	 * @param builder_id
+	 * @return List<BuilderBuilding>
+	 */
 	public List<BuilderBuilding> getActiveBuildingsByBuilderId(int builder_id) {
 		String hql = "from BuilderBuilding where builderProject.builder.id = :builder_id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();

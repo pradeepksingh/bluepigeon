@@ -80,8 +80,8 @@
 	List<BuilderProjectPropertyConfiguration> projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderActiveProjectConfigurations();
 	List<BuilderProjectAmenity> projectAmenities = new BuilderProjectAmenityDAO().getBuilderActiveProjectAmenityList();
 	List<BuilderProjectApprovalType> projectApprovals = new BuilderProjectApprovalTypeDAO().getBuilderActiveProjectApprovalTypes();
-	List<HomeLoanBanks> homeLoanBanks = new HomeLoanBanksDAO().getHomeLoanBanksList();
-	List<AreaUnit> areaUnits = new AreaUnitDAO().getAreaUnitList();
+	List<HomeLoanBanks> homeLoanBanks = new HomeLoanBanksDAO().getActiveHomeLoanBanksList();
+	List<AreaUnit> areaUnits = new AreaUnitDAO().getActiveAreaUnitList();
 	List<BuilderProjectAmenityInfo> projectAmenityInfos = new BuilderProjectAmenityInfoDAO().getBuilderProjectAmenityInfo(project_id);
 	List<BuilderProjectProjectType> projectProjectTypes = new BuilderProjectProjectTypeDAO().getBuilderProjectProjectTypes(project_id);
 	List<BuilderProjectPropertyType> projectPropertyTypes = new BuilderProjectPropertyTypeDAO().getBuilderProjectPropertyTypes(project_id);
@@ -89,9 +89,9 @@
 	List<BuilderProjectApprovalInfo> projectApprovalInfos = new BuilderProjectApprovalInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id);
 	List<BuilderProjectBankInfo> projectBankInfos = new BuilderProjectBankInfoDAO().getBuilderProjectBankInfos(project_id);
 	BuilderProjectPriceInfo projectPriceInfo = new BuilderProjectPriceInfoDAO().getBuilderProjectPriceInfo(project_id);
-	List<BuilderProjectPaymentInfo> projectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(project_id);
-	List<BuilderProjectOfferInfo> projectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderProjectOfferInfo(project_id);
-	List<ProjectAmenityWeightage> amenityWeightages = new ProjectDAO().getProjectAmenityWeightageByProjectId(project_id);
+	List<BuilderProjectPaymentInfo> projectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderActiveProjectPaymentInfo(project_id);
+	List<BuilderProjectOfferInfo> projectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderActiveProjectOfferInfo(project_id);
+	List<ProjectAmenityWeightage> amenityWeightages = new ProjectDAO().getActiveProjectAmenityWeightageByProjectId(project_id);
 	if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
 		taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
 	}

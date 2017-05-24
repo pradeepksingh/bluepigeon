@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderBuildingStatusDAO"%>
@@ -39,7 +40,7 @@
 	if(builderBuildings.size() > 0) {
 		builderBuilding = builderBuildings.get(0);
 	}
-	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderAllProjects();
+	List<ProjectData> builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
 	List<BuilderBuildingStatus> builderBuildingStatusList = new BuilderBuildingStatusDAO().getBuilderBuildingStatus();
 	List<BuilderBuildingAmenity> builderBuildingAmenities = new BuilderBuildingAmenityDAO().getBuilderBuildingAmenityList();
 	List<BuildingImageGallery> buildingImageGalleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
@@ -146,7 +147,7 @@
                               		  <div class="col-6">
                                 	   <!-- <input class="form-control" type="text" value="project" id="example-search-input">-->
                                 		  <select id="project_id" name="project_id" class="form-control">
-											  <% for(BuilderProject builderProject :builderProjects) { %>
+											  <% for(ProjectData builderProject :builderProjects) { %>
 											  <option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == builderBuilding.getBuilderProject().getId()) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
 											  <% } %>
 										  </select>
