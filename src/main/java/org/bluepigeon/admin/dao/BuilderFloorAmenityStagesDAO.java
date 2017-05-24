@@ -134,6 +134,19 @@ public class BuilderFloorAmenityStagesDAO {
         return builderFloorAmenityStagesList;
     }
     
+    public List<BuilderFloorAmenityStages> getFloorAmenityStagesByAmenityId(int amenityId)
+    {
+        
+        String hql = "from BuilderFloorAmenityStages where builderFloorAmenity.id = :amenityId";
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        Session session = hibernateUtil.openSession();
+        Query query = session.createQuery(hql);
+        query.setParameter("amenityId", amenityId);
+        List<BuilderFloorAmenityStages> result = query.list();
+        session.close();
+        return result;
+    }
+    
     public List<BuilderFloorAmenityStages> getBuilderFloorAmenityStagesById(int id)
     {
         String hql = "from BuilderFloorAmenityStages where id = :id";

@@ -71,6 +71,7 @@ payment_size = payment_list.size();
                                     <thead>
                                         <tr>
                                             <th>Name</th>
+                                            <th>Payment Stage</th>
                                             <th>Status</th>
                                             <th class="alignRight">Actions</th>
                                         </tr>
@@ -81,6 +82,7 @@ payment_size = payment_list.size();
                                         %>
                                         <tr>
                                             <td><% out.print(payment_stage_list.get(i).getName()); %></td>
+                                            <td><% out.print(payment_stage_list.get(i).getBuilderPaymentStages().getName()); %></td>
                                             <td><% if(payment_stage_list.get(i).getStatus() == 1) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
                                             <td class="alignRight">
                                             	<a href="javascript:editPaymentSubstages(<% out.print(payment_stage_list.get(i).getId()); %>);" class="btn btn-success btn-xs icon-btn"><i class="fa fa-pencil"></i></a>

@@ -134,6 +134,19 @@ public class BuilderFlatAmenityStagesDAO {
         return builderFlatAmenityStagesList;
     }
     
+    public List<BuilderFlatAmenityStages> getFlatAmenityStagesByAmenityId(int amenityId)
+    {
+        
+        String hql = "from BuilderFlatAmenityStages where builderFlatAmenity.id = :amenityId";
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        Session session = hibernateUtil.openSession();
+        Query query = session.createQuery(hql);
+        query.setParameter("amenityId", amenityId);
+        List<BuilderFlatAmenityStages> result = query.list();
+        session.close();
+        return result;
+    }
+    
     public List<BuilderFlatAmenityStages> getBuilderFlatAmenityStagesById(int id)
     {
         String hql = "from BuilderFlatAmenityStages where id = :id";

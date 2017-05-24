@@ -19,7 +19,7 @@ if (request.getParameterMap().containsKey("amenity_id")) {
 	amenity_id = Integer.parseInt(request.getParameter("amenity_id"));
 	
 	if (amenity_id > 0) {
-		amenity_stage_list = new BuilderProjectAmenityStagesDAO().getStateByAmenityId(amenity_id);
+		amenity_stage_list = new BuilderProjectAmenityStagesDAO().getProjectAmenityStagesByAmenityId(amenity_id);
 		amenity_stage_size = amenity_stage_list.size(); 
 	}
 } else {

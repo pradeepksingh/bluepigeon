@@ -162,6 +162,20 @@ public class BuilderBuildingAmenityStagesDAO {
         return builderBuildingAmenityStagesList;
     }
     
+    public List<BuilderBuildingAmenityStages> getBuildingAmenityStagesByAmenityId(int amenityId)
+    {
+        System.out.println("country="+amenityId);
+        String hql = "from BuilderBuildingAmenityStages where builderBuildingAmenity.id = :amenityId";
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        Session session = hibernateUtil.openSession();
+        Query query = session.createQuery(hql);
+        query.setParameter("amenityId", amenityId);
+        List<BuilderBuildingAmenityStages> result = query.list();
+        session.close();
+        System.out.println("Size1="+result.size());
+        return result;
+    }
+    
     public List<BuilderBuildingAmenityStages> getBuilderBuildingAmenityStagesById(int id)
     {
         String hql = "from BuilderBuildingAmenityStages where id = :id";
