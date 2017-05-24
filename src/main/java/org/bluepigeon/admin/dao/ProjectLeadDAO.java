@@ -97,6 +97,22 @@ public class ProjectLeadDAO {
 			session.close();
 			return result;
 		}
+	  
+	  /**
+	   * Get list of all active property type
+	   * @author pankaj
+	   * @return List<BuilderPropertyType>
+	   */
+	  public List<BuilderPropertyType> getBuilderActivePropertyType() {
+			String hql = "from BuilderPropertyType where status=1";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			List<BuilderPropertyType> result = query.list();
+			session.close();
+			return result;
+		}
+	  
 	  public List<BuilderSellerType> getSellerTypeList(){
 		  String hql = "from BuilderSellerType";
 			HibernateUtil hibernateUtil = new HibernateUtil();

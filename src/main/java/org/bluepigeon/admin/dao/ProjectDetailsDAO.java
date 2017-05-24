@@ -454,6 +454,17 @@ public class ProjectDetailsDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<BuilderProject> getBuilderActiveProjectList(int builderId) {
+		String hql = "from BuilderProject where builder.id= :builder_id and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		List<BuilderProject> result = query.list();
+		session.close();
+		return result;
+	}
 
 	public List<BuilderProject> getBuilderProjectById(int id) {
 		String hql = "from BuilderProject where id = :id";

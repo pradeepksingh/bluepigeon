@@ -223,4 +223,18 @@ public class LocalityNamesImp {
 		session.close();
 		return result;
 	}
+	/**
+	 * Get all active locality list
+	 * @author pankaj
+	 * @return List<Locality>
+	 */
+	public List<Locality> getLocalityActiveList(){
+		String hql = "from Locality where status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<Locality> result = query.list();
+		session.close();
+		return result;
+	}
 }
