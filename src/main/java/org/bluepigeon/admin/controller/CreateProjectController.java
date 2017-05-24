@@ -261,6 +261,7 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuildingAmenityList> getBuilderBuildingAmenity(@QueryParam("amenity_id") int amenity_id) {
 		BuilderBuildingAmenityStagesDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityStagesDAO();
+		System.err.println("AmenityId :: "+amenity_id);
 		return builderBuildingAmenityDAO.getBuildingAmenityById(amenity_id);
 	}
 	

@@ -9,7 +9,7 @@
 <%
 	session = request.getSession(false);
 	Builder builder = new Builder();
-	List<BuilderProject> project_list = new ProjectDetailsDAO().getBuilderProjectList();
+	List<BuilderProject> project_list = null; 
 	int builder_id = 0;
 	if(session!=null)
 	{
@@ -20,6 +20,9 @@
 		}
    }
 	int builder_id1 = 1;
+	if(builder_id> 0 ){
+		project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id);
+	}
 	List<BuilderEmployee> builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
 %>
 <!DOCTYPE html>
@@ -202,20 +205,20 @@
                                     <label for="example-text-input" class="col-3 col-form-label">Project Name</label>
                                     <div class="col-6">
                                        <select name="project_id" id="project_id" class="form-control">
-											                    <option value="">Select Project</option>
-											                    <% for(BuilderProject builderProject : project_list){ %>
-																<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option>
-																<% } %>
-												             </select>
+						                    <option value="">Select Project</option>
+						                    <% for(BuilderProject builderProject : project_list){ %>
+											<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option>
+											<% } %>
+							            </select>
                                     </div>
                                 </div>
                                 
                                 <div class="form-group row">
-                                  <label for="example-text-input" class="col-3 col-form-label">Buliding</label>
+                                  <label for="example-text-input" class="col-3 col-form-label">Building</label>
                                     <div class="col-6">
                                        <select name="building_id" id="building_id" class="form-control">
-											                    <option value="">Select Building</option>
-												          	</select>
+						                    <option value="">Select Building</option>
+							          	</select>
                                     </div>
                                 </div>
                                 
@@ -223,8 +226,8 @@
                                     <label for="example-text-input" class="col-3 col-form-label">Flat</label>
                                     <div class="col-6">
                                        <select name="flat_id" id="flat_id" class="form-control">
-											                    <option value="">Select Flat</option>
-												          	</select>
+						                    <option value="">Select Flat</option>
+							           </select>
                                     </div>
                                 </div>
                                 
@@ -232,10 +235,10 @@
                                     <label for="example-text-input" class="col-3 col-form-label">Assign Manager</label>
                                     <div class="col-6">
                                       <select name="admin_id" id="admin_id" class="form-control">
-																<% for(BuilderEmployee builderEmployee :builderEmployees) { %>
-											                  	<option value="<% out.print(builderEmployee.getId());%>"><% out.print(builderEmployee.getName());%></option>
-											                  	<% } %>
-												          	</select>
+											<% for(BuilderEmployee builderEmployee :builderEmployees) { %>
+						                  	<option value="<% out.print(builderEmployee.getId());%>"><% out.print(builderEmployee.getName());%></option>
+						                  	<% } %>
+							          </select>
                                     </div>
                                 </div>
 
@@ -301,7 +304,7 @@
                                     <label for="example-search-input" class="col-3 col-form-label">Tenure</label>
                                     <div class="col-3">
                                       <input type="text" class="form-control" id="tenure" name="tenure" />
-														<span class="input-group-addon">Months</span>
+									  <span class="input-group-addon">Months</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -310,13 +313,9 @@
                                         <input class="form-control" type="text" value="" id="post" name="post">
                                     </div>
                                </div>
-                               
                                <div class="form-group row">
-                               
                                     <button type="button" class="col-2" onclick="showOffers()">+ADD offers</button>
-                                  
                                 </div>
-                                
                                  <div id="displayoffers" style="display:none">
                                   <div class="offset-sm-11 col-sm-7">
                                     <i class="fa fa-times"></i> 
@@ -356,12 +355,10 @@
 										</div>
 	                                </div>
 	                             </div>
-                             
                                 <div class="offset-sm-5 col-sm-7">
                                      <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous2();">Previous</button>
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next2" onclick="show2();">Next</button>
                                  </div>
-                           
                                 </div>
                                </div>
 
@@ -402,18 +399,12 @@
 	                                <div class="offset-sm-9 col-sm-7">
                                        <a href="javascript:addMoreSchedule();"> <button type="button" class="">+ Add More Schedules</button></a>
                                     </div>
-	                                
 	                                <div class="offset-sm-5 col-sm-7">
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous3();">Previous</button>
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next3" onclick="show3();">Next</button>
                                     </div>
-                       
-                                
                                 </div>
-                                
                                <div id="vimessages4" class="tab-pane" aria-expanded="true">
-                           
-                              
 	                              <div class="form-group row">
 	                              <input type="hidden" name="doc_name[]" value="Agreement" />
                                     <label for="example-text-input" class="col-6 col-form-label">Agreement*</label>
@@ -433,7 +424,6 @@
                                   <div class="form-group row">
                                   <input type="hidden" name="doc_name[]" value="Receipts with Date and time and Name" />
                                     <label for="example-text-input" class="col-6 col-form-label">Receipts with Date & Time & Name</label>
-                                    
                                       <div class="col-2"> <input type="file" class="form-control" name="doc_url[]" /><!-- <i class="fa fa-upload" aria-hidden="true"></i>--></div>
 <!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
 <!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
@@ -502,7 +492,7 @@ $('#booking_date').datepicker({
 });
 
 $("#project_id").change(function(){
-	$.get("${baseUrl}/bluepigeon/webapi/buyer/buildings/names/"+$("#project_id").val(),{ }, function(data){
+	$.get("${baseUrl}/webapi/buyer/buildings/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
 		$(data).each(function(index){
 			
@@ -512,7 +502,7 @@ $("#project_id").change(function(){
 	},'json');
 });
 $("#building_id").change(function(){
-	$.get("${baseUrl}/bluepigeon/webapi/buyer/building/available/flat/names/"+$("#building_id").val(),{ }, function(data){
+	$.get("${baseUrl}/webapi/buyer/building/available/flat/names/"+$("#building_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Flat</option>';
 		$(data).each(function(index){
 			

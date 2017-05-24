@@ -4,7 +4,7 @@
 <%@page import="java.util.List"%>
 <%
 int p_user_id = 0;
-List<Locality> localities = new LocalityNamesImp().getLocalityList();
+List<Locality> localities = new LocalityNamesImp().getLocalityActiveList();
 session = request.getSession(false);
 Builder builder = new Builder();
 if(session!=null)

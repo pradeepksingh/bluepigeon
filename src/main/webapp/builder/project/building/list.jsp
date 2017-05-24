@@ -17,7 +17,7 @@
 	int project_id=0;
 	session = request.getSession(false);
 	Builder builder = new Builder();
-	List<City> cityList = new CityNamesImp().getCityNames();
+	List<City> cityList = new CityNamesImp().getCityActiveNames();
 	int builder_uid = 0;
 	if(session!=null)
 	{
@@ -32,12 +32,12 @@
 	if (request.getParameterMap().containsKey("project_id")) {
 		project_id = Integer.parseInt(request.getParameter("project_id"));
 		if(project_id > 0) {
-			builderBuildings = new ProjectDAO().getBuilderProjectBuildings(project_id);
+			builderBuildings = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
 		}
 	} else {
-		builderBuildings = new ProjectDAO().getBuildingsByBuilderId(builder_uid);
+		builderBuildings = new ProjectDAO().getActiveBuildingsByBuilderId(builder_uid);
 		int builder_size = builderBuildings.size();
-		projectDatas = new ProjectDAO().getProjectsByBuilderId(builder_uid);
+		projectDatas = new ProjectDAO().getActiveProjectsByBuilderId(builder_uid);
 	}
 %>
 

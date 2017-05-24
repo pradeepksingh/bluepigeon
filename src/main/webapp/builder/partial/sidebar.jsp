@@ -82,11 +82,11 @@
                             <li> <a href="${baseUrl }/builder/cancellation/list.jsp">Cancellation</a></li>
                         </ul>
                     </li>
- 					<li class="nav-small-cap m-t-10">--Support--</li>
-                    <li> <a href="javascript:void(0);" class="waves-effect"><i class="icon-envelope p-r-10"></i> <span class="hide-menu"> Settings<span class="fa arrow"></span></span></a>
-                    </li>
-                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="icon-envelope p-r-10"></i> <span class="hide-menu"> Contact Us<span class="fa arrow"></span></span></a>
-                    </li>
+<!--  					<li class="nav-small-cap m-t-10">--Support--</li> -->
+<!--                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="icon-envelope p-r-10"></i> <span class="hide-menu"> Settings<span class="fa arrow"></span></span></a> -->
+<!--                     </li> -->
+<!--                      <li> <a href="javascript:void(0);" class="waves-effect"><i class="icon-envelope p-r-10"></i> <span class="hide-menu"> Contact Us<span class="fa arrow"></span></span></a> -->
+<!--                     </li> -->
                 </ul>
             </div>
         </div>

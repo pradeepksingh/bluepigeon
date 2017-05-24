@@ -22,7 +22,7 @@
 		}
    	}
 	if(builder_uid > 0){
-		project_list = new ProjectDAO().getProjectsByBuilderId(builder_uid);
+		project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_uid);
 		int builder_size = project_list.size();
 	}
 	
@@ -311,7 +311,6 @@ $('#addemployee').bootstrapValidator({
 	addEmployee();
 });
 function addEmployee() {
-	alert("inside emp");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,

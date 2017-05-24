@@ -118,7 +118,6 @@ public class LocalityNamesImp {
 		session.close();
 		
 		List<Locality> localities = new ArrayList<Locality>();
-		Locality locality = new Locality();
 		for(int i=0; i<result.size(); i++){
 			Locality locality2 = new Locality();
 			locality2.setId(result.get(i).getId());
@@ -216,6 +215,20 @@ public class LocalityNamesImp {
 	}
 	public List<Locality> getLocalityList(){
 		String hql = "from Locality";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<Locality> result = query.list();
+		session.close();
+		return result;
+	}
+	/**
+	 * Get all active locality list
+	 * @author pankaj
+	 * @return List<Locality>
+	 */
+	public List<Locality> getLocalityActiveList(){
+		String hql = "from Locality where status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);

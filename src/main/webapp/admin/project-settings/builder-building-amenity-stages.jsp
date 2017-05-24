@@ -54,19 +54,19 @@ amenity_size = amenity_list.size();
                         <!--Contacts tab starts-->
                         <div class="tab-pane fade active in" id="contacts" aria-labelledby="contacts-tab">
                             <div class="contacts-list">
-                            	<div class="col-sm-6">
-		                            <div class="form-group">
-						                <label class="col-sm-6 control-label">Select Building Amenity</label>
-						                <div class="col-sm-6">
-							                <select name="searchamenityId" id="searchamenityId" class="form-control">
-							                    <option value="0">Select Building Amenity</option>
-							                    <% for(int i=0; i < amenity_size ; i++){ %>
-												<option value="<% out.print(amenity_list.get(i).getId());%>" <% if(amenity_id == amenity_list.get(i).getId()) { %>selected<% } %>><% out.print(amenity_list.get(i).getName());%></option>
-												<% } %>
-							                </select>
-						                </div>
-					                </div>
-				                </div>
+<!--                             	<div class="col-sm-6"> -->
+<!-- 		                            <div class="form-group"> -->
+<!-- 						                <label class="col-sm-6 control-label">Select Building Amenity</label> -->
+<!-- 						                <div class="col-sm-6"> -->
+<!-- 							                <select name="searchamenityId" id="searchamenityId" class="form-control"> -->
+<!-- 							                    <option value="0">Select Building Amenity</option> -->
+<%-- 							                    <% for(int i=0; i < amenity_size ; i++){ %> --%>
+<%-- 												<option value="<% out.print(amenity_list.get(i).getId());%>" <% if(amenity_id == amenity_list.get(i).getId()) { %>selected<% } %>><% out.print(amenity_list.get(i).getName());%></option> --%>
+<%-- 												<% } %> --%>
+<!-- 							                </select> -->
+<!-- 						                </div> -->
+<!-- 					                </div> -->
+<!-- 				                </div> -->
 				              
                                 <table class="table table-striped table-bordered" id="statetable">
                                     <thead>

@@ -334,6 +334,35 @@ public class BuilderDetailsDAO {
 		session.close();
 		return employeeLists;
 	}
+	/**
+	 * Get All active builder's employee list
+	 * @author pankaj
+	 * @param builder_id
+	 * @return  List<EmployeeList>
+	 */
+	public List<EmployeeList> getBuilderActiveEmployeeListByBuilderId(int builder_id) {
+		String hql = "from BuilderEmployee where builder.id=:builder_id and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builder_id);
+		List<BuilderEmployee> result = query.list();
+		List<EmployeeList> employeeLists = new ArrayList<EmployeeList>();
+		int count=1;
+		for(BuilderEmployee builderEmployee : result){
+			EmployeeList employeeList = new EmployeeList();
+			employeeList.setCount(count);
+			employeeList.setName(builderEmployee.getName());
+			employeeList.setId(builderEmployee.getId());
+			employeeList.setAccess(builderEmployee.getBuilderEmployeeAccessType().getName());
+			employeeList.setDesgnation(builderEmployee.getDesignation());
+			employeeLists.add(employeeList);
+			count++;
+		}
+		session.close();
+		return employeeLists;
+	}
+	
 	public List<EmployeeList> getEmployeeListFilter(int city_id,int project_id) {
 		String hql = "from BuilderEmployee where ";
 		String where = "";
@@ -425,6 +454,23 @@ public class BuilderDetailsDAO {
 		session.close();
 		return result.get(0);
 	}
+	/**
+	 * Get active builder employee by id
+	 * @author pankaj
+	 * @param id
+	 * @return employee
+	 */
+	public BuilderEmployee getBuilderActiveEmployeeById(int id) {
+		String hql = "from BuilderEmployee where id=:id and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<BuilderEmployee> result = query.list();
+		session.close();
+		return result.get(0);
+	}
+	
 	public ResponseMessage updateBuilderEmployee(BuilderEmployee builderEmployee){
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();

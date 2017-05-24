@@ -89,7 +89,21 @@ public class CityNamesImp {
 		session.close();
 		return result;
 	}
-	
+	/**
+	 * Get all active city
+	 * @author pankaj
+	 * @return list<City>
+	 */
+	public List<City> getCityActiveNames()
+	{
+		String hql = "from City where status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<City> result = query.list();
+		session.close();
+		return result;
+	}
 	/**
 	 * Get cities by tehsil ID
 	 * @author pradeep

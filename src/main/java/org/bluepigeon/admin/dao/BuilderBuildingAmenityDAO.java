@@ -135,6 +135,20 @@ public class BuilderBuildingAmenityDAO {
 		session.close();
 		return result;
 	}
+	/**
+	 * Get all active building amenity list
+	 * @author pankaj
+	 * @return List<BuilderBuildingAmenity>
+	 */
+	public List<BuilderBuildingAmenity> getActiveBuilderBuildingAmenityList() {
+		String hql = "from BuilderBuildingAmenity where isDeleted=0 and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderBuildingAmenity> result = query.list();
+		session.close();
+		return result;
+	}
 	
 	public List<BuilderBuildingAmenity> getBuilderActiveBuildingAmenityList() {
 		String hql = "from BuilderBuildingAmenity where isDeleted=0 and status=1";

@@ -39,23 +39,23 @@
 	List<BuilderBuilding> buildings = null;
 	List<BuilderFloor> floors = null;
 	BuilderFlat builderFlat = null;
-	List<BuilderFlat> builderFlats = new ProjectDAO().getBuildingFlatById(flat_id);
+	List<BuilderFlat> builderFlats = new ProjectDAO().getBuildingActiveFlatById(flat_id);
 	if(builderFlats.size() > 0) {
 		builderFlat = builderFlats.get(0);
 		floor_id = builderFlat.getBuilderFloor().getId();
 		building_id = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
 		project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
-		buildings = new ProjectDAO().getBuilderProjectBuildings(project_id);
-		floors = new ProjectDAO().getBuildingFloors(building_id);
+		buildings = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
+		floors = new ProjectDAO().getBuildingActiveFloors(building_id);
 		
 	}
-	List<BuilderFlatStatus> builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderFlatStatus();
-	List<BuilderFlatAmenity> builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderFlatAmenityList();
+	List<BuilderFlatStatus> builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderActiveFlatStatus();
+	List<BuilderFlatAmenity> builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderActiveFlatAmenityList();
 	List<FlatAmenityInfo> flatAmenityInfos = new ProjectDAO().getBuilderFlatAmenityInfos(flat_id);
-	List<FlatPaymentSchedule> flatPaymentSchedules = new ProjectDAO().getBuilderFlatPaymentSchedules(flat_id);
+	List<FlatPaymentSchedule> flatPaymentSchedules = new ProjectDAO().getBuilderActiveFlatPaymentSchedules(flat_id);
 	List<BuilderBuildingFlatType> builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeByBuildingId(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
-	List<ProjectData> builderProjects = new ProjectDAO().getProjectsByBuilderId(p_user_id);
-	List<FlatAmenityWeightage> flatAmenityWeightages = new ProjectDAO().getFlatAmenityWeightageByFloorId(flat_id);
+	List<ProjectData> builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
+	List<FlatAmenityWeightage> flatAmenityWeightages = new ProjectDAO().getActiveFlatAmenityWeightageByFlatId(flat_id);
 %>
 <!DOCTYPE html>
 <html lang="en">

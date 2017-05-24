@@ -110,6 +110,7 @@ public class BuyerDAO {
 		buyerSession.save(buyer);
 		buyerSession.getTransaction().commit();
 		buyerSession.close();
+		updateFlatStatus(buyer.getBuilderFlat().getId());
 		response.setId(buyer.getId());
 		response.setStatus(1);
 		response.setMessage("Buyer Added Successfully");

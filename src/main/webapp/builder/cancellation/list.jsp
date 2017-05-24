@@ -30,7 +30,7 @@
 	if(builder_uid > 0){
 		cancellation_list = new CancellationDAO().getCancellationByBuilderId(builder_uid);
 		int builder_size = cancellation_list.size();
-		projectDatas = new ProjectDAO().getProjectsByBuilderId(builder_uid);
+		projectDatas = new ProjectDAO().getActiveProjectsByBuilderId(builder_uid);
 	}
 %>
 

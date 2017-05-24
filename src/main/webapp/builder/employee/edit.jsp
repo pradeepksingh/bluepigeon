@@ -29,14 +29,14 @@
 		}
    	}
 	if(builder_uid > 0){
-		project_list = new ProjectDAO().getProjectsByBuilderId(builder_uid);
+		project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_uid);
 		int builder_size = project_list.size();
 	}
 	BuilderEmployee builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
 	BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
 	List<BuilderEmployeeAccessType> access_list = builderDetailsDAO.getBuilderAccessList();
-	List<City> cityList = new CityNamesImp().getCityNames();
-	List<Locality> localityList = new LocalityNamesImp().getLocalityList();
+	List<City> cityList = new CityNamesImp().getCityActiveNames();
+	List<Locality> localityList = new LocalityNamesImp().getLocalityActiveList();
 	 
 	
 %>

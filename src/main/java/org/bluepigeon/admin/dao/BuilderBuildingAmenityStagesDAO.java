@@ -185,7 +185,10 @@ public class BuilderBuildingAmenityStagesDAO {
 		for(BuilderBuildingAmenityStages builderBuildingAmenity : result){
 			BuildingAmenityList buildingAmenityList = new BuildingAmenityList();
 			buildingAmenityList.setId(builderBuildingAmenity.getId());
-			buildingAmenityList.setBuildingAmenityName(builderBuildingAmenity.getBuilderBuildingAmenity().getName());
+			if(builderBuildingAmenity.getBuilderBuildingAmenity().getName()!=null)
+				buildingAmenityList.setBuildingAmenityName(builderBuildingAmenity.getBuilderBuildingAmenity().getName());
+			else
+				buildingAmenityList.setBuildingAmenityName("HAHA");
 			buildingAmenityList.setBuildingAmenityStageName(builderBuildingAmenity.getName());
 			buildingAmenityList.setStatus(builderBuildingAmenity.getStatus());
 			buildingAmenityLists.add(buildingAmenityList);

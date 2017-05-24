@@ -164,11 +164,6 @@ if(session!=null)
 							</a> <b class="arrow"></b>
 						</li>
 						<li class="">
-							<a href="${baseUrl}/admin/project-settings/builder-project-amenity.jsp"> 
-								<i class="menu-icon fa fa-caret-right"></i> Project Amenity
-							</a> <b class="arrow"></b>
-						</li>
-						<li class="">
 							<a href="${baseUrl}/admin/project-settings/builder-project-amenity-stages.jsp"> 
 								<i class="menu-icon fa fa-caret-right"></i> Project Amenity Stages
 							</a> <b class="arrow"></b>

@@ -22,11 +22,11 @@
 	if (request.getParameterMap().containsKey("building_id")) {
 		building_id = Integer.parseInt(request.getParameter("building_id"));
 		if(building_id > 0) {
-			builderFloors = new ProjectDAO().getBuildingFloors(building_id);
+			builderFloors = new ProjectDAO().getBuildingActiveFloors(building_id);
 		}
 	} else {
-		builderFloors = new ProjectDAO().getAllFloorsByBuilderId(p_user_id);
-		projectDatas = new ProjectDAO().getProjectsByBuilderId(p_user_id);
+		builderFloors = new ProjectDAO().getAllActiveFloorsByBuilderId(p_user_id);
+		projectDatas = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
 	}
 %>
 <!DOCTYPE html>

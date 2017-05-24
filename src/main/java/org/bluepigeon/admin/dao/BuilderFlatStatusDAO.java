@@ -100,6 +100,20 @@ public class BuilderFlatStatusDAO {
 		session.close();
 		return result;
 	}
+	/**
+	 * Get all active flat status
+	 * @author pankaj
+	 * @return  List<BuilderFlatStatus>
+	 */
+	public List<BuilderFlatStatus> getBuilderActiveFlatStatus() {
+		String hql = "from BuilderFlatStatus where status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderFlatStatus> result = query.list();
+		session.close();
+		return result;
+	}
 
 	public List<BuilderFlatStatus> getCountryById(int id) {
 		String hql = "from BuilderFlatStatus where id = :id";
