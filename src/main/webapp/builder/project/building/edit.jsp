@@ -41,14 +41,14 @@
 		builderBuilding = builderBuildings.get(0);
 	}
 	List<ProjectData> builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
-	List<BuilderBuildingStatus> builderBuildingStatusList = new BuilderBuildingStatusDAO().getBuilderBuildingStatus();
-	List<BuilderBuildingAmenity> builderBuildingAmenities = new BuilderBuildingAmenityDAO().getBuilderBuildingAmenityList();
+	List<BuilderBuildingStatus> builderBuildingStatusList = new BuilderBuildingStatusDAO().getActiveBuilderBuildingStatus();
+	List<BuilderBuildingAmenity> builderBuildingAmenities = new BuilderBuildingAmenityDAO().getActiveBuilderBuildingAmenityList();
 	List<BuildingImageGallery> buildingImageGalleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
 	List<BuildingPanoramicImage> buildingPanoramicImages = new ProjectDAO().getBuilderBuildingElevationImagesById(building_id);
 	List<BuildingAmenityInfo> buildingAmenityInfos = new ProjectDAO().getBuilderBuildingAmenityInfoById(building_id);
-	List<BuildingPaymentInfo> buildingPaymentInfos = new ProjectDAO().getBuilderBuildingPaymentInfoById(building_id);
+	List<BuildingPaymentInfo> buildingPaymentInfos = new ProjectDAO().getActiveBuilderBuildingPaymentInfoById(building_id);
 	List<BuildingOfferInfo> buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
-	List<BuildingAmenityWeightage> buildingAmenityWeightages = new ProjectDAO().getBuilderBuildingAmenityWeightageById(building_id);
+	List<BuildingAmenityWeightage> buildingAmenityWeightages = new ProjectDAO().getActiveBuilderBuildingAmenityWeightageById(building_id);
 %>
 
 <!DOCTYPE html>

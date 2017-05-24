@@ -139,15 +139,16 @@ public class AgreementDAO {
 	}
 	
 	/**
+	 * Get all active agreement list
 	 * @author pankaj
-	 * @return list of agreement
+	 * @return List<AgreementList>
 	 */
 	public List<AgreementList> getAgreementsByBuilderId(int builderId){
 		String hql = "from Agreement";
 		String project_hql= "from BuilderProject where builder.id = :id and status=1";
-		String building_hql = "from BuilderBuilding where id = :id";
-		String floor_hql = "from BuilderFloor where id = :id";
-		String flat_hql = "from BuilderFlat where id = :id";
+		String building_hql = "from BuilderBuilding where id = :id and status=1";
+		String floor_hql = "from BuilderFloor where id = :id and status=1";
+		String flat_hql = "from BuilderFlat where id = :id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Session projectSession = hibernateUtil.openSession();

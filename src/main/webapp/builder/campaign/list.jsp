@@ -22,7 +22,7 @@ if(session!=null)
 	}
 	}
 if(session_id > 0){
-	campaignLists = new CampaignDAO().getCampaignListByBuilderId(session_id); 
+	campaignLists = new CampaignDAO().getActiveCampaignListByBuilderId(session_id); 
 }
 %>
 <!DOCTYPE html>

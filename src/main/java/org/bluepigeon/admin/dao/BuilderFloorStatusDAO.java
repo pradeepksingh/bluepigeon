@@ -90,6 +90,20 @@ public class BuilderFloorStatusDAO {
 		session.close();
 		return result;
 	}
+	/**
+	 * Get all active floor status
+	 * @author pankaj
+	 * @return List<BuilderFloorStatus>
+	 */
+	public List<BuilderFloorStatus> getActiveFloorStatus() {
+		String hql = "from BuilderFloorStatus where status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderFloorStatus> result = query.list();
+		session.close();
+		return result;
+	}
 
 	public List<BuilderFloorStatus> getFloorStatusById(int id) {
 		String hql = "from BuilderFloorStatus where id = :id";

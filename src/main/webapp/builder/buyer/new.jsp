@@ -214,7 +214,7 @@
                                 </div>
                                 
                                 <div class="form-group row">
-                                  <label for="example-text-input" class="col-3 col-form-label">Buliding</label>
+                                  <label for="example-text-input" class="col-3 col-form-label">Building</label>
                                     <div class="col-6">
                                        <select name="building_id" id="building_id" class="form-control">
 						                    <option value="">Select Building</option>

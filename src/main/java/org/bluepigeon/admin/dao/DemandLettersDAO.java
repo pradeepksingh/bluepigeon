@@ -554,7 +554,9 @@ public class DemandLettersDAO {
 	public List<BuyerPayment> getBuyerPaymentByDemandId(int demandLetter_id){
 		List<BuyerPayment> buyerPayments = new ArrayList<BuyerPayment>();
 		String hql ="from DemandLetters where id=:id";
-		String buyerHql = "from Buyer where builderFlat.id = :flat_id";
+		String buyerProjectHql = "from Buyer where builderProject.id = :project_id";
+		String buyerBuildingHql = "from Buyer where builderBuilding.id = :building_id";
+		String buyerflatHql = "from Buyer where builderFlat.id = :flat_id";
 		String paymentHql = "from BuyerPayment where buyer.id = :buyer_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -564,13 +566,35 @@ public class DemandLettersDAO {
 		query.setParameter("id", demandLetter_id);
 		DemandLetters demandLetters = (DemandLetters)query.list().get(0);
 		if(demandLetters != null){
-			Query buyerQuery = buyerSession.createQuery(buyerHql);
-			buyerQuery.setParameter("flat_id", demandLetters.getBuilderFlat().getId());
-			Buyer buyers = (Buyer)buyerQuery.list().get(0);
-			if(buyers != null){
-				Query paymentQuery = paymentSession.createQuery(paymentHql);
-				paymentQuery.setParameter("buyer_id", buyers.getId());
-				buyerPayments = paymentQuery.list();
+//			if(demandLetters.getBuilderProject() != null){
+//				Query buyerQuery = buyerSession.createQuery(buyerProjectHql);
+//				buyerQuery.setParameter("project_id", demandLetters.getBuilderProject().getId());
+//				Buyer buyers = (Buyer)buyerQuery.list().get(0);
+//				if(buyers != null){
+//					Query paymentQuery = paymentSession.createQuery(paymentHql);
+//					paymentQuery.setParameter("buyer_id", buyers.getId());
+//					buyerPayments = paymentQuery.list();
+//				}
+//			}
+//			if(demandLetters.getBuilderBuilding() != null){
+//				Query buyerQuery = buyerSession.createQuery(buyerBuildingHql);
+//				buyerQuery.setParameter("building_id", demandLetters.getBuilderBuilding().getId());
+//				Buyer buyers = (Buyer)buyerQuery.list().get(0);
+//				if(buyers != null){
+//					Query paymentQuery = paymentSession.createQuery(paymentHql);
+//					paymentQuery.setParameter("buyer_id", buyers.getId());
+//					buyerPayments = paymentQuery.list();
+//				}
+//			}
+//			if(demandLetters.getBuilderFlat() != null){
+				Query buyerQuery = buyerSession.createQuery(buyerflatHql);
+				buyerQuery.setParameter("flat_id", demandLetters.getBuilderFlat().getId());
+				Buyer buyers = (Buyer)buyerQuery.list().get(0);
+				if(buyers != null){
+					Query paymentQuery = paymentSession.createQuery(paymentHql);
+					paymentQuery.setParameter("buyer_id", buyers.getId());
+					buyerPayments = paymentQuery.list();
+			//	}
 			}
 		}
 		session.close();

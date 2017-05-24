@@ -21,7 +21,7 @@
 	if (request.getParameterMap().containsKey("floor_id")) {
 		floor_id = Integer.parseInt(request.getParameter("floor_id"));
 		if(floor_id > 0) {
-			builderFlats = new ProjectDAO().getBuilderFloorFlats(floor_id);
+			builderFlats = new ProjectDAO().getBuilderActiveFloorFlats(floor_id);
 		}
 	} else {
 		builderFlats = new ProjectDAO().getBuilderAllFlatsByBuilderId(p_user_id);

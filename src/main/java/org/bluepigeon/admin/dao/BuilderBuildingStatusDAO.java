@@ -81,7 +81,7 @@ public class BuilderBuildingStatusDAO {
 
 		return response;
 	}
-
+	
 	public List<BuilderBuildingStatus> getBuilderBuildingStatus() {
 		String hql = "from BuilderBuildingStatus";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -91,6 +91,21 @@ public class BuilderBuildingStatusDAO {
 		session.close();
 		return result;
 	}
+	/**
+	 * Get all active building status
+	 * @author pankaj
+	 * @return List<BuilderBuildingStatus>
+	 */
+	public List<BuilderBuildingStatus> getActiveBuilderBuildingStatus() {
+		String hql = "from BuilderBuildingStatus where status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderBuildingStatus> result = query.list();
+		session.close();
+		return result;
+	}
+
 
 	public List<BuilderBuildingStatus> getCountryById(int id) {
 		String hql = "from BuilderBuildingStatus where id = :id";

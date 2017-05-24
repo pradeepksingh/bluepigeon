@@ -27,7 +27,7 @@
 			builder_id = builder.getId();
 		}
 		if(builder_id > 0){
-			builderProjects = new ProjectDAO().getProjectsByBuilderId(builder_id);
+			builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
 		}
    }
    	if(builderProjects.size()>0)
