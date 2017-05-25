@@ -162,7 +162,7 @@
 															<fieldset class="scheduler-border">
 																<legend class="scheduler-border">Stages</legend>
 																<div class="col-sm-12">
-																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(builderBuildingAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value=""/></div></div>
+																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(builderBuildingAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="number" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value=""/></div></div>
 																	<fieldset class="scheduler-border" style="margin-bottom:0px !important">
 																		<legend class="scheduler-border">Sub Stages</legend>
 																	<% 	for(BuilderBuildingAmenitySubstages bpaSubstage :bpaStages.getBuilderBuildingAmenitySubstageses()) { 
@@ -283,7 +283,7 @@
 													<div class="form-group" id="error-payable">
 														<label class="control-label col-sm-8">% of Net Payable </label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control" id="payable" name="payable[]" value=""/>
+															<input type="number" class="form-control" id="payable" name="payable[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -292,7 +292,7 @@
 													<div class="form-group" id="error-amount">
 														<label class="control-label col-sm-6">Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="amount" name="amount[]" value=""/>
+															<input type="number" class="form-control" id="amount" name="amount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -347,7 +347,7 @@
 													<div class="form-group" id="error-discount">
 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="discount" name="discount[]" value=""/>
+															<input type="number" class="form-control" id="discount" name="discount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -356,7 +356,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
+															<input type="number" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -631,7 +631,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount">'
 				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control" id="discount" name="discount[]" value=""/>'
+					+'<input type="number" class="form-control" id="discount" name="discount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -640,7 +640,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>'
+					+'<input type="number" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -705,7 +705,7 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-payable">'
 				+'<label class="control-label col-sm-8">% of Net Payable </label>'
 				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control" id="payable" name="payable[]" value=""/>'
+				+'<input type="number" class="form-control" id="payable" name="payable[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 				+'</div>'
@@ -714,7 +714,7 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-amount">'
 				+'<label class="control-label col-sm-6">Amount </label>'
 				+'<div class="col-sm-6">'
-				+'<input type="text" class="form-control" id="amount" name="amount[]" value=""/>'
+				+'<input type="number" class="form-control" id="amount" name="amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 				+'</div>'

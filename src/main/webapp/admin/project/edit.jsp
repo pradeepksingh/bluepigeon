@@ -900,7 +900,7 @@
 													<div class="form-group" id="error-discount">
 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
+															<input type="number" class="form-control" id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -909,7 +909,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
+															<input type="number" class="form-control" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -970,7 +970,7 @@
 													<div class="form-group" id="error-discount">
 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="discount" name="discount[]" value=""/>
+															<input type="number" class="form-control" id="discount" name="discount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -979,7 +979,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
+															<input type="number" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
