@@ -202,13 +202,17 @@
 													<div class="col-sm-8">
 														<select name="country_id" id="country_id" class="form-control">
 										                    <option value="">Select Country</option>
-										                    <% for(Country country : listCountry){ %>
+										                    <% 
+										                    	if(listCountry != null){
+										                    	for(Country country : listCountry){ 
+										                    		
+										                    	%>
 										                    <% 	if(builderProject.getCountry().getId() == country.getId()) { 
 										                    		states = country.getStates();
 										                    	}
 										                    %>
 															<option value="<% out.print(country.getId());%>" <% if(builderProject.getCountry().getId() == country.getId()) { %>selected<% } %>><% out.print(country.getName());%></option>
-															<% } %>
+															<% }} %>
 											             </select>
 													</div>
 													<div class="messageContainer"></div>
@@ -222,7 +226,11 @@
 													<div class="col-sm-8">
 														<select name="state_id" id="state_id" class="form-control">
 										                    <option value="">Select State</option>
-										                    <% for(State state : states) { %>
+										                    <% 
+										                    	if(states !=null){
+										                    	for(State state : states) { 
+										                    	
+										                    %>
 										                    <% 	if(builderProject.getState().getId() == state.getId()) {
 										                    		cities = state.getCities();
 										                    		out.print(state.getName());
@@ -230,7 +238,7 @@
 										                    	if(state.getStatus() == 1) {
 										                    %>
 															<option value="<% out.print(state.getId());%>" <% if(builderProject.getState().getId() == state.getId()) { %>selected<% } %>><% out.print(state.getName());%></option>
-															<% }} %>
+															<% }}} %>
 											          	</select>
 													</div>
 													<div class="messageContainer"></div>
@@ -242,14 +250,15 @@
 													<div class="col-sm-8">
 														<select name="city_id" id="city_id" class="form-control">
 										                	<option value="">Select City</option>
-										                    <% for(City city : cities){ %>
+										                    <%	if(cities !=null){ 
+										                    	for(City city : cities){ %>
 										                    <% 	if(builderProject.getCity().getId() == city.getId()) { 
 										                    		localities = city.getLocalities();
 										                    	}
 										                    	if(city.getStatus() == 1) {
 										                    %>
 															<option value="<% out.print(city.getId());%>" <% if(builderProject.getCity().getId() == city.getId()) { %>selected<% } %>><% out.print(city.getName());%></option>
-															<% }} %>
+															<% }} }%>
 											          	</select>
 													</div>
 													<div class="messageContainer"></div>
@@ -263,11 +272,13 @@
 													<div class="col-sm-8">
 														<select name="locality_id" id="locality_id" class="form-control">
 										                	<option value="">Select Locality</option>
-										                	<% for(Locality locality : localities){ 
-										                		if(locality.getStatus()) {
+										                	<% 
+										                		if(localities != null){
+										                			for(Locality locality : localities){ 
+										                				if(locality.getStatus()) {
 										                	%>
 															<option value="<% out.print(locality.getId());%>" <% if(builderProject.getLocality().getId() == locality.getId()) { %>selected<% } %>><% out.print(locality.getName());%></option>
-															<% }} %>
+															<% }}} %>
 											          	</select>
 													</div>
 													<div class="messageContainer"></div>
@@ -399,7 +410,7 @@
 																<input type="checkbox" name="property_type[]" value="<% out.print(builderPropertyType.getId());%>" <% out.print(is_checked); %>/> <% out.print(builderPropertyType.getName());%>
 															</div>
 															<div>
-																<input type="text" class="form-control" id="property_type<% out.print(builderPropertyType.getId());%>" name="property_type<% out.print(builderPropertyType.getId());%>" value="<% out.print(prop_value); %>" placeholder="No. Of <% out.print(builderPropertyType.getName());%>"/>
+																<input type="number" class="form-control" id="property_type<% out.print(builderPropertyType.getId());%>" name="property_type<% out.print(builderPropertyType.getId());%>" value="<% out.print(prop_value); %>" placeholder="No. Of <% out.print(builderPropertyType.getName());%>"/>
 															</div>
 														</div>
 														<% } %>
@@ -478,7 +489,7 @@
 															<div class="row">
 																<label class="control-label col-sm-3" style="padding-top:5px;"><strong><% out.print(projectAmenity.getName());%> (%)</strong></label>
 																<div class="col-sm-4">
-																	<input type="text" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(projectAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
+																	<input type="number" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(projectAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
 																</div>
 															</div>
 															<% 	for(BuilderProjectAmenityStages bpaStages :projectAmenity.getBuilderProjectAmenityStageses()) { 
@@ -505,7 +516,7 @@
 																	%>
 																		<div class="col-sm-3">
 																			<% out.print(bpaSubstage.getName()); %> (%)<br>
-																			<input type="text" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																			<input type="number" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
 																		</div>
 																	<% } %>
 																	</fieldset>
@@ -889,7 +900,7 @@
 													<div class="form-group" id="error-discount">
 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
+															<input type="number" class="form-control" id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -898,7 +909,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
+															<input type="number" class="form-control" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -959,7 +970,7 @@
 													<div class="form-group" id="error-discount">
 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="discount" name="discount[]" value=""/>
+															<input type="number" class="form-control" id="discount" name="discount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -968,7 +979,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
+															<input type="number" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -1062,6 +1073,102 @@
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script>
+$('#latitude').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#longitude').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#project_area').keypress(function (event) {
+    return isNumber(event, this)
+});
+function isNumber(evt, element) {
+
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+}   
+$('#landmark').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z0-9, ]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+});
+
+$('#sublocation').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z0-9, ]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+});
+$("#pincode").attr('maxlength','6');
+$('#pincode').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease use only numbers.'); return ''; } ) );
+});
+$('#post').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease use only numbers.'); return ''; } ) );
+});
+$('#tenure').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease use only numbers.'); return ''; } ) );
+});
+$('#base_rate').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#rise_rate').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#maintenance').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#amenity_rate').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#parking').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#stamp_duty').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#tax').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#vat').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#tech_fee').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#payable').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#amount').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#discount').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#discount_amount').keypress(function (event) {
+    return isNumber(event, this)
+});
+function isNumber(evt, element) {
+
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+} 
+$('#schedule').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z0-9, ]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+});
 $('#launch_date').datepicker({
 	format: "dd MM yyyy"
 });

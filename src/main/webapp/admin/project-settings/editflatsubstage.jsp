@@ -55,3 +55,9 @@ flat_stage_size = flat_stage_list.size();
              			<button type="submit" class="btn btn-primary" onclick="updateFlatSubstages();">Update</button>
              		</div>
               	</div>
+<script>
+$('#uname').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
+</script>

@@ -232,6 +232,10 @@ $("#searchamenityId").change(function(){
 		$("#searchstageId").html(html);
 	},'json');
 });
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 
 $("#searchstageId").change(function(){
 	window.location.href = "${baseUrl}/admin/project-settings/builder-floor-amenity-substages.jsp?stage_id="+$("#searchstageId").val();

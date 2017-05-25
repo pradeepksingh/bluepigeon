@@ -125,4 +125,8 @@ $("#ustate_id").change(function(){
 		$("#ucity_id").html(html);
 	},'json');
 });
+$('#uname').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 </script>

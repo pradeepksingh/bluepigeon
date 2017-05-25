@@ -135,7 +135,10 @@ function addFlatStatus() {
 		window.location.reload();
 	},'json');
 }
-
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 function editFlatStatus(flat_status_id) {
 	$.get("${baseUrl}/admin/project-settings/editbuilderflatstatus.jsp?flat_status_id="+flat_status_id,{ }, function(data){
 		$("#modalarea").html(data);

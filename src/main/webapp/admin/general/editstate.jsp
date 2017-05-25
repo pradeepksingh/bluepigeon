@@ -56,3 +56,9 @@ country_size = country_list.size();
              			<button type="submit" class="btn btn-primary" onclick="updateState();">Update</button>
              		</div>
               	</div>
+<script>
+$('#uname').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
+</script>

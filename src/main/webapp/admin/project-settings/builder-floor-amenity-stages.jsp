@@ -184,6 +184,10 @@ $("#searchamenityId").change(function(){
 	window.location.href = "${baseUrl}/admin/project-settings/builder-floor-amenity-stages.jsp?amenity_id="+$("#searchamenityId").val();
 });
 
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 
 
 function editFloorAmenityStages(amenity_stage_id) {

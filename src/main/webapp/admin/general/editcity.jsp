@@ -85,6 +85,10 @@
              		</div>
               	</div>
 <script type="text/javascript">
+$('#uname').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 $("#ucountry_id").change(function(){
 	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#ucountry_id").val() }, function(data){
 		var html = '<option value="">Select State</optio>';

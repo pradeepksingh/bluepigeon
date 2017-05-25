@@ -238,11 +238,11 @@ if(session!=null)
 								<i class="menu-icon fa fa-caret-right"></i> Flat Status
 							</a> <b class="arrow"></b>
 						</li>
-						<li class="">
-							<a href="${baseUrl}/admin/project-settings/builder-overall-project-stages-and-sub-stages.jsp"> 
-								<i class="menu-icon fa fa-caret-right"></i> Overall Project Stages & Sub Stages
-							</a> <b class="arrow"></b>
-						</li>
+<!-- 						<li class=""> -->
+<%-- 							<a href="${baseUrl}/admin/project-settings/builder-overall-project-stages-and-sub-stages.jsp">  --%>
+<!-- 								<i class="menu-icon fa fa-caret-right"></i> Overall Project Stages & Sub Stages -->
+<!-- 							</a> <b class="arrow"></b> -->
+<!-- 						</li> -->
 						<li class="">
 							<a href="${baseUrl}/admin/project-settings/builder-project-approval-type.jsp"> 
 								<i class="menu-icon fa fa-caret-right"></i> Project Approval Type

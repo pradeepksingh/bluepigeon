@@ -126,6 +126,10 @@ $(document).ready(function(){
         "aaSorting": []
     });
 });
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 function addProjectSellerType() {
 	$.post("${baseUrl}/webapi/create/builder/seller/type/save",{ name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);

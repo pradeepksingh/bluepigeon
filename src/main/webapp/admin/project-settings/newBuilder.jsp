@@ -66,7 +66,7 @@
 							<label class="col-sm-3 control-label no-padding-right"
 								for="form-field-1"> Email </label>
 							<div class="col-sm-9">
-								<input type="text" id="hemail" placeholder="Email ids"
+								<input type="text"  id="hemail" placeholder="Email ids"
 									class="col-xs-10 col-sm-5" />
 							</div>
 						</div>
@@ -135,6 +135,40 @@
 <%@include file="../../footer.jsp"%>
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
+var batch_count =1;
+$('#bname').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) {  return ''; } ) );
+});
+$('#cname-'+batch_count).keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) {  return ''; } ) );
+});
+$("#hemail").keyup(function() {
+	alert("Hi from head office email");
+	ValidateEmail($("#hemail").val());
+});
+$("#contact-"+batch_count).keyup(function(){
+	alert("Hi from contact "+$("#contact-"+batch_count).val());
+	phnoValidation();
+});
+function phnoValidation()
+{
+   var b;
+   b = document.form1.TextBox4.value;
+    if (b.charCodeAt(0) == 57 && b.charCodeAt(1) == 56)
+     {
+       return true;
+    }
+    else if (b.charCodeAt(0) == 57 && b.charCodeAt(1) == 55)
+    {
+       alert("this number is acceptable");
+        return true;
+   }
+    else
+       alert("this number is not acceptable");
+    return false;
+}
 	function ValidateEmail(email) {
         var expr = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
         return expr.test(email);
@@ -142,7 +176,7 @@
 	$("#addBuilder").click(function(){
 		//alert("Hi");
 	})
-    var batch_count =1;
+    
     function addBuilderCompanyName()
 	{
     //	alert("Hello...");

@@ -245,6 +245,10 @@ $(document).ready(function(){
         "aaSorting": []
     });
 });
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 function addLocality() {
 	$.post("${baseUrl}/webapi/general/locality/save/",{ city_id: $("#city_id").val(), name: $("#name").val(), status: $("#status").val(), sortorder: 1, latitude: '', longitude: ''}, function(data){
 		alert(data.message);

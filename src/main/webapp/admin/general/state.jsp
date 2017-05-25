@@ -176,7 +176,10 @@ function addState() {
 		window.location.reload();
 	},'json');
 }
-
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 $("#searchcountryId").change(function(){
 	window.location.href = "${baseUrl}/admin/general/state.jsp?country_id="+$("#searchcountryId").val();
 });

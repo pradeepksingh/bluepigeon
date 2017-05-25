@@ -173,6 +173,10 @@ $(document).ready(function(){
         "aaSorting": []
     });
 });
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 function addPaymentSubstage() {
 	$.post("${baseUrl}/webapi/create/builder/payment/substages/save/",{ payment_id: $("#payment_id").val(), name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);

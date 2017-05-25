@@ -78,7 +78,7 @@ int tax_size=tax_list.size();
     <div id="cancel-overlay" class="modal-dialog" style="opacity:1 ;width:400px ">
       	<div class="modal-content">
           	<div class="modal-header">
-              	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">◊</span><span class="sr-only">Close</span></button>
+              	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
               	<h4 class="modal-title" id="myModalLabel">Add New Tax</h4>
           	</div>
           	<div class="modal-body" style="background-color:#f5f5f5;">
@@ -127,7 +127,7 @@ int tax_size=tax_list.size();
     <div id="cancel-overlay" class="modal-dialog" style="opacity:1 ;width:400px ">
       	<div class="modal-content">
           	<div class="modal-header">
-              	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">◊</span><span class="sr-only">Close</span></button>
+              	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
               	<h4 class="modal-title" id="myModalLabel">Update Tax</h4>
           	</div>
           	<div class="modal-body" style="background-color:#f5f5f5;" id="modalarea">
@@ -146,6 +146,31 @@ $(document).ready(function(){
         "aaSorting": []
     });
 });
+$("#pincode").attr('maxlength','6');
+$('#pincode').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease use only numbers.'); return ''; } ) );
+});
+$('#tax').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#vat').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#sduty').keypress(function (event) {
+    return isNumber(event, this)
+});
+function isNumber(evt, element) {
+
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // ‚Äú.‚Äù CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+}    
 function addTax() {
 	$.post("${baseUrl}/webapi/create/tax/save/",{ pincode: $("#pincode").val(), tax: $("#tax").val(),sduty: $("#sduty").val(),vat: $("#vat").val()}, function(data){
 		alert(data.message);

@@ -137,6 +137,17 @@ $(document).ready(function(){
         "aaSorting": []
     });
 });
+
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
+
+$('#sqft_value').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9.]/g, function(str) { alert('\n\nPlease enter only decimal numbers.'); return ''; } ) );
+});
+
 function addAreaUnit() {
 	$.post("${baseUrl}/webapi/general/area/save/",{ name: $("#name").val(), sqft_value: $("#sqft_value").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
