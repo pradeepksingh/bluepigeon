@@ -135,7 +135,10 @@ function addFlatAmenity() {
 		window.location.reload();
 	},'json');
 }
-
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 function editFlatAmenity(amenityid) {
 	$.get("${baseUrl}/admin/project-settings/editbuilderflatamenity.jsp?amenity_id="+amenityid,{ }, function(data){
 		$("#modalarea").html(data);

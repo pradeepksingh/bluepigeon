@@ -207,6 +207,10 @@ $(document).ready(function(){
         "aaSorting": []
     });
 });
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 function addProjectAmenitySubstage() {
 	$.post("${baseUrl}/webapi/create/builder/project/amenity/substages/save",{ stage_id: $("#stage_id").val(), name: $("#name").val(), status: $("#status").val(), sortorder: 1}, function(data){
 		alert(data.message);

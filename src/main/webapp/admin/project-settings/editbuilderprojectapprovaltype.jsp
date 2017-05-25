@@ -36,3 +36,9 @@ BuilderProjectApprovalTypeDAO builderProjectApprovalTypeDAO = new BuilderProject
              			<button type="submit" class="btn btn-primary" onclick="updateProjectApprovalType();">UPDATE</button>
              		</div>
               	</div>
+<script>
+$('#uname').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
+</script>

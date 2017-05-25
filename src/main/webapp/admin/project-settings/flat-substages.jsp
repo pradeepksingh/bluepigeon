@@ -176,6 +176,10 @@ $(document).ready(function(){
         "aaSorting": []
     });
 });
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 function addFlatSubstage() {
 	$.post("${baseUrl}/webapi/create/flat/substage/save/",{ stage_id: $("#stage_id").val(), name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);

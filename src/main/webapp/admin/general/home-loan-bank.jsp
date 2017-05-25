@@ -161,6 +161,19 @@ $(document).ready(function(){
         "aaSorting": []
     });
 });
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
+$('#contact_name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
+$('#location').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
+
 function addHomeLoanBank() {
 	$.post("${baseUrl}/webapi/general/bank/save/",{ name: $("#name").val(),location:$("#location").val(),contact_name:$("#contact_name").val(), email:$("#email").val(),phone:$("#phone").val(),status: $("#status").val()}, function(data){
 		alert(data.message);

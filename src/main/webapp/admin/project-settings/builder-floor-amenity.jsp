@@ -141,6 +141,10 @@ function editFloorAmenity(amenityid) {
 		$("#editFloorAmenity").modal('show');
 	},'html');
 }
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 
 function updateFloorAmenity() {
 	$.post("${baseUrl}/webapi/create/builder/floor/amenity/update/",{ id: $("#uamenity_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){

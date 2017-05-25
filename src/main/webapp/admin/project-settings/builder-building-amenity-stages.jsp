@@ -174,12 +174,17 @@ $(document).ready(function(){
         "aaSorting": []
     });
 });
+
 function addBuildingAmenityStage() {
 	$.post("${baseUrl}/webapi/create/builder/building/amenity/stages/save/",{ amenity_id: $("#amenity_id").val(), name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
 	},'json');
 }
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 
 $("#searchamenityId").change(function(){
 	window.location.href = "${baseUrl}/admin/project-settings/builder-building-amenity-stages.jsp?amenity_id="+$("#searchamenityId").val();

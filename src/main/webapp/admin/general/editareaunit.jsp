@@ -45,3 +45,14 @@
              			<button type="submit" class="btn btn-primary" onclick="updateAreaUnit();">UPDATE</button>
              		</div>
               	</div>
+<script>
+$('#uname').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
+$('#usqft_value').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9.]/g, function(str) { alert('\n\nPlease enter only decimal numbers.'); return ''; } ) );
+});
+
+</script>

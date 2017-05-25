@@ -130,6 +130,10 @@ $(document).ready(function(){
         "aaSorting": []
     });
 });
+$('input').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+});
 
 function addCountry() {
 		$.post("${baseUrl}/webapi/general/country/save",{ name: $("#name").val(), status: $("#status").val()}, function(data){
