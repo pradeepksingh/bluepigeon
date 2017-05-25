@@ -242,6 +242,38 @@
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script>
+$("#pincode").attr('maxlength','6');
+$('#pincode').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { return ''; } ) );
+});
+$('#latitude').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#longitude').keypress(function (event) {
+    return isNumber(event, this)
+});
+function isNumber(evt, element) {
+
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+}    
+$('#landmark').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z0-9, ]/g, function(str) {  return ''; } ) );
+});
+
+$('#sublocation').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z0-9, ]/g, function(str) {  return ''; } ) );
+});
+
 $("#builder_id").change(function(){
 	if($("#builder_id").val() != "") {
 		$.get("${baseUrl}/webapi/create/project/list/",{ builder_id: $("#builder_id").val() }, function(data){
