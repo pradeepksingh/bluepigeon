@@ -128,7 +128,7 @@
                        	%>
                        	<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">
 	                       	<div class="image">
-		                       	<img src="../plugins/images/Untitled-1.png" alt="Project image"/>
+		                       	<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" ><img src="../plugins/images/Untitled-1.png" alt="Project image"/></a>
 		                       	<div class="overlay">
 			                       	<div class="row">
 				                       	<div class="col-md-6 left">
@@ -136,15 +136,15 @@
 					                       <h4><%out.print(projectList.getCityName()); %></h4>
 					                       <br>
 						                       <div class="bottom">
-						                       <h4>50/500 SOLD</h4>
-						                          <a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a>
+<!-- 						                       <h4>50/500 SOLD</h4> -->
+<%-- 						                          <a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a> --%>
 						                       </div>
 				                       	</div>
 				                    	<div class="col-md-6 right">
 					                      	<div class="chart" id="graph" data-percent="10"> </div>
 						                  	<div class="bottom">
-						                    	<h4>10 NEW LEADS</h4>
-						                    	<a href="${baseUrl}/builder/project/building/list.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>
+<!-- 						                    	<h4>10 NEW LEADS</h4> -->
+<%-- 						                    	<a href="${baseUrl}/builder/project/building/list.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a> --%>
 						                 	</div>
 				                       </div>
 			                       </div>

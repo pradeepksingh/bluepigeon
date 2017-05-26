@@ -571,6 +571,7 @@ public class ProjectDAO {
 		session.close();
 		return result.get(0);
 	}
+
 	
 	public List<ProjectAmenityWeightage> getProjectAmenityWeightageByProjectId(int project_id) {
 		String hql = "from ProjectAmenityWeightage where builderProject.id = :project_id order by builderProjectAmenity.id ASC, builderProjectAmenityStages.id ASC";

@@ -80,7 +80,7 @@
     <!-- Custom CSS -->
     <link href="../../../../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link href="../../../../css/colors/megna.css" id="theme" rel="stylesheet">
+    <link href="../../../../css/megna.css" id="theme" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../../../css/custom.css">
  
     <script src="../../../../plugins/bower_components/jquery/dist/jquery.min.js"></script>

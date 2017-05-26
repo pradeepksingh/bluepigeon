@@ -26,8 +26,6 @@
     <link href="css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="css/style.css" rel="stylesheet">
-    <!-- color CSS -->
-    <link href="css/megna.css" id="theme" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="${baseUrl}/builder/css/custom.css">
      <link href="${baseUrl}/builder/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
     <link href="${baseUrl}/builder/plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />

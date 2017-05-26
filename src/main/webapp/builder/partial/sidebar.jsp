@@ -1,9 +1,24 @@
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="req" value="${pageContext.request}" />
 <c:set var="url">${req.requestURL}</c:set>
 <c:set var="uri" value="${req.requestURI}" />
 <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
+<%
+	session = request.getSession(false);
+	Builder builder_new = new Builder();
+	int builder_new_id = 0;
+	if(session!=null)
+	{
+		if(session.getAttribute("ubname") != null)
+		{
+			builder_new  = (Builder)session.getAttribute("ubname");
+			builder_new_id = builder_new.getId();
+		}
+   	}
+%>
      <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse slimscrollsidebar">
                 <ul class="nav" id="side-menu">
@@ -22,7 +37,7 @@
                             <li><a href="javascript:void(0)"><i class="ti-user"></i> My Profile</a></li>
                             <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
                             <li><a href="javascript:void(0)"><i class="ti-settings"></i> Account Setting</a></li>
-                            <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Logout</a></li>
+                            <li><a href="${baseUrl }/webapi/validate/logoutbuilder"><i class="fa fa-power-off"></i> Logout</a></li>
                         </ul>
                     </li>
                     <li class="nav-small-cap m-t-10">--Main Menu--</li>
