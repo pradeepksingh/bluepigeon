@@ -79,8 +79,6 @@
     <link href="../../../../css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="../../../../css/style.css" rel="stylesheet">
-    <!-- color CSS -->
-    <link href="../../../../css/megna.css" id="theme" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../../../css/custom.css">
  
     <script src="../../../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
@@ -163,7 +161,7 @@
                                              <div class="messageContainer col-sm-offset-3"></div>
                                          </div>
                                           <div class="form-group row">
-                                             <label for="example-search-input" class="col-4 col-form-label">>Floor No.</label>
+                                             <label for="example-search-input" class="col-4 col-form-label">Floor No.</label>
                                              <div class="col-8">
                                                 <select id="floor_id" name="floor_id" class="form-control">
 													<% if(floors != null) { %>
