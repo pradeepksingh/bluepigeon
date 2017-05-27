@@ -83,9 +83,7 @@
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                         <h4 class="page-title">Project List</h4> </div>
-                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> 
-                    <a href="${baseUrl}/builder/project/new.jsp"><span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add new Project</span></a>
-                    </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"></div>
                     <!-- /.col-lg-12 -->
                 </div>
                 <!--.row -->
@@ -127,8 +125,9 @@
                        			for(ProjectList projectList : project_list ){
                        	%>
                        	<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">
+                       		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" >
 	                       	<div class="image">
-		                       	<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" ><img src="../plugins/images/Untitled-1.png" alt="Project image"/></a>
+		                      <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
 		                       	<div class="overlay">
 			                       	<div class="row">
 				                       	<div class="col-md-6 left">
@@ -149,7 +148,7 @@
 				                       </div>
 			                       </div>
 	                           </div>
-	                       </div>
+	                       </div></a>
                         </div>
                         <%  i++;
                        		}

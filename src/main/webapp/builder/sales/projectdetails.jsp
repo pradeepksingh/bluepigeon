@@ -104,48 +104,47 @@
                 <div class="row">
                     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                         <div class="white-box">
-<!--                            <button class="full" data-toggle="modal" data-target=".bs-example-modal-lg"> -->
+                           <button class="full" data-toggle="modal" data-target=".bs-example-modal-lg">
                            <img src="../plugins/images/Untitled-1.png" alt="Second slide image" class="full">
-<!--                            </button> -->
-<!--                         <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"> -->
-<!-- 						  <div class="modal-dialog modal-lg"> -->
-<!-- 						    <div class="modal-content"> -->
-<!-- 						      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel"> -->
+                           </button>
+                        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+						  <div class="modal-dialog modal-lg">
+						    <div class="modal-content">
+						      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 
-<!--   								Wrapper for slides -->
-<!-- 								  <div class="carousel-inner"> -->
-<!-- 								    <div class="item active"> -->
-<!-- 								     <img class="img-responsive" src="../plugins/images/Untitled-1.png" alt="bp" class="full"> -->
-<!-- 								      <div class="carousel-caption"> -->
-<!-- 								        One Image -->
-<!-- 								      </div> -->
-<!-- 								    </div> -->
-<!-- 								    <div class="item"> -->
-<!-- 								      <img class="img-responsive" src="../plugins/images/Untitled-1.png" alt="bp" class="full"> -->
-<!-- 								      <div class="carousel-caption"> -->
-<!-- 								        Another Image -->
-<!-- 								      </div> -->
-<!-- 								    </div> -->
-<!-- 								     <div class="item"> -->
-<!-- 								      <img class="img-responsive" src="../plugins/images/Untitled-1.png" alt="bp" class="full"> -->
-<!-- 								      <div class="carousel-caption"> -->
-<!-- 								        Another Image -->
-<!-- 								      </div> -->
-<!-- 								    </div> -->
-<!--  								 </div> -->
-<!-- 								    Controls -->
-<!-- 									  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev"> -->
-<!-- 									    <span class="glyphicon glyphicon-chevron-left"></span> -->
-<!-- 									  </a> -->
-<!-- 									  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next"> -->
-<!-- 									    <span class="glyphicon glyphicon-chevron-right"></span> -->
-<!-- 									  </a> -->
-<!-- 							   </div> -->
-<!-- 						    </div> -->
-<!-- 						  </div> -->
-<!-- 						</div> -->
-                            <h4 class="p-t-20 fw-500">Pune, Baner, X Colony</h4>
-                            <h5><span class="text-muted"><i class="fa fa-map-marker text-danger m-r-10" aria-hidden="true"></i>Maharastra / India</span></h5>
+								  <div class="carousel-inner">
+								    <div class="item active">
+								     <img class="img-responsive full" src="../plugins/images/Untitled-1.png" alt="bp" style="width: 100%;" class="full">
+								      <div class="carousel-caption">
+								        One Image
+								      </div>
+								    </div>
+								    <div class="item">
+								      <img class="img-responsive" src="../plugins/images/Untitled-1.png" alt="bp" style="width: 100%;" class="full">
+								      <div class="carousel-caption">
+								        Another Image
+								      </div>
+								    </div>
+								     <div class="item">
+								      <img class="img-responsive" src="../plugins/images/Untitled-1.png" alt="bp" style="width: 100%;" class="full">
+								      <div class="carousel-caption">
+								        Another Image
+								      </div>
+								    </div>
+ 								 </div>
+								    
+									  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+									    <span class="glyphicon glyphicon-chevron-left"></span>
+									  </a>
+									  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+									    <span class="glyphicon glyphicon-chevron-right"></span>
+									  </a>
+							   </div>
+						    </div>
+						  </div>
+						</div>
+                            <h4 class="p-t-20 fw-500"><%out.print(projectList.getCity().getName());%>, <%out.print(projectList.getLocality().getName());%>, <%out.print(projectList.getName());%></h4>
+                            <h5><span class="text-muted"><i class="fa fa-map-marker text-danger m-r-10" aria-hidden="true"></i><%out.print(projectList.getState().getName());%> / <%out.print(projectList.getCountry().getName());%></span></h5>
                             <hr class="m-0">
                             <p class="text-dark p-t-20 pro-desc"><%out.print(projectList.getDescription()); %></p>
                         </div>
@@ -227,7 +226,7 @@
 		                                            for(int i=0;i<j;i++ ){
 		                                            	if(j>1){
 		                                            			out.print(projectProjectTypes.get(i).getBuilderProjectType().getName()+",");
-		                                            			j--;
+		                                            			
 		                                            	}else{
 		                                            		out.print(projectProjectTypes.get(i).getBuilderProjectType().getName());
 		                                            	}
@@ -239,10 +238,11 @@
                                             <td><%
                                             		int propertytypeCount = projectPropertyTypes.size();
 													for(int i=0;i<projectPropertyTypes.size();i++){
-														if(propertytypeCount > 0){
-															out.print(projectPropertyTypes.get(i).getBuilderPropertyType().getName());
+														if(propertytypeCount > 1){
+															out.print(projectPropertyTypes.get(i).getBuilderPropertyType().getName()+", ");
+															propertytypeCount--;
 														}else{
-															
+															out.print(projectPropertyTypes.get(i).getBuilderPropertyType().getName());
 														}
 													}
                                             %></td>

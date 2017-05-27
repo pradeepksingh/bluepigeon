@@ -152,7 +152,7 @@ session = request.getSession(false);
                     <!-- /.dropdown -->
                 </ul>
             </div>
-             <script src="${baseUrl}/js/bootstrap.min.js"></script>
+            <!--  <script src="${baseUrl}/js/bootstrap.min.js"></script>-->
             <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
            
             <!-- /.navbar-header -->

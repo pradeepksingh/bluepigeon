@@ -106,7 +106,7 @@
  											<% out.print(demandLetterList.getBuyerName()); %> 
 										</td>
 										<td>
-<%--  											<a href="${baseUrl}/admin/buyer/demandletters/edit.jsp?demandletter_id=<% out.print(demandLetterList.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
+ 											<a href="" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>
 										</td>
 									</tr>
  									<%
@@ -127,10 +127,10 @@
         </div>
         <!-- /#page-wrapper -->
     
-    <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+    <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script> 
     <!-- start - This is for export functionality only -->
-    <script src="../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+   <script src="../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script> 
+    <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script> 
     
     <!-- end - This is for export functionality only -->
     <script>
