@@ -144,21 +144,21 @@
                                     	  int i=1;
                                       	for(BuilderBuilding buildingList : builderBuildings) { %>
 									<tr>
-										<th><% out.print(i); %></th>
-										<th><% out.print(buildingList.getBuilderProject().getBuilder().getName()); %></th>
-										<th><% out.print(buildingList.getBuilderProject().getName()); %></th>
-										<th><% out.print(buildingList.getName()); %></th>
-										<th><% out.print(buildingList.getBuilderBuildingStatus().getName()); %></th>
-										<th>
+										<td><% out.print(i); %></td>
+										<td><% out.print(buildingList.getBuilderProject().getBuilder().getName()); %></td>
+										<td><% out.print(buildingList.getBuilderProject().getName()); %></td>
+										<td><% out.print(buildingList.getName()); %></td>
+										<td><% out.print(buildingList.getBuilderBuildingStatus().getName()); %></td>
 										<td>
 										  <a href="${baseUrl}/builder/project/building/edit.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
 										   <a href="${baseUrl}/builder/project/building/floor/list.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-info pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Floor</span></a>
 										</td>
+									</tr>
 										<% 	
 											i++;} 
                                       	}
 										%>
-										</tr>
+										
                                     </tbody>
                                 </table>
                             </div>

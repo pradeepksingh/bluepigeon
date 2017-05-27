@@ -180,7 +180,7 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Landmark </label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>"/>
+														<input type="text" class="form-control" id="landmark" name="landmark" value="<% if(builderProject.getAddr1()!=null){out.print(builderProject.getAddr1());}%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -191,7 +191,7 @@
 												<div class="form-group" id="error-sublocation">
 													<label class="control-label col-sm-4">Sub Location </label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control" id="sublocation" name="sublocation" value="<% out.print(builderProject.getAddr2());%>"/>
+														<input type="text" class="form-control" id="sublocation" name="sublocation" value="<% if(builderProject.getAddr2() != null){out.print(builderProject.getAddr2());}%>"/>
 													</div>
 													<div class="messageContainer"></div>
 												</div>
@@ -635,9 +635,10 @@
 													<label class="control-label col-sm-4">Pricing Unit <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<select name="base_unit" id="base_unit" class="form-control">
-															<% for(AreaUnit areaUnit :areaUnits) { %>
+															<%	if(projectPriceInfo.getAreaUnit() != null){ 
+															for(AreaUnit areaUnit :areaUnits) { %>
 															<option value="<% out.print(areaUnit.getId()); %>" <% if(projectPriceInfo.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
-															<% } %>
+															<% }} %>
 														</select>
 													</div>
 												</div>

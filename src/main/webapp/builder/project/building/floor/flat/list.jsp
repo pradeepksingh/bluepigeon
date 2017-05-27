@@ -134,12 +134,12 @@
                                        		
                                        %>
                                        <tr>
-                                       	<th><% out.print(i); %></th>
-										<th><% out.print(builderFlat.getFlatNo()); %></th>
-										<th><% out.print(builderFlat.getBuilderFloor().getName()); %></th>
-										<th><% out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getName()); %></th>
-										<th><% out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName()); %></th>
-										<th><% out.print(builderFlat.getBuilderFlatStatus().getName()); %></th>
+                                       	<td><% out.print(i); %></td>
+										<td><% out.print(builderFlat.getFlatNo()); %></td>
+										<td><% out.print(builderFlat.getBuilderFloor().getName()); %></td>
+										<td><% out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getName()); %></td>
+										<td><% out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName()); %></td>
+										<td><% out.print(builderFlat.getBuilderFlatStatus().getName()); %></td>
 										 <td><a href="${baseUrl}/builder/project/building/floor/flat/edit.jsp?flat_id=<% out.print(builderFlat.getId());%>"><span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a></td>
 										</tr>
                                        <%	i++;

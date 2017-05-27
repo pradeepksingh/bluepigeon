@@ -155,7 +155,7 @@
                        		}
                        	}
                         %>
-                       
+                       </div>
                       <!-- div class="col-md-6 col-sm-6 col-xs-12 projectsection">
                         <div class="image">
 	                       <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
@@ -304,10 +304,7 @@
 	                    <div class="offset-sm-5 col-sm-7">
 	                        <button type="submit" class="btn btn11 btn-info waves-effect waves-light m-t-10">More...</button>
 	                     </div>
-                    </div>
-                    
                 </div>
-                
                 </div>
                 </div>
         <!-- /.container-fluid -->
