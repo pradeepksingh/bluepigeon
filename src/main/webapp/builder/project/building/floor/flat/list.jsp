@@ -49,8 +49,8 @@
     <link href="../../../../css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="../../../../css/style.css" rel="stylesheet">
-    <link href=".../../../../css/custom.css" rel="stylesheet">
-    <link href="../../../../css/custom1.css" rel="stylesheet">
+    <link href="../../../../css/custom.css" rel="stylesheet">
+<!--     <link href="../../../../css/custom1.css" rel="stylesheet"> -->
     <!-- color CSS -->
 <!--     <link href="../../../../css/megna.css" id="theme" rel="stylesheet"> -->
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -166,9 +166,9 @@
     <!-- start - This is for export functionality only -->
     <script src="../../../../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
     <script src="../../../../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
-    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-    <script src="../../../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-    <script src="../../../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<!--     <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script> -->
+<!--     <script src="../../../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script> -->
+<!--     <script src="../../../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script> -->
     <script src="../../../../cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="../../../../cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <!-- end - This is for export functionality only -->

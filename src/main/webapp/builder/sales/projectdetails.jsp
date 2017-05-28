@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.model.BuilderProjectApprovalInfo"%>
+<%@page import="org.bluepigeon.admin.dao.BuilderProjectApprovalInfoDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectPropertyConfigurationInfoDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectPropertyTypeDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectProjectTypeDAO"%>
@@ -23,6 +25,7 @@
 	List<BuilderProjectProjectType> projectProjectTypes = new BuilderProjectProjectTypeDAO().getBuilderProjectProjectTypes(project_id);
 	List<BuilderProjectPropertyType> projectPropertyTypes = new BuilderProjectPropertyTypeDAO().getBuilderProjectPropertyTypes(project_id);
 	List<BuilderProjectPropertyConfigurationInfo> projectConfigurationInfos = new BuilderProjectPropertyConfigurationInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id);
+	List<BuilderProjectApprovalInfo> projectApprovalInfos = new BuilderProjectApprovalInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id);
 	session = request.getSession(false);
 	Builder builder = new Builder();
 	if(session!=null)
@@ -225,7 +228,7 @@
                                              		int j= projectProjectTypes.size();
 		                                            for(int i=0;i<j;i++ ){
 		                                            	if(j>1){
-		                                            			out.print(projectProjectTypes.get(i).getBuilderProjectType().getName()+",");
+		                                            			out.print(projectProjectTypes.get(i).getBuilderProjectType().getName()+", ");
 		                                            			
 		                                            	}else{
 		                                            		out.print(projectProjectTypes.get(i).getBuilderProjectType().getName());
@@ -249,25 +252,39 @@
                                         </tr>
                                          <tr>
                                             <td>Configuration</td>
-                                            <td>1BHK, 2BHK</td>
+                                            <td><%	int configurationCount = projectConfigurationInfos.size();
+                                            		for(BuilderProjectPropertyConfigurationInfo configurationInfo : projectConfigurationInfos){
+                                            			if(configurationCount > 1){
+						                                	out.print(configurationInfo.getBuilderProjectPropertyConfiguration().getName()+", ");
+						                                	configurationCount--;
+                                            			}
+                                            			else{
+                                            				out.print(configurationInfo.getBuilderProjectPropertyConfiguration().getName());
+                                            			}
+                                            		}
+                                            %></td>
                                         </tr>
                                         
                                         <tr>
-                                            <td>Square Footage</td>
-                                            <td>2,123</td>
+                                            <td>Project Area</td>
+                                            <td><%out.print(projectList.getProjectArea()+" "+projectList.getAreaUnit().getName()); %></td>
                                         </tr>
+<!--                                         <tr> -->
+<!--                                             <td>Lot SQFT</td> -->
+<!--                                             <td>256</td> -->
+<!--                                         </tr> -->
+                                        <%
+                                        	for(BuilderProjectPropertyType builderProjectPropertyType: projectPropertyTypes){
+                                        %>
                                         <tr>
-                                            <td>Lot SQFT</td>
-                                            <td>256</td>
-                                        </tr>
-                                        <tr>
-                                         <td>No. of Building</td>
-                                            <td>4</td>
+                                         <td>No. of <%out.print(builderProjectPropertyType.getBuilderPropertyType().getName());; %>
+                                            <td><%out.print(builderProjectPropertyType.getValue()); %></td>
                                               </tr>
-                                            <tr>
-                                                <td>No. of Flats</td>
-                                                <td>50</td>
-                                                </tr>
+                                        <%} %>
+<!--                                             <tr> -->
+<!--                                                 <td>No. of Flats</td> -->
+<!--                                                 <td>50</td> -->
+<!--                                                 </tr> -->
                                            <tr>
                                             <td>Year Built</td>
                                             <td>2012</td>
@@ -275,43 +292,53 @@
                                        
                                         <tr>
                                             <td>Project Approval</td>
-                                            <td>Active</td>
+                                            <td><%
+                                            		int approvalCount=projectApprovalInfos.size();
+													for(BuilderProjectApprovalInfo builderProjectApprovalInfo : projectApprovalInfos){
+														if(approvalCount > 1){
+															out.print(builderProjectApprovalInfo.getBuilderProjectApprovalType().getName()+", ");
+															approvalCount--;
+														}else{
+															out.print(builderProjectApprovalInfo.getBuilderProjectApprovalType().getName());
+														}
+													}
+                                            %></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="white-box p-0">
+<!--                         <div class="white-box p-0"> -->
                     
-                            <hr class="m-0">
-                            <div class="pd-agent-inq">
-                                <h4 class="box-title">Request Inquiry</h4>
-                                <form class="form-horizontal form-agent-inq">
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <input type="text" class="form-control" placeholder="Name"> </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <input type="text" class="form-control" placeholder="Phone"> </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <input type="email" class="form-control" placeholder="E-Mail"> </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <textarea class="form-control" rows="3" placeholder="Message"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <button type="submit" class="btn btn-danger btn-rounded pull-right">Submit Request</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+<!--                             <hr class="m-0"> -->
+<!--                             <div class="pd-agent-inq"> -->
+<!--                                 <h4 class="box-title">Request Inquiry</h4> -->
+<!--                                 <form class="form-horizontal form-agent-inq"> -->
+<!--                                     <div class="form-group"> -->
+<!--                                         <div class="col-md-12"> -->
+<!--                                             <input type="text" class="form-control" placeholder="Name"> </div> -->
+<!--                                     </div> -->
+<!--                                     <div class="form-group"> -->
+<!--                                         <div class="col-md-12"> -->
+<!--                                             <input type="text" class="form-control" placeholder="Phone"> </div> -->
+<!--                                     </div> -->
+<!--                                     <div class="form-group"> -->
+<!--                                         <div class="col-md-12"> -->
+<!--                                             <input type="email" class="form-control" placeholder="E-Mail"> </div> -->
+<!--                                     </div> -->
+<!--                                     <div class="form-group"> -->
+<!--                                         <div class="col-md-12"> -->
+<!--                                             <textarea class="form-control" rows="3" placeholder="Message"></textarea> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                     <div class="form-group"> -->
+<!--                                         <div class="col-md-12"> -->
+<!--                                             <button type="submit" class="btn btn-danger btn-rounded pull-right">Submit Request</button> -->
+<!--                                         </div> -->
+<!--                                     </div> -->
+<!--                                 </form> -->
+<!--                             </div> -->
+<!--                         </div> -->
                      
                     </div>
                 </div>

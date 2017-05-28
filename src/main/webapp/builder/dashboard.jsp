@@ -229,9 +229,9 @@
                            </div>
                        </div>
                        </div>
-	                    <div class="offset-sm-5 col-sm-7">
-	                        <button type="submit" class="btn btn11 btn-info waves-effect waves-light m-t-10">More...</button>
-	                     </div>
+<!-- 	                    <div class="offset-sm-5 col-sm-7"> -->
+<!-- 	                        <button type="submit" class="btn btn11 btn-info waves-effect waves-light m-t-10">More...</button> -->
+<!-- 	                     </div> -->
                     </div>
                 </div>
                 </div>

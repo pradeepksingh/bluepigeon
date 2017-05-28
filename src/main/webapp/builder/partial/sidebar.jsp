@@ -81,6 +81,7 @@
                         <ul class="nav nav-second-level">
 <!--                             <li> <a href="inbox.html">Add</a></li> -->
 <!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
+							  <li> <a href="${baseUrl }/builder/sales/list.jsp">Manage Project</a></li>
                               <li> <a href="${baseUrl }/builder/leads/list.jsp">Manage Leads</a></li>
                              </ul>
                     </li>
