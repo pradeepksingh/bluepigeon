@@ -134,14 +134,14 @@
 				                       	<div class="col-md-6 left">
 					                       <h3><%out.print(projectList.getName()); %></h3>
 					                       <h4><%out.print(projectList.getCityName()); %></h4>
-					                       <br>
+					                       
 						                       <div class="bottom">
 						                       <h4>50/500 SOLD</h4>
 						                          <a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a>
 						                       </div>
 				                       	</div>
 				                    	<div class="col-md-6 right">
-					                      	<div class="chart" id="graph" data-percent="10"> </div>
+					                      	<div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="20"> </div>
 						                  	<div class="bottom">
 						                    	<h4>10 NEW LEADS</h4>
 						                    	<a href="${baseUrl}/builder/project/building/list.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>
@@ -155,7 +155,7 @@
                        		}
                        	}
                         %>
-                       
+                       </div>
                       <!-- div class="col-md-6 col-sm-6 col-xs-12 projectsection">
                         <div class="image">
 	                       <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
@@ -301,13 +301,10 @@
                          </div>
                        </div-->
                        
-	                    <div class="offset-sm-5 col-sm-7">
+	                    <!-- <div class="offset-sm-5 col-sm-7">
 	                        <button type="submit" class="btn btn11 btn-info waves-effect waves-light m-t-10">More...</button>
-	                     </div>
-                    </div>
-                    
+	                     </div>-->
                 </div>
-                
                 </div>
                 </div>
         <!-- /.container-fluid -->
@@ -417,7 +414,7 @@
     		$("#state_id").html(html);
     		$('.selectpicker').selectpicker('refresh');
     	},'json');
-    	//getProjectList();
+    	getProjectList();
     });
     $("#state_id").change(function(){
     	$.get("${baseUrl}/webapi/general/city/list",{ state_id: $("#state_id").val() }, function(data){
@@ -435,15 +432,46 @@
    function getProjectList(){
 	   $.post("${baseUrl}/webapi/project/list",{builder_id: $("#builder_id").val(), company_id: $("#company_id").val(), country_id: $("#country_id").val(), city_id: $("#city_id").val(), state_id: $("#state_id").val(),project_name: $("#project_name").val()},function(data){
 			alert(data);
+			var html = "";
 		    $(data).each(function(index){
 		    	alert(data[index].id);
+		    	html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
+               	+'<div class="image">'
+                   	+'<img src="../plugins/images/Untitled-1.png" alt="Project image"/>'
+                   	+'<div class="overlay">'
+                       	+'<div class="row">'
+	                       	+'<div class="col-md-6 left">'
+		                       +'<h3>project Name</h3>'
+		                       +'<h4>city name</h4>'
+		                       +'<br>'
+			                       +'<div class="bottom">'
+			                      +' <h4>50/500 SOLD</h4>'
+			                          +'<a href="${baseUrl}/builder/project/edit.jsp?project_id="" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a>'
+			                       +'</div>'
+	                       	+'</div>'
+	                    	+'<div class="col-md-6 right">'
+		                      	+'<div class="chart" id="graph" data-percent="10"> </div>'
+			                  	+'<div class="bottom">'
+			                    	+'<h4>10 NEW LEADS</h4>'
+			                    	+'<a href="${baseUrl}/builder/project/building/list.jsp?project_id="" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>'
+			                 	+'</div>'
+	                       +'</div>'
+                       +'</div>'
+                   +'</div>'
+               +'</div>'
+            +'</div>';
+            $("#projectlist").html(html);
 		    });
 	   },'json');
    }
     </script>
     <script>
-   
-    	 var el = document.getElementById('graph'); 
+    <%
+		if(project_list !=null){
+			int i=1;
+			for(ProjectList projectList : project_list ){
+	%>
+    	 var el = document.getElementById('graph<%out.print(projectList.getId());%>'); 
     	    var options = {
     	        percent:  el.getAttribute('data-percent') || 2,
     	        size: el.getAttribute('data-size') || 100,
@@ -483,9 +511,7 @@
 
     	    drawCircle('#efefef', options.lineWidth, 100 / 100);
     	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
-    	
-    
-   
+    	<%}}%>
     </script>
     
     <script>

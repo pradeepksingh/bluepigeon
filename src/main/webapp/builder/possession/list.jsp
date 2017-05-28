@@ -45,8 +45,9 @@
     <link href="../css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/custom.css" rel="stylesheet">
     <!-- color CSS -->
-    <link href="../css/colors/megna.css" id="theme" rel="stylesheet">
+    <!--<link href="../css/colors/megna.css" id="theme" rel="stylesheet">-->
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -112,7 +113,7 @@
  											<% out.print(possessionList.getBuyerName()); %> 
 										</td>
 										<td>
-<%--  											<a href="${baseUrl}/admin/buyer/possession/edit.jsp?possession_id=<% out.print(agreementList.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
+ 											<a href="" class="btn btn-success icon-btn btn-xs"> Edit</a>
 										</td>
 									</tr>
  									<% 
@@ -132,7 +133,7 @@
       		</div>
         </div>
         <!-- /#page-wrapper -->
-    </div>
+    
     
     <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <!-- start - This is for export functionality only -->

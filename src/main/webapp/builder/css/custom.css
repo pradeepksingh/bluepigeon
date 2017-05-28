@@ -1,3 +1,11 @@
+.navbar-header .nav>li>a {
+    position: relative;
+    display: block;
+    padding: 0px 15px !important;
+}
+
+
+
 #error{
 	color:red;
 	parent-top:10px;
@@ -48,13 +56,13 @@ padding-left: 12px;
 
     margin:1px;
 
-    margin-left: 111px;
+    margin-left: 45px;
 
 }
 
 .btn11 {
 
-    font-size: 24px !important;
+    font-size: 15px !important;
 
     padding: .8rem 5rem !important;
 
@@ -129,7 +137,7 @@ padding-top:85%;
 .image img{
 
 
-    width: 100%;
+    width: 370px;
 
 }
 
@@ -189,7 +197,7 @@ padding-top:85%;
 
      padding:40px;
 
-    width:100%;
+    width:370px;
 
     height:100%;
 
@@ -309,4 +317,9 @@ text-align: center;
 
     margin-bottom: 15px;
 
+}
+
+.liheader{
+    text-decoration: none;
+    background-color: #35baf6 !important; 
 }
