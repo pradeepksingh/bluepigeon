@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.ProjectImageGallery"%>
 <%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
 <%@page import="org.bluepigeon.admin.model.Country"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
@@ -13,6 +14,7 @@
 	List<ProjectList> project_list = null;
 	session = request.getSession(false);
 	Builder builder = new Builder();
+	ProjectImageGallery imageGaleries = null;
 	int builder_uid = 0;
 	if(session!=null)
 	{
@@ -127,7 +129,15 @@
                        	<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">
                        		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" >
 	                       	<div class="image">
-		                      <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
+	                       		<%
+	                       		try{
+	                       		imageGaleries = new ProjectDAO().getProjectImagesByProjectId(projectList.getId()).get(0);
+	                       	     if(imageGaleries.getImage() != null){
+	                       	%>
+		                     <img src="${baseUrl}/<% out.print(imageGaleries.getImage()); %>" height="294" alt="Project image"/>
+		                       	<%}}catch(Exception e){ %>
+		                       		 <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
+		                       	<%} %>
 		                       	<div class="overlay">
 			                       	<div class="row">
 				                       	<div class="col-md-6 left">
@@ -140,7 +150,7 @@
 						                       </div>
 				                       	</div>
 				                    	<div class="col-md-6 right">
-					                      	<div class="chart" id="graph" data-percent="10"> </div>
+					                      	<div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="10"> </div>
 						                  	<div class="bottom">
 <!-- 						                    	<h4>10 NEW LEADS</h4> -->
 <%-- 						                    	<a href="${baseUrl}/builder/project/building/list.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a> --%>
@@ -300,9 +310,9 @@
                          </div>
                        </div-->
                        
-	                    <div class="offset-sm-5 col-sm-7">
-	                        <button type="submit" class="btn btn11 btn-info waves-effect waves-light m-t-10">More...</button>
-	                     </div>
+<!-- 	                    <div class="offset-sm-5 col-sm-7"> -->
+<!-- 	                        <button type="submit" class="btn btn11 btn-info waves-effect waves-light m-t-10">More...</button> -->
+<!-- 	                     </div> -->
                     </div>
                     
                 </div>
@@ -441,8 +451,12 @@
    }
     </script>
     <script>
-   
-    	 var el = document.getElementById('graph'); 
+ 	<%
+		if(project_list !=null){
+			int i=1;
+			for(ProjectList projectList : project_list ){
+	%>
+    	 var el = document.getElementById('graph<%out.print(projectList.getId());%>'); 
     	    var options = {
     	        percent:  el.getAttribute('data-percent') || 2,
     	        size: el.getAttribute('data-size') || 100,
@@ -484,7 +498,7 @@
     	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
     	
     
-   
+   <%}}%>
     </script>
     
     <script>
