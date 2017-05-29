@@ -140,7 +140,7 @@
 								  
 								 
 								  <%if(projectImageGallery != null){ 
-								  	if(imageCount>1){
+								  	
 								  %>
 								    <div class="item">
 								     	<img class="img-responsive" src="${baseUrl}/<% out.print(projectImageGallery.getImage()); %>" alt="bp"  style="width: 100%;"  class="full">
@@ -148,14 +148,7 @@
 								        	Another Image
 								      	</div>
 								    </div>
-								    <% } else{%>
-								     <div class="item  active">
-								     	<img class="img-responsive" src="${baseUrl}/<% out.print(projectImageGallery.getImage()); %>" alt="bp" style="width: 100%;"   class="full">
-								     	<div class="carousel-caption">
-								        	Another Image
-								      	</div>
-								    </div>
-								    <%} }%>
+								    <% }%>
 <!-- 								     <div class="item active"> -->
 <!-- 								      <img class="img-responsive" src="../plugins/images/Untitled-1.png" alt="bp" style="width: 100%;" class="full"> -->
 <!-- 								      <div class="carousel-caption"> -->
@@ -388,3 +381,8 @@
 </body>
 
 </html>
+<script>
+$(document).ready(function(){ 
+$('.item').first().addClass('active');
+});
+</script>
