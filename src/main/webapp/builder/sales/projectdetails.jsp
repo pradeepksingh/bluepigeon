@@ -115,41 +115,65 @@
                     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                         <div class="white-box">
                          <% if(imageGaleries != null){
-                        	 int imgCount=1;
+                        	// int imgCount=1;
                         	 %>
                            <button class="full" data-toggle="modal" data-target=".bs-example-modal-lg">
-                          
-                           <img src="${baseUrl}/<% out.print(imageGaleries.get(0).getImage()); %>" alt="Second slide image" class="full">
+                          <% try{
+                        	  if(imageGaleries.get(0).getImage() != null){
+                          %>
+                           			<img src="${baseUrl}/<% out.print(imageGaleries.get(0).getImage()); %>" alt="Second slide image" width="491" height="390" class="full">
+                           <%}}catch(Exception e){ %>
+                           			<img src="../plugins/images/Untitled-1.png" alt="Second slide image" class="full">
+                            <%}} %>
                            </button>
                         <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 						  <div class="modal-dialog modal-lg">
 						    <div class="modal-content">
 						      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-								  <%for(ProjectImageGallery projectImageGallery : imageGaleries){ %>
-								  <div class="carousel-inner">
-								  <%if(imgCount>1){ %>
+						       <div class="carousel-inner">
+								  <%
+								//   out.print(imageGaleries);
+								
+								  if(imageGaleries != null){
+								   int imageCount=1;
+								  for(ProjectImageGallery projectImageGallery : imageGaleries){ %>
+								  
+								 
+								  <%if(projectImageGallery != null){ 
+								  	if(imageCount>1){
+								  %>
 								    <div class="item">
-								     	<img class="img-responsive" src="${baseUrl}/<% out.print(projectImageGallery.getImage()); %>" alt="bp" style="width: 100%;" class="full">
+								     	<img class="img-responsive" src="${baseUrl}/<% out.print(projectImageGallery.getImage()); %>" alt="bp"  style="width: 100%;"  class="full">
 								     	<div class="carousel-caption">
 								        	Another Image
 								      	</div>
 								    </div>
-								    <%}else{ %>
-								     <div class="item active">
-								     	<img class="img-responsive full" src="${baseUrl}/<% out.print(projectImageGallery.getImage()); %>" alt="bp" style="width: 100%;" class="full">
-								      	<div class="carousel-caption">
-								        	One Image
+								    <% } else{%>
+								     <div class="item  active">
+								     	<img class="img-responsive" src="${baseUrl}/<% out.print(projectImageGallery.getImage()); %>" alt="bp" style="width: 100%;"   class="full">
+								     	<div class="carousel-caption">
+								        	Another Image
 								      	</div>
 								    </div>
-								    <%} %>
-<!-- 								     <div class="item"> -->
+								    <%} }%>
+<!-- 								     <div class="item active"> -->
 <!-- 								      <img class="img-responsive" src="../plugins/images/Untitled-1.png" alt="bp" style="width: 100%;" class="full"> -->
 <!-- 								      <div class="carousel-caption"> -->
 <!-- 								        Another Image -->
 <!-- 								      </div> -->
 <!-- 								    </div> -->
- 								 </div>
-								    <% imgCount++;}} %>
+ 								
+								    <% }}else{%>
+<!-- 								    <div class="carousel-inner"> -->
+								     <div class="item active">
+								     	<img class="img-responsive full" src="../plugins/images/Untitled-1.png" alt="bp" style="width: 100%;" class="full">
+								      	<div class="carousel-caption">
+								        	One Image
+								      	</div>
+								    </div>
+								    <%} %>
+<!-- 								    </div> -->
+								     </div>
 									  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
 									    <span class="glyphicon glyphicon-chevron-left"></span>
 									  </a>
@@ -197,9 +221,10 @@
                             <div class="table-responsive pro-rd p-t-10">
                                 <table class="table">
                                     <tbody class="text-dark">
+                                    	<% if(projectList!=null){ %>
                                         <tr>
                                             <td>Address</td>
-                                            <td><%	if(projectList!=null){
+                                            <td><%	
                                             	out.print(projectList.getAddr1()); %><br>
                                             	<% 
                                             	out.print(projectList.getAddr2()); %>
@@ -207,14 +232,13 @@
                                         </tr>
                                         <tr>
                                             <td>Subdivision</td>
-                                            <td><%
-                                            out.print(projectList.getLocality().getName()); %></td>
+                                            <td><%out.print(projectList.getLocality().getName()); %></td>
                                         </tr>
                                         <tr>
                                             <td>City</td>
-                                            <td><% 
-                                            out.print(projectList.getCity().getName()); }%></td>
+                                            <td><%out.print(projectList.getCity().getName()); %></td>
 		                                 </tr>
+		                                 <% }%>
 		                            </tbody>
 		                         </table>
 		                       </div>
@@ -306,8 +330,7 @@
                                        
                                         <tr>
                                             <td>Project Approval</td>
-                                            <td><%
-                                            		int approvalCount=projectApprovalInfos.size();
+                                            <td><%	int approvalCount=projectApprovalInfos.size();
 													for(BuilderProjectApprovalInfo builderProjectApprovalInfo : projectApprovalInfos){
 														if(approvalCount > 1){
 															out.print(builderProjectApprovalInfo.getBuilderProjectApprovalType().getName()+", ");

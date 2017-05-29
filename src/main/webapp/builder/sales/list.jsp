@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.ProjectImageGallery"%>
 <%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
 <%@page import="org.bluepigeon.admin.model.Country"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
@@ -13,6 +14,7 @@
 	List<ProjectList> project_list = null;
 	session = request.getSession(false);
 	Builder builder = new Builder();
+	ProjectImageGallery imageGaleries = null;
 	int builder_uid = 0;
 	if(session!=null)
 	{
@@ -127,7 +129,15 @@
                        	<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">
                        		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" >
 	                       	<div class="image">
-		                      <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
+	                       		<%
+	                       		try{
+	                       		imageGaleries = new ProjectDAO().getProjectImagesByProjectId(projectList.getId()).get(0);
+	                       	     if(imageGaleries.getImage() != null){
+	                       	%>
+		                     <img src="${baseUrl}/<% out.print(imageGaleries.getImage()); %>" height="294" alt="Project image"/>
+		                       	<%}}catch(Exception e){ %>
+		                       		 <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
+		                       	<%} %>
 		                       	<div class="overlay">
 			                       	<div class="row">
 				                       	<div class="col-md-6 left">

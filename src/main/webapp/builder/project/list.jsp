@@ -13,7 +13,7 @@
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%
 	List<ProjectList> project_list = null;
-	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>();
+	ProjectImageGallery imageGaleries = null;
 	session = request.getSession(false);
 	Builder builder = new Builder();
 	int builder_uid = 0;
@@ -131,9 +131,14 @@
                        	<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">
 	                       	<div class="image">
 	                       	<%
-	                       		imageGaleries = new ProjectDAO().getProjectImagesByProjectId(projectList.getId());
+	                       		try{
+	                       		imageGaleries = new ProjectDAO().getProjectImagesByProjectId(projectList.getId()).get(0);
+	                       	     if(imageGaleries.getImage() != null){
 	                       	%>
-		                       	<img src="${baseUrl}/<% out.print(imageGaleries.get(0).getImage()); %>" alt="Project image"/>
+		                       	<img src="${baseUrl}/<% out.print(imageGaleries.getImage()); %>" height="294" alt="Project image"/>
+		                       	<%}}catch(Exception e){ %>
+		                       		 <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
+		                       	<%} %>
 		                       	<div class="overlay">
 			                       	<div class="row">
 				                       	<div class="col-md-6 left">
