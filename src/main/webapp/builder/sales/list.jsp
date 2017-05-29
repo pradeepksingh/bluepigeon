@@ -140,7 +140,7 @@
 						                       </div>
 				                       	</div>
 				                    	<div class="col-md-6 right">
-					                      	<div class="chart" id="graph" data-percent="10"> </div>
+					                      	<div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="10"> </div>
 						                  	<div class="bottom">
 <!-- 						                    	<h4>10 NEW LEADS</h4> -->
 <%-- 						                    	<a href="${baseUrl}/builder/project/building/list.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a> --%>
@@ -300,9 +300,9 @@
                          </div>
                        </div-->
                        
-	                    <div class="offset-sm-5 col-sm-7">
-	                        <button type="submit" class="btn btn11 btn-info waves-effect waves-light m-t-10">More...</button>
-	                     </div>
+<!-- 	                    <div class="offset-sm-5 col-sm-7"> -->
+<!-- 	                        <button type="submit" class="btn btn11 btn-info waves-effect waves-light m-t-10">More...</button> -->
+<!-- 	                     </div> -->
                     </div>
                     
                 </div>
@@ -441,8 +441,12 @@
    }
     </script>
     <script>
-   
-    	 var el = document.getElementById('graph'); 
+ 	<%
+		if(project_list !=null){
+			int i=1;
+			for(ProjectList projectList : project_list ){
+	%>
+    	 var el = document.getElementById('graph<%out.print(projectList.getId());%>'); 
     	    var options = {
     	        percent:  el.getAttribute('data-percent') || 2,
     	        size: el.getAttribute('data-size') || 100,
@@ -484,7 +488,7 @@
     	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
     	
     
-   
+   <%}}%>
     </script>
     
     <script>

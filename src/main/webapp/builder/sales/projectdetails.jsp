@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.model.ProjectImageGallery"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectApprovalInfo"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectApprovalInfoDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectPropertyConfigurationInfoDAO"%>
@@ -18,6 +20,7 @@
 	int p_user_id = 0;
 	int project_id=0;
 	BuilderProject projectList = null;
+	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>();
 	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList();
 	project_id = Integer.parseInt(request.getParameter("project_id"));
 	projectList = new ProjectDAO().getBuilderActiveProjectById(project_id);
@@ -26,6 +29,7 @@
 	List<BuilderProjectPropertyType> projectPropertyTypes = new BuilderProjectPropertyTypeDAO().getBuilderProjectPropertyTypes(project_id);
 	List<BuilderProjectPropertyConfigurationInfo> projectConfigurationInfos = new BuilderProjectPropertyConfigurationInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id);
 	List<BuilderProjectApprovalInfo> projectApprovalInfos = new BuilderProjectApprovalInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id);
+	imageGaleries = new ProjectDAO().getProjectImagesByProjectId(project_id);
 	session = request.getSession(false);
 	Builder builder = new Builder();
 	if(session!=null)
@@ -96,7 +100,9 @@
                 <div class="row bg-title">
                     <!-- .page title -->
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Property Detail</h4> </div>
+                        <h4 class="page-title">Property Detail
+                        <span class="pull-right"><a href="${baseUrl}/builder/sales/list.jsp" class="btn btn-default btn-sm"> << Project List</a></span></h4>
+                        </div>
                     <!-- /.page title -->
                     <!-- .breadcrumb -->
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> 
@@ -104,38 +110,46 @@
                     <!-- /.breadcrumb -->
                 </div>
                 <!-- .row -->
+                
                 <div class="row">
                     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                         <div class="white-box">
+                         <% if(imageGaleries != null){
+                        	 int imgCount=1;
+                        	 %>
                            <button class="full" data-toggle="modal" data-target=".bs-example-modal-lg">
-                           <img src="../plugins/images/Untitled-1.png" alt="Second slide image" class="full">
+                          
+                           <img src="${baseUrl}/<% out.print(imageGaleries.get(0).getImage()); %>" alt="Second slide image" class="full">
                            </button>
                         <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 						  <div class="modal-dialog modal-lg">
 						    <div class="modal-content">
 						      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-
+								  <%for(ProjectImageGallery projectImageGallery : imageGaleries){ %>
 								  <div class="carousel-inner">
-								    <div class="item active">
-								     <img class="img-responsive full" src="../plugins/images/Untitled-1.png" alt="bp" style="width: 100%;" class="full">
-								      <div class="carousel-caption">
-								        One Image
-								      </div>
-								    </div>
+								  <%if(imgCount>1){ %>
 								    <div class="item">
-								      <img class="img-responsive" src="../plugins/images/Untitled-1.png" alt="bp" style="width: 100%;" class="full">
-								      <div class="carousel-caption">
-								        Another Image
-								      </div>
+								     	<img class="img-responsive" src="${baseUrl}/<% out.print(projectImageGallery.getImage()); %>" alt="bp" style="width: 100%;" class="full">
+								     	<div class="carousel-caption">
+								        	Another Image
+								      	</div>
 								    </div>
-								     <div class="item">
-								      <img class="img-responsive" src="../plugins/images/Untitled-1.png" alt="bp" style="width: 100%;" class="full">
-								      <div class="carousel-caption">
-								        Another Image
-								      </div>
+								    <%}else{ %>
+								     <div class="item active">
+								     	<img class="img-responsive full" src="${baseUrl}/<% out.print(projectImageGallery.getImage()); %>" alt="bp" style="width: 100%;" class="full">
+								      	<div class="carousel-caption">
+								        	One Image
+								      	</div>
 								    </div>
+								    <%} %>
+<!-- 								     <div class="item"> -->
+<!-- 								      <img class="img-responsive" src="../plugins/images/Untitled-1.png" alt="bp" style="width: 100%;" class="full"> -->
+<!-- 								      <div class="carousel-caption"> -->
+<!-- 								        Another Image -->
+<!-- 								      </div> -->
+<!-- 								    </div> -->
  								 </div>
-								    
+								    <% imgCount++;}} %>
 									  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
 									    <span class="glyphicon glyphicon-chevron-left"></span>
 									  </a>

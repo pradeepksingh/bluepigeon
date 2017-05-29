@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.bluepigeon.admin.model.ProjectImageGallery"%>
 <%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
 <%@page import="org.bluepigeon.admin.model.Country"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
@@ -11,6 +13,7 @@
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%
 	List<ProjectList> project_list = null;
+	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>();
 	session = request.getSession(false);
 	Builder builder = new Builder();
 	int builder_uid = 0;
@@ -123,12 +126,14 @@
                        
                        	<%
                        		if(project_list !=null){
-                       			int i=1;
                        			for(ProjectList projectList : project_list ){
                        	%>
                        	<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">
 	                       	<div class="image">
-		                       	<img src="../plugins/images/Untitled-1.png" alt="Project image"/>
+	                       	<%
+	                       		imageGaleries = new ProjectDAO().getProjectImagesByProjectId(projectList.getId());
+	                       	%>
+		                       	<img src="${baseUrl}/<% out.print(imageGaleries.get(0).getImage()); %>" alt="Project image"/>
 		                       	<div class="overlay">
 			                       	<div class="row">
 				                       	<div class="col-md-6 left">
@@ -151,7 +156,7 @@
 	                           </div>
 	                       </div>
                         </div>
-                        <%  i++;
+                        <%  
                        		}
                        	}
                         %>

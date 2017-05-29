@@ -6,7 +6,6 @@
 <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -288,13 +287,13 @@
                 <div class="white-box">
 	                <div class="row">
 		                <div class="col-md-4">
-		                    <button type="submit" class="btn11 btn-info waves-effect waves-light m-t-10">Update Info</button>
+		                    <button type="button" onclick="addEmployee();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Employee</button>
 		                </div>
 		                 <div class="col-md-4">
-		                    <button type="submit" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Lead</button>
+		                    <button type="button" onclick="addLead();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Lead</button>
 		                 </div>
 		                 <div class="col-md-4">
-		                    <button type="submit" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Buyer</button>
+		                    <button type="button" onclick="addBuyer();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Buyer</button>
 		                </div>
 	                </div>
                 </div>
@@ -315,6 +314,15 @@
     <script src="${baseUrl}/builder/plugins/bower_components/morrisjs/morris.js"></script>
     <script src="${baseUrl}/builder/js/real-estate.js"></script>
     <script>
+    function addLead(){
+    	window.location.href="${baseUrl }/builder/leads/new.jsp"
+    }
+    function addEmployee(){
+    	window.location.href="${baseUrl }/builder/employee/new.jsp";
+    }
+    function addBuyer(){
+    	window.location.href="${baseUrl }/builder/buyer/new.jsp";
+    }
     jQuery(document).ready(function() {
         // Switchery
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));

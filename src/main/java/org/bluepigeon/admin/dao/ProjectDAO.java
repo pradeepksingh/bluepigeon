@@ -508,7 +508,7 @@ public class ProjectDAO {
 				where = where + "city.id = :city_id ";
 			}
 		}
-		hql = hql + where;
+		hql = hql + where+" and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
