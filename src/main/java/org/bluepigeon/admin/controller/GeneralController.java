@@ -213,7 +213,6 @@ public class GeneralController {
 		
 		LocalityNamesImp localityNamesImp= new LocalityNamesImp();
 		System.out.println("City id :: "+city_id);
-		System.out.println("Locality Name data size :: "+localityNamesImp.getLocalityByCityId(city_id).get(0).getName());
 		return localityNamesImp.getLocalityByCityId(city_id);
 	}
 	@POST

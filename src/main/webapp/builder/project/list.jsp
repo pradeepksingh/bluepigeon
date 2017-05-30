@@ -113,14 +113,12 @@
                                         <option value="0">City</option>
                          </select>
                     </div>
-<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!--                        <select class="selectpicker" data-style="form-control"> -->
-<!--                                         <option>Status</option> -->
-<!--                                         <option>1</option> -->
-<!--                                         <option>2</option> -->
-<!--                          </select> -->
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                       <select class="selectpicker" data-style="form-control" id="locality_id" name="locality_id">
+                                        <option value="0">Locality</option>
+                         </select>
                                
-<!--                     </div> -->
+                    </div>
                     
                     <div class="row">
                        
@@ -145,22 +143,32 @@
 					                       <h3><%out.print(projectList.getName()); %></h3>
 					                       <h4><%out.print(projectList.getCityName()); %></h4>
 					                       
-						                       <div class="bottom">
-						                       <h4>50/500 SOLD</h4>
-						                          <a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a>
-						                       </div>
+<!-- 					                       <div class="bottom"> -->
+<!-- 					                       <h4>50/500 SOLD</h4> -->
+<%-- 					                          <a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a> --%>
+<!-- 					                       </div> -->
 				                       	</div>
 				                    	<div class="col-md-6 right">
 					                      	<div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="20"> </div>
-						                  	<div class="bottom">
-						                    	<h4>10 NEW LEADS</h4>
-						                    	<a href="${baseUrl}/builder/project/building/list.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>
-						                 	</div>
+<!-- 						                  	<div class="bottom"> -->
+<!-- 						                    	<h4>10 NEW LEADS</h4> -->
+<%-- 						                    	<a href="${baseUrl}/builder/project/building/list.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a> --%>
+<!-- 						                 	</div> -->
 				                       </div>
 			                       </div>
 	                           </div>
+	                          
 	                       </div>
+	                       <div class="row">
+                           	<div class="col-md-6 center"> 
+                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a>
+                           	</div>
+                         	<div class="col-md-6 center">
+                          		 <a href="${baseUrl}/builder/project/building/list.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>
+						 	 </div>
+						  </div>
                         </div>
+                         
                         <%  
                        		}
                        	}
@@ -428,19 +436,28 @@
     });
     $("#state_id").change(function(){
     	$.get("${baseUrl}/webapi/general/city/list",{ state_id: $("#state_id").val() }, function(data){
-    		var html = '<option value="">Select City</optio>';
+    		var html = '<option value="">Select City</option>';
     		$(data).each(function(index){
     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
     		});
     		$("#city_id").html(html);
     		$('.selectpicker').selectpicker('refresh');
     	},'json');
+    	getProjectList();
     });
     $("#city_id").change(function(){
-    	
+    	$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
+    		var html = '<option value="">Select Locality</option>';
+    		$(data).each(function(index){
+    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+    		});
+    		$("#locality_id").html(html);
+    		$('.selectpicker').selectpicker('refresh');
+    	},'json');
+    	getProjectList();
     })
    function getProjectList(){
-	   $.post("${baseUrl}/webapi/project/list",{builder_id: $("#builder_id").val(), company_id: $("#company_id").val(), country_id: $("#country_id").val(), city_id: $("#city_id").val(), state_id: $("#state_id").val(),project_name: $("#project_name").val()},function(data){
+	   $.post("${baseUrl}/webapi/project/data/list",{country_id: $("#country_id").val(),state_id: $("#state_id").val(), city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
 			alert(data);
 			var html = "";
 		    $(data).each(function(index){

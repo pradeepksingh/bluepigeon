@@ -22,6 +22,7 @@ import org.bluepigeon.admin.dao.CityNamesImp;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.dao.StateImp;
+import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
@@ -385,4 +386,17 @@ public class BuilderController {
 		}
 		return msg;
 	}
+	
+	@POST
+	@Path("/project/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderProjectList> getProjectsById(
+			@FormParam("country_id") int countryId,
+			@FormParam("state_id") int stateId,
+			@FormParam("city_id") int cityId,
+			@FormParam("locality_id") int localityId){
+		
+		return new BuilderDetailsDAO().getProjectFilters(countryId, stateId, cityId, localityId);
+	}
+	
 }
