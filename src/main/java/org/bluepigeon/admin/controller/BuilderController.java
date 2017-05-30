@@ -387,16 +387,4 @@ public class BuilderController {
 		return msg;
 	}
 	
-	@POST
-	@Path("/project/list")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<BuilderProjectList> getProjectsById(
-			@FormParam("country_id") int countryId,
-			@FormParam("state_id") int stateId,
-			@FormParam("city_id") int cityId,
-			@FormParam("locality_id") int localityId){
-		
-		return new BuilderDetailsDAO().getProjectFilters(countryId, stateId, cityId, localityId);
-	}
-	
 }

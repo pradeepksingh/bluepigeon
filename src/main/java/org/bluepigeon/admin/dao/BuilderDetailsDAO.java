@@ -487,13 +487,18 @@ public class BuilderDetailsDAO {
 		return response;
 	}
 	
-	public List<BuilderProjectList> getProjectFilters(int countryId,int stateId,int cityId, int localityId){
+	public List<BuilderProjectList> getProjectFilters(int builderId,int countryId,int stateId,int cityId, int localityId){
 		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
-		ProjectImageGallery projectImageGallery = new  ProjectImageGallery();
 		String hql = "from BuilderProject where ";
 		String where = "";
+		if(builderId > 0){
+			where +="builder.id = :builder_id";
+		}
 		if(countryId > 0){
-			where += "country.id = :country_id";
+			if(where!="")
+				where += " AND country.id = :country_id";
+			else
+				where += "country.id = :country_id";
 		}
 		if(stateId > 0){
 			if(where !="")
@@ -509,16 +514,18 @@ public class BuilderDetailsDAO {
 		}
 		if(localityId > 0){
 			if(where != "")
-				where +="AND locality.id = :locality_id";
+				where +=" AND locality.id = :locality_id";
 			else
 				where +="locality.id = :locality_id";
 			
 		}
 		hql += where + " AND status=1";
-		String imageHql = "from ProjectImageGallery where builderProject.id = :project_id";
+	//	String imageHql = "from ProjectImageGallery where builderProject.id = :project_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
+		if(builderId > 0)
+			query.setParameter("builder_id", builderId);
 		if(countryId > 0)
 			query.setParameter("country_id", countryId);
 		if(stateId > 0)
@@ -534,7 +541,11 @@ public class BuilderDetailsDAO {
 			builderProjectList.setName(builderProject.getName());
 			builderProjectList.setCity(builderProject.getCity().getName());
 			ProjectDAO projectDAO = new ProjectDAO();
-			builderProjectList.setImage(projectDAO.getProjectImagesByProjectId(builderProject.getId()).get(0).getImage());
+			try{
+				builderProjectList.setImage(projectDAO.getProjectImagesByProjectId(builderProject.getId()).get(0).getImage());
+			}catch(Exception e){
+				builderProjectList.setImage("");
+			}
 			builderProjectLists.add(builderProjectList);
 		}
 		return builderProjectLists;

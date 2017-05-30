@@ -50,8 +50,6 @@
     <link href="../css/animate.css" rel="stylesheet">
     <!-- Menu CSS -->
     <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
-    <!-- animation CSS -->
-    <link href="../css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../css/custom.css">
@@ -81,6 +79,7 @@
        	<%@include file="../partial/sidebar.jsp"%>
       </div>
    </div>
+   		<input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_uid); %>"/>
         <div id="page-wrapper" style="min-height: 2038px;">
            <div class="container-fluid">
                 <div class="row bg-title">
@@ -120,13 +119,13 @@
                                
                     </div>
                     
-                    <div class="row">
-                       
+                    <div class="row" >
+                      
                        	<%
                        		if(project_list !=null){
                        			for(ProjectList projectList : project_list ){
                        	%>
-                       	<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">
+                       	 <div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">
 	                       	<div class="image">
 	                       	<%
 	                       		try{
@@ -173,6 +172,7 @@
                        		}
                        	}
                         %>
+                        
                        </div>
                       <!-- div class="col-md-6 col-sm-6 col-xs-12 projectsection">
                         <div class="image">
@@ -421,12 +421,9 @@
     });
     
     $("#country_id").change(function(){
-    //	alert("Country Id : "+$("#country_id").val());
-    	//$("#projectlist").remove();
     	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#country_id").val() }, function(data){
     		var html = '<option value="">Select State</option>';
     		$(data).each(function(index){
-    			alert(data[index].name);
     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
     		});
     		$("#state_id").html(html);
@@ -455,42 +452,66 @@
     		$('.selectpicker').selectpicker('refresh');
     	},'json');
     	getProjectList();
-    })
+    });
+    $("#locality_id").change(function(){
+    	getProjectList();
+    });
    function getProjectList(){
-	   $.post("${baseUrl}/webapi/project/data/list",{country_id: $("#country_id").val(),state_id: $("#state_id").val(), city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
-			alert(data);
-			var html = "";
-		    $(data).each(function(index){
-		    	alert(data[index].id);
-		    	html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
-               	+'<div class="image">'
-                   	+'<img src="../plugins/images/Untitled-1.png" alt="Project image"/>'
-                   	+'<div class="overlay">'
-                       	+'<div class="row">'
-	                       	+'<div class="col-md-6 left">'
-		                       +'<h3>project Name</h3>'
-		                       +'<h4>city name</h4>'
-		                       +'<br>'
-			                       +'<div class="bottom">'
-			                      +' <h4>50/500 SOLD</h4>'
-			                          +'<a href="${baseUrl}/builder/project/edit.jsp?project_id="" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a>'
-			                       +'</div>'
-	                       	+'</div>'
-	                    	+'<div class="col-md-6 right">'
-		                      	+'<div class="chart" id="graph" data-percent="10"> </div>'
-			                  	+'<div class="bottom">'
-			                    	+'<h4>10 NEW LEADS</h4>'
-			                    	+'<a href="${baseUrl}/builder/project/building/list.jsp?project_id="" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>'
-			                 	+'</div>'
+    	//$("#projectlist").empty();
+    	var html = "";
+		var image = "";
+		var projectName = "";
+		var cityName = "";
+		var projectId = "";
+	   $.post("${baseUrl}/webapi/project/data/list",{builder_id: $("#builder_id").val(), country_id: $("#country_id").val(),state_id: $("#state_id").val(), city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
+		   alert(data);
+			$(data).each(function(index){
+				 alert(data[index].name);
+				if(data[index].image != "")
+					image = "${baseUrl}/"+data[index].image;
+				else
+					image = "../plugins/images/Untitled-1.png";
+				if(data[index].name != ""){
+					projectName = data[index].name;
+				}
+				if(data[index].city != ""){
+					cityName = data[index].city;
+				}
+				if(data[index].id != ""){
+					projectId = data[index].id;
+				}
+			  
+// 			    	html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
+			    		html=	+'<div class="image">'
+	                   	+'<img src="'+image+'" alt="Project image"/>'
+	                   	+'<div class="overlay">'
+	                       +'	<div class="row">'
+		                       +'<div class="col-md-6 left">'
+			                       +'<h3>'+ProjectName+'</h3>'
+			                       +'<h4>'+CityName+'</h4>'
+		                       	+'</div>'
+		                    	+'<div class="col-md-6 right">'
+			                      	+'<div class="chart" id="graph'+projectId+'" data-percent="20"> </div>'
+		                       +'</div>'
 	                       +'</div>'
-                       +'</div>'
-                   +'</div>'
-               +'</div>'
-            +'</div>';
-            $("#projectlist").html(html);
-		    });
-	   },'json');
-   }
+	                   +'</div>'
+	               +'</div>'
+	               +'<div class="row">'
+	               	+'<div class="col-md-6 center">' 
+	               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a>'
+	               	+'</div>'
+	             	+'<div class="col-md-6 center">'
+	              		 +'<a href="${baseUrl}/builder/project/building/list.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>'
+				 	 +'</div>'
+				 +'</div>';
+// 	            +'</div>';
+			    $("#projectlist").html(html);
+			  
+			 
+			});
+			
+		    },'json');
+	   }
     </script>
     <script>
     <%
