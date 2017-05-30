@@ -501,7 +501,7 @@
    <%}}%>
     </script>
     
-    <script>
+   <!-- <script>
     var el = document.getElementById('graph1'); // get canvas
 
     var options = {
@@ -629,7 +629,7 @@
 
     drawCircle('#efefef', options.lineWidth, 100 / 100);
     drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
-    </script>
+    </script>-->
 
 </body>
 
