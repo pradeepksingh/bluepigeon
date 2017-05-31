@@ -3,8 +3,13 @@
     display: block;
     padding: 0px 15px !important;
 }
-
-
+.inputbox{
+	max-width: 145px !important;
+	padding:5px;
+}
+.btn-sm{
+	    margin: 0px 5px;
+}
 
 #error{
 	color:red;

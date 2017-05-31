@@ -319,7 +319,7 @@
 	   $.post("${baseUrl}/webapi/project/data/list",{builder_id: $("#builder_id").val(), country_id: 1,state_id: $("#state_id").val(), city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
 		   if(data == ""){
 			   $("#project_list").empty();
-			   $("#project_list").append("<h2>No Records Found</h2>");
+			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
 		   }
 			$(data).each(function(index){
 				if(data[index].image != "")
