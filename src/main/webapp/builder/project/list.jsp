@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.dao.StateImp"%>
+<%@page import="org.bluepigeon.admin.model.State"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.bluepigeon.admin.model.ProjectImageGallery"%>
 <%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
@@ -29,7 +31,7 @@
 			int builder_size = project_list.size();
 		}
    	}
-	List<Country> countryList = new CountryDAOImp().getActiveCountryList();
+	List<State> stateList = new StateImp().getActiveStateByCountryId(1);
 	
 %>
 <!DOCTYPE html>
@@ -93,19 +95,22 @@
                 <!--.row -->
                
                    <div class="row re white-box">
-                    <div class="col-md-3 col-sm-6 col-xs-12">
-                        <select class="selectpicker" data-style="form-control" id="country_id" name="country_id">
-                                  <option value="0">Country</option>
-                                  <% for(Country country : countryList){%>
-                                  <option value="<%out.print(country.getId());%>"><%out.print(country.getName()); %></option>
-                                  <%} %>
-                           </select>
+<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!--                         <select class="selectpicker" data-style="form-control" id="country_id" name="country_id"> -->
+<!--                                   <option value="0">Country</option> -->
+<%--                                   <% for(Country country : countryList){%> --%>
+<%--                                   <option value="<%out.print(country.getId());%>"><%out.print(country.getName()); %></option> --%>
+<%--                                   <%} %> --%>
+<!--                            </select> -->
                                
-                    </div>
+<!--                     </div> -->
                     <div class="col-md-3 col-sm-6 col-xs-12">
                       <select class="selectpicker" data-style="form-control" id="state_id" name="state_id" >
                       		<option value="0">State</option>
-                          </select>
+                      		 <% for(State state : stateList){%>
+                             <option value="<%out.print(state.getId());%>"><%out.print(state.getName()); %></option>
+                             <%} %>
+                      </select>
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                        <select class="selectpicker" data-style="form-control" id="city_id" name="city_id">
@@ -115,11 +120,10 @@
                     <div class="col-md-3 col-sm-6 col-xs-12">
                        <select class="selectpicker" data-style="form-control" id="locality_id" name="locality_id">
                                         <option value="0">Locality</option>
-                         </select>
-                               
+                        </select>
                     </div>
                     
-                    <div class="row" id="project_list">
+                    <div class="container" id="project_list">
                        	<%
                        		if(project_list !=null){
                        			for(ProjectList projectList : project_list ){
@@ -131,9 +135,9 @@
 	                       		imageGaleries = new ProjectDAO().getProjectImagesByProjectId(projectList.getId()).get(0);
 	                       	     if(imageGaleries.getImage() != null){
 	                       	%>
-		                       	<img src="${baseUrl}/<% out.print(imageGaleries.getImage()); %>" height="294" alt="Project image"/>
+		                       	<img  src="${baseUrl}/<% out.print(imageGaleries.getImage()); %>" height="348" width="438" alt="Project image"/>
 		                       	<%}}catch(Exception e){ %>
-		                       		 <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
+		                       		 <img  src="../plugins/images/Untitled-1.png" height="348"  width="438" alt="Project image"/>
 		                       	<%} %>
 		                       	<div class="overlay">
 			                       	<div class="row">
@@ -141,15 +145,15 @@
 					                       <h3><%out.print(projectList.getName()); %></h3>
 					                       <h4><%out.print(projectList.getCityName()); %></h4>
 					                       
-					                       <div class="bottom">
-					                       <h4>50/500 SOLD</h4>
-					                       </div>
+<!-- 					                       <div class="bottom"> -->
+<!-- 					                       <h4>50/500 SOLD</h4> -->
+<!-- 					                       </div> -->
 				                       	</div>
 				                    	<div class="col-md-5 right">
 					                      	<div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="20"> </div>
-						                  	<div class="bottom">
-						                    	<h4>10 NEW LEADS</h4>
-						                 	</div>
+<!-- 						                  	<div class="bottom"> -->
+<!-- 						                    	<h4>10 NEW LEADS</h4> -->
+<!-- 						                 	</div> -->
 				                       </div>
 			                       </div>
 	                           </div>
@@ -268,17 +272,17 @@
 
     });
     
-    $("#country_id").change(function(){
-    	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#country_id").val() }, function(data){
-    		var html = '<option value="">Select State</option>';
-    		$(data).each(function(index){
-    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-    		});
-    		$("#state_id").html(html);
-    		$('.selectpicker').selectpicker('refresh');
-    	},'json');
-    	getProjectList();
-    });
+//     $("#country_id").change(function(){
+//     	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#country_id").val() }, function(data){
+//     		var html = '<option value="">Select State</option>';
+//     		$(data).each(function(index){
+//     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+//     		});
+//     		$("#state_id").html(html);
+//     		$('.selectpicker').selectpicker('refresh');
+//     	},'json');
+//     	getProjectList();
+//     });
     $("#state_id").change(function(){
     	$.get("${baseUrl}/webapi/general/city/list",{ state_id: $("#state_id").val() }, function(data){
     		var html = '<option value="">Select City</option>';
@@ -312,16 +316,13 @@
 		var projectName = "";
 		var cityName = "";
 		var projectId = "";
-		//var count=parseInt($("#list_count").val());
 		$("#project_list").empty();
-	   $.post("${baseUrl}/webapi/project/data/list",{builder_id: $("#builder_id").val(), country_id: $("#country_id").val(),state_id: $("#state_id").val(), city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
+	   $.post("${baseUrl}/webapi/project/data/list",{builder_id: $("#builder_id").val(), country_id: 1,state_id: $("#state_id").val(), city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
 		   if(data == ""){
 			   $("#project_list").empty();
 			   $("#project_list").append("<h2>No Records Found</h2>");
 		   }
-		  // alert(data.length);
 			$(data).each(function(index){
-				 //alert(data[index].name);
 				if(data[index].image != "")
 					image = "${baseUrl}/"+data[index].image;
 				else
@@ -337,7 +338,7 @@
 				}
  			    	html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
 			    		+'<div class="image">'
-	                   	+'<img src="'+image+'" height="294" alt="Project image"/>'
+	                   	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
 	                   	+'<div class="overlay">'
 	                    +'<div class="row">'
 		                +'<div class="col-md-6 left">'
@@ -360,11 +361,8 @@
 				 		+'</div>'
  	            		+'</div>';
  	            		$("#project_list").append(html);
- 	            		//var el = $('.chart').attr('data-percent');
-    					//alert(el);
  	            		createGraph("graph"+projectId);
-			   // $("#list_count").val(count);
-			 // count++;
+			 
 			});
 			
 		    },'json');
