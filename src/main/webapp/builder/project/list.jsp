@@ -120,13 +120,11 @@
                     </div>
                     
                     <div class="row" id="project_list">
-                       <input type="hidden" id="list_count" name="list_count" value="1"/>
                        	<%
                        		if(project_list !=null){
-                       			int count=1;
                        			for(ProjectList projectList : project_list ){
                        	%>
-                       	<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist-<%out.print(count);%>">
+                       	<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">
 	                       	<div class="image">
 	                       	<%
 	                       		try{
@@ -143,17 +141,15 @@
 					                       <h3><%out.print(projectList.getName()); %></h3>
 					                       <h4><%out.print(projectList.getCityName()); %></h4>
 					                       
-<!-- 					                       <div class="bottom"> -->
-<!-- 					                       <h4>50/500 SOLD</h4> -->
-<%-- 					                          <a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a> --%>
-<!-- 					                       </div> -->
+					                       <div class="bottom">
+					                       <h4>50/500 SOLD</h4>
+					                       </div>
 				                       	</div>
-				                    	<div class="col-md-6 right">
+				                    	<div class="col-md-5 right">
 					                      	<div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="20"> </div>
-<!-- 						                  	<div class="bottom"> -->
-<!-- 						                    	<h4>10 NEW LEADS</h4> -->
-<%-- 						                    	<a href="${baseUrl}/builder/project/building/list.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a> --%>
-<!-- 						                 	</div> -->
+						                  	<div class="bottom">
+						                    	<h4>10 NEW LEADS</h4>
+						                 	</div>
 				                       </div>
 			                       </div>
 	                           </div>
@@ -168,160 +164,12 @@
 						 	 </div>
 						  </div>
                         </div>
-                        <%  count++;
+                        <%  
                        		}
                        	}
                         %>
                         
                        </div>
-                      <!-- div class="col-md-6 col-sm-6 col-xs-12 projectsection">
-                        <div class="image">
-	                       <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
-	                       <div class="overlay">
-		                       <div class="row">
-			                       <div class="col-md-6 left">
-				                       <h3>Rohan Lehare</h3>
-				                       <h4>Baner</h4>
-				                       <br>
-					                       <div class="bottom">
-					                       <h4>50/500 SOLD</h4>
-					                       </div>
-			                       </div>
-			                        <div class="col-md-6 right">
-				                         <div class="chart" id="graph2" data-percent="30">
-				                         </div>
-					                        <div class="bottom">
-					                        <h4>10 NEW LEADS</h4>
-					                        </div>
-			                       </div>
-		                       </div>
-                           </div>
-                       </div> 
-                        <div class="image">
-	                       <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
-	                       <div class="overlay">
-		                       <div class="row">
-			                       <div class="col-md-6 left">
-				                       <h3>Rohan Lehare</h3>
-				                       <h4>Baner</h4>
-				                       <br>
-					                       <div class="bottom">
-					                       <h4>50/500 SOLD</h4>
-					                        class="btn btn11 btn-info waves-effect waves-light m-t-10"
-					                        class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light"
-					                      <a href=""> <span class="btn btn-success pull-center m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span></a>
-					                       </div>
-			                       </div>
-			                        <div class="col-md-6 right">
-				                         <div class="chart" id="graph3" data-percent="90">
-				                         </div>
-					                        <div class="bottom">
-					                        <h4>10 NEW LEADS</h4>
-					                        <a href="" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>
-					                        </div>
-			                       </div>
-		                       </div>
-                           </div>
-                       </div>
-                       </div>
-                       <div class="col-md-6 col-sm-6 col-xs-12 projectsection">
-	                       <div class="image">
-		                       <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
-		                       <div class="overlay">
-			                       <div class="row">
-				                       <div class="col-md-6 left">
-					                       <h3>Rohan Lehare</h3>
-					                       <h4>Baner</h4>
-					                       <br>
-						                       <div class="bottom">
-						                       <h4>50/500 SOLD</h4>
-						                       </div>
-				                       </div>
-				                        <div class="col-md-6 right">
-					                         <div class="chart" id="graph" data-percent="70">
-					                         </div>
-						                        <div class="bottom">
-						                        <h4>10 NEW LEADS</h4>
-						                        </div>
-				                       </div>
-			                       </div>
-	                           </div>
-	                       </div>
-                        <div class="image">
-                          <div class="image">
-	                       <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
-	                       <div class="overlay">
-		                       <div class="row">
-			                       <div class="col-md-6 left">
-				                       <h3>Rohan Lehare</h3>
-				                       <h4>Baner</h4>
-				                       <br>
-					                       <div class="bottom">
-					                       <h4>50/500 SOLD</h4>
-					                       </div>
-			                       </div>
-			                        <div class="col-md-6 right">
-				                         <div class="chart" id="graph1" data-percent="50">
-				                         </div>
-					                        <div class="bottom">
-					                        <h4>10 NEW LEADS</h4>
-					                        </div>
-			                       </div>
-		                       </div>
-                           </div>
-                         </div>
-                        </div>
-                       </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12 projectsection">
-                        <div class="image">
-	                       <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
-	                       <div class="overlay">
-		                       <div class="row">
-			                       <div class="col-md-6 left">
-				                       <h3>Rohan Lehare</h3>
-				                       <h4>Baner</h4>
-				                       <br>
-					                       <div class="bottom">
-					                       <h4>50/500 SOLD</h4>
-					                       </div>
-			                       </div>
-			                        <div class="col-md-6 right">
-				                         <div class="chart" id="graph2" data-percent="30">
-				                         </div>
-					                        <div class="bottom">
-					                        <h4>10 NEW LEADS</h4>
-					                        </div>
-			                       </div>
-		                       </div>
-                           </div>
-                       </div> 
-                        <div class="image">
-	                       <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
-	                       <div class="overlay">
-		                       <div class="row">
-			                       <div class="col-md-6 left">
-				                       <h3>Rohan Lehare</h3>
-				                       <h4>Baner</h4>
-				                       <br>
-					                       <div class="bottom">
-					                       <h4>50/500 SOLD</h4>
-					                       </div>
-			                       </div>
-			                        <div class="col-md-6 right">
-				                         <div class="chart" id="graph3" data-percent="90">
-				                         </div>
-					                        <div class="bottom">
-					                        <h4>10 NEW LEADS</h4>
-					                        </div>
-			                       </div>
-		                       </div>
-                           </div>
-                         </div>
-                       </div-->
-                       
-	                    <!-- <div class="offset-sm-5 col-sm-7">
-	                        <button type="submit" class="btn btn11 btn-info waves-effect waves-light m-t-10">More...</button>
-	                     </div>-->
                 </div>
                 </div>
                 </div>
@@ -471,9 +319,9 @@
 			   $("#project_list").empty();
 			   $("#project_list").append("<h2>No Records Found</h2>");
 		   }
-		   alert(data.length);
+		  // alert(data.length);
 			$(data).each(function(index){
-				 alert(data[index].name);
+				 //alert(data[index].name);
 				if(data[index].image != "")
 					image = "${baseUrl}/"+data[index].image;
 				else
@@ -530,14 +378,12 @@
 		for(ProjectList projectList : project_list ){
 %>
 	createGraph("graph<%out.print(projectList.getId());%>");
-	alert("on load :: "+"graph<%out.print(projectList.getId());%>");
 	<%}}%>
     
     function createGraph(graphId){
     	//alert(graphId);
     	 var el = document.getElementById(graphId); 
     	//var el = $('div #'+graphId).attr('data-percent');
-    	alert(el);
     	// alert("Graph Id "+el);
     	var per= el.getAttribute('data-percent');
     	//alert("per : "+per);
