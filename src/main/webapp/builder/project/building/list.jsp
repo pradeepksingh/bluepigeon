@@ -95,19 +95,19 @@
                         <div class="white-box"><br>
                           <h3>Manage Building</h3>
 						<div class="row re white-box">
-							<div class="col-md-3 col-sm-6 col-xs-12">
-								<select name="searchprojectId" id="searchprojectId" class="form-control">
-				                    <option value="0">Project</option>
-				                    <%
-    				                    if(projectDatas != null){  
-  				                    for(int i=0; i < projectDatas.size() ; i++){ %>  
-									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option>
-									<% 	
-    										}
-   				                    } 
-  				                    %>  
-						         </select>   
-							</div>
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 								<select name="searchprojectId" id="searchprojectId" class="form-control"> -->
+<!-- 				                    <option value="0">Project</option> -->
+<%-- 				                    <% --%>
+<!--      				                    if(projectDatas != null){   -->
+<%--   				                    for(int i=0; i < projectDatas.size() ; i++){ %>   --%>
+<%-- 									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option> --%>
+<%-- 									<% 	 --%>
+<!--      										} -->
+<!--     				                    }  -->
+<%--   				                    %>   --%>
+<!-- 						         </select>    -->
+<!-- 							</div> -->
 <!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
 <!-- 							   <select name="searchlocalityId" id="searchlocalityId" class="form-control"> -->
 <!-- 				                    <option value="0">Locality</option> -->
@@ -140,7 +140,18 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
+                                    
+							           
+							       
                                     <tbody>
+                                     <tr>
+							                <th></th>
+							                <th>Builder</th>
+							                <th>Project</th>
+							                <th>Building</th>
+							                <th>status</th>
+							                <th></th>
+							            </tr>
                                        <%
                                       if(builderBuildings != null){
                                     	  int i=1;
@@ -152,8 +163,8 @@
 										<td><% out.print(buildingList.getName()); %></td>
 										<td><% out.print(buildingList.getBuilderBuildingStatus().getName()); %></td>
 										<td>
-										  <a href="${baseUrl}/builder/project/building/edit.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
-										   <a href="${baseUrl}/builder/project/building/floor/list.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-info pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Floor</span></a>
+										  <a href="${baseUrl}/builder/project/building/edit.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
+										   <a href="${baseUrl}/builder/project/building/floor/list.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-info pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Floor</span></a>
 										</td>
 									</tr>
 										<% 	
@@ -163,6 +174,9 @@
 										
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="table-responsive">
+                            
                             </div>
                         </div>
                     </div>
@@ -187,7 +201,7 @@
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {
-        $('#tblbuildings').DataTable();
+       /* $('#tblbuildings').DataTable();
         $(document).ready(function() {
             var table = $('#example').DataTable({
                 "columnDefs": [{
@@ -216,7 +230,7 @@
                             last = group;
                         }
                     });
-                }
+                }*/
             });
 
             // Order by the grouping
@@ -230,7 +244,7 @@
             });
         });
     });
-    $('#example23').DataTable({
+    $('#tblbuildings').DataTable({
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
@@ -260,11 +274,37 @@
     	    	row.push(data[index].buildingName);
     	    	row.push(status);
     	    	row.push(vieworder);
-    	    	oTable.fnAddData(row);
+    	    	oTable.fnAdbdData(row);
     	    	count++;
     	    });
     	},'json');
     }
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        // Setup - add a text input to each footer cell
+        $('#tblbuildings tbody th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
+        } );
+     
+        // DataTable
+        var table = $('#tblbuildings').DataTable();
+     
+        // Apply the search
+        table.columns().every( function () {
+            var that = this;
+     
+            $( 'input', this.footer() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+    } );
+    
     </script>
 </body>
 </html>
