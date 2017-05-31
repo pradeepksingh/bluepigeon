@@ -1247,7 +1247,6 @@ $("#offerbtn").click(function(){
 });
 
 function addMoreOffer() {
-	alert("Hi");
 	var offers = parseInt($("#offer_count").val());
 	offers++;
 	var html = '<div class="form-group row" id="offer-"'+offers+'>'

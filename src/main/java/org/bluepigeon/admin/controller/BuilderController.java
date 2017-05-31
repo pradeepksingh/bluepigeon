@@ -22,6 +22,7 @@ import org.bluepigeon.admin.dao.CityNamesImp;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.dao.StateImp;
+import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
@@ -385,4 +386,5 @@ public class BuilderController {
 		}
 		return msg;
 	}
+	
 }

@@ -71,9 +71,9 @@
     <link href="../plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
     <link href="../plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
     <link href="../plugins/bower_components/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
    <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../plugins/bower_components/raphael/raphael-min.js"></script>
@@ -100,12 +100,12 @@
                 <div class="row bg-title">
                     <!-- .page title -->
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Property Detail
-                        <span class="pull-right"><a href="${baseUrl}/builder/sales/list.jsp" class="btn btn-default btn-sm"> << Project List</a></span></h4>
+                        <h4 class="page-title">Property Detail</h4>
                         </div>
                     <!-- /.page title -->
                     <!-- .breadcrumb -->
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> 
+                    <span class="pull-right"><a href="${baseUrl}/builder/sales/list.jsp" class="btn btn-default btn-sm"> << Project List</a></span>
                     </div>
                     <!-- /.breadcrumb -->
                 </div>
@@ -133,8 +133,8 @@
 						       <div class="carousel-inner">
 								  <%
 								//   out.print(imageGaleries);
-								
-								  if(imageGaleries != null){
+								try{
+								  if(imageGaleries.get(0).getImage() != null){
 								   int imageCount=1;
 								  for(ProjectImageGallery projectImageGallery : imageGaleries){ %>
 								  
@@ -149,14 +149,14 @@
 								      	</div>
 								    </div>
 								    <% }%>
-<!-- 								     <div class="item active"> -->
+<!-- 								     <div class="item"> -->
 <!-- 								      <img class="img-responsive" src="../plugins/images/Untitled-1.png" alt="bp" style="width: 100%;" class="full"> -->
 <!-- 								      <div class="carousel-caption"> -->
 <!-- 								        Another Image -->
 <!-- 								      </div> -->
 <!-- 								    </div> -->
  								
-								    <% }}else{%>
+								    <% }}}catch(Exception e){%>
 <!-- 								    <div class="carousel-inner"> -->
 								     <div class="item active">
 								     	<img class="img-responsive full" src="../plugins/images/Untitled-1.png" alt="bp" style="width: 100%;" class="full">

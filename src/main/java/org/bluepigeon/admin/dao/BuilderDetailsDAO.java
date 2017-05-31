@@ -11,8 +11,11 @@ import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
+import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Country;
+import org.bluepigeon.admin.model.ProjectImageGallery;
 import org.bluepigeon.admin.data.BuilderDetails;
+import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.EmployeeList;
 import org.bluepigeon.admin.util.HibernateUtil;
 
@@ -482,5 +485,69 @@ public class BuilderDetailsDAO {
 		response.setStatus(1);
 		response.setMessage("Employee updated Successfully");
 		return response;
+	}
+	
+	public List<BuilderProjectList> getProjectFilters(int builderId,int countryId,int stateId,int cityId, int localityId){
+		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
+		String hql = "from BuilderProject where ";
+		String where = "";
+		if(builderId > 0){
+			where +="builder.id = :builder_id";
+		}
+		if(countryId > 0){
+			if(where!="")
+				where += " AND country.id = :country_id";
+			else
+				where += "country.id = :country_id";
+		}
+		if(stateId > 0){
+			if(where !="")
+				where += " AND state.id = :state_id";
+			else
+				where += "state.id = :state_id";
+		}
+		if(cityId > 0){
+			if(where != "")
+				where +=" AND city.id = :city_id";
+			else
+				where +="city.id = :city_id";
+		}
+		if(localityId > 0){
+			if(where != "")
+				where +=" AND locality.id = :locality_id";
+			else
+				where +="locality.id = :locality_id";
+			
+		}
+		hql += where + " AND status=1";
+	//	String imageHql = "from ProjectImageGallery where builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		if(builderId > 0)
+			query.setParameter("builder_id", builderId);
+		if(countryId > 0)
+			query.setParameter("country_id", countryId);
+		if(stateId > 0)
+			query.setParameter("state_id", stateId);
+		if(cityId > 0)
+			query.setParameter("city_id",cityId);
+		if(localityId > 0)
+			query.setParameter("locality_id", localityId);
+		List<BuilderProject> builderProjects = query.list();
+		for(BuilderProject builderProject : builderProjects){
+			BuilderProjectList builderProjectList = new BuilderProjectList();
+			builderProjectList.setId(builderProject.getId());
+			builderProjectList.setName(builderProject.getName());
+			builderProjectList.setCity(builderProject.getCity().getName());
+			ProjectDAO projectDAO = new ProjectDAO();
+			try{
+				builderProjectList.setImage(projectDAO.getProjectImagesByProjectId(builderProject.getId()).get(0).getImage());
+			}catch(Exception e){
+				builderProjectList.setImage("");
+			}
+			builderProjectLists.add(builderProjectList);
+		}
+		return builderProjectLists;
 	}
 }
