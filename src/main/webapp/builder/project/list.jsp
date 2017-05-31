@@ -119,13 +119,14 @@
                                
                     </div>
                     
-                    <div class="row" >
-                      
+                    <div class="row" id="project_list">
+                       <input type="hidden" id="list_count" name="list_count" value="1"/>
                        	<%
                        		if(project_list !=null){
+                       			int count=1;
                        			for(ProjectList projectList : project_list ){
                        	%>
-                       	 <div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">
+                       	<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist-<%out.print(count);%>">
 	                       	<div class="image">
 	                       	<%
 	                       		try{
@@ -167,8 +168,7 @@
 						 	 </div>
 						  </div>
                         </div>
-                         
-                        <%  
+                        <%  count++;
                        		}
                        	}
                         %>
@@ -456,15 +456,22 @@
     $("#locality_id").change(function(){
     	getProjectList();
     });
+    
    function getProjectList(){
-    	//$("#projectlist").empty();
+    	
     	var html = "";
 		var image = "";
 		var projectName = "";
 		var cityName = "";
 		var projectId = "";
+		//var count=parseInt($("#list_count").val());
+		$("#project_list").empty();
 	   $.post("${baseUrl}/webapi/project/data/list",{builder_id: $("#builder_id").val(), country_id: $("#country_id").val(),state_id: $("#state_id").val(), city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
-		   alert(data);
+		   if(data == ""){
+			   $("#project_list").empty();
+			   $("#project_list").append("<h2>No Records Found</h2>");
+		   }
+		   alert(data.length);
 			$(data).each(function(index){
 				 alert(data[index].name);
 				if(data[index].image != "")
@@ -480,86 +487,101 @@
 				if(data[index].id != ""){
 					projectId = data[index].id;
 				}
-			  
-// 			    	html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
-			    		html=	+'<div class="image">'
-	                   	+'<img src="'+image+'" alt="Project image"/>'
+ 			    	html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
+			    		+'<div class="image">'
+	                   	+'<img src="'+image+'" height="294" alt="Project image"/>'
 	                   	+'<div class="overlay">'
-	                       +'	<div class="row">'
-		                       +'<div class="col-md-6 left">'
-			                       +'<h3>'+ProjectName+'</h3>'
-			                       +'<h4>'+CityName+'</h4>'
-		                       	+'</div>'
-		                    	+'<div class="col-md-6 right">'
-			                      	+'<div class="chart" id="graph'+projectId+'" data-percent="20"> </div>'
-		                       +'</div>'
-	                       +'</div>'
-	                   +'</div>'
-	               +'</div>'
-	               +'<div class="row">'
-	               	+'<div class="col-md-6 center">' 
+	                    +'<div class="row">'
+		                +'<div class="col-md-6 left">'
+			            +'<h3>'+projectName+'</h3>'
+			            +'<h4>'+cityName+'</h4>'
+		                +'</div>'
+		                +'<div class="col-md-6 right">'
+			            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"> </div>'
+		                +'</div>'
+	                    +'</div>'
+	                    +'</div>'
+	               		+'</div>'
+	               		+'<div class="row">'
+	               		+'<div class="col-md-6 center">' 
 	               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a>'
-	               	+'</div>'
-	             	+'<div class="col-md-6 center">'
-	              		 +'<a href="${baseUrl}/builder/project/building/list.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>'
-				 	 +'</div>'
-				 +'</div>';
-// 	            +'</div>';
-			    $("#projectlist").html(html);
-			  
-			 
+	               		+'</div>'
+	             		+'<div class="col-md-6 center">'
+	              		+'<a href="${baseUrl}/builder/project/building/list.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>'
+				 	 	+'</div>'
+				 		+'</div>'
+ 	            		+'</div>';
+ 	            		$("#project_list").append(html);
+ 	            		//var el = $('.chart').attr('data-percent');
+    					//alert(el);
+ 	            		createGraph("graph"+projectId);
+			   // $("#list_count").val(count);
+			 // count++;
 			});
 			
 		    },'json');
 	   }
     </script>
     <script>
+    
     <%
-		if(project_list !=null){
-			int i=1;
-			for(ProjectList projectList : project_list ){
-	%>
-    	 var el = document.getElementById('graph<%out.print(projectList.getId());%>'); 
-    	    var options = {
-    	        percent:  el.getAttribute('data-percent') || 2,
-    	        size: el.getAttribute('data-size') || 100,
-    	        lineWidth: el.getAttribute('data-line') || 5,
-    	        rotate: el.getAttribute('data-rotate') || 0
-    	    }
+	if(project_list !=null){
+		int i=1;
+		for(ProjectList projectList : project_list ){
+%>
+	createGraph("graph<%out.print(projectList.getId());%>");
+	alert("on load :: "+"graph<%out.print(projectList.getId());%>");
+	<%}}%>
+    
+    function createGraph(graphId){
+    	//alert(graphId);
+    	 var el = document.getElementById(graphId); 
+    	//var el = $('div #'+graphId).attr('data-percent');
+    	alert(el);
+    	// alert("Graph Id "+el);
+    	var per= el.getAttribute('data-percent');
+    	//alert("per : "+per);
+ 	    var options = {
+ 	        percent:  el.getAttribute('data-percent') || 2,
+ 	        size: el.getAttribute('data-size') || 100,
+ 	        lineWidth: el.getAttribute('data-line') || 5,
+ 	        rotate: el.getAttribute('data-rotate') || 0
+ 	    }
 
-    	    var canvas = document.createElement('canvas');
-    	    var span = document.createElement('span');
-    	    span.textContent = options.percent + '%';
-    	        
-    	    if (typeof(G_vmlCanvasManager) !== 'undefined') {
-    	        G_vmlCanvasManager.initElement(canvas);
-    	    }
+ 	    var canvas = document.createElement('canvas');
+ 	    var span = document.createElement('span');
+ 	    span.textContent = options.percent + '%';
+ 	        
+ 	    if (typeof(G_vmlCanvasManager) !== 'undefined') {
+ 	        G_vmlCanvasManager.initElement(canvas);
+ 	    }
 
-    	    var ctx = canvas.getContext('2d');
-    	    canvas.width = canvas.height = options.size;
+ 	    var ctx = canvas.getContext('2d');
+ 	    canvas.width = canvas.height = options.size;
 
-    	    el.appendChild(span);
-    	    el.appendChild(canvas);
+ 	    el.appendChild(span);
+ 	    el.appendChild(canvas);
 
-    	    ctx.translate(options.size / 2, options.size / 2); // change center
-    	    ctx.rotate((-1 / 2 + options.rotate / 180) * Math.PI); // rotate -90 deg
+ 	    ctx.translate(options.size / 2, options.size / 2); // change center
+ 	    ctx.rotate((-1 / 2 + options.rotate / 180) * Math.PI); // rotate -90 deg
 
-    	    //imd = ctx.getImageData(0, 0, 240, 240);
-    	    var radius = (options.size - options.lineWidth) / 2;
+ 	    //imd = ctx.getImageData(0, 0, 240, 240);
+ 	    var radius = (options.size - options.lineWidth) / 2;
 
-    	    var drawCircle = function(color, lineWidth, percent) {
-    	    		percent = Math.min(Math.max(0, percent || 1), 1);
-    	    		ctx.beginPath();
-    	    		ctx.arc(0, 0, radius, 0, Math.PI * 2 * percent, false);
-    	    		ctx.strokeStyle = color;
-    	            ctx.lineCap = 'round'; // butt, round or square
-    	    		ctx.lineWidth = lineWidth
-    	    		ctx.stroke();
-    	    };
+ 	    var drawCircle = function(color, lineWidth, percent) {
+ 	    		percent = Math.min(Math.max(0, percent || 1), 1);
+ 	    		ctx.beginPath();
+ 	    		ctx.arc(0, 0, radius, 0, Math.PI * 2 * percent, false);
+ 	    		ctx.strokeStyle = color;
+ 	            ctx.lineCap = 'round'; // butt, round or square
+ 	    		ctx.lineWidth = lineWidth
+ 	    		ctx.stroke();
+ 	    };
 
-    	    drawCircle('#efefef', options.lineWidth, 100 / 100);
-    	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
-    	<%}}%>
+ 	    drawCircle('#efefef', options.lineWidth, 100 / 100);
+ 	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
+    }
+   
     </script>
     
    <!--  <script>
