@@ -73,15 +73,16 @@
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/custom.css" rel="stylesheet">
+    <link href="../css/custom1.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-   
+  
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    
+   
     </head>
 
 <body class="fix-sidebar">
@@ -142,6 +143,15 @@
                                            	 <th>Action</th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                    	<tr>
+                                            <th></th>
+                                            <th>Employee Name</th>
+                                             <th>Designation</th>
+                                             <th>Access Type</th>
+                                           	 <th></th>
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
                                        <%
                                      if(employeeLists != null){
@@ -160,7 +170,7 @@
 											<%out.print(employeeList.getAccess()); %>
 										</td>
 										<td>
-											 <a href="${baseUrl}/builder/employee/edit.jsp?emp_id=<% out.print(employeeList.getId());%>" ><span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
+											 <a href="${baseUrl}/builder/employee/edit.jsp?emp_id=<% out.print(employeeList.getId());%>" ><span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
 										</td>
 										<% 	
 											} 
@@ -180,43 +190,48 @@
         </div>
         <!-- /#page-wrapper -->
     
-    <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+   <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <!-- start - This is for export functionality only -->
     <script src="../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
     <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+<!--     <script src="../../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script> -->
+<!--     <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script> -->
+<!--     <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script> -->
+    <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {
-        $('#tblEmployee').DataTable();
-        $(document).ready(function() {
-            var table = $('#example').DataTable({
-                "columnDefs": [{
-                    "visible": false,
-                    "targets": 2
-                }],
-                "order": [
-                    [2, 'asc']
-                ],
-                "displayLength": 25,
-                "drawCallback": function(settings) {
-                    var api = this.api();
-                    var rows = api.rows({
-                        page: 'current'
-                    }).nodes();
-                    var last = null;
+//         $('#tblEmployee').DataTable();
+//         $(document).ready(function() {
+//             var table = $('#example').DataTable({
+//                 "columnDefs": [{
+//                     "visible": false,
+//                     "targets": 2
+//                 }],
+//                 "order": [
+//                     [2, 'asc']
+//                 ],
+//                 "displayLength": 25,
+//                 "drawCallback": function(settings) {
+//                     var api = this.api();
+//                     var rows = api.rows({
+//                         page: 'current'
+//                     }).nodes();
+//                     var last = null;
 
-                    api.column(2, {
-                        page: 'current'
-                    }).data().each(function(group, i) {
-                        if (last !== group) {
-                            $(rows).eq(i).before(
-                                '<tr class="group"><td colspan="5">' + group + '</td></tr>'
-                            );
+//                     api.column(2, {
+//                         page: 'current'
+//                     }).data().each(function(group, i) {
+//                         if (last !== group) {
+//                             $(rows).eq(i).before(
+//                                 '<tr class="group"><td colspan="5">' + group + '</td></tr>'
+//                             );
 
-                            last = group;
-                        }
-                    });
-                }
+//                             last = group;
+//                         }
+//                     });
+//                 }
             });
 
             // Order by the grouping
@@ -228,9 +243,9 @@
                     table.order([2, 'asc']).draw();
                 }
             });
-        });
-    });
-    $('#example23').DataTable({
+//         });
+//     });
+    $('#tblEmployee').DataTable({
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
@@ -238,44 +253,70 @@
     });
 
     
-    function getDataTable(){
-    	$.post("${baseUrl}/webapi/project/building",{city_id: $("#city_id").val(),project_id : $("#project_id").val()},function(data){
-    		var oTable = $("#tblBuilding").dataTable();
-    	    oTable.fnClearTable();
-    	    var count=1;
-    	    $(data).each(function(index){
-    		    var vieworder = '<a href="${baseUrl}/builder/project/edit.jsp?project_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
-    		    var status = '';
-    		    if(data[index].status == 1) {
-    		    	status = '<span class="label label-success">Active</span>';
-    		    } else {
-    		    	status = '<span class="label label-warning">Inactive</span>';
-    		    }
-    	    	var row = [];
-    	    	row.push(count);
-    	    	row.push(data[index].name);
-    	    	row.push(data[index].designation);
-    	    	row.push(data[index].access);
-    	    	row.push(status);
-    	    	row.push(vieworder);
-    	    	oTable.fnAddData(row);
-    	    	count++;
-    	    });
-    	},'json');
-    }
+//     function getDataTable(){
+//     	$.post("${baseUrl}/webapi/project/building",{city_id: $("#city_id").val(),project_id : $("#project_id").val()},function(data){
+//     		var oTable = $("#tblBuilding").dataTable();
+//     	    oTable.fnClearTable();
+//     	    var count=1;
+//     	    $(data).each(function(index){
+//     		    var vieworder = '<a href="${baseUrl}/builder/project/edit.jsp?project_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
+//     		    var status = '';
+//     		    if(data[index].status == 1) {
+//     		    	status = '<span class="label label-success">Active</span>';
+//     		    } else {
+//     		    	status = '<span class="label label-warning">Inactive</span>';
+//     		    }
+//     	    	var row = [];
+//     	    	row.push(count);
+//     	    	row.push(data[index].name);
+//     	    	row.push(data[index].designation);
+//     	    	row.push(data[index].access);
+//     	    	row.push(status);
+//     	    	row.push(vieworder);
+//     	    	oTable.fnAddData(row);
+//     	    	count++;
+//     	    });
+//     	},'json');
+//     }
     
-    $("#city_id").change(function(){
-    	$.get("${baseUrl}/webapi/employee/emp/list/"+$("#city_id").val(),{ }, function(data){
-    		var html = '<option value="0">Select Project</option>';
-    		$(data).each(function(index){
-    			html = html + '<option value="'+data[index].projectId+'">'+data[index].projectName+'</option>';
+//     $("#city_id").change(function(){
+//     	$.get("${baseUrl}/webapi/employee/emp/list/"+$("#city_id").val(),{ }, function(data){
+//     		var html = '<option value="0">Select Project</option>';
+//     		$(data).each(function(index){
+//     			html = html + '<option value="'+data[index].projectId+'">'+data[index].projectName+'</option>';
     		
-    		});
-    		$("#project_id").html(html);
+//     		});
+//     		$("#project_id").html(html);
      	
-    	},'json');
-    	getDataTable();
-    });
+//     	},'json');
+//     	getDataTable();
+//     });
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        // Setup - add a text input to each footer cell
+        $('#tblEmployee tfoot th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
+        } );
+     
+        // DataTable
+        var table = $('#tblEmployee').DataTable();
+     
+        // Apply the search
+        table.columns().every( function () {
+            var that = this;
+     
+            $( 'input', this.footer() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+    } );
+    
     </script>
 </body>
 </html>

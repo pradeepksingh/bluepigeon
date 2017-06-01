@@ -44,7 +44,8 @@
     <link href="../css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
-     <link href="../css/custom.css" rel="stylesheet">
+    <link href="../css/custom.css" rel="stylesheet">
+    <link href="../css/custom1.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -53,7 +54,6 @@
 <![endif]-->
   
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    
    
     </head>
 
@@ -108,7 +108,7 @@
 <!-- 						</div> -->
 						
                             <div class="table-responsive">
-                                <table id="myTable" class="table table-striped">
+                                <table id="btlBuyer" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>No.</th>
@@ -121,6 +121,19 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
+                                    
+                                    <tfoot>
+                                    	<tr>
+                                            <th></th>
+                                            <th>Project Name</th>
+											<th>Buyer Name</th>
+											<th>Email</th>
+											<th>Phone</th>
+                                            <th>Building Name</th>
+                                            <th>Flat No.</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
                                        <%
                                        		if(buyerList != null){
@@ -152,50 +165,49 @@
 			</div> 
         </div>
         <!-- /#page-wrapper -->
-    </div>
     
-    <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+   <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <!-- start - This is for export functionality only -->
     <script src="../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
     <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
-    <script src="../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-    <script src="../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-    <script src="../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<!--     <script src="../../cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script> -->
+<!--     <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script> -->
+<!--     <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script> -->
     <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {
-        $('#myTable').DataTable();
-        $(document).ready(function() {
-            var table = $('#example').DataTable({
-                "columnDefs": [{
-                    "visible": false,
-                    "targets": 2
-                }],
-                "order": [
-                    [2, 'asc']
-                ],
-                "displayLength": 25,
-                "drawCallback": function(settings) {
-                    var api = this.api();
-                    var rows = api.rows({
-                        page: 'current'
-                    }).nodes();
-                    var last = null;
+//         $('#myTable').DataTable();
+//         $(document).ready(function() {
+//             var table = $('#example').DataTable({
+//                 "columnDefs": [{
+//                     "visible": false,
+//                     "targets": 2
+//                 }],
+//                 "order": [
+//                     [2, 'asc']
+//                 ],
+//                 "displayLength": 25,
+//                 "drawCallback": function(settings) {
+//                     var api = this.api();
+//                     var rows = api.rows({
+//                         page: 'current'
+//                     }).nodes();
+//                     var last = null;
 
-                    api.column(2, {
-                        page: 'current'
-                    }).data().each(function(group, i) {
-                        if (last !== group) {
-                            $(rows).eq(i).before(
-                                '<tr class="group"><td colspan="5">' + group + '</td></tr>'
-                            );
+//                     api.column(2, {
+//                         page: 'current'
+//                     }).data().each(function(group, i) {
+//                         if (last !== group) {
+//                             $(rows).eq(i).before(
+//                                 '<tr class="group"><td colspan="5">' + group + '</td></tr>'
+//                             );
 
-                            last = group;
-                        }
-                    });
-                }
+//                             last = group;
+//                         }
+//                     });
+//                 }
             });
 
             // Order by the grouping
@@ -207,14 +219,40 @@
                     table.order([2, 'asc']).draw();
                 }
             });
-        });
-    });
-    $('#example23').DataTable({
+//         });
+//     });
+    $('#btlBuyer').DataTable({
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
+    </script>
+      <script type="text/javascript">
+    $(document).ready(function() {
+        // Setup - add a text input to each footer cell
+        $('#btlBuyer tfoot th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
+        } );
+     
+        // DataTable
+        var table = $('#btlBuyer').DataTable();
+     
+        // Apply the search
+        table.columns().every( function () {
+            var that = this;
+     
+            $( 'input', this.footer() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+    } );
+    
     </script>
 </body>
 </html>
