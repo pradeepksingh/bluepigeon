@@ -82,40 +82,6 @@
                     <div class="col-sm-12">
                         <div class="white-box"><br>
                           <h3>Manage Floor</h3>
-						<div class="row re white-box">
-							<div class="col-md-3 col-sm-6 col-xs-12">
-								<select name="searchprojectId" id="searchprojectId" class="form-control">
-				                    <option value="0">Select Project</option>
-				                    <%
-  				                    if(projectDatas != null){ 
- 				                    for(int i=0; i < projectDatas.size() ; i++){ %> 
-									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option>
-									<% 	
-  										} 
-  				                    } 
- 				                    %> 
-						         </select>   
-							</div>
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 							   <select name="searchlocalityId" id="searchlocalityId" class="form-control"> -->
-<!-- 				                    <option value="0">Locality</option> -->
-<!-- 							   </select> -->
-<!-- 							</div> -->
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 								<select name="searchprojectId" id="searchprojectId" class="form-control"> -->
-<!-- 				                    <option value="0">Project</option> -->
-<!-- 								</select> -->
-<!-- 							</div> -->
-							
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 							    <select class="form-control"> -->
-<!-- 												<option>Status</option> -->
-<!-- 												<option>1</option> -->
-<!-- 												<option>2</option> -->
-<!-- 								</select>	    -->
-<!-- 							</div> -->
-						</div>
-						
                             <div class="table-responsive">
                                 <table id="tblfloor" class="table table-striped">
                                     <thead>
@@ -128,6 +94,16 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
+                                     <tfoot>
+                                        <tr>
+                                            <th></th>
+                                            <th>Builder Name</th>
+                                             <th>Project Name</th>
+                                             <th>Building Name</th>
+                                            <th>status</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
                                        <%
                                       if(builderFloors != null){
@@ -140,9 +116,9 @@
       										<td><% out.print(builderFloor.getBuilderBuilding().getBuilderProject().getName()); %></td>
       										<td><% out.print(builderFloor.getBuilderFloorStatus().getName()); %></td>
       										<td>
-      											<a href="${baseUrl}/builder/project/building/floor/edit.jsp?floor_id=<% out.print(builderFloor.getId());%>"><span class="btn btn-success pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
+      											<a href="${baseUrl}/builder/project/building/floor/edit.jsp?floor_id=<% out.print(builderFloor.getId());%>"><span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
 <%--       											<a href="${baseUrl}/admin/project/building/floor/updates.jsp?floor_id=<% out.print(builderFloor.getId());%>" class="btn btn-warning icon-btn btn-xs"><i class="fa fa-pencil"></i> Updates</a> --%>
-      											<a href="${baseUrl}/builder/project/building/floor/flat/list.jsp?floor_id=<% out.print(builderFloor.getId());%>" ><span class="btn btn-info pull-left m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Flat</span></a>
+      											<a href="${baseUrl}/builder/project/building/floor/flat/list.jsp?floor_id=<% out.print(builderFloor.getId());%>" ><span class="btn btn-info pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Flat</span></a>
       										</td>
       									</tr>
       								<% i++;} 
@@ -173,36 +149,36 @@
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {
-        $('#tblfloor').DataTable();
-        $(document).ready(function() {
-            var table = $('#example').DataTable({
-                "columnDefs": [{
-                    "visible": false,
-                    "targets": 2
-                }],
-                "order": [
-                    [2, 'asc']
-                ],
-                "displayLength": 25,
-                "drawCallback": function(settings) {
-                    var api = this.api();
-                    var rows = api.rows({
-                        page: 'current'
-                    }).nodes();
-                    var last = null;
+     //   $('#tblfloor').DataTable();
+//         $(document).ready(function() {
+//             var table = $('#example').DataTable({
+//                 "columnDefs": [{
+//                     "visible": false,
+//                     "targets": 2
+//                 }],
+//                 "order": [
+//                     [2, 'asc']
+//                 ],
+//                 "displayLength": 25,
+//                 "drawCallback": function(settings) {
+//                     var api = this.api();
+//                     var rows = api.rows({
+//                         page: 'current'
+//                     }).nodes();
+//                     var last = null;
 
-                    api.column(2, {
-                        page: 'current'
-                    }).data().each(function(group, i) {
-                        if (last !== group) {
-                            $(rows).eq(i).before(
-                                '<tr class="group"><td colspan="5">' + group + '</td></tr>'
-                            );
+//                     api.column(2, {
+//                         page: 'current'
+//                     }).data().each(function(group, i) {
+//                         if (last !== group) {
+//                             $(rows).eq(i).before(
+//                                 '<tr class="group"><td colspan="5">' + group + '</td></tr>'
+//                             );
 
-                            last = group;
-                        }
-                    });
-                }
+//                             last = group;
+//                         }
+//                     });
+//                 }
             });
 
             // Order by the grouping
@@ -214,44 +190,70 @@
                     table.order([2, 'asc']).draw();
                 }
             });
-        });
-    });
-    $('#example23').DataTable({
+//         });
+//     });
+    $('#tblfloor').DataTable({
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
     
-    $("#searchprojectId").change(function(){
-    	//alert("ID :: "+$("#searchprojectId").val());
-    });
+//     $("#searchprojectId").change(function(){
+//     	//alert("ID :: "+$("#searchprojectId").val());
+//     });
     
-    function getDataTable(){
-    	$.post("${baseUrl}/webapi/project/building",{city_id: $("#searchcitytId").val(), locality_id: $("#searchlocalityId").val(), project_id : $("#searchprojectId").val()},function(data){
-    		var oTable = $("#tblBuilding").dataTable();
-    	    oTable.fnClearTable();
-    	    var count=1;
-    	    $(data).each(function(index){
-    		    var vieworder = '<a href="${baseUrl}/builder/project/edit.jsp?project_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
-    		    var status = '';
-    		    if(data[index].status == 1) {
-    		    	status = '<span class="label label-success">Active</span>';
-    		    } else {
-    		    	status = '<span class="label label-warning">Inactive</span>';
-    		    }
-    	    	var row = [];
-    	    	row.push(count);
-    	    	row.push(data[index].builderName);
-    	    	row.push(data[index].projectName);
-    	    	row.push(data[index].buildingName);
-    	    	row.push(status);
-    	    	row.push(vieworder);
-    	    	oTable.fnAddData(row);
-    	    	count++;
-    	    });
-    	},'json');
-    }
+//     function getDataTable(){
+//     	$.post("${baseUrl}/webapi/project/building",{city_id: $("#searchcitytId").val(), locality_id: $("#searchlocalityId").val(), project_id : $("#searchprojectId").val()},function(data){
+//     		var oTable = $("#tblBuilding").dataTable();
+//     	    oTable.fnClearTable();
+//     	    var count=1;
+//     	    $(data).each(function(index){
+//     		    var vieworder = '<a href="${baseUrl}/builder/project/edit.jsp?project_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
+//     		    var status = '';
+//     		    if(data[index].status == 1) {
+//     		    	status = '<span class="label label-success">Active</span>';
+//     		    } else {
+//     		    	status = '<span class="label label-warning">Inactive</span>';
+//     		    }
+//     	    	var row = [];
+//     	    	row.push(count);
+//     	    	row.push(data[index].builderName);
+//     	    	row.push(data[index].projectName);
+//     	    	row.push(data[index].buildingName);
+//     	    	row.push(status);
+//     	    	row.push(vieworder);
+//     	    	oTable.fnAddData(row);
+//     	    	count++;
+//     	    });
+//     	},'json');
+//     }
+    </script>
+     <script type="text/javascript">
+    $(document).ready(function() {
+        // Setup - add a text input to each footer cell
+        $('#tblfloor tfoot th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
+        } );
+     
+        // DataTable
+        var table = $('#tblfloor').DataTable();
+     
+        // Apply the search
+        table.columns().every( function () {
+            var that = this;
+     
+            $( 'input', this.footer() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+    } );
+    
     </script>
 </body>
 </html>

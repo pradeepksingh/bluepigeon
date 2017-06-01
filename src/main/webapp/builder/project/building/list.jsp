@@ -106,9 +106,6 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    
-							           
-							       
                                     <tfoot>
                                      <tr>
 							                <th></th>
