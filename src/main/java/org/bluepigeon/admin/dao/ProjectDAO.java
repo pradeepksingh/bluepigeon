@@ -2514,7 +2514,7 @@ public class ProjectDAO {
 	}
 	
 	public List<BuilderLead> getBuilderLeadByBuilderId(int builderId){
-		String hql = "from BuilderLead where builderProject.builder.id = :builder_id";
+		String hql = "from BuilderLead where builderProject.builder.id = :builder_id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
