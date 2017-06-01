@@ -86,20 +86,18 @@ if(session_id > 0){
                                 <table id="tblCampaign" class="table table-striped">
                                     <thead>
                                         <tr>
-                                          <th>Campaign Title</th>
+                                          	<td>Campaign Title</td>
+                                           	<td>Start Date</td>
+                                            <td>Campaign Type</td>
+                                            <td>Actions</td>
+                                        </tr>
+                                        <tr>
+                                          	<th>Campaign Title</th>
                                            	<th>Start Date</th>
                                             <th>Campaign Type</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                     <tr>
-                                          <th>Campaign Title</th>
-                                           	<th>Start Date</th>
-                                            <th>Campaign Type</th>
-                                            <th></th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
                                         <%
                                         if(campaignLists != null){
@@ -208,7 +206,7 @@ if(session_id > 0){
      <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#tblCampaign tfoot th').each( function () {
+        $('#tblCampaign thead td').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
         } );
@@ -217,19 +215,16 @@ if(session_id > 0){
         var table = $('#tblCampaign').DataTable();
      
         // Apply the search
-        table.columns().every( function () {
-            var that = this;
-     
-            $( 'input', this.footer() ).on( 'keyup change', function () {
-                if ( that.search() !== this.value ) {
-                    that
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
+        table.columns().every(function (index) {
+            $('#tblCampaign thead  td:eq(' + index + ') input').on('keyup change', function () {
+                table.column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
+            });
+        });
     } );
     
+
     </script>
 </body>
 </html>

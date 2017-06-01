@@ -85,6 +85,15 @@
                                 <table id="tblLeads" class="table table-striped">
                                     <thead>
                                         <tr>
+                                        	<td>Sr. No</td>
+                                         	<td>Name</td>
+                                            <td>Builder Name</td>
+                                            <td>City Name</td>
+                                            <td>Locality</td>
+                                            <td>Status</td>
+                                            <td>Action</td>
+                                        </tr>
+                                          <tr>
                                         	<th>Sr. No</th>
                                          	<th>Name</th>
                                             <th>Builder Name</th>
@@ -94,17 +103,6 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                    <tr>
-                                        	<th></th>
-                                         	<th>Name</th>
-                                            <th>Builder Name</th>
-                                            <th>City Name</th>
-                                            <th>Locality</th>
-                                            <th>Status</th>
-                                            <th></th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
                                         <%
                                       if(project_list != null){
@@ -221,7 +219,7 @@
      <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#tblLeads tfoot th').each( function () {
+        $('#tblLeads thead td').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
         } );
@@ -230,19 +228,16 @@
         var table = $('#tblLeads').DataTable();
      
         // Apply the search
-        table.columns().every( function () {
-            var that = this;
-     
-            $( 'input', this.footer() ).on( 'keyup change', function () {
-                if ( that.search() !== this.value ) {
-                    that
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
+        table.columns().every(function (index) {
+            $('#tblLeads thead  td:eq(' + index + ') input').on('keyup change', function () {
+                table.column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
+            });
+        });
     } );
     
+
     </script>
 </body>
 </html>

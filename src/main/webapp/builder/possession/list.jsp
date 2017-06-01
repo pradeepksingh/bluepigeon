@@ -83,6 +83,12 @@
                             <div class="table-responsive">
                                 <table id="tblPossession" class="table table-striped">
                                     <thead>
+                                     <tr>
+                                         <td>No.</td>
+                                            <td>Project</td>
+                                            <td>Building</td>
+                                            <td>Flat No.</td>
+                                        </tr>
                                         <tr>
                                          <th>No.</th>
                                             <th>Project Name</th>
@@ -93,17 +99,6 @@
                                            
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                    	<tr>
-                                         <th></th>
-                                            <th>Project Name</th>
-                                            <th>Building Name</th>
-                                            <th>Flat No.</th>
-<!--                                             <th>Buyer Name</th> -->
-<!--                                             <th>Action</th> -->
-                                           
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
                                        <%
                                        	if(possession_list != null){
@@ -211,7 +206,7 @@
      <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#tblPossession tfoot th').each( function () {
+        $('#tblPossession thead td').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
         } );
@@ -220,19 +215,16 @@
         var table = $('#tblPossession').DataTable();
      
         // Apply the search
-        table.columns().every( function () {
-            var that = this;
-     
-            $( 'input', this.footer() ).on( 'keyup change', function () {
-                if ( that.search() !== this.value ) {
-                    that
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
+        table.columns().every(function (index) {
+            $('#tblPossession thead  td:eq(' + index + ') input').on('keyup change', function () {
+                table.column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
+            });
+        });
     } );
     
+
     </script>
 </body>
 </html>

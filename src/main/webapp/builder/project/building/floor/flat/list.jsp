@@ -85,6 +85,15 @@
                                 <table id="tblflat" class="table table-striped">
                                     <thead>
                                         <tr>
+                                            <td>No.</td>
+                                            <td>Flat No</td>
+											<td>Floor No</td>
+											<td>Building Name</td>
+											<td>Project Name</td>
+											<td>Status</td>
+											<td>Actions</td>
+                                        </tr>
+                                        <tr>
                                             <th>No.</th>
                                             <th>Flat No</th>
 											<th>Floor No</th>
@@ -94,17 +103,6 @@
 											<th>Actions</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th></th>
-                                            <th>Flat No</th>
-											<th>Floor No</th>
-											<th>Building Name</th>
-											<th>Project Name</th>
-											<th>Status</th>
-											<th></th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
                                        <%
                                        		if(builderFlats != null){
@@ -201,10 +199,10 @@
         ]
     });
     </script>
-     <script type="text/javascript">
+      <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#tblflat tfoot th').each( function () {
+        $('#tblflat thead td').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
         } );
@@ -213,19 +211,16 @@
         var table = $('#tblflat').DataTable();
      
         // Apply the search
-        table.columns().every( function () {
-            var that = this;
-     
-            $( 'input', this.footer() ).on( 'keyup change', function () {
-                if ( that.search() !== this.value ) {
-                    that
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
+        table.columns().every(function (index) {
+            $('#tblflat thead  td:eq(' + index + ') input').on('keyup change', function () {
+                table.column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
+            });
+        });
     } );
     
+
     </script>
 </body>
 </html>

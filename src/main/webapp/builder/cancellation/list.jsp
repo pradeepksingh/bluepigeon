@@ -116,6 +116,13 @@
                                 <table id="tblCancellation" class="table table-striped">
                                     <thead>
                                         <tr>
+                                            <td>Sr No.</td>
+                                            <td>Buyer</td>
+                                             <td>Project</td>
+                                             <td>Building</td>
+                                            <td>Flat No</td>
+                                        </tr>
+                                        <tr>
                                             <th>Sr No.</th>
                                             <th>Buyer Name</th>
                                              <th>Project Name</th>
@@ -123,15 +130,6 @@
                                             <th>Flat No</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                    	<tr>
-                                            <th></th>
-                                            <th>Buyer Name</th>
-                                             <th>Project Name</th>
-                                             <th>Building Name</th>
-                                            <th>Flat No</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
                                        <%
                                       if(cancellation_list != null){
@@ -233,77 +231,29 @@
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
-    
-
-//     function getDataTable(){
-//     	$.post("${baseUrl}/webapi/cancellation/buyer/list",{project_id: $("#project_id").val(), building_id: $("#building_id").val(), flat_id : $("#flat_id").val()},function(data){
-//     		var oTable = $("#tblBuilding").dataTable();
-//     	    oTable.fnClearTable();
-//     	    var count=1;
-//     	    $(data).each(function(index){
-//     	    	var row = [];
-//     	    	row.push(count);
-//     	    	row.push(data[index].buyerName);
-//     	    	row.push(data[index].projectName);
-//     	    	row.push(data[index].buildingName);
-//     	    	row.push(data[index].flatNo);
-//     	    	oTable.fnAddData(row);
-//     	    	count++;
-//     	    });
-//     	},'json');
-//     }
-//     $("#project_id").change(function(){
-//     	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{ }, function(data){
-//     		var html = '<option value="0">Select Building</option>';
-//     		$(data).each(function(index){
-    			
-//     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-//     		});
-//     		$("#building_id").html(html);
-//     	},'json');
-//     	getDataTable();
-//     });
-//     $("#building_id").change(function(){
-//     	$.get("${baseUrl}/webapi/project/building/flat/names/"+$("#building_id").val(),{ }, function(data){
-//     		var html = '<option value="0">Select Flat</option>';
-//     		$(data).each(function(index){
-    			
-//     			html = html + '<option value="'+data[index].id+'">'+data[index].flatNo+'</option>';
-//     		});
-//     		$("#flat_id").html(html);
-//     	},'json');
-//     	getDataTable();
-//     });
-    
-//     $("#flat_id").change(function(){
-//     	getDataTable();
-//     });
     </script>
     <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#tblCancellation tfoot th').each( function () {
+        $('#tblDemand thead td').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
         } );
      
         // DataTable
-        var table = $('#tblCancellation').DataTable();
+        var table = $('#tblDemand').DataTable();
      
         // Apply the search
-        table.columns().every( function () {
-            var that = this;
-     
-            $( 'input', this.footer() ).on( 'keyup change', function () {
-                if ( that.search() !== this.value ) {
-                    that
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
+        table.columns().every(function (index) {
+            $('#tblDemand thead  td:eq(' + index + ') input').on('keyup change', function () {
+                table.column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
+            });
+        });
     } );
     
+
     </script>
 </body>
 </html>

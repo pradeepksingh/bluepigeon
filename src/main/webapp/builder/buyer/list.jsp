@@ -111,6 +111,16 @@
                                 <table id="btlBuyer" class="table table-striped">
                                     <thead>
                                         <tr>
+                                            <td>No.</td>
+                                            <td>Project</td>
+											<td>Buyer Name</td>
+											<td>Email</td>
+											<td>Phone</td>
+                                            <td>Building Name</td>
+                                            <td>Flat No.</td>
+                                            <td>Action</td>
+                                        </tr>
+                                         <tr>
                                             <th>No.</th>
                                             <th>Project Name</th>
 											<th>Buyer Name</th>
@@ -121,19 +131,6 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    
-                                    <tfoot>
-                                    	<tr>
-                                            <th></th>
-                                            <th>Project Name</th>
-											<th>Buyer Name</th>
-											<th>Email</th>
-											<th>Phone</th>
-                                            <th>Building Name</th>
-                                            <th>Flat No.</th>
-                                            <th></th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
                                        <%
                                        		if(buyerList != null){
@@ -148,7 +145,7 @@
                                        		<td><% out.print(buyer.getMobile()); %></td>
                                        		<td><% out.print(buyer.getBuilderBuilding().getName()); %></td>
                                        		<td><% out.print(buyer.getBuilderFlat().getFlatNo()); %></td>
-                                       		<td><a href="" class="btn btn11 btn-success waves-effect waves-light m-t-10">Manage</a></td>
+                                       		<td><a href=""><span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a></td>
                                        		</tr>
                                        <% i++;}
                                        }%>
@@ -228,10 +225,10 @@
         ]
     });
     </script>
-      <script type="text/javascript">
+     <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#btlBuyer tfoot th').each( function () {
+        $('#btlBuyer thead td').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
         } );
@@ -240,19 +237,16 @@
         var table = $('#btlBuyer').DataTable();
      
         // Apply the search
-        table.columns().every( function () {
-            var that = this;
-     
-            $( 'input', this.footer() ).on( 'keyup change', function () {
-                if ( that.search() !== this.value ) {
-                    that
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
+        table.columns().every(function (index) {
+            $('#btlBuyer thead  td:eq(' + index + ') input').on('keyup change', function () {
+                table.column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
+            });
+        });
     } );
     
+
     </script>
 </body>
 </html>

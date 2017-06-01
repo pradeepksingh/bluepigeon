@@ -150,7 +150,7 @@
 <!-- 					                       </div> -->
 				                       	</div>
 				                    	<div class="col-md-5 right">
-					                      	<div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="20"> </div>
+					                      	<div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="<%out.print(projectList.getId()); %>"> </div>
 <!-- 						                  	<div class="bottom"> -->
 <!-- 						                    	<h4>10 NEW LEADS</h4> -->
 <!-- 						                 	</div> -->

@@ -136,6 +136,13 @@
                                 <table id="tblEmployee" class="table table-striped">
                                     <thead>
                                         <tr>
+                                            <td>Sr No.</td>
+                                            <td>Employee Name</td>
+                                             <td>Designation</td>
+                                             <td>Access Type</td>
+                                           	 <td>Action</td>
+                                        </tr>
+                                        <tr>
                                             <th>Sr No.</th>
                                             <th>Employee Name</th>
                                              <th>Designation</th>
@@ -143,15 +150,6 @@
                                            	 <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                    	<tr>
-                                            <th></th>
-                                            <th>Employee Name</th>
-                                             <th>Designation</th>
-                                             <th>Access Type</th>
-                                           	 <th></th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
                                        <%
                                      if(employeeLists != null){
@@ -251,51 +249,11 @@
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
-
-    
-//     function getDataTable(){
-//     	$.post("${baseUrl}/webapi/project/building",{city_id: $("#city_id").val(),project_id : $("#project_id").val()},function(data){
-//     		var oTable = $("#tblBuilding").dataTable();
-//     	    oTable.fnClearTable();
-//     	    var count=1;
-//     	    $(data).each(function(index){
-//     		    var vieworder = '<a href="${baseUrl}/builder/project/edit.jsp?project_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
-//     		    var status = '';
-//     		    if(data[index].status == 1) {
-//     		    	status = '<span class="label label-success">Active</span>';
-//     		    } else {
-//     		    	status = '<span class="label label-warning">Inactive</span>';
-//     		    }
-//     	    	var row = [];
-//     	    	row.push(count);
-//     	    	row.push(data[index].name);
-//     	    	row.push(data[index].designation);
-//     	    	row.push(data[index].access);
-//     	    	row.push(status);
-//     	    	row.push(vieworder);
-//     	    	oTable.fnAddData(row);
-//     	    	count++;
-//     	    });
-//     	},'json');
-//     }
-    
-//     $("#city_id").change(function(){
-//     	$.get("${baseUrl}/webapi/employee/emp/list/"+$("#city_id").val(),{ }, function(data){
-//     		var html = '<option value="0">Select Project</option>';
-//     		$(data).each(function(index){
-//     			html = html + '<option value="'+data[index].projectId+'">'+data[index].projectName+'</option>';
-    		
-//     		});
-//     		$("#project_id").html(html);
-     	
-//     	},'json');
-//     	getDataTable();
-//     });
     </script>
-    <script type="text/javascript">
+     <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#tblEmployee tfoot th').each( function () {
+        $('#tblEmployee thead td').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
         } );
@@ -304,19 +262,16 @@
         var table = $('#tblEmployee').DataTable();
      
         // Apply the search
-        table.columns().every( function () {
-            var that = this;
-     
-            $( 'input', this.footer() ).on( 'keyup change', function () {
-                if ( that.search() !== this.value ) {
-                    that
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
+        table.columns().every(function (index) {
+            $('#tblEmployee thead  td:eq(' + index + ') input').on('keyup change', function () {
+                table.column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
+            });
+        });
     } );
     
+
     </script>
 </body>
 </html>
