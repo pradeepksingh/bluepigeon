@@ -98,20 +98,20 @@
                                 <table id="tblbuildings" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>No</th>
-                                            <th>Builder Name</th>
-                                             <th>Project Name</th>
-                                             <th>Building Name</th>
-                                            <th>status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                         <tr>
-							                <td>No</td>
+                                            <td>No</td>
 							                <td>Builder</td>
 							                <td>Project</td>
 							                <td>Building</td>
 							                <td>status</td>
 							                <td>Action</td>
+                                        </tr>
+                                         <tr>
+							                <th>No</th>
+                                            <th>Builder Name</th>
+                                             <th>Project Name</th>
+                                             <th>Building Name</th>
+                                            <th>status</th>
+                                            <th>Action</th>
 							            </tr>
                                     </thead>
 <!--                                     <tfoot> -->
@@ -265,7 +265,7 @@
     <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#tblbuildings thead th').each( function () {
+        $('#tblbuildings thead td').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
         } );
@@ -274,21 +274,8 @@
         var table = $('#tblbuildings').DataTable();
      
         // Apply the search
-//         table.columns().every( function () {
-//             var that = this;
-     
-//             $( 'input', this.header() ).on( 'keyup change', function () {
-//                 if ( that.search() !== this.value ) {
-//                     that
-//                         .search( this.value )
-//                         .draw();
-//                 }
-//             } );
-//         } );
-        
-        
         table.columns().every(function (index) {
-            $('#tblbuildings thead  th:eq(' + index + ') input').on('keyup change', function () {
+            $('#tblbuildings thead  td:eq(' + index + ') input').on('keyup change', function () {
                 table.column($(this).parent().index() + ':visible')
                     .search(this.value)
                     .draw();
