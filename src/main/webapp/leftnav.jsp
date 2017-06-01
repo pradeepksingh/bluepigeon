@@ -307,6 +307,11 @@ if(session!=null)
 					<b class="arrow"></b>
 					<ul class="submenu">
 						<li class="">
+							<a href="${baseUrl}/admin/project/newlist.jsp"> 
+								<i class="menu-icon fa fa-caret-right"></i> New Projects
+							</a> <b class="arrow"></b>
+						</li>
+						<li class="">
 							<a href="${baseUrl}/admin/project/list.jsp"> 
 								<i class="menu-icon fa fa-caret-right"></i> Manage Projects
 							</a> <b class="arrow"></b>

@@ -10,6 +10,7 @@ import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorDetail;
 import org.bluepigeon.admin.data.FloorImageData;
 import org.bluepigeon.admin.data.FloorPanoData;
+import org.bluepigeon.admin.data.NewProjectList;
 import org.bluepigeon.admin.data.ProjectCityData;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectDetail;
@@ -2766,5 +2767,26 @@ public class ProjectDAO {
 		session.close();
 		return result;
 	}
-	
+	/**
+	 * 
+	 */
+	public List<NewProjectList> getNewProjectList(){
+		String hql = "from NewProject";
+		List<NewProjectList> newProjectLists = new ArrayList<NewProjectList>();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<NewProject> newProjects = query.list();
+		for(NewProject newProject : newProjects){
+			NewProjectList newProjectList = new NewProjectList();
+			newProjectList.setBuilderName(newProject.getBuilder().getName());
+			newProjectList.setProjectName(newProject.getName());
+			newProjectList.setContactNumber(newProject.getBuilder().getMobile());
+			newProjectList.setEmail(newProject.getBuilder().getEmail());
+			newProjectList.setLocalityName(newProject.getLocality().getName());
+			newProjectLists.add(newProjectList);
+		}
+		return newProjectLists;
+		
+	}
 }

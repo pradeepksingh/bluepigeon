@@ -143,7 +143,7 @@
                                     
 							           
 							       
-                                    <tbody>
+                                    <tfoot>
                                      <tr>
 							                <th></th>
 							                <th>Builder</th>
@@ -152,6 +152,8 @@
 							                <th>status</th>
 							                <th></th>
 							            </tr>
+							            </tfoot>
+							            <tbody>
                                        <%
                                       if(builderBuildings != null){
                                     	  int i=1;
@@ -242,8 +244,8 @@
                     table.order([2, 'asc']).draw();
                 }
             });
-        });
-    });
+     /*   });
+    });*/
     $('#tblbuildings').DataTable({
         dom: 'Bfrtip',
         buttons: [
@@ -254,36 +256,36 @@
     $("#searchprojectId").change(function(){
     	//alert("ID :: "+$("#searchprojectId").val());
     });
-    function getDataTable(){
-    	$.post("${baseUrl}/webapi/project/building",{city_id: $("#searchcitytId").val(), locality_id: $("#searchlocalityId").val(), project_id : $("#searchprojectId").val()},function(data){
-    		var oTable = $("#tblBuilding").dataTable();
-    	    oTable.fnClearTable();
-    	    var count=1;
-    	    $(data).each(function(index){
-    		    var vieworder = '<a href="${baseUrl}/builder/project/edit.jsp?project_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
-    		    var status = '';
-    		    if(data[index].status == 1) {
-    		    	status = '<span class="label label-success">Active</span>';
-    		    } else {
-    		    	status = '<span class="label label-warning">Inactive</span>';
-    		    }
-    	    	var row = [];
-    	    	row.push(count);
-    	    	row.push(data[index].builderName);
-    	    	row.push(data[index].projectName);
-    	    	row.push(data[index].buildingName);
-    	    	row.push(status);
-    	    	row.push(vieworder);
-    	    	oTable.fnAdbdData(row);
-    	    	count++;
-    	    });
-    	},'json');
-    }
+//     function getDataTable(){
+//     	$.post("${baseUrl}/webapi/project/building",{city_id: $("#searchcitytId").val(), locality_id: $("#searchlocalityId").val(), project_id : $("#searchprojectId").val()},function(data){
+//     		var oTable = $("#tblBuilding").dataTable();
+//     	    oTable.fnClearTable();
+//     	    var count=1;
+//     	    $(data).each(function(index){
+//     		    var vieworder = '<a href="${baseUrl}/builder/project/edit.jsp?project_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
+//     		    var status = '';
+//     		    if(data[index].status == 1) {
+//     		    	status = '<span class="label label-success">Active</span>';
+//     		    } else {
+//     		    	status = '<span class="label label-warning">Inactive</span>';
+//     		    }
+//     	    	var row = [];
+//     	    	row.push(count);
+//     	    	row.push(data[index].builderName);
+//     	    	row.push(data[index].projectName);
+//     	    	row.push(data[index].buildingName);
+//     	    	row.push(status);
+//     	    	row.push(vieworder);
+//     	    	oTable.fnAdbdData(row);
+//     	    	count++;
+//     	    });
+//     	},'json');
+//     }
     </script>
     <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#tblbuildings tbody th').each( function () {
+        $('#tblbuildings tfoot th').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
         } );
