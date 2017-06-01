@@ -94,40 +94,6 @@
                     <div class="col-sm-12">
                         <div class="white-box"><br>
                           <h3>Manage Building</h3>
-						<div class="row re white-box">
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 								<select name="searchprojectId" id="searchprojectId" class="form-control"> -->
-<!-- 				                    <option value="0">Project</option> -->
-<%-- 				                    <% --%>
-<!--      				                    if(projectDatas != null){   -->
-<%--   				                    for(int i=0; i < projectDatas.size() ; i++){ %>   --%>
-<%-- 									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option> --%>
-<%-- 									<% 	 --%>
-<!--      										} -->
-<!--     				                    }  -->
-<%--   				                    %>   --%>
-<!-- 						         </select>    -->
-<!-- 							</div> -->
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 							   <select name="searchlocalityId" id="searchlocalityId" class="form-control"> -->
-<!-- 				                    <option value="0">Locality</option> -->
-<!-- 							   </select> -->
-<!-- 							</div> -->
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 								<select name="searchprojectId" id="searchprojectId" class="form-control"> -->
-<!-- 				                    <option value="0">Project</option> -->
-<!-- 								</select> -->
-<!-- 							</div> -->
-							
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 							    <select class="form-control"> -->
-<!-- 												<option>Status</option> -->
-<!-- 												<option>1</option> -->
-<!-- 												<option>2</option> -->
-<!-- 								</select>	    -->
-<!-- 							</div> -->
-						</div>
-						
                             <div class="table-responsive">
                                 <table id="tblbuildings" class="table table-striped">
                                     <thead>
