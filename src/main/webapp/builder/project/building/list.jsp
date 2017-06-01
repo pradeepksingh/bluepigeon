@@ -98,25 +98,42 @@
                                 <table id="tblbuildings" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>No.</th>
+                                            <th>No</th>
                                             <th>Builder Name</th>
                                              <th>Project Name</th>
                                              <th>Building Name</th>
                                             <th>status</th>
                                             <th>Action</th>
                                         </tr>
-                                    </thead>
-                                    <tfoot>
-                                     <tr>
-							                <th></th>
-							                <th>Builder</th>
-							                <th>Project</th>
-							                <th>Building</th>
-							                <th>status</th>
-							                <th></th>
+                                         <tr>
+							                <td>No</td>
+							                <td>Builder</td>
+							                <td>Project</td>
+							                <td>Building</td>
+							                <td>status</td>
+							                <td>Action</td>
 							            </tr>
-							            </tfoot>
+                                    </thead>
+<!--                                     <tfoot> -->
+<!--                                      <tr> -->
+<!-- 							                <th></th> -->
+<!-- 							                <th>Builder</th> -->
+<!-- 							                <th>Project</th> -->
+<!-- 							                <th>Building</th> -->
+<!-- 							                <th>status</th> -->
+<!-- 							                <th></th> -->
+<!-- 							            </tr> -->
+<!-- 							            </tfoot> -->
 							            <tbody>
+<!-- 							             <tr> -->
+<!-- 							                <td></td> -->
+<!-- 							                <td>Builder</td> -->
+<!-- 							                <td>Project</td> -->
+<!-- 							                <td>Building</td> -->
+<!-- 							                <td>status</td> -->
+<!-- 							                <td></td> -->
+<!-- 							            </tr> -->
+							            
                                        <%
                                       if(builderBuildings != null){
                                     	  int i=1;
@@ -248,7 +265,7 @@
     <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#tblbuildings tfoot th').each( function () {
+        $('#tblbuildings thead th').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
         } );
@@ -257,19 +274,29 @@
         var table = $('#tblbuildings').DataTable();
      
         // Apply the search
-        table.columns().every( function () {
-            var that = this;
+//         table.columns().every( function () {
+//             var that = this;
      
-            $( 'input', this.footer() ).on( 'keyup change', function () {
-                if ( that.search() !== this.value ) {
-                    that
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
+//             $( 'input', this.header() ).on( 'keyup change', function () {
+//                 if ( that.search() !== this.value ) {
+//                     that
+//                         .search( this.value )
+//                         .draw();
+//                 }
+//             } );
+//         } );
+        
+        
+        table.columns().every(function (index) {
+            $('#tblbuildings thead  th:eq(' + index + ') input').on('keyup change', function () {
+                table.column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
+            });
+        });
     } );
     
+
     </script>
 </body>
 </html>
