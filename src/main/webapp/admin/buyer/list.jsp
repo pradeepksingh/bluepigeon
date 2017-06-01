@@ -65,7 +65,7 @@
 <!-- 		            </div> -->
 	               	<div class="panel-body">
 	                	<div class="dataTable_wrapper" style="overflow:auto;">
-	                       	<table class="table table-striped table-bordered table-hover" id="tblProjects">
+	                       	<table class="table table-striped table-bordered table-hover" id="tblBuyer">
 								<thead class="bg-info">
 									<tr>
 										<th>Project Name</th>
@@ -139,3 +139,10 @@
 <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 </body>
 </html>
+<script>
+$(document).ready(function(){
+    $('#tblBuyer').DataTable({
+        "aaSorting": []
+    });
+});
+</script>
