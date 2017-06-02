@@ -2,11 +2,14 @@ package org.bluepigeon.admin.model;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,6 +38,7 @@ public class Buyer implements java.io.Serializable {
 	private Short possession;
 	private Short isDeleted;
 	private Short status;
+	private Set<BuyerDocuments> buyerDocuments = new HashSet<BuyerDocuments>(0);
 	
 	public Buyer() {
 	}
@@ -43,7 +47,7 @@ public class Buyer implements java.io.Serializable {
 			GlobalBuyer globalBuyer, Builder builder, BuilderEmployee builderEmployee, BuilderProject builderProject,
 			BuilderBuilding builderBuilding, BuilderFlat builderFlat, boolean isPrimary, String name, 
 			String mobile, String email, String pancard, String photo, String address, Short agreement,
-			Short possession, Short isDeleted, Short status
+			Short possession, Short isDeleted, Short status, Set<BuyerDocuments> buyerDocuments
 	) {
 		this.globalBuyer = globalBuyer;
 		this.builder = builder;
@@ -62,6 +66,7 @@ public class Buyer implements java.io.Serializable {
 		this.possession = possession;
 		this.isDeleted = isDeleted;
 		this.status = status;
+		this.buyerDocuments = buyerDocuments;
 	}
 
 	@Id
@@ -235,4 +240,14 @@ public class Buyer implements java.io.Serializable {
 	public void setStatus(Short status) {
 		this.status = status;
 	}
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "buyer")
+	public Set<BuyerDocuments> getBuyerDocuments() {
+		return this.buyerDocuments;
+	}
+
+	public void setBuyerDocuments(Set<BuyerDocuments> buyerDocuments) {
+		this.buyerDocuments = buyerDocuments;
+	}
+	
 }

@@ -1846,6 +1846,17 @@ public class ProjectDAO {
 		return result;
 	}
 	
+	public List<BuilderFlat> getBuilderAllFlatsByBuildingId(int building_id) {
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :id order by flat_no ASC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", building_id);
+		List<BuilderFlat> result = query.list();
+		session.close();
+		return result;
+	}
+	
 	public List<FlatAmenityInfo> getBuilderFlatAmenityInfos(int flat_id) {
 		String hql = "from FlatAmenityInfo where builderFlat.id = :flat_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();

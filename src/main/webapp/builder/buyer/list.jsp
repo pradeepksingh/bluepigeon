@@ -135,7 +135,7 @@
                                        		<td><% out.print(buyer.getMobile()); %></td>
                                        		<td><% out.print(buyer.getBuilderBuilding().getName()); %></td>
                                        		<td><% out.print(buyer.getBuilderFlat().getFlatNo()); %></td>
-                                       		<td><a href="" class="btn btn11 btn-success waves-effect waves-light m-t-10">Manage</a></td>
+                                       		<td><a href="${baseUrl}/builder/buyer/edit.jsp?flat_id=<% out.print(buyer.getBuilderFlat().getId()); %>" class="btn btn11 btn-success waves-effect waves-light m-t-10">Manage</a></td>
                                        		</tr>
                                        <% i++;}
                                        }%>
