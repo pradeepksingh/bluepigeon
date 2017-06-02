@@ -1,1247 +1,1217 @@
-<%@page import="org.bluepigeon.admin.dao.ProjectLeadDAO"%>
-<%@page import="org.bluepigeon.admin.data.FlatData"%>
-<%@page import="org.bluepigeon.admin.data.FloorData"%>
-<%@page import="org.bluepigeon.admin.data.BuildingData"%>
-<%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
-<%@page import="org.bluepigeon.admin.model.BuilderFloor"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
-<%@page import="org.bluepigeon.admin.data.ProjectDetails"%>
-<%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>
-<%@page import="org.bluepigeon.admin.model.BuyerPayment"%>
+<%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
+<%@page import="org.bluepigeon.admin.model.Buyer"%>
 <%@page import="org.bluepigeon.admin.model.BuyerOffer"%>
 <%@page import="org.bluepigeon.admin.model.BuyingDetails"%>
-<%@page import="org.bluepigeon.admin.model.BuyerUploadDocuments"%>
-<%@page import="org.bluepigeon.admin.model.Buyer"%>
+<%@page import="org.bluepigeon.admin.model.BuyerPayment"%>
 <%@page import="org.bluepigeon.admin.model.BuyerDocuments"%>
-<%@page import="org.bluepigeon.admin.dao.BuyerDAO"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>
+<%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
+<%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.dao.BuyerDAO"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
-<%@page import="java.util.Set"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="org.bluepigeon.admin.model.BuilderProject"%>
-<%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
-<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
-<%@include file="../../head.jsp"%>
-<%@include file="../../leftnav.jsp"%>
 <%
-	int lead_id = 0;
-	int type_size = 0;
-	int flat_size =	0;
-	int building_size = 0;
-	int city_size = 0;
-	int buyer_id = 0;
-	int projectId = 0;
-	int buildingId = 0;
-	//int floorId = 0;
-	int flatId = 0;
-	int p_user_id = 0;
-	List<BuildingData> building_list = null;
-	//List<FloorData> floor_list = null;
-	List<FlatData> flat_list = null;
-	buyer_id = Integer.parseInt(request.getParameter("buyer_id"));
 	session = request.getSession(false);
-	AdminUser adminuserproject = new AdminUser();
+	Builder builder = new Builder();
+	List<BuilderProject> project_list = null; 
+	int builder_id = 0;
 	if(session!=null)
 	{
-		if(session.getAttribute("uname") != null)
+		if(session.getAttribute("ubname") != null)
 		{
-			adminuserproject  = (AdminUser)session.getAttribute("uname");
-			p_user_id = adminuserproject.getId();
+			builder  = (Builder)session.getAttribute("ubname");
+			builder_id = builder.getId();
 		}
    	}
-	
-	int project_size = 0;
-	int builder_id = 0;
-	List<BuilderBuilding> builderBuildings = null;
-	List<BuilderFlat> builderFlats = null;
- 	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
- 	if(builderProjects.size()>0){
-    	project_size = builderProjects.size();
- 		builderBuildings = new ProjectLeadDAO().getBuildingByProjectId(builderProjects.get(0).getId());
- 	}
- 	if(builderBuildings.size()>0){
- 		building_size =	builderBuildings.size();
- 		builderFlats = new ProjectDAO().getBuilderProjectBuildingFlats(builderBuildings.get(0).getId());
- 	}
- 	Buyer buyer =  new BuyerDAO().getBuyerById(buyer_id);
- 	List<BuyerDocuments> buyerDocuments = new BuyerDAO().getBuyerDocumentsByBuyerId(buyer_id);
- 	BuyingDetails buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyer_id);
- 	List<BuyerOffer> buyerOffersList = new BuyerDAO().getBuyerOffersByBuyerId(buyer_id);
- 	List<BuyerPayment> buyerPaymentsList = new BuyerDAO().getBuyerPaymentsByBuyerId(buyer_id);
- 	List<BuyerUploadDocuments> buyerUploadDocumentsList = new BuyerDAO().getBuyerUploadDocumentsByBuyerId(buyer_id);
-// 	List<BuilderProject> project_list = new ProjectDetailsDAO().getBuilderProjectList();
-// 	if(project_list.size()>0){
-// 		for(BuilderProject builderProject: project_list){
-// 	    projectId = builderProject.getId();
-// 	    building_list = new BuyerDAO().getBuildingByProjectId(projectId);
-// 		    if(building_list.size()>0){
-// 		    	for(BuildingData buildingData : building_list){
-// 		    		System.out.println("Building Size :: "+building_list.size());
-// 			    	buildingId = buildingData.getId();
-// 			    	floor_list = new BuyerDAO().getBuilderFloorByBuildingId(buildingId);
-// 			    	if(floor_list.size()>0){
-// 			    		floorId = floor_list.get(0).getId();
-// 			    		flat_list = new BuyerDAO().getBuilderFlatTypeByFloorId(floorId);
-// 			    	}
-// 		    	}	
-// 		    }  	
-// 		}
-// 	}
+	int builder_id1 = 1;
+	if(builder_id > 0 ){
+		project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id);
+	}
+	List<BuilderEmployee> builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
+	int flat_id = 0;
+	List<Buyer> buyers = new ArrayList<Buyer>();
+	List<BuilderBuilding> builderBuildings = new ArrayList<BuilderBuilding>(); 
+	List<BuilderFlat> builderFlats = new ArrayList<BuilderFlat>();
+	BuyingDetails buyingDetails = new BuyingDetails();
+	List<BuyerOffer> buyerOffers = new ArrayList<BuyerOffer>();
+	List<BuyerPayment> buyerPayments = new ArrayList<BuyerPayment>();
+	int buyeroffersize = 0;
+	int primary_buyer_id = 0;
+	if (request.getParameterMap().containsKey("flat_id")) {
+		flat_id = Integer.parseInt(request.getParameter("flat_id"));
+		buyers = new BuyerDAO().getFlatBuyersByFlatId(flat_id);
+		builderBuildings = new ProjectDAO().getBuilderProjectBuildings(buyers.get(0).getBuilderProject().getId());
+		builderFlats = new ProjectDAO().getBuilderAllFlatsByBuildingId(buyers.get(0).getBuilderBuilding().getId());
+		buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyers.get(0).getId());
+		buyerOffers = new BuyerDAO().getBuyerOffersByBuyerId(buyers.get(0).getId());
+		buyeroffersize = buyerOffers.size();
+		buyerPayments = new BuyerDAO().getBuyerPaymentsByBuyerId(buyers.get(0).getId());
+		for(Buyer buyer :buyers) {
+			if(buyer.getIsPrimary()) {
+				primary_buyer_id = buyer.getId();
+			}
+		}
+	}
 %>
-<div class="main-content">
-	<div class="main-content-inner">
-		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-			<ul class="breadcrumb">
-				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
-				</li>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" type="image/png" sizes="16x16"
+	href="../plugins/images/favicon.png">
+<title>Blue Piegon</title>
+<!-- Bootstrap Core CSS -->
+<link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+<!-- animation CSS -->
+<link href="../css/animate.css" rel="stylesheet">
+<!-- Menu CSS -->
+<link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+<!-- animation CSS -->
+<link href="../css/animate.css" rel="stylesheet">
+<!-- Custom CSS -->
+<link href="../css/style.css" rel="stylesheet">
+<link href="../css/custom.css" rel="stylesheet">
+<link href="../css/custom1.css" rel="stylesheet">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
 
-				<li><a href="#">Buyer</a></li>
-				<li class="active">Update</li>
-			</ul>
-		</div>
-		<div class="page-content">
-			<div class="page-header">
-				<h1>
-					Buyer Update 
-				</h1>
+<!-- jQuery -->
+<script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../js/bootstrap-datepicker.min.js"></script>
+<script src="../js/jquery.form.js"></script>
+<script src="../js/bootstrapValidator.min.js"></script>
+
+<script type="text/javascript">
+	$('input[type=checkbox]').click(function() {
+		if ($(this).is(':checked')) {
+			var tb = $('<input type=text />');
+			$(this).after(tb);
+		} else if ($(this).siblings('input[type=text]').length > 0) {
+			$(this).siblings('input[type=text]').remove();
+		}
+	})
+</script>
+</head>
+
+<body class="fix-sidebar">
+	<!-- Preloader -->
+	<div class="preloader" style="display: none;">
+		<div class="cssload-speeding-wheel"></div>
+	</div>
+	<div id="wrapper">
+		<div id="wrapper">
+			<div id="header">
+				<%@include file="../partial/header.jsp"%>
 			</div>
-			<ul class="nav nav-tabs">
-			  	<li class="active"><a data-toggle="tab" href="#basic">Basic Details</a></li>
-			  	<li><a data-toggle="tab" href="#buyingdetail">Buying Details</a></li>
-			  	<li><a data-toggle="tab" href="#offer">Offers</a></li>
-			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
-			  	<li><a data-toggle="tab" href="#documents">Documents</a></li>
-			</ul>
-			<div class="tab-content">
-			  	<div id="basic" class="tab-pane fade in active">
-			  		<form id="basicfrm" name="basicfrm" method="post" enctype="multipart/form-data" action="">
-			  			<div id="basicresponse"></div>
-						<div class="row" id="buyer-1">
-							<div class="col-lg-12">
-								<div class="panel panel-default">
-									<div class="panel-body">
-										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
-										<div id="buyer_area">
-										<input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
-										<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(buyer_id);%>"/>
-											<div class="row" id="buyer-1">
-												<div class="row">
-													<div class="col-lg-5 margin-bottom-5">
-														<div class="form-group" id="error-buyer_name">
-														<label class="control-label col-sm-4">Buyer Name <span class="text-danger">*</span></label>
-															<div class="col-sm-8">
-																<input type="text" class="form-control" id="buyer_name" name="buyer_name[]" value=""/>
-															</div>
-															<div class="messageContainer"></div>
-														</div>
-													</div>
-													<div class="col-lg-5 margin-bottom-6">
-														<div class="form-group" id="error-contact">
-															<label class="control-label col-sm-4">Contact <span class="text-danger">*</span></label>
-															<div class="col-sm-8">
-																<input type="text" class="form-control" id="contact" name="contact[]" value=""/>
-															</div>
-															<div class="messageContainer"></div>
-														</div>
-													</div>
-											    </div>
-											    <div class="row">
-													<div class="col-lg-5 margin-bottom-6">
-														<div class="form-group" id="error-email">
-															<label class="control-label col-sm-4">Email <span class="text-danger">*</span></label>
-															<div class="col-sm-8">
-																<input type="text" class="form-control" id="email" name="email[]" value=""/>
-															</div>
-															<div class="messageContainer"></div><br/>
-														</div>
-													</div>
-													<div class="col-lg-5 margin-bottom-6">
-														<div class="form-group" id="error-email">
-															<label class="control-label col-sm-4">PAN <span class="text-danger">*</span></label>
-															<div class="col-sm-8">
-																<input type="text" class="form-control" id="pan" name="pan[]" value=""/>
-															</div>
-															<div class="messageContainer"></div>
-														</div>
-													</div>
-												</div>
-												<div class="row">
-													<div class="col-lg-5 margin-bottom-5">
-														<div class="form-group" id="error-applicable_on">
-														<label class="control-label col-sm-4"> Prem. Address <span class="text-danger">*</span></label>
-														<div class="col-sm-8">
-														<textarea class="form-control" id="address" name="address[]" ></textarea>
-														</div>
-														<div class="messageContainer"></div>
-														</div>
-													</div>
-													<div class="col-lg-5 margin-bottom-6">
-														<div class="form-group" id="error-state_id">
-															<label class="control-label col-sm-4">Owner <span class='text-danger'>*</span></label>
-															<div class="col-sm-8">
-																<select name="is_primary[]" id="is_primary" class="form-control">
-												                    <option value="">Select Owner</option>
-												                     <option value="0">Co-Owner</option>
-												                      <option value="1">Owner</option>
-													          	</select>
-															</div>
-															<div class="messageContainer col-sm-4"></div>
-														</div>
-													</div>
-												</div>
-												<hr>
-												<div class="col-lg-12 margin-bottom-6">
-														<div class="form-group" id="error-project_type">
-															<label class="control-label col-sm-2">Documents <span class='text-danger'>*</span></label>
-															<div class="col-sm-10">
-																<div class="col-sm-4">
-																	<input type="checkbox" name="document_type[]" value="1" />PAN Card
-																</div>
-																<div class="col-sm-4">
-																	<input type="checkbox" name="document_type[]" value="2" />Aadhar Card
-																</div>
-																<div class="col-sm-4">
-																	<input type="checkbox" name="document_type[]" value="3" />Passport 
-																</div>
-																<div class="col-sm-4">
-																	<input type="checkbox" name="document_type[]" value="4" />Registered Rent Agreement 
-																</div>
-																<div class="col-sm-4">
-																	<input type="checkbox" name="document_type[]" value="5" />Vote ID 
-																</div>
-															</div>
-															<div class="messageContainer"></div>
-														</div>
-													</div>
-												</div>
-											</div>
-										<hr>
-										<div>
-											<div class="col-lg-12">
-												<span class="pull-right">
-													<a href="javascript:addMoreBuyers();" class="btn btn-info btn-xs">+ Add More Buyers</a>
-												</span>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-12 margin-bottom-5">
-												<div class="form-group" id="error-country_id">
-													<label class="control-label col-sm-3"><b>Project Details</b><span class='text-danger'>*</span></label>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-country_id">
-													<label class="control-label col-sm-3">Project <span class='text-danger'>*</span></label>
-													<div class="col-sm-5">
-														<select name="project_id" id="project_id" class="form-control">
-										                    <option value="">Select Project</option>
-										                    <% for(BuilderProject builderProject : builderProjects){ %>
-															<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option>
-															<% } %>
-											             </select>
-													</div>
-													<div class="messageContainer col-sm-4"></div>
-												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-state_id">
-													<label class="control-label col-sm-3">Building <span class='text-danger'>*</span></label>
-													<div class="col-sm-5">
-														<select name="building_id" id="building_id" class="form-control">
-										                    <option value="">Select Building</option>
-											          	</select>
-													</div>
-													<div class="messageContainer col-sm-4"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-state_id">
-													<label class="control-label col-sm-3">Flat <span class='text-danger'>*</span></label>
-													<div class="col-sm-5">
-														<select name="flat_id" id="flat_id" class="form-control">
-										                    <option value="">Select Flat</option>
-											          	</select>
-													</div>
-													<div class="messageContainer col-sm-4"></div>
-												</div>
-											</div>
-	<!-- 										<div class="col-lg-6 margin-bottom-5"> -->
-	<!-- 											<div class="form-group" id="error-state_id"> -->
-	<!-- 												<label class="control-label col-sm-3">Agreement <span class='text-danger'>*</span></label> -->
-	<!-- 												<div class="col-sm-5"> -->
-	<!-- 													<select name="agreement" id="agreement" class="form-control"> -->
-	<!-- 									                    <option value="">Select Agreement</option> -->
-	<!-- 									                     <option value="0">No</option> -->
-	<!-- 									                      <option value="1">Yes</option> -->
-	<!-- 										          	</select> -->
-	<!-- 												</div> -->
-	<!-- 												<div class="messageContainer col-sm-4"></div> -->
-	<!-- 											</div> -->
-	<!-- 										</div> -->
-	<!-- 									</div> -->
-	<!-- 									<div class="row"> -->
-	<!-- 										<div class="col-lg-6 margin-bottom-5"> -->
-	<!-- 											<div class="form-group" id="error-state_id"> -->
-	<!-- 												<label class="control-label col-sm-3">Possession <span class='text-danger'>*</span></label> -->
-	<!-- 												<div class="col-sm-5"> -->
-	<!-- 													<select name="possession" id="possession" class="form-control"> -->
-	<!-- 									                    <option value="">Select Possession</option> -->
-	<!-- 									                     <option value="0">No</option> -->
-	<!-- 									                      <option value="1">Yes</option> -->
-	<!-- 										          	</select> -->
-	<!-- 												</div> -->
-	<!-- 												<div class="messageContainer col-sm-4"></div> -->
-	<!-- 											</div> -->
-	<!-- 										</div> -->
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-state_id">
-													<label class="control-label col-sm-3">Status <span class='text-danger'>*</span></label>
-													<div class="col-sm-5">
-														<select name="status" id="status" class="form-control">
-										                    <option value="">Select Status</option>
-										                     <option value="0">Inactive</option>
-										                      <option value="1">Active</option>
-											          	</select>
-													</div>
-													<div class="messageContainer col-sm-4"></div>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-12 margin-bottom-5">
-											<div class="clearfix form-actions">
-												<div class="pull-right">
-													<button type="submit" class="btn btn-success">Submit</button>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+			<div id="sidebar1">
+				<%@include file="../partial/sidebar.jsp"%>
+			</div>
+
+
+			<!-- Left navbar-header end -->
+			<!-- Page Content -->
+			<div id="page-wrapper" style="min-height: 2038px;">
+				<div class="container-fluid">
+					<div class="row bg-title">
+						<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+							<h4 class="page-title">Update Buyer</h4>
 						</div>
-					</form>
-				</div>
-				<div id="buyingdetail" class="tab-pane fade">
-					<form id="pricingfrm" name="pricingfrm" method="post">
-						<input type="hidden" name="id" />
-						<input type="hidden" name="project_id" />
-			 			<div class="row">
-			 				<div id="pricingresponse"></div>
-							<div class="col-lg-12">
-								<div class="panel panel-default">
-									<div class="panel-body">
-										<div class="row">
+
+						<!-- /.col-lg-12 -->
+					</div>
+
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="white-box">
+								<h4 class="page-title">Update Buyer</h4>
+								<br>
+								<ul class="nav tabs-horizontal">
+									<li class="tab nav-item" aria-expanded="false">
+										<a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"><span>Update Buyer</span></a>
+									</li>
+									<li class="tab nav-item">
+										<a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages1"><span>Project Details</span></a>
+									</li>
+									<li class="tab nav-item"><a aria-expanded="false"
+										class="nav-link space1" data-toggle="tab" href="#vimessages2"><span>Buying
+												Details</span></a></li>
+									<li class="tab nav-item"><a aria-expanded="true"
+										class="nav-link space1" data-toggle="tab" href="#vimessages3"><span>Payment
+												Schedule</span></a></li>
+									<li class="tab nav-item"><a aria-expanded="true"
+										class="nav-link space1" data-toggle="tab" href="#vimessages4"><span>Documents</span></a>
+									</li>
+									<!--   <li class="tab nav-item">
+                                        <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a>
+                                    </li>-->
+								</ul>
+
+									<div class="tab-content">
+										<div class="tab-pane active" id="vimessages" aria-expanded="false">
+										<form id="addbuyer" name="addbuyer" action="" method="post" enctype="multipart/form-data">
+											<input type="hidden" name="buyer_count" id="buyer_count" value="1" />
+											<input type="hidden" name="employee_id" id="employee_id" value="<%out.print(buyers.get(0).getBuilderEmployee().getId());%>" />
+											<input type="hidden" name="builder_id" id="builder_id" value="<%out.print(builder_id);%>" />
+											<input type="hidden" name="project_id" id="project_id" value="<%out.print(buyers.get(0).getBuilderProject().getId());%>" />
+											<input type="hidden" name="building_id" id="building_id" value="<%out.print(buyers.get(0).getBuilderBuilding().getId());%>" />
+											<input type="hidden" name="flat_id" id="flat_id" value="<%out.print(buyers.get(0).getBuilderFlat().getId());%>" />
+											<input type="file" name="photo[]" value="" style="display:none;" />
+											<input type="hidden" name="doc_pan" id="doc_pan" value="" />
+											<input type="hidden" name="doc_aadhar" id="doc_aadhar" value="" />
+											<input type="hidden" name="doc_passport" id="doc_passport" value="" />
+											<input type="hidden" name="doc_rra" id="doc_rra" value="" />
+											<input type="hidden" name="doc_voterid" id="doc_voterid" value="" />
+											<%for(Buyer buyer :buyers) { %>
+											<input type="hidden" name="buyer_id[]" id="buyer_id" value="<% out.print(buyer.getId());%>" />
+											<div class="col-12" id="vimessagesdd">
+												<div class="form-group row">
+													<label for="example-text-input" class="col-3 col-form-label">Buyer Name*</label>
+													<div class="col-3">
+														<input class="form-control" type="text" id="buyer_name" name="buyer_name[]" value="<% out.print(buyer.getName());%>">
+													</div>
+													<label for="example-text-input" class="col-3 col-form-label">Contact*</label>
+													<div class="col-3">
+														<input class="form-control" type="text" id="contact" name="contact[]" value="<% out.print(buyer.getMobile());%>">
+													</div>
+												</div>
+
+												<div class="form-group row">
+													<label for="example-search-input"
+														class="col-3 col-form-label">Email*</label>
+													<div class="col-3">
+														<input class="form-control" type="text" id="email" name="email[]" value="<% out.print(buyer.getEmail());%>">
+													</div>
+													<label for="example-search-input"
+														class="col-3 col-form-label">Pan*</label>
+													<div class="col-3">
+														<input class="form-control" type="text" id="pan" name="pan[]" value="<% out.print(buyer.getPancard());%>">
+													</div>
+												</div>
+
+												<div class="form-group row">
+													<label for="example-tel-input" class="col-3 col-form-label">Permanent Address*</label>
+													<div class="col-3">
+														<textarea class="form-control" rows="" cols="" id="address" name="address[]"><% out.print(buyer.getAddress());%></textarea>
+													</div>
+													<label for="example-tel-input" class="col-3 col-form-label">Owner*</label>
+													<div class="col-3">
+														<select name="is_primary[]" id="is_primary" class="form-control">
+															<option value="">Select Owner</option>
+															<option value="0" <%if(!buyer.getIsPrimary()) { %>selected<% } %>>Co-Owner</option>
+															<option value="1" <% if(buyer.getIsPrimary()) { %>selected<% } %>>Owner</option>
+														</select>
+													</div>
+												</div>
+												<%
+													int buyer_pan = 0;
+													int buyer_aadhar = 0;
+													int buyer_passport = 0;
+													int buyer_rra = 0;
+													int buyer_voterid = 0;
+													for(BuyerDocuments buyerDocument :buyer.getBuyerDocuments()) {
+														if(buyerDocument.getDocuments().equals("1")) {
+															buyer_pan = 1;
+														}
+														if(buyerDocument.getDocuments().equals("2")) {
+															buyer_aadhar = 2;
+														}
+														if(buyerDocument.getDocuments().equals("3")) {
+															buyer_passport = 3;
+														}
+														if(buyerDocument.getDocuments().equals("4")) {
+															buyer_rra = 4;
+														}
+														if(buyerDocument.getDocuments().equals("5")) {
+															buyer_voterid = 5;
+														}
+													}
+												%>
+												<div class="form-group row" id="error-project_type">
+													<label class="col-12 col-form-label">Documents <span class='text-danger'>*</span></label>
+													<div class="col-3">
+														<input type="checkbox" name="document_pan[]" value="1" <% if(buyer_pan > 0) { %>checked<% } %>/>
+														PAN Card
+													</div>
+													<div class="col-3">
+														<input type="checkbox" name="document_aadhar[]" value="2" <% if(buyer_aadhar > 0) { %>checked<% } %>/>
+														Aadhar Card
+													</div>
+													<div class="col-3">
+														<input type="checkbox" name="document_passport[]" value="3" <% if(buyer_passport > 0) { %>checked<% } %>/> Passport
+													</div>
+													<div class="col-3">
+														<input type="checkbox" name="document_rra[]" value="4" <% if(buyer_rra > 0) { %>checked<% } %>/>
+														Registered Rent Agreement
+													</div>
+													<div class="col-3">
+														<input type="checkbox" name="document_voterid[]" value="5" <% if(buyer_voterid > 0) { %>checked<% } %>/>
+														Vote ID
+													</div>
+													<div class="messageContainer col-sm-offset-2"></div>
+												</div>
+											</div>
+											<% } %>
+											<div class="offset-sm-10 col-sm-7">
+												<button type="submit" class="btn btn-info waves-effect waves-light m-t-10" >SAVE</button>
+												<a href="javascript:addMoreBuyers();">
+													<button type="button" class="btn btn-info waves-effect waves-light m-t-10">+ Add New Buyer</button>
+												</a>
+											</div>
+										</form>
+										</div>
+
+										<div id="vimessages1" class="tab-pane" aria-expanded="false">
+										<form id="addbuyerdetail" name="addbuyerdetail" action="" method="post" >
+											<input type="hidden" name="old_flat_id" id="old_flat_id" value="<%out.print(buyers.get(0).getBuilderFlat().getId());%>" />
+											<div class="form-group row">
+												<label for="example-text-input" class="col-3 col-form-label">Project Name</label>
+												<div class="col-6">
+													<select name="project_id" id="project_id" class="form-control">
+														<option value="">Select Project</option>
+														<% for(BuilderProject builderProject : project_list){ %>
+														<option value="<% out.print(builderProject.getId()); %>" <% if(buyers.get(0).getBuilderProject().getId() == builderProject.getId()) { %> selected <% } %>>
+															<% out.print(builderProject.getName()); %>
+														</option>
+														<% } %>
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group row">
+												<label for="example-text-input" class="col-3 col-form-label">Building</label>
+												<div class="col-6">
+													<select name="building_id" id="building_id"
+														class="form-control">
+														<option value="">Select Building</option>
+														<% for(BuilderBuilding builderBuilding :builderBuildings) { %>
+														<option value="<% out.print(builderBuilding.getId()); %>" <% if(builderBuilding.getId() == buyers.get(0).getBuilderBuilding().getId()) { %>selected<% } %> ><% out.print(builderBuilding.getName()); %></option>
+														<% } %>
+													</select>
+												</div>
+											</div>
+			
+											<div class="form-group row">
+												<label for="example-text-input" class="col-3 col-form-label">Flat</label>
+												<div class="col-6">
+													<select name="flat_id" id="flat_id" class="form-control">
+														<option value="">Select Flat</option>
+														<% for(BuilderFlat builderFlat :builderFlats) { %>
+															<option value="<% out.print(builderFlat.getId()); %>" <% if(builderFlat.getId() == buyers.get(0).getBuilderFlat().getId()) { %>selected<% } %>><% out.print(builderFlat.getFlatNo()); %></option>
+														<% } %>
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group row">
+												<label for="example-text-input" class="col-3 col-form-label">Assign
+													Manager</label>
+												<div class="col-6">
+													<select name="employee_id" id="admin_id" class="form-control">
+														<%
+															for(BuilderEmployee builderEmployee :builderEmployees) {
+														%>
+														<option value="<%out.print(builderEmployee.getId());%>" <% if(buyers.get(0).getBuilderEmployee().getId() == builderEmployee.getId()) { %>selected<% } %>>
+															<%
+																out.print(builderEmployee.getName());
+															%>
+														</option>
+														<%
+															}
+														%>
+													</select>
+												</div>
+											</div>
+
+											<div class="offset-sm-5 col-sm-7">
+												<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="updateBuyerFlat();" >SAVE</button>
+												<button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next1" onclick="show1();">Next</button>
+											</div>
+										</form>
+										</div>
+
+										<div id="vimessages2" class="tab-pane" aria-expanded="false">
+										<form id="addbuyingdetail" name="addbuyingdetail" action="" method="post" enctype="multipart/form-data">
 											<%
 												SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
 											%>
-											<div class="col-lg-6">
-												<div class="form-group" id="error-base_unit">
-													<label class="control-label col-sm-4">Booking Date <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-															<input type="text" class="form-control" id="booking_date" name="booking_date" value="<% //if(builderProject.getLaunchDate() != null) { out.print(dt1.format(builderProject.getLaunchDate()));} %>"/>
+											<input type="hidden" name="id" id="id" value="<%out.print(buyingDetails.getId());%>" />
+											<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
+											<div class="col-12">
+
+												<div class="form-group row">
+													<label for="example-text-input" class="col-3 col-form-label">Booking Date</label>
+													<div class="col-3">
+														<input type="text" class="form-control" id="booking_date" name="booking_date" value="<% out.print(dt1.format(buyingDetails.getBookingDate())); %>" />
+													</div>
+													<label for="example-text-input" class="col-3 col-form-label">Base Rate</label>
+													<div class="col-3">
+														<input type="text" class="form-control" id="base_rate" name="base_rate" value="<% out.print(buyingDetails.getBaseRate()); %>"/>
 													</div>
 												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-base_rate">
-													<label class="control-label col-sm-4">Base Rate <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="base_rate" name="base_rate" />
+
+												<div class="form-group row">
+													<label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate</label>
+													<div class="col-3">
+														<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<% out.print(buyingDetails.getFloorRiseRate()); %>"/>
 													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-rise_rate">
-													<label class="control-label col-sm-4">Floor Rise Rate</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="rise_rate" name="rise_rate"/>
+													<label for="example-search-input"
+														class="col-3 col-form-label">Aminities Facing Rise Rates</label>
+													<div class="col-3">
+														<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<% out.print(buyingDetails.getAmenityFacingRate()); %>"/>
 													</div>
-													<div class="messageContainer"></div>
 												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-amenity_rate">
-													<label class="control-label col-sm-4">Amenities Facing Rate</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" />
+
+												<div class="form-group row">
+													<label for="example-tel-input" class="col-3 col-form-label">Parking Rates</label>
+													<div class="col-3">
+														<input type="text" class="form-control" id="parking" name="parking" value="<% out.print(buyingDetails.getParkingRate()); %>" />
 													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-maintenance">
-													<label class="control-label col-sm-4">Maintenance Charge </label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="maintenance" name="maintenance" "/>
+													<label for="example-tel-input" class="col-3 col-form-label">Maintance</label>
+													<div class="col-3">
+														<input type="text" class="form-control" id="maintenance" name="maintenance" value="<% out.print(buyingDetails.getMaintenance()); %>" />
 													</div>
-													<div class="messageContainer"></div>
 												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-tenure">
-													<label class="control-label col-sm-4">Tenure </label>
-													<div class="col-sm-8 input-group" style="padding: 0px 12px;">
-														<input type="text" class="form-control" id="tenure" name="tenure" "/>
-														<span class="input-group-addon">Months</span>
+
+												<div class="form-group row">
+													<label for="example-tel-input" class="col-3 col-form-label">Stamp Duty</label>
+													<div class="col-3">
+														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% out.print(buyingDetails.getStampDuty()); %>" />
 													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-amenity_rate">
-													<label class="control-label col-sm-4">Registration</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="registration" name="registration" />
+													<label for="example-tel-input" class="col-3 col-form-label">Taxes</label>
+													<div class="col-3">
+														<input type="text" class="form-control" id="tax" name="tax" value="<% out.print(buyingDetails.getTaxes()); %>"/>
 													</div>
-													<div class="messageContainer"></div>
 												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Parking </label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="parking" name="parking" />
+
+												<div class="form-group row">
+													<label for="example-search-input"
+														class="col-3 col-form-label">VAT</label>
+													<div class="col-3">
+														<input type="text" class="form-control" id="vat" name="vat" value="<% out.print(buyingDetails.getVat()); %>" />
 													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Stamp Duty </label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" />
+													<label for="example-search-input"
+														class="col-3 col-form-label">Tenure</label>
+													<div class="col-3 input-group">
+														<input type="text" class="form-control" id="tenure" name="tenure" value="<% out.print(buyingDetails.getTenure()); %>"/> <span class="input-group-addon">Months</span>
 													</div>
-													<div class="messageContainer"></div>
 												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-tax">
-													<label class="control-label col-sm-4">Tax</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="tax" name="tax" />
+												<div class="form-group row">
+													<label for="example-search-input"
+														class="col-3 col-form-label">Registration Charges</label>
+													<div class="col-3">
+														<input class="form-control" type="text" id="registration" name="registration" value="<% out.print(buyingDetails.getRegistration()); %>" />
 													</div>
-													<div class="messageContainer"></div>
 												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-vat">
-													<label class="control-label col-sm-4">VAT </label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="vat" name="vat" />
-													</div>
-													<div class="messageContainer"></div>
+												<% if(buyeroffersize <= 0) {%>
+												<div class="form-group row">
+													<button type="button" class="col-2" onclick="showOffers()">+ADD offers</button>
 												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="col-sm-12">
-													<button type="submit" class="btn btn-success btn-sm" id="pricebtn">SAVE</button>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div id="payment" class="tab-pane fade">
-					<form id="paymentfrm" name="paymentfrm" method="post">
-						<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(buyerPaymentsList.size()+1);%>"/>
-			 			<div class="row">
-			 				<div id="paymentresponse"></div>
-							<div class="col-lg-12">
-								<div class="panel panel-default">
-									<div class="panel-body">
-										<div id="payment_schedule">
-											<% 	int i = 1;
-												for(BuyerPayment buyerPayment :buyerPaymentsList) { 
-											%>
-											<div class="row" id="schedule-<% out.print(i); %>">
-												<% if(i > 1) { %>
-												<hr/>
+												<% } else { %>
+												<hr>
 												<% } %>
-												<div class="col-lg-5 margin-bottom-5">
-													<div class="form-group" id="error-schedule">
-														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% if(buyerPayment.getMilestone() != null) { out.print(buyerPayment.getMilestone());}%>"/>
+												<div id="displayoffers" style="display: <% if(buyeroffersize > 0) {%>block<% } else { %>none<% } %>;">
+													<div class="offset-sm-11 col-sm-7">
+														<i class="fa fa-times"></i>
+													</div>
+													<div class="form-group row">
+														<label for="example-search-input"
+															class="col-2 col-form-label">Offer Title*</label>
+														<div class="col-2">
+															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% if(buyeroffersize > 0) { out.print(buyerOffers.get(0).getTitle()); }%>" />
 														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-payable">
-														<label class="control-label col-sm-8">% of Net Payable </label>
-														<div class="col-sm-4">
-															<input type="text" class="form-control" id="payable" name="payable[]" value="<% if(buyerPayment.getNetPayable() != null) { out.print(buyerPayment.getNetPayable());}%>"/>
+														<label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>
+														<div class="col-2">
+															<input type="text" class="form-control" id="discount" name="discount[]" value="<% if(buyeroffersize > 0) { out.print(buyerOffers.get(0).getOfferPercentage()); }%>" />
 														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-amount">
-														<label class="control-label col-sm-6">Amount </label>
-														<div class="col-sm-6">
-															<input type="text" class="form-control" id="amount" name="amount[]" value="<% if(buyerPayment.getAmount() != null) { out.print(buyerPayment.getAmount());}%>"/>
+														<label for="example-search-input"
+															class="col-2 col-form-label">Discount Amount</label>
+														<div class="col-2">
+															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% if(buyeroffersize > 0) { out.print(buyerOffers.get(0).getOfferAmount()); }%>" />
 														</div>
-														<div class="messageContainer"></div>
 													</div>
-												</div>
-												<div class="col-lg-1">
-													<span><a href="javascript:removeSchedule(<% out.print(i); %>);" class="btn btn-danger btn-xs">x</a></span>
-												</div>
-											</div>
-											<% i++; } %>
-											<div class="row" id="schedule-<% out.print(i);%>">
-												<% if(i > 1) { %>
-												<hr/>
-												<% } %>
-												<div class="col-lg-5 margin-bottom-5">
-													<div class="form-group" id="error-schedule">
-														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>
+													<div class="form-group row">
+														<label for="example-search-input" class="col-2 col-form-label">Description</label>
+														<div class="col-2">
+															<textarea class="form-control" id="description" class="description"></textarea>
 														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-payable">
-														<label class="control-label col-sm-8">% of Net Payable </label>
-														<div class="col-sm-4">
-															<input type="text" class="form-control" id="payable" name="payable[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-amount">
-														<label class="control-label col-sm-6">Amount </label>
-														<div class="col-sm-6">
-															<input type="text" class="form-control" id="amount" name="amount[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-1">
-													<span><a href="javascript:removeSchedule(<% out.print(i);%>);" class="btn btn-danger btn-xs">x</a></span>
-												</div>
-											</div>
-										</div>
-										<div>
-											<div class="col-lg-12">
-												<span class="pull-right">
-													<a href="javascript:addMoreSchedule();" class="btn btn-info btn-xs">+ Add More Schedule</a>
-												</span>
-											</div>
-										</div>
-										<div>
-											<div class="row">
-												<div class="col-lg-12">
-													<div class="col-sm-12">
-														<button type="button" class="btn btn-success btn-sm" id="paymentbtn">SAVE</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div id="offer" class="tab-pane fade">
-					<form id="offerfrm" name="offerfrm" method="post">
-						<input type="hidden" name="offer_count" id="offer_count" value="<%out.print(buyerOffersList.size()+1); %>"/>
-			 			<div class="row">
-							<div class="col-lg-12">
-								<div class="panel panel-default">
-									<div class="panel-body">
-										<div id="offer_area">
-											<% 	int j = 1;
-												for(BuyerOffer buyerOffer :buyerOffersList) { 
-											%>
-											<div class="row" id="offer-<% out.print(j);%>">
-												<div class="col-lg-12" style="padding-bottom:5px;">
-													<span class="pull-right"><a href="javascript:removeOffer(<% out.print(j);%>);" class="btn btn-danger btn-xs">x</a></span>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-offer_title">
-														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% if(buyerOffer.getTitle() != null) { out.print(buyerOffer.getTitle());}%>"/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-discount">
-														<label class="control-label col-sm-4">Offer Discount(%) <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="discount" name="discount[]" value="<% if(buyerOffer.getOfferPercentage() != null) { out.print(buyerOffer.getOfferPercentage());}%>"/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-discount_amount">
-														<label class="control-label col-sm-4">Offer Discount Amount </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% if(buyerOffer.getOfferPercentage() != null) { out.print(buyerOffer.getOfferAmount());}%>"/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-applicable_on">
-														<label class="control-label col-sm-4">Applicable on </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="applicable_on" name="applicable_on[]" value="<% if(buyerOffer.getApplicable() != null) { out.print(buyerOffer.getApplicable());}%>"/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-apply">
-														<label class="control-label col-sm-4">Apply </label>
-														<div class="col-sm-8">
-															<select class="form-control" id="apply" name="apply[]">
-																<option value="1" <% if(buyerOffer.getApplicable() == 1) { %>selected<% } %>>Yes</option>
-																<option value="0" <% if(buyerOffer.getApplicable() == 0) { %>selected<% } %>>No</option>
+														<label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
+														<div class="col-2">
+															<select class="form-control" id="applicable" name="applicable_on[]">
+																<option value="1" <% if(buyeroffersize > 0) { if(buyerOffers.get(0).getApplicable() == 1) { out.print("selected"); }}%>>Percentage</option>
+																<option value="2" <% if(buyeroffersize > 0) { if(buyerOffers.get(0).getApplicable() == 2) { out.print("selected"); }}%>>Discount</option>
 															</select>
 														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-											</div>
-											<% j++; } %>
-											<div class="row" id="offer-<% out.print(j);%>">
-												<% if(j > 1) { %>
-												<hr/>
-												<% } %>
-												<div class="col-lg-12" style="padding-bottom:5px;">
-													<span class="pull-right"><a href="javascript:removeOffer(<% out.print(j);%>);" class="btn btn-danger btn-xs">x</a></span>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-offer_title">
-														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-discount">
-														<label class="control-label col-sm-4">Offer Discount(%) <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="discount" name="discount[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-discount_amount">
-														<label class="control-label col-sm-4">Offer Discount Amount </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-applicable_on">
-														<label class="control-label col-sm-4">Applicable on </label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="applicable_on" name="applicable_on[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-6 margin-bottom-5">
-													<div class="form-group" id="error-apply">
-														<label class="control-label col-sm-4">Apply </label>
-														<div class="col-sm-8">
-															<select class="form-control" id="apply" name="apply[]">
-																<option value="1" >Yes</option>
-																<option value="0" >No</option>
+														<label for="example-search-input" class="col-2 col-form-label">Status</label>
+														<div class="col-2">
+															<select class="form-control" id="status" name="apply[]">
+																<option value="1" <% if(buyeroffersize > 0) { if(buyerOffers.get(0).getStatus() == 1) { out.print("selected"); }}%>>Active</option>
+																<option value="0" <% if(buyeroffersize > 0) { if(buyerOffers.get(0).getStatus() == 0) { out.print("selected"); }}%>>Inactive</option>
 															</select>
 														</div>
-														<div class="messageContainer"></div>
 													</div>
 												</div>
-											</div>
-										</div>
-										<div>
-											<div class="col-lg-12">
-												<span class="pull-right">
-													<a href="javascript:addMoreOffer();" class="btn btn-info btn-xs">+ Add More Offers</a>
-												</span>
-											</div>
-										</div>
-										<div>
-											<div class="row">
-												<div class="col-lg-12">
-													<div class="col-sm-12">
-														<button type="button" class="btn btn-success btn-sm" id="offerbtn">SAVE</button>
-													</div>
+												<div class="offset-sm-5 col-sm-7">
+													<button type="submit" class="btn btn-info waves-effect waves-light m-t-10" >SAVE</button>
+													<button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next2" onclick="show2();">Next</button>
 												</div>
 											</div>
+										</form>
+										</div>
+
+										<div id="vimessages3" class="tab-pane" aria-expanded="true">
+										<form id="addbuyerpayment" name="addbuyerpayment" action="" method="post" enctype="multipart/form-data">
+											<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
+											<% if(buyerPayments.size() > 0) { %>
+											<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(buyerPayments.size()); %>" />
+											<% for(BuyerPayment buyerPayment :buyerPayments) { %>
+											<input type="hidden" name="payment_id[]" id="payment_id" value="<%out.print(buyerPayment.getId());%>" />
+											<div class="form-group row">
+												<label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
+												<div class="col-2">
+													<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% out.print(buyerPayment.getMilestone());%>" />
+												</div>
+												<label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
+												<div class="col-2">
+													<input type="text" class="form-control" id="payable" name="payable[]" value="<% out.print(buyerPayment.getNetPayable());%>" />
+												</div>
+												<label for="example-search-input" class="col-1 col-form-label">Amount</label>
+												<div class="col-2">
+													<input type="text" class="form-control" id="amount" name="amount[]" value="<% out.print(buyerPayment.getAmount());%>" />
+												</div>
+												<i class="fa fa-times"></i>
+											</div>
+											<% } %>
+											<% } else { %>
+											<input type="hidden" name="schedule_count" id="schedule_count" value="1" />
+											<div class="form-group row">
+												<label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
+												<div class="col-2">
+													<input type="text" class="form-control" id="schedule" name="schedule[]" value="" />
+												</div>
+												<label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
+												<div class="col-2">
+													<input type="text" class="form-control" id="payable" name="payable[]" value="" />
+												</div>
+												<label for="example-search-input" class="col-1 col-form-label">Amount</label>
+												<div class="col-2">
+													<input type="text" class="form-control" id="amount" name="amount[]" value="" />
+												</div>
+												<i class="fa fa-times"></i>
+											</div>
+											<% } %>
+
+											<div class="offset-sm-9 col-sm-7">
+												<a href="javascript:addMoreSchedule();">
+													<button type="button" class="">+ Add More Schedules</button>
+												</a>
+											</div>
+											<div class="offset-sm-5 col-sm-7">
+												<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="updateBuyerPayments();">SAVE</button>
+												<button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next3" onclick="show3();">Next</button>
+											</div>
+										</form>
+										</div>
+										<div id="vimessages4" class="tab-pane" aria-expanded="true">
+										<form id="addbuyerdocs" name="addbuyerdocs" action="" method="post" enctype="multipart/form-data">
+											<div class="form-group row">
+												<input type="hidden" name="doc_name[]" value="Agreement" />
+												<label for="example-text-input" class="col-6 col-form-label">Agreement*</label>
+
+												<div class="col-2">
+													<input type="file" class="form-control" name="doc_url[]" />
+													<!-- <i class="fa fa-upload" aria-hidden="true"></i>-->
+												</div>
+												<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
+												<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
+											</div>
+											<div class="form-group row">
+												<input type="hidden" name="doc_name[]" value="Index 2" /> <label
+													for="example-text-input" class="col-6 col-form-label">Index
+													2*</label>
+
+												<div class="col-2">
+													<input type="file" class="form-control" name="doc_url[]" />
+													<!-- <i class="fa fa-upload" aria-hidden="true"></i>-->
+												</div>
+												<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
+												<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
+											</div>
+											<div class="form-group row">
+												<input type="hidden" name="doc_name[]"
+													value="Receipts with Date and time and Name" /> <label
+													for="example-text-input" class="col-6 col-form-label">Receipts
+													with Date & Time & Name</label>
+												<div class="col-2">
+													<input type="file" class="form-control" name="doc_url[]" />
+													<!-- <i class="fa fa-upload" aria-hidden="true"></i>-->
+												</div>
+												<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
+												<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
+											</div>
+											<div class="form-group row">
+												<input type="hidden" name="doc_name[]"
+													value="Electrical and Plumbing lines map" /> <label
+													for="example-text-input" class="col-6 col-form-label">Electricals
+													& Plumbing lines map</label>
+
+												<div class="col-2">
+													<input type="file" class="form-control" name="doc_url[]" />
+													<!-- <i class="fa fa-upload" aria-hidden="true"></i>-->
+												</div>
+												<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
+												<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
+											</div>
+											<div class="form-group row">
+												<input type="hidden" name="doc_name[]"
+													value="Possession grant letter" /> <label
+													for="example-text-input" class="col-6 col-form-label">Possession
+													grant letter</label>
+
+												<div class="col-2">
+													<input type="file" class="form-control" name="doc_url[]" />
+													<!-- <i class="fa fa-upload" aria-hidden="true"></i>-->
+												</div>
+												<!--                                       <div class="col-2"><i class="fa fa-upload" aria-hidden="true"></i></div> -->
+												<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
+												<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
+											</div>
+											<div class="form-group row">
+												<label for="example-text-input" class="col-6 col-form-label">Other
+													Documents</label>
+
+												<div class="col-2">
+													<input type="text" name="doc_name[]" class="form-control"
+														value="" placeholder="Enter Document Name" />
+												</div>
+												<div class="col-2">
+													<input type="file" class="form-control" name="doc_url[]" />
+													<!-- <i class="fa fa-upload" aria-hidden="true">-->
+												</div>
+
+											</div>
+
+											<div class="offset-sm-5 col-sm-7">
+												<button type="button"
+													class="btn btn-info waves-effect waves-light m-t-10"
+													onclick="previous4();">Previous</button>
+												<button type="submit"
+													class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+											</div>
+										</form>
 										</div>
 									</div>
-								</div>
 							</div>
+
 						</div>
-					</form>
+					</div>
 				</div>
+
 			</div>
-			<br> <br>
+			<!-- /.container-fluid -->
+			<div id="sidebar1">
+				<%@include file="../partial/footer.jsp"%>
+			</div>
+
 		</div>
+		<!-- /#page-wrapper -->
+
+		<!-- /#wrapper -->
 	</div>
-</div>
-<%@include file="../../footer.jsp"%>
-<!-- inline scripts related to this page -->
-<style>
-	.row {
-		margin-bottom:5px;
-	}
-	.margin-bottom-5 {
-		padding-bottom:5px;
-	}
-</style>
-<script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
-<script src="${baseUrl}/js/jquery.form.js"></script>
-<script>
-$('#launch_date').datepicker({
-	format: "dd MM yyyy"
-});
-$("#project_id").change(function(){
-	if($("#project_id").val() != "") {
-		$.get("${baseUrl}/webapi/buyer/building/list/",{ project_id: $("#project_id").val() }, function(data){
-			var html = '<option value="">Select Building</option>';
-			$(data).each(function(index){
-				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-			});
-			$("#building_id").html(html);
-		},'json');
-	}
-});
-
-$("#building_id").change(function(){
-	$.get("${baseUrl}/webapi/buyer/floor/list/",{ building_id: $("#building_id").val() }, function(data){
-		var html = '<option value="">Select Floor</option>';
-		$(data).each(function(index){
-			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-		});
-		$("#floor_id").html(html);
-	},'json');
-});
-$("#floor_id").change(function(){
-	$.get("${baseUrl}/webapi/buyer/flat/list/",{ floor_id: $("#floor_id").val() }, function(data){
-		var html = '<option value="">Select Flat</option>';
-		$(data).each(function(index){
-			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-		});
-		$("#flat_id").html(html);
-	},'json');
-});
-$('#basicfrm').bootstrapValidator({
-	container: function($field, validator) {
-		return $field.parent().next('.messageContainer');
-   	},
-    feedbackIcons: {
-        validating: 'glyphicon glyphicon-refresh'
-    },
-    excluded: ':disabled',
-    fields: {
-    	builder_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Builder Group is required and cannot be empty'
-                }
-            }
-        },
-    	company_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Company Name is required and cannot be empty'
-                }
-            }
-        },
-        name: {
-            validators: {
-                notEmpty: {
-                    message: 'Project Name is required and cannot be empty'
-                }
-            }
-        },
-        country_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Country Name is required and cannot be empty'
-                }
-            }
-        },
-        state_id: {
-            validators: {
-                notEmpty: {
-                    message: 'State Name is required and cannot be empty'
-                }
-            }
-        },
-        city_id: {
-            validators: {
-                notEmpty: {
-                    message: 'City Name is required and cannot be empty'
-                }
-            }
-        },
-        locality_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Locality Name is required and cannot be empty'
-                }
-            }
-        },
-        pincode: {
-            validators: {
-                notEmpty: {
-                    message: 'The Pincode is required and cannot be empty'
-                },
-                stringLength: {
-                    max: 6,
-                    min: 6,
-                    message: 'Invalid pin code.'
-                },
-                integer: {
-                    message: 'Invalid pin code.'
-           		}
-            }
-        },
-    }
-}).on('success.form.bv', function(event,data) {
-	// Prevent form submission
-	event.preventDefault();
-	updateProject();
-});
-
-function updateProject() {
-	var options = {
-	 		target : '#basicresponse', 
-	 		beforeSubmit : showAddRequest,
-	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/project/basic/update',
-	 		semantic : true,
-	 		dataType : 'json'
-	 	};
-   	$('#basicfrm').ajaxSubmit(options);
-}
-
-function showAddRequest(formData, jqForm, options){
-	$("#basicresponse").hide();
-   	var queryString = $.param(formData);
-	return true;
-}
-
-function showAddResponse(resp, statusText, xhr, $form){
-	if(resp.status == '0') {
-		$("#basicresponse").removeClass('alert-success');
-       	$("#basicresponse").addClass('alert-danger');
-		$("#basicresponse").html(resp.message);
-		$("#basicresponse").show();
-  	} else {
-  		$("#basicresponse").removeClass('alert-danger');
-        $("#basicresponse").addClass('alert-success');
-        $("#basicresponse").html(resp.message);
-        $("#basicresponse").show();
-        alert(resp.message);
-  	}
-}
-
-$('#pricingfrm').bootstrapValidator({
-	container: function($field, validator) {
-		return $field.parent().next('.messageContainer');
-   	},
-    feedbackIcons: {
-        validating: 'glyphicon glyphicon-refresh'
-    },
-    excluded: ':disabled',
-    fields: {
-    	base_rate: {
-    		validators: {
-                notEmpty: {
-                    message: 'Base Rate is required and cannot be empty'
-                },
-                numeric: {
-                 	message: 'Base Rate is invalid',
-                    thousandsSeparator: '',
-                    decimalSeparator: '.'
-              	}
-            }
-        },
-        base_unit: {
-    		validators: {
-                notEmpty: {
-                    message: 'Pricing Unit is required and cannot be empty'
-                },
-            }
-        },
-    }
-}).on('success.form.bv', function(event,data) {
-	// Prevent form submission
-	event.preventDefault();
-	updateProjectPrice();
-});
-
-function updateProjectPrice() {
-	var options = {
-	 		target : '#pricingresponse', 
-	 		beforeSubmit : showPriceRequest,
-	 		success :  showPriceResponse,
-	 		url : '${baseUrl}/webapi/project/price/update',
-	 		semantic : true,
-	 		dataType : 'json'
-	 	};
-   	$('#pricingfrm').ajaxSubmit(options);
-}
-
-function showPriceRequest(formData, jqForm, options){
-	$("#pricingresponse").hide();
-   	var queryString = $.param(formData);
-	return true;
-}
-
-function showPriceResponse(resp, statusText, xhr, $form){
-	if(resp.status == '0') {
-		$("#pricingresponse").removeClass('alert-success');
-       	$("#pricingresponse").addClass('alert-danger');
-		$("#pricingresponse").html(resp.message);
-		$("#pricingresponse").show();
-  	} else {
-  		$("#pricingresponse").removeClass('alert-danger');
-        $("#pricingresponse").addClass('alert-success');
-        $("#pricingresponse").html(resp.message);
-        $("#pricingresponse").show();
-        alert(resp.message);
-  	}
-}
-
-$("#detailbtn").click(function(){
-	var projectType = [];
-	var propertyType = [];
-	var configuration = [];
-	var amenityType = [];
-	var approvalType = [];
-	var homeLoanInfo = [];
-	var project = {id:$("#id").val(),projectArea:$("#project_area").val(),areaUnit:{id:$("#area_unit").val()},launchDate:new Date($("#launch_date").val())};
-	$('input[name="project_type[]"]:checked').each(function() {
-		projectType.push({builderProjectType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="property_type[]"]:checked').each(function() {
-		val = $("#property_type"+$(this).val()).val();
-		propertyType.push({value:val,builderPropertyType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="configuration[]"]:checked').each(function() {
-		configuration.push({builderProjectPropertyConfiguration:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="amenity_type[]"]:checked').each(function() {
-		amenityType.push({builderProjectAmenity:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="approval_type[]"]:checked').each(function() {
-		approvalType.push({builderProjectApprovalType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	$('input[name="homeloan_bank[]"]:checked').each(function() {
-		homeLoanInfo.push({homeLoanBanks:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-	});
-	var final_data = {builderProject:project,builderProjectProjectTypes:projectType,builderProjectPropertyTypes:propertyType,builderProjectPropertyConfigurationInfos:configuration,builderProjectAmenityInfos:amenityType,builderProjectApprovalInfos:approvalType,builderProjectBankInfos:homeLoanInfo}
-	$.ajax({
-	    url: '${baseUrl}/webapi/project/detail/update',
-	    type: 'POST',
-	    data: JSON.stringify(final_data),
-	    contentType: 'application/json; charset=utf-8',
-	    dataType: 'json',
-	    async: false,
-	    success: function(data) {
-			if (data.status == 0) {
-				alert(data.message);
-			} else {
-				alert(data.message);
-			}
-		},
-		error : function(data)
-		{
-			alert("Fail to save data");
-		}
-		
-	});
-});
-
-$("#paymentbtn").click(function(){
-	var paymentInfo = [];
-	var payable = [];
-	var amount = [];
-	$('input[name="payable[]"]').each(function(index) {
-		payable.push($(this).val());
-	});
-	$('input[name="amount[]"]').each(function(index) {
-		amount.push($(this).val());
-	});
-	$('input[name="schedule[]"]').each(function(index) {
-		if($(this).val() != "") {
-			paymentInfo.push({schedule:$(this).val(),payable:payable[index],amount:amount[index],status:1,builderProject:{id:$("#id").val()}});
-		}
-	});
-	var project = {id:$("#id").val()};
-	var final_data = {builderProjectPaymentInfos:paymentInfo,builderProject:project}
-	if(paymentInfo.length > 0) {
-		$.ajax({
-		    url: '${baseUrl}/webapi/project/payment/update',
-		    type: 'POST',
-		    data: JSON.stringify(final_data),
-		    contentType: 'application/json; charset=utf-8',
-		    dataType: 'json',
-		    async: false,
-		    success: function(data) {
-				if (data.status == 0) {
-					alert(data.message);
-				} else {
-					alert(data.message);
-				}
-			},
-			error : function(data)
-			{
-				alert("Fail to save data");
-			}
-			
-		});
-	} else {
-		alert("Please enter payment schedule details");
-	}
-});
-
-$("#offerbtn").click(function(){
-	var offerInfo = [];
-	var discount = [];
-	var amount = [];
-	var applicable = [];
-	var apply = [];
-	$('input[name="discount[]"]').each(function(index) {
-		discount.push($(this).val());
-	});
-	$('input[name="discount_amount[]"]').each(function(index) {
-		amount.push($(this).val());
-	});
-	$('input[name="applicable_on[]"]').each(function(index) {
-		applicable.push($(this).val());
-	});
-	$('select[name="apply[]"] option:selected').each(function(index) {
-		apply.push($(this).val());
-	});
-	$('input[name="offer_title[]"]').each(function(index) {
-		if($(this).val() != "") {
-			offerInfo.push({title:$(this).val(),per:discount[index],amount:amount[index],applicable:applicable[index],apply:apply[index],builderProject:{id:$("#id").val()}});
-		}
-	});
-	var project = {id:$("#id").val()};
-	var final_data = {builderProjectOfferInfos:offerInfo,builderProject:project}
-	if(offerInfo.length > 0) {
-		$.ajax({
-		    url: '${baseUrl}/webapi/project/offer/update',
-		    type: 'POST',
-		    data: JSON.stringify(final_data),
-		    contentType: 'application/json; charset=utf-8',
-		    dataType: 'json',
-		    async: false,
-		    success: function(data) {
-				if (data.status == 0) {
-					alert(data.message);
-				} else {
-					alert(data.message);
-				}
-			},
-			error : function(data)
-			{
-				alert("Fail to save data");
-			}
-			
-		});
-	} else {
-		alert("Please enter offer details");
-	}
-});
-function addMoreBuyers() {
-	var buyers = parseInt($("#buyer_count").val());
-	buyers++;
-	var html = '<div class="row" id="buyer-'+buyers+'"><hr>'
-		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeBuyer('+buyers+');" class="btn btn-danger btn-xs">x</a></span></div>'
-			+'<div class="row">'
-		+'<div class="col-lg-5 margin-bottom-5">'
-			+'<div class="form-group" id="error-buyer_name">'
-			+'<label class="control-label col-sm-4">Buyer Name <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="buyer_name" name="buyer_name[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
-		+'</div>'
-		+'<div class="col-lg-5 margin-bottom-6">'
-			+'<div class="form-group" id="error-contact">'
-				+'<label class="control-label col-sm-4">Contact <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="contact" name="contact[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
-		+'</div>'
-	+'</div>'
-	+'<div class="row">'
-		+'<div class="col-lg-5 margin-bottom-6">'
-			+'<div class="form-group" id="error-email">'
-				+'<label class="control-label col-sm-4">Email <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="email" name="email[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div><br/>'
-			+'</div>'
-		+'</div>'
-		+'<div class="col-lg-5 margin-bottom-6">'
-			+'<div class="form-group" id="error-email">'
-				+'<label class="control-label col-sm-4">PAN <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="pan" name="pan[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
-		+'</div>'
-	+'</div>'
-	+'<div class="row">'
-		+'<div class="col-lg-5 margin-bottom-5">'
-			+'<div class="form-group" id="error-applicable_on">'
-			+'<label class="control-label col-sm-4"> Prem. Address <span class="text-danger">*</span></label>'
-			+'<div class="col-sm-8">'
-			+'<textarea class="form-control" id="address" name="address[]" ></textarea>'
-			+'</div>'
-			+'<div class="messageContainer"></div>'
-			+'</div>'
-		+'</div>'
-		+'<div class="col-lg-5 margin-bottom-6">'
-			+'<div class="form-group" id="error-state_id">'
-				+'<label class="control-label col-sm-4">Owner <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-					+'<select name="is_primary[]" id="is_primary" class="form-control">'
-	                    +'<option value="">Select Owner</option>'
-	                     +'<option value="0">Co-Owner</option>'
-	                      +'<option value="1">Owner</option>'
-		          	+'</select>'
-				+'</div>'
-				+'<div class="messageContainer col-sm-4"></div>'
-			+'</div>'
-		+'</div>'
-	+'</div>'
-	+'<hr>'
-	+'<div class="col-lg-12 margin-bottom-6">'
-			+'<div class="form-group" id="error-project_type">'
-				+'<label class="control-label col-sm-2">Documents <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-10">'
-					+'<div class="col-sm-4">'
-						+'<input type="checkbox" name="document_type[]" value="1" />PAN Card'
-					+'</div>'
-					+'<div class="col-sm-4">'
-						+'<input type="checkbox" name="document_type[]" value="2" />Aadhar Card' 
-					+'</div>'
-					+'<div class="col-sm-4">'
-						+'<input type="checkbox" name="document_type[]" value="3" />Passport' 
-					+'</div>'
-					+'<div class="col-sm-4">'
-						+'<input type="checkbox" name="document_type[]" value="4" />Registered Rent Agreement' 
-					+'</div>'
-					+'<div class="col-sm-4">'
-						+'<input type="checkbox" name="document_type[]" value="5" />Vote ID' 
-					+'</div>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
-		+'</div>'
-	+'</div>'
-	+'</div>'
-	+'</div>';
-	$("#buyer_area").append(html);
-	$("#buyer_count").val(buyers);
-}
-function removeBuyer(id) {
-	$("#buyer-"+id).remove();
-}
-function deleteImage(id) {
-	var flag = confirm("Are you sure ? You want to delete plan ?");
-	if(flag) {
-		$.get("${baseUrl}/webapi/project/buyer/"+id, { }, function(data){
-			alert(data.message);
-			if(data.status == 1) {
-				$("#b_image"+id).remove();
-			}
-		},'json');
-	}
-}
-
-function addMoreSchedule() {
-	var schedule_count = parseInt($("#schedule_count").val());
-	schedule_count++;
-	var html = '<div class="row" id="schedule-'+schedule_count+'">'
-				+'<hr/>'
-				+'<div class="col-lg-5 margin-bottom-5">'
-				+'<div class="form-group" id="error-schedule">'
-				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-				+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-payable">'
-				+'<label class="control-label col-sm-8">% of Net Payable </label>'
-				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control" id="payable" name="payable[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-amount">'
-				+'<label class="control-label col-sm-6">Amount </label>'
-				+'<div class="col-sm-6">'
-				+'<input type="text" class="form-control" id="amount" name="amount[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-1">'
-				+'<span><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span>'
-				+'</div>'
-			+'</div>';
-	$("#payment_schedule").append(html);
-	$("#schedule_count").val(schedule_count);
-}
-function removeSchedule(id) {
-	$("#schedule-"+id).remove();
-}
-
-</script>
 </body>
 </html>
+<script type="text/javascript">
+	function showOffers() {
+		$("#displayoffers").show();
+	}
+
+	$('#booking_date').datepicker({
+		format : "dd MM yyyy"
+	});
+
+	$("#project_id").change(
+			function() {
+				$.get("${baseUrl}/webapi/buyer/buildings/names/"
+						+ $("#project_id").val(), {}, function(data) {
+					var html = '<option value="0">Select Building</option>';
+					$(data).each(
+							function(index) {
+
+								html = html
+										+ '<option value="'+data[index].id+'">'
+										+ data[index].name + '</option>';
+							});
+					$("#building_id").html(html);
+				}, 'json');
+			});
+	$("#building_id").change(
+			function() {
+				$.get("${baseUrl}/webapi/buyer/building/available/flat/names/"
+						+ $("#building_id").val(), {}, function(data) {
+					var html = '<option value="0">Select Flat</option>';
+					$(data).each(
+							function(index) {
+
+								html = html
+										+ '<option value="'+data[index].id+'">'
+										+ data[index].name + '</option>';
+							});
+					$("#flat_id").html(html);
+				}, 'json');
+			});
+	$('#addbuyer').bootstrapValidator({
+		container: function($field, validator) {
+			return $field.parent().next('.messageContainer');
+	   	},
+	    feedbackIcons: {
+	        validating: 'glyphicon glyphicon-refresh'
+	    },
+	    excluded: ':disabled',
+	    fields: {
+	    	project_id: {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Project Name is required and cannot be empty'
+	                }
+	            }
+	        },
+	    	building_id: {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Building Name is required and cannot be empty'
+	                }
+	            }
+	        },
+	        flat_id: {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Flat Name is required and cannot be empty'
+	                }
+	            }
+	        },
+	        'buyer_name[]': {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Buyer Name is required and cannot be empty'
+	                }
+	            }
+	        },
+	        'contact[]': {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Buyer contact is required and cannot be empty'
+	                }
+	            }
+	        },
+	        'email[]': {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Buyer Email is required and cannot be empty'
+	                }
+	            }
+	        },
+	        'pan[]': {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Pancard is required and cannot be empty'
+	                }
+	            }
+	        },
+	        'address[]': {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Permanent address is required and cannot be empty'
+	                }
+	            }
+	        },
+	    }
+	}).on('success.form.bv', function(event,data) {
+		// Prevent form submission
+		event.preventDefault();
+		updateBuyer();
+	});
+
+	function updateBuyer() {
+		var doc_pan = "";
+		$('input[name="document_pan[]"]').each(function(index) {
+			if(doc_pan == "") {
+				if($(this).is(':checked')) {
+					doc_pan = $(this).val();
+				} else {
+					doc_pan = "0";
+				}
+			} else {
+				if($(this).is(':checked')) {
+					doc_pan = doc_pan + ","+$(this).val();
+				} else {
+					doc_pan = doc_pan + ",0";
+				}
+			}
+		});
+		$("#doc_pan").val(doc_pan);
+		var doc_aadhar = "";
+		$('input[name="document_aadhar[]"]').each(function(index) {
+			if(doc_aadhar == "") {
+				if($(this).is(':checked')) {
+					doc_aadhar = $(this).val();
+				} else {
+					doc_aadhar = "0";
+				}
+			} else {
+				if($(this).is(':checked')) {
+					doc_aadhar = doc_aadhar + ","+$(this).val();
+				} else {
+					doc_aadhar = doc_aadhar + ",0";
+				}
+			}
+		});
+		$("#doc_aadhar").val(doc_aadhar);
+		
+		var doc_passport = "";
+		$('input[name="document_passport[]"]').each(function(index) {
+			if(doc_passport == "") {
+				if($(this).is(':checked')) {
+					doc_passport = $(this).val();
+				} else {
+					doc_passport = "0";
+				}
+			} else {
+				if($(this).is(':checked')) {
+					doc_passport = doc_passport + ","+$(this).val();
+				} else {
+					doc_passport = doc_passport + ",0";
+				}
+			}
+		});
+		$("#doc_passport").val(doc_passport);
+		
+		var doc_rra = "";
+		$('input[name="document_rra[]"]').each(function(index) {
+			if(doc_rra == "") {
+				if($(this).is(':checked')) {
+					doc_rra = $(this).val();
+				} else {
+					doc_rra = "0";
+				}
+			} else {
+				if($(this).is(':checked')) {
+					doc_rra = doc_rra + ","+$(this).val();
+				} else {
+					doc_rra = doc_rra + ",0";
+				}
+			}
+		});
+		$("#doc_rra").val(doc_rra);
+		
+		var doc_voterid = "";
+		$('input[name="document_voterid[]"]').each(function(index) {
+			if(doc_voterid == "") {
+				if($(this).is(':checked')) {
+					doc_voterid = $(this).val();
+				} else {
+					doc_voterid = "0";
+				}
+			} else {
+				if($(this).is(':checked')) {
+					doc_voterid = doc_voterid + ","+$(this).val();
+				} else {
+					doc_voterid = doc_voterid + ",0";
+				}
+			}
+		});
+		$("#doc_voterid").val(doc_voterid);
+		
+		var options = {
+		 		target : '#basicresponse', 
+		 		beforeSubmit : showAddRequest,
+		 		success :  showAddResponse,
+		 		url : '${baseUrl}/webapi/buyer/update/basic',
+		 		semantic : true,
+		 		dataType : 'json'
+		 	};
+	   	$('#addbuyer').ajaxSubmit(options);
+	}
+
+	function showAddRequest(formData, jqForm, options){
+		$("#basicresponse").hide();
+	   	var queryString = $.param(formData);
+		return true;
+	}
+
+	function showAddResponse(resp, statusText, xhr, $form){
+		if(resp.status == '0') {
+			$("#basicresponse").removeClass('alert-success');
+	       	$("#basicresponse").addClass('alert-danger');
+			$("#basicresponse").html(resp.message);
+			$("#basicresponse").show();
+	  	} else {
+	  		$("#basicresponse").removeClass('alert-danger');
+	        $("#basicresponse").addClass('alert-success');
+	        $("#basicresponse").html(resp.message);
+	        $("#basicresponse").show();
+	        alert(resp.message);
+	        location.reload(true);
+	  	}
+	}
+	function updateBuyerOffer(){
+		var options = {
+		 		target : '#offerresponse', 
+		 		beforeSubmit : showAddOfferRequest,
+		 		success :  showAddOfferResponse,
+		 		url : '${baseUrl}/webapi/buyer/offer/update',
+		 		semantic : true,
+		 		dataType : 'json'
+		 	};
+	   	$('#offerfrm').ajaxSubmit(options);
+	}
+	function showAddOfferRequest(formData, jqForm, options){
+		$("#offerresponse").hide();
+	   	var queryString = $.param(formData);
+		return true;
+	}
+	   	
+	function showAddOfferResponse(resp, statusText, xhr, $form){
+		if(resp.status == '0') {
+			$("#offerresponse").removeClass('alert-success');
+	       	$("#offerresponse").addClass('alert-danger');
+			$("#offerresponse").html(resp.message);
+			$("#offerresponse").show();
+	  	} else {
+	  		$("#offerresponse").removeClass('alert-danger');
+	        $("#offerresponse").addClass('alert-success');
+	        $("#offerresponse").html(resp.message);
+	        $("#offerresponse").show();
+	        alert(resp.message);
+	  	}
+	}
+	
+	function updateBuyerFlat() {
+		var options = {
+		 		target : '#flatresponse', 
+		 		beforeSubmit : showAddFlatRequest,
+		 		success :  showAddFlatResponse,
+		 		url : '${baseUrl}/webapi/buyer/update/flat',
+		 		semantic : true,
+		 		dataType : 'json'
+		 	};
+	   	$('#addbuyerdetail').ajaxSubmit(options);
+	}
+	function showAddFlatRequest(formData, jqForm, options){
+		$("#flatresponse").hide();
+	   	var queryString = $.param(formData);
+		return true;
+	}
+	   	
+	function showAddFlatResponse(resp, statusText, xhr, $form){
+		if(resp.status == '0') {
+			$("#flatresponse").removeClass('alert-success');
+	       	$("#flatresponse").addClass('alert-danger');
+			$("#flatresponse").html(resp.message);
+			$("#flatresponse").show();
+	  	} else {
+	  		$("#flatresponse").removeClass('alert-danger');
+	        $("#flatresponse").addClass('alert-success');
+	        $("#flatresponse").html(resp.message);
+	        $("#flatresponse").show();
+	        alert(resp.message);
+	  	}
+	}
+	
+	$('#addbuyingdetail').bootstrapValidator({
+		container: function($field, validator) {
+			return $field.parent().next('.messageContainer');
+	   	},
+	    feedbackIcons: {
+	        validating: 'glyphicon glyphicon-refresh'
+	    },
+	    excluded: ':disabled',
+	    fields: {
+	    	base_rate: {
+	    		validators: {
+	                notEmpty: {
+	                    message: 'Base Rate is required and cannot be empty'
+	                },
+	                numeric: {
+	                 	message: 'Base Rate is invalid',
+	                    thousandsSeparator: '',
+	                    decimalSeparator: '.'
+	              	}
+	            }
+	        },
+	        base_unit: {
+	    		validators: {
+	                notEmpty: {
+	                    message: 'Pricing Unit is required and cannot be empty'
+	                },
+	            }
+	        },
+	    }
+	}).on('success.form.bv', function(event,data) {
+		// Prevent form submission
+		event.preventDefault();
+		updateProjectPrice();
+		
+	});
+
+	function updateProjectPrice() {
+		var options = {
+		 		target : '#pricingresponse', 
+		 		beforeSubmit : showPriceRequest,
+		 		success :  showPriceResponse,
+		 		url : '${baseUrl}/webapi/buyer/update/pricenoffer',
+		 		semantic : true,
+		 		dataType : 'json'
+		 	};
+	   	$('#addbuyingdetail').ajaxSubmit(options);
+	}
+
+	function showPriceRequest(formData, jqForm, options){
+		$("#pricingresponse").hide();
+	   	var queryString = $.param(formData);
+		return true;
+	}
+
+	function showPriceResponse(resp, statusText, xhr, $form){
+		if(resp.status == '0') {
+			$("#pricingresponse").removeClass('alert-success');
+	       	$("#pricingresponse").addClass('alert-danger');
+			$("#pricingresponse").html(resp.message);
+			$("#pricingresponse").show();
+	  	} else {
+	  		$("#pricingresponse").removeClass('alert-danger');
+	        $("#pricingresponse").addClass('alert-success');
+	        $("#pricingresponse").html(resp.message);
+	        $("#pricingresponse").show();
+	        alert(resp.message);
+	  	}
+	}
+
+
+	function updateBuyerPayments() {
+		var options = {
+		 		target : '#imageresponse', 
+		 		beforeSubmit : showAddPaymentRequest,
+		 		success :  showAddPaymentResponse,
+		 		url : '${baseUrl}/webapi/buyer/payment/update',
+		 		semantic : true,
+		 		dataType : 'json'
+		 	};
+	   	$('#addbuyerpayment').ajaxSubmit(options);
+	}
+	function showAddPaymentRequest(formData, jqForm, options){
+		$("#paymentresponse").hide();
+	   	var queryString = $.param(formData);
+		return true;
+	}
+	   	
+	function showAddPaymentResponse(resp, statusText, xhr, $form){
+		if(resp.status == '0') {
+			$("#paymentresponse").removeClass('alert-success');
+	       	$("#paymentresponse").addClass('alert-danger');
+			$("#paymentresponse").html(resp.message);
+			$("#paymentresponse").show();
+	  	} else {
+	  		$("#paymentresponse").removeClass('alert-danger');
+	        $("#paymentresponse").addClass('alert-success');
+	        $("#paymentresponse").html(resp.message);
+	        $("#paymentresponse").show();
+	        alert(resp.message);
+	  	}
+	}
+
+	function addMoreBuyers() {
+		var buyers = parseInt($("#buyer_count").val());
+		buyers++;
+
+		var html = '<input type="hidden" name="buyer_id[]" value="0"/><div class="tab-content" id="buyer-'+buyers+'"><hr>'
+				+ '<span class="pull-right">	<a href="javascript:removeBuyer('
+				+ buyers
+				+ ');" class="btn btn-danger btn-xs">x</a></span><br>'
+				+ '<div class="col-12">'
+				+ '<div class="form-group row">'
+				+ '<label for="example-text-input" class="col-3 col-form-label">Buyer Name</label>'
+				+ '<div class="col-3">'
+				+ ' <input class="form-control" type="text" id="buyer_name" name="buyer_name[]" value="">'
+				+ '</div>'
+
+				+ '<label for="example-text-input" class="col-3 col-form-label">Contact</label>'
+				+ '<div class="col-3">'
+				+ '<input class="form-control" type="text" id="contact" name="contact[]" value="">'
+				+ '</div>'
+				+ '</div>'
+
+				+ '<div class="form-group row">'
+
+				+ '<label for="example-text-input" class="col-3 col-form-label">Email</label>'
+				+ '<div class="col-3">'
+				+ ' <input class="form-control" type="text" id="email" name="email[]" value="">'
+				+ '</div>'
+
+				+ '<label for="example-text-input" class="col-3 col-form-label">PAN</label>'
+				+ '<div class="col-3">'
+				+ '<input class="form-control" type="text" id="pan" name="pan[]" value="">'
+				+ '</div>'
+				+ '</div>'
+
+				+ '<div class="form-group row">'
+
+				+ '<label for="example-text-input" class="col-3 col-form-label"> Perm. Address</label>'
+				+ '<div class="col-3">'
+				+ ' <input class="form-control" type="text" id="address" name="address[]" value="">'
+				+ '</div>'
+
+				+ '<label for="example-text-input" class="col-3 col-form-label">Owner *</label>'
+				+ '<div class="col-3">'
+				+ '<select name="is_primary[]" id="is_primary" class="form-control">'
+				+ '<option value="">Select Owner</option>'
+				+ '<option value="0" selected>Co-Owner</option>'
+				+ '<option value="1">Owner</option>'
+				+ '</select>'
+				+ '</div>'
+				+ '</div>'
+
+				+ '<div class="form-group row" id="error-project_type">'
+				+ '<label class="col-12 col-form-label">Documents <span class="text-danger">*</span></label>'
+				+ '<div class="col-3">'
+				+ '<input type="checkbox" name="document_pan[]" value="1" /> PAN Card'
+				+ '</div>'
+				+ '<div class="col-3">'
+				+ '<input type="checkbox" name="document_aadhar[]" value="2" /> Aadhar Card'
+				+ '</div>'
+				+ '<div class="col-3">'
+				+ '<input type="checkbox" name="document_passport[]" value="3" /> Passport'
+				+ '</div>'
+				+ '<div class="col-3">'
+				+ '<input type="checkbox" name="document_rra[]" value="4" /> Registered Rent Agreement'
+				+ '</div>'
+				+ '<div class="col-3">'
+				+ '<input type="checkbox" name="document_voterid[]" value="5" /> Vote ID'
+				+ '</div>'
+
+				+ '<div class="messageContainer"></div>' + '</div>'
+
+				+ '</div>' + '</div>';
+
+		$("#vimessages").append(html);
+		$("#buyer_count").val(buyers);
+	}
+	function removeBuyer(id) {
+		$("#buyer-" + id).remove();
+	}
+
+	function addMoreSchedule() {
+		var schedule_count = parseInt($("#schedule_count").val());
+		schedule_count++;
+		alert(schedule_count);
+		var html = '<div class="tab-content" id="schedule-'+schedule_count+'">'
+				+ '<hr/>'
+				+ '<span class="pull-right">	<a href="javascript:removeSchedule('
+				+ schedule_count
+				+ ');" class="btn btn-danger btn-xs">x</a></span><br>'
+				+ '<div class="col-12">'
+				+ '<div class="form-group row">'
+				+ '<label for="example-search-input" class="col-2 col-form-label">Milestone</label>'
+				+ '<div class="col-2">'
+				+ '<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
+				+ '</div>'
+				+ '<label for="example-search-input" class="col-2 col-form-label">% of Net Payable</label>'
+				+ '<div class="col-2">'
+				+ '<input type="text" class="form-control"  id="payable" name="payable[]" value=""/>'
+				+ '</div>'
+				+ '<label for="example-search-input" class="col-2 col-form-label">Amount</label>'
+				+ '<div class="col-2">'
+				+ '<input type="text" class="form-control" id="amount" name="amount[]" value=""/>'
+				+ '</div>' + '</div>' + '</div>'
+
+				+ '</div>';
+		$("#vimessages3").append(html);
+		$("#schedule_count").val(schedule_count);
+	}
+	function removeSchedule(id) {
+		$("#schedule-" + id).remove();
+	}
+
+	function addMoreDoc() {
+		var doc_count = parseInt($("#doc_count").val());
+		doc_count++;
+		var html = '<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;" id="doc-'+doc_count+'">'
+				+ '<div class="form-group" id="error-offer_title">'
+				+ '<label class="control-label col-sm-5">Other Documents </label>'
+				+ '<div class="col-sm-3">'
+				+ '<input type="text" name="doc_name[]" class="form-control" value="" placeholder="Enter Document Name"/>'
+				+ '</div>'
+				+ '<div class="col-sm-3">'
+				+ '<input type="file" class="form-control" name="doc_url[]" />'
+				+ '</div>'
+				+ '<div class="col-sm-1"><a href="javascript:removeDoc('
+				+ doc_count
+				+ ');" class="btn btn-danger btn-sm">X</a></div>'
+				+ '<div class="messageContainer col-sm-offset-5"></div>'
+				+ '</div>' + '</div>';
+		$("#doc_area").append(html);
+		$("#doc_count").val(doc_count);
+	}
+
+	function removeDoc(id) {
+		$("#doc-" + id).remove();
+	}
+
+	function show() {
+		$("#vimessages1").show();
+		$("#111").hide();
+
+	}
+
+	function show1() {
+		$("#vimessages2").show();
+		$("#vimessages1").hide();
+
+	}
+
+	function previous1() {
+		$("#vimessages1").hide();
+		$("#111").show();
+	}
+
+	function show2() {
+		$("#vimessages3").show();
+		$("#vimessages2").hide();
+
+	}
+	function previous2() {
+		$("#vimessages2").hide();
+		$("#vimessages1").show();
+
+	}
+
+	function show3() {
+		$("#vimessages4").show();
+		$("#vimessages3").hide();
+
+	}
+	function previous3() {
+		$("#vimessages3").hide();
+		$("#vimessages2").show();
+
+	}
+	function previous4() {
+		$("#vimessages4").hide();
+		$("#vimessages3").show();
+
+	}
+</script>

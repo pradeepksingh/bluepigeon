@@ -353,11 +353,6 @@ public class BuyerController {
 			@FormDataParam("doc_rra") String rra,
 			@FormDataParam("doc_passport") String passport,
 			@FormDataParam("doc_voterid") String voterid,
-//			@FormDataParam("document_pan[]") List<FormDataBodyPart> douments,
-//			@FormDataParam("document_aadhar[]") List<FormDataBodyPart> aadhar,
-//			@FormDataParam("document_passport[]") List<FormDataBodyPart> passport,
-//			@FormDataParam("document_rra[]") List<FormDataBodyPart> rra,
-//			@FormDataParam("document_voterid[]") List<FormDataBodyPart> voterid,
 			@FormDataParam("builder_id") int builder_id,
 			@FormDataParam("project_id") int project_id,
 			@FormDataParam("building_id") int building_id,
@@ -443,6 +438,8 @@ public class BuyerController {
 						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
 						this.imageUploader.writeToFile(photos.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
 						buyer.setPhoto(gallery_name);
+					} else {
+						buyer.setPhoto("");
 					}
 				} catch(Exception e) {
 					buyer.setPhoto("");
@@ -450,14 +447,6 @@ public class BuyerController {
 				msg = buyerDAO.updateBuyer(buyer);
 				buyer.setId(msg.getId());
 				List<BuyerDocuments> buyerDocumentsList = new ArrayList<BuyerDocuments>();
-				/*if(douments != null && douments.size() > 0) {
-					if(douments.get(i).getValueAs(String.class).toString()!=null && !douments.get(i).getValueAs(String.class).isEmpty()){
-						BuyerDocuments buyerDocuments = new BuyerDocuments();
-						buyerDocuments.setDocuments(douments.get(i).getValueAs(String.class).toString());
-						buyerDocuments.setBuyer(buyer);
-						buyerDocumentsList.add(buyerDocuments);
-					}
-				}*/
 				if(docs != "") {
 					if(doc_pan[i].toString().equals("1") ){
 						System.out.println("System doc:"+doc_pan[i]);
@@ -503,38 +492,6 @@ public class BuyerController {
 					}
 				}
 				
-//				if(aadhar != null && aadhar.size() > 0) {
-//					if(aadhar.get(i).getValueAs(String.class).toString()!=null && !aadhar.get(i).getValueAs(String.class).isEmpty()){
-//						BuyerDocuments buyerDocuments = new BuyerDocuments();
-//						buyerDocuments.setDocuments(aadhar.get(i).getValueAs(String.class).toString());
-//						buyerDocuments.setBuyer(buyer);
-//						buyerDocumentsList.add(buyerDocuments);
-//					}
-//				}
-//				if(passport != null && passport.size() > 0) {
-//					if(passport.get(i).getValueAs(String.class).toString()!=null && !passport.get(i).getValueAs(String.class).isEmpty()){
-//						BuyerDocuments buyerDocuments = new BuyerDocuments();
-//						buyerDocuments.setDocuments(passport.get(i).getValueAs(String.class).toString());
-//						buyerDocuments.setBuyer(buyer);
-//						buyerDocumentsList.add(buyerDocuments);
-//					}
-//				}
-//				if(rra != null && rra.size() > 0) {
-//					if(rra.get(i).getValueAs(String.class).toString()!=null && !rra.get(i).getValueAs(String.class).isEmpty()){
-//						BuyerDocuments buyerDocuments = new BuyerDocuments();
-//						buyerDocuments.setDocuments(rra.get(i).getValueAs(String.class).toString());
-//						buyerDocuments.setBuyer(buyer);
-//						buyerDocumentsList.add(buyerDocuments);
-//					}
-//				}
-//				if(voterid != null && voterid.size() > 0) {
-//					if(voterid.get(i).getValueAs(String.class).toString()!=null && !voterid.get(i).getValueAs(String.class).isEmpty()){
-//						BuyerDocuments buyerDocuments = new BuyerDocuments();
-//						buyerDocuments.setDocuments(voterid.get(i).getValueAs(String.class).toString());
-//						buyerDocuments.setBuyer(buyer);
-//						buyerDocumentsList.add(buyerDocuments);
-//					}
-//				}
 				buyerDAO.updateBuyerDocuments(buyerDocumentsList);
 				System.out.println("Primary ID:"+buyer.getIsPrimary());
 				if(buyer.getIsPrimary()) {
@@ -546,6 +503,40 @@ public class BuyerController {
 		}
 		return msg;
 	}
+	
+	@POST
+	@Path("/update/flat")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateBuyerFlat (
+			@FormParam("old_flat_id") int old_flat_id,
+			@FormParam("project_id") int project_id,
+			@FormParam("building_id") int building_id,
+			@FormParam("flat_id") int flat_id,
+			@FormParam("employee_id") int employee_id
+	){
+		ResponseMessage msg = new ResponseMessage();
+		BuilderProject builderProject = new BuilderProject();
+		builderProject.setId(project_id);
+		BuilderBuilding builderBuilding = new BuilderBuilding();
+		builderBuilding.setId(building_id);
+		BuilderFlat builderFlat = new BuilderFlat();
+		builderFlat.setId(flat_id);
+		BuilderEmployee builderEmployee = new BuilderEmployee();
+		builderEmployee.setId(employee_id);
+		BuyerDAO buyerDAO = new BuyerDAO();
+		buyerDAO.changeFlatStatus(1, old_flat_id);
+		List<Buyer> buyers = buyerDAO.getFlatBuyersByFlatId(old_flat_id);
+		for(Buyer buyer :buyers) {
+			buyer.setBuilderProject(builderProject);
+			buyer.setBuilderBuilding(builderBuilding);
+			buyer.setBuilderFlat(builderFlat);
+			buyer.setBuilderEmployee(builderEmployee);
+			msg = buyerDAO.updateBuyer(buyer);
+		}
+		return msg;
+	}
+	
+	
 	@POST
 	@Path("/update/doc")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -785,6 +776,116 @@ public class BuyerController {
 				buyingDetails.setTenure(tenure);
 				buyingDetails.setVat(vat);
 				msg = buyerDAO.updateBuyingDetails(buyingDetails);
+			}
+		return msg;
+	}
+	
+	@POST
+	@Path("/update/pricenoffer")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateBuyerPriceAndOffer (
+			@FormDataParam("id") int id,
+			@FormDataParam("buyer_id") int buyer_id,
+			@FormDataParam("booking_date") String booking_date,
+			@FormDataParam("base_rate") Double base_rate,
+			@FormDataParam("rise_rate") Double rise_rate,
+			@FormDataParam("amenity_rate") Double amenity_rate,
+			@FormDataParam("maintenance") Double maintenance,
+			@FormDataParam("tenure") Integer tenure,
+			@FormDataParam("registration") Double registration,
+			@FormDataParam("parking") Double parking,
+			@FormDataParam("stamp_duty") Double stamp_duty,
+			@FormDataParam("tax") Double tax,
+			@FormDataParam("vat") Double vat,
+			@FormDataParam("offer_id[]") List<FormDataBodyPart> offer_id,
+			@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_title,
+			@FormDataParam("discount[]") List<FormDataBodyPart> discount,
+			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amount,
+			@FormDataParam("applicable_on[]") List<FormDataBodyPart> applicable_on,
+			@FormDataParam("apply[]") List<FormDataBodyPart> apply
+	){
+		ResponseMessage msg = new ResponseMessage();
+		BuyerDAO buyerDAO = new BuyerDAO();
+		System.out.println("Buyer Id :: "+buyer_id);
+		Buyer buyer =null;
+		Buyer primaryBuyer = new Buyer();
+	     buyer = buyerDAO.getBuyerById(buyer_id);
+			if(buyer_id>0){
+				buyer.setId(buyer_id);
+			}
+			System.err.println("Buyer is primary ? "+buyer.getIsPrimary());
+			System.err.println("Primary Buyer ?");
+			if(buyer.getIsPrimary()) {
+				System.out.println("Yes");
+				primaryBuyer = buyer;
+				primaryBuyer.setId(buyer.getId());
+			}
+			System.out.println("No");
+			if(primaryBuyer.getId() > 0) {
+				SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+				Date bookingDate = null;
+				try {
+					bookingDate = format.parse(booking_date);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				BuyingDetails buyingDetails = new BuyingDetails();
+				buyingDetails.setId(id);
+				buyingDetails.setBuyer(primaryBuyer);
+				buyingDetails.setAmenityFacingRate(amenity_rate);
+				buyingDetails.setBaseRate(base_rate);
+				buyingDetails.setBookingDate(bookingDate);
+				buyingDetails.setFloorRiseRate(rise_rate);
+				buyingDetails.setMaintenance(maintenance);
+				buyingDetails.setParkingRate(parking);
+				buyingDetails.setRegistration(registration);
+				buyingDetails.setStampDuty(stamp_duty);
+				buyingDetails.setTaxes(tax);
+				buyingDetails.setTenure(tenure);
+				buyingDetails.setVat(vat);
+				msg = buyerDAO.updateBuyingDetails(buyingDetails);
+			}
+			if (offer_title.size() > 0) {
+				List<BuyerOffer> updateBuyerOffers = new ArrayList<BuyerOffer>();
+				List<BuyerOffer> addBuyerOffers = new ArrayList<BuyerOffer>();
+				int i = 0;
+				for(FormDataBodyPart title : offer_title)
+				{
+					if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
+						if(offer_id!=null){
+						if( offer_id.get(i).getValueAs(Integer.class) != 0 && offer_id.get(i).getValueAs(Integer.class) != null) {
+							BuyerOffer buyerOffer = new BuyerOffer();
+							buyerOffer.setId(offer_id.get(i).getValueAs(Integer.class) );
+							buyerOffer.setTitle(title.getValueAs(String.class).toString());
+							buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
+							buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
+							buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
+							buyerOffer.setStatus(apply.get(i).getValueAs(Byte.class));
+							buyerOffer.setBuyer(primaryBuyer);
+							updateBuyerOffers.add(buyerOffer);
+						}}else{
+							BuyerOffer buyerOffer = new BuyerOffer();
+							buyerOffer.setTitle(title.getValueAs(String.class).toString());
+							buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
+							buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
+							buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
+							buyerOffer.setStatus(apply.get(i).getValueAs(Byte.class));
+							buyerOffer.setBuyer(primaryBuyer);
+							addBuyerOffers.add(buyerOffer);
+						}
+					}
+					i++;
+				}
+				if(updateBuyerOffers.size() > 0) {
+					msg=buyerDAO.updateBuyerOffers(updateBuyerOffers);
+					
+				}
+				if(addBuyerOffers.size() > 0){
+					buyerDAO.saveBuyerOffers(addBuyerOffers);
+				}
+				msg.setStatus(1);
+				msg.setMessage("Buyer pricing updated successfully");
 			}
 		return msg;
 	}

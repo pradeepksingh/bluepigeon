@@ -130,8 +130,8 @@
                                  <form id="addbuyer" name="addbuyer" action="" method="post" enctype="multipart/form-data"> 
                               <div class="tab-content"> 
                               	<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
-                               <div class="tab-pane active" id="111" aria-expanded="false">
-                                <div class="col-12" id="vimessages" >
+                               <div class="tab-pane active" id="vimessages" aria-expanded="false">
+                                <div class="col-12" id="vimessages111" >
                             
                                 <input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
                                 <div class="form-group row">
@@ -672,7 +672,7 @@ function addBuyer1() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/buyer/save',
+	 		url : '${baseUrl}/webapi/buyer/updatebuyer',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
