@@ -109,16 +109,16 @@ import com.fasterxml.jackson.databind.deser.BuilderBasedDeserializer;
 @Path("create")
 public class CreateProjectController {
 
-	@POST
-	@Path("/builder/new/save")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseMessage addBuilder(BuilderDetails builderDetails) {
-		
-		 BuilderDetailsDAO builderDetalsDAO = new BuilderDetailsDAO();
-		  return  builderDetalsDAO.save(builderDetails);
-	
-	}
+//	@POST
+//	@Path("/builder/new/save")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public ResponseMessage addBuilder(BuilderDetails builderDetails) {
+//		
+//		 BuilderDetailsDAO builderDetalsDAO = new BuilderDetailsDAO();
+//		  return  builderDetalsDAO.save(builderDetails);
+//	
+//	}
 
 	@POST
 	@Path("/builder/new/add")
@@ -132,9 +132,9 @@ public class CreateProjectController {
 			@FormDataParam("hemail") String uhemail,
 			@FormDataParam("password") String password,
 			@FormDataParam("abuilder") String aboutBuilder,
-			@FormDataParam("name[]") List<FormDataBodyPart> cname,
+			@FormDataParam("cname[]") List<FormDataBodyPart> cname,
 			@FormDataParam("contact[]") List<FormDataBodyPart> contact,
-			@FormDataParam("email[]") List<FormDataBodyPart> cemail
+			@FormDataParam("cemail[]") List<FormDataBodyPart> cemail
 			) {
 	  ResponseMessage responseMessage = new ResponseMessage();
 	  Builder builder = new Builder();
@@ -157,7 +157,7 @@ public class CreateProjectController {
 		  City city = new City();
 		  city.setId(1);
 		  Locality locality = new Locality();
-		  locality.setId(1);
+		  locality.setId(3);
 		  BuilderEmployeeAccessType builderEmployeeAccessType = new BuilderEmployeeAccessType();
 		  builderEmployeeAccessType.setId(1);
 		  
@@ -174,6 +174,7 @@ public class CreateProjectController {
 		  builderEmployee.setCurrentAddress("");
 		  builderEmployee.setPermanentAddress("");
 		  builderEmployee.setEmployeeId("");
+		  builderEmployee.setMobile(phone);
 		  BuilderDetailsDAO builderDetailsDAO2 = new BuilderDetailsDAO();
 		  builderDetailsDAO2.saveEmployee(builderEmployee);
 		  

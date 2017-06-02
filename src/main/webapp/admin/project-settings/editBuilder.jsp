@@ -131,8 +131,9 @@ if(builder_list.size()>0){
 	</div>
 </div>
 <%@include file="../../footer.jsp"%>
-<script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
+<script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
+
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
 var batch_count =1;
