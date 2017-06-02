@@ -13,7 +13,7 @@ int id = Integer.parseInt(request.getParameter("id"));
 Builder builder=null;
 //List<BuilderCompanyNames> builderCompanyNames = null;
 if(id>0){
-List<Builder> builder_list=new BuilderDetailsDAO().getBuilderById(id);
+List<Builder> builder_list=new BuilderDetailsDAO().getActiveBuilderById(id);
 if(builder_list.size()>0){
 	builder=builder_list.get(0);	
 	//builderCompanyNames = new BuilderDetailsDAO().getAllBuilderCompanyNameByBuilderId(id);
@@ -77,14 +77,6 @@ if(builder_list.size()>0){
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right"
-								for="form-field-1"> Password </label>
-							<div class="col-sm-9">
-								<input type="password" id="password" name="password" value="<%out.print(builder.getPassword()); %>" placeholder="password"
-									class="col-xs-10 col-sm-5" />
-							</div>
-						</div>
-						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right"	for="form-field-1" for="form-field-11">About Builder</label>
 							<div class="col-sm-4">
 								<textarea id="uabuilder" name="uabuilder" class="autosize-transition form-control"><%out.print(builder.getAboutBuilder());%></textarea>
@@ -99,6 +91,7 @@ if(builder_list.size()>0){
 						%>
 						<hr>
 						<div class="form-group">
+							<input type="hidden" id="company_id" name="company_id[]" value="<%out.print(builderCompanyNames1.getId());%>"/>
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Company Name </label>
 							<div class="col-sm-9">
 								<input type="text" id="uname-<%out.print(i); %>" name="uname[]" value="<%out.print(builderCompanyNames1.getName()); %>"	placeholder="Company Name" class="col-xs-10 col-sm-5" />
@@ -138,14 +131,16 @@ if(builder_list.size()>0){
 	</div>
 </div>
 <%@include file="../../footer.jsp"%>
-<script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
+<script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
+
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
 var batch_count =1;
 function addBuilderCompanyName(){
   	batch_count++;
   	var batch='<div class="form-group">';
+  	batch+='<input type="hidden" id="company_id" name="company_id[]" value="0"/>';
   	batch+='<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Company Name </label>';
   	batch+='<div class="col-sm-9">';
   	batch+='<input type="text" id="uname-'+batch_count+'" name="uname[]" placeholder="Company Name" class="col-xs-10 col-sm-5" />';
@@ -269,12 +264,26 @@ $('#updateBuilder').bootstrapValidator({
                 }
             }
         },
-        password: {
+        'uname[]': {
             validators: {
                 notEmpty: {
-                    message: 'password is required and cannot be empty'
+                    message: 'name is required and cannot be empty'
                 }
             }
+        },
+        'ucontact[]' :{
+        	validators: {
+        		notEmpty: {
+        			message: 'contact number is required and cannot be empty'
+        		}
+        	}
+        },
+        'ucemail[]' :{
+        	validators:{
+        		notEmpty: {
+        			message: 'email id is required and cannot be empty'
+        		}
+        	}
         }
     }
 }).on('success.form.bv', function(event,data) {

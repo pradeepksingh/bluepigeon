@@ -129,6 +129,17 @@ public class BuilderDetailsDAO {
 		return response;
 	}
      
+	public ResponseMessage saveBuilder(Builder builder){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		session.save(builder);
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setId(builder.getId());
+		return responseMessage;
+	}
 	public void updateBuilder(Builder builder){
 		ResponseMessage resp = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -142,23 +153,21 @@ public class BuilderDetailsDAO {
 	public ResponseMessage updateBuilderCompanyName(List<BuilderCompanyNames> builderCompanyNames){
 		ResponseMessage msg = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		int count = 0;
-		int objectCount = builderCompanyNames.size();
 		if(builderCompanyNames.size()>0){
 			try{
 				String deleteBuilderCompanyName = "Update from BuilderCompanyNames  set name=:name,email=:email,contact=:contact where builder.id = :builder_id";
 				Session newsession1 = hibernateUtil.openSession();
+				newsession1.beginTransaction();
 				for(BuilderCompanyNames builderCompanyNames2 : builderCompanyNames){
-					newsession1.beginTransaction();
 					Query smupdate = newsession1.createQuery(deleteBuilderCompanyName);
 					smupdate.setParameter("builder_id", builderCompanyNames2.getBuilder().getId());
 					smupdate.setParameter("name", builderCompanyNames2.getName());
 					smupdate.setParameter("email", builderCompanyNames2.getEmail());
 					smupdate.setParameter("contact", builderCompanyNames2.getContact());
 					smupdate.executeUpdate();
-					newsession1.getTransaction().commit();
-					count++;
+					//newsession1.update(builderCompanyNames2);
 				}
+				newsession1.getTransaction().commit();
 				newsession1.close();
 				msg.setStatus(1);
 				msg.setMessage("Builder updated successfully.");
@@ -182,6 +191,16 @@ public class BuilderDetailsDAO {
 		 }
 		return msg;
 	}
+	
+	public void saveBuilderCompany(List<BuilderCompanyNames> builderCompanyNames){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(BuilderCompanyNames builderCompanyNames2 : builderCompanyNames)
+			session.save(builderCompanyNames2);
+		session.getTransaction().commit();
+		session.close();
+	}
 	public List<Builder> getBuilderList() {
 		String hql = "from Builder";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -203,7 +222,17 @@ public class BuilderDetailsDAO {
 		session.close();
 		return result;
 	}
-
+	
+	public Builder getBuilderById(int id){
+		Builder builder = null;
+		String hql = "from Builder where id =:id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		builder = (Builder) query.list().get(0);
+		return builder;
+	}
 	public List<BuilderEmployeeAccessType> getBuilderAccessList() {
 		String hql = "from BuilderEmployeeAccessType";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -214,8 +243,8 @@ public class BuilderDetailsDAO {
 		return result;
 	}
 	
-	public List<Builder> getBuilderById(int id) {
-		String hql = "from Builder where id = :id";
+	public List<Builder> getActiveBuilderById(int id) {
+		String hql = "from Builder where id = :id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -267,8 +296,8 @@ public class BuilderDetailsDAO {
 	}
 	public ResponseMessage updateBuilderPassword(String oldPassword, String newPassword){
 		ResponseMessage responseMessage = new ResponseMessage();
-		String passwordHql = "from Builder where password = :password";
-		String hql = "UPDATE Builder set password = :password, loginStatus=1 "  + 
+		String passwordHql = "from BuilderEmployee where password = :password";
+		String hql = "UPDATE BuilderEmployee set password = :password, loginStatus=1 "  + 
 	             "WHERE id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session passwordSession = hibernateUtil.openSession();
@@ -486,7 +515,16 @@ public class BuilderDetailsDAO {
 		response.setMessage("Employee updated Successfully");
 		return response;
 	}
-	
+	/**
+	 * Filter Project list by passing builderId, countryId, stateId, cityId and localityId 
+	 * @author pankaj
+	 * @param builderId
+	 * @param countryId
+	 * @param stateId
+	 * @param cityId
+	 * @param localityId
+	 * @return List<BuilderProjectList>
+	 */
 	public List<BuilderProjectList> getProjectFilters(int builderId,int countryId,int stateId,int cityId, int localityId){
 		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
 		String hql = "from BuilderProject where ";

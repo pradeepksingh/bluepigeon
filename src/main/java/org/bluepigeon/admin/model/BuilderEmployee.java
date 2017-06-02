@@ -22,6 +22,7 @@ public class BuilderEmployee implements java.io.Serializable {
 	private String name;
 	private String mobile;
 	private String email;
+	private String password;
 	private String currentAddress;
 	private String permanentAddress;
 	private String designation;
@@ -33,6 +34,7 @@ public class BuilderEmployee implements java.io.Serializable {
 	private City city;
 	private Locality locality;
 	private boolean status;
+	private Byte loginStatus;
 
 	public BuilderEmployee() {
 	}
@@ -93,6 +95,15 @@ public class BuilderEmployee implements java.io.Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Column(name = "password")
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Column(name = "current_address", length = 65535)
@@ -199,6 +210,14 @@ public class BuilderEmployee implements java.io.Serializable {
 
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+	@Column(name = "login_status")
+	public Byte isLoginStatus() {
+		return loginStatus;
+	}
+
+	public void setLoginStatus(Byte loginStatus) {
+		this.loginStatus = loginStatus;
 	}
 	
 	
