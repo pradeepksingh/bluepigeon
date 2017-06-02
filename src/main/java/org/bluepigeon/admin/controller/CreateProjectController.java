@@ -64,6 +64,8 @@ import org.bluepigeon.admin.model.BuilderBuildingAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderBuildingStatus;
 import org.bluepigeon.admin.model.BuilderCompany;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
+import org.bluepigeon.admin.model.BuilderEmployee;
+import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderFlatAmenity;
 import org.bluepigeon.admin.model.BuilderFlatAmenityStages;
@@ -90,10 +92,12 @@ import org.bluepigeon.admin.model.BuilderSellerType;
 import org.bluepigeon.admin.model.BuilderTaxType;
 import org.bluepigeon.admin.model.BuildingStage;
 import org.bluepigeon.admin.model.BuildingSubstage;
+import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.model.FlatStage;
 import org.bluepigeon.admin.model.FlatSubstage;
 import org.bluepigeon.admin.model.FloorStage;
 import org.bluepigeon.admin.model.FloorSubstage;
+import org.bluepigeon.admin.model.Locality;
 import org.bluepigeon.admin.model.ProjectStage;
 import org.bluepigeon.admin.model.ProjectSubstage;
 import org.bluepigeon.admin.model.Tax;
@@ -105,17 +109,107 @@ import com.fasterxml.jackson.databind.deser.BuilderBasedDeserializer;
 @Path("create")
 public class CreateProjectController {
 
-	@POST
-	@Path("/builder/new/save")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseMessage addBuilder(BuilderDetails builderDetails) {
-		
-		 BuilderDetailsDAO builderDetalsDAO = new BuilderDetailsDAO();
-		  return  builderDetalsDAO.save(builderDetails);
-	
-	}
+//	@POST
+//	@Path("/builder/new/save")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public ResponseMessage addBuilder(BuilderDetails builderDetails) {
+//		
+//		 BuilderDetailsDAO builderDetalsDAO = new BuilderDetailsDAO();
+//		  return  builderDetalsDAO.save(builderDetails);
+//	
+//	}
 
+	@POST
+	@Path("/builder/new/add")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addBuilder(
+			@FormDataParam("bname") String name,
+			@FormDataParam("status") byte status,
+			@FormDataParam("hoffice") String headOffice,
+			@FormDataParam("hphno") String phone,
+			@FormDataParam("hemail") String uhemail,
+			@FormDataParam("password") String password,
+			@FormDataParam("abuilder") String aboutBuilder,
+			@FormDataParam("cname[]") List<FormDataBodyPart> cname,
+			@FormDataParam("contact[]") List<FormDataBodyPart> contact,
+			@FormDataParam("cemail[]") List<FormDataBodyPart> cemail
+			) {
+	  ResponseMessage responseMessage = new ResponseMessage();
+	  Builder builder = new Builder();
+	  builder.setName(name);
+	  builder.setStatus(status);
+	  builder.setAboutBuilder(aboutBuilder);
+	  builder.setEmail(uhemail);
+	  builder.setLoginStatus(0);
+	  builder.setHeadOffice(headOffice);
+	  builder.setMobile(phone);
+	  builder.setPassword(password);
+	  BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+	  responseMessage = builderDetailsDAO.saveBuilder(builder);
+	  if(responseMessage.getId() > 0){
+		  builder.setId(responseMessage.getId());
+		  byte loginStatus = 0;
+		  boolean empStatus = false;
+		  if(status == 1)
+			  empStatus = true;
+		  City city = new City();
+		  city.setId(1);
+		  Locality locality = new Locality();
+		  locality.setId(3);
+		  BuilderEmployeeAccessType builderEmployeeAccessType = new BuilderEmployeeAccessType();
+		  builderEmployeeAccessType.setId(1);
+		  
+		  BuilderEmployee builderEmployee = new BuilderEmployee();
+		  builderEmployee.setBuilder(builder);
+		  builderEmployee.setBuilderEmployeeAccessType(builderEmployeeAccessType);
+		  builderEmployee.setCity(city);
+		  builderEmployee.setLocality(locality);
+		  builderEmployee.setName(name);
+		  builderEmployee.setLoginStatus(loginStatus);
+		  builderEmployee.setStatus(empStatus);
+		  builderEmployee.setEmail(uhemail);
+		  builderEmployee.setPassword(password);
+		  builderEmployee.setCurrentAddress("");
+		  builderEmployee.setPermanentAddress("");
+		  builderEmployee.setEmployeeId("");
+		  builderEmployee.setMobile(phone);
+		  BuilderDetailsDAO builderDetailsDAO2 = new BuilderDetailsDAO();
+		  builderDetailsDAO2.saveEmployee(builderEmployee);
+		  
+		  if(cname.size()>0){
+			  int i=0;
+			  List<BuilderCompanyNames> builderCompanyNames = new ArrayList<BuilderCompanyNames>();
+			  for(FormDataBodyPart company_name : cname){
+				  BuilderCompanyNames builderCompanyNames2 = new BuilderCompanyNames();
+				  builderCompanyNames2.setBuilder(builder);
+				  if(company_name.getValueAs(String.class).toString() != null && !company_name.getValueAs(String.class).toString().isEmpty()) {
+					  builderCompanyNames2.setName(cname.get(i).getValueAs(String.class).toString());
+				  }
+				  if(contact.get(i).getValueAs(String.class).toString() != null && contact.get(i).getValueAs(String.class).toString().isEmpty()){
+					  builderCompanyNames2.setContact(contact.get(i).getValueAs(String.class).toString());
+				  }
+				  if(cemail.get(i).getValueAs(String.class).toString() != null && !cemail.get(i).getValueAs(String.class).toString().isEmpty()){
+					  builderCompanyNames2.setEmail(cemail.get(i).getValueAs(String.class).toString());
+				  }
+				  builderCompanyNames.add(builderCompanyNames2);
+			  }
+			  if(builderCompanyNames.size() > 0){
+				   new BuilderDetailsDAO().saveBuilderCompany(builderCompanyNames);
+			  }
+			  responseMessage.setStatus(1);
+			  responseMessage.setMessage("Builder added successfully");
+		  }
+	  }else{
+		  responseMessage.setStatus(0);
+		  responseMessage.setMessage("Fail to add new Builder");
+	  }
+	  
+	  return responseMessage;
+	}
+	
+	
 	@POST
 	@Path("/builder/new/update")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -127,8 +221,8 @@ public class CreateProjectController {
 			@FormDataParam("uhoffice") String headOffice,
 			@FormDataParam("uhphno") String phone,
 			@FormDataParam("uhemail") String uhemail,
-			@FormDataParam("password") String password,
 			@FormDataParam("uabuilder") String aboutBuilder,
+			@FormDataParam("company_id[]") List<FormDataBodyPart> cid,
 			@FormDataParam("uname[]") List<FormDataBodyPart> cname,
 			@FormDataParam("ucontact[]") List<FormDataBodyPart> ucontact,
 			@FormDataParam("uemail[]") List<FormDataBodyPart> cemail
@@ -137,38 +231,68 @@ public class CreateProjectController {
 			BuilderDetailsDAO builderDetalsDAO = new BuilderDetailsDAO();
 			ResponseMessage msg = new ResponseMessage();
 			if(id>0){
+				
 				builder.setId(id);
 				builder.setName(name);
 				builder.setStatus(status);
 				builder.setEmail(uhemail);
 				builder.setMobile(phone);
-				builder.setPassword(password);
+				String passworddao = new BuilderDetailsDAO().getActiveBuilderById(id).get(0).getPassword();
+				builder.setPassword(passworddao);
+				int loginStatus = new BuilderDetailsDAO().getActiveBuilderById(id).get(0).getLoginStatus();
+				builder.setLoginStatus(loginStatus);
 				builder.setAboutBuilder(aboutBuilder);
 				builder.setHeadOffice(headOffice);
 				builderDetalsDAO.updateBuilder(builder);
 			}
 			if(cname.size()>0){
-				List<BuilderCompanyNames> builderCompanyNames = new ArrayList<BuilderCompanyNames>();
+				List<BuilderCompanyNames> updatebuilderCompanyNames = new ArrayList<BuilderCompanyNames>();
+				List<BuilderCompanyNames> saveBuilderCompanyNames = new ArrayList<BuilderCompanyNames>();
 				int i=0;
 				for(FormDataBodyPart names : cname)
 				{
-					BuilderCompanyNames builderCompanyNames2 = new BuilderCompanyNames();
-					builderCompanyNames2.setBuilder(builder);
- 					if(names.getValueAs(String.class) != null || names.getValueAs(String.class).trim().length() > 0){
-						builderCompanyNames2.setName(names.getValueAs(String.class).toString());
+					if(cid.get(i).getValueAs(Integer.class) != 0 && cid.get(i).getValueAs(Integer.class) != null){
+						BuilderCompanyNames builderCompanyNames2 = new BuilderCompanyNames();
+						builderCompanyNames2.setBuilder(builder);
+						builderCompanyNames2.setId(cid.get(i).getValueAs(Integer.class));
+	 					if(names.getValueAs(String.class) != null || names.getValueAs(String.class).trim().length() > 0){
+							builderCompanyNames2.setName(names.getValueAs(String.class).toString());
+						}
+	 					if(ucontact.get(i).getValueAs(String.class) != null || ucontact.get(i).getValueAs(String.class).trim().length() >0){
+	 						builderCompanyNames2.setContact(ucontact.get(i).getValueAs(String.class).toString());
+	 					}
+	 					if(cemail.get(i).getValueAs(String.class) != null || cemail.get(i).getValueAs(String.class).trim().length() > 0){
+	 						builderCompanyNames2.setEmail(cemail.get(i).getValueAs(String.class).toString());
+	 					}
+	 					updatebuilderCompanyNames.add(builderCompanyNames2);
+					}else{
+						BuilderCompanyNames builderCompanyNames2 = new BuilderCompanyNames();
+						builderCompanyNames2.setBuilder(builder);
+	 					if(names.getValueAs(String.class) != null || names.getValueAs(String.class).trim().length() > 0){
+							builderCompanyNames2.setName(names.getValueAs(String.class).toString());
+						}
+	 					if(ucontact.get(i).getValueAs(String.class) != null || ucontact.get(i).getValueAs(String.class).trim().length() >0){
+	 						builderCompanyNames2.setContact(ucontact.get(i).getValueAs(String.class).toString());
+	 					}
+	 					if(cemail.get(i).getValueAs(String.class) != null || cemail.get(i).getValueAs(String.class).trim().length() > 0){
+	 						builderCompanyNames2.setEmail(cemail.get(i).getValueAs(String.class).toString());
+	 					}
+	 					saveBuilderCompanyNames.add(builderCompanyNames2);
 					}
- 					if(ucontact.get(i).getValueAs(String.class) != null || ucontact.get(i).getValueAs(String.class).trim().length() >0){
- 						builderCompanyNames2.setContact(ucontact.get(i).getValueAs(String.class).toString());
- 					}
- 					if(cemail.get(i).getValueAs(String.class) != null || cemail.get(i).getValueAs(String.class).trim().length() > 0){
- 						builderCompanyNames2.setEmail(cemail.get(i).getValueAs(String.class).toString());
- 					}
- 					builderCompanyNames.add(builderCompanyNames2);
+					i++;
 				}
-				if(builderCompanyNames.size()>0)
+				if(updatebuilderCompanyNames.size()>0)
 				{
-					msg = builderDetalsDAO.updateBuilderCompanyName(builderCompanyNames);
+					builderDetalsDAO.updateBuilderCompanyName(updatebuilderCompanyNames);
 				}
+				if(saveBuilderCompanyNames.size() > 0){
+					builderDetalsDAO.saveBuilderCompany(saveBuilderCompanyNames);
+				}
+				msg.setStatus(1);
+				msg.setMessage("Builder updated successfully.");
+			} else {
+				msg.setMessage("Failed to add building.");
+				msg.setStatus(0);
 			}
 		 
 		return msg;
@@ -179,8 +303,6 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseMessage addProject(ProjectDetails projectDetails) {
-		System.err.println("Project name :: "+projectDetails.getBuilderProject().getName());
-		System.err.println("Config id :: "+projectDetails.getBuilderProjectPropertyConfigurationInfos().iterator().next().getId());
 		ProjectDetailsDAO projectDetailsDAO = new ProjectDetailsDAO();
 		  return  projectDetailsDAO.save(projectDetails);
 	
@@ -243,7 +365,6 @@ public class CreateProjectController {
 		BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
 		builderBuildingAmenity.setId(amenityid);
 		builderBuildingAmenity.setIsDeleted(isDeleted);
-		System.out.println("Hi from Bulder amenity delete id :: " + amenityid);
 		BuilderBuildingAmenityDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityDAO();
 		return builderBuildingAmenityDAO.delete(builderBuildingAmenity);
 	}
@@ -261,7 +382,6 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuildingAmenityList> getBuilderBuildingAmenity(@QueryParam("amenity_id") int amenity_id) {
 		BuilderBuildingAmenityStagesDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityStagesDAO();
-		System.err.println("AmenityId :: "+amenity_id);
 		return builderBuildingAmenityDAO.getBuildingAmenityById(amenity_id);
 	}
 	

@@ -136,7 +136,7 @@
 	                       		imageGaleries = new ProjectDAO().getProjectImagesByProjectId(projectList.getId()).get(0);
 	                       	     if(imageGaleries.getImage() != null){
 	                       	%>
-		                     <img src="${baseUrl}/<% out.print(imageGaleries.getImage()); %>" height="294" alt="Project image"/>
+		                     <img src="${baseUrl}/<% out.print(imageGaleries.getImage()); %>" height="330" alt="Project image"/>
 		                       	<%}}catch(Exception e){ %>
 		                       		 <img src="../plugins/images/Untitled-1.png" alt="Project image"/>
 		                       	<%} %>
@@ -151,7 +151,7 @@
 <!-- 						                       </div> -->
 				                       	</div>
 				                    	<div class="col-md-6 right">
-					                      	<div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="10"> </div>
+					                      	<div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="<%out.print(projectList.getId()); %>"> </div>
 <!-- 						                  	<div class="bottom"> -->
 <!-- 						                    	<h4>10 NEW LEADS</h4> -->
 <!-- 						                 	</div> -->
@@ -338,7 +338,7 @@
  			    	html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
                   		 +'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" >'
                    	     +'<div class="image">'
-                         +'<img src="'+image+'" height="348"  width="438" alt="Project image"/>'
+                         +'<img src="'+image+'" height="330"  width="438" alt="Project image"/>'
                        	 +'<div class="overlay">'
 	                     +'<div class="row">'
 		                 +'<div class="col-md-6 left">'

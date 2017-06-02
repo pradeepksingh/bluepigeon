@@ -94,64 +94,46 @@
                     <div class="col-sm-12">
                         <div class="white-box"><br>
                           <h3>Manage Building</h3>
-						<div class="row re white-box">
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 								<select name="searchprojectId" id="searchprojectId" class="form-control"> -->
-<!-- 				                    <option value="0">Project</option> -->
-<%-- 				                    <% --%>
-<!--      				                    if(projectDatas != null){   -->
-<%--   				                    for(int i=0; i < projectDatas.size() ; i++){ %>   --%>
-<%-- 									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option> --%>
-<%-- 									<% 	 --%>
-<!--      										} -->
-<!--     				                    }  -->
-<%--   				                    %>   --%>
-<!-- 						         </select>    -->
-<!-- 							</div> -->
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 							   <select name="searchlocalityId" id="searchlocalityId" class="form-control"> -->
-<!-- 				                    <option value="0">Locality</option> -->
-<!-- 							   </select> -->
-<!-- 							</div> -->
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 								<select name="searchprojectId" id="searchprojectId" class="form-control"> -->
-<!-- 				                    <option value="0">Project</option> -->
-<!-- 								</select> -->
-<!-- 							</div> -->
-							
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 							    <select class="form-control"> -->
-<!-- 												<option>Status</option> -->
-<!-- 												<option>1</option> -->
-<!-- 												<option>2</option> -->
-<!-- 								</select>	    -->
-<!-- 							</div> -->
-						</div>
-						
                             <div class="table-responsive">
                                 <table id="tblbuildings" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>No.</th>
+                                            <td>No</td>
+							                <td>Builder</td>
+							                <td>Project</td>
+							                <td>Building</td>
+							                <td>status</td>
+							                <td>Action</td>
+                                        </tr>
+                                         <tr>
+							                <th>No</th>
                                             <th>Builder Name</th>
                                              <th>Project Name</th>
                                              <th>Building Name</th>
                                             <th>status</th>
                                             <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    
-							           
-							       
-                                    <tbody>
-                                     <tr>
-							                <th></th>
-							                <th>Builder</th>
-							                <th>Project</th>
-							                <th>Building</th>
-							                <th>status</th>
-							                <th></th>
 							            </tr>
+                                    </thead>
+<!--                                     <tfoot> -->
+<!--                                      <tr> -->
+<!-- 							                <th></th> -->
+<!-- 							                <th>Builder</th> -->
+<!-- 							                <th>Project</th> -->
+<!-- 							                <th>Building</th> -->
+<!-- 							                <th>status</th> -->
+<!-- 							                <th></th> -->
+<!-- 							            </tr> -->
+<!-- 							            </tfoot> -->
+							            <tbody>
+<!-- 							             <tr> -->
+<!-- 							                <td></td> -->
+<!-- 							                <td>Builder</td> -->
+<!-- 							                <td>Project</td> -->
+<!-- 							                <td>Building</td> -->
+<!-- 							                <td>status</td> -->
+<!-- 							                <td></td> -->
+<!-- 							            </tr> -->
+							            
                                        <%
                                       if(builderBuildings != null){
                                     	  int i=1;
@@ -242,8 +224,8 @@
                     table.order([2, 'asc']).draw();
                 }
             });
-        });
-    });
+     /*   });
+    });*/
     $('#tblbuildings').DataTable({
         dom: 'Bfrtip',
         buttons: [
@@ -254,36 +236,36 @@
     $("#searchprojectId").change(function(){
     	//alert("ID :: "+$("#searchprojectId").val());
     });
-    function getDataTable(){
-    	$.post("${baseUrl}/webapi/project/building",{city_id: $("#searchcitytId").val(), locality_id: $("#searchlocalityId").val(), project_id : $("#searchprojectId").val()},function(data){
-    		var oTable = $("#tblBuilding").dataTable();
-    	    oTable.fnClearTable();
-    	    var count=1;
-    	    $(data).each(function(index){
-    		    var vieworder = '<a href="${baseUrl}/builder/project/edit.jsp?project_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
-    		    var status = '';
-    		    if(data[index].status == 1) {
-    		    	status = '<span class="label label-success">Active</span>';
-    		    } else {
-    		    	status = '<span class="label label-warning">Inactive</span>';
-    		    }
-    	    	var row = [];
-    	    	row.push(count);
-    	    	row.push(data[index].builderName);
-    	    	row.push(data[index].projectName);
-    	    	row.push(data[index].buildingName);
-    	    	row.push(status);
-    	    	row.push(vieworder);
-    	    	oTable.fnAdbdData(row);
-    	    	count++;
-    	    });
-    	},'json');
-    }
+//     function getDataTable(){
+//     	$.post("${baseUrl}/webapi/project/building",{city_id: $("#searchcitytId").val(), locality_id: $("#searchlocalityId").val(), project_id : $("#searchprojectId").val()},function(data){
+//     		var oTable = $("#tblBuilding").dataTable();
+//     	    oTable.fnClearTable();
+//     	    var count=1;
+//     	    $(data).each(function(index){
+//     		    var vieworder = '<a href="${baseUrl}/builder/project/edit.jsp?project_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
+//     		    var status = '';
+//     		    if(data[index].status == 1) {
+//     		    	status = '<span class="label label-success">Active</span>';
+//     		    } else {
+//     		    	status = '<span class="label label-warning">Inactive</span>';
+//     		    }
+//     	    	var row = [];
+//     	    	row.push(count);
+//     	    	row.push(data[index].builderName);
+//     	    	row.push(data[index].projectName);
+//     	    	row.push(data[index].buildingName);
+//     	    	row.push(status);
+//     	    	row.push(vieworder);
+//     	    	oTable.fnAdbdData(row);
+//     	    	count++;
+//     	    });
+//     	},'json');
+//     }
     </script>
     <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#tblbuildings tbody th').each( function () {
+        $('#tblbuildings thead td').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
         } );
@@ -292,19 +274,16 @@
         var table = $('#tblbuildings').DataTable();
      
         // Apply the search
-        table.columns().every( function () {
-            var that = this;
-     
-            $( 'input', this.footer() ).on( 'keyup change', function () {
-                if ( that.search() !== this.value ) {
-                    that
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
+        table.columns().every(function (index) {
+            $('#tblbuildings thead  td:eq(' + index + ') input').on('keyup change', function () {
+                table.column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
+            });
+        });
     } );
     
+
     </script>
 </body>
 </html>
