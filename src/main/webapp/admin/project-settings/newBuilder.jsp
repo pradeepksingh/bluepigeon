@@ -18,7 +18,6 @@
 			<!-- /.breadcrumb -->
 
 		</div>
-		<input type="hidden" value="" name="builder_id" id="builder_id">
 		<div class="page-content">
 			<div class="page-header">
 				<h1>New Builder</h1>
@@ -27,12 +26,12 @@
 			<div class="row">
 				<div class="col-xs-12">
 					<!-- PAGE CONTENT BEGINS -->
-					<form class="form-horizontal" role="form">
+					<form class="form-horizontal" role="form" method="post" action="" id="addBuilder" name="addBuilder" enctype="multipart/form-data">
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right"
 								for="form-field-1">Builder Name </label>
 							<div class="col-sm-9">
-								<input type="text" id="bname" placeholder="Builder Name"
+								<input type="text" id="bname" name="bname" placeholder="Builder Name"
 									class="col-xs-10 col-sm-5" />
 							</div>
 						</div>
@@ -50,7 +49,7 @@
 							<label class="col-sm-3 control-label no-padding-right"
 								for="form-field-1" for="form-field-11">Head Office</label>
 							<div class="col-sm-4">
-								<textarea id="hoffice"
+								<textarea id="hoffice" name="hoffice"
 									class="autosize-transition form-control"></textarea>
 							</div>
 						</div>
@@ -58,7 +57,7 @@
 							<label class="col-sm-3 control-label no-padding-right"
 								for="form-field-1"> Phone Number </label>
 							<div class="col-sm-9">
-								<input type="text" id="hphno"
+								<input type="text" id="hphno" name="hphno"
 									placeholder="Phone Numbers" class="col-xs-10 col-sm-5" />
 							</div>
 						</div>
@@ -66,7 +65,7 @@
 							<label class="col-sm-3 control-label no-padding-right"
 								for="form-field-1"> Email </label>
 							<div class="col-sm-9">
-								<input type="text"  id="hemail" placeholder="Email ids"
+								<input type="text"  id="hemail" name="hemail" placeholder="Email ids"
 									class="col-xs-10 col-sm-5" />
 							</div>
 						</div>
@@ -82,7 +81,7 @@
 							<label class="col-sm-3 control-label no-padding-right"
 								for="form-field-1" for="form-field-11">About Builder</label>
 							<div class="col-sm-4">
-								<textarea id="abuilder"
+								<textarea id="abuilder" name="abuilder"
 									class="autosize-transition form-control"></textarea>
 							</div>
 						</div>
