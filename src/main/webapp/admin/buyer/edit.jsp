@@ -1,96 +1,71 @@
-<%@page import="org.bluepigeon.admin.data.BuyerDocList"%>
-<%@page import="org.bluepigeon.admin.dao.ProjectLeadDAO"%>
-<%@page import="org.bluepigeon.admin.data.FlatData"%>
-<%@page import="org.bluepigeon.admin.data.FloorData"%>
-<%@page import="org.bluepigeon.admin.data.BuildingData"%>
-<%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
-<%@page import="org.bluepigeon.admin.model.BuilderFloor"%>
+<%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
-<%@page import="org.bluepigeon.admin.data.ProjectDetails"%>
-<%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>
-<%@page import="org.bluepigeon.admin.model.BuyerPayment"%>
+<%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
+<%@page import="org.bluepigeon.admin.model.Buyer"%>
 <%@page import="org.bluepigeon.admin.model.BuyerOffer"%>
 <%@page import="org.bluepigeon.admin.model.BuyingDetails"%>
-<%@page import="org.bluepigeon.admin.model.BuyerUploadDocuments"%>
-<%@page import="org.bluepigeon.admin.model.Buyer"%>
+<%@page import="org.bluepigeon.admin.model.BuyerPayment"%>
 <%@page import="org.bluepigeon.admin.model.BuyerDocuments"%>
-<%@page import="org.bluepigeon.admin.dao.BuyerDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuyerUploadDocuments"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>
+<%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
+<%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.dao.BuyerDAO"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="org.bluepigeon.admin.model.BuilderProject"%>
-<%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
-<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@include file="../../head.jsp"%>
 <%@include file="../../leftnav.jsp"%>
 <%
-	int lead_id = 0;
-	int type_size = 0;
-	int flat_size =	0;
-	int building_size = 0;
-	int city_size = 0;
-	int buyer_id = 0;
-	int projectId = 0;
-	int buildingId = 0;
-	//int floorId = 0;
-	int flatId = 0;
-	int p_user_id = 0;
-	List<BuildingData> building_list = null;
-	//List<FloorData> floor_list = null;
-	List<FlatData> flat_list = null;
-	buyer_id = Integer.parseInt(request.getParameter("buyer_id"));
-	session = request.getSession(false);
-	AdminUser adminuserproject = new AdminUser();
-	if(session!=null)
+int p_user_id = 0;
+session = request.getSession(false);
+AdminUser adminuserproject = new AdminUser();
+if(session!=null)
+{
+	if(session.getAttribute("uname") != null)
 	{
-		if(session.getAttribute("uname") != null)
-		{
-			adminuserproject  = (AdminUser)session.getAttribute("uname");
-			p_user_id = adminuserproject.getId();
+		adminuserproject  = (AdminUser)session.getAttribute("uname");
+		p_user_id = adminuserproject.getId();
+	}
+}
+List<BuilderProject> project_list = null; 
+int flat_id = 0;
+List<Buyer> buyers = new ArrayList<Buyer>();
+List<BuilderBuilding> builderBuildings = new ArrayList<BuilderBuilding>(); 
+List<BuilderFlat> builderFlats = new ArrayList<BuilderFlat>();
+BuyingDetails buyingDetails = new BuyingDetails();
+List<BuyerOffer> buyerOffers = new ArrayList<BuyerOffer>();
+List<BuyerPayment> buyerPayments = new ArrayList<BuyerPayment>();
+List<BuyerUploadDocuments> buyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
+int buyeroffersize = 0;
+int primary_buyer_id = 0;
+int builder_id = 0;
+if (request.getParameterMap().containsKey("flat_id")) {
+	flat_id = Integer.parseInt(request.getParameter("flat_id"));
+	buyers = new BuyerDAO().getFlatBuyersByFlatId(flat_id);
+	builderBuildings = new ProjectDAO().getBuilderProjectBuildings(buyers.get(0).getBuilderProject().getId());
+	builderFlats = new ProjectDAO().getBuilderAllFlatsByBuildingId(buyers.get(0).getBuilderBuilding().getId());
+	buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyers.get(0).getId());
+	buyerOffers = new BuyerDAO().getBuyerOffersByBuyerId(buyers.get(0).getId());
+	buyeroffersize = buyerOffers.size();
+	buyerPayments = new BuyerDAO().getBuyerPaymentsByBuyerId(buyers.get(0).getId());
+	buyerUploadDocuments = new BuyerDAO().getBuyerUploadDocumentsByBuyerId(buyers.get(0).getId());
+	for(Buyer buyer :buyers) {
+		if(buyer.getIsPrimary()) {
+			primary_buyer_id = buyer.getId();
 		}
-   	}
-	
-	int project_size = 0;
-	int builder_id = 1;
-	List<BuilderBuilding> builderBuildings = null;
-	List<BuilderFlat> builderFlats = null;
-	BuyerDAO buyerDAO = new BuyerDAO();
- 	Buyer updateBuyer = buyerDAO.getBuyerById(buyer_id);
- 	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
- 	if(builderProjects.size()>0){
-    	project_size = builderProjects.size();
- 		builderBuildings = new ProjectLeadDAO().getBuildingByProjectId(updateBuyer.getBuilderProject().getId());
- 	}
- 	if(builderBuildings.size()>0){
- 		building_size =	builderBuildings.size();
- 		builderFlats = new ProjectDAO().getBuilderProjectBuildingFlats(builderBuildings.get(0).getId());
- 	}
- 	List<BuyerDocList> buyers = buyerDAO.getBuyerDocListById(buyer_id);
- 	BuyingDetails buyingDetails = buyerDAO.getBuyingDetailsByBuyerId(buyer_id);
- 	List<BuyerOffer> buyerOffersList = buyerDAO.getBuyerOffersByBuyerId(buyer_id);
- 	List<BuyerPayment> buyerPaymentsList = buyerDAO.getBuyerPaymentsByBuyerId(buyer_id);
- 	List<BuyerUploadDocuments> buyerUploadDocumentsList = buyerDAO.getBuyerUploadDocumentsByBuyerId(buyer_id);
-// 	List<BuilderProject> project_list = new ProjectDetailsDAO().getBuilderProjectList();
-// 	if(project_list.size()>0){
-// 		for(BuilderProject builderProject: project_list){
-// 	    projectId = builderProject.getId();
-// 	    building_list = new BuyerDAO().getBuildingByProjectId(projectId);
-// 		    if(building_list.size()>0){
-// 		    	for(BuildingData buildingData : building_list){
-// 		    		System.out.println("Building Size :: "+building_list.size());
-// 			    	buildingId = buildingData.getId();
-// 			    	floor_list = new BuyerDAO().getBuilderFloorByBuildingId(buildingId);
-// 			    	if(floor_list.size()>0){
-// 			    		floorId = floor_list.get(0).getId();
-// 			    		flat_list = new BuyerDAO().getBuilderFlatTypeByFloorId(floorId);
-// 			    	}
-// 		    	}	
-// 		    }  	
-// 		}
-// 	}
+	}
+	builder_id = buyers.get(0).getBuilder().getId();
+	if(builder_id > 0 ){
+		project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id);
+	}
+	List<BuilderEmployee> builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id);
+}
 %>
 
 <div class="main-content">
@@ -126,23 +101,28 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
-										<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id);%>"/>
-										<input type="hidden" name="employee_id" id="employee_id" value="<% out.print(updateBuyer.getBuilderEmployee().getId());%>"/>
+										<input type="hidden" name="employee_id" id="employee_id" value="<%out.print(buyers.get(0).getBuilderEmployee().getId());%>" />
+										<input type="hidden" name="builder_id" id="builder_id" value="<%out.print(builder_id);%>" />
 										<input type="hidden" name="doc_pan" id="doc_pan" value="" />
 										<input type="hidden" name="doc_aadhar" id="doc_aadhar" value="" />
 										<input type="hidden" name="doc_passport" id="doc_passport" value="" />
 										<input type="hidden" name="doc_rra" id="doc_rra" value="" />
 										<input type="hidden" name="doc_voterid" id="doc_voterid" value="" />
+										<% if(buyers.size() > 0) { %>
+											<input type="hidden" name="buyer_count" id="buyer_count" value="<% out.print(buyers.size()); %>" />
+										<% } else { %>
+										<input type="hidden" name="buyer_count" id="buyer_count" value="1" />
+										<% } %>
 										<div id="buyer_area">
-										<%
-											if(buyers.size()>0){
-												int i = 0;
-												for(BuyerDocList buyer:buyers){	
-										%>
-										<input type="hidden" name="buyer_count" id="buyer_count" value="<%out.print(i+1);%>"/>
-										<input type="hidden" name="buyer_id[]" id="buyer_id" value="<%out.print(buyer.getId());%>"/>
-											<div class="row" id="buyer-<%out.print(i);%>">
-											<div class="col-lg-12" style="padding-bottom:5px;"><% if(!buyer.isPrimary()) { %><span class="pull-right"><a href="javascript:deleteBuyer(<%out.print(buyer.getId()); %>);" class="btn btn-danger btn-xs">x</a></span><% } %></div>
+										<% int i = 1; 
+										for(Buyer buyer :buyers) { %>
+											<div class="row" id="buyer-<% out.print(buyer.getId()); %>">
+											<input type="hidden" name="buyer_id[]" id="buyer_id" value="<%out.print(buyer.getId());%>"/>
+											<% if(i > 1) { %>
+											<hr>
+											<span class="pull-right"><a href="javascript:deleteBuyer(<% out.print(buyer.getId()); %>);" class="btn btn-danger btn-xs">x</a></span><br>
+											<% } %>
+											<div class="col-lg-12" style="padding-bottom:5px;"></div>
 												<div class="row">
 													<div class="col-lg-5 margin-bottom-5">
 														<div class="form-group" id="error-buyer_name">
@@ -157,7 +137,7 @@
 														<div class="form-group" id="error-contact">
 															<label class="control-label col-sm-4">Contact <span class="text-danger">*</span></label>
 															<div class="col-sm-8">
-																<input type="text" class="form-control" id="contact" name="contact[]" value="<%out.print(buyer.getMobile());%>"/>
+																<input type="text" class="form-control" id="contact" name="contact[]" value="<%out.print(buyer.getMobile());%>" maxlength="10"/>
 															</div>
 															<div class="messageContainer col-sm-8"></div>
 														</div>
@@ -177,7 +157,7 @@
 														<div class="form-group" id="error-email">
 															<label class="control-label col-sm-4">PAN <span class="text-danger">*</span></label>
 															<div class="col-sm-8">
-																<input type="text" class="form-control" id="pan" name="pan[]" value="<%out.print(buyer.getPanCard());%>"/>
+																<input type="text" class="form-control" id="pan" name="pan[]" value="<%out.print(buyer.getPancard());%>"/>
 															</div>
 															<div class="messageContainer col-sm-8"></div>
 														</div>
@@ -199,59 +179,56 @@
 															<div class="col-sm-8">
 																<select name="is_primary[]" id="is_primary" class="form-control">
 												                    <option value="">Select Owner</option>
-												                     <option value="0" <%if(buyer.isPrimary() == false){ %>selected<%} %>>Co-Owner</option>
-												                      <option value="1"<% if(buyer.isPrimary() == true){%>selected<%} %>>Owner</option>
+												                     <option value="0" <%if(buyer.getIsPrimary() == false){ %>selected<%} %>>Co-Owner</option>
+												                      <option value="1"<% if(buyer.getIsPrimary() == true){%>selected<%} %>>Owner</option>
 													          	</select>
 															</div>
 															<div class="messageContainer col-sm-8"></div>
 														</div>
 													</div>
 												</div>
-												<hr>
 												<%
-													if(buyer != null){
-														if(buyer.getDocResult() != null){
-															boolean is_pan = false;
-															boolean is_aadhar = false;
-															boolean is_passport = false;
-															boolean is_rra = false;
-															boolean is_voterid = false;
-															for(String bd :buyer.getDocResult()) {
-																if(Integer.parseInt(bd) == 1) {
-																	is_pan = true;
-																}
-																if(Integer.parseInt(bd) == 2) {
-																	is_aadhar = true;
-																}
-																if(Integer.parseInt(bd) == 3) {
-																	is_passport = true;
-																}
-																if(Integer.parseInt(bd) == 4) {
-																	is_rra = true;
-																}
-																if(Integer.parseInt(bd) == 5) {
-																	is_voterid = true;
-																}
-															}
+													int buyer_pan = 0;
+													int buyer_aadhar = 0;
+													int buyer_passport = 0;
+													int buyer_rra = 0;
+													int buyer_voterid = 0;
+													for(BuyerDocuments buyerDocument :buyer.getBuyerDocuments()) {
+														if(buyerDocument.getDocuments().equals("1")) {
+															buyer_pan = 1;
+														}
+														if(buyerDocument.getDocuments().equals("2")) {
+															buyer_aadhar = 2;
+														}
+														if(buyerDocument.getDocuments().equals("3")) {
+															buyer_passport = 3;
+														}
+														if(buyerDocument.getDocuments().equals("4")) {
+															buyer_rra = 4;
+														}
+														if(buyerDocument.getDocuments().equals("5")) {
+															buyer_voterid = 5;
+														}
+													}
 												%>
 												<div class="col-lg-12 margin-bottom-6">
 														<div class="form-group" id="error-project_type">
 															<label class="control-label col-sm-2">Documents <span class='text-danger'>*</span></label>
 															<div class="col-sm-10">
 															<div class="col-sm-4">
-																<input type="checkbox" name="document_pan[]" value="1" <%if(is_pan) { %> checked <% } %> />PAN Card
+																<input type="checkbox" name="document_pan[]" value="1" <% if(buyer_pan > 0) { %>checked<% } %> />PAN Card
 															</div>
 															<div class="col-sm-4">
-																<input type="checkbox" name="document_aadhar[]" value="2" <%if(is_aadhar) {%>checked<%} %>/>Aadhar Card
+																<input type="checkbox" name="document_aadhar[]" value="2" <% if(buyer_aadhar > 0) { %>checked<% } %>/>Aadhar Card
 															</div>
 															<div class="col-sm-4">
-																<input type="checkbox" name="document_passport[]" value="3" <% if(is_passport) {%>checked<%} %>/>Passport 
+																<input type="checkbox" name="document_passport[]" value="3" <% if(buyer_passport > 0) { %>checked<% } %>/>Passport 
 															</div>
 															<div class="col-sm-4">
-																<input type="checkbox" name="document_rra[]" value="4" <% if(is_rra) {%>checked<%} %> />Registered Rent Agreement 
+																<input type="checkbox" name="document_rra[]" value="4" e="checkbox" name="document_rra[]" value="4" <% if(buyer_rra > 0) { %>checked<% } %> />Registered Rent Agreement 
 															</div>
 															<div class="col-sm-4">
-																<input type="checkbox" name="document_voterid[]" value="5" <% if(is_voterid) {%>checked<%} %> />Vote ID 
+																<input type="checkbox" name="document_voterid[]" value="5" <% if(buyer_voterid > 0) { %>checked<% } %> />Vote ID 
 															</div>
 														</div>
 														<div class="messageContainer col-sm-3"></div>
@@ -259,12 +236,10 @@
 												</div>
 												
 											</div>
-											<hr>
-											<%   			}
-														}
-													}
-												}
-												%>
+											<% 
+												i++;
+											}
+											%>
 										</div>
 										
 										<div>
@@ -274,6 +249,7 @@
 												</span>
 											</div>
 										</div>
+										<hr>
 										<div class="row">
 											<div class="col-lg-12 margin-bottom-5">
 												<div class="form-group" id="error-country_id">
@@ -288,8 +264,8 @@
 													<div class="col-sm-5">
 														<select name="project_id" id="project_id" class="form-control">
 										                    <option value="">Select Project</option>
-										                    <% for(BuilderProject builderProject : builderProjects){ %>
-															<option value="<% out.print(builderProject.getId());%>" <%if(builderProject.getId() == buyers.get(0).getProjectId()){ %> selected <% } %>><% out.print(builderProject.getName());%></option>
+										                    <% for(BuilderProject builderProject : project_list){ %>
+															<option value="<% out.print(builderProject.getId());%>" <%if(builderProject.getId() == buyers.get(0).getBuilderProject().getId()){ %> selected <% } %>><% out.print(builderProject.getName());%></option>
 															<% } %>
 											             </select>
 													</div>
@@ -303,7 +279,7 @@
 														<select name="building_id" id="building_id" class="form-control">
 										                    <option value="">Select Building</option>
 										                    <% for(BuilderBuilding builderBuilding : builderBuildings){ %>
-															<option value="<% out.print(builderBuilding.getId());%>" <%if(builderBuilding.getId() == buyers.get(0).getBuildingId()){ %> selected <% } %>><% out.print(builderBuilding.getName());%></option>
+															<option value="<% out.print(builderBuilding.getId());%>" <%if(builderBuilding.getId() == buyers.get(0).getBuilderBuilding().getId()){ %> selected <% } %>><% out.print(builderBuilding.getName());%></option>
 															<% } %>
 											          	</select>
 													</div>
@@ -319,7 +295,7 @@
 														<select name="flat_id" id="flat_id" class="form-control">
 										                    <option value="">Select Flat</option>
 										                    <% for(BuilderFlat builderFlat : builderFlats){ %>
-															<option value="<% out.print(builderFlat.getId());%>" <%if(builderFlat.getId() == buyers.get(0).getFlatId()){ %> selected <% } %>><% out.print(builderFlat.getFlatNo());%></option>
+															<option value="<% out.print(builderFlat.getId());%>" <%if(builderFlat.getId() == buyers.get(0).getBuilderFlat().getId()){ %> selected <% } %>><% out.print(builderFlat.getFlatNo());%></option>
 															<% } %>
 											          	</select>
 													</div>
@@ -354,19 +330,19 @@
 	<!-- 												<div class="messageContainer col-sm-4"></div> -->
 	<!-- 											</div> -->
 	<!-- 										</div> -->
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-state_id">
-													<label class="control-label col-sm-3">Status <span class='text-danger'>*</span></label>
-													<div class="col-sm-5">
-														<select name="status" id="status" class="form-control">
-										                    <option value="">Select Status</option>
-										                     <option value="0" <%if(updateBuyer.getStatus() == 0) { %> selected <% } %>>Inactive</option>
-										                      <option value="1" <%if(updateBuyer.getStatus() == 1) { %> selected <% } %>>Active</option>
-											          	</select>
-													</div>
-													<div class="messageContainer col-sm-8"></div>
-												</div>
-											</div>
+<!-- 											<div class="col-lg-6 margin-bottom-5"> -->
+<!-- 												<div class="form-group" id="error-state_id"> -->
+<!-- 													<label class="control-label col-sm-3">Status <span class='text-danger'>*</span></label> -->
+<!-- 													<div class="col-sm-5"> -->
+<!-- 														<select name="status" id="status" class="form-control"> -->
+<!-- 										                    <option value="">Select Status</option> -->
+<%-- 										                     <option value="0" <%if(updateBuyer.getStatus() == 0) { %> selected <% } %>>Inactive</option> --%>
+<%-- 										                      <option value="1" <%if(updateBuyer.getStatus() == 1) { %> selected <% } %>>Active</option> --%>
+<!-- 											          	</select> -->
+<!-- 													</div> -->
+<!-- 													<div class="messageContainer col-sm-8"></div> -->
+<!-- 												</div> -->
+<!-- 											</div> -->
 										</div>
 										<div class="col-lg-12 margin-bottom-5">
 											<div class="clearfix form-actions">
@@ -383,7 +359,7 @@
 				</div>
 				<div id="buyingdetail" class="tab-pane fade">
 					<form id="pricingfrm" name="pricingfrm" method="post">
-						<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(buyer_id); %>" />
+						<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id); %>" />
 						<input type="hidden" name="id" id="id" value="<%out.print(buyingDetails.getId()); %>" />
 			 			<div class="row">
 			 				<div id="pricingresponse"></div>
@@ -517,18 +493,18 @@
 				</div>
 				<div id="payment" class="tab-pane fade">
 					<form id="paymentfrm" name="paymentfrm" method="post" enctype="multipart/form-data">
-						<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(buyerPaymentsList.size()+1);%>"/>
-						<input type="hidden" id="buyer_id" name="buyer_id" value="<%out.print(buyer_id);%>"/>
+						<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(buyerPayments.size()+1);%>"/>
+						<input type="hidden" id="buyer_id" name="buyer_id" value="<%out.print(primary_buyer_id);%>"/>
 			 			<div class="row">
 			 				<div id="paymentresponse"></div>
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<div id="payment_schedule">
-											<% 	int i = 1;
-												for(BuyerPayment buyerPayment :buyerPaymentsList) { 
+											<% 	i = 1;
+												for(BuyerPayment buyerPayment :buyerPayments) { 
 											%>
-										<input type="hidden"  name="payment_id[]" value="<%out.print(buyerPayment.getId());%>"/>
+											<input type="hidden"  name="payment_id[]" value="<%out.print(buyerPayment.getId());%>"/>
 											<div class="row" id="schedule-<% out.print(buyerPayment.getId()); %>">
 												<% if(i > 1) { %>
 												<hr/>
@@ -566,6 +542,7 @@
 											</div>
 											<% i++; } %>
 											<div class="row" id="schedule-<% out.print(i);%>">
+											<input type="hidden"  name="payment_id[]" value="0"/>
 												<% if(i > 1) { %>
 												<hr/>
 												<% } %>
@@ -625,21 +602,23 @@
 				</div>
 				<div id="offer" class="tab-pane fade">
 					<form id="offerfrm" name="offerfrm" method="post"  enctype="multipart/form-data">
-						<input type="hidden" name="offer_count" id="offer_count" value="<%out.print(buyerOffersList.size()+1); %>"/>
-						<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(buyer_id);%>"/>
+						<input type="hidden" name="offer_count" id="offer_count" value="<%out.print(buyerOffers.size()+1); %>"/>
+						<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>"/>
 			 			<div class="row">
 			 			<div id="offerresponse"></div>
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<div id="offer_area">
-											<% 	int j = 1;
-												for(BuyerOffer buyerOffer :buyerOffersList) { 
+											<% 	
+											if(buyerOffers.size() > 0) {
+												int j = 1;
+												for(BuyerOffer buyerOffer :buyerOffers) { 
 											%>
 											<input type="hidden"  name="offer_id[]" value="<%out.print(buyerOffer.getId());%>"/>
 											<div class="row" id="offer-<% out.print(buyerOffer.getId());%>">
 												<div class="col-lg-12" style="padding-bottom:5px;">
-													<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(buyerOffer.getId());%>);" class="btn btn-danger btn-xs">x</a></span>
+<%-- 													<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(buyerOffer.getId());%>);" class="btn btn-danger btn-xs">x</a></span> --%>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
 													<div class="form-group" id="error-offer_title">
@@ -661,7 +640,7 @@
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
 													<div class="form-group" id="error-discount_amount">
-														<label class="control-label col-sm-4">Offer Discount Amount </label>
+														<label class="control-label col-sm-4">Discount Amount </label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% if(buyerOffer.getOfferPercentage() != null) { out.print(buyerOffer.getOfferAmount());}%>"/>
 														</div>
@@ -673,6 +652,15 @@
 														<label class="control-label col-sm-4">Applicable on </label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="applicable_on" name="applicable_on[]" value="<% if(buyerOffer.getApplicable() != null) { out.print(buyerOffer.getApplicable());}%>"/>
+														</div>
+														<div class="messageContainer col-sm-3"></div>
+													</div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-applicable_on">
+														<label class="control-label col-sm-4">Description </label>
+														<div class="col-sm-8">
+															<textarea class="form-control" id="description" name="description[]"><% if(buyerOffer.getDescription() != null) { out.print(buyerOffer.getDescription());}%></textarea>
 														</div>
 														<div class="messageContainer col-sm-3"></div>
 													</div>
@@ -690,14 +678,12 @@
 													</div>
 												</div>
 											</div>
-											<% j++; } %>
-											<div class="row" id="offer-<% out.print(j);%>">
-												<% if(j > 1) { %>
-												<hr/>
-												<% } %>
-												<div class="col-lg-12" style="padding-bottom:5px;">
-													<span class="pull-right"><a href="javascript:removeOffer(<% out.print(j);%>);" class="btn btn-danger btn-xs">x</a></span>
-												</div>
+											<% 
+												j++; 
+												} 
+											} else {
+											%>
+											<div class="row" id="offer-1">
 												<div class="col-lg-6 margin-bottom-5">
 													<div class="form-group" id="error-offer_title">
 														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
@@ -735,6 +721,15 @@
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-discount_amount">
+														<label class="control-label col-sm-4">Discount Amount </label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
+														</div>
+														<div class="messageContainer col-sm-3"></div>
+													</div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
 													<div class="form-group" id="error-apply">
 														<label class="control-label col-sm-4">Apply </label>
 														<div class="col-sm-8">
@@ -747,13 +742,7 @@
 													</div>
 												</div>
 											</div>
-										</div>
-										<div>
-											<div class="col-lg-12">
-												<span class="pull-right">
-													<a href="javascript:addMoreOffer();" class="btn btn-info btn-xs">+ Add More Offers</a>
-												</span>
-											</div>
+											<% } %>
 										</div>
 										<div>
 											<div class="row">
@@ -773,8 +762,9 @@
 				<div id="documents" class="tab-pane fade">
 					<form id="buyerdoc" name="buyerdoc" method="post" enctype="multipart/form-data">
 						<input type="hidden" name="doc_count" id="doc_count" value="1"/>
-						<input type="hidden" id="buyer_id" name="buyer_id" value="<%out.print(updateBuyer.getId());%>"/>
+						<input type="hidden" id="buyer_id" name="buyer_id" value="<%out.print(primary_buyer_id);%>"/>
 			 			<div class="row">
+			 				<div id="docresponse"></div>
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
@@ -785,82 +775,39 @@
 												</div>
 												<div class="row" id="doc_area">
 												<%
-													if(buyerUploadDocumentsList !=null){
-													for(BuyerUploadDocuments buyerUploadDocuments :buyerUploadDocumentsList){
+													if(buyerUploadDocuments.size() > 0){
+														for(BuyerUploadDocuments buyerUploadDocument :buyerUploadDocuments) {
 												%>
 													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
 														<div class="form-group" id="error-offer_title">
-															<input type="hidden" id="id" name="id" value="<%out.print(buyerUploadDocuments.getId());%>"/>
-															<input type="hidden" name="doc_name[]" value="<%out.print(buyerUploadDocuments.getName()); %>" />
-															<label class="control-label col-sm-5">Agreement <span class='text-danger'>*</span></label>
-															<div class="col-sm-7">
-															<a href="${baseUrl}/<%out.print(buyerUploadDocuments.getDocUrl()); %>" target=""></a>
+															<input type="hidden" id="id" name="doc_id[]" value="<%out.print(buyerUploadDocument.getId());%>"/>
+															<input type="hidden" name="doc_name[]" value="<%out.print(buyerUploadDocument.getName()); %>" />
+															<label class="control-label col-sm-5"><%out.print(buyerUploadDocument.getName()); %> <span class='text-danger'>*</span></label>
+															<div class="col-sm-3">
+																<a href="${baseUrl}/<% out.print(buyerUploadDocument.getDocUrl().toString()); %>" target="_blank">View / Download</a>
+															</div>
+															<div class="col-sm-4">
 																<input type="file" class="form-control" name="doc_url[]"/>
 															</div>
 															<div class="messageContainer col-sm-offset-5"></div>
 														</div>
 													</div>
-													<%}} %>
-													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
-														<div class="form-group" id="error-offer_title">
-															<input type="hidden" name="doc_name[]" value="Index 2" />
-															<label class="control-label col-sm-5">Index 2 <span class='text-danger'>*</span></label>
-															<div class="col-sm-7">
-																<input type="file" class="form-control" name="doc_url[]" />
-															</div>
-															<div class="messageContainer col-sm-offset-5"></div>
-														</div>
-													</div>
-													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
-														<div class="form-group" id="error-offer_title">
-															<input type="hidden" name="doc_name[]" value="Receipts with Date and time and Name" />
-															<label class="control-label col-sm-5">Receipts with Date and time and Name </label>
-															<div class="col-sm-7">
-																<input type="file" class="form-control" name="doc_url[]" />
-															</div>
-															<div class="messageContainer col-sm-offset-5"></div>
-														</div>
-													</div>
-													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
-														<div class="form-group" id="error-offer_title">
-															<input type="hidden" name="doc_name[]" value="Electrical and Plumbing lines map" />
-															<label class="control-label col-sm-5">Electrical and Plumbing lines map </label>
-															<div class="col-sm-7">
-																<input type="file" class="form-control" name="doc_url[]" />
-															</div>
-															<div class="messageContainer col-sm-offset-5"></div>
-														</div>
-													</div>
-													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;">
-														<div class="form-group" id="error-offer_title">
-															<input type="hidden" name="doc_name[]" value="Possession grant letter" />
-															<label class="control-label col-sm-5">Possession grant letter </label>
-															<div class="col-sm-7">
-																<input type="file" class="form-control" name="doc_url[]" />
-															</div>
-															<div class="messageContainer col-sm-offset-5"></div>
-														</div>
-													</div>
+													<% }
+													} %>
 													<div class="col-lg-12 margin-bottom-5" style="margin-bottom:5px;" id="doc-1">
 														<div class="form-group" id="error-offer_title">
 															<label class="control-label col-sm-5">Other Documents </label>
 															<div class="col-sm-3">
+																<input type="hidden" name="doc_id[]" value="0" />
 																<input type="text" name="doc_name[]" class="form-control" value="" placeholder="Enter Document Name"/>
 															</div>
-															<div class="col-sm-3">
+															<div class="col-sm-4">
 																<input type="file" class="form-control" name="doc_url[]" />
 															</div>
 															<div class="messageContainer col-sm-offset-5"></div>
 														</div>
 													</div>
 													
-												</div>
-											</div>
-											<div>
-												<div class="col-lg-12">
-													<span class="pull-right">
-														<a href="javascript:addMoreDoc();" class="btn btn-info btn-xs">+ Add More Document</a>
-													</span>
 												</div>
 											</div>
 										</div>
@@ -872,7 +819,7 @@
 							<div class="row">
 								<div class="col-lg-12">
 									<div class="col-sm-12">
-										<button type="submit" name="updatedoc" class="btn btn-success btn-sm" id="updatedoc">Update</button>
+										<button type="button" name="updatedoc" class="btn btn-success btn-sm" id="updatedoc" onclick="uploadDocuments();">Update</button>
 									</div>
 								</div>
 							</div>
@@ -1224,98 +1171,6 @@ function showPriceResponse(resp, statusText, xhr, $form){
   	}
 }
 
-// $("#detailbtn").click(function(){
-// 	var projectType = [];
-// 	var propertyType = [];
-// 	var configuration = [];
-// 	var amenityType = [];
-// 	var approvalType = [];
-// 	var homeLoanInfo = [];
-// 	var project = {id:$("#id").val(),projectArea:$("#project_area").val(),areaUnit:{id:$("#area_unit").val()},launchDate:new Date($("#launch_date").val())};
-// 	$('input[name="project_type[]"]:checked').each(function() {
-// 		projectType.push({builderProjectType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-// 	});
-// 	$('input[name="property_type[]"]:checked').each(function() {
-// 		val = $("#property_type"+$(this).val()).val();
-// 		propertyType.push({value:val,builderPropertyType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-// 	});
-// 	$('input[name="configuration[]"]:checked').each(function() {
-// 		configuration.push({builderProjectPropertyConfiguration:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-// 	});
-// 	$('input[name="amenity_type[]"]:checked').each(function() {
-// 		amenityType.push({builderProjectAmenity:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-// 	});
-// 	$('input[name="approval_type[]"]:checked').each(function() {
-// 		approvalType.push({builderProjectApprovalType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-// 	});
-// 	$('input[name="homeloan_bank[]"]:checked').each(function() {
-// 		homeLoanInfo.push({homeLoanBanks:{id:$(this).val()},builderProject:{id:$("#id").val()}});
-// 	});
-// 	var final_data = {builderProject:project,builderProjectProjectTypes:projectType,builderProjectPropertyTypes:propertyType,builderProjectPropertyConfigurationInfos:configuration,builderProjectAmenityInfos:amenityType,builderProjectApprovalInfos:approvalType,builderProjectBankInfos:homeLoanInfo}
-// 	$.ajax({
-// 	    url: '${baseUrl}/webapi/project/detail/update',
-// 	    type: 'POST',
-// 	    data: JSON.stringify(final_data),
-// 	    contentType: 'application/json; charset=utf-8',
-// 	    dataType: 'json',
-// 	    async: false,
-// 	    success: function(data) {
-// 			if (data.status == 0) {
-// 				alert(data.message);
-// 			} else {
-// 				alert(data.message);
-// 			}
-// 		},
-// 		error : function(data)
-// 		{
-// 			alert("Fail to save data");
-// 		}
-		
-// 	});
-// });
-
-$("#paymentbtn").click(function(){
-// 	var paymentInfo = [];
-// 	var payable = [];
-// 	var amount = [];
-// 	$('input[name="payable[]"]').each(function(index) {
-// 		payable.push($(this).val());
-// 	});
-// 	$('input[name="amount[]"]').each(function(index) {
-// 		amount.push($(this).val());
-// 	});
-// 	$('input[name="schedule[]"]').each(function(index) {
-// 		if($(this).val() != "") {
-// 			paymentInfo.push({schedule:$(this).val(),payable:payable[index],amount:amount[index],status:1,builderProject:{id:$("#id").val()}});
-// 		}
-// 	});
-// 	var project = {id:$("#id").val()};
-// 	var final_data = {builderProjectPaymentInfos:paymentInfo,builderProject:project}
-// 	if(paymentInfo.length > 0) {
-// 		$.ajax({
-// 		    url: '${baseUrl}/webapi/buyer/payment/update',
-// 		    type: 'POST',
-// 		    data: JSON.stringify(final_data),
-// 		    contentType: 'application/json; charset=utf-8',
-// 		    dataType: 'json',
-// 		    async: false,
-// 		    success: function(data) {
-// 				if (data.status == 0) {
-// 					alert(data.message);
-// 				} else {
-// 					alert(data.message);
-// 				}
-// 			},
-// 			error : function(data)
-// 			{
-// 				alert("Fail to save data");
-// 			}
-			
-// 		});
-// 	} else {
-// 		alert("Please enter payment schedule details");
-// 	}
-});
 
 function updateBuyerPayments() {
 	var options = {
@@ -1348,66 +1203,10 @@ function showAddPaymentResponse(resp, statusText, xhr, $form){
         alert(resp.message);
   	}
 }
-$("#offerbtn").click(function(){
-// 	var offerInfo = [];
-// 	var discount = [];
-// 	var amount = [];
-// 	var applicable = [];
-// 	var apply = [];
-// 	var offer_id = [];
-// 	$('input[name="offer_id[]"]').each(function(index){
-// 		offer_id.push($(this).val());
-// 	});
-// 	$('input[name="discount[]"]').each(function(index) {
-// 		discount.push($(this).val());
-// 	});
-// 	$('input[name="discount_amount[]"]').each(function(index) {
-// 		amount.push($(this).val());
-// 	});
-// 	$('input[name="applicable_on[]"]').each(function(index) {
-// 		applicable.push($(this).val());
-// 	});
-// 	$('select[name="apply[]"] option:selected').each(function(index) {
-// 		apply.push($(this).val());
-// 	});
-// 	$('input[name="offer_title[]"]').each(function(index) {
-// 		if($(this).val() != "") {
-// 				offerInfo.push({title:$(this).val(),offer_percentage:discount[index],offer_amount:amount[index],applicable:applicable[index],status:apply[index],buyer:{id:$("#buyer_id").val()}});
-// 			}
-		
-// 	});
-// 	var buyer = {id: $("#buyer_id").val()};
-// 	alert("Buyer Id :: "+$("#buyer_id").val());
-// 	var final_data = {buyerOffer:offerInfo}
-// 	if(offerInfo.length > 0) {
-// 		$.ajax({
-// 		    url: '${baseUrl}/webapi/buyer/offer/update',
-// 		    type: 'POST',
-// 		    data: JSON.stringify(final_data),
-// 		    contentType: 'application/json; charset=utf-8',
-// 		    dataType: 'json',
-// 		    async: false,
-// 		    success: function(data) {
-// 				if (data.status == 0) {
-// 					alert(data.message);
-// 				} else {
-// 					alert(data.message);
-// 				}
-// 			},
-// 			error : function(data)
-// 			{
-// 				alert("Fail to save data");
-// 			}
-			
-// 		});
-// 	} else {
-// 		alert("Please enter offer details");
-// 	}
-});
 function addMoreBuyers() {
 	var buyers = parseInt($("#buyer_count").val());
 	buyers++;
-	var html = '<div class="row" id="buyer-'+buyers+'"><hr>'
+	var html = '<input type="hidden" name="buyer_id[]" id="buyer_id" value="0"/><div class="row" id="buyer-'+buyers+'"><hr>'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeBuyer('+buyers+');" class="btn btn-danger btn-xs">x</a></span></div>'
 			+'<div class="row"><input type="hidden" name="buyer_id[]" value="0" />'
 		+'<div class="col-lg-5 margin-bottom-5">'
@@ -1423,7 +1222,7 @@ function addMoreBuyers() {
 			+'<div class="form-group" id="error-contact">'
 				+'<label class="control-label col-sm-4">Contact <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="contact" name="contact[]" value=""/>'
+					+'<input type="text" class="form-control" id="contact" name="contact[]" value="" maxlength="10"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1660,6 +1459,39 @@ function deleteOffer(id) {
 			}
 		});
 	}
+}
+
+function uploadDocuments(){
+	var options = {
+	 		target : '#docresponse', 
+	 		beforeSubmit : showAddDocumentRequest,
+	 		success :  showAddDocumentResponse,
+	 		url : '${baseUrl}/webapi/buyer/update/doc',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#buyerdoc').ajaxSubmit(options);
+}
+
+function showAddDocumentRequest(formData, jqForm, options){
+	$("#docresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddDocumentResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#docresponse").removeClass('alert-success');
+       	$("#docresponse").addClass('alert-danger');
+		$("#docresponse").html(resp.message);
+		$("#docresponse").show();
+  	} else {
+  		$("#docresponse").removeClass('alert-danger');
+        $("#docresponse").addClass('alert-success');
+        $("#docresponse").html(resp.message);
+        $("#docresponse").show();
+        alert(resp.message);
+  	}
 }
 
 </script>

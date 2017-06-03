@@ -7,6 +7,7 @@
 <%@page import="org.bluepigeon.admin.model.BuyingDetails"%>
 <%@page import="org.bluepigeon.admin.model.BuyerPayment"%>
 <%@page import="org.bluepigeon.admin.model.BuyerDocuments"%>
+<%@page import="org.bluepigeon.admin.model.BuyerUploadDocuments"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
@@ -30,11 +31,10 @@
 			builder_id = builder.getId();
 		}
    	}
-	int builder_id1 = 1;
 	if(builder_id > 0 ){
 		project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id);
 	}
-	List<BuilderEmployee> builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
+	List<BuilderEmployee> builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id);
 	int flat_id = 0;
 	List<Buyer> buyers = new ArrayList<Buyer>();
 	List<BuilderBuilding> builderBuildings = new ArrayList<BuilderBuilding>(); 
@@ -42,6 +42,7 @@
 	BuyingDetails buyingDetails = new BuyingDetails();
 	List<BuyerOffer> buyerOffers = new ArrayList<BuyerOffer>();
 	List<BuyerPayment> buyerPayments = new ArrayList<BuyerPayment>();
+	List<BuyerUploadDocuments> buyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
 	int buyeroffersize = 0;
 	int primary_buyer_id = 0;
 	if (request.getParameterMap().containsKey("flat_id")) {
@@ -53,6 +54,7 @@
 		buyerOffers = new BuyerDAO().getBuyerOffersByBuyerId(buyers.get(0).getId());
 		buyeroffersize = buyerOffers.size();
 		buyerPayments = new BuyerDAO().getBuyerPaymentsByBuyerId(buyers.get(0).getId());
+		buyerUploadDocuments = new BuyerDAO().getBuyerUploadDocumentsByBuyerId(buyers.get(0).getId());
 		for(Buyer buyer :buyers) {
 			if(buyer.getIsPrimary()) {
 				primary_buyer_id = buyer.getId();
@@ -165,7 +167,6 @@
 									<div class="tab-content">
 										<div class="tab-pane active" id="vimessages" aria-expanded="false">
 										<form id="addbuyer" name="addbuyer" action="" method="post" enctype="multipart/form-data">
-											<input type="hidden" name="buyer_count" id="buyer_count" value="1" />
 											<input type="hidden" name="employee_id" id="employee_id" value="<%out.print(buyers.get(0).getBuilderEmployee().getId());%>" />
 											<input type="hidden" name="builder_id" id="builder_id" value="<%out.print(builder_id);%>" />
 											<input type="hidden" name="project_id" id="project_id" value="<%out.print(buyers.get(0).getBuilderProject().getId());%>" />
@@ -177,9 +178,19 @@
 											<input type="hidden" name="doc_passport" id="doc_passport" value="" />
 											<input type="hidden" name="doc_rra" id="doc_rra" value="" />
 											<input type="hidden" name="doc_voterid" id="doc_voterid" value="" />
-											<%for(Buyer buyer :buyers) { %>
-											<input type="hidden" name="buyer_id[]" id="buyer_id" value="<% out.print(buyer.getId());%>" />
-											<div class="col-12" id="vimessagesdd">
+											<% if(buyers.size() > 0) { %>
+											<input type="hidden" name="buyer_count" id="buyer_count" value="<% out.print(buyers.size()); %>" />
+											<% } else { %>
+											<input type="hidden" name="buyer_count" id="buyer_count" value="1" />
+											<% } %>
+											<% int i = 1;
+											for(Buyer buyer :buyers) { %>
+											<div class="col-12" id="deleteb-<% out.print(buyer.getId()); %>">
+												<% if(i > 1) { %>
+												<hr>
+												<span class="pull-right"><a href="javascript:deleteBuyer(<% out.print(buyer.getId()); %>);" class="btn btn-danger btn-xs">x</a></span><br>
+												<% } %>
+												<input type="hidden" name="buyer_id[]" id="buyer_id" value="<% out.print(buyer.getId());%>" />
 												<div class="form-group row">
 													<label for="example-text-input" class="col-3 col-form-label">Buyer Name*</label>
 													<div class="col-3">
@@ -187,7 +198,7 @@
 													</div>
 													<label for="example-text-input" class="col-3 col-form-label">Contact*</label>
 													<div class="col-3">
-														<input class="form-control" type="text" id="contact" name="contact[]" value="<% out.print(buyer.getMobile());%>">
+														<input class="form-control" type="text" id="contact" name="contact[]" value="<% out.print(buyer.getMobile());%>" maxlength="10">
 													</div>
 												</div>
 
@@ -266,8 +277,14 @@
 													<div class="messageContainer col-sm-offset-2"></div>
 												</div>
 											</div>
-											<% } %>
-											<div class="offset-sm-10 col-sm-7">
+											<% 
+												i++;
+											} 
+											%>
+											<div id="more_buyer_area">
+											
+											</div>
+											<div class="offset-sm-9 col-sm-7">
 												<button type="submit" class="btn btn-info waves-effect waves-light m-t-10" >SAVE</button>
 												<a href="javascript:addMoreBuyers();">
 													<button type="button" class="btn btn-info waves-effect waves-light m-t-10">+ Add New Buyer</button>
@@ -338,9 +355,8 @@
 												</div>
 											</div>
 
-											<div class="offset-sm-5 col-sm-7">
+											<div class="offset-sm-10 col-sm-7">
 												<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="updateBuyerFlat();" >SAVE</button>
-												<button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next1" onclick="show1();">Next</button>
 											</div>
 										</form>
 										</div>
@@ -425,6 +441,7 @@
 												<% } else { %>
 												<hr>
 												<% } %>
+												<input type="hidden" name="offer_id[]" id="offer_id" value="<% if(buyeroffersize > 0) { out.print(buyerOffers.get(0).getId()); } else { %>0<% } %>" />
 												<div id="displayoffers" style="display: <% if(buyeroffersize > 0) {%>block<% } else { %>none<% } %>;">
 													<div class="offset-sm-11 col-sm-7">
 														<i class="fa fa-times"></i>
@@ -448,7 +465,7 @@
 													<div class="form-group row">
 														<label for="example-search-input" class="col-2 col-form-label">Description</label>
 														<div class="col-2">
-															<textarea class="form-control" id="description" class="description"></textarea>
+															<textarea class="form-control" id="description" name="description[]"><% if(buyeroffersize > 0) { out.print(buyerOffers.get(0).getDescription()); }%></textarea>
 														</div>
 														<label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
 														<div class="col-2">
@@ -466,9 +483,8 @@
 														</div>
 													</div>
 												</div>
-												<div class="offset-sm-5 col-sm-7">
+												<div class="offset-sm-10 col-sm-7">
 													<button type="submit" class="btn btn-info waves-effect waves-light m-t-10" >SAVE</button>
-													<button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next2" onclick="show2();">Next</button>
 												</div>
 											</div>
 										</form>
@@ -480,8 +496,8 @@
 											<% if(buyerPayments.size() > 0) { %>
 											<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(buyerPayments.size()); %>" />
 											<% for(BuyerPayment buyerPayment :buyerPayments) { %>
-											<input type="hidden" name="payment_id[]" id="payment_id" value="<%out.print(buyerPayment.getId());%>" />
-											<div class="form-group row">
+											<div class="form-group row" id="schedule-<% out.print(buyerPayment.getId()); %>">
+												<input type="hidden" name="payment_id[]" id="payment_id" value="<%out.print(buyerPayment.getId());%>" />
 												<label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
 												<div class="col-2">
 													<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% out.print(buyerPayment.getMilestone());%>" />
@@ -494,12 +510,13 @@
 												<div class="col-2">
 													<input type="text" class="form-control" id="amount" name="amount[]" value="<% out.print(buyerPayment.getAmount());%>" />
 												</div>
-												<i class="fa fa-times"></i>
+												<a href="javascript:deleteSchedule(<%out.print(buyerPayment.getId());%>);" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
 											</div>
 											<% } %>
 											<% } else { %>
 											<input type="hidden" name="schedule_count" id="schedule_count" value="1" />
 											<div class="form-group row">
+												<input type="hidden" name="payment_id[]" id="payment_id" value="0" />
 												<label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
 												<div class="col-2">
 													<input type="text" class="form-control" id="schedule" name="schedule[]" value="" />
@@ -515,103 +532,45 @@
 												<i class="fa fa-times"></i>
 											</div>
 											<% } %>
-
+											<div id="more_schedules"></div>
 											<div class="offset-sm-9 col-sm-7">
 												<a href="javascript:addMoreSchedule();">
 													<button type="button" class="">+ Add More Schedules</button>
 												</a>
 											</div>
-											<div class="offset-sm-5 col-sm-7">
+											<div class="offset-sm-10 col-sm-7">
 												<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="updateBuyerPayments();">SAVE</button>
-												<button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next3" onclick="show3();">Next</button>
 											</div>
 										</form>
 										</div>
 										<div id="vimessages4" class="tab-pane" aria-expanded="true">
 										<form id="addbuyerdocs" name="addbuyerdocs" action="" method="post" enctype="multipart/form-data">
+											<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
+											<% for(BuyerUploadDocuments buyerUploadDocument :buyerUploadDocuments) { %>
 											<div class="form-group row">
-												<input type="hidden" name="doc_name[]" value="Agreement" />
-												<label for="example-text-input" class="col-6 col-form-label">Agreement*</label>
-
+												<input type="hidden" name="doc_id[]" value="<% out.print(buyerUploadDocument.getId()); %>" />
+												<input type="hidden" name="doc_name[]" value="<% out.print(buyerUploadDocument.getName()); %>" />
+												<label for="example-text-input" class="col-6 col-form-label"><% out.print(buyerUploadDocument.getName()); %></label>
 												<div class="col-2">
-													<input type="file" class="form-control" name="doc_url[]" />
-													<!-- <i class="fa fa-upload" aria-hidden="true"></i>-->
-												</div>
-												<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
-												<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
-											</div>
-											<div class="form-group row">
-												<input type="hidden" name="doc_name[]" value="Index 2" /> <label
-													for="example-text-input" class="col-6 col-form-label">Index
-													2*</label>
-
-												<div class="col-2">
-													<input type="file" class="form-control" name="doc_url[]" />
-													<!-- <i class="fa fa-upload" aria-hidden="true"></i>-->
-												</div>
-												<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
-												<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
-											</div>
-											<div class="form-group row">
-												<input type="hidden" name="doc_name[]"
-													value="Receipts with Date and time and Name" /> <label
-													for="example-text-input" class="col-6 col-form-label">Receipts
-													with Date & Time & Name</label>
-												<div class="col-2">
-													<input type="file" class="form-control" name="doc_url[]" />
-													<!-- <i class="fa fa-upload" aria-hidden="true"></i>-->
-												</div>
-												<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
-												<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
-											</div>
-											<div class="form-group row">
-												<input type="hidden" name="doc_name[]"
-													value="Electrical and Plumbing lines map" /> <label
-													for="example-text-input" class="col-6 col-form-label">Electricals
-													& Plumbing lines map</label>
-
-												<div class="col-2">
-													<input type="file" class="form-control" name="doc_url[]" />
-													<!-- <i class="fa fa-upload" aria-hidden="true"></i>-->
-												</div>
-												<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
-												<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
-											</div>
-											<div class="form-group row">
-												<input type="hidden" name="doc_name[]"
-													value="Possession grant letter" /> <label
-													for="example-text-input" class="col-6 col-form-label">Possession
-													grant letter</label>
-
-												<div class="col-2">
-													<input type="file" class="form-control" name="doc_url[]" />
-													<!-- <i class="fa fa-upload" aria-hidden="true"></i>-->
-												</div>
-												<!--                                       <div class="col-2"><i class="fa fa-upload" aria-hidden="true"></i></div> -->
-												<!--                                       <div class="col-2"><i class="fa fa-download" aria-hidden="true"></i></div> -->
-												<!--                                       <div class="col-2"><i class="fa fa-eye" aria-hidden="true"></i></div> -->
-											</div>
-											<div class="form-group row">
-												<label for="example-text-input" class="col-6 col-form-label">Other
-													Documents</label>
-
-												<div class="col-2">
-													<input type="text" name="doc_name[]" class="form-control"
-														value="" placeholder="Enter Document Name" />
+													<a href="${baseUrl}/<% out.print(buyerUploadDocument.getDocUrl().toString()); %>" target="_blank">View / Download</a>
 												</div>
 												<div class="col-2">
 													<input type="file" class="form-control" name="doc_url[]" />
-													<!-- <i class="fa fa-upload" aria-hidden="true">-->
 												</div>
-
 											</div>
-
-											<div class="offset-sm-5 col-sm-7">
-												<button type="button"
-													class="btn btn-info waves-effect waves-light m-t-10"
-													onclick="previous4();">Previous</button>
-												<button type="submit"
-													class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+											<% } %>
+											<div class="form-group row">
+												<label for="example-text-input" class="col-6 col-form-label">Other Documents</label>
+												<div class="col-2">
+													<input type="hidden" name="doc_id[]" value="0" />
+													<input type="text" name="doc_name[]" class="form-control" value="" placeholder="Enter Document Name" />
+												</div>
+												<div class="col-2">
+													<input type="file" class="form-control" name="doc_url[]" />
+												</div>
+											</div>
+											<div class="offset-sm-9 col-sm-7">
+												<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="uploadDocuments();">SAVE</button>
 											</div>
 										</form>
 										</div>
@@ -1033,15 +992,46 @@
 	        alert(resp.message);
 	  	}
 	}
+	
+	function uploadDocuments(){
+		var options = {
+		 		target : '#imageresponse', 
+		 		beforeSubmit : showAddDocumentRequest,
+		 		success :  showAddDocumentResponse,
+		 		url : '${baseUrl}/webapi/buyer/update/doc',
+		 		semantic : true,
+		 		dataType : 'json'
+		 	};
+	   	$('#addbuyerdocs').ajaxSubmit(options);
+	}
+	
+	function showAddDocumentRequest(formData, jqForm, options){
+		$("#paymentresponse").hide();
+	   	var queryString = $.param(formData);
+		return true;
+	}
+	   	
+	function showAddDocumentResponse(resp, statusText, xhr, $form){
+		if(resp.status == '0') {
+			$("#paymentresponse").removeClass('alert-success');
+	       	$("#paymentresponse").addClass('alert-danger');
+			$("#paymentresponse").html(resp.message);
+			$("#paymentresponse").show();
+	  	} else {
+	  		$("#paymentresponse").removeClass('alert-danger');
+	        $("#paymentresponse").addClass('alert-success');
+	        $("#paymentresponse").html(resp.message);
+	        $("#paymentresponse").show();
+	        alert(resp.message);
+	  	}
+	}
 
 	function addMoreBuyers() {
 		var buyers = parseInt($("#buyer_count").val());
 		buyers++;
 
 		var html = '<input type="hidden" name="buyer_id[]" value="0"/><div class="tab-content" id="buyer-'+buyers+'"><hr>'
-				+ '<span class="pull-right">	<a href="javascript:removeBuyer('
-				+ buyers
-				+ ');" class="btn btn-danger btn-xs">x</a></span><br>'
+				+ '<span class="pull-right"><a href="javascript:removeBuyer('+buyers+');" class="btn btn-danger btn-xs">x</a></span><br>'
 				+ '<div class="col-12">'
 				+ '<div class="form-group row">'
 				+ '<label for="example-text-input" class="col-3 col-form-label">Buyer Name</label>'
@@ -1051,7 +1041,7 @@
 
 				+ '<label for="example-text-input" class="col-3 col-form-label">Contact</label>'
 				+ '<div class="col-3">'
-				+ '<input class="form-control" type="text" id="contact" name="contact[]" value="">'
+				+ '<input class="form-control" type="text" id="contact" name="contact[]" value="" maxlength="10">'
 				+ '</div>'
 				+ '</div>'
 
@@ -1107,18 +1097,21 @@
 
 				+ '</div>' + '</div>';
 
-		$("#vimessages").append(html);
+		$("#more_buyer_area").append(html);
 		$("#buyer_count").val(buyers);
 	}
 	function removeBuyer(id) {
 		$("#buyer-" + id).remove();
 	}
-
+	function deleteBuyer(id) {
+		$.get("${baseUrl}/webapi/buyer/delete/coowner/"+id,{},function(){
+			window.location.reload();
+		});
+	}
 	function addMoreSchedule() {
 		var schedule_count = parseInt($("#schedule_count").val());
 		schedule_count++;
-		alert(schedule_count);
-		var html = '<div class="tab-content" id="schedule-'+schedule_count+'">'
+		var html = '<input type="hidden" name="payment_id[]" id="payment_id" value="0" /><div class="tab-content" id="schedule-'+schedule_count+'">'
 				+ '<hr/>'
 				+ '<span class="pull-right">	<a href="javascript:removeSchedule('
 				+ schedule_count
@@ -1133,17 +1126,30 @@
 				+ '<div class="col-2">'
 				+ '<input type="text" class="form-control"  id="payable" name="payable[]" value=""/>'
 				+ '</div>'
-				+ '<label for="example-search-input" class="col-2 col-form-label">Amount</label>'
+				+ '<label for="example-search-input" class="col-1 col-form-label">Amount</label>'
 				+ '<div class="col-2">'
 				+ '<input type="text" class="form-control" id="amount" name="amount[]" value=""/>'
 				+ '</div>' + '</div>' + '</div>'
 
 				+ '</div>';
-		$("#vimessages3").append(html);
+		$("#more_schedules").append(html);
 		$("#schedule_count").val(schedule_count);
 	}
 	function removeSchedule(id) {
 		$("#schedule-" + id).remove();
+	}
+	
+	function deleteSchedule(id){
+		var flag = confirm("Are you sure ? You want to delete offer ?");
+		if(flag) {
+			$.get("${baseUrl}/webapi/buyer/payment/delete/"+id, { }, function(data){
+				
+				if(data.status == 1) {
+					alert(data.message);
+					$("#schedule-"+id).remove();
+				}
+			});
+		}
 	}
 
 	function addMoreDoc() {

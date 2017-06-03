@@ -217,7 +217,9 @@ public class BuyerDAO {
 	public ResponseMessage saveBuyerUploadDouments(List<BuyerUploadDocuments> buyerUploadDocuments){
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
+		System.out.println("File Name: ttetet1");
 		if(buyerUploadDocuments.size()>0){
+			System.out.println("File Name: ttetet2");
 			Session newsession = hibernateUtil.openSession();
 			newsession.beginTransaction();
 			for(int i=0;i<buyerUploadDocuments.size();i++){
@@ -285,6 +287,16 @@ public class BuyerDAO {
 		buildingSession.close();
 		flatSession.close();
 		return buyerLists;
+	}
+	
+	public List<Buyer> getPrimaryBuyerList(){
+		String hql = "from Buyer where is_primary=1 order by id desc ";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<Buyer> result = query.list();
+		session.close();
+		return result;
 	}
 	
 	public List<BuyerList> getBuyerListByCompanyId(int company_id, String name){
@@ -634,21 +646,11 @@ public class BuyerDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		ResponseMessage responseMessage = new ResponseMessage();
 		
-		String delete_buyer_documents = "DELETE from  BuyerUploadDocuments where buyer.id = :buyer_id";
-		Session newsession1 = hibernateUtil.openSession();
-		newsession1.beginTransaction();
-		Query smdelete = newsession1.createQuery(delete_buyer_documents);
-		smdelete.setParameter("buyer_id", buyerUploadDocuments.get(0).getBuyer().getId());
-		smdelete.executeUpdate();
-		newsession1.getTransaction().commit();
-		newsession1.close();
-		
-		
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
 		if(buyerUploadDocuments.size()>0){
 			for(int i=0;i<buyerUploadDocuments.size();i++){
-				newsession.save(buyerUploadDocuments.get(i));
+				newsession.update(buyerUploadDocuments.get(i));
 			}
 			newsession.getTransaction().commit();
 			newsession.close();
@@ -878,16 +880,27 @@ public class BuyerDAO {
 	 * @return response message
 	 */
 	public ResponseMessage deleteSecondaryBuyerById(int id){
-		ResponseMessage resp = new ResponseMessage();
-		String hql = "Update Buyer set is_deleted=1 where id = :id";
+		String hql = "from BuyerDocuments where buyer.id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		session.beginTransaction();
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
-		query.executeUpdate();
+		List<BuyerDocuments> result = query.list();
+		session.beginTransaction();
+		for(BuyerDocuments buyerDocuments :result) {
+			session.delete(buyerDocuments);
+		}
 		session.getTransaction().commit();
 		session.close();
+		
+		Buyer buyer = new Buyer();
+		buyer.setId(id);
+		ResponseMessage resp = new ResponseMessage();
+		Session session2 = hibernateUtil.openSession();
+		session2.beginTransaction();
+		session2.delete(buyer);
+		session2.getTransaction().commit();
+		session2.close();
 		resp.setMessage("Buyer deleted successfully.");
 		resp.setStatus(1);
 		return resp;

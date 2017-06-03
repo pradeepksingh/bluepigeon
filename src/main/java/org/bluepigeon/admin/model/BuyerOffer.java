@@ -18,6 +18,7 @@ public class BuyerOffer implements java.io.Serializable {
 	private Integer id;
 	private Buyer buyer;
 	private String title;
+	private String description;
 	private Double offerPercentage;
 	private Double offerAmount;
 	private Byte applicable;
@@ -30,6 +31,7 @@ public class BuyerOffer implements java.io.Serializable {
 			Byte status) {
 		this.buyer = buyer;
 		this.title = title;
+		this.description = description;
 		this.offerPercentage = offerPercentage;
 		this.offerAmount = offerAmount;
 		this.applicable = applicable;
@@ -65,6 +67,15 @@ public class BuyerOffer implements java.io.Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	@Column(name = "description")
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Column(name = "offer_percentage", precision = 22, scale = 0)
