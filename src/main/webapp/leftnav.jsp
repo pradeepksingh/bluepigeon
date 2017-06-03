@@ -61,13 +61,13 @@ if(session!=null)
 		<script type="text/javascript">
 			try{ace.settings.loadState('main-container')}catch(e){}
 		</script>
-		<div id="sidebar" class="sidebar responsive ace-save-state">
+		<div id="sidebar" class="sidebar responsive ace-save-state" style="max-height:600px;overflow-y:scroll;">
 			<script type="text/javascript">
 				try{ace.settings.loadState('sidebar')}catch(e){}
 			</script>
 			<ul class="nav nav-list">
 				<li class="active">
-					<a href="#" class="dropdown-toggle">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						<i class="menu-icon fa fa-list"></i>
 						<span class="menu-text"> General Settings </span>
 						<b class="arrow fa fa-angle-down"></b>
@@ -112,7 +112,7 @@ if(session!=null)
 					</ul>
 				</li>
 				<li class="active">
-					<a href="#" class="dropdown-toggle"> 
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 						<i class="menu-icon fa fa-pencil-square-o"></i> 
 						<span class="menu-text"> Project Settings </span> <b class="arrow fa fa-angle-down"></b>
 					</a> 
@@ -238,21 +238,11 @@ if(session!=null)
 								<i class="menu-icon fa fa-caret-right"></i> Flat Status
 							</a> <b class="arrow"></b>
 						</li>
-<!-- 						<li class=""> -->
-<%-- 							<a href="${baseUrl}/admin/project-settings/builder-overall-project-stages-and-sub-stages.jsp">  --%>
-<!-- 								<i class="menu-icon fa fa-caret-right"></i> Overall Project Stages & Sub Stages -->
-<!-- 							</a> <b class="arrow"></b> -->
-<!-- 						</li> -->
 						<li class="">
 							<a href="${baseUrl}/admin/project-settings/builder-project-approval-type.jsp"> 
 								<i class="menu-icon fa fa-caret-right"></i> Project Approval Type
 							</a> <b class="arrow"></b>
 						</li>
-<!-- 						<li class=""> -->
-<%-- 							<a href="${baseUrl}/admin/project-settings/builder-project-level.jsp">  --%>
-<!-- 								<i class="menu-icon fa fa-caret-right"></i> Project Level -->
-<!-- 							</a> <b class="arrow"></b> -->
-<!-- 						</li> -->
 						<li class="">
 							<a href="${baseUrl}/admin/project-settings/builder-project-property-configuration.jsp"> 
 								<i class="menu-icon fa fa-caret-right"></i> Project Property Configuration
@@ -286,7 +276,7 @@ if(session!=null)
 					</ul>
 				</li>
 				<li class="active">
-					<a href="#" class="dropdown-toggle"> 
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 						<i class="menu-icon fa fa-pencil-square-o"></i> 
 						<span class="menu-text"> Builder </span> <b class="arrow fa fa-angle-down"></b>
 					</a> 
@@ -300,7 +290,7 @@ if(session!=null)
 					</ul>
 				</li>
 				<li class="active">
-					<a href="#" class="dropdown-toggle"> 
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 						<i class="menu-icon fa fa-pencil-square-o"></i> 
 						<span class="menu-text"> Project </span> <b class="arrow fa fa-angle-down"></b>
 					</a> 
@@ -339,7 +329,7 @@ if(session!=null)
 					</ul>
 				</li>
 				<li class="active">
-					<a href="#" class="dropdown-toggle"> 
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 						<i class="menu-icon fa fa-pencil-square-o"></i> 
 						<span class="menu-text"> Employees </span> <b class="arrow fa fa-angle-down"></b>
 					</a> 
@@ -353,7 +343,7 @@ if(session!=null)
 					</ul>
 				</li>
 				<li class="active">
-					<a href="#" class="dropdown-toggle"> 
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 						<i class="menu-icon fa fa-pencil-square-o"></i> 
 						<span class="menu-text"> Leads </span> <b class="arrow fa fa-angle-down"></b>
 					</a> 
@@ -367,7 +357,7 @@ if(session!=null)
 					</ul>
 				</li>
 				<li class="active">
-					<a href="#" class="dropdown-toggle"> 
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 						<i class="menu-icon fa fa-pencil-square-o"></i> 
 						<span class="menu-text"> Buyers </span> <b class="arrow fa fa-angle-down"></b>
 					</a> 
@@ -381,7 +371,7 @@ if(session!=null)
 					</ul>
 				</li>
 				<li class="active">
-					<a href="#" class="dropdown-toggle"> 
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 						<i class="menu-icon fa fa-pencil-square-o"></i> 
 						<span class="menu-text"> DemandLetters </span> <b class="arrow fa fa-angle-down"></b>
 					</a> 
@@ -395,7 +385,7 @@ if(session!=null)
 					</ul>
 				</li>
 				<li class="active">
-					<a href="#" class="dropdown-toggle"> 
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 						<i class="menu-icon fa fa-pencil-square-o"></i> 
 						<span class="menu-text"> Agreement </span> <b class="arrow fa fa-angle-down"></b>
 					</a> 
@@ -409,7 +399,7 @@ if(session!=null)
 					</ul>
 				</li>
 				<li class="active">
-					<a href="#" class="dropdown-toggle"> 
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 						<i class="menu-icon fa fa-pencil-square-o"></i> 
 						<span class="menu-text"> Possession </span> <b class="arrow fa fa-angle-down"></b>
 					</a> 
@@ -423,7 +413,7 @@ if(session!=null)
 					</ul>
 				</li>
 				<li class="active">
-					<a href="#" class="dropdown-toggle"> 
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 						<i class="menu-icon fa fa-pencil-square-o"></i> 
 						<span class="menu-text"> Campaign </span> <b class="arrow fa fa-angle-down"></b>
 					</a> 
@@ -436,20 +426,6 @@ if(session!=null)
 						</li>
 					</ul>
 				</li>
-<!-- 				<li class="active"> -->
-<!-- 					<a href="#" class="dropdown-toggle">  -->
-<!-- 						<i class="menu-icon fa fa-pencil-square-o"></i>  -->
-<!-- 						<span class="menu-text"> Project Update</span> <b class="arrow fa fa-angle-down"></b> -->
-<!-- 					</a>  -->
-<!-- 					<b class="arrow"></b> -->
-<!-- 					<ul class="submenu"> -->
-<!-- 						<li class="active"> -->
-<%-- 							<a href="${baseUrl}/admin/buyer/update-buyers/list.jsp">  --%>
-<!-- 								<i class="menu-icon fa fa-caret-right"></i>Project Update -->
-<!-- 							</a> <b class="arrow"></b> -->
-<!-- 						</li> -->
-<!-- 					</ul> -->
-<!-- 				</li> -->
 			</ul>
 			<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
 				<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"

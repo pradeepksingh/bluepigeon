@@ -1,5 +1,5 @@
 <%@page import="org.bluepigeon.admin.dao.BuyerDAO"%>
-<%@page import="org.bluepigeon.admin.data.BuyerList"%>
+<%@page import="org.bluepigeon.admin.model.Buyer"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
@@ -12,7 +12,7 @@
 <%@include file="../../head.jsp"%>
 <%@include file="../../leftnav.jsp"%>
 <%
-	List<BuyerList> buyer_list = new BuyerDAO().getBuyerList();
+	List<Buyer> buyer_list = new BuyerDAO().getPrimaryBuyerList();
 	int buyer_size = buyer_list.size();
 	List<Builder> builders = new BuilderDetailsDAO().getBuilderList();
 %>
@@ -36,33 +36,6 @@
 			</div>
 			<div class="">
 				<div class="panel panel-default" style="padding: 5px;">
-<!-- 				  	<div> -->
-<!-- 	              		<div class="panel panel-default"> -->
-<!-- 		                   	<div class="panel-body"> -->
-<!-- 	                            <div class="row" style="padding-bottom:10px;"> -->
-<!-- 		                            <div class="col-sm-3"> -->
-<!-- 		                            	<select id="builder_id" name="builder_id" class="form-control"> -->
-<!-- 											<option value="0">Select Builder Group</option> -->
-<%-- 											<% for (Builder builder : builders) { %> --%>
-<%-- 											<option value="<%out.print(builder.getId());%>"> <% out.print(builder.getName()); %> </option> --%>
-<%-- 											<% } %> --%>
-<!-- 										</select> -->
-<!-- 		                            </div> -->
-<!-- 		                            <div class="col-sm-3"> -->
-<!-- 		                            	<select id="company_id" name="company_id" class="form-control"> -->
-<!-- 											<option value="0">Select Builder Company</option> -->
-<!-- 										</select> -->
-<!-- 		                            </div> -->
-<!-- 		                            <div class="col-sm-3"> -->
-<!-- 		                            	<input type="text" id="project_name" name="project_name" class="form-control" placeholder="Project Name"/> -->
-<!-- 		                            </div> -->
-<!-- 		                            <div class="col-sm-3"> -->
-<!-- 	                          			<input type="button" name="search" id="search" class="btn btn-primary btn-sm" value="Search" onclick="searchBuyers();"/> -->
-<!-- 	                          		</div> -->
-<!-- 		                     	</div> -->
-<!-- 		                   	</div> -->
-<!-- 		               	</div> -->
-<!-- 		            </div> -->
 	               	<div class="panel-body">
 	                	<div class="dataTable_wrapper" style="overflow:auto;">
 	                       	<table class="table table-striped table-bordered table-hover" id="tblBuyer">
@@ -80,22 +53,22 @@
 									</tr>
 								</thead>
 								<tbody class="project_table">
-								<% for(BuyerList buyer : buyer_list) { %>
+								<% for(Buyer buyer : buyer_list) { %>
 									<tr>
 										<td>
-											<%	out.print(buyer.getProjectName());	%>
+											<%	out.print(buyer.getBuilderProject().getName());	%>
 										</td>
 										<td>
 											<% out.print(buyer.getName()); %>
 										</td>
 										<td>
-											<% out.print(buyer.getPhone()); %>
+											<% out.print(buyer.getMobile()); %>
 										</td>
 										<td>
 											<% out.print(buyer.getEmail()); %>
 										</td>
 										<td>
-											<% out.print(buyer.getBuildingName()+" "+buyer.getFlatNumber()); %>
+											<% out.print(buyer.getBuilderBuilding().getName()+" "+buyer.getBuilderFlat().getFlatNo()); %>
 										</td>
 										<td>
 											<% if(buyer.getAgreement() == 0) { %>
@@ -119,8 +92,7 @@
 											<% } %>
 										</td>
 										<td>
-											<a href="${baseUrl}/admin/buyer/edit.jsp?buyer_id=<% out.print(buyer.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-<%-- 											<a href="${baseUrl}/admin/project/building/list.jsp?project_id=<% out.print(project.getId());%>" class="btn btn-info icon-btn btn-xs"><i class="fa fa-list"></i> Buildings</a> --%>
+											<a href="${baseUrl}/admin/buyer/edit.jsp?flat_id=<% out.print(buyer.getBuilderFlat().getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>
 										</td>
 									</tr>
 									<% } %>

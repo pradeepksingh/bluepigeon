@@ -44,6 +44,9 @@ $(function() {
     $("ul.submenu li a").each(function(){
    	  var target_li = $(this).closest("li");
          if($(this).attr("href") == pgurl || $(this).attr("href") == '' ) {
+         	setTimeout(function(){
+        		slideToTop(target_li);
+        	}, 1000);
        	  	target_li.addClass("active");
        	  	var tagetul = target_li.closest("ul");
    	  	  	if(tagetul.closest("li")) {
@@ -52,4 +55,10 @@ $(function() {
          }
     });
 });
+
+function slideToTop(input) {
+	$("#sidebar").animate({
+ 	    scrollTop: $(input).offset().top
+ 	},1500);
+}
 </script>

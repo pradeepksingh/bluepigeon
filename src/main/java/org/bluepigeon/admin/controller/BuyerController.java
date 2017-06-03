@@ -543,21 +543,20 @@ public class BuyerController {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updateBuyerUploadDoc (
 			@FormDataParam("buyer_id") int buyer_id,
+			@FormDataParam("doc_id[]") List<FormDataBodyPart> doc_id,
 			@FormDataParam("doc_name[]") List<FormDataBodyPart> doc_name,
 			@FormDataParam("doc_url[]") List<FormDataBodyPart> doc_url
-			){
-		 Buyer buyer = null;
+	){
+			ResponseMessage resp = new ResponseMessage();
 		 Buyer primaryBuyer = new Buyer();
 		 BuyerDAO buyerDAO = new BuyerDAO();
-		 ResponseMessage resp = new ResponseMessage();
 		 if(buyer_id > 0){
-			 buyer = new Buyer();
-			 buyer.setId(buyer_id);
+			 primaryBuyer.setId(buyer_id);
 		 }
-		 if(buyer.getIsPrimary())
-			 primaryBuyer = buyer;
+			 
 		try {
 			List<BuyerUploadDocuments> buyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
+			List<BuyerUploadDocuments> newbuyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
 			int i = 0;
 			for(FormDataBodyPart title : doc_name)
 			{
@@ -571,19 +570,32 @@ public class BuyerController {
 					this.imageUploader.writeToFile(doc_url.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
 					buDocuments.setDocUrl(gallery_name);
 					buDocuments.setBuyer(primaryBuyer);
+					if(doc_id.get(i).getValueAs(Integer.class) != 0) {
+						buDocuments.setId(doc_id.get(i).getValueAs(Integer.class));
+					}
 					buDocuments.setName(doc_name.get(i).getValueAs(String.class).toString());
 					buDocuments.setBuilderdoc(true);
 					buDocuments.setUploadedDate(new Date());
+					if(doc_id.get(i).getValueAs(Integer.class) != 0) {
+						buyerUploadDocuments.add(buDocuments);
+					} else {
+						newbuyerUploadDocuments.add(buDocuments);
+					}
 				}
-				buyerUploadDocuments.add(buDocuments);
+				i++;
 			}
-			resp = buyerDAO.updateBuyerUploadDocuments(buyerUploadDocuments);
+			if(buyerUploadDocuments.size() > 0) {
+				resp = buyerDAO.updateBuyerUploadDocuments(buyerUploadDocuments);
+			}
+			if(newbuyerUploadDocuments.size() > 0) {
+				resp = buyerDAO.saveBuyerUploadDouments(newbuyerUploadDocuments);
+			}
 		} catch(Exception e) {
-			buyer.setPhoto("");
+			//exception
+			resp.setStatus(0);
 		}
 		return resp;
 	}
-
 	
 	@POST
 	@Path("/payment/update")
@@ -613,7 +625,7 @@ public class BuyerController {
 				for(FormDataBodyPart milestone : schedule)
 				{
 					if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
-						if(payment_id!=null){
+						if(payment_id.get(i).getValueAs(Integer.class) != 0){
 							if(payment_id.get(i).getValueAs(Integer.class) != null && payment_id.get(i).getValueAs(Integer.class) !=0) {
 								boolean isPaid = false;
 								BuyerPayment buyerPayment = new BuyerPayment();
@@ -662,6 +674,7 @@ public class BuyerController {
 			@FormDataParam("discount[]") List<FormDataBodyPart> discount,
 			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amount,
 			@FormDataParam("applicable_on[]") List<FormDataBodyPart> applicable_on,
+			@FormDataParam("description[]") List<FormDataBodyPart> description,
 			@FormDataParam("apply[]") List<FormDataBodyPart> apply
 			) {
 			Buyer buyer = new BuyerDAO().getBuyerById(buyer_id);
@@ -684,6 +697,7 @@ public class BuyerController {
 							BuyerOffer buyerOffer = new BuyerOffer();
 							buyerOffer.setId(offer_id.get(i).getValueAs(Integer.class) );
 							buyerOffer.setTitle(title.getValueAs(String.class).toString());
+							buyerOffer.setDescription(description.get(i).getValueAs(String.class).toString());
 							buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
 							buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
 							buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
@@ -693,6 +707,7 @@ public class BuyerController {
 						}}else{
 							BuyerOffer buyerOffer = new BuyerOffer();
 							buyerOffer.setTitle(title.getValueAs(String.class).toString());
+							buyerOffer.setDescription(description.get(i).getValueAs(String.class).toString());
 							buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
 							buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
 							buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
@@ -803,7 +818,8 @@ public class BuyerController {
 			@FormDataParam("discount[]") List<FormDataBodyPart> discount,
 			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amount,
 			@FormDataParam("applicable_on[]") List<FormDataBodyPart> applicable_on,
-			@FormDataParam("apply[]") List<FormDataBodyPart> apply
+			@FormDataParam("apply[]") List<FormDataBodyPart> apply,
+			@FormDataParam("description[]") List<FormDataBodyPart> description
 	){
 		ResponseMessage msg = new ResponseMessage();
 		BuyerDAO buyerDAO = new BuyerDAO();
@@ -853,11 +869,12 @@ public class BuyerController {
 				for(FormDataBodyPart title : offer_title)
 				{
 					if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
-						if(offer_id!=null){
+						if(offer_id.get(i).getValueAs(Integer.class) != null){
 						if( offer_id.get(i).getValueAs(Integer.class) != 0 && offer_id.get(i).getValueAs(Integer.class) != null) {
 							BuyerOffer buyerOffer = new BuyerOffer();
 							buyerOffer.setId(offer_id.get(i).getValueAs(Integer.class) );
 							buyerOffer.setTitle(title.getValueAs(String.class).toString());
+							buyerOffer.setDescription(description.get(i).getValueAs(String.class).toString());
 							buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
 							buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
 							buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
@@ -867,6 +884,7 @@ public class BuyerController {
 						}}else{
 							BuyerOffer buyerOffer = new BuyerOffer();
 							buyerOffer.setTitle(title.getValueAs(String.class).toString());
+							buyerOffer.setDescription(description.get(i).getValueAs(String.class).toString());
 							buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
 							buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
 							buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
@@ -888,6 +906,14 @@ public class BuyerController {
 				msg.setMessage("Buyer pricing updated successfully");
 			}
 		return msg;
+	}
+	
+	@GET
+	@Path("/delete/coowner/{buyer_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteCoOwner(@PathParam("buyer_id") int buyer_id) {
+		BuyerDAO buyerDAO = new BuyerDAO();
+		return buyerDAO.deleteSecondaryBuyerById(buyer_id);
 	}
 	
 	@GET
