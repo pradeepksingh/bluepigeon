@@ -72,16 +72,6 @@
     <script src="../js/bootstrap-datepicker.min.js"></script>
     <script src="../js/jquery.form.js"></script>
     <script src="../js/bootstrapValidator.min.js"></script>
-  
-     <script> 
- 
-$(function(){
-$("#sidebar1").load("../partial/sidebar.jsp");
-  $("#header").load("../partial/header.jsp"); 
-
-  $("#footer").load("../partial/footer.jsp"); 
-});
-</script>
 <script type="text/javascript">
     $('input[type=checkbox]').click(function(){
     if($(this).is(':checked')){
@@ -101,11 +91,12 @@ $("#sidebar1").load("../partial/sidebar.jsp");
         <div class="cssload-speeding-wheel"></div>
     </div>
     <div id="wrapper">
-        <!-- Top Navigation -->
-        <div id="header"></div>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
-       <div id="sidebar1"> </div>
+       <div id="header">
+	       <%@include file="../partial/header.jsp"%>
+      	</div>
+      	<div id="sidebar1"> 
+       	   <%@include file="../partial/sidebar.jsp"%>
+      	</div>
     </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
@@ -233,7 +224,9 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                 </div>
             </div>
             <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2017 Â© Blue Pigeon</footer>
+            <div id="sidebar1"> 
+       	   		<%@include file="../partial/footer.jsp"%>
+      		</div>
         
         <!-- /#page-wrapper -->
     

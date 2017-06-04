@@ -56,7 +56,7 @@
     <link href="../css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
-    <link href="../../css/custom.css" rel="stylesheet">
+    <link href="../css/custom.css" rel="stylesheet">
     <link href="css/custom1.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -194,7 +194,7 @@
 </html>
 <script type="text/javascript">
 $("#project_id").change(function(){
-	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{ }, function(data){
+	$.get("${baseUrl}/webapi/builder/building/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
 		$(data).each(function(index){
 			
@@ -204,7 +204,7 @@ $("#project_id").change(function(){
 	},'json');
 });
 $("#building_id").change(function(){
-	$.get("${baseUrl}/webapi/project/building/flat/names/"+$("#building_id").val(),{ }, function(data){
+	$.get("${baseUrl}/webapi/builder/building/flat/names/"+$("#building_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Flat</option>';
 		$(data).each(function(index){
 			

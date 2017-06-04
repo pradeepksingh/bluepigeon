@@ -32,7 +32,7 @@
 			builder_id = builder.getBuilder().getId();
 		}
 		if(builder_id > 0){
-			builderProjects = new ProjectDAO().getProjectsByBuilderId(builder_id);
+			builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
 		}
 		if(builderProjects.size()>0)
 	    	project_size = builderProjects.size();
@@ -77,15 +77,6 @@
     <script src="../js/jquery.form.js"></script>
     <script src="../js/bootstrapValidator.min.js"></script>
   
-     <script> 
- 
-$(function(){
-$("#sidebar1").load("../partial/sidebar.jsp");
-  $("#header").load("../partial/header.jsp"); 
-
-  $("#footer").load("../partial/footer.jsp"); 
-});
-</script>
 <script type="text/javascript">
     $('input[type=checkbox]').click(function(){
     if($(this).is(':checked')){
@@ -225,8 +216,9 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                 </div>
             </div>
             <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2017 Â© Blue Pigeon</footer>
-        
+            <div id="sidebar1"> 
+       	   		<%@include file="../partial/footer.jsp"%>
+      		</div>
         <!-- /#page-wrapper -->
     
     <!-- /#wrapper -->

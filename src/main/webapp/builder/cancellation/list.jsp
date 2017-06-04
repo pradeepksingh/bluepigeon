@@ -24,7 +24,7 @@
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
-			builder_uid = builder.getId();
+			builder_uid = builder.getBuilder().getId();
 		}
    	}
 	if(builder_uid > 0){
