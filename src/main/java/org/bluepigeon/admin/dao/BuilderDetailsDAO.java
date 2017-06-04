@@ -304,7 +304,7 @@ public class BuilderDetailsDAO {
 		Session updatePasswordSession = hibernateUtil.openSession();
 		Query passwordQuery = passwordSession.createQuery(passwordHql);
 		passwordQuery.setParameter("password", oldPassword);
-		Builder builder = (Builder) passwordQuery.list().get(0);
+		BuilderEmployee builder = (BuilderEmployee) passwordQuery.list().get(0);
 		if(builder != null){
 			updatePasswordSession.beginTransaction();
 			Query query = updatePasswordSession.createQuery(hql);
@@ -557,7 +557,7 @@ public class BuilderDetailsDAO {
 				where +="locality.id = :locality_id";
 			
 		}
-		hql += where + " AND status=1";
+		hql += where + " AND status=1 order by id desc";
 	//	String imageHql = "from ProjectImageGallery where builderProject.id = :project_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();

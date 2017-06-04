@@ -31,7 +31,7 @@ public class BuyerOffer implements java.io.Serializable {
 			Byte status) {
 		this.buyer = buyer;
 		this.title = title;
-		this.description = description;
+		//this.description = description;
 		this.offerPercentage = offerPercentage;
 		this.offerAmount = offerAmount;
 		this.applicable = applicable;

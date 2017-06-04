@@ -5,7 +5,6 @@
 <c:set var="url">${req.requestURL}</c:set>
 <c:set var="uri" value="${req.requestURI}" />
 <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
-<%@page import="org.bluepigeon.admin.model.Builder"%>
 <%
 session = request.getSession(false);
 	BuilderEmployee mainadmin = new BuilderEmployee();
@@ -52,7 +51,7 @@ session = request.getSession(false);
 <nav class="navbar navbar-default navbar-static-top m-b-0">
             <div class="navbar-header">
                 
-                <div class="top-left-part"><a class="logo" href="index.jsp"><b><img src="plugins/images/eliteadmin-logo.png" alt="logo" /></b><span class="hidden-xs"><strong>Blue</strong>Pigeon</span></a></div>
+                <div class="top-left-part"><a class="logo" href="index.jsp"><b><img src="${baseUrl}/builder/plugins/images/bpadmin-logo.png" alt="logo" /></b><span class="hidden-xs"></span></a></div>
                 <ul class="nav navbar-top-links navbar-right pull-right">
                    <li><a href="${baseUrl }/webapi/validatebuilder/logoutbuilder"><b class="hidden-xs">logout</b></a></li>
                    <li></li>
