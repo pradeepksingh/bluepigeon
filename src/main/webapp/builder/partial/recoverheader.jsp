@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="req" value="${pageContext.request}" />
@@ -7,13 +8,13 @@
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%
 session = request.getSession(false);
-	Builder mainadmin = new Builder();
+	BuilderEmployee mainadmin = new BuilderEmployee();
 	int session_uid = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			mainadmin  = (Builder)session.getAttribute("ubname");
+			mainadmin  = (BuilderEmployee)session.getAttribute("ubname");
 			session_uid = mainadmin.getId();
 		}
    	}
@@ -53,7 +54,7 @@ session = request.getSession(false);
                 
                 <div class="top-left-part"><a class="logo" href="index.jsp"><b><img src="plugins/images/eliteadmin-logo.png" alt="logo" /></b><span class="hidden-xs"><strong>Blue</strong>Pigeon</span></a></div>
                 <ul class="nav navbar-top-links navbar-right pull-right">
-                   <li><a href="${baseUrl }/webapi/validate/logoutbuilder"><b class="hidden-xs">logout</b></a></li>
+                   <li><a href="${baseUrl }/webapi/validatebuilder/logoutbuilder"><b class="hidden-xs">logout</b></a></li>
                    <li></li>
                 </ul>
                 

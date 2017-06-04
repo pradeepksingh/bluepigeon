@@ -6,13 +6,13 @@
 int p_user_id = 0;
 List<Locality> localities = new LocalityNamesImp().getLocalityActiveList();
 session = request.getSession(false);
-Builder builder = new Builder();
+BuilderEmployee builder = new BuilderEmployee();
 if(session!=null)
 {
 	if(session.getAttribute("ubname") != null)
 	{
-		builder  = (Builder)session.getAttribute("ubname");
-		p_user_id = builder.getId();
+		builder  = (BuilderEmployee)session.getAttribute("ubname");
+		p_user_id = builder.getBuilder().getId();
 	}
 }
 %>

@@ -23,13 +23,13 @@
  	if(builderPropertyTypes.size()>0)
  		type_size = builderPropertyTypes.size();
    	session = request.getSession(false);
-   	Builder builder = new Builder();
+   	BuilderEmployee builder = new BuilderEmployee();
    	int builder_id = 0;
    	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			builder  = (Builder)session.getAttribute("ubname");
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getId();
 		}
    }

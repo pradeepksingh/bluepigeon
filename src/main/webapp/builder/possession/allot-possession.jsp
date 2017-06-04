@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
@@ -16,14 +17,14 @@
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
  	
    	session = request.getSession(false);
-   	Builder builder = new Builder();
+   	BuilderEmployee builder = new BuilderEmployee();
    	int builder_id = 0;
    	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			builder  = (Builder)session.getAttribute("ubname");
-			builder_id = builder.getId();
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			builder_id = builder.getBuilder().getId();
 		}
 		if(builder_id > 0){
 			projectDatas = new ProjectDAO().getProjectsByBuilderId(builder_id);

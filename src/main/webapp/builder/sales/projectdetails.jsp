@@ -31,13 +31,13 @@
 	List<BuilderProjectApprovalInfo> projectApprovalInfos = new BuilderProjectApprovalInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id);
 	imageGaleries = new ProjectDAO().getProjectImagesByProjectId(project_id);
 	session = request.getSession(false);
-	Builder builder = new Builder();
+	BuilderEmployee builder = new BuilderEmployee();
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			builder  = (Builder)session.getAttribute("ubname");
-			p_user_id = builder.getId();
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			p_user_id = builder.getBuilder().getId();
 		}
 	}
 %>

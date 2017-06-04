@@ -61,7 +61,7 @@
 	CountryDAOImp countryService = new CountryDAOImp();
 	List<Country> listCountry = countryService.getActiveCountryList();
 	session = request.getSession(false);
-	Builder adminuserproject = new Builder();
+	BuilderEmployee adminuserproject = new BuilderEmployee();
 	Set<State> states = null;
 	Set<City> cities = null;
 	String name = null;
@@ -71,8 +71,8 @@
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			adminuserproject  = (Builder)session.getAttribute("ubname");
-			p_user_id = adminuserproject.getId();
+			adminuserproject  = (BuilderEmployee)session.getAttribute("ubname");
+			p_user_id = adminuserproject.getBuilder().getId();
 		}
    	}
 	List<BuilderProjectType> projectTypes = new BuilderProjectTypeDAO().getBuilderProjectTypes();

@@ -17,14 +17,14 @@
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
  	
    	session = request.getSession(false);
-   	Builder builder = new Builder();
+   	BuilderEmployee builder = new BuilderEmployee();
    	int builder_id = 0;
    	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			builder  = (Builder)session.getAttribute("ubname");
-			builder_id = builder.getId();
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			builder_id = builder.getBuilder().getId();
 		}
 		if(builder_id > 0){
 			builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);

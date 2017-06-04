@@ -9,13 +9,13 @@
 	int p_user_id = 0;
 	List<BuilderFlat> builderFlats = null;
 	session = request.getSession(false);
-	Builder adminuserproject = new Builder();
+	BuilderEmployee adminuserproject = new BuilderEmployee();
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			adminuserproject  = (Builder)session.getAttribute("ubname");
-			p_user_id = adminuserproject.getId();
+			adminuserproject  = (BuilderEmployee)session.getAttribute("ubname");
+			p_user_id = adminuserproject.getBuilder().getId();
 		}
 	}
 	if (request.getParameterMap().containsKey("floor_id")) {

@@ -23,14 +23,14 @@
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
    	session = request.getSession(false);
    	
-   Builder builder = new Builder();
+   BuilderEmployee builder = new BuilderEmployee();
  	int p_user_id = 0;
  	List<City> city_list = new CityNamesImp().getCityNames();
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			builder  = (Builder)session.getAttribute("ubname");
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			p_user_id = builder.getId();
 		}
 		if(p_user_id > 0){
