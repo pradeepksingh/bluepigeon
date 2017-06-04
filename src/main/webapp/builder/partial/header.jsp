@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="req" value="${pageContext.request}" />
@@ -7,13 +8,13 @@
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%
 session = request.getSession(false);
-	Builder mainadmin = new Builder();
+	BuilderEmployee mainadmin = new BuilderEmployee();
 	int session_uid = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			mainadmin  = (Builder)session.getAttribute("ubname");
+			mainadmin  = (BuilderEmployee)session.getAttribute("ubname");
 			session_uid = mainadmin.getId();
 		}
    	}
@@ -144,7 +145,7 @@ session = request.getSession(false);
 <!--                             <li><a href="javascript:void(0)"><i class="ti-user"></i>  My Profile</a></li> -->
 <!--                             <li><a href="javascript:void(0)"><i class="ti-email"></i>  Inbox</a></li> -->
 <!--                             <li><a href="javascript:void(0)"><i class="ti-settings"></i>  Account Setting</a></li> -->
-                            <li><a href="${baseUrl }/webapi/validate/logoutbuilder"><i class="fa fa-power-off"></i>  Logout</a></li>
+                            <li><a href="${baseUrl }/webapi/validatebuilder/logoutbuilder"><i class="fa fa-power-off"></i>  Logout</a></li>
                         </ul>
                         <!-- /.dropdown-user -->
                     </li>

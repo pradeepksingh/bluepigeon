@@ -2,39 +2,39 @@ package org.bluepigeon.admin.dao;
 
 import java.util.List;
 
+import org.bluepigeon.admin.model.Builder;
+import org.bluepigeon.admin.model.BuilderEmployee;
+import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.bluepigeon.admin.model.AdminUser;
-import org.bluepigeon.admin.model.Builder;
-import org.bluepigeon.admin.util.HibernateUtil;
 
-
-public class LoginValidationImp implements LoginValidateDAO{
+public class BuilderLoginValidateImp implements BuilderLoginValidateDAO {
 
 	@Override
-	public List<AdminUser> getAdminUserByEmail(String email) {
-		String hql = "from AdminUser a where a.email =  :email1";
+	public BuilderEmployee getBuilderByEmail(String email) {
+		String hql = "from BuilderEmployee a where a.email =  :email1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		
 		query.setString("email1", email);
-		List<AdminUser> result = query.list();
+		BuilderEmployee result = (BuilderEmployee)query.list().get(0);
 		session.close();
+		System.out.println("Email Id DB :: "+result.getEmail());
 		return result;
 		
 	}
 
 	@Override
-	public boolean isValidEmailId(String email) {
+	public boolean isValidBuilderEmailId(String email) {
 		boolean isValid = false;
-		String hql = "from AdminUser a where a.email =  :email";
+		String hql = "from BuilderEmployee a where a.email =  :email";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		
 		query.setString("email", email);
-		List<AdminUser> result = query.list();
+		List<BuilderEmployee> result = query.list();
 		if(result.size()>0)
 			isValid = true;
 		session.close();
@@ -42,24 +42,24 @@ public class LoginValidationImp implements LoginValidateDAO{
 	}
 
 	@Override
-	public boolean isValidPassword(String password) {
+	public boolean isValidBuilderPassword(String password) {
 		boolean isValid = false;
-		String hql = "from AdminUser a where a.password =  :password";
+		String hql = "from BuilderEmployee a where a.password =  :password";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		
 		query.setString("password", password);
-		List<AdminUser> result = query.list();
+		List<Builder> result = query.list();
 		if(result.size()>0)
 			isValid = true;
 		session.close();
 		return isValid;
 	}
-	public int activateAccount(AdminUser registration)
+	public int activateBuilderAccount(BuilderEmployee registration)
 	{
 		byte status= 1;
-		String hql="update AdminUser set password = :password, status = :status where id = :id";
+		String hql="update BuilderEmployee set password = :password, status = :status where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
@@ -72,26 +72,6 @@ public class LoginValidationImp implements LoginValidateDAO{
 		session.getTransaction().commit();
 		session.close();
 		
-		return result;
-	}
-	
-	public List<AdminUser> getSalesExecutive(){
-		String hql = "from AdminUser where adminUserRole.id=2";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		List<AdminUser> result = query.list();
-		session.close();
-		return result;
-	}
-	
-	public List<AdminUser> getDataCollector(){
-		String hql = "from AdminUser where adminUserRole.id=3";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		List<AdminUser> result = query.list();
-		session.close();
 		return result;
 	}
 }

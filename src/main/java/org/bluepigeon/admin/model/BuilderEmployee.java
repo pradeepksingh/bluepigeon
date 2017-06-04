@@ -34,7 +34,7 @@ public class BuilderEmployee implements java.io.Serializable {
 	private City city;
 	private Locality locality;
 	private boolean status;
-	private Byte loginStatus;
+	private int loginStatus;
 
 	public BuilderEmployee() {
 	}
@@ -212,14 +212,12 @@ public class BuilderEmployee implements java.io.Serializable {
 		this.status = status;
 	}
 	@Column(name = "login_status")
-	public Byte isLoginStatus() {
+	public int getLoginStatus() {
 		return loginStatus;
 	}
 
-	public void setLoginStatus(Byte loginStatus) {
+	public void setLoginStatus(int loginStatus) {
 		this.loginStatus = loginStatus;
 	}
-	
-	
 	
 }

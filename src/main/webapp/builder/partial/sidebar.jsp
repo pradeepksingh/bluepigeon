@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -8,13 +9,13 @@
 <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <%
 	session = request.getSession(false);
-	Builder builder_new = new Builder();
+	BuilderEmployee builder_new = new BuilderEmployee();
 	int builder_new_id = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			builder_new  = (Builder)session.getAttribute("ubname");
+			builder_new  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_new_id = builder_new.getId();
 		}
    	}
@@ -31,7 +32,7 @@
                         /input-group
                     </li>
                     <li class="user-pro">
-                        <a href="#" class="waves-effect"><img src="${baseUrl }/builder/plugins/images/users/d1.jpg" alt="user-img" class="img-circle"> <span class="hide-menu">Steve Gection<span class="fa arrow"></span></span>
+                        <a href="#" class="waves-effect"><img src="${baseUrl }/builder/plugins/images/users/d1.jpg" alt="user-img" class="img-circle"> <span class="hide-menu"><%out.print(builder_new.getName()); %><span class="fa arrow"></span></span>
                         </a>
                         <ul class="nav nav-second-level">
                             <li><a href="javascript:void(0)"><i class="ti-user"></i> My Profile</a></li>

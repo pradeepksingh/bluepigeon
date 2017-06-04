@@ -7,14 +7,14 @@
 <%
 	List<PossessionList> possession_list = null;
 	session = request.getSession(false);
-	Builder builder = new Builder();
+	BuilderEmployee builder = new BuilderEmployee();
 	int builder_uid = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			builder  = (Builder)session.getAttribute("ubname");
-			builder_uid = builder.getId();
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			builder_uid = builder.getBuilder().getId();
 		}
    	}
 	if(builder_uid > 0){

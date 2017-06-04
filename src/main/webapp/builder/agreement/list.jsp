@@ -5,14 +5,14 @@
 <%
 	List<AgreementList> agreement_list = null;
 	session = request.getSession(false);
-	Builder builder = new Builder();
+	BuilderEmployee builder = new BuilderEmployee();
 	int session_id = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			builder  = (Builder)session.getAttribute("ubname");
-			session_id = builder.getId();
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			session_id = builder.getBuilder().getId();
 		}
    	}
 	if(session_id > 0){

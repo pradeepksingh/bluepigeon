@@ -16,15 +16,15 @@
 	List<ProjectData> projectDatas = null;
 	int project_id=0;
 	session = request.getSession(false);
-	Builder builder = new Builder();
+	BuilderEmployee builder = new BuilderEmployee();
 	List<City> cityList = new CityNamesImp().getCityActiveNames();
 	int builder_uid = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			builder  = (Builder)session.getAttribute("ubname");
-			builder_uid = builder.getId();
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			builder_uid = builder.getBuilder().getId();
 		}
    	}
 	

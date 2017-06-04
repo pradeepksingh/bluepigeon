@@ -29,20 +29,21 @@
 	
 	session = request.getSession(false);
 	
-	Builder builder = new Builder();
+	BuilderEmployee builder = new BuilderEmployee();
 	int p_user_id = 0;
 	List<City> city_list = new CityNamesImp().getCityNames();
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			builder  = (Builder)session.getAttribute("ubname");
-			p_user_id = builder.getId();
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			p_user_id = builder.getBuilder().getId();
+			if(p_user_id>0){
+				builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
+				employeeLists = new BuilderDetailsDAO().getBuilderEmployeeList(p_user_id);
+			}
 		}
-		if(p_user_id>0){
-			builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
-			employeeLists = new BuilderDetailsDAO().getBuilderEmployeeList(p_user_id);
-		}
+		
 	}
 	if(builderProjects.size()>0)
 		project_size = builderProjects.size();

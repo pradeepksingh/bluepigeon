@@ -12,6 +12,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -386,5 +387,38 @@ public class BuilderController {
 		}
 		return msg;
 	}
+	@GET
+	@Path("/building/flat/names/{building_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderFlat> getProjectBuildingFlatNames(@PathParam("building_id") int building_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		List<BuilderFlat> flats = projectDAO.getBuildingActiveFlatById(building_id);
+		List<BuilderFlat> newflats = new ArrayList<BuilderFlat>();
+		for(BuilderFlat builderFlat :flats) {
+			BuilderFlat flat = new BuilderFlat();
+			flat.setId(builderFlat.getId());
+			flat.setFlatNo(builderFlat.getFlatNo());
+			newflats.add(flat);
+		}
+		return newflats;
+	}
+	
+	
+	@GET
+	@Path("/building/names/{project_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderBuilding> getProjectBuildingNames(@PathParam("project_id") int project_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		List<BuilderBuilding> buildings = projectDAO.getBuilderActiveProjectBuildings(project_id);
+		List<BuilderBuilding> newbuildings = new ArrayList<BuilderBuilding>();
+		for(BuilderBuilding builderBuilding :buildings) {
+			BuilderBuilding building = new BuilderBuilding();
+			building.setId(builderBuilding.getId());
+			building.setName(builderBuilding.getName());
+			newbuildings.add(building);
+		}
+		return newbuildings;
+	}
+	
 	
 }

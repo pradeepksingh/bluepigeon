@@ -102,7 +102,7 @@
 
 <script type="text/javascript">
 function login(){
-	$.post('${baseUrl}/webapi/validate/builder',{email: $("#bname").val(), password: $("#bpassword").val()}, function(data){
+	$.post('${baseUrl}/webapi/validatebuilder/builder',{email: $("#bname").val(), password: $("#bpassword").val()}, function(data){
 		var success = data.status;
 		var status =parseInt(success);
 		if(status==1) {

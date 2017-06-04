@@ -16,7 +16,7 @@
 <%
 	List<ProjectData> project_list = null;
 	session = request.getSession(false);
-	Builder builder = new Builder();
+	BuilderEmployee builder = new BuilderEmployee();
 	int builder_uid = 0;
 	int emp_id = 0;
 	emp_id = Integer.parseInt(request.getParameter("emp_id"));
@@ -24,8 +24,8 @@
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			builder  = (Builder)session.getAttribute("ubname");
-			builder_uid = builder.getId();
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			builder_uid = builder.getBuilder().getId();
 		}
    	}
 	if(builder_uid > 0){

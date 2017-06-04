@@ -36,7 +36,7 @@
  	if(builderPropertyTypes.size()>0)
  		type_size = builderPropertyTypes.size();
    	session = request.getSession(false);
-   	Builder builder = new Builder();
+   	BuilderEmployee builder = new BuilderEmployee();
    	BuilderLead builderLead = null;
    	int builder_id = 0;
    	int builder_size = 0;
@@ -45,8 +45,8 @@
 	{
 		if(session.getAttribute("ubname") != null)
 		{
-			builder  = (Builder)session.getAttribute("ubname");
-			builder_id = builder.getId();
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			builder_id = builder.getBuilder().getId();
 		}
 		if(builder_id > 0){
 			builderLead = new ProjectDAO().getBuilderLeadByBuilderId(builder_id).get(0);
