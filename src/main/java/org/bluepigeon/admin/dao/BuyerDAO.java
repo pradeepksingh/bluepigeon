@@ -1003,7 +1003,7 @@ public class BuyerDAO {
 	
 	public Long getTotalBuyers(int builderId){
 		Long totalBuyers = (long) 0;
-		String hql = "select COUNT(*) from Buyer where builder.id = :builder_id and is_deleted = 0 and status = 1 and is_primary = 1";
+		String hql = "select COUNT(*) from Buyer where builder.id = :builder_id and is_deleted = 0";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
