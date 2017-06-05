@@ -1794,6 +1794,25 @@ public class ProjectDAO {
 		session.close();
 		return result;
 	}
+	
+	/**
+	 * 
+	 * @param flat_id
+	 * @return List<BuilderFlat>
+	 */
+	public List<BuilderFlat> getBuildingActiveFlatByBuildingId(int building_id) {
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id and builderFlatStatus.id=2 and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuilderFlat> result = query.list();
+		for(BuilderFlat builderFlat : result){
+			System.out.println("Flat number :: "+builderFlat.getFlatNo());
+		}
+		session.close();
+		return result;
+	}
 	/**
 	 * 
 	 * @param flat_id
@@ -1806,6 +1825,9 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("flat_id", flat_id);
 		List<BuilderFlat> result = query.list();
+		for(BuilderFlat builderFlat : result){
+			System.out.println("Flat number :: "+builderFlat.getFlatNo());
+		}
 		session.close();
 		return result;
 	}

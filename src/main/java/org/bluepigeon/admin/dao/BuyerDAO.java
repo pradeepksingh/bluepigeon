@@ -880,29 +880,42 @@ public class BuyerDAO {
 	 * @return response message
 	 */
 	public ResponseMessage deleteSecondaryBuyerById(int id){
-		String hql = "from BuyerDocuments where buyer.id = :id";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("id", id);
-		List<BuyerDocuments> result = query.list();
-		session.beginTransaction();
-		for(BuyerDocuments buyerDocuments :result) {
-			session.delete(buyerDocuments);
-		}
-		session.getTransaction().commit();
-		session.close();
-		
-		Buyer buyer = new Buyer();
-		buyer.setId(id);
 		ResponseMessage resp = new ResponseMessage();
-		Session session2 = hibernateUtil.openSession();
-		session2.beginTransaction();
-		session2.delete(buyer);
-		session2.getTransaction().commit();
-		session2.close();
-		resp.setMessage("Buyer deleted successfully.");
-		resp.setStatus(1);
+		String hql = "from BuyerDocuments where buyer.id = :id";
+		String bhql = "from Buyer where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		
+		Session bsession = hibernateUtil.openSession();
+		Query bquery = bsession.createQuery(bhql);
+		bquery.setParameter("id", id);
+		List<Buyer> bresult = bquery.list();
+		if(bresult.get(0).getIsPrimary()) {
+			resp.setStatus(0);
+			resp.setMessage("You can not delete primary buyer");
+		} else {
+		
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("id", id);
+			List<BuyerDocuments> result = query.list();
+			session.beginTransaction();
+			for(BuyerDocuments buyerDocuments :result) {
+				session.delete(buyerDocuments);
+			}
+			session.getTransaction().commit();
+			session.close();
+			
+			Buyer buyer = new Buyer();
+			buyer.setId(id);
+			Session session2 = hibernateUtil.openSession();
+			session2.beginTransaction();
+			session2.delete(buyer);
+			session2.getTransaction().commit();
+			session2.close();
+			resp.setMessage("Buyer deleted successfully.");
+			resp.setStatus(1);
+		}
+		
 		return resp;
 	}
 		

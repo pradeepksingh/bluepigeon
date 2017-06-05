@@ -122,45 +122,45 @@
                             <h3 class="box-title">Total Revenue (Rs in cr)</h3>
                             <ul class="list-inline two-part">
                                 <li><i class="ti-wallet text-success"></i></li>
-                                <li class="text-right"><span class="counter">8170</span></li>
+                                <li class="text-right"><span class="counter"> &#x20B9;8170</span></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="white-box">
                    <div class="row re">
-                    <div class="col-md-3 col-sm-6 col-xs-12">
-                        <select class="selectpicker" data-style="form-control">
-                                        <option>Project Name</option>
-                                        <option>Kumar</option>
-                                        <option>ganga</option>
-                           </select>
+<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!--                         <select class="selectpicker" data-style="form-control"> -->
+<!--                                         <option>Project Name</option> -->
+<!--                                         <option>Kumar</option> -->
+<!--                                         <option>ganga</option> -->
+<!--                            </select> -->
                                
-                    </div>
-                    <div class="col-md-3 col-sm-6 col-xs-12">
-                      <select class="selectpicker" data-style="form-control">
-                                        <option>City</option>
-                                        <option>Pune</option>
-                                        <option>Mumbai</option>
-                          </select>
+<!--                     </div> -->
+<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!--                       <select class="selectpicker" data-style="form-control"> -->
+<!--                                         <option>City</option> -->
+<!--                                         <option>Pune</option> -->
+<!--                                         <option>Mumbai</option> -->
+<!--                           </select> -->
                              
-                    </div>
-                    <div class="col-md-3 col-sm-6 col-xs-12">
-                       <select class="selectpicker" data-style="form-control">
-                                        <option>Locality</option>
-                                        <option>S.B Road</option>
-                                        <option>Kothrud</option>
-                         </select>
+<!--                     </div> -->
+<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!--                        <select class="selectpicker" data-style="form-control"> -->
+<!--                                         <option>Locality</option> -->
+<!--                                         <option>S.B Road</option> -->
+<!--                                         <option>Kothrud</option> -->
+<!--                          </select> -->
                               
-                    </div>
-                    <div class="col-md-3 col-sm-6 col-xs-12">
-                       <select class="selectpicker" data-style="form-control">
-                                        <option>Status</option>
-                                        <option>1</option>
-                                        <option>2</option>
-                         </select>
+<!--                     </div> -->
+<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!--                        <select class="selectpicker" data-style="form-control"> -->
+<!--                                         <option>Status</option> -->
+<!--                                         <option>1</option> -->
+<!--                                         <option>2</option> -->
+<!--                          </select> -->
                                
-                    </div>
+<!--                     </div> -->
                     
                     <div class="row">
                    		<%
@@ -453,49 +453,64 @@
     });
     </script>
     <script>
-   
-    	 var el = document.getElementById('graph'); 
-    	    var options = {
-    	        percent:  el.getAttribute('data-percent') || 2,
-    	        size: el.getAttribute('data-size') || 100,
-    	        lineWidth: el.getAttribute('data-line') || 5,
-    	        rotate: el.getAttribute('data-rotate') || 0
-    	    }
-
-    	    var canvas = document.createElement('canvas');
-    	    var span = document.createElement('span');
-    	    span.textContent = options.percent + '%';
-    	        
-    	    if (typeof(G_vmlCanvasManager) !== 'undefined') {
-    	        G_vmlCanvasManager.initElement(canvas);
-    	    }
-
-    	    var ctx = canvas.getContext('2d');
-    	    canvas.width = canvas.height = options.size;
-
-    	    el.appendChild(span);
-    	    el.appendChild(canvas);
-
-    	    ctx.translate(options.size / 2, options.size / 2); // change center
-    	    ctx.rotate((-1 / 2 + options.rotate / 180) * Math.PI); // rotate -90 deg
-
-    	    //imd = ctx.getImageData(0, 0, 240, 240);
-    	    var radius = (options.size - options.lineWidth) / 2;
-
-    	    var drawCircle = function(color, lineWidth, percent) {
-    	    		percent = Math.min(Math.max(0, percent || 1), 1);
-    	    		ctx.beginPath();
-    	    		ctx.arc(0, 0, radius, 0, Math.PI * 2 * percent, false);
-    	    		ctx.strokeStyle = color;
-    	            ctx.lineCap = 'round'; // butt, round or square
-    	    		ctx.lineWidth = lineWidth
-    	    		ctx.stroke();
-    	    };
-
-    	    drawCircle('#efefef', options.lineWidth, 100 / 100);
-    	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
-    </script>
     
+    <%
+	if(project_list !=null){
+		int i=1;
+		for(ProjectList projectList : project_list ){
+%>
+	createGraph("graph<%out.print(projectList.getId());%>");
+	<%}}%>
+    
+    function createGraph(graphId){
+    	//alert(graphId);
+    	 var el = document.getElementById(graphId); 
+    	//var el = $('div #'+graphId).attr('data-percent');
+    	// alert("Graph Id "+el);
+    	var per= el.getAttribute('data-percent');
+    	//alert("per : "+per);
+ 	    var options = {
+ 	        percent:  el.getAttribute('data-percent') || 2,
+ 	        size: el.getAttribute('data-size') || 100,
+ 	        lineWidth: el.getAttribute('data-line') || 5,
+ 	        rotate: el.getAttribute('data-rotate') || 0
+ 	    }
+
+ 	    var canvas = document.createElement('canvas');
+ 	    var span = document.createElement('span');
+ 	    span.textContent = options.percent + '%';
+ 	        
+ 	    if (typeof(G_vmlCanvasManager) !== 'undefined') {
+ 	        G_vmlCanvasManager.initElement(canvas);
+ 	    }
+
+ 	    var ctx = canvas.getContext('2d');
+ 	    canvas.width = canvas.height = options.size;
+
+ 	    el.appendChild(span);
+ 	    el.appendChild(canvas);
+
+ 	    ctx.translate(options.size / 2, options.size / 2); // change center
+ 	    ctx.rotate((-1 / 2 + options.rotate / 180) * Math.PI); // rotate -90 deg
+
+ 	    //imd = ctx.getImageData(0, 0, 240, 240);
+ 	    var radius = (options.size - options.lineWidth) / 2;
+
+ 	    var drawCircle = function(color, lineWidth, percent) {
+ 	    		percent = Math.min(Math.max(0, percent || 1), 1);
+ 	    		ctx.beginPath();
+ 	    		ctx.arc(0, 0, radius, 0, Math.PI * 2 * percent, false);
+ 	    		ctx.strokeStyle = color;
+ 	            ctx.lineCap = 'round'; // butt, round or square
+ 	    		ctx.lineWidth = lineWidth
+ 	    		ctx.stroke();
+ 	    };
+
+ 	    drawCircle('#efefef', options.lineWidth, 100 / 100);
+ 	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
+    }
+   
+    </script>
 
 </body>
 
