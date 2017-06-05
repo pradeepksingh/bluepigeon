@@ -1000,7 +1000,13 @@ public class BuyerDAO {
 		}
 		return response;
 	}
-	
+	//To display total buyers on dash board
+	/**
+	 * Get total count of buyers by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return count of buyers
+	 */
 	public Long getTotalBuyers(int builderId){
 		Long totalBuyers = (long) 0;
 		String hql = "select COUNT(*) from Buyer where builder.id = :builder_id and is_deleted = 0";

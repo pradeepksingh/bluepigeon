@@ -2503,9 +2503,9 @@ public class ProjectDAO {
 		session.close();
 		return projects;
 	}
-	
+	//To display first 4 active projects on dash board
 	/**
-	 * Get all active projects by builder id
+	 * Get first 4 active projects by builder id
 	 * @author pankaj
 	 * @param builderId
 	 * @return List<BuilderProject>
@@ -2856,7 +2856,13 @@ public class ProjectDAO {
 		return newProjectLists;
 		
 	}
-	
+	//To display total inventory on dash board
+	/**
+	 * Get total number of inventory by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return total number of inventory(Flats)
+	 */
 	public Long getTotalInventory(int builderId){
 		Long totalInventory= (long) 0;
 		String hql = "select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and status = 1";
