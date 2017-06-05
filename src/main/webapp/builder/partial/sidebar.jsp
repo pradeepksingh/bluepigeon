@@ -38,7 +38,7 @@
                             <li><a href="javascript:void(0)"><i class="ti-user"></i> My Profile</a></li>
                             <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
                             <li><a href="javascript:void(0)"><i class="ti-settings"></i> Account Setting</a></li>
-                            <li><a href="${baseUrl }/webapi/validate/logoutbuilder"><i class="fa fa-power-off"></i> Logout</a></li>
+                            <li><a href="${baseUrl }/webapi/validatebuilder/logoutbuilder"><i class="fa fa-power-off"></i> Logout</a></li>
                         </ul>
                     </li>
                     <li class="nav-small-cap m-t-10">--Main Menu--</li>

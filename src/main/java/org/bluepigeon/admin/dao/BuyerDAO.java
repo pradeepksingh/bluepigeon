@@ -988,4 +988,16 @@ public class BuyerDAO {
 		return response;
 	}
 	
+	public Long getTotalBuyers(int builderId){
+		Long totalBuyers = (long) 0;
+		String hql = "select COUNT(*) from Buyer where builder.id = :builder_id and is_deleted = 0 and status = 1 and is_primary = 1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setInteger("builder_id", builderId);
+		totalBuyers = (Long) query.uniqueResult();
+		
+		return totalBuyers;
+	}
+	
 }

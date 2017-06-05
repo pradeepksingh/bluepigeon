@@ -2482,6 +2482,40 @@ public class ProjectDAO {
 		return projects;
 	}
 	
+	/**
+	 * Get all active projects by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return List<BuilderProject>
+	 */
+	public List<ProjectList> getBuilderFirstFourActiveProjectsByBuilderId(int builderId) {
+		System.err.println("builderId :: "+builderId);
+		String hql = "from BuilderProject where builder.id = :builder_id and status=1 order by id desc";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setFirstResult(0);
+		query.setMaxResults(4);
+		query.setParameter("builder_id", builderId);
+		List<BuilderProject> result = query.list();
+		List<ProjectList> projects = new ArrayList<ProjectList>();
+		for(BuilderProject builderproject : result) {
+			ProjectList newproject = new ProjectList();
+			newproject.setId(builderproject.getId());
+			newproject.setName(builderproject.getName());
+			newproject.setStatus(builderproject.getStatus());
+			newproject.setBuilderId(builderproject.getBuilder().getId());
+			newproject.setBuilderName(builderproject.getBuilder().getName());
+			newproject.setCityId(builderproject.getCity().getId());
+			newproject.setCityName(builderproject.getCity().getName());
+			newproject.setLocalityId(builderproject.getLocality().getId());
+			newproject.setLocalityName(builderproject.getLocality().getName());
+			System.out.println("Project name :: "+builderproject.getName());
+			projects.add(newproject);
+		}
+		session.close();
+		return projects;
+	}
 	public ResponseMessage deleteProjectOfferInfo(int id) {
 		String hql = "delete from BuilderProjectOfferInfo where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -2799,5 +2833,17 @@ public class ProjectDAO {
 		}
 		return newProjectLists;
 		
+	}
+	
+	public Long getTotalInventory(int builderId){
+		Long totalInventory= (long) 0;
+		String hql = "select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and status = 1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setInteger("builder_id", builderId);
+		totalInventory = (Long) query.uniqueResult();
+		
+		return totalInventory;
 	}
 }
