@@ -40,8 +40,6 @@ public class CancellationController {
 			@FormParam("charges") Double charges,
 			@FormParam("builder_id") int builderId){
 		
-		
-		Builder builder = new Builder();
 		Cancellation cancellation = new Cancellation();
 		if(projectId > 0){
 			BuilderProject builderProject = new BuilderProject();

@@ -1,9 +1,37 @@
+<%@page import="org.bluepigeon.admin.model.ProjectImageGallery"%>
+<%@page import="org.bluepigeon.admin.data.ProjectList"%>
+<%@page import="java.util.List"%>
+<%@page import="org.bluepigeon.admin.dao.BuyerDAO"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="req" value="${pageContext.request}" />
 <c:set var="url">${req.requestURL}</c:set>
 <c:set var="uri" value="${req.requestURI}" />
 <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
+<%
+	List<ProjectList> project_list = null;
+	ProjectImageGallery imageGaleries = null;
+	Long totalBuyers = (long)0;
+	Long totalInventory = (long) 0; 
+	session = request.getSession(false);
+	BuilderEmployee builder = new BuilderEmployee();
+	int builder_id = 0;
+	if(session!=null)
+	{
+		if(session.getAttribute("ubname") != null)
+		{
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			builder_id = builder.getBuilder().getId();
+		}
+	}
+	if(builder_id > 0){
+		totalBuyers = new BuyerDAO().getTotalBuyers(builder_id);
+		totalInventory = new ProjectDAO().getTotalInventory(builder_id);
+		project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
+		
+		
+	}
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,7 +95,7 @@
                             <h3 class="box-title">Total Properties</h3>
                             <ul class="list-inline two-part">
                                 <li><i class="ti-home text-info"></i></li>
-                                <li class="text-right"><span class="counter">480</span></li>
+                                <li class="text-right"><span class="counter"><%out.print(totalInventory); %></span></li>
                             </ul>
                         </div>
                     </div>
@@ -76,7 +104,7 @@
                             <h3 class="box-title">Total Buyers</h3>
                             <ul class="list-inline two-part">
                                 <li><i class="icon-tag text-purple"></i></li>
-                                <li class="text-right"><span class="counter">169</span></li>
+                                <li class="text-right"><span class="counter"><%out.print(totalBuyers); %></span></li>
                             </ul>
                         </div>
                     </div>
@@ -94,140 +122,158 @@
                             <h3 class="box-title">Total Revenue (Rs in cr)</h3>
                             <ul class="list-inline two-part">
                                 <li><i class="ti-wallet text-success"></i></li>
-                                <li class="text-right"><span class="counter">8170</span></li>
+                                <li class="text-right"><span class="counter"> &#x20B9;8170</span></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="white-box">
                    <div class="row re">
-                    <div class="col-md-3 col-sm-6 col-xs-12">
-                        <select class="selectpicker" data-style="form-control">
-                                        <option>Project Name</option>
-                                        <option>Kumar</option>
-                                        <option>ganga</option>
-                           </select>
+<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!--                         <select class="selectpicker" data-style="form-control"> -->
+<!--                                         <option>Project Name</option> -->
+<!--                                         <option>Kumar</option> -->
+<!--                                         <option>ganga</option> -->
+<!--                            </select> -->
                                
-                    </div>
-                    <div class="col-md-3 col-sm-6 col-xs-12">
-                      <select class="selectpicker" data-style="form-control">
-                                        <option>City</option>
-                                        <option>Pune</option>
-                                        <option>Mumbai</option>
-                          </select>
+<!--                     </div> -->
+<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!--                       <select class="selectpicker" data-style="form-control"> -->
+<!--                                         <option>City</option> -->
+<!--                                         <option>Pune</option> -->
+<!--                                         <option>Mumbai</option> -->
+<!--                           </select> -->
                              
-                    </div>
-                    <div class="col-md-3 col-sm-6 col-xs-12">
-                       <select class="selectpicker" data-style="form-control">
-                                        <option>Locality</option>
-                                        <option>S.B Road</option>
-                                        <option>Kothrud</option>
-                         </select>
+<!--                     </div> -->
+<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!--                        <select class="selectpicker" data-style="form-control"> -->
+<!--                                         <option>Locality</option> -->
+<!--                                         <option>S.B Road</option> -->
+<!--                                         <option>Kothrud</option> -->
+<!--                          </select> -->
                               
-                    </div>
-                    <div class="col-md-3 col-sm-6 col-xs-12">
-                       <select class="selectpicker" data-style="form-control">
-                                        <option>Status</option>
-                                        <option>1</option>
-                                        <option>2</option>
-                         </select>
+<!--                     </div> -->
+<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!--                        <select class="selectpicker" data-style="form-control"> -->
+<!--                                         <option>Status</option> -->
+<!--                                         <option>1</option> -->
+<!--                                         <option>2</option> -->
+<!--                          </select> -->
                                
-                    </div>
+<!--                     </div> -->
                     
                     <div class="row">
+                   		<%
+                       		if(project_list !=null){
+                       			for(ProjectList projectList : project_list ){
+                       	%>
                        <div class="col-md-6 col-sm-6 col-xs-12 projectsection">
 	                       <div class="image">
-		                       <img src="plugins/images/Untitled-1.png" alt="Project image"/>
+		                      <%
+	                       		try{
+	                       		imageGaleries = new ProjectDAO().getProjectImagesByProjectId(projectList.getId()).get(0);
+	                       	     if(imageGaleries.getImage() != null){
+	                       	%>
+		                       	<img  src="${baseUrl}/<% out.print(imageGaleries.getImage()); %>" height="348" width="438" alt="Project image"/>
+		                       	<%}}catch(Exception e){ %>
+		                       		 <img  src="${baseUrl}/builder/plugins/images/Untitled-1.png" height="348"  width="438" alt="Project image"/>
+		                       	<%} %>
 		                       <div class="overlay">
 			                       <div class="row">
 				                       <div class="col-md-6 left">
-					                       <h3>Rohan Lehare</h3>
-					                       <h4>Baner</h4>
-					                       <br>
-						                       <div class="bottom">
-						                       <h4>50/500 SOLD</h4>
-						                       </div>
+					                       <h3><%out.print(projectList.getName()); %></h3>
+					                       <h4><%out.print(projectList.getCityName()); %></h4>
+<!-- 					                       <br> -->
+<!-- 						                       <div class="bottom"> -->
+<!-- 						                       <h4>50/500 SOLD</h4> -->
+<!-- 						                       </div> -->
 				                       </div>
 				                        <div class="col-md-6 right">
-					                         <div class="chart" id="graph" data-percent="70">
+					                         <div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="<%out.print(projectList.getId()); %>">
 					                         </div>
-						                        <div class="bottom">
-						                        <h4>10 NEW LEADS</h4>
-						                        </div>
+<!-- 						                        <div class="bottom"> -->
+<!-- 						                        <h4>10 NEW LEADS</h4> -->
+<!-- 						                        </div> -->
 				                       </div>
 			                       </div>
 	                           </div>
 	                       </div>
-                        <div class="image">
-                          <div class="image">
-	                       <img src="plugins/images/Untitled-1.png" alt="Project image"/>
-	                       <div class="overlay">
-		                       <div class="row">
-			                       <div class="col-md-6 left">
-				                       <h3>Rohan Lehare</h3>
-				                       <h4>Baner</h4>
-				                       <br>
-					                       <div class="bottom">
-					                       <h4>50/500 SOLD</h4>
-					                       </div>
-			                       </div>
-			                        <div class="col-md-6 right">
-				                         <div class="chart" id="graph1" data-percent="50">
-				                         </div>
-					                        <div class="bottom">
-					                        <h4>10 NEW LEADS</h4>
-					                        </div>
-			                       </div>
-		                       </div>
-                           </div>
-                       </div>
-                        </div>
-                       </div>
-                       <div class="col-md-6 col-sm-6 col-xs-12 projectsection">
-                      <div class="image">
-	                       <img src="plugins/images/Untitled-1.png" alt="Project image"/>
-	                       <div class="overlay">
-		                       <div class="row">
-			                       <div class="col-md-6 left">
-				                       <h3>Rohan Lehare</h3>
-				                       <h4>Baner</h4>
-				                       <br>
-					                       <div class="bottom">
-					                       <h4>50/500 SOLD</h4>
-					                       </div>
-			                       </div>
-			                        <div class="col-md-6 right">
-				                         <div class="chart" id="graph" data-percent="30">
-				                         </div>
-					                        <div class="bottom">
-					                        <h4>10 NEW LEADS</h4>
-					                        </div>
-			                       </div>
-		                       </div>
-                           </div>
-                       </div>  <div class="image">
-	                       <img src="plugins/images/Untitled-1.png" alt="Project image"/>
-	                       <div class="overlay">
-		                       <div class="row">
-			                       <div class="col-md-6 left">
-				                       <h3>Rohan Lehare</h3>
-				                       <h4>Baner</h4>
-				                       <br>
-					                       <div class="bottom">
-					                       <h4>50/500 SOLD</h4>
-					                       </div>
-			                       </div>
-			                        <div class="col-md-6 right">
-				                         <div class="chart" id="graph" data-percent="90">
-				                         </div>
-					                        <div class="bottom">
-					                        <h4>10 NEW LEADS</h4>
-					                        </div>
-			                       </div>
-		                       </div>
-                           </div>
-                       </div>
-                       </div>
+	                       </div>
+	                       <%  
+                       		}
+                       	}
+                        %>
+<!--                         <div class="image"> -->
+<!--                           <div class="image"> -->
+<!-- 	                       <img src="plugins/images/Untitled-1.png" alt="Project image"/> -->
+<!-- 	                       <div class="overlay"> -->
+<!-- 		                       <div class="row"> -->
+<!-- 			                       <div class="col-md-6 left"> -->
+<!-- 				                       <h3>Rohan Lehare</h3> -->
+<!-- 				                       <h4>Baner</h4> -->
+<!-- 				                       <br> -->
+<!-- 					                       <div class="bottom"> -->
+<!-- 					                       <h4>50/500 SOLD</h4> -->
+<!-- 					                       </div> -->
+<!-- 			                       </div> -->
+<!-- 			                        <div class="col-md-6 right"> -->
+<!-- 				                         <div class="chart" id="graph1" data-percent="50"> -->
+<!-- 				                         </div> -->
+<!-- 					                        <div class="bottom"> -->
+<!-- 					                        <h4>10 NEW LEADS</h4> -->
+<!-- 					                        </div> -->
+<!-- 			                       </div> -->
+<!-- 		                       </div> -->
+<!--                            </div> -->
+<!--                        </div> -->
+<!--                         </div> -->
+<!--                        </div> -->
+<!--                        <div class="col-md-6 col-sm-6 col-xs-12 projectsection"> -->
+<!--                       <div class="image"> -->
+<!-- 	                       <img src="plugins/images/Untitled-1.png" alt="Project image"/> -->
+<!-- 	                       <div class="overlay"> -->
+<!-- 		                       <div class="row"> -->
+<!-- 			                       <div class="col-md-6 left"> -->
+<!-- 				                       <h3>Rohan Lehare</h3> -->
+<!-- 				                       <h4>Baner</h4> -->
+<!-- 				                       <br> -->
+<!-- 					                       <div class="bottom"> -->
+<!-- 					                       <h4>50/500 SOLD</h4> -->
+<!-- 					                       </div> -->
+<!-- 			                       </div> -->
+<!-- 			                        <div class="col-md-6 right"> -->
+<!-- 				                         <div class="chart" id="graph" data-percent="30"> -->
+<!-- 				                         </div> -->
+<!-- 					                        <div class="bottom"> -->
+<!-- 					                        <h4>10 NEW LEADS</h4> -->
+<!-- 					                        </div> -->
+<!-- 			                       </div> -->
+<!-- 		                       </div> -->
+<!--                            </div> -->
+<!--                        </div>   -->
+<!--                        <div class="image"> -->
+<!-- 	                       <img src="plugins/images/Untitled-1.png" alt="Project image"/> -->
+<!-- 	                       <div class="overlay"> -->
+<!-- 		                       <div class="row"> -->
+<!-- 			                       <div class="col-md-6 left"> -->
+<!-- 				                       <h3>Rohan Lehare</h3> -->
+<!-- 				                       <h4>Baner</h4> -->
+<!-- 				                       <br> -->
+<!-- 					                       <div class="bottom"> -->
+<!-- 					                       <h4>50/500 SOLD</h4> -->
+<!-- 					                       </div> -->
+<!-- 			                       </div> -->
+<!-- 			                        <div class="col-md-6 right"> -->
+<!-- 				                         <div class="chart" id="graph" data-percent="90"> -->
+<!-- 				                         </div> -->
+<!-- 					                        <div class="bottom"> -->
+<!-- 					                        <h4>10 NEW LEADS</h4> -->
+<!-- 					                        </div> -->
+<!-- 			                       </div> -->
+<!-- 		                       </div> -->
+<!--                            </div> -->
+<!--                        </div> -->
+<!--                        </div> -->
 <!-- 	                    <div class="offset-sm-5 col-sm-7"> -->
 <!-- 	                        <button type="submit" class="btn btn11 btn-info waves-effect waves-light m-t-10">More...</button> -->
 <!-- 	                     </div> -->
@@ -407,49 +453,64 @@
     });
     </script>
     <script>
-   
-    	 var el = document.getElementById('graph'); 
-    	    var options = {
-    	        percent:  el.getAttribute('data-percent') || 2,
-    	        size: el.getAttribute('data-size') || 100,
-    	        lineWidth: el.getAttribute('data-line') || 5,
-    	        rotate: el.getAttribute('data-rotate') || 0
-    	    }
-
-    	    var canvas = document.createElement('canvas');
-    	    var span = document.createElement('span');
-    	    span.textContent = options.percent + '%';
-    	        
-    	    if (typeof(G_vmlCanvasManager) !== 'undefined') {
-    	        G_vmlCanvasManager.initElement(canvas);
-    	    }
-
-    	    var ctx = canvas.getContext('2d');
-    	    canvas.width = canvas.height = options.size;
-
-    	    el.appendChild(span);
-    	    el.appendChild(canvas);
-
-    	    ctx.translate(options.size / 2, options.size / 2); // change center
-    	    ctx.rotate((-1 / 2 + options.rotate / 180) * Math.PI); // rotate -90 deg
-
-    	    //imd = ctx.getImageData(0, 0, 240, 240);
-    	    var radius = (options.size - options.lineWidth) / 2;
-
-    	    var drawCircle = function(color, lineWidth, percent) {
-    	    		percent = Math.min(Math.max(0, percent || 1), 1);
-    	    		ctx.beginPath();
-    	    		ctx.arc(0, 0, radius, 0, Math.PI * 2 * percent, false);
-    	    		ctx.strokeStyle = color;
-    	            ctx.lineCap = 'round'; // butt, round or square
-    	    		ctx.lineWidth = lineWidth
-    	    		ctx.stroke();
-    	    };
-
-    	    drawCircle('#efefef', options.lineWidth, 100 / 100);
-    	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
-    </script>
     
+    <%
+	if(project_list !=null){
+		int i=1;
+		for(ProjectList projectList : project_list ){
+%>
+	createGraph("graph<%out.print(projectList.getId());%>");
+	<%}}%>
+    
+    function createGraph(graphId){
+    	//alert(graphId);
+    	 var el = document.getElementById(graphId); 
+    	//var el = $('div #'+graphId).attr('data-percent');
+    	// alert("Graph Id "+el);
+    	var per= el.getAttribute('data-percent');
+    	//alert("per : "+per);
+ 	    var options = {
+ 	        percent:  el.getAttribute('data-percent') || 2,
+ 	        size: el.getAttribute('data-size') || 100,
+ 	        lineWidth: el.getAttribute('data-line') || 5,
+ 	        rotate: el.getAttribute('data-rotate') || 0
+ 	    }
+
+ 	    var canvas = document.createElement('canvas');
+ 	    var span = document.createElement('span');
+ 	    span.textContent = options.percent + '%';
+ 	        
+ 	    if (typeof(G_vmlCanvasManager) !== 'undefined') {
+ 	        G_vmlCanvasManager.initElement(canvas);
+ 	    }
+
+ 	    var ctx = canvas.getContext('2d');
+ 	    canvas.width = canvas.height = options.size;
+
+ 	    el.appendChild(span);
+ 	    el.appendChild(canvas);
+
+ 	    ctx.translate(options.size / 2, options.size / 2); // change center
+ 	    ctx.rotate((-1 / 2 + options.rotate / 180) * Math.PI); // rotate -90 deg
+
+ 	    //imd = ctx.getImageData(0, 0, 240, 240);
+ 	    var radius = (options.size - options.lineWidth) / 2;
+
+ 	    var drawCircle = function(color, lineWidth, percent) {
+ 	    		percent = Math.min(Math.max(0, percent || 1), 1);
+ 	    		ctx.beginPath();
+ 	    		ctx.arc(0, 0, radius, 0, Math.PI * 2 * percent, false);
+ 	    		ctx.strokeStyle = color;
+ 	            ctx.lineCap = 'round'; // butt, round or square
+ 	    		ctx.lineWidth = lineWidth
+ 	    		ctx.stroke();
+ 	    };
+
+ 	    drawCircle('#efefef', options.lineWidth, 100 / 100);
+ 	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
+    }
+   
+    </script>
 
 </body>
 

@@ -144,17 +144,17 @@
                                     				</div>
                                     				<label for="example-search-input" class="col-3 col-form-label">Current Address</label>
                                     				<div class="col-3">
-														<textarea rows="" cols="" class="form-control" id="address" name="address"><%out.print(builderEmployee.getCurrentAddress()); %></textarea>
+														<textarea rows="" cols="" class="form-control" id="address" name="address"><%if(builderEmployee.getCurrentAddress() != null){out.print(builderEmployee.getCurrentAddress());} %></textarea>
                                     				</div>
                                 				</div>
                                  				<div class="form-group row">
                                     				<label for="example-tel-input" class="col-3 col-form-label">Permanent Address</label>
                                     				<div class="col-3">
-                                        				<textarea rows="" cols="" class="form-control" id="address1" name="address1"><%out.print(builderEmployee.getPermanentAddress()); %></textarea>
+                                        				<textarea rows="" cols="" class="form-control" id="address1" name="address1"><%if(builderEmployee.getPermanentAddress() != null){out.print(builderEmployee.getPermanentAddress());} %></textarea>
                                     				</div>
                                     				<label for="example-tel-input" class="col-3 col-form-label">Designation</label>
                                     				<div class="col-3">
-                                        				<input class="form-control" type="text" value="<%out.print(builderEmployee.getDesignation());%>" name="designation" id="designation">
+                                        				<input class="form-control" type="text" value="<%if(builderEmployee.getDesignation() != null){out.print(builderEmployee.getDesignation());}%>" name="designation" id="designation">
                                     				</div>
                                 				</div>
                                 				<div class="form-group row">
@@ -169,7 +169,7 @@
 				                                    </div>
                                     				<label for="example-tel-input" class="col-3 col-form-label">Employee ID</label>
                                     				<div class="col-3">
-                                         				<input class="form-control" type="text" value="<%out.print(builderEmployee.getEmployeeId()); %>" id="empid" name="empid">
+                                         				<input class="form-control" type="text" value="<%if(builderEmployee.getEmployeeId() != null){out.print(builderEmployee.getEmployeeId());} %>" id="empid" name="empid">
                                     				</div>
                                 				</div>
                                 				<div class="form-group row">
@@ -177,9 +177,11 @@
                                     				<div class="col-3">
                                        				<select class="form-control" name="project" id="project">
 				                                          <option value="0">Select Project</option>
-														  <% for (ProjectData project : project_list) { %>
+														  <%
+														  if( builderEmployee.getBuilderProject() != null){
+														  for (ProjectData project : project_list) { %>
 														  <option value="<%out.print(project.getId());%>" <%if(project.getId() == builderEmployee.getBuilderProject().getId()) {%>selected<%} %>> <% out.print(project.getName()); %> </option>
-														  <% } %>
+														  <% }} %>
 													</select>
                                     			</div>
                                     			<label for="example-text-input" class="col-3 col-form-label">Area</label>

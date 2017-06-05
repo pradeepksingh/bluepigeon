@@ -174,7 +174,7 @@
 				                                    </div>
 				                                </div>
 				                                <div class="offset-sm-5 col-sm-7">
-				                                 	<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+				                                 	<button type="submit" name="cancelBuyer" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
 				                                </div>
 		                               		</form>
 	                               		</div>

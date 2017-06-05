@@ -392,7 +392,7 @@ public class BuilderController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuilderFlat> getProjectBuildingFlatNames(@PathParam("building_id") int building_id) {
 		ProjectDAO projectDAO = new ProjectDAO();
-		List<BuilderFlat> flats = projectDAO.getBuildingActiveFlatById(building_id);
+		List<BuilderFlat> flats = projectDAO.getBuildingActiveFlatByBuildingId(building_id);
 		List<BuilderFlat> newflats = new ArrayList<BuilderFlat>();
 		for(BuilderFlat builderFlat :flats) {
 			BuilderFlat flat = new BuilderFlat();

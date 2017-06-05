@@ -35,7 +35,7 @@ public class CancellationDAO {
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
-		query.setInteger("id",flatId);
+		query.setParameter("id",flatId);
 		query.executeUpdate();
 		session.getTransaction().commit();
 		//tx.commit();

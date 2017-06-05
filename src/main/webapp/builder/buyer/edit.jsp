@@ -1104,8 +1104,12 @@
 		$("#buyer-" + id).remove();
 	}
 	function deleteBuyer(id) {
-		$.get("${baseUrl}/webapi/buyer/delete/coowner/"+id,{},function(){
-			window.location.reload();
+		$.get("${baseUrl}/webapi/buyer/delete/coowner/"+id,{},function(data){
+			if(data.status == 0 ){
+				alert(data.message);
+			} else {
+				window.location.reload();
+			}
 		});
 	}
 	function addMoreSchedule() {
