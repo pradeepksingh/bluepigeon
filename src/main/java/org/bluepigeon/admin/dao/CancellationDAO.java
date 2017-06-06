@@ -43,7 +43,7 @@ public class CancellationDAO {
 	}
 	
 	public Buyer getPrimaryBuyerByFlatId(int flatId){
-		String hql = "from Buyer where builderFlat.id = :flat_id";
+		String hql = "from Buyer where builderFlat.id = :flat_id and is_primary=1";
 		Buyer buyer = new Buyer();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -60,6 +60,7 @@ public class CancellationDAO {
 		b2.setName(buyer.getName());
 		b2.setPancard(buyer.getPancard());
 		b2.setMobile(buyer.getMobile());
+		b2.setIsPrimary(buyer.getIsPrimary());
 		session.close();
 		return b2;
 	}

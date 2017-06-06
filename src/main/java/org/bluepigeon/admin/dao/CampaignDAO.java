@@ -64,8 +64,8 @@ public class CampaignDAO {
 	 */
 	public List<BuyerBuildingList> getBuyerBuildingListByProjectId(int projectId){
 		List<BuyerBuildingList> buyerBuildingLists = new ArrayList<BuyerBuildingList>();
-		String hql = "from BuilderBuilding where builderProject.id = :project_id";
-		String buyerHql = "from Buyer where builderFlat.builderFloor.builderBuilding.id =:building_id";
+		String hql = "from BuilderBuilding where builderProject.id = :project_id and status=1";
+		String buyerHql = "from Buyer where builderFlat.builderFloor.builderBuilding.id =:building_id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Session BuyerSession = hibernateUtil.openSession();
@@ -100,8 +100,8 @@ public class CampaignDAO {
 	 */
 	public List<BuyerFlatList> getBuyerFlatListByBuildingId(int buildingId){
 		List<BuyerFlatList> buyerFlatLists = new ArrayList<BuyerFlatList>();
-		String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id";
-		String buyerHql = "from Buyer where  builderFlat.id = :flat_id";
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id and status=1";
+		String buyerHql = "from Buyer where  builderFlat.id = :flat_id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Session buyerSession = hibernateUtil.openSession();
