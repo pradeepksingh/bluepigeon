@@ -223,9 +223,15 @@
 													<label for="example-tel-input" class="col-3 col-form-label">Owner*</label>
 													<div class="col-3">
 														<select name="is_primary[]" id="is_primary" class="form-control">
-															<option value="">Select Owner</option>
-															<option value="0" <%if(!buyer.getIsPrimary()) { %>selected<% } %>>Co-Owner</option>
-															<option value="1" <% if(buyer.getIsPrimary()) { %>selected<% } %>>Owner</option>
+<!-- 															<option value="">Select Owner</option> -->
+															<%
+																if(!buyer.getIsPrimary()){													
+															%>
+															<option value="0" selected>Co-Owner</option>
+															<%} %>
+															<% if(buyer.getIsPrimary()){ %>
+															<option value="1" selected>Owner</option>
+															<%} %>
 														</select>
 													</div>
 												</div>
@@ -1068,9 +1074,9 @@
 				+ '<label for="example-text-input" class="col-3 col-form-label">Owner *</label>'
 				+ '<div class="col-3">'
 				+ '<select name="is_primary[]" id="is_primary" class="form-control">'
-				+ '<option value="">Select Owner</option>'
+				//+ '<option value="">Select Owner</option>'
 				+ '<option value="0" selected>Co-Owner</option>'
-				+ '<option value="1">Owner</option>'
+				//+ '<option value="1">Owner</option>'
 				+ '</select>'
 				+ '</div>'
 				+ '</div>'
