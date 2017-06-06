@@ -135,7 +135,7 @@ public class CampaignDAO {
 	 * @return list of buyers
 	 */
 	public List<Buyer> getBuyerbyFlatId(int flatId){
-		String hql ="from Buyer where builderFlat.id = :flat_id and is_deleted=0";
+		String hql ="from Buyer where builderFlat.id = :flat_id and is_deleted=0 and is_primary=1";
 		HibernateUtil hibernateUtil = new HibernateUtil(); 
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);

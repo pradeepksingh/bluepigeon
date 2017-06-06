@@ -173,9 +173,11 @@
                                     <div class="col-3">
                                        <select name="building_id" id="building_id" class="form-control">
 						                 	   	<option value="0">Select Building</option>
-						                 	   	<% for(int i=0; i < building_size ; i++){ %>
+						                 	   	<%
+						                 	   	if(builderLead.getBuilderBuilding() != null){
+						                 	   	for(int i=0; i < building_size ; i++){ %>
 												<option value="<% out.print(builderBuildings.get(i).getId());%>"<%if(builderBuildings.get(i).getId() == builderLead.getBuilderBuilding().getId()) {%>selected<%} %> ><% out.print(builderBuildings.get(i).getName());%></option>
-											  	<% } %>
+											  	<% }} %>
 								       	  	</select>
                                     </div>
                                 </div>
@@ -185,9 +187,11 @@
                                     <div class="col-3">
                                       <select name="flat_id" id="flat_id" class="form-control">
 						                 	   	<option value="0">Select Flat</option>
-						                 	   	<% for(int i=0; i < flat_size; i++){ %>
+						                 	   	<%
+						                 	   	if(builderLead.getBuilderFlat()!= null){
+						                 	   	for(int i=0; i < flat_size; i++){ %>
 												<option value="<% out.print(builderFlats.get(i).getId());%>"<%if(builderFlats.get(i).getId() == builderLead.getBuilderFlat().getId()) {%>selected<%} %> ><% out.print(builderFlats.get(i).getFlatNo());%></option>
-											  	<% } %>
+											  	<% } }%>
 								       	  	</select>
                                     </div>
                                     <label for="example-search-input" class="col-3 col-form-label">Lead Name</label>
@@ -199,11 +203,11 @@
                                 <div class="form-group row">
                                     <label for="example-tel-input" class="col-3 col-form-label">Contact</label>
                                     <div class="col-3">
-                                       <input type="text" id="mobile" name="mobile" value="<%out.print(builderLead.getMobile()); %>"placeholder="Enter lead phone number" class="form-control" />
+                                       <input type="text" id="mobile" name="mobile" value="<%if(builderLead.getMobile() != null){out.print(builderLead.getMobile());} %>"placeholder="Enter lead phone number" class="form-control" />
                                     </div>
                                     <label for="example-tel-input" class="col-3 col-form-label">Email</label>
                                     <div class="col-3">
-                                         <input type="text"  id="email" name="email" value="<%out.print(builderLead.getEmail()); %>" placeholder="Enter lead email" class="form-control" />
+                                         <input type="text"  id="email" name="email" value="<%if(builderLead.getEmail() != null){out.print(builderLead.getEmail());} %>" placeholder="Enter lead email" class="form-control" />
                                     </div>
                                 </div>
                                 
@@ -233,7 +237,7 @@
                                     </div>
                                     <label for="example-search-input" class="col-3 col-form-label">Discount offered</label>
                                     <div class="col-3">
-                                       <input type="text" id="discount_offered" name="discount_offered" placeholder="Enter Discount" <%out.print(builderLead.getDiscountOffered());%> class="form-control" />
+                                       <input type="text" id="discount_offered" name="discount_offered" placeholder="Enter Discount" value="<%out.print(builderLead.getDiscountOffered());%>" class="form-control" />
                                     </div>
                                 </div>
                                 
