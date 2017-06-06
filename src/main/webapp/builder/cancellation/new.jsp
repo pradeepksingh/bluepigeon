@@ -9,6 +9,12 @@
 <%@page import="org.bluepigeon.admin.dao.ProjectLeadDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri" value="${req.requestURI}" />
+<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <%
  	int project_size = 0;
 	int type_size = 0;
@@ -25,15 +31,15 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
-		}
-		if(builder_id > 0){
-			builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+			if(builder_id > 0){
+				builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+			}
+			if(builderProjects.size()>0)
+		    	project_size = builderProjects.size();
+		 	if(builderPropertyTypes.size()>0)
+		 		type_size = builderPropertyTypes.size();
 		}
    }
-   	if(builderProjects.size()>0)
-    	project_size = builderProjects.size();
- 	if(builderPropertyTypes.size()>0)
- 		type_size = builderPropertyTypes.size();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,7 +63,7 @@
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/custom.css" rel="stylesheet">
-    <link href="css/custom1.css" rel="stylesheet">
+    <link href="../css/custom1.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -67,10 +73,10 @@
     
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="../js/bootstrap-datepicker.min.js"></script>
-<script src="../js/jquery.form.js"></script>
-<script src="../js/bootstrapValidator.min.js"></script>
+    <script src="../js/jquery.form.js"></script>
+  	<script src="../js/bootstrapValidator.min.js"></script>
+   <script src="../js/bootstrap-datepicker.min.js"></script>
+
 <script type="text/javascript">
     $('input[type=checkbox]').click(function(){
     if($(this).is(':checked')){
@@ -98,6 +104,7 @@
        <div id="sidebar1"> 
        <%@include file="../partial/sidebar.jsp"%>
        </div>
+   </div>
         <div id="page-wrapper" style="min-height: 2038px;">
             <div class="container-fluid">
                 <div class="row bg-title">
@@ -119,13 +126,14 @@
                                 <div class="tab-content"> 
 	                            	<div id="vimessages" class="tab-pane active" aria-expanded="false">
 		                                <div class="col-12">
-		                                	<form id="addcancellation" name="addcancellation" class="form-horizontal" action="" method="post">
+		                                	<form id="newcancellation" name="newcancellation" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
 		                                  		<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id); %>" />
+		                                  		<input type="hidden" name="is_primary" id="is_primary" value=""/>
 				                                 <div class="form-group row">
 				                                    <label for="example-tel-input" class="col-3 col-form-label">Project</label>
 				                                    <div class="col-3">
 				                                        <select name="project_id" id="project_id" class="form-control">
-									                 	   	<option value="0">Select Project</option>
+									                 	   	<option value="">Select Project</option>
 									                  	   	<%
 									                  	   	if(builderProjects != null){
 									                  	   	for(int i=0; i < project_size ; i++){ %>
@@ -134,47 +142,55 @@
 									                  	   	}%>
 											       	 	</select>
 				                                    </div>
+<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
 				                                    <label for="example-text-input" class="col-3 col-form-label">Building</label>
 				                                    <div class="col-3">
 			                                        	<select name="building_id" id="building_id" class="form-control">
-									                 	   	<option value="0">Select Building</option>
+									                 	   	<option value="">Select Building</option>
 											       	  	</select>
 				                                    </div>
+<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
 				                                </div>
 				                                <div class="form-group row">
 				                               		<label for="example-search-input" class="col-3 col-form-label">Flat</label>
 				                                    <div class="col-3">
 				                                        <select name="flat_id" id="flat_id" class="form-control">
-										                 	<option value="0">Select Flat</option>
+										                 	<option value="">Select Flat</option>
 												       	 </select>
 				                                    </div>
+<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
 				                                    <label for="example-text-input" class="col-3 col-form-label">Buyer Name*</label>
 				                                    <div class="col-3">
 				                                        <input class="form-control" type="text" value="" id="buyer_name" name="buyer_name">
 				                                    </div>
+<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
 				                                </div>
 				                                <div class="form-group row">
 				                                	<label for="example-search-input" class="col-3 col-form-label">Buyer Pan Card*</label>
 				                                    <div class="col-3">
 				                                        <input class="form-control" type="text" value="" id="pan_card" name="pan_card">
 				                                    </div>
+<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
 				                                    <label for="example-tel-input" class="col-3 col-form-label">Buyer Contact</label>
 				                                    <div class="col-3">
 				                                       <input class="form-control" type="text" value="" id="buyer_contact" name="buyer_contact" >
 				                                    </div>
+<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
 				                                </div>
 				                                <div class="form-group row">
 				                                    <label for="example-search-input" class="col-3 col-form-label">Reason of Cancellation</label>
 				                                    <div class="col-3">
 				                                        <input class="form-control" type="text" value="" id="reason" name="reason">
 				                                    </div>
+<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
 				                                    <label for="example-search-input" class="col-3 col-form-label">Cancellation Charges</label>
 				                                    <div class="col-3">
 				                                        <input class="form-control" type="text" value="" id="charges" name="charges">
 				                                    </div>
+<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
 				                                </div>
 				                                <div class="offset-sm-5 col-sm-7">
-				                                 	<button type="submit" name="cancelBuyer" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+				                                 	<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
 				                                </div>
 		                               		</form>
 	                               		</div>
@@ -186,12 +202,17 @@
                 </div>
             </div>
             <!-- /.container-fluid -->
+           
          <div id="sidebar1"> 
        	   	<%@include file="../partial/footer.jsp"%>
       	</div>
-    </div>
 </body>
 </html>
+<!-- jQuery -->
+
+<!-- <script src="../js/jquery.form.js"></script> -->
+<!-- <script src="../js/bootstrap-datepicker.min.js"></script> -->
+
 <script type="text/javascript">
 $("#project_id").change(function(){
 	$.get("${baseUrl}/webapi/builder/building/names/"+$("#project_id").val(),{ }, function(data){
@@ -222,12 +243,14 @@ $("#flat_id").change(function(){
 		$("#buyer_name").val(data.name);
 		$("#buyer_contact").val(data.mobile);
 		$("#pan_card").val(data.pancard);
+		if(data.isPrimary)
+			$("#is_primary").val(1);
 		
 	},'json');
 });
 						
 				
-$('#addcancellation').bootstrapValidator({
+$('#newcancellation').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},
@@ -236,6 +259,29 @@ $('#addcancellation').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
+    	
+    	'project_id': {
+            validators: {
+                notEmpty: {
+                    message: 'Project is required and cannot be empty'
+                }
+            }
+        },
+        
+        'building_id': {
+            validators: {
+                notEmpty: {
+                    message: 'building is required and cannot be empty'
+                }
+            }
+        },
+        'flat_id' : {
+            validators: {
+                notEmpty: {
+                    message: 'flat is required and cannot be empty'
+                }
+            }
+        },
     	buyer_name: {
             validators: {
                 notEmpty: {
@@ -255,13 +301,6 @@ $('#addcancellation').bootstrapValidator({
             }
         },
         
-        project_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Project is required and cannot be empty'
-                }
-            }
-        },
         pan_card: {
             validators: {
                 notEmpty: {
@@ -287,28 +326,31 @@ $('#addcancellation').bootstrapValidator({
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
+	console.log("Hi you are in cancellation");
+	//alert("Hello");
 	addCancellation();
 });
 
 function addCancellation() {
+	alert("Hello again");
 	var options = {
 	 		target : '#response', 
-	 		beforeSubmit : showAddRequest,
-	 		success :  showAddResponse,
+	 		beforeSubmit : showCancellationRequest,
+	 		success :  showCancellationResponse,
 	 		url : '${baseUrl}/webapi/cancellation/save',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
-   	$('#addcancellation').ajaxSubmit(options);
+   	$('#newcancellation').ajaxSubmit(options);
 }
 
-function showAddRequest(formData, jqForm, options){
+function showCancellationRequest(formData, jqForm, options){
 	$("#response").hide();
    	var queryString = $.param(formData);
 	return true;
 }
    	
-function showAddResponse(resp, statusText, xhr, $form){
+function showCancellationResponse(resp, statusText, xhr, $form){
 	if(resp.status == '0') {
 		$("#response").removeClass('alert-success');
        	$("#response").addClass('alert-danger');

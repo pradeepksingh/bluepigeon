@@ -28,14 +28,14 @@
 	<div class="main-content-inner">
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 			<ul class="breadcrumb">
-				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
-				<li><a href="#">PropertyManager</a></li>
-				<li class="active">Add New Property manager</li>
+				<li><i class="ace-icon fa fa-home home-icon"></i>Home</li>
+				<li>Employee</li>
+				<li class="active">Add New Employee</li>
 			</ul>
 		</div>
 		<div class="page-content">
 			<div class="page-header">
-				<h1>Add New Property manager</h1>
+				<h1>Add New Employee</h1>
 			</div>
 			<ul class="nav nav-tabs" id="managerTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Basic Details</a></li>
