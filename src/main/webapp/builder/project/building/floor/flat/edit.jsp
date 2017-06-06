@@ -146,7 +146,7 @@
                                              <div class="messageContainer col-sm-offset-3"></div>
                                          </div>
                                     	 <div class="form-group row">
-                                             <label for="example-search-input" class="col-4 col-form-label">Flat Type Name</label>
+                                             <label for="example-search-input" class="col-4 col-form-label">Building Name</label>
                                              <div class="col-8">
                                                 <select id="building_id" name="building_id" class="form-control">
 													<% if(buildings != null) { %>
