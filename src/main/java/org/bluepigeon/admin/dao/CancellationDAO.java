@@ -23,6 +23,7 @@ public class CancellationDAO {
 		session.getTransaction().commit();
 		session.close();
 		updateFlatStatus(cancellation.getBuilderFlat().getId());
+		updatePrimaryBuyer(cancellation.getBuilderFlat().getId());
 		responseMessage.setId(cancellation.getId());
 		responseMessage.setStatus(1);
 		return responseMessage;
@@ -38,10 +39,20 @@ public class CancellationDAO {
 		query.setParameter("id",flatId);
 		query.executeUpdate();
 		session.getTransaction().commit();
-		//tx.commit();
 		session.close();
 	}
-	
+	public void updatePrimaryBuyer(int flatId){
+		String hql ="UPDATE Buyer set is_deleted=1 where builderFlat.id = :flat_id ";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flatId);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		
+	}
 	public Buyer getPrimaryBuyerByFlatId(int flatId){
 		String hql = "from Buyer where builderFlat.id = :flat_id and is_primary=1";
 		Buyer buyer = new Buyer();

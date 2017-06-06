@@ -31,15 +31,15 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
-		}
-		if(builder_id > 0){
-			builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+			if(builder_id > 0){
+				builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+			}
+			if(builderProjects.size()>0)
+		    	project_size = builderProjects.size();
+		 	if(builderPropertyTypes.size()>0)
+		 		type_size = builderPropertyTypes.size();
 		}
    }
-   	if(builderProjects.size()>0)
-    	project_size = builderProjects.size();
- 	if(builderPropertyTypes.size()>0)
- 		type_size = builderPropertyTypes.size();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -126,7 +126,7 @@
                                 <div class="tab-content"> 
 	                            	<div id="vimessages" class="tab-pane active" aria-expanded="false">
 		                                <div class="col-12">
-		                                	<form id="addcancellation" name="addcancellation" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+		                                	<form id="newcancellation" name="newcancellation" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
 		                                  		<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id); %>" />
 		                                  		<input type="hidden" name="is_primary" id="is_primary" value=""/>
 				                                 <div class="form-group row">
@@ -250,7 +250,7 @@ $("#flat_id").change(function(){
 });
 						
 				
-$('#addcancellation').bootstrapValidator({
+$('#newcancellation').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},
@@ -326,6 +326,7 @@ $('#addcancellation').bootstrapValidator({
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
+	console.log("Hi you are in cancellation");
 	//alert("Hello");
 	addCancellation();
 });
@@ -340,7 +341,7 @@ function addCancellation() {
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
-   	$('#addcancellation').ajaxSubmit(options);
+   	$('#newcancellation').ajaxSubmit(options);
 }
 
 function showCancellationRequest(formData, jqForm, options){
