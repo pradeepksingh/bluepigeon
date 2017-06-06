@@ -159,6 +159,10 @@
                                	<form id="addlead" name="addlead" class="form-horizontal" action="" method="post">
                                 <input type="hidden" name="added_by" id="added_by" value="<% out.print(builder_id); %>" />
                                 <input type="hidden" name="lead_id" id="lead_id" value="<%out.print(lead_id);%>"/>
+                                <input type="hidden" name="status" id="status" value="<%out.print(builderLead.getStatus());%>"/>
+                                <input type="hidden" name="type_id" id="type_id" value="<%out.print(builderLead.getBuilderPropertyType().getId()); %>" />
+                                <input type="hidden" name="interest" id="interest" value="<%out.print(builderLead.getIntrestedIn()); %>" />
+                                <input type="hidden" name="source" id="source" value="<%out.print(builderLead.getSource());%>"/>
                                 <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Interested In*</label>
                                     <div class="col-3">
