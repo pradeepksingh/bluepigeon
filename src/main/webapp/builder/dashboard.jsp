@@ -168,6 +168,7 @@
                        			for(ProjectList projectList : project_list ){
                        	%>
                        <div class="col-md-6 col-sm-6 col-xs-12 projectsection">
+                       <a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" >
 	                       <div class="image">
 		                      <%
 	                       		try{
@@ -197,7 +198,7 @@
 				                       </div>
 			                       </div>
 	                           </div>
-	                       </div>
+	                       </div></a>
 	                       </div>
 	                       <%  
                        		}

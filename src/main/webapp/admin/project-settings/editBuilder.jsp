@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderLogo"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
@@ -11,12 +12,14 @@
 <%
 int id = Integer.parseInt(request.getParameter("id"));	
 Builder builder=null;
+List<BuilderLogo>  builderLogos = null;
 //List<BuilderCompanyNames> builderCompanyNames = null;
 if(id>0){
 List<Builder> builder_list=new BuilderDetailsDAO().getActiveBuilderById(id);
 if(builder_list.size()>0){
 	builder=builder_list.get(0);	
 	//builderCompanyNames = new BuilderDetailsDAO().getAllBuilderCompanyNameByBuilderId(id);
+	builderLogos = new BuilderDetailsDAO().getBuilderLogoByBuilderId(builder.getId());
 }
 }
 %>
@@ -24,14 +27,13 @@ if(builder_list.size()>0){
 	<div class="main-content-inner">
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 			<ul class="breadcrumb">
-				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
+				<li><i class="ace-icon fa fa-home home-icon"></i>Home
 				</li>
-				<li><a href="#">Forms</a></li>
+				<li>Builder</li>
 				<li class="active">Update Builder</li>
 			</ul>
 			<!-- /.breadcrumb -->
 		</div>
-		
 		<div class="page-content">
 			<div class="page-header">
 				<h1>Update Builder</h1>
@@ -42,7 +44,7 @@ if(builder_list.size()>0){
 				<!-- PAGE CONTENT BEGINS -->
 					<form class="form-horizontal" role="form" method="post" action="" id="updateBuilder" name="updateBuilder" enctype="multipart/form-data">
 						<input type="hidden" value="<% out.print(builder.getId()); %>" name="ubuilder_id" id="ubuilder_id">
-						<input type="hidden" value="<%out.print(builder.getLoginStatus()); %> name="uloginstatus" id="uloginstatus"/>
+						<input type="hidden" value="<%out.print(builder.getLoginStatus()); %>" name="uloginstatus" id="uloginstatus"/>
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Builder Name </label>
 							<div class="col-sm-9">
@@ -80,6 +82,23 @@ if(builder_list.size()>0){
 							<label class="col-sm-3 control-label no-padding-right"	for="form-field-1" for="form-field-11">About Builder</label>
 							<div class="col-sm-4">
 								<textarea id="uabuilder" name="uabuilder" class="autosize-transition form-control"><%out.print(builder.getAboutBuilder());%></textarea>
+							</div>
+						</div>
+						
+						<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right"
+								for="form-field-1" for="form-field-11">Builder Logo</label>
+						<% if(builderLogos != null) {
+							for(BuilderLogo builderLogo : builderLogos){
+							%>
+							<input type="hidden" value="<%out.print(builderLogo.getId()); %>" name="builder_logo_id[]" id="builder_logo_id[]"/>
+							<div class="col-sm-4">
+										<img alt="builder logo" src="${baseUrl}/<% out.print(builderLogo.getBuilderUrl()); %>" width="200px;">
+									</div>
+									<div class="messageContainer col-sm-offset-4"></div>
+							<% }} %>
+							<div class="col-sm-4">
+								<input type="file" class="form-control" id="builder_logo" name="builder_logo[]" />
 							</div>
 						</div>
 						<% if(builder.getBuilderCompanyNameses().size()>0) {
@@ -159,66 +178,7 @@ function addBuilderCompanyName(){
   	batch+='</div></div>';
   	$("#addCompanyName").append(batch);
 }	
-// $("#updateBuilder").click(function(){
-// 	updateNewBuilder();
-// })
-// function updateNewBuilder(){
-// 	company_names=getCompanyNames();
-// 	var builder_data=getBuilderData();
-// 	var final_data=[];
-// 	final_data={builderCompanyNames:company_names,builder:builder_data};
-// 	$.ajax({
-//    		url: '${baseUrl}/webapi/create/builder/new/update/',
-//     	type: 'POST',
-//     	data: JSON.stringify(final_data),
-//     	contentType: 'application/json; charset=utf-8',
-//     	dataType: 'json',
-//    		async: false,
-//     	success: function(data) {
-// 			if (data.status == 0) {
-// 				alert(data.message);
-// 			} else {
-// 				alert(data.message);
-// 			 	window.location.href ="${baseUrl}/createbuilder/addbuilder.jsp";
-// 			}
-// 		},
-// 		error : function(data){
-// 			alert("Fail to save data"+JSON.stringify(data,null,2));
-// 		}
-// 	});
-// }
-// function getBuilderData(){
-// 	if($("#ubuilder_id").val()>0){
-// 		var  builder_info = {id:$("#ubuilder_id").val(),name:$("#ubname").val(),status:$("#ustatus").val(),headOffice:$("#uhoffice").val(),email:$("#uhemail").val(),mobile:$("#uhphno").val(),aboutBuilder:$("#uabuilder").val()}
-// 	}else{
-// 		var  builder_info = {name:$("#ubname").val(),status:$("#ustatus").val(),headOffice:$("#uhoffice").val(),email:$("#uhemail").val(),mobile:$("#uhphno").val(),aboutBuilder:$("#uabuilder").val()}
-// 	}
-//    	return builder_info;
-// }
-// function getCompanyNames(){
-//    	var contact_company=[];
-//    	var company;
-// 	for(var i=1;i<=batch_count;i++){
-//   		var cname="#uname-"+i;
-//   		var ccontact="#ucontact-"+i;
-//   		var cemail ="#uemail-"+i;
-//   		if($("#uname-"+i).val()!="" || (typeof $("#uname-"+i).val()!="undefined")){
-// 	  		cname=$("#uname-"+i).val();
-// 	  		alert(cname);
-//   		}
-//    		if($("#ucontact-"+i).val()!="" || (typeof $("#ucontact-"+i).val()!="undefined")){
-// 		  ccontact=$("#ucontact-"+i).val();
-// 		  alert($("#ucontact-"+i).val());
-// 	    }
-//    		if($("#uemail-"+i).val()!="" || (typeof $("#uemail-"+i).val()!="undefined")){
-// 	  		cemail=$("#uemail-"+i).val();
-// 	  		alert($("#uemail-"+i).val());
-//   		}
-// 		company ={name : cname, contact:ccontact,email:cemail}
-//   		contact_company.push(company);  
-//  	}
-// 	return contact_company;
-// }
+
 
 $('#updateBuilder').bootstrapValidator({
 	container: function($field, validator) {

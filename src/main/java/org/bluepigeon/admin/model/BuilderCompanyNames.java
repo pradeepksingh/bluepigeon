@@ -71,7 +71,7 @@ public class BuilderCompanyNames implements java.io.Serializable {
 		this.name = name;
 	}
 
-	@Column(name = "contact", length = 10)
+	@Column(name = "contact")
 	public String getContact() {
 		return this.contact;
 	}

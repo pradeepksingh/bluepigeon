@@ -35,7 +35,7 @@ int builder_size=builder_list.size();
                         <!--Contacts tab starts-->
                         <div class="tab-pane fade active in" id="contacts" aria-labelledby="contacts-tab">
                             <div class="contacts-list">
-                                <table class="table table-striped table-bordered" id="buildingamenitytable">
+                                <table class="table table-striped table-bordered" id="addNewBuildertable">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -69,13 +69,20 @@ int builder_size=builder_list.size();
 	</div>
 </div>
 <%@include file="../../footer.jsp"%>
+</body>
+</html>
 <link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
-<script src="${baseUrl}/js/jquery.builder-tax-type.min.js"></script>
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
-	function editBuilder(id){
-		window.location.href = "${baseUrl}/admin/project-settings/editBuilder.jsp?id="+id;
-	}
+$(document).ready(function(){
+    $('#addNewBuildertable').DataTable({
+        "aaSorting": []
+    });
+});
+function editBuilder(id){
+	window.location.href = "${baseUrl}/admin/project-settings/editBuilder.jsp?id="+id;
+}
 </script>
 	</body>
 </html>

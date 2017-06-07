@@ -604,4 +604,36 @@ public class BuilderDetailsDAO {
 		}
 		return builderProjectLists;
 	}
+
+	/**
+	 * Get builder logo by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return List<BuilderLogo>
+	 */
+	public List<BuilderLogo> getBuilderLogoByBuilderId(int builderId){
+		String hql = "from BuilderLogo where builder.id = :builder_id";
+		List<BuilderLogo> builderLogo = new ArrayList<BuilderLogo>();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		builderLogo = query.list();
+		return builderLogo;
+	}
+	/**
+	 * Update builder logo
+	 * @author pankaj
+	 * @param builderLogos
+	 */
+	public void updateBuilderLogo(List<BuilderLogo> builderLogos){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(BuilderLogo builderLogo : builderLogos){
+			session.update(builderLogo);
+		}
+		session.getTransaction().commit();
+		session.close();
+	}
 }

@@ -141,7 +141,7 @@ public class CreateProjectController {
 			@FormDataParam("password") String password,
 			@FormDataParam("abuilder") String aboutBuilder,
 			@FormDataParam("cname[]") List<FormDataBodyPart> cname,
-			@FormDataParam("contact[]") List<FormDataBodyPart> contact,
+			@FormDataParam("ccontact[]") List<FormDataBodyPart> ccontact,
 			@FormDataParam("cemail[]") List<FormDataBodyPart> cemail,
 			@FormDataParam("builder_logo[]") List<FormDataBodyPart> builder_logo
 			
@@ -197,8 +197,8 @@ public class CreateProjectController {
 				  if(company_name.getValueAs(String.class).toString() != null && !company_name.getValueAs(String.class).toString().isEmpty()) {
 					  builderCompanyNames2.setName(cname.get(i).getValueAs(String.class).toString());
 				  }
-				  if(contact.get(i).getValueAs(String.class).toString() != null && contact.get(i).getValueAs(String.class).toString().isEmpty()){
-					  builderCompanyNames2.setContact(contact.get(i).getValueAs(String.class).toString());
+				  if(ccontact.get(i).getValueAs(String.class).toString() != null && !ccontact.get(i).getValueAs(String.class).toString().isEmpty()){
+					  builderCompanyNames2.setContact(ccontact.get(i).getValueAs(String.class).toString());
 				  }
 				  if(cemail.get(i).getValueAs(String.class).toString() != null && !cemail.get(i).getValueAs(String.class).toString().isEmpty()){
 					  builderCompanyNames2.setEmail(cemail.get(i).getValueAs(String.class).toString());
@@ -264,7 +264,9 @@ public class CreateProjectController {
 			@FormDataParam("company_id[]") List<FormDataBodyPart> cid,
 			@FormDataParam("uname[]") List<FormDataBodyPart> cname,
 			@FormDataParam("ucontact[]") List<FormDataBodyPart> ucontact,
-			@FormDataParam("uemail[]") List<FormDataBodyPart> cemail
+			@FormDataParam("uemail[]") List<FormDataBodyPart> cemail,
+			@FormDataParam("builder_logo[]") List<FormDataBodyPart> builder_logo,
+			@FormDataParam("builder_logo_id[]")  List<FormDataBodyPart> builder_logo_id
 			) {
 			Builder builder = new Builder();
 			BuilderDetailsDAO builderDetalsDAO = new BuilderDetailsDAO();
@@ -320,6 +322,53 @@ public class CreateProjectController {
 					}
 					i++;
 				}
+				try {	
+					List<BuilderLogo> builderLogos = new ArrayList<BuilderLogo>();
+					List<BuilderLogo> saveBuilderLogos = new ArrayList<BuilderLogo>();
+					//for multiple inserting images.
+					if (builder_logo.size() > 0) {
+						for(int j=0 ;j < builder_logo.size();j++)
+						{
+							if(builder_logo.get(j).getFormDataContentDisposition().getFileName() != null && !builder_logo.get(j).getFormDataContentDisposition().getFileName().isEmpty()) {
+								if(builder_logo_id.get(j).getValueAs(Integer.class) != 0 && builder_logo_id.get(i).getValueAs(Integer.class) != null){
+									BuilderLogo builderLogo = new BuilderLogo();
+									String gallery_name = builder_logo.get(j).getFormDataContentDisposition().getFileName();
+									long millis = System.currentTimeMillis() % 1000;
+									gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+									gallery_name = "images/project/builder/"+gallery_name;
+									String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+									//System.out.println("for loop image path: "+uploadGalleryLocation);
+									this.imageUploader.writeToFile(builder_logo.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
+									builderLogo.setId(builder_logo_id.get(j).getValueAs(Integer.class));
+									builderLogo.setBuilderUrl(gallery_name);
+									builderLogo.setBuilder(builder);
+									builderLogos.add(builderLogo);
+								}else{
+									BuilderLogo builderLogo = new BuilderLogo();
+									String gallery_name = builder_logo.get(j).getFormDataContentDisposition().getFileName();
+									long millis = System.currentTimeMillis() % 1000;
+									gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+									gallery_name = "images/project/builder/"+gallery_name;
+									String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+									//System.out.println("for loop image path: "+uploadGalleryLocation);
+									this.imageUploader.writeToFile(builder_logo.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
+									builderLogo.setBuilderUrl(gallery_name);
+									builderLogo.setBuilder(builder);
+									saveBuilderLogos.add(builderLogo);
+								}
+							}
+						}
+						if(builderLogos.size() > 0) {
+							builderDetalsDAO.updateBuilderLogo(builderLogos);
+						}
+						if(saveBuilderLogos.size() > 0){
+							builderDetalsDAO.saveBuilderLogo(saveBuilderLogos);
+						}
+					}
+				} catch(Exception e) {
+					msg.setStatus(0);
+					msg.setMessage("Unable to save image");
+				}
 				if(updatebuilderCompanyNames.size()>0)
 				{
 					builderDetalsDAO.updateBuilderCompanyName(updatebuilderCompanyNames);
@@ -327,35 +376,6 @@ public class CreateProjectController {
 				if(saveBuilderCompanyNames.size() > 0){
 					builderDetalsDAO.saveBuilderCompany(saveBuilderCompanyNames);
 				}
-			/*	try {	
-					List<ProjectImageGallery> projectImageGalleries = new ArrayList<ProjectImageGallery>();
-					//for multiple inserting images.
-					if (project_images.size() > 0) {
-						for(int i=0 ;i < project_images.size();i++)
-						{
-							if(project_images.get(i).getFormDataContentDisposition().getFileName() != null && !project_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-								ProjectImageGallery projectImageGallery = new ProjectImageGallery();
-								String gallery_name = project_images.get(i).getFormDataContentDisposition().getFileName();
-								long millis = System.currentTimeMillis() % 1000;
-								gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-								gallery_name = "images/project/images/"+gallery_name;
-								String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-								//System.out.println("for loop image path: "+uploadGalleryLocation);
-								this.imageUploader.writeToFile(project_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-								projectImageGallery.setImage(gallery_name);
-								projectImageGallery.setTitle("New Image");
-								projectImageGallery.setBuilderProject(builderProject);
-								projectImageGalleries.add(projectImageGallery);
-							}
-						}
-						if(projectImageGalleries.size() > 0) {
-							projectDAO.addProjectImageGallery(projectImageGalleries);
-						}
-					}
-				} catch(Exception e) {
-					msg.setStatus(0);
-					msg.setMessage("Unable to save image");
-				}*/
 				msg.setStatus(1);
 				msg.setMessage("Builder updated successfully.");
 			} else {
