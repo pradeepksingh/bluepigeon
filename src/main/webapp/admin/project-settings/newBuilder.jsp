@@ -85,6 +85,13 @@
 									class="autosize-transition form-control"></textarea>
 							</div>
 						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right"
+								for="form-field-1" for="form-field-11">Builder Logo</label>
+							<div class="col-sm-4">
+								<input type="file" class="form-control" id="builder_logo" name="builder_logo[]" />
+							</div>
+						</div>
 						<hr>
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right"

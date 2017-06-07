@@ -11,6 +11,7 @@ import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
+import org.bluepigeon.admin.model.BuilderLogo;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.ProjectImageGallery;
@@ -514,6 +515,21 @@ public class BuilderDetailsDAO {
 		response.setStatus(1);
 		response.setMessage("Employee updated Successfully");
 		return response;
+	}
+	/**
+	 * Save builder logo
+	 * @author pankaj
+	 * @param builderLogo
+	 */
+	public void saveBuilderLogo(List<BuilderLogo> builderLogos){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(BuilderLogo builderLogo : builderLogos){
+			session.save(builderLogo);
+		}
+		session.getTransaction().commit();
+		session.close();
 	}
 	/**
 	 * Filter Project list by passing builderId, countryId, stateId, cityId and localityId 
