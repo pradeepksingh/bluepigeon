@@ -11,6 +11,7 @@ import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
+import org.bluepigeon.admin.model.BuilderLogo;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.ProjectImageGallery;
@@ -516,6 +517,21 @@ public class BuilderDetailsDAO {
 		return response;
 	}
 	/**
+	 * Save builder logo
+	 * @author pankaj
+	 * @param builderLogo
+	 */
+	public void saveBuilderLogo(List<BuilderLogo> builderLogos){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(BuilderLogo builderLogo : builderLogos){
+			session.save(builderLogo);
+		}
+		session.getTransaction().commit();
+		session.close();
+	}
+	/**
 	 * Filter Project list by passing builderId, countryId, stateId, cityId and localityId 
 	 * @author pankaj
 	 * @param builderId
@@ -587,5 +603,37 @@ public class BuilderDetailsDAO {
 			builderProjectLists.add(builderProjectList);
 		}
 		return builderProjectLists;
+	}
+
+	/**
+	 * Get builder logo by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return List<BuilderLogo>
+	 */
+	public List<BuilderLogo> getBuilderLogoByBuilderId(int builderId){
+		String hql = "from BuilderLogo where builder.id = :builder_id";
+		List<BuilderLogo> builderLogo = new ArrayList<BuilderLogo>();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		builderLogo = query.list();
+		return builderLogo;
+	}
+	/**
+	 * Update builder logo
+	 * @author pankaj
+	 * @param builderLogos
+	 */
+	public void updateBuilderLogo(List<BuilderLogo> builderLogos){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(BuilderLogo builderLogo : builderLogos){
+			session.update(builderLogo);
+		}
+		session.getTransaction().commit();
+		session.close();
 	}
 }
