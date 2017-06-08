@@ -308,7 +308,7 @@
 							</div>
 							<div class="col-sm-12">
 								<span class="pull-right">
-									<button type="button" class="btn btn-success btn-sm" onclick="showDetailTab();">Next</button>
+									<button type="submit" name="flooradd" class="btn btn-success btn-sm" onclick="showDetailTab();">Next</button>
 								</span>
 							</div>
 						</div>
