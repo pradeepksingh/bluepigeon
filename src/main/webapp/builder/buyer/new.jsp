@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
@@ -24,6 +25,7 @@
 		project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id);
 	}
 	List<BuilderEmployee> builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
+	List<BuilderFlat> builderFlatList = new ProjectDAO().getBuilderAllFlatsByBuilderId(builder_id1);
 %>
 <!DOCTYPE html>
 <html lang="en">
