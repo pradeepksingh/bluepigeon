@@ -506,7 +506,7 @@
 												<input type="hidden" name="payment_id[]" id="payment_id" value="<%out.print(buyerPayment.getId());%>" />
 												<label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
 												<div class="col-2">
-													<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% out.print(buyerPayment.getMilestone());%>" />
+													<input type="text" class="form-control" readonly="true" id="schedule" name="schedule[]" value="<% out.print(buyerPayment.getMilestone());%>" />
 												</div>
 												<label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
 												<div class="col-2">
@@ -516,34 +516,35 @@
 												<div class="col-2">
 													<input type="text" class="form-control" id="amount" name="amount[]" value="<% out.print(buyerPayment.getAmount());%>" />
 												</div>
-												<a href="javascript:deleteSchedule(<%out.print(buyerPayment.getId());%>);" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
+<%-- 												<a href="javascript:deleteSchedule(<%out.print(buyerPayment.getId());%>);" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a> --%>
 											</div>
 											<% } %>
-											<% } else { %>
-											<input type="hidden" name="schedule_count" id="schedule_count" value="1" />
-											<div class="form-group row">
-												<input type="hidden" name="payment_id[]" id="payment_id" value="0" />
-												<label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
-												<div class="col-2">
-													<input type="text" class="form-control" id="schedule" name="schedule[]" value="" />
-												</div>
-												<label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
-												<div class="col-2">
-													<input type="text" class="form-control" id="payable" name="payable[]" value="" />
-												</div>
-												<label for="example-search-input" class="col-1 col-form-label">Amount</label>
-												<div class="col-2">
-													<input type="text" class="form-control" id="amount" name="amount[]" value="" />
-												</div>
-												<i class="fa fa-times"></i>
-											</div>
-											<% } %>
-											<div id="more_schedules"></div>
-											<div class="offset-sm-9 col-sm-7">
-												<a href="javascript:addMoreSchedule();">
-													<button type="button" class="">+ Add More Schedules</button>
-												</a>
-											</div>
+											<% } 
+											//else { %>
+<!-- 											<input type="hidden" name="schedule_count" id="schedule_count" value="1" /> -->
+<!-- 											<div class="form-group row"> -->
+<!-- 												<input type="hidden" name="payment_id[]" id="payment_id" value="0" /> -->
+<!-- 												<label for="example-search-input" class="col-2 col-form-label">Milestone*</label> -->
+<!-- 												<div class="col-2"> -->
+<!-- 													<input type="text" class="form-control" id="schedule" name="schedule[]" value="" /> -->
+<!-- 												</div> -->
+<!-- 												<label for="example-search-input" class="col-2 col-form-label">% of net payable</label> -->
+<!-- 												<div class="col-2"> -->
+<!-- 													<input type="text" class="form-control" id="payable" name="payable[]" value="" /> -->
+<!-- 												</div> -->
+<!-- 												<label for="example-search-input" class="col-1 col-form-label">Amount</label> -->
+<!-- 												<div class="col-2"> -->
+<!-- 													<input type="text" class="form-control" id="amount" name="amount[]" value="" /> -->
+<!-- 												</div> -->
+<!-- 												<i class="fa fa-times"></i> -->
+<!-- 											</div> -->
+<%-- 											<% } %> --%>
+<!-- 											<div id="more_schedules"></div> -->
+<!-- 											<div class="offset-sm-9 col-sm-7"> -->
+<!-- 												<a href="javascript:addMoreSchedule();"> -->
+<!-- 													<button type="button" class="">+ Add More Schedules</button> -->
+<!-- 												</a> -->
+<!-- 											</div> -->
 											<div class="offset-sm-10 col-sm-7">
 												<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="updateBuyerPayments();">SAVE</button>
 											</div>
@@ -616,7 +617,6 @@
 					var html = '<option value="0">Select Building</option>';
 					$(data).each(
 							function(index) {
-
 								html = html
 										+ '<option value="'+data[index].id+'">'
 										+ data[index].name + '</option>';

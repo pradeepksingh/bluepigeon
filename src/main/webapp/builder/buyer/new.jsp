@@ -126,77 +126,72 @@
                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a>
                                     </li>-->
                                 </ul>
-                                
                                  <form id="addbuyer" name="addbuyer" action="" method="post" enctype="multipart/form-data"> 
-                              <div class="tab-content"> 
+                              	<div class="tab-content"> 
                               	<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
-                               <div class="tab-pane active" id="vimessages" aria-expanded="false">
-                                <div class="col-12" id="vimessages111" >
-                            
-                                <input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
-                                <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Buyer Name*</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="buyer_name" name="buyer_name[]" value="">
-                                    </div>
-                                    <label for="example-text-input" class="col-3 col-form-label">Contact*</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="contact" name="contact[]" value="">
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Email*</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="email" name="email[]" value="">
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Pan*</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="pan" name="pan[]" value="">
-                                    </div>
-                                </div>
-                                
-                                 <div class="form-group row">
-                                    <label for="example-tel-input" class="col-3 col-form-label">Permanent Address*</label>
-                                    <div class="col-3">
-                                         <textarea class="form-control" rows="" cols="" id="address" name="address[]"></textarea>
-                                    </div>
-                                    <label for="example-tel-input" class="col-3 col-form-label">Owner*</label>
-                                    <div class="col-3">
-                                      <select name="is_primary[]" id="is_primary" class="form-control">
-<!-- 			                       		<option value="">Select Owner</option> -->
-<!-- 			                     		<option value="0">Co-Owner</option> -->
-			                      		<option value="1" selected>Owner</option>
-							          </select>
-                                    </div>
-                                </div>
-								<div class="form-group row" id="error-project_type">
-									<label class="col-12 col-form-label">Documents <span class='text-danger'>*</span></label>
-										<div class="col-3">
-											<input type="checkbox" name="document_pan[]" value="1" /> PAN Card
-										</div>
-										<div class="col-3">
-											<input type="checkbox" name="document_aadhar[]" value="2" /> Aadhar Card
-										</div>
-										<div class="col-3">
-											<input type="checkbox" name="document_passport[]" value="3" /> Passport 
-										</div>
-										<div class="col-3">
-											<input type="checkbox" name="document_rra[]" value="4" /> Registered Rent Agreement 
-										</div>
-										<div class="col-3">
-											<input type="checkbox" name="document_voterid[]" value="5" /> Vote ID 
-										</div>
-										<div class="messageContainer col-sm-offset-2"></div>
-								</div>
-                               </div>
-                                <div class="offset-sm-10 col-sm-7">
-                                <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="show();" id="next">Next</button>
-                                       <a href="javascript:addMoreBuyers();"> <button type="button" class="btn btn-info waves-effect waves-light m-t-10">+ Add New Buyer</button></a>
-                                 </div>
-                                
-                              </div>
-                              
+                               		<div class="tab-pane active" id="vimessages" aria-expanded="false">
+                                		<div class="col-12" >
+                                			<input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
+                                			<div class="form-group row">
+                                   				<label for="example-text-input" class="col-3 col-form-label">Buyer Name*</label>
+                                   				<div class="col-3">
+                                       				<input class="form-control" type="text" id="buyer_name" name="buyer_name[]" value="">
+                                   				</div>
+                                   				<label for="example-text-input" class="col-3 col-form-label">Contact*</label>
+                                   				<div class="col-3">
+                                       				<input class="form-control" type="text" id="contact" name="contact[]" value="">
+                                   				</div>
+                                			</div>
+                                			<div class="form-group row">
+                                    			<label for="example-search-input" class="col-3 col-form-label">Email*</label>
+                                    			<div class="col-3">
+                                        			<input class="form-control" type="text" id="email" name="email[]" value="">
+                                    			</div>
+                                    			<label for="example-search-input" class="col-3 col-form-label">Pan*</label>
+                                    			<div class="col-3">
+                                        			<input class="form-control" type="text" id="pan" name="pan[]" value="">
+                                    			</div>
+                                			</div>
+                                 			<div class="form-group row">
+                                    			<label for="example-tel-input" class="col-3 col-form-label">Permanent Address*</label>
+                                    			<div class="col-3">
+                                         			<textarea class="form-control" rows="" cols="" id="address" name="address[]"></textarea>
+                                    			</div>
+                                    			<label for="example-tel-input" class="col-3 col-form-label">Owner*</label>
+                                    			<div class="col-3">
+                                      				<select name="is_primary[]" id="is_primary" class="form-control">
+<!-- 			                       					<option value="">Select Owner</option> -->
+<!-- 			                     					<option value="0">Co-Owner</option> -->
+			                      						<option value="1" selected>Owner</option>
+							          				</select>
+                                    			</div>
+                                			</div>
+											<div class="form-group row" id="error-project_type">
+												<label class="col-12 col-form-label">Documents <span class='text-danger'>*</span></label>
+												<div class="col-3">
+													<input type="checkbox" name="document_pan[]" value="1" /> PAN Card
+												</div>
+												<div class="col-3">
+													<input type="checkbox" name="document_aadhar[]" value="2" /> Aadhar Card
+												</div>
+												<div class="col-3">
+													<input type="checkbox" name="document_passport[]" value="3" /> Passport 
+												</div>
+												<div class="col-3">
+													<input type="checkbox" name="document_rra[]" value="4" /> Registered Rent Agreement 
+												</div>
+												<div class="col-3">
+													<input type="checkbox" name="document_voterid[]" value="5" /> Vote ID 
+												</div>
+												<div class="messageContainer col-sm-offset-2"></div>
+											</div>
+											<div id="more_buyer_area"></div>
+                                			<div class="offset-sm-7 col-sm-7">
+                                				<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="show();" id="next">Next</button>
+                                       				<a href="javascript:addMoreBuyers();"> <button type="button" class="btn btn-info waves-effect waves-light m-t-10">+ Add New Buyer</button></a>
+                                 			</div>
+                              			</div>
+                             		</div>
                              <div id="vimessages1" class="tab-pane" aria-expanded="false">
                            
                                  <div class="form-group row">
@@ -239,14 +234,12 @@
 							          </select>
                                     </div>
                                 </div>
-
-                                <div class="offset-sm-5 col-sm-7">
-                                <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous1();">Previous</button>
-                                        <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next1" onclick="show1();">Next</button>
+								  <div class="offset-sm-5 col-sm-7">
+                                	<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous1();">Previous</button>
+                                    <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next1" onclick="show1();">Next</button>
                                  </div>
-                             
                                </div>
-
+								
                                 <div id="vimessages2" class="tab-pane" aria-expanded="false">
                                  <div class="col-12">
                            
@@ -359,7 +352,6 @@
                                  </div>
                                 </div>
                                </div>
-
                                 <div id="vimessages3" class="tab-pane" aria-expanded="true">        
                                 <input type="hidden" name="schedule_count" id="schedule_count" value="1"/>
 	                                <div class="form-group row">
@@ -375,7 +367,7 @@
 	                                    <div class="col-2">
 	                                       <input type="text" class="form-control" id="amount" name="amount[]" value=""/>
 	                                    </div>
-	                                     <i class="fa fa-times"></i>
+<!-- 	                                     <i class="fa fa-times"></i> -->
 	                                </div>
 	                                <div class="form-group row">
 	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
@@ -390,13 +382,13 @@
 	                                    <div class="col-2">
 	                                        <input type="text" class="form-control" id="amount" name="amount[]" value=""/>
 	                                    </div>
-	                                     <i class="fa fa-times"></i>
+<!-- 	                                     <i class="fa fa-times"></i> -->
 	                                </div>
 	                                
 	                                 
-	                                <div class="offset-sm-9 col-sm-7">
-                                       <a href="javascript:addMoreSchedule();"> <button type="button" class="">+ Add More Schedules</button></a>
-                                    </div>
+<!-- 	                                <div class="offset-sm-9 col-sm-7"> -->
+<!--                                        <a href="javascript:addMoreSchedule();"> <button type="button" class="">+ Add More Schedules</button></a> -->
+<!--                                     </div> -->
 	                                <div class="offset-sm-5 col-sm-7">
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous3();">Previous</button>
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next3" onclick="show3();">Next</button>
@@ -779,7 +771,7 @@ function addMoreBuyers() {
 	+'</div>';
 
 	
-	$("#vimessages").append(html);
+	$("#more_buyer_area").append(html);
 	$("#buyer_count").val(buyers);
 }
 function removeBuyer(id) {
@@ -845,7 +837,7 @@ function removeDoc(id) {
 function show()
 {
 	$("#vimessages1").show();
-	$("#111").hide();
+	$("#vimessages").hide();
 	
 }
 
@@ -859,7 +851,7 @@ function show1()
 function previous1()
 {
 	$("#vimessages1").hide();
-	$("#111").show();
+	$("#vimessages").show();
 }
 
 
