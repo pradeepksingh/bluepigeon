@@ -776,7 +776,7 @@
 <!-- 									<div class="panel-body"> -->
 <!-- 										<div id="payment_schedule"> -->
 <%-- 											<% 	int i = 1; --%>
-// 												for(BuilderProjectPaymentInfo projectPaymentInfo :projectPaymentInfos) { 
+<!-- // 												for(BuilderProjectPaymentInfo projectPaymentInfo :projectPaymentInfos) {  -->
 <%-- 											%> --%>
 <%-- 											<div class="row" id="schedule-<% out.print(i); %>"> --%>
 <%-- 												<% if(i > 1) { %> --%>
