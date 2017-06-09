@@ -2874,4 +2874,19 @@ public class ProjectDAO {
 		
 		return totalInventory;
 	}
+	/**
+	 * Get active flats by project id
+	 * @author pankaj
+	 * @return List<BuilderFlat>
+	 */
+	public List<BuilderFlat> getActiveFlatsByProjectId(int projectId){
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		List<BuilderFlat> builderFlatList = query.list();
+		return builderFlatList;
+		
+	}
 }

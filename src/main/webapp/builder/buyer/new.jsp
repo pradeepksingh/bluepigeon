@@ -1,3 +1,6 @@
+<%@page import="org.bluepigeon.admin.data.ProjectPriceInfoData"%>
+<%@page import="org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectPriceInfo"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>
@@ -8,24 +11,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%
+	List<BuilderEmployee> builderEmployees = null;
+	List<BuilderFlat> builderFlatList  = null;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	List<BuilderProject> project_list = null; 
-	int builder_id = 0;
+	ProjectPriceInfoData projectPriceInfoData = null;
+	int builder_id1 = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
-			builder_id = builder.getBuilder().getId();
+			builder_id1 = builder.getBuilder().getId();
+			
+			if(builder_id1> 0 ){
+				project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id1);
+			}
+			 builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
+			 builderFlatList = new ProjectDAO().getActiveFlatsByProjectId(project_list.get(0).getId());
+			 projectPriceInfoData = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByProjectId(project_list.get(0).getId());
 		}
    }
-	int builder_id1 = 1;
-	if(builder_id> 0 ){
-		project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id);
-	}
-	List<BuilderEmployee> builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
-	List<BuilderFlat> builderFlatList = new ProjectDAO().getBuilderAllFlatsByBuilderId(builder_id1);
+	
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,8 +48,6 @@
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
-    <!-- animation CSS -->
-    <link href="../css/animate.css" rel="stylesheet">
     <!-- Menu CSS -->
     <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
@@ -196,32 +202,38 @@
                              		</div>
                              <div id="vimessages1" class="tab-pane" aria-expanded="false">
                            
-                                 <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Project Name</label>
-                                    <div class="col-6">
-                                       <select name="project_id" id="project_id" class="form-control">
-						                    <option value="">Select Project</option>
-						                    <% for(BuilderProject builderProject : project_list){ %>
-											<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option>
-											<% } %>
-							            </select>
-                                    </div>
-                                </div>
+<!--                                  <div class="form-group row"> -->
+<!--                                     <label for="example-text-input" class="col-3 col-form-label">Project Name</label> -->
+<!--                                     <div class="col-6"> -->
+<!--                                        <select name="project_id" id="project_id" class="form-control"> -->
+<!-- 						                    <option value="">Select Project</option> -->
+<%-- 						                    <% for(BuilderProject builderProject : project_list){ %> --%>
+<%-- 											<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option> --%>
+<%-- 											<% } %> --%>
+<!-- 							            </select> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
                                 
-                                <div class="form-group row">
-                                  <label for="example-text-input" class="col-3 col-form-label">Building</label>
-                                    <div class="col-6">
-                                       <select name="building_id" id="building_id" class="form-control">
-						                    <option value="">Select Building</option>
-							          	</select>
-                                    </div>
-                                </div>
+<!--                                 <div class="form-group row"> -->
+<!--                                   <label for="example-text-input" class="col-3 col-form-label">Building</label> -->
+<!--                                     <div class="col-6"> -->
+<!--                                        <select name="building_id" id="building_id" class="form-control"> -->
+<!-- 						                    <option value="">Select Building</option> -->
+<!-- 							          	</select> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
                                 
                                  <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Flat</label>
                                     <div class="col-6">
                                        <select name="flat_id" id="flat_id" class="form-control">
 						                    <option value="">Select Flat</option>
+						                    <%
+						                    	if(builderFlatList.size() > 0){
+						                    		for(BuilderFlat builderFlat : builderFlatList){
+						                    %><option value="<%out.print(builderFlat.getId());%>"><% out.print(builderFlat.getFlatNo());%></option>
+						                    <
+						                    <%}} %>
 							           </select>
                                     </div>
                                 </div>
@@ -244,7 +256,9 @@
 								
                                 <div id="vimessages2" class="tab-pane" aria-expanded="false">
                                  <div class="col-12">
-                           
+    							<%
+    								if(projectPriceInfoData != null){
+    							%>                       
                                 <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Booking Date</label>
                                     <div class="col-3">
@@ -252,60 +266,65 @@
                                     </div>
                                     <label for="example-text-input" class="col-3 col-form-label">Base Rate</label>
                                     <div class="col-3">
-                                        <input type="text" class="form-control" id="base_rate" name="base_rate" />
+                                        <input type="text" value="<%out.print(projectPriceInfoData.getBasePrice()); %>" class="form-control" id="base_rate" name="base_rate" />
                                     </div>
                                 </div> 
                                 
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate</label>
                                     <div class="col-3">
-                                       <input type="text" class="form-control" id="rise_rate" name="rise_rate"/>
+                                       <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getRiseRate()); %>" id="rise_rate" name="rise_rate"/>
                                     </div>
                                     <label for="example-search-input" class="col-3 col-form-label">Aminities Facing Rise Rates</label>
                                     <div class="col-3">
-                                        <input type="text" class="form-control" id="amenity_rate" name="amenity_rate" />
+                                        <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getAmenityRate()); %>" id="amenity_rate" name="amenity_rate" />
                                     </div>
                                 </div>
                                 
                                  <div class="form-group row">
                                     <label for="example-tel-input" class="col-3 col-form-label">Parking Rates</label>
                                     <div class="col-3">
-                                       	<input type="text" class="form-control" id="parking" name="parking" />
+                                       	<input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getParking()); %>" id="parking" name="parking" />
                                     </div>
                                     <label for="example-tel-input" class="col-3 col-form-label">Maintance</label>
                                     <div class="col-3">
-                                        <input type="text" class="form-control" id="maintenance" name="maintenance" />
+                                        <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getMaintenance()); %>" id="maintenance" name="maintenance" />
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label for="example-tel-input" class="col-3 col-form-label">Stamp Duty</label>
                                     <div class="col-3">
-                                       <input type="text" class="form-control" id="stamp_duty" name="stamp_duty" />
+                                       <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getStampDuty()); %>" id="stamp_duty" name="stamp_duty" />
                                     </div>
                                     <label for="example-tel-input" class="col-3 col-form-label">Taxes</label>
                                     <div class="col-3">
-                                         <input type="text" class="form-control" id="tax" name="tax" />
+                                         <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getTax()); %>" id="tax" name="tax" />
                                     </div>
                                 </div>
                                                               
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">VAT</label>
                                     <div class="col-3">
-                                       <input type="text" class="form-control" id="vat" name="vat" />
+                                       <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getVat()); %>" id="vat" name="vat" />
                                     </div>
                                     <label for="example-search-input" class="col-3 col-form-label">Tenure</label>
                                     <div class="col-3">
-                                      <input type="text" class="form-control" id="tenure" name="tenure" />
+                                      <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getTenure()); %>" id="tenure" name="tenure" />
 									  <span class="input-group-addon">Months</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">No. of Post</label>
                                     <div class="col-3">
-                                        <input class="form-control" type="text" value="" id="post" name="post">
+                                        <input class="form-control" type="text" value="<%out.print(projectPriceInfoData.getPost()); %>" id="post" name="post">
+                                    </div>
+                                    <label for="example-search-input" class="col-3 col-form-label">Total Sale Value</label>
+                                    <div class="col-3">
+                                        <input class="form-control" readonly="true" type="text" value="<%out.print(projectPriceInfoData.getPost()); %>" id="toatl_sale_value" name="total_sale_value">
                                     </div>
                                </div>
+                               <%} %>
                                <div class="form-group row">
                                     <button type="button" class="col-2" onclick="showOffers()">+ADD offers</button>
                                 </div>
@@ -444,26 +463,22 @@
                                       <div class="col-2"><input type="file" class="form-control" name="doc_url[]" /><!-- <i class="fa fa-upload" aria-hidden="true">--></div>
                                      
                                   </div>
-	                             
 	                             <div class="offset-sm-5 col-sm-7">
-	                             <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous4();">Previous</button>
-                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+	                             	<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous4();">Previous</button>
+                                 	<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
                                  </div>
                                 </div>
                                 </div>
                                 </form>
                         </div>
-
                         </div>
                     </div>
                 </div>
-               
             </div>
             <!-- /.container-fluid -->
              <div id="sidebar1"> 
 	      		<%@include file="../partial/footer.jsp"%>
 			</div> 
-        
         </div>
         <!-- /#page-wrapper -->
     
