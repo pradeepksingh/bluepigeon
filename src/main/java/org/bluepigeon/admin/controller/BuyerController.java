@@ -20,6 +20,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.AgreementDAO;
+import org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.DemandLettersDAO;
 import org.bluepigeon.admin.dao.PossessionDAO;
@@ -1439,6 +1440,42 @@ public class BuyerController {
 		BuyerDAO buyerDAO = new BuyerDAO();
 		msg = buyerDAO.deleteBuyerPaymentById(id);
 		return msg;
+	}
+	
+	@POST
+	@Path("/sale")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage getTotalSaleValue(
+			@FormParam("project_id") int projectId,
+			@FormParam("base_rate") Double base_rate,
+			@FormParam("rise_rate") Double rise_rate,
+			@FormParam("amenity_rate") Double amenity_rate,
+			@FormParam("parking") Double parking,
+			@FormParam("maintenance") Double maintenance,
+			@FormParam("stamp_duty") Double stamp_duty,
+			@FormParam("tax") Double tax,
+			@FormParam("vat") Double vat,
+			@FormParam("no_of_floors") int noOfFloors 
+			){
+		ResponseMessage responseMessage = new ResponseMessage();
+		Double totalSaleValue = 0.0;
+		Double A = 0.0, B = 0.0, C = 0.0, D = 0.0, E = 0.0, F = 0.0, G = 0.0;
+		Double superBuildUpArea = new BuilderProjectPriceInfoDAO().getBuilderFlatTypeByProjectId(projectId).getSuperBuiltupArea();
+		Double sqft = new BuilderProjectPriceInfoDAO().getBuilderProjectPriceInfo(projectId).getAreaUnit().getSqft_value();
+		A = base_rate * superBuildUpArea * sqft ; 
+		if(noOfFloors > 0)
+			B = rise_rate * superBuildUpArea * sqft ;
+		if(maintenance > 0)
+			C = maintenance;
+		if(amenity_rate  > 0)
+			D = amenity_rate;
+		if(parking > 0)
+			E = parking;
+		F = A+B+D;
+		G = F*stamp_duty/100+F * tax/100+F * vat/100;
+		totalSaleValue = F+C+E+G;
+		responseMessage.setMessage(totalSaleValue.toString());
+		return responseMessage;
 	}
 }
 	

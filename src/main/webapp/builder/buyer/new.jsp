@@ -258,7 +258,8 @@
                                  <div class="col-12">
     							<%
     								if(projectPriceInfoData != null){
-    							%>                       
+    							%>                     
+    							<input type="hidden" id="project_id" name="project_id" value="<%out.print(project_list.get(0).getId());%>"/>  
                                 <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Booking Date</label>
                                     <div class="col-3">
@@ -902,5 +903,34 @@ function previous4()
 	$("#vimessages4").hide();
 	$("#vimessages3").show();
 	
+}
+$("#base_rate").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#tax").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#vat").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#rise_rate").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#parking").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#amenity_rate").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#maintenance").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#stamp_duty").keyup(function(){
+	calculateTotalSaleValue();
+});
+function calculateTotalSaleValue(){
+	$.post("${baseUrl}/webapi/buyer/sale",{project_id : $("#project_id").val(),base_rate : $("#base_rate").val(), rise_rate : $("#rise_rate").val(), amenity_rate : $("#amenity_rate").val(),parking : $("#parking").val(), maintenance : $("#maintenance").val(), stamp_duty : $("#stamp_duty").val(), tax : $("#tax").val(),vat : $("#vat").val(), no_of_floors : $("#post").val() },function(data){
+		$("#toatl_sale_value").val(data.message);
+	},'json');
 }
 </script>

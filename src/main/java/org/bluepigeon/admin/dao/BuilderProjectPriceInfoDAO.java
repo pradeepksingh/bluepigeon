@@ -26,7 +26,7 @@ public class BuilderProjectPriceInfoDAO {
 		int numberOfFloors = 0;
 		Double A = 0.0,B = 0.0,C = 0.0,D = 0.0,E = 0.0,F = 0.0,G = 0.0,totalSalePrice = 0.0;
 		String hql = "from BuilderProjectPriceInfo where builderProject.id = :project_id";
-		String superBuildUpArea = " from BuilderFlatType where builderProject.id = :project_id";
+		String superBuildUpArea = "from BuilderFlatType where builderProject.id = :project_id";
 		ProjectPriceInfoData projectPriceInfoData = new ProjectPriceInfoData();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -66,5 +66,14 @@ public class BuilderProjectPriceInfoDAO {
 		session.close();
 		innerSession.close();
 		return projectPriceInfoData;
+	}
+	public BuilderFlatType getBuilderFlatTypeByProjectId(int projectId){
+		String superBuildUpArea = "from BuilderFlatType where builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(superBuildUpArea);
+		query.setParameter("project_id", projectId);
+		BuilderFlatType builderFlatType = (BuilderFlatType)query.list().get(0);
+		return builderFlatType;
 	}
 }
