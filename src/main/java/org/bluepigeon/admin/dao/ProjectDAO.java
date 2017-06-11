@@ -2883,7 +2883,7 @@ public class ProjectDAO {
 	 * @return List<BuilderFlat>
 	 */
 	public List<BuilderFlat> getActiveFlatsByProjectId(int projectId){
-		String hql = "from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and status=1";
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and builderFlatStatus.id = 1 and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
