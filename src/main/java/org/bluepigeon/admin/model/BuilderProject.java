@@ -46,6 +46,7 @@ public class BuilderProject implements java.io.Serializable {
 	private Date possessionDate;
 	private Double totalInventory;
 	private Double inventorySold;
+	private Integer availbale;
 	private Double revenue;
 	private Byte status;
 	private Set<BuilderBuilding> builderBuildings = new HashSet<BuilderBuilding>(0);
@@ -289,6 +290,15 @@ public class BuilderProject implements java.io.Serializable {
 
 	public void setHighlights(String highlights) {
 		this.highlights = highlights;
+	}
+
+	@Column(name = "availbale")
+	public Integer getAvailbale() {
+		return availbale;
+	}
+
+	public void setAvailbale(Integer availbale) {
+		this.availbale = availbale;
 	}
 
 	@Temporal(TemporalType.DATE)
