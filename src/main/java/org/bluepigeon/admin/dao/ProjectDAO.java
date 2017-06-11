@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.bluepigeon.admin.data.BuildingList;
+import org.bluepigeon.admin.data.FlatPayment;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorDetail;
 import org.bluepigeon.admin.data.FloorImageData;
@@ -2835,7 +2836,9 @@ public class ProjectDAO {
 		return result;
 	}
 	/**
-	 * 
+	 * Get new project list added by builder
+	 * @author pankaj
+	 * @return List<NewProjectList>
 	 */
 	public List<NewProjectList> getNewProjectList(){
 		String hql = "from NewProject";
@@ -2887,6 +2890,35 @@ public class ProjectDAO {
 		query.setParameter("project_id", projectId);
 		List<BuilderFlat> builderFlatList = query.list();
 		return builderFlatList;
+		
+	}
+	/**
+	 * Get flat payment by flat id
+	 * @author pankaj
+	 * @param flatId
+	 * @return List<FlatPayment>
+	 */
+	public List<FlatPayment> getFlatPaymentByFlatId(int flatId){
+		String hql = "from BuilderFlat where id = :flat_id";
+		String payment = "from BuildingPaymentInfo where builderBuilding.id = :building_id" ;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id",flatId);
+		BuilderFlat builderFlat = (BuilderFlat) query.list().get(0);
+		Session paymentSession = hibernateUtil.openSession();
+		Query paymentQuery = paymentSession.createQuery(payment);
+		paymentQuery.setParameter("building_id", builderFlat.getBuilderFloor().getBuilderBuilding().getId());
+		List<BuildingPaymentInfo> buildingPaymentInfos = paymentQuery.list();
+		List<FlatPayment> flatPaymentList = new ArrayList<FlatPayment>();
+		for(BuildingPaymentInfo buildingPaymentInfo :buildingPaymentInfos ){
+			FlatPayment flatPayment = new FlatPayment();
+			flatPayment.setMilestone(buildingPaymentInfo.getMilestone());
+			flatPayment.setPayable(buildingPaymentInfo.getPayable());
+			flatPayment.setAmount(buildingPaymentInfo.getAmount());
+			flatPaymentList.add(flatPayment);
+		}
+		return flatPaymentList;
 		
 	}
 }

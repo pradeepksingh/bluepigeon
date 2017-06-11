@@ -95,7 +95,7 @@ public class BuyerController {
 			@FormDataParam("document_voterid[]") List<FormDataBodyPart> voterid,
 			@FormDataParam("builder_id") int builder_id,
 			@FormDataParam("project_id") int project_id,
-			@FormDataParam("building_id") int building_id,
+			//@FormDataParam("building_id") int building_id,
 			@FormDataParam("flat_id") int flat_id,
 			@FormDataParam("booking_date") String booking_date,
 			@FormDataParam("base_rate") Double base_rate,
@@ -147,6 +147,7 @@ public class BuyerController {
 					buyer.setBuilderProject(builderProject);
 				}
 				
+				int building_id = new ProjectDAO().getBuildingFlatById(flat_id).get(0).getBuilderFloor().getBuilderBuilding().getId();
 				if(building_id > 0){
 					BuilderBuilding builderBuilding = new BuilderBuilding();
 					builderBuilding.setId(building_id);
@@ -970,6 +971,7 @@ public class BuyerController {
 	public List<FlatData> getProjectBuildingFlatNames(@PathParam("building_id") int building_id) {
 		return new BuyerDAO().getBuilderProjectBuildingFlats(building_id);
 	}
+	
 	/**
 	 * Get Building List by passing project id
 	 * @param project_id
@@ -1476,6 +1478,13 @@ public class BuyerController {
 		totalSaleValue = F+C+E+G;
 		responseMessage.setMessage(totalSaleValue.toString());
 		return responseMessage;
+	}
+	
+	@GET
+	@Path("/flat/payments/{flat_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<FlatData> getFlatPayment(@PathParam("flat_id") int flat_id) {
+		return new BuyerDAO().getBuilderProjectBuildingFlats(flat_id);
 	}
 }
 	

@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.FlatPayment"%>
 <%@page import="org.bluepigeon.admin.data.ProjectPriceInfoData"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectPriceInfo"%>
@@ -16,6 +17,7 @@
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	List<BuilderProject> project_list = null; 
+	List<FlatPayment> flatPayments = null;
 	ProjectPriceInfoData projectPriceInfoData = null;
 	int builder_id1 = 0;
 	if(session!=null)
@@ -31,6 +33,8 @@
 			 builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
 			 builderFlatList = new ProjectDAO().getActiveFlatsByProjectId(project_list.get(0).getId());
 			 projectPriceInfoData = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByProjectId(project_list.get(0).getId());
+			 flatPayments = new ProjectDAO().getFlatPaymentByFlatId(builderFlatList.get(0).getId());
+			 
 		}
    }
 	
@@ -232,7 +236,7 @@
 						                    	if(builderFlatList.size() > 0){
 						                    		for(BuilderFlat builderFlat : builderFlatList){
 						                    %><option value="<%out.print(builderFlat.getId());%>"><% out.print(builderFlat.getFlatNo());%></option>
-						                    <
+						                    
 						                    <%}} %>
 							           </select>
                                     </div>
@@ -391,21 +395,21 @@
 	                                    </div>
 <!-- 	                                     <i class="fa fa-times"></i> -->
 	                                </div>
-	                                <div class="form-group row">
-	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
-	                                    <div class="col-2">
-	                                       <input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
-	                                    <div class="col-2">
-	                                       <input type="text" class="form-control" id="payable" name="payable[]" value=""/>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-1 col-form-label">Amount</label>
-	                                    <div class="col-2">
-	                                        <input type="text" class="form-control" id="amount" name="amount[]" value=""/>
-	                                    </div>
-<!-- 	                                     <i class="fa fa-times"></i> -->
-	                                </div>
+<!-- 	                                <div class="form-group row"> -->
+<!-- 	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label> -->
+<!-- 	                                    <div class="col-2"> -->
+<!-- 	                                       <input type="text" class="form-control" id="schedule" name="schedule[]" value=""/> -->
+<!-- 	                                    </div> -->
+<!-- 	                                    <label for="example-search-input" class="col-2 col-form-label">% of net payable</label> -->
+<!-- 	                                    <div class="col-2"> -->
+<!-- 	                                       <input type="text" class="form-control" id="payable" name="payable[]" value=""/> -->
+<!-- 	                                    </div> -->
+<!-- 	                                    <label for="example-search-input" class="col-1 col-form-label">Amount</label> -->
+<!-- 	                                    <div class="col-2"> -->
+<!-- 	                                        <input type="text" class="form-control" id="amount" name="amount[]" value=""/> -->
+<!-- 	                                    </div> -->
+<!-- <!-- 	                                     <i class="fa fa-times"></i> --> 
+<!-- 	                                </div> -->
 	                                
 	                                 
 <!-- 	                                <div class="offset-sm-9 col-sm-7"> -->
@@ -519,6 +523,52 @@ $("#building_id").change(function(){
 		$("#flat_id").html(html);
 	},'json');
 });
+
+$("#flat_id").change(function(){
+	$.get("${baseUrl}/webapi/buyer/building/available/flat/names/"+$("#flat_id").val(),{ }, function(data){
+// 		var html = '<option value="0">Select Flat</option>';
+        var html = "";
+		$(data).each(function(index){
+			
+// 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+			
+// 			+'<span class="pull-right">	<a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span><br>'
+		    html = 	+'<div class="col-12">'
+			+'<div class="form-group row">'
+			+'<label for="example-search-input" class="col-2 col-form-label">Milestone</label>'
+			+'<div class="col-2">'
+			+'<input type="text" class="form-control" id="schedule" name="schedule[]" value="'+data[index].schedule+'"/>'
+			+'</div>'
+			+'<label for="example-search-input" class="col-2 col-form-label">% of Net Payable</label>'
+			+'<div class="col-2">'
+			+'<input type="text" class="form-control"  id="payable" name="payable[]" value="'+data[index].payable+'"/>'
+			+'</div>'
+			+'<label for="example-search-input" class="col-2 col-form-label">Amount</label>'
+			+'<div class="col-2">'
+			+'<input type="text" class="form-control" id="amount" name="amount[]" value="'+data[index].amount+'"/>'
+			+'</div>'
+			+'</div>'
+		+'</div>'
+			
+		+'</div>';
+		});
+$("#vimessages3").append(html);
+	},'json');
+});
+alert("Flat ID on load :: "+<%out.print(builderFlatList.get(0).getId());%>);
+
+<%
+  if(flatPayments != null){
+	  for(FlatPayment flatPayment: flatPayments){
+%>	
+	showFlatPayment(<%out.print(flatPayment.getMilestone());%>,<%out.print(flatPayment.getPayable());%>);
+<%  }
+  }
+%>
+function showFlatPayment(milestone,percentage){
+	alert("Percentage  "+percentage);
+}
+
 $('#addbuyer').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -682,7 +732,7 @@ function addBuyer1() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/buyer/updatebuyer',
+	 		url : '${baseUrl}/webapi/buyer/save',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -707,7 +757,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/builder/buyer/new.jsp";
+        window.location.href = "${baseUrl}/builder/buyer/list.jsp";
   	}
 }
 
@@ -799,7 +849,7 @@ function removeBuyer(id) {
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
-	alert(schedule_count);
+	//alert(schedule_count);
 	var html = '<div class="tab-content" id="schedule-'+schedule_count+'">'
 				+'<hr/>'
 				+'<span class="pull-right">	<a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span><br>'
@@ -933,4 +983,5 @@ function calculateTotalSaleValue(){
 		$("#toatl_sale_value").val(data.message);
 	},'json');
 }
+
 </script>
