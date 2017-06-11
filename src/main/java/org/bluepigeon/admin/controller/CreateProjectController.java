@@ -322,22 +322,32 @@ public class CreateProjectController {
 					}
 					i++;
 				}
+				if(updatebuilderCompanyNames.size()>0)
+				{
+					builderDetalsDAO.updateBuilderCompanyName(updatebuilderCompanyNames);
+				}
+				if(saveBuilderCompanyNames.size() > 0){
+					builderDetalsDAO.saveBuilderCompany(saveBuilderCompanyNames);
+				}
+			}
+			System.out.println("BuilderLog Size :: "+builder_logo.size());
+			if(builder_logo.size() > 0){
 				try {	
 					List<BuilderLogo> builderLogos = new ArrayList<BuilderLogo>();
 					List<BuilderLogo> saveBuilderLogos = new ArrayList<BuilderLogo>();
 					//for multiple inserting images.
-					if (builder_logo.size() > 0) {
+					//if (builder_logo.size() > 0) {
 						for(int j=0 ;j < builder_logo.size();j++)
 						{
 							if(builder_logo.get(j).getFormDataContentDisposition().getFileName() != null && !builder_logo.get(j).getFormDataContentDisposition().getFileName().isEmpty()) {
-								if(builder_logo_id.get(j).getValueAs(Integer.class) != 0 && builder_logo_id.get(i).getValueAs(Integer.class) != null){
+								if(builder_logo_id.get(j).getValueAs(Integer.class) != 0 && builder_logo_id.get(j).getValueAs(Integer.class) != null){
 									BuilderLogo builderLogo = new BuilderLogo();
 									String gallery_name = builder_logo.get(j).getFormDataContentDisposition().getFileName();
 									long millis = System.currentTimeMillis() % 1000;
 									gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
 									gallery_name = "images/project/builder/"+gallery_name;
 									String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-									//System.out.println("for loop image path: "+uploadGalleryLocation);
+									System.out.println("for loop image path update: "+uploadGalleryLocation);
 									this.imageUploader.writeToFile(builder_logo.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
 									builderLogo.setId(builder_logo_id.get(j).getValueAs(Integer.class));
 									builderLogo.setBuilderUrl(gallery_name);
@@ -350,14 +360,14 @@ public class CreateProjectController {
 									gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
 									gallery_name = "images/project/builder/"+gallery_name;
 									String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-									//System.out.println("for loop image path: "+uploadGalleryLocation);
+									System.out.println("for loop image path add: "+uploadGalleryLocation);
 									this.imageUploader.writeToFile(builder_logo.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
 									builderLogo.setBuilderUrl(gallery_name);
 									builderLogo.setBuilder(builder);
 									saveBuilderLogos.add(builderLogo);
 								}
 							}
-						}
+						//}
 						if(builderLogos.size() > 0) {
 							builderDetalsDAO.updateBuilderLogo(builderLogos);
 						}
@@ -369,16 +379,11 @@ public class CreateProjectController {
 					msg.setStatus(0);
 					msg.setMessage("Unable to save image");
 				}
-				if(updatebuilderCompanyNames.size()>0)
-				{
-					builderDetalsDAO.updateBuilderCompanyName(updatebuilderCompanyNames);
-				}
-				if(saveBuilderCompanyNames.size() > 0){
-					builderDetalsDAO.saveBuilderCompany(saveBuilderCompanyNames);
-				}
+				
 				msg.setStatus(1);
 				msg.setMessage("Builder updated successfully.");
-			} else {
+			}
+			else {
 				msg.setMessage("Failed to add building.");
 				msg.setStatus(0);
 			}
