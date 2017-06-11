@@ -42,13 +42,14 @@
 				builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
 				employeeLists = new BuilderDetailsDAO().getBuilderEmployeeList(p_user_id);
 			}
+			if(builderProjects.size()>0)
+				project_size = builderProjects.size();
+			if(builderPropertyTypes.size()>0)
+				type_size = builderPropertyTypes.size();
 		}
 		
 	}
-	if(builderProjects.size()>0)
-		project_size = builderProjects.size();
-	if(builderPropertyTypes.size()>0)
-		type_size = builderPropertyTypes.size();
+	
 %>
 
 <!DOCTYPE html>

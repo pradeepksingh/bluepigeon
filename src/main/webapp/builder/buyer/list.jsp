@@ -9,6 +9,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%
+	List<Buyer> buyerList = null;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	int builder_id = 0;
@@ -18,9 +19,10 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
+			buyerList = new BuyerDAO().getAllBuyerByBuilderId(builder_id);
 		}
    }
-	List<Buyer> buyerList = new BuyerDAO().getAllBuyerByBuilderId(builder_id);
+	
 %>
 <!DOCTYPE html>
 <html lang="en">

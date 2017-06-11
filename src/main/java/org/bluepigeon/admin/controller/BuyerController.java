@@ -20,6 +20,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.AgreementDAO;
+import org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.DemandLettersDAO;
 import org.bluepigeon.admin.dao.PossessionDAO;
@@ -94,7 +95,7 @@ public class BuyerController {
 			@FormDataParam("document_voterid[]") List<FormDataBodyPart> voterid,
 			@FormDataParam("builder_id") int builder_id,
 			@FormDataParam("project_id") int project_id,
-			@FormDataParam("building_id") int building_id,
+			//@FormDataParam("building_id") int building_id,
 			@FormDataParam("flat_id") int flat_id,
 			@FormDataParam("booking_date") String booking_date,
 			@FormDataParam("base_rate") Double base_rate,
@@ -146,6 +147,7 @@ public class BuyerController {
 					buyer.setBuilderProject(builderProject);
 				}
 				
+				int building_id = new ProjectDAO().getBuildingFlatById(flat_id).get(0).getBuilderFloor().getBuilderBuilding().getId();
 				if(building_id > 0){
 					BuilderBuilding builderBuilding = new BuilderBuilding();
 					builderBuilding.setId(building_id);
@@ -969,6 +971,7 @@ public class BuyerController {
 	public List<FlatData> getProjectBuildingFlatNames(@PathParam("building_id") int building_id) {
 		return new BuyerDAO().getBuilderProjectBuildingFlats(building_id);
 	}
+	
 	/**
 	 * Get Building List by passing project id
 	 * @param project_id
@@ -1439,6 +1442,49 @@ public class BuyerController {
 		BuyerDAO buyerDAO = new BuyerDAO();
 		msg = buyerDAO.deleteBuyerPaymentById(id);
 		return msg;
+	}
+	
+	@POST
+	@Path("/sale")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage getTotalSaleValue(
+			@FormParam("project_id") int projectId,
+			@FormParam("base_rate") Double base_rate,
+			@FormParam("rise_rate") Double rise_rate,
+			@FormParam("amenity_rate") Double amenity_rate,
+			@FormParam("parking") Double parking,
+			@FormParam("maintenance") Double maintenance,
+			@FormParam("stamp_duty") Double stamp_duty,
+			@FormParam("tax") Double tax,
+			@FormParam("vat") Double vat,
+			@FormParam("no_of_floors") int noOfFloors 
+			){
+		ResponseMessage responseMessage = new ResponseMessage();
+		Double totalSaleValue = 0.0;
+		Double A = 0.0, B = 0.0, C = 0.0, D = 0.0, E = 0.0, F = 0.0, G = 0.0;
+		Double superBuildUpArea = new BuilderProjectPriceInfoDAO().getBuilderFlatTypeByProjectId(projectId).getSuperBuiltupArea();
+		Double sqft = new BuilderProjectPriceInfoDAO().getBuilderProjectPriceInfo(projectId).getAreaUnit().getSqft_value();
+		A = base_rate * superBuildUpArea * sqft ; 
+		if(noOfFloors > 0)
+			B = rise_rate * superBuildUpArea * sqft ;
+		if(maintenance > 0)
+			C = maintenance;
+		if(amenity_rate  > 0)
+			D = amenity_rate;
+		if(parking > 0)
+			E = parking;
+		F = A+B+D;
+		G = F*stamp_duty/100+F * tax/100+F * vat/100;
+		totalSaleValue = F+C+E+G;
+		responseMessage.setMessage(totalSaleValue.toString());
+		return responseMessage;
+	}
+	
+	@GET
+	@Path("/flat/payments/{flat_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<FlatData> getFlatPayment(@PathParam("flat_id") int flat_id) {
+		return new BuyerDAO().getBuilderProjectBuildingFlats(flat_id);
 	}
 }
 	

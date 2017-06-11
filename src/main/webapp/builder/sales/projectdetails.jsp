@@ -55,8 +55,7 @@
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
-    <!-- animation CSS -->
-    <link href="../css/animate.css" rel="stylesheet">
+    
     <!-- Menu CSS -->
     <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
