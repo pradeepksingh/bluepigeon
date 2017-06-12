@@ -203,7 +203,7 @@
                            		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Edit</a>
                            	</div>
                          	<div class="col-md-6 center">
-                          		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id==<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>
+                          		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>
 						 	 </div>
 						  </div>
 	                       </div>
