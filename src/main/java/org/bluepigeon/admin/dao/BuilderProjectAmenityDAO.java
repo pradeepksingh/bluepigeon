@@ -5,7 +5,9 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.model.BuilderLogo;
 import org.bluepigeon.admin.model.BuilderProjectAmenity;
+import org.bluepigeon.admin.model.ProjectAmenityIcon;
 import org.bluepigeon.admin.util.HibernateUtil;
 
 public class BuilderProjectAmenityDAO {
@@ -32,6 +34,7 @@ public class BuilderProjectAmenityDAO {
 				newsession.save(builderProjectAmenity);
 				newsession.getTransaction().commit();
 				newsession.close();
+				response.setId(builderProjectAmenity.getId());
 				response.setStatus(1);
 				response.setMessage("Project amenity added Successfully");
 			}
@@ -39,6 +42,33 @@ public class BuilderProjectAmenityDAO {
 		return response;
 	}
 
+	public ResponseMessage saveProjectAmenityIcon(List<ProjectAmenityIcon> projectAmenityIcons){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(ProjectAmenityIcon projectAmenityIcon : projectAmenityIcons){
+			session.save(projectAmenityIcon);
+		}
+		session.getTransaction().commit();
+		session.close();
+		
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Project amenity added Successfully");
+		return responseMessage;
+		
+	}
+	
+	public ProjectAmenityIcon getProjectAmenityIconById(int amenityId){
+		ProjectAmenityIcon projectAmenityIcon = null;
+		String hql = "from ProjectAmenityIcon where builderProjectAmenity.id = :amenity_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("amenity_id", amenityId);
+		projectAmenityIcon = (ProjectAmenityIcon) query.uniqueResult();
+		return projectAmenityIcon;
+	}
 	public ResponseMessage update(BuilderProjectAmenity builderProjectAmenity) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -62,6 +92,27 @@ public class BuilderProjectAmenityDAO {
 			response.setMessage("Project amenity updated Successfully");
 		}
 		return response;
+	}
+	
+	/**
+	 * Update project amenity icon
+	 * @author pankaj
+	 * @param projectAmenityIcons
+	 */
+	public void updateProjectAmenityIcon(List<ProjectAmenityIcon> projectAmenityIcons){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "update ProjectAmenityIcon set iconUrl=:icon_url where id = :id";
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		for(ProjectAmenityIcon projectAmenityIcon : projectAmenityIcons){
+			System.out.println("BuilderLogo Id :: "+projectAmenityIcon.getId());
+			query.setParameter("builder_url", projectAmenityIcon.getIconUrl());
+			query.setParameter("id", projectAmenityIcon.getId());
+			query.executeUpdate();
+		}
+		session.getTransaction().commit();
+		session.close();
 	}
 
 	public ResponseMessage delete(BuilderProjectAmenity builderProjectAmenity) {

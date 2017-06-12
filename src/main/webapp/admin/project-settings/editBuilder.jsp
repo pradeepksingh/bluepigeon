@@ -88,7 +88,11 @@ if(builder_list.size()>0){
 						<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right"
 								for="form-field-1" for="form-field-11">Builder Logo</label>
-						<% if(builderLogos != null) {
+							<input type="hidden" value="0" name="builder_logo_id[]" id="builder_logo_id[]"/>
+							<div class="col-sm-4">
+								<input type="file" class="form-control" id="builder_logo" name="builder_logo[]" />
+							</div>
+							<% if(builderLogos != null) {
 							for(BuilderLogo builderLogo : builderLogos){
 							%>
 							<input type="hidden" value="<%out.print(builderLogo.getId()); %>" name="builder_logo_id[]" id="builder_logo_id[]"/>
@@ -97,9 +101,6 @@ if(builder_list.size()>0){
 									</div>
 									<div class="messageContainer col-sm-offset-4"></div>
 							<% }} %>
-							<div class="col-sm-4">
-								<input type="file" class="form-control" id="builder_logo" name="builder_logo[]" />
-							</div>
 						</div>
 						<% if(builder.getBuilderCompanyNameses().size()>0) {
 							int i=1;
