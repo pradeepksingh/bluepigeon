@@ -1953,12 +1953,52 @@ public class ProjectDAO {
 		newsession.save(builderFlat);
 		newsession.getTransaction().commit();
 		newsession.close();
+		updateProjectInventory(builderFlat);
 		response.setId(builderFlat.getId());
 		response.setStatus(1);
 		response.setMessage("Building flat Added Successfully.");
 		return response;
 	}
 	
+	public void updateProjectInventory(BuilderFlat builderFlat){
+		String hql = "UPDATE BuilderProject set availbale = :availbale and totalInventory = :totalInventory where id = :project_id ";
+		int available = 0;
+		int totalInventory = 0;
+		int soldInventory = 0;
+		int projectId = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
+		available = getAvaiableFlatCount(projectId);
+		soldInventory = getSoldFlatCount(projectId);
+		totalInventory = available + soldInventory;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("availbale", available);
+		query.setParameter("totalInventory",totalInventory );
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public int getAvaiableFlatCount(int project_id){
+		String hql = "Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and builderFlatStatus =1 AND status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", project_id);
+		int available = (int) query.uniqueResult();
+		return available;
+	}
+	
+	public int getSoldFlatCount(int projectId){
+		String hql = "Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and builderFlatStatus =2 and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		int available = (int) query.uniqueResult();
+		return available;
+	}
 	public ResponseMessage updateBuildingFlat(BuilderFlat builderFlat) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -2883,7 +2923,7 @@ public class ProjectDAO {
 	 * @return List<BuilderFlat>
 	 */
 	public List<BuilderFlat> getActiveFlatsByProjectId(int projectId){
-		String hql = "from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and status=1";
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and builderFlatStatus.id = 1 and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);

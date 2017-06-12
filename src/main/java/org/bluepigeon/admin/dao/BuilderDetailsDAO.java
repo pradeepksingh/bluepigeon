@@ -156,12 +156,12 @@ public class BuilderDetailsDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		if(builderCompanyNames.size()>0){
 			try{
-				String deleteBuilderCompanyName = "Update from BuilderCompanyNames  set name=:name,email=:email,contact=:contact where builder.id = :builder_id";
+				String deleteBuilderCompanyName = "Update from BuilderCompanyNames  set name=:name,email=:email,contact=:contact where id = :id";
 				Session newsession1 = hibernateUtil.openSession();
 				newsession1.beginTransaction();
 				for(BuilderCompanyNames builderCompanyNames2 : builderCompanyNames){
 					Query smupdate = newsession1.createQuery(deleteBuilderCompanyName);
-					smupdate.setParameter("builder_id", builderCompanyNames2.getBuilder().getId());
+					smupdate.setParameter("id", builderCompanyNames2.getId());
 					smupdate.setParameter("name", builderCompanyNames2.getName());
 					smupdate.setParameter("email", builderCompanyNames2.getEmail());
 					smupdate.setParameter("contact", builderCompanyNames2.getContact());
@@ -629,9 +629,14 @@ public class BuilderDetailsDAO {
 	public void updateBuilderLogo(List<BuilderLogo> builderLogos){
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
+		String hql = "update BuilderLogo set builderUrl=:builder_url where id = :id";
 		session.beginTransaction();
+		Query query = session.createQuery(hql);
 		for(BuilderLogo builderLogo : builderLogos){
-			session.update(builderLogo);
+			System.out.println("BuilderLogo Id :: "+builderLogo.getId());
+			query.setParameter("builder_url", builderLogo.getBuilderUrl());
+			query.setParameter("id", builderLogo.getId());
+			query.executeUpdate();
 		}
 		session.getTransaction().commit();
 		session.close();

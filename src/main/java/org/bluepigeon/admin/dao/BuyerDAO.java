@@ -119,20 +119,14 @@ public class BuyerDAO {
 	}
 	
 	public void updateFlatStatus(int flatId){
-		String hql = "UPDATE BuilderFlat set builderFlatStatus.id=2 WHERE id = :id";
+		System.out.println("FlatId in buyer DAO :: "+flatId);
+		String hql = "UPDATE BuilderFlat set builderFlatStatus.id = 2 WHERE id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-//		BuilderFlatType builderFlatType = new BuilderFlatType();
-//		builderFlatType.setId(2);
-//		BuilderFlat builderFlat = new BuilderFlat();
-//		builderFlat.setId(flatId);
-//		
-//		builderFlat.setBuilderFlatType(builderFlatType);
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
 		query.setParameter("id",flatId);
 		query.executeUpdate();
-//		session.update(builderFlat);
 		session.getTransaction().commit();
 		session.close();
 	}
