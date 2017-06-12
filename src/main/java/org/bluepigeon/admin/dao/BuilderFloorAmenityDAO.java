@@ -6,6 +6,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.BuilderFloorAmenity;
+import org.bluepigeon.admin.model.FloorAmenityIcon;
+import org.bluepigeon.admin.model.ProjectAmenityIcon;
 import org.bluepigeon.admin.util.HibernateUtil;
 
 public class BuilderFloorAmenityDAO {
@@ -32,6 +34,7 @@ public class BuilderFloorAmenityDAO {
 				newsession.save(builderFloorAmenity);
 				newsession.getTransaction().commit();
 				newsession.close();
+				response.setId(builderFloorAmenity.getId());
 				response.setStatus(1);
 				response.setMessage("Floor amenity added Successfully");
 			}
@@ -39,6 +42,34 @@ public class BuilderFloorAmenityDAO {
 		return response;
 	}
 
+	public ResponseMessage saveFloorAmenityIcon(List<FloorAmenityIcon> floorAmenityIcons){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(FloorAmenityIcon floorAmenityIcon : floorAmenityIcons){
+			session.save(floorAmenityIcon);
+		}
+		session.getTransaction().commit();
+		session.close();
+		
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Floor amenity added Successfully");
+		return responseMessage;
+		
+	}
+	
+	public FloorAmenityIcon getFloorAmenityIconById(int amenityId){
+		FloorAmenityIcon floorAmenityIcon = null;
+		String hql = "from FloorAmenityIcon where builderFloorAmenity.id = :amenity_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("amenity_id", amenityId);
+		floorAmenityIcon = (FloorAmenityIcon) query.uniqueResult();
+		return floorAmenityIcon;
+	}
+	
 	public ResponseMessage update(BuilderFloorAmenity builderFloorAmenity) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -64,6 +95,27 @@ public class BuilderFloorAmenityDAO {
 		return response;
 	}
 
+	/**
+	 * Update floor amenity icon
+	 * @author pankaj
+	 * @param floorAmenityIcons
+	 */
+	public void updateFloorAmenityIcon(List<FloorAmenityIcon> floorAmenityIcons){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "update FloorAmenityIcon set iconUrl=:icon_url where id = :id";
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		for(FloorAmenityIcon floorAmenityIcon : floorAmenityIcons){
+			query.setParameter("icon_url", floorAmenityIcon.getIconUrl());
+			query.setParameter("id", floorAmenityIcon.getId());
+			query.executeUpdate();
+		}
+		session.getTransaction().commit();
+		session.close();
+	}
+
+	
 	public ResponseMessage delete(BuilderFloorAmenity builderFloorAmenity) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new org.bluepigeon.admin.util.HibernateUtil();

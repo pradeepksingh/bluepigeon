@@ -168,7 +168,6 @@
                        			for(ProjectList projectList : project_list ){
                        	%>
                        <div class="col-md-6 col-sm-6 col-xs-12 projectsection">
-                       <a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" >
 	                       <div class="image">
 		                      <%
 	                       		try{
@@ -198,8 +197,17 @@
 				                       </div>
 			                       </div>
 	                           </div>
-	                       </div></a>
 	                       </div>
+	                       <div class="row">
+                           	<div class="col-md-6 center"> 
+                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Edit</a>
+                           	</div>
+                         	<div class="col-md-6 center">
+                          		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id==<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>
+						 	 </div>
+						  </div>
+	                       </div>
+	                       
 	                       <%  
                        		}
                        	}

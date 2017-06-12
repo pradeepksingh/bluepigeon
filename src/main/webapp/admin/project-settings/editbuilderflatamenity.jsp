@@ -7,7 +7,7 @@
 	int amenity_size = 0;
 	int state_size = 0;
 	List<BuilderFlatAmenity> amenity_list = null;
-	FlatAmenityIcon faltAmenityIcon = null;
+	FlatAmenityIcon flatAmenityIcon = null;
 	
 	BuilderFlatAmenityDAO builderFlatAmenityDAO = new BuilderFlatAmenityDAO();
 	
@@ -16,7 +16,7 @@
 	if (amenity_id > 0) {
 		amenity_list = builderFlatAmenityDAO.getBuilderFlatAmenityById(amenity_id);
 		builderFlatAmenity = amenity_list.get(0);
-		faltAmenityIcon = builderFlatAmenityDAO.getFlatAmenityIconById(amenity_id);
+		flatAmenityIcon = builderFlatAmenityDAO.getFlatAmenityIconById(amenity_id);
 	}
 %>
 <form class="form-horizontal" role="form" method="post" action="" id="editFlatAmenity" name="editFlatAmenity" enctype="multipart/form-data">		
@@ -34,10 +34,10 @@
               <div class="form-group">
               		<label for="password" class="control-label">Flat Amenity Icon</label>
                     <input type="file" class="form-control" id="flat_amenity_icon" name="flat_amenity_icon[]" />
-                    <% if(faltAmenityIcon != null) {%>
-					<input type="hidden" value="<%out.print(faltAmenityIcon.getId()); %>" name="flat_amenity_id[]" id="flat_amenity_id"/>
+                    <% if(flatAmenityIcon != null) {%>
+					<input type="hidden" value="<%out.print(flatAmenityIcon.getId()); %>" name="flat_amenity_id[]" id="flat_amenity_id"/>
 					<div class="col-sm-4">
-						<img alt="flat amenity icon" src="${baseUrl}/<% out.print(faltAmenityIcon.getIconUrl()); %>" width="50px;">
+						<img alt="flat amenity icon" src="${baseUrl}/<% out.print(flatAmenityIcon.getIconUrl()); %>" width="50px;">
 					</div>
 					<div class="messageContainer col-sm-offset-4"></div>
 					<% } %>
