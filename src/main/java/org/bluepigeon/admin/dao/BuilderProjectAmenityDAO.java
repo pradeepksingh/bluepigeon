@@ -106,8 +106,7 @@ public class BuilderProjectAmenityDAO {
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
 		for(ProjectAmenityIcon projectAmenityIcon : projectAmenityIcons){
-			System.out.println("BuilderLogo Id :: "+projectAmenityIcon.getId());
-			query.setParameter("builder_url", projectAmenityIcon.getIconUrl());
+			query.setParameter("icon_url", projectAmenityIcon.getIconUrl());
 			query.setParameter("id", projectAmenityIcon.getId());
 			query.executeUpdate();
 		}

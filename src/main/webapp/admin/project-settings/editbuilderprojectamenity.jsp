@@ -31,21 +31,21 @@
               		</div>
               	</div>
               	<div class="row">
-	              		<div class="col-xs-12">
-	                  		<div class="form-group">
-	                       		<label for="password" class="control-label">Project Amenity Icon</label>
-								<input type="hidden" id="project_amenity_id" name="project_amenity_id[]" value="0"/>
-	                       		<input type="file" class="form-control" id="project_amenity_icon" name="project_amenity_icon[]" />
-	                       		<% if(projectAmenityIcon != null) {%>
-								<input type="hidden" value="<%out.print(projectAmenityIcon.getId()); %>" name="project_amenity_id[]" id="project_amenity_id"/>
-								<div class="col-sm-4">
-										<img alt="project amenity icon" src="${baseUrl}/<% out.print(projectAmenityIcon.getIconUrl()); %>" width="50px;">
-								</div>
-								<div class="messageContainer col-sm-offset-4"></div>
-								<% } %>
-	                  		</div>
-	              		</div>
-	              	</div>
+              		<div class="col-xs-12">
+                  		<div class="form-group">
+                       		<label for="password" class="control-label">Project Amenity Icon</label>
+							<input type="hidden" id="project_amenity_id" name="project_amenity_id[]" value="0"/>
+                       		<input type="file" class="form-control" id="project_amenity_icon" name="project_amenity_icon[]" />
+                       		<% if(projectAmenityIcon != null) {%>
+							<input type="hidden" value="<%out.print(projectAmenityIcon.getId()); %>" name="project_amenity_id[]" id="project_amenity_id"/>
+							<div class="col-sm-4">
+									<img alt="project amenity icon" src="${baseUrl}/<% out.print(projectAmenityIcon.getIconUrl()); %>" width="50px;">
+							</div>
+							<div class="messageContainer col-sm-offset-4"></div>
+							<% } %>
+                  		</div>
+              		</div>
+              	</div>
               	<div class="row">
               		<div class="col-xs-12">
                   		<div class="form-group">

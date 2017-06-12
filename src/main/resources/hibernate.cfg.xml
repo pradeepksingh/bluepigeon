@@ -32,6 +32,9 @@
         <mapping class="org.bluepigeon.admin.model.BuyerProjectUpdate" />
         <mapping class="org.bluepigeon.admin.model.FloorPanoramicImage" />
          <mapping class="org.bluepigeon.admin.model.ProjectAmenityIcon" />
+         <mapping class="org.bluepigeon.admin.model.BuildingAmenityIcon" />
+         <mapping class="org.bluepigeon.admin.model.FloorAmenityIcon" />
+         <mapping class="org.bluepigeon.admin.model.FlatAmenityIcon" />
         <mapping class="org.bluepigeon.admin.model.Locality" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectType" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloorAmenitySubstages" />
