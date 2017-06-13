@@ -5,6 +5,9 @@ public class BuilderProjectList {
 	private String name;
 	private String image;
 	private String city;
+	private double sold;
+	private double totalSold;
+	private int totalLeads;
 	public int getId() {
 		return id;
 	}
@@ -28,5 +31,23 @@ public class BuilderProjectList {
 	}
 	public void setCity(String city) {
 		this.city = city;
+	}
+	public double getSold() {
+		return sold;
+	}
+	public void setSold(double sold) {
+		this.sold = sold;
+	}
+	public double getTotalSold() {
+		return totalSold;
+	}
+	public void setTotalSold(double totalSold) {
+		this.totalSold = totalSold;
+	}
+	public int getTotalLeads() {
+		return totalLeads;
+	}
+	public void setTotalLeads(int totalLeads) {
+		this.totalLeads = totalLeads;
 	}
 }

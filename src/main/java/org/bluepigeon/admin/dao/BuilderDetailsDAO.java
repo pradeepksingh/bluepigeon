@@ -545,6 +545,7 @@ public class BuilderDetailsDAO {
 		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
 		String hql = "from BuilderProject where ";
 		String where = "";
+		
 		if(builderId > 0){
 			where +="builder.id = :builder_id";
 		}
@@ -594,6 +595,10 @@ public class BuilderDetailsDAO {
 			builderProjectList.setId(builderProject.getId());
 			builderProjectList.setName(builderProject.getName());
 			builderProjectList.setCity(builderProject.getCity().getName());
+			if(builderProject.getTotalInventory()!=null)
+				builderProjectList.setTotalSold(builderProject.getTotalInventory());
+			if(builderProject.getInventorySold() != null)
+				builderProjectList.setSold(builderProject.getInventorySold());
 			ProjectDAO projectDAO = new ProjectDAO();
 			try{
 				builderProjectList.setImage(projectDAO.getProjectImagesByProjectId(builderProject.getId()).get(0).getImage());
@@ -603,6 +608,40 @@ public class BuilderDetailsDAO {
 			builderProjectLists.add(builderProjectList);
 		}
 		return builderProjectLists;
+	}
+	/**
+	 * Get project by filter's projectid
+	 * @author pankaj
+	 * @param projectId
+	 * @return List<BuilderProjectList>
+	 */
+	public List<BuilderProjectList> getProjectFilterListByProjectId(int projectId){
+		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
+		String hql ="from BuilderProject where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", projectId);
+		List<BuilderProject> builderProjects = query.list();
+		for(BuilderProject builderProject : builderProjects){
+			BuilderProjectList builderProjectList = new BuilderProjectList();
+			builderProjectList.setId(builderProject.getId());
+			builderProjectList.setName(builderProject.getName());
+			builderProjectList.setCity(builderProject.getCity().getName());
+			if(builderProject.getTotalInventory()!=null)
+				builderProjectList.setTotalSold(builderProject.getTotalInventory());
+			if(builderProject.getInventorySold() != null)
+				builderProjectList.setSold(builderProject.getInventorySold());
+			ProjectDAO projectDAO = new ProjectDAO();
+			try{
+				builderProjectList.setImage(projectDAO.getProjectImagesByProjectId(builderProject.getId()).get(0).getImage());
+			}catch(Exception e){
+				builderProjectList.setImage("");
+			}
+			builderProjectLists.add(builderProjectList);
+		}
+		return builderProjectLists;
+		
 	}
 
 	/**

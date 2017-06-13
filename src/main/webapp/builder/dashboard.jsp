@@ -1,3 +1,6 @@
+<%@page import="org.bluepigeon.admin.model.City"%>
+<%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
+<%@page import="org.bluepigeon.admin.data.CityData"%>
 <%@page import="org.bluepigeon.admin.model.ProjectImageGallery"%>
 <%@page import="org.bluepigeon.admin.data.ProjectList"%>
 <%@page import="java.util.List"%>
@@ -10,6 +13,7 @@
 <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <%
 	List<ProjectList> project_list = null;
+	List<City> cityDataList = null;
 	ProjectImageGallery imageGaleries = null;
 	Long totalBuyers = (long)0;
 	Long totalInventory = (long) 0; 
@@ -28,8 +32,7 @@
 		totalBuyers = new BuyerDAO().getTotalBuyers(builder_id);
 		totalInventory = new ProjectDAO().getTotalInventory(builder_id);
 		project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
-		
-		
+		cityDataList = new CityNamesImp().getCityActiveNames();
 	}
 %>
 <!DOCTYPE html>
@@ -129,40 +132,40 @@
                 </div>
                 <div class="white-box">
                    <div class="row re">
-<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!--                         <select class="selectpicker" data-style="form-control"> -->
-<!--                                         <option>Project Name</option> -->
-<!--                                         <option>Kumar</option> -->
-<!--                                         <option>ganga</option> -->
-<!--                            </select> -->
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <select class="selectpicker" data-style="form-control" id="project_id" name="project_id">
+                                        <option>Project Name</option>
+                                       <% for(ProjectList projectList : project_list){%>
+                                       <option value="<%out.print(projectList.getId());%>"><%out.print(projectList.getName()); %></option>
+                                       <% }%>
+                           </select>
                                
-<!--                     </div> -->
-<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!--                       <select class="selectpicker" data-style="form-control"> -->
-<!--                                         <option>City</option> -->
-<!--                                         <option>Pune</option> -->
-<!--                                         <option>Mumbai</option> -->
-<!--                           </select> -->
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                      <select class="selectpicker" data-style="form-control" id="city_id" name="city_id">
+                                   		<option value="0">City</option>
+                                        <%for(City city : cityDataList){ %>
+                                        <option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
+                                        <%} %>
+                          </select>
                              
-<!--                     </div> -->
-<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!--                        <select class="selectpicker" data-style="form-control"> -->
-<!--                                         <option>Locality</option> -->
-<!--                                         <option>S.B Road</option> -->
-<!--                                         <option>Kothrud</option> -->
-<!--                          </select> -->
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                       <select class="selectpicker" data-style="form-control" id="locality_id" name="locality_id">
+                                        <option value="0">Locality</option>
+                         </select>
                               
-<!--                     </div> -->
-<!--                     <div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!--                        <select class="selectpicker" data-style="form-control"> -->
-<!--                                         <option>Status</option> -->
-<!--                                         <option>1</option> -->
-<!--                                         <option>2</option> -->
-<!--                          </select> -->
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                       <select class="selectpicker" data-style="form-control">
+                                        <option>Project Status</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                         </select>
                                
-<!--                     </div> -->
-                    
-                    <div class="row">
+                    </div>
+                    <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_id);%>"/>
+                    <div class="container" id="project_list">
                    		<%
                        		if(project_list !=null){
                        			for(ProjectList projectList : project_list ){
@@ -183,17 +186,17 @@
 				                       <div class="col-md-6 left">
 					                       <h3><%out.print(projectList.getName()); %></h3>
 					                       <h4><%out.print(projectList.getCityName()); %></h4>
-<!-- 					                       <br> -->
-<!-- 						                       <div class="bottom"> -->
-<!-- 						                       <h4>50/500 SOLD</h4> -->
-<!-- 						                       </div> -->
+					                       <br>
+						                       <div class="bottom">
+						                       <h4><%if(projectList != null){out.print(projectList.getSold());} %>/<% if(projectList != null){out.print(projectList.getTotalSold());} %> SOLD</h4>
+						                       </div>
 				                       </div>
 				                        <div class="col-md-6 right">
 					                         <div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="<%out.print(projectList.getId()); %>">
 					                         </div>
-<!-- 						                        <div class="bottom"> -->
-<!-- 						                        <h4>10 NEW LEADS</h4> -->
-<!-- 						                        </div> -->
+						                        <div class="bottom">
+						                        <h4><%out.print(projectList.getTotalLeads()) ;%> NEW LEADS</h4>
+						                        </div>
 				                       </div>
 			                       </div>
 	                           </div>
@@ -203,7 +206,7 @@
                            		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Edit</a>
                            	</div>
                          	<div class="col-md-6 center">
-                          		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id==<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>
+                          		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>
 						 	 </div>
 						  </div>
 	                       </div>
@@ -378,6 +381,22 @@
     function addBuyer(){
     	window.location.href="${baseUrl }/builder/buyer/new.jsp";
     }
+    
+    $("#city_id").change(function(){
+    	$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
+    		var html = '<option value="">Select Locality</option>';
+    		$(data).each(function(index){
+    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+    		});
+    		$("#locality_id").html(html);
+    		$('.selectpicker').selectpicker('refresh');
+    	},'json');
+    	getProjectList();
+    });
+    $("#locality_id").change(function(){
+    	getProjectList();
+    });
+    
     jQuery(document).ready(function() {
         // Switchery
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
@@ -518,7 +537,138 @@
  	    drawCircle('#efefef', options.lineWidth, 100 / 100);
  	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
     }
-   
+    
+    $("#project_id").change(function(){
+    	getProjectFilterList($("#project_id").val());
+    });
+    
+ function getProjectList(){
+    	
+    	var html = "";
+		var image = "";
+		var projectName = "";
+		var cityName = "";
+		var projectId = "";
+		$("#project_list").empty();
+	   $.post("${baseUrl}/webapi/project/data/list",{builder_id: $("#builder_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
+		   if(data == ""){
+			   $("#project_list").empty();
+			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
+		   }
+			$(data).each(function(index){
+				if(data[index].image != "")
+					image = "${baseUrl}/"+data[index].image;
+				else
+					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
+				if(data[index].name != ""){
+					projectName = data[index].name;
+				}
+				if(data[index].city != ""){
+					cityName = data[index].city;
+				}
+				if(data[index].id != ""){
+					projectId = data[index].id;
+				}
+				html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
+		    		+'<div class="image">'
+                   	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
+                   	+'<div class="overlay">'
+                    +'<div class="row">'
+	                +'<div class="col-md-6 left">'
+		            +'<h3>'+projectName+'</h3>'
+		            +'<h4>'+cityName+'</h4>'
+		            +'<br>'
+               		+'<div class="bottom">'
+                	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
+                	+'</div>'
+	                +'</div>'
+	                +'<div class="col-md-6 right">'
+		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"></div>'
+		            +'<div class="bottom">'
+                    +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
+                    +'</div>'
+	                +'</div>'
+                    +'</div>'
+                    +'</div>'
+               		+'</div>'
+               		+'<div class="row">'
+               		+'<div class="col-md-6 center">' 
+               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Edit</a>'
+               		+'</div>'
+             		+'<div class="col-md-6 center">'
+              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>'
+			 	 	+'</div>'
+			 		+'</div>'
+	            	+'</div>';
+	            		$("#project_list").append(html);
+	            		createGraph("graph"+projectId);
+			});
+		    },'json');
+	   }
+ 
+ function getProjectFilterList(project_id){
+ 	
+ 	var html = "";
+		var image = "";
+		var projectName = "";
+		var cityName = "";
+		var projectId = "";
+		$("#project_list").empty();
+	   $.post("${baseUrl}/webapi/project/filter",{project_id:project_id},function(data){
+		   if(data == ""){
+			   $("#project_list").empty();
+			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
+		   }
+			$(data).each(function(index){
+				if(data[index].image != "")
+					image = "${baseUrl}/"+data[index].image;
+				else
+					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
+				if(data[index].name != ""){
+					projectName = data[index].name;
+				}
+				if(data[index].city != ""){
+					cityName = data[index].city;
+				}
+				if(data[index].id != ""){
+					projectId = data[index].id;
+				}
+				html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
+		    		+'<div class="image">'
+                   	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
+                   	+'<div class="overlay">'
+                    +'<div class="row">'
+	                +'<div class="col-md-6 left">'
+		            +'<h3>'+projectName+'</h3>'
+		            +'<h4>'+cityName+'</h4>'
+		            +'<br>'
+               		+'<div class="bottom">'
+                	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
+                	+'</div>'
+	                +'</div>'
+	                +'<div class="col-md-6 right">'
+		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"></div>'
+		            +'<div class="bottom">'
+                    +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
+                    +'</div>'
+	                +'</div>'
+                    +'</div>'
+                    +'</div>'
+               		+'</div>'
+               		+'<div class="row">'
+               		+'<div class="col-md-6 center">' 
+               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Edit</a>'
+               		+'</div>'
+             		+'<div class="col-md-6 center">'
+              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>'
+			 	 	+'</div>'
+			 		+'</div>'
+	            	+'</div>';
+	            		$("#project_list").append(html);
+	            		createGraph("graph"+projectId);
+			});
+		    },'json');
+	   }
     </script>
 
 </body>

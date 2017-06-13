@@ -2573,6 +2573,13 @@ public class ProjectDAO {
 			newproject.setCityName(builderproject.getCity().getName());
 			newproject.setLocalityId(builderproject.getLocality().getId());
 			newproject.setLocalityName(builderproject.getLocality().getName());
+			if(builderproject.getInventorySold() != null){
+				newproject.setSold(builderproject.getInventorySold());
+			}
+			if(builderproject.getTotalInventory() != null){
+			newproject.setTotalSold(builderproject.getTotalInventory());
+			}
+			
 			System.out.println("Project name :: "+builderproject.getName());
 			projects.add(newproject);
 		}
