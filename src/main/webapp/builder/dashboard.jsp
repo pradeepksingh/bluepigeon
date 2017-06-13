@@ -559,7 +559,7 @@
 				if(data[index].image != "")
 					image = "${baseUrl}/"+data[index].image;
 				else
-					image = "../plugins/images/Untitled-1.png";
+					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
 				if(data[index].name != ""){
 					projectName = data[index].name;
 				}
@@ -578,31 +578,30 @@
 		            +'<h3>'+projectName+'</h3>'
 		            +'<h4>'+cityName+'</h4>'
 		            +'<br>'
-              	 	+'<div class="bottom">'
+               		+'<div class="bottom">'
                 	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
                 	+'</div>'
 	                +'</div>'
 	                +'<div class="col-md-6 right">'
-		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"> </div>'
-	                +'</div>'
-	                +'</div>'
-                    +'<div class="bottom">'
-                    +'<h4>'+data[index].totalLeads+' NEW LEADS</h4>'
+		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"></div>'
+		            +'<div class="bottom">'
+                    +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
                     +'</div>'
+	                +'</div>'
                     +'</div>'
                     +'</div>'
                		+'</div>'
                		+'<div class="row">'
                		+'<div class="col-md-6 center">' 
-               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a>'
+               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Edit</a>'
                		+'</div>'
              		+'<div class="col-md-6 center">'
-              		+'<a href="${baseUrl}/builder/project/building/list.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>'
+              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>'
 			 	 	+'</div>'
 			 		+'</div>'
-            		+'</div>';
-            		$("#project_list").append(html);
-            		createGraph("graph"+projectId);
+	            	+'</div>';
+	            		$("#project_list").append(html);
+	            		createGraph("graph"+projectId);
 			});
 		    },'json');
 	   }
@@ -634,38 +633,37 @@
 				if(data[index].id != ""){
 					projectId = data[index].id;
 				}
-			    	html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
-			    		+'<div class="image">'
-	                   	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
-	                   	+'<div class="overlay">'
-	                    +'<div class="row">'
-		                +'<div class="col-md-6 left">'
-			            +'<h3>'+projectName+'</h3>'
-			            +'<h4>'+cityName+'</h4>'
-			            +'<br>'
-                  	 	+'<div class="bottom">'
-                    	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
-                    	+'</div>'
-		                +'</div>'
-		                +'<div class="col-md-6 right">'
-			            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"> </div>'
-		                +'</div>'
-		                +'</div>'
-	                    +'<div class="bottom">'
-	                    +'<h4>'+data[index].totalLeads+' NEW LEADS</h4>'
-	                    +'</div>'
-	                    +'</div>'
-	                    +'</div>'
-	               		+'</div>'
-	               		+'<div class="row">'
-	               		+'<div class="col-md-6 center">' 
-	               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a>'
-	               		+'</div>'
-	             		+'<div class="col-md-6 center">'
-	              		+'<a href="${baseUrl}/builder/project/building/list.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>'
-				 	 	+'</div>'
-				 		+'</div>'
-	            		+'</div>';
+				html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
+		    		+'<div class="image">'
+                   	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
+                   	+'<div class="overlay">'
+                    +'<div class="row">'
+	                +'<div class="col-md-6 left">'
+		            +'<h3>'+projectName+'</h3>'
+		            +'<h4>'+cityName+'</h4>'
+		            +'<br>'
+               		+'<div class="bottom">'
+                	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
+                	+'</div>'
+	                +'</div>'
+	                +'<div class="col-md-6 right">'
+		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"></div>'
+		            +'<div class="bottom">'
+                    +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
+                    +'</div>'
+	                +'</div>'
+                    +'</div>'
+                    +'</div>'
+               		+'</div>'
+               		+'<div class="row">'
+               		+'<div class="col-md-6 center">' 
+               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Edit</a>'
+               		+'</div>'
+             		+'<div class="col-md-6 center">'
+              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>'
+			 	 	+'</div>'
+			 		+'</div>'
+	            	+'</div>';
 	            		$("#project_list").append(html);
 	            		createGraph("graph"+projectId);
 			});
