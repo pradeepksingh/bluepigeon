@@ -11,7 +11,8 @@ public class ProjectList {
 	private String cityName;
 	private int localityId;
 	private String localityName;
-	
+	private double sold;
+	private double totalSold;
 	public int getId() {
 		return id;
 	}
@@ -65,6 +66,19 @@ public class ProjectList {
 	}
 	public void setLocalityName(String localityName) {
 		this.localityName = localityName;
+	}
+	
+	public double getSold() {
+		return sold;
+	}
+	public void setSold(double sold) {
+		this.sold = sold;
+	}
+	public double getTotalSold() {
+		return totalSold;
+	}
+	public void setTotalSold(double totalSold) {
+		this.totalSold = totalSold;
 	}
 	
 	
