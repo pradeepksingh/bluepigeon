@@ -2579,6 +2579,7 @@ public class ProjectDAO {
 			if(builderproject.getTotalInventory() != null){
 			newproject.setTotalSold(builderproject.getTotalInventory());
 			}
+			
 			System.out.println("Project name :: "+builderproject.getName());
 			projects.add(newproject);
 		}

@@ -13,6 +13,7 @@ public class ProjectList {
 	private String localityName;
 	private double sold;
 	private double totalSold;
+	private int totalLeads;
 	public int getId() {
 		return id;
 	}
@@ -80,7 +81,11 @@ public class ProjectList {
 	public void setTotalSold(double totalSold) {
 		this.totalSold = totalSold;
 	}
-	
-	
+	public int getTotalLeads() {
+		return totalLeads;
+	}
+	public void setTotalLeads(int totalLeads) {
+		this.totalLeads = totalLeads;
+	}
 
 }

@@ -1105,12 +1105,12 @@ label {
 .btn-info-new{
 	 color: #fff;
     background-color: #6ABE5E;
-    border-color: #00c292;
+    border-color: #6ABE5E;
 }
 .btn-info-new:hover {
     color: #fff;
     background-color: #6ABE5E;
-    border-color: #00c292;
+    border-color: #6ABE5E;
 }
 .btn-info-new.disabled.focus, .btn-info-new.disabled:focus, .btn-info-new.disabled:hover, .btn-info-new.focus, .btn-info-new:focus, .btn-info-new:hover {
 	background: #6ABE5E;
@@ -4110,6 +4110,10 @@ ul#themecolors li:first-child {
 .btn-1b.btn-info:after, .btn-1c.btn-info:after, .btn-1d.btn-info:after, .btn-1e.btn-info:after, .btn-1f.btn-info:after {
 	background: #03a9f3
 }
+.btn-1b.btn-info-new:after, .btn-1c.btn-info-new:after, .btn-1d.btn-info-new:after, .btn-1e.btn-info-new:after, .btn-1f.btn-info-new:after {
+	background: #6ABE5E
+}
+
 .btn-1b.btn-warning:after, .btn-1c.btn-warning:after, .btn-1d.btn-warning:after, .btn-1e.btn-warning:after, .btn-1f.btn-warning:after {
 	background: #fec107
 }

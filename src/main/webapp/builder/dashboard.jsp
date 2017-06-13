@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.model.City"%>
+<%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
 <%@page import="org.bluepigeon.admin.data.CityData"%>
 <%@page import="org.bluepigeon.admin.model.ProjectImageGallery"%>
 <%@page import="org.bluepigeon.admin.data.ProjectList"%>
@@ -11,7 +13,7 @@
 <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <%
 	List<ProjectList> project_list = null;
-	List<CityData> cityDataList = null;
+	List<City> cityDataList = null;
 	ProjectImageGallery imageGaleries = null;
 	Long totalBuyers = (long)0;
 	Long totalInventory = (long) 0; 
@@ -30,9 +32,7 @@
 		totalBuyers = new BuyerDAO().getTotalBuyers(builder_id);
 		totalInventory = new ProjectDAO().getTotalInventory(builder_id);
 		project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
-		
-		
-		
+		cityDataList = new CityNamesImp().getCityActiveNames();
 	}
 %>
 <!DOCTYPE html>
@@ -143,7 +143,10 @@
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                       <select class="selectpicker" data-style="form-control" id="city_id" name="city_id">
-                                        <option value="0">City</option>
+                                   		<option value="0">City</option>
+                                        <%for(City city : cityDataList){ %>
+                                        <option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
+                                        <%} %>
                           </select>
                              
                     </div>
@@ -155,7 +158,7 @@
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                        <select class="selectpicker" data-style="form-control">
-                                        <option>Status</option>
+                                        <option>Project Status</option>
                                         <option>1</option>
                                         <option>2</option>
                          </select>
@@ -191,9 +194,9 @@
 				                        <div class="col-md-6 right">
 					                         <div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="<%out.print(projectList.getId()); %>">
 					                         </div>
-<!-- 						                        <div class="bottom"> -->
-<!-- 						                        <h4>10 NEW LEADS</h4> -->
-<!-- 						                        </div> -->
+						                        <div class="bottom">
+						                        <h4><%out.print(projectList.getTotalLeads()) ;%> NEW LEADS</h4>
+						                        </div>
 				                       </div>
 			                       </div>
 	                           </div>
@@ -378,6 +381,22 @@
     function addBuyer(){
     	window.location.href="${baseUrl }/builder/buyer/new.jsp";
     }
+    
+    $("#city_id").change(function(){
+    	$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
+    		var html = '<option value="">Select Locality</option>';
+    		$(data).each(function(index){
+    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+    		});
+    		$("#locality_id").html(html);
+    		$('.selectpicker').selectpicker('refresh');
+    	},'json');
+    	getProjectList();
+    });
+    $("#locality_id").change(function(){
+    	getProjectList();
+    });
+    
     jQuery(document).ready(function() {
         // Switchery
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
@@ -520,7 +539,7 @@
     }
     
     $("#project_id").change(function(){
-    	getProjectList();
+    	getProjectFilterList($("#project_id").val());
     });
     
  function getProjectList(){
@@ -531,7 +550,7 @@
 		var cityName = "";
 		var projectId = "";
 		$("#project_list").empty();
-	   $.post("${baseUrl}/webapi/project/data/list",{builder_id: $("#builder_id").val(),project_id:$("project_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
+	   $.post("${baseUrl}/webapi/project/data/list",{builder_id: $("#builder_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
 		   if(data == ""){
 			   $("#project_list").empty();
 			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
@@ -550,7 +569,72 @@
 				if(data[index].id != ""){
 					projectId = data[index].id;
 				}
- 			    	html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
+				html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
+		    		+'<div class="image">'
+                   	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
+                   	+'<div class="overlay">'
+                    +'<div class="row">'
+	                +'<div class="col-md-6 left">'
+		            +'<h3>'+projectName+'</h3>'
+		            +'<h4>'+cityName+'</h4>'
+		            +'<br>'
+              	 	+'<div class="bottom">'
+                	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
+                	+'</div>'
+	                +'</div>'
+	                +'<div class="col-md-6 right">'
+		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"> </div>'
+	                +'</div>'
+	                +'</div>'
+                    +'<div class="bottom">'
+                    +'<h4>'+data[index].totalLeads+' NEW LEADS</h4>''
+                    +'</div>'
+                    +'</div>'
+                    +'</div>'
+               		+'</div>'
+               		+'<div class="row">'
+               		+'<div class="col-md-6 center">' 
+               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a>'
+               		+'</div>'
+             		+'<div class="col-md-6 center">'
+              		+'<a href="${baseUrl}/builder/project/building/list.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>'
+			 	 	+'</div>'
+			 		+'</div>'
+            		+'</div>';
+            		$("#project_list").append(html);
+            		createGraph("graph"+projectId);
+			});
+		    },'json');
+	   }
+ 
+ function getProjectFilterList(project_id){
+ 	
+ 	var html = "";
+		var image = "";
+		var projectName = "";
+		var cityName = "";
+		var projectId = "";
+		$("#project_list").empty();
+	   $.post("${baseUrl}/webapi/project/filter",{project_id:project_id},function(data){
+		   if(data == ""){
+			   $("#project_list").empty();
+			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
+		   }
+			$(data).each(function(index){
+				if(data[index].image != "")
+					image = "${baseUrl}/"+data[index].image;
+				else
+					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
+				if(data[index].name != ""){
+					projectName = data[index].name;
+				}
+				if(data[index].city != ""){
+					cityName = data[index].city;
+				}
+				if(data[index].id != ""){
+					projectId = data[index].id;
+				}
+			    	html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
 			    		+'<div class="image">'
 	                   	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
 	                   	+'<div class="overlay">'
@@ -558,10 +642,18 @@
 		                +'<div class="col-md-6 left">'
 			            +'<h3>'+projectName+'</h3>'
 			            +'<h4>'+cityName+'</h4>'
+			            +'<br>'
+                  	 	+'<div class="bottom">'
+                    	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
+                    	+'</div>'
 		                +'</div>'
 		                +'<div class="col-md-6 right">'
 			            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"> </div>'
 		                +'</div>'
+		                +'</div>'
+	                    +'<div class="bottom">'
+	                    +'<h4>'+data[index].totalLeads+' NEW LEADS</h4>''
+	                    +'</div>'
 	                    +'</div>'
 	                    +'</div>'
 	               		+'</div>'
@@ -573,9 +665,9 @@
 	              		+'<a href="${baseUrl}/builder/project/building/list.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>'
 				 	 	+'</div>'
 				 		+'</div>'
- 	            		+'</div>';
- 	            		$("#project_list").append(html);
- 	            		createGraph("graph"+projectId);
+	            		+'</div>';
+	            		$("#project_list").append(html);
+	            		createGraph("graph"+projectId);
 			});
 		    },'json');
 	   }
