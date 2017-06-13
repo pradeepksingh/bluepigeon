@@ -17,7 +17,9 @@
 		builderFloorAmenity = amenity_list.get(0);
 		floorAmenityIcon = builderFloorAmenityDAO.getFloorAmenityIconById(amenity_id);
 	}
-%>				<input type="hidden" name="uamenity_id" id="uamenity_id" value="<% out.print(builderFloorAmenity.getId()); %>"/>
+%>
+<form class="form-horizontal" role="form" method="post" action="" id="editFloorAmenity" name="editFloorAmenity" enctype="multipart/form-data">			
+	<input type="hidden" name="uamenity_id" id="uamenity_id" value="<% out.print(builderFloorAmenity.getId()); %>"/>
               	<div class="row">
               		<div class="col-xs-12">
                   		<div class="form-group">
@@ -57,6 +59,7 @@
              			<button type="submit" class="btn btn-primary" name="updateFloorAmenityIcon">UPDATE</button>
              		</div>
               	</div>
+            </form>
 <script>
 $('#uname').keyup(function() {
     var $th = $(this);

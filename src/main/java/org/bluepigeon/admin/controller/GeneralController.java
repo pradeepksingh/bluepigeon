@@ -1,7 +1,11 @@
 package org.bluepigeon.admin.controller;
 
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -10,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.AreaUnitDAO;
@@ -22,16 +27,25 @@ import org.bluepigeon.admin.data.CityData;
 import org.bluepigeon.admin.data.LocalityData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AreaUnit;
+import org.bluepigeon.admin.model.BankLogo;
+import org.bluepigeon.admin.model.BuilderLogo;
+import org.bluepigeon.admin.model.BuildingAmenityIcon;
 import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.HomeLoanBanks;
 import org.bluepigeon.admin.model.Locality;
 import org.bluepigeon.admin.model.State;
 import org.bluepigeon.admin.service.CityNamesService;
+import org.bluepigeon.admin.service.ImageUploader;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("general")
 public class GeneralController {
 
+	@Context ServletContext context;
+	ImageUploader imageUploader = new ImageUploader();
+	
 	@POST
 	@Path("/area/save")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -291,9 +305,16 @@ public class GeneralController {
 	@POST
 	@Path("/bank/save/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage addHomeLoanBanks(@FormParam("name") String name, @FormParam("location") String location,
-			@FormParam("email") String email,@FormParam("contact_name") String contactPerson,@FormParam("phone") String phone,
-			@FormParam("status") byte status) {
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addHomeLoanBanks(
+			@FormDataParam("name") String name, 
+			@FormDataParam("location") String location,
+			@FormDataParam("email") String email,
+			@FormDataParam("contact_name") String contactPerson,
+			@FormDataParam("phone") String phone,
+			@FormDataParam("status") byte status,
+			@FormDataParam("bank_logo[]")List<FormDataBodyPart> bank_logos) {
+		ResponseMessage responseMessage = new ResponseMessage();
 		HomeLoanBanks homeLoanBanks = new HomeLoanBanks();
 		homeLoanBanks.setName(name);
 		homeLoanBanks.setLocation(location);
@@ -302,15 +323,63 @@ public class GeneralController {
 		homeLoanBanks.setPhone(phone);
 		homeLoanBanks.setStatus(status);
 	
-		return new HomeLoanBanksDAO().save(homeLoanBanks);
+		HomeLoanBanksDAO homeLoanBanksDAO = new HomeLoanBanksDAO();
+		responseMessage = homeLoanBanksDAO.save(homeLoanBanks);
+		if(responseMessage.getId() > 0){
+			homeLoanBanks.setId(responseMessage.getId());
+			try {	
+				List<BankLogo> bankLogoList = new ArrayList<BankLogo>();
+				//for multiple inserting images.
+				if (bank_logos.size() > 0) {
+					for(int i=0 ;i < bank_logos.size();i++)
+					{
+						if(bank_logos.get(i).getFormDataContentDisposition().getFileName() != null && !bank_logos.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+							BankLogo bankLogo = new BankLogo();
+							String gallery_name = bank_logos.get(i).getFormDataContentDisposition().getFileName();
+							long millis = System.currentTimeMillis() % 1000;
+							gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+							gallery_name = "images/project/bank/logo/"+gallery_name;
+							String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+							//System.out.println("for loop image path: "+uploadGalleryLocation);
+							this.imageUploader.writeToFile(bank_logos.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+							bankLogo.setHomeLoanBanks(homeLoanBanks);
+							bankLogo.setLogoUrl(gallery_name);
+							bankLogoList.add(bankLogo);
+						}
+					}
+					if(bankLogoList.size() > 0) {
+						homeLoanBanksDAO.saveBankLogo(bankLogoList);
+					}
+				}
+				responseMessage.setStatus(1);
+				responseMessage.setMessage("Bank Details added successfully");
+			} catch(Exception e) {
+				e.printStackTrace();
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("Unable to save image");
+			}
+		}else{
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Fail to save bank details");
+		}
+		return responseMessage;
 	}
 	
 	@POST
 	@Path("/bank/update")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage updateHomeLoanBanks(@FormParam("id") int bankId,@FormParam("name") String name, @FormParam("location") String location,
-			@FormParam("email") String email,@FormParam("contact_name") String contactPerson,@FormParam("phone") String phone,
-			@FormParam("status") byte status) {
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateHomeLoanBanks(
+			@FormDataParam("ubank_id") int bankId,
+			@FormDataParam("uname") String name,
+			@FormDataParam("ulocation") String location,
+			@FormDataParam("uemail") String email,
+			@FormDataParam("ucontact_name") String contactPerson,
+			@FormDataParam("uphone") String phone,
+			@FormDataParam("ustatus") byte status,
+			@FormDataParam("bank_logo_id[]")List<FormDataBodyPart> logo_ids,
+			@FormDataParam("bank_logo[]")List<FormDataBodyPart> bank_logos) {
+		ResponseMessage responseMessage = new ResponseMessage();
 		HomeLoanBanks homeLoanBanks = new HomeLoanBanks();
 		homeLoanBanks.setId(bankId);
 		homeLoanBanks.setName(name);
@@ -320,7 +389,67 @@ public class GeneralController {
 		homeLoanBanks.setContactPerson(contactPerson);
 		homeLoanBanks.setPhone(phone);
 	
-		return new HomeLoanBanksDAO().update(homeLoanBanks);
+		HomeLoanBanksDAO homeLoanBanksDAO = new HomeLoanBanksDAO();
+		homeLoanBanksDAO.update(homeLoanBanks);
+		if(bank_logos.size() > 0){
+			try {	
+				List<BankLogo> updateBankLogos = new ArrayList<BankLogo>();
+				List<BankLogo> saveBankLogos = new ArrayList<BankLogo>();
+				//for multiple inserting images.
+				//if (builder_logo.size() > 0) {
+					for(int j=0 ;j < bank_logos.size();j++)
+					{
+						if(logo_ids != null){
+						if(bank_logos.get(j).getFormDataContentDisposition().getFileName() != null && !bank_logos.get(j).getFormDataContentDisposition().getFileName().isEmpty()) {
+							if(logo_ids.get(j).getValueAs(Integer.class) != 0 && logo_ids.get(j).getValueAs(Integer.class) != null){
+								System.out.println("Inside if condition");
+								BankLogo bankLogo = new BankLogo();
+								String gallery_name = bank_logos.get(j).getFormDataContentDisposition().getFileName();
+								long millis = System.currentTimeMillis() % 1000;
+								gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+								gallery_name = "images/project/bank/logo/"+gallery_name;
+								String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+								//System.out.println("for loop image path update: "+uploadGalleryLocation);
+								this.imageUploader.writeToFile(bank_logos.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
+								bankLogo.setId(logo_ids.get(j).getValueAs(Integer.class));
+								bankLogo.setLogoUrl(gallery_name);
+								bankLogo.setHomeLoanBanks(homeLoanBanks);
+								updateBankLogos.add(bankLogo);
+							}}}else{
+								BankLogo bankLogo = new BankLogo();
+								String gallery_name = bank_logos.get(j).getFormDataContentDisposition().getFileName();
+								long millis = System.currentTimeMillis() % 1000;
+								gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+								gallery_name = "images/project/bank/logo/"+gallery_name;
+								String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+								System.out.println("for loop image path add: "+uploadGalleryLocation);
+								this.imageUploader.writeToFile(bank_logos.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
+								bankLogo.setLogoUrl(gallery_name);
+								bankLogo.setHomeLoanBanks(homeLoanBanks);
+								saveBankLogos.add(bankLogo);
+							}
+					}
+					if(updateBankLogos.size() > 0) {
+						homeLoanBanksDAO.updateBankLogo(updateBankLogos);
+					}
+					if(saveBankLogos.size() > 0){
+						homeLoanBanksDAO.saveBankLogo(saveBankLogos);
+					}
+				}
+			 catch(Exception e) {
+				 //System.out.println("Error "+e.getMessage());
+				 //e.printStackTrace();
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("Unable to save image");
+			}
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Bank Details updated successfully.");
+		}else{
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Fail to update Bank details");
+		}
+		return responseMessage;
+		
 	}
 	
 }

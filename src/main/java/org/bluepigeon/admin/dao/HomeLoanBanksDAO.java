@@ -5,6 +5,8 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.model.BankLogo;
+import org.bluepigeon.admin.model.BuildingAmenityIcon;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.HomeLoanBanks;
 
@@ -35,13 +37,63 @@ public class HomeLoanBanksDAO {
 				newsession.save(homeLoanBanks);
 				newsession.getTransaction().commit();
 				newsession.close();
+				response.setId(homeLoanBanks.getId());
 				response.setStatus(1);
 				response.setMessage("Home loan bank added Successfully");
 			}
 		}
 		return response;
 	}
-
+	/**
+	 * Save bank logo
+	 * @author pankaj
+	 * @param bankLogos
+	 */
+	public void saveBankLogo(List<BankLogo> bankLogos){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(BankLogo bankLogo : bankLogos){
+			session.save(bankLogo);
+		}
+		session.getTransaction().commit();
+		session.close();
+	}
+	/**
+	 * Get Bank logo
+	 * @param bankId
+	 * @return bankLogo
+	 */
+	public BankLogo getBankLogoByBankId(int bankId){
+		BankLogo bankLogo = null;
+		String hql = "from BankLogo where homeLoanBanks.id = :bank_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("bank_id", bankId);
+		bankLogo = (BankLogo) query.uniqueResult();
+		return bankLogo;
+	}
+	
+	/**
+	 * Update bank logo
+	 * @author pankaj
+	 * @param bankLogo
+	 */
+	public void updateBankLogo(List<BankLogo> bankLogos){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "update BankLogo set logoUrl=:logo_url where id = :id";
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		for(BankLogo bankLogo : bankLogos){
+			query.setParameter("logo_url", bankLogo.getLogoUrl());
+			query.setParameter("id", bankLogo.getId());
+			query.executeUpdate();
+		}
+		session.getTransaction().commit();
+		session.close();
+	}
 	public ResponseMessage update(HomeLoanBanks homeLoanBanks) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new org.bluepigeon.admin.util.HibernateUtil();

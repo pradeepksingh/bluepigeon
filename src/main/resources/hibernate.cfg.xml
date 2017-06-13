@@ -42,6 +42,7 @@
         <mapping class="org.bluepigeon.admin.model.BuilderCompany" />
         <mapping class="org.bluepigeon.admin.model.NewProject" />
         <mapping class="org.bluepigeon.admin.model.BuilderLogo" />
+         <mapping class="org.bluepigeon.admin.model.BankLogo" />
         <mapping class="org.bluepigeon.admin.model.AreaUnit" />
         <mapping class="org.bluepigeon.admin.model.BuildingPanoramicImage" />
         <mapping class="org.bluepigeon.admin.model.BuyingDetails" />
