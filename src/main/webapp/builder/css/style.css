@@ -68,6 +68,10 @@ h1 {
 	line-height: 48px;
 	font-size: 36px
 }
+.sales-income{
+	line-height: 48px;
+	font-size: 29px;
+}
 h2 {
 	line-height: 36px;
 	font-size: 24px
@@ -485,7 +489,7 @@ hr {
 	color: #03a9f3 !important
 }
 .text-info-new{
-	color: #07B3B1 !important
+	color: #0FAEB9 !important
 }
 .text-inverse {
 	color: #4c5667 !important
@@ -601,6 +605,9 @@ hr {
 }
 .bg-purple {
 	background-color: #9675ce !important
+}
+.bg-blue {
+	background-color : #0FAEB9 !important
 }
 .bg-white {
 	background-color: #fff !important

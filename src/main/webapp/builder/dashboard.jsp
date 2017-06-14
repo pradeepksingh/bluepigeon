@@ -294,8 +294,8 @@
 <!--                        </div> -->
 <!--                        </div> -->
 
-	                    <div class="offset-sm-5 col-sm-7">
-	                        <button type="submit" class="btn btn11 btn-default waves-effect waves-light m-t-10">More...</button>
+	                    <div class="offset-sm-5 col-sm-7" id="showMore">
+	                        <button type="button" onclick="getAllProjectsByBuiderId();" class="btn btn11 btn-default waves-effect waves-light m-t-10">More...</button>
 	                     </div>
 	                     
                     </div>
@@ -307,14 +307,14 @@
                 <div class="row">
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         <div class="white-box">
-                            <h3 class="box-title">Properties stats</h3>
+                            <h3 class="box-title">Project stats</h3>
                             <ul class="list-inline text-right">
                                 <li>
-                                    <h5><i class="fa fa-circle m-r-5" style="color: #00bfc7;"></i>For Sale</h5> </li>
+                                    <h5><i class="fa fa-circle m-r-5" style="color: #00bfc7;"></i>Flats</h5> </li>
                                 <li>
-                                    <h5><i class="fa fa-circle m-r-5" style="color: #fb9678;"></i>For Rent</h5> </li>
+                                    <h5><i class="fa fa-circle m-r-5" style="color: #fb9678;"></i>Buyers</h5> </li>
                                 <li>
-                                    <h5><i class="fa fa-circle m-r-5" style="color: #9675ce;"></i>All Properties</h5> </li>
+                                    <h5><i class="fa fa-circle m-r-5" style="color: #9675ce;"></i>Purchases</h5> </li>
                             </ul>
                             <div id="morris-bar-chart" style="height:372px;"></div>
                         </div>
@@ -323,10 +323,10 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="white-box m-b-15">
-                                    <h3 class="box-title">Property sales income</h3>
+                                    <h3 class="box-title">Property sales</h3>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                                            <h1 class="text-info">$64057</h1>
+                                            <h1 class="text-info sales-income">Rs 64057</h1>
                                             <p class="text-muted">APRIL 2017</p> <b>(150 Sales)</b> </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sparkline2dash" class="text-center"></div>
@@ -335,12 +335,12 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <div class="white-box bg-purple m-b-15">
-                                    <h3 class="text-white box-title">Property on Rent income</h3>
+                                <div class="white-box bg-blue m-b-15">
+                                    <h3 class="text-white box-title">PROPERTY SALE INCOME</h3>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                                            <h1 class="text-white">$30447</h1>
-                                            <p class="light_op_text">APRIL 2017</p> <b class="text-white">(110 Sales)</b> </div>
+                                            <h1 class="text-white sales-income">Rs 30447</h1>
+                                            <p class="light_op_text"></p> <b class="text-white">(110 Sales)</b> </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sales1" class="text-center"></div>
                                         </div>
@@ -678,6 +678,71 @@
 			});
 		    },'json');
 	   }
+ 
+      function getAllProjectsByBuiderId(){
+    	  var html = "";
+  		var image = "";
+  		var projectName = "";
+  		var cityName = "";
+  		var projectId = "";
+  		//alert("Builder Id :: "+$("#builder_id").val());
+  		$("#project_list").empty();
+  	   $.post("${baseUrl}/webapi/project/filter/builder",{builder_id:$("#builder_id").val()},function(data){
+  		   if(data == ""){
+  			   $("#project_list").empty();
+  			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
+  		   }
+  			$(data).each(function(index){
+  				if(data[index].image != "")
+  					image = "${baseUrl}/"+data[index].image;
+  				else
+  					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
+  				if(data[index].name != ""){
+  					projectName = data[index].name;
+  				}
+  				if(data[index].city != ""){
+  					cityName = data[index].city;
+  				}
+  				if(data[index].id != ""){
+  					projectId = data[index].id;
+  				}
+  				html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
+  		    		+'<div class="image">'
+                     	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
+                     	+'<div class="overlay">'
+                      +'<div class="row">'
+  	                +'<div class="col-md-6 left">'
+  		            +'<h3>'+projectName+'</h3>'
+  		            +'<h4>'+cityName+'</h4>'
+  		            +'<br>'
+                 		+'<div class="bottom">'
+                  	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
+                  	+'</div>'
+  	                +'</div>'
+  	                +'<div class="col-md-6 right">'
+  		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"></div>'
+  		            +'<div class="bottom">'
+                      +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
+                      +'</div>'
+  	                +'</div>'
+                      +'</div>'
+                      +'</div>'
+                 		+'</div>'
+                 		+'<div class="row">'
+                 		+'<div class="col-md-6 left">' 
+                 		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Edit</a>'
+                 		+'</div>'
+               		+'<div class="col-md-6 center">'
+                		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
+  			 	 	+'</div>'
+  			 		+'</div>'
+  	            	+'</div>';
+  	            		$("#project_list").append(html);
+  	            		createGraph("graph"+projectId);
+  			});
+  		    },'json');
+  	   $("#showMore").empty();
+      }
     </script>
 
 </body>

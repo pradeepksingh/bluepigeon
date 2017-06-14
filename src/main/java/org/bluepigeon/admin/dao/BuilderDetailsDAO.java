@@ -618,11 +618,42 @@ public class BuilderDetailsDAO {
 	 */
 	public List<BuilderProjectList> getProjectFilterListByProjectId(int projectId){
 		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
-		String hql ="from BuilderProject where id = :id";
+		String hql ="from BuilderProject where id = :id AND status=1 order by id desc";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("id", projectId);
+		List<BuilderProject> builderProjects = query.list();
+		for(BuilderProject builderProject : builderProjects){
+			BuilderProjectList builderProjectList = new BuilderProjectList();
+			builderProjectList.setId(builderProject.getId());
+			builderProjectList.setName(builderProject.getName());
+			builderProjectList.setCity(builderProject.getCity().getName());
+			if(builderProject.getTotalInventory()!=null)
+				builderProjectList.setTotalSold(builderProject.getTotalInventory());
+			if(builderProject.getInventorySold() != null)
+				builderProjectList.setSold(builderProject.getInventorySold());
+			ProjectDAO projectDAO = new ProjectDAO();
+			builderProjectList.setTotalLeads(projectDAO.getTotalLeadsByProjectId(builderProject.getId()));
+			try{
+				builderProjectList.setImage(projectDAO.getProjectImagesByProjectId(builderProject.getId()).get(0).getImage());
+			}catch(Exception e){
+				builderProjectList.setImage("");
+			}
+			builderProjectLists.add(builderProjectList);
+		}
+		return builderProjectLists;
+		
+	}
+	
+	
+	public List<BuilderProjectList> getProjectFilterListByBuilderId(int builderId){
+		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
+		String hql ="from BuilderProject where builder.id = :builder_id AND status=1 order by id desc";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
 		List<BuilderProject> builderProjects = query.list();
 		for(BuilderProject builderProject : builderProjects){
 			BuilderProjectList builderProjectList = new BuilderProjectList();

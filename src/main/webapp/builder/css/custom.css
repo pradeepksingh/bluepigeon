@@ -43,7 +43,7 @@ textarea{
 
 .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
 
-    width: 252px !important;
+    width: 210px !important;
 
     padding-left: 13px !important;
 
@@ -147,25 +147,14 @@ padding-top:85%;
 }
 
 .image {
-
     position:relative;
-
-   
-
-       margin-bottom: 30px;
-
-    
-
+    margin-bottom: 30px;
     }
 
     .left h3{
-
    color:white;
-
    text-align:left;
-
-    
-
+	width: 220px;
     }
 
      .left h4{
