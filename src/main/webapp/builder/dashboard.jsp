@@ -16,7 +16,8 @@
 	List<City> cityDataList = null;
 	ProjectImageGallery imageGaleries = null;
 	Long totalBuyers = (long)0;
-	Long totalInventory = (long) 0; 
+	Long totalInventory = (long) 0;
+	Long totalLeads = (long)0;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	int builder_id = 0;
@@ -33,6 +34,7 @@
 		totalInventory = new ProjectDAO().getTotalInventory(builder_id);
 		project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
 		cityDataList = new CityNamesImp().getCityActiveNames();
+		totalLeads = new ProjectDAO().getTotalLeads(builder_id);
 	}
 %>
 <!DOCTYPE html>
@@ -94,38 +96,41 @@
                 <!--.row -->
                 <div class="row re">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box">
+                        <div class="white-box white-border">
                             <h3 class="box-title">Total Properties</h3>
                             <ul class="list-inline two-part">
-                                <li><i class="ti-home text-info"></i></li>
+                                <li><i class="ti-home text-info-new"></i></li>
                                 <li class="text-right"><span class="counter"><%out.print(totalInventory); %></span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box">
+                        <div class="white-box white-border">
                             <h3 class="box-title">Total Buyers</h3>
                             <ul class="list-inline two-part">
-                                <li><i class="icon-tag text-purple"></i></li>
+<!--                                 <li><i class="icon-tag text-purple"></i></li> -->
+									 <li><i class="icon-tag text-info-new"></i></li>
                                 <li class="text-right"><span class="counter"><%out.print(totalBuyers); %></span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box">
+                        <div class="white-box white-border">
                             <h3 class="box-title">New leads</h3>
                             <ul class="list-inline two-part">
-                                <li><i class="icon-user text-danger"></i></li>
-                                <li class="text-right"><span class="counter">311</span></li>
+<!--                                 <li><i class="icon-user text-danger"></i></li> -->
+                                 <li><i class="icon-user text-info-new"></i></li>
+                                <li class="text-right"><span class="counter"><%out.print(totalLeads); %></span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box">
+                        <div class="white-box white-border">
                             <h3 class="box-title">Total Revenue (Rs in cr)</h3>
                             <ul class="list-inline two-part">
-                                <li><i class="ti-wallet text-success"></i></li>
-                                <li class="text-right"><span class="counter"> &#x20B9;8170</span></li>
+<!--                                 <li><i class="ti-wallet text-success"></i></li> -->
+									 <li><i class="ti-wallet text-info-new"></i></li>
+                                <li class="text-right"><span class="counter"> 8170</span></li>
                             </ul>
                         </div>
                     </div>
@@ -133,7 +138,7 @@
                 <div class="white-box">
                    <div class="row re">
                     <div class="col-md-3 col-sm-6 col-xs-12">
-                        <select class="selectpicker" data-style="form-control" id="project_id" name="project_id">
+                        <select class="selectpicker border-drop-down" data-style="form-control" id="project_id" name="project_id">
                                         <option>Project Name</option>
                                        <% for(ProjectList projectList : project_list){%>
                                        <option value="<%out.print(projectList.getId());%>"><%out.print(projectList.getName()); %></option>
@@ -202,11 +207,11 @@
 	                           </div>
 	                       </div>
 	                       <div class="row">
-                           	<div class="col-md-6 center"> 
-                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Edit</a>
+                           	<div class="col-md-6 left"> 
+                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-1">Edit</a>
                            	</div>
                          	<div class="col-md-6 center">
-                          		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>
+                          		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
 						 	 </div>
 						  </div>
 	                       </div>
@@ -214,7 +219,9 @@
 	                       <%  
                        		}
                        	}
+                   		
                         %>
+                        </div>
 <!--                         <div class="image"> -->
 <!--                           <div class="image"> -->
 <!-- 	                       <img src="plugins/images/Untitled-1.png" alt="Project image"/> -->
@@ -286,12 +293,14 @@
 <!--                            </div> -->
 <!--                        </div> -->
 <!--                        </div> -->
-<!-- 	                    <div class="offset-sm-5 col-sm-7"> -->
-<!-- 	                        <button type="submit" class="btn btn11 btn-info waves-effect waves-light m-t-10">More...</button> -->
-<!-- 	                     </div> -->
+
+	                    <div class="offset-sm-5 col-sm-7">
+	                        <button type="submit" class="btn btn11 btn-default waves-effect waves-light m-t-10">More...</button>
+	                     </div>
+	                     
                     </div>
                 </div>
-                </div>
+                
                 
                 <!-- /.row -->
                 <!-- .row -->
@@ -592,11 +601,11 @@
                     +'</div>'
                		+'</div>'
                		+'<div class="row">'
-               		+'<div class="col-md-6 center">' 
-               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Edit</a>'
+               		+'<div class="col-md-6 left">' 
+               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Edit</a>'
                		+'</div>'
              		+'<div class="col-md-6 center">'
-              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>'
+              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
 			 		+'</div>'
 	            	+'</div>';
@@ -656,11 +665,11 @@
                     +'</div>'
                		+'</div>'
                		+'<div class="row">'
-               		+'<div class="col-md-6 center">' 
-               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Edit</a>'
+               		+'<div class="col-md-6 left">' 
+               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Edit</a>'
                		+'</div>'
              		+'<div class="col-md-6 center">'
-              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>'
+              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
 			 		+'</div>'
 	            	+'</div>';
