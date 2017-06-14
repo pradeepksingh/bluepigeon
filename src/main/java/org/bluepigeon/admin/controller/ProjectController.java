@@ -144,6 +144,14 @@ public class ProjectController extends ResourceConfig {
 	}
 	
 	@POST
+	@Path("/filter/builder")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderProjectList> getProjectsByBuilderId(@FormParam("builder_id") int builderId){
+		
+		return new BuilderDetailsDAO().getProjectFilterListByBuilderId(builderId);
+	}
+	
+	@POST
 	@Path("/add")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addProject(

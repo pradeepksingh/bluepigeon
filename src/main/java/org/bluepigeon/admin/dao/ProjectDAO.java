@@ -2553,6 +2553,7 @@ public class ProjectDAO {
 	 */
 	public List<ProjectList> getBuilderFirstFourActiveProjectsByBuilderId(int builderId) {
 		System.err.println("builderId :: "+builderId);
+		Long totalLeads = (long)0;
 		String hql = "from BuilderProject where builder.id = :builder_id and status=1 order by id desc";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -2577,9 +2578,12 @@ public class ProjectDAO {
 				newproject.setSold(builderproject.getInventorySold());
 			}
 			if(builderproject.getTotalInventory() != null){
-			newproject.setTotalSold(builderproject.getTotalInventory());
+				newproject.setTotalSold(builderproject.getTotalInventory());
 			}
-			
+			totalLeads = getTotalLeadsByProjectId(builderproject.getId());
+			if(totalLeads != null){
+				newproject.setTotalLeads(totalLeads.intValue());
+			}
 			System.out.println("Project name :: "+builderproject.getName());
 			projects.add(newproject);
 		}
@@ -2966,6 +2970,33 @@ public class ProjectDAO {
 			flatPaymentList.add(flatPayment);
 		}
 		return flatPaymentList;
+	}
+	/**
+	 * Get total leads by builder id
+	 * @author pankaj
+	 * @param builder_id
+	 * @return totalLeads
+	 */
+	public Long getTotalLeads(int builder_id){
+		Long totalLeads =(long) 0;
+		String hql = "Select COUNT(*) from BuilderLead where builderProject.builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builder_id);
+		totalLeads = (Long) query.uniqueResult();
+		return totalLeads;
 		
+	}
+	
+	public Long getTotalLeadsByProjectId(int projectId){
+		Long totalLeads =(long) 0;
+		String hql = "Select COUNT(*) from BuilderLead where builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		totalLeads = (Long) query.uniqueResult();
+		return totalLeads;
 	}
 }

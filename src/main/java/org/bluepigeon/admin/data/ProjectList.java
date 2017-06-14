@@ -87,5 +87,6 @@ public class ProjectList {
 	public void setTotalLeads(int totalLeads) {
 		this.totalLeads = totalLeads;
 	}
+	
 
 }

@@ -7,7 +7,7 @@ public class BuilderProjectList {
 	private String city;
 	private double sold;
 	private double totalSold;
-	private int totalLeads;
+	private Long totalLeads;
 	public int getId() {
 		return id;
 	}
@@ -44,10 +44,10 @@ public class BuilderProjectList {
 	public void setTotalSold(double totalSold) {
 		this.totalSold = totalSold;
 	}
-	public int getTotalLeads() {
+	public Long getTotalLeads() {
 		return totalLeads;
 	}
-	public void setTotalLeads(int totalLeads) {
-		this.totalLeads = totalLeads;
+	public void setTotalLeads(Long long1) {
+		this.totalLeads = long1;
 	}
 }

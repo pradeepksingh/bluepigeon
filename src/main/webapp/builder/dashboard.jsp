@@ -16,7 +16,8 @@
 	List<City> cityDataList = null;
 	ProjectImageGallery imageGaleries = null;
 	Long totalBuyers = (long)0;
-	Long totalInventory = (long) 0; 
+	Long totalInventory = (long) 0;
+	Long totalLeads = (long)0;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	int builder_id = 0;
@@ -33,6 +34,7 @@
 		totalInventory = new ProjectDAO().getTotalInventory(builder_id);
 		project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
 		cityDataList = new CityNamesImp().getCityActiveNames();
+		totalLeads = new ProjectDAO().getTotalLeads(builder_id);
 	}
 %>
 <!DOCTYPE html>
@@ -94,38 +96,41 @@
                 <!--.row -->
                 <div class="row re">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box">
+                        <div class="white-box white-border">
                             <h3 class="box-title">Total Properties</h3>
                             <ul class="list-inline two-part">
-                                <li><i class="ti-home text-info"></i></li>
+                                <li><i class="ti-home text-info-new"></i></li>
                                 <li class="text-right"><span class="counter"><%out.print(totalInventory); %></span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box">
+                        <div class="white-box white-border">
                             <h3 class="box-title">Total Buyers</h3>
                             <ul class="list-inline two-part">
-                                <li><i class="icon-tag text-purple"></i></li>
+<!--                                 <li><i class="icon-tag text-purple"></i></li> -->
+									 <li><i class="icon-tag text-info-new"></i></li>
                                 <li class="text-right"><span class="counter"><%out.print(totalBuyers); %></span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box">
+                        <div class="white-box white-border">
                             <h3 class="box-title">New leads</h3>
                             <ul class="list-inline two-part">
-                                <li><i class="icon-user text-danger"></i></li>
-                                <li class="text-right"><span class="counter">311</span></li>
+<!--                                 <li><i class="icon-user text-danger"></i></li> -->
+                                 <li><i class="icon-user text-info-new"></i></li>
+                                <li class="text-right"><span class="counter"><%out.print(totalLeads); %></span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box">
+                        <div class="white-box white-border">
                             <h3 class="box-title">Total Revenue (Rs in cr)</h3>
                             <ul class="list-inline two-part">
-                                <li><i class="ti-wallet text-success"></i></li>
-                                <li class="text-right"><span class="counter"> &#x20B9;8170</span></li>
+<!--                                 <li><i class="ti-wallet text-success"></i></li> -->
+									 <li><i class="ti-wallet text-info-new"></i></li>
+                                <li class="text-right"><span class="counter"> 8170</span></li>
                             </ul>
                         </div>
                     </div>
@@ -133,7 +138,7 @@
                 <div class="white-box">
                    <div class="row re">
                     <div class="col-md-3 col-sm-6 col-xs-12">
-                        <select class="selectpicker" data-style="form-control" id="project_id" name="project_id">
+                        <select class="selectpicker border-drop-down" data-style="form-control" id="project_id" name="project_id">
                                         <option>Project Name</option>
                                        <% for(ProjectList projectList : project_list){%>
                                        <option value="<%out.print(projectList.getId());%>"><%out.print(projectList.getName()); %></option>
@@ -202,11 +207,11 @@
 	                           </div>
 	                       </div>
 	                       <div class="row">
-                           	<div class="col-md-6 center"> 
-                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Edit</a>
+                           	<div class="col-md-6 left"> 
+                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-1">Edit</a>
                            	</div>
                          	<div class="col-md-6 center">
-                          		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>
+                          		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
 						 	 </div>
 						  </div>
 	                       </div>
@@ -214,7 +219,9 @@
 	                       <%  
                        		}
                        	}
+                   		
                         %>
+                        </div>
 <!--                         <div class="image"> -->
 <!--                           <div class="image"> -->
 <!-- 	                       <img src="plugins/images/Untitled-1.png" alt="Project image"/> -->
@@ -286,26 +293,28 @@
 <!--                            </div> -->
 <!--                        </div> -->
 <!--                        </div> -->
-<!-- 	                    <div class="offset-sm-5 col-sm-7"> -->
-<!-- 	                        <button type="submit" class="btn btn11 btn-info waves-effect waves-light m-t-10">More...</button> -->
-<!-- 	                     </div> -->
+
+	                    <div class="offset-sm-5 col-sm-7" id="showMore">
+	                        <button type="button" onclick="getAllProjectsByBuiderId();" class="btn btn11 btn-default waves-effect waves-light m-t-10">More...</button>
+	                     </div>
+	                     
                     </div>
                 </div>
-                </div>
+                
                 
                 <!-- /.row -->
                 <!-- .row -->
                 <div class="row">
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         <div class="white-box">
-                            <h3 class="box-title">Properties stats</h3>
+                            <h3 class="box-title">Project stats</h3>
                             <ul class="list-inline text-right">
                                 <li>
-                                    <h5><i class="fa fa-circle m-r-5" style="color: #00bfc7;"></i>For Sale</h5> </li>
+                                    <h5><i class="fa fa-circle m-r-5" style="color: #00bfc7;"></i>Flats</h5> </li>
                                 <li>
-                                    <h5><i class="fa fa-circle m-r-5" style="color: #fb9678;"></i>For Rent</h5> </li>
+                                    <h5><i class="fa fa-circle m-r-5" style="color: #fb9678;"></i>Buyers</h5> </li>
                                 <li>
-                                    <h5><i class="fa fa-circle m-r-5" style="color: #9675ce;"></i>All Properties</h5> </li>
+                                    <h5><i class="fa fa-circle m-r-5" style="color: #9675ce;"></i>Purchases</h5> </li>
                             </ul>
                             <div id="morris-bar-chart" style="height:372px;"></div>
                         </div>
@@ -314,10 +323,10 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="white-box m-b-15">
-                                    <h3 class="box-title">Property sales income</h3>
+                                    <h3 class="box-title">Property sales</h3>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                                            <h1 class="text-info">$64057</h1>
+                                            <h1 class="text-info sales-income">Rs 64057</h1>
                                             <p class="text-muted">APRIL 2017</p> <b>(150 Sales)</b> </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sparkline2dash" class="text-center"></div>
@@ -326,12 +335,12 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <div class="white-box bg-purple m-b-15">
-                                    <h3 class="text-white box-title">Property on Rent income</h3>
+                                <div class="white-box bg-blue m-b-15">
+                                    <h3 class="text-white box-title">PROPERTY SALE INCOME</h3>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                                            <h1 class="text-white">$30447</h1>
-                                            <p class="light_op_text">APRIL 2017</p> <b class="text-white">(110 Sales)</b> </div>
+                                            <h1 class="text-white sales-income">Rs 30447</h1>
+                                            <p class="light_op_text"></p> <b class="text-white">(110 Sales)</b> </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sales1" class="text-center"></div>
                                         </div>
@@ -592,11 +601,11 @@
                     +'</div>'
                		+'</div>'
                		+'<div class="row">'
-               		+'<div class="col-md-6 center">' 
-               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Edit</a>'
+               		+'<div class="col-md-6 left">' 
+               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Edit</a>'
                		+'</div>'
              		+'<div class="col-md-6 center">'
-              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>'
+              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
 			 		+'</div>'
 	            	+'</div>';
@@ -656,11 +665,11 @@
                     +'</div>'
                		+'</div>'
                		+'<div class="row">'
-               		+'<div class="col-md-6 center">' 
-               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-10">Edit</a>'
+               		+'<div class="col-md-6 left">' 
+               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Edit</a>'
                		+'</div>'
              		+'<div class="col-md-6 center">'
-              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-10">View</a>'
+              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
 			 		+'</div>'
 	            	+'</div>';
@@ -669,6 +678,71 @@
 			});
 		    },'json');
 	   }
+ 
+      function getAllProjectsByBuiderId(){
+    	  var html = "";
+  		var image = "";
+  		var projectName = "";
+  		var cityName = "";
+  		var projectId = "";
+  		//alert("Builder Id :: "+$("#builder_id").val());
+  		$("#project_list").empty();
+  	   $.post("${baseUrl}/webapi/project/filter/builder",{builder_id:$("#builder_id").val()},function(data){
+  		   if(data == ""){
+  			   $("#project_list").empty();
+  			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
+  		   }
+  			$(data).each(function(index){
+  				if(data[index].image != "")
+  					image = "${baseUrl}/"+data[index].image;
+  				else
+  					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
+  				if(data[index].name != ""){
+  					projectName = data[index].name;
+  				}
+  				if(data[index].city != ""){
+  					cityName = data[index].city;
+  				}
+  				if(data[index].id != ""){
+  					projectId = data[index].id;
+  				}
+  				html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
+  		    		+'<div class="image">'
+                     	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
+                     	+'<div class="overlay">'
+                      +'<div class="row">'
+  	                +'<div class="col-md-6 left">'
+  		            +'<h3>'+projectName+'</h3>'
+  		            +'<h4>'+cityName+'</h4>'
+  		            +'<br>'
+                 		+'<div class="bottom">'
+                  	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
+                  	+'</div>'
+  	                +'</div>'
+  	                +'<div class="col-md-6 right">'
+  		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"></div>'
+  		            +'<div class="bottom">'
+                      +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
+                      +'</div>'
+  	                +'</div>'
+                      +'</div>'
+                      +'</div>'
+                 		+'</div>'
+                 		+'<div class="row">'
+                 		+'<div class="col-md-6 left">' 
+                 		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Edit</a>'
+                 		+'</div>'
+               		+'<div class="col-md-6 center">'
+                		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
+  			 	 	+'</div>'
+  			 		+'</div>'
+  	            	+'</div>';
+  	            		$("#project_list").append(html);
+  	            		createGraph("graph"+projectId);
+  			});
+  		    },'json');
+  	   $("#showMore").empty();
+      }
     </script>
 
 </body>

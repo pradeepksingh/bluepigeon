@@ -68,6 +68,10 @@ h1 {
 	line-height: 48px;
 	font-size: 36px
 }
+.sales-income{
+	line-height: 48px;
+	font-size: 29px;
+}
 h2 {
 	line-height: 36px;
 	font-size: 24px
@@ -227,6 +231,9 @@ hr {
 }
 .m-l-40 {
 	margin-left: 40px !important
+}
+.m-r--65{
+	margin-right: -65px !important
 }
 .m-r-5 {
 	margin-right: 5px !important
@@ -481,6 +488,9 @@ hr {
 .text-info {
 	color: #03a9f3 !important
 }
+.text-info-new{
+	color: #0FAEB9 !important
+}
 .text-inverse {
 	color: #4c5667 !important
 }
@@ -595,6 +605,9 @@ hr {
 }
 .bg-purple {
 	background-color: #9675ce !important
+}
+.bg-blue {
+	background-color : #0FAEB9 !important
 }
 .bg-white {
 	background-color: #fff !important
@@ -915,7 +928,7 @@ label {
 	width: 100%;
 	background: #03a9f3;
 	border: 0;
-	padding: 0 10px;
+	padding: 0 0px;
 }
 .navbar-default {
 	border: 0
@@ -14810,7 +14823,7 @@ ul.pro-amenities li span i {
 	}
 	.fix-sidebar .top-left-part {
 		position: fixed;
-		width: 210px
+		width: 220px
 	}
 	.fix-sidebar .navbar-left {
 		margin-left: 220px
@@ -15235,4 +15248,10 @@ a.fc-event:not([href]):not([tabindex]) {
 	.col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9 {
 		float: left
 	}
+}
+.white-border{
+	   box-shadow: 3px 3px 3px 3px #B0B0B0;
+}
+.border-drop-down{
+	border-right: #565656;
 }
