@@ -15,6 +15,7 @@ import org.bluepigeon.admin.model.BuilderLogo;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.ProjectImageGallery;
+import org.bluepigeon.admin.data.BarGraphData;
 import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.EmployeeList;
@@ -712,5 +713,78 @@ public class BuilderDetailsDAO {
 		}
 		session.getTransaction().commit();
 		session.close();
+	}
+    /**
+     * Get all project's flats, buyers and sold flats count by builder id
+     * @author pankaj	
+     * @param builderId
+     * @return List<BarGraphData>
+     */
+	public List<BarGraphData> getBarGraphByBuilderId(int builderId){
+		List<BarGraphData> barGraphDatas = new ArrayList<BarGraphData>();
+		String hql = "Select COUNT(DISTINCT B.possessionDate) from BuilderProject B where B.builder.id = :builder_id and B.status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		List<Long> builderProjectLists = query.list();
+		for(Long builderProject : builderProjectLists){
+			BarGraphData barGraphData = new BarGraphData();
+			barGraphData.setYear(builderProject);
+			barGraphData.setTotalFlats(getTotalFlatsByBuilderId(builderId));
+			barGraphData.setTotalBuyers(getTotalBuyersByBuilderId(builderId));
+			barGraphData.setTotalSold(getTotalsoldFlatsByBuilderId(builderId));
+			barGraphDatas.add(barGraphData);
+		}
+		return barGraphDatas;
+	}
+	/**
+	 * Get all project's flat count by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return totalFlats
+	 */
+	public Long getTotalFlatsByBuilderId(int builderId){
+		Long totalFlats = (long)0;
+		String hql = "Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		totalFlats = (Long) query.uniqueResult();
+		return totalFlats;
+	}
+	/**
+	 * Get all owner's count by builder id
+	 * @author pankaj 
+	 * @param builderId
+	 * @return
+	 */
+	public Long getTotalBuyersByBuilderId(int builderId){
+		Long totalBuyers = (long)0;
+		String hql = "Select COUNt(*) from Buyer where builder.id = :builder_id and is_primary=1 and is_deleted=0";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		totalBuyers = (Long) query.uniqueResult();
+		return totalBuyers;
+	}
+	
+	/**
+	 * Get all project's sold flats count by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return total sold flats
+	 */
+	public Long getTotalsoldFlatsByBuilderId(int builderId){
+		Long totalSoldFlats = (long)0;
+		String hql = "Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id AND builderFlatStatus.id=2";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		totalSoldFlats = (Long) query.uniqueResult();
+		return totalSoldFlats;
 	}
 }
