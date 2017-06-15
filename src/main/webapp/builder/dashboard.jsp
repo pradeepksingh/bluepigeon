@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
+<%@page import="org.bluepigeon.admin.data.BarGraphData"%>
 <%@page import="org.bluepigeon.admin.model.City"%>
 <%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
 <%@page import="org.bluepigeon.admin.data.CityData"%>
@@ -14,6 +16,7 @@
 <%
 	List<ProjectList> project_list = null;
 	List<City> cityDataList = null;
+	List<BarGraphData> barGraphDatas = null;
 	ProjectImageGallery imageGaleries = null;
 	Long totalBuyers = (long)0;
 	Long totalInventory = (long) 0;
@@ -27,15 +30,17 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
+			if(builder_id > 0){
+				totalBuyers = new BuyerDAO().getTotalBuyers(builder_id);
+				totalInventory = new ProjectDAO().getTotalInventory(builder_id);
+				project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
+				cityDataList = new CityNamesImp().getCityActiveNames();
+				totalLeads = new ProjectDAO().getTotalLeads(builder_id);
+				barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder_id);
+			}
 		}
 	}
-	if(builder_id > 0){
-		totalBuyers = new BuyerDAO().getTotalBuyers(builder_id);
-		totalInventory = new ProjectDAO().getTotalInventory(builder_id);
-		project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
-		cityDataList = new CityNamesImp().getCityActiveNames();
-		totalLeads = new ProjectDAO().getTotalLeads(builder_id);
-	}
+	
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -335,12 +340,12 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <div class="white-box bg-blue m-b-15">
+                                <div class="white-box bg-blue m-b-15 ">
                                     <h3 class="text-white box-title">PROPERTY SALE INCOME</h3>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
                                             <h1 class="text-white sales-income">Rs 30447</h1>
-                                            <p class="light_op_text"></p> <b class="text-white">(110 Sales)</b> </div>
+                                            <p class="light_op_text"><br></p> <b class="text-white">(110 Sales)</b> </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sales1" class="text-center"></div>
                                         </div>
@@ -380,6 +385,8 @@
     <script type="text/javascript" src="plugins/bower_components/multiselect/js/jquery.multi-select.js"></script>
     <script src="${baseUrl}/builder/plugins/bower_components/morrisjs/morris.js"></script>
     <script src="${baseUrl}/builder/js/real-estate.js"></script>
+    <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.charts-sparkline.js"></script>
+    <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
     <script>
     function addLead(){
     	window.location.href="${baseUrl }/builder/leads/new.jsp"
@@ -744,7 +751,78 @@
   	   $("#showMore").empty();
       }
     </script>
+    
+    <script>
+   
+    
+    //	 alert("Total Flats :: "+totalFlats);
+    	//Morris bar chart
+    	 <%
+     	if(barGraphDatas != null){
+      		%>
+     // alert("Total Flats :: "+totalFlats);
+     // alert("Total buyers :: "+totalBuyers);
+      //alert("totalSold :: "+totalSold);
+     	//getMorrisBar(totalFlats,totalBuyers,totalSold);
+     	Morris.Bar({
+     		 
+    	    element: 'morris-bar-chart',
+    	    data: [
+    	    	<% for(BarGraphData barGraphData : barGraphDatas){ %>
+    	    	{
+    	    	
+    	    	
+   		      y: '2010',
+    	        Flat: <%out.print(barGraphData.getTotalFlats());%>,
+             Buyer: <%out.print(barGraphData.getTotalBuyers()); %>,
+             Purchases: <% out.print(barGraphData.getTotalSold());%>
+             
+             },
+             <% } %>],
+             xkey: 'y',
+     	    ykeys: ['Flat', 'Buyer', 'Purchases'],
+     	    labels: ['Flat', 'Buyer', 'Purchases'],
+     	    barColors:['#00bfc7', '#fb9678', '#9675ce'],
+     	    hideHover: 'auto',
+     	   
+     	    gridLineColor: '#eef0f2',
+     	    resize: true
+     	});
 
+     	//This is for the sparkline chart
+
+     	var sparklineLogin = function() { 
+     	    
+     	    $('#sparkline2dash').sparkline([6, 10, 9, 11, 9, 10, 12], {
+     	        type: 'bar',
+     	        height: '154',
+     	        barWidth: '4',
+     	        resize: true,
+     	        barSpacing: '10',
+     	        barColor: '#25a6f7'
+     	    });
+     	   $('#sales1').sparkline([6, 10, 9, 11, 9, 10, 12], {
+     	        type: 'bar',
+     	        height: '154',
+     	        barWidth: '4',
+     	        resize: true,
+     	        barSpacing: '10',
+     	        barColor: '#fff'
+     	    });
+     	    
+     	}
+     	var sparkResize;
+
+     	    $(window).resize(function(e) {
+     	        clearTimeout(sparkResize);
+     	        sparkResize = setTimeout(sparklineLogin, 500);
+     	    });
+     	    sparklineLogin();
+
+     	
+     <%
+ 	} %>
+    </script>
 </body>
 
 </html>
