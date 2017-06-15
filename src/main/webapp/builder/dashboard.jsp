@@ -385,8 +385,8 @@
     <script type="text/javascript" src="plugins/bower_components/multiselect/js/jquery.multi-select.js"></script>
     <script src="${baseUrl}/builder/plugins/bower_components/morrisjs/morris.js"></script>
     <script src="${baseUrl}/builder/js/real-estate.js"></script>
-    <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.charts-sparkline.js"></script>
-    <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
+<%--     <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.charts-sparkline.js"></script> --%>
+<%--     <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script> --%>
     <script>
     function addLead(){
     	window.location.href="${baseUrl }/builder/leads/new.jsp"
@@ -791,33 +791,33 @@
 
      	//This is for the sparkline chart
 
-     	var sparklineLogin = function() { 
+//      	var sparklineLogin = function() { 
      	    
-     	    $('#sparkline2dash').sparkline([6, 10, 9, 11, 9, 10, 12], {
-     	        type: 'bar',
-     	        height: '154',
-     	        barWidth: '4',
-     	        resize: true,
-     	        barSpacing: '10',
-     	        barColor: '#25a6f7'
-     	    });
-     	   $('#sales1').sparkline([6, 10, 9, 11, 9, 10, 12], {
-     	        type: 'bar',
-     	        height: '154',
-     	        barWidth: '4',
-     	        resize: true,
-     	        barSpacing: '10',
-     	        barColor: '#fff'
-     	    });
+//      	    $('#sparkline2dash').sparkline([6, 10, 9, 11, 9, 10, 12], {
+//      	        type: 'bar',
+//      	        height: '154',
+//      	        barWidth: '4',
+//      	        resize: true,
+//      	        barSpacing: '10',
+//      	        barColor: '#25a6f7'
+//      	    });
+//      	   $('#sales1').sparkline([6, 10, 9, 11, 9, 10, 12], {
+//      	        type: 'bar',
+//      	        height: '154',
+//      	        barWidth: '4',
+//      	        resize: true,
+//      	        barSpacing: '10',
+//      	        barColor: '#fff'
+//      	    });
      	    
-     	}
-     	var sparkResize;
+//      	}
+//      	var sparkResize;
 
-     	    $(window).resize(function(e) {
-     	        clearTimeout(sparkResize);
-     	        sparkResize = setTimeout(sparklineLogin, 500);
-     	    });
-     	    sparklineLogin();
+//      	    $(window).resize(function(e) {
+//      	        clearTimeout(sparkResize);
+//      	        sparkResize = setTimeout(sparklineLogin, 500);
+//      	    });
+//      	    sparklineLogin();
 
      	
      <%

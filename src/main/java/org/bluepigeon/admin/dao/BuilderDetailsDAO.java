@@ -722,14 +722,15 @@ public class BuilderDetailsDAO {
      */
 	public List<BarGraphData> getBarGraphByBuilderId(int builderId){
 		List<BarGraphData> barGraphDatas = new ArrayList<BarGraphData>();
-		String hql = "from BuilderProject where builder.id = :builder_id and status=1";
+		String hql = "Select COUNT(DISTINCT B.possessionDate) from BuilderProject B where B.builder.id = :builder_id and B.status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("builder_id", builderId);
-		List<BuilderProject> builderProjectLists = query.list();
-		for(BuilderProject builderProject : builderProjectLists){
+		List<Long> builderProjectLists = query.list();
+		for(Long builderProject : builderProjectLists){
 			BarGraphData barGraphData = new BarGraphData();
+			barGraphData.setYear(builderProject);
 			barGraphData.setTotalFlats(getTotalFlatsByBuilderId(builderId));
 			barGraphData.setTotalBuyers(getTotalBuyersByBuilderId(builderId));
 			barGraphData.setTotalSold(getTotalsoldFlatsByBuilderId(builderId));
