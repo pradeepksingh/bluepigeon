@@ -201,6 +201,18 @@ $("#manager_id").change(function(){
 	}
 });
 
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) {  return ''; } ) );
+});
+$("#email").keyUp(function(){
+	var th = $(this);
+	$th.val($th.val().replace(/[^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$]/g,function(str){return '';}));
+});
+$("#mobile").keyUp(function(){
+	var mobile = $(this);
+	$mobile.val($mobile.val().replace(/[^[7-9][0-9]{9}$]/g, function(str){return '';}));
+});
 $('#addmanager').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -228,17 +240,17 @@ $('#addmanager').bootstrapValidator({
                 }
             }
         },
-//         email: {
-//         	validators: {
-//             	notEmpty: {
-//                     message: 'The Email is required and cannot be empty'
-//                 },
-//                 regexp: {
-//                     regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
-//                     message: 'The value is not a valid email address'
-//                 }
-//             }
-//         },
+        email: {
+        	validators: {
+            	notEmpty: {
+                    message: 'The Email is required and cannot be empty'
+                },
+                regexp: {
+                    regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
+                    message: 'The value is not a valid email address'
+                }
+            }
+        },
         project_id: {
             validators: {
                 notEmpty: {
