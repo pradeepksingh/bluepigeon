@@ -2549,7 +2549,7 @@ public class ProjectDAO {
 	 * Get first 4 active projects by builder id
 	 * @author pankaj
 	 * @param builderId
-	 * @return List<BuilderProject>
+	 * @return List<ProjectList>
 	 */
 	public List<ProjectList> getBuilderFirstFourActiveProjectsByBuilderId(int builderId) {
 		System.err.println("builderId :: "+builderId);
@@ -2988,7 +2988,12 @@ public class ProjectDAO {
 		return totalLeads;
 		
 	}
-	
+	/**
+	 * Get Total leads by builder id
+	 * @author pankaj
+	 * @param projectId
+	 * @return
+	 */
 	public Long getTotalLeadsByProjectId(int projectId){
 		Long totalLeads =(long) 0;
 		String hql = "Select COUNT(*) from BuilderLead where builderProject.id = :project_id";
@@ -2998,5 +3003,21 @@ public class ProjectDAO {
 		query.setParameter("project_id", projectId);
 		totalLeads = (Long) query.uniqueResult();
 		return totalLeads;
+	}
+	/**
+	 * Get total sold flat count for all projects by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return Long
+	 */
+	public Long getTotalSoldInventory(int builderId){
+		Long totalSoldInventory =(long)0;
+		String hql ="Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and builderFlatStatus.id=2";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		totalSoldInventory = (Long) query.uniqueResult();
+		return totalSoldInventory;
 	}
 }

@@ -1,4 +1,4 @@
-//// Morris bar chart
+////// Morris bar chart
 //    Morris.Bar({
 //        element: 'morris-bar-chart',
 //        data: [{
@@ -38,6 +38,101 @@
 //            Purchases: 40
 //        },{
 //            y: '2017',
+//            Flat: 100,
+//            Buyer: 90,
+//            Purchases: 40
+//        }, {
+//            y: '2018',
+//            Flat: 75,
+//            Buyer: 65,
+//            Purchases: 40
+//        },{
+//            y: '2019',
+//            Flat: 75,
+//            Buyer: 65,
+//            Purchases: 40
+//        },{
+//            y: '2020',
+//            Flat: 100,
+//            Buyer: 90,
+//            Purchases: 40
+//        }, {
+//            y: '2021',
+//            Flat: 75,
+//            Buyer: 65,
+//            Purchases: 40
+//        },{
+//            y: '2022',
+//            Flat: 75,
+//            Buyer: 30,
+//            Purchases: 40
+//        },{
+//            y: '2023',
+//            Flat: 100,
+//            Buyer: 50,
+//            Purchases: 40
+//        }, {
+//            y: '2024',
+//            Flat: 75,
+//            Buyer: 65,
+//            Purchases: 40
+//        },{
+//            y: '2025',
+//            Flat: 75,
+//            Buyer: 65,
+//            Purchases: 40
+//        },{
+//            y: '2026',
+//            Flat: 100,
+//            Buyer: 90,
+//            Purchases: 40
+//        },{
+//            y: '2027',
+//            Flat: 75,
+//            Buyer: 30,
+//            Purchases: 40
+//        },{
+//            y: '2028',
+//            Flat: 100,
+//            Buyer: 50,
+//            Purchases: 40
+//        }, {
+//            y: '2029',
+//            Flat: 75,
+//            Buyer: 65,
+//            Purchases: 40
+//        },{
+//            y: '2030',
+//            Flat: 75,
+//            Buyer: 65,
+//            Purchases: 40
+//        },{
+//            y: '2031',
+//            Flat: 100,
+//            Buyer: 90,
+//            Purchases: 40
+//        },{
+//            y: '2032',
+//            Flat: 75,
+//            Buyer: 30,
+//            Purchases: 40
+//        },{
+//            y: '2033',
+//            Flat: 100,
+//            Buyer: 50,
+//            Purchases: 40
+//        }, {
+//            y: '2034',
+//            Flat: 75,
+//            Buyer: 65,
+//            Purchases: 40
+//        },{
+//            y: '2035',
+//            Flat: 75,
+//            Buyer: 65,
+//            Purchases: 40
+//        },{
+//            y: '2036',
 //            Flat: 100,
 //            Buyer: 90,
 //            Purchases: 40

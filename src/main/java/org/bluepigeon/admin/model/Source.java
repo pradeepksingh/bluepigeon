@@ -31,6 +31,4 @@ public class Source {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
 }

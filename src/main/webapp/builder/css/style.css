@@ -15255,3 +15255,7 @@ a.fc-event:not([href]):not([tabindex]) {
 .border-drop-down{
 	border-right: #565656;
 }
+.dashboard-text{
+	font-size:20px !important;
+	margin-left: -45px;
+}
