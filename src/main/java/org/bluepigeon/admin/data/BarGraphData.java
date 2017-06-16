@@ -1,10 +1,12 @@
 package org.bluepigeon.admin.data;
 
+import java.util.Date;
+
 public class BarGraphData {
 	private Long totalFlats;
 	private Long totalBuyers;
 	private Long totalSold;
-	private Long year;
+	private Date builtYear;
 	
 	public Long getTotalFlats() {
 		return totalFlats;
@@ -30,12 +32,12 @@ public class BarGraphData {
 		this.totalSold = totalSold;
 	}
 
-	public Long getYear() {
-		return year;
+	public Date getBuiltYear() {
+		return builtYear;
 	}
 
-	public void setYear(Long year) {
-		this.year = year;
+	public void setBuiltYear(Date builtYear) {
+		this.builtYear = builtYear;
 	}
-	
+
 }

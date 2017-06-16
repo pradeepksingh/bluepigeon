@@ -1,3 +1,5 @@
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.data.BarGraphData"%>
 <%@page import="org.bluepigeon.admin.model.City"%>
@@ -21,8 +23,12 @@
 	Long totalBuyers = (long)0;
 	Long totalInventory = (long) 0;
 	Long totalLeads = (long)0;
+	Double totalRevenue = 0.0;
+	Double totalSaleValue = 0.0;
+	Long totalSoldInventory = (long)0;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
+    DecimalFormat decimalFormat = new DecimalFormat("#.##");
 	int builder_id = 0;
 	if(session!=null)
 	{
@@ -37,6 +43,9 @@
 				cityDataList = new CityNamesImp().getCityActiveNames();
 				totalLeads = new ProjectDAO().getTotalLeads(builder_id);
 				barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder_id);
+				totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder_id);
+				totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
+				totalRevenue = totalSaleValue * totalSoldInventory;
 			}
 		}
 	}
@@ -50,13 +59,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="${baseUrl}/builder/plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
-    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+    <link href="${baseUrl}/builder/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${baseUrl}/builder/plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+    <link href="${baseUrl}/builder/plugins/bower_components/morrisjs/morris.css" rel="stylesheet">
     <!-- animation CSS -->
-    <link href="css/animate.css" rel="stylesheet">
+    <link href="${baseUrl}/builder/css/animate.css" rel="stylesheet">
     <!-- Menu CSS -->
     <link href="plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
@@ -105,7 +115,7 @@
                             <h3 class="box-title">Total Properties</h3>
                             <ul class="list-inline two-part">
                                 <li><i class="ti-home text-info-new"></i></li>
-                                <li class="text-right"><span class="counter"><%out.print(totalInventory); %></span></li>
+                                <li class="text-right"><span class="counter dashboard-text"><%out.print(totalInventory); %></span></li>
                             </ul>
                         </div>
                     </div>
@@ -115,7 +125,7 @@
                             <ul class="list-inline two-part">
 <!--                                 <li><i class="icon-tag text-purple"></i></li> -->
 									 <li><i class="icon-tag text-info-new"></i></li>
-                                <li class="text-right"><span class="counter"><%out.print(totalBuyers); %></span></li>
+                                <li class="text-right"><span class="counter dashboard-text" ><%out.print(totalBuyers); %></span></li>
                             </ul>
                         </div>
                     </div>
@@ -125,7 +135,7 @@
                             <ul class="list-inline two-part">
 <!--                                 <li><i class="icon-user text-danger"></i></li> -->
                                  <li><i class="icon-user text-info-new"></i></li>
-                                <li class="text-right"><span class="counter"><%out.print(totalLeads); %></span></li>
+                                <li class="text-right"><span class="counter dashboard-text"><%out.print(totalLeads); %></span></li>
                             </ul>
                         </div>
                     </div>
@@ -135,7 +145,7 @@
                             <ul class="list-inline two-part">
 <!--                                 <li><i class="ti-wallet text-success"></i></li> -->
 									 <li><i class="ti-wallet text-info-new"></i></li>
-                                <li class="text-right"><span class="counter"> 8170</span></li>
+                                <li class="text-right"><span class="counter dashboard-text"> <%out.print(Math.round(totalRevenue)); %></span></li>
                             </ul>
                         </div>
                     </div>
@@ -313,6 +323,14 @@
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         <div class="white-box">
                             <h3 class="box-title">Project stats</h3>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                        		<select class="selectpicker border-drop-down" data-style="form-control" id="graph_project_id" name="graph_project_id">
+                                        <option>Project Name</option>
+                                       <% for(ProjectList projectList : project_list){%>
+                                       <option value="<%out.print(projectList.getId());%>"><%out.print(projectList.getName()); %></option>
+                                       <% }%>
+                           		</select>
+                    		</div>
                             <ul class="list-inline text-right">
                                 <li>
                                     <h5><i class="fa fa-circle m-r-5" style="color: #00bfc7;"></i>Flats</h5> </li>
@@ -772,7 +790,7 @@
     	    	{
     	    	
     	    	
-   		      y: '2010',
+   		      y: '<%out.print(barGraphData.getBuiltYear().getYear()+1900);%>',
     	        Flat: <%out.print(barGraphData.getTotalFlats());%>,
              Buyer: <%out.print(barGraphData.getTotalBuyers()); %>,
              Purchases: <% out.print(barGraphData.getTotalSold());%>

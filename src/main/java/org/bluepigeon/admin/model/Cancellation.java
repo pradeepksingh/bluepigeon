@@ -27,6 +27,8 @@ public class Cancellation implements java.io.Serializable {
 	private String buyerContact;
 	private String reason;
 	private Double charges;
+	private boolean isApproved;
+	private boolean cancelStatus;
 
 	public Cancellation() {
 	}
@@ -135,5 +137,21 @@ public class Cancellation implements java.io.Serializable {
 	public void setCharges(Double charges) {
 		this.charges = charges;
 	}
+	@Column(name = "is_approved")
+	public boolean isApproved() {
+		return isApproved;
+	}
 
+	public void setApproved(boolean isApproved) {
+		this.isApproved = isApproved;
+	}
+	@Column(name = "cancel_status")
+	public boolean setCancelStatus() {
+		return cancelStatus;
+	}
+
+	public void setCancelStatus(boolean cancelStatus) {
+		this.cancelStatus = cancelStatus;
+	}
+	
 }
