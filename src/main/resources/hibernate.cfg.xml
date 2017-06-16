@@ -38,6 +38,7 @@
         <mapping class="org.bluepigeon.admin.model.AllotProject" />
         <mapping class="org.bluepigeon.admin.model.AllotLeads" />
         <mapping class="org.bluepigeon.admin.model.AllotCampaign" />
+         <mapping class="org.bluepigeon.admin.model.Source" />
         <mapping class="org.bluepigeon.admin.model.Locality" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectType" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloorAmenitySubstages" />
