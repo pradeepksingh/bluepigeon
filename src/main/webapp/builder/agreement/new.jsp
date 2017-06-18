@@ -66,12 +66,6 @@
   
      <script> 
  
-$(function(){
-$("#sidebar1").load("../partial/sidebar.jsp");
-  $("#header").load("../partial/header.jsp"); 
-
-  $("#footer").load("../partial/footer.jsp"); 
-});
 </script>
 <script type="text/javascript">
     $('input[type=checkbox]').click(function(){
@@ -149,10 +143,10 @@ $("#sidebar1").load("../partial/sidebar.jsp");
 										                    <option value="0">Select Flat</option>
 										                </select>
 			                                      </div>
-			                                      <label for="example-text-input" class="col-3 col-form-label">Owner Name*</label>
-			                                      <div class="col-3">
-			                                      		<input class="form-control" type="text" value="" id="owner_name" name="owner_name">
-			                                      </div>
+<!-- 			                                      <label for="example-text-input" class="col-3 col-form-label">Owner Name*</label> -->
+<!-- 			                                      <div class="col-3"> -->
+<!-- 			                                      		<input class="form-control" type="text" value="" id="owner_name" name="owner_name"> -->
+<!-- 			                                      </div> -->
 			                                  </div>
 			                                  <div class="form-group row">
 			                                      <label for="example-search-input" class="col-3 col-form-label">Select Date</label>
@@ -228,7 +222,7 @@ $("#building_id").change(function(){
 		});
 		$("#flat_id").html(html);
 		checkbox+='</div>';
-		$("#appendbuyer").html(checkbox);
+		$("#appendbuyer").append(checkbox);
 	},'json');
 });
 

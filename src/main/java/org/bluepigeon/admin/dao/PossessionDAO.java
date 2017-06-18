@@ -6,6 +6,7 @@ import java.util.List;
 import org.bluepigeon.admin.data.PossessionList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.Possession;
+import org.bluepigeon.admin.model.PossessionBuyer;
 import org.bluepigeon.admin.model.PossessionInfo;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderFlat;
@@ -34,6 +35,23 @@ public class PossessionDAO {
 		responseMessage.setMessage("Possession Added Successfully.");
 		return responseMessage;
 	}
+	
+	public ResponseMessage savePossessionBuyer(List<PossessionBuyer> possessionBuyerList){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(PossessionBuyer possessionBuyer :possessionBuyerList)
+			newsession.save(possessionBuyer);
+		newsession.getTransaction().commit();
+		newsession.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Possession Added Successfully.");
+		return responseMessage;
+	}
+	
+	
+	
 	/**
 	 * @author pankaj
 	 * @param possession

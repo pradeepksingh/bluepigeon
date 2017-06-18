@@ -37,6 +37,20 @@ public class AgreementDAO {
 		responseMessage.setMessage("Agreement Added Successfully.");
 		return responseMessage;
 	}
+	
+	public ResponseMessage saveAgreementBuyer(List<AgreementBuyer> agreementBuyerList){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(AgreementBuyer agreementBuyer: agreementBuyerList)
+			newsession.save(agreementBuyer);
+		newsession.getTransaction().commit();
+		newsession.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Agreement Added Successfully.");
+		return responseMessage;
+	}
 	/**
 	 * @author pankaj
 	 * @param agreement
