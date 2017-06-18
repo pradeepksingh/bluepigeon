@@ -25,15 +25,17 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
+			if(builder_id > 0){
+				projectDatas = new ProjectDAO().getProjectsByBuilderId(builder_id);
+				if(projectDatas.size()>0)
+			    	project_size = projectDatas.size();
+			 	if(builderPropertyTypes.size()>0)
+			 		type_size = builderPropertyTypes.size();
+			}
 		}
-		if(builder_id > 0){
-			projectDatas = new ProjectDAO().getProjectsByBuilderId(builder_id);
-		}
+		
    }
-   	if(projectDatas.size()>0)
-    	project_size = projectDatas.size();
- 	if(builderPropertyTypes.size()>0)
- 		type_size = builderPropertyTypes.size();
+   	
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -152,10 +154,10 @@
 						                 	   	<option value="0">Select Flat</option>
 								       	  	</select>
                                     </div>
-                                    <label for="example-text-input" class="col-3 col-form-label">Buyer Name*</label>
-                                    <div class="col-3">
-                                          <input class="form-control" type="text" value="" id="buyer_name" name="buyer_name">
-                                    </div>
+<!--                                     <label for="example-text-input" class="col-3 col-form-label">Buyer Name*</label> -->
+<!--                                     <div class="col-3"> -->
+<!--                                           <input class="form-control" type="text" value="" id="buyer_name" name="buyer_name"> -->
+<!--                                     </div> -->
                                     
                                 </div>
                                 
@@ -164,13 +166,13 @@
 <!--                                     <div class="col-3"> -->
 <!--                                           <input class="form-control" type="text" value="" id="pan_card" name="pan_card"> -->
 <!--                                     </div> -->
-                                      <label for="example-tel-input" class="col-3 col-form-label">Buyer Contact</label> 
-                                    <div class="col-3">
-                                       <input class="form-control" type="text" value="" id="buyer_contact" name="buyer_contact" >
-                                    </div>
+<!--                                       <label for="example-tel-input" class="col-3 col-form-label">Buyer Contact</label>  -->
+<!--                                     <div class="col-3"> -->
+<!--                                        <input class="form-control" type="text" value="" id="buyer_contact" name="buyer_contact" > -->
+<!--                                     </div> -->
                                       <label for="example-search-input" class="col-3 col-form-label">Possession Date</label>
                                     <div class="col-3">
-                                    	 <input class="form-control" type="text" value="Date" id="possession_date" name="possession_date">
+                                    	 <input class="form-control" type="text"  id="possession_date" name="possession_date">
                                     </div>
                                     
                                 </div>
@@ -178,7 +180,7 @@
                                 <div class="form-group row">
                                     <div class="col-12">
                                         <center><label for="example-search-input" class="col-form-label">Buyers</label></center><br>
-                                       <div id="appendbuyer" class="row"></div>
+                                       <div id="appendbuyer" class="col-10"></div>
                                     </div>
                                     <input type="hidden" name="added_by" id="added_by" value="1"/>
                                     
@@ -240,7 +242,7 @@ $('#possession_date').datepicker({
 });
 
 $("#project_id").change(function(){
-	$.get("${baseUrl}/bluepigeon/webapi/campaign/building/names/"+$("#project_id").val(),{ }, function(data){
+	$.get("${baseUrl}/webapi/campaign/building/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
 		var checkbox = '<div class="row">';
 		$("#appendbuyer").empty();
@@ -257,10 +259,11 @@ $("#project_id").change(function(){
 	},'json');
 });
 $("#building_id").change(function(){
-	$.get("${baseUrl}/bluepigeon/webapi/campaign/building/flat/names/"+$("#building_id").val(),{ }, function(data){
+	$("#appendbuyer").empty();
+	$.get("${baseUrl}/webapi/campaign/building/flat/names/"+$("#building_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Flat</option>';
 		var checkbox = '<div class="row">';
-		$("#appendbuyer").empty();
+		
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].flatId+'">'+data[index].flatNo+'</option>';
 			$(data[index].buyer).each(function(key, value){
@@ -275,7 +278,7 @@ $("#building_id").change(function(){
 });
 
 $("#flat_id").change(function(){
-	$.get("${baseUrl}/bluepigeon/webapi/campaign/flat/buyer/names/"+$("#flat_id").val(),{ }, function(data){
+	$.get("${baseUrl}/webapi/campaign/flat/buyer/names/"+$("#flat_id").val(),{ }, function(data){
 		var checkbox = '<div class="row">';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
@@ -286,15 +289,6 @@ $("#flat_id").change(function(){
 		$("#appendbuyer").html(checkbox);
 	},'json');
 	
-	$.get("${baseUrl}/bluepigeon/webapi/cancellation/buyer/"+$("#flat_id").val(),{ }, function(data){
-// 		alert(data.name);
-// 		alert(data.mobile);
-// 		alert(data.pancard);
-		$("#buyer_name").val(data.name);
-		$("#buyer_contact").val(data.mobile);
-		$("#pan_card").val(data.pancard);
-		
-	},'json');
 });
 
 						
@@ -355,7 +349,7 @@ function addPossesion() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/bluepigeon/webapi/buyer/possession/save',
+	 		url : '${baseUrl}/webapi/buyer/possession/save',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -380,7 +374,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
        // alert(resp.message);
-        window.location.href = "${baseUrl}/bluepigeon/builder/possession/list.jsp";
+        window.location.href = "${baseUrl}/builder/possession/list.jsp";
   	}
 }
 </script>

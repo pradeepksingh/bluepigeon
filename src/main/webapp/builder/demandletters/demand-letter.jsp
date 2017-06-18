@@ -121,24 +121,18 @@
                                <div id="vimessages" class="tab-pane active" aria-expanded="false">
                                 <div class="col-12">
                                   <form id="add_demand" name="add_demand" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-                       <input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
-                                <div class="form-group row">
+                       				<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
+                                	<div class="form-group row">
                                     
-                                    <label for="example-text-input" class="col-3 col-form-label">Demand Name*</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" value="" id="demand_name" name="demand_name">
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Last Date</label>
-                                    <div class="col-3">
-                                    	 <input class="form-control" type="text" value="" id="last_date" name="last_date">
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                    
-                                    
-                                </div>
-                                
+	                                    <label for="example-text-input" class="col-3 col-form-label">Demand Name*</label>
+	                                    <div class="col-3">
+	                                        <input class="form-control" type="text" value="" id="demand_name" name="demand_name">
+	                                    </div>
+	                                    <label for="example-search-input" class="col-3 col-form-label">Last Date</label>
+	                                    <div class="col-3">
+	                                    	 <input class="form-control" type="text" value="" id="last_date" name="last_date">
+	                                    </div>
+                                	</div>
                                  <div class="form-group row">
                                      <label for="example-tel-input" class="col-3 col-form-label">Remind Every</label>
                                     <div class="col-3">

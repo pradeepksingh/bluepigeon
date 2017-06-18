@@ -99,17 +99,6 @@
                                            
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                    	<tr>
-                                         <th></th>
-                                            <th>Project Name</th>
-                                            <th>Building Name</th>
-                                            <th>Flat No.</th>
-                                            <th>Buyer Name</th>
-                                            <th></th>
-                                           
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
                                        <% 
                                        if(agreement_list != null){	

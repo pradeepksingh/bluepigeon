@@ -142,7 +142,11 @@
 			<artifactId>hibernate-ehcache</artifactId>
 			<version>4.1.4.Final</version>
 		</dependency>
-
+		<dependency>
+   		 	<groupId>com.itextpdf</groupId>
+    		<artifactId>itextpdf</artifactId>
+    		<version>5.0.6</version>
+		</dependency>
 				
     </dependencies>
     <properties>
