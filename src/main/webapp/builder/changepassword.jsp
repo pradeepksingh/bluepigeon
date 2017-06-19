@@ -92,7 +92,7 @@ function changePassword(){
 			if(status==1)
 				{
 				$('#error').empty();
-					window.location.href="../builder/project/list.jsp";	
+					window.location.href="../builder/dashboard.jsp";	
 				}
 			
 			else if(status == 0)

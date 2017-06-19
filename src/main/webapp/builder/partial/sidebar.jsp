@@ -43,6 +43,7 @@
                     </li>
                     <li class="nav-small-cap m-t-10">--Main Menu--</li>
                     <li> <a href="${baseUrl }/builder/dashboard.jsp" class="waves-effect"><i class="ti-dashboard p-r-10"></i> <span class="hide-menu">Dashboard</span></a> </li>
+                    <% if(builder_new.getBuilderEmployeeAccessType().getId() ==1 || builder_new.getBuilderEmployeeAccessType().getId()==2){%>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="linea-icon linea-basic fa-fw" data-icon="7"></i> <span class="hide-menu">Project<span class="fa arrow"></span> 
                     </span></a>
                         <ul class="nav nav-second-level">
@@ -53,6 +54,7 @@
                              <li> <a href="${baseUrl }/builder/project/building/floor/flat/list.jsp">Manage Flat</a></li>
                          </ul>
                     </li>
+                    <%} %>
 <!--                      <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="ti-home fa-fw"></i><span class="hide-menu">Building<span class="fa arrow"></span></span></a> -->
 <!--                         <ul class="nav nav-second-level"> -->
 <!--                             <li> <a href="inbox.html">Add</a></li> -->
@@ -65,12 +67,15 @@
                             <li> <a href="${baseUrl }/builder/buyer/list.jsp">Manage</a></li>
                         </ul>
                     </li>
+                    <%if(builder_new.getBuilderEmployeeAccessType().getId() == 1|| builder_new.getBuilderEmployeeAccessType().getId() ==2 || builder_new.getBuilderEmployeeAccessType().getId() == 4 || builder_new.getBuilderEmployeeAccessType().getId() == 5){ %>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu"> Employee<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/employee/new.jsp">Add</a></li>
                             <li> <a href="${baseUrl }/builder/employee/list.jsp">Manage</a></li>
+                             <li> <a href="${baseUrl }/builder/cancellation/list.jsp">Cancellation</a></li>
                         </ul>
                     </li>
+                    <%} %>
 <!--                      <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Campaign<span class="fa arrow"></span></span></a> -->
 <!--                         <ul class="nav nav-second-level"> -->
 <!--                             <li> <a href="inbox.html">Add</a></li> -->
@@ -86,19 +91,23 @@
                               <li> <a href="${baseUrl }/builder/leads/list.jsp">Manage Leads</a></li>
                              </ul>
                     </li>
+                    <%if(builder_new.getBuilderEmployeeAccessType().getId()==1 || builder_new.getBuilderEmployeeAccessType().getId() == 2 || builder_new.getBuilderEmployeeAccessType().getId() ==3){ %>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Marketing<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
 <!--                             <li> <a href="inbox.html">Manage Updates</a></li> -->
                             <li> <a href="${baseUrl }/builder/campaign/list.jsp">New Campaign</a></li>
                              </ul>
                     </li>
+                    <%} %>
+                    <% if(builder_new.getBuilderEmployeeAccessType().getId() ==1 || builder_new.getBuilderEmployeeAccessType().getId() ==2 || builder_new.getBuilderEmployeeAccessType().getId()==6){%>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="F" class="linea-icon linea-software fa-fw"></i><span class="hide-menu"> Inventory<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
+                         <li> <a href="${baseUrl }/builder/agreement/list.jsp">Agreement</a></li>
                             <li> <a href="${baseUrl }/builder/demandletters/list.jsp">Demand Letter Release</a></li>
                             <li> <a href="${baseUrl }/builder/possession/list.jsp">Allot Possession</a></li>
-                            <li> <a href="${baseUrl }/builder/cancellation/list.jsp">Cancellation</a></li>
                         </ul>
                     </li>
+                    <%} %>
 <!--  					<li class="nav-small-cap m-t-10">--Support--</li> -->
 <!--                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="icon-envelope p-r-10"></i> <span class="hide-menu"> Settings<span class="fa arrow"></span></span></a> -->
 <!--                     </li> -->

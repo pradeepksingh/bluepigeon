@@ -275,8 +275,12 @@ $('#addemployee').bootstrapValidator({
         email:{
         	 excluded: false,
              validators: {
-                 notEmpty: {
+            	 notEmpty: {
                      message: 'Email is required and cannot be empty'
+                 },
+                 regexp: {
+                     regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
+                     message: 'The value is not a valid email address'
                  }
              }
         },

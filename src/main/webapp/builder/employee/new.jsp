@@ -255,16 +255,24 @@ $('#addemployee').bootstrapValidator({
         },
         contact:{
         	validators:{
-        		notEmpty: {
-        			message:'Contact is required and cannot be empty'
-        		}
+        		 notEmpty: {
+                     message: 'The Mobile is required.'
+                 },
+                 regexp: {
+                     regexp: '^[7-9][0-9]{9}$',
+                     message: 'Invalid Mobile Number'
+                 }
         	}
         },
         email:{
         	 excluded: false,
              validators: {
-                 notEmpty: {
+            	 notEmpty: {
                      message: 'Email is required and cannot be empty'
+                 },
+                 regexp: {
+                     regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
+                     message: 'The value is not a valid email address'
                  }
              }
         },

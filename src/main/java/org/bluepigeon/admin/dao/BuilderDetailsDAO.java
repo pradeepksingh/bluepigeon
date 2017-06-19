@@ -351,12 +351,22 @@ public class BuilderDetailsDAO {
 		responseMessage.setMessage("Empolyee Added Successfully.");
 		return responseMessage;
 	}
-	public List<EmployeeList> getBuilderEmployeeList(int builder_id) {
+	public List<EmployeeList> getBuilderEmployeeList(BuilderEmployee builderEmployeeList) {
 		String hql = "from BuilderEmployee where builder.id=:builder_id";
+		String empHql = "from BuilderEmployee where builder.id = :builder_id and builderEmployee.id = :reporting_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("builder_id", builder_id);
+		Query query = null;
+		if(builderEmployeeList.getBuilderEmployeeAccessType().getId() == 1 || builderEmployeeList.getBuilderEmployeeAccessType().getId()==2){
+			query = session.createQuery(hql);
+			query.setParameter("builder_id", builderEmployeeList.getBuilder().getId());
+		}
+		if(builderEmployeeList.getBuilderEmployeeAccessType().getId() == 4 || builderEmployeeList.getBuilderEmployeeAccessType().getId() ==5){
+			query = session.createQuery(empHql);
+			query.setParameter("builder_id", builderEmployeeList.getBuilder().getId());
+			query.setParameter("reporting_id",builderEmployeeList.getId() );
+		}
+			
 		List<BuilderEmployee> result = query.list();
 		List<EmployeeList> employeeLists = new ArrayList<EmployeeList>();
 		int count=1;

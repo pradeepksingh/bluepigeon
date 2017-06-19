@@ -108,7 +108,7 @@ function login(){
 		if(status==1) {
 			$("#perror").empty();
 			$('#error').empty();
-			window.location.href="../builder/project/list.jsp";	
+			window.location.href="../builder/dashboard.jsp";	
 		} else if(status == 0) {
 			$("#perror").empty();
 			$('#error').empty();
