@@ -235,13 +235,18 @@ public class BuilderDetailsDAO {
 		builder = (Builder) query.list().get(0);
 		return builder;
 	}
-	public List<BuilderEmployeeAccessType> getBuilderAccessList() {
-		String hql = "from BuilderEmployeeAccessType";
+	public List<BuilderEmployeeAccessType> getBuilderAccessList(int accessId) {
+		List<BuilderEmployeeAccessType> result = null;
+		String hql = "from BuilderEmployeeAccessType where id > :access_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
+		if(accessId != 3 || accessId !=6 || accessId != 7){
 		Query query = session.createQuery(hql);
-		List<BuilderEmployeeAccessType> result = query.list();
+		query.setParameter("access_id", accessId);
+		result = query.list();
+		}
 		session.close();
+		
 		return result;
 	}
 	

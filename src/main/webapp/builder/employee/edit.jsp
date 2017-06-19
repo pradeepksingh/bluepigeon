@@ -19,6 +19,11 @@
 	BuilderEmployee builder = new BuilderEmployee();
 	int builder_uid = 0;
 	int emp_id = 0;
+	BuilderEmployee builderEmployee = null;
+	BuilderDetailsDAO builderDetailsDAO  = null;
+	List<BuilderEmployeeAccessType> access_list = null;
+	List<City> cityList = null;
+	List<Locality> localityList = null;
 	emp_id = Integer.parseInt(request.getParameter("emp_id"));
 	if(session!=null)
 	{
@@ -26,17 +31,18 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_uid = builder.getBuilder().getId();
+			if(builder_uid > 0){
+				project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_uid);
+				int builder_size = project_list.size();
+			    builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
+				builderDetailsDAO = new BuilderDetailsDAO();
+				access_list = builderDetailsDAO.getBuilderAccessList(builder.getBuilderEmployeeAccessType().getId());
+				cityList = new CityNamesImp().getCityActiveNames();
+				localityList = new LocalityNamesImp().getLocalityActiveList();
+			}
 		}
    	}
-	if(builder_uid > 0){
-		project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_uid);
-		int builder_size = project_list.size();
-	}
-	BuilderEmployee builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
-	BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
-	List<BuilderEmployeeAccessType> access_list = builderDetailsDAO.getBuilderAccessList();
-	List<City> cityList = new CityNamesImp().getCityActiveNames();
-	List<Locality> localityList = new LocalityNamesImp().getLocalityActiveList();
+	
 	 
 	
 %>
