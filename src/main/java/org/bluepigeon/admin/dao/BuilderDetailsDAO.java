@@ -749,6 +749,7 @@ public class BuilderDetailsDAO {
 		projectQuery.setParameter("builder_id", builderId);
 		List<Long> builderProjectLists = query.list();
 		List<BuilderProject> projectList = projectQuery.list();
+		System.out.println("Year Count :: "+builderProjectLists.size());
 		int i=0;		
 		for(Long builderProject : builderProjectLists){
 			BarGraphData barGraphData = new BarGraphData();
@@ -757,6 +758,7 @@ public class BuilderDetailsDAO {
 			barGraphData.setTotalBuyers(getTotalBuyersByBuilderId(builderId));
 			barGraphData.setTotalSold(getTotalsoldFlatsByBuilderId(builderId));
 			barGraphDatas.add(barGraphData);
+			i++;
 		}
 		return barGraphDatas;
 	}

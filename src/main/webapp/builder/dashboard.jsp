@@ -35,17 +35,19 @@
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
-			builder_id = builder.getBuilder().getId();
-			if(builder_id > 0){
-				totalBuyers = new BuyerDAO().getTotalBuyers(builder_id);
-				totalInventory = new ProjectDAO().getTotalInventory(builder_id);
-				project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
-				cityDataList = new CityNamesImp().getCityActiveNames();
-				totalLeads = new ProjectDAO().getTotalLeads(builder_id);
-				barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder_id);
-				totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder_id);
-				totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
-				totalRevenue = totalSaleValue * totalSoldInventory;
+			if(builder != null){
+				builder_id = builder.getBuilder().getId();
+				if(builder_id > 0){
+					totalBuyers = new BuyerDAO().getTotalBuyers(builder_id);
+					totalInventory = new ProjectDAO().getTotalInventory(builder_id);
+					project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
+					cityDataList = new CityNamesImp().getCityActiveNames();
+					totalLeads = new ProjectDAO().getTotalLeads(builder_id);
+					barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder_id);
+					totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder_id);
+					totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
+					totalRevenue = totalSaleValue * totalSoldInventory;
+				}
 			}
 		}
 	}
@@ -155,9 +157,11 @@
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         <select class="selectpicker border-drop-down" data-style="form-control" id="project_id" name="project_id">
                                         <option>Project Name</option>
-                                       <% for(ProjectList projectList : project_list){%>
+                                       <%
+                                       if(project_list != null){
+                                       for(ProjectList projectList : project_list){%>
                                        <option value="<%out.print(projectList.getId());%>"><%out.print(projectList.getName()); %></option>
-                                       <% }%>
+                                       <% }}%>
                            </select>
                                
                     </div>
@@ -786,7 +790,8 @@
      		 
     	    element: 'morris-bar-chart',
     	    data: [
-    	    	<% for(BarGraphData barGraphData : barGraphDatas){ %>
+    	    	<% for(BarGraphData barGraphData : barGraphDatas){
+    	    		System.out.println("graph Count :: "+barGraphDatas.size());%>
     	    	{
     	    	
     	    	

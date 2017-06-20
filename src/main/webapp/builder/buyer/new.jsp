@@ -30,10 +30,15 @@
 			if(builder_id1> 0 ){
 				project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id1);
 			}
-			 builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
-			 builderFlatList = new ProjectDAO().getActiveFlatsByProjectId(project_list.get(0).getId());
-			 projectPriceInfoData = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByProjectId(project_list.get(0).getId());
-			 flatPayments = new ProjectDAO().getFlatPaymentByFlatId(builderFlatList.get(0).getId());
+			if(project_list != null){
+			 	builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
+			 	builderFlatList = new ProjectDAO().getActiveFlatsByProjectId(project_list.get(0).getId());
+			 
+			 	projectPriceInfoData = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByProjectId(project_list.get(0).getId());
+			 	if(builderFlatList != null){
+				 flatPayments = new ProjectDAO().getFlatPaymentByFlatId(builderFlatList.get(0).getId());
+			 	}
+			}
 			 
 		}
    }

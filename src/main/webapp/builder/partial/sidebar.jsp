@@ -17,9 +17,8 @@
 		{
 			builder_new  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_new_id = builder_new.getId();
-		}
-   	}
-%>
+			 if(builder_new != null){
+		%>
      <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse slimscrollsidebar">
                 <ul class="nav" id="side-menu">
@@ -43,7 +42,9 @@
                     </li>
                     <li class="nav-small-cap m-t-10">--Main Menu--</li>
                     <li> <a href="${baseUrl }/builder/dashboard.jsp" class="waves-effect"><i class="ti-dashboard p-r-10"></i> <span class="hide-menu">Dashboard</span></a> </li>
-                    <% if(builder_new.getBuilderEmployeeAccessType().getId() ==1 || builder_new.getBuilderEmployeeAccessType().getId()==2){%>
+                    <%
+                    
+                     if(builder_new.getBuilderEmployeeAccessType().getId() ==1 || builder_new.getBuilderEmployeeAccessType().getId()==2){%>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="linea-icon linea-basic fa-fw" data-icon="7"></i> <span class="hide-menu">Project<span class="fa arrow"></span> 
                     </span></a>
                         <ul class="nav nav-second-level">
@@ -82,6 +83,7 @@
 <!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
 <!--                         </ul> -->
 <!--                     </li> -->
+					<%if(builder_new.getBuilderEmployeeAccessType().getId()==1 || builder_new.getBuilderEmployeeAccessType().getId() == 2 || builder_new.getBuilderEmployeeAccessType().getId()==4 || builder_new.getBuilderEmployeeAccessType().getId() == 5||builder_new.getBuilderEmployeeAccessType().getId()==6){ %>
                      <li class="nav-small-cap m-t-10">--Professional--</li>
                      <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Sales<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
@@ -91,6 +93,7 @@
                               <li> <a href="${baseUrl }/builder/leads/list.jsp">Manage Leads</a></li>
                              </ul>
                     </li>
+                    <% }%>
                     <%if(builder_new.getBuilderEmployeeAccessType().getId()==1 || builder_new.getBuilderEmployeeAccessType().getId() == 2 || builder_new.getBuilderEmployeeAccessType().getId() ==3){ %>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Marketing<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
@@ -116,3 +119,8 @@
                 </ul>
             </div>
         </div>
+        <%
+        }
+   	}
+	}
+%>

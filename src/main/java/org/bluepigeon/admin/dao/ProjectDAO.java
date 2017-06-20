@@ -2969,7 +2969,10 @@ public class ProjectDAO {
 			flatPayment.setAmount(buildingPaymentInfo.getAmount());
 			flatPaymentList.add(flatPayment);
 		}
-		return flatPaymentList;
+		if(flatPaymentList != null)
+			return flatPaymentList;
+		else
+			return null;
 	}
 	/**
 	 * Get total leads by builder id
