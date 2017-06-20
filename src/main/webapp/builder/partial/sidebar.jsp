@@ -62,18 +62,20 @@
 <!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
 <!--                         </ul> -->
 <!--                     </li> -->
+					<%if(builder_new.getBuilderEmployeeAccessType().getId() == 1|| builder_new.getBuilderEmployeeAccessType().getId() ==2 || builder_new.getBuilderEmployeeAccessType().getId() == 4 || builder_new.getBuilderEmployeeAccessType().getId() == 5){ %>
                      <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="ti-layout fa-fw"></i><span class="hide-menu"> Buyer<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/buyer/new.jsp">Add</a></li>
                             <li> <a href="${baseUrl }/builder/buyer/list.jsp">Manage</a></li>
+                            <li> <a href="${baseUrl }/builder/cancellation/list.jsp">Cancellation</a></li>
                         </ul>
                     </li>
+                    <% }%>
                     <%if(builder_new.getBuilderEmployeeAccessType().getId() == 1|| builder_new.getBuilderEmployeeAccessType().getId() ==2 || builder_new.getBuilderEmployeeAccessType().getId() == 4 || builder_new.getBuilderEmployeeAccessType().getId() == 5){ %>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu"> Employee<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/employee/new.jsp">Add</a></li>
                             <li> <a href="${baseUrl }/builder/employee/list.jsp">Manage</a></li>
-                             <li> <a href="${baseUrl }/builder/cancellation/list.jsp">Cancellation</a></li>
                         </ul>
                     </li>
                     <%} %>
@@ -91,6 +93,8 @@
 <!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
 							  <li> <a href="${baseUrl }/builder/sales/list.jsp">Manage Project</a></li>
                               <li> <a href="${baseUrl }/builder/leads/list.jsp">Manage Leads</a></li>
+                              <li> <a href="${baseUrl }/builder/sales/source.jsp">Add Source</a></li>
+                                <li> <a href="${baseUrl }/builder/sales/source-list.jsp">Manage Source</a></li>
                              </ul>
                     </li>
                     <% }%>

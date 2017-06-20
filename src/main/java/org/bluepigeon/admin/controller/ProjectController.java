@@ -90,6 +90,7 @@ import org.bluepigeon.admin.model.NewProject;
 import org.bluepigeon.admin.model.ProjectAmenityWeightage;
 import org.bluepigeon.admin.model.ProjectImageGallery;
 import org.bluepigeon.admin.model.ProjectPanoramicImage;
+import org.bluepigeon.admin.model.Source;
 import org.bluepigeon.admin.model.State;
 import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -2439,5 +2440,40 @@ public class ProjectController extends ResourceConfig {
 		msg = buyerDAO.deleteBuyerById(id);
 		return msg;
 	}
+	@POST
+	@Path("/source/add")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addSource (
+			@FormDataParam("name") String name
+			
+	){
+		ResponseMessage responseMessage = new ResponseMessage();
+		Source source = new Source();
+		source.setName(name);
+		responseMessage = new ProjectDAO().saveSource(source);
+		
+		return responseMessage;
+	}
 	
+	@POST
+	@Path("/source/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addSource (
+			@FormDataParam("uid") int id,
+			@FormDataParam("uname") String name,
+			@FormDataParam("builder_id") int builderId
+	){
+		ResponseMessage responseMessage = new ResponseMessage();
+		Builder builder = new Builder();
+		builder.setId(builderId);
+		Source source = new Source();
+		source.setId(id);
+		source.setName(name);
+		source.setBuilder(builder);
+		responseMessage = new ProjectDAO().updateSource(source);
+		
+		return responseMessage;
+	}
 }

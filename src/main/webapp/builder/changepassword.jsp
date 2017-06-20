@@ -26,7 +26,7 @@
      
         $("#header").load("partial/recoverheader.jsp");
 
-        $("#footer").load("partial/footer.html");
+        $("#footer").load("partial/footer.jsp");
     });
     </script>
  
@@ -38,8 +38,9 @@
 </div>
 <section id="wrapper" class="login-register">
 <!-- Top Navigation -->
-        <div id="header"></div>
-        <!-- End Top Navigation -->
+         <div id="header">
+	       <%@include file="partial/loginheader.jsp"%>
+      </div>
        
         <!-- Page Content -->
 <div class="col-md-12">	
@@ -79,6 +80,9 @@
   </div>
  </div>
 </div>
+<div id="footer"> 
+	   <%@include file="partial/footer.jsp"%>
+</div> 
 </section>
 
 </body>

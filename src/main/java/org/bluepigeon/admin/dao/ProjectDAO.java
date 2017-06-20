@@ -59,6 +59,7 @@ import org.bluepigeon.admin.model.NewProject;
 import org.bluepigeon.admin.model.ProjectAmenityWeightage;
 import org.bluepigeon.admin.model.ProjectImageGallery;
 import org.bluepigeon.admin.model.ProjectPanoramicImage;
+import org.bluepigeon.admin.model.Source;
 import org.bluepigeon.admin.model.Tax;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
@@ -3022,5 +3023,61 @@ public class ProjectDAO {
 		query.setParameter("builder_id", builderId);
 		totalSoldInventory = (Long) query.uniqueResult();
 		return totalSoldInventory;
+	}
+	/**
+	 * Save source
+	 * @author pankaj
+	 * @param source
+	 * @return responseMessage
+	 */
+	public ResponseMessage saveSource(Source source){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		session.save(source);
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Source added successfully");
+		return responseMessage;
+	}
+	/**
+	 * Get all source by builder id
+	 * @author pankaj
+	 * @return List<Source>
+	 */
+	public List<Source> getAllSourcesByBuilderId(int builderId){
+		String hql = "from Source where builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		List<Source> sourceList = query.list();
+		return sourceList;
+	}
+	
+	public List<Source> getSourceById(int id){
+		String hql = "from Source where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<Source> source = query.list();
+		session.close();
+		return source;
+	}
+	
+	public ResponseMessage updateSource(Source source){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		session.update(source);
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Source updated successfully");
+		return responseMessage;
 	}
 }
