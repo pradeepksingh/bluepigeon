@@ -4,11 +4,14 @@ package org.bluepigeon.admin.model;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -47,6 +50,7 @@ public class BuilderProject implements java.io.Serializable {
 	private Double totalInventory;
 	private Double inventorySold;
 	private Double revenue;
+	private Double completionStatus = 0.0;
 	private Byte status;
 	private Set<BuilderBuilding> builderBuildings = new HashSet<BuilderBuilding>(0);
 	private Set<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos = new HashSet<BuilderProjectPropertyConfigurationInfo>(
@@ -79,7 +83,7 @@ public class BuilderProject implements java.io.Serializable {
 			Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos,
 			Set<BuilderProjectBankInfo> builderProjectBankInfos,
 			Set<BuilderProjectProjectType> builderProjectProjectTypes, Set<BuilderFlatType> builderFlatTypes,
-			Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos) {
+			Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos, Double completionStatus) {
 		this.state = state;
 		this.adminUser = adminUser;
 		this.areaUnit = areaUnit;
@@ -116,6 +120,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.builderProjectProjectTypes = builderProjectProjectTypes;
 		this.builderFlatTypes = builderFlatTypes;
 		this.builderProjectApprovalInfos = builderProjectApprovalInfos;
+		this.completionStatus = completionStatus;
 	}
 
 	@Id
@@ -463,6 +468,15 @@ public class BuilderProject implements java.io.Serializable {
 
 	public void setBuilderProjectApprovalInfos(Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos) {
 		this.builderProjectApprovalInfos = builderProjectApprovalInfos;
+	}
+	
+	@Column(name = "completion_status", precision = 22, scale = 0)
+	public Double getCompletionStatus() {
+		return this.completionStatus;
+	}
+
+	public void setCompletionStatus(Double completionStatus) {
+		this.completionStatus = completionStatus;
 	}
 
 }

@@ -104,4 +104,14 @@ public class FlatStageDAO {
 		session.close();
 		return result.get(0);
 	}
+	
+	public List<FlatStage> getActiveFlatStages() {
+		String hql = "from FlatStage where status = 1 and is_deleted = 0 order by name ASC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<FlatStage> result = query.list();
+		session.close();
+		return result;
+	}
 }

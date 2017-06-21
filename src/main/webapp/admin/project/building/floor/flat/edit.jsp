@@ -13,6 +13,11 @@
 <%@page import="org.bluepigeon.admin.model.FlatAmenityWeightage"%>
 <%@page import="org.bluepigeon.admin.model.FlatAmenityInfo"%>
 <%@page import="org.bluepigeon.admin.model.FlatPaymentSchedule"%>
+<%@page import="org.bluepigeon.admin.model.FlatStage"%>
+<%@page import="org.bluepigeon.admin.model.FlatSubstage"%>
+<%@page import="org.bluepigeon.admin.model.FlatWeightage"%>
+<%@page import="org.bluepigeon.admin.dao.FlatStageDAO"%>
+<%@page import="org.bluepigeon.admin.dao.FlatSubstagesDAO"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
@@ -56,6 +61,8 @@
 	List<BuilderBuildingFlatType> builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeByBuildingId(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
 	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderActiveProjects();
 	List<FlatAmenityWeightage> flatAmenityWeightages = new ProjectDAO().getFlatAmenityWeightageByFlatId(flat_id);
+	List<FlatStage> flatStages = new FlatStageDAO().getActiveFlatStages();
+	List<FlatWeightage> flatWeightages = new ProjectDAO().getFlatWeightage(flat_id);
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -78,6 +85,7 @@
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Flat Details</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Details</a></li>
+			  	<li><a data-toggle="tab" href="#productsubstage">Stage/Substage</a></li>
 			</ul>
 			<form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 				<div class="tab-content">
@@ -374,6 +382,69 @@
 							</div>
 						</div>
 					</div>
+					<div id="productsubstage" class="tab-pane fade">
+						<form id="subpfrm" name="subpfrm" method="post">
+				 			<div class="row">
+								<div class="col-lg-12">
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<div id="offer_area">
+												<div class="row">
+													<div class="col-lg-12 margin-bottom-5">
+														<div class="form-group" id="error-amenity_type">
+															<div class="col-sm-12">
+																<% 	for(FlatStage flatStage :flatStages) { 
+																	Double stage_wt = 0.0;
+																	for(FlatWeightage flatWeightage :flatWeightages) {
+																		if(flatStage.getId() == flatWeightage.getFlatStage().getId()) {
+																			stage_wt = flatWeightage.getStageWeightage();
+																		}
+																	}
+																%>
+																<fieldset class="scheduler-border">
+																	<legend class="scheduler-border">Stages</legend>
+																	<div class="col-sm-12">
+																		<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(flatStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage[]" id="<% out.print(flatStage.getId());%>" type="text" class="form-control" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																		<fieldset class="scheduler-border" style="margin-bottom:0px !important">
+																			<legend class="scheduler-border">Sub Stages</legend>
+																		<% 	for(FlatSubstage flatSubstage :flatStage.getFlatSubstages()) { 
+																			Double substage_wt = 0.0;
+																			for(FlatWeightage flatWeightage :flatWeightages) {
+																				if(flatSubstage.getId() == flatWeightage.getFlatSubstage().getId()) {
+																					substage_wt = flatWeightage.getSubstageWeightage();
+																				}
+																			}
+																		%>
+																			<div class="col-sm-3">
+																				<% out.print(flatSubstage.getName()); %> (%)<br>
+																				<input type="number" name="substage_weightage<% out.print(flatStage.getId());%>[]" id="<% out.print(flatSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																			</div>
+																		<% } %>
+																		</fieldset>
+																	</div>
+																</fieldset>
+																<% } %>
+															</div>
+															<div class="messageContainer"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div class="row">
+													<div class="col-lg-12">
+														<div class="col-sm-12">
+															<button type="button" class="btn btn-success btn-sm" id="subpbtn">SAVE</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</form>
 		</div>
@@ -612,6 +683,38 @@ $('input[name="amenity_type[]"]').click(function() {
 	} else {
 		$("#amenity_stage"+$(this).val()).hide();
 	}
+});
+
+$("#subpbtn").click(function(){
+	var amenityWeightage = [];
+	$('input[name="stage_weightage[]"]').each(function() {
+		stage_id = $(this).attr("id");
+		stage_weightage = $(this).val();
+		$('input[name="substage_weightage'+stage_id+'[]"]').each(function() {
+			amenityWeightage.push({builderFlat:{id:$("#flat_id").val()},flatStage:{id:stage_id},stageWeightage:stage_weightage,flatSubstage:{id:$(this).attr("id")},substageWeightage:$(this).val(),status:false});
+		});
+	});
+	var final_data = {flatId: $("#flat_id").val(),flatWeightages:amenityWeightage}
+	$.ajax({
+	    url: '${baseUrl}/webapi/project/flat/substage/update',
+	    type: 'POST',
+	    data: JSON.stringify(final_data),
+	    contentType: 'application/json; charset=utf-8',
+	    dataType: 'json',
+	    async: false,
+	    success: function(data) {
+			if (data.status == 0) {
+				alert(data.message);
+			} else {
+				alert(data.message);
+			}
+		},
+		error : function(data)
+		{
+			alert("Fail to save data");
+		}
+		
+	});
 });
 
 </script>

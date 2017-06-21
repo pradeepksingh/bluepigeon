@@ -7,6 +7,9 @@
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.model.Country"%>
 <%@page import="org.bluepigeon.admin.model.FlatAmenityWeightage"%>
+<%@page import="org.bluepigeon.admin.model.FlatStage"%>
+<%@page import="org.bluepigeon.admin.model.FlatSubstage"%>
+<%@page import="org.bluepigeon.admin.model.FlatWeightage"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
@@ -18,6 +21,7 @@
 	List<FlatAmenityWeightage> amenityWeightages = new ArrayList<FlatAmenityWeightage>();
 	List<FlatImageGallery> imageGaleries = new ArrayList<FlatImageGallery>();
 	List<FlatPanoramicImage> panoromicImages = new ArrayList<FlatPanoramicImage>();
+	List<FlatWeightage> flatWeightages = new ArrayList<FlatWeightage>();
 	int p_user_id = 0;
 	int flat_id = 0;
 	if(session!=null)
@@ -33,6 +37,7 @@
 		amenityWeightages = new ProjectDAO().getFlatAmenityWeightageByFlatId(flat_id);
 		imageGaleries = new ProjectDAO().getAllFlatImagesById(flat_id);
 		panoromicImages = new ProjectDAO().getFlatPanoImagesByFlatId(flat_id);
+		flatWeightages = new ProjectDAO().getFlatWeightage(flat_id);
 	}
 %>
 <div class="main-content">
@@ -107,6 +112,39 @@
 																	</div>
 																</div>
 															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<hr/>
+									<div class="row">
+										<div class="col-lg-12 margin-bottom-5">
+											<div class="form-group" id="error-name">
+												<label class="control-label col-sm-12"><b>Stages/Substages</b> <span class='text-danger'>*</span></label>
+												<div class="col-sm-12">
+													<% 	
+													int sstage_id = 0;
+													for(FlatWeightage flatWeightage :flatWeightages) { 
+														String is_checked = "";
+													%>
+													<% if(sstage_id == 0 || sstage_id != flatWeightage.getFlatStage().getId()) { %>
+													<% if(sstage_id != 0) {%>
+														</div>
+													</div>
+													<% } %>
+																<div class="row">
+																	<label class="control-label col-sm-3" style="padding-top:5px;"><strong><% out.print(flatWeightage.getFlatStage().getName());%></strong></label>
+																	<div class="col-sm-9">
+													<% } %>
+																		<div class="col-sm-4">
+																			<input type="checkbox" name="ssubstagewt_id[]" value="<% out.print(flatWeightage.getId());%>" <% if(flatWeightage.getStatus()) { %>checked<% } %>/> <% out.print(flatWeightage.getFlatSubstage().getName());%>
+																		</div>
+													<% 
+													sstage_id = flatWeightage.getFlatStage().getId();
+													} 
+													%>
 														</div>
 													</div>
 												</div>

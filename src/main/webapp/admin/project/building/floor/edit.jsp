@@ -11,6 +11,11 @@
 <%@page import="org.bluepigeon.admin.model.FloorAmenityWeightage"%>
 <%@page import="org.bluepigeon.admin.model.FloorAmenityInfo"%>
 <%@page import="org.bluepigeon.admin.model.FloorLayoutImage"%>
+<%@page import="org.bluepigeon.admin.model.FloorStage"%>
+<%@page import="org.bluepigeon.admin.model.FloorSubstage"%>
+<%@page import="org.bluepigeon.admin.model.FloorWeightage"%>
+<%@page import="org.bluepigeon.admin.dao.FloorStageDAO"%>
+<%@page import="org.bluepigeon.admin.dao.FloorSubstagesDAO"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
@@ -43,6 +48,8 @@
 	List<BuilderFloorAmenity> builderFloorAmenities = new BuilderFloorAmenityDAO().getBuilderActiveFloorAmenityList();
 	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderAllProjects();
 	List<FloorAmenityWeightage> floorAmenityWeightages = new ProjectDAO().getFloorAmenityWeightages(floor_id);
+	List<FloorStage> floorStages = new FloorStageDAO().getActiveFloorStages();
+	List<FloorWeightage> floorWeightages = new ProjectDAO().getFloorWeightage(floor_id);
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -65,6 +72,7 @@
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Floor Details</a></li>
 			  	<li><a data-toggle="tab" href="#floorimages">Floor Layouts</a></li>
+			  	<li><a data-toggle="tab" href="#productsubstage">Stage/Substage</a></li>
 			</ul>
 			<form id="updatefloor" name="updatefloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 				<div class="tab-content">
@@ -281,6 +289,69 @@
 							</div>
 						</div>
 					</div>
+					<div id="productsubstage" class="tab-pane fade">
+						<form id="subpfrm" name="subpfrm" method="post">
+				 			<div class="row">
+								<div class="col-lg-12">
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<div id="offer_area">
+												<div class="row">
+													<div class="col-lg-12 margin-bottom-5">
+														<div class="form-group" id="error-amenity_type">
+															<div class="col-sm-12">
+																<% 	for(FloorStage floorStage :floorStages) { 
+																	Double stage_wt = 0.0;
+																	for(FloorWeightage floorWeightage :floorWeightages) {
+																		if(floorStage.getId() == floorWeightage.getFloorStage().getId()) {
+																			stage_wt = floorWeightage.getStageWeightage();
+																		}
+																	}
+																%>
+																<fieldset class="scheduler-border">
+																	<legend class="scheduler-border">Stages</legend>
+																	<div class="col-sm-12">
+																		<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(floorStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage[]" id="<% out.print(floorStage.getId());%>" type="text" class="form-control" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																		<fieldset class="scheduler-border" style="margin-bottom:0px !important">
+																			<legend class="scheduler-border">Sub Stages</legend>
+																		<% 	for(FloorSubstage floorSubstage :floorStage.getFloorSubstages()) { 
+																			Double substage_wt = 0.0;
+																			for(FloorWeightage floorWeightage :floorWeightages) {
+																				if(floorSubstage.getId() == floorWeightage.getFloorSubstage().getId()) {
+																					substage_wt = floorWeightage.getSubstageWeightage();
+																				}
+																			}
+																		%>
+																			<div class="col-sm-3">
+																				<% out.print(floorSubstage.getName()); %> (%)<br>
+																				<input type="number" name="substage_weightage<% out.print(floorStage.getId());%>[]" id="<% out.print(floorSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																			</div>
+																		<% } %>
+																		</fieldset>
+																	</div>
+																</fieldset>
+																<% } %>
+															</div>
+															<div class="messageContainer"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div class="row">
+													<div class="col-lg-12">
+														<div class="col-sm-12">
+															<button type="button" class="btn btn-success btn-sm" id="subpbtn">SAVE</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</form>
 		</div>
@@ -458,6 +529,39 @@ $('input[name="amenity_type[]"]').click(function() {
 		$("#amenity_stage"+$(this).val()).hide();
 	}
 });
+
+$("#subpbtn").click(function(){
+	var amenityWeightage = [];
+	$('input[name="stage_weightage[]"]').each(function() {
+		stage_id = $(this).attr("id");
+		stage_weightage = $(this).val();
+		$('input[name="substage_weightage'+stage_id+'[]"]').each(function() {
+			amenityWeightage.push({builderFloor:{id:$("#floor_id").val()},floorStage:{id:stage_id},stageWeightage:stage_weightage,floorSubstage:{id:$(this).attr("id")},substageWeightage:$(this).val(),status:false});
+		});
+	});
+	var final_data = {floorId: $("#floor_id").val(),floorWeightages:amenityWeightage}
+	$.ajax({
+	    url: '${baseUrl}/webapi/project/floor/substage/update',
+	    type: 'POST',
+	    data: JSON.stringify(final_data),
+	    contentType: 'application/json; charset=utf-8',
+	    dataType: 'json',
+	    async: false,
+	    success: function(data) {
+			if (data.status == 0) {
+				alert(data.message);
+			} else {
+				alert(data.message);
+			}
+		},
+		error : function(data)
+		{
+			alert("Fail to save data");
+		}
+		
+	});
+});
+
 </script>
 </body>
 </html>

@@ -74,7 +74,7 @@ public class FlatStage implements java.io.Serializable {
 		this.isDeleted = isDeleted;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "flatStage")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "flatStage")
 	public Set<FlatSubstage> getFlatSubstages() {
 		return this.flatSubstages;
 	}

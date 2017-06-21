@@ -74,7 +74,7 @@ public class FloorStage implements java.io.Serializable {
 		this.isDeleted = isDeleted;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "floorStage")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "floorStage")
 	public Set<FloorSubstage> getFloorSubstages() {
 		return this.floorSubstages;
 	}

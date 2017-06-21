@@ -4,11 +4,14 @@ package org.bluepigeon.admin.model;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,13 +38,14 @@ public class BuilderBuilding implements java.io.Serializable {
 	private Double totalInventory;
 	private Double inventorySold;
 	private Double revenue;
+	private Double completionStatus = 0.0;
 	private Byte status;
 	private Set<BuilderFloor> builderFloors = new HashSet<BuilderFloor>(0);
 
 	public BuilderBuilding() {
 	}
 
-	public BuilderBuilding(AdminUser adminUser, BuilderBuildingStatus builderBuildingStatus,
+	public BuilderBuilding(AdminUser adminUser, BuilderBuildingStatus builderBuildingStatus, Double completionStatus,
 			BuilderProject builderProject, String name, Integer totalFloor, Date launchDate, Date possessionDate,
 			Double totalInventory, Double inventorySold, Double revenue, Byte status, Set<BuilderFloor> builderFloors) {
 		this.adminUser = adminUser;
@@ -55,6 +59,7 @@ public class BuilderBuilding implements java.io.Serializable {
 		this.inventorySold = inventorySold;
 		this.revenue = revenue;
 		this.status = status;
+		this.completionStatus = completionStatus;
 		this.builderFloors = builderFloors;
 	}
 
@@ -181,6 +186,15 @@ public class BuilderBuilding implements java.io.Serializable {
 
 	public void setBuilderFloors(Set<BuilderFloor> builderFloors) {
 		this.builderFloors = builderFloors;
+	}
+	
+	@Column(name = "completion_status", precision = 22, scale = 0)
+	public Double getCompletionStatus() {
+		return this.completionStatus;
+	}
+
+	public void setCompletionStatus(Double completionStatus) {
+		this.completionStatus = completionStatus;
 	}
 
 }

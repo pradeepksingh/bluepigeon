@@ -104,4 +104,14 @@ public class BuildingStageDAO {
 		session.close();
 		return result.get(0);
 	}
+	
+	public List<BuildingStage> getActiveBuildingStages() {
+		String hql = "from BuildingStage where status = 1 and is_deleted = 0 order by name ASC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuildingStage> result = query.list();
+		session.close();
+		return result;
+	}
 }

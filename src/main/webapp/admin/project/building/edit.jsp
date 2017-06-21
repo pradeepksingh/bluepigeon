@@ -13,6 +13,11 @@
 <%@page import="org.bluepigeon.admin.model.BuilderBuildingAmenityStages"%>
 <%@page import="org.bluepigeon.admin.model.BuilderBuildingAmenitySubstages"%>
 <%@page import="org.bluepigeon.admin.model.BuildingAmenityWeightage"%>
+<%@page import="org.bluepigeon.admin.model.BuildingStage"%>
+<%@page import="org.bluepigeon.admin.model.BuildingSubstage"%>
+<%@page import="org.bluepigeon.admin.model.BuildingWeightage"%>
+<%@page import="org.bluepigeon.admin.dao.BuildingStageDAO"%>
+<%@page import="org.bluepigeon.admin.dao.BuildingSubstagesDAO"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="javax.servlet.ServletContext" %>
@@ -49,6 +54,8 @@
 	List<BuildingPaymentInfo> buildingPaymentInfos = new ProjectDAO().getBuilderBuildingPaymentInfoById(building_id);
 	List<BuildingOfferInfo> buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
 	List<BuildingAmenityWeightage> buildingAmenityWeightages = new ProjectDAO().getBuilderBuildingAmenityWeightageById(building_id);
+	List<BuildingStage> buildingStages = new BuildingStageDAO().getActiveBuildingStages();
+	List<BuildingWeightage> buildingWeightages = new ProjectDAO().getBuildingWeightage(building_id);
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -73,6 +80,7 @@
 			  	<li><a data-toggle="tab" href="#buildingdetail">Building Images</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
 			  	<li><a data-toggle="tab" href="#offer">Offers</a></li>
+			  	<li><a data-toggle="tab" href="#productsubstage">Stage/Substage</a></li>
 			</ul>
 			<div class="tab-content">
 				<div id="basic" class="tab-pane fade in active">
@@ -469,6 +477,69 @@
 												<div class="col-lg-12">
 													<div class="col-sm-12">
 														<button type="button" class="btn btn-success btn-sm" id="offerbtn" onclick="updateBuildingOffers();">SAVE</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div id="productsubstage" class="tab-pane fade">
+					<form id="subpfrm" name="subpfrm" method="post">
+			 			<div class="row">
+							<div class="col-lg-12">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div id="offer_area">
+											<div class="row">
+												<div class="col-lg-12 margin-bottom-5">
+													<div class="form-group" id="error-amenity_type">
+														<div class="col-sm-12">
+															<% 	for(BuildingStage buildingStage :buildingStages) { 
+																Double stage_wt = 0.0;
+																for(BuildingWeightage buildingWeightage :buildingWeightages) {
+																	if(buildingStage.getId() == buildingWeightage.getBuildingStage().getId()) {
+																		stage_wt = buildingWeightage.getStageWeightage();
+																	}
+																}
+															%>
+															<fieldset class="scheduler-border">
+																<legend class="scheduler-border">Stages</legend>
+																<div class="col-sm-12">
+																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(buildingStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage[]" id="<% out.print(buildingStage.getId());%>" type="text" class="form-control" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																	<fieldset class="scheduler-border" style="margin-bottom:0px !important">
+																		<legend class="scheduler-border">Sub Stages</legend>
+																	<% 	for(BuildingSubstage buildingSubstage :buildingStage.getBuildingSubstages()) { 
+																		Double substage_wt = 0.0;
+																		for(BuildingWeightage buildingWeightage :buildingWeightages) {
+																			if(buildingSubstage.getId() == buildingWeightage.getBuildingSubstage().getId()) {
+																				substage_wt = buildingWeightage.getSubstageWeightage();
+																			}
+																		}
+																	%>
+																		<div class="col-sm-3">
+																			<% out.print(buildingSubstage.getName()); %> (%)<br>
+																			<input type="number" name="substage_weightage<% out.print(buildingStage.getId());%>[]" id="<% out.print(buildingSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																		</div>
+																	<% } %>
+																	</fieldset>
+																</div>
+															</fieldset>
+															<% } %>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div>
+											<div class="row">
+												<div class="col-lg-12">
+													<div class="col-sm-12">
+														<button type="button" class="btn btn-success btn-sm" id="subpbtn">SAVE</button>
 													</div>
 												</div>
 											</div>
@@ -956,6 +1027,38 @@ $('input[name="amenity_type[]"]').click(function() {
 	} else {
 		$("#amenity_stage"+$(this).val()).hide();
 	}
+});
+
+$("#subpbtn").click(function(){
+	var amenityWeightage = [];
+	$('input[name="stage_weightage[]"]').each(function() {
+		stage_id = $(this).attr("id");
+		stage_weightage = $(this).val();
+		$('input[name="substage_weightage'+stage_id+'[]"]').each(function() {
+			amenityWeightage.push({builderBuilding:{id:$("#building_id").val()},buildingStage:{id:stage_id},stageWeightage:stage_weightage,buildingSubstage:{id:$(this).attr("id")},substageWeightage:$(this).val(),status:false});
+		});
+	});
+	var final_data = {buildingId: $("#building_id").val(),buildingWeightages:amenityWeightage}
+	$.ajax({
+	    url: '${baseUrl}/webapi/project/building/substage/update',
+	    type: 'POST',
+	    data: JSON.stringify(final_data),
+	    contentType: 'application/json; charset=utf-8',
+	    dataType: 'json',
+	    async: false,
+	    success: function(data) {
+			if (data.status == 0) {
+				alert(data.message);
+			} else {
+				alert(data.message);
+			}
+		},
+		error : function(data)
+		{
+			alert("Fail to save data");
+		}
+		
+	});
 });
 
 </script>

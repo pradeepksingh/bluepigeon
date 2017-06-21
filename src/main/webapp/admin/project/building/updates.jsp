@@ -7,6 +7,9 @@
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.model.Country"%>
 <%@page import="org.bluepigeon.admin.model.BuildingAmenityWeightage"%>
+<%@page import="org.bluepigeon.admin.model.BuildingStage"%>
+<%@page import="org.bluepigeon.admin.model.BuildingSubstage"%>
+<%@page import="org.bluepigeon.admin.model.BuildingWeightage"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
@@ -21,6 +24,7 @@
 	List<BuildingAmenityWeightage> amenityWeightages = new ArrayList<BuildingAmenityWeightage>();
 	List<BuildingImageGallery> imageGaleries = new ArrayList<BuildingImageGallery>();
 	List<BuildingPanoramicImage> panoromicImages = new ArrayList<BuildingPanoramicImage>();
+	List<BuildingWeightage> buildingWeightages = new ArrayList<BuildingWeightage>();
 	int p_user_id = 0;
 	int building_id = 0;
 	if(session!=null)
@@ -36,6 +40,7 @@
 		amenityWeightages = new ProjectDAO().getBuilderBuildingAmenityWeightageById(building_id);
 		imageGaleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
 		panoromicImages = new ProjectDAO().getBuilderBuildingElevationImagesById(building_id);
+		buildingWeightages = new ProjectDAO().getBuildingWeightage(building_id);
 	}
 %>
 <div class="main-content">
@@ -107,9 +112,37 @@
 													stage_id = buildingAmenityWeightage.getBuilderBuildingAmenityStages().getId();
 													} 
 													%>
-																	</div>
-																</div>
-															</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<hr/>
+									<div class="row">
+										<div class="col-lg-12 margin-bottom-5">
+											<div class="form-group" id="error-name">
+												<label class="control-label col-sm-12"><b>Stages/Substages</b> <span class='text-danger'>*</span></label>
+												<div class="col-sm-12">
+													<% 	
+													int sstage_id = 0;
+													for(BuildingWeightage buildingWeightage :buildingWeightages) { 
+														String is_checked = "";
+													%>
+													<% if(sstage_id == 0 || sstage_id != buildingWeightage.getBuildingStage().getId()) { %>
+													<% if(sstage_id != 0) {%>
+														</div>
+													</div>
+													<% } %>
+																<div class="row">
+																	<label class="control-label col-sm-3" style="padding-top:5px;"><strong><% out.print(buildingWeightage.getBuildingStage().getName());%></strong></label>
+																	<div class="col-sm-9">
+													<% } %>
+																		<div class="col-sm-4">
+																			<input type="checkbox" name="ssubstagewt_id[]" value="<% out.print(buildingWeightage.getId());%>" <% if(buildingWeightage.getStatus()) { %>checked<% } %>/> <% out.print(buildingWeightage.getBuildingSubstage().getName());%>
+																		</div>
+													<% 
+													sstage_id = buildingWeightage.getBuildingStage().getId();
+													} 
+													%>
 														</div>
 													</div>
 												</div>
@@ -206,6 +239,7 @@
 		</div>
 	</div>
 </div>
+<br><br>
 <%@include file="../../../footer.jsp"%>
 <!-- inline scripts related to this page -->
 <style>

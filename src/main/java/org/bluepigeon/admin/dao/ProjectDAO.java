@@ -6,10 +6,15 @@ import java.util.List;
 import java.util.Set;
 
 import org.bluepigeon.admin.data.BuildingList;
+import org.bluepigeon.admin.data.BuildingWeightageData;
+import org.bluepigeon.admin.data.FlatAmenityTotal;
+import org.bluepigeon.admin.data.FlatTotal;
+import org.bluepigeon.admin.data.FlatWeightageData;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorDetail;
 import org.bluepigeon.admin.data.FloorImageData;
 import org.bluepigeon.admin.data.FloorPanoData;
+import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.NewProjectList;
 import org.bluepigeon.admin.data.ProjectCityData;
 import org.bluepigeon.admin.data.ProjectData;
@@ -17,6 +22,7 @@ import org.bluepigeon.admin.data.ProjectDetail;
 import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.data.ProjectOffer;
 import org.bluepigeon.admin.data.ProjectPaymentSchedule;
+import org.bluepigeon.admin.data.ProjectWeightageData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AreaUnit;
 import org.bluepigeon.admin.model.BuilderBuilding;
@@ -43,26 +49,32 @@ import org.bluepigeon.admin.model.BuildingImageGallery;
 import org.bluepigeon.admin.model.BuildingOfferInfo;
 import org.bluepigeon.admin.model.BuildingPanoramicImage;
 import org.bluepigeon.admin.model.BuildingPaymentInfo;
+import org.bluepigeon.admin.model.BuildingWeightage;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
 import org.bluepigeon.admin.model.FlatAmenityWeightage;
 import org.bluepigeon.admin.model.FlatImageGallery;
 import org.bluepigeon.admin.model.FlatPanoramicImage;
 import org.bluepigeon.admin.model.FlatPaymentSchedule;
 import org.bluepigeon.admin.model.FlatTypeImage;
+import org.bluepigeon.admin.model.FlatWeightage;
 import org.bluepigeon.admin.model.FloorAmenityInfo;
 import org.bluepigeon.admin.model.FloorAmenityWeightage;
 import org.bluepigeon.admin.model.FloorLayoutImage;
 import org.bluepigeon.admin.model.FloorImageGallery;
 import org.bluepigeon.admin.model.FloorPanoramicImage;
+import org.bluepigeon.admin.model.FloorWeightage;
 import org.bluepigeon.admin.model.NewProject;
 import org.bluepigeon.admin.model.ProjectAmenityWeightage;
 import org.bluepigeon.admin.model.ProjectImageGallery;
 import org.bluepigeon.admin.model.ProjectPanoramicImage;
+import org.bluepigeon.admin.model.ProjectStage;
+import org.bluepigeon.admin.model.ProjectWeightage;
 import org.bluepigeon.admin.model.Tax;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.transform.Transformers;
 
 
 public class ProjectDAO {
@@ -2874,4 +2886,384 @@ public class ProjectDAO {
 		
 		return totalInventory;
 	}
+	
+	/* **************************** Stages / Substages **************************** */
+	
+	public List<ProjectWeightage> getProjectWeightage(int project_id) {
+		String hql = "from ProjectWeightage where builderProject.id = :project_id order by projectStage.id ASC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", project_id);
+		List<ProjectWeightage> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public ResponseMessage updateProjectSubstage(ProjectWeightageData projectWeightageData) {
+		ResponseMessage response = new ResponseMessage();
+		int project_id = projectWeightageData.getProjectId();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "delete from ProjectWeightage where builderProject.id = :id";
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", project_id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		for(ProjectWeightage projectWeightage :projectWeightageData.getProjectWeightages()) {
+			session1.save(projectWeightage);
+		}
+		session1.getTransaction().commit();
+		session1.close();
+		response.setStatus(1);
+		response.setMessage("Project substage updated successfully");
+		return response;
+	}
+	
+	public List<BuildingWeightage> getBuildingWeightage(int building_id) {
+		String hql = "from BuildingWeightage where builderBuilding.id = :building_id order by buildingStage.id ASC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuildingWeightage> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public ResponseMessage updateBuildingSubstage(BuildingWeightageData buildingWeightageData) {
+		ResponseMessage response = new ResponseMessage();
+		int building_id = buildingWeightageData.getBuildingId();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "delete from BuildingWeightage where builderBuilding.id = :id";
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", building_id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		for(BuildingWeightage buildingWeightage :buildingWeightageData.getBuildingWeightages()) {
+			session1.save(buildingWeightage);
+		}
+		session1.getTransaction().commit();
+		session1.close();
+		response.setStatus(1);
+		response.setMessage("Building substage updated successfully");
+		return response;
+	}
+	
+	public List<FloorWeightage> getFloorWeightage(int floor_id) {
+		String hql = "from FloorWeightage where builderFloor.id = :floor_id order by floorStage.id ASC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floor_id);
+		List<FloorWeightage> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public ResponseMessage updateFloorSubstage(FloorWeightageData floorWeightageData) {
+		ResponseMessage response = new ResponseMessage();
+		int floor_id = floorWeightageData.getFloorId();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "delete from FloorWeightage where builderFloor.id = :id";
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", floor_id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		for(FloorWeightage floorWeightage :floorWeightageData.getFloorWeightages()) {
+			session1.save(floorWeightage);
+		}
+		session1.getTransaction().commit();
+		session1.close();
+		response.setStatus(1);
+		response.setMessage("Floor substage updated successfully");
+		return response;
+	}
+	
+	public List<FlatWeightage> getFlatWeightage(int flat_id) {
+		String hql = "from FlatWeightage where builderFlat.id = :flat_id order by flatStage.id ASC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flat_id);
+		List<FlatWeightage> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public ResponseMessage updateFlatSubstage(FlatWeightageData flatWeightageData) {
+		ResponseMessage response = new ResponseMessage();
+		int flat_id = flatWeightageData.getFlatId();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "delete from FlatWeightage where builderFlat.id = :id";
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", flat_id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		for(FlatWeightage flatWeightage :flatWeightageData.getFlatWeightages()) {
+			session1.save(flatWeightage);
+		}
+		session1.getTransaction().commit();
+		session1.close();
+		response.setStatus(1);
+		response.setMessage("Flat substage updated successfully");
+		return response;
+	}
+	
+	public ResponseMessage updateProjectWeightageStatus(List<ProjectWeightage> projectWeightages, int project_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		String hql1 = "UPDATE ProjectWeightage set status = 0 where builderProject.id = :project_id";
+		Query query1 = session1.createQuery(hql1);
+		query1.setParameter("project_id", project_id);
+		query1.executeUpdate();
+		session1.getTransaction().commit();
+		session1.close();
+		Session session = hibernateUtil.openSession();
+		for(ProjectWeightage projectWeightage :projectWeightages) {
+			session.beginTransaction();
+			String hql = "UPDATE ProjectWeightage set status=1 where id = :id";
+			Query query = session.createQuery(hql);
+			query.setParameter("id", projectWeightage.getId());
+			query.executeUpdate();
+			session.getTransaction().commit();
+		}
+		session.close();
+		resp.setMessage("Project stage status updated.");
+		resp.setStatus(1);
+		updateProjectCompletion(project_id);
+		return resp;
+	}
+	
+	public ResponseMessage updateBuildingWeightageStatus(List<BuildingWeightage> buildingWeightages, int building_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		String hql1 = "UPDATE BuildingWeightage set status = 0 where builderBuilding.id = :building_id";
+		Query query1 = session1.createQuery(hql1);
+		query1.setParameter("building_id", building_id);
+		query1.executeUpdate();
+		session1.getTransaction().commit();
+		session1.close();
+		Session session = hibernateUtil.openSession();
+		for(BuildingWeightage buildingWeightage :buildingWeightages) {
+			session.beginTransaction();
+			String hql = "UPDATE BuildingWeightage set status=1 where id = :id";
+			Query query = session.createQuery(hql);
+			query.setParameter("id", buildingWeightage.getId());
+			query.executeUpdate();
+			session.getTransaction().commit();
+		}
+		session.close();
+		resp.setMessage("Building stage status updated.");
+		resp.setStatus(1);
+		updateBuildingCompletion(building_id);
+		return resp;
+	}
+	
+	public ResponseMessage updateFloorWeightageStatus(List<FloorWeightage> floorWeightages, int floor_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		String hql1 = "UPDATE FloorWeightage set status = 0 where builderFloor.id = :floor_id";
+		Query query1 = session1.createQuery(hql1);
+		query1.setParameter("floor_id", floor_id);
+		query1.executeUpdate();
+		session1.getTransaction().commit();
+		session1.close();
+		Session session = hibernateUtil.openSession();
+		for(FloorWeightage floorWeightage :floorWeightages) {
+			session.beginTransaction();
+			String hql = "UPDATE FloorWeightage set status=1 where id = :id";
+			Query query = session.createQuery(hql);
+			query.setParameter("id", floorWeightage.getId());
+			query.executeUpdate();
+			session.getTransaction().commit();
+		}
+		session.close();
+		resp.setMessage("Floor stage status updated.");
+		resp.setStatus(1);
+		updateFloorCompletion(floor_id);
+		return resp;
+	}
+	
+	public ResponseMessage updateFlatWeightageStatus(List<FlatWeightage> flatWeightages, int flat_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		String hql1 = "UPDATE FlatWeightage set status = 0 where builderFlat.id = :flat_id";
+		Query query1 = session1.createQuery(hql1);
+		query1.setParameter("flat_id", flat_id);
+		query1.executeUpdate();
+		session1.getTransaction().commit();
+		session1.close();
+		Session session = hibernateUtil.openSession();
+		for(FlatWeightage flatWeightage :flatWeightages) {
+			session.beginTransaction();
+			String hql = "UPDATE FlatWeightage set status=1 where id = :id";
+			Query query = session.createQuery(hql);
+			query.setParameter("id", flatWeightage.getId());
+			query.executeUpdate();
+			session.getTransaction().commit();
+		}
+		session.close();
+		resp.setMessage("Flat stage status updated.");
+		resp.setStatus(1);
+		updateFlatCompletion(flat_id);
+		return resp;
+	}
+	
+	public ResponseMessage updateFlatCompletion(int flat_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from flat_weightage as a where a.flat_id = "+flat_id+" group by a.stage_id";
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql)
+				.setResultTransformer(Transformers.aliasToBean(FlatTotal.class));
+		List<FlatTotal> resultRaw = query.list();
+		session.close();
+		Double finalWeightage = 0.0;
+		Double percent = 100.00;
+		for(FlatTotal flatTotal :resultRaw) {
+			finalWeightage += (flatTotal.getTotalSubstageWeight()/percent*flatTotal.getStageWeight());
+		}
+		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from flat_amenity_weightage as a where a.flat_id = "+flat_id+" group by a.amenity_id";
+		Session session2 = hibernateUtil.getSessionFactory().openSession();
+		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
+		List<FlatAmenityTotal> resultRaw2 = query2.list();
+		session2.close();
+		for(FlatAmenityTotal flatAmenityTotal :resultRaw2) {
+			finalWeightage += (flatAmenityTotal.getTotalSubstageWeightage()/percent*flatAmenityTotal.getAmenityWeightage());
+		}
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		String hql1 = "UPDATE BuilderFlat set completionStatus = "+finalWeightage+" where id = "+flat_id;
+		Query query1 = session1.createQuery(hql1);
+		query1.executeUpdate();
+		session1.getTransaction().commit();
+		session1.close();
+		return resp;
+	}
+	
+	public ResponseMessage updateFloorCompletion(int floor_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from floor_weightage as a where a.floor_id = "+floor_id+" group by a.stage_id";
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql)
+				.setResultTransformer(Transformers.aliasToBean(FlatTotal.class));
+		List<FlatTotal> resultRaw = query.list();
+		session.close();
+		Double finalWeightage = 0.0;
+		Double percent = 100.00;
+		for(FlatTotal flatTotal :resultRaw) {
+			finalWeightage += (flatTotal.getTotalSubstageWeight()/percent*flatTotal.getStageWeight());
+		}
+		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from floor_amenity_weightage as a where a.floor_id = "+floor_id+" group by a.amenity_id";
+		Session session2 = hibernateUtil.getSessionFactory().openSession();
+		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
+		List<FlatAmenityTotal> resultRaw2 = query2.list();
+		session2.close();
+		for(FlatAmenityTotal flatAmenityTotal :resultRaw2) {
+			finalWeightage += (flatAmenityTotal.getTotalSubstageWeightage()/percent*flatAmenityTotal.getAmenityWeightage());
+		}
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		String hql1 = "UPDATE BuilderFloor set completionStatus = "+finalWeightage+" where id = "+floor_id;
+		Query query1 = session1.createQuery(hql1);
+		query1.executeUpdate();
+		session1.getTransaction().commit();
+		session1.close();
+		return resp;
+	}
+	
+	public ResponseMessage updateBuildingCompletion(int building_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from building_weightage as a where a.building_id = "+building_id+" group by a.stage_id";
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql)
+				.setResultTransformer(Transformers.aliasToBean(FlatTotal.class));
+		List<FlatTotal> resultRaw = query.list();
+		session.close();
+		Double finalWeightage = 0.0;
+		Double percent = 100.00;
+		for(FlatTotal flatTotal :resultRaw) {
+			finalWeightage += (flatTotal.getTotalSubstageWeight()/percent*flatTotal.getStageWeight());
+		}
+		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from building_amenity_weightage as a where a.building_id = "+building_id+" group by a.amenity_id";
+		Session session2 = hibernateUtil.getSessionFactory().openSession();
+		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
+		List<FlatAmenityTotal> resultRaw2 = query2.list();
+		session2.close();
+		for(FlatAmenityTotal flatAmenityTotal :resultRaw2) {
+			finalWeightage += (flatAmenityTotal.getTotalSubstageWeightage()/percent*flatAmenityTotal.getAmenityWeightage());
+		}
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		String hql1 = "UPDATE BuilderBuilding set completionStatus = "+finalWeightage+" where id = "+building_id;
+		Query query1 = session1.createQuery(hql1);
+		query1.executeUpdate();
+		session1.getTransaction().commit();
+		session1.close();
+		return resp;
+	}
+	
+	public ResponseMessage updateProjectCompletion(int project_id) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from project_weightage as a where a.project_id = "+project_id+" group by a.stage_id";
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql)
+				.setResultTransformer(Transformers.aliasToBean(FlatTotal.class));
+		List<FlatTotal> resultRaw = query.list();
+		session.close();
+		Double finalWeightage = 0.0;
+		Double percent = 100.00;
+		for(FlatTotal flatTotal :resultRaw) {
+			finalWeightage += (flatTotal.getTotalSubstageWeight()/percent*flatTotal.getStageWeight());
+		}
+		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from project_amenity_weightage as a where a.project_id = "+project_id+" group by a.amenity_id";
+		Session session2 = hibernateUtil.getSessionFactory().openSession();
+		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
+		List<FlatAmenityTotal> resultRaw2 = query2.list();
+		session2.close();
+		for(FlatAmenityTotal flatAmenityTotal :resultRaw2) {
+			finalWeightage += (flatAmenityTotal.getTotalSubstageWeightage()/percent*flatAmenityTotal.getAmenityWeightage());
+		}
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		String hql1 = "UPDATE BuilderProject set completionStatus = "+finalWeightage+" where id = "+project_id;
+		Query query1 = session1.createQuery(hql1);
+		query1.executeUpdate();
+		session1.getTransaction().commit();
+		session1.close();
+		return resp;
+	}
+	
+	
 }
