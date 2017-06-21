@@ -105,4 +105,14 @@ public class FloorStageDAO {
 		session.close();
 		return result.get(0);
 	}
+	
+	public List<FloorStage> getActiveFloorStages() {
+		String hql = "from FloorStage where status = 1 and is_deleted = 0 order by name ASC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<FloorStage> result = query.list();
+		session.close();
+		return result;
+	}
 }

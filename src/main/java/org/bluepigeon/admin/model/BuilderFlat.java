@@ -4,15 +4,19 @@ package org.bluepigeon.admin.model;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -36,6 +40,7 @@ public class BuilderFlat implements java.io.Serializable {
 	private Double totalInventory;
 	private Double inventorySold;
 	private Double revenue;
+	private Double completionStatus = 0.0;
 	private Date possessionDate;
 	private Byte status;
 	private Set<BuilderLead> builderLeads = new HashSet<BuilderLead>(0);
@@ -46,7 +51,7 @@ public class BuilderFlat implements java.io.Serializable {
 	public BuilderFlat(BuilderFlatType builderFlatType, AdminUser adminUser, BuilderFloor builderFloor,
 			BuilderFlatStatus builderFlatStatus, String flatNo, Integer bedroom, Integer bathroom, Integer balcony,
 			Double totalInventory, Double inventorySold, Double revenue, Date possessionDate, Byte status,
-			Set<BuilderLead> builderLeads) {
+			Set<BuilderLead> builderLeads, Double completionStatus) {
 		this.builderFlatType = builderFlatType;
 		this.adminUser = adminUser;
 		this.builderFloor = builderFloor;
@@ -58,11 +63,18 @@ public class BuilderFlat implements java.io.Serializable {
 		this.totalInventory = totalInventory;
 		this.inventorySold = inventorySold;
 		this.revenue = revenue;
+		this.completionStatus = completionStatus;
 		this.possessionDate = possessionDate;
 		this.status = status;
 		this.builderLeads = builderLeads;
 	}
-
+	
+	@PrePersist
+	public void prePersist() {
+	    if(completionStatus == null) 
+	    	completionStatus = 0.0;
+	}
+	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 
@@ -205,5 +217,16 @@ public class BuilderFlat implements java.io.Serializable {
 	public void setBuilderLeads(Set<BuilderLead> builderLeads) {
 		this.builderLeads = builderLeads;
 	}
+
+	@Column(name = "completion_status", columnDefinition = "Decimal(10,2) default '100.00'")
+	public Double getCompletionStatus() {
+		return this.completionStatus;
+	}
+
+	public void setCompletionStatus(Double completionStatus) {
+		this.completionStatus = completionStatus;
+	}
+	
+	
 
 }

@@ -3,11 +3,14 @@ package org.bluepigeon.admin.model;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -74,7 +77,7 @@ public class ProjectStage implements java.io.Serializable {
 		this.isDeleted = isDeleted;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "projectStage")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "projectStage")
 	public Set<ProjectSubstage> getProjectSubstages() {
 		return this.projectSubstages;
 	}

@@ -32,6 +32,9 @@
 <%@page import="org.bluepigeon.admin.model.BuilderProjectPaymentInfo"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectOfferInfo"%>
 <%@page import="org.bluepigeon.admin.model.ProjectAmenityWeightage"%>
+<%@page import="org.bluepigeon.admin.model.ProjectStage"%>
+<%@page import="org.bluepigeon.admin.model.ProjectSubstage"%>
+<%@page import="org.bluepigeon.admin.model.ProjectWeightage"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
@@ -51,6 +54,8 @@
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectPaymentInfoDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectOfferInfoDAO"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectStageDAO"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectSubstagesDAO"%>
 <%@include file="../../head.jsp"%>
 <%@include file="../../leftnav.jsp"%>
 <%
@@ -95,6 +100,8 @@
 	if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
 		taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
 	}
+	List<ProjectStage> projectStages = new ProjectStageDAO().getActiveProjectStages();
+	List<ProjectWeightage> projectWeightages = new ProjectDAO().getProjectWeightage(project_id);
 	
 %>
 <div class="main-content">
@@ -121,6 +128,7 @@
 			  	<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
 <!-- 			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li> -->
 			  	<li><a data-toggle="tab" href="#offer">Offers</a></li>
+			  	<li><a data-toggle="tab" href="#productsubstage">Stage/Substage</a></li>
 			</ul>
 			<div class="tab-content">
 			  	<div id="basic" class="tab-pane fade in active">
@@ -1043,6 +1051,69 @@
 						</div>
 					</form>
 				</div>
+				<div id="productsubstage" class="tab-pane fade">
+					<form id="subpfrm" name="subpfrm" method="post">
+			 			<div class="row">
+							<div class="col-lg-12">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div id="offer_area">
+											<div class="row">
+												<div class="col-lg-12 margin-bottom-5">
+													<div class="form-group" id="error-amenity_type">
+														<div class="col-sm-12">
+															<% 	for(ProjectStage projectStage :projectStages) { 
+																Double stage_wt = 0.0;
+																for(ProjectWeightage projectWeightage :projectWeightages) {
+																	if(projectStage.getId() == projectWeightage.getProjectStage().getId()) {
+																		stage_wt = projectWeightage.getStageWeightage();
+																	}
+																}
+															%>
+															<fieldset class="scheduler-border">
+																<legend class="scheduler-border">Stages</legend>
+																<div class="col-sm-12">
+																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(projectStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage[]" id="<% out.print(projectStage.getId());%>" type="text" class="form-control" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																	<fieldset class="scheduler-border" style="margin-bottom:0px !important">
+																		<legend class="scheduler-border">Sub Stages</legend>
+																	<% 	for(ProjectSubstage projectSubstage :projectStage.getProjectSubstages()) { 
+																		Double substage_wt = 0.0;
+																		for(ProjectWeightage projectWeightage :projectWeightages) {
+																			if(projectSubstage.getId() == projectWeightage.getProjectSubstage().getId()) {
+																				substage_wt = projectWeightage.getSubstageWeightage();
+																			}
+																		}
+																	%>
+																		<div class="col-sm-3">
+																			<% out.print(projectSubstage.getName()); %> (%)<br>
+																			<input type="number" name="substage_weightage<% out.print(projectStage.getId());%>[]" id="<% out.print(projectSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																		</div>
+																	<% } %>
+																	</fieldset>
+																</div>
+															</fieldset>
+															<% } %>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div>
+											<div class="row">
+												<div class="col-lg-12">
+													<div class="col-sm-12">
+														<button type="button" class="btn btn-success btn-sm" id="subpbtn">SAVE</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 			<br> <br>
 		</div>
@@ -1683,6 +1754,39 @@ function addMoreSchedule() {
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();
 }
+
+$("#subpbtn").click(function(){
+	var amenityWeightage = [];
+	$('input[name="stage_weightage[]"]').each(function() {
+		stage_id = $(this).attr("id");
+		stage_weightage = $(this).val();
+		$('input[name="substage_weightage'+stage_id+'[]"]').each(function() {
+			amenityWeightage.push({builderProject:{id:$("#id").val()},projectStage:{id:stage_id},stageWeightage:stage_weightage,projectSubstage:{id:$(this).attr("id")},substageWeightage:$(this).val(),status:false});
+		});
+	});
+	var final_data = {projectId: $("#id").val(),projectWeightages:amenityWeightage}
+	$.ajax({
+	    url: '${baseUrl}/webapi/project/substage/update',
+	    type: 'POST',
+	    data: JSON.stringify(final_data),
+	    contentType: 'application/json; charset=utf-8',
+	    dataType: 'json',
+	    async: false,
+	    success: function(data) {
+			if (data.status == 0) {
+				alert(data.message);
+			} else {
+				alert(data.message);
+			}
+		},
+		error : function(data)
+		{
+			alert("Fail to save data");
+		}
+		
+	});
+});
+
 
 </script>
 </body>

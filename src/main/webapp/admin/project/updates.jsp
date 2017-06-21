@@ -7,6 +7,9 @@
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.model.Country"%>
 <%@page import="org.bluepigeon.admin.model.ProjectAmenityWeightage"%>
+<%@page import="org.bluepigeon.admin.model.ProjectStage"%>
+<%@page import="org.bluepigeon.admin.model.ProjectSubstage"%>
+<%@page import="org.bluepigeon.admin.model.ProjectWeightage"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
@@ -21,6 +24,7 @@
 	List<ProjectAmenityWeightage> amenityWeightages = new ArrayList<ProjectAmenityWeightage>();
 	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>();
 	List<ProjectPanoramicImage> panoromicImages = new ArrayList<ProjectPanoramicImage>();
+	List<ProjectWeightage> projectWeightages = new ArrayList<ProjectWeightage>();
 	int p_user_id = 0;
 	int project_id = 0;
 	if(session!=null)
@@ -36,6 +40,7 @@
 		amenityWeightages = new ProjectDAO().getProjectAmenityWeightageByProjectId(project_id);
 		imageGaleries = new ProjectDAO().getProjectImagesByProjectId(project_id);
 		panoromicImages = new ProjectDAO().getProjectPanoromicImagesByProjectId(project_id);
+		projectWeightages = new ProjectDAO().getProjectWeightage(project_id);
 	}
 %>
 <div class="main-content">
@@ -69,7 +74,7 @@
 									<div class="row">
 										<div class="col-lg-12 margin-bottom-5">
 											<div class="form-group" id="error-name">
-												<label class="control-label col-sm-12">Amenities <span class='text-danger'>*</span></label>
+												<label class="control-label col-sm-12"><b>Amenities</b> <span class='text-danger'>*</span></label>
 												<div class="col-sm-12">
 													<% 	
 													int amenity_id = 0;
@@ -110,6 +115,39 @@
 																	</div>
 																</div>
 															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<hr/>
+									<div class="row">
+										<div class="col-lg-12 margin-bottom-5">
+											<div class="form-group" id="error-name">
+												<label class="control-label col-sm-12"><b>Stages/Substages</b> <span class='text-danger'>*</span></label>
+												<div class="col-sm-12">
+													<% 	
+													int sstage_id = 0;
+													for(ProjectWeightage projectWeightage :projectWeightages) { 
+														String is_checked = "";
+													%>
+													<% if(sstage_id == 0 || sstage_id != projectWeightage.getProjectStage().getId()) { %>
+													<% if(sstage_id != 0) {%>
+														</div>
+													</div>
+													<% } %>
+																<div class="row">
+																	<label class="control-label col-sm-3" style="padding-top:5px;"><strong><% out.print(projectWeightage.getProjectStage().getName());%></strong></label>
+																	<div class="col-sm-9">
+													<% } %>
+																		<div class="col-sm-4">
+																			<input type="checkbox" name="ssubstagewt_id[]" value="<% out.print(projectWeightage.getId());%>" <% if(projectWeightage.getStatus()) { %>checked<% } %>/> <% out.print(projectWeightage.getProjectSubstage().getName());%>
+																		</div>
+													<% 
+													sstage_id = projectWeightage.getProjectStage().getId();
+													} 
+													%>
 														</div>
 													</div>
 												</div>

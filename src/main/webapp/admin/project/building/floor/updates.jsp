@@ -7,6 +7,9 @@
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.model.Country"%>
 <%@page import="org.bluepigeon.admin.model.FloorAmenityWeightage"%>
+<%@page import="org.bluepigeon.admin.model.FloorStage"%>
+<%@page import="org.bluepigeon.admin.model.FloorSubstage"%>
+<%@page import="org.bluepigeon.admin.model.FloorWeightage"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
@@ -18,6 +21,7 @@
 	List<FloorAmenityWeightage> amenityWeightages = new ArrayList<FloorAmenityWeightage>();
 	List<FloorImageGallery> imageGaleries = new ArrayList<FloorImageGallery>();
 	List<FloorPanoramicImage> panoromicImages = new ArrayList<FloorPanoramicImage>();
+	List<FloorWeightage> floorWeightages = new ArrayList<FloorWeightage>();
 	int p_user_id = 0;
 	int floor_id = 0;
 	if(session!=null)
@@ -33,6 +37,7 @@
 		amenityWeightages = new ProjectDAO().getFloorAmenityWeightages(floor_id);
 		imageGaleries = new ProjectDAO().getAllFloorImagesById(floor_id);
 		panoromicImages = new ProjectDAO().getFloorPanoImagesByFloodId(floor_id);
+		floorWeightages = new ProjectDAO().getFloorWeightage(floor_id);
 	}
 %>
 <div class="main-content">
@@ -107,6 +112,39 @@
 																	</div>
 																</div>
 															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<hr/>
+									<div class="row">
+										<div class="col-lg-12 margin-bottom-5">
+											<div class="form-group" id="error-name">
+												<label class="control-label col-sm-12"><b>Stages/Substages</b> <span class='text-danger'>*</span></label>
+												<div class="col-sm-12">
+													<% 	
+													int sstage_id = 0;
+													for(FloorWeightage floorWeightage :floorWeightages) { 
+														String is_checked = "";
+													%>
+													<% if(sstage_id == 0 || sstage_id != floorWeightage.getFloorStage().getId()) { %>
+													<% if(sstage_id != 0) {%>
+														</div>
+													</div>
+													<% } %>
+																<div class="row">
+																	<label class="control-label col-sm-3" style="padding-top:5px;"><strong><% out.print(floorWeightage.getFloorStage().getName());%></strong></label>
+																	<div class="col-sm-9">
+													<% } %>
+																		<div class="col-sm-4">
+																			<input type="checkbox" name="ssubstagewt_id[]" value="<% out.print(floorWeightage.getId());%>" <% if(floorWeightage.getStatus()) { %>checked<% } %>/> <% out.print(floorWeightage.getFloorSubstage().getName());%>
+																		</div>
+													<% 
+													sstage_id = floorWeightage.getFloorStage().getId();
+													} 
+													%>
 														</div>
 													</div>
 												</div>

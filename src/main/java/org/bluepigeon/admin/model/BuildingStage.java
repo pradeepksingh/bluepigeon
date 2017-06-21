@@ -74,7 +74,7 @@ public class BuildingStage implements java.io.Serializable {
 		this.isDeleted = isDeleted;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "buildingStage")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "buildingStage")
 	public Set<BuildingSubstage> getBuildingSubstages() {
 		return this.buildingSubstages;
 	}

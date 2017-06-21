@@ -6,8 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -20,22 +18,23 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.bluepigeon.admin.dao.BuilderCompanyDAO;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
-import org.bluepigeon.admin.dao.CityNamesImp;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
-import org.bluepigeon.admin.dao.StateImp;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingList;
+import org.bluepigeon.admin.data.BuildingWeightageData;
+import org.bluepigeon.admin.data.FlatWeightageData;
 import org.bluepigeon.admin.data.FloorData;
+import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.LocalityData;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectDetail;
 import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.data.ProjectOffer;
 import org.bluepigeon.admin.data.ProjectPaymentSchedule;
+import org.bluepigeon.admin.data.ProjectWeightageData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
 import org.bluepigeon.admin.model.AreaUnit;
@@ -72,6 +71,7 @@ import org.bluepigeon.admin.model.BuildingOfferInfo;
 import org.bluepigeon.admin.model.BuildingPanoramicImage;
 import org.bluepigeon.admin.model.BuildingPaymentInfo;
 import org.bluepigeon.admin.model.BuilderPropertyType;
+import org.bluepigeon.admin.model.BuildingWeightage;
 import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
@@ -80,16 +80,19 @@ import org.bluepigeon.admin.model.FlatImageGallery;
 import org.bluepigeon.admin.model.FlatPanoramicImage;
 import org.bluepigeon.admin.model.FlatPaymentSchedule;
 import org.bluepigeon.admin.model.FlatTypeImage;
+import org.bluepigeon.admin.model.FlatWeightage;
 import org.bluepigeon.admin.model.FloorAmenityInfo;
 import org.bluepigeon.admin.model.FloorAmenityWeightage;
 import org.bluepigeon.admin.model.FloorImageGallery;
 import org.bluepigeon.admin.model.FloorLayoutImage;
 import org.bluepigeon.admin.model.FloorPanoramicImage;
+import org.bluepigeon.admin.model.FloorWeightage;
 import org.bluepigeon.admin.model.Locality;
 import org.bluepigeon.admin.model.NewProject;
 import org.bluepigeon.admin.model.ProjectAmenityWeightage;
 import org.bluepigeon.admin.model.ProjectImageGallery;
 import org.bluepigeon.admin.model.ProjectPanoramicImage;
+import org.bluepigeon.admin.model.ProjectWeightage;
 import org.bluepigeon.admin.model.Source;
 import org.bluepigeon.admin.model.State;
 import org.bluepigeon.admin.service.ImageUploader;
@@ -368,6 +371,7 @@ public class ProjectController extends ResourceConfig {
 	public ResponseMessage addBuildingInfo (
 			@FormDataParam("project_id") int project_id,
 			@FormDataParam("substagewt_id[]") List<FormDataBodyPart> substagewt_id,
+			@FormDataParam("ssubstagewt_id[]") List<FormDataBodyPart> ssubstagewt_id,
 			@FormDataParam("project_image[]") List<FormDataBodyPart> project_images,
 			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
 			@FormDataParam("admin_id") int admin_id
@@ -386,6 +390,16 @@ public class ProjectController extends ResourceConfig {
 		}
 		if(projectAmenityWeightages.size() > 0) {
 			msg = projectDAO.updateProjectAmenityWeightage(projectAmenityWeightages, project_id);
+		}
+		List<ProjectWeightage> projectWeightages = new ArrayList<ProjectWeightage>();
+		for(int i=0 ;i < ssubstagewt_id.size();i++) {
+			ProjectWeightage paw = new ProjectWeightage();
+			paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
+			paw.setStatus(bstatus);
+			projectWeightages.add(paw);
+		}
+		if(projectWeightages.size() > 0) {
+			msg = projectDAO.updateProjectWeightageStatus(projectWeightages, project_id);
 		}
 		
 		try {	
@@ -1077,6 +1091,7 @@ public class ProjectController extends ResourceConfig {
 	public ResponseMessage updateBuildingStatus (
 			@FormDataParam("building_id") int building_id,
 			@FormDataParam("substagewt_id[]") List<FormDataBodyPart> substagewt_id,
+			@FormDataParam("ssubstagewt_id[]") List<FormDataBodyPart> ssubstagewt_id,
 			@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
 			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
 			@FormDataParam("admin_id") int admin_id
@@ -1095,6 +1110,17 @@ public class ProjectController extends ResourceConfig {
 		}
 		if(buildingAmenityWeightages.size() > 0) {
 			msg = projectDAO.updateBuildingAmenityWeightage(buildingAmenityWeightages, building_id);
+		}
+		
+		List<BuildingWeightage> buildingWeightages = new ArrayList<BuildingWeightage>();
+		for(int i=0 ;i < ssubstagewt_id.size();i++) {
+			BuildingWeightage paw = new BuildingWeightage();
+			paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
+			paw.setStatus(bstatus);
+			buildingWeightages.add(paw);
+		}
+		if(buildingWeightages.size() > 0) {
+			msg = projectDAO.updateBuildingWeightageStatus(buildingWeightages, building_id);
 		}
 		
 		try {	
@@ -1439,6 +1465,7 @@ public class ProjectController extends ResourceConfig {
 	public ResponseMessage updateFloorStatus (
 			@FormDataParam("floor_id") int floor_id,
 			@FormDataParam("substagewt_id[]") List<FormDataBodyPart> substagewt_id,
+			@FormDataParam("ssubstagewt_id[]") List<FormDataBodyPart> ssubstagewt_id,
 			@FormDataParam("floor_image[]") List<FormDataBodyPart> building_images,
 			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
 			@FormDataParam("admin_id") int admin_id
@@ -1457,6 +1484,17 @@ public class ProjectController extends ResourceConfig {
 		}
 		if(floorAmenityWeightages.size() > 0) {
 			msg = projectDAO.updateFloorAmenityWeightage(floorAmenityWeightages, floor_id);
+		}
+		
+		List<FloorWeightage> floorWeightages = new ArrayList<FloorWeightage>();
+		for(int i=0 ;i < ssubstagewt_id.size();i++) {
+			FloorWeightage paw = new FloorWeightage();
+			paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
+			paw.setStatus(bstatus);
+			floorWeightages.add(paw);
+		}
+		if(floorWeightages.size() > 0) {
+			msg = projectDAO.updateFloorWeightageStatus(floorWeightages, floor_id);
 		}
 		
 		try {	
@@ -2124,6 +2162,7 @@ public class ProjectController extends ResourceConfig {
 	public ResponseMessage updateFlatStatus (
 			@FormDataParam("flat_id") int flat_id,
 			@FormDataParam("substagewt_id[]") List<FormDataBodyPart> substagewt_id,
+			@FormDataParam("ssubstagewt_id[]") List<FormDataBodyPart> ssubstagewt_id,
 			@FormDataParam("flat_image[]") List<FormDataBodyPart> building_images,
 			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
 			@FormDataParam("admin_id") int admin_id
@@ -2142,6 +2181,17 @@ public class ProjectController extends ResourceConfig {
 		}
 		if(flatAmenityWeightages.size() > 0) {
 			msg = projectDAO.updateFlatAmenityWeightage(flatAmenityWeightages, flat_id);
+		}
+		
+		List<FlatWeightage> flatWeightages = new ArrayList<FlatWeightage>();
+		for(int i=0 ;i < ssubstagewt_id.size();i++) {
+			FlatWeightage paw = new FlatWeightage();
+			paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
+			paw.setStatus(bstatus);
+			flatWeightages.add(paw);
+		}
+		if(flatWeightages.size() > 0) {
+			msg = projectDAO.updateFlatWeightageStatus(flatWeightages, flat_id);
 		}
 		
 		try {	
@@ -2457,6 +2507,42 @@ public class ProjectController extends ResourceConfig {
 	}
 	
 	@POST
+	@Path("/substage/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateProjectSubstage(ProjectWeightageData projectWeightageData) {
+		ResponseMessage resp = new ProjectDAO().updateProjectSubstage(projectWeightageData); 
+		return resp;
+	}
+	
+	@POST
+	@Path("/building/substage/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateBuildingSubstage(BuildingWeightageData buildingWeightageData) {
+		ResponseMessage resp = new ProjectDAO().updateBuildingSubstage(buildingWeightageData); 
+		return resp;
+	}
+	
+	@POST
+	@Path("/floor/substage/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateFloorSubstage(FloorWeightageData floorWeightageData) {
+		ResponseMessage resp = new ProjectDAO().updateFloorSubstage(floorWeightageData); 
+		return resp;
+	}
+	
+	@POST
+	@Path("/flat/substage/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateFlatSubstage(FlatWeightageData flatWeightageData) {
+		ResponseMessage resp = new ProjectDAO().updateFlatSubstage(flatWeightageData); 
+		return resp;
+	}
+	
+	@POST
 	@Path("/source/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -2476,4 +2562,6 @@ public class ProjectController extends ResourceConfig {
 		
 		return responseMessage;
 	}
+	
 }
+
