@@ -9,6 +9,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%
+	List<Buyer> buyerList = null;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	int builder_id = 0;
@@ -18,9 +19,10 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
+			buyerList = new BuyerDAO().getAllBuyerByBuilderId(builder_id);
 		}
    }
-	List<Buyer> buyerList = new BuyerDAO().getAllBuyerByBuilderId(builder_id);
+	
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -145,7 +147,8 @@
                                        		<td><% out.print(buyer.getMobile()); %></td>
                                        		<td><% out.print(buyer.getBuilderBuilding().getName()); %></td>
                                        		<td><% out.print(buyer.getBuilderFlat().getFlatNo()); %></td>
-                                       		<td><a href="${baseUrl}/builder/buyer/edit.jsp?flat_id=<% out.print(buyer.getBuilderFlat().getId()); %>" class="btn btn11 btn-success waves-effect waves-light m-t-10">Manage</a></td>
+                                       		<td>
+                                       		<a href="${baseUrl}/builder/buyer/edit.jsp?flat_id=<% out.print(buyer.getBuilderFlat().getId()); %>"> <span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a></td>
                                        		</tr>
                                        <% i++;}
                                        }%>

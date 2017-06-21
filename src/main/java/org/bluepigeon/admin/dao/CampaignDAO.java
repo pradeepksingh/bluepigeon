@@ -64,9 +64,9 @@ public class CampaignDAO {
 	 */
 	public List<BuyerBuildingList> getBuyerBuildingListByProjectId(int projectId){
 		List<BuyerBuildingList> buyerBuildingLists = new ArrayList<BuyerBuildingList>();
-		String hql = "from BuilderBuilding where builderProject.id = :project_id";
-		String buyerHql = "from Buyer where builderFlat.builderFloor.builderBuilding.id =:building_id";
-		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "from BuilderBuilding where builderProject.id = :project_id and status=1";
+		String buyerHql = "from Buyer where builderBuilding.id =:building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil(); 
 		Session session = hibernateUtil.openSession();
 		Session BuyerSession = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -82,9 +82,12 @@ public class CampaignDAO {
 			Buyer buyer2[] = new Buyer[buyers.size()];
 			for(int i=0;i<buyers.size();i++){
 				buyer2[i] = new Buyer();
-				buyer2[i].setId(buyers.get(i).getId());
-				buyer2[i].setName(buyers.get(i).getName());
-				buyerBuildingList.setBuyer(buyer2);
+				if(buyer2[i].getIsPrimary() && buyer2[i].getIsDeleted() == 0){
+					buyer2[i].setId(buyers.get(i).getId());
+					buyer2[i].setName(buyers.get(i).getName());
+					System.out.println("BuyerName ::: "+buyer2[i].getName());
+					buyerBuildingList.setBuyer(buyer2);
+				}
 			}
 			buyerBuildingLists.add(buyerBuildingList);
 		}
@@ -100,7 +103,7 @@ public class CampaignDAO {
 	 */
 	public List<BuyerFlatList> getBuyerFlatListByBuildingId(int buildingId){
 		List<BuyerFlatList> buyerFlatLists = new ArrayList<BuyerFlatList>();
-		String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id";
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id and status=1";
 		String buyerHql = "from Buyer where  builderFlat.id = :flat_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -118,9 +121,11 @@ public class CampaignDAO {
 			Buyer buyer[] = new Buyer[buyers.size()];
 			for(int i=0;i<buyers.size();i++){
 				buyer[i] = new Buyer();
-				buyer[i].setId(buyers.get(i).getId());
-				buyer[i].setName(buyers.get(i).getName());
-				buyerFlatList.setBuyer(buyer);
+				if(buyer[i].getIsPrimary() && buyer[i].getIsDeleted() == 0){
+					buyer[i].setId(buyers.get(i).getId());
+					buyer[i].setName(buyers.get(i).getName());
+					buyerFlatList.setBuyer(buyer);
+				}
 			}
 			buyerFlatLists.add(buyerFlatList);		
 		}
@@ -135,7 +140,7 @@ public class CampaignDAO {
 	 * @return list of buyers
 	 */
 	public List<Buyer> getBuyerbyFlatId(int flatId){
-		String hql ="from Buyer where builderFlat.id = :flat_id and is_deleted=0";
+		String hql ="from Buyer where builderFlat.id = :flat_id and is_deleted=0 and is_primary=1";
 		HibernateUtil hibernateUtil = new HibernateUtil(); 
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -144,9 +149,11 @@ public class CampaignDAO {
 		List<Buyer> buyerList = new ArrayList<Buyer>();
 		for(Buyer buyer: buyers){
 			Buyer b = new Buyer();
-			b.setId(buyer.getId());
-			b.setName(buyer.getName());
-			buyerList.add(b);
+			if(b.getIsPrimary()){
+				b.setId(buyer.getId());
+				b.setName(buyer.getName());
+				buyerList.add(b);
+			}
 		}
 		session.close();
 		return buyerList;

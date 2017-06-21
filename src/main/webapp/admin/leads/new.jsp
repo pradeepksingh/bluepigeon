@@ -233,8 +233,12 @@ $("#building_id").change(function(){
 		$("#flat_id").html(html);
 	},'json');
 });
-						
-				
+
+$("#email").keyUp(function(){
+	var th = $(this);
+	$th.val($th.val().replace(/[^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$]/g,function(str){return '';}));
+});
+	
 $('#addlead').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');

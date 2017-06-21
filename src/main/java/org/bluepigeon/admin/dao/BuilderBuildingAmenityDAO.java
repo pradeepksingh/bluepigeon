@@ -9,6 +9,9 @@ import org.bluepigeon.admin.data.BuildingAmenityList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AreaUnit;
 import org.bluepigeon.admin.model.BuilderBuildingAmenity;
+import org.bluepigeon.admin.model.BuilderLogo;
+import org.bluepigeon.admin.model.BuildingAmenityIcon;
+import org.bluepigeon.admin.model.ProjectAmenityIcon;
 import org.bluepigeon.admin.util.HibernateUtil;
 
 public class BuilderBuildingAmenityDAO {
@@ -48,6 +51,7 @@ public class BuilderBuildingAmenityDAO {
 				newsession.save(builderBuildingAmenity);
 				newsession.getTransaction().commit();
 				newsession.close();
+				response.setId(builderBuildingAmenity.getId());
 				response.setStatus(1);
 				response.setMessage("Building amenity Added Successfully");
 			}
@@ -55,6 +59,21 @@ public class BuilderBuildingAmenityDAO {
 		return response;
 	}
 
+	/**
+	 * Save building amenity icon
+	 * @author pankaj
+	 * @param buildingAmenityIcons
+	 */
+	public void saveBuildingAmenityIcon(List<BuildingAmenityIcon> buildingAmenityIcons){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(BuildingAmenityIcon buildingAmenityIcon : buildingAmenityIcons){
+			session.save(buildingAmenityIcon);
+		}
+		session.getTransaction().commit();
+		session.close();
+	}
 	public ResponseMessage update(BuilderBuildingAmenity builderBuildingAmenity) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -82,7 +101,36 @@ public class BuilderBuildingAmenityDAO {
 		}
 		return response;
 	}
-
+	public BuildingAmenityIcon getBuildingAmenityIconById(int amenityId){
+		BuildingAmenityIcon buildingAmenityIcon = null;
+		String hql = "from BuildingAmenityIcon where builderBuildingAmenity.id = :amenity_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("amenity_id", amenityId);
+		buildingAmenityIcon = (BuildingAmenityIcon) query.uniqueResult();
+		return buildingAmenityIcon;
+	}
+	
+	/**
+	 * Update building amenity icon
+	 * @author pankaj
+	 * @param buildingAmenityIcons
+	 */
+	public void updateBuildingAmenityIcon(List<BuildingAmenityIcon> buildingAmenityIcons){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "update BuildingAmenityIcon set iconUrl=:icon_url where id = :id";
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		for(BuildingAmenityIcon buildingAmenityIcon : buildingAmenityIcons){
+			query.setParameter("icon_url", buildingAmenityIcon.getIconUrl());
+			query.setParameter("id", buildingAmenityIcon.getId());
+			query.executeUpdate();
+		}
+		session.getTransaction().commit();
+		session.close();
+	}
 	public ResponseMessage delete(BuilderBuildingAmenity builderBuildingAmenity) {
 	/*	ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new org.bluepigeon.admin.util.HibernateUtil();

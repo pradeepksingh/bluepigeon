@@ -85,6 +85,13 @@
 									class="autosize-transition form-control"></textarea>
 							</div>
 						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right"
+								for="form-field-1" for="form-field-11">Builder Logo</label>
+							<div class="col-sm-4">
+								<input type="file" class="form-control" id="builder_logo" name="builder_logo[]" />
+							</div>
+						</div>
 						<hr>
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right"
@@ -98,7 +105,7 @@
 							<label class="col-sm-3 control-label no-padding-right"
 								for="form-field-1">Contact </label>
 							<div class="col-sm-9">
-								<input type="text" id="contact-1" name="contact[]"
+								<input type="text" id="ccontact-1" name="ccontact[]"
 									placeholder="Contact number" class="col-xs-10 col-sm-5" />
 							</div>
 						</div>
@@ -152,27 +159,14 @@ $("#hemail").keyup(function() {
 $('#cemail-'+batch_count).keyup(function() {
 	ValidateEmail($("#cemail-"+batch_count).val());
 });
-// $("#contact-"+batch_count).keyup(function(){
-// 	phnoValidation($("#contact-"+batch_count).val());
-// });
-// function phnoValidation(phval)
-// {
-// 	alert(phval);
-//    var b;
-//    b = phval;
-//     if (b.charCodeAt(0) == 57 && b.charCodeAt(1) == 56)
-//      {
-//        return true;
-//     }
-//     else if (b.charCodeAt(0) == 57 && b.charCodeAt(1) == 55)
-//     {
-//        alert("this number is acceptable");
-//         return true;
-//    }
-//     else
-//        alert("this number is not acceptable");
-//     return false;
-// }
+$('#hphno').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { return ''; } ) );
+});
+$('#ccontact-'+batch_count).keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { return ''; } ) );
+});
 	function ValidateEmail(email) {
         var expr = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
         return expr.test(email);
@@ -192,7 +186,7 @@ $('#cemail-'+batch_count).keyup(function() {
     	batch+='<div class="form-group">';
     	batch+='<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Contact </label>';
     	batch+='<div class="col-sm-9">';
-    	batch+='<input type="text" id="contact-'+batch_count+'" name="contact[]" placeholder="Contact number" class="col-xs-10 col-sm-5" />';
+    	batch+='<input type="text" id="ccontact-'+batch_count+'" name="ccontact[]" placeholder="Contact number" class="col-xs-10 col-sm-5" />';
     	batch+='</div>';
     	batch+='</div>';
     	batch+='<div class="form-group">';
@@ -204,81 +198,12 @@ $('#cemail-'+batch_count).keyup(function() {
     	$("#addCompanyName").append(batch);
     	
     	}	
-//     $("#saveBuilder").click(function(){
-//     	saveNewBuilder();
-//     })
-//     function saveNewBuilder(){
-//     	if($("#password").val() == $("#cpassword").val()){
-//     	company_names=getCompanyNames();
-//         var builder_data=getBuilderData();
-//     	var final_data=[];
-//     	final_data={builderCompanyNames:company_names,builder:builder_data};
-//     	$.ajax({
-// 		    url: '${baseUrl}/webapi/create/builder/new/save/',
-// 		    type: 'POST',
-// 		    data: JSON.stringify(final_data),
-// 		    contentType: 'application/json; charset=utf-8',
-// 		    dataType: 'json',
-// 		    async: false,
-// 		    success: function(data) {
-// 				if (data.status == 0) {
-// 					alert(data.message);
-					
-// 				} else {
-// 					alert(data.message);
-// 					 clearAllFields();
-// 					 window.location.href ="${baseUrl}/admin/project-settings/addbuilder.jsp";
-// 				}
-// 			},
-// 			error : function(data)
-// 			{
-// 				alert("Fail to save data"+JSON.stringify(data,null,2));
-// 			}
-			
-// 		});
-//       }
-//     	else{
-//     		alert("Password does not match with confirm password");
-//     	}
-//     }
-    
-//     function getBuilderData(){
-//     	if($("#builder_id").val()>0){
-//     		var  builder_info = {id:$("#builder_id").val(),name:$("#bname").val(),status:$("#status").val(),headOffice:$("#hoffice").val(),email:$("#hemail").val(),password:$("#password").val(),loginStatus:0,mobile:$("#hphno").val(),aboutBuilder:$("#abuilder").val()}
-//     	}else{
-//     		var  builder_info = {name:$("#bname").val(),status:$("#status").val(),headOffice:$("#hoffice").val(),email:$("#hemail").val(),mobile:$("#hphno").val(),password:$("#password").val(),loginStatus:0,aboutBuilder:$("#abuilder").val()}
-//     	}
-//     	return builder_info;
-//     }
-    
-//     function getCompanyNames(){
-//     	var contact_company=[];
-//     	var company;
-//   for(var i=1;i<=batch_count;i++){
-// 	  var cname="#cname-"+i;
-// 	  var ccontact="#contact-"+i;
-// 	  var cemail ="#email-"+i;
-// 	  if($("#cname-"+i).val()!="" || typeof $("#cname-"+i).val()!="undefined"){
-// 		  cname=$("#cname-"+i).val();
-// 	  }
-// 	   if($("#contact-"+i).val()!="" || typeof $("#contact-"+i).val()!="undefined"){
-		  
-// 		  ccontact=$("#contact-"+i).val();
-		
-// 	  }
-// 	   if($("#cemail-"+i).val()!="" || typeof $("#cemail-"+i).val()!="undefined"){
-// 		  cemail=$("#cemail-"+i).val();
-// 	  }
-// 	company ={name : cname, contact:ccontact,email:cemail}
-// 	  contact_company.push(company);  
-//   }
-//   return contact_company;
-// }
+
     
     function clearAllFields(){
     	 for(var i=1;i<=batch_count;i++){
     		 $("#cname-"+i).val("");
-    		 $("#contact-"+i).val("");
+    		 $("#ccontact-"+i).val("");
     		 $("#cemail-"+i).val("");
     	 }
     	 $("#bname").val("");
@@ -321,18 +246,26 @@ $('#cemail-'+batch_count).keyup(function() {
                 }
             },
             hphno: {
-                validators: {
-                    notEmpty: {
-                        message: 'Phone Number is required and cannot be empty'
-                    },
-                    max:10
-                }
+            	 validators: {
+                     notEmpty: {
+                         message: 'The Mobile is required.'
+                     },
+                     regexp: {
+                         regexp: '^[7-9][0-9]{9}$',
+                         message: 'Invalid Mobile Number'
+                     }
+                 }
             },
             hemail: {
-                validators: {
+            	validators: {
                     notEmpty: {
                         message: 'Email is required and cannot be empty'
+                    },
+                    regexp: {
+                        regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
+                        message: 'The value is not a valid email address'
                     }
+            		
                 }
             },
             'cname[]': {
@@ -342,19 +275,28 @@ $('#cemail-'+batch_count).keyup(function() {
                     }
                 }
             },
-            'contact[]' :{
-            	validators: {
-            		notEmpty: {
-            			message: 'contact number is required and cannot be empty'
-            		}
-            	}
+            'ccontact[]' :{
+            	 validators: {
+                     notEmpty: {
+                         message: 'The Mobile is required.'
+                     },
+                     regexp: {
+                         regexp: '^[7-9][0-9]{9}$',
+                         message: 'Invalid Mobile Number'
+                     }
+                 }
             },
             'cemail[]' :{
-            	validators:{
-            		notEmpty: {
-            			message: 'email id is required and cannot be empty'
-            		}
-            	}
+            	validators: {
+                    notEmpty: {
+                        message: 'Email is required and cannot be empty'
+                    },
+                    regexp: {
+                        regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
+                        message: 'The value is not a valid email address'
+                    }
+            		
+                }
             }
         }
     }).on('success.form.bv', function(event,data) {
@@ -364,7 +306,6 @@ $('#cemail-'+batch_count).keyup(function() {
     });
 
     function addBuilder() {
-    	alert("Hi");
     	var options = {
     	 		target : '#response', 
     	 		beforeSubmit : showAddRequest,

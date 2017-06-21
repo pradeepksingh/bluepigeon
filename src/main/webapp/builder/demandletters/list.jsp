@@ -13,12 +13,12 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			session_id = builder.getBuilder().getId();
+			if(session_id > 0){
+				demandletters_list = new DemandLettersDAO().getAllDemandLettersByBuilderId(session_id);
+				int demandletters_size = demandletters_list.size();
+			}
 		}
    	}
-	if(session_id > 0){
-		demandletters_list = new DemandLettersDAO().getAllDemandLettersByBuilderId(session_id);
-		int demandletters_size = demandletters_list.size();
-	}
 %>
 
 <!DOCTYPE html>

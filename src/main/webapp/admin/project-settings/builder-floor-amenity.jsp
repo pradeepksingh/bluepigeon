@@ -70,6 +70,7 @@ int amenity_size=amenity_list.size();
 	</div>
 </div>
 <div id="addFloorAmenity" class="modal fade" style="">
+<form class="form-horizontal" role="form" method="post" action="" id="newFloorAmenity" name="newFloorAmenity" enctype="multipart/form-data">
     <div id="cancel-overlay" class="modal-dialog" style="opacity:1 ;width:400px ">
       	<div class="modal-content">
           	<div class="modal-header">
@@ -88,6 +89,14 @@ int amenity_size=amenity_list.size();
               	<div class="row">
               		<div class="col-xs-12">
                   		<div class="form-group">
+                       		<label for="password" class="control-label">Floor Amenity Icon</label>
+                       		<input type="file" class="form-control" id="floor_amenity_icon" name="floor_amenity_icon[]" />
+                  		</div>
+              		</div>
+              	</div>
+              	<div class="row">
+              		<div class="col-xs-12">
+                  		<div class="form-group">
                        		<label for="password" class="control-label">Status</label>
                        		<select name="status" id="status" class="form-control">
 								<option value="1"> Active </option>
@@ -98,12 +107,13 @@ int amenity_size=amenity_list.size();
               	</div>
               	<div class="row">
               		<div class="col-xs-12">
-             			<button type="submit" class="btn btn-primary" onclick="addFloorAmenity();">SAVE</button>
+             			<button type="submit" class="btn btn-primary" name="saveFloorAmenityIcon">SAVE</button>
              		</div>
               	</div>
           	</div>
       	</div>
   	</div>
+  </form>
 </div>
 <div id="editFloorAmenity" class="modal fade" style="">
     <div id="cancel-overlay" class="modal-dialog" style="opacity:1 ;width:400px ">
@@ -118,6 +128,8 @@ int amenity_size=amenity_list.size();
   	</div>
 </div>
 <%@include file="../../footer.jsp"%>
+<script src="${baseUrl}/js/jquery.form.js"></script>
+<script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 	</body>
 </html>
 <link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
@@ -128,12 +140,12 @@ $(document).ready(function(){
         "aaSorting": []
     });
 });
-function addFloorAmenity() {
-	$.post("${baseUrl}/webapi/create/builder/floor/amenity/save/",{ name: $("#name").val(), status: $("#status").val()}, function(data){
-		alert(data.message);
-		window.location.reload();
-	},'json');
-}
+// function addFloorAmenity() {
+// 	$.post("${baseUrl}/webapi/create/builder/floor/amenity/save/",{ name: $("#name").val(), status: $("#status").val()}, function(data){
+// 		alert(data.message);
+// 		window.location.reload();
+// 	},'json');
+// }
 
 function editFloorAmenity(amenityid) {
 	$.get("${baseUrl}/admin/project-settings/editbuilderflooramenity.jsp?amenity_id="+amenityid,{ }, function(data){
@@ -146,12 +158,12 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
 });
 
-function updateFloorAmenity() {
-	$.post("${baseUrl}/webapi/create/builder/floor/amenity/update/",{ id: $("#uamenity_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
-		alert(data.message);
-		window.location.reload();
-	},'json');
-}
+// function updateFloorAmenity() {
+// 	$.post("${baseUrl}/webapi/create/builder/floor/amenity/update/",{ id: $("#uamenity_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
+// 		alert(data.message);
+// 		window.location.reload();
+// 	},'json');
+// }
 function deleteFloorAmenity(amenityid){
 	var yes = confirm("Do you want to delete ?");
 	if(yes==true){
@@ -167,4 +179,69 @@ function deleteFloorAmenity(amenityid){
 	}
 }
 
+$('#newFloorAmenity').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	name: {
+            validators: {
+                notEmpty: {
+                    message: 'Amenity Name is required and cannot be empty'
+                }
+            }
+        },
+        status: {
+            validators: {
+                notEmpty: {
+                    message: 'Status  is required and cannot be empty'
+                }
+            }
+        }
+   
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	addFloorAmenity();
+});
+
+
+function addFloorAmenity() {
+	var options = {
+	 		target : '#response', 
+	 		beforeSubmit : showAddRequest,
+	 		success :  showAddResponse,
+	 		url : '${baseUrl}/webapi/create/builder/floor/amenity/save/',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#newFloorAmenity').ajaxSubmit(options);
+}
+
+function showAddRequest(formData, jqForm, options){
+	$("#response").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#response").removeClass('alert-success');
+       	$("#response").addClass('alert-danger');
+		$("#response").html(resp.message);
+		$("#response").show();
+  	} else {
+  		$("#response").removeClass('alert-danger');
+        $("#response").addClass('alert-success');
+        $("#response").html(resp.message);
+        $("#response").show();
+        alert(resp.message);
+        window.location.href = "${baseUrl}/admin/project-settings/builder-floor-amenity.jsp";
+  	}
+}
 </script>

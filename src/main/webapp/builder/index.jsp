@@ -27,14 +27,6 @@
 <link href="css/colors/default.css" id="theme"  rel="stylesheet">
 
  <script src="plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <script>
-    $(function() {
-     
-        $("#header").load("partial/loginheader.jsp");
-
-        $("#footer").load("partial/footer.jsp");
-    });
-    </script>
  
 </head>
 <body>
@@ -44,11 +36,9 @@
 </div>
 <section id="wrapper" class="login-register">
 <!-- Top Navigation -->
-        <div id="header"></div>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
-      
-        <!-- Left navbar-header end -->
+        <div id="header">
+	       <%@include file="partial/loginheader.jsp"%>
+      </div>
         <!-- Page Content -->
 <div class="col-md-12">	
 	<div class="col-md-8 loginbgimg">	
@@ -95,6 +85,7 @@
  </div>
   </div>
  </div>
+
 </section>
 </body>
 
@@ -108,7 +99,7 @@ function login(){
 		if(status==1) {
 			$("#perror").empty();
 			$('#error').empty();
-			window.location.href="../builder/project/list.jsp";	
+			window.location.href="../builder/dashboard.jsp";	
 		} else if(status == 0) {
 			$("#perror").empty();
 			$('#error').empty();

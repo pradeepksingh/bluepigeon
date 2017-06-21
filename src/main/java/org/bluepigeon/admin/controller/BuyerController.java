@@ -1,6 +1,8 @@
 package org.bluepigeon.admin.controller;
 
 import java.util.Date;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,6 +22,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.AgreementDAO;
+import org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.DemandLettersDAO;
 import org.bluepigeon.admin.dao.PossessionDAO;
@@ -35,6 +38,7 @@ import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
 import org.bluepigeon.admin.model.Agreement;
+import org.bluepigeon.admin.model.AgreementBuyer;
 import org.bluepigeon.admin.model.AgreementInfo;
 import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderBuilding;
@@ -54,10 +58,16 @@ import org.bluepigeon.admin.model.DemandLetters;
 import org.bluepigeon.admin.model.DemandLettersInfo;
 //import org.bluepigeon.admin.model.GlobalBuyer;
 import org.bluepigeon.admin.model.Possession;
+import org.bluepigeon.admin.model.PossessionBuyer;
 import org.bluepigeon.admin.model.PossessionInfo;
 import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 @Path("buyer")
 public class BuyerController {
@@ -94,7 +104,7 @@ public class BuyerController {
 			@FormDataParam("document_voterid[]") List<FormDataBodyPart> voterid,
 			@FormDataParam("builder_id") int builder_id,
 			@FormDataParam("project_id") int project_id,
-			@FormDataParam("building_id") int building_id,
+			//@FormDataParam("building_id") int building_id,
 			@FormDataParam("flat_id") int flat_id,
 			@FormDataParam("booking_date") String booking_date,
 			@FormDataParam("base_rate") Double base_rate,
@@ -146,6 +156,7 @@ public class BuyerController {
 					buyer.setBuilderProject(builderProject);
 				}
 				
+				int building_id = new ProjectDAO().getBuildingFlatById(flat_id).get(0).getBuilderFloor().getBuilderBuilding().getId();
 				if(building_id > 0){
 					BuilderBuilding builderBuilding = new BuilderBuilding();
 					builderBuilding.setId(building_id);
@@ -969,6 +980,7 @@ public class BuyerController {
 	public List<FlatData> getProjectBuildingFlatNames(@PathParam("building_id") int building_id) {
 		return new BuyerDAO().getBuilderProjectBuildingFlats(building_id);
 	}
+	
 	/**
 	 * Get Building List by passing project id
 	 * @param project_id
@@ -992,17 +1004,21 @@ public class BuyerController {
 	@POST
 	@Path("/agreement/save")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage addAgeement(
-			@FormParam("project_id") int projectId,
-			@FormParam("building_id") int buildingId,
-			@FormParam("floor_id") int floorId,
-			@FormParam("flat_id") int flatId,
-			@FormParam("owner_name") String name,
-			@FormParam("contact") String contact,
-			@FormParam("email") String email,
-			@FormParam("remind") String remind,
-			@FormParam("content") String content,
-			@FormParam("select_date") String last_date){
+			@FormDataParam("project_id") int projectId,
+			@FormDataParam("building_id") int buildingId,
+			@FormDataParam("floor_id") int floorId,
+			@FormDataParam("flat_id") int flatId,
+			@FormDataParam("owner_name") String name,
+			@FormDataParam("contact") String contact,
+			@FormDataParam("email") String email,
+			@FormDataParam("remind") String remind,
+			@FormDataParam("content") String content,
+			@FormDataParam("select_date") String last_date,
+			@FormDataParam("buyer_name[]") List<FormDataBodyPart> buyer_names
+			)throws DocumentException, IOException {
+		ResponseMessage responseMessage = new ResponseMessage();
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
 		Date lastDate = null;
 		try {
@@ -1038,9 +1054,57 @@ public class BuyerController {
 		agreement.setContact(contact);
 		agreement.setEmail(email);
 		
-		return new AgreementDAO().saveAgreement(agreement);
+		responseMessage = new AgreementDAO().saveAgreement(agreement);
+		if(responseMessage.getId() > 0){
+			List<AgreementBuyer> agreementBuyerList = new ArrayList<AgreementBuyer>();
+			agreement.setId(responseMessage.getId());
+			if(buyer_names.size()>0){
+				Buyer buyerDetails = null;
+				for(FormDataBodyPart buyers : buyer_names){
+					if(buyers.getValueAs(Integer.class).toString() != null && !buyers.getValueAs(Integer.class).toString().isEmpty()) {
+						AgreementBuyer agreementBuyer = new AgreementBuyer();
+						agreementBuyer.setAgreement(agreement);
+						Buyer buyer = new Buyer();
+						buyer.setId(buyers.getValueAs(Integer.class));
+						buyerDetails = new BuyerDAO().getBuyerById(buyer.getId());
+						agreementBuyer.setBuyer(buyer);
+						agreementBuyerList.add(agreementBuyer);
+						String name1 = buyerDetails.getName();
+						String name_url = name1.replaceAll(" ", "-").toLowerCase();
+						final String RESULT = this.context.getInitParameter("building_image_url")+"images/project/buyer/agreement/"+buyerDetails.getBuilderProject().getName()+"-"+buyerDetails.getId()+"-"+name_url+".pdf";
+						createAgreementPdf(RESULT, agreement, buyerDetails);
+					}
+				}
+				if(agreementBuyerList.size()>0){
+					AgreementDAO agreementDAO = new AgreementDAO();
+					responseMessage=agreementDAO.saveAgreementBuyer(agreementBuyerList);
+				}
+			}
+		}
+		return responseMessage;
 	}
-	
+	/**
+	 * Create pdf file for agreement.
+	 * @param fileName
+	 * @param agreement
+	 * @param buyer
+	 * @throws DocumentException
+	 * @throws IOException
+	 */
+	public void createAgreementPdf(String fileName, Agreement agreement, Buyer buyer) throws DocumentException, IOException{
+		Document document = new Document();
+		PdfWriter.getInstance(document, new FileOutputStream(fileName));
+		document.open();
+		document.add(new Paragraph("Project Name : "+buyer.getBuilderProject().getName()));
+		document.add(new Paragraph("Building : "+buyer.getBuilderBuilding().getName()));
+		document.add(new Paragraph("Flat No : "+buyer.getBuilderFlat().getFlatNo()));
+		document.add(new Paragraph("Agreement Date : "+agreement.getLastDate()));
+		document.add(new Paragraph("Buyer Name "+buyer.getName()));
+		document.add(new Paragraph("Buyer Contact "+buyer.getMobile()));
+		if(agreement.getContent()!=null)
+			document.add(new Paragraph("Content "+agreement.getContent()));
+		document.close();
+	}
 	@POST
 	@Path("/agreement/update")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -1154,8 +1218,10 @@ public class BuyerController {
 			@FormDataParam("email") String email,
 			@FormDataParam("remind") String remind,
 			@FormDataParam("content") String content,
-			@FormDataParam("possession_date") String last_date){
+			@FormDataParam("possession_date") String last_date,
+			@FormDataParam("buyer_name[]")List<FormDataBodyPart> buyer_names) throws DocumentException, IOException{
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+		ResponseMessage responseMessage = new ResponseMessage();
 		Date lastDate = null;
 		try {
 			lastDate = format.parse(last_date);
@@ -1189,8 +1255,57 @@ public class BuyerController {
 		possession.setName(name);
 		possession.setContact(contact);
 		possession.setEmail(email);
-		
-		return new PossessionDAO().savePossession(possession);
+		responseMessage=new PossessionDAO().savePossession(possession);
+		if(responseMessage.getId()>0){
+			List<PossessionBuyer> possessionBuyerList = new ArrayList<PossessionBuyer>();
+			possession.setId(responseMessage.getId());
+			if(buyer_names.size()>0 || buyer_names != null ){
+				Buyer buyerDetails = null;
+				for(FormDataBodyPart buyers : buyer_names){
+					if(buyers.getValueAs(Integer.class).toString() != null && !buyers.getValueAs(Integer.class).toString().isEmpty()) {
+						PossessionBuyer possessionBuyer = new PossessionBuyer();
+						possessionBuyer.setPossession(possession);
+						Buyer buyer = new Buyer();
+						buyer.setId(buyers.getValueAs(Integer.class));
+						buyerDetails = new BuyerDAO().getBuyerById(buyer.getId());
+						possessionBuyer.setBuyer(buyer);
+						possessionBuyerList.add(possessionBuyer);
+						String name1 = buyerDetails.getName();
+						String name_url = name1.replaceAll(" ", "-").toLowerCase();
+						final String RESULT = this.context.getInitParameter("building_image_url")+"images/project/buyer/possession/"+buyerDetails.getBuilderProject().getName()+"-"+buyerDetails.getId()+"-"+name_url+".pdf";
+						createPossessionPdf(RESULT, possession, buyerDetails);
+					}
+				}
+				if(possessionBuyerList.size()>0){
+					PossessionDAO possessionDAO = new PossessionDAO();
+					responseMessage=possessionDAO.savePossessionBuyer(possessionBuyerList);
+					
+				}
+			}
+		}
+		return responseMessage;
+	}
+	/**
+	 * Create pdf file for possession
+	 * @param fileName
+	 * @param possession
+	 * @param buyer
+	 * @throws DocumentException
+	 * @throws IOException
+	 */
+	public void createPossessionPdf(String fileName, Possession possession, Buyer buyer) throws DocumentException, IOException{
+		Document document = new Document();
+		PdfWriter.getInstance(document, new FileOutputStream(fileName));
+		document.open();
+		document.add(new Paragraph("Project Name : "+buyer.getBuilderProject().getName()));
+		document.add(new Paragraph("Building : "+buyer.getBuilderBuilding().getName()));
+		document.add(new Paragraph("Flat No : "+buyer.getBuilderFlat().getFlatNo()));
+		document.add(new Paragraph("Possession Date : "+possession.getLastDate()));
+		document.add(new Paragraph("Buyer Name "+buyer.getName()));
+		document.add(new Paragraph("Buyer Contact "+buyer.getMobile()));
+		if(possession.getContent()!=null)
+			document.add(new Paragraph("Content "+possession.getContent()));
+		document.close();
 	}
 	
 	@POST
@@ -1439,6 +1554,49 @@ public class BuyerController {
 		BuyerDAO buyerDAO = new BuyerDAO();
 		msg = buyerDAO.deleteBuyerPaymentById(id);
 		return msg;
+	}
+	
+	@POST
+	@Path("/sale")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage getTotalSaleValue(
+			@FormParam("project_id") int projectId,
+			@FormParam("base_rate") Double base_rate,
+			@FormParam("rise_rate") Double rise_rate,
+			@FormParam("amenity_rate") Double amenity_rate,
+			@FormParam("parking") Double parking,
+			@FormParam("maintenance") Double maintenance,
+			@FormParam("stamp_duty") Double stamp_duty,
+			@FormParam("tax") Double tax,
+			@FormParam("vat") Double vat,
+			@FormParam("no_of_floors") int noOfFloors 
+			){
+		ResponseMessage responseMessage = new ResponseMessage();
+		Double totalSaleValue = 0.0;
+		Double A = 0.0, B = 0.0, C = 0.0, D = 0.0, E = 0.0, F = 0.0, G = 0.0;
+		Double superBuildUpArea = new BuilderProjectPriceInfoDAO().getBuilderFlatTypeByProjectId(projectId).getSuperBuiltupArea();
+		Double sqft = new BuilderProjectPriceInfoDAO().getBuilderProjectPriceInfo(projectId).getAreaUnit().getSqft_value();
+		A = base_rate * superBuildUpArea * sqft ; 
+		if(noOfFloors > 0)
+			B = rise_rate * superBuildUpArea * sqft ;
+		if(maintenance > 0)
+			C = maintenance;
+		if(amenity_rate  > 0)
+			D = amenity_rate;
+		if(parking > 0)
+			E = parking;
+		F = A+B+D;
+		G = F*stamp_duty/100+F * tax/100+F * vat/100;
+		totalSaleValue = F+C+E+G;
+		responseMessage.setMessage(totalSaleValue.toString());
+		return responseMessage;
+	}
+	
+	@GET
+	@Path("/flat/payments/{flat_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<FlatData> getFlatPayment(@PathParam("flat_id") int flat_id) {
+		return new BuyerDAO().getBuilderProjectBuildingFlats(flat_id);
 	}
 }
 	

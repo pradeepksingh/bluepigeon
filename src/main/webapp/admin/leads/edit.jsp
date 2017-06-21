@@ -70,9 +70,11 @@
 										<div class="col-sm-9">
 											<select name="project_id" id="project_id" class="form-control">
 						                 	   	<option value="0">Select Project</option>
-						                  	   	<% for(int i=0; i < project_size ; i++){ %>
+						                  	   	<%
+						                  	   	if(builderLead.getBuilderProject() != null){
+						                  	   	for(int i=0; i < project_size ; i++){ %>
 												<option value="<% out.print(builderProjects.get(i).getId());%>"<%if(builderProjects.get(i).getId() == builderLead.getBuilderProject().getId()) {%>selected<%} %> ><% out.print(builderProjects.get(i).getName());%></option>
-											  	<% } %>
+											  	<% } }%>
 								       	  	</select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
@@ -85,9 +87,11 @@
 										<div class="col-sm-9">
 											<select name="building_id" id="building_id" class="form-control">
 						                 	   	<option value="0">Select Building</option>
-						                 	   	<% for(int i=0; i < building_size ; i++){ %>
+						                 	   	<%
+						                 	   	if(builderLead.getBuilderBuilding() != null){
+						                 	   	for(int i=0; i < building_size ; i++){ %>
 												<option value="<% out.print(builderBuildings.get(i).getId());%>"<%if(builderBuildings.get(i).getId() == builderLead.getBuilderBuilding().getId()) {%>selected<%} %> ><% out.print(builderBuildings.get(i).getName());%></option>
-											  	<% } %>
+											  	<% }} %>
 								       	  	</select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
@@ -99,9 +103,11 @@
 										<div class="col-sm-9">
 											<select name="flat_id" id="flat_id" class="form-control">
 						                 	   	<option value="0">Select Flat</option>
-						                 	   	<% for(int i=0; i < flat_size; i++){ %>
+						                 	   	<%
+						                 	   	if(builderLead.getBuilderFlat() != null){
+						                 	   	for(int i=0; i < flat_size; i++){ %>
 												<option value="<% out.print(builderFlats.get(i).getId());%>"<%if(builderFlats.get(i).getId() == builderLead.getBuilderFlat().getId()) {%>selected<%} %> ><% out.print(builderFlats.get(i).getFlatNo());%></option>
-											  	<% } %>
+											  	<% }} %>
 								       	  	</select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>

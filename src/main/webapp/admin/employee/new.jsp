@@ -28,14 +28,14 @@
 	<div class="main-content-inner">
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 			<ul class="breadcrumb">
-				<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
-				<li><a href="#">PropertyManager</a></li>
-				<li class="active">Add New Property manager</li>
+				<li><i class="ace-icon fa fa-home home-icon"></i>Home</li>
+				<li>Employee</li>
+				<li class="active">Add New Employee</li>
 			</ul>
 		</div>
 		<div class="page-content">
 			<div class="page-header">
-				<h1>Add New Property manager</h1>
+				<h1>Add New Employee</h1>
 			</div>
 			<ul class="nav nav-tabs" id="managerTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Basic Details</a></li>
@@ -201,6 +201,18 @@ $("#manager_id").change(function(){
 	}
 });
 
+$('#name').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) {  return ''; } ) );
+});
+$("#email").keyUp(function(){
+	var th = $(this);
+	$th.val($th.val().replace(/[^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$]/g,function(str){return '';}));
+});
+$("#mobile").keyUp(function(){
+	var mobile = $(this);
+	$mobile.val($mobile.val().replace(/[^[7-9][0-9]{9}$]/g, function(str){return '';}));
+});
 $('#addmanager').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -228,17 +240,17 @@ $('#addmanager').bootstrapValidator({
                 }
             }
         },
-//         email: {
-//         	validators: {
-//             	notEmpty: {
-//                     message: 'The Email is required and cannot be empty'
-//                 },
-//                 regexp: {
-//                     regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
-//                     message: 'The value is not a valid email address'
-//                 }
-//             }
-//         },
+        email: {
+        	validators: {
+            	notEmpty: {
+                    message: 'The Email is required and cannot be empty'
+                },
+                regexp: {
+                    regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
+                    message: 'The value is not a valid email address'
+                }
+            }
+        },
         project_id: {
             validators: {
                 notEmpty: {

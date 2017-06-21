@@ -11,9 +11,11 @@ import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
+import org.bluepigeon.admin.model.BuilderLogo;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.ProjectImageGallery;
+import org.bluepigeon.admin.data.BarGraphData;
 import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.EmployeeList;
@@ -155,12 +157,12 @@ public class BuilderDetailsDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		if(builderCompanyNames.size()>0){
 			try{
-				String deleteBuilderCompanyName = "Update from BuilderCompanyNames  set name=:name,email=:email,contact=:contact where builder.id = :builder_id";
+				String deleteBuilderCompanyName = "Update from BuilderCompanyNames  set name=:name,email=:email,contact=:contact where id = :id";
 				Session newsession1 = hibernateUtil.openSession();
 				newsession1.beginTransaction();
 				for(BuilderCompanyNames builderCompanyNames2 : builderCompanyNames){
 					Query smupdate = newsession1.createQuery(deleteBuilderCompanyName);
-					smupdate.setParameter("builder_id", builderCompanyNames2.getBuilder().getId());
+					smupdate.setParameter("id", builderCompanyNames2.getId());
 					smupdate.setParameter("name", builderCompanyNames2.getName());
 					smupdate.setParameter("email", builderCompanyNames2.getEmail());
 					smupdate.setParameter("contact", builderCompanyNames2.getContact());
@@ -233,13 +235,18 @@ public class BuilderDetailsDAO {
 		builder = (Builder) query.list().get(0);
 		return builder;
 	}
-	public List<BuilderEmployeeAccessType> getBuilderAccessList() {
-		String hql = "from BuilderEmployeeAccessType";
+	public List<BuilderEmployeeAccessType> getBuilderAccessList(int accessId) {
+		List<BuilderEmployeeAccessType> result = null;
+		String hql = "from BuilderEmployeeAccessType where id > :access_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
+		if(accessId != 3 || accessId !=6 || accessId != 7){
 		Query query = session.createQuery(hql);
-		List<BuilderEmployeeAccessType> result = query.list();
+		query.setParameter("access_id", accessId);
+		result = query.list();
+		}
 		session.close();
+		
 		return result;
 	}
 	
@@ -344,12 +351,22 @@ public class BuilderDetailsDAO {
 		responseMessage.setMessage("Empolyee Added Successfully.");
 		return responseMessage;
 	}
-	public List<EmployeeList> getBuilderEmployeeList(int builder_id) {
+	public List<EmployeeList> getBuilderEmployeeList(BuilderEmployee builderEmployeeList) {
 		String hql = "from BuilderEmployee where builder.id=:builder_id";
+		String empHql = "from BuilderEmployee where builder.id = :builder_id and builderEmployee.id = :reporting_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("builder_id", builder_id);
+		Query query = null;
+		if(builderEmployeeList.getBuilderEmployeeAccessType().getId() == 1 || builderEmployeeList.getBuilderEmployeeAccessType().getId()==2){
+			query = session.createQuery(hql);
+			query.setParameter("builder_id", builderEmployeeList.getBuilder().getId());
+		}
+		if(builderEmployeeList.getBuilderEmployeeAccessType().getId() == 4 || builderEmployeeList.getBuilderEmployeeAccessType().getId() ==5){
+			query = session.createQuery(empHql);
+			query.setParameter("builder_id", builderEmployeeList.getBuilder().getId());
+			query.setParameter("reporting_id",builderEmployeeList.getId() );
+		}
+			
 		List<BuilderEmployee> result = query.list();
 		List<EmployeeList> employeeLists = new ArrayList<EmployeeList>();
 		int count=1;
@@ -516,6 +533,21 @@ public class BuilderDetailsDAO {
 		return response;
 	}
 	/**
+	 * Save builder logo
+	 * @author pankaj
+	 * @param builderLogo
+	 */
+	public void saveBuilderLogo(List<BuilderLogo> builderLogos){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(BuilderLogo builderLogo : builderLogos){
+			session.save(builderLogo);
+		}
+		session.getTransaction().commit();
+		session.close();
+	}
+	/**
 	 * Filter Project list by passing builderId, countryId, stateId, cityId and localityId 
 	 * @author pankaj
 	 * @param builderId
@@ -529,6 +561,7 @@ public class BuilderDetailsDAO {
 		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
 		String hql = "from BuilderProject where ";
 		String where = "";
+		
 		if(builderId > 0){
 			where +="builder.id = :builder_id";
 		}
@@ -578,7 +611,12 @@ public class BuilderDetailsDAO {
 			builderProjectList.setId(builderProject.getId());
 			builderProjectList.setName(builderProject.getName());
 			builderProjectList.setCity(builderProject.getCity().getName());
+			if(builderProject.getTotalInventory()!=null)
+				builderProjectList.setTotalSold(builderProject.getTotalInventory());
+			if(builderProject.getInventorySold() != null)
+				builderProjectList.setSold(builderProject.getInventorySold());
 			ProjectDAO projectDAO = new ProjectDAO();
+			builderProjectList.setTotalLeads(projectDAO.getTotalLeadsByProjectId(builderProject.getId()));
 			try{
 				builderProjectList.setImage(projectDAO.getProjectImagesByProjectId(builderProject.getId()).get(0).getImage());
 			}catch(Exception e){
@@ -587,5 +625,201 @@ public class BuilderDetailsDAO {
 			builderProjectLists.add(builderProjectList);
 		}
 		return builderProjectLists;
+	}
+	/**
+	 * Get project by filter's projectid
+	 * @author pankaj
+	 * @param projectId
+	 * @return List<BuilderProjectList>
+	 */
+	public List<BuilderProjectList> getProjectFilterListByProjectId(int projectId){
+		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
+		String hql ="from BuilderProject where id = :id AND status=1 order by id desc";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", projectId);
+		List<BuilderProject> builderProjects = query.list();
+		for(BuilderProject builderProject : builderProjects){
+			BuilderProjectList builderProjectList = new BuilderProjectList();
+			builderProjectList.setId(builderProject.getId());
+			builderProjectList.setName(builderProject.getName());
+			builderProjectList.setCity(builderProject.getCity().getName());
+			if(builderProject.getTotalInventory()!=null)
+				builderProjectList.setTotalSold(builderProject.getTotalInventory());
+			if(builderProject.getInventorySold() != null)
+				builderProjectList.setSold(builderProject.getInventorySold());
+			ProjectDAO projectDAO = new ProjectDAO();
+			builderProjectList.setTotalLeads(projectDAO.getTotalLeadsByProjectId(builderProject.getId()));
+			try{
+				builderProjectList.setImage(projectDAO.getProjectImagesByProjectId(builderProject.getId()).get(0).getImage());
+			}catch(Exception e){
+				builderProjectList.setImage("");
+			}
+			builderProjectLists.add(builderProjectList);
+		}
+		return builderProjectLists;
+		
+	}
+	
+	
+	public List<BuilderProjectList> getProjectFilterListByBuilderId(int builderId){
+		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
+		String hql ="from BuilderProject where builder.id = :builder_id AND status=1 order by id desc";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		List<BuilderProject> builderProjects = query.list();
+		for(BuilderProject builderProject : builderProjects){
+			BuilderProjectList builderProjectList = new BuilderProjectList();
+			builderProjectList.setId(builderProject.getId());
+			builderProjectList.setName(builderProject.getName());
+			builderProjectList.setCity(builderProject.getCity().getName());
+			if(builderProject.getTotalInventory()!=null)
+				builderProjectList.setTotalSold(builderProject.getTotalInventory());
+			if(builderProject.getInventorySold() != null)
+				builderProjectList.setSold(builderProject.getInventorySold());
+			ProjectDAO projectDAO = new ProjectDAO();
+			builderProjectList.setTotalLeads(projectDAO.getTotalLeadsByProjectId(builderProject.getId()));
+			try{
+				builderProjectList.setImage(projectDAO.getProjectImagesByProjectId(builderProject.getId()).get(0).getImage());
+			}catch(Exception e){
+				builderProjectList.setImage("");
+			}
+			builderProjectLists.add(builderProjectList);
+		}
+		return builderProjectLists;
+		
+	}
+
+	/**
+	 * Get builder logo by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return List<BuilderLogo>
+	 */
+	public List<BuilderLogo> getBuilderLogoByBuilderId(int builderId){
+		String hql = "from BuilderLogo where builder.id = :builder_id";
+		List<BuilderLogo> builderLogo = new ArrayList<BuilderLogo>();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		builderLogo = query.list();
+		return builderLogo;
+	}
+	/**
+	 * Update builder logo
+	 * @author pankaj
+	 * @param builderLogos
+	 */
+	public void updateBuilderLogo(List<BuilderLogo> builderLogos){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "update BuilderLogo set builderUrl=:builder_url where id = :id";
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		for(BuilderLogo builderLogo : builderLogos){
+			System.out.println("BuilderLogo Id :: "+builderLogo.getId());
+			query.setParameter("builder_url", builderLogo.getBuilderUrl());
+			query.setParameter("id", builderLogo.getId());
+			query.executeUpdate();
+		}
+		session.getTransaction().commit();
+		session.close();
+	}
+    /**
+     * Get all project's flats, buyers and sold flats count by builder id
+     * @author pankaj	
+     * @param builderId
+     * @return List<BarGraphData>
+     */
+	@SuppressWarnings("deprecation")
+	public List<BarGraphData> getBarGraphByBuilderId(int builderId){
+		List<BarGraphData> barGraphDatas = new ArrayList<BarGraphData>();
+		String hql = "Select COUNT(DISTINCT B.possessionDate) from BuilderProject B where B.builder.id = :builder_id and B.status=1";
+		String projectHql = "from BuilderProject where builder.id =:builder_id and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		Session projectSession = hibernateUtil.openSession();
+		Query projectQuery = projectSession.createQuery(projectHql);
+		projectQuery.setParameter("builder_id", builderId);
+		List<Long> builderProjectLists = query.list();
+		List<BuilderProject> projectList = projectQuery.list();
+		System.out.println("Year Count :: "+builderProjectLists.size());
+		int i=0;		
+		for(Long builderProject : builderProjectLists){
+			BarGraphData barGraphData = new BarGraphData();
+			barGraphData.setBuiltYear(projectList.get(i).getPossessionDate());
+			barGraphData.setTotalFlats(getTotalFlatsByBuilderId(builderId));
+			barGraphData.setTotalBuyers(getTotalBuyersByBuilderId(builderId));
+			barGraphData.setTotalSold(getTotalsoldFlatsByBuilderId(builderId));
+			barGraphDatas.add(barGraphData);
+			i++;
+		}
+		return barGraphDatas;
+	}
+	
+//	public int getYearByBuilderId(int builderId){
+//		int builtYear = 0;
+//		String hql = "from BuilderProject where builder.id = :builder_id and status=1";
+//		HibernateUtil hibernateUtil = new HibernateUtil();
+//		Session session = hibernateUtil.openSession();
+//		Query query = session.createQuery(hql);
+//		query.setParameter("builder_id", builderId);
+//		
+//		return builtYear;
+//	}
+	/**
+	 * Get all project's flat count by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return totalFlats
+	 */
+	public Long getTotalFlatsByBuilderId(int builderId){
+		Long totalFlats = (long)0;
+		String hql = "Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		totalFlats = (Long) query.uniqueResult();
+		return totalFlats;
+	}
+	/**
+	 * Get all owner's count by builder id
+	 * @author pankaj 
+	 * @param builderId
+	 * @return
+	 */
+	public Long getTotalBuyersByBuilderId(int builderId){
+		Long totalBuyers = (long)0;
+		String hql = "Select COUNt(*) from Buyer where builder.id = :builder_id and is_primary=1 and is_deleted=0";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		totalBuyers = (Long) query.uniqueResult();
+		return totalBuyers;
+	}
+	
+	/**
+	 * Get all project's sold flats count by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return total sold flats
+	 */
+	public Long getTotalsoldFlatsByBuilderId(int builderId){
+		Long totalSoldFlats = (long)0;
+		String hql = "Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id AND builderFlatStatus.id=2";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		totalSoldFlats = (Long) query.uniqueResult();
+		return totalSoldFlats;
 	}
 }

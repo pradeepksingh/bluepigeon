@@ -10,6 +10,7 @@ import org.bluepigeon.admin.data.BuildingWeightageData;
 import org.bluepigeon.admin.data.FlatAmenityTotal;
 import org.bluepigeon.admin.data.FlatTotal;
 import org.bluepigeon.admin.data.FlatWeightageData;
+import org.bluepigeon.admin.data.FlatPayment;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorDetail;
 import org.bluepigeon.admin.data.FloorImageData;
@@ -69,6 +70,7 @@ import org.bluepigeon.admin.model.ProjectImageGallery;
 import org.bluepigeon.admin.model.ProjectPanoramicImage;
 import org.bluepigeon.admin.model.ProjectStage;
 import org.bluepigeon.admin.model.ProjectWeightage;
+import org.bluepigeon.admin.model.Source;
 import org.bluepigeon.admin.model.Tax;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
@@ -1964,12 +1966,52 @@ public class ProjectDAO {
 		newsession.save(builderFlat);
 		newsession.getTransaction().commit();
 		newsession.close();
+		updateProjectInventory(builderFlat);
 		response.setId(builderFlat.getId());
 		response.setStatus(1);
 		response.setMessage("Building flat Added Successfully.");
 		return response;
 	}
 	
+	public void updateProjectInventory(BuilderFlat builderFlat){
+		String hql = "UPDATE BuilderProject set availbale = :availbale and totalInventory = :totalInventory where id = :project_id ";
+		int available = 0;
+		int totalInventory = 0;
+		int soldInventory = 0;
+		int projectId = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
+		available = getAvaiableFlatCount(projectId);
+		soldInventory = getSoldFlatCount(projectId);
+		totalInventory = available + soldInventory;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("availbale", available);
+		query.setParameter("totalInventory",totalInventory );
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public int getAvaiableFlatCount(int project_id){
+		String hql = "Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and builderFlatStatus =1 AND status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", project_id);
+		int available = (int) query.uniqueResult();
+		return available;
+	}
+	
+	public int getSoldFlatCount(int projectId){
+		String hql = "Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and builderFlatStatus =2 and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		int available = (int) query.uniqueResult();
+		return available;
+	}
 	public ResponseMessage updateBuildingFlat(BuilderFlat builderFlat) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -2520,10 +2562,11 @@ public class ProjectDAO {
 	 * Get first 4 active projects by builder id
 	 * @author pankaj
 	 * @param builderId
-	 * @return List<BuilderProject>
+	 * @return List<ProjectList>
 	 */
 	public List<ProjectList> getBuilderFirstFourActiveProjectsByBuilderId(int builderId) {
 		System.err.println("builderId :: "+builderId);
+		Long totalLeads = (long)0;
 		String hql = "from BuilderProject where builder.id = :builder_id and status=1 order by id desc";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -2544,6 +2587,16 @@ public class ProjectDAO {
 			newproject.setCityName(builderproject.getCity().getName());
 			newproject.setLocalityId(builderproject.getLocality().getId());
 			newproject.setLocalityName(builderproject.getLocality().getName());
+			if(builderproject.getInventorySold() != null){
+				newproject.setSold(builderproject.getInventorySold());
+			}
+			if(builderproject.getTotalInventory() != null){
+				newproject.setTotalSold(builderproject.getTotalInventory());
+			}
+			totalLeads = getTotalLeadsByProjectId(builderproject.getId());
+			if(totalLeads != null){
+				newproject.setTotalLeads(totalLeads.intValue());
+			}
 			System.out.println("Project name :: "+builderproject.getName());
 			projects.add(newproject);
 		}
@@ -2847,7 +2900,9 @@ public class ProjectDAO {
 		return result;
 	}
 	/**
-	 * 
+	 * Get new project list added by builder
+	 * @author pankaj
+	 * @return List<NewProjectList>
 	 */
 	public List<NewProjectList> getNewProjectList(){
 		String hql = "from NewProject";
@@ -3265,5 +3320,156 @@ public class ProjectDAO {
 		return resp;
 	}
 	
+	/**
+	 * Get active flats by project id
+	 * @author pankaj
+	 * @return List<BuilderFlat>
+	 */
+	public List<BuilderFlat> getActiveFlatsByProjectId(int projectId){
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and builderFlatStatus.id = 1 and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		List<BuilderFlat> builderFlatList = query.list();
+		return builderFlatList;
+		
+	}
+	/**
+	 * Get flat payment by flat id
+	 * @author pankaj
+	 * @param flatId
+	 * @return List<FlatPayment>
+	 */
+	public List<FlatPayment> getFlatPaymentByFlatId(int flatId){
+		String hql = "from BuilderFlat where id = :flat_id";
+		String payment = "from BuildingPaymentInfo where builderBuilding.id = :building_id" ;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id",flatId);
+		BuilderFlat builderFlat = (BuilderFlat) query.list().get(0);
+		Session paymentSession = hibernateUtil.openSession();
+		Query paymentQuery = paymentSession.createQuery(payment);
+		paymentQuery.setParameter("building_id", builderFlat.getBuilderFloor().getBuilderBuilding().getId());
+		List<BuildingPaymentInfo> buildingPaymentInfos = paymentQuery.list();
+		List<FlatPayment> flatPaymentList = new ArrayList<FlatPayment>();
+		for(BuildingPaymentInfo buildingPaymentInfo :buildingPaymentInfos ){
+			FlatPayment flatPayment = new FlatPayment();
+			flatPayment.setMilestone(buildingPaymentInfo.getMilestone());
+			flatPayment.setPayable(buildingPaymentInfo.getPayable());
+			flatPayment.setAmount(buildingPaymentInfo.getAmount());
+			flatPaymentList.add(flatPayment);
+		}
+		if(flatPaymentList != null)
+			return flatPaymentList;
+		else
+			return null;
+	}
+	/**
+	 * Get total leads by builder id
+	 * @author pankaj
+	 * @param builder_id
+	 * @return totalLeads
+	 */
+	public Long getTotalLeads(int builder_id){
+		Long totalLeads =(long) 0;
+		String hql = "Select COUNT(*) from BuilderLead where builderProject.builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builder_id);
+		totalLeads = (Long) query.uniqueResult();
+		return totalLeads;
+		
+	}
+	/**
+	 * Get Total leads by builder id
+	 * @author pankaj
+	 * @param projectId
+	 * @return
+	 */
+	public Long getTotalLeadsByProjectId(int projectId){
+		Long totalLeads =(long) 0;
+		String hql = "Select COUNT(*) from BuilderLead where builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		totalLeads = (Long) query.uniqueResult();
+		return totalLeads;
+	}
+	/**
+	 * Get total sold flat count for all projects by builder id
+	 * @author pankaj
+	 * @param builderId
+	 * @return Long
+	 */
+	public Long getTotalSoldInventory(int builderId){
+		Long totalSoldInventory =(long)0;
+		String hql ="Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and builderFlatStatus.id=2";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		totalSoldInventory = (Long) query.uniqueResult();
+		return totalSoldInventory;
+	}
+	/**
+	 * Save source
+	 * @author pankaj
+	 * @param source
+	 * @return responseMessage
+	 */
+	public ResponseMessage saveSource(Source source){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		session.save(source);
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Source added successfully");
+		return responseMessage;
+	}
+	/**
+	 * Get all source by builder id
+	 * @author pankaj
+	 * @return List<Source>
+	 */
+	public List<Source> getAllSourcesByBuilderId(int builderId){
+		String hql = "from Source where builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		List<Source> sourceList = query.list();
+		return sourceList;
+	}
+	
+	public List<Source> getSourceById(int id){
+		String hql = "from Source where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<Source> source = query.list();
+		session.close();
+		return source;
+	}
+	
+	public ResponseMessage updateSource(Source source){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		session.update(source);
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Source updated successfully");
+		return responseMessage;
+	}
 	
 }

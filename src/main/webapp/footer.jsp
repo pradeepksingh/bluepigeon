@@ -28,8 +28,8 @@
 <script src="${baseUrl}/js/dataTables.select.min.js"></script>
 <script src="${baseUrl}/js/bootstrap-datepicker.min.js"></script>
 <script src="${baseUrl}/js/grid.locale-en.js"></script>
-<%-- <script src="${baseUrl}/js/ace-elements.min.js"></script> --%>
-<%-- <script src="${baseUrl}/js/ace.min.js"></script> --%>
+<script src="${baseUrl}/js/ace-elements.min.js"></script>
+<script src="${baseUrl}/js/ace.min.js"></script>
 <script>
 $(function() {
 	var main_url = window.location.href;

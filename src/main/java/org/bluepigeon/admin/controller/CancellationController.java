@@ -29,16 +29,17 @@ public class CancellationController {
 	@POST
 	@Path("/save")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage addCancellation (
-			@FormParam("project_id") int projectId,
-			@FormParam("building_id") int buildingId,
-			@FormParam("flat_id") int flatId,
-			@FormParam("buyer_name") String name,
-			@FormParam("buyer_contact") String mobile,
-			@FormParam("pan_card") String pancard,
-			@FormParam("reason") String reason,
-			@FormParam("charges") Double charges,
-			@FormParam("builder_id") int builderId){
+			@FormDataParam("project_id") int projectId,
+			@FormDataParam("building_id") int buildingId,
+			@FormDataParam("flat_id") int flatId,
+			@FormDataParam("buyer_name") String name,
+			@FormDataParam("buyer_contact") String mobile,
+			@FormDataParam("pan_card") String pancard,
+			@FormDataParam("reason") String reason,
+			@FormDataParam("charges") Double charges,
+			@FormDataParam("builder_id") int builderId){
 		
 		Cancellation cancellation = new Cancellation();
 		if(projectId > 0){

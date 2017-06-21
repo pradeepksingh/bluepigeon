@@ -1,3 +1,8 @@
+<%@page import="org.bluepigeon.admin.data.FlatPayment"%>
+<%@page import="org.bluepigeon.admin.data.ProjectPriceInfoData"%>
+<%@page import="org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectPriceInfo"%>
+<%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
@@ -7,23 +12,37 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%
+	List<BuilderEmployee> builderEmployees = null;
+	List<BuilderFlat> builderFlatList  = null;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	List<BuilderProject> project_list = null; 
-	int builder_id = 0;
+	List<FlatPayment> flatPayments = null;
+	ProjectPriceInfoData projectPriceInfoData = null;
+	int builder_id1 = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
-			builder_id = builder.getBuilder().getId();
+			builder_id1 = builder.getBuilder().getId();
+			
+			if(builder_id1> 0 ){
+				project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id1);
+			}
+			if(project_list != null){
+			 	builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
+			 	builderFlatList = new ProjectDAO().getActiveFlatsByProjectId(project_list.get(0).getId());
+			 
+			 	projectPriceInfoData = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByProjectId(project_list.get(0).getId());
+			 	if(builderFlatList != null){
+				 flatPayments = new ProjectDAO().getFlatPaymentByFlatId(builderFlatList.get(0).getId());
+			 	}
+			}
+			 
 		}
    }
-	int builder_id1 = 1;
-	if(builder_id> 0 ){
-		project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id);
-	}
-	List<BuilderEmployee> builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
+	
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,8 +57,6 @@
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
-    <!-- animation CSS -->
-    <link href="../css/animate.css" rel="stylesheet">
     <!-- Menu CSS -->
     <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
@@ -126,105 +143,106 @@
                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a>
                                     </li>-->
                                 </ul>
-                                
                                  <form id="addbuyer" name="addbuyer" action="" method="post" enctype="multipart/form-data"> 
-                              <div class="tab-content"> 
+                              	<div class="tab-content"> 
                               	<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
-                               <div class="tab-pane active" id="vimessages" aria-expanded="false">
-                                <div class="col-12" id="vimessages111" >
-                            
-                                <input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
-                                <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Buyer Name*</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="buyer_name" name="buyer_name[]" value="">
-                                    </div>
-                                    <label for="example-text-input" class="col-3 col-form-label">Contact*</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="contact" name="contact[]" value="">
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Email*</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="email" name="email[]" value="">
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Pan*</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="pan" name="pan[]" value="">
-                                    </div>
-                                </div>
-                                
-                                 <div class="form-group row">
-                                    <label for="example-tel-input" class="col-3 col-form-label">Permanent Address*</label>
-                                    <div class="col-3">
-                                         <textarea class="form-control" rows="" cols="" id="address" name="address[]"></textarea>
-                                    </div>
-                                    <label for="example-tel-input" class="col-3 col-form-label">Owner*</label>
-                                    <div class="col-3">
-                                      <select name="is_primary[]" id="is_primary" class="form-control">
-			                       		<option value="">Select Owner</option>
-			                     		<option value="0">Co-Owner</option>
-			                      		<option value="1" selected>Owner</option>
-							          </select>
-                                    </div>
-                                </div>
-								<div class="form-group row" id="error-project_type">
-									<label class="col-12 col-form-label">Documents <span class='text-danger'>*</span></label>
-										<div class="col-3">
-											<input type="checkbox" name="document_pan[]" value="1" /> PAN Card
-										</div>
-										<div class="col-3">
-											<input type="checkbox" name="document_aadhar[]" value="2" /> Aadhar Card
-										</div>
-										<div class="col-3">
-											<input type="checkbox" name="document_passport[]" value="3" /> Passport 
-										</div>
-										<div class="col-3">
-											<input type="checkbox" name="document_rra[]" value="4" /> Registered Rent Agreement 
-										</div>
-										<div class="col-3">
-											<input type="checkbox" name="document_voterid[]" value="5" /> Vote ID 
-										</div>
-										<div class="messageContainer col-sm-offset-2"></div>
-								</div>
-                               </div>
-                                <div class="offset-sm-10 col-sm-7">
-                                <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="show();" id="next">Next</button>
-                                       <a href="javascript:addMoreBuyers();"> <button type="button" class="btn btn-info waves-effect waves-light m-t-10">+ Add New Buyer</button></a>
-                                 </div>
-                                
-                              </div>
-                              
+                               		<div class="tab-pane active" id="vimessages" aria-expanded="false">
+                                		<div class="col-12" >
+                                			<input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
+                                			<div class="form-group row">
+                                   				<label for="example-text-input" class="col-3 col-form-label">Buyer Name*</label>
+                                   				<div class="col-3">
+                                       				<input class="form-control" type="text" id="buyer_name" name="buyer_name[]" value="">
+                                   				</div>
+                                   				<label for="example-text-input" class="col-3 col-form-label">Contact*</label>
+                                   				<div class="col-3">
+                                       				<input class="form-control" type="text" id="contact" name="contact[]" value="">
+                                   				</div>
+                                			</div>
+                                			<div class="form-group row">
+                                    			<label for="example-search-input" class="col-3 col-form-label">Email*</label>
+                                    			<div class="col-3">
+                                        			<input class="form-control" type="text" id="email" name="email[]" value="">
+                                    			</div>
+                                    			<label for="example-search-input" class="col-3 col-form-label">Pan*</label>
+                                    			<div class="col-3">
+                                        			<input class="form-control" type="text" id="pan" name="pan[]" value="">
+                                    			</div>
+                                			</div>
+                                 			<div class="form-group row">
+                                    			<label for="example-tel-input" class="col-3 col-form-label">Permanent Address*</label>
+                                    			<div class="col-3">
+                                         			<textarea class="form-control" rows="" cols="" id="address" name="address[]"></textarea>
+                                    			</div>
+                                    			<label for="example-tel-input" class="col-3 col-form-label">Owner*</label>
+                                    			<div class="col-3">
+                                      				<select name="is_primary[]" id="is_primary" class="form-control">
+<!-- 			                       					<option value="">Select Owner</option> -->
+<!-- 			                     					<option value="0">Co-Owner</option> -->
+			                      						<option value="1" selected>Owner</option>
+							          				</select>
+                                    			</div>
+                                			</div>
+											<div class="form-group row" id="error-project_type">
+												<label class="col-12 col-form-label">Documents <span class='text-danger'>*</span></label>
+												<div class="col-3">
+													<input type="checkbox" name="document_pan[]" value="1" /> PAN Card
+												</div>
+												<div class="col-3">
+													<input type="checkbox" name="document_aadhar[]" value="2" /> Aadhar Card
+												</div>
+												<div class="col-3">
+													<input type="checkbox" name="document_passport[]" value="3" /> Passport 
+												</div>
+												<div class="col-3">
+													<input type="checkbox" name="document_rra[]" value="4" /> Registered Rent Agreement 
+												</div>
+												<div class="col-3">
+													<input type="checkbox" name="document_voterid[]" value="5" /> Vote ID 
+												</div>
+												<div class="messageContainer col-sm-offset-2"></div>
+											</div>
+											<div id="more_buyer_area"></div>
+                                			<div class="offset-sm-7 col-sm-7">
+                                				<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="show();" id="next">Next</button>
+                                       				<a href="javascript:addMoreBuyers();"> <button type="button" class="btn btn-info waves-effect waves-light m-t-10">+ Add New Buyer</button></a>
+                                 			</div>
+                              			</div>
+                             		</div>
                              <div id="vimessages1" class="tab-pane" aria-expanded="false">
                            
-                                 <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Project Name</label>
-                                    <div class="col-6">
-                                       <select name="project_id" id="project_id" class="form-control">
-						                    <option value="">Select Project</option>
-						                    <% for(BuilderProject builderProject : project_list){ %>
-											<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option>
-											<% } %>
-							            </select>
-                                    </div>
-                                </div>
+<!--                                  <div class="form-group row"> -->
+<!--                                     <label for="example-text-input" class="col-3 col-form-label">Project Name</label> -->
+<!--                                     <div class="col-6"> -->
+<!--                                        <select name="project_id" id="project_id" class="form-control"> -->
+<!-- 						                    <option value="">Select Project</option> -->
+<%-- 						                    <% for(BuilderProject builderProject : project_list){ %> --%>
+<%-- 											<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option> --%>
+<%-- 											<% } %> --%>
+<!-- 							            </select> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
                                 
-                                <div class="form-group row">
-                                  <label for="example-text-input" class="col-3 col-form-label">Building</label>
-                                    <div class="col-6">
-                                       <select name="building_id" id="building_id" class="form-control">
-						                    <option value="">Select Building</option>
-							          	</select>
-                                    </div>
-                                </div>
+<!--                                 <div class="form-group row"> -->
+<!--                                   <label for="example-text-input" class="col-3 col-form-label">Building</label> -->
+<!--                                     <div class="col-6"> -->
+<!--                                        <select name="building_id" id="building_id" class="form-control"> -->
+<!-- 						                    <option value="">Select Building</option> -->
+<!-- 							          	</select> -->
+<!--                                     </div> -->
+<!--                                 </div> -->
                                 
                                  <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Flat</label>
                                     <div class="col-6">
                                        <select name="flat_id" id="flat_id" class="form-control">
 						                    <option value="">Select Flat</option>
+						                    <%
+						                    	if(builderFlatList.size() > 0){
+						                    		for(BuilderFlat builderFlat : builderFlatList){
+						                    %><option value="<%out.print(builderFlat.getId());%>"><% out.print(builderFlat.getFlatNo());%></option>
+						                    
+						                    <%}} %>
 							           </select>
                                     </div>
                                 </div>
@@ -239,17 +257,18 @@
 							          </select>
                                     </div>
                                 </div>
-
-                                <div class="offset-sm-5 col-sm-7">
-                                <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous1();">Previous</button>
-                                        <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next1" onclick="show1();">Next</button>
+								  <div class="offset-sm-5 col-sm-7">
+                                	<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous1();">Previous</button>
+                                    <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next1" onclick="show1();">Next</button>
                                  </div>
-                             
                                </div>
-
+								
                                 <div id="vimessages2" class="tab-pane" aria-expanded="false">
                                  <div class="col-12">
-                           
+    							<%
+    								if(projectPriceInfoData != null){
+    							%>                     
+    							<input type="hidden" id="project_id" name="project_id" value="<%out.print(project_list.get(0).getId());%>"/>  
                                 <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Booking Date</label>
                                     <div class="col-3">
@@ -257,60 +276,65 @@
                                     </div>
                                     <label for="example-text-input" class="col-3 col-form-label">Base Rate</label>
                                     <div class="col-3">
-                                        <input type="text" class="form-control" id="base_rate" name="base_rate" />
+                                        <input type="text" value="<%out.print(projectPriceInfoData.getBasePrice()); %>" class="form-control" id="base_rate" name="base_rate" />
                                     </div>
                                 </div> 
                                 
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate</label>
                                     <div class="col-3">
-                                       <input type="text" class="form-control" id="rise_rate" name="rise_rate"/>
+                                       <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getRiseRate()); %>" id="rise_rate" name="rise_rate"/>
                                     </div>
                                     <label for="example-search-input" class="col-3 col-form-label">Aminities Facing Rise Rates</label>
                                     <div class="col-3">
-                                        <input type="text" class="form-control" id="amenity_rate" name="amenity_rate" />
+                                        <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getAmenityRate()); %>" id="amenity_rate" name="amenity_rate" />
                                     </div>
                                 </div>
                                 
                                  <div class="form-group row">
                                     <label for="example-tel-input" class="col-3 col-form-label">Parking Rates</label>
                                     <div class="col-3">
-                                       	<input type="text" class="form-control" id="parking" name="parking" />
+                                       	<input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getParking()); %>" id="parking" name="parking" />
                                     </div>
                                     <label for="example-tel-input" class="col-3 col-form-label">Maintance</label>
                                     <div class="col-3">
-                                        <input type="text" class="form-control" id="maintenance" name="maintenance" />
+                                        <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getMaintenance()); %>" id="maintenance" name="maintenance" />
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label for="example-tel-input" class="col-3 col-form-label">Stamp Duty</label>
                                     <div class="col-3">
-                                       <input type="text" class="form-control" id="stamp_duty" name="stamp_duty" />
+                                       <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getStampDuty()); %>" id="stamp_duty" name="stamp_duty" />
                                     </div>
                                     <label for="example-tel-input" class="col-3 col-form-label">Taxes</label>
                                     <div class="col-3">
-                                         <input type="text" class="form-control" id="tax" name="tax" />
+                                         <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getTax()); %>" id="tax" name="tax" />
                                     </div>
                                 </div>
                                                               
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">VAT</label>
                                     <div class="col-3">
-                                       <input type="text" class="form-control" id="vat" name="vat" />
+                                       <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getVat()); %>" id="vat" name="vat" />
                                     </div>
                                     <label for="example-search-input" class="col-3 col-form-label">Tenure</label>
                                     <div class="col-3">
-                                      <input type="text" class="form-control" id="tenure" name="tenure" />
+                                      <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getTenure()); %>" id="tenure" name="tenure" />
 									  <span class="input-group-addon">Months</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">No. of Post</label>
                                     <div class="col-3">
-                                        <input class="form-control" type="text" value="" id="post" name="post">
+                                        <input class="form-control" type="text" value="<%out.print(projectPriceInfoData.getPost()); %>" id="post" name="post">
+                                    </div>
+                                    <label for="example-search-input" class="col-3 col-form-label">Total Sale Value</label>
+                                    <div class="col-3">
+                                        <input class="form-control" readonly="true" type="text" value="<%out.print(projectPriceInfoData.getPost()); %>" id="toatl_sale_value" name="total_sale_value">
                                     </div>
                                </div>
+                               <%} %>
                                <div class="form-group row">
                                     <button type="button" class="col-2" onclick="showOffers()">+ADD offers</button>
                                 </div>
@@ -359,7 +383,6 @@
                                  </div>
                                 </div>
                                </div>
-
                                 <div id="vimessages3" class="tab-pane" aria-expanded="true">        
                                 <input type="hidden" name="schedule_count" id="schedule_count" value="1"/>
 	                                <div class="form-group row">
@@ -375,28 +398,28 @@
 	                                    <div class="col-2">
 	                                       <input type="text" class="form-control" id="amount" name="amount[]" value=""/>
 	                                    </div>
-	                                     <i class="fa fa-times"></i>
+<!-- 	                                     <i class="fa fa-times"></i> -->
 	                                </div>
-	                                <div class="form-group row">
-	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
-	                                    <div class="col-2">
-	                                       <input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
-	                                    <div class="col-2">
-	                                       <input type="text" class="form-control" id="payable" name="payable[]" value=""/>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-1 col-form-label">Amount</label>
-	                                    <div class="col-2">
-	                                        <input type="text" class="form-control" id="amount" name="amount[]" value=""/>
-	                                    </div>
-	                                     <i class="fa fa-times"></i>
-	                                </div>
+<!-- 	                                <div class="form-group row"> -->
+<!-- 	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label> -->
+<!-- 	                                    <div class="col-2"> -->
+<!-- 	                                       <input type="text" class="form-control" id="schedule" name="schedule[]" value=""/> -->
+<!-- 	                                    </div> -->
+<!-- 	                                    <label for="example-search-input" class="col-2 col-form-label">% of net payable</label> -->
+<!-- 	                                    <div class="col-2"> -->
+<!-- 	                                       <input type="text" class="form-control" id="payable" name="payable[]" value=""/> -->
+<!-- 	                                    </div> -->
+<!-- 	                                    <label for="example-search-input" class="col-1 col-form-label">Amount</label> -->
+<!-- 	                                    <div class="col-2"> -->
+<!-- 	                                        <input type="text" class="form-control" id="amount" name="amount[]" value=""/> -->
+<!-- 	                                    </div> -->
+<!-- <!-- 	                                     <i class="fa fa-times"></i> --> 
+<!-- 	                                </div> -->
 	                                
 	                                 
-	                                <div class="offset-sm-9 col-sm-7">
-                                       <a href="javascript:addMoreSchedule();"> <button type="button" class="">+ Add More Schedules</button></a>
-                                    </div>
+<!-- 	                                <div class="offset-sm-9 col-sm-7"> -->
+<!--                                        <a href="javascript:addMoreSchedule();"> <button type="button" class="">+ Add More Schedules</button></a> -->
+<!--                                     </div> -->
 	                                <div class="offset-sm-5 col-sm-7">
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous3();">Previous</button>
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next3" onclick="show3();">Next</button>
@@ -450,26 +473,22 @@
                                       <div class="col-2"><input type="file" class="form-control" name="doc_url[]" /><!-- <i class="fa fa-upload" aria-hidden="true">--></div>
                                      
                                   </div>
-	                             
 	                             <div class="offset-sm-5 col-sm-7">
-	                             <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous4();">Previous</button>
-                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+	                             	<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous4();">Previous</button>
+                                 	<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
                                  </div>
                                 </div>
                                 </div>
                                 </form>
                         </div>
-
                         </div>
                     </div>
                 </div>
-               
             </div>
             <!-- /.container-fluid -->
              <div id="sidebar1"> 
 	      		<%@include file="../partial/footer.jsp"%>
 			</div> 
-        
         </div>
         <!-- /#page-wrapper -->
     
@@ -509,6 +528,52 @@ $("#building_id").change(function(){
 		$("#flat_id").html(html);
 	},'json');
 });
+
+$("#flat_id").change(function(){
+	$.get("${baseUrl}/webapi/buyer/building/available/flat/names/"+$("#flat_id").val(),{ }, function(data){
+// 		var html = '<option value="0">Select Flat</option>';
+        var html = "";
+		$(data).each(function(index){
+			
+// 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+			
+// 			+'<span class="pull-right">	<a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span><br>'
+		    html = 	+'<div class="col-12">'
+			+'<div class="form-group row">'
+			+'<label for="example-search-input" class="col-2 col-form-label">Milestone</label>'
+			+'<div class="col-2">'
+			+'<input type="text" class="form-control" id="schedule" name="schedule[]" value="'+data[index].schedule+'"/>'
+			+'</div>'
+			+'<label for="example-search-input" class="col-2 col-form-label">% of Net Payable</label>'
+			+'<div class="col-2">'
+			+'<input type="text" class="form-control"  id="payable" name="payable[]" value="'+data[index].payable+'"/>'
+			+'</div>'
+			+'<label for="example-search-input" class="col-2 col-form-label">Amount</label>'
+			+'<div class="col-2">'
+			+'<input type="text" class="form-control" id="amount" name="amount[]" value="'+data[index].amount+'"/>'
+			+'</div>'
+			+'</div>'
+		+'</div>'
+			
+		+'</div>';
+		});
+$("#vimessages3").append(html);
+	},'json');
+});
+alert("Flat ID on load :: "+<%out.print(builderFlatList.get(0).getId());%>);
+
+<%
+  if(flatPayments != null){
+	  for(FlatPayment flatPayment: flatPayments){
+%>	
+	showFlatPayment(<%out.print(flatPayment.getMilestone());%>,<%out.print(flatPayment.getPayable());%>);
+<%  }
+  }
+%>
+function showFlatPayment(milestone,percentage){
+	alert("Percentage  "+percentage);
+}
+
 $('#addbuyer').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -672,7 +737,7 @@ function addBuyer1() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/buyer/updatebuyer',
+	 		url : '${baseUrl}/webapi/buyer/save',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -697,7 +762,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/builder/buyer/new.jsp";
+        window.location.href = "${baseUrl}/builder/buyer/list.jsp";
   	}
 }
 
@@ -746,9 +811,9 @@ function addMoreBuyers() {
 						+'<label for="example-text-input" class="col-3 col-form-label">Owner *</label>'
 						+'<div class="col-3">'
 							+'<select name="is_primary[]" id="is_primary" class="form-control">'
-                       		+'<option value="">Select Owner</option>'
+                       	//	+'<option value="">Select Owner</option>'
                      		+'<option value="0" selected>Co-Owner</option>'
-                      		+'<option value="1">Owner</option>'
+//                       		+'<option value="1">Owner</option>'
 				          +'</select>'
 						+'</div>'
 						+'</div>'
@@ -779,7 +844,7 @@ function addMoreBuyers() {
 	+'</div>';
 
 	
-	$("#vimessages").append(html);
+	$("#more_buyer_area").append(html);
 	$("#buyer_count").val(buyers);
 }
 function removeBuyer(id) {
@@ -789,7 +854,7 @@ function removeBuyer(id) {
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
-	alert(schedule_count);
+	//alert(schedule_count);
 	var html = '<div class="tab-content" id="schedule-'+schedule_count+'">'
 				+'<hr/>'
 				+'<span class="pull-right">	<a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span><br>'
@@ -845,7 +910,7 @@ function removeDoc(id) {
 function show()
 {
 	$("#vimessages1").show();
-	$("#111").hide();
+	$("#vimessages").hide();
 	
 }
 
@@ -859,7 +924,7 @@ function show1()
 function previous1()
 {
 	$("#vimessages1").hide();
-	$("#111").show();
+	$("#vimessages").show();
 }
 
 
@@ -894,4 +959,34 @@ function previous4()
 	$("#vimessages3").show();
 	
 }
+$("#base_rate").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#tax").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#vat").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#rise_rate").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#parking").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#amenity_rate").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#maintenance").keyup(function(){
+	calculateTotalSaleValue();
+});
+$("#stamp_duty").keyup(function(){
+	calculateTotalSaleValue();
+});
+function calculateTotalSaleValue(){
+	$.post("${baseUrl}/webapi/buyer/sale",{project_id : $("#project_id").val(),base_rate : $("#base_rate").val(), rise_rate : $("#rise_rate").val(), amenity_rate : $("#amenity_rate").val(),parking : $("#parking").val(), maintenance : $("#maintenance").val(), stamp_duty : $("#stamp_duty").val(), tax : $("#tax").val(),vat : $("#vat").val(), no_of_floors : $("#post").val() },function(data){
+		$("#toatl_sale_value").val(data.message);
+	},'json');
+}
+
 </script>

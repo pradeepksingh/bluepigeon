@@ -90,7 +90,6 @@
                                             <td>Builder Name</td>
                                             <td>City Name</td>
                                             <td>Locality</td>
-                                            <td>Status</td>
                                             <td>Action</td>
                                         </tr>
                                           <tr>
@@ -99,7 +98,6 @@
                                             <th>Builder Name</th>
                                             <th>City Name</th>
                                             <th>Locality</th>
-                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -125,16 +123,7 @@
 											<% out.print(project.getEmail()); %>
 										</td>
 										<td>
-											<% if(project.getStatus() == 0) { %>
-											<span class='label label-warning'>Inactive</span>
-											<% } else { %>
-											<span class='label label-success'>Active</span>
-											<% 	
-											   }
-											%>
-										</td>
-										<td>
-										<a href="${baseUrl}/builder/leads/edit.jsp?lead_id=<% out.print(project.getId());%>"> <span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Edit</span></a>
+										<a href="${baseUrl}/builder/leads/edit.jsp?lead_id=<% out.print(project.getId());%>"> <span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
 										</td>
 										<% 	i++;
 											} 

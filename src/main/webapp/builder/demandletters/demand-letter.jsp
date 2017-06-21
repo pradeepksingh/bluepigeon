@@ -68,16 +68,6 @@
    <script src="../js/jquery.form.js"></script>
   <script src="../js/bootstrapValidator.min.js"></script>
    <script src="../js/bootstrap-datepicker.min.js"></script>
-  
-     <script> 
- 
-$(function(){
-$("#sidebar1").load("../partial/sidebar.jsp");
-  $("#header").load("../partial/header.jsp"); 
-
-  $("#footer").load("../partial/footer.jsp"); 
-});
-</script>
 <script type="text/javascript">
     $('input[type=checkbox]').click(function(){
     if($(this).is(':checked')){
@@ -97,12 +87,13 @@ $("#sidebar1").load("../partial/sidebar.jsp");
         <div class="cssload-speeding-wheel"></div>
     </div>
     <div id="wrapper">
-        <!-- Top Navigation -->
-        <div id="header"></div>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
-       <div id="sidebar1"> </div>
-    
+        <div id="header">
+	       <%@include file="../partial/header.jsp"%>
+      	</div>
+      	<div id="sidebar1"> 
+       	   <%@include file="../partial/sidebar.jsp"%>
+      	</div>
+    </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper" style="min-height: 2038px;">
@@ -130,24 +121,18 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                                <div id="vimessages" class="tab-pane active" aria-expanded="false">
                                 <div class="col-12">
                                   <form id="add_demand" name="add_demand" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-                       <input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
-                                <div class="form-group row">
+                       				<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
+                                	<div class="form-group row">
                                     
-                                    <label for="example-text-input" class="col-3 col-form-label">Demand Name*</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" value="" id="demand_name" name="demand_name">
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Last Date</label>
-                                    <div class="col-3">
-                                    	 <input class="form-control" type="text" value="" id="last_date" name="last_date">
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                    
-                                    
-                                </div>
-                                
+	                                    <label for="example-text-input" class="col-3 col-form-label">Demand Name*</label>
+	                                    <div class="col-3">
+	                                        <input class="form-control" type="text" value="" id="demand_name" name="demand_name">
+	                                    </div>
+	                                    <label for="example-search-input" class="col-3 col-form-label">Last Date</label>
+	                                    <div class="col-3">
+	                                    	 <input class="form-control" type="text" value="" id="last_date" name="last_date">
+	                                    </div>
+                                	</div>
                                  <div class="form-group row">
                                      <label for="example-tel-input" class="col-3 col-form-label">Remind Every</label>
                                     <div class="col-3">
@@ -236,7 +221,9 @@ $("#sidebar1").load("../partial/sidebar.jsp");
                 <!-- /.right-sidebar -->
             </div>
             <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2017 Â© Blue Pigeon</footer>
+             <div id="sidebar1"> 
+       	   		<%@include file="../partial/footer.jsp"%>
+      		</div>
         
         <!-- /#page-wrapper -->
     

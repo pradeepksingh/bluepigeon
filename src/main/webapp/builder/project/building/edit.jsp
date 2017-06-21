@@ -201,12 +201,16 @@
 											</select>
                            				</div>
                              		</div>
-		                            <% 	for(BuilderBuildingAmenity builderBuildingAmenity :builderBuildingAmenities) {  
+		                            <%
+		                            if(builderBuildingAmenities != null){
+		                            for(BuilderBuildingAmenity builderBuildingAmenity :builderBuildingAmenities) {  
 										String is_selected = "";
 										if(buildingAmenityInfos.size() > 0) { 
 											for(BuildingAmenityInfo buildingAmenityInfo :buildingAmenityInfos) {
-												if(buildingAmenityInfo.getBuilderBuildingAmenity().getId() == builderBuildingAmenity.getId()) {
-													is_selected = "checked";
+												if(buildingAmenityInfo.getBuilderBuildingAmenity() != null){
+													if(buildingAmenityInfo.getBuilderBuildingAmenity().getId() == builderBuildingAmenity.getId()) {
+														is_selected = "checked";
+													}
 												}
 											}
 										}
@@ -217,8 +221,10 @@
 										String is_checked = "";
 										if(buildingAmenityInfos.size() > 0) { 
 											for(BuildingAmenityInfo buildingAmenityInfo :buildingAmenityInfos) {
-												if(buildingAmenityInfo.getBuilderBuildingAmenity().getId() == builderBuildingAmenity.getId()) {
-													is_checked = "checked";
+												if(buildingAmenityInfo.getBuilderBuildingAmenity() != null){
+													if(buildingAmenityInfo.getBuilderBuildingAmenity().getId() == builderBuildingAmenity.getId()) {
+														is_checked = "checked";
+													}
 												}
 											}
 										}
@@ -250,7 +256,7 @@
 									<input type="hidden" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
 									<% } 
 									}
-									}
+									}}
 									%>
 			                   		<div id="offer" class="tab-pane fade active in">
 										<input type="hidden" name="offer_count" id="offer_count" value="10002">

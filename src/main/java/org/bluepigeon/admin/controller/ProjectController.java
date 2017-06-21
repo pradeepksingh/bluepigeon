@@ -6,8 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -20,13 +18,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.bluepigeon.admin.dao.BuilderCompanyDAO;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
-import org.bluepigeon.admin.dao.CityNamesImp;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
-import org.bluepigeon.admin.dao.StateImp;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.BuildingWeightageData;
@@ -98,6 +93,7 @@ import org.bluepigeon.admin.model.ProjectAmenityWeightage;
 import org.bluepigeon.admin.model.ProjectImageGallery;
 import org.bluepigeon.admin.model.ProjectPanoramicImage;
 import org.bluepigeon.admin.model.ProjectWeightage;
+import org.bluepigeon.admin.model.Source;
 import org.bluepigeon.admin.model.State;
 import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -141,6 +137,22 @@ public class ProjectController extends ResourceConfig {
 			@FormParam("locality_id") int localityId){
 		
 		return new BuilderDetailsDAO().getProjectFilters(builderId,countryId, stateId, cityId, localityId);
+	}
+	
+	@POST
+	@Path("/filter")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderProjectList> getProjectById(@FormParam("project_id") int projectId){
+		
+		return new BuilderDetailsDAO().getProjectFilterListByProjectId(projectId);
+	}
+	
+	@POST
+	@Path("/filter/builder")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderProjectList> getProjectsByBuilderId(@FormParam("builder_id") int builderId){
+		
+		return new BuilderDetailsDAO().getProjectFilterListByBuilderId(builderId);
 	}
 	
 	@POST
@@ -1996,10 +2008,10 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("status") Integer status,
 			@FormDataParam("possession_date") String possession_date,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
-			@FormDataParam("payment_id[]") List<FormDataBodyPart> payment_id,
-			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
-			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
-			@FormDataParam("amount[]") List<FormDataBodyPart> amount,
+			//@FormDataParam("payment_id[]") List<FormDataBodyPart> payment_id,
+			//@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
+			//@FormDataParam("payable[]") List<FormDataBodyPart> payable,
+			//@FormDataParam("amount[]") List<FormDataBodyPart> amount,
 			@FormDataParam("admin_id") int admin_id,
 			@FormDataParam("amenity_wt") String amenity_wts
 	) {
@@ -2087,45 +2099,45 @@ public class ProjectController extends ResourceConfig {
 				projectDAO.deleteFlatAmenityWeightage(flat_id);
 				projectDAO.addFlatAmenityWeightage(baws);
 			}
-			try{
-				if (schedule.size() > 0) {
-					List<FlatPaymentSchedule> flatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
-					List<FlatPaymentSchedule> newFlatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
-					int i = 0;
-					for(FormDataBodyPart milestone : schedule)
-					{
-						if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
-							if(payment_id.get(i).getValueAs(Integer.class) != 0 && payment_id.get(i).getValueAs(Integer.class) != null) {
-								Byte milestone_status = 0;
-								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
-								flatPaymentSchedule.setId(payment_id.get(i).getValueAs(Integer.class));
-								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
-								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
-								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
-								flatPaymentSchedule.setStatus(milestone_status);
-								flatPaymentSchedule.setBuilderFlat(builderFlat);
-								flatPaymentSchedules.add(flatPaymentSchedule);
-							} else {
-								Byte milestone_status = 0;
-								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
-								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
-								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
-								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
-								flatPaymentSchedule.setStatus(milestone_status);
-								flatPaymentSchedule.setBuilderFlat(builderFlat);
-								newFlatPaymentSchedules.add(flatPaymentSchedule);
-							}
-						}
-						i++;
-					}
-					if(flatPaymentSchedules.size() > 0) {
-						projectDAO.updateFlatPaymentInfo(flatPaymentSchedules);
-						projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
-					}
-				}
-			} catch(Exception e) {
-				
-			}
+//			try{
+//				if (schedule.size() > 0) {
+//					List<FlatPaymentSchedule> flatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
+//					List<FlatPaymentSchedule> newFlatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
+//					int i = 0;
+//					for(FormDataBodyPart milestone : schedule)
+//					{
+//						if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
+//							if(payment_id.get(i).getValueAs(Integer.class) != 0 && payment_id.get(i).getValueAs(Integer.class) != null) {
+//								Byte milestone_status = 0;
+//								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+//								flatPaymentSchedule.setId(payment_id.get(i).getValueAs(Integer.class));
+//								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
+//								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
+//								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
+//								flatPaymentSchedule.setStatus(milestone_status);
+//								flatPaymentSchedule.setBuilderFlat(builderFlat);
+//								flatPaymentSchedules.add(flatPaymentSchedule);
+//							} else {
+//								Byte milestone_status = 0;
+//								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+//								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
+//								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
+//								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
+//								flatPaymentSchedule.setStatus(milestone_status);
+//								flatPaymentSchedule.setBuilderFlat(builderFlat);
+//								newFlatPaymentSchedules.add(flatPaymentSchedule);
+//							}
+//						}
+//						i++;
+//					}
+//					if(flatPaymentSchedules.size() > 0) {
+//						projectDAO.updateFlatPaymentInfo(flatPaymentSchedules);
+//						projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
+//					}
+//				}
+//			} catch(Exception e) {
+//				
+//			}
 		} else {
 			msg.setMessage("Failed to update flat.");
 			msg.setStatus(0);
@@ -2478,6 +2490,21 @@ public class ProjectController extends ResourceConfig {
 		msg = buyerDAO.deleteBuyerById(id);
 		return msg;
 	}
+	@POST
+	@Path("/source/add")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addSource (
+			@FormDataParam("name") String name
+			
+	){
+		ResponseMessage responseMessage = new ResponseMessage();
+		Source source = new Source();
+		source.setName(name);
+		responseMessage = new ProjectDAO().saveSource(source);
+		
+		return responseMessage;
+	}
 	
 	@POST
 	@Path("/substage/update")
@@ -2515,4 +2542,26 @@ public class ProjectController extends ResourceConfig {
 		return resp;
 	}
 	
+	@POST
+	@Path("/source/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addSource (
+			@FormDataParam("uid") int id,
+			@FormDataParam("uname") String name,
+			@FormDataParam("builder_id") int builderId
+	){
+		ResponseMessage responseMessage = new ResponseMessage();
+		Builder builder = new Builder();
+		builder.setId(builderId);
+		Source source = new Source();
+		source.setId(id);
+		source.setName(name);
+		source.setBuilder(builder);
+		responseMessage = new ProjectDAO().updateSource(source);
+		
+		return responseMessage;
+	}
+	
 }
+

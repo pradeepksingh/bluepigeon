@@ -114,26 +114,6 @@
                                             <th>Action</th>
 							            </tr>
                                     </thead>
-<!--                                     <tfoot> -->
-<!--                                      <tr> -->
-<!-- 							                <th></th> -->
-<!-- 							                <th>Builder</th> -->
-<!-- 							                <th>Project</th> -->
-<!-- 							                <th>Building</th> -->
-<!-- 							                <th>status</th> -->
-<!-- 							                <th></th> -->
-<!-- 							            </tr> -->
-<!-- 							            </tfoot> -->
-							            <tbody>
-<!-- 							             <tr> -->
-<!-- 							                <td></td> -->
-<!-- 							                <td>Builder</td> -->
-<!-- 							                <td>Project</td> -->
-<!-- 							                <td>Building</td> -->
-<!-- 							                <td>status</td> -->
-<!-- 							                <td></td> -->
-<!-- 							            </tr> -->
-							            
                                        <%
                                       if(builderBuildings != null){
                                     	  int i=1;

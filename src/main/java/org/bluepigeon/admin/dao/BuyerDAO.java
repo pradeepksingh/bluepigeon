@@ -119,20 +119,14 @@ public class BuyerDAO {
 	}
 	
 	public void updateFlatStatus(int flatId){
-		String hql = "UPDATE BuilderFlat set builderFlatStatus.id=2 WHERE id = :id";
+		System.out.println("FlatId in buyer DAO :: "+flatId);
+		String hql = "UPDATE BuilderFlat set builderFlatStatus.id = 2 WHERE id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-//		BuilderFlatType builderFlatType = new BuilderFlatType();
-//		builderFlatType.setId(2);
-//		BuilderFlat builderFlat = new BuilderFlat();
-//		builderFlat.setId(flatId);
-//		
-//		builderFlat.setBuilderFlatType(builderFlatType);
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
 		query.setParameter("id",flatId);
 		query.executeUpdate();
-//		session.update(builderFlat);
 		session.getTransaction().commit();
 		session.close();
 	}
@@ -661,7 +655,7 @@ public class BuyerDAO {
 	}
 	
 	public List<ProjectData> getProjectByBuilderId(int builderId){
-		  String hql = "from BuilderProject where builder.id = :builder_id";
+		  String hql = "from BuilderProject where builder.id = :builder_id and status=1";
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
@@ -679,7 +673,7 @@ public class BuyerDAO {
 	}
 	
 	public List<BuildingData> getBuildingByProjectId(int projectId){
-		  String hql = "from BuilderBuilding where builderProject.id = :project_id";
+		  String hql = "from BuilderBuilding where builderProject.id = :project_id and status=1";
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
@@ -714,7 +708,7 @@ public class BuyerDAO {
 	}
 	
 	public List<FlatData> getBuilderFlatTypeByFloorId(int floorId){
-		  String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :floor_id";
+		  String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :floor_id and status=1";
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
@@ -738,7 +732,7 @@ public class BuyerDAO {
 	 * @return list of booked flat  
 	 */
 	public List<FlatData> getBookedFlatByFloorId(int floorId){
-		  String hql = "from BuilderFlat where builderFloor.id = :floor_id and builderFlatStatus.id=2";
+		  String hql = "from BuilderFlat where builderFloor.id = :floor_id and builderFlatStatus.id=2 and status=1";
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);

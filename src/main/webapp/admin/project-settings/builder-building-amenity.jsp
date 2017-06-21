@@ -71,6 +71,7 @@ int amenity_size=amenity_list.size();
 	</div>
 </div>
 <div id="addBuildingamenity" class="modal fade" style="">
+<form class="form-horizontal" role="form" method="post" action="" id="newBuildingAmenity" name="newBuildingAmenity" enctype="multipart/form-data">
     <div id="cancel-overlay" class="modal-dialog" style="opacity:1 ;width:400px ">
       	<div class="modal-content">
           	<div class="modal-header">
@@ -83,6 +84,15 @@ int amenity_size=amenity_list.size();
                   		<div class="form-group">
                        		<label for="password" class="control-label">Building Amenity Name</label>
                        		<input type="text" name="name" id="name" class="form-control" placeholder="Enter building amenity name"/>
+                  		</div>
+                  		<div class="messageContainer"></div>
+              		</div>
+              	</div>
+              	<div class="row">
+	              	<div class="col-xs-12">
+                  		<div class="form-group">
+                       		<label for="password" class="control-label">Building Amenity Icon</label>
+                       		<input type="file" class="form-control" id="building_amenity_icon" name="building_amenity_icon[]" />
                   		</div>
               		</div>
               	</div>
@@ -99,12 +109,13 @@ int amenity_size=amenity_list.size();
               	</div>
               	<div class="row">
               		<div class="col-xs-12">
-             			<button type="submit" class="btn btn-primary" onclick="addBuildingAmenity();">SAVE</button>
+             			<button type="submit" class="btn btn-primary" name="saveBuildingAmenity">SAVE</button>
              		</div>
               	</div>
           	</div>
       	</div>
   	</div>
+  	</form>
 </div>
 <div id="editBuildingAmenity" class="modal fade" style="">
     <div id="cancel-overlay" class="modal-dialog" style="opacity:1 ;width:400px ">
@@ -119,6 +130,8 @@ int amenity_size=amenity_list.size();
   	</div>
 </div>
 <%@include file="../../footer.jsp"%>
+<script src="${baseUrl}/js/jquery.form.js"></script>
+<script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 	</body>
 </html>
 <link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
@@ -133,13 +146,13 @@ $('#name').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
 });
-s
-function addBuildingAmenity() {
-	$.post("${baseUrl}/webapi/create/builder/building/amenity/save/",{ name: $("#name").val(), status: $("#status").val()}, function(data){
-		alert(data.message);
-		window.location.reload();
-	},'json');
-}
+
+// function addBuildingAmenity() {
+// 	$.post("${baseUrl}/webapi/create/builder/building/amenity/save/",{ name: $("#name").val(), status: $("#status").val()}, function(data){
+// 		alert(data.message);
+// 		window.location.reload();
+// 	},'json');
+// }
 
 function editBuildingAmenity(amenityid) {
 	$.get("${baseUrl}/admin/project-settings/editbuilderbuildingamenity.jsp?amenity_id="+amenityid,{ }, function(data){
@@ -148,12 +161,12 @@ function editBuildingAmenity(amenityid) {
 	},'html');
 }
 
-function updateBuildingAmenity() {
-	$.post("${baseUrl}/webapi/create/builder/building/amenity/update/",{ id: $("#uamenity_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
-		alert(data.message);
-		window.location.reload();
-	},'json');
-}
+// function updateBuildingAmenity() {
+// 	$.post("${baseUrl}/webapi/create/builder/building/amenity/update/",{ id: $("#uamenity_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
+// 		alert(data.message);
+// 		window.location.reload();
+// 	},'json');
+// }
 function deleteBuildingAmenity(amenityid){
 	var yes = confirm("Do you want to delete ?");
 	if(yes==true){
@@ -167,6 +180,73 @@ function deleteBuildingAmenity(amenityid){
 			}
 		});
 	}
+}
+
+
+$('#newBuildingAmenity').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	name: {
+            validators: {
+                notEmpty: {
+                    message: 'Amenity Name is required and cannot be empty'
+                }
+            }
+        },
+        status: {
+            validators: {
+                notEmpty: {
+                    message: 'Status  is required and cannot be empty'
+                }
+            }
+        }
+   
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	addBuildingAmenity();
+});
+
+
+function addBuildingAmenity() {
+	var options = {
+	 		target : '#response', 
+	 		beforeSubmit : showAddRequest,
+	 		success :  showAddResponse,
+	 		url : '${baseUrl}/webapi/create/builder/building/amenity/save/',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#newBuildingAmenity').ajaxSubmit(options);
+}
+
+function showAddRequest(formData, jqForm, options){
+	$("#response").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#response").removeClass('alert-success');
+       	$("#response").addClass('alert-danger');
+		$("#response").html(resp.message);
+		$("#response").show();
+  	} else {
+  		$("#response").removeClass('alert-danger');
+        $("#response").addClass('alert-success');
+        $("#response").html(resp.message);
+        $("#response").show();
+        alert(resp.message);
+        window.location.href = "${baseUrl}/admin/project-settings/builder-building-amenity.jsp";
+  	}
 }
 
 </script>
