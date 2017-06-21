@@ -235,13 +235,18 @@ public class BuilderDetailsDAO {
 		builder = (Builder) query.list().get(0);
 		return builder;
 	}
-	public List<BuilderEmployeeAccessType> getBuilderAccessList() {
-		String hql = "from BuilderEmployeeAccessType";
+	public List<BuilderEmployeeAccessType> getBuilderAccessList(int accessId) {
+		List<BuilderEmployeeAccessType> result = null;
+		String hql = "from BuilderEmployeeAccessType where id > :access_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
+		if(accessId != 3 || accessId !=6 || accessId != 7){
 		Query query = session.createQuery(hql);
-		List<BuilderEmployeeAccessType> result = query.list();
+		query.setParameter("access_id", accessId);
+		result = query.list();
+		}
 		session.close();
+		
 		return result;
 	}
 	
@@ -346,12 +351,22 @@ public class BuilderDetailsDAO {
 		responseMessage.setMessage("Empolyee Added Successfully.");
 		return responseMessage;
 	}
-	public List<EmployeeList> getBuilderEmployeeList(int builder_id) {
+	public List<EmployeeList> getBuilderEmployeeList(BuilderEmployee builderEmployeeList) {
 		String hql = "from BuilderEmployee where builder.id=:builder_id";
+		String empHql = "from BuilderEmployee where builder.id = :builder_id and builderEmployee.id = :reporting_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("builder_id", builder_id);
+		Query query = null;
+		if(builderEmployeeList.getBuilderEmployeeAccessType().getId() == 1 || builderEmployeeList.getBuilderEmployeeAccessType().getId()==2){
+			query = session.createQuery(hql);
+			query.setParameter("builder_id", builderEmployeeList.getBuilder().getId());
+		}
+		if(builderEmployeeList.getBuilderEmployeeAccessType().getId() == 4 || builderEmployeeList.getBuilderEmployeeAccessType().getId() ==5){
+			query = session.createQuery(empHql);
+			query.setParameter("builder_id", builderEmployeeList.getBuilder().getId());
+			query.setParameter("reporting_id",builderEmployeeList.getId() );
+		}
+			
 		List<BuilderEmployee> result = query.list();
 		List<EmployeeList> employeeLists = new ArrayList<EmployeeList>();
 		int count=1;
@@ -734,6 +749,7 @@ public class BuilderDetailsDAO {
 		projectQuery.setParameter("builder_id", builderId);
 		List<Long> builderProjectLists = query.list();
 		List<BuilderProject> projectList = projectQuery.list();
+		System.out.println("Year Count :: "+builderProjectLists.size());
 		int i=0;		
 		for(Long builderProject : builderProjectLists){
 			BarGraphData barGraphData = new BarGraphData();
@@ -742,6 +758,7 @@ public class BuilderDetailsDAO {
 			barGraphData.setTotalBuyers(getTotalBuyersByBuilderId(builderId));
 			barGraphData.setTotalSold(getTotalsoldFlatsByBuilderId(builderId));
 			barGraphDatas.add(barGraphData);
+			i++;
 		}
 		return barGraphDatas;
 	}

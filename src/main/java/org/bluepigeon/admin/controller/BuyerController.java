@@ -1259,7 +1259,7 @@ public class BuyerController {
 		if(responseMessage.getId()>0){
 			List<PossessionBuyer> possessionBuyerList = new ArrayList<PossessionBuyer>();
 			possession.setId(responseMessage.getId());
-			if(buyer_names.size()>0){
+			if(buyer_names.size()>0 || buyer_names != null ){
 				Buyer buyerDetails = null;
 				for(FormDataBodyPart buyers : buyer_names){
 					if(buyers.getValueAs(Integer.class).toString() != null && !buyers.getValueAs(Integer.class).toString().isEmpty()) {

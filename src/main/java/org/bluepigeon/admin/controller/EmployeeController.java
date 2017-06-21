@@ -3,6 +3,7 @@ package org.bluepigeon.admin.controller;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -15,6 +16,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.bluepigeon.admin.dao.AdminUserDAO;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.ProjectDAO;
@@ -148,12 +150,15 @@ public class EmployeeController {
 			@FormDataParam("project") int projectId,
 			@FormDataParam("area") int areaId,
 			@FormDataParam("city") int cityId,
-			@FormDataParam("builder_id") int builderId){
+			@FormDataParam("builder_id") int builderId,
+			@FormDataParam("reporting_id") int reporting_id){
 		
 		BuilderEmployeeAccessType employeeAccessType = new BuilderEmployeeAccessType();
 		
 		Builder builder = new Builder();
 		BuilderEmployee builderEmployee = new BuilderEmployee();
+		BuilderEmployee reportingEmployee = new BuilderEmployee();
+		reportingEmployee.setId(reporting_id);
 		Locality locality = new Locality();
 		boolean status = false;
 		
@@ -181,13 +186,20 @@ public class EmployeeController {
 			builderProject.setId(projectId);
 			builderEmployee.setBuilderProject(builderProject);
 		}
+		Random random = new Random();
+		//random.doubles();
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
+		String pwd = RandomStringUtils.random( 15, characters );
+		System.out.println( pwd );
 		builderEmployee.setName(name);
 		builderEmployee.setEmail(email);
+		builderEmployee.setPassword(pwd);
 		builderEmployee.setMobile(mobile);
 		builderEmployee.setCurrentAddress(currentAddress);
 		builderEmployee.setPermanentAddress(permanentAddress);
 		builderEmployee.setDesignation(designation);
 		builderEmployee.setEmployeeId(employeeId);
+		builderEmployee.setBuilderEmployee(reportingEmployee);
 		builderEmployee.setStatus(status);
 		
 	return new BuilderDetailsDAO().saveEmployee(builderEmployee);

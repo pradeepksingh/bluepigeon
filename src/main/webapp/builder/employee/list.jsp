@@ -40,12 +40,13 @@
 			p_user_id = builder.getBuilder().getId();
 			if(p_user_id>0){
 				builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
-				employeeLists = new BuilderDetailsDAO().getBuilderEmployeeList(p_user_id);
+			    employeeLists = new BuilderDetailsDAO().getBuilderEmployeeList(builder);
+				if(builderProjects.size()>0)
+					project_size = builderProjects.size();
+				if(builderPropertyTypes.size()>0)
+					type_size = builderPropertyTypes.size();
 			}
-			if(builderProjects.size()>0)
-				project_size = builderProjects.size();
-			if(builderPropertyTypes.size()>0)
-				type_size = builderPropertyTypes.size();
+			
 		}
 		
 	}

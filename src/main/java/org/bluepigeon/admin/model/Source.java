@@ -4,8 +4,11 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,6 +17,7 @@ public class Source {
 	
 	private Integer id;
 	private String name;
+	private Builder builder;
 	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -30,5 +34,13 @@ public class Source {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "builder_id")
+	public Builder getBuilder() {
+		return builder;
+	}
+	public void setBuilder(Builder builder) {
+		this.builder = builder;
 	}
 }

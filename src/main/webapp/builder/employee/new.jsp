@@ -13,21 +13,28 @@
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	int builder_uid = 0;
+	int builder_size =0;
+	BuilderDetailsDAO builderDetailsDAO = null;
+	List<BuilderEmployeeAccessType> access_list  = null;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_uid = builder.getBuilder().getId();
+			if(builder_uid > 0){
+				project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_uid);
+			    builder_size = project_list.size();
+			    
+			    builderDetailsDAO = new BuilderDetailsDAO();
+			    access_list = builderDetailsDAO.getBuilderAccessList(builder.getBuilderEmployeeAccessType().getId());
+			}
 		}
    	}
-	if(builder_uid > 0){
-		project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_uid);
-		int builder_size = project_list.size();
-	}
 	
-	BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
-	List<BuilderEmployeeAccessType> access_list = builderDetailsDAO.getBuilderAccessList();
+	
+	
+	
 	
 	 
 	
@@ -116,6 +123,7 @@
                                 		<div class="col-12">
                                				<form id="addemployee" name="addemployee" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
                                 				<input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_uid); %>" />
+                                				<input type="hidden" id="reporting_id" name="reporting_id" value="<%out.print(builder.getId());%>"/>
                                 					<div class="form-group row">
                                     					<label for="example-text-input" class="col-3 col-form-label">Name*</label>
                                     					<div class="col-3">
@@ -153,9 +161,11 @@
                                     					<div class="col-3">
                                          					<select class="form-control" name="access" id="access">
                                           						<option value="">Select Access</option>
-																<% for (BuilderEmployeeAccessType access : access_list) { %>
+																<%
+																if(access_list !=null){
+																for (BuilderEmployeeAccessType access : access_list) { %>
 																<option value="<%out.print(access.getId());%>"> <% out.print(access.getName()); %> </option>
-																<% } %>
+																<% }} %>
 															</select>
                                     					</div>
                                     					<label for="example-tel-input" class="col-3 col-form-label">Employee ID</label>
@@ -245,16 +255,24 @@ $('#addemployee').bootstrapValidator({
         },
         contact:{
         	validators:{
-        		notEmpty: {
-        			message:'Contact is required and cannot be empty'
-        		}
+        		 notEmpty: {
+                     message: 'The Mobile is required.'
+                 },
+                 regexp: {
+                     regexp: '^[7-9][0-9]{9}$',
+                     message: 'Invalid Mobile Number'
+                 }
         	}
         },
         email:{
         	 excluded: false,
              validators: {
-                 notEmpty: {
+            	 notEmpty: {
                      message: 'Email is required and cannot be empty'
+                 },
+                 regexp: {
+                     regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
+                     message: 'The value is not a valid email address'
                  }
              }
         },

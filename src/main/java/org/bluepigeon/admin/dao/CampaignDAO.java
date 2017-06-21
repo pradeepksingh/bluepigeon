@@ -65,8 +65,8 @@ public class CampaignDAO {
 	public List<BuyerBuildingList> getBuyerBuildingListByProjectId(int projectId){
 		List<BuyerBuildingList> buyerBuildingLists = new ArrayList<BuyerBuildingList>();
 		String hql = "from BuilderBuilding where builderProject.id = :project_id and status=1";
-		String buyerHql = "from Buyer where builderBuilding.id =:building_id and is_primary=1 and is_deleted=0";
-		HibernateUtil hibernateUtil = new HibernateUtil();
+		String buyerHql = "from Buyer where builderBuilding.id =:building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil(); 
 		Session session = hibernateUtil.openSession();
 		Session BuyerSession = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -82,7 +82,7 @@ public class CampaignDAO {
 			Buyer buyer2[] = new Buyer[buyers.size()];
 			for(int i=0;i<buyers.size();i++){
 				buyer2[i] = new Buyer();
-				if(buyer2[i].getIsPrimary()){
+				if(buyer2[i].getIsPrimary() && buyer2[i].getIsDeleted() == 0){
 					buyer2[i].setId(buyers.get(i).getId());
 					buyer2[i].setName(buyers.get(i).getName());
 					System.out.println("BuyerName ::: "+buyer2[i].getName());
@@ -104,7 +104,7 @@ public class CampaignDAO {
 	public List<BuyerFlatList> getBuyerFlatListByBuildingId(int buildingId){
 		List<BuyerFlatList> buyerFlatLists = new ArrayList<BuyerFlatList>();
 		String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id and status=1";
-		String buyerHql = "from Buyer where  builderFlat.id = :flat_id and is_primary=1 and is_deleted=0";
+		String buyerHql = "from Buyer where  builderFlat.id = :flat_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Session buyerSession = hibernateUtil.openSession();
@@ -121,7 +121,7 @@ public class CampaignDAO {
 			Buyer buyer[] = new Buyer[buyers.size()];
 			for(int i=0;i<buyers.size();i++){
 				buyer[i] = new Buyer();
-				if(buyer[i].getIsPrimary()){
+				if(buyer[i].getIsPrimary() && buyer[i].getIsDeleted() == 0){
 					buyer[i].setId(buyers.get(i).getId());
 					buyer[i].setName(buyers.get(i).getName());
 					buyerFlatList.setBuyer(buyer);
