@@ -17,6 +17,7 @@ import org.bluepigeon.admin.data.FloorImageData;
 import org.bluepigeon.admin.data.FloorPanoData;
 import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.NewProjectList;
+import org.bluepigeon.admin.data.PaymentInfoData;
 import org.bluepigeon.admin.data.ProjectCityData;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectDetail;
@@ -796,6 +797,79 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("building_id", building_id);
 		List<BuildingPaymentInfo> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<PaymentInfoData> getBuildingPaymentInfoById(int building_id) {
+		List<PaymentInfoData> paymentInfoDatas = new ArrayList<PaymentInfoData>();
+		System.out.println("Building Id :: "+building_id);
+		String hql = "from BuildingPaymentInfo where builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		try{
+		List<BuildingPaymentInfo> result = query.list();
+		
+		if(result.get(0) != null){
+			System.err.println("No Error :: "+result.size());
+			for(BuildingPaymentInfo buildingPaymentInfo : result){
+				PaymentInfoData paymentInfoData = new PaymentInfoData();
+				paymentInfoData.setId(buildingPaymentInfo.getId());
+				paymentInfoData.setName(buildingPaymentInfo.getMilestone());
+				paymentInfoData.setAmount(buildingPaymentInfo.getAmount());
+				paymentInfoData.setPayable(buildingPaymentInfo.getPayable());
+				paymentInfoDatas.add(paymentInfoData);
+			}
+		}else{
+			
+			BuilderBuilding building = getBuilderProjectBuildingById(building_id).get(0);
+			System.err.println("Project Id :: "+building.getBuilderProject().getId());
+			List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(building.getBuilderProject().getId());
+			for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
+				PaymentInfoData paymentInfoData = new PaymentInfoData();
+				paymentInfoData.setId(0);
+				paymentInfoData.setName(builderProjectPaymentInfo.getSchedule());
+				paymentInfoData.setAmount(builderProjectPaymentInfo.getAmount());
+				paymentInfoData.setPayable(builderProjectPaymentInfo.getPayable());
+				paymentInfoDatas.add(paymentInfoData);
+			}
+			
+		}
+		}catch(IndexOutOfBoundsException e){
+			BuilderBuilding building = getBuilderProjectBuildingById(building_id).get(0);
+			System.err.println("Project Id :: "+building.getBuilderProject().getId());
+			List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(building.getBuilderProject().getId());
+			for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
+				PaymentInfoData paymentInfoData = new PaymentInfoData();
+				paymentInfoData.setId(0);
+				paymentInfoData.setName(builderProjectPaymentInfo.getSchedule());
+				paymentInfoData.setAmount(builderProjectPaymentInfo.getAmount());
+				paymentInfoData.setPayable(builderProjectPaymentInfo.getPayable());
+				paymentInfoDatas.add(paymentInfoData);
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		session.close();
+		return paymentInfoDatas;
+	}
+	/**
+	 * Get Project Payment details by building id
+	 * @author pankaj
+	 * @param building_id
+	 * @return
+	 */
+	public List<BuilderProjectPaymentInfo> getBuilderBuildingPaymentInfoByBuildingId(int building_id) {
+		BuilderBuilding building = getBuilderProjectBuildingById(building_id).get(0);
+		String hql = "from BuilderProjectPaymentInfo where builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", building.getBuilderProject().getId());
+		List<BuilderProjectPaymentInfo> result = query.list();
 		session.close();
 		return result;
 	}
@@ -1940,6 +2014,66 @@ public class ProjectDAO {
 		List<FlatPaymentSchedule> result = query.list();
 		session.close();
 		return result;
+	}
+	
+	public List<PaymentInfoData> getFlatPaymentSchedules(int flat_id) {
+		List<PaymentInfoData> paymentInfoDatas = new ArrayList<>();
+		String hql = "from FlatPaymentSchedule where builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flat_id);
+		try{
+		List<FlatPaymentSchedule> result = query.list();
+		if(result.get(0)!=null){
+			for(FlatPaymentSchedule flatPaymentSchedule : result){
+				PaymentInfoData paymentInfoData = new PaymentInfoData();
+				paymentInfoData.setId(flatPaymentSchedule.getId());
+				paymentInfoData.setName(flatPaymentSchedule.getMilestone());
+				paymentInfoData.setAmount(flatPaymentSchedule.getAmount());
+				paymentInfoData.setPayable(flatPaymentSchedule.getPayable());
+				paymentInfoDatas.add(paymentInfoData);
+			}
+		}else{
+			BuilderFlat flat =  getBuilderFlatById(flat_id);
+			List<BuildingPaymentInfo> buildingPaymentInfos = getActiveBuilderBuildingPaymentInfoById(flat.getBuilderFloor().getBuilderBuilding().getId());
+			for(BuildingPaymentInfo buildingPaymentInfo : buildingPaymentInfos){
+				PaymentInfoData paymentInfoData = new PaymentInfoData();
+				paymentInfoData.setId(0);
+				paymentInfoData.setName(buildingPaymentInfo.getMilestone());
+				paymentInfoData.setAmount(buildingPaymentInfo.getAmount());
+				paymentInfoData.setPayable(buildingPaymentInfo.getPayable());
+				paymentInfoDatas.add(paymentInfoData);
+			}
+		}
+		}catch(IndexOutOfBoundsException e){
+			BuilderFlat flat =  getBuilderFlatById(flat_id);
+			List<BuildingPaymentInfo> buildingPaymentInfos = getActiveBuilderBuildingPaymentInfoById(flat.getBuilderFloor().getBuilderBuilding().getId());
+			for(BuildingPaymentInfo buildingPaymentInfo : buildingPaymentInfos){
+				PaymentInfoData paymentInfoData = new PaymentInfoData();
+				paymentInfoData.setId(0);
+				paymentInfoData.setName(buildingPaymentInfo.getMilestone());
+				paymentInfoData.setAmount(buildingPaymentInfo.getAmount());
+				paymentInfoData.setPayable(buildingPaymentInfo.getPayable());
+				paymentInfoDatas.add(paymentInfoData);
+			}
+				
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		session.close();
+		return paymentInfoDatas;
+	}
+	
+	public BuilderFlat getBuilderFlatById(int flatId){
+		BuilderFlat builderFlat = null;
+		String hql = "from BuilderFlat where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", flatId);
+		builderFlat = (BuilderFlat) query.uniqueResult();
+		return builderFlat;
 	}
 	/**
 	 * Get all active flat payment schedules by flat id
