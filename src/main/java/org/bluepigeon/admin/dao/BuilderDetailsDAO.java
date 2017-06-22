@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.model.AllotProject;
 import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderEmployee;
@@ -821,5 +822,21 @@ public class BuilderDetailsDAO {
 		query.setParameter("builder_id", builderId);
 		totalSoldFlats = (Long) query.uniqueResult();
 		return totalSoldFlats;
+	}
+	
+	public ResponseMessage saveAllotProjects(List<AllotProject> allotProjectList){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(AllotProject allotProject : allotProjectList){
+			session.save(allotProject);
+		}
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Empolyee Added Successfully.");
+		return responseMessage;
+		
 	}
 }

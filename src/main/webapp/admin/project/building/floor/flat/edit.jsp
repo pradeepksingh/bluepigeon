@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.PaymentInfoData"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderFlatStatusDAO"%>
@@ -57,7 +58,7 @@
 	List<BuilderFlatStatus> builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderFlatStatus();
 	List<BuilderFlatAmenity> builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderActiveFlatAmenityList();
 	List<FlatAmenityInfo> flatAmenityInfos = new ProjectDAO().getBuilderFlatAmenityInfos(flat_id);
-	List<FlatPaymentSchedule> flatPaymentSchedules = new ProjectDAO().getBuilderFlatPaymentSchedules(flat_id);
+	List<PaymentInfoData> flatPaymentSchedules = new ProjectDAO().getFlatPaymentSchedules(flat_id);
 	List<BuilderBuildingFlatType> builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeByBuildingId(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
 	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderActiveProjects();
 	List<FlatAmenityWeightage> flatAmenityWeightages = new ProjectDAO().getFlatAmenityWeightageByFlatId(flat_id);
@@ -84,7 +85,7 @@
 			</div>
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Flat Details</a></li>
-<!-- 			  	<li><a data-toggle="tab" href="#payment">Payment Details</a></li> -->
+			  	<li><a data-toggle="tab" href="#payment">Payment Details</a></li>
 			  	<li><a data-toggle="tab" href="#productsubstage">Stage/Substage</a></li>
 			</ul>
 			<form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
@@ -384,67 +385,67 @@
 							</div>
 						</form>
 					</div>
-<!-- 					<div id="payment" class="tab-pane fade"> -->
-<%-- 						<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(flatPaymentSchedules.size() + 1);%>"/> --%>
-<!-- 			 			<div class="row"> -->
-<!-- 			 				<div id="paymentresponse"></div> -->
-<!-- 							<div class="col-lg-12"> -->
-<!-- 								<div class="panel panel-default"> -->
-<!-- 									<div class="panel-body"> -->
-<!-- 										<div id="payment_schedule"> -->
-<%-- 											<% for(FlatPaymentSchedule flatPaymentSchedule : flatPaymentSchedules) { %> --%>
-<%-- 											<div class="row" id="schedule-<% out.print(flatPaymentSchedule.getId());%>"> --%>
-<%-- 												<input type="hidden" name="payment_id[]" value="<% out.print(flatPaymentSchedule.getId()); %>" /> --%>
-<!-- 												<div class="col-lg-5 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-schedule"> -->
-<!-- 														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label> -->
-<!-- 														<div class="col-sm-8"> -->
-<%-- 															<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% out.print(flatPaymentSchedule.getMilestone());%>"/> --%>
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 												<div class="col-lg-3 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-payable"> -->
-<!-- 														<label class="control-label col-sm-8">% of Net Payable </label> -->
-<!-- 														<div class="col-sm-4"> -->
-<%-- 															<input type="number" class="form-control" id="payable" name="payable[]" value="<% out.print(flatPaymentSchedule.getPayable());%>"/> --%>
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 												<div class="col-lg-3 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-amount"> -->
-<!-- 														<label class="control-label col-sm-6">Amount </label> -->
-<!-- 														<div class="col-sm-6"> -->
-<%-- 															<input type="number" class="form-control" id="amount" name="amount[]" value="<% out.print(flatPaymentSchedule.getAmount());%>"/> --%>
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
+					<div id="payment" class="tab-pane fade">
+						<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(flatPaymentSchedules.size() + 1);%>"/>
+			 			<div class="row">
+			 				<div id="paymentresponse"></div>
+							<div class="col-lg-12">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div id="payment_schedule">
+											<% for(PaymentInfoData flatPaymentSchedule : flatPaymentSchedules) { %>
+											<div class="row" id="schedule-<% out.print(flatPaymentSchedule.getId());%>">
+												<input type="hidden" name="payment_id[]" value="<% out.print(flatPaymentSchedule.getId()); %>" />
+												<div class="col-lg-5 margin-bottom-5">
+													<div class="form-group" id="error-schedule">
+														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" readonly="true" id="schedule" name="schedule[]" value="<% out.print(flatPaymentSchedule.getName());%>"/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-3 margin-bottom-5">
+													<div class="form-group" id="error-payable">
+														<label class="control-label col-sm-8">% of Net Payable </label>
+														<div class="col-sm-4">
+															<input type="number" class="form-control" id="payable" name="payable[]" value="<% out.print(flatPaymentSchedule.getPayable());%>"/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-3 margin-bottom-5">
+													<div class="form-group" id="error-amount">
+														<label class="control-label col-sm-6">Amount </label>
+														<div class="col-sm-6">
+															<input type="number" class="form-control" id="amount" name="amount[]" value="<% out.print(flatPaymentSchedule.getAmount());%>"/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
 <!-- 												<div class="col-lg-1"> -->
 <%-- 													<span><a href="javascript:deletePayment(<% out.print(flatPaymentSchedule.getId());%>);" class="btn btn-danger btn-xs">x</a></span> --%>
 <!-- 												</div> -->
-<!-- 											</div> -->
-<%-- 											<% } %> --%>
-<!-- 										</div> -->
-<!-- 										<div> -->
+											</div>
+											<% } %>
+										</div>
+										<div>
 <!-- 											<div class="col-lg-12"> -->
 <!-- 												<span class="pull-right"> -->
 <!-- 													<a href="javascript:addMoreSchedule();" class="btn btn-info btn-xs">+ Add More Schedule</a> -->
 <!-- 												</span> -->
 <!-- 											</div> -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
-<!-- 							<div class="col-sm-12"> -->
-<!-- 								<span class="pull-right"> -->
-<!-- 									<button type="submit" name="flooradd" class="btn btn-success btn-sm" >Submit</button> -->
-<!-- 								</span> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<span class="pull-right">
+									<button type="submit" name="flooradd" class="btn btn-success btn-sm" >Submit</button>
+								</span>
+							</div>
+						</div>
+					</div>
 				</div>
 			</form>
 		</div>
@@ -602,48 +603,48 @@ function deletePayment(id) {
 	}
 }
 
-function addMoreSchedule() {
-	var schedule_count = parseInt($("#schedule_count").val());
-	schedule_count++;
-	var html = '<div class="row" id="schedule-'+schedule_count+'"><input type="hidden" name="payment_id[]" value="0" />'
-				+'<hr/>'
-				+'<div class="col-lg-5 margin-bottom-5">'
-				+'<div class="form-group" id="error-schedule">'
-				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-				+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-payable">'
-				+'<label class="control-label col-sm-8">% of Net Payable </label>'
-				+'<div class="col-sm-4">'
-				+'<input type="number" class="form-control" id="payable" name="payable[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-amount">'
-				+'<label class="control-label col-sm-6">Amount </label>'
-				+'<div class="col-sm-6">'
-				+'<input type="number" class="form-control" id="amount" name="amount[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-1">'
-				+'<span><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span>'
-				+'</div>'
-			+'</div>';
-	$("#payment_schedule").append(html);
-	$("#schedule_count").val(schedule_count);
-}
-function removeSchedule(id) {
-	$("#schedule-"+id).remove();
-}
+// function addMoreSchedule() {
+// 	var schedule_count = parseInt($("#schedule_count").val());
+// 	schedule_count++;
+// 	var html = '<div class="row" id="schedule-'+schedule_count+'"><input type="hidden" name="payment_id[]" value="0" />'
+// 				+'<hr/>'
+// 				+'<div class="col-lg-5 margin-bottom-5">'
+// 				+'<div class="form-group" id="error-schedule">'
+// 				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
+// 				+'<div class="col-sm-8">'
+// 				+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
+// 				+'</div>'
+// 				+'<div class="messageContainer"></div>'
+// 				+'</div>'
+// 				+'</div>'
+// 				+'<div class="col-lg-3 margin-bottom-5">'
+// 				+'<div class="form-group" id="error-payable">'
+// 				+'<label class="control-label col-sm-8">% of Net Payable </label>'
+// 				+'<div class="col-sm-4">'
+// 				+'<input type="number" class="form-control" id="payable" name="payable[]" value=""/>'
+// 				+'</div>'
+// 				+'<div class="messageContainer"></div>'
+// 				+'</div>'
+// 				+'</div>'
+// 				+'<div class="col-lg-3 margin-bottom-5">'
+// 				+'<div class="form-group" id="error-amount">'
+// 				+'<label class="control-label col-sm-6">Amount </label>'
+// 				+'<div class="col-sm-6">'
+// 				+'<input type="number" class="form-control" id="amount" name="amount[]" value=""/>'
+// 				+'</div>'
+// 				+'<div class="messageContainer"></div>'
+// 				+'</div>'
+// 				+'</div>'
+// 				+'<div class="col-lg-1">'
+// 				+'<span><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span>'
+// 				+'</div>'
+// 			+'</div>';
+// 	$("#payment_schedule").append(html);
+// 	$("#schedule_count").val(schedule_count);
+// }
+// function removeSchedule(id) {
+// 	$("#schedule-"+id).remove();
+// }
 
 
 function showDetailTab() {

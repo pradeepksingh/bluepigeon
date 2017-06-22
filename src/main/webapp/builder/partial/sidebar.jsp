@@ -62,7 +62,7 @@
 <!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
 <!--                         </ul> -->
 <!--                     </li> -->
-					<%if(builder_new.getBuilderEmployeeAccessType().getId() == 1|| builder_new.getBuilderEmployeeAccessType().getId() ==2 || builder_new.getBuilderEmployeeAccessType().getId() == 4 || builder_new.getBuilderEmployeeAccessType().getId() == 5){ %>
+					<%if(builder_new.getBuilderEmployeeAccessType().getId() == 1|| builder_new.getBuilderEmployeeAccessType().getId() ==2 || builder_new.getBuilderEmployeeAccessType().getId() == 4 || builder_new.getBuilderEmployeeAccessType().getId() == 5 || builder_new.getBuilderEmployeeAccessType().getId() == 6 || builder_new.getBuilderEmployeeAccessType().getId() == 7){ %>
                      <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="ti-layout fa-fw"></i><span class="hide-menu"> Buyer<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/buyer/new.jsp">Add</a></li>

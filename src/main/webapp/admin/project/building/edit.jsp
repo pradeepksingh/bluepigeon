@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.data.PaymentInfoData"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectPaymentInfo"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderBuildingStatusDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderBuildingAmenityDAO"%>
@@ -51,7 +53,7 @@
 	List<BuildingImageGallery> buildingImageGalleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
 	List<BuildingPanoramicImage> buildingPanoramicImages = new ProjectDAO().getBuilderBuildingElevationImagesById(building_id);
 	List<BuildingAmenityInfo> buildingAmenityInfos = new ProjectDAO().getBuilderBuildingAmenityInfoById(building_id);
-	List<BuildingPaymentInfo> buildingPaymentInfos = new ProjectDAO().getBuilderBuildingPaymentInfoById(building_id);
+	List<PaymentInfoData> buildingPaymentInfos = new ProjectDAO().getBuildingPaymentInfoById(building_id);
 	List<BuildingOfferInfo> buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
 	List<BuildingAmenityWeightage> buildingAmenityWeightages = new ProjectDAO().getBuilderBuildingAmenityWeightageById(building_id);
 	List<BuildingStage> buildingStages = new BuildingStageDAO().getActiveBuildingStages();
@@ -327,14 +329,14 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<div id="payment_schedule">
-											<% for(BuildingPaymentInfo buildingPaymentInfo : buildingPaymentInfos) { %>
+											<% for(PaymentInfoData buildingPaymentInfo : buildingPaymentInfos) { %>
 											<div class="row" id="schedule-<% out.print(buildingPaymentInfo.getId());%>">
 												<input type="hidden" name="payment_id[]" value="<% out.print(buildingPaymentInfo.getId()); %>" />
 												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-schedule">
 														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% out.print(buildingPaymentInfo.getMilestone());%>"/>
+															<input type="text" class="form-control" readonly="true" id="schedule" name="schedule[]" value="<% out.print(buildingPaymentInfo.getName());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -343,7 +345,7 @@
 													<div class="form-group" id="error-payable">
 														<label class="control-label col-sm-8">% of Net Payable </label>
 														<div class="col-sm-4">
-															<input type="number" class="form-control" id="payable" name="payable[]" value="<% out.print(buildingPaymentInfo.getPayable());%>"/>
+															<input type="number" class="form-control"  id="payable" name="payable[]" value="<% out.print(buildingPaymentInfo.getPayable());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -357,19 +359,19 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-1">
-													<span><a href="javascript:deletePayment(<% out.print(buildingPaymentInfo.getId());%>);" class="btn btn-danger btn-xs">x</a></span>
-												</div>
+<!-- 												<div class="col-lg-1"> -->
+<%-- 													<span><a href="javascript:deletePayment(<% out.print(buildingPaymentInfo.getId());%>);" class="btn btn-danger btn-xs">x</a></span> --%>
+<!-- 												</div> -->
 											</div>
 											<% } %>
 										</div>
-										<div>
-											<div class="col-lg-12">
-												<span class="pull-right">
-													<a href="javascript:addMoreSchedule();" class="btn btn-info btn-xs">+ Add More Schedule</a>
-												</span>
-											</div>
-										</div>
+<!-- 										<div> -->
+<!-- 											<div class="col-lg-12"> -->
+<!-- 												<span class="pull-right"> -->
+<!-- 													<a href="javascript:addMoreSchedule();" class="btn btn-info btn-xs">+ Add More Schedule</a> -->
+<!-- 												</span> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
 										<div>
 											<div class="row">
 												<div class="col-lg-12">

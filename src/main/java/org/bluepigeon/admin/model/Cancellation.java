@@ -27,7 +27,7 @@ public class Cancellation implements java.io.Serializable {
 	private String buyerContact;
 	private String reason;
 	private Double charges;
-	private boolean isApproved;
+	private boolean isApproved = false;
 	private boolean cancelStatus;
 
 	public Cancellation() {
@@ -40,7 +40,7 @@ public class Cancellation implements java.io.Serializable {
 	}
 
 	public Cancellation(BuilderBuilding builderBuilding, BuilderFlat builderFlat, BuilderProject builderProject,
-			String buyerName, String panCard, String buyerContact, String reason, Double charges) {
+			String buyerName, String panCard, String buyerContact, String reason, Double charges, Boolean isApproved) {
 		this.builderBuilding = builderBuilding;
 		this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
@@ -49,6 +49,7 @@ public class Cancellation implements java.io.Serializable {
 		this.buyerContact = buyerContact;
 		this.reason = reason;
 		this.charges = charges;
+		this.isApproved = isApproved;
 	}
 
 	@Id
