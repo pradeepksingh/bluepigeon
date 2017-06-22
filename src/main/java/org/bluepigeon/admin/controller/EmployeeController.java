@@ -27,6 +27,7 @@ import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
 import org.bluepigeon.admin.model.AdminUserPhotos;
 import org.bluepigeon.admin.model.AdminUserRole;
+import org.bluepigeon.admin.model.AllotProject;
 import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
@@ -147,14 +148,14 @@ public class EmployeeController {
 			@FormDataParam("designation") String designation,
 			@FormDataParam("access") int accessId,
 			@FormDataParam("empid") String employeeId,
-			@FormDataParam("project") int projectId,
+			@FormDataParam("project") List<FormDataBodyPart> projectId,
 			@FormDataParam("area") int areaId,
 			@FormDataParam("city") int cityId,
 			@FormDataParam("builder_id") int builderId,
 			@FormDataParam("reporting_id") int reporting_id){
 		
 		BuilderEmployeeAccessType employeeAccessType = new BuilderEmployeeAccessType();
-		
+		ResponseMessage responseMessage = new ResponseMessage();
 		Builder builder = new Builder();
 		BuilderEmployee builderEmployee = new BuilderEmployee();
 		BuilderEmployee reportingEmployee = new BuilderEmployee();
@@ -181,16 +182,12 @@ public class EmployeeController {
 			locality.setId(areaId);
 			builderEmployee.setLocality(locality);
 		}
-		if(projectId > 0){
-			BuilderProject builderProject = new BuilderProject();
-			builderProject.setId(projectId);
-			builderEmployee.setBuilderProject(builderProject);
-		}
+		
 		Random random = new Random();
 		//random.doubles();
 		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
 		String pwd = RandomStringUtils.random( 15, characters );
-		System.out.println( pwd );
+		//System.out.println( pwd );
 		builderEmployee.setName(name);
 		builderEmployee.setEmail(email);
 		builderEmployee.setPassword(pwd);
@@ -202,7 +199,25 @@ public class EmployeeController {
 		builderEmployee.setBuilderEmployee(reportingEmployee);
 		builderEmployee.setStatus(status);
 		
-	return new BuilderDetailsDAO().saveEmployee(builderEmployee);
+	responseMessage = new BuilderDetailsDAO().saveEmployee(builderEmployee);
+	if(responseMessage.getId() > 0){
+		builderEmployee.setId(responseMessage.getId());
+		List<AllotProject> allotProjectList = new ArrayList<>();
+		for(FormDataBodyPart projects : projectId){
+			if(projects.getValueAs(Integer.class) != null ){
+				AllotProject allotProject = new AllotProject();
+				allotProject.setBuilderEmployee(builderEmployee);
+				BuilderProject builderProject = new BuilderProject();
+				builderProject.setId(projects.getValueAs(Integer.class));
+				allotProject.setBuilderProject(builderProject);
+				allotProjectList.add(allotProject);
+			}
+		}
+		if(allotProjectList.size() > 0){
+			responseMessage =  new BuilderDetailsDAO().saveAllotProjects(allotProjectList);
+		}
+	}
+	return responseMessage;
 	}
 	
 	@POST

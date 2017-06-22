@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
+<%@page import="org.bluepigeon.admin.model.City"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.model.BuilderEmployeeAccessType"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
@@ -14,6 +16,7 @@
 	BuilderEmployee builder = new BuilderEmployee();
 	int builder_uid = 0;
 	int builder_size =0;
+	List<City> cityList = null;
 	BuilderDetailsDAO builderDetailsDAO = null;
 	List<BuilderEmployeeAccessType> access_list  = null;
 	if(session!=null)
@@ -28,6 +31,7 @@
 			    
 			    builderDetailsDAO = new BuilderDetailsDAO();
 			    access_list = builderDetailsDAO.getBuilderAccessList(builder.getBuilderEmployeeAccessType().getId());
+			    cityList = new CityNamesImp().getCityActiveNames();
 			}
 		}
    	}
@@ -176,8 +180,7 @@
                                 					<div class="form-group row">
                                     					<label for="example-text-input" class="col-3 col-form-label">Project</label>
                                     					<div class="col-3">
-                                       						<select class="form-control" name="project" id="project">
-                                          						<option value="">Select Project</option>
+                                       						<select class="form-control" multiple name="project" id="project">
 																	<% for (ProjectData project : project_list) { %>
 																	<option value="<%out.print(project.getId());%>"> <% out.print(project.getName()); %> </option>
 																	<% } %>
@@ -193,8 +196,11 @@
                                 					<div class="form-group row">
                                     					<label for="example-search-input" class="col-3 col-form-label">City</label>
                                     					<div class="col-3">
-                                         					<select name="city" id="city" class="form-control">
+                                         					<select name="city_id" id="city_id" class="form-control">
 																<option value=""> Select City </option>
+																<% for(City city : cityList){ %>
+																<option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
+																<% } %>
 															</select>
                                     					</div>
                                 					</div>
@@ -217,26 +223,28 @@
 </html>
 
 <script type="text/javascript">
-$("#project").change(function(){
-	var a=$("#project").val();
-	//alert(a);
-	$.get("${baseUrl}/webapi/employee/projectarea/list",{ project: $("#project").val() }, function(data){
-	//	alert(data);
-		var html = '<option value="">Select City</option>';
-		$(data).each(function(index){
-			html = html + '<option value="'+data[index].cityId+'">'+data[index].cityName+'</option>';
-		});
-		$("#city").html(html);
+// $("#project").change(function(){
+// 	var a=$("#project").val();
+// 	//alert(a);
+// 	$.get("${baseUrl}/webapi/employee/projectarea/list",{ project: $("#project").val() }, function(data){
+// 	//	alert(data);
+// 		var html = '<option value="">Select City</option>';
+// 		$(data).each(function(index){
+// 			html = html + '<option value="'+data[index].cityId+'">'+data[index].cityName+'</option>';
+// 		});
+// 		$("#city").html(html);
 		
-		var html1 = '<option value="">Select Area</option>';
-		$(data).each(function(index){
-			html1 = html1 + '<option value="'+data[index].areaId+'">'+data[index].areaName+'</option>';
-		});
-		$("#area").html(html1);
-	},'json');
+// 		var html1 = '<option value="">Select Area</option>';
+// 		$(data).each(function(index){
+// 			html1 = html1 + '<option value="'+data[index].areaId+'">'+data[index].areaName+'</option>';
+// 		});
+// 		$("#area").html(html1);
+// 	},'json');
+// });
+
+$("#city_id").change(function(){
+	alert("City Name "+$("#city_id").val());
 });
-
-
 $('#addemployee').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');

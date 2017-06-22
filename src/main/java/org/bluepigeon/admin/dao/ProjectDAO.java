@@ -26,6 +26,7 @@ import org.bluepigeon.admin.data.ProjectOffer;
 import org.bluepigeon.admin.data.ProjectPaymentSchedule;
 import org.bluepigeon.admin.data.ProjectWeightageData;
 import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.model.AllotProject;
 import org.bluepigeon.admin.model.AreaUnit;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuildingFlatType;
@@ -3605,5 +3606,4 @@ public class ProjectDAO {
 		responseMessage.setMessage("Source updated successfully");
 		return responseMessage;
 	}
-	
 }
