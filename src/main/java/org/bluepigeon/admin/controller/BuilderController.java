@@ -421,5 +421,11 @@ public class BuilderController {
 		return newbuildings;
 	}
 	
+	@GET
+	@Path("/building/floor/names/{building_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderFloor> getFloorNamebyBuidingId(@PathParam("building_id") int buildingId){
+		return new ProjectDAO().getBuildingFloors(buildingId);
+	}
 	
 }

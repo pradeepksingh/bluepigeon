@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
+<%@page import="org.bluepigeon.admin.data.BuildingData"%>
 <%@page import="org.bluepigeon.admin.model.ProjectImageGallery"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectApprovalInfo"%>
@@ -20,6 +22,7 @@
 	int p_user_id = 0;
 	int project_id=0;
 	BuilderProject projectList = null;
+	List<BuilderBuilding> buildingList = null;
 	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>();
 	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList();
 	project_id = Integer.parseInt(request.getParameter("project_id"));
@@ -38,6 +41,7 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			p_user_id = builder.getBuilder().getId();
+			buildingList =  new ProjectDAO().getBuilderProjectBuildings(project_id);
 		}
 	}
 %>
@@ -331,11 +335,14 @@
 															out.print(builderProjectApprovalInfo.getBuilderProjectApprovalType().getName());
 														}
 													}
-                                            %></td>
-                                        </tr>
+                                           %></td>
                                     </tbody>
                                 </table>
+                                 
                             </div>
+                        </div>
+                        <div class="white-box col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <a href="#addCountry" class="btn btn-info btn-sm pull-right" style="margin-right:-20px;" role="button" data-toggle="modal"><i class="fa fa-plus"></i> New Buyer</a>
                         </div>
 <!--                         <div class="white-box p-0"> -->
                     
@@ -371,17 +378,99 @@
                      
                     </div>
                 </div>
-                </div>
-                </div>
-        <!-- /.container-fluid -->
-        <div id="sidebar1"> 
-       	   		<%@include file="../partial/footer.jsp"%>
-      		</div>
+              </div>
+            </div>
+            <div id="addCountry" class="modal fade" style="">
+				<div id="cancel-overlay" class="modal-dialog" style="opacity:1 ;width:400px ">
+  					<div class="modal-content-new">
+			          	<div class="modal-header">
+			              	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+			              	<h4 class="modal-title" id="myModalLabel">Refine results to show project with</h4>
+			          	</div>
+          				<div class="modal-body" style="background-color:#f5f5f5;">
+              				<div class="row">
+              				<div class="col-sm-4">
+	                       		<select name="building_id" id="building_id" class="form-control">
+									<option value="0"> building </option>
+									<%for(BuilderBuilding builderBuilding : buildingList){ %>
+									<option value="<%out.print(builderBuilding.getId());%>"> <%out.print(builderBuilding.getName()); %> </option>
+									<%} %>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<select name="floor_id" id="floor_id" class="form-control">
+									<option value="0"> Floor </option>
+									
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<select name="even_odd_id" id="even_odd_id" class="form-control">
+									<option value="0">Odd / Even</option>
+							</select>
+							</div>
+							</div>
+			              		<div class="col-xs-3">
+			                  		
+			                       		<label for="password" class="control-label">Country Name</label>
+			                       		<p id="error" class="bg-danger nopadding" ></p>
+			                       		<input type="text" name="name" id="name" class="form-control" placeholder="Enter country name"/>
+			                  		
+			              		</div>
+			              		<div class="col-xs-3">
+			                  		
+			                       		<label for="password" class="control-label">Country Name</label>
+			                       		<p id="error" class="bg-danger nopadding" ></p>
+			                       		<input type="text" name="name" id="name" class="form-control" placeholder="Enter country name"/>
+			                  		
+			              		</div>
+			              		<div class="col-xs-3">
+			                  		
+			                       		<label for="password" class="control-label">Country Name</label>
+			                       		<p id="error" class="bg-danger nopadding" ></p>
+			                       		<input type="text" name="name" id="name" class="form-control" placeholder="Enter country name"/>
+			                  		
+			              		</div>
+			              		<div class="col-xs-3">
+			                  		
+			                       		<label for="password" class="control-label">Country Name</label>
+			                       		<p id="error" class="bg-danger nopadding" ></p>
+			                       		<input type="text" name="name" id="name" class="form-control" placeholder="Enter country name"/>
+			                  		
+			              		</div>
+              				</div>
+			              	<div class="row">
+			              		<div class="col-xs-12">
+			                  		<div class="form-group">
+			                       		<label for="password" class="control-label">Status</label>
+			                       		<select name="status" id="status" class="form-control">
+											<option value="1"> Active </option>
+											<option value="0"> Inactive </option>
+										</select>
+			                  		</div>
+			              		</div>
+			              	</div>
+			              	<div class="row">
+			              		<div class="col-xs-12">
+			             			<button type="submit" class="btn btn-info" onclick="addCountry();">SAVE</button>
+			             		</div>
+			              	</div>
+          				</div>
+      				</div>
+				</div>
+			</div>
+	        <!-- /.container-fluid -->
+	        <div id="sidebar1"> 
+	       	   		<%@include file="../partial/footer.jsp"%>
+	      	</div>
 </body>
 
 </html>
 <script>
 $(document).ready(function(){ 
 $('.item').first().addClass('active');
+});
+
+$("#building_id").change(function(){
+	alert("Building id :: "+$("#building_id").val())
 });
 </script>

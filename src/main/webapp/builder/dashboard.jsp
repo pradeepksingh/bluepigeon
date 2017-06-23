@@ -716,7 +716,7 @@
   		var projectId = "";
   		alert($("#project_id").val());
   	//  $('#project_id').prop('selectedIndex',0);
-  	$("#project_id")[0].selectedIndex = 0;
+  	$("#project_id").val('0');
   		//alert("Builder Id :: "+$("#builder_id").val());
   		$("#project_list").empty();
   	   $.post("${baseUrl}/webapi/project/filter/builder",{builder_id:$("#builder_id").val()},function(data){
