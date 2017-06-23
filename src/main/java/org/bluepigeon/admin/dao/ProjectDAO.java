@@ -560,6 +560,7 @@ public class ProjectDAO {
 			newproject.setCityName(builderproject.getCity().getName());
 			newproject.setLocalityId(builderproject.getLocality().getId());
 			newproject.setLocalityName(builderproject.getLocality().getName());
+			newproject.setCompletionStatus(builderproject.getCompletionStatus());
 			projects.add(newproject);
 			
 		}
@@ -2722,6 +2723,7 @@ public class ProjectDAO {
 			newproject.setCityName(builderproject.getCity().getName());
 			newproject.setLocalityId(builderproject.getLocality().getId());
 			newproject.setLocalityName(builderproject.getLocality().getName());
+			newproject.setCompletionStatus(builderproject.getCompletionStatus());
 			if(builderproject.getInventorySold() != null){
 				newproject.setSold(builderproject.getInventorySold());
 			}

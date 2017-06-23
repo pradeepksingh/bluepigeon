@@ -616,6 +616,7 @@ public class BuilderDetailsDAO {
 				builderProjectList.setTotalSold(builderProject.getTotalInventory());
 			if(builderProject.getInventorySold() != null)
 				builderProjectList.setSold(builderProject.getInventorySold());
+			builderProjectList.setCompletionStatus(builderProject.getCompletionStatus());
 			ProjectDAO projectDAO = new ProjectDAO();
 			builderProjectList.setTotalLeads(projectDAO.getTotalLeadsByProjectId(builderProject.getId()));
 			try{
@@ -650,6 +651,7 @@ public class BuilderDetailsDAO {
 				builderProjectList.setTotalSold(builderProject.getTotalInventory());
 			if(builderProject.getInventorySold() != null)
 				builderProjectList.setSold(builderProject.getInventorySold());
+			builderProjectList.setCompletionStatus(builderProject.getCompletionStatus());
 			ProjectDAO projectDAO = new ProjectDAO();
 			builderProjectList.setTotalLeads(projectDAO.getTotalLeadsByProjectId(builderProject.getId()));
 			try{
