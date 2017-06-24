@@ -82,12 +82,12 @@ public class CampaignDAO {
 			Buyer buyer2[] = new Buyer[buyers.size()];
 			for(int i=0;i<buyers.size();i++){
 				buyer2[i] = new Buyer();
-				if(buyer2[i].getIsPrimary() && buyer2[i].getIsDeleted() == 0){
+				//if(buyer2[i].getIsPrimary() && buyer2[i].getIsDeleted() == 0){
 					buyer2[i].setId(buyers.get(i).getId());
 					buyer2[i].setName(buyers.get(i).getName());
 					System.out.println("BuyerName ::: "+buyer2[i].getName());
 					buyerBuildingList.setBuyer(buyer2);
-				}
+				//}
 			}
 			buyerBuildingLists.add(buyerBuildingList);
 		}
@@ -121,11 +121,11 @@ public class CampaignDAO {
 			Buyer buyer[] = new Buyer[buyers.size()];
 			for(int i=0;i<buyers.size();i++){
 				buyer[i] = new Buyer();
-				if(buyer[i].getIsPrimary() && buyer[i].getIsDeleted() == 0){
+				//if(buyer[i].getIsPrimary() && buyer[i].getIsDeleted() == 0){
 					buyer[i].setId(buyers.get(i).getId());
 					buyer[i].setName(buyers.get(i).getName());
 					buyerFlatList.setBuyer(buyer);
-				}
+				//}
 			}
 			buyerFlatLists.add(buyerFlatList);		
 		}
@@ -149,11 +149,11 @@ public class CampaignDAO {
 		List<Buyer> buyerList = new ArrayList<Buyer>();
 		for(Buyer buyer: buyers){
 			Buyer b = new Buyer();
-			if(b.getIsPrimary()){
+			//if(b.getIsPrimary()){
 				b.setId(buyer.getId());
 				b.setName(buyer.getName());
 				buyerList.add(b);
-			}
+			//}
 		}
 		session.close();
 		return buyerList;

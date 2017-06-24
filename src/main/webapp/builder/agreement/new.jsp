@@ -117,7 +117,7 @@
 	                            <div class="tab-content"> 
 		                            <div id="vimessages" class="tab-pane active" aria-expanded="false">
 		                                <div class="col-12">
-		                                 	<form id="addagreement" name="addagreement" class="form-horizontal" action="" method="post">
+		                                 	<form id="addagreement" name="addagreement" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
 		                                     <input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
 			                                 <div class="form-group row">
 			                                    <label for="example-tel-input" class="col-3 col-form-label">Project</label>
@@ -279,7 +279,6 @@ $('#addagreement').bootstrapValidator({
 	addAgreement();
 });
 function addAgreement() {
-	alert("hiii");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
