@@ -429,7 +429,7 @@ public class BuilderController {
 			@FormParam("project_id") int projectId,
 			@FormParam("building_id") int buildingId,
 			@FormParam("floor_id") int floorId,
-			@FormParam("even_odd") int evenorodd){
+			@FormParam("evenOrodd") int evenorodd){
 		return new ProjectDAO().getBuildingFloorsFilter(projectId, buildingId, floorId, evenorodd);
 	}
 	

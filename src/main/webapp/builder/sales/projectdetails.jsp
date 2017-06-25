@@ -406,6 +406,8 @@
 								<div class="col-sm-4">
 									<select name="even_odd_id" id="even_odd_id" class="form-control">
 										<option value="0">Odd / Even</option>
+										<option value="1">odd</option>
+										<option value ="2">even</option>
 								</select>
 								</div>
 							</div>
@@ -470,7 +472,7 @@ $("#building_id").change(function(){
 });
 function getActiveProjectFlats(){
 	alert("Project Id :: "+$("#project_id").val());
-	$.post("${baseUrl}/webapi/builder/building/floor/filternames",{project_id: $("#project_id").val(), building_id : $("#building_id").val(), floor_id : $("#floor_id").val(), evenOrodd : $("#evenOrodd").val()},function(data){
+	$.post("${baseUrl}/webapi/builder/building/floor/filternames",{project_id: $("#project_id").val(), building_id : $("#building_id").val(), floor_id : $("#floor_id").val(), evenOrodd : $("#even_odd_id").val()},function(data){
 		
 // 		var oTable = $("#tblProjects").dataTable();
 // 	    oTable.fnClearTable();
