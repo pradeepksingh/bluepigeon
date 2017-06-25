@@ -8,6 +8,7 @@ public class BuilderProjectList {
 	private double sold;
 	private double totalSold;
 	private Long totalLeads;
+	private Double completionStatus;
 	public int getId() {
 		return id;
 	}
@@ -49,5 +50,11 @@ public class BuilderProjectList {
 	}
 	public void setTotalLeads(Long long1) {
 		this.totalLeads = long1;
+	}
+	public Double getCompletionStatus() {
+		return completionStatus;
+	}
+	public void setCompletionStatus(Double completionStatus) {
+		this.completionStatus = completionStatus;
 	}
 }

@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
+<%@page import="org.bluepigeon.admin.data.BuildingData"%>
 <%@page import="org.bluepigeon.admin.model.ProjectImageGallery"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectApprovalInfo"%>
@@ -20,6 +22,7 @@
 	int p_user_id = 0;
 	int project_id=0;
 	BuilderProject projectList = null;
+	List<BuilderBuilding> buildingList = null;
 	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>();
 	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList();
 	project_id = Integer.parseInt(request.getParameter("project_id"));
@@ -38,6 +41,7 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			p_user_id = builder.getBuilder().getId();
+			buildingList =  new ProjectDAO().getBuilderProjectBuildings(project_id);
 		}
 	}
 %>
@@ -109,7 +113,7 @@
                     <!-- /.breadcrumb -->
                 </div>
                 <!-- .row -->
-                
+                <input type="hidden" name="project_id" id="project_id" value="<%out.print(project_id); %>" />
                 <div class="row">
                     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                         <div class="white-box">
@@ -317,7 +321,7 @@
 <!--                                                 </tr> -->
                                            <tr>
                                             <td>Year Built</td>
-                                            <td>2012</td>
+                                            <td><%out.print(projectList.getPossessionDate().getYear()); %></td>
                                         </tr>
                                        
                                         <tr>
@@ -331,11 +335,15 @@
 															out.print(builderProjectApprovalInfo.getBuilderProjectApprovalType().getName());
 														}
 													}
-                                            %></td>
-                                        </tr>
+                                           %></td>
                                     </tbody>
                                 </table>
+                                 
                             </div>
+                        </div>
+                        <div class="white-box col-sm-12">
+                        <a href="#addCountry" class="btn btn-info btn-sm-new btn-round pull-right col-sm-12" onclick="getActiveProjectFlats();" role="button" data-toggle="modal"><i class="fa fa-plus"></i>Book Now</a>
+<!--                         <button id="#addCountry" type="button" onclick="getActiveProjectFlats();" class="btn btn-info bt-sm btn-rounded pull-right" style="margin-right:-20px;">New Request</button> -->
                         </div>
 <!--                         <div class="white-box p-0"> -->
                     
@@ -371,17 +379,126 @@
                      
                     </div>
                 </div>
-                </div>
-                </div>
-        <!-- /.container-fluid -->
-        <div id="sidebar1"> 
-       	   		<%@include file="../partial/footer.jsp"%>
-      		</div>
+              </div>
+            </div>
+            <div id="addCountry" class="modal fade" style="">
+				<div id="cancel-overlay" class="modal-dialog" style="opacity:1 ;width:400px ">
+  					<div class="modal-content-new">
+		          	<div class="modal-header">
+		              	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+		              	<h4 class="modal-title" id="myModalLabel">Refine results to show project with</h4>
+		          	</div>
+         				<div class="modal-body" style="background-color:#f5f5f5;">
+             				<div class="row">
+	             				<div class="col-sm-4">
+	                       			<select name="building_id" id="building_id" class="form-control">
+										<option value="0"> building </option>
+										<%for(BuilderBuilding builderBuilding : buildingList){ %>
+										<option value="<%out.print(builderBuilding.getId());%>"> <%out.print(builderBuilding.getName()); %> </option>
+										<%} %>
+									</select>
+								</div>
+								<div class="col-sm-4">
+									<select name="floor_id" id="floor_id" class="form-control">
+										<option value="0"> Floor </option>
+									</select>
+								</div>
+								<div class="col-sm-4">
+									<select name="even_odd_id" id="even_odd_id" class="form-control">
+										<option value="0">Odd / Even</option>
+										<option value="1">odd</option>
+										<option value ="2">even</option>
+								</select>
+								</div>
+							</div>
+							<div class="row" id="flatList">
+		              		<div class="col-xs-3">
+		                       		<label for="password" class="control-label">Country Name</label>
+		                       		<p id="error" class="bg-danger nopadding" ></p>
+		                       		<input type="text" name="name" id="name" class="form-control" placeholder="Enter country name"/>
+		                  		
+		              		</div>
+		              		<div class="col-xs-3">
+		                  		
+		                       		<label for="password" class="control-label">Country Name</label>
+		                       		<p id="error" class="bg-danger nopadding" ></p>
+		                       		<input type="text" name="name" id="name" class="form-control" placeholder="Enter country name"/>
+		                  		
+		              		</div>
+		              	</div>
+		              	<div class="row">
+		              		<div class="col-xs-12">
+		                  		<div class="form-group">
+		                       		<label for="password" class="control-label">Status</label>
+		                       		<select name="status" id="status" class="form-control">
+										<option value="1"> Active </option>
+										<option value="0"> Inactive </option>
+									</select>
+		                  		</div>
+		              		</div>
+		              	</div>
+			              <div class="row">
+			           		<div class="col-xs-12">
+			           			<button type="submit" class="btn btn-info" onclick="addCountry();">SAVE</button>
+			           		</div>
+			           	</div>
+          			</div>
+      			</div>
+			</div>
+		</div>
+	        <!-- /.container-fluid -->
+	        <div id="sidebar1"> 
+	       	   		<%@include file="../partial/footer.jsp"%>
+	      	</div>
 </body>
 
 </html>
-<script>
+<script type="text/javascript">
 $(document).ready(function(){ 
-$('.item').first().addClass('active');
+	$('.item').first().addClass('active');
 });
+$("#building_id").change(function(){
+	//$("#flatList").empty();
+// 	var flats = "";
+// 	$.get("${baseUrl}/webapi/builder/building/floor/filternames/"+$("#building_id").val(),{},function(data){
+// 		var html = "<option value='0'>Floor</option>";
+// 		$(data).each(function(index){
+// 			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
+// 		});
+// 		$("#floor_id").html(html);
+// 	},'json');
+// 	getActiveProjectFlats();
+	
+});
+function getActiveProjectFlats(){
+	alert("Project Id :: "+$("#project_id").val());
+	$.post("${baseUrl}/webapi/builder/building/floor/filternames",{project_id: $("#project_id").val(), building_id : $("#building_id").val(), floor_id : $("#floor_id").val(), evenOrodd : $("#even_odd_id").val()},function(data){
+		
+// 		var oTable = $("#tblProjects").dataTable();
+// 	    oTable.fnClearTable();
+// 	    $(data).each(function(index){
+// 		    var vieworder = '<a href="${baseUrl}/admin/project/edit.jsp?project_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
+// 		    var status = '';
+// 		    if(data[index].status == 1) {
+// 		    	status = '<span class="label label-success">Active</span>';
+// 		    } else {
+// 		    	status = '<span class="label label-warning">Inactive</span>';
+// 		    }
+// 	    	var row = [];
+// 	    	row.push(data[index].name);
+// 	    	row.push(data[index].builderName);
+// 	    	row.push(data[index].cityName);
+// 		    row.push(data[index].localityName);
+// 	    	row.push(status);
+// 	    	row.push(vieworder);
+// 	    	oTable.fnAddData(row);
+// 	    });
+sucess: {
+	
+};
+eoor:{
+	alert("Hi tehere is amn eoor");
+}
+	},'json');
+}
 </script>

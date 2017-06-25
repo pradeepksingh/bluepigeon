@@ -156,7 +156,7 @@
                    <div class="row re">
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         <select class="selectpicker border-drop-down" data-style="form-control" id="project_id" name="project_id">
-                                        <option>Project Name</option>
+                                        <option value="0">Project Name</option>
                                        <%
                                        if(project_list != null){
                                        for(ProjectList projectList : project_list){%>
@@ -182,9 +182,9 @@
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                        <select class="selectpicker" data-style="form-control">
-                                        <option>Project Status</option>
-                                        <option>1</option>
-                                        <option>2</option>
+                                        <option value="0">Project Status</option>
+                                        <option value="1">Pending Projects</option>
+                                        <option value="2">Complete Projects</option>
                          </select>
                                
                     </div>
@@ -212,11 +212,11 @@
 					                       <h4><%out.print(projectList.getCityName()); %></h4>
 					                       <br>
 						                       <div class="bottom">
-						                       <h4><%if(projectList != null){out.print(projectList.getSold());} %>/<% if(projectList != null){out.print(projectList.getTotalSold());} %> SOLD</h4>
+						                       <h4><%if(projectList != null){out.print(Math.round(projectList.getSold()));} %>/<% if(projectList != null){out.print(Math.round(projectList.getTotalSold()));} %> SOLD</h4>
 						                       </div>
 				                       </div>
 				                        <div class="col-md-6 right">
-					                         <div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="<%out.print(projectList.getId()); %>">
+					                         <div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="<%out.print(Math.round(projectList.getCompletionStatus())); %>">
 					                         </div>
 						                        <div class="bottom">
 						                        <h4><%out.print(projectList.getTotalLeads()) ;%> NEW LEADS</h4>
@@ -621,7 +621,7 @@
                 	+'</div>'
 	                +'</div>'
 	                +'<div class="col-md-6 right">'
-		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"></div>'
+		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+data[index].completionStatus+'"></div>'
 		            +'<div class="bottom">'
                     +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
                     +'</div>'
@@ -685,7 +685,7 @@
                 	+'</div>'
 	                +'</div>'
 	                +'<div class="col-md-6 right">'
-		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"></div>'
+		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+data[index].completionStatus+'"></div>'
 		            +'<div class="bottom">'
                     +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
                     +'</div>'
@@ -714,6 +714,9 @@
   		var projectName = "";
   		var cityName = "";
   		var projectId = "";
+  		alert($("#project_id").val());
+  	//  $('#project_id').prop('selectedIndex',0);
+  	$("#project_id").val('0');
   		//alert("Builder Id :: "+$("#builder_id").val());
   		$("#project_list").empty();
   	   $.post("${baseUrl}/webapi/project/filter/builder",{builder_id:$("#builder_id").val()},function(data){

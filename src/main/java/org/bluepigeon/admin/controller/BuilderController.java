@@ -26,6 +26,7 @@ import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.dao.StateImp;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingList;
+import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
 import org.bluepigeon.admin.model.AreaUnit;
@@ -421,5 +422,15 @@ public class BuilderController {
 		return newbuildings;
 	}
 	
+	@POST
+	@Path("/building/floor/filternames/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderFlat> getFloorNamebyBuidingId(
+			@FormParam("project_id") int projectId,
+			@FormParam("building_id") int buildingId,
+			@FormParam("floor_id") int floorId,
+			@FormParam("evenOrodd") int evenorodd){
+		return new ProjectDAO().getBuildingFloorsFilter(projectId, buildingId, floorId, evenorodd);
+	}
 	
 }

@@ -8,8 +8,8 @@ public class BuyerProjectList {
 	private int projectId;
 	private String projectName;
 	private Buyer buyer[];
-	private int buyerId[];
-	private String buyerName[];
+	//private int buyerId[];
+	//private String buyerName[];
 	//private int buyerId;
 	//private String buyerName;
 	public int getProjectId() {
@@ -31,18 +31,18 @@ public class BuyerProjectList {
 		this.buyer = buyer;
 	}
 	
-	public String[] getBuyerName() {
-		return buyerName;
-	}
-	public int[] getBuyerId() {
-		return buyerId;
-	}
-	public void setBuyerId(int[] buyerId) {
-		this.buyerId = buyerId;
-	}
-	public void setBuyerName(String[] buyerName) {
-		this.buyerName = buyerName;
-	}
+//	public String[] getBuyerName() {
+//		return buyerName;
+//	}
+//	public int[] getBuyerId() {
+//		return buyerId;
+//	}
+//	public void setBuyerId(int[] buyerId) {
+//		this.buyerId = buyerId;
+//	}
+//	public void setBuyerName(String[] buyerName) {
+//		this.buyerName = buyerName;
+//	}
 	
 	
 //	public int getBuyerId() {
