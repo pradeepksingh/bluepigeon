@@ -341,8 +341,8 @@
                                  
                             </div>
                         </div>
-                        <div class="white-box col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <a href="#addCountry" class="btn btn-info btn-sm btn-round pull-right" onclick="getActiveProjectFlats();" style="margin-right:-20px;" role="button" data-toggle="modal"><i class="fa fa-plus"></i> New Buyer</a>
+                        <div class="white-box col-sm-12">
+                        <a href="#addCountry" class="btn btn-info btn-sm-new btn-round pull-right col-sm-12" onclick="getActiveProjectFlats();" role="button" data-toggle="modal"><i class="fa fa-plus"></i>Book Now</a>
 <!--                         <button id="#addCountry" type="button" onclick="getActiveProjectFlats();" class="btn btn-info bt-sm btn-rounded pull-right" style="margin-right:-20px;">New Request</button> -->
                         </div>
 <!--                         <div class="white-box p-0"> -->

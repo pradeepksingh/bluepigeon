@@ -13,20 +13,21 @@
 	BuilderEmployee builder = new BuilderEmployee();
 	List<ProjectData> project_list = null;
 	int builder_id = 0;
+	int builder_id1 = 1;
+	List<BuilderEmployee> builderEmployees = null;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
-		}
-		if(builder_id > 0){
-			project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+			if(builder_id > 0){
+				project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+				
+				builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
+			}
 		}
    }
-	
-	int builder_id1 = 1;
-	List<BuilderEmployee> builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -124,9 +125,11 @@
 			                                    <div class="col-3">
 			                                         <select name="project_id" id="project_id" class="form-control">
 									                    <option value="">Select Project</option>
-									                    <% for(ProjectData builderProject : project_list){ %>
+									                    <%
+									                    if(project_list != null){
+									                    for(ProjectData builderProject : project_list){ %>
 														<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option>
-														<% } %>
+														<% }} %>
 										             </select>
 			                                    </div>
 			                                    <label for="example-text-input" class="col-3 col-form-label">Building</label>
