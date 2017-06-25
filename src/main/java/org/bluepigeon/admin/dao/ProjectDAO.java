@@ -1352,24 +1352,24 @@ public class ProjectDAO {
 				where +=" builderFloor.id = :floor_id";
 			}
 		}
-		if(evenOrodd > 0){
-			//for even floors
-			if(evenOrodd % 2 == 0){
-				if(where != null){
-					where += " AND builderFloor.floorNo % 2 = 0";
-				}else{
-					where +=" builderFloor.floorNo % 2 = 0";
-				}
-			}else{
-				if(where != null){
-					where +=" AND builderFloor.floorNo %2 <> 0";
-				}else{
-					where +=" builderFloor.floorNo %2 <> 0";
-				}
-			}
-		}
+//		if(evenOrodd > 0){
+//			//for even floors
+//			if(evenOrodd % 2 == 0){
+//				if(where != null){
+//					where += " AND builderFloor.floorNo % 2 = 0";
+//				}else{
+//					where +=" builderFloor.floorNo % 2 = 0";
+//				}
+//			}else{
+//				if(where != null){
+//					where +=" AND builderFloor.floorNo %2 <> 0";
+//				}else{
+//					where +=" builderFloor.floorNo %2 <> 0";
+//				}
+//			}
+//		}
 		//order by projectid,buildingid, floornumber and flatnumber asc
-		hql += where+" ORDER BY builderFloor.builderBuilding.builderProject.id ASC, builderFloor.builderBuilding.id ASC, builderFloor.floorNo ASC, flatNo ASC";
+		hql += where;//+" ORDER BY builderFloor.builderBuilding.builderProject.id ASC, builderFloor.builderBuilding.id ASC, builderFloor.floorNo ASC, flatNo ASC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -1379,8 +1379,8 @@ public class ProjectDAO {
 			query.setParameter("building_id", buildingId);
 		if(floorId > 0)
 			query.setParameter("floor_id", floorId);
-		if(evenOrodd > 0)
-			query.setParameter("floor_no", evenOrodd);
+//		if(evenOrodd > 0)
+//			query.setParameter("floor_no", evenOrodd);
 		List<BuilderFlat> builderFlatList = query.list();
 		session.close();
 		return builderFlatList;

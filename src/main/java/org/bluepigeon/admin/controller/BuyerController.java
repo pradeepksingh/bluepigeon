@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1093,18 +1094,20 @@ public class BuyerController {
 	 * @throws IOException
 	 */
 	public void createAgreementPdf(String fileName, Agreement agreement, Buyer buyer) throws DocumentException, IOException, FileNotFoundException{
-		Document document = new Document();
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		Date date =agreement.getLastDate();
 		String p1="(a)	Subject to applicable legislation and, where such legislation does not exist or apply, in accordance with such prescribed regulations or industry practice respecting holdback percentages and in accordance with the provisions of the General Conditions of the Contract, the Owner shall:";
 		String p2 = "(1)  make monthly payments to the Contractor on account of the Contract Price.  The amounts of such payments shall be as certified by the Engineer/Architect; and ";
 		String p3 = "(2)  upon Substantial Performance of the work as certified by the Engineer/Architect pay to the contractor any unpaid balance of holdback monies then due; and ";
 		String p4 = "(3)  upon Total Performance of the Work as certified by the Engineer/Architect pay to the contractor any unpaid balance of the Contract Price then due.";
 		String p5 ="(b)	If the Owner fails to make payments to the Contractor as they become due under the terms of this Contract or in any award by a court, interest at the rate and in the manner specified in GC21-Certificates and Payments, shall become due and payable until payment.  Such interest shall be calculated and added to any unpaid amounts monthly.";
+		Document document = new Document();
 		PdfWriter.getInstance(document, new FileOutputStream(fileName));
 		document.open();
 		document.add(new Paragraph("Project Name : "+buyer.getBuilderProject().getName()));
 		document.add(new Paragraph("Building : "+buyer.getBuilderBuilding().getName()));
 		document.add(new Paragraph("Flat No : "+buyer.getBuilderFlat().getFlatNo()));
-		document.add(new Paragraph("Agreement Date : "+agreement.getLastDate().getDay()+"/"+agreement.getLastDate().getMonth()+"/"+agreement.getLastDate().getYear()));
+		document.add(new Paragraph("Agreement Date : "+dateFormat.format(date)));
 		document.add(new Paragraph("Buyer Name "+buyer.getName()));
 		document.add(new Paragraph("Buyer Contact "+buyer.getMobile()));
 		document.add(new Paragraph("PAYMENT"));

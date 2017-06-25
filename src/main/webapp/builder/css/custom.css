@@ -10,9 +10,7 @@
 .btn-sm{
 	    margin: 0px 5px;
 }
-.bt-sm-new{
-	margin: -15px 5px;
-}
+
 #error{
 	color:red;
 	parent-top:10px;
