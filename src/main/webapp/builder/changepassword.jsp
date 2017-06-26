@@ -90,7 +90,7 @@
 <script type="text/javascript">
 function changePassword(){
 	if($("#npassword").val() == $("#cpassword").val()){
-		$.post('webapi/validatebuilder/builder/password/',{oldpassword: $("#opassword").val(), password: $("#npassword").val()}, function(data){
+		$.post('${baseUrl}/webapi/validatebuilder/builder/password/',{oldpassword: $("#opassword").val(), password: $("#npassword").val()}, function(data){
 			var success = data.status;
 			var status =parseInt(success);
 			if(status==1)
