@@ -430,7 +430,9 @@ public class BuilderController {
 			@FormParam("building_id") int buildingId,
 			@FormParam("floor_id") int floorId,
 			@FormParam("evenOrodd") int evenorodd){
-		return new ProjectDAO().getBuildingFloorsFilter(projectId, buildingId, floorId, evenorodd);
+		List<BuilderFlat>  flatList =  new ProjectDAO().getBuildingFloorsFilter(projectId, buildingId, floorId, evenorodd);
+		System.out.println("In Controller :::: "+flatList.get(0).getFlatNo());
+		return flatList;
 	}
 	
 }

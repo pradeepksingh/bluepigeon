@@ -1,3 +1,6 @@
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.text.DateFormat"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
@@ -143,7 +146,7 @@
                     </div>
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border">
-                            <h3 class="box-title">Total Revenue (Rs in cr)</h3>
+                            <h3 class="box-title">Total Revenue (in Rs)</h3>
                             <ul class="list-inline two-part">
 <!--                                 <li><i class="ti-wallet text-success"></i></li> -->
 									 <li><i class="ti-wallet text-info-new"></i></li>
@@ -798,7 +801,9 @@
     	    	{
     	    	
     	    	
-   		      y: '<%out.print(barGraphData.getBuiltYear().getYear()+1900);%>',
+   		      y: '<% DateFormat dateFormat = new SimpleDateFormat("yyyy");
+    	    	    Date date = barGraphData.getBuiltYear();
+   		      out.print(dateFormat.format(date));%>',
     	        Flat: <%out.print(barGraphData.getTotalFlats());%>,
              Buyer: <%out.print(barGraphData.getTotalBuyers()); %>,
              Purchases: <% out.print(barGraphData.getTotalSold());%>

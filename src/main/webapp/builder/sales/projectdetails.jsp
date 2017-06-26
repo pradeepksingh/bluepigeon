@@ -1,3 +1,6 @@
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.text.DateFormat"%>
 <%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
 <%@page import="org.bluepigeon.admin.data.BuildingData"%>
 <%@page import="org.bluepigeon.admin.model.ProjectImageGallery"%>
@@ -321,7 +324,10 @@
 <!--                                                 </tr> -->
                                            <tr>
                                             <td>Year Built</td>
-                                            <td><%out.print(projectList.getPossessionDate().getYear()); %></td>
+                                            <td><%
+                                            DateFormat dateFormat = new SimpleDateFormat("yyyy");
+                            	    	    Date date = projectList.getPossessionDate();
+                                            out.print(dateFormat.format(date)); %></td>
                                         </tr>
                                        
                                         <tr>
@@ -342,7 +348,7 @@
                             </div>
                         </div>
                         <div class="white-box col-sm-12">
-                        <a href="#addCountry" class="btn btn-info btn-sm-new btn-round pull-right col-sm-12" onclick="getActiveProjectFlats();" role="button" data-toggle="modal"><i class="fa fa-plus"></i>Book Now</a>
+                        <a href="#addCountry" class="btn btn-info btn-lg btn-round pull-right col-sm-12" style="margin: -22px 1px;" onclick="getActiveProjectFlats();" role="button" data-toggle="modal"><i class="fa fa-plus"></i>Book Now</a>
 <!--                         <button id="#addCountry" type="button" onclick="getActiveProjectFlats();" class="btn btn-info bt-sm btn-rounded pull-right" style="margin-right:-20px;">New Request</button> -->
                         </div>
 <!--                         <div class="white-box p-0"> -->
@@ -457,6 +463,12 @@
 $(document).ready(function(){ 
 	$('.item').first().addClass('active');
 });
+window.openNewModal = function() {
+	$('#addCountry').modal('hide');
+	setTimeout(function() {
+    	$('#addCountry').modal('show');
+    }, 500);
+}
 $("#building_id").change(function(){
 	//$("#flatList").empty();
 // 	var flats = "";
@@ -467,13 +479,14 @@ $("#building_id").change(function(){
 // 		});
 // 		$("#floor_id").html(html);
 // 	},'json');
-// 	getActiveProjectFlats();
+ 	getActiveProjectFlats();
+ 	
 	
 });
 function getActiveProjectFlats(){
 	alert("Project Id :: "+$("#project_id").val());
 	$.post("${baseUrl}/webapi/builder/building/floor/filternames",{project_id: $("#project_id").val(), building_id : $("#building_id").val(), floor_id : $("#floor_id").val(), evenOrodd : $("#even_odd_id").val()},function(data){
-		
+		alert(data);
 // 		var oTable = $("#tblProjects").dataTable();
 // 	    oTable.fnClearTable();
 // 	    $(data).each(function(index){
@@ -493,12 +506,12 @@ function getActiveProjectFlats(){
 // 	    	row.push(vieworder);
 // 	    	oTable.fnAddData(row);
 // 	    });
-sucess: {
-	
-};
-eoor:{
-	alert("Hi tehere is amn eoor");
-}
+// sucess: {
+// 	alert(data);
+// };
+// eoor:{
+// 	alert("Hi tehere is amn eoor");
+// }
 	},'json');
 }
 </script>
