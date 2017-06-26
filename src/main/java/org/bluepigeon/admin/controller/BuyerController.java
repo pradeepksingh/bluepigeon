@@ -1309,17 +1309,61 @@ public class BuyerController {
 	 * @throws IOException
 	 */
 	public void createPossessionPdf(String fileName, Possession possession, Buyer buyer) throws DocumentException, IOException{
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		Date date =possession.getLastDate();
+		String p1="Possession Letter";
+		String p2="The General Manager/Project Manager,";
+		String p3="Sub: Handing over of flats in ";
+		String p4="Shri/Smt/Ms. "+buyer.getName()+" who has been allotted flat no "+buyer.getBuilderFlat().getFlatNo()+"in "+buyer.getBuilderProject().getName()+" has made full"+
+				   "payment. All documents required from the allottee have also been received. The allottee may please be handed over his/her dwelling unit.";
+		String p5="2. The allottee has furnished Undertaking in the prescribed proforma.";
+		String p6="3. It may be noted by the Allottee that the possession of the Dwelling Unit can be given only to the Allottee or Co-Allottee/Co-Owner and not to his representative or holder of General Power of Attorney.";
+		String p7="4. Alllottee has not obtained /obtained loan through IRWO from ...................................................";
+		String p8="5. Handing Over/Taking Over Certificate should be prepared in triplicate – 1 st copy (original) will be issued to the allottee concerned in case no loan is outstanding against him/her. 2 nd copy"+
+				  "(duplicate) is required to be placed in the personal file of the allottee and the 3 rd copy (office copy) may be kept in the Project Office for their record. In case allottee has obtained loan"+
+				  "through IRWO, both the copies (original as well as duplicate) shall be kept in the personal file of the allottee. The original copy will be given to the allottee only when the loan against him/her is cleared.";
+		String p9="6. It may be ensured that the Handing Over / Taking Over Certificate is signed by the allottee before the dwelling unit is handed over.";
+		String p10="7. Photographs of the Allottee and the Co-Allottee (where applicable) are affixed above for identification.";
+		String p11= "Copy forwarded to Shri/Smt/Ms ..........................................................................................................."+
+					 ".....................................................................................................................................................................";
 		Document document = new Document();
 		PdfWriter.getInstance(document, new FileOutputStream(fileName));
 		document.open();
-		document.add(new Paragraph("Project Name : "+buyer.getBuilderProject().getName()));
-		document.add(new Paragraph("Building : "+buyer.getBuilderBuilding().getName()));
-		document.add(new Paragraph("Flat No : "+buyer.getBuilderFlat().getFlatNo()));
-		document.add(new Paragraph("Possession Date : "+possession.getLastDate()));
-		document.add(new Paragraph("Buyer Name "+buyer.getName()));
-		document.add(new Paragraph("Buyer Contact "+buyer.getMobile()));
-		if(possession.getContent()!=null)
-			document.add(new Paragraph("Content "+possession.getContent()));
+		document.add(new Paragraph(p1));
+		document.add(new Paragraph(""));
+		document.add(new Paragraph(p2));
+		document.add(new Paragraph(buyer.getBuilderProject().getName()));
+		document.add(new Paragraph("IRWO"));
+		document.add(new Paragraph(""));
+		document.add(new Paragraph(p3+buyer.getBuilderProject().getName()));
+		document.add(new Paragraph(p4));
+		document.add(new Paragraph(""));
+		document.add(new Paragraph(p5));
+		document.add(new Paragraph(""));
+		document.add(new Paragraph(p6));
+		document.add(new Paragraph(""));
+		document.add(new Paragraph(p7));
+		document.add(new Paragraph(""));
+		document.add(new Paragraph(p8));
+		document.add(new Paragraph(""));
+		document.add(new Paragraph(p9));
+		document.add(new Paragraph(""));
+		document.add(new Paragraph(p10));
+		document.add(new Paragraph(""));
+		document.add(new Paragraph("For IRWO"));
+		document.add(new Paragraph(""));
+		document.add(new Paragraph(""));
+		document.add(new Paragraph(""));
+		document.add(new Paragraph(p11));
+	
+//		document.add(new Paragraph("Project Name : "+buyer.getBuilderProject().getName()));
+//		document.add(new Paragraph("Building : "+buyer.getBuilderBuilding().getName()));
+//		document.add(new Paragraph("Flat No : "+buyer.getBuilderFlat().getFlatNo()));
+//		document.add(new Paragraph("Possession Date : "+dateFormat.format(date)));
+//		document.add(new Paragraph("Buyer Name "+buyer.getName()));
+//		document.add(new Paragraph("Buyer Contact "+buyer.getMobile()));
+//		if(possession.getContent()!=null)
+//			document.add(new Paragraph("Content "+possession.getContent()));
 		document.close();
 	}
 	
