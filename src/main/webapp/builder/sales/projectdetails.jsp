@@ -463,6 +463,12 @@
 $(document).ready(function(){ 
 	$('.item').first().addClass('active');
 });
+window.openNewModal = function() {
+	$('#addCountry').modal('hide');
+	setTimeout(function() {
+    	$('#addCountry').modal('show');
+    }, 500);
+}
 $("#building_id").change(function(){
 	//$("#flatList").empty();
 // 	var flats = "";
@@ -474,12 +480,13 @@ $("#building_id").change(function(){
 // 		$("#floor_id").html(html);
 // 	},'json');
  	getActiveProjectFlats();
+ 	
 	
 });
 function getActiveProjectFlats(){
 	alert("Project Id :: "+$("#project_id").val());
 	$.post("${baseUrl}/webapi/builder/building/floor/filternames",{project_id: $("#project_id").val(), building_id : $("#building_id").val(), floor_id : $("#floor_id").val(), evenOrodd : $("#even_odd_id").val()},function(data){
-		
+		alert(data);
 // 		var oTable = $("#tblProjects").dataTable();
 // 	    oTable.fnClearTable();
 // 	    $(data).each(function(index){
@@ -499,12 +506,12 @@ function getActiveProjectFlats(){
 // 	    	row.push(vieworder);
 // 	    	oTable.fnAddData(row);
 // 	    });
-sucess: {
-	
-};
-eoor:{
-	alert("Hi tehere is amn eoor");
-}
+// sucess: {
+// 	alert(data);
+// };
+// eoor:{
+// 	alert("Hi tehere is amn eoor");
+// }
 	},'json');
 }
 </script>

@@ -1352,6 +1352,7 @@ public class ProjectDAO {
 				where +=" builderFloor.id = :floor_id";
 			}
 		}
+		System.out.println("projectId :::: "+projectId);
 //		if(evenOrodd > 0){
 //			//for even floors
 //			if(evenOrodd % 2 == 0){
@@ -1382,7 +1383,8 @@ public class ProjectDAO {
 //		if(evenOrodd > 0)
 //			query.setParameter("floor_no", evenOrodd);
 		List<BuilderFlat> builderFlatList = query.list();
-		session.close();
+		System.err.println("No of flats :::: "+builderFlatList.size());
+		//session.close();
 		return builderFlatList;
 	}
 	/**
