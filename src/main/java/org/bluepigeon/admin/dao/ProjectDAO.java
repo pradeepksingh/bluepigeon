@@ -1383,9 +1383,17 @@ public class ProjectDAO {
 //		if(evenOrodd > 0)
 //			query.setParameter("floor_no", evenOrodd);
 		List<BuilderFlat> builderFlatList = query.list();
+		List<BuilderFlat> newFlatList = new ArrayList<BuilderFlat>();
 		System.err.println("No of flats :::: "+builderFlatList.size());
+		for(BuilderFlat builderFlat : builderFlatList){
+			BuilderFlat builderFlat2 = new BuilderFlat();
+			builderFlat2.setId(builderFlat.getId());
+			builderFlat2.setFlatNo(builderFlat.getFlatNo());
+			builderFlat2.setBuilderFloor(builderFlat.getBuilderFloor());
+			newFlatList.add(builderFlat2);
+		}
 		//session.close();
-		return builderFlatList;
+		return newFlatList;
 	}
 	/**
 	 * Get all active floor list
