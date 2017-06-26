@@ -488,7 +488,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
        // alert(resp.message);
-        window.location.href = "${baseUrl}/builder/demandletters/demand-lettter-change.jsp";
+        window.location.href = "${baseUrl}/builder/demandletters/list.jsp";
   	}
 }
 </script>
