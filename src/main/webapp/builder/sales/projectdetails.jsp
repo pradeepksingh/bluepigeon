@@ -348,7 +348,7 @@
                             </div>
                         </div>
                         <div class="white-box col-sm-12">
-                        <a href="#addCountry" class="btn btn-info btn-lg btn-round pull-right col-sm-12" style="margin: -22px 1px;" onclick="getActiveProjectFlats();" role="button" data-toggle="modal"><i class="fa fa-plus"></i>Book Now</a>
+                        <a href="#addCountry" class="btn btn-info btn-lg btn-round pull-right col-sm-12" style="margin: -22px 1px;" onclick="javascript:getActiveProjectFlats();" role="button" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;Book Now</a>
 <!--                         <button id="#addCountry" type="button" onclick="getActiveProjectFlats();" class="btn btn-info bt-sm btn-rounded pull-right" style="margin-right:-20px;">New Request</button> -->
                         </div>
 <!--                         <div class="white-box p-0"> -->
@@ -392,62 +392,33 @@
   					<div class="modal-content-new">
 		          	<div class="modal-header">
 		              	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-		              	<h4 class="modal-title" id="myModalLabel">Refine results to show project with</h4>
-		          	</div>
-         				<div class="modal-body" style="background-color:#f5f5f5;">
-             				<div class="row">
-	             				<div class="col-sm-4">
-	                       			<select name="building_id" id="building_id" class="form-control">
-										<option value="0"> building </option>
-										<%for(BuilderBuilding builderBuilding : buildingList){ %>
-										<option value="<%out.print(builderBuilding.getId());%>"> <%out.print(builderBuilding.getName()); %> </option>
-										<%} %>
-									</select>
-								</div>
-								<div class="col-sm-4">
-									<select name="floor_id" id="floor_id" class="form-control">
-										<option value="0"> Floor </option>
-									</select>
-								</div>
-								<div class="col-sm-4">
-									<select name="even_odd_id" id="even_odd_id" class="form-control">
-										<option value="0">Odd / Even</option>
-										<option value="1">odd</option>
-										<option value ="2">even</option>
-								</select>
-								</div>
-							</div>
-							<div class="row" id="flatList">
-		              		<div class="col-xs-3">
-		                       		<label for="password" class="control-label">Country Name</label>
-		                       		<p id="error" class="bg-danger nopadding" ></p>
-		                       		<input type="text" name="name" id="name" class="form-control" placeholder="Enter country name"/>
-		                  		
-		              		</div>
-		              		<div class="col-xs-3">
-		                  		
-		                       		<label for="password" class="control-label">Country Name</label>
-		                       		<p id="error" class="bg-danger nopadding" ></p>
-		                       		<input type="text" name="name" id="name" class="form-control" placeholder="Enter country name"/>
-		                  		
-		              		</div>
-		              	</div>
 		              	<div class="row">
-		              		<div class="col-xs-12">
-		                  		<div class="form-group">
-		                       		<label for="password" class="control-label">Status</label>
-		                       		<select name="status" id="status" class="form-control">
-										<option value="1"> Active </option>
-										<option value="0"> Inactive </option>
-									</select>
-		                  		</div>
-		              		</div>
-		              	</div>
-			              <div class="row">
-			           		<div class="col-xs-12">
-			           			<button type="submit" class="btn btn-info" onclick="addCountry();">SAVE</button>
-			           		</div>
-			           	</div>
+			              	<div class="col-sm-6"><h4 class="modal-title" id="myModalLabel">Refine results to show project with</h4></div>
+			              	<div class="col-sm-2">
+			              		<select name="building_id" id="building_id" class="form-control">
+									<option value="0"> Building </option>
+									<%for(BuilderBuilding builderBuilding : buildingList){ %>
+									<option value="<%out.print(builderBuilding.getId());%>"> <%out.print(builderBuilding.getName()); %> </option>
+									<%} %>
+								</select>
+							</div>
+							<div class="col-sm-2">
+								<select name="floor_id" id="floor_id" class="form-control">
+									<option value="0"> Floor </option>
+								</select>
+							</div>
+							<div class="col-sm-2">
+								<select name="even_odd_id" id="even_odd_id" class="form-control">
+									<option value="0">Odd / Even</option>
+									<option value="1">odd</option>
+									<option value ="2">even</option>
+								</select>
+							</div>
+			          	</div>
+		          </div>
+         		  <div class="modal-body" style="background-color:#f5f5f5;">
+						<div id="flatList"></div>
+						<div id="next"></div>
           			</div>
       			</div>
 			</div>
@@ -470,48 +441,51 @@ window.openNewModal = function() {
     }, 500);
 }
 $("#building_id").change(function(){
-	//$("#flatList").empty();
-// 	var flats = "";
-// 	$.get("${baseUrl}/webapi/builder/building/floor/filternames/"+$("#building_id").val(),{},function(data){
-// 		var html = "<option value='0'>Floor</option>";
-// 		$(data).each(function(index){
-// 			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
-// 		});
-// 		$("#floor_id").html(html);
-// 	},'json');
+	$.get("${baseUrl}/webapi/project/building/floor/names/"+$("#building_id").val(),{},function(data){
+		var html = '<option value="0">Select Floor</option>';
+		$(data).each(function(index){
+			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
+		});
+		$("#floor_id").html(html);
+	},'json');
  	getActiveProjectFlats();
- 	
-	
+});
+$("#floor_id").change(function(){
+	getActiveProjectFlats();
+});
+$("#even_odd_id").change(function(){
+	getActiveProjectFlats();
 });
 function getActiveProjectFlats(){
-	alert("Project Id :: "+$("#project_id").val());
+	$("#flatList").empty();
+	var buildingImg = "";
+	var imgdiv = "";
+	var html = "<div class='row'>";
 	$.post("${baseUrl}/webapi/builder/building/floor/filternames",{project_id: $("#project_id").val(), building_id : $("#building_id").val(), floor_id : $("#floor_id").val(), evenOrodd : $("#even_odd_id").val()},function(data){
-		alert(data);
-// 		var oTable = $("#tblProjects").dataTable();
-// 	    oTable.fnClearTable();
-// 	    $(data).each(function(index){
-// 		    var vieworder = '<a href="${baseUrl}/admin/project/edit.jsp?project_id='+data[index].id+'" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
-// 		    var status = '';
-// 		    if(data[index].status == 1) {
-// 		    	status = '<span class="label label-success">Active</span>';
-// 		    } else {
-// 		    	status = '<span class="label label-warning">Inactive</span>';
-// 		    }
-// 	    	var row = [];
-// 	    	row.push(data[index].name);
-// 	    	row.push(data[index].builderName);
-// 	    	row.push(data[index].cityName);
-// 		    row.push(data[index].localityName);
-// 	    	row.push(status);
-// 	    	row.push(vieworder);
-// 	    	oTable.fnAddData(row);
-// 	    });
-// sucess: {
-// 	alert(data);
-// };
-// eoor:{
-// 	alert("Hi tehere is amn eoor");
-// }
+		 if(data == ""){
+			   $("#flatList").empty();
+			   $("#flatList").append("<h2><center>Sorry No Flats Found</center></h2>");
+		 }else{
+			$(data).each(function(index){
+				$(data[index].buildingListDatas).each(function(index1){
+					html+="<div class='col-sm-12'><label for='password' class='control-label bold'>Building "+data[index].buildingListDatas[index1].buildingName+"</label></div>"
+					buildingImg = data[index].buildingListDatas[index1].buildingImage;
+					$(data[index].buildingListDatas[index1].floorListDatas).each(function(index2){
+						html+="<div class='col-sm-12'><label for='password' class='control-label'><b>"+data[index].buildingListDatas[index1].floorListDatas[index2].floorName+"</b></div>"
+						$(data[index].buildingListDatas[index1].floorListDatas[index2].flatDatas).each(function(index3){
+							html+="<div class='col-sm-2'><input type='radio' value="+data[index].buildingListDatas[index1].floorListDatas[index2].flatDatas[index3].id+">"+data[index].buildingListDatas[index1].floorListDatas[index2].flatDatas[index3].name+"<div>"
+						});
+					});
+				});
+			});
+			html +="</div>";
+			if(buildingImg != "")
+				buildingImg = "${baseUrl}/"+buildingImg;
+			else
+				buildingImg = "No Image Found";
+			
+		   $("#flatList").append(html);
+		}
 	},'json');
 }
 </script>

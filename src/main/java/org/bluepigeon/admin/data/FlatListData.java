@@ -3,13 +3,14 @@ package org.bluepigeon.admin.data;
 import java.util.List;
 
 public class FlatListData {
-	private int id;
+	private int projectid;
 	private List<BuildingListData> buildingListDatas;
-	public int getId() {
-		return id;
+	
+	public int getProjectid() {
+		return projectid;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setProjectid(int projectid) {
+		this.projectid = projectid;
 	}
 	public List<BuildingListData> getBuildingListDatas() {
 		return buildingListDatas;

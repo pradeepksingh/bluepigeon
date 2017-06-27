@@ -5,6 +5,7 @@ import java.util.List;
 public class BuildingListData {
 	private int buildingId;
 	private String buildingName;
+	private String BuildingImage;
 	List<FloorListData> floorListDatas;
 	public int getBuildingId() {
 		return buildingId;
@@ -17,6 +18,12 @@ public class BuildingListData {
 	}
 	public void setBuildingName(String buildingName) {
 		this.buildingName = buildingName;
+	}
+	public String getBuildingImage() {
+		return BuildingImage;
+	}
+	public void setBuildingImage(String buildingImage) {
+		BuildingImage = buildingImage;
 	}
 	public List<FloorListData> getFloorListDatas() {
 		return floorListDatas;
