@@ -28,6 +28,7 @@
 	Long totalLeads = (long)0;
 	Double totalRevenue = 0.0;
 	Double totalSaleValue = 0.0;
+	Long totalCampaign = (long)0;
 	Long totalSoldInventory = (long)0;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
@@ -50,6 +51,7 @@
 					totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder_id);
 					totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
 					totalRevenue = totalSaleValue * totalSoldInventory;
+				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 				}
 			}
 		}
@@ -164,7 +166,7 @@
                             <h3 class="box-title">Total No. Of Campaigns</h3>
                             <ul class="list-inline two-part">
                                 <li><i class="ti-home text-info-new"></i></li>
-                                <li class="text-right"><span class="counter dashboard-text"><%out.print(totalInventory); %></span></li>
+                                <li class="text-right"><span class="counter dashboard-text"><%if(totalCampaign != null){out.print(totalCampaign);} %></span></li>
                             </ul>
                         </div>
                     </div>

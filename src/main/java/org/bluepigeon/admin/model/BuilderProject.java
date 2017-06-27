@@ -47,10 +47,10 @@ public class BuilderProject implements java.io.Serializable {
 	private String highlights;
 	private Date launchDate;
 	private Date possessionDate;
-	private Double totalInventory;
-	private Double inventorySold;
-	private Integer availbale;
-	private Double revenue;
+	private Double totalInventory = 0.0;
+	private Double inventorySold =0.0;
+	private Integer availbale = 0;
+	private Double revenue = 0.0;
 	private Double completionStatus = 0.0;
 	private Byte status;
 	private Set<BuilderBuilding> builderBuildings = new HashSet<BuilderBuilding>(0);
@@ -84,7 +84,7 @@ public class BuilderProject implements java.io.Serializable {
 			Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos,
 			Set<BuilderProjectBankInfo> builderProjectBankInfos,
 			Set<BuilderProjectProjectType> builderProjectProjectTypes, Set<BuilderFlatType> builderFlatTypes,
-			Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos, Double completionStatus) {
+			Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos, Double completionStatus, Integer availbale) {
 		this.state = state;
 		this.adminUser = adminUser;
 		this.areaUnit = areaUnit;
@@ -122,6 +122,8 @@ public class BuilderProject implements java.io.Serializable {
 		this.builderFlatTypes = builderFlatTypes;
 		this.builderProjectApprovalInfos = builderProjectApprovalInfos;
 		this.completionStatus = completionStatus;
+		this.revenue = revenue;
+		this.availbale = availbale;
 	}
 
 	@Id

@@ -30,6 +30,7 @@ public class Builder implements java.io.Serializable {
 	private String password;
 	private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
 	private Set<BuilderCompanyNames> builderCompanyNameses = new HashSet<BuilderCompanyNames>(0);
+	//private Set<BuilderEmployee> builderEmployees = new HashSet<BuilderEmployee>(0);
 
 	public Builder() {
 	}
@@ -47,6 +48,7 @@ public class Builder implements java.io.Serializable {
 		this.password = password;
 		this.builderProjects = builderProjects;
 		this.builderCompanyNameses = builderCompanyNameses;
+		//this.builderEmployees = builderEmployees;
 	}
 
 	@Id
@@ -150,6 +152,4 @@ public class Builder implements java.io.Serializable {
 	public void setBuilderCompanyNameses(Set<BuilderCompanyNames> builderCompanyNameses) {
 		this.builderCompanyNameses = builderCompanyNameses;
 	}
-
-
 }

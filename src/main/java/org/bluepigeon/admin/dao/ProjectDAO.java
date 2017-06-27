@@ -7,8 +7,10 @@ import java.util.Set;
 
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuildingList;
+import org.bluepigeon.admin.data.BuildingListData;
 import org.bluepigeon.admin.data.BuildingWeightageData;
 import org.bluepigeon.admin.data.FlatAmenityTotal;
+import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.data.FlatTotal;
 import org.bluepigeon.admin.data.FlatWeightageData;
@@ -16,6 +18,7 @@ import org.bluepigeon.admin.data.FlatPayment;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorDetail;
 import org.bluepigeon.admin.data.FloorImageData;
+import org.bluepigeon.admin.data.FloorListData;
 import org.bluepigeon.admin.data.FloorPanoData;
 import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.NewProjectList;
@@ -1332,7 +1335,7 @@ public class ProjectDAO {
 		return result;
 	}
 	
-	public List<BuilderFlat> getBuildingFloorsFilter(int projectId, int buildingId, int floorId, int evenOrodd) {
+	public List<FlatListData> getBuildingFloorsFilter(int projectId, int buildingId, int floorId, int evenOrodd) {
 		String hql = "from BuilderFlat where ";
 		String where = "";
 		if(projectId > 0){
@@ -1370,10 +1373,13 @@ public class ProjectDAO {
 //			}
 //		}
 		//order by projectid,buildingid, floornumber and flatnumber asc
-		hql += where;//+" ORDER BY builderFloor.builderBuilding.builderProject.id ASC, builderFloor.builderBuilding.id ASC, builderFloor.floorNo ASC, flatNo ASC";
+		hql += where+" ORDER BY builderFloor.builderBuilding.builderProject.id ASC, builderFloor.builderBuilding.id ASC, builderFloor.floorNo ASC, flatNo ASC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
+		String flatHql = "from BuilderFlat where builderFloor.id = :floor_id" ;
+		Session flatSession = hibernateUtil.openSession();
+		Query flatQuery = flatSession.createQuery(flatHql);
 		if(projectId > 0)
 			query.setParameter("project_id", projectId);
 		if(buildingId > 0)
@@ -1383,14 +1389,52 @@ public class ProjectDAO {
 //		if(evenOrodd > 0)
 //			query.setParameter("floor_no", evenOrodd);
 		List<BuilderFlat> builderFlatList = query.list();
-		List<BuilderFlat> newFlatList = new ArrayList<BuilderFlat>();
+		List<FlatListData> newFlatList = new ArrayList<FlatListData>();
 		System.err.println("No of flats :::: "+builderFlatList.size());
+		int buildingid = 0;
+		String buildingName = "";
+		int floorid = 0;
+		String floorName = "";
+		int flatid =0;
+		int flatno=0;
 		for(BuilderFlat builderFlat : builderFlatList){
-			BuilderFlat builderFlat2 = new BuilderFlat();
-			builderFlat2.setId(builderFlat.getId());
-			builderFlat2.setFlatNo(builderFlat.getFlatNo());
-			builderFlat2.setBuilderFloor(builderFlat.getBuilderFloor());
-			newFlatList.add(builderFlat2);
+			FlatListData flatListData = new FlatListData();
+			List<BuildingListData> buildingListDatas = new ArrayList<BuildingListData>();
+			if(buildingid != builderFlat.getBuilderFloor().getBuilderBuilding().getId()){
+				List<FloorListData> floorListDatas = new ArrayList<>();
+				if(floorid != builderFlat.getBuilderFloor().getId()){
+					
+//					BuilderFloor builderFloor = new BuilderFloor();
+//					builderFloor.setId(floorid);
+//					builderFloor.setName(floorName);
+					//builderFloor.setBuilderFlats(builder);
+					List<FlatData> flatDatas = getActiveFlatsByFloorId(builderFlat.getBuilderFloor().getId());
+					FloorListData floorListData = new FloorListData();
+					floorListData.setFloorId(builderFlat.getBuilderFloor().getId());
+					floorListData.setFloorName(builderFlat.getBuilderFloor().getName());
+					
+					floorListData.setFlatDatas(flatDatas);
+					floorListDatas.add(floorListData);
+				}
+//				BuilderFlat builderFlat2 = new BuilderFlat();
+//				builderFlat2.setId(builderFlat.getId());
+//				builderFlat2.setFlatNo(builderFlat.getFlatNo());
+//				builderFlatList.add(builderFlat2);
+				floorid = builderFlat.getBuilderFloor().getId();
+//				floorName = builderFlat.getBuilderFloor().getName();
+				BuildingListData buildingListData = new BuildingListData();
+				buildingListData.setBuildingId( builderFlat.getBuilderFloor().getBuilderBuilding().getId());
+				buildingListData.setBuildingName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
+				buildingListData.setFloorListDatas(floorListDatas);
+				buildingListDatas.add(buildingListData);
+			}
+//			BuildingData buildingData = new BuildingData();
+//			buildingData.setId(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
+//			buildingData.setName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
+			buildingid = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
+//			buildingName = builderFlat.getBuilderFloor().getBuilderBuilding().getName();
+			flatListData.setBuildingListDatas(buildingListDatas);
+			newFlatList.add(flatListData);
 		}
 		//session.close();
 		return newFlatList;
@@ -1926,6 +1970,23 @@ public class ProjectDAO {
 		}
 		session.close();
 		return floorDatas;
+	}
+	
+	public List<FlatData> getActiveFlatsByFloorId(int floorId){
+		List<FlatData> flatDatas = new ArrayList<FlatData>();
+		String hql = "from BuilderFlat where builderFloor.id = :floor_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floorId);
+		List<BuilderFlat> builderFlats = query.list();
+		for(BuilderFlat builderFlat : builderFlats){
+			FlatData flatData = new FlatData();
+			flatData.setId(builderFlat.getId());
+			flatData.setName(builderFlat.getFlatNo());
+			flatDatas.add(flatData);
+		}
+		return flatDatas;
 	}
 	
 	/* ******************** Project Flats ******************** */
@@ -3674,5 +3735,16 @@ public class ProjectDAO {
 		responseMessage.setStatus(1);
 		responseMessage.setMessage("Source updated successfully");
 		return responseMessage;
+	}
+	
+	public Long getTotalCampaignByEmpId(int empId){
+		Long totalCampaign = (long)0;
+		String hql = "SELECT COUNT(*) from Campaign where builder.builderEmployees.id = :emp_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("emp_id", empId);
+		totalCampaign = (Long) query.uniqueResult();
+		return totalCampaign;
 	}
 }
