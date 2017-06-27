@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.FlatPaymentSchedule"%>
 <%@page import="org.bluepigeon.admin.data.FlatPayment"%>
 <%@page import="org.bluepigeon.admin.data.ProjectPriceInfoData"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO"%>
@@ -17,9 +18,11 @@
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	List<BuilderProject> project_list = null; 
-	List<FlatPayment> flatPayments = null;
+	List<FlatPaymentSchedule> flatPayments = null;
 	ProjectPriceInfoData projectPriceInfoData = null;
 	int builder_id1 = 0;
+	int flat_id = 0;
+	
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -32,17 +35,16 @@
 			}
 			if(project_list != null){
 			 	builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
-			 	builderFlatList = new ProjectDAO().getActiveFlatsByProjectId(project_list.get(0).getId());
-			 
-			 	projectPriceInfoData = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByProjectId(project_list.get(0).getId());
-			 	if(builderFlatList != null){
-				 flatPayments = new ProjectDAO().getFlatPaymentByFlatId(builderFlatList.get(0).getId());
+			 		
 			 	}
 			}
 			 
 		}
-   }
-	
+   
+	if (request.getParameterMap().containsKey("flat_id")) {
+		flat_id = Integer.parseInt(request.getParameter("flat_id"));
+		flatPayments = new ProjectDAO().getFlatPaymentByFlatId(flat_id);
+	}
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -211,49 +213,16 @@
                              		</div>
                              <div id="vimessages1" class="tab-pane" aria-expanded="false">
                            
-<!--                                  <div class="form-group row"> -->
-<!--                                     <label for="example-text-input" class="col-3 col-form-label">Project Name</label> -->
-<!--                                     <div class="col-6"> -->
-<!--                                        <select name="project_id" id="project_id" class="form-control"> -->
-<!-- 						                    <option value="">Select Project</option> -->
-<%-- 						                    <% for(BuilderProject builderProject : project_list){ %> --%>
-<%-- 											<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option> --%>
-<%-- 											<% } %> --%>
-<!-- 							            </select> -->
-<!--                                     </div> -->
-<!--                                 </div> -->
+
+
                                 
-<!--                                 <div class="form-group row"> -->
-<!--                                   <label for="example-text-input" class="col-3 col-form-label">Building</label> -->
-<!--                                     <div class="col-6"> -->
-<!--                                        <select name="building_id" id="building_id" class="form-control"> -->
-<!-- 						                    <option value="">Select Building</option> -->
-<!-- 							          	</select> -->
-<!--                                     </div> -->
-<!--                                 </div> -->
-                                
-                                 <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Flat</label>
-                                    <div class="col-6">
-                                       <select name="flat_id" id="flat_id" class="form-control">
-						                    <option value="">Select Flat</option>
-						                    <%
-						                    	if(builderFlatList.size() > 0){
-						                    		for(BuilderFlat builderFlat : builderFlatList){
-						                    %><option value="<%out.print(builderFlat.getId());%>"><% out.print(builderFlat.getFlatNo());%></option>
-						                    
-						                    <%}} %>
-							           </select>
-                                    </div>
-                                </div>
+
                                 
                                  <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Assign Manager</label>
                                     <div class="col-6">
                                       <select name="admin_id" id="admin_id" class="form-control">
-											<% for(BuilderEmployee builderEmployee :builderEmployees) { %>
-						                  	<option value="<% out.print(builderEmployee.getId());%>"><% out.print(builderEmployee.getName());%></option>
-						                  	<% } %>
+						                  	<option value="<% out.print(builder.getId());%>"><% out.print(builder.getName());%></option>
 							          </select>
                                     </div>
                                 </div>
@@ -560,11 +529,11 @@ $("#flat_id").change(function(){
 $("#vimessages3").append(html);
 	},'json');
 });
-alert("Flat ID on load :: "+<%out.print(builderFlatList.get(0).getId());%>);
+
 
 <%
   if(flatPayments != null){
-	  for(FlatPayment flatPayment: flatPayments){
+	  for(FlatPaymentSchedule flatPayment: flatPayments){
 %>	
 	showFlatPayment(<%out.print(flatPayment.getMilestone());%>,<%out.print(flatPayment.getPayable());%>);
 <%  }

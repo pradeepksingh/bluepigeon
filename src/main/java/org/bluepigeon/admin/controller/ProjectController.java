@@ -1102,27 +1102,29 @@ public class ProjectController extends ResourceConfig {
 		BuilderBuilding builderBuilding = new BuilderBuilding();
 		builderBuilding.setId(building_id);
 		List<BuildingAmenityWeightage> buildingAmenityWeightages = new ArrayList<BuildingAmenityWeightage>();
-		for(int i=0 ;i < substagewt_id.size();i++) {
-			BuildingAmenityWeightage baw = new BuildingAmenityWeightage();
-			baw.setId(substagewt_id.get(i).getValueAs(Integer.class));
-			baw.setStatus(bstatus);
-			buildingAmenityWeightages.add(baw);
-		}
-		if(buildingAmenityWeightages.size() > 0) {
-			msg = projectDAO.updateBuildingAmenityWeightage(buildingAmenityWeightages, building_id);
-		}
+		if(substagewt_id != null){
+			for(int i=0 ;i < substagewt_id.size();i++) {
+				BuildingAmenityWeightage baw = new BuildingAmenityWeightage();
+				baw.setId(substagewt_id.get(i).getValueAs(Integer.class));
+				baw.setStatus(bstatus);
+				buildingAmenityWeightages.add(baw);
+			}
+			
+			if(buildingAmenityWeightages.size() > 0) {
+				msg = projectDAO.updateBuildingAmenityWeightage(buildingAmenityWeightages, building_id);
+			}
 		
-		List<BuildingWeightage> buildingWeightages = new ArrayList<BuildingWeightage>();
-		for(int i=0 ;i < ssubstagewt_id.size();i++) {
-			BuildingWeightage paw = new BuildingWeightage();
-			paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
-			paw.setStatus(bstatus);
-			buildingWeightages.add(paw);
+			List<BuildingWeightage> buildingWeightages = new ArrayList<BuildingWeightage>();
+			for(int i=0 ;i < ssubstagewt_id.size();i++) {
+				BuildingWeightage paw = new BuildingWeightage();
+				paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
+				paw.setStatus(bstatus);
+				buildingWeightages.add(paw);
+			}
+			if(buildingWeightages.size() > 0) {
+				msg = projectDAO.updateBuildingWeightageStatus(buildingWeightages, building_id);
+			}
 		}
-		if(buildingWeightages.size() > 0) {
-			msg = projectDAO.updateBuildingWeightageStatus(buildingWeightages, building_id);
-		}
-		
 		try {	
 			List<BuildingImageGallery> buildingImageGalleries = new ArrayList<BuildingImageGallery>();
 			//for multiple inserting images.

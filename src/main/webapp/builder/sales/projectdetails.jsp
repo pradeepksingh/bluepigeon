@@ -417,9 +417,11 @@
 			          	</div>
 		          </div>
          		  <div class="modal-body" style="background-color:#f5f5f5;">
-						<div id="flatList"></div>
-						<div id="next"></div>
-          			</div>
+         		  	<div class="row col-sm-12">
+						<div class="col-sm-6" id="flatList"></div>
+						<div class="col-sm-6" id="next"></div>
+					</div>
+          		  </div>
       			</div>
 			</div>
 		</div>
@@ -458,13 +460,14 @@ $("#even_odd_id").change(function(){
 });
 function getActiveProjectFlats(){
 	$("#flatList").empty();
+	 $("#next").empty();
 	var buildingImg = "";
-	var imgdiv = "";
-	var html = "<div class='row'>";
+	var html = "";
 	$.post("${baseUrl}/webapi/builder/building/floor/filternames",{project_id: $("#project_id").val(), building_id : $("#building_id").val(), floor_id : $("#floor_id").val(), evenOrodd : $("#even_odd_id").val()},function(data){
 		 if(data == ""){
 			   $("#flatList").empty();
 			   $("#flatList").append("<h2><center>Sorry No Flats Found</center></h2>");
+			   $("#next").empty();
 		 }else{
 			$(data).each(function(index){
 				$(data[index].buildingListDatas).each(function(index1){
@@ -473,19 +476,36 @@ function getActiveProjectFlats(){
 					$(data[index].buildingListDatas[index1].floorListDatas).each(function(index2){
 						html+="<div class='col-sm-12'><label for='password' class='control-label'><b>"+data[index].buildingListDatas[index1].floorListDatas[index2].floorName+"</b></div>"
 						$(data[index].buildingListDatas[index1].floorListDatas[index2].flatDatas).each(function(index3){
-							html+="<div class='col-sm-2'><input type='radio' value="+data[index].buildingListDatas[index1].floorListDatas[index2].flatDatas[index3].id+">"+data[index].buildingListDatas[index1].floorListDatas[index2].flatDatas[index3].name+"<div>"
+							html+="<div class='col-sm-2'><input type='radio' name='addnewbuyer'  onclick='addBuyer();' value='"+data[index].buildingListDatas[index1].floorListDatas[index2].flatDatas[index3].id+"'>"+data[index].buildingListDatas[index1].floorListDatas[index2].flatDatas[index3].name+"<div>"
 						});
 					});
 				});
 			});
-			html +="</div>";
-			if(buildingImg != "")
-				buildingImg = "${baseUrl}/"+buildingImg;
-			else
-				buildingImg = "No Image Found";
-			
 		   $("#flatList").append(html);
+		   if(buildingImg != "")
+				buildingImg = "${baseUrl}/"+buildingImg;
+		   else
+				buildingImg = "No Image Found";
+		  var imgdiv ="<div class='col-sm-10'>";
+		           if(buildingImg != "")
+		        	   imgdiv  +="<image src='"+buildingImg+"' alt='Building Image' width='200px'>"
+		           else
+		        	   imgdiv +="<h2> No Image Found</h2>";
+		          imgdiv+="</div>";
+		          $("#next").append(imgdiv);
+		  
 		}
 	},'json');
+}
+// $("#myradiobuttonlist").click(function(){
+// 	var flatId = $("#myradiobuttonlist input[type='radio']:checked").val();
+// 	alert(flatId);
+// });
+function addBuyer(){
+ // $flatId = $("#myradiobuttonlist input[type='radio']:checked").val();
+var flatId =   $('input[name="addnewbuyer"]:checked').val();
+//  	alert($("#myradiobuttonlist").val());
+ 	//alert(flatId);
+ 	window.location.href = "${baseUrl }/builder/buyer/new.jsp?flat_id="+flatId;
 }
 </script>

@@ -3609,31 +3609,42 @@ public class ProjectDAO {
 	 * @param flatId
 	 * @return List<FlatPayment>
 	 */
-	public List<FlatPayment> getFlatPaymentByFlatId(int flatId){
-		String hql = "from BuilderFlat where id = :flat_id";
-		String payment = "from BuildingPaymentInfo where builderBuilding.id = :building_id" ;
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("flat_id",flatId);
-		BuilderFlat builderFlat = (BuilderFlat) query.list().get(0);
-		Session paymentSession = hibernateUtil.openSession();
-		Query paymentQuery = paymentSession.createQuery(payment);
-		paymentQuery.setParameter("building_id", builderFlat.getBuilderFloor().getBuilderBuilding().getId());
-		List<BuildingPaymentInfo> buildingPaymentInfos = paymentQuery.list();
-		List<FlatPayment> flatPaymentList = new ArrayList<FlatPayment>();
-		for(BuildingPaymentInfo buildingPaymentInfo :buildingPaymentInfos ){
-			FlatPayment flatPayment = new FlatPayment();
-			flatPayment.setMilestone(buildingPaymentInfo.getMilestone());
-			flatPayment.setPayable(buildingPaymentInfo.getPayable());
-			flatPayment.setAmount(buildingPaymentInfo.getAmount());
-			flatPaymentList.add(flatPayment);
-		}
-		if(flatPaymentList != null)
-			return flatPaymentList;
-		else
-			return null;
-	}
+//	public List<FlatPayment> getFlatPaymentByFlatId(int flatId){
+//		String hql = "from BuilderFlat where id = :flat_id";
+//		String payment = "from BuildingPaymentInfo where builderBuilding.id = :building_id" ;
+//		HibernateUtil hibernateUtil = new HibernateUtil();
+//		Session session = hibernateUtil.openSession();
+//		Query query = session.createQuery(hql);
+//		query.setParameter("flat_id",flatId);
+//		BuilderFlat builderFlat = (BuilderFlat) query.list().get(0);
+//		Session paymentSession = hibernateUtil.openSession();
+//		Query paymentQuery = paymentSession.createQuery(payment);
+//		paymentQuery.setParameter("building_id", builderFlat.getBuilderFloor().getBuilderBuilding().getId());
+//		List<BuildingPaymentInfo> buildingPaymentInfos = paymentQuery.list();
+//		List<FlatPayment> flatPaymentList = new ArrayList<FlatPayment>();
+//		for(BuildingPaymentInfo buildingPaymentInfo :buildingPaymentInfos ){
+//			FlatPayment flatPayment = new FlatPayment();
+//			flatPayment.setMilestone(buildingPaymentInfo.getMilestone());
+//			flatPayment.setPayable(buildingPaymentInfo.getPayable());
+//			flatPayment.setAmount(buildingPaymentInfo.getAmount());
+//			flatPaymentList.add(flatPayment);
+//		}
+//		if(flatPaymentList != null)
+//			return flatPaymentList;
+//		else
+//			return null;
+//	}
+	
+	 public List<FlatPaymentSchedule> getFlatPaymentByFlatId(int flatId){
+		 String hql ="from FlatPaymentSchedule where builderFlat.id = :flat_id";
+		 HibernateUtil hibernateUtil = new HibernateUtil();
+		 Session session = hibernateUtil.openSession();
+		 Query query = session.createQuery(hql);
+		 query.setParameter("flat_id", flatId);
+		 List<FlatPaymentSchedule> result = query.list();
+		 return result;
+		 
+	 }
 	/**
 	 * Get total leads by builder id
 	 * @author pankaj
