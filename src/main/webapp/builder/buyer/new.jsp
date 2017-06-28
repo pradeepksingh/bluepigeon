@@ -304,10 +304,11 @@
                                     </div>
                                </div>
                                <%} %>
-                               <div class="form-group row">
-                                    <button type="button" class="col-2" onclick="showOffers()">+ADD offers</button>
-                                </div>
+<!--                                <div class="form-group row"> -->
+<!--                                     <button type="button" class="col-2" onclick="showOffers()">+ADD offers</button> -->
+<!--                                 </div> -->
                                  <div id="displayoffers" style="display:none">
+                                
                                   <div class="offset-sm-11 col-sm-7">
                                     <i class="fa fa-times"></i> 
                                   </div>
@@ -329,8 +330,8 @@
 	                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
 	                                    <div class="col-2">
 	                                        <textarea class="form-control" id="description" class="description"></textarea>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
+	                                    </div>p
+;	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
 	                                    <div class="col-2">
 	                                     <select class="form-control" id="offer" name="offer">
 										  <option value="">Percentage</option>
@@ -346,26 +347,28 @@
 										</div>
 	                                </div>
 	                             </div>
+	                             
                                 <div class="offset-sm-5 col-sm-7">
                                      <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous2();">Previous</button>
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next2" onclick="show2();">Next</button>
                                  </div>
                                 </div>
                                </div>
-                                <div id="vimessages3" class="tab-pane" aria-expanded="true">        
+                                <div id="vimessages3" class="tab-pane" aria-expanded="true">      
+                                 <%for(FlatPaymentSchedule flatPayment: flatPayments ) {%>  
                                 <input type="hidden" name="schedule_count" id="schedule_count" value="1"/>
 	                                <div class="form-group row">
 	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
 	                                    <div class="col-2">
-	                                       <input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>
+	                                       <input type="text" class="form-control" id="schedule" name="schedule[]" value="<%out.print(flatPayment.getMilestone());%>"/>
 	                                    </div>
 	                                    <label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
 	                                    <div class="col-2">
-	                                       <input type="text" class="form-control" id="payable" name="payable[]" value=""/>
+	                                       <input type="text" class="form-control" id="payable" name="payable[]" value="<%out.print(flatPayment.getPayable());%>"/>
 	                                    </div>
 	                                    <label for="example-search-input" class="col-1 col-form-label">Amount</label>
 	                                    <div class="col-2">
-	                                       <input type="text" class="form-control" id="amount" name="amount[]" value=""/>
+	                                       <input type="text" class="form-control" id="amount" name="amount[]" value="<%out.print(flatPayment.getAmount());%>"/>
 	                                    </div>
 <!-- 	                                     <i class="fa fa-times"></i> -->
 	                                </div>
@@ -389,6 +392,7 @@
 <!-- 	                                <div class="offset-sm-9 col-sm-7"> -->
 <!--                                        <a href="javascript:addMoreSchedule();"> <button type="button" class="">+ Add More Schedules</button></a> -->
 <!--                                     </div> -->
+										<%} %>
 	                                <div class="offset-sm-5 col-sm-7">
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous3();">Previous</button>
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next3" onclick="show3();">Next</button>
@@ -531,17 +535,7 @@ $("#vimessages3").append(html);
 });
 
 
-<%
-  if(flatPayments != null){
-	  for(FlatPaymentSchedule flatPayment: flatPayments){
-%>	
-	showFlatPayment(<%out.print(flatPayment.getMilestone());%>,<%out.print(flatPayment.getPayable());%>);
-<%  }
-  }
-%>
-function showFlatPayment(milestone,percentage){
-	alert("Percentage  "+percentage);
-}
+
 
 $('#addbuyer').bootstrapValidator({
 	container: function($field, validator) {

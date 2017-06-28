@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuildingPaymentInfo"%>
 <%@page import="org.bluepigeon.admin.model.BuilderBuildingFlatType"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFloor"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
@@ -19,6 +20,7 @@
 	int p_user_id = 0;
 	int building_id = 0;
 	int project_id = 0;
+	List<BuildingPaymentInfo> buildingPaymentInfos = null;
 	floor_id = Integer.parseInt(request.getParameter("floor_id"));
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
@@ -42,6 +44,7 @@
 		buildings = new ProjectDAO().getBuilderProjectBuildings(builderFloor.getBuilderBuilding().getBuilderProject().getId());
 		floors = new ProjectDAO().getBuildingFloors(builderFloor.getBuilderBuilding().getId());
 		builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeByBuildingId(builderFloor.getBuilderBuilding().getId());
+		buildingPaymentInfos = new ProjectDAO().getBuilderBuildingPaymentInfoById(building_id);
 	}
 	List<BuilderFlatStatus> builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderFlatStatus();
 	List<BuilderFlatAmenity> builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderActiveFlatAmenityList();
@@ -67,7 +70,7 @@
 			</div>
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Flat Details</a></li>
-<!-- 			  	<li><a data-toggle="tab" href="#payment">Payment Details</a></li> -->
+			  	<li><a data-toggle="tab" href="#payment">Payment Details</a></li>
 			</ul>
 			<form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 				<div class="tab-content">
@@ -268,64 +271,121 @@
 							</div>
 						</div>
 					</div>
-<!-- 					<div id="payment" class="tab-pane fade"> -->
-<!-- 						<input type="hidden" name="schedule_count" id="schedule_count" value="1"/> -->
-<!-- 			 			<div class="row"> -->
-<!-- 			 				<div id="paymentresponse"></div> -->
-<!-- 							<div class="col-lg-12"> -->
-<!-- 								<div class="panel panel-default"> -->
-<!-- 									<div class="panel-body"> -->
-<!-- 										<div id="payment_schedule"> -->
-<!-- 											<div class="row" id="schedule-1"> -->
-<!-- 												<div class="col-lg-5 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-schedule"> -->
-<!-- 														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label> -->
-<!-- 														<div class="col-sm-8"> -->
-<!-- 															<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/> -->
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 												<div class="col-lg-3 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-payable"> -->
-<!-- 														<label class="control-label col-sm-8">% of Net Payable </label> -->
-<!-- 														<div class="col-sm-4"> -->
-<!-- 															<input type="number" class="form-control" id="payable" name="payable[]" value=""/> -->
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 												<div class="col-lg-3 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-amount"> -->
-<!-- 														<label class="control-label col-sm-6">Amount </label> -->
-<!-- 														<div class="col-sm-6"> -->
-<!-- 															<input type="number" class="form-control" id="amount" name="amount[]" value=""/> -->
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
+					<div id="payment" class="tab-pane fade">
+					
+						<input type="hidden" name="schedule_count" id="schedule_count" value="1"/>
+			 			<div class="row">
+			 				<div id="paymentresponse"></div>
+			 				<%
+							if(buildingPaymentInfos != null){
+								for(BuildingPaymentInfo  buildingPaymentInfo: buildingPaymentInfos){ %>
+							<div class="col-lg-12">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div id="payment_schedule">
+											<div class="row" id="schedule-1">
+												<div class="col-lg-5 margin-bottom-5">
+													<div class="form-group" id="error-schedule">
+														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="schedule" name="schedule[]" value="<%out.print(buildingPaymentInfo.getMilestone());%>"/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-3 margin-bottom-5">
+													<div class="form-group" id="error-payable">
+														<label class="control-label col-sm-8">% of Net Payable </label>
+														<div class="col-sm-4">
+															<input type="number" class="form-control" id="payable" name="payable[]" value="<%out.print(buildingPaymentInfo.getPayable());%>"/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-3 margin-bottom-5">
+													<div class="form-group" id="error-amount">
+														<label class="control-label col-sm-6">Amount </label>
+														<div class="col-sm-6">
+															<input type="number" class="form-control" id="amount" name="amount[]" value="<%out.print(buildingPaymentInfo.getAmount());%>"/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
 <!-- 												<div class="col-lg-1"> -->
 <!-- 													<span><a href="javascript:removeSchedule(1);" class="btn btn-danger btn-xs">x</a></span> -->
 <!-- 												</div> -->
-<!-- 											</div> -->
-<!-- 										</div> -->
-<!-- 										<div> -->
+											</div>
+										</div>
+										<div>
 <!-- 											<div class="col-lg-12"> -->
 <!-- 												<span class="pull-right"> -->
 <!-- 													<a href="javascript:addMoreSchedule();" class="btn btn-info btn-xs">+ Add More Schedule</a> -->
 <!-- 												</span> -->
 <!-- 											</div> -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
-<!-- 							<div class="col-sm-12"> -->
-<!-- 								<span class="pull-right"> -->
-<!-- 									<button type="submit" name="flooradd" class="btn btn-success btn-sm" >Submit</button> -->
-<!-- 								</span> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
+										</div>
+									</div>
+								</div>
+							</div>
+							<%	
+								}
+							}else{
+							%>
+							<div class="col-lg-12">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div id="payment_schedule">
+											<div class="row" id="schedule-1">
+												<div class="col-lg-5 margin-bottom-5">
+													<div class="form-group" id="error-schedule">
+														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-3 margin-bottom-5">
+													<div class="form-group" id="error-payable">
+														<label class="control-label col-sm-8">% of Net Payable </label>
+														<div class="col-sm-4">
+															<input type="number" class="form-control" id="payable" name="payable[]" value=""/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-3 margin-bottom-5">
+													<div class="form-group" id="error-amount">
+														<label class="control-label col-sm-6">Amount </label>
+														<div class="col-sm-6">
+															<input type="number" class="form-control" id="amount" name="amount[]" value=""/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+<!-- 												<div class="col-lg-1"> -->
+<!-- 													<span><a href="javascript:removeSchedule(1);" class="btn btn-danger btn-xs">x</a></span> -->
+<!-- 												</div> -->
+											</div>
+										</div>
+										<div>
+<!-- 											<div class="col-lg-12"> -->
+<!-- 												<span class="pull-right"> -->
+<!-- 													<a href="javascript:addMoreSchedule();" class="btn btn-info btn-xs">+ Add More Schedule</a> -->
+<!-- 												</span> -->
+<!-- 											</div> -->
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<%} %>
+							<div class="col-sm-12">
+								<span class="pull-right">
+									<button type="submit" name="flooradd" class="btn btn-success btn-sm" >Submit</button>
+								</span>
+							</div>
+						</div>
+					</div>
 				</div>
 			</form>
 		</div>
