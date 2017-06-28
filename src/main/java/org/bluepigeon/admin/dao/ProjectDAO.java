@@ -2798,6 +2798,7 @@ public class ProjectDAO {
 	 */
 	public List<ProjectList> getBuilderActiveProjectsByBuilderId(int builderId) {
 		System.err.println("builderId :: "+builderId);
+		Long totalLeads = (long)0;
 		String hql = "from BuilderProject where builder.id = :builder_id and status=1 order by id desc";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -2818,6 +2819,17 @@ public class ProjectDAO {
 			newproject.setCityName(builderproject.getCity().getName());
 			newproject.setLocalityId(builderproject.getLocality().getId());
 			newproject.setLocalityName(builderproject.getLocality().getName());
+			newproject.setCompletionStatus(builderproject.getCompletionStatus());
+			if(builderproject.getInventorySold() != null){
+				newproject.setSold(builderproject.getInventorySold());
+			}
+			if(builderproject.getTotalInventory() != null){
+				newproject.setTotalSold(builderproject.getTotalInventory());
+			}
+			totalLeads = getTotalLeadsByProjectId(builderproject.getId());
+			if(totalLeads != null){
+				newproject.setTotalLeads(totalLeads.intValue());
+			}
 			System.out.println("Project name :: "+builderproject.getName());
 			projects.add(newproject);
 		}

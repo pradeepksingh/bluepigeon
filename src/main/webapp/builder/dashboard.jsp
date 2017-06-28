@@ -376,7 +376,7 @@
                 <div class="row">
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         <div class="white-box">
-                            <h3 class="box-title">Project stats</h3>
+                            <h3 class="box-title">Project status</h3>
                             <div class="col-md-3 col-sm-6 col-xs-12">
                         		<select class="selectpicker border-drop-down" data-style="form-control" id="graph_project_id" name="graph_project_id">
                                         <option>Project Name</option>
