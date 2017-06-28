@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.PaymentInfoData"%>
 <%@page import="org.bluepigeon.admin.model.BuildingPaymentInfo"%>
 <%@page import="org.bluepigeon.admin.model.BuilderBuildingFlatType"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFloor"%>
@@ -35,6 +36,7 @@
 	BuilderFloor builderFloor = null;
 	List<BuilderBuilding> buildings = null;
 	List<BuilderFloor> floors = null;
+	List<PaymentInfoData> paymentInfoDatas = null;
 	List<BuilderBuildingFlatType> builderFlatTypes = null;
 	List<BuilderFloor> builderFloors = new ProjectDAO().getBuildingFloorById(floor_id);
 	if(builderFloors.size() > 0) {
@@ -45,6 +47,9 @@
 		floors = new ProjectDAO().getBuildingFloors(builderFloor.getBuilderBuilding().getId());
 		builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeByBuildingId(builderFloor.getBuilderBuilding().getId());
 		buildingPaymentInfos = new ProjectDAO().getBuilderBuildingPaymentInfoById(building_id);
+	}
+	if(floor_id > 0){
+		paymentInfoDatas =  new ProjectDAO().getFlatPaymnetbyFloorId(floor_id);
 	}
 	List<BuilderFlatStatus> builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderFlatStatus();
 	List<BuilderFlatAmenity> builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderActiveFlatAmenityList();
@@ -277,18 +282,18 @@
 			 			<div class="row">
 			 				<div id="paymentresponse"></div>
 			 				<%
-							if(buildingPaymentInfos != null){
-								for(BuildingPaymentInfo  buildingPaymentInfo: buildingPaymentInfos){ %>
-							<div class="col-lg-12">
-								<div class="panel panel-default">
-									<div class="panel-body">
-										<div id="payment_schedule">
+							if(paymentInfoDatas != null){
+								for(PaymentInfoData paymentInfoData: paymentInfoDatas){ %>
+							<div id="payment_schedule">
+								<div class="col-lg-12">
+									<div class="panel panel-default">
+										<div class="panel-body">
 											<div class="row" id="schedule-1">
 												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-schedule">
 														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="schedule" name="schedule[]" value="<%out.print(buildingPaymentInfo.getMilestone());%>"/>
+															<input type="text" class="form-control" readonly="true" id="schedule" name="schedule[]" value="<%out.print(paymentInfoData.getName());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -297,7 +302,7 @@
 													<div class="form-group" id="error-payable">
 														<label class="control-label col-sm-8">% of Net Payable </label>
 														<div class="col-sm-4">
-															<input type="number" class="form-control" id="payable" name="payable[]" value="<%out.print(buildingPaymentInfo.getPayable());%>"/>
+															<input type="number" class="form-control" id="payable" name="payable[]" value="<%out.print(paymentInfoData.getPayable());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -306,7 +311,7 @@
 													<div class="form-group" id="error-amount">
 														<label class="control-label col-sm-6">Amount </label>
 														<div class="col-sm-6">
-															<input type="number" class="form-control" id="amount" name="amount[]" value="<%out.print(buildingPaymentInfo.getAmount());%>"/>
+															<input type="number" class="form-control" id="amount" name="amount[]" value="<%out.print(paymentInfoData.getAmount());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -328,57 +333,8 @@
 							</div>
 							<%	
 								}
-							}else{
+							}
 							%>
-							<div class="col-lg-12">
-								<div class="panel panel-default">
-									<div class="panel-body">
-										<div id="payment_schedule">
-											<div class="row" id="schedule-1">
-												<div class="col-lg-5 margin-bottom-5">
-													<div class="form-group" id="error-schedule">
-														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-payable">
-														<label class="control-label col-sm-8">% of Net Payable </label>
-														<div class="col-sm-4">
-															<input type="number" class="form-control" id="payable" name="payable[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-amount">
-														<label class="control-label col-sm-6">Amount </label>
-														<div class="col-sm-6">
-															<input type="number" class="form-control" id="amount" name="amount[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-<!-- 												<div class="col-lg-1"> -->
-<!-- 													<span><a href="javascript:removeSchedule(1);" class="btn btn-danger btn-xs">x</a></span> -->
-<!-- 												</div> -->
-											</div>
-										</div>
-										<div>
-<!-- 											<div class="col-lg-12"> -->
-<!-- 												<span class="pull-right"> -->
-<!-- 													<a href="javascript:addMoreSchedule();" class="btn btn-info btn-xs">+ Add More Schedule</a> -->
-<!-- 												</span> -->
-<!-- 											</div> -->
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<%} %>
 							<div class="col-sm-12">
 								<span class="pull-right">
 									<button type="submit" name="flooradd" class="btn btn-success btn-sm" >Submit</button>
@@ -436,6 +392,59 @@ $('#floor_no').keyup(function() {
 });
 $('#possession_date').datepicker({
 	format: "dd MM yyyy"
+});
+$("#floor_id").change(function(){
+	$("#payment_schedule").empty();
+    var html = "";
+	var floor_id = $("#floor_id").val();
+	$.get("${baseUrl}/webapi/project/building/floor/flat/payments/"+floor_id, { }, function(data){
+		$(data).each(function(index){
+			console.log(data[index].name);
+			//$("#schedule").val(data[index].name);
+		
+			
+		html=+'<div class="col-lg-12">'
+			+'<div class="panel panel-default">'
+			+'<div class="panel-body">'
+			+'<div id="payment_schedule">'
+			+'<div class="row" id="schedule-1">'
+			+'<div class="col-lg-5 margin-bottom-5">'
+			+'<div class="form-group" id="error-schedule">'
+			+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
+			+'<div class="col-sm-8">'
+			+'<input type="text" class="form-control" readonly="true" id="schedule" name="schedule[]" value="'+data[index].name+'"/>'
+			+'</div>'
+			+'<div class="messageContainer"></div>'
+			+'</div>'
+			+'</div>'
+			+'<div class="col-lg-3 margin-bottom-5">'
+			+'<div class="form-group" id="error-payable">'
+			+'<label class="control-label col-sm-8">% of Net Payable </label>'
+			+'<div class="col-sm-4">'
+			+'<input type="number" class="form-control" id="payable" name="payable[]" value="'+data[index].payable+'"/>'
+			+'</div>'
+			+'<div class="messageContainer"></div>'
+			+'</div>'
+			+'</div>'
+			+'<div class="col-lg-3 margin-bottom-5">'
+			+'<div class="form-group" id="error-amount">'
+			+'<label class="control-label col-sm-6">Amount </label>'
+			+'<div class="col-sm-6">'
+			+'<input type="number" class="form-control" id="amount" name="amount[]" value="'+data[index].amount+'"/>'
+			+'</div>'
+			+'<div class="messageContainer"></div>'
+			+'</div>'
+			+'</div>'
+			+'</div>'
+			+'</div>'
+			+'</div>'
+			+'</div>';
+		
+		});
+		html = html.replace("NaN","");
+		$("#paymentresponse").html(html);
+	});
+
 });
 $('#addfloor').bootstrapValidator({
 	container: function($field, validator) {
@@ -534,6 +543,7 @@ function showAddResponse(resp, statusText, xhr, $form){
 
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
+	alert(schedule_count);
 	schedule_count++;
 	var html = '<div class="row" id="schedule-'+schedule_count+'">'
 				+'<hr/>'

@@ -49,7 +49,7 @@ public class FlatPaymentSchedule implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "flat_id")
 	public BuilderFlat getBuilderFlat() {
 		return this.builderFlat;

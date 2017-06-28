@@ -29,6 +29,7 @@ import org.bluepigeon.admin.data.FlatWeightageData;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.LocalityData;
+import org.bluepigeon.admin.data.PaymentInfoData;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectDetail;
 import org.bluepigeon.admin.data.ProjectList;
@@ -2564,6 +2565,13 @@ public class ProjectController extends ResourceConfig {
 		
 		return responseMessage;
 	}
-	
+	@GET
+	@Path("/building/floor/flat/payments/{floor_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PaymentInfoData> getFlatPayment(@PathParam("floor_id") int floor_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		List<PaymentInfoData> paymentInfoDatas = projectDAO.getFlatPaymnetbyFloorId(floor_id);
+		return paymentInfoDatas;
+	}
 }
 
