@@ -5,7 +5,7 @@ import java.util.List;
 public class FloorListData {
 	private int floorId;
 	private String floorName;
-	private List<FlatData> flatDatas;
+	private List<FlatStatusData> flatStatusDatas;
 	public int getFloorId() {
 		return floorId;
 	}
@@ -18,11 +18,10 @@ public class FloorListData {
 	public void setFloorName(String floorName) {
 		this.floorName = floorName;
 	}
-	public List<FlatData> getFlatDatas() {
-		return flatDatas;
+	public List<FlatStatusData> getFlatStatusDatas() {
+		return flatStatusDatas;
 	}
-	public void setFlatDatas(List<FlatData> flatDatas) {
-		this.flatDatas = flatDatas;
+	public void setFlatStatusDatas(List<FlatStatusData> flatStatusDatas) {
+		this.flatStatusDatas = flatStatusDatas;
 	}
-	
 }

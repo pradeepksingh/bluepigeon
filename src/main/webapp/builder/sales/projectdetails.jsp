@@ -475,8 +475,12 @@ function getActiveProjectFlats(){
 					buildingImg = data[index].buildingListDatas[index1].buildingImage;
 					$(data[index].buildingListDatas[index1].floorListDatas).each(function(index2){
 						html+="<div class='col-sm-12'><label for='password' class='control-label'><b>"+data[index].buildingListDatas[index1].floorListDatas[index2].floorName+"</b></div>"
-						$(data[index].buildingListDatas[index1].floorListDatas[index2].flatDatas).each(function(index3){
-							html+="<div class='col-sm-2'><input type='radio' name='addnewbuyer'  onclick='addBuyer();' value='"+data[index].buildingListDatas[index1].floorListDatas[index2].flatDatas[index3].id+"'>"+data[index].buildingListDatas[index1].floorListDatas[index2].flatDatas[index3].name+"<div>"
+						$(data[index].buildingListDatas[index1].floorListDatas[index2].flatStatusDatas).each(function(index3){
+							if(data[index].buildingListDatas[index1].floorListDatas[index2].flatStatusDatas[index3].flatStaus == 1){
+								html+="<div class='col-sm-2'><input type='radio'id='yes-button' name='addnewbuyer' onclick='addBuyer();' value='"+data[index].buildingListDatas[index1].floorListDatas[index2].flatStatusDatas[index3].id+"'><label class='button-label' for='yes-button'><h1>"+data[index].buildingListDatas[index1].floorListDatas[index2].flatStatusDatas[index3].name+"</h1></label><div>"
+							}else{
+								html+="<div class='col-sm-2'><input type='radio'id='yes-button' name='addnewbuyer' disabled='disabled' value='"+data[index].buildingListDatas[index1].floorListDatas[index2].flatStatusDatas[index3].id+"'><label class='button-label' for='yes-button'><h1>"+data[index].buildingListDatas[index1].floorListDatas[index2].flatStatusDatas[index3].name+"</h1></label><div>"
+							}
 						});
 					});
 				});

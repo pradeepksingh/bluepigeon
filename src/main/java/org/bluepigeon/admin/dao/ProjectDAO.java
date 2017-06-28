@@ -15,6 +15,7 @@ import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.data.FlatTotal;
 import org.bluepigeon.admin.data.FlatWeightageData;
 import org.bluepigeon.admin.data.FlatPayment;
+import org.bluepigeon.admin.data.FlatStatusData;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorDetail;
 import org.bluepigeon.admin.data.FloorImageData;
@@ -1405,12 +1406,12 @@ public class ProjectDAO {
 //					builderFloor.setId(floorid);
 //					builderFloor.setName(floorName);
 					//builderFloor.setBuilderFlats(builder);
-					List<FlatData> flatDatas = getActiveFlatsByFloorId(builderFlat.getBuilderFloor().getId());
+					List<FlatStatusData> flatDatas = getFlatsByFloorId(builderFlat.getBuilderFloor().getId());
 					FloorListData floorListData = new FloorListData();
 					floorListData.setFloorId(builderFlat.getBuilderFloor().getId());
 					floorListData.setFloorName(builderFlat.getBuilderFloor().getName());
 					
-					floorListData.setFlatDatas(flatDatas);
+					floorListData.setFlatStatusDatas(flatDatas);
 					floorListDatas.add(floorListData);
 				}
 //				BuilderFlat builderFlat2 = new BuilderFlat();
@@ -1987,6 +1988,24 @@ public class ProjectDAO {
 			FlatData flatData = new FlatData();
 			flatData.setId(builderFlat.getId());
 			flatData.setName(builderFlat.getFlatNo());
+			flatDatas.add(flatData);
+		}
+		return flatDatas;
+	}
+	
+	public List<FlatStatusData> getFlatsByFloorId(int floorId){
+		List<FlatStatusData> flatDatas = new ArrayList<FlatStatusData>();
+		String hql = "from BuilderFlat where builderFloor.id = :floor_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floorId);
+		List<BuilderFlat> builderFlats = query.list();
+		for(BuilderFlat builderFlat : builderFlats){
+			FlatStatusData flatData = new FlatStatusData();
+			flatData.setId(builderFlat.getId());
+			flatData.setName(builderFlat.getFlatNo());
+			flatData.setFlatStaus(builderFlat.getBuilderFlatStatus().getStatus());
 			flatDatas.add(flatData);
 		}
 		return flatDatas;

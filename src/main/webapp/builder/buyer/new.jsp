@@ -212,12 +212,6 @@
                               			</div>
                              		</div>
                              <div id="vimessages1" class="tab-pane" aria-expanded="false">
-                           
-
-
-                                
-
-                                
                                  <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Assign Manager</label>
                                     <div class="col-6">
@@ -231,7 +225,6 @@
                                     <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next1" onclick="show1();">Next</button>
                                  </div>
                                </div>
-								
                                 <div id="vimessages2" class="tab-pane" aria-expanded="false">
                                  <div class="col-12">
     							<%
@@ -248,7 +241,6 @@
                                         <input type="text" value="<%out.print(projectPriceInfoData.getBasePrice()); %>" class="form-control" id="base_rate" name="base_rate" />
                                     </div>
                                 </div> 
-                                
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate</label>
                                     <div class="col-3">
@@ -259,7 +251,6 @@
                                         <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getAmenityRate()); %>" id="amenity_rate" name="amenity_rate" />
                                     </div>
                                 </div>
-                                
                                  <div class="form-group row">
                                     <label for="example-tel-input" class="col-3 col-form-label">Parking Rates</label>
                                     <div class="col-3">
@@ -270,7 +261,6 @@
                                         <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getMaintenance()); %>" id="maintenance" name="maintenance" />
                                     </div>
                                 </div>
-
                                 <div class="form-group row">
                                     <label for="example-tel-input" class="col-3 col-form-label">Stamp Duty</label>
                                     <div class="col-3">
@@ -281,7 +271,6 @@
                                          <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getTax()); %>" id="tax" name="tax" />
                                     </div>
                                 </div>
-                                                              
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">VAT</label>
                                     <div class="col-3">
@@ -301,6 +290,69 @@
                                     <label for="example-search-input" class="col-3 col-form-label">Total Sale Value</label>
                                     <div class="col-3">
                                         <input class="form-control" readonly="true" type="text" value="<%out.print(projectPriceInfoData.getPost()); %>" id="toatl_sale_value" name="total_sale_value">
+                                    </div>
+                               </div>
+                               <%} else{%>
+                               <input type="hidden" id="project_id" name="project_id" value=""/>  
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-3 col-form-label">Booking Date</label>
+                                    <div class="col-3">
+                                       <input type="text" class="form-control" id="booking_date" name="booking_date" value=""/>
+                                    </div>
+                                    <label for="example-text-input" class="col-3 col-form-label">Base Rate</label>
+                                    <div class="col-3">
+                                        <input type="text" value="" class="form-control" id="base_rate" name="base_rate" />
+                                    </div>
+                                </div> 
+                                <div class="form-group row">
+                                    <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate</label>
+                                    <div class="col-3">
+                                       <input type="text" class="form-control" value="" id="rise_rate" name="rise_rate"/>
+                                    </div>
+                                    <label for="example-search-input" class="col-3 col-form-label">Aminities Facing Rise Rates</label>
+                                    <div class="col-3">
+                                        <input type="text" class="form-control" value="" id="amenity_rate" name="amenity_rate" />
+                                    </div>
+                                </div>
+                                 <div class="form-group row">
+                                    <label for="example-tel-input" class="col-3 col-form-label">Parking Rates</label>
+                                    <div class="col-3">
+                                       	<input type="text" class="form-control" value="" id="parking" name="parking" />
+                                    </div>
+                                    <label for="example-tel-input" class="col-3 col-form-label">Maintance</label>
+                                    <div class="col-3">
+                                        <input type="text" class="form-control" value="" id="maintenance" name="maintenance" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="example-tel-input" class="col-3 col-form-label">Stamp Duty</label>
+                                    <div class="col-3">
+                                       <input type="text" class="form-control" value="" id="stamp_duty" name="stamp_duty" />
+                                    </div>
+                                    <label for="example-tel-input" class="col-3 col-form-label">Taxes</label>
+                                    <div class="col-3">
+                                         <input type="text" class="form-control" value="" id="tax" name="tax" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="example-search-input" class="col-3 col-form-label">VAT</label>
+                                    <div class="col-3">
+                                       <input type="text" class="form-control" value="" id="vat" name="vat" />
+                                    </div>
+                                    <label for="example-search-input" class="col-3 col-form-label">Tenure</label>
+                                    <div class="col-3">
+                                      <input type="text" class="form-control" value="" id="tenure" name="tenure" />
+									  <span class="input-group-addon">Months</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="example-search-input" class="col-3 col-form-label">No. of Post</label>
+                                    <div class="col-3">
+                                        <input class="form-control" type="text" value="" id="post" name="post">
+                                    </div>
+                                    <label for="example-search-input" class="col-3 col-form-label">Total Sale Value</label>
+                                    <div class="col-3">
+                                        <input class="form-control" readonly="true" type="text" value="" id="toatl_sale_value" name="total_sale_value">
                                     </div>
                                </div>
                                <%} %>
@@ -360,7 +412,7 @@
 	                                <div class="form-group row">
 	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
 	                                    <div class="col-2">
-	                                       <input type="text" class="form-control" id="schedule" name="schedule[]" value="<%out.print(flatPayment.getMilestone());%>"/>
+	                                       <input type="text" class="form-control" readonly="true" id="schedule" name="schedule[]" value="<%out.print(flatPayment.getMilestone());%>"/>
 	                                    </div>
 	                                    <label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
 	                                    <div class="col-2">
