@@ -2,36 +2,20 @@ package org.bluepigeon.admin.data;
 
 import java.util.List;
 
-import org.bluepigeon.admin.model.BuilderFlat;
-
 public class FlatListData {
-	private int id;
-	private BuildingData buildingData[];
-	private FloorData floorData[];
-	private FlatData flatData[];
+	private int projectid;
+	private List<BuildingListData> buildingListDatas;
 	
-	public int getId() {
-		return id;
+	public int getProjectid() {
+		return projectid;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setProjectid(int projectid) {
+		this.projectid = projectid;
 	}
-	public BuildingData[] getBuildingData() {
-		return buildingData;
+	public List<BuildingListData> getBuildingListDatas() {
+		return buildingListDatas;
 	}
-	public void setBuildingData(BuildingData[] buildingData) {
-		this.buildingData = buildingData;
-	}
-	public FloorData[] getFloorData() {
-		return floorData;
-	}
-	public void setFloorData(FloorData[] floorData) {
-		this.floorData = floorData;
-	}
-	public FlatData[] getFlatData() {
-		return flatData;
-	}
-	public void setFlatData(FlatData[] flatData) {
-		this.flatData = flatData;
+	public void setBuildingListDatas(List<BuildingListData> buildingListDatas) {
+		this.buildingListDatas = buildingListDatas;
 	}
 }

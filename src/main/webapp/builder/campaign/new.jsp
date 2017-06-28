@@ -31,16 +31,17 @@
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
-			p_user_id = builder.getId();
+			p_user_id = builder.getBuilder().getId();
 		}
 		if(p_user_id > 0){
 			builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
+			if(builderProjects.size()>0)
+		    	project_size = builderProjects.size();
+		 	if(builderPropertyTypes.size()>0)
+		 		type_size = builderPropertyTypes.size();
 		}
    	}
-	if(builderProjects.size()>0)
-    	project_size = builderProjects.size();
- 	if(builderPropertyTypes.size()>0)
- 		type_size = builderPropertyTypes.size();
+	
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -139,7 +140,7 @@
                               
                                <div id="vimessages" class="tab-pane active" aria-expanded="false">
                                 <div class="col-12">
-                               
+                               		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(builder.getId());%>"/>
                                 	 <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(p_user_id); %>" />
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">Campaign Title*</label>
@@ -227,7 +228,7 @@
                                 <div class="form-group row">
                                     <div class="col-12">
                                         <center><label for="example-search-input" class="col-form-label">Recipients Name</label></center><br>
-                                       <div id="appendbuyer" class="col-3"></div>
+                                       <div id="appendbuyer" class="row"></div>
                                     </div>
                                     <input type="hidden" name="added_by" id="added_by" value="1"/>
                                      <!--  <div class="col-4">
@@ -274,7 +275,7 @@ $('#set_date').datepicker({
 $("#city_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/projectlist/"+$("#city_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Project</option>';
-		var checkbox = '<div class="col-sm-10">';
+		var checkbox = '';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].projectId+'">'+data[index].projectName+'</option>';
@@ -283,7 +284,6 @@ $("#city_id").change(function(){
 				checkbox +='</div>';
 			});
 		});
-		checkbox+='</div>';
 		$("#project_id").html(html);
  		$("#appendbuyer").html(checkbox);
 	},'json');
@@ -292,7 +292,7 @@ $("#city_id").change(function(){
 $("#project_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/building/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
-		var checkbox = '<div class="col-sm-10">';
+		var checkbox = '';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].buildingId+'">'+data[index].buildingName+'</option>';
@@ -302,14 +302,13 @@ $("#project_id").change(function(){
 			});
 		});
 		$("#building_id").html(html);
-		checkbox+='</div>';
 		$("#appendbuyer").html(checkbox);
 	},'json');
 });
 $("#building_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/building/flat/names/"+$("#building_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Flat</option>';
-		var checkbox = '<div class="col-sm-10">';
+		var checkbox = '';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].flatId+'">'+data[index].flatNo+'</option>';
@@ -319,20 +318,18 @@ $("#building_id").change(function(){
 			});
 		});
 		$("#flat_id").html(html);
-		checkbox+='</div>';
 		$("#appendbuyer").html(checkbox);
 	},'json');
 });
 
 $("#flat_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/flat/buyer/names/"+$("#flat_id").val(),{ }, function(data){
-		var checkbox = '<div class="col-sm-10">';
+		var checkbox = '';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
 				checkbox += '<div class="col-sm-4"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+data[index].id+'" />'+'&nbsp;'+data[index].name
 				checkbox +='</div>';
 		});
-		checkbox+='</div>';
 		$("#appendbuyer").html(checkbox);
 	},'json');
 });

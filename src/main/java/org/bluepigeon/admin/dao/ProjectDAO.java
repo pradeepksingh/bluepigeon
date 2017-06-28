@@ -7,15 +7,19 @@ import java.util.Set;
 
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuildingList;
+import org.bluepigeon.admin.data.BuildingListData;
 import org.bluepigeon.admin.data.BuildingWeightageData;
 import org.bluepigeon.admin.data.FlatAmenityTotal;
+import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.data.FlatTotal;
 import org.bluepigeon.admin.data.FlatWeightageData;
 import org.bluepigeon.admin.data.FlatPayment;
+import org.bluepigeon.admin.data.FlatStatusData;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorDetail;
 import org.bluepigeon.admin.data.FloorImageData;
+import org.bluepigeon.admin.data.FloorListData;
 import org.bluepigeon.admin.data.FloorPanoData;
 import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.NewProjectList;
@@ -1332,7 +1336,7 @@ public class ProjectDAO {
 		return result;
 	}
 	
-	public List<BuilderFlat> getBuildingFloorsFilter(int projectId, int buildingId, int floorId, int evenOrodd) {
+	public List<FlatListData> getBuildingFloorsFilter(int projectId, int buildingId, int floorId, int evenOrodd) {
 		String hql = "from BuilderFlat where ";
 		String where = "";
 		if(projectId > 0){
@@ -1353,27 +1357,30 @@ public class ProjectDAO {
 			}
 		}
 		System.out.println("projectId :::: "+projectId);
-//		if(evenOrodd > 0){
-//			//for even floors
-//			if(evenOrodd % 2 == 0){
-//				if(where != null){
-//					where += " AND builderFloor.floorNo % 2 = 0";
-//				}else{
-//					where +=" builderFloor.floorNo % 2 = 0";
-//				}
-//			}else{
-//				if(where != null){
-//					where +=" AND builderFloor.floorNo %2 <> 0";
-//				}else{
-//					where +=" builderFloor.floorNo %2 <> 0";
-//				}
-//			}
-//		}
+		if(evenOrodd > 0){
+			//for even floors
+			if(evenOrodd % 2 == 0){
+				if(where != null){
+					where += " AND builderFloor.floorNo % 2 = 0";
+				}else{
+					where +=" builderFloor.floorNo % 2 = 0";
+				}
+			}else{
+				if(where != null){
+					where +=" AND builderFloor.floorNo %2 <> 0";
+				}else{
+					where +=" builderFloor.floorNo %2 <> 0";
+				}
+			}
+		}
 		//order by projectid,buildingid, floornumber and flatnumber asc
-		hql += where;//+" ORDER BY builderFloor.builderBuilding.builderProject.id ASC, builderFloor.builderBuilding.id ASC, builderFloor.floorNo ASC, flatNo ASC";
+		hql += where+" ORDER BY builderFloor.builderBuilding.builderProject.id ASC, builderFloor.builderBuilding.id ASC, builderFloor.floorNo ASC, flatNo ASC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
+		String flatHql = "from BuilderFlat where builderFloor.id = :floor_id" ;
+		Session flatSession = hibernateUtil.openSession();
+		Query flatQuery = flatSession.createQuery(flatHql);
 		if(projectId > 0)
 			query.setParameter("project_id", projectId);
 		if(buildingId > 0)
@@ -1383,14 +1390,55 @@ public class ProjectDAO {
 //		if(evenOrodd > 0)
 //			query.setParameter("floor_no", evenOrodd);
 		List<BuilderFlat> builderFlatList = query.list();
-		List<BuilderFlat> newFlatList = new ArrayList<BuilderFlat>();
+		List<FlatListData> newFlatList = new ArrayList<FlatListData>();
 		System.err.println("No of flats :::: "+builderFlatList.size());
+		int buildingid = 0;
+		int floorid = 0;
+		
 		for(BuilderFlat builderFlat : builderFlatList){
-			BuilderFlat builderFlat2 = new BuilderFlat();
-			builderFlat2.setId(builderFlat.getId());
-			builderFlat2.setFlatNo(builderFlat.getFlatNo());
-			builderFlat2.setBuilderFloor(builderFlat.getBuilderFloor());
-			newFlatList.add(builderFlat2);
+			FlatListData flatListData = new FlatListData();
+			List<BuildingListData> buildingListDatas = new ArrayList<BuildingListData>();
+			if(buildingid != builderFlat.getBuilderFloor().getBuilderBuilding().getId()){
+				List<FloorListData> floorListDatas = new ArrayList<>();
+				if(floorid != builderFlat.getBuilderFloor().getId()){
+					
+//					BuilderFloor builderFloor = new BuilderFloor();
+//					builderFloor.setId(floorid);
+//					builderFloor.setName(floorName);
+					//builderFloor.setBuilderFlats(builder);
+					List<FlatStatusData> flatDatas = getFlatsByFloorId(builderFlat.getBuilderFloor().getId());
+					FloorListData floorListData = new FloorListData();
+					floorListData.setFloorId(builderFlat.getBuilderFloor().getId());
+					floorListData.setFloorName(builderFlat.getBuilderFloor().getName());
+					
+					floorListData.setFlatStatusDatas(flatDatas);
+					floorListDatas.add(floorListData);
+				}
+//				BuilderFlat builderFlat2 = new BuilderFlat();
+//				builderFlat2.setId(builderFlat.getId());
+//				builderFlat2.setFlatNo(builderFlat.getFlatNo());
+//				builderFlatList.add(builderFlat2);
+				floorid = builderFlat.getBuilderFloor().getId();
+//				floorName = builderFlat.getBuilderFloor().getName();
+				BuildingListData buildingListData = new BuildingListData();
+				List<BuildingImageGallery> buildingImageGalleries =  getBuilderBuildingImagesById(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
+				buildingListData.setBuildingId( builderFlat.getBuilderFloor().getBuilderBuilding().getId());
+				if(buildingImageGalleries.get(0) != null)	
+					buildingListData.setBuildingImage(buildingImageGalleries.get(0).getImage());
+				else
+					buildingListData.setBuildingImage("");
+				buildingListData.setBuildingName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
+				buildingListData.setFloorListDatas(floorListDatas);
+				buildingListDatas.add(buildingListData);
+			}
+//			BuildingData buildingData = new BuildingData();
+//			buildingData.setId(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
+//			buildingData.setName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
+			buildingid = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
+//			buildingName = builderFlat.getBuilderFloor().getBuilderBuilding().getName();
+			flatListData.setBuildingListDatas(buildingListDatas);
+			flatListData.setProjectid(projectId);
+			newFlatList.add(flatListData);
 		}
 		//session.close();
 		return newFlatList;
@@ -1926,6 +1974,41 @@ public class ProjectDAO {
 		}
 		session.close();
 		return floorDatas;
+	}
+	
+	public List<FlatData> getActiveFlatsByFloorId(int floorId){
+		List<FlatData> flatDatas = new ArrayList<FlatData>();
+		String hql = "from BuilderFlat where builderFloor.id = :floor_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floorId);
+		List<BuilderFlat> builderFlats = query.list();
+		for(BuilderFlat builderFlat : builderFlats){
+			FlatData flatData = new FlatData();
+			flatData.setId(builderFlat.getId());
+			flatData.setName(builderFlat.getFlatNo());
+			flatDatas.add(flatData);
+		}
+		return flatDatas;
+	}
+	
+	public List<FlatStatusData> getFlatsByFloorId(int floorId){
+		List<FlatStatusData> flatDatas = new ArrayList<FlatStatusData>();
+		String hql = "from BuilderFlat where builderFloor.id = :floor_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floorId);
+		List<BuilderFlat> builderFlats = query.list();
+		for(BuilderFlat builderFlat : builderFlats){
+			FlatStatusData flatData = new FlatStatusData();
+			flatData.setId(builderFlat.getId());
+			flatData.setName(builderFlat.getFlatNo());
+			flatData.setFlatStaus(builderFlat.getBuilderFlatStatus().getStatus());
+			flatDatas.add(flatData);
+		}
+		return flatDatas;
 	}
 	
 	/* ******************** Project Flats ******************** */
@@ -2734,6 +2817,7 @@ public class ProjectDAO {
 	 */
 	public List<ProjectList> getBuilderActiveProjectsByBuilderId(int builderId) {
 		System.err.println("builderId :: "+builderId);
+		Long totalLeads = (long)0;
 		String hql = "from BuilderProject where builder.id = :builder_id and status=1 order by id desc";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -2754,6 +2838,17 @@ public class ProjectDAO {
 			newproject.setCityName(builderproject.getCity().getName());
 			newproject.setLocalityId(builderproject.getLocality().getId());
 			newproject.setLocalityName(builderproject.getLocality().getName());
+			newproject.setCompletionStatus(builderproject.getCompletionStatus());
+			if(builderproject.getInventorySold() != null){
+				newproject.setSold(builderproject.getInventorySold());
+			}
+			if(builderproject.getTotalInventory() != null){
+				newproject.setTotalSold(builderproject.getTotalInventory());
+			}
+			totalLeads = getTotalLeadsByProjectId(builderproject.getId());
+			if(totalLeads != null){
+				newproject.setTotalLeads(totalLeads.intValue());
+			}
 			System.out.println("Project name :: "+builderproject.getName());
 			projects.add(newproject);
 		}
@@ -3545,31 +3640,42 @@ public class ProjectDAO {
 	 * @param flatId
 	 * @return List<FlatPayment>
 	 */
-	public List<FlatPayment> getFlatPaymentByFlatId(int flatId){
-		String hql = "from BuilderFlat where id = :flat_id";
-		String payment = "from BuildingPaymentInfo where builderBuilding.id = :building_id" ;
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("flat_id",flatId);
-		BuilderFlat builderFlat = (BuilderFlat) query.list().get(0);
-		Session paymentSession = hibernateUtil.openSession();
-		Query paymentQuery = paymentSession.createQuery(payment);
-		paymentQuery.setParameter("building_id", builderFlat.getBuilderFloor().getBuilderBuilding().getId());
-		List<BuildingPaymentInfo> buildingPaymentInfos = paymentQuery.list();
-		List<FlatPayment> flatPaymentList = new ArrayList<FlatPayment>();
-		for(BuildingPaymentInfo buildingPaymentInfo :buildingPaymentInfos ){
-			FlatPayment flatPayment = new FlatPayment();
-			flatPayment.setMilestone(buildingPaymentInfo.getMilestone());
-			flatPayment.setPayable(buildingPaymentInfo.getPayable());
-			flatPayment.setAmount(buildingPaymentInfo.getAmount());
-			flatPaymentList.add(flatPayment);
-		}
-		if(flatPaymentList != null)
-			return flatPaymentList;
-		else
-			return null;
-	}
+//	public List<FlatPayment> getFlatPaymentByFlatId(int flatId){
+//		String hql = "from BuilderFlat where id = :flat_id";
+//		String payment = "from BuildingPaymentInfo where builderBuilding.id = :building_id" ;
+//		HibernateUtil hibernateUtil = new HibernateUtil();
+//		Session session = hibernateUtil.openSession();
+//		Query query = session.createQuery(hql);
+//		query.setParameter("flat_id",flatId);
+//		BuilderFlat builderFlat = (BuilderFlat) query.list().get(0);
+//		Session paymentSession = hibernateUtil.openSession();
+//		Query paymentQuery = paymentSession.createQuery(payment);
+//		paymentQuery.setParameter("building_id", builderFlat.getBuilderFloor().getBuilderBuilding().getId());
+//		List<BuildingPaymentInfo> buildingPaymentInfos = paymentQuery.list();
+//		List<FlatPayment> flatPaymentList = new ArrayList<FlatPayment>();
+//		for(BuildingPaymentInfo buildingPaymentInfo :buildingPaymentInfos ){
+//			FlatPayment flatPayment = new FlatPayment();
+//			flatPayment.setMilestone(buildingPaymentInfo.getMilestone());
+//			flatPayment.setPayable(buildingPaymentInfo.getPayable());
+//			flatPayment.setAmount(buildingPaymentInfo.getAmount());
+//			flatPaymentList.add(flatPayment);
+//		}
+//		if(flatPaymentList != null)
+//			return flatPaymentList;
+//		else
+//			return null;
+//	}
+	
+	 public List<FlatPaymentSchedule> getFlatPaymentByFlatId(int flatId){
+		 String hql ="from FlatPaymentSchedule where builderFlat.id = :flat_id";
+		 HibernateUtil hibernateUtil = new HibernateUtil();
+		 Session session = hibernateUtil.openSession();
+		 Query query = session.createQuery(hql);
+		 query.setParameter("flat_id", flatId);
+		 List<FlatPaymentSchedule> result = query.list();
+		 return result;
+		 
+	 }
 	/**
 	 * Get total leads by builder id
 	 * @author pankaj
@@ -3675,4 +3781,75 @@ public class ProjectDAO {
 		responseMessage.setMessage("Source updated successfully");
 		return responseMessage;
 	}
+	
+	public Long getTotalCampaignByEmpId(int empId){
+		Long totalCampaign = (long)0;
+		String hql = "SELECT COUNT(*) from Campaign where builder.builderEmployees.id = :emp_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("emp_id", empId);
+		totalCampaign = (Long) query.uniqueResult();
+		return totalCampaign;
+	}
+	public List<PaymentInfoData> getFlatPaymnetbyFloorId(int floorId){
+		
+		List<PaymentInfoData> paymentInfoDatas = new ArrayList<PaymentInfoData>();
+		
+		String hql = "from FlatPaymentSchedule where builderFlat.id = :flat_data_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		
+		try{
+		
+		FlatData flatData = getActiveFlatsByFloorId(floorId).get(0);
+		query.setParameter("flat_data_id", flatData.getId() );
+		List<FlatPaymentSchedule> result = query.list();
+		if(result.get(0) != null){
+			System.err.println("No Error :: "+result.size());
+			for(FlatPaymentSchedule buildingPaymentInfo : result){
+				PaymentInfoData paymentInfoData = new PaymentInfoData();
+				paymentInfoData.setId(buildingPaymentInfo.getId());
+				paymentInfoData.setName(buildingPaymentInfo.getMilestone());
+				paymentInfoData.setAmount(buildingPaymentInfo.getAmount());
+				paymentInfoData.setPayable(buildingPaymentInfo.getPayable());
+				paymentInfoDatas.add(paymentInfoData);
+			}
+		}else{
+			
+			BuilderFloor builderFloor = getFloorById(floorId);
+			System.err.println("Building Id :: "+builderFloor.getBuilderBuilding().getId());
+			List<BuildingPaymentInfo> buildingPaymentInfos = getActiveBuilderBuildingPaymentInfoById(builderFloor.getBuilderBuilding().getId());
+			for(BuildingPaymentInfo builderProjectPaymentInfo : buildingPaymentInfos){
+				PaymentInfoData paymentInfoData = new PaymentInfoData();
+				paymentInfoData.setId(0);
+				paymentInfoData.setName(builderProjectPaymentInfo.getMilestone());
+				paymentInfoData.setAmount(builderProjectPaymentInfo.getAmount());
+				paymentInfoData.setPayable(builderProjectPaymentInfo.getPayable());
+				paymentInfoDatas.add(paymentInfoData);
+			}
+			
+		}
+		}catch(IndexOutOfBoundsException e){
+			BuilderFloor builderFloor = getFloorById(floorId);
+			System.err.println("Building Id :: "+builderFloor.getBuilderBuilding().getId());
+			List<BuildingPaymentInfo> buildingPaymentInfos = getActiveBuilderBuildingPaymentInfoById(builderFloor.getBuilderBuilding().getId());
+			for(BuildingPaymentInfo builderProjectPaymentInfo : buildingPaymentInfos){
+				PaymentInfoData paymentInfoData = new PaymentInfoData();
+				paymentInfoData.setId(0);
+				paymentInfoData.setName(builderProjectPaymentInfo.getMilestone());
+				paymentInfoData.setAmount(builderProjectPaymentInfo.getAmount());
+				paymentInfoData.setPayable(builderProjectPaymentInfo.getPayable());
+				paymentInfoDatas.add(paymentInfoData);
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		session.close();
+		return paymentInfoDatas;
+	}
+	
+	
 }

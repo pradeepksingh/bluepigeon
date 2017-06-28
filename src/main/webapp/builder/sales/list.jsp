@@ -151,7 +151,7 @@
 <!-- 						                       </div> -->
 				                       	</div>
 				                    	<div class="col-md-6 right">
-					                      	<div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="<%out.print(projectList.getId()); %>"> </div>
+					                      	<div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="<%if(projectList.getCompletionStatus()!=null)out.print(Math.round(projectList.getCompletionStatus())); %>"> </div>
 <!-- 						                  	<div class="bottom"> -->
 <!-- 						                    	<h4>10 NEW LEADS</h4> -->
 <!-- 						                 	</div> -->
@@ -346,7 +346,7 @@
 			             +'<h4>'+cityName+'</h4>'
 		                 +'</div>'
 		                 +'<div class="col-md-6 right">'
-			             +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"> </div>'
+			             +'<div class="chart" id="graph'+projectId+'" data-percent="'+data[index].completionStatus+'"> </div>'
 		                 +'</div>'
 	                     +'</div>'
                        	 +'</div>'

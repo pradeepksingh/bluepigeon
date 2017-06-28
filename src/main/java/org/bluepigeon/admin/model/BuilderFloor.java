@@ -32,7 +32,7 @@ public class BuilderFloor implements java.io.Serializable {
 	private Integer totalFlats;
 	private Double completionStatus = 0.0;
 	private Byte status;
-	private Set<BuilderFlat> builderFlats = new HashSet<BuilderFlat>(0);
+	//private Set<BuilderFlat> builderFlats = new HashSet<BuilderFlat>(0);
 
 	public BuilderFloor() {
 	}

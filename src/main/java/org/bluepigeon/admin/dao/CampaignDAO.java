@@ -28,8 +28,8 @@ public class CampaignDAO {
 	 */
 	public List<BuyerProjectList> getBuyerProjectByCityId(int cityId){
 		List<BuyerProjectList> buyerProjectLists = new ArrayList<BuyerProjectList>();
-		String hql = "from BuilderProject where city.id = :city_id";
-		String buyerHql = "from Buyer where builderProject.id = :project_id";
+		String hql = "from BuilderProject where city.id = :city_id and status=1";
+		String buyerHql = "from Buyer where builderProject.id = :project_id and is_deleted=0 and is_primary=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Session BuyerSession = hibernateUtil.openSession();
@@ -48,6 +48,7 @@ public class CampaignDAO {
 				buyer2[i]=new Buyer();
 				buyer2[i].setId(buyer_list.get(i).getId());
 				buyer2[i].setName(buyer_list.get(i).getName());
+				buyer2[i].setIsPrimary(buyer_list.get(i).getIsPrimary());
 				buyerProjectList.setBuyer(buyer2);
 			}
 			buyerProjectLists.add(buyerProjectList);
@@ -65,7 +66,7 @@ public class CampaignDAO {
 	public List<BuyerBuildingList> getBuyerBuildingListByProjectId(int projectId){
 		List<BuyerBuildingList> buyerBuildingLists = new ArrayList<BuyerBuildingList>();
 		String hql = "from BuilderBuilding where builderProject.id = :project_id and status=1";
-		String buyerHql = "from Buyer where builderBuilding.id =:building_id";
+		String buyerHql = "from Buyer where builderBuilding.id =:building_id and is_deleted=0 and is_primary=1";
 		HibernateUtil hibernateUtil = new HibernateUtil(); 
 		Session session = hibernateUtil.openSession();
 		Session BuyerSession = hibernateUtil.openSession();
@@ -85,6 +86,7 @@ public class CampaignDAO {
 				//if(buyer2[i].getIsPrimary() && buyer2[i].getIsDeleted() == 0){
 					buyer2[i].setId(buyers.get(i).getId());
 					buyer2[i].setName(buyers.get(i).getName());
+					buyer2[i].setIsPrimary(buyers.get(i).getIsPrimary());
 					System.out.println("BuyerName ::: "+buyer2[i].getName());
 					buyerBuildingList.setBuyer(buyer2);
 				//}
@@ -104,7 +106,7 @@ public class CampaignDAO {
 	public List<BuyerFlatList> getBuyerFlatListByBuildingId(int buildingId){
 		List<BuyerFlatList> buyerFlatLists = new ArrayList<BuyerFlatList>();
 		String hql = "from BuilderFlat where builderFloor.builderBuilding.id = :building_id and status=1";
-		String buyerHql = "from Buyer where  builderFlat.id = :flat_id";
+		String buyerHql = "from Buyer where  builderFlat.id = :flat_id and is_deleted=0 and is_primary=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Session buyerSession = hibernateUtil.openSession();
@@ -124,6 +126,7 @@ public class CampaignDAO {
 				//if(buyer[i].getIsPrimary() && buyer[i].getIsDeleted() == 0){
 					buyer[i].setId(buyers.get(i).getId());
 					buyer[i].setName(buyers.get(i).getName());
+					buyer[i].setIsPrimary(buyers.get(i).getIsPrimary());
 					buyerFlatList.setBuyer(buyer);
 				//}
 			}
@@ -152,6 +155,7 @@ public class CampaignDAO {
 			//if(b.getIsPrimary()){
 				b.setId(buyer.getId());
 				b.setName(buyer.getName());
+				b.setIsPrimary(buyer.getIsPrimary());
 				buyerList.add(b);
 			//}
 		}

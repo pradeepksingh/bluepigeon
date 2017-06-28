@@ -29,6 +29,7 @@ import org.bluepigeon.admin.data.FlatWeightageData;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.LocalityData;
+import org.bluepigeon.admin.data.PaymentInfoData;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectDetail;
 import org.bluepigeon.admin.data.ProjectList;
@@ -1102,27 +1103,29 @@ public class ProjectController extends ResourceConfig {
 		BuilderBuilding builderBuilding = new BuilderBuilding();
 		builderBuilding.setId(building_id);
 		List<BuildingAmenityWeightage> buildingAmenityWeightages = new ArrayList<BuildingAmenityWeightage>();
-		for(int i=0 ;i < substagewt_id.size();i++) {
-			BuildingAmenityWeightage baw = new BuildingAmenityWeightage();
-			baw.setId(substagewt_id.get(i).getValueAs(Integer.class));
-			baw.setStatus(bstatus);
-			buildingAmenityWeightages.add(baw);
-		}
-		if(buildingAmenityWeightages.size() > 0) {
-			msg = projectDAO.updateBuildingAmenityWeightage(buildingAmenityWeightages, building_id);
-		}
+		if(substagewt_id != null){
+			for(int i=0 ;i < substagewt_id.size();i++) {
+				BuildingAmenityWeightage baw = new BuildingAmenityWeightage();
+				baw.setId(substagewt_id.get(i).getValueAs(Integer.class));
+				baw.setStatus(bstatus);
+				buildingAmenityWeightages.add(baw);
+			}
+			
+			if(buildingAmenityWeightages.size() > 0) {
+				msg = projectDAO.updateBuildingAmenityWeightage(buildingAmenityWeightages, building_id);
+			}
 		
-		List<BuildingWeightage> buildingWeightages = new ArrayList<BuildingWeightage>();
-		for(int i=0 ;i < ssubstagewt_id.size();i++) {
-			BuildingWeightage paw = new BuildingWeightage();
-			paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
-			paw.setStatus(bstatus);
-			buildingWeightages.add(paw);
+			List<BuildingWeightage> buildingWeightages = new ArrayList<BuildingWeightage>();
+			for(int i=0 ;i < ssubstagewt_id.size();i++) {
+				BuildingWeightage paw = new BuildingWeightage();
+				paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
+				paw.setStatus(bstatus);
+				buildingWeightages.add(paw);
+			}
+			if(buildingWeightages.size() > 0) {
+				msg = projectDAO.updateBuildingWeightageStatus(buildingWeightages, building_id);
+			}
 		}
-		if(buildingWeightages.size() > 0) {
-			msg = projectDAO.updateBuildingWeightageStatus(buildingWeightages, building_id);
-		}
-		
 		try {	
 			List<BuildingImageGallery> buildingImageGalleries = new ArrayList<BuildingImageGallery>();
 			//for multiple inserting images.
@@ -2562,6 +2565,13 @@ public class ProjectController extends ResourceConfig {
 		
 		return responseMessage;
 	}
-	
+	@GET
+	@Path("/building/floor/flat/payments/{floor_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PaymentInfoData> getFlatPayment(@PathParam("floor_id") int floor_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		List<PaymentInfoData> paymentInfoDatas = projectDAO.getFlatPaymnetbyFloorId(floor_id);
+		return paymentInfoDatas;
+	}
 }
 

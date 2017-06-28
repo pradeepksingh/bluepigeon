@@ -25,10 +25,11 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
+			if(builder_id > 0){
+				project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+			}
 		}
-		if(builder_id > 0){
-			project_list = new ProjectDAO().getProjectsByBuilderId(builder_id);
-		}
+		
    }
 	int builder_id1 = 1;
 	List<BuilderEmployee> builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);

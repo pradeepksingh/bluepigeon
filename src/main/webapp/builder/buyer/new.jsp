@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.FlatPaymentSchedule"%>
 <%@page import="org.bluepigeon.admin.data.FlatPayment"%>
 <%@page import="org.bluepigeon.admin.data.ProjectPriceInfoData"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO"%>
@@ -17,9 +18,11 @@
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	List<BuilderProject> project_list = null; 
-	List<FlatPayment> flatPayments = null;
+	List<FlatPaymentSchedule> flatPayments = null;
 	ProjectPriceInfoData projectPriceInfoData = null;
 	int builder_id1 = 0;
+	int flat_id = 0;
+	
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -32,17 +35,16 @@
 			}
 			if(project_list != null){
 			 	builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
-			 	builderFlatList = new ProjectDAO().getActiveFlatsByProjectId(project_list.get(0).getId());
-			 
-			 	projectPriceInfoData = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByProjectId(project_list.get(0).getId());
-			 	if(builderFlatList != null){
-				 flatPayments = new ProjectDAO().getFlatPaymentByFlatId(builderFlatList.get(0).getId());
+			 		
 			 	}
 			}
 			 
 		}
-   }
-	
+   
+	if (request.getParameterMap().containsKey("flat_id")) {
+		flat_id = Integer.parseInt(request.getParameter("flat_id"));
+		flatPayments = new ProjectDAO().getFlatPaymentByFlatId(flat_id);
+	}
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -210,50 +212,11 @@
                               			</div>
                              		</div>
                              <div id="vimessages1" class="tab-pane" aria-expanded="false">
-                           
-<!--                                  <div class="form-group row"> -->
-<!--                                     <label for="example-text-input" class="col-3 col-form-label">Project Name</label> -->
-<!--                                     <div class="col-6"> -->
-<!--                                        <select name="project_id" id="project_id" class="form-control"> -->
-<!-- 						                    <option value="">Select Project</option> -->
-<%-- 						                    <% for(BuilderProject builderProject : project_list){ %> --%>
-<%-- 											<option value="<% out.print(builderProject.getId());%>" ><% out.print(builderProject.getName());%></option> --%>
-<%-- 											<% } %> --%>
-<!-- 							            </select> -->
-<!--                                     </div> -->
-<!--                                 </div> -->
-                                
-<!--                                 <div class="form-group row"> -->
-<!--                                   <label for="example-text-input" class="col-3 col-form-label">Building</label> -->
-<!--                                     <div class="col-6"> -->
-<!--                                        <select name="building_id" id="building_id" class="form-control"> -->
-<!-- 						                    <option value="">Select Building</option> -->
-<!-- 							          	</select> -->
-<!--                                     </div> -->
-<!--                                 </div> -->
-                                
-                                 <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Flat</label>
-                                    <div class="col-6">
-                                       <select name="flat_id" id="flat_id" class="form-control">
-						                    <option value="">Select Flat</option>
-						                    <%
-						                    	if(builderFlatList.size() > 0){
-						                    		for(BuilderFlat builderFlat : builderFlatList){
-						                    %><option value="<%out.print(builderFlat.getId());%>"><% out.print(builderFlat.getFlatNo());%></option>
-						                    
-						                    <%}} %>
-							           </select>
-                                    </div>
-                                </div>
-                                
                                  <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Assign Manager</label>
                                     <div class="col-6">
                                       <select name="admin_id" id="admin_id" class="form-control">
-											<% for(BuilderEmployee builderEmployee :builderEmployees) { %>
-						                  	<option value="<% out.print(builderEmployee.getId());%>"><% out.print(builderEmployee.getName());%></option>
-						                  	<% } %>
+						                  	<option value="<% out.print(builder.getId());%>"><% out.print(builder.getName());%></option>
 							          </select>
                                     </div>
                                 </div>
@@ -262,7 +225,6 @@
                                     <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next1" onclick="show1();">Next</button>
                                  </div>
                                </div>
-								
                                 <div id="vimessages2" class="tab-pane" aria-expanded="false">
                                  <div class="col-12">
     							<%
@@ -279,7 +241,6 @@
                                         <input type="text" value="<%out.print(projectPriceInfoData.getBasePrice()); %>" class="form-control" id="base_rate" name="base_rate" />
                                     </div>
                                 </div> 
-                                
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate</label>
                                     <div class="col-3">
@@ -290,7 +251,6 @@
                                         <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getAmenityRate()); %>" id="amenity_rate" name="amenity_rate" />
                                     </div>
                                 </div>
-                                
                                  <div class="form-group row">
                                     <label for="example-tel-input" class="col-3 col-form-label">Parking Rates</label>
                                     <div class="col-3">
@@ -301,7 +261,6 @@
                                         <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getMaintenance()); %>" id="maintenance" name="maintenance" />
                                     </div>
                                 </div>
-
                                 <div class="form-group row">
                                     <label for="example-tel-input" class="col-3 col-form-label">Stamp Duty</label>
                                     <div class="col-3">
@@ -312,7 +271,6 @@
                                          <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getTax()); %>" id="tax" name="tax" />
                                     </div>
                                 </div>
-                                                              
                                 <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">VAT</label>
                                     <div class="col-3">
@@ -334,11 +292,75 @@
                                         <input class="form-control" readonly="true" type="text" value="<%out.print(projectPriceInfoData.getPost()); %>" id="toatl_sale_value" name="total_sale_value">
                                     </div>
                                </div>
-                               <%} %>
-                               <div class="form-group row">
-                                    <button type="button" class="col-2" onclick="showOffers()">+ADD offers</button>
+                               <%} else{%>
+                               <input type="hidden" id="project_id" name="project_id" value=""/>  
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-3 col-form-label">Booking Date</label>
+                                    <div class="col-3">
+                                       <input type="text" class="form-control" id="booking_date" name="booking_date" value=""/>
+                                    </div>
+                                    <label for="example-text-input" class="col-3 col-form-label">Base Rate</label>
+                                    <div class="col-3">
+                                        <input type="text" value="" class="form-control" id="base_rate" name="base_rate" />
+                                    </div>
+                                </div> 
+                                <div class="form-group row">
+                                    <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate</label>
+                                    <div class="col-3">
+                                       <input type="text" class="form-control" value="" id="rise_rate" name="rise_rate"/>
+                                    </div>
+                                    <label for="example-search-input" class="col-3 col-form-label">Aminities Facing Rise Rates</label>
+                                    <div class="col-3">
+                                        <input type="text" class="form-control" value="" id="amenity_rate" name="amenity_rate" />
+                                    </div>
                                 </div>
+                                 <div class="form-group row">
+                                    <label for="example-tel-input" class="col-3 col-form-label">Parking Rates</label>
+                                    <div class="col-3">
+                                       	<input type="text" class="form-control" value="" id="parking" name="parking" />
+                                    </div>
+                                    <label for="example-tel-input" class="col-3 col-form-label">Maintance</label>
+                                    <div class="col-3">
+                                        <input type="text" class="form-control" value="" id="maintenance" name="maintenance" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="example-tel-input" class="col-3 col-form-label">Stamp Duty</label>
+                                    <div class="col-3">
+                                       <input type="text" class="form-control" value="" id="stamp_duty" name="stamp_duty" />
+                                    </div>
+                                    <label for="example-tel-input" class="col-3 col-form-label">Taxes</label>
+                                    <div class="col-3">
+                                         <input type="text" class="form-control" value="" id="tax" name="tax" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="example-search-input" class="col-3 col-form-label">VAT</label>
+                                    <div class="col-3">
+                                       <input type="text" class="form-control" value="" id="vat" name="vat" />
+                                    </div>
+                                    <label for="example-search-input" class="col-3 col-form-label">Tenure</label>
+                                    <div class="col-3">
+                                      <input type="text" class="form-control" value="" id="tenure" name="tenure" />
+									  <span class="input-group-addon">Months</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="example-search-input" class="col-3 col-form-label">No. of Post</label>
+                                    <div class="col-3">
+                                        <input class="form-control" type="text" value="" id="post" name="post">
+                                    </div>
+                                    <label for="example-search-input" class="col-3 col-form-label">Total Sale Value</label>
+                                    <div class="col-3">
+                                        <input class="form-control" readonly="true" type="text" value="" id="toatl_sale_value" name="total_sale_value">
+                                    </div>
+                               </div>
+                               <%} %>
+<!--                                <div class="form-group row"> -->
+<!--                                     <button type="button" class="col-2" onclick="showOffers()">+ADD offers</button> -->
+<!--                                 </div> -->
                                  <div id="displayoffers" style="display:none">
+                                
                                   <div class="offset-sm-11 col-sm-7">
                                     <i class="fa fa-times"></i> 
                                   </div>
@@ -360,8 +382,8 @@
 	                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
 	                                    <div class="col-2">
 	                                        <textarea class="form-control" id="description" class="description"></textarea>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
+	                                    </div>p
+;	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
 	                                    <div class="col-2">
 	                                     <select class="form-control" id="offer" name="offer">
 										  <option value="">Percentage</option>
@@ -377,26 +399,28 @@
 										</div>
 	                                </div>
 	                             </div>
+	                             
                                 <div class="offset-sm-5 col-sm-7">
                                      <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous2();">Previous</button>
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next2" onclick="show2();">Next</button>
                                  </div>
                                 </div>
                                </div>
-                                <div id="vimessages3" class="tab-pane" aria-expanded="true">        
+                                <div id="vimessages3" class="tab-pane" aria-expanded="true">      
+                                 <%for(FlatPaymentSchedule flatPayment: flatPayments ) {%>  
                                 <input type="hidden" name="schedule_count" id="schedule_count" value="1"/>
 	                                <div class="form-group row">
 	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
 	                                    <div class="col-2">
-	                                       <input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>
+	                                       <input type="text" class="form-control" readonly="true" id="schedule" name="schedule[]" value="<%out.print(flatPayment.getMilestone());%>"/>
 	                                    </div>
 	                                    <label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
 	                                    <div class="col-2">
-	                                       <input type="text" class="form-control" id="payable" name="payable[]" value=""/>
+	                                       <input type="text" class="form-control" id="payable" name="payable[]" value="<%out.print(flatPayment.getPayable());%>"/>
 	                                    </div>
 	                                    <label for="example-search-input" class="col-1 col-form-label">Amount</label>
 	                                    <div class="col-2">
-	                                       <input type="text" class="form-control" id="amount" name="amount[]" value=""/>
+	                                       <input type="text" class="form-control" id="amount" name="amount[]" value="<%out.print(flatPayment.getAmount());%>"/>
 	                                    </div>
 <!-- 	                                     <i class="fa fa-times"></i> -->
 	                                </div>
@@ -420,6 +444,7 @@
 <!-- 	                                <div class="offset-sm-9 col-sm-7"> -->
 <!--                                        <a href="javascript:addMoreSchedule();"> <button type="button" class="">+ Add More Schedules</button></a> -->
 <!--                                     </div> -->
+										<%} %>
 	                                <div class="offset-sm-5 col-sm-7">
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous3();">Previous</button>
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next3" onclick="show3();">Next</button>
@@ -560,19 +585,9 @@ $("#flat_id").change(function(){
 $("#vimessages3").append(html);
 	},'json');
 });
-alert("Flat ID on load :: "+<%out.print(builderFlatList.get(0).getId());%>);
 
-<%
-  if(flatPayments != null){
-	  for(FlatPayment flatPayment: flatPayments){
-%>	
-	showFlatPayment(<%out.print(flatPayment.getMilestone());%>,<%out.print(flatPayment.getPayable());%>);
-<%  }
-  }
-%>
-function showFlatPayment(milestone,percentage){
-	alert("Percentage  "+percentage);
-}
+
+
 
 $('#addbuyer').bootstrapValidator({
 	container: function($field, validator) {

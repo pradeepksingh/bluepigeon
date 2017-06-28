@@ -128,7 +128,7 @@
 			  	<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
 			  	<li><a data-toggle="tab" href="#offer">Offers</a></li>
-			  	<li><a data-toggle="tab" href="#productsubstage">Stage/Substage</a></li>
+			  	<li><a data-toggle="tab" href="#productsubstage"> Project Weightage</a></li>
 			</ul>
 			<div class="tab-content">
 			  	<div id="basic" class="tab-pane fade in active">
@@ -1060,42 +1060,45 @@
 										<div id="offer_area">
 											<div class="row">
 												<div class="col-lg-12 margin-bottom-5">
-													<div class="form-group" id="error-amenity_type">
-														<div class="col-sm-12">
-															<% 	for(ProjectStage projectStage :projectStages) { 
-																Double stage_wt = 0.0;
-																for(ProjectWeightage projectWeightage :projectWeightages) {
-																	if(projectStage.getId() == projectWeightage.getProjectStage().getId()) {
-																		stage_wt = projectWeightage.getStageWeightage();
-																	}
-																}
-															%>
-															<fieldset class="scheduler-border">
-																<legend class="scheduler-border">Stages</legend>
-																<div class="col-sm-12">
-																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(projectStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage[]" id="<% out.print(projectStage.getId());%>" type="text" class="form-control" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
-																	<fieldset class="scheduler-border" style="margin-bottom:0px !important">
-																		<legend class="scheduler-border">Sub Stages</legend>
-																	<% 	for(ProjectSubstage projectSubstage :projectStage.getProjectSubstages()) { 
-																		Double substage_wt = 0.0;
-																		for(ProjectWeightage projectWeightage :projectWeightages) {
-																			if(projectSubstage.getId() == projectWeightage.getProjectSubstage().getId()) {
-																				substage_wt = projectWeightage.getSubstageWeightage();
-																			}
-																		}
-																	%>
-																		<div class="col-sm-3">
-																			<% out.print(projectSubstage.getName()); %> (%)<br>
-																			<input type="number" name="substage_weightage<% out.print(projectStage.getId());%>[]" id="<% out.print(projectSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
-																		</div>
-																	<% } %>
-																	</fieldset>
-																</div>
-															</fieldset>
-															<% } %>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
+<!-- 													<div class="form-group" id="error-amenity_type"> -->
+<!-- 														<div class="col-sm-12"> -->
+<%-- 															<% 	for(ProjectStage projectStage :projectStages) {  --%>
+<!-- // 																Double stage_wt = 0.0; -->
+<!-- // 																for(ProjectWeightage projectWeightage :projectWeightages) { -->
+<!-- // 																	if(projectStage.getId() == projectWeightage.getProjectStage().getId()) { -->
+<!-- // 																		stage_wt = projectWeightage.getStageWeightage(); -->
+<!-- // 																	} -->
+<!-- // 																} -->
+<%-- 															%> --%>
+<!-- 															<fieldset class="scheduler-border"> -->
+<!-- 																<legend class="scheduler-border">Stages</legend> -->
+<!-- 																<div class="col-sm-12"> -->
+<%-- 																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(projectStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage[]" id="<% out.print(projectStage.getId());%>" type="text" class="form-control" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div> --%>
+<!-- 																	<fieldset class="scheduler-border" style="margin-bottom:0px !important"> -->
+<!-- 																		<legend class="scheduler-border">Sub Stages</legend> -->
+<%-- 																	<% 	for(ProjectSubstage projectSubstage :projectStage.getProjectSubstages()) {  --%>
+<!-- // 																		Double substage_wt = 0.0; -->
+<!-- // 																		for(ProjectWeightage projectWeightage :projectWeightages) { -->
+<!-- // 																			if(projectSubstage.getId() == projectWeightage.getProjectSubstage().getId()) { -->
+<!-- // 																				substage_wt = projectWeightage.getSubstageWeightage(); -->
+<!-- // 																			} -->
+<!-- // 																		} -->
+<%-- 																	%> --%>
+<!-- 																		<div class="col-sm-3"> -->
+<%-- 																			<% out.print(projectSubstage.getName()); %> (%)<br> --%>
+<%-- 																			<input type="number" name="substage_weightage<% out.print(projectStage.getId());%>[]" id="<% out.print(projectSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/> --%>
+<!-- 																		</div> -->
+<%-- 																	<% } %> --%>
+<!-- 																	</fieldset> -->
+<!-- 																</div> -->
+<!-- 															</fieldset> -->
+<%-- 															<% } %> --%>
+<!-- 														</div> -->
+<!-- 														<div class="messageContainer"></div> -->
+<!-- 													</div> -->
+
+
+
 												</div>
 											</div>
 										</div>

@@ -44,7 +44,7 @@ public class CampaignController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage addBuyerInfoNew (
-			@FormDataParam("admin_id") int emp_id,
+			@FormDataParam("admin_id") int admin_id,
 			@FormDataParam("title") String  name,
 			@FormDataParam("campaign_type") int  campaignType,
 			@FormDataParam("set_date") String setDate,
@@ -52,23 +52,32 @@ public class CampaignController {
 			@FormDataParam("terms") String terms,
 			@FormDataParam("city_id") int city_id,
 			@FormDataParam("project_id") int project_id,
+			@FormDataParam("builder_id") int builder_id,
+			@FormDataParam("emp_id") int emp_id,
 			@FormDataParam("recipient_type_id") int recipientType,
 			@FormDataParam("buyer_name[]") List<FormDataBodyPart> buyerNames
 			
 			){
 				ResponseMessage msg = new ResponseMessage();
+				BuilderEmployee builderEmployee = new BuilderEmployee();
+				Builder builder = new Builder();
 				AdminUser adminUser = new AdminUser();
 				City city = new City();
 				BuilderProject builderProject = new BuilderProject();
-				
-				adminUser.setId(emp_id);
+				if(admin_id > 0)
+					adminUser.setId(admin_id);
 				
 				if(city_id > 0){
-				city.setId(city_id);
+					city.setId(city_id);
 				}
 				if(project_id>0){
-				builderProject.setId(project_id);
+					builderProject.setId(project_id);
 				}
+				if(builder_id > 0)
+					builder.setId(builder_id);
+				if(emp_id > 0)
+					builderEmployee.setId(emp_id);
+				
 				Campaign campaign = new Campaign();
 				campaign.setAdminUser(adminUser);
 				campaign.setCity(city);
@@ -76,6 +85,7 @@ public class CampaignController {
 				campaign.setTitle(name);
 				campaign.setContent(content);
 				campaign.setTerms(terms);
+				campaign.setBuilder(builder);
 				campaign.setType(campaignType);
 				SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
 				Date startDate = null;

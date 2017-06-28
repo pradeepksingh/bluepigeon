@@ -28,6 +28,7 @@
 	Long totalLeads = (long)0;
 	Double totalRevenue = 0.0;
 	Double totalSaleValue = 0.0;
+	Long totalCampaign = (long)0;
 	Long totalSoldInventory = (long)0;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
@@ -50,6 +51,7 @@
 					totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder_id);
 					totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
 					totalRevenue = totalSaleValue * totalSoldInventory;
+				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 				}
 			}
 		}
@@ -114,6 +116,7 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <!--.row -->
+                <%if(builder.getBuilderEmployeeAccessType().getId() == 1 || builder.getBuilderEmployeeAccessType().getId() == 2){ %>
                 <div class="row re">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border">
@@ -155,6 +158,50 @@
                         </div>
                     </div>
                 </div>
+                <%} %>
+                    <%if(builder.getBuilderEmployeeAccessType().getId() == 3){ %>
+                <div class="row re">
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box white-border" style="padding: 15px;">
+                            <h3 class="box-title">Total No. Of Campaigns</h3>
+                            <ul class="list-inline two-part">
+                                <li><i class="ti-home text-info-new"></i></li>
+                                <li class="text-right"><span class="counter dashboard-text"><%if(totalCampaign != null){out.print(totalCampaign);} %></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box white-border" style="padding: 15px;">
+                            <h3 class="box-title">Leads through Campaigns</h3>
+                            <ul class="list-inline two-part">
+<!--                                 <li><i class="icon-tag text-purple"></i></li> -->
+									 <li><i class="icon-tag text-info-new"></i></li>
+                                <li class="text-right"><span class="counter dashboard-text" ><%out.print(totalBuyers); %></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6" >
+                        <div class="white-box white-border" style="padding: 15px;">
+                            <h3 class="box-title">Buyers through Campaigns</h3>
+                            <ul class="list-inline two-part">
+<!--                                 <li><i class="icon-user text-danger"></i></li> -->
+                                 <li><i class="icon-user text-info-new"></i></li>
+                                <li class="text-right"><span class="counter dashboard-text"><%out.print(totalLeads); %></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box white-border" style="padding: 15px;">
+                            <h3 class="box-title">Total Revenue (in Rs)</h3>
+                            <ul class="list-inline two-part">
+<!--                                 <li><i class="ti-wallet text-success"></i></li> -->
+									 <li><i class="ti-wallet text-info-new"></i></li>
+                                <li class="text-right"><span class="counter dashboard-text"> <%out.print(Math.round(totalRevenue)); %></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <%} %>
                 <div class="white-box">
                    <div class="row re">
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -329,7 +376,7 @@
                 <div class="row">
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         <div class="white-box">
-                            <h3 class="box-title">Project stats</h3>
+                            <h3 class="box-title">Project status</h3>
                             <div class="col-md-3 col-sm-6 col-xs-12">
                         		<select class="selectpicker border-drop-down" data-style="form-control" id="graph_project_id" name="graph_project_id">
                                         <option>Project Name</option>

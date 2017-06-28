@@ -197,7 +197,7 @@ $('#select_date').datepicker({
 $("#project_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/building/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
-		var checkbox = '<div class="row">';
+		var checkbox = '';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].buildingId+'">'+data[index].buildingName+'</option>';
@@ -207,14 +207,13 @@ $("#project_id").change(function(){
 			});
 		});
 		$("#building_id").html(html);
-		checkbox+='</div>';
 		$("#appendbuyer").html(checkbox);
 	},'json');
 });
 $("#building_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/building/flat/names/"+$("#building_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Flat</option>';
-		var checkbox = '<div class="row">';
+		var checkbox = '';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].flatId+'">'+data[index].flatNo+'</option>';
@@ -224,20 +223,18 @@ $("#building_id").change(function(){
 			});
 		});
 		$("#flat_id").html(html);
-		checkbox+='</div>';
 		$("#appendbuyer").append(checkbox);
 	},'json');
 });
 
 $("#flat_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/flat/buyer/names/"+$("#flat_id").val(),{ }, function(data){
-		var checkbox = '<div class="row">';
+		var checkbox = '';
 		$("#appendbuyer").empty();
 		$(data).each(function(index){
 				checkbox += '<div class="col-sm-3"><input type="checkbox" id="recipient" name="buyer_name[]" value="'+data[index].id+'" />'+'&nbsp;'+data[index].name
 				checkbox +='</div>';
 		});
-		checkbox+='</div>';
 		$("#appendbuyer").html(checkbox);
 	},'json');
 });
