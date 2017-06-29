@@ -418,8 +418,8 @@
 		          </div>
          		  <div class="modal-body" style="background-color:#f5f5f5;">
          		  	<div class="row col-sm-12">
-						<div class="col-sm-6" id="flatList"></div>
-						<div class="col-sm-6" id="next"></div>
+						<div class="col-sm-9" id="flatList"></div>
+						<div class="col-sm-3" id="next"></div>
 					</div>
           		  </div>
       			</div>

@@ -39,6 +39,9 @@ public class BuilderBuilding implements java.io.Serializable {
 	private Double inventorySold;
 	private Double revenue;
 	private Double completionStatus = 0.0;
+	private Double amenityWeightage = 0.0;
+	private Double floorWeightage = 0.0;
+	private Double weightage = 0.0;
 	private Byte status;
 	private Set<BuilderFloor> builderFloors = new HashSet<BuilderFloor>(0);
 
@@ -47,7 +50,8 @@ public class BuilderBuilding implements java.io.Serializable {
 
 	public BuilderBuilding(AdminUser adminUser, BuilderBuildingStatus builderBuildingStatus, Double completionStatus,
 			BuilderProject builderProject, String name, Integer totalFloor, Date launchDate, Date possessionDate,
-			Double totalInventory, Double inventorySold, Double revenue, Byte status, Set<BuilderFloor> builderFloors) {
+			Double totalInventory, Double inventorySold, Double revenue, Byte status, Set<BuilderFloor> builderFloors,
+			Double amenityWeightage, Double floorWeightage, Double weightage) {
 		this.adminUser = adminUser;
 		this.builderBuildingStatus = builderBuildingStatus;
 		this.builderProject = builderProject;
@@ -61,6 +65,9 @@ public class BuilderBuilding implements java.io.Serializable {
 		this.status = status;
 		this.completionStatus = completionStatus;
 		this.builderFloors = builderFloors;
+		this.amenityWeightage = amenityWeightage;
+		this.floorWeightage = floorWeightage;
+		this.weightage = weightage;
 	}
 
 	@Id
@@ -195,6 +202,30 @@ public class BuilderBuilding implements java.io.Serializable {
 
 	public void setCompletionStatus(Double completionStatus) {
 		this.completionStatus = completionStatus;
+	}
+	@Column(name = "amenity_weightage", precision = 22, scale = 0)
+	public Double getAmenityWeightage() {
+		return amenityWeightage;
+	}
+
+	public void setAmenityWeightage(Double amenityWeightage) {
+		this.amenityWeightage = amenityWeightage;
+	}
+	@Column(name = "floor_weightage", precision = 22, scale = 0)
+	public Double getFloorWeightage() {
+		return floorWeightage;
+	}
+
+	public void setFloorWeightage(Double floorWeightage) {
+		this.floorWeightage = floorWeightage;
+	}
+	@Column(name = "weightage", precision = 22, scale = 0)
+	public Double getWeightage() {
+		return weightage;
+	}
+
+	public void setWeightage(Double weightage) {
+		this.weightage = weightage;
 	}
 
 }

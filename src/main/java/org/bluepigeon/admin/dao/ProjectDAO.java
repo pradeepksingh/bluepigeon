@@ -24,6 +24,7 @@ import org.bluepigeon.admin.data.FloorPanoData;
 import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.NewProjectList;
 import org.bluepigeon.admin.data.PaymentInfoData;
+import org.bluepigeon.admin.data.ProjectAmenityData;
 import org.bluepigeon.admin.data.ProjectCityData;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectDetail;
@@ -738,6 +739,8 @@ public class ProjectDAO {
 		session.close();
 		return result;
 	}
+	
+	
 	/**
 	 * Get all active buildings by project id
 	 * @author pankaj
@@ -1993,6 +1996,17 @@ public class ProjectDAO {
 		return flatDatas;
 	}
 	
+	public List<BuilderFlat> getActiveFlatByFloorId(int floorId){
+		String hql = "from BuilderFlat where builderFloor.id = :floor_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floorId);
+		List<BuilderFlat> builderFlats = query.list();
+		
+		return builderFlats;
+	}
+	
 	public List<FlatStatusData> getFlatsByFloorId(int floorId){
 		List<FlatStatusData> flatDatas = new ArrayList<FlatStatusData>();
 		String hql = "from BuilderFlat where builderFloor.id = :floor_id";
@@ -2225,6 +2239,7 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("id", flatId);
 		builderFlat = (BuilderFlat) query.uniqueResult();
+		session.close();
 		return builderFlat;
 	}
 	/**
@@ -3290,6 +3305,22 @@ public class ProjectDAO {
 	}
 	
 	public ResponseMessage updateBuildingSubstage(BuildingWeightageData buildingWeightageData) {
+		
+		BuilderBuilding builderBuilding = buildingWeightageData.getBuilderBuilding();
+		BuilderBuilding builderBuilding2 = getBuilderProjectBuildingById(builderBuilding.getId()).get(0);
+		
+		builderBuilding2.setAmenityWeightage(builderBuilding.getAmenityWeightage());
+		builderBuilding2.setFloorWeightage(builderBuilding.getFloorWeightage());
+		updateBuilding(builderBuilding2);
+		
+		List<BuilderFloor> floors = buildingWeightageData.getBuilderFloors();
+		if(floors != null){
+			for(BuilderFloor floor : floors){
+			 BuilderFloor builderFloor2 =getBuildingActiveFloorById(floor.getId()).get(0);
+			 builderFloor2.setWeightage(floor.getWeightage());
+			 updateFloors(builderFloor2);
+			}
+		}
 		ResponseMessage response = new ResponseMessage();
 		int building_id = buildingWeightageData.getBuildingId();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -3313,6 +3344,15 @@ public class ProjectDAO {
 		return response;
 	}
 	
+	public void updateFloors(BuilderFloor builderFloor){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		session.update(builderFloor);
+		session.getTransaction().commit();
+		session.close();
+	}
+	
 	public List<FloorWeightage> getFloorWeightage(int floor_id) {
 		String hql = "from FloorWeightage where builderFloor.id = :floor_id order by floorStage.id ASC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -3324,7 +3364,47 @@ public class ProjectDAO {
 		return result;
 	}
 	
-	public ResponseMessage updateFloorSubstage(FloorWeightageData floorWeightageData) {
+//	public ResponseMessage updateFloorSubstage(FloorWeightageData floorWeightageData) {
+//		ResponseMessage response = new ResponseMessage();
+//		int floor_id = floorWeightageData.getFloorId();
+//		HibernateUtil hibernateUtil = new HibernateUtil();
+//		Session session = hibernateUtil.openSession();
+//		String hql = "delete from FloorWeightage where builderFloor.id = :id";
+//		session.beginTransaction();
+//		Query query = session.createQuery(hql);
+//		query.setParameter("id", floor_id);
+//		query.executeUpdate();
+//		session.getTransaction().commit();
+//		session.close();
+//		Session session1 = hibernateUtil.openSession();
+//		session1.beginTransaction();
+//		for(FloorWeightage floorWeightage :floorWeightageData.getFloorWeightages()) {
+//			session1.save(floorWeightage);
+//		}
+//		session1.getTransaction().commit();
+//		session1.close();
+//		response.setStatus(1);
+//		response.setMessage("Floor substage updated successfully");
+//		return response;
+//	}
+//	
+	public ResponseMessage updateFloorAmenity(FloorWeightageData floorWeightageData) {
+		
+		BuilderFloor builderFloor = floorWeightageData.getBuilderFloor();
+		BuilderFloor builderFloor2  =getBuildingActiveFloorById(builderFloor.getId()).get(0);
+		builderFloor2.setAmenityWeightage(builderFloor.getAmenityWeightage());
+		builderFloor2.setFlatWeightage(builderFloor.getFlatWeightage());
+		updateBuildingFloor(builderFloor2);
+		
+		List<BuilderFlat> builderFlats = floorWeightageData.getBuilderFlats();
+		if(builderFlats != null){
+			for(BuilderFlat builderFlat : builderFlats){
+				BuilderFlat builderFlat2 = getBuilderFlatById(builderFlat.getId());
+				builderFlat2.setWeightage(builderFlat.getWeightage());
+				updateBuildingFlat(builderFlat2);
+			}
+		}
+		
 		ResponseMessage response = new ResponseMessage();
 		int floor_id = floorWeightageData.getFloorId();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -3362,6 +3442,9 @@ public class ProjectDAO {
 	public ResponseMessage updateFlatSubstage(FlatWeightageData flatWeightageData) {
 		ResponseMessage response = new ResponseMessage();
 		int flat_id = flatWeightageData.getFlatId();
+		BuilderFlat builderFlat = getBuilderFlatById(flat_id);
+		builderFlat.setAmenityWeightage(flatWeightageData.getAmenityWeightage());
+		updateBuildingFlat(builderFlat);
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		String hql = "delete from FlatWeightage where builderFlat.id = :id";
@@ -3851,5 +3934,24 @@ public class ProjectDAO {
 		return paymentInfoDatas;
 	}
 	
-	
+	public ResponseMessage updateProjectAmenity(ProjectAmenityData projectWeightageData){
+		ResponseMessage resp = new ResponseMessage();
+		BuilderProject  builderProject = projectWeightageData.getBuilderProject();
+		List<BuilderBuilding> builderBuildings = projectWeightageData.getBuilderBuildings();
+		BuilderProject builderProject2 = getBuilderProjectById(builderProject.getId());
+		builderProject2.setBuildingWeightage(builderProject.getBuildingWeightage());
+		builderProject2.setAmenityWeightage(builderProject.getAmenityWeightage());
+
+		updateBasicInfo(builderProject2);
+		if(builderBuildings != null){
+			for(BuilderBuilding builderBuilding : builderBuildings){
+				BuilderBuilding builderBuilding2 = getBuilderProjectBuildingById(builderBuilding.getId()).get(0);
+				builderBuilding2.setWeightage(builderBuilding.getWeightage());
+				updateBuilding(builderBuilding2);
+			}
+		  resp.setStatus(1);
+		  resp.setMessage("Project Weightage Updated successfully.");
+		}
+		return resp;
+	}
 }

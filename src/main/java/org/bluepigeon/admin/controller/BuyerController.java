@@ -1632,10 +1632,10 @@ public class BuyerController {
 			){
 		ResponseMessage responseMessage = new ResponseMessage();
 		Double totalSaleValue = 0.0;
-		Double A = 0.0, B = 0.0, C = 0.0, D = 0.0, E = 0.0, F = 0.0, G = 0.0;
+		Double cost = 0.0, B = 0.0, C = 0.0, D = 0.0, E = 0.0, F = 0.0, G = 0.0;
 		Double superBuildUpArea = new BuilderProjectPriceInfoDAO().getBuilderFlatTypeByProjectId(projectId).getSuperBuiltupArea();
 		Double sqft = new BuilderProjectPriceInfoDAO().getBuilderProjectPriceInfo(projectId).getAreaUnit().getSqft_value();
-		A = base_rate * superBuildUpArea * sqft ; 
+		cost = base_rate * superBuildUpArea * sqft ; 
 		if(noOfFloors > 0)
 			B = rise_rate * superBuildUpArea * sqft ;
 		if(maintenance > 0)
@@ -1644,7 +1644,7 @@ public class BuyerController {
 			D = amenity_rate;
 		if(parking > 0)
 			E = parking;
-		F = A+B+D;
+		F = cost+B+D;
 		G = F*stamp_duty/100+F * tax/100+F * vat/100;
 		totalSaleValue = F+C+E+G;
 		responseMessage.setMessage(totalSaleValue.toString());

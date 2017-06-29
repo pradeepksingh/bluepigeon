@@ -8,6 +8,7 @@ import org.bluepigeon.admin.model.FlatWeightage;
 public class FlatWeightageData {
 
 	private Integer flatId;
+	private Double amenityWeightage;
 	private Set<FlatWeightage> flatWeightages = new HashSet<FlatWeightage>(0);
 	
 	public Integer getFlatId() {
@@ -16,6 +17,13 @@ public class FlatWeightageData {
 
 	public void setFlatId(Integer flatId) {
 		this.flatId = flatId;
+	}
+	public Double getAmenityWeightage() {
+		return amenityWeightage;
+	}
+
+	public void setAmenityWeightage(Double amenityWeightage) {
+		this.amenityWeightage = amenityWeightage;
 	}
 
 	public Set<FlatWeightage> getFlatWeightages() {
