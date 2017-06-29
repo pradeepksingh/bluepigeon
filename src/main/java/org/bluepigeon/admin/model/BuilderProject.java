@@ -52,6 +52,8 @@ public class BuilderProject implements java.io.Serializable {
 	private Integer availbale = 0;
 	private Double revenue = 0.0;
 	private Double completionStatus = 0.0;
+	private Double amenityWeightage = 0.0;
+	private Double buildingWeightage = 0.0;
 	private Byte status;
 	private Set<BuilderBuilding> builderBuildings = new HashSet<BuilderBuilding>(0);
 	private Set<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos = new HashSet<BuilderProjectPropertyConfigurationInfo>(
@@ -84,7 +86,8 @@ public class BuilderProject implements java.io.Serializable {
 			Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos,
 			Set<BuilderProjectBankInfo> builderProjectBankInfos,
 			Set<BuilderProjectProjectType> builderProjectProjectTypes, Set<BuilderFlatType> builderFlatTypes,
-			Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos, Double completionStatus, Integer availbale) {
+			Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos, Double completionStatus, Integer availbale,
+			Double amenityWeightage, Double buildingWeightage) {
 		this.state = state;
 		this.adminUser = adminUser;
 		this.areaUnit = areaUnit;
@@ -124,6 +127,8 @@ public class BuilderProject implements java.io.Serializable {
 		this.completionStatus = completionStatus;
 		this.revenue = revenue;
 		this.availbale = availbale;
+		this.amenityWeightage = amenityWeightage;
+		this.buildingWeightage = buildingWeightage;
 	}
 
 	@Id
@@ -490,5 +495,22 @@ public class BuilderProject implements java.io.Serializable {
 	public void setCompletionStatus(Double completionStatus) {
 		this.completionStatus = completionStatus;
 	}
+	@Column(name = "amenity_weightage", precision = 22, scale = 0)
+	public Double getAmenityWeightage() {
+		return amenityWeightage;
+	}
 
+	public void setAmenityWeightage(Double amenityWeightage) {
+		this.amenityWeightage = amenityWeightage;
+	}
+	@Column(name = "building_weightage", precision = 22, scale = 0)
+	public Double getBuildingWeightage() {
+		return buildingWeightage;
+	}
+
+	public void setBuildingWeightage(Double buildingWeightage) {
+		this.buildingWeightage = buildingWeightage;
+	}
+
+	
 }

@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderFloor"%>
 <%@page import="org.bluepigeon.admin.data.PaymentInfoData"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectPaymentInfo"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
@@ -58,6 +59,7 @@
 	List<BuildingAmenityWeightage> buildingAmenityWeightages = new ProjectDAO().getBuilderBuildingAmenityWeightageById(building_id);
 	List<BuildingStage> buildingStages = new BuildingStageDAO().getActiveBuildingStages();
 	List<BuildingWeightage> buildingWeightages = new ProjectDAO().getBuildingWeightage(building_id);
+	List<BuilderFloor> builderFloors = new ProjectDAO().getBuildingFloors(builderBuilding.getId());
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -82,7 +84,7 @@
 			  	<li><a data-toggle="tab" href="#buildingdetail">Building Images</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
 			  	<li><a data-toggle="tab" href="#offer">Offers</a></li>
-			  	<li><a data-toggle="tab" href="#productsubstage">Stage/Substage</a></li>
+			  	<li><a data-toggle="tab" href="#productsubstage">Building Weightage</a></li>
 			</ul>
 			<div class="tab-content">
 				<div id="basic" class="tab-pane fade in active">
@@ -498,6 +500,50 @@
 										<div id="offer_area">
 											<div class="row">
 												<div class="col-lg-12 margin-bottom-5">
+													<div class="row" id="error-amenity_type">
+															<div class="col-sm-6">
+																<div class="form-group" id="error-amenity_weightage">
+																	<label class="control-label col-sm-6">Amenity Weightage </label>
+																	<div class="col-sm-6">
+																		<input type="text" class="form-control" id="amenity_weightage" name="amenity_weightage" value="<%out.print(builderBuilding.getAmenityWeightage());%>" placeholder="amenity weightage in %"/>
+																	</div>
+																	<div class="messageContainer"></div>
+																</div>
+															</div>
+														</div>
+														<div class="row" id="error-amenity_type">
+															<div class="col-sm-6">
+																<div class="form-group" id="error-discount_amount">
+																	<label class="control-label col-sm-6">Floor Weightage</label>
+																	<div class="col-sm-6">
+																		<input type="text" class="form-control" id="floor_weightage" name="floor_weightage" value="<%out.print(builderBuilding.getFloorWeightage());%>"/>
+																	</div>
+																	<div class="messageContainer"></div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-12">
+															<label class="control-label col-sm-6">Floors</label>
+														</div>
+														<%
+														  if(builderFloors != null){
+															  for(BuilderFloor builderFloorList : builderFloors ){
+														%>
+														<input type="hidden" id="floor_ids" name="floor_ids[]" value="<%out.print(builderFloorList.getId());%>">
+														<div class="col-sm-4 margin-bottom-5">
+															<div class="form-group" id="error-discount_amount">
+																<label class="control-label col-sm-6"><%out.print(builderFloorList.getName()); %></label>
+																<div class="col-sm-6">
+																	<input type="number" class="form-control" id="weightage[]" name="weightage[]" value="<%out.print(builderFloorList.getWeightage());%>"/>
+																</div>
+																<div class="messageContainer"></div>
+															</div>
+														</div>	  
+														<%	  }
+														  }
+														%>
+													</div>
+												
 													<div class="form-group" id="error-amenity_type">
 														<div class="col-sm-12">
 															<% 	for(BuildingStage buildingStage :buildingStages) { 
@@ -1040,7 +1086,16 @@ $("#subpbtn").click(function(){
 			amenityWeightage.push({builderBuilding:{id:$("#building_id").val()},buildingStage:{id:stage_id},stageWeightage:stage_weightage,buildingSubstage:{id:$(this).attr("id")},substageWeightage:$(this).val(),status:false});
 		});
 	});
-	var final_data = {buildingId: $("#building_id").val(),buildingWeightages:amenityWeightage}
+	var floors = [];
+	var floor_id = [];
+	$('input[name="floor_ids[]"]').each(function(index){
+		floor_id.push($(this).val());
+	});
+	$('input[name="weightage[]"]').each(function(index){
+		floors.push({id:floor_id[index],weightage:$(this).val()});
+	});
+	var buildings = {id:$("#building_id").val(), amenityWeightage : $("#amenity_weightage").val(),floorWeightage:$("#floor_weightage").val()};
+	var final_data = {buildingId: $("#building_id").val(),buildingWeightages:amenityWeightage, builderBuilding : buildings, builderFloors : floors}
 	$.ajax({
 	    url: '${baseUrl}/webapi/project/building/substage/update',
 	    type: 'POST',

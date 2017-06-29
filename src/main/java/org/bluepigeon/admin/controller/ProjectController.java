@@ -30,6 +30,7 @@ import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.LocalityData;
 import org.bluepigeon.admin.data.PaymentInfoData;
+import org.bluepigeon.admin.data.ProjectAmenityData;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectDetail;
 import org.bluepigeon.admin.data.ProjectList;
@@ -2509,21 +2510,39 @@ public class ProjectController extends ResourceConfig {
 		return responseMessage;
 	}
 	
+//	@POST
+//	@Path("/substage/update")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public ResponseMessage updateProjectSubstage(ProjectWeightageData projectWeightageData) {
+//		ResponseMessage resp = new ProjectDAO().updateProjectSubstage(projectWeightageData); 
+//		return resp;
+//	}
+	
 	@POST
 	@Path("/substage/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseMessage updateProjectSubstage(ProjectWeightageData projectWeightageData) {
-		ResponseMessage resp = new ProjectDAO().updateProjectSubstage(projectWeightageData); 
-		return resp;
+	public ResponseMessage updateProjectSubstage(ProjectAmenityData projectWeightageData) {
+		ResponseMessage responseMessage = new ProjectDAO().updateProjectAmenity(projectWeightageData);
+		return responseMessage;
 	}
+	
+//	@POST
+//	@Path("/building/substage/update")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public ResponseMessage updateBuildingSubstage(BuildingWeightageData buildingWeightageData) {
+//		ResponseMessage resp = new ProjectDAO().updateBuildingSubstage(buildingWeightageData); 
+//		return resp;
+//	}
 	
 	@POST
 	@Path("/building/substage/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuildingSubstage(BuildingWeightageData buildingWeightageData) {
-		ResponseMessage resp = new ProjectDAO().updateBuildingSubstage(buildingWeightageData); 
+		ResponseMessage resp = new ProjectDAO().updateBuildingSubstage(buildingWeightageData);
 		return resp;
 	}
 	

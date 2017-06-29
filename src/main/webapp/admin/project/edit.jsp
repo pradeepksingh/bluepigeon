@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectAmenitySubstages"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectAmenityStages"%>
@@ -102,7 +103,7 @@
 	}
 	List<ProjectStage> projectStages = new ProjectStageDAO().getActiveProjectStages();
 	List<ProjectWeightage> projectWeightages = new ProjectDAO().getProjectWeightage(project_id);
-	
+	List<BuilderBuilding> builderBuildings = new ProjectDAO().getBuilderProjectBuildings(project_id);
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -1097,10 +1098,50 @@
 <!-- 														<div class="messageContainer"></div> -->
 <!-- 													</div> -->
 
-
-
+														<div class="row" id="error-amenity_type">
+															<div class="col-sm-6">
+																<div class="form-group" id="error-amenity_weightage">
+																	<label class="control-label col-sm-6">Amenity Weightage </label>
+																	<div class="col-sm-6">
+																		<input type="text" class="form-control" id="amenity_weightage" name="amenity_weightage" value="<%out.print(builderProject.getAmenityWeightage());%>" placeholder="amenity weightage in %"/>
+																	</div>
+																	<div class="messageContainer"></div>
+																</div>
+															</div>
+														</div>
+														<div class="row" id="error-amenity_type">
+															<div class="col-sm-6">
+																<div class="form-group" id="error-discount_amount">
+																	<label class="control-label col-sm-6">Building Weightage</label>
+																	<div class="col-sm-6">
+																		<input type="text" class="form-control" id="building_weightage" name="building_weightage" value="<%out.print(builderProject.getBuildingWeightage());%>"/>
+																	</div>
+																	<div class="messageContainer"></div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-12">
+															<label class="control-label col-sm-6">Buildings</label>
+														</div>
+														<%
+														  if(builderBuildings != null){
+															  for(BuilderBuilding builderBuilding : builderBuildings ){
+														%>
+														<input type="hidden" id="building_ids" name="building_ids[]" value="<%out.print(builderBuilding.getId());%>">
+														<div class="col-sm-4 margin-bottom-5">
+															<div class="form-group" id="error-discount_amount">
+																<label class="control-label col-sm-6"><%out.print(builderBuilding.getName()); %></label>
+																<div class="col-sm-6">
+																	<input type="number" class="form-control" id="weightage[]" name="weightage[]" value="<%out.print(builderBuilding.getWeightage());%>"/>
+																</div>
+																<div class="messageContainer"></div>
+															</div>
+														</div>	  
+														<%	  }
+														  }
+														%>
+													</div>
 												</div>
-											</div>
 										</div>
 										<div>
 											<div class="row">
@@ -1228,6 +1269,12 @@ $('#discount').keypress(function (event) {
 });
 $('#discount_amount').keypress(function (event) {
     return isNumber(event, this)
+});
+$("#amenity_weightage").keypress(function(event){
+	return isNumber(event, this)
+});
+$("#building_weightage").keypress(function(event){
+	return isNumber(event, this)
 });
 function isNumber(evt, element) {
 
@@ -1759,15 +1806,29 @@ function removeSchedule(id) {
 }
 
 $("#subpbtn").click(function(){
-	var amenityWeightage = [];
-	$('input[name="stage_weightage[]"]').each(function() {
-		stage_id = $(this).attr("id");
-		stage_weightage = $(this).val();
-		$('input[name="substage_weightage'+stage_id+'[]"]').each(function() {
-			amenityWeightage.push({builderProject:{id:$("#id").val()},projectStage:{id:stage_id},stageWeightage:stage_weightage,projectSubstage:{id:$(this).attr("id")},substageWeightage:$(this).val(),status:false});
-		});
-	});
-	var final_data = {projectId: $("#id").val(),projectWeightages:amenityWeightage}
+// 	var amenityWeightage = [];
+// 	$('input[name="stage_weightage[]"]').each(function() {
+// 		stage_id = $(this).attr("id");
+// 		stage_weightage = $(this).val();
+// 		$('input[name="substage_weightage'+stage_id+'[]"]').each(function() {
+// 			amenityWeightage.push({builderProject:{id:$("#id").val()},projectStage:{id:stage_id},stageWeightage:stage_weightage,projectSubstage:{id:$(this).attr("id")},substageWeightage:$(this).val(),status:false});
+// 		});
+// 	});
+//	var final_data = {projectId: $("#id").val(),projectWeightages:amenityWeightage}
+    var building_id = [];
+    var buildings = [];
+    
+    $('input[name="building_ids[]"]').each(function(index){
+    	alert("Building Id :: "+$(this).val());
+    	building_id.push($(this).val());
+    });
+    $('input[name="weightage[]"]').each(function(index){
+    	alert("Building Id :: "+building_id[index]+" Weightage :: "+$(this).val());
+    	buildings.push({id : building_id[index],weightage: $(this).val()});
+    });
+    var projects = {id:$("#id").val(),amenityWeightage : $("#amenity_weightage").val(),buildingWeightage:$("#building_weightage").val()};
+    var final_data = {builderProject:projects, builderBuildings:buildings};
+	
 	$.ajax({
 	    url: '${baseUrl}/webapi/project/substage/update',
 	    type: 'POST',

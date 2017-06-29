@@ -24,6 +24,7 @@ import org.bluepigeon.admin.data.FloorPanoData;
 import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.NewProjectList;
 import org.bluepigeon.admin.data.PaymentInfoData;
+import org.bluepigeon.admin.data.ProjectAmenityData;
 import org.bluepigeon.admin.data.ProjectCityData;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectDetail;
@@ -738,6 +739,8 @@ public class ProjectDAO {
 		session.close();
 		return result;
 	}
+	
+	
 	/**
 	 * Get all active buildings by project id
 	 * @author pankaj
@@ -3290,6 +3293,40 @@ public class ProjectDAO {
 	}
 	
 	public ResponseMessage updateBuildingSubstage(BuildingWeightageData buildingWeightageData) {
+		
+		BuilderBuilding builderBuilding = buildingWeightageData.getBuilderBuilding();
+		BuilderBuilding builderBuilding2 = getBuilderProjectBuildingById(builderBuilding.getId()).get(0);
+		builderBuilding.setAdminUser(builderBuilding2.getAdminUser());
+		builderBuilding.setBuilderBuildingStatus(builderBuilding2.getBuilderBuildingStatus());
+		builderBuilding.setBuilderProject(builderBuilding2.getBuilderProject());
+		builderBuilding.setCompletionStatus(builderBuilding2.getCompletionStatus());
+		builderBuilding.setWeightage(builderBuilding2.getWeightage());
+		builderBuilding.setInventorySold(builderBuilding2.getInventorySold());
+		builderBuilding.setLaunchDate(builderBuilding2.getLaunchDate());
+		builderBuilding.setName(builderBuilding2.getName());
+		builderBuilding.setPossessionDate(builderBuilding2.getPossessionDate());
+		builderBuilding.setRevenue(builderBuilding2.getRevenue());
+		builderBuilding.setStatus(builderBuilding2.getStatus());
+		builderBuilding.setTotalFloor(builderBuilding2.getTotalFloor());
+		builderBuilding.setTotalInventory(builderBuilding2.getTotalInventory());
+		updateBuilding(builderBuilding);
+		
+		List<BuilderFloor> floors = buildingWeightageData.getBuilderFloors();
+		if(floors != null){
+			for(BuilderFloor floor : floors){
+			 BuilderFloor builderFloor2 =getBuildingActiveFloorById(floor.getId()).get(0);
+			 floor.setAmenityWeightage(builderFloor2.getAmenityWeightage());
+			 floor.setBuilderBuilding(builderFloor2.getBuilderBuilding());
+			 floor.setBuilderFloorStatus(builderFloor2.getBuilderFloorStatus());
+			 floor.setCompletionStatus(builderFloor2.getCompletionStatus());
+			 floor.setFlatWeightage(builderFloor2.getFlatWeightage());
+			 floor.setFloorNo(builderFloor2.getFloorNo());
+			 floor.setName(builderFloor2.getName());
+			 floor.setStatus(builderFloor2.getStatus());
+			 floor.setTotalFlats(builderFloor2.getTotalFlats());
+			 updateFloors(floor);
+			}
+		}
 		ResponseMessage response = new ResponseMessage();
 		int building_id = buildingWeightageData.getBuildingId();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -3311,6 +3348,15 @@ public class ProjectDAO {
 		response.setStatus(1);
 		response.setMessage("Building substage updated successfully");
 		return response;
+	}
+	
+	public void updateFloors(BuilderFloor builderFloor){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		session.update(builderFloor);
+		session.getTransaction().commit();
+		session.close();
 	}
 	
 	public List<FloorWeightage> getFloorWeightage(int floor_id) {
@@ -3851,5 +3897,60 @@ public class ProjectDAO {
 		return paymentInfoDatas;
 	}
 	
-	
+	public ResponseMessage updateProjectAmenity(ProjectAmenityData projectWeightageData){
+		ResponseMessage resp = new ResponseMessage();
+		BuilderProject  builderProject = projectWeightageData.getBuilderProject();
+		List<BuilderBuilding> builderBuildings = projectWeightageData.getBuilderBuildings();
+		BuilderProject builderProject2 = getBuilderProjectById(builderProject.getId());
+		builderProject.setAddr1(builderProject2.getAddr1());
+		builderProject.setAddr2(builderProject2.getAddr2());
+		builderProject.setAdminUser(builderProject2.getAdminUser());
+		builderProject.setAreaUnit(builderProject2.getAreaUnit());
+		builderProject.setAvailbale(builderProject2.getAvailbale());
+		builderProject.setBuilder(builderProject2.getBuilder());
+		builderProject.setBuilderCompanyNames(builderProject2.getBuilderCompanyNames());
+		builderProject.setCity(builderProject2.getCity());
+		builderProject.setCompletionStatus(builderProject2.getCompletionStatus());
+		builderProject.setCountry(builderProject2.getCountry());
+		builderProject.setDescription(builderProject2.getDescription());
+		builderProject.setHighlights(builderProject2.getHighlights());
+		builderProject.setInventorySold(builderProject2.getInventorySold());
+		builderProject.setLatitude(builderProject2.getLatitude());
+		builderProject.setLaunchDate(builderProject2.getLaunchDate());
+		builderProject.setLocality(builderProject2.getLocality());
+		builderProject.setLongitude(builderProject2.getLongitude());
+		builderProject.setName(builderProject2.getName());
+		builderProject.setPincode(builderProject2.getPincode());
+		builderProject.setPossessionDate(builderProject2.getPossessionDate());
+		builderProject.setProjectArea(builderProject2.getProjectArea());
+		builderProject.setRevenue(builderProject2.getRevenue());
+		builderProject.setState(builderProject2.getState());
+		builderProject.setStatus(builderProject2.getStatus());
+		builderProject.setTotalInventory(builderProject2.getTotalInventory());
+
+		updateBasicInfo(builderProject);
+		if(builderBuildings != null){
+			for(BuilderBuilding builderBuilding : builderBuildings){
+				BuilderBuilding builderBuilding2 = getBuilderProjectBuildingById(builderBuilding.getId()).get(0);
+				builderBuilding.setAdminUser(builderBuilding2.getAdminUser());
+				builderBuilding.setAmenityWeightage(builderBuilding2.getAmenityWeightage());
+				builderBuilding.setBuilderBuildingStatus(builderBuilding2.getBuilderBuildingStatus());
+				builderBuilding.setBuilderProject(builderBuilding2.getBuilderProject());
+				builderBuilding.setCompletionStatus(builderBuilding2.getCompletionStatus());
+				builderBuilding.setFloorWeightage(builderBuilding2.getFloorWeightage());
+				builderBuilding.setInventorySold(builderBuilding2.getInventorySold());
+				builderBuilding.setLaunchDate(builderBuilding2.getLaunchDate());
+				builderBuilding.setName(builderBuilding2.getName());
+				builderBuilding.setPossessionDate(builderBuilding2.getPossessionDate());
+				builderBuilding.setRevenue(builderBuilding2.getRevenue());
+				builderBuilding.setStatus(builderBuilding2.getStatus());
+				builderBuilding.setTotalFloor(builderBuilding2.getTotalFloor());
+				builderBuilding.setTotalInventory(builderBuilding2.getTotalInventory());
+				updateBuilding(builderBuilding);
+			}
+		  resp.setStatus(1);
+		  resp.setMessage("Project Weightage Updated successfully.");
+		}
+		return resp;
+	}
 }
