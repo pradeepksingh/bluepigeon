@@ -1996,6 +1996,17 @@ public class ProjectDAO {
 		return flatDatas;
 	}
 	
+	public List<BuilderFlat> getActiveFlatByFloorId(int floorId){
+		String hql = "from BuilderFlat where builderFloor.id = :floor_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floorId);
+		List<BuilderFlat> builderFlats = query.list();
+		
+		return builderFlats;
+	}
+	
 	public List<FlatStatusData> getFlatsByFloorId(int floorId){
 		List<FlatStatusData> flatDatas = new ArrayList<FlatStatusData>();
 		String hql = "from BuilderFlat where builderFloor.id = :floor_id";
@@ -2228,6 +2239,7 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("id", flatId);
 		builderFlat = (BuilderFlat) query.uniqueResult();
+		session.close();
 		return builderFlat;
 	}
 	/**
@@ -3296,35 +3308,17 @@ public class ProjectDAO {
 		
 		BuilderBuilding builderBuilding = buildingWeightageData.getBuilderBuilding();
 		BuilderBuilding builderBuilding2 = getBuilderProjectBuildingById(builderBuilding.getId()).get(0);
-		builderBuilding.setAdminUser(builderBuilding2.getAdminUser());
-		builderBuilding.setBuilderBuildingStatus(builderBuilding2.getBuilderBuildingStatus());
-		builderBuilding.setBuilderProject(builderBuilding2.getBuilderProject());
-		builderBuilding.setCompletionStatus(builderBuilding2.getCompletionStatus());
-		builderBuilding.setWeightage(builderBuilding2.getWeightage());
-		builderBuilding.setInventorySold(builderBuilding2.getInventorySold());
-		builderBuilding.setLaunchDate(builderBuilding2.getLaunchDate());
-		builderBuilding.setName(builderBuilding2.getName());
-		builderBuilding.setPossessionDate(builderBuilding2.getPossessionDate());
-		builderBuilding.setRevenue(builderBuilding2.getRevenue());
-		builderBuilding.setStatus(builderBuilding2.getStatus());
-		builderBuilding.setTotalFloor(builderBuilding2.getTotalFloor());
-		builderBuilding.setTotalInventory(builderBuilding2.getTotalInventory());
-		updateBuilding(builderBuilding);
+		
+		builderBuilding2.setAmenityWeightage(builderBuilding.getAmenityWeightage());
+		builderBuilding2.setFloorWeightage(builderBuilding.getFloorWeightage());
+		updateBuilding(builderBuilding2);
 		
 		List<BuilderFloor> floors = buildingWeightageData.getBuilderFloors();
 		if(floors != null){
 			for(BuilderFloor floor : floors){
 			 BuilderFloor builderFloor2 =getBuildingActiveFloorById(floor.getId()).get(0);
-			 floor.setAmenityWeightage(builderFloor2.getAmenityWeightage());
-			 floor.setBuilderBuilding(builderFloor2.getBuilderBuilding());
-			 floor.setBuilderFloorStatus(builderFloor2.getBuilderFloorStatus());
-			 floor.setCompletionStatus(builderFloor2.getCompletionStatus());
-			 floor.setFlatWeightage(builderFloor2.getFlatWeightage());
-			 floor.setFloorNo(builderFloor2.getFloorNo());
-			 floor.setName(builderFloor2.getName());
-			 floor.setStatus(builderFloor2.getStatus());
-			 floor.setTotalFlats(builderFloor2.getTotalFlats());
-			 updateFloors(floor);
+			 builderFloor2.setWeightage(floor.getWeightage());
+			 updateFloors(builderFloor2);
 			}
 		}
 		ResponseMessage response = new ResponseMessage();
@@ -3370,7 +3364,47 @@ public class ProjectDAO {
 		return result;
 	}
 	
-	public ResponseMessage updateFloorSubstage(FloorWeightageData floorWeightageData) {
+//	public ResponseMessage updateFloorSubstage(FloorWeightageData floorWeightageData) {
+//		ResponseMessage response = new ResponseMessage();
+//		int floor_id = floorWeightageData.getFloorId();
+//		HibernateUtil hibernateUtil = new HibernateUtil();
+//		Session session = hibernateUtil.openSession();
+//		String hql = "delete from FloorWeightage where builderFloor.id = :id";
+//		session.beginTransaction();
+//		Query query = session.createQuery(hql);
+//		query.setParameter("id", floor_id);
+//		query.executeUpdate();
+//		session.getTransaction().commit();
+//		session.close();
+//		Session session1 = hibernateUtil.openSession();
+//		session1.beginTransaction();
+//		for(FloorWeightage floorWeightage :floorWeightageData.getFloorWeightages()) {
+//			session1.save(floorWeightage);
+//		}
+//		session1.getTransaction().commit();
+//		session1.close();
+//		response.setStatus(1);
+//		response.setMessage("Floor substage updated successfully");
+//		return response;
+//	}
+//	
+	public ResponseMessage updateFloorAmenity(FloorWeightageData floorWeightageData) {
+		
+		BuilderFloor builderFloor = floorWeightageData.getBuilderFloor();
+		BuilderFloor builderFloor2  =getBuildingActiveFloorById(builderFloor.getId()).get(0);
+		builderFloor2.setAmenityWeightage(builderFloor.getAmenityWeightage());
+		builderFloor2.setFlatWeightage(builderFloor.getFlatWeightage());
+		updateBuildingFloor(builderFloor2);
+		
+		List<BuilderFlat> builderFlats = floorWeightageData.getBuilderFlats();
+		if(builderFlats != null){
+			for(BuilderFlat builderFlat : builderFlats){
+				BuilderFlat builderFlat2 = getBuilderFlatById(builderFlat.getId());
+				builderFlat2.setWeightage(builderFlat.getWeightage());
+				updateBuildingFlat(builderFlat2);
+			}
+		}
+		
 		ResponseMessage response = new ResponseMessage();
 		int floor_id = floorWeightageData.getFloorId();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -3408,6 +3442,9 @@ public class ProjectDAO {
 	public ResponseMessage updateFlatSubstage(FlatWeightageData flatWeightageData) {
 		ResponseMessage response = new ResponseMessage();
 		int flat_id = flatWeightageData.getFlatId();
+		BuilderFlat builderFlat = getBuilderFlatById(flat_id);
+		builderFlat.setAmenityWeightage(flatWeightageData.getAmenityWeightage());
+		updateBuildingFlat(builderFlat);
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		String hql = "delete from FlatWeightage where builderFlat.id = :id";
@@ -3902,51 +3939,15 @@ public class ProjectDAO {
 		BuilderProject  builderProject = projectWeightageData.getBuilderProject();
 		List<BuilderBuilding> builderBuildings = projectWeightageData.getBuilderBuildings();
 		BuilderProject builderProject2 = getBuilderProjectById(builderProject.getId());
-		builderProject.setAddr1(builderProject2.getAddr1());
-		builderProject.setAddr2(builderProject2.getAddr2());
-		builderProject.setAdminUser(builderProject2.getAdminUser());
-		builderProject.setAreaUnit(builderProject2.getAreaUnit());
-		builderProject.setAvailbale(builderProject2.getAvailbale());
-		builderProject.setBuilder(builderProject2.getBuilder());
-		builderProject.setBuilderCompanyNames(builderProject2.getBuilderCompanyNames());
-		builderProject.setCity(builderProject2.getCity());
-		builderProject.setCompletionStatus(builderProject2.getCompletionStatus());
-		builderProject.setCountry(builderProject2.getCountry());
-		builderProject.setDescription(builderProject2.getDescription());
-		builderProject.setHighlights(builderProject2.getHighlights());
-		builderProject.setInventorySold(builderProject2.getInventorySold());
-		builderProject.setLatitude(builderProject2.getLatitude());
-		builderProject.setLaunchDate(builderProject2.getLaunchDate());
-		builderProject.setLocality(builderProject2.getLocality());
-		builderProject.setLongitude(builderProject2.getLongitude());
-		builderProject.setName(builderProject2.getName());
-		builderProject.setPincode(builderProject2.getPincode());
-		builderProject.setPossessionDate(builderProject2.getPossessionDate());
-		builderProject.setProjectArea(builderProject2.getProjectArea());
-		builderProject.setRevenue(builderProject2.getRevenue());
-		builderProject.setState(builderProject2.getState());
-		builderProject.setStatus(builderProject2.getStatus());
-		builderProject.setTotalInventory(builderProject2.getTotalInventory());
+		builderProject2.setBuildingWeightage(builderProject.getBuildingWeightage());
+		builderProject2.setAmenityWeightage(builderProject.getAmenityWeightage());
 
-		updateBasicInfo(builderProject);
+		updateBasicInfo(builderProject2);
 		if(builderBuildings != null){
 			for(BuilderBuilding builderBuilding : builderBuildings){
 				BuilderBuilding builderBuilding2 = getBuilderProjectBuildingById(builderBuilding.getId()).get(0);
-				builderBuilding.setAdminUser(builderBuilding2.getAdminUser());
-				builderBuilding.setAmenityWeightage(builderBuilding2.getAmenityWeightage());
-				builderBuilding.setBuilderBuildingStatus(builderBuilding2.getBuilderBuildingStatus());
-				builderBuilding.setBuilderProject(builderBuilding2.getBuilderProject());
-				builderBuilding.setCompletionStatus(builderBuilding2.getCompletionStatus());
-				builderBuilding.setFloorWeightage(builderBuilding2.getFloorWeightage());
-				builderBuilding.setInventorySold(builderBuilding2.getInventorySold());
-				builderBuilding.setLaunchDate(builderBuilding2.getLaunchDate());
-				builderBuilding.setName(builderBuilding2.getName());
-				builderBuilding.setPossessionDate(builderBuilding2.getPossessionDate());
-				builderBuilding.setRevenue(builderBuilding2.getRevenue());
-				builderBuilding.setStatus(builderBuilding2.getStatus());
-				builderBuilding.setTotalFloor(builderBuilding2.getTotalFloor());
-				builderBuilding.setTotalInventory(builderBuilding2.getTotalInventory());
-				updateBuilding(builderBuilding);
+				builderBuilding2.setWeightage(builderBuilding.getWeightage());
+				updateBuilding(builderBuilding2);
 			}
 		  resp.setStatus(1);
 		  resp.setMessage("Project Weightage Updated successfully.");

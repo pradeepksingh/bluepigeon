@@ -2551,7 +2551,7 @@ public class ProjectController extends ResourceConfig {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateFloorSubstage(FloorWeightageData floorWeightageData) {
-		ResponseMessage resp = new ProjectDAO().updateFloorSubstage(floorWeightageData); 
+		ResponseMessage resp =  new ProjectDAO().updateFloorAmenity(floorWeightageData);
 		return resp;
 	}
 	

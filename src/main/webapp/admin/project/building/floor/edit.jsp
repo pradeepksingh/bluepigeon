@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderFloorStatusDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderFloorAmenityDAO"%>
@@ -50,6 +51,7 @@
 	List<FloorAmenityWeightage> floorAmenityWeightages = new ProjectDAO().getFloorAmenityWeightages(floor_id);
 	List<FloorStage> floorStages = new FloorStageDAO().getActiveFloorStages();
 	List<FloorWeightage> floorWeightages = new ProjectDAO().getFloorWeightage(floor_id);
+	List<BuilderFlat> builderFlats = new ProjectDAO().getActiveFlatByFloorId(floor_id);
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -72,7 +74,7 @@
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Floor Details</a></li>
 			  	<li><a data-toggle="tab" href="#floorimages">Floor Layouts</a></li>
-			  	<li><a data-toggle="tab" href="#productsubstage">Stage/Substage</a></li>
+			  	<li><a data-toggle="tab" href="#productsubstage">Floor Amenity</a></li>
 			</ul>
 			<form id="updatefloor" name="updatefloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 				<div class="tab-content">
@@ -298,6 +300,49 @@
 											<div id="offer_area">
 												<div class="row">
 													<div class="col-lg-12 margin-bottom-5">
+														<div class="row" id="error-amenity_type">
+															<div class="col-sm-6">
+																<div class="form-group" id="error-amenity_weightage">
+																	<label class="control-label col-sm-6">Amenity Weightage </label>
+																	<div class="col-sm-6">
+																		<input type="text" class="form-control" id="amenity_weightage" name="amenity_weightage" value="<%out.print(builderFloor.getAmenityWeightage());%>" placeholder="amenity weightage in %"/>
+																	</div>
+																	<div class="messageContainer"></div>
+																</div>
+															</div>
+														</div>
+														<div class="row" id="error-amenity_type">
+															<div class="col-sm-6">
+																<div class="form-group" id="error-discount_amount">
+																	<label class="control-label col-sm-6">Flat Weightage</label>
+																	<div class="col-sm-6">
+																		<input type="text" class="form-control" id="flat_weightage" name="flat_weightage" value="<%out.print(builderFloor.getFlatWeightage());%>"/>
+																	</div>
+																	<div class="messageContainer"></div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-12">
+															<label class="control-label col-sm-2">Flats</label>
+														</div>
+														<%
+														  if(builderFlats != null){
+															  for(BuilderFlat builderFlat : builderFlats ){
+														%>
+														<input type="hidden" id="flat_ids" name="flat_ids[]" value="<%out.print(builderFlat.getId());%>">
+														<div class="col-sm-4 margin-bottom-5">
+															<div class="form-group" id="error-discount_amount">
+																<label class="control-label col-sm-6"><%out.print(builderFlat.getFlatNo()); %></label>
+																<div class="col-sm-6">
+																	<input type="number" class="form-control" id="weightage[]" name="weightage[]" value="<%out.print(builderFlat.getWeightage());%>"/>
+																</div>
+																<div class="messageContainer"></div>
+															</div>
+														</div>	  
+														<%	  }
+														  }
+														%>
+													</div>
 														<div class="form-group" id="error-amenity_type">
 															<div class="col-sm-12">
 																<% 	for(FloorStage floorStage :floorStages) { 
@@ -349,8 +394,8 @@
 										</div>
 									</div>
 								</div>
-							</div>
-						</form>
+							</form>	
+						</div>
 					</div>
 				</div>
 			</form>
@@ -388,6 +433,23 @@ $('#name').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^a-zA-Z0-9- ]/g, function(str) { alert('Please use only letters and numbers.'); return ''; } ) );
 });
+$('#amenity_weightage').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#flat_weightage').keypress(function (event) {
+    return isNumber(event, this)
+});
+function isNumber(evt, element) {
+
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+}  
 $('#updatefloor').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -532,6 +594,8 @@ $('input[name="amenity_type[]"]').click(function() {
 
 $("#subpbtn").click(function(){
 	var amenityWeightage = [];
+	var flats = [];
+	var flat_id = [];
 	$('input[name="stage_weightage[]"]').each(function() {
 		stage_id = $(this).attr("id");
 		stage_weightage = $(this).val();
@@ -539,7 +603,16 @@ $("#subpbtn").click(function(){
 			amenityWeightage.push({builderFloor:{id:$("#floor_id").val()},floorStage:{id:stage_id},stageWeightage:stage_weightage,floorSubstage:{id:$(this).attr("id")},substageWeightage:$(this).val(),status:false});
 		});
 	});
-	var final_data = {floorId: $("#floor_id").val(),floorWeightages:amenityWeightage}
+	
+	$('input[name="flat_ids[]"]').each(function(index){
+		flat_id.push($(this).val());
+	});
+	
+	$('input[name="weightage[]"]').each(function(index){
+		flats.push({id:flat_id[index],weightage:$(this).val()});
+	});
+	var floors = {id:$("#floor_id").val(),amenityWeightage : $("#amenity_weightage").val(),flatWeightage:$("#flat_weightage").val()};
+	var final_data = {floorId: $("#floor_id").val(),floorWeightages:amenityWeightage, builderFloor:floors,builderFlats : flats};
 	$.ajax({
 	    url: '${baseUrl}/webapi/project/floor/substage/update',
 	    type: 'POST',

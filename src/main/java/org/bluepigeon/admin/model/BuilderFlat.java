@@ -42,6 +42,7 @@ public class BuilderFlat implements java.io.Serializable {
 	private Double revenue;
 	private Double completionStatus = 0.0;
 	private Date possessionDate;
+	private Double amenityWeightage = 0.0;
 	private Double weightage = 0.0;
 	private Byte status;
 	private Set<BuilderLead> builderLeads = new HashSet<BuilderLead>(0);
@@ -52,7 +53,7 @@ public class BuilderFlat implements java.io.Serializable {
 	public BuilderFlat(BuilderFlatType builderFlatType, AdminUser adminUser, BuilderFloor builderFloor,
 			BuilderFlatStatus builderFlatStatus, String flatNo, Integer bedroom, Integer bathroom, Integer balcony,
 			Double totalInventory, Double inventorySold, Double revenue, Date possessionDate, Byte status,
-			Set<BuilderLead> builderLeads, Double completionStatus, Double weightage) {
+			Set<BuilderLead> builderLeads, Double completionStatus, Double weightage, Double amenityWeightage) {
 		this.builderFlatType = builderFlatType;
 		this.adminUser = adminUser;
 		this.builderFloor = builderFloor;
@@ -69,6 +70,7 @@ public class BuilderFlat implements java.io.Serializable {
 		this.status = status;
 		this.builderLeads = builderLeads;
 		this.weightage = weightage;
+		this.amenityWeightage = amenityWeightage;
 	}
 	
 	@PrePersist
@@ -235,6 +237,14 @@ public class BuilderFlat implements java.io.Serializable {
 
 	public void setWeightage(Double weightage) {
 		this.weightage = weightage;
+	}
+	@Column(name = "amenity_weightage", precision = 22, scale = 0)
+	public Double getAmenityWeightage() {
+		return amenityWeightage;
+	}
+
+	public void setAmenityWeightage(Double amenityWeightage) {
+		this.amenityWeightage = amenityWeightage;
 	}
 	
 	

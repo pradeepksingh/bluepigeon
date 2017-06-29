@@ -86,7 +86,7 @@
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Flat Details</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Details</a></li>
-			  	<li><a data-toggle="tab" href="#productsubstage">Stage/Substage</a></li>
+			  	<li><a data-toggle="tab" href="#productsubstage">Flat Weightage</a></li>
 			</ul>
 			<form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 				<div class="tab-content">
@@ -331,6 +331,18 @@
 											<div id="offer_area">
 												<div class="row">
 													<div class="col-lg-12 margin-bottom-5">
+														<div class="row" id="error-amenity_type">
+																<div class="col-sm-6">
+																	<div class="form-group" id="error-amenity_weightage">
+																		<label class="control-label col-sm-6">Amenity Weightage </label>
+																		<div class="col-sm-6">
+																			<input type="text" class="form-control" id="flat_amenity_weightage" name="flat_amenity_weightage" value="<%out.print(builderFlat.getAmenityWeightage());%>" placeholder="amenity weightage in %"/>
+																		</div>
+																		<div class="messageContainer"></div>
+																	</div>
+																</div>
+															</div>
+														</div>
 														<div class="form-group" id="error-amenity_type">
 															<div class="col-sm-12">
 																<% 	for(FlatStage flatStage :flatStages) { 
@@ -688,6 +700,7 @@ $('input[name="amenity_type[]"]').click(function() {
 
 $("#subpbtn").click(function(){
 	var amenityWeightage = [];
+	var flatAmenityWeightage = [];
 	$('input[name="stage_weightage[]"]').each(function() {
 		stage_id = $(this).attr("id");
 		stage_weightage = $(this).val();
@@ -695,7 +708,8 @@ $("#subpbtn").click(function(){
 			amenityWeightage.push({builderFlat:{id:$("#flat_id").val()},flatStage:{id:stage_id},stageWeightage:stage_weightage,flatSubstage:{id:$(this).attr("id")},substageWeightage:$(this).val(),status:false});
 		});
 	});
-	var final_data = {flatId: $("#flat_id").val(),flatWeightages:amenityWeightage}
+	
+	var final_data = {flatId: $("#flat_id").val(),amenityWeightage : $("#flat_amenity_weightage").val(),flatWeightages:amenityWeightage}
 	$.ajax({
 	    url: '${baseUrl}/webapi/project/flat/substage/update',
 	    type: 'POST',

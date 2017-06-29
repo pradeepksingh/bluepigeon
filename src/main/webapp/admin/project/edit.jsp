@@ -1819,11 +1819,9 @@ $("#subpbtn").click(function(){
     var buildings = [];
     
     $('input[name="building_ids[]"]').each(function(index){
-    	alert("Building Id :: "+$(this).val());
     	building_id.push($(this).val());
     });
     $('input[name="weightage[]"]').each(function(index){
-    	alert("Building Id :: "+building_id[index]+" Weightage :: "+$(this).val());
     	buildings.push({id : building_id[index],weightage: $(this).val()});
     });
     var projects = {id:$("#id").val(),amenityWeightage : $("#amenity_weightage").val(),buildingWeightage:$("#building_weightage").val()};

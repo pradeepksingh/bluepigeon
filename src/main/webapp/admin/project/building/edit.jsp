@@ -595,13 +595,12 @@
 									</div>
 								</div>
 							</div>
-						</div>
-					</form>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 <%@include file="../../../footer.jsp"%>
 <!-- inline scripts related to this page -->
 <style>
@@ -645,6 +644,12 @@ $('#discount').keypress(function (event) {
     return isNumber(event, this)
 });
 $('#discount_amount').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#amenity_weightage').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#floor_weightage').keypress(function (event) {
     return isNumber(event, this)
 });
 function isNumber(evt, element) {
