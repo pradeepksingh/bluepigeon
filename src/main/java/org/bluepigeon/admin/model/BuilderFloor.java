@@ -31,14 +31,16 @@ public class BuilderFloor implements java.io.Serializable {
 	private Integer floorNo;
 	private Integer totalFlats;
 	private Double completionStatus = 0.0;
+	private Double amenityWeightage = 0.0;
+	private Double flatWeightage = 0.0;
+	private Double weightage = 0.0;
 	private Byte status;
-	//private Set<BuilderFlat> builderFlats = new HashSet<BuilderFlat>(0);
 
 	public BuilderFloor() {
 	}
 
 	public BuilderFloor(BuilderBuilding builderBuilding, BuilderFloorStatus builderFloorStatus, String name, Double completionStatus,
-			Integer floorNo, Integer totalFlats, Byte status, Set<BuilderFlat> builderFlats) {
+			Integer floorNo, Integer totalFlats, Byte status, Double amenityWeightage, Double flatWeightage, Double weightage) {
 		this.builderBuilding = builderBuilding;
 		this.builderFloorStatus = builderFloorStatus;
 		this.name = name;
@@ -46,6 +48,9 @@ public class BuilderFloor implements java.io.Serializable {
 		this.totalFlats = totalFlats;
 		this.status = status;
 		this.completionStatus = completionStatus;
+		this.amenityWeightage = amenityWeightage;
+		this.flatWeightage = flatWeightage;
+		this.weightage = weightage;
 	}
 	
 	@Id
@@ -113,6 +118,30 @@ public class BuilderFloor implements java.io.Serializable {
 
 	public void setCompletionStatus(Double completionStatus) {
 		this.completionStatus = completionStatus;
+	}
+	@Column(name = "amenity_weightage", precision = 22, scale = 0)
+	public Double getAmenityWeightage() {
+		return amenityWeightage;
+	}
+
+	public void setAmenityWeightage(Double amenityWeightage) {
+		this.amenityWeightage = amenityWeightage;
+	}
+	@Column(name = "flat_weightage", precision = 22, scale = 0)
+	public Double getFlatWeightage() {
+		return flatWeightage;
+	}
+
+	public void setFlatWeightage(Double flatWeightage) {
+		this.flatWeightage = flatWeightage;
+	}
+	@Column(name = "weightage", precision = 22, scale = 0)
+	public Double getWeightage() {
+		return weightage;
+	}
+
+	public void setWeightage(Double weightage) {
+		this.weightage = weightage;
 	}
 
 }
