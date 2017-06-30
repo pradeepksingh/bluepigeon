@@ -61,9 +61,9 @@ if(session!=null)
 		<script type="text/javascript">
 			try{ace.settings.loadState('main-container')}catch(e){}
 		</script>
-		<div id="sidebar" class="sidebar responsive ace-save-state">
+		<div id="sidebar" class="sidebar responsive ace-save-state" style="max-height:600px;overflow-y:scroll;z-index:1px;">
 			<script type="text/javascript">
-				try{ace.settings.loadState('sidebar')}catch(e){}
+				try{ace.settings.loadState('sidebar')}catch(e){console.log("Error :: "+e);}
 			</script>
 			<ul class="nav nav-list">
 				<li class="active">

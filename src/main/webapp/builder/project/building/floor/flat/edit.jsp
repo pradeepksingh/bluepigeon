@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.PaymentInfoData"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
@@ -52,7 +53,7 @@
 	List<BuilderFlatStatus> builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderActiveFlatStatus();
 	List<BuilderFlatAmenity> builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderActiveFlatAmenityList();
 	List<FlatAmenityInfo> flatAmenityInfos = new ProjectDAO().getBuilderFlatAmenityInfos(flat_id);
-	List<FlatPaymentSchedule> flatPaymentSchedules = new ProjectDAO().getBuilderActiveFlatPaymentSchedules(flat_id);
+	List<PaymentInfoData> flatPaymentSchedules = new ProjectDAO().getFlatPaymentSchedules(flat_id);
 	List<BuilderBuildingFlatType> builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeByBuildingId(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
 	List<ProjectData> builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
 	List<FlatAmenityWeightage> flatAmenityWeightages = new ProjectDAO().getActiveFlatAmenityWeightageByFlatId(flat_id);

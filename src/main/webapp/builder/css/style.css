@@ -15276,7 +15276,7 @@ a.fc-event:not([href]):not([tabindex]) {
   color: #292929;
   border-radius: 3.25em;
   background: #efefef;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2), inset 0 -3px 0 rgba(0, 0, 0, 0.22);
+  box-shadow: 0 3px 10px #00A462, inset 0 -3px 0 #00A462;
   -webkit-transition: 0.3s;
   transition: 0.3s;
   -webkit-user-select: none;
@@ -15286,7 +15286,7 @@ a.fc-event:not([href]):not([tabindex]) {
 }
 .button-label h1 {
   font-size: 1em;
-   margin: -7px 0px !important;
+   margin: -7px -3px !important;
   font-family: "Poppins", sans-serif;
 }
 .button-label:hover {
@@ -15308,22 +15308,22 @@ a.fc-event:not([href]):not([tabindex]) {
   }
 }
 
-#yes-button:checked + .button-label {
+.yes-button:checked + .button-label {
   background: #2ECC71;
-  color: #efefef;
+  background-color: #efefef;
 }
-#yes-button:checked + .button-label:hover {
+.yes-button:checked + .button-label:hover {
   background: #29b765;
-  color: #e2e2e2;
+  color: #ffffff;
 }
 
-#no-button:checked + .button-label {
+.no-button:checked + .button-label {
   background: #D91E18;
-  color: #efefef;
+  color: grey;
 }
-#no-button:checked + .button-label:hover {
+.no-button:checked + .button-label:hover {
   background: #c21b15;
-  color: #e2e2e2;
+  color: grey;
 }
 
 #maybe-button:checked + .button-label {
@@ -15344,6 +15344,37 @@ a.fc-event:not([href]):not([tabindex]) {
   top: 50%;
   margin-top: -2.5em;
 }
+.no-button {
+  display: inline-block;
+  padding: 0em 1em;
+  margin: 0em 0em 0em -2em;
+  /*cursor: pointer; */
+  color: #ffffff;
+  border-radius: 3.25em;
+  background: #CBCBCB;
+ /* box-shadow: 0 3px 10px #00A462, inset 0 -3px 0 #00A462; */
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.no-button h1 {
+  font-size: 1em;
+  color:#ffffff;
+  font-weight:600;
+   margin: -7px 0px !important;
+  font-family: "Poppins", sans-serif;
+}
+.no-button:hover {
+/*   background: #d6d6d6; */
+/*   color: #101010; */
+  background: #CBCBCB;
+  color: #efefef;
+ /* box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2), inset 0 -3px 0 rgba(0, 0, 0, 0.32); */
+}
+
 @media (max-width: 40em) {
   .button-wrap {
     margin-top: -1.5em;

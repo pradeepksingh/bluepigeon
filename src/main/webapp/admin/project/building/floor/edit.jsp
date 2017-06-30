@@ -197,7 +197,7 @@
 															<div class="row">
 																<label class="control-label col-sm-3" style="padding-top:5px;text-align:left;"><strong><% out.print(builderFloorAmenity.getName());%> (%)</strong></label>
 																<div class="col-sm-4">
-																	<input type="number" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderFloorAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
+																	<input type="text" class="form-control errorMsg" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderFloorAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
 																</div>
 															</div>
 															<% 	for(BuilderFloorAmenityStages bpaStages :builderFloorAmenity.getBuilderFloorAmenityStageses()) { 
@@ -211,7 +211,7 @@
 															<fieldset class="scheduler-border">
 																<legend class="scheduler-border">Stages</legend>
 																<div class="col-sm-12">
-																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(builderFloorAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="number" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(builderFloorAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" class="form-control errorMsg" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
 																	<fieldset class="scheduler-border" style="margin-bottom:0px !important">
 																		<legend class="scheduler-border">Sub Stages</legend>
 																	<% 	for(BuilderFloorAmenitySubstages bpaSubstage :bpaStages.getBuilderFloorAmenitySubstageses()) { 
@@ -224,7 +224,7 @@
 																	%>
 																		<div class="col-sm-3">
 																			<% out.print(bpaSubstage.getName()); %> (%)<br>
-																			<input type="number" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																			<input type="text" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control errorMsg" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
 																		</div>
 																	<% } %>
 																	</fieldset>
@@ -334,7 +334,7 @@
 															<div class="form-group" id="error-discount_amount">
 																<label class="control-label col-sm-6"><%out.print(builderFlat.getFlatNo()); %></label>
 																<div class="col-sm-6">
-																	<input type="number" class="form-control" id="weightage[]" name="weightage[]" value="<%out.print(builderFlat.getWeightage());%>"/>
+																	<input type="text" class="form-control" id="weightage[]" name="weightage[]" value="<%out.print(builderFlat.getWeightage());%>"/>
 																</div>
 																<div class="messageContainer"></div>
 															</div>
@@ -369,7 +369,7 @@
 																		%>
 																			<div class="col-sm-3">
 																				<% out.print(floorSubstage.getName()); %> (%)<br>
-																				<input type="number" name="substage_weightage<% out.print(floorStage.getId());%>[]" id="<% out.print(floorSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																				<input type="text" name="substage_weightage<% out.print(floorStage.getId());%>[]" id="<% out.print(floorSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
 																			</div>
 																		<% } %>
 																		</fieldset>
@@ -425,6 +425,22 @@
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script>
+$(".errorMsg").keypress(function(event){
+	return isNumber(event, this)
+});
+
+function isNumber(evt, element) {
+
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+} 
+
 $('#floor_no').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
