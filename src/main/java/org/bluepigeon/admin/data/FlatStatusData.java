@@ -3,7 +3,7 @@ package org.bluepigeon.admin.data;
 public class FlatStatusData {
 	private int id;
 	private String name;
-	private int flatStaus;
+	private String flatStaus;
 	public int getId() {
 		return id;
 	}
@@ -16,10 +16,10 @@ public class FlatStatusData {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getFlatStaus() {
+	public String getFlatStaus() {
 		return flatStaus;
 	}
-	public void setFlatStaus(int flatStaus) {
+	public void setFlatStaus(String flatStaus) {
 		this.flatStaus = flatStaus;
 	}
 	

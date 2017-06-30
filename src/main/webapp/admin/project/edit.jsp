@@ -1189,6 +1189,21 @@
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script>
+$(".errorMsg").keypress(function(event){
+	return isNumber(event, this)
+});
+
+function isNumber(evt, element) {
+
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+} 
 $('#latitude').keypress(function (event) {
     return isNumber(event, this)
 });
