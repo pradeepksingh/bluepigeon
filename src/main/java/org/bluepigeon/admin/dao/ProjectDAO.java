@@ -2183,7 +2183,8 @@ public class ProjectDAO {
 	}
 	
 	public List<PaymentInfoData> getFlatPaymentSchedules(int flat_id) {
-		List<PaymentInfoData> paymentInfoDatas = new ArrayList<>();
+		System.err.println("FlatId :: "+flat_id);
+		List<PaymentInfoData> paymentInfoDatas = new ArrayList<PaymentInfoData>();
 		String hql = "from FlatPaymentSchedule where builderFlat.id = :flat_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -2199,8 +2200,10 @@ public class ProjectDAO {
 				paymentInfoData.setAmount(flatPaymentSchedule.getAmount());
 				paymentInfoData.setPayable(flatPaymentSchedule.getPayable());
 				paymentInfoDatas.add(paymentInfoData);
+				System.out.println("GT :: "+flatPaymentSchedule.getPayable());
 			}
 		}else{
+			System.err.println("TR :: "+flat_id);
 			BuilderFlat flat =  getBuilderFlatById(flat_id);
 			List<BuildingPaymentInfo> buildingPaymentInfos = getActiveBuilderBuildingPaymentInfoById(flat.getBuilderFloor().getBuilderBuilding().getId());
 			for(BuildingPaymentInfo buildingPaymentInfo : buildingPaymentInfos){
@@ -2213,6 +2216,7 @@ public class ProjectDAO {
 			}
 		}
 		}catch(IndexOutOfBoundsException e){
+			e.printStackTrace();
 			BuilderFlat flat =  getBuilderFlatById(flat_id);
 			List<BuildingPaymentInfo> buildingPaymentInfos = getActiveBuilderBuildingPaymentInfoById(flat.getBuilderFloor().getBuilderBuilding().getId());
 			for(BuildingPaymentInfo buildingPaymentInfo : buildingPaymentInfos){

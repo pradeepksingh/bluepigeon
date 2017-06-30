@@ -15286,7 +15286,7 @@ a.fc-event:not([href]):not([tabindex]) {
 }
 .button-label h1 {
   font-size: 1em;
-   margin: -7px 0px !important;
+   margin: -7px -3px !important;
   font-family: "Poppins", sans-serif;
 }
 .button-label:hover {
