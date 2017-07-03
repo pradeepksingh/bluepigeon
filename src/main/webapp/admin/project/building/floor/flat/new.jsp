@@ -75,6 +75,7 @@
 			</div>
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Flat Details</a></li>
+			  	<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Details</a></li>
 			</ul>
 			<form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
@@ -272,6 +273,114 @@
 							<div class="col-sm-12">
 								<span class="pull-right">
 									<button type="submit" name="flooradd" class="btn btn-success btn-sm">Submit</button>
+								</span>
+							</div>
+						</div>
+					</div>
+						<div id="pricing" class="tab-pane fade">
+					
+			 			<div class="row">
+			 				<div id="pricingresponse"></div>
+							<div id="payment_schedule">
+								<div class="col-lg-12">
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<div class="row">
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-name">
+														<label class="control-label col-sm-5">Saleble Area<span class='text-danger'>*</span></label>
+														<div class="col-sm-7">
+															<input type="text" class="form-control" id="saleble_area" name="saleble_area" value="" />
+														</div>
+														<div class="messageContainer col-sm-offset-3"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-name">
+														<label class="control-label col-sm-5">Rate<span class='text-danger'>*</span></label>
+														<div class="col-sm-7">
+															<input type="text" class="form-control" id="rate" name="rate" value="" />
+														</div>
+														<div class="messageContainer col-sm-offset-3"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-name">
+														<label class="control-label col-sm-5">Cost<span class='text-danger'>*</span></label>
+														<div class="col-sm-7">
+															<input type="text" class="form-control" id="cost" name="cost" value="" />
+														</div>
+														<div class="messageContainer col-sm-offset-3"></div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-schedule">
+														<label class="control-label col-sm-5">Stamp Duty<span class='text-danger'>*</span></label>
+														<div class="col-sm-7">
+															<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value=""/>
+														</div>
+														<div class="messageContainer col-sm-offset-3"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-payable">
+														<label class="control-label col-sm-5">Registration</label>
+														<div class="col-sm-7">
+															<input type="text" class="form-control errorMsg" id="registration" name="registration" value=""/>
+														</div>
+														<div class="messageContainer col-sm-offset-3"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-amount">
+														<label class="control-label col-sm-5">Cost </label>
+														<div class="col-sm-7">
+															<input type="text" class="form-control errorMsg" id="service_tax" name="service_tax" value=""/>
+														</div>
+														<div class="messageContainer col-sm-offset-3"></div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-schedule">
+														<label class="control-label col-sm-5">Stamp Duty<span class='text-danger'>*</span></label>
+														<div class="col-sm-7">
+															<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value=""/>
+														</div>
+														<div class="messageContainer col-sm-offset-3"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-payable">
+														<label class="control-label col-sm-5">Registration</label>
+														<div class="col-sm-7">
+															<input type="text" class="form-control errorMsg" id="registration" name="registration" value=""/>
+														</div>
+														<div class="messageContainer col-sm-offset-3"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-amount">
+														<label class="control-label col-sm-5">Cost </label>
+														<div class="col-sm-7">
+															<input type="text" class="form-control errorMsg" id="service_tax" name="service_tax" value=""/>
+														</div>
+														<div class="messageContainer col-sm-offset-3"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-sm-12">
+								<span class="pull-right">
+									<button type="submit" name="flooradd" class="btn btn-success btn-sm" >Submit</button>
 								</span>
 							</div>
 						</div>

@@ -891,7 +891,7 @@ public class ProjectDAO {
 	 * @return List<BuildingPaymentInfo>
 	 */
 	public List<BuildingPaymentInfo> getActiveBuilderBuildingPaymentInfoById(int building_id) {
-		String hql = "from BuildingPaymentInfo where builderBuilding.id = :building_id and status=1";
+		String hql = "from BuildingPaymentInfo where builderBuilding.id = :building_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
