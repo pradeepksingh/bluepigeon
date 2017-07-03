@@ -3959,4 +3959,51 @@ public class ProjectDAO {
 		}
 		return resp;
 	}
+	
+	public List<PaymentInfoData> getProjectPaymentScheduleByProjectId(int projectId){
+		List<PaymentInfoData> paymentInfoDatas = new ArrayList<PaymentInfoData>();
+		String hql = "from BuildingPaymentInfo where builderBuilding.builderProject.id =:project_id ";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		try{
+			List<BuildingPaymentInfo> result = query.list();
+			if(result.get(0) != null){
+				for(BuildingPaymentInfo buildingPaymentInfo : result){
+					PaymentInfoData paymentInfoData = new PaymentInfoData();
+					paymentInfoData.setId(buildingPaymentInfo.getId());
+					paymentInfoData.setAmount(buildingPaymentInfo.getAmount());
+					paymentInfoData.setName(buildingPaymentInfo.getMilestone());
+					paymentInfoData.setPayable(buildingPaymentInfo.getPayable());
+					paymentInfoDatas.add(paymentInfoData);
+				}
+			}else{
+				BuilderBuilding builderBuilding = getBuilderActiveProjectBuildings(projectId).get(0);
+				List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(builderBuilding.getBuilderProject().getId());
+				for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
+					PaymentInfoData paymentInfoData = new PaymentInfoData();
+					paymentInfoData.setName(builderProjectPaymentInfo.getSchedule());
+					paymentInfoData.setPayable(builderProjectPaymentInfo.getPayable());
+					paymentInfoData.setAmount(builderProjectPaymentInfo.getAmount());
+					paymentInfoDatas.add(paymentInfoData);
+				}
+			}
+		}catch(IndexOutOfBoundsException e){
+			BuilderBuilding builderBuilding = getBuilderActiveProjectBuildings(projectId).get(0);
+			List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(builderBuilding.getBuilderProject().getId());
+			for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
+				PaymentInfoData paymentInfoData = new PaymentInfoData();
+				paymentInfoData.setName(builderProjectPaymentInfo.getSchedule());
+				paymentInfoData.setPayable(builderProjectPaymentInfo.getPayable());
+				paymentInfoData.setAmount(builderProjectPaymentInfo.getAmount());
+				paymentInfoDatas.add(paymentInfoData);
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return paymentInfoDatas;
+				
+	}
 }

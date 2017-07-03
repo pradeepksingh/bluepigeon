@@ -281,7 +281,7 @@
 					
 			 			<div class="row">
 			 				<div id="pricingresponse"></div>
-							<div id="payment_schedule">
+							<div id="pricing_schedule">
 								<div class="col-lg-12">
 									<div class="panel panel-default">
 										<div class="panel-body">

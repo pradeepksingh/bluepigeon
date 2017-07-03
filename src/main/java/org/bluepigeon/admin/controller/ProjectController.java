@@ -2592,5 +2592,14 @@ public class ProjectController extends ResourceConfig {
 		List<PaymentInfoData> paymentInfoDatas = projectDAO.getFlatPaymnetbyFloorId(floor_id);
 		return paymentInfoDatas;
 	}
+	
+	@GET
+	@Path("/building/payments/{project_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PaymentInfoData> getBuildingPayment(@PathParam("project_id") int project_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		List<PaymentInfoData> paymentInfoDatas = projectDAO.getProjectPaymentScheduleByProjectId(project_id);
+		return paymentInfoDatas;
+	}
 }
 
