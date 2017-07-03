@@ -19,6 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
+import org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
@@ -2600,6 +2601,14 @@ public class ProjectController extends ResourceConfig {
 		ProjectDAO projectDAO = new ProjectDAO();
 		List<PaymentInfoData> paymentInfoDatas = projectDAO.getProjectPaymentScheduleByProjectId(project_id);
 		return paymentInfoDatas;
+	}
+	
+	@GET
+	@Path("/building/prices/{project_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public BuilderProjectPriceInfo getBuildingPricing(@PathParam("project_id") int project_id) {
+		BuilderProjectPriceInfoDAO  builderProjectPriceInfoDAO= new BuilderProjectPriceInfoDAO();
+		return builderProjectPriceInfoDAO.getBuilderProjectPriceInfo(project_id);
 	}
 }
 

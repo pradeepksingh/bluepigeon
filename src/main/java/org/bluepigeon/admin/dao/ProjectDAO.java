@@ -748,7 +748,7 @@ public class ProjectDAO {
 	 * @return
 	 */
 	public List<BuilderBuilding> getBuilderActiveProjectBuildings(int project_id) {
-		String hql = "from BuilderBuilding where builderProject.id = :project_id and status=1";
+		String hql = "from BuilderBuilding where builderProject.id = :project_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -3979,8 +3979,7 @@ public class ProjectDAO {
 					paymentInfoDatas.add(paymentInfoData);
 				}
 			}else{
-				BuilderBuilding builderBuilding = getBuilderActiveProjectBuildings(projectId).get(0);
-				List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(builderBuilding.getBuilderProject().getId());
+				List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(projectId);
 				for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
 					PaymentInfoData paymentInfoData = new PaymentInfoData();
 					paymentInfoData.setName(builderProjectPaymentInfo.getSchedule());
@@ -3990,8 +3989,7 @@ public class ProjectDAO {
 				}
 			}
 		}catch(IndexOutOfBoundsException e){
-			BuilderBuilding builderBuilding = getBuilderActiveProjectBuildings(projectId).get(0);
-			List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(builderBuilding.getBuilderProject().getId());
+			List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(projectId);
 			for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
 				PaymentInfoData paymentInfoData = new PaymentInfoData();
 				paymentInfoData.setName(builderProjectPaymentInfo.getSchedule());
