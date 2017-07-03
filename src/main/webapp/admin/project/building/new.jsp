@@ -704,7 +704,7 @@ function removeOffer(id) {
 }
 
 $("#project_id").change(function(){
-	alert("ProjectId :: "+$("#project_id").val());
+	//alert("ProjectId :: "+$("#project_id").val());
 
 	$("#payment_schedule").empty();
     var html = "";
