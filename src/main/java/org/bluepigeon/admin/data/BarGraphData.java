@@ -7,7 +7,16 @@ public class BarGraphData {
 	private Long totalBuyers;
 	private Long totalSold;
 	private Date builtYear;
+	private int id;
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public Long getTotalFlats() {
 		return totalFlats;
 	}

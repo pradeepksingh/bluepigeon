@@ -3790,6 +3790,26 @@ public class ProjectDAO {
 		}
 	}
 	/**
+	 * Get total number of active project's count by builder id
+	 * @author pankaj
+	 * @param builder_id
+	 * @return total number of project count
+	 */
+	public Long getTotalNumberOfProjects(int builder_id){
+		Long totalProjects =(long) 0;
+		String hql = "Select COUNT(*) from BuilderProject where builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builder_id);
+		totalProjects = (Long) query.uniqueResult();
+		if(totalProjects != null){
+			return totalProjects;
+		}else{
+			return (long)0;
+		}
+	}
+	/**
 	 * Get Total leads by builder id
 	 * @author pankaj
 	 * @param projectId
