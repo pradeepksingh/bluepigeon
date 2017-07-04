@@ -788,7 +788,9 @@ public class BuilderDetailsDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session projectSession = hibernateUtil.openSession();
 		Query projectQuery = projectSession.createQuery(projectHql);
-		projectQuery.setParameter("id", projectId);
+		if(projectId > 0){
+			projectQuery.setParameter("id", projectId);
+		}
 		List<BuilderProject> projectList = projectQuery.list();
 		if(projectList != null){
 			try{
