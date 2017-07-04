@@ -77,7 +77,7 @@
     <link href="../plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
     <link href="../plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
     <link href="../plugins/bower_components/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
    <!-- jQuery -->
@@ -418,22 +418,22 @@
 		          </div>
          		  <div class="modal-body" style="background-color:#f5f5f5;">
 	         		  <div class="container">
-						  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+						  <div id="myCarousel1" class="carousel slide" data-ride="carousel">
 						    <!-- Indicators -->
-						    <ol class="carousel-indicators">
-						      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-						      <li data-target="#myCarousel" data-slide-to="1"></li>
-						      <li data-target="#myCarousel" data-slide-to="2"></li>
-						    </ol>
+<!-- 						    <ol class="carousel-indicators"> -->
+<!-- 						      <li data-target="#myCarousel1" data-slide-to="0" class="active"></li> -->
+<!-- 						      <li data-target="#myCarousel1" data-slide-to="1"></li> -->
+<!-- 						      <li data-target="#myCarousel1" data-slide-to="2"></li> -->
+<!-- 						    </ol> -->
 						    <div class="carousel-inner" id="flatList">
 						    </div>
 						
 						    <!-- Left and right controls -->
-						    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+						    <a class="left carousel-control" href="#myCarousel1" data-slide="prev">
 						      <span class="glyphicon glyphicon-chevron-left"></span>
 						      <span class="sr-only">Previous</span>
 						    </a>
-						    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+						    <a class="right carousel-control" href="#myCarousel1" data-slide="next">
 						      <span class="glyphicon glyphicon-chevron-right"></span>
 						      <span class="sr-only">Next</span>
 						    </a>
@@ -478,16 +478,16 @@ $("#even_odd_id").change(function(){
 });
 function getActiveProjectFlats(){
 	$("#flatList").empty();
-	 $("#next").empty();
+	// $("#next").empty();
 	var buildingImg = "";
 	var html = " ";
-	var i = 0;
+	var i = 1;
 	
 	$.post("${baseUrl}/webapi/builder/building/floor/filternames",{project_id: $("#project_id").val(), building_id : $("#building_id").val(), floor_id : $("#floor_id").val(), evenOrodd : $("#even_odd_id").val()},function(data){
 		 if(data == ""){
 			   $("#flatList").empty();
 			   $("#flatList").append("<h2><center>Sorry No Flats Found</center></h2>");
-			   $("#next").empty();
+			   //$("#next").empty();
 		 }else{
 			$(data).each(function(index){
 				if(i==1){
@@ -498,10 +498,11 @@ function getActiveProjectFlats(){
 				
 				$(data[index].buildingListDatas).each(function(index1){
 					i++;
-					alert(i);
-					alert(active);
+					//alert(i);
+					//alert(active);
 					html+="<div class='item "+active+"'><div class='row'><div class='col-md-9'><div class='col-sm-12'><label for='password' class='control-label bold'>Building "+data[index].buildingListDatas[index1].buildingName+"</label></div>";
 					buildingImg = data[index].buildingListDatas[index1].buildingImage;
+					
 					$(data[index].buildingListDatas[index1].floorListDatas).each(function(index2){
 						html+="<div class='row'><div class='col-sm-2'><label for='password' class='control-label'><b>"+data[index].buildingListDatas[index1].floorListDatas[index2].floorName+"</b></div>";
 						$(data[index].buildingListDatas[index1].floorListDatas[index2].flatStatusDatas).each(function(index3){
@@ -511,26 +512,16 @@ function getActiveProjectFlats(){
 								html+="<div class='col-sm-1'><input type='radio' id='no-button' name='addnewbuyer' class='no-button' disabled='disabled' value='"+data[index].buildingListDatas[index1].floorListDatas[index2].flatStatusDatas[index3].id+"'/><label class='no-button' for='no-button'><h1>"+data[index].buildingListDatas[index1].floorListDatas[index2].flatStatusDatas[index3].name+"</h1></label></div>";
 							}
 						});
-						html+="</div></div></div><div class='col-md-3'>";
+						html+="</div></div><div class='col-md-3'>";
 						
 						html+="<image src='${baseUrl}/"+buildingImg+"' alt='Building Image' width='100%'>";
-						html+="</div></div>";
+						html+="</div></div></div>";
 					});
 				});
 			});
-			alert(html);
+			//alert(html);
 		   $("#flatList").append(html);
-		   if(buildingImg != "")
-				buildingImg = "${baseUrl}/"+buildingImg;
-		   else
-				buildingImg = "No Image Found";
-		  var imgdiv ="<div class='col-sm-10'>";
-		           if(buildingImg != "")
-		        	   imgdiv  +="<image src='"+buildingImg+"' alt='Building Image' width='200px'>"
-		           else
-		        	   imgdiv +="<h2> No Image Found</h2>";
-		          imgdiv+="</div>";
-		          $("#next").append(imgdiv);
+		 
 		  
 		}
 	},'json');

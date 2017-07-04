@@ -748,7 +748,7 @@ public class ProjectDAO {
 	 * @return
 	 */
 	public List<BuilderBuilding> getBuilderActiveProjectBuildings(int project_id) {
-		String hql = "from BuilderBuilding where builderProject.id = :project_id and status=1";
+		String hql = "from BuilderBuilding where builderProject.id = :project_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -891,7 +891,7 @@ public class ProjectDAO {
 	 * @return List<BuildingPaymentInfo>
 	 */
 	public List<BuildingPaymentInfo> getActiveBuilderBuildingPaymentInfoById(int building_id) {
-		String hql = "from BuildingPaymentInfo where builderBuilding.id = :building_id and status=1";
+		String hql = "from BuildingPaymentInfo where builderBuilding.id = :building_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -2894,30 +2894,32 @@ public class ProjectDAO {
 		query.setParameter("builder_id", builderId);
 		List<BuilderProject> result = query.list();
 		List<ProjectList> projects = new ArrayList<ProjectList>();
-		for(BuilderProject builderproject : result) {
-			ProjectList newproject = new ProjectList();
-			newproject.setId(builderproject.getId());
-			newproject.setName(builderproject.getName());
-			newproject.setStatus(builderproject.getStatus());
-			newproject.setBuilderId(builderproject.getBuilder().getId());
-			newproject.setBuilderName(builderproject.getBuilder().getName());
-			newproject.setCityId(builderproject.getCity().getId());
-			newproject.setCityName(builderproject.getCity().getName());
-			newproject.setLocalityId(builderproject.getLocality().getId());
-			newproject.setLocalityName(builderproject.getLocality().getName());
-			newproject.setCompletionStatus(builderproject.getCompletionStatus());
-			if(builderproject.getInventorySold() != null){
-				newproject.setSold(builderproject.getInventorySold());
+		if(result != null){
+			for(BuilderProject builderproject : result) {
+				ProjectList newproject = new ProjectList();
+				newproject.setId(builderproject.getId());
+				newproject.setName(builderproject.getName());
+				newproject.setStatus(builderproject.getStatus());
+				newproject.setBuilderId(builderproject.getBuilder().getId());
+				newproject.setBuilderName(builderproject.getBuilder().getName());
+				newproject.setCityId(builderproject.getCity().getId());
+				newproject.setCityName(builderproject.getCity().getName());
+				newproject.setLocalityId(builderproject.getLocality().getId());
+				newproject.setLocalityName(builderproject.getLocality().getName());
+				newproject.setCompletionStatus(builderproject.getCompletionStatus());
+				if(builderproject.getInventorySold() != null){
+					newproject.setSold(builderproject.getInventorySold());
+				}
+				if(builderproject.getTotalInventory() != null){
+					newproject.setTotalSold(builderproject.getTotalInventory());
+				}
+				totalLeads = getTotalLeadsByProjectId(builderproject.getId());
+				if(totalLeads != null){
+					newproject.setTotalLeads(totalLeads.intValue());
+				}
+				System.out.println("Project name :: "+builderproject.getName());
+				projects.add(newproject);
 			}
-			if(builderproject.getTotalInventory() != null){
-				newproject.setTotalSold(builderproject.getTotalInventory());
-			}
-			totalLeads = getTotalLeadsByProjectId(builderproject.getId());
-			if(totalLeads != null){
-				newproject.setTotalLeads(totalLeads.intValue());
-			}
-			System.out.println("Project name :: "+builderproject.getName());
-			projects.add(newproject);
 		}
 		session.close();
 		return projects;
@@ -3257,8 +3259,11 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setInteger("builder_id", builderId);
 		totalInventory = (Long) query.uniqueResult();
-		
-		return totalInventory;
+		if(totalInventory != null){
+			return totalInventory;
+		}else{
+			return (long)0;
+		}
 	}
 	
 	/* **************************** Stages / Substages **************************** */
@@ -3778,8 +3783,31 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("builder_id", builder_id);
 		totalLeads = (Long) query.uniqueResult();
-		return totalLeads;
-		
+		if(totalLeads != null){
+			return totalLeads;
+		}else{
+			return (long)0;
+		}
+	}
+	/**
+	 * Get total number of active project's count by builder id
+	 * @author pankaj
+	 * @param builder_id
+	 * @return total number of project count
+	 */
+	public Long getTotalNumberOfProjects(int builder_id){
+		Long totalProjects =(long) 0;
+		String hql = "Select COUNT(*) from BuilderProject where builder.id = :builder_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builder_id);
+		totalProjects = (Long) query.uniqueResult();
+		if(totalProjects != null){
+			return totalProjects;
+		}else{
+			return (long)0;
+		}
 	}
 	/**
 	 * Get Total leads by builder id
@@ -3811,7 +3839,11 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("builder_id", builderId);
 		totalSoldInventory = (Long) query.uniqueResult();
-		return totalSoldInventory;
+		if(totalSoldInventory != null){
+			return totalSoldInventory;
+		}else{
+			return (long)0;
+		}
 	}
 	/**
 	 * Save source
@@ -3958,5 +3990,50 @@ public class ProjectDAO {
 		  resp.setMessage("Project Weightage Updated successfully.");
 		}
 		return resp;
+	}
+	
+	public List<PaymentInfoData> getProjectPaymentScheduleByProjectId(int projectId){
+		List<PaymentInfoData> paymentInfoDatas = new ArrayList<PaymentInfoData>();
+		String hql = "from BuildingPaymentInfo where builderBuilding.builderProject.id =:project_id ";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		try{
+			List<BuildingPaymentInfo> result = query.list();
+			if(result.get(0) != null){
+				for(BuildingPaymentInfo buildingPaymentInfo : result){
+					PaymentInfoData paymentInfoData = new PaymentInfoData();
+					paymentInfoData.setId(buildingPaymentInfo.getId());
+					paymentInfoData.setAmount(buildingPaymentInfo.getAmount());
+					paymentInfoData.setName(buildingPaymentInfo.getMilestone());
+					paymentInfoData.setPayable(buildingPaymentInfo.getPayable());
+					paymentInfoDatas.add(paymentInfoData);
+				}
+			}else{
+				List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(projectId);
+				for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
+					PaymentInfoData paymentInfoData = new PaymentInfoData();
+					paymentInfoData.setName(builderProjectPaymentInfo.getSchedule());
+					paymentInfoData.setPayable(builderProjectPaymentInfo.getPayable());
+					paymentInfoData.setAmount(builderProjectPaymentInfo.getAmount());
+					paymentInfoDatas.add(paymentInfoData);
+				}
+			}
+		}catch(IndexOutOfBoundsException e){
+			List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(projectId);
+			for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
+				PaymentInfoData paymentInfoData = new PaymentInfoData();
+				paymentInfoData.setName(builderProjectPaymentInfo.getSchedule());
+				paymentInfoData.setPayable(builderProjectPaymentInfo.getPayable());
+				paymentInfoData.setAmount(builderProjectPaymentInfo.getAmount());
+				paymentInfoDatas.add(paymentInfoData);
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return paymentInfoDatas;
+				
 	}
 }

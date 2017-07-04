@@ -16,18 +16,21 @@
 		if(session.getAttribute("ubname") != null)
 		{
 			adminuserproject  = (BuilderEmployee)session.getAttribute("ubname");
-			p_user_id = adminuserproject.getBuilder().getId();
+			if(adminuserproject != null){
+				p_user_id = adminuserproject.getBuilder().getId();
+			}
+			if (request.getParameterMap().containsKey("building_id")) {
+				building_id = Integer.parseInt(request.getParameter("building_id"));
+				if(building_id > 0) {
+					builderFloors = new ProjectDAO().getBuildingActiveFloors(building_id);
+				}
+			} else {
+				builderFloors = new ProjectDAO().getAllActiveFloorsByBuilderId(p_user_id);
+				projectDatas = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
+			}
 		}
 	}
-	if (request.getParameterMap().containsKey("building_id")) {
-		building_id = Integer.parseInt(request.getParameter("building_id"));
-		if(building_id > 0) {
-			builderFloors = new ProjectDAO().getBuildingActiveFloors(building_id);
-		}
-	} else {
-		builderFloors = new ProjectDAO().getAllActiveFloorsByBuilderId(p_user_id);
-		projectDatas = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
-	}
+	
 %>
 <!DOCTYPE html>
 <html lang="en">

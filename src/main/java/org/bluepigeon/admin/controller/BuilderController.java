@@ -24,6 +24,7 @@ import org.bluepigeon.admin.dao.CityNamesImp;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.dao.StateImp;
+import org.bluepigeon.admin.data.BarGraphData;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.FlatData;
@@ -434,6 +435,14 @@ public class BuilderController {
 			@FormParam("evenOrodd") int evenorodd){
 		List<FlatListData>  flatList =  new ProjectDAO().getBuildingFloorsFilter(projectId, buildingId, floorId, evenorodd);
 		return flatList;
+	}
+	
+	@POST
+	@Path("/filter/bargraph")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BarGraphData> getBarGraphDataByProjectId(@FormParam("project_id") int projectId){
+		
+		return new BuilderDetailsDAO().getBarGraphByProjectId(projectId);
 	}
 	
 }

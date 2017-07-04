@@ -738,7 +738,6 @@ public class BuilderDetailsDAO {
      * @param builderId
      * @return List<BarGraphData>
      */
-	@SuppressWarnings("deprecation")
 	public List<BarGraphData> getBarGraphByBuilderId(int builderId){
 		List<BarGraphData> barGraphDatas = new ArrayList<BarGraphData>();
 		String hql = "Select COUNT(DISTINCT B.possessionDate) from BuilderProject B where B.builder.id = :builder_id and B.status=1";
@@ -750,32 +749,73 @@ public class BuilderDetailsDAO {
 		Session projectSession = hibernateUtil.openSession();
 		Query projectQuery = projectSession.createQuery(projectHql);
 		projectQuery.setParameter("builder_id", builderId);
-		List<Long> builderProjectLists = query.list();
+		Long builderProjectLists = (Long)query.uniqueResult();
 		List<BuilderProject> projectList = projectQuery.list();
-		System.out.println("Year Count :: "+builderProjectLists.size());
-		int i=0;		
-		for(Long builderProject : builderProjectLists){
-			BarGraphData barGraphData = new BarGraphData();
-			barGraphData.setBuiltYear(projectList.get(i).getPossessionDate());
-			barGraphData.setTotalFlats(getTotalFlatsByBuilderId(builderId));
-			barGraphData.setTotalBuyers(getTotalBuyersByBuilderId(builderId));
-			barGraphData.setTotalSold(getTotalsoldFlatsByBuilderId(builderId));
-			barGraphDatas.add(barGraphData);
-			i++;
+		System.err.println("Builder Id :: "+builderId);
+		if(projectList != null && builderProjectLists != null){
+			try{
+				for(int i=0;i< builderProjectLists.intValue();i++){
+					BarGraphData barGraphData = new BarGraphData();
+					barGraphData.setBuiltYear(projectList.get(i).getPossessionDate());
+					barGraphData.setTotalFlats(getTotalFlatsByProjectId(projectList.get(i).getId()));
+					barGraphData.setTotalBuyers(getTotalBuyersByProjectId(projectList.get(i).getId()));
+					barGraphData.setTotalSold(getTotalsoldFlatsByProjectId(projectList.get(i).getId()));
+					barGraphDatas.add(barGraphData);
+					
+				}
+			}catch(IndexOutOfBoundsException e){
+				//Return this when no data present in database.
+				BarGraphData barGraphData = new BarGraphData();
+				barGraphData.setBuiltYear(null);
+				barGraphData.setTotalFlats((long)0);
+				barGraphData.setTotalBuyers((long)0);
+				barGraphData.setTotalSold((long)0);
+				barGraphDatas.add(barGraphData);
+			}
 		}
 		return barGraphDatas;
 	}
-	
-//	public int getYearByBuilderId(int builderId){
-//		int builtYear = 0;
-//		String hql = "from BuilderProject where builder.id = :builder_id and status=1";
-//		HibernateUtil hibernateUtil = new HibernateUtil();
-//		Session session = hibernateUtil.openSession();
-//		Query query = session.createQuery(hql);
-//		query.setParameter("builder_id", builderId);
-//		
-//		return builtYear;
-//	}
+
+	 /**
+     * Get all project's flats, buyers and sold flats count by builder id
+     * @author pankaj	
+     * @param builderId
+     * @return List<BarGraphData>
+     */
+	public List<BarGraphData> getBarGraphByProjectId(int projectId){
+		List<BarGraphData> barGraphDatas = new ArrayList<BarGraphData>();
+		String projectHql = "from BuilderProject where id =:id and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session projectSession = hibernateUtil.openSession();
+		Query projectQuery = projectSession.createQuery(projectHql);
+		if(projectId > 0){
+			projectQuery.setParameter("id", projectId);
+		}
+		List<BuilderProject> projectList = projectQuery.list();
+		if(projectList != null){
+			try{
+				for(int i=0;i< projectList.size();i++){
+					BarGraphData barGraphData = new BarGraphData();
+					barGraphData.setBuiltYear(projectList.get(i).getPossessionDate());
+					barGraphData.setTotalFlats(getTotalFlatsByProjectId(projectList.get(i).getId()));
+					barGraphData.setTotalBuyers(getTotalBuyersByProjectId(projectList.get(i).getId()));
+					barGraphData.setTotalSold(getTotalsoldFlatsByProjectId(projectList.get(i).getId()));
+					barGraphDatas.add(barGraphData);
+					
+				}
+			}catch(IndexOutOfBoundsException e){
+				//Return this when no data present in database.
+				BarGraphData barGraphData = new BarGraphData();
+				barGraphData.setBuiltYear(null);
+				barGraphData.setTotalFlats((long)0);
+				barGraphData.setTotalBuyers((long)0);
+				barGraphData.setTotalSold((long)0);
+				barGraphDatas.add(barGraphData);
+			}
+		}
+		return barGraphDatas;
+	}
+
 	/**
 	 * Get all project's flat count by builder id
 	 * @author pankaj
@@ -790,13 +830,33 @@ public class BuilderDetailsDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("builder_id", builderId);
 		totalFlats = (Long) query.uniqueResult();
-		return totalFlats;
+		if(totalFlats != null){
+			return totalFlats;
+		}else{
+			return (long)0;
+		}
 	}
+	
+	public Long getTotalFlatsByProjectId(int projectId){
+		Long totalFlats = (long)0;
+		String hql = "Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		totalFlats = (Long) query.uniqueResult();
+		if(totalFlats != null){
+			return totalFlats;
+		}else{
+			return (long)0;
+		}
+	}
+	
 	/**
 	 * Get all owner's count by builder id
 	 * @author pankaj 
 	 * @param builderId
-	 * @return
+	 * @return count of buyer
 	 */
 	public Long getTotalBuyersByBuilderId(int builderId){
 		Long totalBuyers = (long)0;
@@ -808,7 +868,22 @@ public class BuilderDetailsDAO {
 		totalBuyers = (Long) query.uniqueResult();
 		return totalBuyers;
 	}
-	
+	/**
+	 * Get all owner's count by project id
+	 * @author pankaj 
+	 * @param projectId
+	 * @return buyer's count
+	 */
+	public Long getTotalBuyersByProjectId(int projectId){
+		Long totalBuyers = (long)0;
+		String hql = "Select COUNt(*) from Buyer where builderProject.id = :project_id and is_primary=1 and is_deleted=0";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		totalBuyers = (Long) query.uniqueResult();
+		return totalBuyers;
+	}
 	/**
 	 * Get all project's sold flats count by builder id
 	 * @author pankaj
@@ -822,6 +897,23 @@ public class BuilderDetailsDAO {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("builder_id", builderId);
+		totalSoldFlats = (Long) query.uniqueResult();
+		return totalSoldFlats;
+	}
+	
+	/**
+	 * Get all project's sold flats count by project id
+	 * @author pankaj
+	 * @param projectId
+	 * @return total sold flats
+	 */
+	public Long getTotalsoldFlatsByProjectId(int projectId){
+		Long totalSoldFlats = (long)0;
+		String hql = "Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id AND builderFlatStatus.id=2";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
 		totalSoldFlats = (Long) query.uniqueResult();
 		return totalSoldFlats;
 	}

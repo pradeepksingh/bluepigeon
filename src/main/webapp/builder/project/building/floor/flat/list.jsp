@@ -10,22 +10,23 @@
 	List<BuilderFlat> builderFlats = null;
 	session = request.getSession(false);
 	BuilderEmployee adminuserproject = new BuilderEmployee();
-	if(session!=null)
-	{
-		if(session.getAttribute("ubname") != null)
-		{
+	if(session!=null){
+		if(session.getAttribute("ubname") != null){
 			adminuserproject  = (BuilderEmployee)session.getAttribute("ubname");
-			p_user_id = adminuserproject.getBuilder().getId();
+			if(adminuserproject != null){
+				p_user_id = adminuserproject.getBuilder().getId();
+				if (request.getParameterMap().containsKey("floor_id")) {
+					floor_id = Integer.parseInt(request.getParameter("floor_id"));
+					if(floor_id > 0) {
+						builderFlats = new ProjectDAO().getBuilderActiveFloorFlats(floor_id);
+					}
+				} else {
+					builderFlats = new ProjectDAO().getBuilderAllFlatsByBuilderId(p_user_id);
+				}
+			}
 		}
 	}
-	if (request.getParameterMap().containsKey("floor_id")) {
-		floor_id = Integer.parseInt(request.getParameter("floor_id"));
-		if(floor_id > 0) {
-			builderFlats = new ProjectDAO().getBuilderActiveFloorFlats(floor_id);
-		}
-	} else {
-		builderFlats = new ProjectDAO().getBuilderAllFlatsByBuilderId(p_user_id);
-	}
+	
 %>
 <!DOCTYPE html>
 <html lang="en">

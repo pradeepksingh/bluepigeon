@@ -12,7 +12,9 @@ if(session!=null)
 	if(session.getAttribute("ubname") != null)
 	{
 		builder  = (BuilderEmployee)session.getAttribute("ubname");
-		p_user_id = builder.getBuilder().getId();
+		if(builder != null){
+			p_user_id = builder.getBuilder().getId();
+		}
 	}
 }
 %>

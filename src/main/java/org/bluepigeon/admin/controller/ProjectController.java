@@ -19,6 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
+import org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
@@ -30,6 +31,7 @@ import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.LocalityData;
 import org.bluepigeon.admin.data.PaymentInfoData;
+import org.bluepigeon.admin.data.PriceInfoData;
 import org.bluepigeon.admin.data.ProjectAmenityData;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectDetail;
@@ -101,6 +103,8 @@ import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.server.ResourceConfig;
+
+import com.google.gson.Gson;
 @Path("project")
 public class ProjectController extends ResourceConfig {
 	@Context ServletContext context;
@@ -394,6 +398,7 @@ public class ProjectController extends ResourceConfig {
 			msg = projectDAO.updateProjectAmenityWeightage(projectAmenityWeightages, project_id);
 		}
 		List<ProjectWeightage> projectWeightages = new ArrayList<ProjectWeightage>();
+		if(ssubstagewt_id != null){
 		for(int i=0 ;i < ssubstagewt_id.size();i++) {
 			ProjectWeightage paw = new ProjectWeightage();
 			paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
@@ -403,7 +408,7 @@ public class ProjectController extends ResourceConfig {
 		if(projectWeightages.size() > 0) {
 			msg = projectDAO.updateProjectWeightageStatus(projectWeightages, project_id);
 		}
-		
+		}
 		try {	
 			List<ProjectImageGallery> projectImageGalleries = new ArrayList<ProjectImageGallery>();
 			//for multiple inserting images.
@@ -2591,6 +2596,23 @@ public class ProjectController extends ResourceConfig {
 		ProjectDAO projectDAO = new ProjectDAO();
 		List<PaymentInfoData> paymentInfoDatas = projectDAO.getFlatPaymnetbyFloorId(floor_id);
 		return paymentInfoDatas;
+	}
+	
+	@GET
+	@Path("/building/payments/{project_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PaymentInfoData> getBuildingPayment(@PathParam("project_id") int project_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		List<PaymentInfoData> paymentInfoDatas = projectDAO.getProjectPaymentScheduleByProjectId(project_id);
+		return paymentInfoDatas;
+	}
+	
+	@GET
+	@Path("/building/prices/{project_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public PriceInfoData getBuildingPricing(@PathParam("project_id") int project_id) {
+		BuilderProjectPriceInfoDAO  builderProjectPriceInfoDAO= new BuilderProjectPriceInfoDAO();
+		return builderProjectPriceInfoDAO.getBuilderProjectPriceInfos(project_id);
 	}
 }
 

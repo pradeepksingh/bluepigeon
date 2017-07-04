@@ -30,6 +30,7 @@
 	Double totalSaleValue = 0.0;
 	Long totalCampaign = (long)0;
 	Long totalSoldInventory = (long)0;
+	Long totalProjects = (long)0;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
     DecimalFormat decimalFormat = new DecimalFormat("#.##");
@@ -39,21 +40,21 @@
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
-			if(builder != null){
+			
 				builder_id = builder.getBuilder().getId();
-				if(builder_id > 0){
-					totalBuyers = new BuyerDAO().getTotalBuyers(builder_id);
-					totalInventory = new ProjectDAO().getTotalInventory(builder_id);
-					project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
-					cityDataList = new CityNamesImp().getCityActiveNames();
-					totalLeads = new ProjectDAO().getTotalLeads(builder_id);
-					barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder_id);
-					totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder_id);
-					totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
-					totalRevenue = totalSaleValue * totalSoldInventory;
-				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
-				}
-			}
+		}
+		if(builder_id > 0){
+			totalBuyers = new BuyerDAO().getTotalBuyers(builder_id);
+			totalInventory = new ProjectDAO().getTotalInventory(builder_id);
+			project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
+			cityDataList = new CityNamesImp().getCityActiveNames();
+			totalLeads = new ProjectDAO().getTotalLeads(builder_id);
+			totalProjects = new ProjectDAO().getTotalNumberOfProjects(builder_id);
+			barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder_id);
+			totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder_id);
+			totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
+			totalRevenue = totalSaleValue * totalSoldInventory;
+		//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 		}
 	}
 	
@@ -116,30 +117,30 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <!--.row -->
-                <%if(builder.getBuilderEmployeeAccessType().getId() == 1 || builder.getBuilderEmployeeAccessType().getId() == 2){ %>
+                <%if(builder!=null){if(builder.getBuilderEmployeeAccessType().getId() == 1 || builder.getBuilderEmployeeAccessType().getId() == 2){ %>
                 <div class="row re">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border">
-                            <h3 class="box-title">Total Properties</h3>
+                            <h3 class="box-title">Total Projects</h3>
                             <ul class="list-inline two-part">
                                 <li><i class="ti-home text-info-new"></i></li>
-                                <li class="text-right"><span class="counter dashboard-text"><%out.print(totalInventory); %></span></li>
+                                <li class="text-right"><span class="counter dashboard-text"><%out.print(totalProjects); %></span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border">
-                            <h3 class="box-title">Total Buyers</h3>
+                            <h3 class="box-title">Total Unit Sold</h3>
                             <ul class="list-inline two-part">
 <!--                                 <li><i class="icon-tag text-purple"></i></li> -->
 									 <li><i class="icon-tag text-info-new"></i></li>
-                                <li class="text-right"><span class="counter dashboard-text" ><%out.print(totalBuyers); %></span></li>
+                                <li class="text-right"><span class="counter dashboard-text" ><%out.print(totalSoldInventory); %></span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border">
-                            <h3 class="box-title">New leads</h3>
+                            <h3 class="box-title">Tota leads Received</h3>
                             <ul class="list-inline two-part">
 <!--                                 <li><i class="icon-user text-danger"></i></li> -->
                                  <li><i class="icon-user text-info-new"></i></li>
@@ -158,8 +159,8 @@
                         </div>
                     </div>
                 </div>
-                <%} %>
-                    <%if(builder.getBuilderEmployeeAccessType().getId() == 3){ %>
+                <%}} %>
+                    <%if(builder!=null){if(builder.getBuilderEmployeeAccessType().getId() == 3){ %>
                 <div class="row re">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border" style="padding: 15px;">
@@ -201,7 +202,7 @@
                         </div>
                     </div>
                 </div>
-                <%} %>
+                <%}} %>
                 <div class="white-box">
                    <div class="row re">
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -243,6 +244,7 @@
                    		<%
                        		if(project_list !=null){
                        			for(ProjectList projectList : project_list ){
+                       				if(projectList.getId() > 0){
                        	%>
                        <div class="col-md-6 col-sm-6 col-xs-12 projectsection">
 	                       <div class="image">
@@ -287,9 +289,12 @@
 	                       
 	                       <%  
                        		}
+                       		else{
+                        		out.print("<h2><center>No Records Found</center></h2>");
+                        		break;
+                       		 }
                        	}
-                   		
-                        %>
+                       	}%>
                         </div>
 <!--                         <div class="image"> -->
 <!--                           <div class="image"> -->
@@ -764,9 +769,9 @@
   		var projectName = "";
   		var cityName = "";
   		var projectId = "";
-  		alert($("#project_id").val());
+  		//alert($("#project_id").val());
   	//  $('#project_id').prop('selectedIndex',0);
-  	$("#project_id").val('0');
+  	//$("#project_id").val('0');
   		//alert("Builder Id :: "+$("#builder_id").val());
   		$("#project_list").empty();
   	   $.post("${baseUrl}/webapi/project/filter/builder",{builder_id:$("#builder_id").val()},function(data){
@@ -849,8 +854,9 @@
     	    	
     	    	
    		      y: '<% DateFormat dateFormat = new SimpleDateFormat("yyyy");
-    	    	    Date date = barGraphData.getBuiltYear();
-   		      out.print(dateFormat.format(date));%>',
+    	    	    if(barGraphData.getBuiltYear() != null){
+    	    	    	Date date = barGraphData.getBuiltYear();
+   		      out.print(dateFormat.format(date));}%>',
     	        Flat: <%out.print(barGraphData.getTotalFlats());%>,
              Buyer: <%out.print(barGraphData.getTotalBuyers()); %>,
              Purchases: <% out.print(barGraphData.getTotalSold());%>
@@ -900,6 +906,53 @@
      	
      <%
  	} %>
+ 	
+ 	$("#graph_project_id").change(function(){
+ 		barGraph();
+ 	});
+ 	function barGraph(){
+ 		//Morris bar chart
+ 		$("#morris-bar-chart").empty();
+ 		var chart = Morris.Bar({
+ 	   	    element: 'morris-bar-chart',
+ 	   	    data: [{
+ 	  		      y: '',
+ 	   	        Flat: 0,
+ 	            Buyers: 0,
+ 	            Purchases: 0
+ 	            }],
+ 	            xkey: 'y',
+ 	    	    ykeys: ['Flat', 'Buyers', 'Purchases'],
+ 	    	    labels: ['Flat', 'Buyers', 'Purchases'],
+ 	    	    barColors:['#00bfc7', '#fb9678', '#9675ce'],
+ 	    	    hideHover: 'auto',
+ 	    	   
+ 	    	    gridLineColor: '#eef0f2',
+ 	    	    resize: true
+ 	    	});
+ 		 $.post("${baseUrl}/webapi/builder/filter/bargraph",{project_id:$("#graph_project_id").val()},function(data){
+ 			 $(data).each(function(index){
+ 				var year = parseInt(data[index].builtYear); 
+ 				var buyers = data[index].totalBuyers;
+ 				var flats = data[index].totalFlats;
+ 				var purchases = data[index].totalSold;
+ 	 			chart.setData([{"y":year,"Flat":flats,"Buyers":buyers,"Purchases":purchases}]);
+ 			 });
+ 			
+ 			
+ 			
+ 			
+ 		 });
+  		   
+   	
+    // alert("Total Flats :: "+totalFlats);
+    // alert("Total buyers :: "+totalBuyers);
+     //alert("totalSold :: "+totalSold);
+    	//getMorrisBar(totalFlats,totalBuyers,totalSold);
+    	
+    	
+    	
+    }
     </script>
 </body>
 

@@ -24,6 +24,16 @@
 	ServletContext webcontext = pageContext.getServletContext();
 	int building_id = 0;
 	int p_user_id = 0;
+	BuilderBuilding builderBuilding = null;
+	List<ProjectData> builderProjects = null;
+	List<BuilderBuildingAmenity> builderBuildingAmenities = null;
+	List<BuilderBuildingStatus> builderBuildingStatusList = null;
+	List<BuildingImageGallery> buildingImageGalleries = null;
+	List<BuildingPanoramicImage> buildingPanoramicImages = null;
+	List<BuildingAmenityInfo> buildingAmenityInfos  = null;
+	List<BuildingPaymentInfo> buildingPaymentInfos = null;
+	List<BuildingOfferInfo> buildingOfferInfos = null;
+	List<BuildingAmenityWeightage> buildingAmenityWeightages = null;
 	building_id = Integer.parseInt(request.getParameter("building_id"));
 	session = request.getSession(false);
 	BuilderEmployee adminuserproject = new BuilderEmployee();
@@ -32,23 +42,28 @@
 		if(session.getAttribute("ubname") != null)
 		{
 			adminuserproject  = (BuilderEmployee)session.getAttribute("ubname");
-			p_user_id = adminuserproject.getBuilder().getId();
+			if(adminuserproject != null){
+				p_user_id = adminuserproject.getBuilder().getId();
+				builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
+			}
+			List<BuilderBuilding> builderBuildings = new ProjectDAO().getBuilderProjectBuildingById(building_id);
+			if(builderBuildings.size() > 0) {
+				builderBuilding = builderBuildings.get(0);
+			}
+			
+			builderBuildingStatusList = new BuilderBuildingStatusDAO().getActiveBuilderBuildingStatus();
+			builderBuildingAmenities = new BuilderBuildingAmenityDAO().getActiveBuilderBuildingAmenityList();
+			buildingImageGalleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
+		    buildingPanoramicImages = new ProjectDAO().getBuilderBuildingElevationImagesById(building_id);
+			buildingAmenityInfos = new ProjectDAO().getBuilderBuildingAmenityInfoById(building_id);
+			buildingPaymentInfos = new ProjectDAO().getActiveBuilderBuildingPaymentInfoById(building_id);
+			buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
+			buildingAmenityWeightages = new ProjectDAO().getActiveBuilderBuildingAmenityWeightageById(building_id);
 		}
+		
 	}
-	BuilderBuilding builderBuilding = null;
-	List<BuilderBuilding> builderBuildings = new ProjectDAO().getBuilderProjectBuildingById(building_id);
-	if(builderBuildings.size() > 0) {
-		builderBuilding = builderBuildings.get(0);
-	}
-	List<ProjectData> builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
-	List<BuilderBuildingStatus> builderBuildingStatusList = new BuilderBuildingStatusDAO().getActiveBuilderBuildingStatus();
-	List<BuilderBuildingAmenity> builderBuildingAmenities = new BuilderBuildingAmenityDAO().getActiveBuilderBuildingAmenityList();
-	List<BuildingImageGallery> buildingImageGalleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
-	List<BuildingPanoramicImage> buildingPanoramicImages = new ProjectDAO().getBuilderBuildingElevationImagesById(building_id);
-	List<BuildingAmenityInfo> buildingAmenityInfos = new ProjectDAO().getBuilderBuildingAmenityInfoById(building_id);
-	List<BuildingPaymentInfo> buildingPaymentInfos = new ProjectDAO().getActiveBuilderBuildingPaymentInfoById(building_id);
-	List<BuildingOfferInfo> buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
-	List<BuildingAmenityWeightage> buildingAmenityWeightages = new ProjectDAO().getActiveBuilderBuildingAmenityWeightageById(building_id);
+	
+	
 %>
 
 <!DOCTYPE html>

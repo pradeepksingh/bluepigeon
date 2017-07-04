@@ -1009,8 +1009,11 @@ public class BuyerDAO {
 		Query query = session.createQuery(hql);
 		query.setInteger("builder_id", builderId);
 		totalBuyers = (Long) query.uniqueResult();
-		
-		return totalBuyers;
+		if(totalBuyers != null){
+			return totalBuyers;
+		}else{
+			return (long)0;
+		}
 	}
 	
 }
