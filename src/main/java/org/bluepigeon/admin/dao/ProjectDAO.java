@@ -2894,30 +2894,32 @@ public class ProjectDAO {
 		query.setParameter("builder_id", builderId);
 		List<BuilderProject> result = query.list();
 		List<ProjectList> projects = new ArrayList<ProjectList>();
-		for(BuilderProject builderproject : result) {
-			ProjectList newproject = new ProjectList();
-			newproject.setId(builderproject.getId());
-			newproject.setName(builderproject.getName());
-			newproject.setStatus(builderproject.getStatus());
-			newproject.setBuilderId(builderproject.getBuilder().getId());
-			newproject.setBuilderName(builderproject.getBuilder().getName());
-			newproject.setCityId(builderproject.getCity().getId());
-			newproject.setCityName(builderproject.getCity().getName());
-			newproject.setLocalityId(builderproject.getLocality().getId());
-			newproject.setLocalityName(builderproject.getLocality().getName());
-			newproject.setCompletionStatus(builderproject.getCompletionStatus());
-			if(builderproject.getInventorySold() != null){
-				newproject.setSold(builderproject.getInventorySold());
+		if(result != null){
+			for(BuilderProject builderproject : result) {
+				ProjectList newproject = new ProjectList();
+				newproject.setId(builderproject.getId());
+				newproject.setName(builderproject.getName());
+				newproject.setStatus(builderproject.getStatus());
+				newproject.setBuilderId(builderproject.getBuilder().getId());
+				newproject.setBuilderName(builderproject.getBuilder().getName());
+				newproject.setCityId(builderproject.getCity().getId());
+				newproject.setCityName(builderproject.getCity().getName());
+				newproject.setLocalityId(builderproject.getLocality().getId());
+				newproject.setLocalityName(builderproject.getLocality().getName());
+				newproject.setCompletionStatus(builderproject.getCompletionStatus());
+				if(builderproject.getInventorySold() != null){
+					newproject.setSold(builderproject.getInventorySold());
+				}
+				if(builderproject.getTotalInventory() != null){
+					newproject.setTotalSold(builderproject.getTotalInventory());
+				}
+				totalLeads = getTotalLeadsByProjectId(builderproject.getId());
+				if(totalLeads != null){
+					newproject.setTotalLeads(totalLeads.intValue());
+				}
+				System.out.println("Project name :: "+builderproject.getName());
+				projects.add(newproject);
 			}
-			if(builderproject.getTotalInventory() != null){
-				newproject.setTotalSold(builderproject.getTotalInventory());
-			}
-			totalLeads = getTotalLeadsByProjectId(builderproject.getId());
-			if(totalLeads != null){
-				newproject.setTotalLeads(totalLeads.intValue());
-			}
-			System.out.println("Project name :: "+builderproject.getName());
-			projects.add(newproject);
 		}
 		session.close();
 		return projects;
@@ -3257,8 +3259,11 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setInteger("builder_id", builderId);
 		totalInventory = (Long) query.uniqueResult();
-		
-		return totalInventory;
+		if(totalInventory != null){
+			return totalInventory;
+		}else{
+			return (long)0;
+		}
 	}
 	
 	/* **************************** Stages / Substages **************************** */
@@ -3778,8 +3783,11 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("builder_id", builder_id);
 		totalLeads = (Long) query.uniqueResult();
-		return totalLeads;
-		
+		if(totalLeads != null){
+			return totalLeads;
+		}else{
+			return (long)0;
+		}
 	}
 	/**
 	 * Get Total leads by builder id
@@ -3811,7 +3819,11 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("builder_id", builderId);
 		totalSoldInventory = (Long) query.uniqueResult();
-		return totalSoldInventory;
+		if(totalSoldInventory != null){
+			return totalSoldInventory;
+		}else{
+			return (long)0;
+		}
 	}
 	/**
 	 * Save source

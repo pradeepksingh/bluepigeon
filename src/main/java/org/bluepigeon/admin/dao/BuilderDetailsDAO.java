@@ -754,14 +754,25 @@ public class BuilderDetailsDAO {
 		List<BuilderProject> projectList = projectQuery.list();
 		System.out.println("Year Count :: "+builderProjectLists.size());
 		int i=0;		
-		for(Long builderProject : builderProjectLists){
-			BarGraphData barGraphData = new BarGraphData();
-			barGraphData.setBuiltYear(projectList.get(i).getPossessionDate());
-			barGraphData.setTotalFlats(getTotalFlatsByBuilderId(builderId));
-			barGraphData.setTotalBuyers(getTotalBuyersByBuilderId(builderId));
-			barGraphData.setTotalSold(getTotalsoldFlatsByBuilderId(builderId));
-			barGraphDatas.add(barGraphData);
-			i++;
+		if(projectList != null && builderProjectLists != null){
+			try{
+				for(Long builderProject : builderProjectLists){
+					BarGraphData barGraphData = new BarGraphData();
+					barGraphData.setBuiltYear(projectList.get(i).getPossessionDate());
+					barGraphData.setTotalFlats(getTotalFlatsByBuilderId(builderId));
+					barGraphData.setTotalBuyers(getTotalBuyersByBuilderId(builderId));
+					barGraphData.setTotalSold(getTotalsoldFlatsByBuilderId(builderId));
+					barGraphDatas.add(barGraphData);
+					i++;
+				}
+			}catch(IndexOutOfBoundsException e){
+				BarGraphData barGraphData = new BarGraphData();
+				barGraphData.setBuiltYear(null);
+				barGraphData.setTotalFlats(getTotalFlatsByBuilderId(builderId));
+				barGraphData.setTotalBuyers(getTotalBuyersByBuilderId(builderId));
+				barGraphData.setTotalSold(getTotalsoldFlatsByBuilderId(builderId));
+				barGraphDatas.add(barGraphData);
+			}
 		}
 		return barGraphDatas;
 	}
@@ -790,7 +801,11 @@ public class BuilderDetailsDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("builder_id", builderId);
 		totalFlats = (Long) query.uniqueResult();
-		return totalFlats;
+		if(totalFlats != null){
+			return totalFlats;
+		}else{
+			return (long)0;
+		}
 	}
 	/**
 	 * Get all owner's count by builder id
