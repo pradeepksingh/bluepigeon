@@ -26,6 +26,7 @@
 	int building_id = 0;
 	int project_id = 0;
 	int floor_id = 0;
+	List<ProjectData> builderProjects = null;
 	flat_id = Integer.parseInt(request.getParameter("flat_id"));
 	session = request.getSession(false);
 	BuilderEmployee adminuserproject = new BuilderEmployee();
@@ -34,7 +35,10 @@
 		if(session.getAttribute("ubname") != null)
 		{
 			adminuserproject  = (BuilderEmployee)session.getAttribute("ubname");
-			p_user_id = adminuserproject.getBuilder().getId();
+			if(adminuserproject != null){
+				p_user_id = adminuserproject.getBuilder().getId();
+				builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
+			}
 		}
 	}
 	List<BuilderBuilding> buildings = null;
@@ -48,14 +52,12 @@
 		project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
 		buildings = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
 		floors = new ProjectDAO().getBuildingActiveFloors(building_id);
-		
 	}
 	List<BuilderFlatStatus> builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderActiveFlatStatus();
 	List<BuilderFlatAmenity> builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderActiveFlatAmenityList();
 	List<FlatAmenityInfo> flatAmenityInfos = new ProjectDAO().getBuilderFlatAmenityInfos(flat_id);
 	List<PaymentInfoData> flatPaymentSchedules = new ProjectDAO().getFlatPaymentSchedules(flat_id);
 	List<BuilderBuildingFlatType> builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeByBuildingId(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
-	List<ProjectData> builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
 	List<FlatAmenityWeightage> flatAmenityWeightages = new ProjectDAO().getActiveFlatAmenityWeightageByFlatId(flat_id);
 %>
 <!DOCTYPE html>

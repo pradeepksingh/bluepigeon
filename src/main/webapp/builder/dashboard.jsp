@@ -243,6 +243,7 @@
                    		<%
                        		if(project_list !=null){
                        			for(ProjectList projectList : project_list ){
+                       				if(projectList.getId() > 0){
                        	%>
                        <div class="col-md-6 col-sm-6 col-xs-12 projectsection">
 	                       <div class="image">
@@ -287,9 +288,12 @@
 	                       
 	                       <%  
                        		}
+                       		else{
+                        		out.print("<h2><center>No Records Found</center></h2>");
+                        		break;
+                       		 }
                        	}
-                   		
-                        %>
+                       	}%>
                         </div>
 <!--                         <div class="image"> -->
 <!--                           <div class="image"> -->
@@ -849,8 +853,9 @@
     	    	
     	    	
    		      y: '<% DateFormat dateFormat = new SimpleDateFormat("yyyy");
-    	    	    Date date = barGraphData.getBuiltYear();
-   		      out.print(dateFormat.format(date));%>',
+    	    	    if(barGraphData.getBuiltYear() != null){
+    	    	    	Date date = barGraphData.getBuiltYear();
+   		      out.print(dateFormat.format(date));}%>',
     	        Flat: <%out.print(barGraphData.getTotalFlats());%>,
              Buyer: <%out.print(barGraphData.getTotalBuyers()); %>,
              Purchases: <% out.print(barGraphData.getTotalSold());%>

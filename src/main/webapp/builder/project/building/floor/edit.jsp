@@ -18,30 +18,36 @@
 <%
 	int floor_id = 0;
 	int p_user_id = 0;
+	BuilderFloor builderFloor = null;
+	List<BuilderBuilding> buildings = null;
+	List<FloorAmenityInfo> floorAmenityInfos = null;
+	List<FloorLayoutImage> floorLayoutImages = null;
+	List<BuilderFloorStatus> builderFloorStatuses = null;
+	List<BuilderFloorAmenity> builderFloorAmenities = null;
+	List<ProjectData> builderProjects  = null;
+	List<FloorAmenityWeightage> floorAmenityWeightages  = null;
 	floor_id = Integer.parseInt(request.getParameter("floor_id"));
 	session = request.getSession(false);
 	BuilderEmployee adminuserproject = new BuilderEmployee();
-	if(session!=null)
-	{
-		if(session.getAttribute("ubname") != null)
-		{
+	if(session!=null){
+		if(session.getAttribute("ubname") != null){
 			adminuserproject  = (BuilderEmployee)session.getAttribute("ubname");
-			p_user_id = adminuserproject.getBuilder().getId();
+			if(adminuserproject != null){
+				p_user_id = adminuserproject.getBuilder().getId();
+			}
+			List<BuilderFloor> builderFloors = new ProjectDAO().getBuildingActiveFloorById(floor_id);
+			if(builderFloors.size() > 0) {
+				builderFloor = builderFloors.get(0);
+				buildings = new ProjectDAO().getBuilderActiveProjectBuildings(builderFloor.getBuilderBuilding().getBuilderProject().getId());
+			}
+			 floorAmenityInfos = new ProjectDAO().getBuildingFloorAmenityInfo(floor_id);
+			 floorLayoutImages = new ProjectDAO().getBuildingFloorPlanInfo(floor_id);
+			 builderFloorStatuses = new BuilderFloorStatusDAO().getActiveFloorStatus();
+			 builderFloorAmenities = new BuilderFloorAmenityDAO().getBuilderActiveFloorAmenityList();
+			 builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
+			floorAmenityWeightages = new ProjectDAO().getActiveFloorAmenityWeightages(floor_id);
 		}
 	}
-	BuilderFloor builderFloor = null;
-	List<BuilderBuilding> buildings = null;
-	List<BuilderFloor> builderFloors = new ProjectDAO().getBuildingActiveFloorById(floor_id);
-	if(builderFloors.size() > 0) {
-		builderFloor = builderFloors.get(0);
-		buildings = new ProjectDAO().getBuilderActiveProjectBuildings(builderFloor.getBuilderBuilding().getBuilderProject().getId());
-	}
-	List<FloorAmenityInfo> floorAmenityInfos = new ProjectDAO().getBuildingFloorAmenityInfo(floor_id);
-	List<FloorLayoutImage> floorLayoutImages = new ProjectDAO().getBuildingFloorPlanInfo(floor_id);
-	List<BuilderFloorStatus> builderFloorStatuses = new BuilderFloorStatusDAO().getActiveFloorStatus();
-	List<BuilderFloorAmenity> builderFloorAmenities = new BuilderFloorAmenityDAO().getBuilderActiveFloorAmenityList();
-	List<ProjectData> builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
-	List<FloorAmenityWeightage> floorAmenityWeightages = new ProjectDAO().getActiveFloorAmenityWeightages(floor_id);
 %>
 
 <!DOCTYPE html>

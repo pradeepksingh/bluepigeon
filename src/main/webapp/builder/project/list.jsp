@@ -25,11 +25,12 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_uid = builder.getBuilder().getId();
+			if(builder_uid > 0){
+				project_list = new ProjectDAO().getBuilderActiveProjectsByBuilderId(builder_uid);
+				int builder_size = project_list.size();
+			}
 		}
-		if(builder_uid > 0){
-			project_list = new ProjectDAO().getBuilderActiveProjectsByBuilderId(builder_uid);
-			int builder_size = project_list.size();
-		}
+		
    	}
 	List<State> stateList = new StateImp().getActiveStateByCountryId(1);
 	
