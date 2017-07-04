@@ -2,6 +2,7 @@ package org.bluepigeon.admin.dao;
 
 import java.util.List;
 
+import org.bluepigeon.admin.data.PriceInfoData;
 import org.bluepigeon.admin.data.ProjectPriceInfoData;
 import org.bluepigeon.admin.model.BuilderFlatType;
 import org.bluepigeon.admin.model.BuilderProjectPriceInfo;
@@ -23,16 +24,33 @@ public class BuilderProjectPriceInfoDAO {
 		session.close();
 		return result.get(0);
 	}
-	
-	public List<BuilderProjectPriceInfo> getBuilderProjectPriceInfos(int project_id) {
+	public PriceInfoData getBuilderProjectPriceInfos(int project_id) {
+		PriceInfoData priceInfoData = null; 
 		String hql = "from BuilderProjectPriceInfo where builderProject.id = :project_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("project_id", project_id);
 		List<BuilderProjectPriceInfo> result = query.list();
+		
+		if(result.get(0) != null){
+			priceInfoData = new PriceInfoData();
+			priceInfoData.setId(result.get(0).getId());
+			priceInfoData.setAmenityRate(result.get(0).getAmenityRate());
+			//priceInfoData.setAreaUnits(result.get(0).getAreaUnit());
+			priceInfoData.setBaseRate(result.get(0).getBasePrice());
+			priceInfoData.setMaintainance(result.get(0).getMaintenance());
+			priceInfoData.setParking(result.get(0).getParking());
+			priceInfoData.setPost(result.get(0).getPost());
+			priceInfoData.setRiseRate(result.get(0).getRiseRate());
+			priceInfoData.setTenure(result.get(0).getTenure());
+			priceInfoData.setFee(result.get(0).getFee());
+			priceInfoData.setStampDuty(result.get(0).getStampDuty());
+			priceInfoData.setTax(result.get(0).getTax());
+			priceInfoData.setVat(result.get(0).getVat());
+		}
 		session.close();
-		return result;
+		return priceInfoData;
 	}
 	
 	public ProjectPriceInfoData getProjectPriceInfoByProjectId(int projectId){

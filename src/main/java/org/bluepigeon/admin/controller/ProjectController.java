@@ -31,6 +31,7 @@ import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.LocalityData;
 import org.bluepigeon.admin.data.PaymentInfoData;
+import org.bluepigeon.admin.data.PriceInfoData;
 import org.bluepigeon.admin.data.ProjectAmenityData;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectDetail;
@@ -102,6 +103,8 @@ import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.server.ResourceConfig;
+
+import com.google.gson.Gson;
 @Path("project")
 public class ProjectController extends ResourceConfig {
 	@Context ServletContext context;
@@ -395,6 +398,7 @@ public class ProjectController extends ResourceConfig {
 			msg = projectDAO.updateProjectAmenityWeightage(projectAmenityWeightages, project_id);
 		}
 		List<ProjectWeightage> projectWeightages = new ArrayList<ProjectWeightage>();
+		if(ssubstagewt_id != null){
 		for(int i=0 ;i < ssubstagewt_id.size();i++) {
 			ProjectWeightage paw = new ProjectWeightage();
 			paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
@@ -404,7 +408,7 @@ public class ProjectController extends ResourceConfig {
 		if(projectWeightages.size() > 0) {
 			msg = projectDAO.updateProjectWeightageStatus(projectWeightages, project_id);
 		}
-		
+		}
 		try {	
 			List<ProjectImageGallery> projectImageGalleries = new ArrayList<ProjectImageGallery>();
 			//for multiple inserting images.
@@ -2606,9 +2610,9 @@ public class ProjectController extends ResourceConfig {
 	@GET
 	@Path("/building/prices/{project_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public BuilderProjectPriceInfo getBuildingPricing(@PathParam("project_id") int project_id) {
+	public PriceInfoData getBuildingPricing(@PathParam("project_id") int project_id) {
 		BuilderProjectPriceInfoDAO  builderProjectPriceInfoDAO= new BuilderProjectPriceInfoDAO();
-		return builderProjectPriceInfoDAO.getBuilderProjectPriceInfo(project_id);
+		return builderProjectPriceInfoDAO.getBuilderProjectPriceInfos(project_id);
 	}
 }
 

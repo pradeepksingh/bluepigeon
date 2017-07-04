@@ -498,8 +498,8 @@ function getActiveProjectFlats(){
 				
 				$(data[index].buildingListDatas).each(function(index1){
 					i++;
-					alert(i);
-					alert(active);
+					//alert(i);
+					//alert(active);
 					html+="<div class='item "+active+"'><div class='row'><div class='col-md-9'><div class='col-sm-12'><label for='password' class='control-label bold'>Building "+data[index].buildingListDatas[index1].buildingName+"</label></div>";
 					buildingImg = data[index].buildingListDatas[index1].buildingImage;
 					
@@ -519,7 +519,7 @@ function getActiveProjectFlats(){
 					});
 				});
 			});
-			alert(html);
+		//	alert(html);
 		   $("#flatList").append(html);
 		 
 		  

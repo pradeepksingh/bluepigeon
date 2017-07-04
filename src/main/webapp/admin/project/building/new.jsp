@@ -238,7 +238,7 @@
 													<label class="control-label col-sm-4">Select Image </label>
 													<div class="col-sm-8 input-group" style="padding:0px 12px;">
 														<input type="file" class="form-control" id="building_image" name="building_image[]" />
-														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a></span>
+														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
@@ -265,7 +265,7 @@
 													<label class="control-label col-sm-4">Select Image </label>
 													<div class="col-sm-8 input-group" style="padding:0px 12px;">
 														<input type="file" class="form-control" id="elevation_image" name="elevation_image[]" />
-														<a href="javascript:removeElvImage(2);" class="input-group-addon btn-danger">x</a></span>
+														<a href="javascript:removeElvImage(2);" class="input-group-addon btn-danger">x</a>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
@@ -288,151 +288,153 @@
 			 			<div class="row">
 			 				<div id="pricingresponse"></div>
 			 				<%if(projectPriceInfo != null){ %>
-							<div class="col-lg-12">
-								<div class="panel panel-default">
-									<div class="panel-body">
-										<div class="row">
-											<div class="col-lg-6">
-											   <input type="hidden" name="id" value="<% out.print(projectPriceInfo.getId());%>"/>
-												<div class="form-group" id="error-base_unit">
-													<label class="control-label col-sm-4">Pricing Unit <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-														<select name="base_unit" id="base_unit" class="form-control">
-															<%	if(projectPriceInfo.getAreaUnit() != null){ 
-															for(AreaUnit areaUnit :areaUnits) { %>
-															<option value="<% out.print(areaUnit.getId()); %>" <% if(projectPriceInfo.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
-															<% }} %>
-														</select>
+			 				<div id="price_schedule">
+								<div class="col-lg-12">
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<div class="row">
+												<div class="col-lg-6">
+												   <input type="hidden" name="id" value="<% out.print(projectPriceInfo.getId());%>"/>
+													<div class="form-group" id="error-base_unit">
+														<label class="control-label col-sm-4">Pricing Unit <span class='text-danger'>*</span></label>
+														<div class="col-sm-8">
+															<select name="base_unit" id="base_unit" class="form-control">
+																<%	if(projectPriceInfo.getAreaUnit() != null){ 
+																for(AreaUnit areaUnit :areaUnits) { %>
+																<option value="<% out.print(areaUnit.getId()); %>" <% if(projectPriceInfo.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
+																<% }} %>
+															</select>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-base_rate">
+														<label class="control-label col-sm-4">Base Rate <span class='text-danger'>*</span></label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="base_rate" name="base_rate" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
+														</div>
+														<div class="messageContainer"></div>
 													</div>
 												</div>
 											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-base_rate">
-													<label class="control-label col-sm-4">Base Rate <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="base_rate" name="base_rate" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
+											<div class="row">
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-rise_rate">
+														<label class="control-label col-sm-4">Floor Rise Rate</label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
+														</div>
+														<div class="messageContainer"></div>
 													</div>
-													<div class="messageContainer"></div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-post">
+														<label class="control-label col-sm-4">Applicable Post </label>
+														<div class="col-sm-8 input-group" style="padding: 0px 12px;">
+															<input type="text" class="form-control" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
+															<span class="input-group-addon">floor</span>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
 												</div>
 											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-rise_rate">
-													<label class="control-label col-sm-4">Floor Rise Rate</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
+											<div class="row">
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-maintenance">
+														<label class="control-label col-sm-4">Maintenance Charge </label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="maintenance" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
+														</div>
+														<div class="messageContainer"></div>
 													</div>
-													<div class="messageContainer"></div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-tenure">
+														<label class="control-label col-sm-4">Tenure </label>
+														<div class="col-sm-8 input-group" style="padding: 0px 12px;">
+															<input type="text" class="form-control" id="tenure" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>"/>
+															<span class="input-group-addon">Months</span>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
 												</div>
 											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-post">
-													<label class="control-label col-sm-4">Applicable Post </label>
-													<div class="col-sm-8 input-group" style="padding: 0px 12px;">
-														<input type="text" class="form-control" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
-														<span class="input-group-addon">floor</span>
+											<div class="row">
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-amenity_rate">
+														<label class="control-label col-sm-4">Amenities Facing Rate</label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
+														</div>
+														<div class="messageContainer"></div>
 													</div>
-													<div class="messageContainer"></div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-landmark">
+														<label class="control-label col-sm-4">Parking Type </label>
+														<div class="col-sm-8">
+															<select id="parking_id" name="parking_id" class="form-control">
+																<option value="0">Select Parking Type</option>
+																<option value="1">Open Parking</option>
+																<option value="2">Shed Parking</option>
+															</select>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
 												</div>
 											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-maintenance">
-													<label class="control-label col-sm-4">Maintenance Charge </label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="maintenance" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
+											<div class="row">
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-landmark">
+														<label class="control-label col-sm-4">Parking</label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="parking" name="parking" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
+														</div>
+														<div class="messageContainer"></div>
 													</div>
-													<div class="messageContainer"></div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-landmark">
+														<label class="control-label col-sm-4">Stamp Duty </label>
+														<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
+															<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
+															<span class="input-group-addon">%</span>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
 												</div>
 											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-tenure">
-													<label class="control-label col-sm-4">Tenure </label>
-													<div class="col-sm-8 input-group" style="padding: 0px 12px;">
-														<input type="text" class="form-control" id="tenure" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>"/>
-														<span class="input-group-addon">Months</span>
+											<div class="row">
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-tax">
+														<label class="control-label col-sm-4">Tax</label>
+														<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
+															<input type="text" class="form-control" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
+															<span class="input-group-addon">%</span>
+														</div>
+														<div class="messageContainer"></div>
 													</div>
-													<div class="messageContainer"></div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-vat">
+														<label class="control-label col-sm-4">VAT </label>
+														<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
+															<input type="text" class="form-control" id="vat" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
+															<span class="input-group-addon">%</span>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
 												</div>
 											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-amenity_rate">
-													<label class="control-label col-sm-4">Amenities Facing Rate</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
+											<div class="row">
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-tech_fee">
+														<label class="control-label col-sm-4">Tech Fees</label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="tech_fee" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
+														</div>
+														<div class="messageContainer"></div>
 													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Parking Type </label>
-													<div class="col-sm-8">
-														<select id="parking_id" name="parking_id" class="form-control">
-															<option value="0">Select Parking Type</option>
-															<option value="1">Open Parking</option>
-															<option value="2">Shed Parking</option>
-														</select>
-													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Parking</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="parking" name="parking" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
-													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Stamp Duty </label>
-													<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
-														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
-														<span class="input-group-addon">%</span>
-													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-tax">
-													<label class="control-label col-sm-4">Tax</label>
-													<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
-														<input type="text" class="form-control" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
-														<span class="input-group-addon">%</span>
-													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-vat">
-													<label class="control-label col-sm-4">VAT </label>
-													<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
-														<input type="text" class="form-control" id="vat" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
-														<span class="input-group-addon">%</span>
-													</div>
-													<div class="messageContainer"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-tech_fee">
-													<label class="control-label col-sm-4">Tech Fees</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" id="tech_fee" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
-													</div>
-													<div class="messageContainer"></div>
 												</div>
 											</div>
 										</div>
@@ -885,7 +887,167 @@ function removeOffer(id) {
 
 $("#project_id").change(function(){
 	//alert("ProjectId :: "+$("#project_id").val());
-
+	getPriceDetails();
+	getProjectShedule();
+});
+function getPriceDetails(){
+	$("#price_schedule").empty();
+	var html ="";
+	var project_id = $("#project_id").val();
+	$.get("${baseUrl}/webapi/project/building/prices/"+project_id, { }, function(data){
+	 html=+'<div id="price_schedule">'
+		  +'<div class="col-lg-12">'
+		  +'<div class="panel panel-default">'
+		  +'<div class="panel-body">'
+		  +'<div class="row">'
+		  +'<div class="col-lg-6">'
+		  +'<div class="form-group" id="error-base_unit">'
+		  +'<label class="control-label col-sm-4">Pricing Unit <span class="text-danger">*</span></label>'
+		  +'<div class="col-sm-8">'
+		  +'<select name="base_unit" id="base_unit" class="form-control">'
+		  +'<option >Test</option>'	
+		  +'</select>'
+		  +'</div>'
+		  +'</div>'
+		  +'</div>'
+		  +'<div class="col-lg-6 margin-bottom-5">'
+		  +'<div class="form-group" id="error-base_rate">'
+		  +'<label class="control-label col-sm-4">Base Rate <span class="text-danger">*</span></label>'
+		  +'<div class="col-sm-8">'
+		  +'<input type="text" class="form-control" id="base_rate" name="base_rate" value="'+data.baseRate+'"/>'
+		  +'</div>'
+		  +'<div class="messageContainer"></div>'
+		  +'</div>'
+		  +'</div>'
+		  +'</div>'
+		  +'<div class="row">'
+		  +'<div class="col-lg-6 margin-bottom-5">'
+		  +'<div class="form-group" id="error-rise_rate">'
+		  +'<label class="control-label col-sm-4">Floor Rise Rate</label>'
+		  +'<div class="col-sm-8">'
+		  +'<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="'+data.riseRate+'"/>'
+		  +'</div>'
+		  +'<div class="messageContainer"></div>'
+		  +'</div>'
+		  +'</div>'
+		  +'<div class="col-lg-6 margin-bottom-5">'
+		  +'<div class="form-group" id="error-post">'
+		  +'<label class="control-label col-sm-4">Applicable Post </label>'
+		  +'<div class="col-sm-8 input-group" style="padding: 0px 12px;">'
+		  +'<input type="text" class="form-control" id="post" name="post" value="'+data.post+'"/>'
+		  +'<span class="input-group-addon">floor</span>'
+		  +'</div>'
+		  +'<div class="messageContainer"></div>'
+		  +'</div>'
+		  +'</div>'
+		  +'</div>'
+		  +'<div class="row">'
+		  +'<div class="col-lg-6 margin-bottom-5">'
+		  +'<div class="form-group" id="error-maintenance">'
+		  +'<label class="control-label col-sm-4">Maintenance Charge </label>'
+		  +'<div class="col-sm-8">'
+		  +'<input type="text" class="form-control" id="maintenance" name="maintenance" value="'+data.maintainance+'"/>'
+		  +'</div>'
+		  +'<div class="messageContainer"></div>'
+		  +'</div>'
+		  +'</div>'
+		  +'<div class="col-lg-6 margin-bottom-5">'
+		  +'<div class="form-group" id="error-tenure">'
+		  +'<label class="control-label col-sm-4">Tenure </label>'
+		  +'<div class="col-sm-8 input-group" style="padding: 0px 12px;">'
+		  +'<input type="text" class="form-control" id="tenure" name="tenure" value="'+data.tenure+'"/>'
+		  +'<span class="input-group-addon">Months</span>'
+		  +'</div>'
+		  +'<div class="messageContainer"></div>'
+		  +'</div>'
+		  +'</div>'
+		  +'</div>'
+		  +'<div class="row">'
+		  +'<div class="col-lg-6 margin-bottom-5">'
+		  +'<div class="form-group" id="error-amenity_rate">'
+		  +'<label class="control-label col-sm-4">Amenities Facing Rate</label>'
+		  +'<div class="col-sm-8">'
+		  +'<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="'+data.amenityRate+'"/>'
+		  +'</div>'
+		  +'<div class="messageContainer"></div>'
+		  +'</div>'
+		  +'</div>'
+		  +'<div class="col-lg-6 margin-bottom-5">'
+		  +'<div class="form-group" id="error-landmark">'
+		  +'<label class="control-label col-sm-4">Parking Type </label>'
+		  +'<div class="col-sm-8">'
+		  +'<select id="parking_id" name="parking_id" class="form-control">'
+		  +'<option value="0">Select Parking Type</option>'
+		  +'<option value="1">Open Parking</option>'
+		  +'<option value="2">Shed Parking</option>'
+		  +'</select>'
+		  +'</div>'
+		  +'<div class="messageContainer"></div>'
+		  +'</div>'
+		  +'</div>'
+		  +'</div>'
+		  +'<div class="row">'
+		  +'<div class="col-lg-6 margin-bottom-5">'
+		  +'<div class="form-group" id="error-landmark">'
+		  +'<label class="control-label col-sm-4">Parking</label>'
+		  +'<div class="col-sm-8">'
+		  +'<input type="text" class="form-control" id="parking" name="parking" value="'+data.parking+'"/>'
+		  +'</div>'
+		  +'<div class="messageContainer"></div>'
+		  +'</div>'
+		  +'</div>'
+		  +'<div class="col-lg-6 margin-bottom-5">'
+		  +'<div class="form-group" id="error-landmark">'
+		  +'<label class="control-label col-sm-4">Stamp Duty </label>'
+	      +'<div class="col-sm-8 input-group"  style="padding: 0px 12px;">'
+		  +'<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="'+data.stampDuty+'"/>'
+		  +'<span class="input-group-addon">%</span>'
+		  +'</div>'
+		  +'<div class="messageContainer"></div>'
+		  +'</div>'
+		  +'</div>'
+		  +'</div>'
+		  +'<div class="row">'
+		  +'<div class="col-lg-6 margin-bottom-5">'
+		  +'<div class="form-group" id="error-tax">'
+		  +'<label class="control-label col-sm-4">Tax</label>'
+		  +'<div class="col-sm-8 input-group"  style="padding: 0px 12px;">'
+		  +'<input type="text" class="form-control" id="tax" name="tax" value="'+data.tax+'"/>'
+		  +'<span class="input-group-addon">%</span>'
+		  +'</div>'
+		  +'<div class="messageContainer"></div>'
+		  +'</div>'
+		  +'</div>'
+		  +'<div class="col-lg-6 margin-bottom-5">'
+		  +'<div class="form-group" id="error-vat">'
+		  +'<label class="control-label col-sm-4">VAT </label>'
+		  +'<div class="col-sm-8 input-group"  style="padding: 0px 12px;">'
+		  +'<input type="text" class="form-control" id="vat" name="vat" value="'+data.vat+'"/>'
+		  +'<span class="input-group-addon">%</span>'
+		  +'</div>'
+		  +'<div class="messageContainer"></div>'
+		  +'</div>'
+		  +'</div>'
+		  +'</div>'
+		  +'<div class="row">'
+		  +'<div class="col-lg-6 margin-bottom-5">'
+		  +'<div class="form-group" id="error-tech_fee">'
+		  +'<label class="control-label col-sm-4">Tech Fees</label>'
+		  +'<div class="col-sm-8">'
+		  +'<input type="text" class="form-control" id="tech_fee" name="tech_fee" value="'+data.fee+'"/>'
+		  +'</div>'
+		  +'<div class="messageContainer"></div>'
+		  +'</div>'
+		  +'</div>'
+		  +'</div>'
+		  +'</div>'
+		  +'</div>'
+	      +'</div>';
+	  	html = html.replace("NaN","");
+	$("#pricingresponse").append(html);
+	});
+}
+function getProjectShedule(){
 	$("#payment_schedule").empty();
     var html = "";
 	var project_id = $("#project_id").val();
@@ -936,7 +1098,7 @@ $("#project_id").change(function(){
 		html = html.replace("NaN","");
 		$("#paymentresponse").html(html);
 	});
-});
+}
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
