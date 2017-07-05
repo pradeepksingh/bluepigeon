@@ -22,7 +22,7 @@ public class FlatSubstage implements java.io.Serializable {
 	private FlatStage flatStage;
 	private String name;
 	private Byte status;
-	private Byte isDeleted;
+	private Byte isDeleted=0;
 
 	public FlatSubstage() {
 	}

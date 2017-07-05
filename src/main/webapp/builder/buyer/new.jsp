@@ -20,6 +20,7 @@
 	List<BuilderProject> project_list = null; 
 	List<FlatPaymentSchedule> flatPayments = null;
 	ProjectPriceInfoData projectPriceInfoData = null;
+	BuilderFlat builderFlat = null;
 	int builder_id1 = 0;
 	int flat_id = 0;
 	
@@ -44,6 +45,7 @@
 	if (request.getParameterMap().containsKey("flat_id")) {
 		flat_id = Integer.parseInt(request.getParameter("flat_id"));
 		flatPayments = new ProjectDAO().getFlatPaymentByFlatId(flat_id);
+		builderFlat = new ProjectDAO().getBuilderFlatById(flat_id);
 	}
 %>
 <!DOCTYPE html>
@@ -212,6 +214,24 @@
                               			</div>
                              		</div>
                              <div id="vimessages1" class="tab-pane" aria-expanded="false">
+                             	  <div class="form-group row">
+                                    <label for="example-text-input" class="col-3 col-form-label">Project Name</label>
+                                    <div class="col-6">
+                                      <input type="text" readonly="true" value="<%out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName());%>">
+                                    </div>
+                                  </div>
+                                  <div class="form-group row">
+                                    <label for="example-text-input" class="col-3 col-form-label">Building Name</label>
+                                    <div class="col-6">
+                                     <input type="text" readonly="true" value="<%out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getName());%>">
+                                    </div>
+                                 </div>
+                                 <div class="form-group row">
+                                    <label for="example-text-input" class="col-3 col-form-label">Assign Manager</label>
+                                    <div class="col-6">
+                                      <input type="text" readonly="true" value="<%out.print(builderFlat.getFlatNo());%>">
+                                    </div>
+                                 </div>
                                  <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Assign Manager</label>
                                     <div class="col-6">

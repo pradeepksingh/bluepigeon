@@ -32,7 +32,7 @@ public class ProjectStageDAO {
 				newsession.getTransaction().commit();
 				newsession.close();
 				response.setStatus(1);
-				response.setMessage("Project Stage Updated Successfully");
+				response.setMessage("Project Stage Added Successfully");
 			}
 		}
 		return response;
@@ -60,7 +60,7 @@ public class ProjectStageDAO {
 			newsession.getTransaction().commit();
 			newsession.close();
 			response.setStatus(1);
-			response.setMessage("Success");
+			response.setMessage("Project Stage Updated Successfully");
 		}
 		return response;
 	}

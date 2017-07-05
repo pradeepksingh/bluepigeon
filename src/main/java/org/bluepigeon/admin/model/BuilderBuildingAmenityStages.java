@@ -25,7 +25,7 @@ public class BuilderBuildingAmenityStages implements java.io.Serializable {
 	private BuilderBuildingAmenity builderBuildingAmenity;
 	private String name;
 	private Byte status;
-	private Byte isDeleted;
+	private Byte isDeleted=0;
 	private Set<BuilderBuildingAmenitySubstages> builderBuildingAmenitySubstageses = new HashSet<BuilderBuildingAmenitySubstages>(
 			0);
 

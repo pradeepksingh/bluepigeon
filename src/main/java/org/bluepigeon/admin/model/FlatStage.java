@@ -22,7 +22,7 @@ public class FlatStage implements java.io.Serializable {
 	private Integer id;
 	private String name;
 	private Byte status;
-	private Byte isDeleted;
+	private Byte isDeleted=0;
 	private Set<FlatSubstage> flatSubstages = new HashSet<FlatSubstage>(0);
 
 	public FlatStage() {

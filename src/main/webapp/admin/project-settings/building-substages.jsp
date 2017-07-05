@@ -52,19 +52,19 @@ building_stage_size = building_stage_list.size();
                         <!--Contacts tab starts-->
                         <div class="tab-pane fade active in" id="contacts" aria-labelledby="contacts-tab">
                             <div class="contacts-list">
-                            	<div class="col-sm-6">
-		                            <div class="form-group">
-						                <label class="col-sm-6 control-label">Select Building Stage</label>
-						                <div class="col-sm-6">
-							                <select name="searchbuildingstageId" id="searchbuildingstageId" class="form-control">
-							                    <option value="0">Select Building Stage</option>
-							                    <% for(int i=0; i < building_stage_size ; i++){ %>
-												<option value="<% out.print(building_stage_list.get(i).getId());%>" <% if(stage_id == building_stage_list.get(i).getId()) { %>selected<% } %>><% out.print(building_stage_list.get(i).getName());%></option>
-												<% } %>
-							                </select>
-						                </div>
-					                </div>
-				                </div>
+<!--                             	<div class="col-sm-6"> -->
+<!-- 		                            <div class="form-group"> -->
+<!-- 						                <label class="col-sm-6 control-label">Select Building Stage</label> -->
+<!-- 						                <div class="col-sm-6"> -->
+<!-- 							                <select name="searchbuildingstageId" id="searchbuildingstageId" class="form-control"> -->
+<!-- 							                    <option value="0">Select Building Stage</option> -->
+<%-- 							                    <% for(int i=0; i < building_stage_size ; i++){ %> --%>
+<%-- 												<option value="<% out.print(building_stage_list.get(i).getId());%>" <% if(stage_id == building_stage_list.get(i).getId()) { %>selected<% } %>><% out.print(building_stage_list.get(i).getName());%></option> --%>
+<%-- 												<% } %> --%>
+<!-- 							                </select> -->
+<!-- 						                </div> -->
+<!-- 					                </div> -->
+<!-- 				                </div> -->
 				              
                                 <table class="table table-striped table-bordered" id="buildingsubstagetable">
                                     <thead>
@@ -174,7 +174,7 @@ $(document).ready(function(){
 });
 $('#name').keyup(function() {
     var $th = $(this);
-    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+    $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 function addBuildingSubstage() {
 	$.post("${baseUrl}/webapi/create/building/substage/save/",{ stage_id: $("#stage_id").val(), name: $("#name").val(), status: $("#status").val()}, function(data){
