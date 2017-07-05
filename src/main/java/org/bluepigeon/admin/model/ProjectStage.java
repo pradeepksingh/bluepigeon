@@ -25,7 +25,7 @@ public class ProjectStage implements java.io.Serializable {
 	private Integer id;
 	private String name;
 	private Byte status;
-	private Byte isDeleted;
+	private Byte isDeleted=0;
 	private Set<ProjectSubstage> projectSubstages = new HashSet<ProjectSubstage>(0);
 
 	public ProjectStage() {

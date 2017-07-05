@@ -52,19 +52,19 @@ project_stage_size = project_stage_list.size();
                         <!--Contacts tab starts-->
                         <div class="tab-pane fade active in" id="contacts" aria-labelledby="contacts-tab">
                             <div class="contacts-list">
-                            	<div class="col-sm-6">
-		                            <div class="form-group">
-						                <label class="col-sm-6 control-label">Select Project Stage</label>
-						                <div class="col-sm-6">
-							                <select name="searchprojectstageId" id="searchprojectstageId" class="form-control">
-							                    <option value="0">Select Project Stage</option>
-							                    <% for(int i=0; i < project_stage_size ; i++){ %>
-												<option value="<% out.print(project_stage_list.get(i).getId());%>" <% if(stage_id == project_stage_list.get(i).getId()) { %>selected<% } %>><% out.print(project_stage_list.get(i).getName());%></option>
-												<% } %>
-							                </select>
-						                </div>
-					                </div>
-				                </div>
+<!--                             	<div class="col-sm-6"> -->
+<!-- 		                            <div class="form-group"> -->
+<!-- 						                <label class="col-sm-6 control-label">Select Project Stage</label> -->
+<!-- 						                <div class="col-sm-6"> -->
+<!-- 							                <select name="searchprojectstageId" id="searchprojectstageId" class="form-control"> -->
+<!-- 							                    <option value="0">Select Project Stage</option> -->
+<%-- 							                    <% for(int i=0; i < project_stage_size ; i++){ %> --%>
+<%-- 												<option value="<% out.print(project_stage_list.get(i).getId());%>" <% if(stage_id == project_stage_list.get(i).getId()) { %>selected<% } %>><% out.print(project_stage_list.get(i).getName());%></option> --%>
+<%-- 												<% } %> --%>
+<!-- 							                </select> -->
+<!-- 						                </div> -->
+<!-- 					                </div> -->
+<!-- 				                </div> -->
 				              
                                 <table class="table table-striped table-bordered" id="projectsubstagetable">
                                     <thead>

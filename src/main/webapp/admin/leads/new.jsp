@@ -234,7 +234,7 @@ $("#building_id").change(function(){
 	},'json');
 });
 
-$("#email").keyUp(function(){
+$("#email").keyup(function(){
 	var th = $(this);
 	$th.val($th.val().replace(/[^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$]/g,function(str){return '';}));
 });

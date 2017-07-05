@@ -353,7 +353,7 @@ function addMoreImages() {
 }
 
 function removeImage(id) {
-	alert(id);
+	//alert(id);
 	$("#imgdiv-"+id).remove();
 }
 

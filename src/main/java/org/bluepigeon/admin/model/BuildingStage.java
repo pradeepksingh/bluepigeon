@@ -22,7 +22,7 @@ public class BuildingStage implements java.io.Serializable {
 	private Integer id;
 	private String name;
 	private Byte status;
-	private Byte isDeleted;
+	private Byte isDeleted=0;
 	private Set<BuildingSubstage> buildingSubstages = new HashSet<BuildingSubstage>(0);
 
 	public BuildingStage() {

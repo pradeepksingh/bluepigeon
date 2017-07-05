@@ -22,7 +22,7 @@ public class FloorStage implements java.io.Serializable {
 	private Integer id;
 	private String name;
 	private Byte status;
-	private Byte isDeleted;
+	private Byte isDeleted=0;
 	private Set<FloorSubstage> floorSubstages = new HashSet<FloorSubstage>(0);
 
 	public FloorStage() {

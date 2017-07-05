@@ -141,9 +141,11 @@ public class BuilderDetailsDAO {
 		session.getTransaction().commit();
 		session.close();
 		responseMessage.setId(builder.getId());
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Builder Added Successfully");
 		return responseMessage;
 	}
-	public void updateBuilder(Builder builder){
+	public ResponseMessage updateBuilder(Builder builder){
 		ResponseMessage resp = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session newsession = hibernateUtil.openSession();
@@ -151,6 +153,9 @@ public class BuilderDetailsDAO {
 		newsession.update(builder);
 		newsession.getTransaction().commit();
 		newsession.close();
+		resp.setStatus(1);
+		resp.setMessage("Builder Updated Successfully");
+		return resp;
 	}
 	
 	public ResponseMessage updateBuilderCompanyName(List<BuilderCompanyNames> builderCompanyNames){
