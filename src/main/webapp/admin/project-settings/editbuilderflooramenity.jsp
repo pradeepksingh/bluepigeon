@@ -63,7 +63,7 @@
 <script>
 $('#uname').keyup(function() {
     var $th = $(this);
-    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+    $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 $('#updateFloorAmenity').bootstrapValidator({
 	container: function($field, validator) {

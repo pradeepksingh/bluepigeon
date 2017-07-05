@@ -130,7 +130,7 @@ $(document).ready(function(){
 });
 $('#name').keyup(function() {
     var $th = $(this);
-    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease enter only letters.'); return ''; } ) );
+    $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease enter only alphanumeric.'); return ''; } ) );
 });
 function addPaymentStages() {
 	$.post("${baseUrl}/webapi/create/builder/payment/satges/save/",{ name: $("#name").val(), status: $("#status").val()}, function(data){
