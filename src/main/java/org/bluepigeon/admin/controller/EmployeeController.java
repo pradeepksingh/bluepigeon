@@ -100,36 +100,38 @@ public class EmployeeController {
 			propertyManager.setAdminUserRole(adminUserRole);
 		}
 		ResponseMessage msg = new AdminUserDAO().save(propertyManager);
-		if(msg.getId() > 0) {
-			propertyManager.setId(msg.getId());
-		//add gallery images
-		try {	
-			List<AdminUserPhotos> buildingImageGalleries = new ArrayList<AdminUserPhotos>();
-			//for multiple inserting images.
-			if (managerImage.size() > 0) {
-				for(int i=0 ;i < managerImage.size();i++)
-				{
-					if(managerImage.get(i).getFormDataContentDisposition().getFileName() != null && !managerImage.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-						AdminUserPhotos buildingImageGallery = new AdminUserPhotos();
-						String gallery_name = managerImage.get(i).getFormDataContentDisposition().getFileName();
-						long millis = System.currentTimeMillis() % 1000;
-						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-						gallery_name = "images/project/building/images/"+gallery_name;
-						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-						System.out.println("for loop image path: "+uploadGalleryLocation);
-						this.imageUploader.writeToFile(managerImage.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-						buildingImageGallery.setPhotoUrl(gallery_name);
-						buildingImageGallery.setAdminUser(propertyManager);
-						buildingImageGalleries.add(buildingImageGallery);
+		if(managerImage != null){
+			if(msg.getId() > 0) {
+				propertyManager.setId(msg.getId());
+			//add gallery images
+			try {	
+				List<AdminUserPhotos> buildingImageGalleries = new ArrayList<AdminUserPhotos>();
+				//for multiple inserting images.
+				if (managerImage.size() > 0) {
+					for(int i=0 ;i < managerImage.size();i++)
+					{
+						if(managerImage.get(i).getFormDataContentDisposition().getFileName() != null && !managerImage.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+							AdminUserPhotos buildingImageGallery = new AdminUserPhotos();
+							String gallery_name = managerImage.get(i).getFormDataContentDisposition().getFileName();
+							long millis = System.currentTimeMillis() % 1000;
+							gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+							gallery_name = "images/project/building/images/"+gallery_name;
+							String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+							System.out.println("for loop image path: "+uploadGalleryLocation);
+							this.imageUploader.writeToFile(managerImage.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+							buildingImageGallery.setPhotoUrl(gallery_name);
+							buildingImageGallery.setAdminUser(propertyManager);
+							buildingImageGalleries.add(buildingImageGallery);
+						}
+					}
+					if(buildingImageGalleries.size() > 0) {
+						new AdminUserDAO().saveManagerPhoto(buildingImageGalleries);
 					}
 				}
-				if(buildingImageGalleries.size() > 0) {
-					new AdminUserDAO().saveManagerPhoto(buildingImageGalleries);
+			} catch(Exception e) {
+				msg.setStatus(0);
+				msg.setMessage("Unable to update Manager Photo");
 				}
-			}
-		} catch(Exception e) {
-			msg.setStatus(0);
-			msg.setMessage("Unable to update Manager Photo");
 			}
 		}
 		return msg;

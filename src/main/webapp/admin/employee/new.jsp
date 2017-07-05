@@ -52,7 +52,7 @@
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Name</label>
-												<div class="col-sm-9">
+												<div class="col-sm-6">
 													<input type="text" class="form-control" id="name" name="name" />
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
@@ -61,7 +61,7 @@
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Phone</label>
-												<div class="col-sm-9">
+												<div class="col-sm-6">
 													<input type="text" class="form-control" id="phone" name="phone" />
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
@@ -70,7 +70,7 @@
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Email </label>
-												<div class="col-sm-9">
+												<div class="col-sm-6">
 													<input type="text" class="form-control" id="email" name="email" />
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
@@ -79,7 +79,7 @@
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Password </label>
-												<div class="col-sm-9">
+												<div class="col-sm-6">
 													<input type="password" class="form-control" id="password" name="password" />
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
@@ -88,7 +88,7 @@
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Current Address</label>
-												<div class="col-sm-9">
+												<div class="col-sm-6">
 													<textarea id="current_address" name="current_address" placeholder="Enter current Address" class="form-control" ></textarea>
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
@@ -97,7 +97,7 @@
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Permanent Address</label>
-												<div class="col-sm-9">
+												<div class="col-sm-6">
 													<textarea id="permanent_address" name="permanent_address" placeholder="Enter Permanent Address" class="form-control" ></textarea>
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
@@ -106,9 +106,9 @@
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">City </label>
-												<div class="col-sm-9">
+												<div class="col-sm-6">
 												 	<select name="city_id" id="city_id" class="form-control">
-									                    <option value="0">Select City</option>
+									                    <option value="">Select City</option>
 									                     <% for(City city : city_list){ %>
 														<option value="<% out.print(city.getId());%>"><% out.print(city.getName());%></option>
 														<% } %>
@@ -120,9 +120,9 @@
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Access type </label>
-												<div class="col-sm-9">
+												<div class="col-sm-6">
 												 	<select name="access_id" id="access_id" class="form-control">
-									                    <option value="0">Access Type</option>
+									                    <option value="">Access Type</option>
 									                     <% for(AdminUserRole adminUser : adminUserRoles){ %>
 														<option value="<% out.print(adminUser.getId());%>"><% out.print(adminUser.getRoleName());%></option>
 														<% } %>
@@ -135,7 +135,7 @@
 										<div class="col-lg-12 margin-bottom-5">
 											<div class="clearfix form-actions">
 												<div class="pull-right">
-													<button type="button" onclick="showDetailTab()" class="btn btn-success btn-small">Submit</button>
+													<button type="button" onclick="showDetailTab()" class="btn btn-success btn-small">Next</button>
 												</div>
 											</div>
 										</div>
@@ -205,12 +205,12 @@ $('#name').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) {  return ''; } ) );
 });
-$("#email").keyUp(function(){
-	var th = $(this);
+$("#email").keyup(function(){
+	var $th = $(this);
 	$th.val($th.val().replace(/[^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$]/g,function(str){return '';}));
 });
-$("#mobile").keyUp(function(){
-	var mobile = $(this);
+$("#mobile").keyup(function(){
+	var $mobile = $(this);
 	$mobile.val($mobile.val().replace(/[^[7-9][0-9]{9}$]/g, function(str){return '';}));
 });
 $('#addmanager').bootstrapValidator({
@@ -225,14 +225,14 @@ $('#addmanager').bootstrapValidator({
     	name: {
             validators: {
                 notEmpty: {
-                    message: 'Lead name is required and cannot be empty'
+                    message: 'Lead name is required'
                 }
             }
         },
-        mobile: {
+        phone: {
         	validators: {
             	notEmpty: {
-                    message: 'The Mobile is required and cannot be empty'
+                    message: 'The Mobile is required'
                 },
                 regexp: {
                     regexp: '^[7-9][0-9]{9}$',
@@ -243,32 +243,32 @@ $('#addmanager').bootstrapValidator({
         email: {
         	validators: {
             	notEmpty: {
-                    message: 'The Email is required and cannot be empty'
+                    message: 'The Email is required'
                 },
                 regexp: {
                     regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
-                    message: 'The value is not a valid email address'
+                    message: 'Invalid email address'
                 }
             }
         },
         project_id: {
             validators: {
                 notEmpty: {
-                    message: 'Project is required and cannot be empty'
+                    message: 'Project is required'
                 }
             }
         },
-        city: {
+        city_id: {
             validators: {
                 notEmpty: {
-                    message: 'City Name is required and cannot be empty'
+                    message: 'City Name is required'
                 }
             }
         },
-        area: {
+        access_id: {
             validators: {
                 notEmpty: {
-                    message: 'Locality Name is required and cannot be empty'
+                    message: 'Access Name is required'
                 }
             }
         }

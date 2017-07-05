@@ -952,6 +952,7 @@ function show()
 function show1()
 {
 	$("#vimessages2").show();
+	//$("#vimessages2").addClass('Active');
 	$("#vimessages1").hide();
 	
 }
@@ -992,6 +993,7 @@ function previous4()
 {
 	$("#vimessages4").hide();
 	$("#vimessages3").show();
+	
 	
 }
 $("#base_rate").keyup(function(){
