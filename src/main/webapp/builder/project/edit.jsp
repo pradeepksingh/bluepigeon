@@ -65,6 +65,23 @@
 	Set<State> states = null;
 	Set<City> cities = null;
 	String name = null;
+	List<BuilderProjectType> projectTypes =null;
+	List<BuilderPropertyType> propertyTypes =null;
+	List<BuilderProjectPropertyConfiguration> projectConfigurations = null;
+	List<BuilderProjectApprovalType> projectApprovals = null;
+	List<BuilderProjectAmenity> projectAmenities  = null;
+	List<AreaUnit> areaUnits = null;
+	List<HomeLoanBanks> homeLoanBanks = null;
+	List<BuilderProjectAmenityInfo> projectAmenityInfos = null;
+	List<BuilderProjectProjectType> projectProjectTypes = null;
+	List<BuilderProjectPropertyType> projectPropertyTypes = null;
+	List<BuilderProjectPropertyConfigurationInfo> projectConfigurationInfos =null;
+	List<BuilderProjectApprovalInfo> projectApprovalInfos = null;
+	List<BuilderProjectBankInfo> projectBankInfos = null;
+	BuilderProjectPriceInfo projectPriceInfo = null;
+	List<BuilderProjectPaymentInfo> projectPaymentInfos = null;
+	List<BuilderProjectOfferInfo> projectOfferInfos = null;
+	List<ProjectAmenityWeightage> amenityWeightages = null;
 	Set<Locality> localities = null;
 	List<Tax> taxes = new ArrayList<Tax>();
 	if(session!=null)
@@ -74,30 +91,29 @@
 			adminuserproject  = (BuilderEmployee)session.getAttribute("ubname");
 			if(adminuserproject != null){
 				p_user_id = adminuserproject.getBuilder().getId();
+				projectTypes = new BuilderProjectTypeDAO().getBuilderProjectTypes();
+				propertyTypes = new BuilderPropertyTypeDAO().getBuilderActivePropertyTypes();
+				projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderActiveProjectConfigurations();
+				projectAmenities = new BuilderProjectAmenityDAO().getBuilderActiveProjectAmenityList();
+				projectApprovals = new BuilderProjectApprovalTypeDAO().getBuilderActiveProjectApprovalTypes();
+				homeLoanBanks = new HomeLoanBanksDAO().getActiveHomeLoanBanksList();
+				areaUnits = new AreaUnitDAO().getActiveAreaUnitList();
+				projectAmenityInfos = new BuilderProjectAmenityInfoDAO().getBuilderProjectAmenityInfo(project_id);
+				projectProjectTypes = new BuilderProjectProjectTypeDAO().getBuilderProjectProjectTypes(project_id);
+				projectPropertyTypes = new BuilderProjectPropertyTypeDAO().getBuilderProjectPropertyTypes(project_id);
+				projectConfigurationInfos = new BuilderProjectPropertyConfigurationInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id);
+				projectApprovalInfos = new BuilderProjectApprovalInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id);
+				projectBankInfos = new BuilderProjectBankInfoDAO().getBuilderProjectBankInfos(project_id);
+				projectPriceInfo = new BuilderProjectPriceInfoDAO().getBuilderProjectPriceInfo(project_id);
+				projectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderActiveProjectPaymentInfo(project_id);
+				projectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderActiveProjectOfferInfo(project_id);
+				amenityWeightages = new ProjectDAO().getActiveProjectAmenityWeightageByProjectId(project_id);
+				if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
+					taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
+				}
 			}
 		}
    	}
-	List<BuilderProjectType> projectTypes = new BuilderProjectTypeDAO().getBuilderProjectTypes();
-	List<BuilderPropertyType> propertyTypes = new BuilderPropertyTypeDAO().getBuilderActivePropertyTypes();
-	List<BuilderProjectPropertyConfiguration> projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderActiveProjectConfigurations();
-	List<BuilderProjectAmenity> projectAmenities = new BuilderProjectAmenityDAO().getBuilderActiveProjectAmenityList();
-	List<BuilderProjectApprovalType> projectApprovals = new BuilderProjectApprovalTypeDAO().getBuilderActiveProjectApprovalTypes();
-	List<HomeLoanBanks> homeLoanBanks = new HomeLoanBanksDAO().getActiveHomeLoanBanksList();
-	List<AreaUnit> areaUnits = new AreaUnitDAO().getActiveAreaUnitList();
-	List<BuilderProjectAmenityInfo> projectAmenityInfos = new BuilderProjectAmenityInfoDAO().getBuilderProjectAmenityInfo(project_id);
-	List<BuilderProjectProjectType> projectProjectTypes = new BuilderProjectProjectTypeDAO().getBuilderProjectProjectTypes(project_id);
-	List<BuilderProjectPropertyType> projectPropertyTypes = new BuilderProjectPropertyTypeDAO().getBuilderProjectPropertyTypes(project_id);
-	List<BuilderProjectPropertyConfigurationInfo> projectConfigurationInfos = new BuilderProjectPropertyConfigurationInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id);
-	List<BuilderProjectApprovalInfo> projectApprovalInfos = new BuilderProjectApprovalInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id);
-	List<BuilderProjectBankInfo> projectBankInfos = new BuilderProjectBankInfoDAO().getBuilderProjectBankInfos(project_id);
-	BuilderProjectPriceInfo projectPriceInfo = new BuilderProjectPriceInfoDAO().getBuilderProjectPriceInfo(project_id);
-	List<BuilderProjectPaymentInfo> projectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderActiveProjectPaymentInfo(project_id);
-	List<BuilderProjectOfferInfo> projectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderActiveProjectOfferInfo(project_id);
-	List<ProjectAmenityWeightage> amenityWeightages = new ProjectDAO().getActiveProjectAmenityWeightageByProjectId(project_id);
-	if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
-		taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
-	}
-	
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -263,14 +279,16 @@
 			                                    <div class="col-3">
 			                                         <select name="state_id" id="state_id" class="form-control">
 									                    <option value="">Select State</option>
-									                    <% for(State state : states) { %>
+									                    <%
+									                    if(states != null){
+									                    for(State state : states) { %>
 									                    <% 	if(builderProject.getState().getId() == state.getId()) {
 									                    		cities = state.getCities();
 									                    		out.print(state.getName());
 									                    	}
 									                    %>
 														<option value="<% out.print(state.getId());%>" <% if(builderProject.getState().getId() == state.getId()) { %>selected<% } %>><% out.print(state.getName());%></option>
-														<% } %>
+														<% }} %>
 										          	</select>
 			                                    </div>
 			<!--                                     <div class="messageContainer"></div> -->
@@ -278,13 +296,15 @@
 			                                    <div class="col-3">
 			                                         <select name="city_id" id="city_id" class="form-control">
 									                	<option value="">Select City</option>
-									                    <% for(City city : cities){ %>
+									                    <%
+									                    if(cities != null){
+									                    for(City city : cities){ %>
 									                    <% 	if(builderProject.getCity().getId() == city.getId()) { 
 									                    		localities = city.getLocalities();
 									                    	}
 									                    %>
 														<option value="<% out.print(city.getId());%>" <% if(builderProject.getCity().getId() == city.getId()) { %>selected<% } %>><% out.print(city.getName());%></option>
-														<% } %>
+														<% } }%>
 										          	</select>
 			                                    </div>
 			<!--                                     <div class="messageContainer"></div> -->
@@ -296,9 +316,11 @@
 			                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
 			                                        <select name="locality_id" id="locality_id" class="form-control">
 									                	<option value="">Select Locality</option>
-									                	<% for(Locality locality : localities){ %>
+									                	<%
+									                	if(localities != null){
+									                	for(Locality locality : localities){ %>
 														<option value="<% out.print(locality.getId());%>" <% if(builderProject.getLocality().getId() == locality.getId()) { %>selected<% } %>><% out.print(locality.getName());%></option>
-														<% } %>
+														<% }} %>
 										          	</select>
 												</div>
 			<!-- 									<div class="messageContainer"></div> -->
@@ -1134,11 +1156,11 @@ $("#detailbtn").click(function(){
 	    async: false,
 	    success: function(data) {
 			if (data.status == 0) {
-				alert(data.id);
-				alert(data.status);
+				//alert(data.id);
+			//	alert(data.status);
 				alert(data.message);
 			} else {
-				alert(data.id);
+			//	alert(data.id);
 				alert(data.message);
 			}
 		},

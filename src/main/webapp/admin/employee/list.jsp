@@ -43,7 +43,7 @@ campaignLists = new AdminUserDAO().getProperyManagers();
                         <!--Contacts tab starts-->
                         <div class="tab-pane fade active in" id="contacts" aria-labelledby="contacts-tab">
                             <div class="contacts-list">
-                                <table class="table table-striped table-bordered" id="managertable">
+                                <table class="table table-striped table-bordered" id="emptable">
                                     <thead>
                                         <tr>
                                             <th>Manager</th>
@@ -64,9 +64,8 @@ campaignLists = new AdminUserDAO().getProperyManagers();
                                             <td><%
                                             out.print(propertyManagerList.getRoleName()); %></td>
                                             <td class="alignRight">
-<%--                                             	<a href="${baseUrl}/admin/leads/edit.jsp?lead_id=<% out.print(campaignList.getCampaignId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
+                                            	<a href="${baseUrl}/admin/employee/edit.jsp?emp_id=<% out.print(propertyManagerList.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>
                                             </td>
-                                            
                                         </tr>
                                         <% } %>
                                     </tbody>
@@ -86,3 +85,11 @@ campaignLists = new AdminUserDAO().getProperyManagers();
 		<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 	</body>
 </html>
+<script>
+$(document).ready(function(
+		){
+    $('#emptable').DataTable({
+        "aaSorting": []
+    });
+});
+</script>

@@ -35,6 +35,26 @@ public class AdminUserDAO {
 		responseMessage.setMessage("Empolyee Added Successfully.");
 		return responseMessage;
 	}
+	
+	/**
+	 * Update Admin User/Admin Emplouee
+	 * @author pankaj
+	 * @param adminUser
+	 * @return message
+	 */
+	public ResponseMessage updateEmployee(AdminUser adminUser){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.update(adminUser);
+		newsession.getTransaction().commit();
+		newsession.close();
+		responseMessage.setId(adminUser.getId());
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Empolyee Updated Successfully.");
+		return responseMessage;
+	}
 	/**
 	 * Save manager photo
 	 * @author pankaj
@@ -53,6 +73,26 @@ public class AdminUserDAO {
 		responseMessage.setId(propertyManagerPhotos.get(0).getId());
 		responseMessage.setStatus(1);
 		responseMessage.setMessage("Employee Photo Added Successfully.");
+		return responseMessage;
+	}
+	/**
+	 * Update manager photo
+	 * @author pankaj
+	 * @param adminUserPhotos
+	 * @return
+	 */
+	public ResponseMessage updateManagerPhoto(List<AdminUserPhotos> propertyManagerPhotos){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(AdminUserPhotos photos : propertyManagerPhotos)
+			newsession.update(photos);
+		newsession.getTransaction().commit();
+		newsession.close();
+		responseMessage.setId(propertyManagerPhotos.get(0).getId());
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Employee Photo Updated Successfully.");
 		return responseMessage;
 	}
 	/**
@@ -89,6 +129,21 @@ public class AdminUserDAO {
 		propertyManagerData.setEmail(adminUser.getEmail());
 		session.close();
 		return propertyManagerData;
+	}
+	/**
+	 * Get AdminUser by id
+	 * @author pankaj
+	 * @param empId
+	 * @return adminUser
+	 */
+	public AdminUser getEmployeeById(int empId){
+		String hql = "from AdminUser where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", empId);
+		AdminUser adminUser = (AdminUser)query.uniqueResult();
+		return adminUser;
 	}
 	/**
 	 * Get All city name
@@ -140,5 +195,15 @@ public class AdminUserDAO {
 		}
 		session.close();
 		return managerList;
+	}
+	
+	public AdminUserPhotos getEmplyeePhoto(int empId){
+		String hql = "from AdminUserPhotos where adminUser.id = :emp_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("emp_id", empId);
+		AdminUserPhotos adminUserPhotos = (AdminUserPhotos)query.uniqueResult();
+		return adminUserPhotos;
 	}
 }
