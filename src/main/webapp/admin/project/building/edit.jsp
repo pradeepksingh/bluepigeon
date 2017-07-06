@@ -118,7 +118,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="name" name="name" value="<% out.print(builderBuilding.getName()); %>" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -127,7 +127,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="total_floor" name="total_floor" value="<% out.print(builderBuilding.getTotalFloor());%>"/>
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<% SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy"); %>

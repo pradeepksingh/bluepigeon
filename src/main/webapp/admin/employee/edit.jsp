@@ -38,12 +38,12 @@
 			<ul class="breadcrumb">
 				<li><i class="ace-icon fa fa-home home-icon"></i>Home</li>
 				<li>Employee</li>
-				<li class="active">Add New Employee</li>
+				<li class="active">Update Employee</li>
 			</ul>
 		</div>
 		<div class="page-content">
 			<div class="page-header">
-				<h1>Add New Employee</h1>
+				<h1>Update Employee</h1>
 			</div>
 			<ul class="nav nav-tabs" id="managerTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Basic Details</a></li>
@@ -169,8 +169,8 @@
 										<h3>Upload manager Photo</h3>
 										<br>
 										<div class="row" id="manager_images">
-										<input type="hidden" id="emp_photo_id" name="emp_photo_id" value="<%out.print(adminUserPhotos.getId());%>">
 											<%if(adminUserPhotos != null) { %>
+											<input type="hidden" id="emp_photo_id" name="emp_photo_id" value="<%out.print(adminUserPhotos.getId());%>">
 											<div class="col-lg-6 margin-bottom-5" id="b_image<% out.print(adminUserPhotos.getId()); %>">
 												<div class="form-group" id="error-landmark">
 													<div class="col-sm-12">
@@ -301,14 +301,14 @@ $('#addmanager').bootstrapValidator({
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
-	addPropertyManager();
+	updateEmployee();
 });
-function addPropertyManager() {
+function updateEmployee() {
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/employee/save',
+	 		url : '${baseUrl}/webapi/employee/admin/update',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};

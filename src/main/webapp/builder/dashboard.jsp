@@ -441,9 +441,9 @@
 		                 <div class="col-md-4">
 		                    <button type="button" onclick="addLead();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Lead</button>
 		                 </div>
-		                 <div class="col-md-4">
-		                    <button type="button" onclick="addBuyer();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Buyer</button>
-		                </div>
+<!-- 		                 <div class="col-md-4"> -->
+<!-- 		                    <button type="button" onclick="addBuyer();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Buyer</button> -->
+<!-- 		                </div> -->
 	                </div>
                 </div>
                 </div>

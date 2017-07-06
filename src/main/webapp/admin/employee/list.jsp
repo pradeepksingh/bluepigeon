@@ -86,8 +86,7 @@ campaignLists = new AdminUserDAO().getProperyManagers();
 	</body>
 </html>
 <script>
-$(document).ready(function(
-		){
+$(document).ready(function(){
     $('#emptable').DataTable({
         "aaSorting": []
     });

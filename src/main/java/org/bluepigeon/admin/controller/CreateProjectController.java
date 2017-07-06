@@ -591,10 +591,17 @@ public class CreateProjectController {
 						 responseMessage.setStatus(0);
 						 responseMessage.setMessage("Unable to save image");
 					}
-			 }else{
-				 responseMessage.setStatus(0);
-				 responseMessage.setMessage("Fail to update Building Amenity");
-			 }
+			 }	 System.err.println("Elece in building amenity icon....");
+				 if(amenity_ids != null){
+					 BuildingAmenityIcon buildingAmenityIcon = builderBuildingAmenityDAO.getBuildingAmenityIconById(amenity_ids.get(0).getValueAs(Integer.class));
+					 List<BuildingAmenityIcon> buildingAmenityIcons = new ArrayList<BuildingAmenityIcon>();
+					 buildingAmenityIcons.add(buildingAmenityIcon);
+					 if(buildingAmenityIcons.size() > 0) {
+							builderBuildingAmenityDAO.updateBuildingAmenityIcon(buildingAmenityIcons);
+						}
+					 responseMessage.setStatus(1);
+					 responseMessage.setMessage("Building Amenity Updated Successfully");
+				 }
 		 }
 		 return responseMessage;
 	}
@@ -802,8 +809,8 @@ public class CreateProjectController {
 							responseMessage.setMessage("Unable to save image");
 						}
 			}else{
-				responseMessage.setStatus(0);
-				responseMessage.setMessage("Unable to save Project Amenity");
+				responseMessage.setStatus(1);
+				responseMessage.setMessage("Project Amenity added successfully");
 			}
 		}
 		return responseMessage;
@@ -1154,8 +1161,8 @@ public class CreateProjectController {
 							if(saveFloorAmenityIcon.size() > 0){
 								builderFloorAmenityDAO.saveFloorAmenityIcon(saveFloorAmenityIcon);
 							}
-//							responseMessage.setStatus(1);
-//							responseMessage.setMessage("Floor Amenity updated successfully.");
+							responseMessage.setStatus(1);
+							responseMessage.setMessage("Floor Amenity updated successfully.");
 						}
 					 catch(Exception e) {
 						 e.printStackTrace();

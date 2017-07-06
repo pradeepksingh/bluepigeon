@@ -388,6 +388,7 @@ public class ProjectController extends ResourceConfig {
 		BuilderProject builderProject = new BuilderProject();
 		builderProject.setId(project_id);
 		List<ProjectAmenityWeightage> projectAmenityWeightages = new ArrayList<ProjectAmenityWeightage>();
+		if(substagewt_id != null){
 		for(int i=0 ;i < substagewt_id.size();i++) {
 			ProjectAmenityWeightage baw = new ProjectAmenityWeightage();
 			baw.setId(substagewt_id.get(i).getValueAs(Integer.class));
@@ -396,6 +397,7 @@ public class ProjectController extends ResourceConfig {
 		}
 		if(projectAmenityWeightages.size() > 0) {
 			msg = projectDAO.updateProjectAmenityWeightage(projectAmenityWeightages, project_id);
+		}
 		}
 		List<ProjectWeightage> projectWeightages = new ArrayList<ProjectWeightage>();
 		if(ssubstagewt_id != null){
@@ -2017,10 +2019,10 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("status") Integer status,
 			@FormDataParam("possession_date") String possession_date,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
-			//@FormDataParam("payment_id[]") List<FormDataBodyPart> payment_id,
-			//@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
-			//@FormDataParam("payable[]") List<FormDataBodyPart> payable,
-			//@FormDataParam("amount[]") List<FormDataBodyPart> amount,
+			@FormDataParam("payment_id[]") List<FormDataBodyPart> payment_id,
+			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
+			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
+			@FormDataParam("amount[]") List<FormDataBodyPart> amount,
 			@FormDataParam("admin_id") int admin_id,
 			@FormDataParam("amenity_wt") String amenity_wts
 	) {
@@ -2108,45 +2110,45 @@ public class ProjectController extends ResourceConfig {
 				projectDAO.deleteFlatAmenityWeightage(flat_id);
 				projectDAO.addFlatAmenityWeightage(baws);
 			}
-//			try{
-//				if (schedule.size() > 0) {
-//					List<FlatPaymentSchedule> flatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
-//					List<FlatPaymentSchedule> newFlatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
-//					int i = 0;
-//					for(FormDataBodyPart milestone : schedule)
-//					{
-//						if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
-//							if(payment_id.get(i).getValueAs(Integer.class) != 0 && payment_id.get(i).getValueAs(Integer.class) != null) {
-//								Byte milestone_status = 0;
-//								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
-//								flatPaymentSchedule.setId(payment_id.get(i).getValueAs(Integer.class));
-//								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
-//								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
-//								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
-//								flatPaymentSchedule.setStatus(milestone_status);
-//								flatPaymentSchedule.setBuilderFlat(builderFlat);
-//								flatPaymentSchedules.add(flatPaymentSchedule);
-//							} else {
-//								Byte milestone_status = 0;
-//								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
-//								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
-//								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
-//								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
-//								flatPaymentSchedule.setStatus(milestone_status);
-//								flatPaymentSchedule.setBuilderFlat(builderFlat);
-//								newFlatPaymentSchedules.add(flatPaymentSchedule);
-//							}
-//						}
-//						i++;
-//					}
-//					if(flatPaymentSchedules.size() > 0) {
-//						projectDAO.updateFlatPaymentInfo(flatPaymentSchedules);
-//						projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
-//					}
-//				}
-//			} catch(Exception e) {
-//				
-//			}
+			try{
+				if (schedule.size() > 0) {
+					List<FlatPaymentSchedule> flatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
+					List<FlatPaymentSchedule> newFlatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
+					int i = 0;
+					for(FormDataBodyPart milestone : schedule)
+					{
+						if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
+							if(payment_id.get(i).getValueAs(Integer.class) != 0 && payment_id.get(i).getValueAs(Integer.class) != null) {
+								Byte milestone_status = 0;
+								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+								flatPaymentSchedule.setId(payment_id.get(i).getValueAs(Integer.class));
+								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
+								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
+								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
+								flatPaymentSchedule.setStatus(milestone_status);
+								flatPaymentSchedule.setBuilderFlat(builderFlat);
+								flatPaymentSchedules.add(flatPaymentSchedule);
+							} else {
+								Byte milestone_status = 0;
+								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
+								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
+								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
+								flatPaymentSchedule.setStatus(milestone_status);
+								flatPaymentSchedule.setBuilderFlat(builderFlat);
+								newFlatPaymentSchedules.add(flatPaymentSchedule);
+							}
+						}
+						i++;
+					}
+					if(flatPaymentSchedules.size() > 0) {
+						projectDAO.updateFlatPaymentInfo(flatPaymentSchedules);
+						projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
+					}
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 		} else {
 			msg.setMessage("Failed to update flat.");
 			msg.setStatus(0);

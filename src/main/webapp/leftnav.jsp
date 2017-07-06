@@ -26,7 +26,7 @@ if(session!=null)
 				<span class="icon-bar"></span>
 			</button>
 			<div class="navbar-header pull-left">
-				<a href="${baseUrl}/" class="navbar-brand">
+				<a href="${baseUrl}/admin/general/country.jsp" class="navbar-brand">
 					<small>
 						<i class="fa fa-leaf"></i>
 						Blue Pigeon Admin
