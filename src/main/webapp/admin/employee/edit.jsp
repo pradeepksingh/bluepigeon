@@ -18,6 +18,7 @@
     AdminUserPhotos adminUserPhotos = null;
     AdminUserDAO adminUserDAO = null;
  	int p_user_id = 0;
+ 	int loginStatus = 0;
  	List<City> city_list = new CityNamesImp().getCityNames();
  	emp_id = Integer.parseInt(request.getParameter("emp_id"));
 	if(session!=null)
@@ -28,6 +29,7 @@
 			adminuserproject  = (AdminUser)session.getAttribute("uname");
 			p_user_id = adminuserproject.getId();
 			emp = adminUserDAO.getEmployeeById(emp_id);
+			loginStatus = emp.getStatus();
 			adminUserPhotos = adminUserDAO.getEmplyeePhoto(emp_id);
 		}
    	}
@@ -58,6 +60,7 @@
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
 										<input type="hidden" name="emp_id" id="emp_id" value="<%out.print(emp_id);%>"/>
+										<input type="hidden" name="loginStatus" id="loginStatus" value="<%out.print(loginStatus);%>"/>
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Name</label>

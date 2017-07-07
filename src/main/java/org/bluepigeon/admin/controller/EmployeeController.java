@@ -154,6 +154,7 @@ public class EmployeeController {
 			@FormDataParam("access_id") int accessId,
 			@FormDataParam("admin_id") Long adminId,
 			@FormDataParam("emp_photo_id") int photoId,
+			@FormDataParam("loginStatus") int loginStatus,
 			@FormDataParam("manager_image[]") List<FormDataBodyPart> managerImage){
 		
 		AdminUser propertyManager = new AdminUser();
@@ -166,6 +167,7 @@ public class EmployeeController {
 		propertyManager.setMobile(contact);
 		propertyManager.setEmail(email);
 		propertyManager.setPassword(password);
+		propertyManager.setStatus(loginStatus);
 		propertyManager.setCurrentAddress(currentAddress);
 		propertyManager.setCreatedDate(new java.util.Date());
 		propertyManager.setPermanentAddress(permanentAddress);

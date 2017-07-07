@@ -10,18 +10,20 @@
 <%@include file="../../head.jsp"%>
 <%@include file="../../leftnav.jsp"%>
 <%
-int id = Integer.parseInt(request.getParameter("id"));	
-Builder builder=null;
-List<BuilderLogo>  builderLogos = null;
-//List<BuilderCompanyNames> builderCompanyNames = null;
-if(id>0){
-List<Builder> builder_list=new BuilderDetailsDAO().getActiveBuilderById(id);
-if(builder_list.size()>0){
-	builder=builder_list.get(0);	
-	//builderCompanyNames = new BuilderDetailsDAO().getAllBuilderCompanyNameByBuilderId(id);
-	builderLogos = new BuilderDetailsDAO().getBuilderLogoByBuilderId(builder.getId());
-}
-}
+	int id =0;
+	int loginStatus = 0;
+	id= Integer.parseInt(request.getParameter("id"));	
+	Builder builder=null;
+	List<BuilderLogo>  builderLogos = null;
+	//List<BuilderCompanyNames> builderCompanyNames = null;
+	if(id>0){
+		builder=new BuilderDetailsDAO().getBuilderById(id);
+		if(builder != null){	
+			//builderCompanyNames = new BuilderDetailsDAO().getAllBuilderCompanyNameByBuilderId(id);
+			loginStatus = builder.getLoginStatus();
+			builderLogos = new BuilderDetailsDAO().getBuilderLogoByBuilderId(builder.getId());
+		}
+	}
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -43,8 +45,8 @@ if(builder_list.size()>0){
 				<div class="col-xs-12">
 				<!-- PAGE CONTENT BEGINS -->
 					<form class="form-horizontal" role="form" method="post" action="" id="updateBuilder" name="updateBuilder" enctype="multipart/form-data">
-						<input type="hidden" value="<% out.print(builder.getId()); %>" name="ubuilder_id" id="ubuilder_id">
-						<input type="hidden" value="<%out.print(builder.getLoginStatus()); %>" name="uloginstatus" id="uloginstatus"/>
+						<input type="hidden" value="<% out.print(id); %>" name="ubuilder_id" id="ubuilder_id">
+						<input type="hidden" value="<%out.print(loginStatus); %>" name="uloginstatus" id="uloginstatus"/>
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Builder Name </label>
 							<div class="col-sm-9">
