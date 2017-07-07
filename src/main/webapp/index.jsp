@@ -195,14 +195,14 @@
 						if(status==1)
 							{
 							$('#error').empty();
-								window.location.href="../bluepigeon/admin/general/country.jsp";	
+								window.location.href="${baseUrl}/admin/general/country.jsp";	
 							}
 						
-						else if(status == 0)
-							{
-								$('#error').empty();
-								window.location.href="activate.jsp";
-							}
+// 						else if(status == 0)
+// 							{
+// 								$('#error').empty();
+// 								window.location.href="activate.jsp";
+// 							}
 						else
 							{
 						$('#error').empty();

@@ -116,10 +116,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
-                             <h4 class="page-title">Edit Source</h4>
                               <div class="tab-content"> 
-                              
-                             
                                 <div class="col-12">
                                	<form id="updatesource" name="updatesource" class="form-horizontal" action="" method="post"  enctype="multipart/form-data">
                                 <input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id); %>" />

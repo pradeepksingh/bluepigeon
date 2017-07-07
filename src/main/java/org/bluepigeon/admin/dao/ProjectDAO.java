@@ -3157,7 +3157,7 @@ public class ProjectDAO {
 	 * @return List<BuilderBuilding>
 	 */
 	public List<BuilderBuilding> getActiveBuildingsByBuilderId(int builder_id) {
-		String hql = "from BuilderBuilding where builderProject.builder.id = :builder_id and status=1";
+		String hql = "from BuilderBuilding where builderProject.builder.id = :builder_id and builderProject.status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -3184,7 +3184,7 @@ public class ProjectDAO {
 	 * @return List<BuilderFloor>
 	 */
 	public List<BuilderFloor> getAllActiveFloorsByBuilderId(int builderId) {
-		String hql = "from BuilderFloor where builderBuilding.builderProject.builder.id = :builder_id and status=1 order by builderBuilding.builderProject.id DESC";
+		String hql = "from BuilderFloor where builderBuilding.builderProject.builder.id = :builder_id and builderBuilding.builderProject.status=1 order by builderBuilding.builderProject.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -3195,7 +3195,7 @@ public class ProjectDAO {
 	}
 	
 	public List<BuilderFlat> getBuilderAllFlatsByBuilderId(int builderId) {
-		String hql = "from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id order by builderFloor.builderBuilding.builderProject.id DESC";
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and builderFloor.builderBuilding.builderProject.status=1 order by builderFloor.builderBuilding.builderProject.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);

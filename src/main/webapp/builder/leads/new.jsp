@@ -115,102 +115,89 @@
                   
                     <!-- /.col-lg-12 -->
                 </div>
-             
-        
-
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
-                             <h4 class="page-title">Add Lead Details</h4><br>
-                                <ul class="nav tabs-horizontal">
-                                    <li class="tab nav-item" aria-expanded="false">
-                                        <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"></a>
-                                    </li>
-                                </ul>
-                                
-                              <div class="tab-content"> 
-                              
                                <div id="vimessages" class="tab-pane active" aria-expanded="false">
-                                <div class="col-12">
-                               	<form id="addlead" name="addlead" class="form-horizontal" action="" method="post">
-                                <input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id); %>" />
-                                <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Interested In*</label>
-                                    <div class="col-3">
-                                       <select name="project_id" id="project_id" class="form-control">
-						                 	   	<option value="0">Select Project</option>
-						                  	   	<% for(int i=0; i < project_size ; i++){ %>
-												<option value="<% out.print(builderProjects.get(i).getId());%>"><% out.print(builderProjects.get(i).getName());%></option>
-											  	<% } %>
-								       	  	</select>
-                                    </div>
-                                    <label for="example-text-input" class="col-3 col-form-label">Building*</label>
-                                    <div class="col-3">
-                                       <select name="building_id" id="building_id" class="form-control">
-						                 	   	<option value="0">Select Building</option>
-								       	  	</select>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Flat*</label>
-                                    <div class="col-3">
-                                      <select name="flat_id" id="flat_id" class="form-control">
-						                 	   	<option value="0">Select Flat</option>
-								       	  	</select>
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Lead Name</label>
-                                    <div class="col-3">
-										<input type="text" id="name" name="name" placeholder="Enter lead name" class="form-control" />
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                    <label for="example-tel-input" class="col-3 col-form-label">Contact</label>
-                                    <div class="col-3">
-                                       <input type="text" id="mobile" name="mobile" placeholder="Enter lead phone number" class="form-control" />
-                                    </div>
-                                    <label for="example-tel-input" class="col-3 col-form-label">Email</label>
-                                    <div class="col-3">
-                                         <input type="text" id="email" name="email" placeholder="Enter lead email" class="form-control" />
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Source</label>
-                                    <div class="col-3">
-                                       <select name="source" id="source" class="form-control">
-							                    <option value="0">Select Source</option>
-							                    <option value="1">App</option>
-							                    <option value="2">Website</option>
-							                    <option value="3">Google</option>
-							                    <option value="4">Facebook</option>
-							                </select>
-                                    </div>
-                                    <label for="example-text-input" class="col-3 col-form-label">Area</label>
-                                    <div class="col-3">
-                                      <input type="text" id="area" name="area" placeholder="Enter lead area" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">City</label>
-                                    <div class="col-3">
-                                       <!--  <input class="form-control" type="text" value="City" id="example-search-input">-->
-                                       <input type="text" id="city" name="city" placeholder="Enter City" class="form-control" />
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Discount offered</label>
-                                    <div class="col-3">
-                                       <input type="text" id="discount_offered" name="discount_offered" placeholder="Enter Discount" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="offset-sm-5 col-sm-7">
-                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
-                                 </div>
-                               </form>
-                               </div>
-                              </div>
-                                </div>
-                        </div>
+	                                <div class="col-12">
+	                               		<form id="addlead" name="addlead" class="form-horizontal" action="" method="post">
+	                                		<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id); %>" />
+	                                		<div class="form-group row">
+	                                    		<label for="example-text-input" class="col-3 col-form-label">Interested In*</label>
+	                                    		<div class="col-3">
+	                                       			<select name="project_id" id="project_id" class="form-control">
+							                 	   		<option value="0">Select Project</option>
+							                  	   		<% for(int i=0; i < project_size ; i++){ %>
+														<option value="<% out.print(builderProjects.get(i).getId());%>"><% out.print(builderProjects.get(i).getName());%></option>
+												  		<% } %>
+									       	  		</select>
+	                                    		</div>
+	                                    		<label for="example-text-input" class="col-3 col-form-label">Building*</label>
+	                                    		<div class="col-3">
+	                                      			<select name="building_id" id="building_id" class="form-control">
+							                 	   		<option value="0">Select Building</option>
+									       	  		</select>
+	                                    		</div>
+	                                		</div>
+	                                
+	                                		<div class="form-group row">
+	                                    		<label for="example-search-input" class="col-3 col-form-label">Flat*</label>
+	                                    		<div class="col-3">
+	                                      			<select name="flat_id" id="flat_id" class="form-control">
+							                 	   		<option value="0">Select Flat</option>
+									       	  		</select>
+	                                    		</div>
+	                                    		<label for="example-search-input" class="col-3 col-form-label">Lead Name</label>
+	                                    		<div class="col-3">
+													<input type="text" id="name" name="name" placeholder="Enter lead name" class="form-control" />
+	                                    		</div>
+	                                		</div>
+	                                
+	                                		<div class="form-group row">
+	                                    		<label for="example-tel-input" class="col-3 col-form-label">Contact</label>
+	                                    		<div class="col-3">
+	                                       			<input type="text" id="mobile" name="mobile" placeholder="Enter lead phone number" class="form-control" />
+	                                    		</div>
+	                                    		<label for="example-tel-input" class="col-3 col-form-label">Email</label>
+	                                    		<div class="col-3">
+	                                         		<input type="text" id="email" name="email" placeholder="Enter lead email" class="form-control" />
+	                                   			</div>
+	                               			 </div>
+	                                
+	                                		 <div class="form-group row">
+	                                    		<label for="example-text-input" class="col-3 col-form-label">Source</label>
+	                                    		<div class="col-3">
+	                                       			<select name="source" id="source" class="form-control">
+									                    <option value="0">Select Source</option>
+									                    <option value="1">App</option>
+									                    <option value="2">Website</option>
+									                    <option value="3">Google</option>
+									                    <option value="4">Facebook</option>
+								                	</select>
+	                                    		</div>
+	                                    		<label for="example-text-input" class="col-3 col-form-label">Area</label>
+	                                    		<div class="col-3">
+	                                      			<input type="text" id="area" name="area" placeholder="Enter lead area" class="form-control" />
+	                                    		</div>
+	                               		 	</div>
+	                                		<div class="form-group row">
+	                                    		<label for="example-search-input" class="col-3 col-form-label">City</label>
+	                                    		<div class="col-3">
+	                                      	 <!--  <input class="form-control" type="text" value="City" id="example-search-input">-->
+	                                       		   	<input type="text" id="city" name="city" placeholder="Enter City" class="form-control" />
+	                                    		</div>
+	                                    		<label for="example-search-input" class="col-3 col-form-label">Discount offered</label>
+	                                    		<div class="col-3">
+	                                       			<input type="text" id="discount_offered" name="discount_offered" placeholder="Enter Discount" class="form-control" />
+	                                    		</div>
+	                                		</div>
+	                                		<div class="offset-sm-5 col-sm-7">
+	                                        	<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+	                                 		</div>
+	                               		</form>
+	                               	</div>
+                              	</div>
+                       	 	</div>
                         </div>
                     </div>
                 </div>

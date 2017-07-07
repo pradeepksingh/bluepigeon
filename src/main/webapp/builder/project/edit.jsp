@@ -184,8 +184,6 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
-                             <h4 class="page-title">Update Project</h4>
-                             <br>
                              <ul class="nav tabs-horizontal">
                                  <li class="tab nav-item" aria-expanded="false">
                                      <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"> <span>Basic Information</span></a>
@@ -223,7 +221,7 @@
 														<option value="<%out.print(adminuserproject.getId()); %>" selected><%out.print(adminuserproject.getName()); %>
 													</select>
 			                                    </div>
-			<!--                                     <div class="messageContainer"></div> -->
+			                                    <div class="messageContainer col-sm-offset-3"></div>
 			                                    <label for="example-text-input" class="col-3 col-form-label">Builder Company*</label>
 			                                    <div class="col-3">
 			                                       <select id="company_id" name="company_id" class="form-control">
@@ -237,20 +235,22 @@
 														<% } %>
 													</select>
 			                                    </div>
-			<!--                                     <div class="messageContainer"></div> -->
+			                                    <div class="messageContainer col-sm-offset-3"></div>
 			                                </div>
 			                                
 			                                <div class="form-group row">
 			                                    <label for="example-search-input" class="col-3 col-form-label">Project Name*</label>
 			                                    <div class="col-3">
-			                                        <input class="form-control" type="text" id="name" name="name" value="<% out.print(builderProject.getName());%>">
+			                                        <input class="form-control"  data-msg-maxlength="The field Project Name must be a string with a minimum length of 5 and a maximum length of 10." 
+      													data-msg-minlength="The field Project Name must be a string with a minimum length of 5 and a maximum length of 10." 
+      													data-msg-required="The Project Name field is required."  data-rule-maxlength="10"  data-rule-minlength="5" data-rule-required="true" type="text" id="name" name="name" value="<% out.print(builderProject.getName());%>">
 			                                    </div>
 			                                    <div class="messageContainer"></div>
 			                                    <label for="example-search-input" class="col-3 col-form-label">Landmark</label>
 			                                    <div class="col-3">
 			                                        <input class="form-control" type="text" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>">
 			                                    </div>
-			<!--                                     <div class="messageContainer"></div> -->
+			                                    <div class="messageContainer col-sm-offset-3"></div>
 			                                </div>
 			                                
 			                                 <div class="form-group row">
@@ -271,7 +271,7 @@
 														<% } %>
 										             </select>
 			                                    </div>
-			<!--                                     <div class="messageContainer"></div> -->
+			                                    <div class="messageContainer col-sm-offset-3"></div>
 			                                </div>
 			
 			                                <div class="form-group row">
@@ -291,7 +291,7 @@
 														<% }} %>
 										          	</select>
 			                                    </div>
-			<!--                                     <div class="messageContainer"></div> -->
+			                                    <div class="messageContainer col-sm-offset-3"></div>
 			                                    <label for="example-tel-input" class="col-3 col-form-label">City</label>
 			                                    <div class="col-3">
 			                                         <select name="city_id" id="city_id" class="form-control">
@@ -307,7 +307,7 @@
 														<% } }%>
 										          	</select>
 			                                    </div>
-			<!--                                     <div class="messageContainer"></div> -->
+			                                    <div class="messageContainer col-sm-offset-3"></div>
 			                                </div>
 			                                
 			                                <div class="form-group row">
@@ -323,7 +323,7 @@
 														<% }} %>
 										          	</select>
 												</div>
-			<!-- 									<div class="messageContainer"></div> -->
+												<div class="messageContainer col-sm-offset-3"></div>
 			                                    <label for="example-text-input" class="col-3 col-form-label">Pincode</label>
 			                                    <div class="col-3">
 			                                        <input class="form-control" type="text" id="pincode" name="pincode" autocomplete="off" value="<% out.print(builderProject.getPincode());%>"/>
@@ -336,12 +336,12 @@
 			                                    <div class="col-3">
 			                                        <input class="form-control" type="text" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
 			                                    </div>
-			<!--                                     <div class="messageContainer"></div> -->
+			                                    <div class="messageContainer col-offset-3"></div>
 			                                    <label for="example-search-input" class="col-3 col-form-label">Longitude</label>
 			                                    <div class="col-3">
 			                                        <input class="form-control" type="text" id="longitude" name="longitude" autocomplete="off" value="<% out.print(builderProject.getLongitude());%>"/>
 			                                    </div>
-			<!--                                     <div class="messageContainer"></div> -->
+			                                    <div class="messageContainer col-sm-offset-3"></div>
 			                                </div>
 			                                
 			                                 <div class="form-group row">
@@ -353,7 +353,7 @@
 			                                    <div class="col-3">
 			                                    	<textarea class="form-control" id="highlight" name="highlight"><% out.print(builderProject.getHighlights());%></textarea>
 			                                    </div>
-			<!--                                     <div class="messageContainer"></div> -->
+			                                    <div class="messageContainer col-sm-offset-3"></div>
 			                                </div>
 			                                
 			                                <div class="form-group row">
@@ -540,7 +540,7 @@
 	                                   </div>
 	                                 </div>
 	                                <div class="offset-sm-5 col-sm-7">
-	                                        <button type="button" id="detailbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+	                                        <button type="button" id="detailbtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
 	                                 </div>
 	                                </form>   
 	                               </div>
@@ -631,7 +631,7 @@
 	                                    		</div>
 	                                		</div>
 			                                <div class="offset-sm-5 col-sm-7">
-	        	                               	<button type="submit" id="pricebtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+	        	                               	<button type="submit" id="pricebtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
 	            		                     </div>
 	                    	            </form>
                                 	</div>
@@ -692,7 +692,7 @@
 	                                </div>
 	                                
 	                                <div class="offset-sm-5 col-sm-7">
-                                        <button type="submit" id="paymentbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+                                        <button type="submit" id="paymentbtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
                                     </div>
                                 </form>
                             </div>
@@ -851,7 +851,7 @@
                                		  <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="javascript:addMoreOffer();">Add more</button>
                                   	</div>
 		                            <div class="offset-sm-5 col-sm-7">
-	                                        <button type="button" id="offerbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+	                                        <button type="button" id="offerbtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
 	                                </div>
 	                             </form>
                               </div>
@@ -866,6 +866,9 @@
          </div>
     </div>
 </body></html>
+<style>
+	  .error { border: 1px solid #b94a48!important; background-color: #fee!important; }
+</style>
 <script src="../js/bootstrapValidator.min.js"></script>
 <script src="../js/bootstrap-datepicker.min.js"></script>
 <script src="../js/jquery.form.js"></script>

@@ -120,15 +120,6 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
-                             <h4 class="page-title">New Demand Letter</h4><br>
-                                <ul class="nav tabs-horizontal">
-                                    <li class="tab nav-item" aria-expanded="false">
-                                        <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"></a>
-                                    </li>
-                                </ul>
-                                
-                              <div class="tab-content"> 
-                              
                                <div id="vimessages" class="tab-pane active" aria-expanded="false">
                                 <div class="col-12">
                                <form id="adddemandletter" name="adddemandletter" action="" method="post" enctype="multipart/form-data">
@@ -237,7 +228,6 @@
                               </div>
                               
                                 
-                                </div>
                         </div>
 
                         </div>

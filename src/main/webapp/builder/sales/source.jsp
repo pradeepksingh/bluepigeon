@@ -85,12 +85,7 @@ if(session!=null)
                 <div class="row">
                     <div class="col-lg-12">
        					<div class="white-box">
-							<ul class="nav tabs-horizontal">
-							    <li class="tab nav-item" aria-expanded="false">
-							        <span>New Source</span>
-							    </li>
-							</ul>
-                     		<div class="tab-content"> 
+							
                                 <div id="vimessages" class="tab-pane active" aria-expanded="false">
 	                                <div class="col-lg-12">
 	                                	<form id="addsource" name="addsource" method="post"  action="" enctype="multipart/form-data">
@@ -108,7 +103,6 @@ if(session!=null)
 	                               		</form>
 	                            	</div>
                          		</div>
-                       		</div>
                      	</div>
                   	</div>
                	</div>
@@ -184,7 +178,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-      //  window.location.href = "${baseUrl}/builder/sales/source-list.jsp";
+        window.location.href = "${baseUrl}/builder/sales/source-list.jsp";
   	}
 }
 

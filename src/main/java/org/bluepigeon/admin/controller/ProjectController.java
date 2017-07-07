@@ -2506,11 +2506,15 @@ public class ProjectController extends ResourceConfig {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage addSource (
-			@FormDataParam("name") String name
+			@FormDataParam("name") String name,
+			@FormDataParam("builder_id") int builderId
 			
 	){
 		ResponseMessage responseMessage = new ResponseMessage();
+		Builder builder = new Builder();
+		builder.setId(builderId);
 		Source source = new Source();
+		source.setBuilder(builder);
 		source.setName(name);
 		responseMessage = new ProjectDAO().saveSource(source);
 		
