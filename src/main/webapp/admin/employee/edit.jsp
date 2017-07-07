@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.AdminUserPhotos"%>
 <%@page import="org.bluepigeon.admin.dao.AdminUserDAO"%>
 <%@page import="org.bluepigeon.admin.model.AdminUserRole"%>
         <%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
@@ -8,19 +9,26 @@
 <%@include file="../../head.jsp"%>
 <%@include file="../../leftnav.jsp"%>
 <%
-
+	int emp_id = 0;
 	List<AdminUserRole> adminUserRoles = new AdminUserDAO().getAdminUserRoles();
 	List<AdminUser> adminUsers = new AdminUserDAO().getAminUserList();
    	session = request.getSession(false);
     AdminUser adminuserproject = new AdminUser();
+    AdminUser emp = null;
+    AdminUserPhotos adminUserPhotos = null;
+    AdminUserDAO adminUserDAO = null;
  	int p_user_id = 0;
  	List<City> city_list = new CityNamesImp().getCityNames();
+ 	emp_id = Integer.parseInt(request.getParameter("emp_id"));
 	if(session!=null)
 	{
 		if(session.getAttribute("uname") != null)
 		{
+			adminUserDAO = new AdminUserDAO();
 			adminuserproject  = (AdminUser)session.getAttribute("uname");
 			p_user_id = adminuserproject.getId();
+			emp = adminUserDAO.getEmployeeById(emp_id);
+			adminUserPhotos = adminUserDAO.getEmplyeePhoto(emp_id);
 		}
    	}
 %>
@@ -30,12 +38,12 @@
 			<ul class="breadcrumb">
 				<li><i class="ace-icon fa fa-home home-icon"></i>Home</li>
 				<li>Employee</li>
-				<li class="active">Add New Employee</li>
+				<li class="active">Update Employee</li>
 			</ul>
 		</div>
 		<div class="page-content">
 			<div class="page-header">
-				<h1>Add New Employee</h1>
+				<h1>Update Employee</h1>
 			</div>
 			<ul class="nav nav-tabs" id="managerTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Basic Details</a></li>
@@ -49,11 +57,12 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
+										<input type="hidden" name="emp_id" id="emp_id" value="<%out.print(emp_id);%>"/>
 										<div class="col-lg-6 margin-bottom-5">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Name</label>
 												<div class="col-sm-6">
-													<input type="text" class="form-control" id="name" name="name" />
+													<input type="text" class="form-control" id="name" name="name" value="<%out.print(emp.getName());%>"/>
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
 										  	</div>
@@ -62,7 +71,7 @@
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Phone</label>
 												<div class="col-sm-6">
-													<input type="text" class="form-control" id="phone" name="phone" />
+													<input type="text" class="form-control" id="phone" name="phone" value="<%out.print(emp.getMobile()); %>" />
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
 											</div>
@@ -71,7 +80,7 @@
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Email </label>
 												<div class="col-sm-6">
-													<input type="text" class="form-control" id="email" name="email" />
+													<input type="text" class="form-control" id="email" name="email" value="<%out.print(emp.getEmail());%>"/>
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
 											</div>
@@ -80,7 +89,7 @@
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Password </label>
 												<div class="col-sm-6">
-													<input type="password" class="form-control" id="password" name="password" />
+													<input type="password" class="form-control" id="password" name="password" value="<%out.print(emp.getPassword());%>"/>
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
 											</div>
@@ -89,7 +98,7 @@
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Current Address</label>
 												<div class="col-sm-6">
-													<textarea id="current_address" name="current_address" placeholder="Enter current Address" class="form-control" ></textarea>
+													<textarea id="current_address" name="current_address" placeholder="Enter current Address" class="form-control" ><%out.print(emp.getCurrentAddress()); %></textarea>
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
 											</div>
@@ -98,7 +107,7 @@
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Permanent Address</label>
 												<div class="col-sm-6">
-													<textarea id="permanent_address" name="permanent_address" placeholder="Enter Permanent Address" class="form-control" ></textarea>
+													<textarea id="permanent_address" name="permanent_address" placeholder="Enter Permanent Address" class="form-control" ><%out.print(emp.getPermanentAddress()); %></textarea>
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
 											</div>
@@ -109,9 +118,14 @@
 												<div class="col-sm-6">
 												 	<select name="city_id" id="city_id" class="form-control">
 									                    <option value="">Select City</option>
-									                     <% for(City city : city_list){ %>
-														<option value="<% out.print(city.getId());%>"><% out.print(city.getName());%></option>
-														<% } %>
+									                     <% for(City city : city_list){
+									                    	 if(emp.getCity()!=null){
+									                     %>
+														<option value="<% out.print(city.getId());%>" <% if(city.getId() == emp.getCity().getId()){ %>selected<%}  %>><% out.print(city.getName());%></option>
+														<% }else{
+															}%>
+															<option value="<% out.print(city.getId());%>"><% out.print(city.getName());%></option>
+														<%}%>
 									                </select>
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
@@ -124,7 +138,7 @@
 												 	<select name="access_id" id="access_id" class="form-control">
 									                    <option value="">Access Type</option>
 									                     <% for(AdminUserRole adminUser : adminUserRoles){ %>
-														<option value="<% out.print(adminUser.getId());%>"><% out.print(adminUser.getRoleName());%></option>
+														<option value="<% out.print(adminUser.getId());%>" <%if(adminUser.getId() == emp.getAdminUserRole().getId()) {%>selected<%} %>><% out.print(adminUser.getRoleName());%></option>
 														<% } %>
 									                </select>
 												</div>
@@ -155,6 +169,17 @@
 										<h3>Upload manager Photo</h3>
 										<br>
 										<div class="row" id="manager_images">
+											<%if(adminUserPhotos != null) { %>
+											<input type="hidden" id="emp_photo_id" name="emp_photo_id" value="<%out.print(adminUserPhotos.getId());%>">
+											<div class="col-lg-6 margin-bottom-5" id="b_image<% out.print(adminUserPhotos.getId()); %>">
+												<div class="form-group" id="error-landmark">
+													<div class="col-sm-12">
+														<img alt="Building Images" src="${baseUrl}/<% out.print(adminUserPhotos.getPhotoUrl()); %>" width="200px;">
+													</div>
+													<div class="messageContainer col-sm-offset-4"></div>
+												</div>
+											</div>
+											<% } %>
 											<div class="col-lg-6 margin-bottom-5" id="imgdiv-'+img_count+'">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Select Image </label>
@@ -171,7 +196,7 @@
 							</div>
 							<div class="col-sm-12">
 								<span class="pull-right">
-									<button type="submit" name="imagebtn" class="btn btn-success">SAVE</button>
+									<button type="submit" name="imagebtn" class="btn btn-success">UPDATE</button>
 								</span>
 							</div>
 						</div>
@@ -276,14 +301,14 @@ $('#addmanager').bootstrapValidator({
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
-	addPropertyManager();
+	updateEmployee();
 });
-function addPropertyManager() {
+function updateEmployee() {
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/employee/save',
+	 		url : '${baseUrl}/webapi/employee/admin/update',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};

@@ -81,6 +81,7 @@
         <mapping class="org.bluepigeon.admin.model.ProjectPanoramicImage" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloorStatus" />
         <mapping class="org.bluepigeon.admin.model.AdminUser" />
+        <mapping class="org.bluepigeon.admin.model.AdminUserPhotos" />
         <mapping class="org.bluepigeon.admin.model.BuilderPropertyType" />
         <mapping class="org.bluepigeon.admin.model.BuilderFlat" />
         <mapping class="org.bluepigeon.admin.model.BuilderProjectPropertyType" />

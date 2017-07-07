@@ -279,7 +279,7 @@
 							</div>
 							<div class="col-sm-12">
 								<span class="pull-right">
-									<button type="button" class="btn btn-success btn-sm" onclick="showDetailTab();">Next</button>
+									<button type="button" class="btn btn-success btn-sm" onclick="show2();">Next</button>
 								</span>
 							</div>
 						</div>
@@ -444,7 +444,7 @@
 							<%} %>
 							<div class="col-lg-6 margin-bottom-5">
 								<div class="col-sm-12">
-									<button type="button" class="btn btn-success btn-sm" id="pricebtn">Next</button>
+									<button type="button" class="btn btn-success btn-sm" onclick="show3();" id="pricebtn">Next</button>
 								</div>
 							</div>
 						</div>
@@ -1053,10 +1053,6 @@ function getProjectShedule(){
 	var project_id = $("#project_id").val();
 	$.get("${baseUrl}/webapi/project/building/payments/"+project_id, { }, function(data){
 		$(data).each(function(index){
-			console.log(data[index].name);
-			//$("#schedule").val(data[index].name);
-		
-			
 		html=+'<div class="col-lg-12">'
 			+'<div class="panel panel-default">'
 			+'<div class="panel-body">'
@@ -1149,7 +1145,19 @@ $('input[name="amenity_type[]"]').click(function() {
 		$("#amenity_stage"+$(this).val()).hide();
 	}
 });
+function show2()
+{
+	$('#buildingTabs a[href="#pricing"]').tab('show');
+	
+}
 
+function show3(){
+	$('#buildingTabs a[href="#payment"]').tab('show');
+}
+
+function show3(){
+	$('#buildingTabs a[href="#offer"]').tab('show');
+}
 </script>
 </body>
 </html>

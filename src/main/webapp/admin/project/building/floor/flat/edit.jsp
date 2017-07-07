@@ -396,7 +396,7 @@
 												<div class="row">
 													<div class="col-lg-12">
 														<div class="col-sm-12">
-															<button type="button" class="btn btn-success btn-sm" id="subpbtn">SAVE</button>
+															<button type="button" class="btn btn-success btn-sm" id="subpbtn">UPDATE</button>
 														</div>
 													</div>
 												</div>
@@ -513,7 +513,7 @@ function isNumber(evt, element) {
     return true;
 } 
 $('input[name="stage_weightage[]"]').keyup(function(){
-	alert("Value :: "+$(this).val());
+	//alert("Value :: "+$(this).val());
 // 	  var $th = $(this);
 // 	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
 });

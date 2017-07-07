@@ -128,7 +128,7 @@ $(document).ready(function(){
 });
 $('#name').keyup(function() {
     var $th = $(this);
-    $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
+    $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
 });
 function addProjectSellerType() {
 	$.post("${baseUrl}/webapi/create/builder/seller/type/save",{ name: $("#name").val(), status: $("#status").val()}, function(data){

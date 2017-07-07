@@ -118,7 +118,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="name" name="name" value="<% out.print(builderBuilding.getName()); %>" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -127,7 +127,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="total_floor" name="total_floor" value="<% out.print(builderBuilding.getTotalFloor());%>"/>
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<% SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy"); %>
@@ -248,7 +248,7 @@
 														</div>
 														<% } %>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
 											</div>
 										</div>
@@ -340,7 +340,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" readonly="true" id="schedule" name="schedule[]" value="<% out.print(buildingPaymentInfo.getName());%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-6"></div>
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
@@ -349,7 +349,7 @@
 														<div class="col-sm-4">
 															<input type="text" class="form-control errorMsg"  id="payable" name="payable[]" value="<% out.print(buildingPaymentInfo.getPayable());%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-6"></div>
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
@@ -691,6 +691,13 @@ $('#updatebuilding').bootstrapValidator({
                     message: 'Building Name is required and cannot be empty'
                 }
             }
+        },
+        total_floor:{
+        	 validators: {
+                 notEmpty: {
+                     message: 'Total number of floors is required and cannot be empty'
+                 }
+             }
         },
         launch_date: {
             validators: {

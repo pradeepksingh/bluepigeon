@@ -6,7 +6,7 @@
 <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <footer class="footer text-center"> 2017 &copy; Blue Pigeon</footer>
 <script src="${baseUrl}/builder/bootstrap/dist/js/tether.min.js"></script>
-<script src="${baseUrl}/builder/bootstrap/dist/js/bootstrap.min.js"></script>
+<%-- <script src="${baseUrl}/builder/bootstrap/dist/js/bootstrap.min.js"></script> --%>
 <script src="${baseUrl}/builder/plugins/bower_components/bootstrap-extension/js/bootstrap-extension.min.js"></script>
 <!-- Menu Plugin JavaScript -->
 <script src="${baseUrl}/builder/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>

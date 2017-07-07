@@ -119,8 +119,6 @@
 													</div>
 												</div>
 											</div>
-										</div>
-									</div>
 									<hr/>
 									<div class="row">
 										<div class="col-lg-12 margin-bottom-5">
@@ -152,7 +150,7 @@
 													</div>
 												</div>
 											</div>
-										</div>
+										
 									</div>
 									<hr/>
 									<h3>Upload Project Images</h3>
@@ -228,22 +226,19 @@
 												<div class="messageContainer col-sm-offset-3"></div>
 											</div>
 										</div>
+										
 									</div>
 									<div class="row">
 										<span class="pull-right"><a href="javascript:addMoreElvImages();" class="btn btn-info btn-xs"> + Add More</a></span>
 									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div id="response"></div>
+									<div id="response"></div>
 				<button type="submit" class="btn btn-success">Submit</button>
 				<br> <br>
-			</form>
-		</div>
-	</div>
-</div>
+								</div>
+								</form>
+							</div>
+				
+			
 <%@include file="../../footer.jsp"%>
 <!-- inline scripts related to this page -->
 <style>

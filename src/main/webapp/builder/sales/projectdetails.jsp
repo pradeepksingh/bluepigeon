@@ -84,6 +84,7 @@
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../plugins/bower_components/raphael/raphael-min.js"></script>
     <script src="../plugins/bower_components/morrisjs/morris.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
    
   
 </head>
@@ -123,7 +124,7 @@
                          <% if(imageGaleries != null){
                         	// int imgCount=1;
                         	 %>
-                           <button class="full" data-toggle="modal" data-target=".bs-example-modal-lg">
+                           <button class="full" onclick="showModal('image_carousel');">
                           <% try{
                         	  if(imageGaleries.get(0).getImage() != null){
                           %>
@@ -132,8 +133,8 @@
                            			<img src="../plugins/images/Untitled-1.png" alt="Second slide image" class="full">
                             <%}} %>
                            </button>
-                        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-						  <div class="modal-dialog modal-lg">
+                        <div class="modal fade" role="dialog" id="image_carousel">
+						  <div class="modal-dialog modal-lg" style="margin-top:15%;">
 						    <div class="modal-content">
 						      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 						       <div class="carousel-inner">
@@ -326,8 +327,9 @@
                                             <td>Year Built</td>
                                             <td><%
                                             DateFormat dateFormat = new SimpleDateFormat("yyyy");
+                                            if(projectList.getPossessionDate() != null){
                             	    	    Date date = projectList.getPossessionDate();
-                                            out.print(dateFormat.format(date)); %></td>
+                                            out.print(dateFormat.format(date)); }%></td>
                                         </tr>
                                        
                                         <tr>
@@ -348,7 +350,7 @@
                             </div>
                         </div>
                         <div class="white-box col-sm-12">
-                        <a href="#addCountry" class="btn btn-info btn-lg btn-round pull-right col-sm-12" style="margin: -22px 1px;" onclick="javascript:getActiveProjectFlats();" role="button" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;Book Now</a>
+                        <a href="#addCountry" class="btn btn-info btn-lg btn-round pull-right col-sm-12" style="margin: -22px 1px;" onclick="javascript:getActiveProjectFlats();"><i class="fa fa-plus"></i>&nbsp;Book Now</a>
 <!--                         <button id="#addCountry" type="button" onclick="getActiveProjectFlats();" class="btn btn-info bt-sm btn-rounded pull-right" style="margin-right:-20px;">New Request</button> -->
                         </div>
 <!--                         <div class="white-box p-0"> -->
@@ -389,7 +391,7 @@
             </div>
             <div id="addCountry" class="modal fade" style="">
 				<div id="cancel-overlay" class="modal-dialog" style="opacity:1 ;width:400px ">
-  					<div class="modal-content-new">
+  					<div class="modal-content-new" style="margin-top:25%;">
 		          	<div class="modal-header">
 		              	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
 		              	<div class="row">
@@ -521,7 +523,7 @@ function getActiveProjectFlats(){
 			});
 			//alert(html);
 		   $("#flatList").append(html);
-		 
+		   $("#addCountry").modal('show');
 		  
 		}
 	},'json');
@@ -532,9 +534,12 @@ function getActiveProjectFlats(){
 // });
 function addBuyer(){
  // $flatId = $("#myradiobuttonlist input[type='radio']:checked").val();
-var flatId =   $('input[name="addnewbuyer"]:checked').val();
+	var flatId =   $('input[name="addnewbuyer"]:checked').val();
 //  	alert($("#myradiobuttonlist").val());
  	//alert(flatId);
  	window.location.href = "${baseUrl }/builder/buyer/new.jsp?flat_id="+flatId;
+}
+function showModal(id) {
+	$("#"+id).modal('show');
 }
 </script>

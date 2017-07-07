@@ -35,8 +35,8 @@ public class BuilderProjectAmenityDAO {
 				newsession.getTransaction().commit();
 				newsession.close();
 				response.setId(builderProjectAmenity.getId());
-				response.setStatus(1);
-				response.setMessage("Project amenity added Successfully");
+				//response.setStatus(1);
+				//response.setMessage("Project amenity added Successfully");
 			}
 		}
 		return response;
