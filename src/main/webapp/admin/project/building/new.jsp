@@ -717,18 +717,18 @@ $('#addbuilding').bootstrapValidator({
         	 validators: {
                  notEmpty: {
                      message: 'Launch date is required and cannot be empty'
-                 },
-                 callback: {
-                     message: 'Launch date is not valid',
-                     callback: function(value, validator, $field) {
-                         if (value === '') {
-                             return true;
-                         }
-						
-                         // Check if the value has format of DD.MM.YYYY or DD.MM.YY
-                         return moment(value, 'dd MM yyyy', true).isValid();
-                     }
                  }
+//                  callback: {
+//                      message: 'Launch date is not valid',
+//                      callback: function(value, validator, $field) {
+//                          if (value === '') {
+//                              return true;
+//                          }
+						
+//                          // Check if the value has format of DD.MM.YYYY or DD.MM.YY
+//                          return moment(value, 'dd MM yyyy', true).isValid();
+//                      }
+//                  }
              }
         },
         possession_date : {

@@ -87,42 +87,35 @@ if(session!=null)
                 <div class="row">
                     <div class="col-lg-12">
        					<div class="white-box">
-							<ul class="nav tabs-horizontal">
-							    <li class="tab nav-item" aria-expanded="false">
-							        <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"><span>New Project Details</span></a>
-							    </li>
-							</ul>
-                     		<div class="tab-content"> 
-                                <div id="vimessages" class="tab-pane active" aria-expanded="false">
-	                                <div class="col-lg-12">
-	                                	<form id="addproject" name="addproject" method="post">
-			                                <input type="hidden" value="<%out.print(p_user_id); %>" name="builder_id" id="builder_id" />
-			                                <div class="form-group row">
-			                                    <label for="example-text-input" class="col-lg-3 col-form-label">Project Name <span class='text-danger'>*</span></label>
-			                                    <div class="col-lg-5">
-			                                        <input class="form-control" type="text" id="name" name="name">
-			                                    </div>
-			                                    <div class="messageContainer col-lg-4"></div>
-			                                </div>
-			                                 <div class="form-group row">
-			                                    <label for="example-tel-input" class="col-lg-3 col-form-label">Area <span class='text-danger'>*</span></label>
-			                                    <div class="col-lg-5">
-			                                       <select id="locality_id" name="locality_id" class="form-control">
-														<option value="">Select Area</option>
-														<% for (Locality locality : localities) { %>
-														<option value="<%out.print(locality.getId());%>"> <% out.print(locality.getName()); %> </option>
-														<% } %>
-													</select>
-			                                    </div>
-			                                    <div class="messageContainer col-lg-4"></div>
-			                                </div>
-			                                <div class="offset-sm-5 col-sm-7">
-			                                	<button type="submit" name="addproject" class="btn btn-info waves-effect waves-light m-t-10">Submit</button>
-			                                 </div>
-	                               		</form>
-	                            	</div>
-                         		</div>
-                       		</div>
+                            <div id="vimessages" class="tab-pane active" aria-expanded="false">
+                                <div class="col-lg-12">
+                                	<form id="addproject" name="addproject" method="post">
+		                                <input type="hidden" value="<%out.print(p_user_id); %>" name="builder_id" id="builder_id" />
+		                                <div class="form-group row">
+		                                    <label for="example-text-input" class="col-lg-3 col-form-label">Project Name <span class='text-danger'>*</span></label>
+		                                    <div class="col-lg-5">
+		                                        <input class="form-control" type="text" id="name" name="name">
+		                                    </div>
+		                                    <div class="messageContainer col-lg-4"></div>
+		                                </div>
+		                                 <div class="form-group row">
+		                                    <label for="example-tel-input" class="col-lg-3 col-form-label">Area <span class='text-danger'>*</span></label>
+		                                    <div class="col-lg-5">
+		                                       <select id="locality_id" name="locality_id" class="form-control">
+													<option value="">Select Area</option>
+													<% for (Locality locality : localities) { %>
+													<option value="<%out.print(locality.getId());%>"> <% out.print(locality.getName()); %> </option>
+													<% } %>
+												</select>
+		                                    </div>
+		                                    <div class="messageContainer col-lg-4"></div>
+		                                </div>
+		                                <div class="offset-sm-5 col-sm-7">
+		                                	<button type="submit" name="addproject" class="btn btn-info waves-effect waves-light m-t-10">Submit</button>
+		                                 </div>
+                               		</form>
+                            	</div>
+                        	</div>
                      	</div>
                   	</div>
                	</div>

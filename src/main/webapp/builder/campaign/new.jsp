@@ -118,26 +118,12 @@
                   
                     <!-- /.col-lg-12 -->
                 </div>
-             
-        
-
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
                              <!-- <h4 class="page-title">Add New Project</h4>
                              <br>-->
-                                <ul class="nav tabs-horizontal">
-                                    <li class="tab nav-item" aria-expanded="false">
-                                        <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"><span>+ New Campaign</span></a>
-                                    </li>
-                                     <li class="tab nav-item">
-                                        <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages1"><span>Select Recipients</span></a>
-                                    </li>
-                                </ul>
-                                
                                  <form id="addcampaign" name="addcampaign" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-                              <div class="tab-content"> 
-                              
                                <div id="vimessages" class="tab-pane active" aria-expanded="false">
                                 <div class="col-12">
                                		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(builder.getId());%>"/>
@@ -250,7 +236,6 @@
 	                                 </div>
                                  </div>
                                </div>
-                             </div>
                               </form>  
                         </div>
                         </div>

@@ -386,7 +386,7 @@
 												<div class="row">
 													<div class="col-lg-12">
 														<div class="col-sm-12">
-															<button type="button" class="btn btn-success btn-sm" id="subpbtn">SAVE</button>
+															<button type="button" class="btn btn-success btn-sm" id="subpbtn">UPDATE</button>
 														</div>
 													</div>
 												</div>
@@ -428,18 +428,6 @@
 $(".errorMsg").keypress(function(event){
 	return isNumber(event, this)
 });
-
-function isNumber(evt, element) {
-
-    var charCode = (evt.which) ? evt.which : event.keyCode
-
-    if (
-        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
-        (charCode < 48 || charCode > 57))
-        return false;
-
-    return true;
-} 
 
 $('#floor_no').keyup(function() {
     var $th = $(this);

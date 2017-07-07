@@ -243,7 +243,7 @@
 													<label class="control-label col-sm-4">Select Image </label>
 													<div class="col-sm-8 input-group" style="padding:0px 12px;">
 														<input type="file" class="form-control" id="building_image" name="building_image[]" />
-														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a></span>
+														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a>
 													</div>
 												<div class="messageContainer col-sm-offset-3"></div>
 											</div>

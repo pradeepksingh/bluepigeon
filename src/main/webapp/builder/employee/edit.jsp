@@ -119,105 +119,98 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
-                                <ul class="nav tabs-horizontal">
-                                    <li class="tab nav-item" aria-expanded="false">
-                                        <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"></a>
-                                    </li>
-                                </ul>
-                               <div class="tab-content"> 
-                               		<div id="vimessages" class="tab-pane active" aria-expanded="false">
-                                		<div class="col-12">
-                               				<form id="addemployee" name="addemployee" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-                                				<input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_uid); %>" />
-                                 				<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>" />
+                           		<div id="vimessages" class="tab-pane active" aria-expanded="false">
+                               		<div class="col-12">
+                              				<form id="addemployee" name="addemployee" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                               				<input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_uid); %>" />
+                                				<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>" />
+                               				<div class="form-group row">
+                                   				<label for="example-text-input" class="col-3 col-form-label">Name*</label>
+                                   				<div class="col-3">
+                                       				<input class="form-control" type="text" value="<%out.print(builderEmployee.getName()); %>" id="name" name="name">
+                                   				</div>
+                                 					<div class="messageContainer"></div>
+                                   				<label for="example-text-input" class="col-3 col-form-label">Contact*</label>
+                                   				<div class="col-3">
+                                       				<input class="form-control" type="text" value="<%out.print(builderEmployee.getMobile()); %>" id="contact" name="contact">
+                                   				</div>
+                                   				<div class="messageContainer"></div>
+                               				</div>
+                               				<div class="form-group row">
+                                   				<label for="example-search-input" class="col-3 col-form-label">Email*</label>
+                                   				<div class="col-3">
+                                       				<input class="form-control" type="text" value="<%out.print(builderEmployee.getEmail()); %>" id="email" name="email">
+                                   				</div>
+                                   				<label for="example-search-input" class="col-3 col-form-label">Current Address</label>
+                                   				<div class="col-3">
+													<textarea rows="" cols="" class="form-control" id="address" name="address"><%if(builderEmployee.getCurrentAddress() != null){out.print(builderEmployee.getCurrentAddress());} %></textarea>
+                                   				</div>
+                               				</div>
                                 				<div class="form-group row">
-                                    				<label for="example-text-input" class="col-3 col-form-label">Name*</label>
-                                    				<div class="col-3">
-                                        				<input class="form-control" type="text" value="<%out.print(builderEmployee.getName()); %>" id="name" name="name">
-                                    				</div>
-                                  					<div class="messageContainer"></div>
-                                    				<label for="example-text-input" class="col-3 col-form-label">Contact*</label>
-                                    				<div class="col-3">
-                                        				<input class="form-control" type="text" value="<%out.print(builderEmployee.getMobile()); %>" id="contact" name="contact">
-                                    				</div>
-                                    				<div class="messageContainer"></div>
-                                				</div>
-                                				<div class="form-group row">
-                                    				<label for="example-search-input" class="col-3 col-form-label">Email*</label>
-                                    				<div class="col-3">
-                                        				<input class="form-control" type="text" value="<%out.print(builderEmployee.getEmail()); %>" id="email" name="email">
-                                    				</div>
-                                    				<label for="example-search-input" class="col-3 col-form-label">Current Address</label>
-                                    				<div class="col-3">
-														<textarea rows="" cols="" class="form-control" id="address" name="address"><%if(builderEmployee.getCurrentAddress() != null){out.print(builderEmployee.getCurrentAddress());} %></textarea>
-                                    				</div>
-                                				</div>
-                                 				<div class="form-group row">
-                                    				<label for="example-tel-input" class="col-3 col-form-label">Permanent Address</label>
-                                    				<div class="col-3">
-                                        				<textarea rows="" cols="" class="form-control" id="address1" name="address1"><%if(builderEmployee.getPermanentAddress() != null){out.print(builderEmployee.getPermanentAddress());} %></textarea>
-                                    				</div>
-                                    				<label for="example-tel-input" class="col-3 col-form-label">Designation</label>
-                                    				<div class="col-3">
-                                        				<input class="form-control" type="text" value="<%if(builderEmployee.getDesignation() != null){out.print(builderEmployee.getDesignation());}%>" name="designation" id="designation">
-                                    				</div>
-                                				</div>
-                                				<div class="form-group row">
-                                    				<label for="example-tel-input" class="col-3 col-form-label">Access Type</label>
-                                    				<div class="col-3">
-                                         				<select class="form-control" name="access" id="access">
-					                                          <option value="0">Select Access</option>
-															  <% for (BuilderEmployeeAccessType access : access_list) { %>
-															  <option value="<%out.print(access.getId());%>" <%if(access.getId() == builderEmployee.getBuilderEmployeeAccessType().getId()){%>selected<%} %>> <% out.print(access.getName()); %> </option>
-															  <% } %>
-														</select>
-				                                    </div>
-                                    				<label for="example-tel-input" class="col-3 col-form-label">Employee ID</label>
-                                    				<div class="col-3">
-                                         				<input class="form-control" type="text" value="<%if(builderEmployee.getEmployeeId() != null){out.print(builderEmployee.getEmployeeId());} %>" id="empid" name="empid">
-                                    				</div>
-                                				</div>
-                                				<div class="form-group row">
-                                    				<label for="example-text-input" class="col-3 col-form-label">Project</label>
-                                    				<div class="col-3">
-                                       				<select class="form-control" name="project" id="project">
-				                                          <option value="0">Select Project</option>
-														  <%
-														  if( builderEmployee.getBuilderProject() != null){
-														  for (ProjectData project : project_list) { %>
-														  <option value="<%out.print(project.getId());%>" <%if(project.getId() == builderEmployee.getBuilderProject().getId()) {%>selected<%} %>> <% out.print(project.getName()); %> </option>
-														  <% }} %>
+                                   				<label for="example-tel-input" class="col-3 col-form-label">Permanent Address</label>
+                                   				<div class="col-3">
+                                       				<textarea rows="" cols="" class="form-control" id="address1" name="address1"><%if(builderEmployee.getPermanentAddress() != null){out.print(builderEmployee.getPermanentAddress());} %></textarea>
+                                   				</div>
+                                   				<label for="example-tel-input" class="col-3 col-form-label">Designation</label>
+                                   				<div class="col-3">
+                                       				<input class="form-control" type="text" value="<%if(builderEmployee.getDesignation() != null){out.print(builderEmployee.getDesignation());}%>" name="designation" id="designation">
+                                   				</div>
+                               				</div>
+                               				<div class="form-group row">
+                                   				<label for="example-tel-input" class="col-3 col-form-label">Access Type</label>
+                                   				<div class="col-3">
+                                        				<select class="form-control" name="access" id="access">
+				                                          <option value="0">Select Access</option>
+														  <% for (BuilderEmployeeAccessType access : access_list) { %>
+														  <option value="<%out.print(access.getId());%>" <%if(access.getId() == builderEmployee.getBuilderEmployeeAccessType().getId()){%>selected<%} %>> <% out.print(access.getName()); %> </option>
+														  <% } %>
 													</select>
-                                    			</div>
-                                    			<label for="example-text-input" class="col-3 col-form-label">Area</label>
-			                                    <div class="col-3">
-			                                      <select name="area" id="area" class="form-control">
-														<option value="0"> Select Area </option>
-														<%for(Locality locality: localityList){ %>
-														<option value="<%out.print(locality.getId()); %>" <%if(locality.getId() == builderEmployee.getLocality().getId()){ %>selected<%} %>><%out.print(locality.getName()); %></option>
-														<%} %>
-												 </select>
-			                                   </div>
-                                			</div >
-                                			<div class="form-group row">
-                                   		 		<label for="example-search-input" class="col-3 col-form-label">City</label>
-                                    			<div class="col-3">
-			                                      <select name="city" id="city" class="form-control">
-														<option value="0"> Select City </option>
-														<% for(City city :cityList){%>
-														<option value="<%out.print(city.getId()); %>" <%if(city.getId() == builderEmployee.getCity().getId()){ %>selected<%} %>><%out.print(city.getName()); %></option>
-														<%}%>
-												  </select>
-			                                   </div>
+			                                    </div>
+                                   				<label for="example-tel-input" class="col-3 col-form-label">Employee ID</label>
+                                   				<div class="col-3">
+                                        				<input class="form-control" type="text" value="<%if(builderEmployee.getEmployeeId() != null){out.print(builderEmployee.getEmployeeId());} %>" id="empid" name="empid">
+                                   				</div>
+                               				</div>
+                               				<div class="form-group row">
+                                   				<label for="example-text-input" class="col-3 col-form-label">Project</label>
+                                   				<div class="col-3">
+                                      				<select class="form-control" name="project" id="project">
+			                                          <option value="0">Select Project</option>
+													  <%
+													  if( builderEmployee.getBuilderProject() != null){
+													  for (ProjectData project : project_list) { %>
+													  <option value="<%out.print(project.getId());%>" <%if(project.getId() == builderEmployee.getBuilderProject().getId()) {%>selected<%} %>> <% out.print(project.getName()); %> </option>
+													  <% }} %>
+												</select>
+                                   			</div>
+                                   			<label for="example-text-input" class="col-3 col-form-label">Area</label>
+		                                    <div class="col-3">
+		                                      <select name="area" id="area" class="form-control">
+													<option value="0"> Select Area </option>
+													<%for(Locality locality: localityList){ %>
+													<option value="<%out.print(locality.getId()); %>" <%if(locality.getId() == builderEmployee.getLocality().getId()){ %>selected<%} %>><%out.print(locality.getName()); %></option>
+													<%} %>
+											 </select>
+		                                   </div>
+                               			</div >
+                               			<div class="form-group row">
+                                  		 		<label for="example-search-input" class="col-3 col-form-label">City</label>
+                                   			<div class="col-3">
+		                                      <select name="city" id="city" class="form-control">
+													<option value="0"> Select City </option>
+													<% for(City city :cityList){%>
+													<option value="<%out.print(city.getId()); %>" <%if(city.getId() == builderEmployee.getCity().getId()){ %>selected<%} %>><%out.print(city.getName()); %></option>
+													<%}%>
+											  </select>
+		                                   </div>
+                               			</div>
+                               			<div class="offset-sm-5 col-sm-7">
+                                       		<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">Update</button>
                                 			</div>
-                                			<div class="offset-sm-5 col-sm-7">
-                                        		<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">Update</button>
-                                 			</div>
-                               			</form>
-                               		</div>
-                              	</div>
-                           	</div>
-                        </div>
+                              			</form>
+                              		</div>
+                             	</div>
+                         </div>
                      </div>
                   </div>
               </div>
