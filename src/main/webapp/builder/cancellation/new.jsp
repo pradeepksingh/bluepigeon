@@ -117,7 +117,6 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
-                             <h4 class="page-title">Initiate New Cancellation</h4><br>
                                 <ul class="nav tabs-horizontal">
                                     <li class="tab nav-item" aria-expanded="false">
                                         <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"></a>

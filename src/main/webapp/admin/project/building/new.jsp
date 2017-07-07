@@ -124,7 +124,7 @@
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-5">Launch Date <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
-														<input type="text" class="form-control" id="launch_date" name="launch_date" value=""/>
+														<input type="text" class="form-control" id="launch_date" name="launch_date"/>
 													</div>
 													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
@@ -510,7 +510,7 @@
 								<div class="row">
 									<div class="col-lg-12">
 										<div class="col-sm-12">
-											<button type="button" class="btn btn-success btn-sm" id="paymentbtn">Next</button>
+											<button type="button" class="btn btn-success btn-sm" onclick="show4();" id="paymentbtn">Next</button>
 										</div>
 									</div>
 								</div>
@@ -706,6 +706,38 @@ $('#addbuilding').bootstrapValidator({
                 }
             }
         },
+        total_floor: {
+        	 validators: {
+                 notEmpty: {
+                     message: 'Total number of floors is required and cannot be empty'
+                 }
+             }
+        },
+        launch_date : {
+        	 validators: {
+                 notEmpty: {
+                     message: 'Launch date is required and cannot be empty'
+                 },
+                 callback: {
+                     message: 'Launch date is not valid',
+                     callback: function(value, validator, $field) {
+                         if (value === '') {
+                             return true;
+                         }
+						
+                         // Check if the value has format of DD.MM.YYYY or DD.MM.YY
+                         return moment(value, 'dd MM yyyy', true).isValid();
+                     }
+                 }
+             }
+        },
+        possession_date : {
+        	 validators: {
+                 notEmpty: {
+                     message: 'Possession date is required and cannot be empty'
+                 }
+             }
+        }
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
@@ -1155,7 +1187,7 @@ function show3(){
 	$('#buildingTabs a[href="#payment"]').tab('show');
 }
 
-function show3(){
+function show4(){
 	$('#buildingTabs a[href="#offer"]').tab('show');
 }
 </script>

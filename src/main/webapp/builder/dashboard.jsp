@@ -140,7 +140,7 @@
                     </div>
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border">
-                            <h3 class="box-title">Tota leads Received</h3>
+                            <h3 class="box-title">Total leads Received</h3>
                             <ul class="list-inline two-part">
 <!--                                 <li><i class="icon-user text-danger"></i></li> -->
                                  <li><i class="icon-user text-info-new"></i></li>
