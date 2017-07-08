@@ -304,7 +304,7 @@ function addLead() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/project/lead/add',
+	 		url : '${baseUrl}/webapi/project/lead/add1',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};

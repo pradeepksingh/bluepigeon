@@ -166,7 +166,6 @@
         </div>
         <!-- /#page-wrapper -->
     
-   <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <!-- start - This is for export functionality only -->
     <script src="../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
     <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>

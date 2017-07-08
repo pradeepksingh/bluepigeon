@@ -1453,7 +1453,7 @@ public class ProjectDAO {
 	 * @return List<BuilderFloor>
 	 */
 	public List<BuilderFloor> getBuildingActiveFloors(int building_id) {
-		String hql = "from BuilderFloor where builderBuilding.id = :building_id and status=1";
+		String hql = "from BuilderFloor where builderBuilding.id = :building_id and builderBuilding.builderProject.status=1 and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -2103,7 +2103,7 @@ public class ProjectDAO {
 	 * @return List<BuilderFlat>
 	 */
 	public List<BuilderFlat> getBuilderActiveFloorFlats(int floor_id) {
-		String hql = "from BuilderFlat where builderFloor.id = :floor_id and status=1";
+		String hql = "from BuilderFlat where builderFloor.id = :floor_id and builderFloor.builderBuilding.builderProject.status=1 and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -3157,7 +3157,7 @@ public class ProjectDAO {
 	 * @return List<BuilderBuilding>
 	 */
 	public List<BuilderBuilding> getActiveBuildingsByBuilderId(int builder_id) {
-		String hql = "from BuilderBuilding where builderProject.builder.id = :builder_id and builderProject.status=1";
+		String hql = "from BuilderBuilding where builderProject.builder.id = :builder_id and builderProject.status=1 and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -3184,7 +3184,7 @@ public class ProjectDAO {
 	 * @return List<BuilderFloor>
 	 */
 	public List<BuilderFloor> getAllActiveFloorsByBuilderId(int builderId) {
-		String hql = "from BuilderFloor where builderBuilding.builderProject.builder.id = :builder_id and builderBuilding.builderProject.status=1 order by builderBuilding.builderProject.id DESC";
+		String hql = "from BuilderFloor where builderBuilding.builderProject.builder.id = :builder_id and builderBuilding.builderProject.status=1 and status=1 order by builderBuilding.builderProject.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
