@@ -49,8 +49,8 @@
 			builder_id = builder.getBuilder().getId();
 		}
 		if(builder_id > 0){
-			builderLead = new ProjectDAO().getBuilderLeadByBuilderId(builder_id).get(0);
-			project_list = new ProjectDAO().getProjectsByBuilderId(builder_id);
+			builderLead = new ProjectDAO().getBuilderProjectLeadById(lead_id);
+			project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
 		    builder_size = project_list.size();
 		}
 		if(builderLead !=null){
@@ -145,14 +145,6 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
-                                <ul class="nav tabs-horizontal">
-                                    <li class="tab nav-item" aria-expanded="false">
-                                        <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"></a>
-                                    </li>
-                                </ul>
-                                
-                              <div class="tab-content"> 
-                              
                                <div id="vimessages" class="tab-pane active" aria-expanded="false">
                                 <div class="col-12">
                                	<form id="addlead" name="addlead" class="form-horizontal" action="" method="post">
@@ -251,7 +243,6 @@
                                </form>
                                </div>
                               </div>
-                                </div>
                         </div>
                         </div>
                     </div>
@@ -354,15 +345,15 @@ $('#addlead').bootstrapValidator({
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
-	addLead();
+	updateLead();
 });
 
-function addLead() {
+function updateLead() {
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/project/lead/update',
+	 		url : '${baseUrl}/webapi/project/lead/update1',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};

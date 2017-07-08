@@ -2331,7 +2331,6 @@ public class ProjectController extends ResourceConfig {
 			builderPropertyType.setId(type_id);
 			builderLead.setBuilderPropertyType(builderPropertyType);
 		}
-		
 		builderLead.setName(name);
 		builderLead.setMobile(mobile);
 		builderLead.setEmail(email);
@@ -2342,6 +2341,58 @@ public class ProjectController extends ResourceConfig {
 		builderLead.setIntrestedIn(interest);
 		builderLead.setStatus(status);
 		builderLead.setAddedBy(added_by);
+	
+		ResponseMessage resp = new ProjectDAO().addProjectLead(builderLead); 
+		return resp;
+	}
+	
+	@POST
+	@Path("/lead/add1")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage addLead (
+			@FormParam("project_id") int project_id,
+			@FormParam("building_id") int building_id, 
+			@FormParam("flat_id") int flat_id,
+			@FormParam("name") String name,
+			@FormParam("mobile") String mobile,
+			@FormParam("email") String email,
+			@FormParam("city") String city,
+			@FormParam("area") String area,
+			@FormParam("source") int source,
+			@FormParam("discount_offered") String discount_offered
+	) {
+		
+		
+		BuilderLead builderLead = new BuilderLead();
+		if(project_id > 0){
+		BuilderProject builderProject = new BuilderProject();
+		builderProject.setId(project_id);
+		builderLead.setBuilderProject(builderProject);
+		}
+		if(building_id > 0) {
+			BuilderBuilding builderBuilding = new BuilderBuilding();
+			builderBuilding.setId(building_id);
+			builderLead.setBuilderBuilding(builderBuilding);
+		}
+		if(flat_id > 0) {
+			BuilderFlat builderFlat = new BuilderFlat();
+			builderFlat.setId(flat_id);
+			builderLead.setBuilderFlat(builderFlat);
+		}
+		
+			BuilderPropertyType builderPropertyType = new BuilderPropertyType();
+			builderPropertyType.setId(1);
+			builderLead.setBuilderPropertyType(builderPropertyType);
+		
+		builderLead.setName(name);
+		builderLead.setMobile(mobile);
+		builderLead.setEmail(email);
+		builderLead.setArea(area);
+		builderLead.setSource(source);
+		builderLead.setCity(city);
+			builderLead.setDiscountOffered(discount_offered);
+			builderLead.setIntrestedIn(1);
+			builderLead.setStatus(1);
 		ResponseMessage resp = new ProjectDAO().addProjectLead(builderLead); 
 		return resp;
 	}
@@ -2402,6 +2453,50 @@ public class ProjectController extends ResourceConfig {
 		return resp;
 	}
 	
+	@POST
+	@Path("/lead/update1")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateLead (
+			@FormParam("lead_id") int lead_id,
+			@FormParam("project_id") int project_id,
+			@FormParam("building_id") int building_id, 
+			@FormParam("flat_id") int flat_id,
+			@FormParam("name") String name,
+			@FormParam("mobile") String mobile,
+			@FormParam("email") String email,
+			@FormParam("city") String city,
+			@FormParam("area") String area,
+			@FormParam("source") int source,
+			@FormParam("discount_offered") String discount_offered
+	) {
+		BuilderLead builderLead = new ProjectDAO().getBuilderProjectLeadById(lead_id);
+		if(project_id>0){
+			BuilderProject builderProject = new BuilderProject();
+			builderProject.setId(project_id);
+			builderLead.setBuilderProject(builderProject);
+		}
+		if(building_id > 0){
+			BuilderBuilding builderBuilding = new BuilderBuilding();
+			builderBuilding.setId(building_id);
+			builderLead.setBuilderBuilding(builderBuilding);
+		}
+		if(flat_id > 0){
+			BuilderFlat builderFlat = new BuilderFlat();
+			builderFlat.setId(flat_id);
+			builderLead.setBuilderFlat(builderFlat);
+		}
+		builderLead.setId(lead_id);
+		builderLead.setName(name);
+		builderLead.setMobile(mobile);
+		builderLead.setEmail(email);
+		builderLead.setArea(area);
+		builderLead.setCity(city);
+		builderLead.setSource(source);
+		builderLead.setDiscountOffered(discount_offered);
+		
+		ResponseMessage resp = new ProjectDAO().updateProjectLead(builderLead);
+		return resp;
+	}
 	@POST
 	@Path("/new")
 	@Produces(MediaType.APPLICATION_JSON)
