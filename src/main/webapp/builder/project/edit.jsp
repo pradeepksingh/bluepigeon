@@ -696,165 +696,179 @@
                                     </div>
                                 </form>
                             </div>
-                            <div id="vimessages4" class="tab-pane" aria-expanded="true">
-                            
-                               <form id="offerfrm" name="offerfrm" method="post">
-                                <input type="hidden" id="projectid" name="projectid" value="<% out.print(project_id);%>"/>
-	                               <div id="offer_area">
-	                                  	<% int j = 1;
-												for(BuilderProjectOfferInfo projectOfferInfo :projectOfferInfos) { 
-										%>
-	                                   <div class="form-group row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
-	                                   
-	                                 	  <input type="hidden" name="offer_id[]" value="<% out.print(projectOfferInfo.getId()); %>" />
-		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Offer Title*</label>
-		                                    <div class="col-2">
-		                                        <input class="form-control" type="text" id="offer_title" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>"/>
-		                                    </div>
-		                                    <div class="messageContainer"></div>
-		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Discount(%)*</label>
-		                                    <div class="col-2">
-		                                        <input class="form-control" type="text" id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
-		                                    </div>
-		                                    <div class="messageContainer"></div>
-		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Discount Amount</label>
-		                                    <div class="col-2">
-		                                        <input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
-		                                    
-		                                    </div>
-		                                    <div class="messageContainer"></div>
-   										</div> 
-		                                <div class="form-group row"> 
-		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Description</label>
-		                                    <div class="col-2">
-		                                        <textarea class="form-control" id="description" name="description[]" ><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
-		                                    </div>
-		                                    <div class="messageContainer"></div>
-		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Offer Type</label>
-		                                    <div class="col-2">
-		                                     <select class="form-control" id="offer_type" name="offer_type[]">
-												<option value="1" <% if(projectOfferInfo.getType().toString() == "1") { %>selected<% } %>>Percentage</option>
-												<option value="2" <% if(projectOfferInfo.getType().toString() == "2") { %>selected<% } %>>Flat Amount</option>
-												<option value="3" <% if(projectOfferInfo.getType().toString() == "3") { %>selected<% } %>>Other</option>
-											</select>
-		                                    </div>
-		                                    <div class="messageContainer"></div>
-		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Status</label>
-		                                    <div class="col-2">
-		                                     <select class="form-control" id="offer_status" name="offer_status[]">
-												<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
-												<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
-											</select>
-											
+                         
+                               <div id="vimessages4" class="tab-pane" aria-expanded="true">
+                               
+                                <div id="offer" class="tab-pane fade active in">
+										<form id="offerfrm" name="offerfrm" method="post">
+										 	<input type="hidden" id="projectid" name="projectid" value="<% out.print(project_id);%>"/>
+											<input type="hidden" name="offer_count" id="offer_count" value="0">
+								 			<div class="row">
+												<div class="col-lg-12">
+													<div class="panel panel-default">
+														<div class="panel-body">
+															<div id="offer_area">
+																<% int j = 1;
+																		for(BuilderProjectOfferInfo projectOfferInfo :projectOfferInfos) { 
+																%>
+																<div class="row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
+																	
+																	<div class="col-lg-12" style="padding-bottom:5px;">
+																		<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(j); %>);" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span>
+																	</div>
+																	<div class="col-lg-5 margin-bottom-5">
+																		<div class="form-group" id="error-offer_title">
+																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
+																			<div class="col-sm-8">
+																				<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-3 margin-bottom-5">
+																		<div class="form-group" id="error-discount">
+																			<label class="control-label col-sm-8">Discount(%) <span class="text-danger">*</span></label>
+																			<div class="col-sm-6">
+																				<input type="text" class="form-control" id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>">
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-4 margin-bottom-5">
+																		<div class="form-group" id="error-discount_amount">
+																			<label class="control-label col-sm-6">Discount Amount </label>
+																			<div class="col-sm-6">
+																				<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>">
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-5 margin-bottom-5">
+																		<div class="form-group" id="error-applicable_on">
+																			<label class="control-label col-sm-4">Description </label>
+																			<div class="col-sm-8">
+																				<textarea class="form-control" id="description" name="description[]"><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-3 margin-bottom-5">
+																		<div class="form-group" id="error-applicable_on">
+																			<label class="control-label col-sm-6">Offer Type </label>
+																			<div class="col-sm-6">
+																				<select class="form-control" id="offer_type" name="offer_type[]">
+																					<option value="1" <% if(projectOfferInfo.getType().toString() == "1") { %>selected<% } %>>Percentage</option>
+																					<option value="2" <% if(projectOfferInfo.getType().toString() == "2") { %>selected<% } %>>Flat Amount</option>
+																					<option value="3" <% if(projectOfferInfo.getType().toString() == "3") { %>selected<% } %>>Other</option>
+																				</select>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-4 margin-bottom-5">
+																		<div class="form-group" id="error-apply">
+																			<label class="control-label col-sm-6">Status </label>
+																			<div class="col-sm-6">
+																				<select class="form-control" id="offer_status" name="offer_status[]">
+																					<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
+																					<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
+																				</select>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																</div>
+																<% j++; } %>
+<%-- 																<div class="row" id="offer-<% out.print(j);%>"> --%>
+<%-- 																<% if(j > 1) { %> --%>
+<!-- 																<hr/> -->
+<%-- 																<% } %> --%>
+<!-- 																	<div class="col-lg-12" style="padding-bottom:5px;"> -->
+<!-- 																		<span class="pull-right"><a href="javascript:removeOffer(1);" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span> -->
+<!-- 																	</div> -->
+<!-- 																	<div class="col-lg-5 margin-bottom-5"> -->
+<!-- 																		<div class="form-group" id="error-offer_title"> -->
+<!-- 																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label> -->
+<!-- 																			<div class="col-sm-8"> -->
+<!-- 																				<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""> -->
+<!-- 																			</div> -->
+<!-- 																			<div class="messageContainer"></div> -->
+<!-- 																		</div> -->
+<!-- 																	</div> -->
+<!-- 																	<div class="col-lg-3 margin-bottom-5"> -->
+<!-- 																		<div class="form-group" id="error-discount"> -->
+<!-- 																			<label class="control-label col-sm-8">Discount(%) <span class="text-danger">*</span></label> -->
+<!-- 																			<div class="col-sm-6"> -->
+<!-- 																				<input type="text" class="form-control" id="discount" name="discount[]" value=""> -->
+<!-- 																			</div> -->
+<!-- 																			<div class="messageContainer"></div> -->
+<!-- 																		</div> -->
+<!-- 																	</div> -->
+<!-- 																	<div class="col-lg-4 margin-bottom-5"> -->
+<!-- 																		<div class="form-group" id="error-discount_amount"> -->
+<!-- 																			<label class="control-label col-sm-6">Discount Amount </label> -->
+<!-- 																			<div class="col-sm-6"> -->
+<!-- 																				<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""> -->
+<!-- 																			</div> -->
+<!-- 																			<div class="messageContainer"></div> -->
+<!-- 																		</div> -->
+<!-- 																	</div> -->
+<!-- 																	<div class="col-lg-5 margin-bottom-5"> -->
+<!-- 																		<div class="form-group" id="error-applicable_on"> -->
+<!-- 																			<label class="control-label col-sm-4">Description </label> -->
+<!-- 																			<div class="col-sm-8"> -->
+<!-- 																				<textarea class="form-control" id="description" name="description[]"></textarea> -->
+<!-- 																			</div> -->
+<!-- 																			<div class="messageContainer"></div> -->
+<!-- 																		</div> -->
+<!-- 																	</div> -->
+<!-- 																	<div class="col-lg-3 margin-bottom-5"> -->
+<!-- 																		<div class="form-group" id="error-applicable_on"> -->
+<!-- 																			<label class="control-label col-sm-6">Offer Type </label> -->
+<!-- 																			<div class="col-sm-6"> -->
+<!-- 																				<select class="form-control" id="offer_type" name="offer_type[]"> -->
+<!-- 																					<option value="1">Percentage</option> -->
+<!-- 																					<option value="2">Flat Amount</option> -->
+<!-- 																					<option value="3">Other</option> -->
+<!-- 																				</select> -->
+<!-- 																			</div> -->
+<!-- 																			<div class="messageContainer"></div> -->
+<!-- 																		</div> -->
+<!-- 																	</div> -->
+<!-- 																	<div class="col-lg-4 margin-bottom-5"> -->
+<!-- 																		<div class="form-group" id="error-apply"> -->
+<!-- 																			<label class="control-label col-sm-6">Status </label> -->
+<!-- 																			<div class="col-sm-6"> -->
+<!-- 																				<select class="form-control" id="offer_status" name="offer_status[]"> -->
+<!-- 																					<option value="1">Active</option> -->
+<!-- 																					<option value="0">Inactive</option> -->
+<!-- 																				</select> -->
+<!-- 																			</div> -->
+<!-- 																			<div class="messageContainer"></div> -->
+<!-- 																		</div> -->
+<!-- 																	</div> -->
+<!-- 																</div> -->
+															</div>
+															<div>
+																<div class="col-lg-12">
+																	<span class="pull-right">
+																		<a href="javascript:addMoreOffer();" class="btn btn-info btn-sm">+ Add More Offers</a>
+																	</span>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
 											</div>
-											<div class="messageContainer"></div>
-		                                </div>
-		                                <hr>
-		                                <br>
-<!-- 		                            </div> -->
-<!-- 	                             	<div> -->
-	                                  <% j++; } %>
-	                                   <div class="form-group row" id="offer-<% out.print(j);%>">
-	                                   <div class="offset-sm-11 col-sm-7">
-	                                    	<a href="javascript:removeOffer(1);"><i class="fa fa-times"></i></a> 
-	                                  	</div>
-										<% if(j > 1) { %>
-											<hr/>
-										<% } %>
-		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Offer Title*</label>
-		                                    <div class="col-2">
-		                                        <input class="form-control" type="text" id="offer_title" name="offer_title[]" value=""/>
-		                                    </div>
-		                                    <div class="messageContainer"></div>
-		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Discount(%)*</label>
-		                                    <div class="col-2">
-		                                        <input class="form-control" type="text" id="discount" name="discount[]" value=""/>
-		                                    </div>
-		                                    <div class="messageContainer"></div>
-		                                    <label for="example-search-input" class="col-sm-2 col-form-label">Discount Amount</label>
-		                                    <div class="col-2">
-		                                        <input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value=""/>
-		                                   
-		                                    </div>
-		                                    <div class="messageContainer"></div>
-		                                </div>
-		                                <div class="form-group row">
-		                                    <label for="example-search-input" class="col-sm-4 col-form-label">Description</label>
-		                                    <div class="col-2">
-		                                        <textarea class="form-control" id="description" name="description[]" ></textarea>
-		                                    </div>
-		                                    <label for="example-search-input" class="col-sm-4 col-form-label">Offer Type</label>
-		                                    <div class="col-2">
-		                                    <select class="form-control" id="offer_type" name="offer_type[]">
-												<option value="1">Percentage</option>
-												<option value="2">Flat Amount</option>
-												<option value="3">Other</option>
-											</select>
-		                                    </div>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Status</label>
-		                                    <div class="col-2">
-		                                     <select class="form-control" id="offer_status" name="offer_status[]">
-												<option value="1" >Active</option>
-												<option value="0" >Inactive</option>
-											</select>
-										
-											</div>
-		                                </div>
-		                                <hr><br>
-<!-- 		                             </div> -->
-<!-- 		                             <div> -->
-	                                 	
-	                                   	<div class="form-group row">
-	                                   	<div class="offset-sm-11 col-sm-7">
-	                                    	<a href="javascript:removeOffer(1);"><i class="fa fa-times"></i></a> 
-	                                  	</div>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>
-		                                    <div class="col-2">
-		                                        <input class="form-control" type="text" value="" id="example-search-input">
-		                                    </div>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>
-		                                    <div class="col-2">
-		                                        <input class="form-control" type="text" value="" id="example-search-input">
-		                                    </div>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>
-		                                    <div class="col-2">
-		                                        <input class="form-control" type="text" value="" id="example-search-input">
-		                                    </div>
-		                                </div>
-		                                <div class="form-group row">
-		                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
-		                                    <div class="col-2">
-		                                        <textarea class="form-control" rows="" cols=""></textarea>
-		                                    </div>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
-		                                    <div class="col-2">
-		                                     <select class="form-control">
-											  <option value="">Percentage</option>
-											  <option value="">Discount</option>
-											</select>
-		                                    </div>
-		                                    <label for="example-search-input" class="col-2 col-form-label">Status</label>
-		                                    <div class="col-2">
-		                                     <select class="form-control">
-											  <option value="">Active</option>
-											  <option value="">Inactive</option>
-											</select>
-											</div>
-		                                </div>
-		                             </div>
-<!-- 		                             <div class="col-sm-12"> -->
-<!-- 										<span class="pull-right"> -->
-<!-- 											<a href="javascript:addMoreOffer();" class="btn btn-info btn-ms">+ Add More Offers</a> -->
-<!-- 										</span> -->
-<!-- 									</div> -->
-									<div class="row">
-                               		  <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="javascript:addMoreOffer();">Add more</button>
-                                  	</div>
-		                            <div class="offset-sm-5 col-sm-7">
-	                                        <button type="button" id="offerbtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
-	                                </div>
-	                             </form>
-                              </div>
+											</form>
+									</div>
+	                            
+                                   <div class="offset-sm-5 col-sm-7">
+                                        <button type="submit" id="offerbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+                                   </div>
+                              
+                               
+                                </div>
                            </div>
                         </div>
                      </div>
@@ -1273,52 +1287,127 @@ $("#offerbtn").click(function(){
 	}
 });
 
+// function addMoreOffer() {
+// 	var offers = parseInt($("#offer_count").val());
+// 	offers++;
+// 	var html = '<div class="form-group row" id="offer-"'+offers+'>'
+// 		+'<label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>'
+// 		+'<div class="col-2">'
+//             +'<input class="form-control" type="text" id="offer_title" name="offer_title[]" value=""/>'
+//         +'</div>'
+//         +'<div class="messageContainer"></div>'
+//         +'<label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>'
+//         +'<div class="col-2">'
+//             +'<input class="form-control" type="text" id="discount" name="discount[]" value=""/>'
+//         +'</div>'
+//         +'<div class="messageContainer"></div>'
+//         +'<label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>'
+//         +'<div class="col-2">'
+//             +'<input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value=""/>'
+//         +'</div>'
+//         +'<div class="messageContainer"></div>'
+//         +'<label for="example-search-input" class="col-2 col-form-label">Description</label>'
+//         +'<div class="col-2">'
+//             +'<textarea class="form-control" id="description" name="description[]" ></textarea>'
+//         +'</div>'
+//         +'<label for="example-search-input" class="col-2 col-form-label">Offer Type</label>'
+//         +'<div class="col-2">'
+//         +'<select class="form-control" id="offer_type" name="offer_type[]">'
+// 			+'<option value="1">Percentage</option>'
+// 			+'<option value="2">Flat Amount</option>'
+// 			+'<option value="3">Other</option>'
+// 		+'</select>'
+//         +'</div>'
+//         +'<label for="example-search-input" class="col-2 col-form-label">Status</label>'
+//         +'<div class="col-2">'
+//          +'<select class="form-control" id="offer_status" name="offer_status[]">'
+// 			+'<option value="1" >Active</option>'
+// 			+'<option value="0" >Inactive</option>'
+// 		+'</select>'
+// 		+'</div>'
+//     +'</div>'
+//  +'</div>';
+// 	$("#offer_area").append(html);
+// 	$("#offer_count").val(offers);
+// }
+// function removeOffer(id) {
+// 	var a=$("#offer").val();
+// 	alert("remove="+a);
+// 	$("#offer-"+id).remove();
+// }
+
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
-	var html = '<div class="form-group row" id="offer-"'+offers+'>'
-		+'<label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>'
-		+'<div class="col-2">'
-            +'<input class="form-control" type="text" id="offer_title" name="offer_title[]" value=""/>'
-        +'</div>'
-        +'<div class="messageContainer"></div>'
-        +'<label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>'
-        +'<div class="col-2">'
-            +'<input class="form-control" type="text" id="discount" name="discount[]" value=""/>'
-        +'</div>'
-        +'<div class="messageContainer"></div>'
-        +'<label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>'
-        +'<div class="col-2">'
-            +'<input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value=""/>'
-        +'</div>'
-        +'<div class="messageContainer"></div>'
-        +'<label for="example-search-input" class="col-2 col-form-label">Description</label>'
-        +'<div class="col-2">'
-            +'<textarea class="form-control" id="description" name="description[]" ></textarea>'
-        +'</div>'
-        +'<label for="example-search-input" class="col-2 col-form-label">Offer Type</label>'
-        +'<div class="col-2">'
-        +'<select class="form-control" id="offer_type" name="offer_type[]">'
-			+'<option value="1">Percentage</option>'
-			+'<option value="2">Flat Amount</option>'
-			+'<option value="3">Other</option>'
-		+'</select>'
-        +'</div>'
-        +'<label for="example-search-input" class="col-2 col-form-label">Status</label>'
-        +'<div class="col-2">'
-         +'<select class="form-control" id="offer_status" name="offer_status[]">'
-			+'<option value="1" >Active</option>'
-			+'<option value="0" >Inactive</option>'
+	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="0" />'
+		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>'
+		+'<div class="col-lg-5 margin-bottom-5">'
+			+'<div class="form-group" id="error-offer_title">'
+			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-8">'
+					+'<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>'
+				+'</div>'
+				+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-3 margin-bottom-5">'
+			+'<div class="form-group" id="error-discount">'
+				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-6">'
+					+'<input type="text" class="form-control" id="discount" name="discount[]" value=""/>'
+				+'</div>'
+				+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-4 margin-bottom-5">'
+			+'<div class="form-group" id="error-discount_amount">'
+				+'<label class="control-label col-sm-6">Discount Amount </label>'
+				+'<div class="col-sm-6">'
+					+'<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>'
+				+'</div>'
+				+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-5 margin-bottom-5">'
+			+'<div class="form-group" id="error-applicable_on">'
+			+'<label class="control-label col-sm-4">Description </label>'
+			+'<div class="col-sm-8">'
+			+'<textarea class="form-control" id="description" name="description[]" ></textarea>'
+			+'</div>'
+			+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-3 margin-bottom-5">'
+		+'<div class="form-group" id="error-applicable_on">'
+		+'<label class="control-label col-sm-6">Offer Type </label>'
+		+'<div class="col-sm-6">'
+		+'<select class="form-control" id="offer_type" name="offer_type[]">'
+		+'<option value="1">Percentage</option>'
+		+'<option value="2">Flat Amount</option>'
+		+'<option value="3">Other</option>'
 		+'</select>'
 		+'</div>'
-    +'</div>'
- +'</div>';
+		+'<div class="messageContainer"></div>'
+		+'</div>'
+		+'</div>'
+		+'<div class="col-lg-4 margin-bottom-5">'
+			+'<div class="form-group" id="error-apply">'
+			+'<label class="control-label col-sm-6">Status </label>'
+			+'<div class="col-sm-6">'
+			+'<select class="form-control" id="offer_status" name="offer_status[]">'
+			+'<option value="1">Active</option>'
+			+'<option value="0">Inactive</option>'
+			+'</select>'
+			+'</div>'
+			+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'</div>';
 	$("#offer_area").append(html);
 	$("#offer_count").val(offers);
 }
 function removeOffer(id) {
-	var a=$("#offer").val();
-	alert("remove="+a);
+	alert(id);
 	$("#offer-"+id).remove();
 }
 

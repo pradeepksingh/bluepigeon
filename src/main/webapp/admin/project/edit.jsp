@@ -153,7 +153,7 @@
 															<% } %>
 														</select>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -171,7 +171,7 @@
 															<% } %>
 														</select>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 										</div>
@@ -182,7 +182,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="name" name="name" value="<% out.print(builderProject.getName());%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -191,7 +191,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="landmark" name="landmark" value="<% if(builderProject.getAddr1()!=null){out.print(builderProject.getAddr1());}%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 										</div>
@@ -202,7 +202,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="sublocation" name="sublocation" value="<% if(builderProject.getAddr2() != null){out.print(builderProject.getAddr2());}%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -224,7 +224,7 @@
 															<% }} %>
 											             </select>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 										</div>
@@ -250,7 +250,7 @@
 															<% }}} %>
 											          	</select>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -270,7 +270,7 @@
 															<% }} }%>
 											          	</select>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 										</div>
@@ -290,42 +290,42 @@
 															<% }}} %>
 											          	</select>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-pincode">
-													<label class="control-label col-sm-4">Pincode </label>
+													<label class="control-label col-sm-4">Pincode <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="pincode" name="pincode" autocomplete="off" value="<% out.print(builderProject.getPincode());%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-latitude">
-													<label class="control-label col-sm-4">Latitude </label>
+													<label class="control-label col-sm-4">Latitude <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-longitude">
-													<label class="control-label col-sm-4">Longitude </label>
+													<label class="control-label col-sm-4">Longitude <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="longitude" name="longitude" autocomplete="off" value="<% out.print(builderProject.getLongitude());%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-longitude">
+												<div class="form-group">
 													<label class="control-label col-sm-4">Description </label>
 													<div class="col-sm-8">
 														<textarea class="form-control" id="description" name="description"><% out.print(builderProject.getDescription());%></textarea>
@@ -334,7 +334,7 @@
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-highlight">
+												<div class="form-group">
 													<label class="control-label col-sm-4">Highlight (USP) </label>
 													<div class="col-sm-8">
 														<textarea class="form-control" id="highlight" name="highlight"><% out.print(builderProject.getHighlights());%></textarea>
@@ -512,7 +512,7 @@
 															<fieldset class="scheduler-border">
 																<legend class="scheduler-border">Stages</legend>
 																<div class="col-sm-12">
-																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(projectAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(projectAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" class="form-control errorMsg" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
 																	<fieldset class="scheduler-border" style="margin-bottom:0px !important">
 																		<legend class="scheduler-border">Sub Stages</legend>
 																	<% 	for(BuilderProjectAmenitySubstages bpaSubstage :bpaStages.getBuilderProjectAmenitySubstageses()) { 
@@ -650,6 +650,7 @@
 															<% }} %>
 														</select>
 													</div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -658,111 +659,113 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="base_rate" name="base_rate" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-rise_rate">
-													<label class="control-label col-sm-4">Floor Rise Rate</label>
+													<label class="control-label col-sm-4">Floor Rise Rate<span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-post">
-													<label class="control-label col-sm-4">Applicable Post </label>
+													<label class="control-label col-sm-4">Applicable Post <span class='text-danger'>*</span></label>
 													<div class="col-sm-8 input-group" style="padding: 0px 12px;">
 														<input type="text" class="form-control" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
 														<span class="input-group-addon">floor</span>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-maintenance">
-													<label class="control-label col-sm-4">Maintenance Charge </label>
+													<label class="control-label col-sm-4">Maintenance Charge <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="maintenance" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-tenure">
-													<label class="control-label col-sm-4">Tenure </label>
+													<label class="control-label col-sm-4">Tenure <span class='text-danger'>*</span></label>
 													<div class="col-sm-8 input-group" style="padding: 0px 12px;">
 														<input type="text" class="form-control" id="tenure" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>"/>
 														<span class="input-group-addon">Months</span>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-amenity_rate">
-													<label class="control-label col-sm-4">Amenities Facing Rate</label>
+													<label class="control-label col-sm-4">Amenities Facing Rate<span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Parking </label>
+													<label class="control-label col-sm-4">Parking <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="parking" name="parking" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Stamp Duty </label>
+													<label class="control-label col-sm-4">Stamp Duty <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-ofset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-tax">
-													<label class="control-label col-sm-4">Tax</label>
+													<label class="control-label col-sm-4">Tax<span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-vat">
-													<label class="control-label col-sm-4">VAT </label>
+													<label class="control-label col-sm-4">VAT <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="vat" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-tech_fee">
-													<label class="control-label col-sm-4">Tech Fees</label>
+													<label class="control-label col-sm-4">Tech Fees<span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="tech_fee" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer colsm-offset-5"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="col-sm-12">
 													<button type="submit" class="btn btn-success btn-sm" id="pricebtn">SAVE</button>
@@ -776,8 +779,9 @@
 					</form>
 				</div>
 				<div id="payment" class="tab-pane fade">
-					<form id="paymentfrm" name="paymentfrm" method="post">
+					<form id="paymentfrm" name="paymentfrm" method="post" action=""  enctype="multipart/form-data">
 						<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(projectPaymentInfos.size()+1);%>"/>
+						<input type="hidden" name="project_id" id="project_id[]" value="<%out.print(project_id);%>"/>
 			 			<div class="row">
 			 				<div id="paymentresponse"></div>
 							<div class="col-lg-12">
@@ -787,6 +791,7 @@
 											<% 	int i = 1;
   												for(BuilderProjectPaymentInfo projectPaymentInfo :projectPaymentInfos) {  
  											%> 
+ 											<input type="hidden" id="schedule_id" name="schedule_id[]" value="<%out.print(projectPaymentInfo.getId());%>"/>
 											<div class="row" id="schedule-<% out.print(i); %>">
 												<% if(i > 1) { %>
 												<hr/>
@@ -797,25 +802,25 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-5"></div>
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-payable">
-														<label class="control-label col-sm-8">% of Net Payable </label>
+														<label class="control-label col-sm-8">% of Net Payable <span class='text-danger'>*</span></label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
+															<input type="text" class="form-control errorMsg" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-5"></div>
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-amount">
-														<label class="control-label col-sm-6">Amount </label>
+														<label class="control-label col-sm-6">Amount <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="amount" name="amount[]" value="<% if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/>
+															<input type="text" class="form-control errorMsg" id="amount" name="amount[]" value="<% if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-5"></div>
 													</div>
 												</div>
 												<div class="col-lg-1">
@@ -828,30 +833,31 @@
 												<hr/>
 												<% } %>
 												<div class="col-lg-5 margin-bottom-5">
+													<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>
 													<div class="form-group" id="error-schedule">
 														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-5"></div>
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-payable">
-														<label class="control-label col-sm-8">% of Net Payable </label>
+														<label class="control-label col-sm-8">% of Net Payable <span class='text-danger'>*</span></label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control" id="payable" name="payable[]" value=""/>
+															<input type="text" class="form-control errorMsg" id="payable" name="payable[]" value=""/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-5"></div>
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-amount">
-														<label class="control-label col-sm-6">Amount </label>
+														<label class="control-label col-sm-6">Amount <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="amount" name="amount[]" value=""/>
+															<input type="text" class="form-control errorMsg" id="amount" name="amount[]" value=""/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-5"></div>
 													</div>
 												</div>
 												<div class="col-lg-1">
@@ -870,7 +876,7 @@
 											<div class="row">
 												<div class="col-lg-12">
 													<div class="col-sm-12">
-														<button type="button" class="btn btn-success btn-sm" id="paymentbtn">SAVE</button>
+														<button type="submit" class="btn btn-success btn-sm" id="paymentbtn">SAVE</button>
 													</div>
 												</div>
 											</div>
@@ -910,7 +916,7 @@
 													<div class="form-group" id="error-discount">
 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="number" class="form-control" id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
+															<input type="number" class="form-control " id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -960,75 +966,75 @@
 												</div>
 											</div>
 											<% j++; } %>
-											<div class="row" id="offer-<% out.print(j);%>">
-												<% if(j > 1) { %>
-												<hr/>
-												<% } %>
-												<div class="col-lg-12" style="padding-bottom:5px;">
-													<span class="pull-right"><a href="javascript:removeOffer(1);" class="btn btn-danger btn-xs">x</a></span>
-												</div>
-												<div class="col-lg-5 margin-bottom-5">
-													<div class="form-group" id="error-offer_title">
-														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-discount">
-														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
-														<div class="col-sm-6">
-															<input type="number" class="form-control" id="discount" name="discount[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-4 margin-bottom-5">
-													<div class="form-group" id="error-discount_amount">
-														<label class="control-label col-sm-6">Discount Amount </label>
-														<div class="col-sm-6">
-															<input type="number" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-5 margin-bottom-5">
-													<div class="form-group" id="error-applicable_on">
-														<label class="control-label col-sm-4">Description </label>
-														<div class="col-sm-8">
-															<textarea class="form-control" id="description" name="description[]" ></textarea>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-applicable_on">
-														<label class="control-label col-sm-6">Offer Type </label>
-														<div class="col-sm-6">
-															<select class="form-control" id="offer_type" name="offer_type[]">
-																<option value="1">Percentage</option>
-																<option value="2">Flat Amount</option>
-																<option value="3">Other</option>
-															</select>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-4 margin-bottom-5">
-													<div class="form-group" id="error-apply">
-														<label class="control-label col-sm-6">Status </label>
-														<div class="col-sm-6">
-															<select class="form-control" id="offer_status" name="offer_status[]">
-																<option value="1" >Active</option>
-																<option value="0" >Inactive</option>
-															</select>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-											</div>
+<%-- 											<div class="row" id="offer-<% out.print(j);%>"> --%>
+<%-- 												<% if(j > 1) { %> --%>
+<!-- 												<hr/> -->
+<%-- 												<% } %> --%>
+<!-- 												<div class="col-lg-12" style="padding-bottom:5px;"> -->
+<!-- 													<span class="pull-right"><a href="javascript:removeOffer(1);" class="btn btn-danger btn-xs">x</a></span> -->
+<!-- 												</div> -->
+<!-- 												<div class="col-lg-5 margin-bottom-5"> -->
+<!-- 													<div class="form-group" id="error-offer_title"> -->
+<!-- 														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label> -->
+<!-- 														<div class="col-sm-8"> -->
+<!-- 															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/> -->
+<!-- 														</div> -->
+<!-- 														<div class="messageContainer"></div> -->
+<!-- 													</div> -->
+<!-- 												</div> -->
+<!-- 												<div class="col-lg-3 margin-bottom-5"> -->
+<!-- 													<div class="form-group" id="error-discount"> -->
+<!-- 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label> -->
+<!-- 														<div class="col-sm-6"> -->
+<!-- 															<input type="number" class="form-control" id="discount" name="discount[]" value=""/> -->
+<!-- 														</div> -->
+<!-- 														<div class="messageContainer"></div> -->
+<!-- 													</div> -->
+<!-- 												</div> -->
+<!-- 												<div class="col-lg-4 margin-bottom-5"> -->
+<!-- 													<div class="form-group" id="error-discount_amount"> -->
+<!-- 														<label class="control-label col-sm-6">Discount Amount </label> -->
+<!-- 														<div class="col-sm-6"> -->
+<!-- 															<input type="number" class="form-control" id="discount_amount" name="discount_amount[]" value=""/> -->
+<!-- 														</div> -->
+<!-- 														<div class="messageContainer"></div> -->
+<!-- 													</div> -->
+<!-- 												</div> -->
+<!-- 												<div class="col-lg-5 margin-bottom-5"> -->
+<!-- 													<div class="form-group" id="error-applicable_on"> -->
+<!-- 														<label class="control-label col-sm-4">Description </label> -->
+<!-- 														<div class="col-sm-8"> -->
+<!-- 															<textarea class="form-control" id="description" name="description[]" ></textarea> -->
+<!-- 														</div> -->
+<!-- 														<div class="messageContainer"></div> -->
+<!-- 													</div> -->
+<!-- 												</div> -->
+<!-- 												<div class="col-lg-3 margin-bottom-5"> -->
+<!-- 													<div class="form-group" id="error-applicable_on"> -->
+<!-- 														<label class="control-label col-sm-6">Offer Type </label> -->
+<!-- 														<div class="col-sm-6"> -->
+<!-- 															<select class="form-control" id="offer_type" name="offer_type[]"> -->
+<!-- 																<option value="1">Percentage</option> -->
+<!-- 																<option value="2">Flat Amount</option> -->
+<!-- 																<option value="3">Other</option> -->
+<!-- 															</select> -->
+<!-- 														</div> -->
+<!-- 														<div class="messageContainer"></div> -->
+<!-- 													</div> -->
+<!-- 												</div> -->
+<!-- 												<div class="col-lg-4 margin-bottom-5"> -->
+<!-- 													<div class="form-group" id="error-apply"> -->
+<!-- 														<label class="control-label col-sm-6">Status </label> -->
+<!-- 														<div class="col-sm-6"> -->
+<!-- 															<select class="form-control" id="offer_status" name="offer_status[]"> -->
+<!-- 																<option value="1" >Active</option> -->
+<!-- 																<option value="0" >Inactive</option> -->
+<!-- 															</select> -->
+<!-- 														</div> -->
+<!-- 														<div class="messageContainer"></div> -->
+<!-- 													</div> -->
+<!-- 												</div> -->
+<!-- 											</div> -->
 										</div>
 										<div>
 											<div class="col-lg-12">
@@ -1427,6 +1433,20 @@ $('#basicfrm').bootstrapValidator({
            		}
             }
         },
+        latitude: {
+            validators: {
+                notEmpty: {
+                    message: 'Latitude is required and cannot be empty'
+                }
+            }
+        },
+        longitude: {
+            validators: {
+                notEmpty: {
+                    message: 'Longitude is required and cannot be empty'
+                }
+            }
+        }
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
@@ -1495,6 +1515,76 @@ $('#pricingfrm').bootstrapValidator({
                 },
             }
         },
+        rise_rate:{
+        	validators: {
+                notEmpty: {
+                    message: 'Floor rise rate is required and cannot be empty'
+                },
+            }
+        },
+        post:{
+        	validators: {
+                notEmpty: {
+                    message: 'Applicable post is required and cannot be empty'
+                },
+            }
+        },
+        maintenance:{
+        	validators: {
+                notEmpty: {
+                    message: 'Maintenance charges is required and cannot be empty'
+                },
+            }
+        },
+        tenure:{
+        	validators: {
+                notEmpty: {
+                    message: 'Tenure is required and cannot be empty'
+                },
+            }
+        },
+        amenity_rate:{
+        	validators: {
+                notEmpty: {
+                    message: 'Amenity rate is required and cannot be empty'
+                },
+            }
+        },
+        parking:{
+        	validators: {
+                notEmpty: {
+                    message: 'Parking charges is required and cannot be empty'
+                },
+            }
+        },
+        stamp_duty:{
+        	validators: {
+                notEmpty: {
+                    message: 'Stamp duty is required and cannot be empty'
+                },
+            }
+        },
+        tax:{
+        	validators: {
+                notEmpty: {
+                    message: 'Tax is required and cannot be empty'
+                },
+            }
+        },
+        vat:{
+        	validators: {
+                notEmpty: {
+                    message: 'Vat is required and cannot be empty'
+                },
+            }
+        },
+        tech_fee:{
+       	 validators: {
+                notEmpty: {
+                    message: 'Tech fee is required and cannot be empty'
+                }
+            }
+       }
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
@@ -1605,49 +1695,118 @@ $("#detailbtn").click(function(){
 	});
 });
 
-$("#paymentbtn").click(function(){
-	var paymentInfo = [];
-	var payable = [];
-	var amount = [];
-	$('input[name="payable[]"]').each(function(index) {
-		payable.push($(this).val());
-	});
-	$('input[name="amount[]"]').each(function(index) {
-		amount.push($(this).val());
-	});
-	$('input[name="schedule[]"]').each(function(index) {
-		if($(this).val() != "") {
-			paymentInfo.push({schedule:$(this).val(),payable:payable[index],amount:amount[index],status:1,builderProject:{id:$("#id").val()}});
-		}
-	});
-	var project = {id:$("#id").val()};
-	var final_data = {builderProjectPaymentInfos:paymentInfo,builderProject:project}
-	if(paymentInfo.length > 0) {
-		$.ajax({
-		    url: '${baseUrl}/webapi/project/payment/update',
-		    type: 'POST',
-		    data: JSON.stringify(final_data),
-		    contentType: 'application/json; charset=utf-8',
-		    dataType: 'json',
-		    async: false,
-		    success: function(data) {
-				if (data.status == 0) {
-					alert(data.message);
-				} else {
-					alert(data.message);
-				}
-			},
-			error : function(data)
-			{
-				alert("Fail to save data");
-			}
+// $("#paymentbtn").click(function(){
+// 	var paymentInfo = [];
+// 	var payable = [];
+// 	var amount = [];
+// 	$('input[name="payable[]"]').each(function(index) {
+// 		payable.push($(this).val());
+// 	});
+// 	$('input[name="amount[]"]').each(function(index) {
+// 		amount.push($(this).val());
+// 	});
+// 	$('input[name="schedule[]"]').each(function(index) {
+// 		if($(this).val() != "") {
+// 			paymentInfo.push({schedule:$(this).val(),payable:payable[index],amount:amount[index],status:1,builderProject:{id:$("#id").val()}});
+// 		}
+// 	});
+// 	var project = {id:$("#id").val()};
+// 	var final_data = {builderProjectPaymentInfos:paymentInfo,builderProject:project}
+// 	if(paymentInfo.length > 0) {
+// 		$.ajax({
+// 		    url: '${baseUrl}/webapi/project/payment/update',
+// 		    type: 'POST',
+// 		    data: JSON.stringify(final_data),
+// 		    contentType: 'application/json; charset=utf-8',
+// 		    dataType: 'json',
+// 		    async: false,
+// 		    success: function(data) {
+// 				if (data.status == 0) {
+// 					alert(data.message);
+// 				} else {
+// 					alert(data.message);
+// 				}
+// 			},
+// 			error : function(data)
+// 			{
+// 				alert("Fail to save data");
+// 			}
 			
-		});
-	} else {
-		alert("Please enter payment schedule details");
-	}
+// 		});
+// 	} else {
+// 		alert("Please enter payment schedule details");
+// 	}
+// });
+
+$("#paymentfrm").bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	'schedule[]': {
+    		validators: {
+                notEmpty: {
+                    message: 'Schedule is required and cannot be empty'
+                }
+            }
+        },
+        'payable[]': {
+    		validators: {
+                notEmpty: {
+                    message: 'Payment is required and cannot be empty'
+                },
+            }
+        },
+       'amount[]':{
+        	validators: {
+                notEmpty: {
+                    message: 'Amount is required and cannot be empty'
+                },
+            }
+        }
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	
+	updatePaymentSchudle();
 });
 
+function updatePaymentSchudle(){
+		var options = {
+		 		target : '#paymentresponse', 
+		 		beforeSubmit : showPaymentRequest,
+		 		success :  showPaymentResponse,
+		 		url : '${baseUrl}/webapi/project/payment/update',
+		 		semantic : true,
+		 		dataType : 'json'
+		 	};
+	   	$('#paymentfrm').ajaxSubmit(options);
+}
+function showPaymentRequest(formData, jqForm, options){
+	$("#paymentresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+
+function showPaymentResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#paymentresponse").removeClass('alert-success');
+       	$("#paymentresponse").addClass('alert-danger');
+		$("#paymentresponse").html(resp.message);
+		$("#paymentresponse").show();
+  	} else {
+  		$("#paymentresponse").removeClass('alert-danger');
+        $("#paymentresponse").addClass('alert-success');
+        $("#paymentresponse").html(resp.message);
+        $("#paymentresponse").show();
+        alert(resp.message);
+  	}
+}
 $("#offerbtn").click(function(){
 	var offerInfo = [];
 	var discount = [];
@@ -1712,7 +1871,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="offer_title" name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1781,32 +1940,33 @@ function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
 	var html = '<div class="row" id="schedule-'+schedule_count+'">'
+				+'<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>'
 				+'<hr/>'
 				+'<div class="col-lg-5 margin-bottom-5">'
 				+'<div class="form-group" id="error-schedule">'
 				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-				+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
+				+'<input type="text" class="form-control" id="schedule" name="schedule[]"/>'
 				+'</div>'
-				+'<div class="messageContainer"></div>'
+				+'<div class="messageContainer col-sm-offset-5"></div>'
 				+'</div>'
 				+'</div>'
 				+'<div class="col-lg-3 margin-bottom-5">'
 				+'<div class="form-group" id="error-payable">'
 				+'<label class="control-label col-sm-8">% of Net Payable </label>'
 				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control" id="payable" name="payable[]" value=""/>'
+				+'<input type="text" class="form-control errorMsg" id="payable" name="payable[]"/>'
 				+'</div>'
-				+'<div class="messageContainer"></div>'
+				+'<div class="messageContainer col-sm-offset-5"></div>'
 				+'</div>'
 				+'</div>'
 				+'<div class="col-lg-3 margin-bottom-5">'
 				+'<div class="form-group" id="error-amount">'
 				+'<label class="control-label col-sm-6">Amount </label>'
 				+'<div class="col-sm-6">'
-				+'<input type="text" class="form-control" id="amount" name="amount[]" value=""/>'
+				+'<input type="text" class="form-control errorMsg" id="amount" name="amount[]"/>'
 				+'</div>'
-				+'<div class="messageContainer"></div>'
+				+'<div class="messageContainer col-sm-offset-5"></div>'
 				+'</div>'
 				+'</div>'
 				+'<div class="col-lg-1">'
@@ -1864,7 +2024,18 @@ $("#subpbtn").click(function(){
 	});
 });
 
-
+function deleteOffer(id) {
+	var b=$("#offer").val();
+	var flag = confirm("Are you sure ? You want to delete offer ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/project/offer/delete/"+id, { }, function(data){
+			alert(data.message);
+			if(data.status == 1) {
+				$("#offer-"+id).remove();
+			}
+		});
+	}
+}
 </script>
 </body>
 </html>

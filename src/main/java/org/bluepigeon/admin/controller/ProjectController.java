@@ -65,6 +65,7 @@ import org.bluepigeon.admin.model.BuilderFloorAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderFloorStatus;
 import org.bluepigeon.admin.model.BuilderLead;
 import org.bluepigeon.admin.model.BuilderProject;
+import org.bluepigeon.admin.model.BuilderProjectPaymentInfo;
 import org.bluepigeon.admin.model.BuilderProjectPriceInfo;
 import org.bluepigeon.admin.model.BuilderProjectProjectType;
 import org.bluepigeon.admin.model.BuilderProjectPropertyConfiguration;
@@ -335,10 +336,66 @@ public class ProjectController extends ResourceConfig {
 	@POST
 	@Path("/payment/update")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseMessage updateProjectPayment(ProjectPaymentSchedule projectPaymentSchedule) {
-		ResponseMessage resp = new ProjectDAO().updatePaymentInfo(projectPaymentSchedule); 
-		return resp;
+//	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+//	public ResponseMessage updateProjectPayment(ProjectPaymentSchedule projectPaymentSchedule) {
+	public ResponseMessage updateProjectPayment(
+			@FormDataParam("project_id") int project_id,
+			@FormDataParam("schedule_id[]") List<FormDataBodyPart> schedule_ids,
+ 			@FormDataParam("schedule[]") List<FormDataBodyPart> schudles,
+			@FormDataParam("payable[]") List<FormDataBodyPart> payables,
+			@FormDataParam("amount[]") List<FormDataBodyPart> amounts
+		) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		BuilderProject builderProject = new BuilderProject();
+		ProjectDAO projectDAO = new ProjectDAO();
+		builderProject.setId(project_id);
+		if(schudles.size() > 0){
+			List<BuilderProjectPaymentInfo> updateProjectPaymentInfos = new ArrayList<BuilderProjectPaymentInfo>();
+			List<BuilderProjectPaymentInfo> saveProjectPaymentInfos = new ArrayList<BuilderProjectPaymentInfo>();
+			int i=0;
+			for(FormDataBodyPart names : schudles)
+			{
+				if(schedule_ids.get(i).getValueAs(Integer.class) != 0 && schedule_ids.get(i).getValueAs(Integer.class) != null){
+					BuilderProjectPaymentInfo builderProjectPaymentInfo = new BuilderProjectPaymentInfo();
+					builderProjectPaymentInfo.setId(schedule_ids.get(i).getValueAs(Integer.class));
+					builderProjectPaymentInfo.setBuilderProject(builderProject);
+					if(names.getValueAs(String.class) != null || names.getValueAs(String.class).trim().length() > 0){
+						builderProjectPaymentInfo.setSchedule(names.getValueAs(String.class).toString());
+					}
+					if(payables.get(i).getValueAs(Double.class) != 0 && payables.get(i).getValueAs(Double.class) !=null){
+						builderProjectPaymentInfo.setPayable(payables.get(i).getValueAs(Double.class));
+					}
+					if(amounts.get(i).getValueAs(Double.class) !=0 && amounts.get(i).getValueAs(Double.class) != null){
+						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
+					}
+					updateProjectPaymentInfos.add(builderProjectPaymentInfo);
+				}else{
+					BuilderProjectPaymentInfo builderProjectPaymentInfo = new BuilderProjectPaymentInfo();
+					builderProjectPaymentInfo.setBuilderProject(builderProject);
+					if(names.getValueAs(String.class) != null || names.getValueAs(String.class).trim().length() > 0){
+						builderProjectPaymentInfo.setSchedule(names.getValueAs(String.class).toString());
+					}
+					if(payables.get(i).getValueAs(Double.class) != 0 && payables.get(i).getValueAs(Double.class) !=null){
+						builderProjectPaymentInfo.setPayable(payables.get(i).getValueAs(Double.class));
+					}
+					if(amounts.get(i).getValueAs(Double.class) !=0 && amounts.get(i).getValueAs(Double.class) != null){
+						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
+					}
+					saveProjectPaymentInfos.add(builderProjectPaymentInfo);
+				}
+				i++;
+			}
+			if(updateProjectPaymentInfos.size() > 0){
+				projectDAO.updateProjectPaymentInfo(updateProjectPaymentInfos);
+			}
+			if(saveProjectPaymentInfos.size() > 0){
+				projectDAO.saveProjectPaymentInfo(saveProjectPaymentInfos);
+			}
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Project payment Info updated successfully");
+		}
+		return responseMessage;
 	}
 	
 	@POST
