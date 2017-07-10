@@ -771,6 +771,7 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("status") Integer status,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
 			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("status_id") byte bstatus,
 			@FormDataParam("amenity_wt") String amenity_wts
 	) {
 		String [] amenityWeightages = amenity_wts.split(",");
@@ -783,7 +784,7 @@ public class ProjectController extends ResourceConfig {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		byte bstatus = 1;
+		//byte bstatus = 1;
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderProject builderProject = new BuilderProject();

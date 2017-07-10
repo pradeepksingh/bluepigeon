@@ -443,14 +443,20 @@
 			</div> 
 </body>
 </html>
+<script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script type="text/javascript">
-$('#possession_date').datepicker({
-	autoclose: true,
-	format: "dd MM yyyy"
-});
 $('#launch_date').datepicker({
-	autoclose: true,
-	format: "dd MM yyyy"
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#detailfrm').data('bootstrapValidator').revalidateField('launch_date');
+});
+
+$('#possession_date').datepicker({
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#detailfrm').data('bootstrapValidator').revalidateField('possession_date');
 });
 function showDemand()
 {
@@ -577,17 +583,33 @@ $('#updateoffer').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-    	possession_date: {
+    	launch_date: {
             validators: {
-                notEmpty: {
-                    message: 'possession date is required and cannot be empty'
+                callback: {
+                    message: 'Wrong Launch Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
                 }
             }
         },
-        launch_date: {
+        possession_date: {
             validators: {
-                notEmpty: {
-                    message: 'launch date is required and cannot be empty'
+                callback: {
+                    message: 'Wrong Possession Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
                 }
             }
         },

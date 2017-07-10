@@ -137,7 +137,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="launch_date" name="launch_date" value="<% if(builderBuilding.getLaunchDate() != null) { out.print(dt1.format(builderBuilding.getLaunchDate()));}%>"/>
 													</div>
-													<div class="messageContainer col-sm-offset-6"></div>
+													<div class="messageContainer"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -146,7 +146,7 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="possession_date" name="possession_date" value="<% if(builderBuilding.getPossessionDate() != null) { out.print(dt1.format(builderBuilding.getPossessionDate()));}%>"/>
 													</div>
-													<div class="messageContainer col-sm-offset-6"></div>
+													<div class="messageContainer"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -157,6 +157,18 @@
 															<% 	for(BuilderBuildingStatus builderBuildingStatus :builderBuildingStatusList) { %>
 															<option value="<% out.print(builderBuildingStatus.getId());%>" <% if(builderBuildingStatus.getId() == builderBuilding.getBuilderBuildingStatus().getId()) { %>selected<% } %>><% out.print(builderBuildingStatus.getName()); %></option>
 															<% } %>
+														</select>
+													</div>
+													<div class="messageContainer col-sm-offset-6"></div>
+												</div>
+											</div>
+											<div class="col-lg-6 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-4">Building visible to builder </label>
+													<div class="col-sm-8">
+														<select id="status_id" name="status_id" class="form-control">
+															<option value="0" <% if(builderBuilding.getId() == 0) { %>selected<% } %>>No</option>
+															<option value="1" <% if(builderBuilding.getId() == 1) { %>selected<% } %>>Yes</option>
 														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-6"></div>
@@ -603,6 +615,7 @@
 	</div>
 <%@include file="../../../footer.jsp"%>
 <!-- inline scripts related to this page -->
+<script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <style>
 	.row {
 		margin-bottom:5px;
@@ -663,13 +676,18 @@ function isNumber(evt, element) {
 
     return true;
 }   
-$('#possession_date').datepicker({
-	autoclose: true,
-	format: "dd MM yyyy"
-});
 $('#launch_date').datepicker({
-	autoclose: true,
-	format: "dd MM yyyy"
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#detailfrm').data('bootstrapValidator').revalidateField('launch_date');
+});
+
+$('#possession_date').datepicker({
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#detailfrm').data('bootstrapValidator').revalidateField('possession_date');
 });
 $('#updatebuilding').bootstrapValidator({
 	container: function($field, validator) {
@@ -703,18 +721,34 @@ $('#updatebuilding').bootstrapValidator({
         },
         launch_date: {
             validators: {
-                notEmpty: {
-                    message: 'Launch Date is required and cannot be empty'
+                callback: {
+                    message: 'Wrong Launch Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
                 }
             }
         },
         possession_date: {
             validators: {
-                notEmpty: {
-                    message: 'Possession Date is required and cannot be empty'
+                callback: {
+                    message: 'Wrong Possession Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
                 }
             }
-        },
+        }
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
@@ -1082,7 +1116,18 @@ function addMoreSchedule() {
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();
 }
-
+$('#launch_date').datepicker({
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#detailfrm').data('bootstrapValidator').revalidateField('launch_date');
+});
+$('#possession_date').datepicker({
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#detailfrm').data('bootstrapValidator').revalidateField('possession_date');
+});
 $('input[name="amenity_type[]"]').click(function() {
 	if($(this).prop("checked")) {
 		$("#amenity_stage"+$(this).val()).show();

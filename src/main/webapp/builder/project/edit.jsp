@@ -232,175 +232,224 @@
 				                                    
 				                                  </div>
 			                                    </div>
-			                                    <label for="example-text-input" class="col-3 col-form-label">Builder Company<span class='text-danger'>*</span></label>
-			                                    <div class="col-3">
-			                                    <div>
-			                                       <select id="company_id" name="company_id" class="form-control">
-														<option value="">Select Builder Company</option>
-														<% for (Builder builder : builders) { %>
-														<% for (BuilderCompanyNames builderCompanyNames : builder.getBuilderCompanyNameses()) { %>
-														<% if(builderProject.getBuilder().getId() ==  builder.getId()) { %>
-														<option value="<%out.print(builderCompanyNames.getId());%>" <% if(builderProject.getBuilderCompanyNames().getId() ==  builderCompanyNames.getId()) { %>selected<% } %>> <% out.print(builderCompanyNames.getName()); %> </option>
-														<% } %>
-														<% } %>
-														<% } %>
-													</select>
-			                                    </div>
-			                                    	<div class="messageContainer"></div>
-			                                    </div>
-			                                   
+			                                    <div class="col-lg-6 ">
+				                                    <div class="form-group row" id="error-builder_id">
+				                                    	<label for="example-text-input" class="col-sm-4 control-label">Builder Company<span class='text-danger'>*</span></label>
+					                                    <div class="col-sm-8">
+						                                    <div>
+						                                       <select id="company_id" name="company_id" class="form-control">
+																	<option value="">Select Builder Company</option>
+																	<% for (Builder builder : builders) { %>
+																	<% for (BuilderCompanyNames builderCompanyNames : builder.getBuilderCompanyNameses()) { %>
+																	<% if(builderProject.getBuilder().getId() ==  builder.getId()) { %>
+																	<option value="<%out.print(builderCompanyNames.getId());%>" <% if(builderProject.getBuilderCompanyNames().getId() ==  builderCompanyNames.getId()) { %>selected<% } %>> <% out.print(builderCompanyNames.getName()); %> </option>
+																	<% } %>
+																	<% } %>
+																	<% } %>
+																</select>
+						                                    </div>
+					                                    	<div class="messageContainer"></div>
+				                                    </div>
+			                                  </div> 
 			                                    
 			                                </div>
-			                                
-			                                <div class="form-group row">
-			                                    <label for="example-search-input" class="col-3 col-form-label">Project Name<span class='text-danger'>*</span></label>
-			                                    <div class="col-3">
-			                                      <div>
-			                                        <input class="form-control" type="text" id="name" name="name" value="<% out.print(builderProject.getName());%>">
-			                                    </div>
-			                                    <div class="messageContainer"></div>
-			                                    </div>
-			                                    <label for="example-search-input" class="col-3 col-form-label">Landmark<span class='text-danger'>*</span></label>
-			                                    <div class="col-3">
-			                                    	<div>
-			                                        	<input class="form-control" type="text" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>">
-			                                    	</div>
-			                                   		 <div class="messageContainer col-sm-offset-3"></div>
-			                                    </div>
 			                                </div>
-			                                
-			                                 <div class="form-group row">
-			                                    <label for="example-tel-input" class="col-3 col-form-label">Sub Location<span class='text-danger'>*</span></label>
-			                                    <div class="col-3">
-			                                    <div>
-			                                        <input class="form-control" type="text" id="sublocation" name="sublocation" value="<% out.print(builderProject.getAddr2());%>">
-			                                    </div>
-			                                    <div class="messageContainer col-sm-offset-3"></div>
-			                                    </div>
-			                                    <label for="example-tel-input" class="col-3 col-form-label">Country<span class='text-danger'>*</span></label>
-			                                    <div class="col-3">
-			                                    <div>
-			                                        <select name="country_id" id="country_id" class="form-control">
-													    <option value="">Select Country</option>
-									                    <% for(Country country : listCountry){ %>
-									                    <% 	if(builderProject.getCountry().getId() == country.getId()) { 
-									                    		states = country.getStates();
-									                    	}
-									                    %>
-														<option value="<% out.print(country.getId());%>" <% if(builderProject.getCountry().getId() == country.getId()) { %>selected<% } %>><% out.print(country.getName());%></option>
-														<% } %>
-										             </select>
-			                                    </div>
-			                                    <div class="messageContainer col-sm-offset-3"></div>
-			                                    </div>
+			                                <div class="row">
+			                                	<div class="col-md-6">
+					                                <div class="form-group row">
+					                                    <label for="example-search-input" class="col-sm-4 control-label">Project Name<span class='text-danger'>*</span></label>
+					                                    <div class="col-sm-8">
+					                                    	<div>
+					                                        	<input class="form-control" type="text" id="name" name="name" value="<% out.print(builderProject.getName());%>">
+					                                    	</div>
+					                                    	<div class="messageContainer"></div>
+					                                    </div>
+					                                 </div>
+					                              </div>
+					                              <div class="col-md-6">
+					                                 	<div class="form-group row">
+					                                    	<label for="example-search-input" class="col-sm-4 control-label">Landmark<span class='text-danger'>*</span></label>
+					                                    	<div class="col-sm-8">
+					                                    		<div>
+					                                        		<input class="form-control" type="text" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>">
+					                                    		</div>
+					                                   		 	<div class="messageContainer"></div>
+					                                   		 </div>
+					                                    </div>
+					                             </div>
+			                               </div>
+		                                	<div class="row">
+			                                	<div class="col-md-6">
+					                                 <div class="form-group row">
+					                                      <label for="example-tel-input" class="col-sm-4 control-label">Sub Location<span class='text-danger'>*</span></label>
+					                                      <div class="col-sm-8">
+						                                      <div>
+							                                     <div>
+							                                        <input class="form-control" type="text" id="sublocation" name="sublocation" value="<% out.print(builderProject.getAddr2());%>">
+							                                    </div>
+							                                    <div class="messageContainer"></div>
+						                                    </div>
+					                                    </div>
+					                                </div>
+					                            </div>
+					                            <div class="col-md-6">
+							                          <div class="form-group row">
+							                               <label for="example-tel-input" class="col-sm-4 control-label">Country<span class='text-danger'>*</span></label>
+							                               <div class="col-sm-8">
+						                                       <div>
+							                                    	<div>
+								                                        <select name="country_id" id="country_id" class="form-control">
+																		    <option value="">Select Country</option>
+														                    <% for(Country country : listCountry){ %>
+														                    <% 	if(builderProject.getCountry().getId() == country.getId()) { 
+														                    		states = country.getStates();
+														                    	}
+														                    %>
+																			<option value="<% out.print(country.getId());%>" <% if(builderProject.getCountry().getId() == country.getId()) { %>selected<% } %>><% out.print(country.getName());%></option>
+																			<% } %>
+															             </select>
+							                                    	</div>
+							                                    	<div class="messageContainer"></div>
+						                                    	</div>
+						                                    </div>
+						                              </div>
+				                                </div>
+				                             </div>
+											
+											<div class="row">
+			                                	<div class="col-md-6">
+			                                		<div class="form-group row">
+			                                   		 	<label for="example-tel-input" class="col-sm-4 control-label">State<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-8">
+			                                    			<div>
+				                                    			<div>
+							                                         <select name="state_id" id="state_id" class="form-control">
+													                    <option value="">Select State</option>
+													                    <%
+													                    if(states != null){
+													                    for(State state : states) { %>
+													                    <% 	if(builderProject.getState().getId() == state.getId()) {
+													                    		cities = state.getCities();
+													                    		out.print(state.getName());
+													                    	}
+													                    %>
+																		<option value="<% out.print(state.getId());%>" <% if(builderProject.getState().getId() == state.getId()) { %>selected<% } %>><% out.print(state.getName());%></option>
+																		<% }} %>
+														          	</select>
+				                                   				</div>
+			                                    				<div class="messageContainer"></div>
+			                                    			</div>	
+			                                   		 	</div>
+			                                   		</div>
+			                                   	</div>	 
+			                                   	<div class="col-md-6">
+			                                   		<div class="form-group row">
+					                                    <label for="example-tel-input" class="col-sm-4 control-label">City<span class='text-danger'>*</span></label>
+					                                    <div class="col-sm-8">
+						                                     <div>
+						                                         <select name="city_id" id="city_id" class="form-control">
+												                	<option value="">Select City</option>
+												                    <%
+												                    if(cities != null){
+												                    for(City city : cities){ %>
+												                    <% 	if(builderProject.getCity().getId() == city.getId()) { 
+												                    		localities = city.getLocalities();
+												                    	}
+												                    %>
+																	<option value="<% out.print(city.getId());%>" <% if(builderProject.getCity().getId() == city.getId()) { %>selected<% } %>><% out.print(city.getName());%></option>
+																	<% } }%>
+													          	</select>
+						                                    </div>
+					                                        <div class="messageContainer"></div>
+					                                  </div>
+					                              </div>
+					                           </div> 
 			                                </div>
-			
-			                                <div class="form-group row">
-			                                    <label for="example-tel-input" class="col-3 col-form-label">State<span class='text-danger'>*</span></label>
-			                                    <div class="col-3">
-			                                    <div>
-			                                         <select name="state_id" id="state_id" class="form-control">
-									                    <option value="">Select State</option>
-									                    <%
-									                    if(states != null){
-									                    for(State state : states) { %>
-									                    <% 	if(builderProject.getState().getId() == state.getId()) {
-									                    		cities = state.getCities();
-									                    		out.print(state.getName());
-									                    	}
-									                    %>
-														<option value="<% out.print(state.getId());%>" <% if(builderProject.getState().getId() == state.getId()) { %>selected<% } %>><% out.print(state.getName());%></option>
-														<% }} %>
-										          	</select>
-			                                    </div>
-			                                    <div class="messageContainer"></div>
-			                                    </div>
-			                                    <label for="example-tel-input" class="col-3 col-form-label">City<span class='text-danger'>*</span></label>
-			                                    <div class="col-3">
-			                                         <select name="city_id" id="city_id" class="form-control">
-									                	<option value="">Select City</option>
-									                    <%
-									                    if(cities != null){
-									                    for(City city : cities){ %>
-									                    <% 	if(builderProject.getCity().getId() == city.getId()) { 
-									                    		localities = city.getLocalities();
-									                    	}
-									                    %>
-														<option value="<% out.print(city.getId());%>" <% if(builderProject.getCity().getId() == city.getId()) { %>selected<% } %>><% out.print(city.getName());%></option>
-														<% } }%>
-										          	</select>
-			                                    </div>
-			                                    <div class="messageContainer col-sm-offset-3"></div>
+			                                <div class="row">
+			                                	<div class="col-md-6">
+					                                <div class="form-group row">
+					                                    <label for="example-text-input" class="col-sm-4 control-label">Locality<span class='text-danger'>*</span></label>
+					                                    <div class="col-sm-8">
+					                                    	<div>
+							                                    <div>
+							                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
+							                                        <select name="locality_id" id="locality_id" class="form-control">
+													                	<option value="">Select Locality</option>
+													                	<%
+													                	if(localities != null){
+													                	for(Locality locality : localities){ %>
+																		<option value="<% out.print(locality.getId());%>" <% if(builderProject.getLocality().getId() == locality.getId()) { %>selected<% } %>><% out.print(locality.getName());%></option>
+																		<% }} %>
+														          	</select>
+																</div>
+																<div class="messageContainer"></div>
+															</div>
+														</div>
+													</div>
+												</div>		
+												<div class="col-md-6">
+					                                <div class="form-group row">		
+					                                    <label for="example-text-input" class="col-sm-4 control-label">Pincode<span class='text-danger'>*</span></label>
+					                                    <div class="col-sm-8">
+					                                    	<div>
+							                                    <div>
+							                                        <input class="form-control" type="text" id="pincode" name="pincode" autocomplete="off" value="<% out.print(builderProject.getPincode());%>"/>
+							                                    </div>
+							                                    <div class="messageContainer"></div>
+							                                    </div>
+							                            </div>     
+					                                </div>
+					                             </div>   
 			                                </div>
-			                                
-			                                <div class="form-group row">
-			                                    <label for="example-text-input" class="col-3 col-form-label">Locality<span class='text-danger'>*</span></label>
-			                                    <div class="col-3">
-			                                    <div>
-			                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
-			                                        <select name="locality_id" id="locality_id" class="form-control">
-									                	<option value="">Select Locality</option>
-									                	<%
-									                	if(localities != null){
-									                	for(Locality locality : localities){ %>
-														<option value="<% out.print(locality.getId());%>" <% if(builderProject.getLocality().getId() == locality.getId()) { %>selected<% } %>><% out.print(locality.getName());%></option>
-														<% }} %>
-										          	</select>
-												</div>
-												<div class="messageContainer col-sm-offset-3"></div>
-												</div>
-			                                    <label for="example-text-input" class="col-3 col-form-label">Pincode<span class='text-danger'>*</span></label>
-			                                    <div class="col-3">
-			                                    <div>
-			                                        <input class="form-control" type="text" id="pincode" name="pincode" autocomplete="off" value="<% out.print(builderProject.getPincode());%>"/>
-			                                    </div>
-			                                    <div class="messageContainer"></div>
-			                                    </div>
+			                                <div class="row">
+			                                	<div class="col-md-6">
+					                                <div class="form-group row">
+					                                    <label for="example-search-input" class="col-sm-4 control-label">Latitude<span class='text-danger'>*</span></label>
+					                                    <div class="col-sm-8">
+					                                    	<div>
+						                                    	<div>
+						                                        	<input class="form-control" type="text" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
+						                                   		</div>
+						                                    	<div class="messageContainer"></div>
+					                                    	</div>
+					                                    </div>
+					                                </div>
+					                            </div>
+					                            <div class="col-md-6">
+					                                <div class="form-group row">  
+					                                    <label for="example-search-input" class="col-sm-4 control-label">Longitude<span class='text-danger'>*</span></label>
+					                                    <div class="col-sm-8">
+					                                    	<div>
+							                                    <div>
+							                                        <input class="form-control" type="text" id="longitude" name="longitude" autocomplete="off" value="<% out.print(builderProject.getLongitude());%>"/>
+							                                    </div>
+							                                    <div class="messageContainer"></div>
+							                                </div>
+					                                    </div>
+					                                </div>
+					                           </div>  
+			                               </div>
+			                               <div class="row">
+			                               		<div class="col-sm -6">   
+					                                <div class="form-group row">
+					                                    <label for="example-tel-input" class="col-sm-4 control-label">Description</label>
+					                                    <div class="col-sm-8">
+					                                        <textarea class="form-control" id="description" name="description"><% out.print(builderProject.getDescription());%></textarea>
+					                                    </div>
+					                                 </div>
+					                              </div>
+					                              <div class="col-sm -6">   
+					                                <div class="form-group row">  
+					                                    <label for="example-tel-input" class="col-sm-4 control-label">Highlight(USP)</label>
+					                                    <div class="col-sm-8">
+					                                    	<textarea class="form-control" id="highlight" name="highlight"><% out.print(builderProject.getHighlights());%></textarea>
+					                                    </div>
+					                                    <div class="messageContainer"></div>
+					                                </div>
+					                            </div> 
 			                                </div>
-			                                
-			                                <div class="form-group row">
-			                                    <label for="example-search-input" class="col-3 col-form-label">Latitude<span class='text-danger'>*</span></label>
-			                                    <div class="col-3">
-			                                    	<div>
-			                                        <input class="form-control" type="text" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
-			                                    </div>
-			                                    <div class="messageContainer"></div>
-			                                    </div>
-			                                    <label for="example-search-input" class="col-3 col-form-label">Longitude<span class='text-danger'>*</span></label>
-			                                    <div class="col-3">
-			                                    <div>
-			                                        <input class="form-control" type="text" id="longitude" name="longitude" autocomplete="off" value="<% out.print(builderProject.getLongitude());%>"/>
-			                                    </div>
-			                                    <div class="messageContainer col-sm-offset-3"></div>
-			                                    </div>
-			                                </div>
-			                                
-			                                 <div class="form-group row">
-			                                    <label for="example-tel-input" class="col-3 col-form-label">Description</label>
-			                                    <div class="col-3">
-			                                        <textarea class="form-control" id="description" name="description"><% out.print(builderProject.getDescription());%></textarea>
-			                                    </div>
-			                                    <label for="example-tel-input" class="col-3 col-form-label">Highlight(USP)</label>
-			                                    <div class="col-3">
-			                                    	<textarea class="form-control" id="highlight" name="highlight"><% out.print(builderProject.getHighlights());%></textarea>
-			                                    </div>
-			                                    <div class="messageContainer col-sm-offset-3"></div>
-			                                </div>
-			                                
-			                                <div class="form-group row">
-			                                    <label for="example-search-input" class="col-3 col-form-label">Status</label>
-			                                    <div class="col-3">
-			                                        <select id="status" name="status" class="form-control">
-														<option value="0" <% if(builderProject.getStatus() == 0) { %>selected<% } %>>Inactive</option>
-														<option value="1" <% if(builderProject.getStatus() == 1) { %>selected<% } %>>Active</option>
-													</select>
-			                                    </div>
-			<!--                                     <div class="messageContainer"></div> -->
-			                                   <!--   <label for="example-search-input" class="col-3 col-form-label">Longitude</label>
-			                                    <div class="col-3">
-			                                        <input class="form-control" type="text" value="How do I shoot web" id="example-search-input">
-			                                    </div>-->
-			                                </div>
+			                                <input type="hidden" id="status" name="status" value="<%out.print(builderProject.getStatus());%>"/>
+			                            
 		                                	<div class="offset-sm-5 col-sm-7">
 		                                        <button type="submit" name="basicbtn" class="btn btn-success btn-sm">Submit</button>
 		                                 	</div>
@@ -565,8 +614,11 @@
 											SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
 									 	%>
 									 	<label class="control-label col-sm-3">Launch Date </label>
-	                                    <div class="col-sm-3">
-	                                   <input type="text"  id="launch_date" name="launch_date" value="<% if(builderProject.getLaunchDate() != null) { out.print(dt1.format(builderProject.getLaunchDate()));} %>"/>
+	                                    <div class="col-sm-3 form-group">
+	                                    	<div class="">
+	                                   			<input type="text" class="form-control" id="launch_date" name="launch_date" value="<% if(builderProject.getLaunchDate() != null) { out.print(dt1.format(builderProject.getLaunchDate()));} %>"/>
+	                                   		</div>
+	                                   		<div class="messageContainer"></div>
 	                                   </div>
 	                                   <label class="control-label col-sm-3">Possession Date </label>
 	                                    <div class="col-sm-3">
@@ -574,7 +626,7 @@
 	                                   </div>
 	                                 </div>
 	                                <div class="offset-sm-5 col-sm-7">
-	                                        <button type="button" id="detailbtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
+	                                        <button type="submit" id="detailbtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
 	                                 </div>
 	                                </form>   
 	                            </div>
@@ -583,89 +635,180 @@
 	                                 	<form id="pricingfrm" name="pricingfrm" method="post">
 		                                	<input type="hidden" name="id" value="<% out.print(projectPriceInfo.getId());%>"/>
 											<input type="hidden" name="project_id" value="<% out.print(project_id);%>"/>
-	                                	 	<div class="form-group row">
-	                                    		<label for="example-text-input" class="col-3 col-form-label">Pricing Unit<span class='text-danger'>*</span></label>
-	                                    		<div class="col-3">
-	                                        		<select name="base_unit" id="base_unit" class="form-control">
-														<% for(AreaUnit areaUnit :areaUnits) {
-															if(projectPriceInfo.getAreaUnit() !=null){
-															%>
-															<option value="<% out.print(areaUnit.getId()); %>" <% if(projectPriceInfo.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
-														<% } else{
-														%>
-															<option value="<% out.print(areaUnit.getId()); %>"><% out.print(areaUnit.getName()); %></option>
-														<%
-															}
-														}
-														%>	
-													</select>
-	                                    		</div>
-	                                    		<div class="messageContainer"></div>
-	                                    		<label for="example-text-input" class="col-3 col-form-label">Base Rate<span class='text-danger'>*</span></label>
-			                                    <div class="col-3">
-			                                    	<div>
-			                                        <input class="form-control" type="text" id="base_rate" name="base_rate" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
+											<div class="row">
+												<div class="col-md-6">
+			                                	 	<div class="form-group row">
+			                                    		<label for="example-text-input" class="col-sm-6 col-form-label">Pricing Unit<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-6"> 
+			                                    			<div>
+				                                        		<select name="base_unit" id="base_unit" class="form-control">
+																	<% for(AreaUnit areaUnit :areaUnits) {
+																		if(projectPriceInfo.getAreaUnit() !=null){
+																		%>
+																		<option value="<% out.print(areaUnit.getId()); %>" <% if(projectPriceInfo.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
+																	<% } else{
+																	%>
+																		<option value="<% out.print(areaUnit.getId()); %>"><% out.print(areaUnit.getName()); %></option>
+																	<%
+																		}
+																	}
+																	%>	
+																</select>
+			                                    			</div>
+			                                    			<div class="messageContainer"></div>
+			                                    		</div>
+			                                      </div>
+			                                      </div>
+			                                      <div class="col-md-6">
+				                                      <div class="form-group row">
+				                                    		<label for="example-text-input" class="col-sm-6 col-form-label">Base Rate<span class='text-danger'>*</span></label>
+						                                    <div class="col-sm-6">
+						                                    	<div>
+						                                    		<div>
+						                                        		<input class="form-control" type="text" id="base_rate" name="base_rate" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
+						                                    		</div>
+						                                    		<div class="messageContainer"></div>
+						                                    	</div>
+						                                   </div>
+						                              </div> 
+					                              </div>
+					                        </div>
+					                        <div class="row">
+					                        	<div class="col-md-6">
+					                                <div class="form-group row">
+				        		                            <label for="example-search-input" class="col-sm-6 col-form-label">Floor Rising Rate<span class='text-danger'>*</span></label>
+				                		                    <div class="col-sm-6">
+				                		                    	<div>
+						                		                    <div>
+						                        		                <input class="form-control" type="text" id="rise_rate" name="rise_rate" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
+						                                	        </div>
+						                                   	 		<div class="messageContainer"></div>
+						                                   	 	</div>
+				                                   	 		</div>
+				                                   	</div>	
+				                                </div>
+				                                <div class="col-md-6"> 	
+				                                	<div class="form-group row">
+				                                    		<label for="example-search-input" class="col-sm-6 col-form-label">Application Post<span class='text-danger'>*</span></label>
+						                                    <div class="col-sm-6">
+						                                    <div>
+						                                        <input class="form-control" type="text" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
+						                                    </div>
+				                                    		<div class="messageContainer"></div>
+				                                    		</div>
+			                                		</div>
+			                                	</div>	
+	                                		</div>
+	                                		<div class="row">
+	                                			<div class="col-sm-6">
+			                                 		<div class="form-group row">
+			                                    		<label for="example-tel-input" class="col-sm-6 col-form-label">Maintainence Charge<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-6">
+			                                    			<div>
+					                                    		<div>
+					                                        		<input class="form-control" type="text" id="maintenance" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
+					                                    		</div>
+					                                    		<div class="messageContainer"></div>
+					                                    	</div>	
+			                                    		</div>
+			                                    	</div>
 			                                    </div>
-			                                    <div class="messageContainer"></div>
+			                                    <div class="col-sm-6">
+			                                    	<div class="form-group row">
+			                                    		<label for="example-tel-input" class="col-sm-6 col-form-label">Tenure</label>
+			                                    		<div class="col-sm-6">
+			                                    			<div>
+					                                    		<div>
+					                                        		<input class="form-control" type="text" id="tenure" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>">
+					                                    		</div>
+					                                    		<div class="messageContainer"></div>
+					                                    	</div>
+			                                    		</div>
+			                                		</div>
+			                                	</div>
+			                                </div>	
+			                                <div class="row">
+			                                	<div class="col-sm-6">	
+					                                <div class="form-group row">
+			        		                            <label for="example-tel-input" class="col-sm-6 col-form-label">Aminities facing Rate<span class='text-danger'>*</span></label>
+			                		                    <div class="col-sm-6">
+			                		                    	<div>
+					                		                    <div>
+					                        		                <input class="form-control" type="text" id="amenity_rate" name="amenity_rate" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
+					                                		    </div>
+					                                		    <div class="messageContainer"></div>
+					                                		</div>
+			                                		    </div>
+			                                		 </div>
+			                                	</div>
+			                                	<div class="col-sm-6">
+			                                		<div class="form-group row">
+			                                    		<label for="example-tel-input" class="col-sm-6 col-form-label">Parking<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-6">
+			                                    			<div>
+				                                    			<div>
+				                                         			<input class="form-control" type="text" id="parking" name="parking" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
+				                                         		</div>	
+			                                    				<div class="messageContainer"></div>
+			                                    			</div>
+			                                    		</div>
+			                                		</div>
+			                                	</div>
+			                                </div>
+			                                <div class="row">
+			                                	<div class="col-sm-6">
+					                                <div class="form-group row">
+			        		                            <label for="example-text-input" class="col-sm-6 col-form-label">Stamp Duty<span class='text-danger'>*</span></label>
+			                		                    <div class="col-sm-6">
+			                		                    	<div>
+				                		                    	<div>
+				                        		               		<input class="form-control" type="text" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
+				                                		    	</div>
+				                                		    	<div class="messageContainer"></div>
+				                                		    </div>
+			                                		    </div>
+			                                		</div>
 			                                   </div>
-			                                </div> 
-			                                <div class="form-group row">
-	        		                            <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate<span class='text-danger'>*</span></label>
-	                		                    <div class="col-3">
-	                        		                <input class="form-control" type="text" id="rise_rate" name="rise_rate" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
-	                                	        </div>
-	                                   	 		<div class="messageContainer"></div>
-	                                    		<label for="example-search-input" class="col-3 col-form-label">Application Post<span class='text-danger'>*</span></label>
-			                                    <div class="col-3">
-			                                        <input class="form-control" type="text" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
+			                                   <div class="col-sm-6">
+			                                		<div class="form-group row">
+			                                   			<label for="example-text-input" class="col-sm-6 col-form-label">Tax<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-6">
+			                                    			<div>
+				                                    			<div>
+				                                        			<input class="form-control" type="text" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
+				                                    			</div>
+				                                    			<div class="messageContainer"></div>
+				                                    		</div>
+			                                    		</div>
+			                                    	</div>
+			                                   </div>
+			                                </div>
+			                                <div class="row">
+			                                	 <div class="col-sm-6">
+			                                		<div class="form-group row">
+			                                    		<label for="example-search-input" class="col-sm-6 col-form-label">VAT<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-6">
+			                                    			<div>
+				                                    			<div>
+				                                        			<input class="form-control" type="text" id="vat" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
+				                                    			</div>
+				                                    			<div class="messageContainer"></div>
+				                                    		</div>
+			                                    		</div>
+			                                    	</div>
 			                                    </div>
-	                                    		<div class="messageContainer"></div>
-	                                		</div>
-	                                 		<div class="form-group row">
-	                                    		<label for="example-tel-input" class="col-3 col-form-label">Maintainence Charge<span class='text-danger'>*</span></label>
-	                                    		<div class="col-3">
-	                                        		<input class="form-control" type="text" id="maintenance" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
-	                                    		</div>
-	                                    		<div class="messageContainer"></div>
-	                                    		<label for="example-tel-input" class="col-3 col-form-label">Tenure</label>
-	                                    		<div class="col-3">
-	                                        		<input class="form-control" type="text" id="tenure" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>">
-	                                    		</div>
-	                                    		<div class="messageContainer"></div>
-	                                		</div>
-			                                <div class="form-group row">
-	        		                            <label for="example-tel-input" class="col-3 col-form-label">Aminities facing Rate<span class='text-danger'>*</span></label>
-	                		                    <div class="col-3">
-	                        		                <input class="form-control" type="text" id="amenity_rate" name="amenity_rate" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
-	                                		    </div>
-	                                		    <div class="messageContainer"></div>
-	                                    		<label for="example-tel-input" class="col-3 col-form-label">Parking<span class='text-danger'>*</span></label>
-	                                    		<div class="col-3">
-	                                         		<input class="form-control" type="text" id="parking" name="parking" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
-	                                    		</div>
-	                                    		<div class="messageContainer"></div>
-	                                		</div>
-			                                <div class="form-group row">
-	        		                            <label for="example-text-input" class="col-3 col-form-label">Stamp Duty<span class='text-danger'>*</span></label>
-	                		                    <div class="col-3">
-	                        		               <input class="form-control" type="text" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
-	                                		    </div>
-	                                		    <div class="messageContainer"></div>
-	                                   				<label for="example-text-input" class="col-3 col-form-label">Tax<span class='text-danger'>*</span></label>
-	                                    		<div class="col-3">
-	                                        		<input class="form-control" type="text" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
-	                                    		</div>
-	                                    	</div>
-	                                		<div class="form-group row">
-	                                    		<label for="example-search-input" class="col-3 col-form-label">VAT<span class='text-danger'>*</span></label>
-	                                    		<div class="col-3">
-	                                        		<input class="form-control" type="text" id="vat" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
-	                                    		</div>
-	                                    			<label for="example-search-input" class="col-3 col-form-label">Tech Fees<span class='text-danger'>*</span></label>
-	                                    		<div class="col-3">
-	                                        		<input class="form-control" type="text" id="tech_fee" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
-	                                    		</div>
-	                                		</div>
+			                                    <div class="col-sm-6">
+			                                    	<div class="form-group row">	
+			                                    		<label for="example-search-input" class="col-sm-6 col-form-label">Tech Fees<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-6">
+			                                    			<div>
+			                                        			<input class="form-control" type="text" id="tech_fee" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
+			                                    			</div>
+			                                    			<div class="messageContainer"></div>
+			                                    		</div>	
+			                                		</div>
+			                                	</div>
+			                                </div>
 			                                <div class="offset-sm-5 col-sm-7">
 	        	                               	<button type="submit" id="pricebtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
 	            		                     </div>
@@ -762,7 +905,7 @@
 																		<div class="form-group" id="error-discount">
 																			<label class="control-label col-sm-8">Discount(%) <span class="text-danger">*</span></label>
 																			<div class="col-sm-6">
-																				<input type="text" class="form-control" id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>">
+																				<input type="text" class="form-control discount" id="discount" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>" onkeypress=" return isNumber(event, this);">
 																			</div>
 																			<div class="messageContainer"></div>
 																		</div>
@@ -916,36 +1059,53 @@
 <script src="../js/bootstrapValidator.min.js"></script>
 <!-- <script src="../js/bootstrap-datepicker.min.js"></script> -->
 <script src="../js/jquery.form.js"></script>
+<script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script>
-$('#launch_date').datepicker({
-	autoclose: true,
-	format: "dd MM yyyy"
-}) .on('changeDate', function(e) {
-    // Revalidate the date field
-  //  $('#detailfrm').formValidation('revalidateField', 'date');
-   // alert("Hi");
+$('#detailfrm').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	launch_date: {
+            validators: {
+                callback: {
+                    message: 'Wrong Launch Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
+                }
+            }
+        },
+        possession_date: {
+            validators: {
+                callback: {
+                    message: 'Wrong Possession Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	saveProjectDetails();
 });
-// $("#detailfrm").formValidation({
-//     framework: 'bootstrap',
-//         icon: {
-//             valid: 'glyphicon glyphicon-ok',
-//             invalid: 'glyphicon glyphicon-remove',
-//             validating: 'glyphicon glyphicon-refresh'
-//         },
-//         fields: {
-//             date: {
-//                 validators: {
-//                     notEmpty: {
-//                         message: 'The date is required'
-//                     },
-//                     date: {
-//                         format: 'MM/DD/YYYY',
-//                         message: 'The date is not a valid'
-//                     }
-//                 }
-//             }
-//         }
-//     });
 $('#latitude').keypress(function (event) {
     return isNumber(event, this)
 });
@@ -1021,9 +1181,6 @@ $('#payable').keypress(function (event) {
 $('#amount').keypress(function (event) {
     return isNumber(event, this)
 });
-$('#discount').keypress(function (event) {
-    return isNumber(event, this)
-});
 $('#discount_amount').keypress(function (event) {
     return isNumber(event, this)
 });
@@ -1049,9 +1206,18 @@ $('#schedule').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9, ]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
 });
 $('#launch_date').datepicker({
-	format: "dd MM yyyy"
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#detailfrm').data('bootstrapValidator').revalidateField('launch_date');
 });
 
+$('#possession_date').datepicker({
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#detailfrm').data('bootstrapValidator').revalidateField('possession_date');
+});
 $("#builder_id").change(function(){
 	if($("#builder_id").val() != "") {
 		$.get("${baseUrl}/webapi/create/project/list/",{ builder_id: $("#builder_id").val() }, function(data){
@@ -1130,7 +1296,7 @@ $('#basicfrm').bootstrapValidator({
         sublocation:{
        	 validators: {
                 notEmpty: {
-                         message: 'Sub location is required and cannot be empty'
+                     message: 'Sub location is required and cannot be empty'
                 }
             }
        },
@@ -1263,6 +1429,76 @@ $('#pricingfrm').bootstrapValidator({
                 },
             }
         },
+        rise_rate:{
+        	validators: {
+                notEmpty: {
+                    message: 'Floor rise rate is required and cannot be empty'
+                },
+            }
+        },
+        post:{
+        	validators: {
+                notEmpty: {
+                    message: 'Applicable post is required and cannot be empty'
+                },
+            }
+        },
+        maintenance:{
+        	validators: {
+                notEmpty: {
+                    message: 'Maintenance charges is required and cannot be empty'
+                },
+            }
+        },
+        tenure:{
+        	validators: {
+                notEmpty: {
+                    message: 'Tenure is required and cannot be empty'
+                },
+            }
+        },
+        amenity_rate:{
+        	validators: {
+                notEmpty: {
+                    message: 'Amenity rate is required and cannot be empty'
+                },
+            }
+        },
+        parking:{
+        	validators: {
+                notEmpty: {
+                    message: 'Parking charges is required and cannot be empty'
+                },
+            }
+        },
+        stamp_duty:{
+        	validators: {
+                notEmpty: {
+                    message: 'Stamp duty is required and cannot be empty'
+                },
+            }
+        },
+        tax:{
+        	validators: {
+                notEmpty: {
+                    message: 'Tax is required and cannot be empty'
+                },
+            }
+        },
+        vat:{
+        	validators: {
+                notEmpty: {
+                    message: 'Vat is required and cannot be empty'
+                },
+            }
+        },
+        tech_fee:{
+       	 validators: {
+                notEmpty: {
+                    message: 'Tech fee is required and cannot be empty'
+                }
+            }
+       }
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
@@ -1311,7 +1547,7 @@ $('input[name="amenity_type[]"]').click(function() {
 	}
 });
 
-$("#detailbtn").click(function(){
+function saveProjectDetails(){
 	var amenityWeightage = [];
 	var projectType = [];
 	var propertyType = [];
@@ -1374,7 +1610,7 @@ $("#detailbtn").click(function(){
 		}
 		
 	});
-});
+}
 
 $("#paymentbtn").click(function(){
 	var paymentInfo = [];
@@ -1541,7 +1777,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount">'
 				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control" id="discount" name="discount[]" value=""/>'
+					+'<input type="text" class="form-control discount" id="discount" name="discount[]" value="" onkeypress=" return isNumber(event, this);"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1550,7 +1786,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="" onkeypress=" return isNumber(event, this);"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
