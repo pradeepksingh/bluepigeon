@@ -157,6 +157,9 @@ public class BuilderController {
 					projectDAO.deleteBuildingAmenityInfo(building_id);
 					projectDAO.addBuildingAmenityInfo(buildingAmenityInfos);
 				}
+				msg = new ResponseMessage();
+				msg.setStatus(1);
+				msg.setMessage("Builing Details updated successfully.");
 			}
 //			if(amenity_wts != "") {
 //				for(String aw :amenityWeightages) {
@@ -193,51 +196,52 @@ public class BuilderController {
 //			}
 			
 		}
-		if (offer_title.size() > 0) {
-			List<BuildingOfferInfo> newBuildingOfferInfos = new ArrayList<BuildingOfferInfo>();
-			List<BuildingOfferInfo> buildingOfferInfos = new ArrayList<BuildingOfferInfo>();
-			int i = 0;
-			for(FormDataBodyPart title : offer_title)
-			{
-				if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
-					if(offer_id.get(i).getValueAs(Integer.class) != 0 && offer_id.get(i).getValueAs(Integer.class) != null) {
-						BuildingOfferInfo buildingOfferInfo = new BuildingOfferInfo();
-						buildingOfferInfo.setId(offer_id.get(i).getValueAs(Integer.class));
-						buildingOfferInfo.setTitle(title.getValueAs(String.class).toString());
-						buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
-						buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
-						buildingOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
-						buildingOfferInfo.setType(offer_type.get(i).getValueAs(Byte.class));
-						buildingOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
-						buildingOfferInfo.setBuilderBuilding(builderBuilding);
-						buildingOfferInfos.add(buildingOfferInfo);
-					} else {
-						BuildingOfferInfo buildingOfferInfo = new BuildingOfferInfo();
-						buildingOfferInfo.setTitle(title.getValueAs(String.class).toString());
-						buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
-						buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
-						buildingOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
-						buildingOfferInfo.setType(offer_type.get(i).getValueAs(Byte.class));
-						buildingOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
-						buildingOfferInfo.setBuilderBuilding(builderBuilding);
-						newBuildingOfferInfos.add(buildingOfferInfo);
+		if(offer_title != null){
+			if (offer_title.size() > 0) {
+				List<BuildingOfferInfo> newBuildingOfferInfos = new ArrayList<BuildingOfferInfo>();
+				List<BuildingOfferInfo> buildingOfferInfos = new ArrayList<BuildingOfferInfo>();
+				int i = 0;
+				for(FormDataBodyPart title : offer_title)
+				{
+					if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
+						if(offer_id.get(i).getValueAs(Integer.class) != 0 && offer_id.get(i).getValueAs(Integer.class) != null) {
+							BuildingOfferInfo buildingOfferInfo = new BuildingOfferInfo();
+							buildingOfferInfo.setId(offer_id.get(i).getValueAs(Integer.class));
+							buildingOfferInfo.setTitle(title.getValueAs(String.class).toString());
+							buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
+							buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
+							buildingOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
+							buildingOfferInfo.setType(offer_type.get(i).getValueAs(Byte.class));
+							buildingOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
+							buildingOfferInfo.setBuilderBuilding(builderBuilding);
+							buildingOfferInfos.add(buildingOfferInfo);
+						} else {
+							BuildingOfferInfo buildingOfferInfo = new BuildingOfferInfo();
+							buildingOfferInfo.setTitle(title.getValueAs(String.class).toString());
+							buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
+							buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
+							buildingOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
+							buildingOfferInfo.setType(offer_type.get(i).getValueAs(Byte.class));
+							buildingOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
+							buildingOfferInfo.setBuilderBuilding(builderBuilding);
+							newBuildingOfferInfos.add(buildingOfferInfo);
+						}
 					}
+					i++;
 				}
-				i++;
+				if(buildingOfferInfos.size() > 0) {
+					projectDAO.updateBuildingOfferInfo(buildingOfferInfos);
+				}
+				if(newBuildingOfferInfos.size() > 0) {
+					projectDAO.addBuildingOfferInfo(newBuildingOfferInfos);
+				}
+				msg.setStatus(1);
+				msg.setMessage("Builing Details updated successfully.");
+			} else {
+				msg.setMessage("Failed to update building Details.");
+				msg.setStatus(0);
 			}
-			if(buildingOfferInfos.size() > 0) {
-				projectDAO.updateBuildingOfferInfo(buildingOfferInfos);
-			}
-			if(newBuildingOfferInfos.size() > 0) {
-				projectDAO.addBuildingOfferInfo(newBuildingOfferInfos);
-			}
-			msg.setStatus(1);
-			msg.setMessage("Builing Details updated successfully.");
-		} else {
-			msg.setMessage("Failed to update building Details.");
-			msg.setStatus(0);
 		}
-		
 		return msg;
 	}
 	

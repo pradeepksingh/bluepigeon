@@ -114,7 +114,7 @@
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-6">Total Floors </label>
-													<div class="col-sm-6">
+													<div class="col-sm-3">
 														<input type="text" class="form-control" id="total_floor" name="total_floor" />
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>

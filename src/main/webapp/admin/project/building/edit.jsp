@@ -664,9 +664,11 @@ function isNumber(evt, element) {
     return true;
 }   
 $('#possession_date').datepicker({
+	autoclose: true,
 	format: "dd MM yyyy"
 });
 $('#launch_date').datepicker({
+	autoclose: true,
 	format: "dd MM yyyy"
 });
 $('#updatebuilding').bootstrapValidator({

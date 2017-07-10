@@ -1066,6 +1066,7 @@ public class ProjectDAO {
 		}
 		newsession.getTransaction().commit();
 		newsession.close();
+		
 		return resp;
 	}
 	

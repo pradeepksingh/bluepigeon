@@ -137,15 +137,15 @@
            <div class="row">
                <div class="col-lg-12">
                    <div class="white-box">
-                           <ul class="nav tabs-horizontal">
-                               <li class="tab nav-item" aria-expanded="false">
-                                   <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"> <span>Project Details</span></a>
+                           <ul class="nav nav-tabs">
+                               <li class="active" >
+                                   <a data-toggle="tab"  href="#vimessages" > <span>Project Details</span></a>
                                </li>
-                                <li class="tab nav-item">
-                                   <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages1"><span>Building Details</span></a>
+                                <li>
+                                   <a  data-toggle="tab" href="#vimessages1"><span>Building Details</span></a>
                                </li>
-                               <li class="tab nav-item">
-                                   <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages2"><span>Images</span></a>
+                               <li>
+                                   <a  data-toggle="tab" href="#vimessages2"><span>Images</span></a>
                                </li>
                            </ul>
                            <div class="tab-content"> 
@@ -158,6 +158,7 @@
                            		<div class="form-group row">
                              		  <label for="example-search-input" class="col-3 col-form-label">Project Name*</label>
                               		  <div class="col-6">
+                              		  <div>
                                 	   <!-- <input class="form-control" type="text" value="project" id="example-search-input">-->
                                 		  <select id="project_id" name="project_id" class="form-control">
 											  <% for(ProjectData builderProject :builderProjects) { %>
@@ -166,20 +167,25 @@
 										  </select>
                                	  	  </div>
                                	  	  <div class="messageContainer col-6"></div>
+                               	  	  </div>
                                </div>
                                <div class="form-group row">
                                     <label for="example-search-input" class="col-3 col-form-label">Total Floors</label>
                                     <div class="col-6">
+                                    <div>
                                         <input class="form-control" type="text" id="total_floor" name="total_floor" value="<% out.print(builderBuilding.getTotalFloor());%>"/>
                                     </div>
                                     <div class="messageContainer col-6"></div>
+                                    </div>
                                </div>
                                <div class="form-group row">
                                 	<label for="example-search-input" class="col-3 col-form-label">Building Name</label>
                                 	<div class="col-6">
+                                	<div>
 										<input class="form-control" type="text" id="name" name="name" value="<% out.print(builderBuilding.getName()); %>">
                                 	</div>
                                 	<div class="messageContainer col-6"></div>
+                                	</div>
                                </div>
                                <div class="offset-sm-5 col-sm-7">
                                     <button type="submit" name="basicdetail"  class="btn btn-info waves-effect waves-light m-t-10">Save</button>
@@ -353,7 +359,7 @@
 														<div>
 															<div class="col-lg-12">
 																<span class="pull-right">
-																	<a href="javascript:addMoreOffer();" class="btn btn-info btn-lg">+ Add More Offers</a>
+																	<a href="javascript:addMoreOffer();" class="btn btn-info btn-md">+ Add More Offers</a>
 																</span>
 															</div>
 														</div>
@@ -361,7 +367,7 @@
 															<div class="row">
 																<div class="col-lg-12">
 																	<div class="col-sm-12">
-																		<button type="button" class="btn btn-success btn-lg" id="offerbtn" onclick="updateBuildingOffers();">Approve</button>
+																		<button type="button" class="btn btn-success btn-md" id="offerbtn" onclick="updateBuildingOffers();">Approve</button>
 																	</div>
 																</div>
 															</div>
@@ -394,7 +400,7 @@
 						<% } %>
 					</div>
 					<div class="row">
-						<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-lg"> + Add More</a></span>
+						<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-sm"> + Add More</a></span>
 					</div>
 					<hr/>
                            </div> 
@@ -415,7 +421,7 @@
 						<% } %>
 					</div>
 					<div class="row">
-						<span class="pull-right"><a href="javascript:addMoreElvImages();" class="btn btn-info btn-lg"> + Add More</a></span>
+						<span class="pull-right"><a href="javascript:addMoreElvImages();" class="btn btn-info btn-sm"> + Add More</a></span>
 					</div>
                              </div>  
                          
@@ -439,9 +445,11 @@
 </html>
 <script type="text/javascript">
 $('#possession_date').datepicker({
+	autoclose: true,
 	format: "dd MM yyyy"
 });
 $('#launch_date').datepicker({
+	autoclose: true,
 	format: "dd MM yyyy"
 });
 function showDemand()

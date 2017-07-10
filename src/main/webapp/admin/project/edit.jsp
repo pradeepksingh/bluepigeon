@@ -356,7 +356,9 @@
 													<div class="messageContainer"></div>
 												</div>
 											</div>
-											<div class="col-lg-6">
+										</div>
+										<div class="row">
+										<div class="col-lg-6">
 												<div class="col-sm-12">
 													<button type="submit" name="basicbtn" class="btn btn-success btn-sm">Submit</button>
 												</div>
@@ -828,42 +830,42 @@
 												</div>
 											</div>
 											<% i++; } %>
-											<div class="row" id="schedule-<% out.print(i);%>">
-												<% if(i > 1) { %>
-												<hr/>
-												<% } %>
-												<div class="col-lg-5 margin-bottom-5">
-													<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>
-													<div class="form-group" id="error-schedule">
-														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>
-														</div>
-														<div class="messageContainer col-sm-offset-5"></div>
-													</div>
-												</div>
-												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-payable">
-														<label class="control-label col-sm-8">% of Net Payable <span class='text-danger'>*</span></label>
-														<div class="col-sm-4">
-															<input type="text" class="form-control errorMsg" id="payable" name="payable[]" value=""/>
-														</div>
-														<div class="messageContainer col-sm-offset-5"></div>
-													</div>
-												</div>
-												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-amount">
-														<label class="control-label col-sm-6">Amount <span class='text-danger'>*</span></label>
-														<div class="col-sm-6">
-															<input type="text" class="form-control errorMsg" id="amount" name="amount[]" value=""/>
-														</div>
-														<div class="messageContainer col-sm-offset-5"></div>
-													</div>
-												</div>
-												<div class="col-lg-1">
-													<span><a href="javascript:removeSchedule(<% out.print(i);%>);" class="btn btn-danger btn-xs">x</a></span>
-												</div>
-											</div>
+<%-- 											<div class="row" id="schedule-<% out.print(i);%>"> --%>
+<%-- 												<% if(i > 1) { %> --%>
+<!-- 												<hr/> -->
+<%-- 												<% } %> --%>
+<!-- 												<div class="col-lg-5 margin-bottom-5"> -->
+<!-- 													<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/> -->
+<!-- 													<div class="form-group" id="error-schedule"> -->
+<!-- 														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label> -->
+<!-- 														<div class="col-sm-8"> -->
+<!-- 															<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/> -->
+<!-- 														</div> -->
+<!-- 														<div class="messageContainer col-sm-offset-5"></div> -->
+<!-- 													</div> -->
+<!-- 												</div> -->
+<!-- 												<div class="col-lg-3 margin-bottom-5"> -->
+<!-- 													<div class="form-group" id="error-payable"> -->
+<!-- 														<label class="control-label col-sm-8">% of Net Payable <span class='text-danger'>*</span></label> -->
+<!-- 														<div class="col-sm-4"> -->
+<!-- 															<input type="text" class="form-control errorMsg" id="payable" name="payable[]" value=""/> -->
+<!-- 														</div> -->
+<!-- 														<div class="messageContainer col-sm-offset-5"></div> -->
+<!-- 													</div> -->
+<!-- 												</div> -->
+<!-- 												<div class="col-lg-3 margin-bottom-5"> -->
+<!-- 													<div class="form-group" id="error-amount"> -->
+<!-- 														<label class="control-label col-sm-6">Amount <span class='text-danger'>*</span></label> -->
+<!-- 														<div class="col-sm-6"> -->
+<!-- 															<input type="text" class="form-control errorMsg" id="amount" name="amount[]" value=""/> -->
+<!-- 														</div> -->
+<!-- 														<div class="messageContainer col-sm-offset-5"></div> -->
+<!-- 													</div> -->
+<!-- 												</div> -->
+<!-- 												<div class="col-lg-1"> -->
+<%-- 													<span><a href="javascript:removeSchedule(<% out.print(i);%>);" class="btn btn-danger btn-xs">x</a></span> --%>
+<!-- 												</div> -->
+<!-- 											</div> -->
 										</div>
 										<div>
 											<div class="col-lg-12">
@@ -1195,21 +1197,28 @@
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script>
-$(".errorMsg").keypress(function(event){
+// $(".errorMsg").keypress(function(event){
+// 	alert("Hello");
+// 	return isNumber(event, this)
+// });
+
+$("input.errorMsg").keypress(function(event){
+	alert("Hello");
 	return isNumber(event, this)
 });
 
-function isNumber(evt, element) {
+// function isNumber(evt, element) {
 
-    var charCode = (evt.which) ? evt.which : event.keyCode
+//     var charCode = (evt.which) ? evt.which : event.keyCode
 
-    if (
-        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
-        (charCode < 48 || charCode > 57))
-        return false;
+//     if (
+//         (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+//         (charCode < 48 || charCode > 57))
+//         return false;
 
-    return true;
-} 
+//     return true;
+// } 
+
 $('#latitude').keypress(function (event) {
     return isNumber(event, this)
 });
@@ -1390,10 +1399,24 @@ $('#basicfrm').bootstrapValidator({
                 }
             }
         },
+        sublocation:{
+        	 validators: {
+                 notEmpty: {
+                          message: 'Sub location is required and cannot be empty'
+                 }
+             }
+        },
+        landmark:{
+        	 validators: {
+                 notEmpty: {
+                          message: 'landmark is required and cannot be empty'
+                 }
+             }
+        },
         country_id: {
             validators: {
                 notEmpty: {
-                    message: 'Country Name is required and cannot be empty'
+                         message: 'Country Name is required and cannot be empty'
                 }
             }
         },
@@ -1427,10 +1450,7 @@ $('#basicfrm').bootstrapValidator({
                     max: 6,
                     min: 6,
                     message: 'Invalid pin code.'
-                },
-                integer: {
-                    message: 'Invalid pin code.'
-           		}
+                }
             }
         },
         latitude: {
@@ -1946,7 +1966,7 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-schedule">'
 				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-				+'<input type="text" class="form-control" id="schedule" name="schedule[]"/>'
+				+'<input type="text" class="form-control"  name="schedule[]"/>'
 				+'</div>'
 				+'<div class="messageContainer col-sm-offset-5"></div>'
 				+'</div>'
@@ -1955,7 +1975,7 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-payable">'
 				+'<label class="control-label col-sm-8">% of Net Payable </label>'
 				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control errorMsg" id="payable" name="payable[]"/>'
+				+'<input type="text" class="form-control errorMsg"  name="payable[]"/>'
 				+'</div>'
 				+'<div class="messageContainer col-sm-offset-5"></div>'
 				+'</div>'
@@ -1964,7 +1984,7 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-amount">'
 				+'<label class="control-label col-sm-6">Amount </label>'
 				+'<div class="col-sm-6">'
-				+'<input type="text" class="form-control errorMsg" id="amount" name="amount[]"/>'
+				+'<input type="text" class="form-control errorMsg"  name="amount[]"/>'
 				+'</div>'
 				+'<div class="messageContainer col-sm-offset-5"></div>'
 				+'</div>'

@@ -141,11 +141,14 @@
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
+    
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 	<![endif]-->
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
 	<script type="text/javascript">
 	    $('input[type=checkbox]').click(function(){
 	    if($(this).is(':checked')){
@@ -184,46 +187,54 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
-                             <ul class="nav tabs-horizontal">
-                                 <li class="tab nav-item" aria-expanded="false">
-                                     <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"> <span>Basic Information</span></a>
+                             <ul class="nav  nav-tabs">
+                                 <li class="active">
+                                     <a data-toggle="tab"  href="#vimessages" > <span>Basic Information</span></a>
                                  </li>
-                                  <li class="tab nav-item">
-                                     <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages1"><span>Project Details</span></a>
+                                  <li>
+                                     <a  data-toggle="tab" href="#vimessages1"><span>Project Details</span></a>
                                  </li>
-                                 <li class="tab nav-item">
-                                     <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages2"><span>Pricing Details</span></a>
+                                 <li>
+                                     <a  data-toggle="tab" href="#vimessages2"><span>Pricing Details</span></a>
                                  </li>
 <!--                                      <li class="tab nav-item"> -->
 <!--                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages3"><span>Payment Schedules</span></a> -->
 <!--                                     </li> -->
-                                 <li class="tab nav-item">
-                                     <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages4"><span>Offers</span></a>
+                                 <li>
+                                     <a  data-toggle="tab" href="#vimessages4"><span>Offers</span></a>
                                  </li>
                                  <!--   <li class="tab nav-item">
                                      <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a>
                                  </li>-->
                              </ul>
                               <div class="tab-content"> 
-	                              <div id="vimessages" class="tab-pane active" aria-expanded="false">
+	                           <div id="vimessages" class="tab-pane active" aria-expanded="false">
 	                                <div class="col-12">
 		                                <form id="basicfrm" name="basicfrm" method="post">
 		                                <input type="hidden" id="id" name="id" value="<% out.print(project_id);%>"/>
-			                                <div class="form-group row">
-			                                    <label for="example-text-input" class="col-3 col-form-label">Builder Group*</label>
-			                                    <div class="col-3">
-			                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
-			                                        <select id="builder_id" name="builder_id" class="form-control">
-														<option value="">Select Builder Group</option>
-		<%-- 												<% for (Builder builder : builders) { %> --%>
-		<%-- 												<option value="<%out.print(builder.getId());%>" <% if(builderProject.getBuilder().getId() ==  builder.getId()) { %>selected<% } %>> <% out.print(builder.getName()); %> </option> --%>
-		<%-- 												<% } %> --%>
-														<option value="<%out.print(adminuserproject.getId()); %>" selected><%out.print(adminuserproject.getName()); %>
-													</select>
+			                                <div class="row">
+			                                	<div class="col-lg-6 ">
+				                                	<div class="form-group row" id="error-builder_id">
+				                                  	  <label  class="col-sm-4 control-label">Builder Group<span class='text-danger'>*</span></label>
+				                                    <div class="col-sm-8">
+				                                    <div>
+				                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
+				                                        <select id="builder_id" name="builder_id" class="form-control">
+															<option value="">Select Builder Group</option>
+			<%-- 												<% for (Builder builder : builders) { %> --%>
+			<%-- 												<option value="<%out.print(builder.getId());%>" <% if(builderProject.getBuilder().getId() ==  builder.getId()) { %>selected<% } %>> <% out.print(builder.getName()); %> </option> --%>
+			<%-- 												<% } %> --%>
+															<option value="<%out.print(adminuserproject.getId()); %>" selected><%out.print(adminuserproject.getName()); %>
+														</select>
+				                                  	  </div>
+				                                  	   <div class="messageContainer "></div>
+				                                  	  </div>
+				                                    
+				                                  </div>
 			                                    </div>
-			                                    <div class="messageContainer col-sm-offset-3"></div>
-			                                    <label for="example-text-input" class="col-3 col-form-label">Builder Company*</label>
+			                                    <label for="example-text-input" class="col-3 col-form-label">Builder Company<span class='text-danger'>*</span></label>
 			                                    <div class="col-3">
+			                                    <div>
 			                                       <select id="company_id" name="company_id" class="form-control">
 														<option value="">Select Builder Company</option>
 														<% for (Builder builder : builders) { %>
@@ -235,31 +246,40 @@
 														<% } %>
 													</select>
 			                                    </div>
-			                                    <div class="messageContainer col-sm-offset-3"></div>
+			                                    	<div class="messageContainer"></div>
+			                                    </div>
+			                                   
+			                                    
 			                                </div>
 			                                
 			                                <div class="form-group row">
-			                                    <label for="example-search-input" class="col-3 col-form-label">Project Name*</label>
+			                                    <label for="example-search-input" class="col-3 col-form-label">Project Name<span class='text-danger'>*</span></label>
 			                                    <div class="col-3">
-			                                        <input class="form-control"  data-msg-maxlength="The field Project Name must be a string with a minimum length of 5 and a maximum length of 10." 
-      													data-msg-minlength="The field Project Name must be a string with a minimum length of 5 and a maximum length of 10." 
-      													data-msg-required="The Project Name field is required."  data-rule-maxlength="10"  data-rule-minlength="5" data-rule-required="true" type="text" id="name" name="name" value="<% out.print(builderProject.getName());%>">
+			                                      <div>
+			                                        <input class="form-control" type="text" id="name" name="name" value="<% out.print(builderProject.getName());%>">
 			                                    </div>
 			                                    <div class="messageContainer"></div>
-			                                    <label for="example-search-input" class="col-3 col-form-label">Landmark</label>
-			                                    <div class="col-3">
-			                                        <input class="form-control" type="text" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>">
 			                                    </div>
-			                                    <div class="messageContainer col-sm-offset-3"></div>
+			                                    <label for="example-search-input" class="col-3 col-form-label">Landmark<span class='text-danger'>*</span></label>
+			                                    <div class="col-3">
+			                                    	<div>
+			                                        	<input class="form-control" type="text" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>">
+			                                    	</div>
+			                                   		 <div class="messageContainer col-sm-offset-3"></div>
+			                                    </div>
 			                                </div>
 			                                
 			                                 <div class="form-group row">
-			                                    <label for="example-tel-input" class="col-3 col-form-label">Sub Location</label>
+			                                    <label for="example-tel-input" class="col-3 col-form-label">Sub Location<span class='text-danger'>*</span></label>
 			                                    <div class="col-3">
+			                                    <div>
 			                                        <input class="form-control" type="text" id="sublocation" name="sublocation" value="<% out.print(builderProject.getAddr2());%>">
 			                                    </div>
-			                                    <label for="example-tel-input" class="col-3 col-form-label">Country</label>
+			                                    <div class="messageContainer col-sm-offset-3"></div>
+			                                    </div>
+			                                    <label for="example-tel-input" class="col-3 col-form-label">Country<span class='text-danger'>*</span></label>
 			                                    <div class="col-3">
+			                                    <div>
 			                                        <select name="country_id" id="country_id" class="form-control">
 													    <option value="">Select Country</option>
 									                    <% for(Country country : listCountry){ %>
@@ -272,11 +292,13 @@
 										             </select>
 			                                    </div>
 			                                    <div class="messageContainer col-sm-offset-3"></div>
+			                                    </div>
 			                                </div>
 			
 			                                <div class="form-group row">
-			                                    <label for="example-tel-input" class="col-3 col-form-label">State</label>
+			                                    <label for="example-tel-input" class="col-3 col-form-label">State<span class='text-danger'>*</span></label>
 			                                    <div class="col-3">
+			                                    <div>
 			                                         <select name="state_id" id="state_id" class="form-control">
 									                    <option value="">Select State</option>
 									                    <%
@@ -291,8 +313,9 @@
 														<% }} %>
 										          	</select>
 			                                    </div>
-			                                    <div class="messageContainer col-sm-offset-3"></div>
-			                                    <label for="example-tel-input" class="col-3 col-form-label">City</label>
+			                                    <div class="messageContainer"></div>
+			                                    </div>
+			                                    <label for="example-tel-input" class="col-3 col-form-label">City<span class='text-danger'>*</span></label>
 			                                    <div class="col-3">
 			                                         <select name="city_id" id="city_id" class="form-control">
 									                	<option value="">Select City</option>
@@ -311,8 +334,9 @@
 			                                </div>
 			                                
 			                                <div class="form-group row">
-			                                    <label for="example-text-input" class="col-3 col-form-label">Locality</label>
+			                                    <label for="example-text-input" class="col-3 col-form-label">Locality<span class='text-danger'>*</span></label>
 			                                    <div class="col-3">
+			                                    <div>
 			                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
 			                                        <select name="locality_id" id="locality_id" class="form-control">
 									                	<option value="">Select Locality</option>
@@ -324,24 +348,31 @@
 										          	</select>
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
-			                                    <label for="example-text-input" class="col-3 col-form-label">Pincode</label>
+												</div>
+			                                    <label for="example-text-input" class="col-3 col-form-label">Pincode<span class='text-danger'>*</span></label>
 			                                    <div class="col-3">
+			                                    <div>
 			                                        <input class="form-control" type="text" id="pincode" name="pincode" autocomplete="off" value="<% out.print(builderProject.getPincode());%>"/>
 			                                    </div>
-			<!--                                     <div class="messageContainer"></div> -->
+			                                    <div class="messageContainer"></div>
+			                                    </div>
 			                                </div>
 			                                
 			                                <div class="form-group row">
-			                                    <label for="example-search-input" class="col-3 col-form-label">Latitude</label>
+			                                    <label for="example-search-input" class="col-3 col-form-label">Latitude<span class='text-danger'>*</span></label>
 			                                    <div class="col-3">
+			                                    	<div>
 			                                        <input class="form-control" type="text" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
 			                                    </div>
-			                                    <div class="messageContainer col-offset-3"></div>
-			                                    <label for="example-search-input" class="col-3 col-form-label">Longitude</label>
+			                                    <div class="messageContainer"></div>
+			                                    </div>
+			                                    <label for="example-search-input" class="col-3 col-form-label">Longitude<span class='text-danger'>*</span></label>
 			                                    <div class="col-3">
+			                                    <div>
 			                                        <input class="form-control" type="text" id="longitude" name="longitude" autocomplete="off" value="<% out.print(builderProject.getLongitude());%>"/>
 			                                    </div>
 			                                    <div class="messageContainer col-sm-offset-3"></div>
+			                                    </div>
 			                                </div>
 			                                
 			                                 <div class="form-group row">
@@ -380,7 +411,7 @@
 	                          	 <form  id="detailfrm" name="detailfrm" method="post">
 	                          	  <input type="hidden" id="id" name="id" value="<% out.print(project_id);%>"/>
 	                               <div class="form-group row">
-	                                  <label for="example-text-input" class="col-12 col-form-label">Project Type*</label><br/>
+	                                  <label for="example-text-input" class="col-12 col-form-label">Project Type<span class='text-danger'>*</span></label><br/>
 	                                  <% 	for(BuilderProjectType builderProjectType : projectTypes) { 
 									String is_checked = "";
 									for(BuilderProjectProjectType projectProjectType :projectProjectTypes) {
@@ -436,7 +467,7 @@
 	                              </div><hr>
 	                                
 	                                <div class="form-group row">
-	                                  <label for="example-text-input" class="col-12 col-form-label">Property Type*</label>
+	                                  <label for="example-text-input" class="col-12 col-form-label">Property Type<span class='text-danger'>*</span></label>
 	                                  <% 	for(BuilderPropertyType builderPropertyType : propertyTypes) { 
 											String is_checked = "";
 											int prop_value = 0;
@@ -469,9 +500,8 @@
 	                                    </div>
 	                                    <% } %>
 	                                </div><hr>
-	
 	                                <div class="form-group row">
-	                                    <label for="example-text-input" class="col-12 col-form-label">Project Amenities*</label>
+	                                    <label for="example-text-input" class="col-12 col-form-label">Project Amenities<span class='text-danger'>*</span></label>
 	                                    <% 	for(BuilderProjectAmenity projectAmenity : projectAmenities) { 
 											String is_checked = "";
 											for(BuilderProjectAmenityInfo projectAmenityInfo :projectAmenityInfos) {
@@ -488,7 +518,7 @@
 	                                </div><hr>
 	                                
 	                                <div class="form-group row">
-	                                   <label for="example-text-input" class="col-12 col-form-label">Project Approval*</label>
+	                                   <label for="example-text-input" class="col-12 col-form-label">Project Approval<span class='text-danger'>*</span></label>
 	                                   <% for(BuilderProjectApprovalType projectApproval : projectApprovals) { 
 											String is_checked1 = "";
 											for(BuilderProjectApprovalInfo projectApprovalInfo :projectApprovalInfos) {
@@ -538,19 +568,23 @@
 	                                    <div class="col-sm-3">
 	                                   <input type="text"  id="launch_date" name="launch_date" value="<% if(builderProject.getLaunchDate() != null) { out.print(dt1.format(builderProject.getLaunchDate()));} %>"/>
 	                                   </div>
+	                                   <label class="control-label col-sm-3">Possession Date </label>
+	                                    <div class="col-sm-3">
+	                                   		<input type="text"  id="possession_date" name="possession_date" value="<% if(builderProject.getPossessionDate() != null) { out.print(dt1.format(builderProject.getPossessionDate()));} %>"/>
+	                                   </div>
 	                                 </div>
 	                                <div class="offset-sm-5 col-sm-7">
 	                                        <button type="button" id="detailbtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
 	                                 </div>
 	                                </form>   
-	                               </div>
-		                           <div id="vimessages2" class="tab-pane" aria-expanded="false">
+	                            </div>
+		                		<div id="vimessages2" class="tab-pane" aria-expanded="false">
 	                                 <div class="col-12">
 	                                 	<form id="pricingfrm" name="pricingfrm" method="post">
 		                                	<input type="hidden" name="id" value="<% out.print(projectPriceInfo.getId());%>"/>
 											<input type="hidden" name="project_id" value="<% out.print(project_id);%>"/>
 	                                	 	<div class="form-group row">
-	                                    		<label for="example-text-input" class="col-3 col-form-label">Pricing Unit*</label>
+	                                    		<label for="example-text-input" class="col-3 col-form-label">Pricing Unit<span class='text-danger'>*</span></label>
 	                                    		<div class="col-3">
 	                                        		<select name="base_unit" id="base_unit" class="form-control">
 														<% for(AreaUnit areaUnit :areaUnits) {
@@ -567,26 +601,28 @@
 													</select>
 	                                    		</div>
 	                                    		<div class="messageContainer"></div>
-	                                    		<label for="example-text-input" class="col-3 col-form-label">Base Rate*</label>
+	                                    		<label for="example-text-input" class="col-3 col-form-label">Base Rate<span class='text-danger'>*</span></label>
 			                                    <div class="col-3">
+			                                    	<div>
 			                                        <input class="form-control" type="text" id="base_rate" name="base_rate" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
 			                                    </div>
 			                                    <div class="messageContainer"></div>
+			                                   </div>
 			                                </div> 
 			                                <div class="form-group row">
-	        		                            <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate</label>
+	        		                            <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate<span class='text-danger'>*</span></label>
 	                		                    <div class="col-3">
 	                        		                <input class="form-control" type="text" id="rise_rate" name="rise_rate" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
 	                                	        </div>
 	                                   	 		<div class="messageContainer"></div>
-	                                    		<label for="example-search-input" class="col-3 col-form-label">Application Post</label>
+	                                    		<label for="example-search-input" class="col-3 col-form-label">Application Post<span class='text-danger'>*</span></label>
 			                                    <div class="col-3">
 			                                        <input class="form-control" type="text" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
 			                                    </div>
 	                                    		<div class="messageContainer"></div>
 	                                		</div>
 	                                 		<div class="form-group row">
-	                                    		<label for="example-tel-input" class="col-3 col-form-label">Maintainence Charge</label>
+	                                    		<label for="example-tel-input" class="col-3 col-form-label">Maintainence Charge<span class='text-danger'>*</span></label>
 	                                    		<div class="col-3">
 	                                        		<input class="form-control" type="text" id="maintenance" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
 	                                    		</div>
@@ -598,34 +634,34 @@
 	                                    		<div class="messageContainer"></div>
 	                                		</div>
 			                                <div class="form-group row">
-	        		                            <label for="example-tel-input" class="col-3 col-form-label">Aminities facing Rate</label>
+	        		                            <label for="example-tel-input" class="col-3 col-form-label">Aminities facing Rate<span class='text-danger'>*</span></label>
 	                		                    <div class="col-3">
 	                        		                <input class="form-control" type="text" id="amenity_rate" name="amenity_rate" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
 	                                		    </div>
 	                                		    <div class="messageContainer"></div>
-	                                    		<label for="example-tel-input" class="col-3 col-form-label">Parking</label>
+	                                    		<label for="example-tel-input" class="col-3 col-form-label">Parking<span class='text-danger'>*</span></label>
 	                                    		<div class="col-3">
 	                                         		<input class="form-control" type="text" id="parking" name="parking" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
 	                                    		</div>
 	                                    		<div class="messageContainer"></div>
 	                                		</div>
 			                                <div class="form-group row">
-	        		                            <label for="example-text-input" class="col-3 col-form-label">Stamp Duty</label>
+	        		                            <label for="example-text-input" class="col-3 col-form-label">Stamp Duty<span class='text-danger'>*</span></label>
 	                		                    <div class="col-3">
 	                        		               <input class="form-control" type="text" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
 	                                		    </div>
 	                                		    <div class="messageContainer"></div>
-	                                   				<label for="example-text-input" class="col-3 col-form-label">Tax</label>
+	                                   				<label for="example-text-input" class="col-3 col-form-label">Tax<span class='text-danger'>*</span></label>
 	                                    		<div class="col-3">
 	                                        		<input class="form-control" type="text" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
 	                                    		</div>
 	                                    	</div>
 	                                		<div class="form-group row">
-	                                    		<label for="example-search-input" class="col-3 col-form-label">VAT</label>
+	                                    		<label for="example-search-input" class="col-3 col-form-label">VAT<span class='text-danger'>*</span></label>
 	                                    		<div class="col-3">
 	                                        		<input class="form-control" type="text" id="vat" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
 	                                    		</div>
-	                                    			<label for="example-search-input" class="col-3 col-form-label">Tech Fees</label>
+	                                    			<label for="example-search-input" class="col-3 col-form-label">Tech Fees<span class='text-danger'>*</span></label>
 	                                    		<div class="col-3">
 	                                        		<input class="form-control" type="text" id="tech_fee" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
 	                                    		</div>
@@ -647,15 +683,15 @@
 												<hr/>
 												<%// } %>
 	                                	<div class="form-group row" id="payment_schedule">
-	                                    <label for="example-search-input" class="col-sm-2 col-form-label">Milestone*</label>
+	                                    <label for="example-search-input" class="col-sm-2 col-form-label">Milestone<span class='text-danger'>*</span></label>
 	                                    <div class="col-2">
 	                                        <input class="form-control" type="text" id="schedule" name="schedule[]" value="<% //if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
 	                                    </div>
-	                                    <label for="example-search-input" class="col-sm-2 col-form-label">% of net payable</label>
+	                                    <label for="example-search-input" class="col-sm-2 col-form-label">% of net payable<span class='text-danger'>*</span></label>
 	                                    <div class="col-2">
 	                                        <input class="form-control" type="text" id="payable" name="payable[]" value="<% //if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 	                                    </div>
-	                                    <label for="example-search-input" class="col-sm-1 col-form-label">Amount</label>
+	                                    <label for="example-search-input" class="col-sm-1 col-form-label">Amount<span class='text-danger'>*</span></label>
 	                                    <div class="col-2">
 	                                        <input class="form-control" type="text" id="amount" name="amount[]" value="<% //if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/>
 	                                    </div>
@@ -698,15 +734,12 @@
                             </div>
                          
                                <div id="vimessages4" class="tab-pane" aria-expanded="true">
-                               
                                 <div id="offer" class="tab-pane fade active in">
 										<form id="offerfrm" name="offerfrm" method="post">
 										 	<input type="hidden" id="projectid" name="projectid" value="<% out.print(project_id);%>"/>
 											<input type="hidden" name="offer_count" id="offer_count" value="0">
 								 			<div class="row">
 												<div class="col-lg-12">
-													<div class="panel panel-default">
-														<div class="panel-body">
 															<div id="offer_area">
 																<% int j = 1;
 																		for(BuilderProjectOfferInfo projectOfferInfo :projectOfferInfos) { 
@@ -736,7 +769,7 @@
 																	</div>
 																	<div class="col-lg-4 margin-bottom-5">
 																		<div class="form-group" id="error-discount_amount">
-																			<label class="control-label col-sm-6">Discount Amount </label>
+																			<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
 																			<div class="col-sm-6">
 																				<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>">
 																			</div>
@@ -852,12 +885,11 @@
 															<div>
 																<div class="col-lg-12">
 																	<span class="pull-right">
-																		<a href="javascript:addMoreOffer();" class="btn btn-info btn-sm">+ Add More Offers</a>
+																		<a href="javascript:addMoreOffer();" id="addMoreOffers" class="btn btn-info btn-sm">+ Add More Offers</a>
 																	</span>
 																</div>
 															</div>
-														</div>
-													</div>
+													
 												</div>
 											</div>
 											</form>
@@ -880,16 +912,146 @@
          </div>
     </div>
 </body></html>
-<style>
-	  .error { border: 1px solid #b94a48!important; background-color: #fee!important; }
-</style>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
 <script src="../js/bootstrapValidator.min.js"></script>
-<script src="../js/bootstrap-datepicker.min.js"></script>
+<!-- <script src="../js/bootstrap-datepicker.min.js"></script> -->
 <script src="../js/jquery.form.js"></script>
 <script>
 $('#launch_date').datepicker({
+	autoclose: true,
+	format: "dd MM yyyy"
+}) .on('changeDate', function(e) {
+    // Revalidate the date field
+  //  $('#detailfrm').formValidation('revalidateField', 'date');
+   // alert("Hi");
+});
+// $("#detailfrm").formValidation({
+//     framework: 'bootstrap',
+//         icon: {
+//             valid: 'glyphicon glyphicon-ok',
+//             invalid: 'glyphicon glyphicon-remove',
+//             validating: 'glyphicon glyphicon-refresh'
+//         },
+//         fields: {
+//             date: {
+//                 validators: {
+//                     notEmpty: {
+//                         message: 'The date is required'
+//                     },
+//                     date: {
+//                         format: 'MM/DD/YYYY',
+//                         message: 'The date is not a valid'
+//                     }
+//                 }
+//             }
+//         }
+//     });
+$('#latitude').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#longitude').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#project_area').keypress(function (event) {
+    return isNumber(event, this)
+});
+function isNumber(evt, element) {
+
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+}   
+$('#landmark').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z0-9, ]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+});
+
+$('#sublocation').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z0-9, ]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+});
+$("#pincode").attr('maxlength','6');
+$('#pincode').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease use only numbers.'); return ''; } ) );
+});
+$('#post').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease use only numbers.'); return ''; } ) );
+});
+$('#tenure').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease use only numbers.'); return ''; } ) );
+});
+$('#base_rate').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#rise_rate').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#maintenance').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#amenity_rate').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#parking').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#stamp_duty').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#tax').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#vat').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#tech_fee').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#payable').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#amount').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#discount').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#discount_amount').keypress(function (event) {
+    return isNumber(event, this)
+});
+$("#amenity_weightage").keypress(function(event){
+	return isNumber(event, this)
+});
+$("#building_weightage").keypress(function(event){
+	return isNumber(event, this)
+});
+function isNumber(evt, element) {
+
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+} 
+$('#schedule').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^a-zA-Z0-9, ]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+});
+$('#launch_date').datepicker({
 	format: "dd MM yyyy"
 });
+
 $("#builder_id").change(function(){
 	if($("#builder_id").val() != "") {
 		$.get("${baseUrl}/webapi/create/project/list/",{ builder_id: $("#builder_id").val() }, function(data){
@@ -965,6 +1127,20 @@ $('#basicfrm').bootstrapValidator({
                 }
             }
         },
+        sublocation:{
+       	 validators: {
+                notEmpty: {
+                         message: 'Sub location is required and cannot be empty'
+                }
+            }
+       },
+       landmark:{
+       	 validators: {
+                notEmpty: {
+                         message: 'landmark is required and cannot be empty'
+                }
+            }
+       },
         country_id: {
             validators: {
                 notEmpty: {
@@ -1002,12 +1178,23 @@ $('#basicfrm').bootstrapValidator({
                     max: 6,
                     min: 6,
                     message: 'Invalid pin code.'
-                },
-                integer: {
-                    message: 'Invalid pin code.'
-           		}
+                }
             }
         },
+        latitude: {
+            validators: {
+                notEmpty: {
+                    message: 'Latitude is required and cannot be empty'
+                }
+            }
+        },
+        longitude: {
+            validators: {
+                notEmpty: {
+                    message: 'Longitude is required and cannot be empty'
+                }
+            }
+        }
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
@@ -1407,9 +1594,52 @@ function addMoreOffer() {
 	$("#offer_count").val(offers);
 }
 function removeOffer(id) {
-	alert(id);
+	
 	$("#offer-"+id).remove();
 }
+
+
+var template = $('#offer-1').clone();
+var options = {
+    fields: {
+        'firstField[]': {
+            validators: {
+                notEmpty: {
+                    message: 'Enter a value 1'
+                }
+            }
+        },
+        'secondField[]': {
+            validators: {
+                notEmpty: {
+                    message: 'Enter a value 2'
+                }
+            }
+        },
+        'thirdField[]': {
+            validators: {
+                notEmpty: {
+                    message: 'Enter a value 3'
+                }
+            }
+        }
+    }
+};
+$('#myForm').bootstrapValidator(options);
+
+$('#addMoreOffers').click(function () {
+    var rowId = $('.row').length + 1;
+    var validator = $('#myForm').data('bootstrapValidator');
+    var klon = template.clone();          
+    klon.attr('id', 'line_' + rowId)
+        .insertAfter($('.row').last())
+        .find('input')
+        .each(function () {
+            $(this).attr('id', $(this).attr('id').replace(/_(\d*)$/, "_"+rowId));
+            validator.addField($(this));
+        })                   
+});
+
 
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
