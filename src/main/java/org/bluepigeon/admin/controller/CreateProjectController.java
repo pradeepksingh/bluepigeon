@@ -285,9 +285,9 @@ public class CreateProjectController {
 				builder.setStatus(status);
 				builder.setEmail(uhemail);
 				builder.setMobile(phone);
-				String passworddao = new BuilderDetailsDAO().getActiveBuilderById(id).get(0).getPassword();
+				String passworddao = new BuilderDetailsDAO().getBuilderById(id).getPassword();
 				builder.setPassword(passworddao);
-				int loginStatus = new BuilderDetailsDAO().getActiveBuilderById(id).get(0).getLoginStatus();
+				int loginStatus = new BuilderDetailsDAO().getBuilderById(id).getLoginStatus();
 				builder.setLoginStatus(loginStatus);
 				builder.setAboutBuilder(aboutBuilder);
 				builder.setHeadOffice(headOffice);

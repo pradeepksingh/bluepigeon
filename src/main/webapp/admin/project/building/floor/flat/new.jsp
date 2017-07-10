@@ -201,12 +201,24 @@
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-5">Status </label>
+													<label class="control-label col-sm-5">Flat Status </label>
 													<div class="col-sm-7">
 														<select id="status" name="status" class="form-control">
 															<% for(BuilderFlatStatus builderFlatStatus :builderFlatStatuses) { %>
 															<option value="<% out.print(builderFlatStatus.getId());%>"><% out.print(builderFlatStatus.getName()); %></option>
 															<% } %>
+														</select>
+													</div>
+													<div class="messageContainer col-sm-offset-6"></div>
+												</div>
+											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-5">Status </label>
+													<div class="col-sm-7">
+														<select id="status_id" name="status_id" class="form-control">
+															<option value="0">Inactive</option>
+															<option value="1">Active</option>
 														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-6"></div>

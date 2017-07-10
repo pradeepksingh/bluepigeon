@@ -1055,9 +1055,9 @@
          </div>
     </div>
 </body></html>
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script> -->
 <script src="../js/bootstrapValidator.min.js"></script>
-<!-- <script src="../js/bootstrap-datepicker.min.js"></script> -->
+<script src="../js/bootstrap-datepicker.min.js"></script>
 <script src="../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script>

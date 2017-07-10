@@ -151,7 +151,7 @@
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Status </label>
+													<label class="control-label col-sm-4">Building Status </label>
 													<div class="col-sm-8">
 														<select id="status" name="status" class="form-control">
 															<% 	for(BuilderBuildingStatus builderBuildingStatus :builderBuildingStatusList) { %>
@@ -164,11 +164,11 @@
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Building visible to builder </label>
-													<div class="col-sm-8">
+													<label class="control-label col-sm-4">Status </label>
+													<div class="col-sm-4">
 														<select id="status_id" name="status_id" class="form-control">
-															<option value="0" <% if(builderBuilding.getId() == 0) { %>selected<% } %>>No</option>
-															<option value="1" <% if(builderBuilding.getId() == 1) { %>selected<% } %>>Yes</option>
+															<option value="0"<%if(builderBuilding.getStatus()==0){ %>selected<%} %>>Inactive</option>
+															<option value="1"<%if(builderBuilding.getStatus()==1){ %>selected<%} %>>Active</option>
 														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-6"></div>
@@ -615,6 +615,9 @@
 	</div>
 <%@include file="../../../footer.jsp"%>
 <!-- inline scripts related to this page -->
+<script src="../js/bootstrapValidator.min.js"></script>
+<script src="../js/bootstrap-datepicker.min.js"></script>
+<script src="../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <style>
 	.row {

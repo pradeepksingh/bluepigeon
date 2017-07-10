@@ -225,6 +225,18 @@
 													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
 											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-5">Status </label>
+													<div class="col-sm-7">
+														<select id="status_id" name="status_id" class="form-control">
+															<option value="0"<%if(builderFlat.getStatus() == 0){ %>selected<%} %>>Inactive</option>
+															<option value="1"<%if(builderFlat.getStatus()==1){ %>selected<%} %>>Active</option>
+														</select>
+													</div>
+													<div class="messageContainer col-sm-offset-6"></div>
+												</div>
+											</div>
 											<div class="col-lg-12">
 												<hr/>
 											</div>

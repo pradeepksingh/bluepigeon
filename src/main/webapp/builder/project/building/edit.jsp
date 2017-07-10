@@ -443,6 +443,9 @@
 			</div> 
 </body>
 </html>
+<script src="../js/bootstrapValidator.min.js"></script>
+<script src="../js/bootstrap-datepicker.min.js"></script>
+<script src="../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script type="text/javascript">
 $('#launch_date').datepicker({

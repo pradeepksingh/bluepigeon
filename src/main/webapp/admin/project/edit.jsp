@@ -1173,6 +1173,9 @@
 </div>
 <%@include file="../../footer.jsp"%>
 <!-- inline scripts related to this page -->
+<script src="../js/bootstrapValidator.min.js"></script>
+<script src="../js/bootstrap-datepicker.min.js"></script>
+<script src="../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <style>
 	.row {

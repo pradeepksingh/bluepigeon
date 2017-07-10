@@ -140,12 +140,24 @@
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-6">Status </label>
+													<label class="control-label col-sm-6">Building Status </label>
 													<div class="col-sm-6">
 														<select id="status" name="status" class="form-control">
 															<% for(BuilderBuildingStatus builderBuildingStatus :builderBuildingStatusList) { %>
 															<option value="<% out.print(builderBuildingStatus.getId());%>"><% out.print(builderBuildingStatus.getName()); %></option>
 															<% } %>
+														</select>
+													</div>
+													<div class="messageContainer col-sm-offset-6"></div>
+												</div>
+											</div>
+											<div class="col-lg-6 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-4">Status </label>
+													<div class="col-sm-4">
+														<select id="status_id" name="status_id" class="form-control">
+															<option value="0">Inactive</option>
+															<option value="1">Active</option>
 														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-6"></div>
@@ -713,30 +725,35 @@ $('#addbuilding').bootstrapValidator({
                  }
              }
         },
-        launch_date : {
-        	 validators: {
-                 notEmpty: {
-                     message: 'Launch date is required and cannot be empty'
-                 }
-//                  callback: {
-//                      message: 'Launch date is not valid',
-//                      callback: function(value, validator, $field) {
-//                          if (value === '') {
-//                              return true;
-//                          }
-						
-//                          // Check if the value has format of DD.MM.YYYY or DD.MM.YY
-//                          return moment(value, 'dd MM yyyy', true).isValid();
-//                      }
-//                  }
-             }
+        launch_date: {
+            validators: {
+                callback: {
+                    message: 'Wrong Launch Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
+                }
+            }
         },
-        possession_date : {
-        	 validators: {
-                 notEmpty: {
-                     message: 'Possession date is required and cannot be empty'
-                 }
-             }
+        possession_date: {
+            validators: {
+                callback: {
+                    message: 'Wrong Possession Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
+                }
+            }
         }
     }
 }).on('success.form.bv', function(event,data) {
