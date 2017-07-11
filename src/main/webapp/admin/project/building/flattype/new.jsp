@@ -112,13 +112,15 @@
 												</div>
 												<hr>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Super BuiltUp <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="super_builtup_area" name="super_builtup_area" value="" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -127,7 +129,7 @@
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="builtup_area" name="builtup_area" value="" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -136,16 +138,18 @@
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="carpet_area" name="carpet_area" value="" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Rooms <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="bedroom" name="bedroom" value="" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -154,7 +158,7 @@
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="bathroom" name="bathroom" value="" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -166,13 +170,15 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Dry Balcony <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="drybalcony" name="drybalcony" value="" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-12" id="rooms">
@@ -211,7 +217,7 @@
 													<label class="control-label col-sm-4">Select Image </label>
 													<div class="col-sm-8 input-group" style="padding:0px 12px;">
 														<input type="file" class="form-control" id="building_image" name="building_image[]" />
-														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a></span>
+														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
@@ -292,7 +298,28 @@ $('#addfloor').bootstrapValidator({
         bedroom: {
             validators: {
                 notEmpty: {
-                    message: 'Rooms is required and cannot be empty'
+                    message: 'Room is required and cannot be empty'
+                }
+            }
+        },
+        bathroom: {
+            validators: {
+                notEmpty: {
+                    message: 'Bathroom is required and cannot be empty'
+                }
+            }
+        },
+        balcony: {
+            validators: {
+                notEmpty: {
+                    message: 'Balcony is required and cannot be empty'
+                }
+            }
+        },
+        drybalcony: {
+            validators: {
+                notEmpty: {
+                    message: 'Dry balcony is required and cannot be empty'
                 }
             }
         },
@@ -302,7 +329,41 @@ $('#addfloor').bootstrapValidator({
 	event.preventDefault();
 	addFloor();
 });
+$('#super_builtup_area').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#builtup_area').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#carpet_area').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#bedroom').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#bathroom').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
+});
+$('#balcony').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
+});
+$('#drybalcony').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
+});
+function isNumber(evt, element) {
 
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+} 
 function addFloor() {
 	var options = {
 	 		target : '#response', 
@@ -380,8 +441,8 @@ $("#bedroom").focusout(function(){
 	var row = "";
 	for(i = 1; i <= bedrooms; i++) {
 		row = row + '<hr><div class="col-sm-12"><div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Room Name</label><div class="col-sm-6"><input type="text" class="form-control" name="room_name[]" value="Room '+i+'"/></div></div></div>'
-				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Length</label><div class="col-sm-6"><input type="text" name="length[]" class="form-control"/></div></div></div>'
-				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Breadth</label><div class="col-sm-6"><input type="text" name="breadth[]" class="form-control"/></div></div></div>'
+				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Length</label><div class="col-sm-6"><input type="text" onkeypress=" return isNumber(event, this);" name="length[]" class="form-control"/></div></div></div>'
+				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Breadth</label><div class="col-sm-6"><input type="text" onkeypress=" return isNumber(event, this);" name="breadth[]" class="form-control"/></div></div></div>'
 				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Unit</label><div class="col-sm-6"><select name="length_unit[]" class="form-control">'
 				+'<option value="1">Feet</option>'
 				+'<option value="2">Meter</option>'

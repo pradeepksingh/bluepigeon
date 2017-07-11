@@ -80,7 +80,7 @@
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Password </label>
 												<div class="col-sm-6">
-													<input type="password" class="form-control" id="password" name="password" />
+													<input type="password" class="form-control" id="epassword" name="epassword" />
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
 											</div>
@@ -225,7 +225,7 @@ $('#addmanager').bootstrapValidator({
     	name: {
             validators: {
                 notEmpty: {
-                    message: 'Lead name is required'
+                    message: 'Employee name is required'
                 }
             }
         },

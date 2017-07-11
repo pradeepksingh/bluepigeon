@@ -141,6 +141,8 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Floor No. </label>
@@ -184,6 +186,8 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-5">Bathrooms <span class='text-danger'>*</span></label>
@@ -212,14 +216,28 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-5">Status </label>
+													<label class="control-label col-sm-5">Flat Status </label>
 													<div class="col-sm-7">
 														<select id="status" name="status" class="form-control">
 															<% for(BuilderFlatStatus builderFlatStatus :builderFlatStatuses) { %>
 															<option value="<% out.print(builderFlatStatus.getId());%>" <% if(builderFlat.getBuilderFlatStatus().getId() ==  builderFlatStatus.getId()) { %>selected<% } %>><% out.print(builderFlatStatus.getName()); %></option>
 															<% } %>
+														</select>
+													</div>
+													<div class="messageContainer col-sm-offset-6"></div>
+												</div>
+											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-5">Status </label>
+													<div class="col-sm-7">
+														<select id="status_id" name="status_id" class="form-control">
+															<option value="0"<%if(builderFlat.getStatus() == 0){ %>selected<%} %>>Inactive</option>
+															<option value="1"<%if(builderFlat.getStatus()==1){ %>selected<%} %>>Active</option>
 														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-6"></div>
@@ -290,7 +308,7 @@
 															<fieldset class="scheduler-border">
 																<legend class="scheduler-border">Stages</legend>
 																<div class="col-sm-12">
-																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %>  (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(builderFlatAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" class="form-control errorMsg" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %>  (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(builderFlatAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" onkeypress=" return isNumber(event, this);" class="form-control errorMsg" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
 																	<fieldset class="scheduler-border" style="margin-bottom:0px !important">
 																		<legend class="scheduler-border">Sub Stages</legend>
 																	<% 	for(BuilderFlatAmenitySubstages bpaSubstage :bpaStages.getBuilderFlatAmenitySubstageses()) { 
@@ -303,7 +321,7 @@
 																	%>
 																		<div class="col-sm-3">
 																			<% out.print(bpaSubstage.getName()); %> (%)<br>
-																			<input type="text" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control errorMsg" placeholder="Substage weightage  %" value="<% out.print(substage_wt);%>"/>
+																			<input type="text" onkeypress=" return isNumber(event, this);" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control errorMsg" placeholder="Substage weightage  %" value="<% out.print(substage_wt);%>"/>
 																		</div>
 																	<% } %>
 																	</fieldset>
@@ -319,18 +337,21 @@
 													<div class="messageContainer"></div>
 												</div>
 											</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-12">
-								<span class="pull-right">
-									<button type="submit" name="flooradd" class="btn btn-success btn-sm" onclick="showDetailTab();">Next</button>
-								</span>
+							<div class="row">
+								<div class="col-sm-12">
+									<span class="pull-right">
+										<button type="submit" name="flooradd" class="btn btn-success btn-sm" onclick="showDetailTab();">Next</button>
+									</span>
+								</div>
 							</div>
-						</div>
 						</form>
 					</div>
+				
 					
 					<div id="productsubstage" class="tab-pane fade">
 						<form id="subpfrm" name="subpfrm" method="post">
@@ -346,7 +367,7 @@
 																	<div class="form-group" id="error-amenity_weightage">
 																		<label class="control-label col-sm-6">Amenity Weightage </label>
 																		<div class="col-sm-6">
-																			<input type="text" class="form-control" id="flat_amenity_weightage" name="flat_amenity_weightage" value="<%out.print(builderFlat.getAmenityWeightage());%>" placeholder="amenity weightage in %"/>
+																			<input type="text" class="form-control" id="flat_amenity_weightage" name="flat_amenity_weightage" value="<%out.print(builderFlat.getAmenityWeightage());%>" onkeypress=" return isNumber(event, this);" placeholder="amenity weightage in %"/>
 																		</div>
 																		<div class="messageContainer"></div>
 																	</div>
@@ -366,7 +387,7 @@
 																<fieldset class="scheduler-border">
 																	<legend class="scheduler-border">Stages</legend>
 																	<div class="col-sm-12">
-																		<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(flatStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage[]" id="<% out.print(flatStage.getId());%>" type="text" class="form-control errorMsg" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																		<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(flatStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input onkeypress=" return isNumber(event, this);" name="stage_weightage[]" id="<% out.print(flatStage.getId());%>" type="text" class="form-control errorMsg" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
 																		<fieldset class="scheduler-border" style="margin-bottom:0px !important">
 																			<legend class="scheduler-border">Sub Stages</legend>
 																		<% 	for(FlatSubstage flatSubstage :flatStage.getFlatSubstages()) { 
@@ -379,7 +400,7 @@
 																		%>
 																			<div class="col-sm-3">
 																				<% out.print(flatSubstage.getName()); %> (%)<br>
-																				<input type="text" name="substage_weightage<% out.print(flatStage.getId());%>[]" id="<% out.print(flatSubstage.getId()); %>" class="form-control errorMsg" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																				<input type="text" onkeypress=" return isNumber(event, this);" name="substage_weightage<% out.print(flatStage.getId());%>[]" id="<% out.print(flatSubstage.getId()); %>" class="form-control errorMsg" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
 																			</div>
 																		<% } %>
 																		</fieldset>
@@ -433,7 +454,7 @@
 													<div class="form-group" id="error-payable">
 														<label class="control-label col-sm-8">% of Net Payable </label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control errorMsg" id="payable" name="payable[]" value="<% out.print(flatPaymentSchedule.getPayable());%>"/>
+															<input type="text" class="form-control" id="payable" onkeypress=" return isNumber(event, this);" name="payable[]" value="<% out.print(flatPaymentSchedule.getPayable());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -442,7 +463,7 @@
 													<div class="form-group" id="error-amount">
 														<label class="control-label col-sm-6">Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control errorMsg" id="amount" name="amount[]" value="<% out.print(flatPaymentSchedule.getAmount());%>"/>
+															<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="amount" name="amount[]" value="<% out.print(flatPaymentSchedule.getAmount());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -471,10 +492,11 @@
 						</div>
 					</div>
 				</div>
-		</div>
+			</div>
 		</div>
 	</div>
 <%@include file="../../../../../footer.jsp"%>
+
 <!-- inline scripts related to this page -->
 <style>
 	.row {
@@ -549,14 +571,14 @@ $('#addfloor').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-    	flat_id: {
+    	flat_no: {
             validators: {
                 notEmpty: {
                     message: 'Flat ID is required and cannot be empty'
                 }
             }
         },
-    	name: {
+        floor_id: {
             validators: {
                 notEmpty: {
                     message: 'Floor Name is required and cannot be empty'
@@ -567,6 +589,27 @@ $('#addfloor').bootstrapValidator({
             validators: {
                 notEmpty: {
                     message: 'Floor Number is required and cannot be empty'
+                }
+            }
+        },
+        bedroom:{
+        	validators: {
+                notEmpty: {
+                    message: 'Number of bedroom is required and cannot be empty'
+                }
+            }
+        },
+        bathroom:{
+        	validators: {
+                notEmpty: {
+                    message: 'Number of bathroom is required and cannot be empty'
+                }
+            }
+        },
+        balcony:{
+        	validators: {
+                notEmpty: {
+                    message: 'Number of balcony is required and cannot be empty'
                 }
             }
         },

@@ -108,6 +108,8 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-12">
 												<hr>
 												<div class="form-group" id="error-name">
@@ -128,6 +130,8 @@
 												</div>
 												<hr>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Super BuiltUp <span class='text-danger'>*</span></label>
@@ -155,6 +159,8 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Rooms <span class='text-danger'>*</span></label>
@@ -173,6 +179,7 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
+										
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Balcony <span class='text-danger'>*</span></label>
@@ -182,6 +189,8 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Dry Balcony <span class='text-danger'>*</span></label>
@@ -203,13 +212,13 @@
 													<div class="col-sm-3">
 														<div class="form-group">
 															<label class="control-label col-sm-6">Length</label>
-															<div class="col-sm-6"><input type="text" name="length[]" class="form-control" value="<% out.print(builderBuildingFlatTypeRoom.getLength());%>"/></div>
+															<div class="col-sm-6"><input type="text" name="length[]" onkeypress=" return isNumber(event, this);" class="form-control" value="<% out.print(builderBuildingFlatTypeRoom.getLength());%>"/></div>
 														</div>
 													</div>
 													<div class="col-sm-3">
 														<div class="form-group">
 															<label class="control-label col-sm-6">Breadth</label>
-															<div class="col-sm-6"><input type="text" name="breadth[]" class="form-control" value="<% out.print(builderBuildingFlatTypeRoom.getBreadth());%>"/></div>
+															<div class="col-sm-6"><input type="text" name="breadth[]" onkeypress=" return isNumber(event, this);" class="form-control" value="<% out.print(builderBuildingFlatTypeRoom.getBreadth());%>"/></div>
 														</div>
 													</div>
 													<div class="col-sm-3">
@@ -263,7 +272,7 @@
 													<label class="control-label col-sm-4">Select Image </label>
 													<div class="col-sm-8 input-group" style="padding:0px 12px;">
 														<input type="file" class="form-control" id="building_image" name="building_image[]" />
-														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a></span>
+														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
@@ -297,6 +306,41 @@
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script>
+$('#super_builtup_area').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#builtup_area').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#carpet_area').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#bedroom').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#bathroom').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
+});
+$('#balcony').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
+});
+$('#drybalcony').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
+});
+function isNumber(evt, element) {
+
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+} 
 $('#addfloor').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -444,8 +488,8 @@ $("#bedroom").focusout(function(){
 	var row = "";
 	for(i = 1; i <= bedrooms; i++) {
 		row = row + '<hr><div class="col-sm-12"><div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Room Name</label><div class="col-sm-6"><input type="text" class="form-control" name="room_name[]" value="Room '+i+'"/></div></div></div>'
-				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Length</label><div class="col-sm-6"><input type="text" name="length[]" class="form-control"/></div></div></div>'
-				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Breadth</label><div class="col-sm-6"><input type="text" name="breadth[]" class="form-control"/></div></div></div>'
+				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Length</label><div class="col-sm-6"><input type="text" onkeypress=" return isNumber(event, this);" name="length[]" class="form-control"/></div></div></div>'
+				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Breadth</label><div class="col-sm-6"><input type="text"  onkeypress=" return isNumber(event, this);" name="breadth[]" class="form-control"/></div></div></div>'
 				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Unit</label><div class="col-sm-6"><select name="length_unit[]" class="form-control">'
 				+'<option value="1">Feet</option>'
 				+'<option value="2">Meter</option>'

@@ -78,7 +78,7 @@
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="floor_no" name="floor_no" value="" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -87,7 +87,7 @@
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="name" name="name" value="" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -104,6 +104,8 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Building Name </label>
@@ -123,7 +125,7 @@
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-6">Status </label>
+													<label class="control-label col-sm-6"> Floor Status </label>
 													<div class="col-sm-6">
 														<select id="status" name="status" class="form-control">
 															<% for(BuilderFloorStatus builderFloorStatus :builderFloorStatuses) { %>
@@ -134,6 +136,20 @@
 													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
 											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-6">Status</label>
+													<div class="col-sm-6">
+														<select id="status_id" name="status_id" class="form-control">
+															<option value="0">Inactive</option>
+															<option value="1">Active</option>
+														</select>
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-12">
 												<hr/>
 											</div>

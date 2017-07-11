@@ -108,7 +108,7 @@
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="name" name="name" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -120,6 +120,8 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-5">Launch Date <span class='text-danger'>*</span></label>
@@ -140,12 +142,26 @@
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-6">Status </label>
+													<label class="control-label col-sm-6">Building Status </label>
 													<div class="col-sm-6">
 														<select id="status" name="status" class="form-control">
 															<% for(BuilderBuildingStatus builderBuildingStatus :builderBuildingStatusList) { %>
 															<option value="<% out.print(builderBuildingStatus.getId());%>"><% out.print(builderBuildingStatus.getName()); %></option>
 															<% } %>
+														</select>
+													</div>
+													<div class="messageContainer col-sm-offset-6"></div>
+												</div>
+											</div>
+										</div>
+										<div class="row">	
+											<div class="col-lg-6 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-4">Status </label>
+													<div class="col-sm-4">
+														<select id="status_id" name="status_id" class="form-control">
+															<option value="0">Inactive</option>
+															<option value="1">Active</option>
 														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-6"></div>
@@ -655,6 +671,10 @@ function isNumber(evt, element) {
 
     return true;
 } 
+function onlyNumbers(){
+	 var $th = $(this);
+	    $th.val( $th.val().replace(/[^a-zA-Z0-9- ]/g, function(str) { alert('Please use only letters and numbers.'); return ''; } ) );
+}
 $('#name').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^a-zA-Z0-9- ]/g, function(str) { alert('Please use only letters and numbers.'); return ''; } ) );
@@ -713,30 +733,35 @@ $('#addbuilding').bootstrapValidator({
                  }
              }
         },
-        launch_date : {
-        	 validators: {
-                 notEmpty: {
-                     message: 'Launch date is required and cannot be empty'
-                 }
-//                  callback: {
-//                      message: 'Launch date is not valid',
-//                      callback: function(value, validator, $field) {
-//                          if (value === '') {
-//                              return true;
-//                          }
-						
-//                          // Check if the value has format of DD.MM.YYYY or DD.MM.YY
-//                          return moment(value, 'dd MM yyyy', true).isValid();
-//                      }
-//                  }
-             }
+        launch_date: {
+            validators: {
+                callback: {
+                    message: 'Wrong Launch Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
+                }
+            }
         },
-        possession_date : {
-        	 validators: {
-                 notEmpty: {
-                     message: 'Possession date is required and cannot be empty'
-                 }
-             }
+        possession_date: {
+            validators: {
+                callback: {
+                    message: 'Wrong Possession Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
+                }
+            }
         }
     }
 }).on('success.form.bv', function(event,data) {
@@ -861,7 +886,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount">'
 				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount" name="discount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount" name="discount[]" onkeypress=" return isNumber(event, this);" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -870,7 +895,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount_amount" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount_amount" onkeypress=" return isNumber(event, this);" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -946,7 +971,7 @@ function getPriceDetails(){
 		  +'<div class="form-group" id="error-base_rate">'
 		  +'<label class="control-label col-sm-4">Base Rate <span class="text-danger">*</span></label>'
 		  +'<div class="col-sm-8">'
-		  +'<input type="text" class="form-control" id="base_rate" name="base_rate" value="'+data.baseRate+'"/>'
+		  +'<input type="text" class="form-control" id="base_rate" onkeypress=" onlyNumbers();" name="base_rate" value="'+data.baseRate+'"/>'
 		  +'</div>'
 		  +'<div class="messageContainer"></div>'
 		  +'</div>'
@@ -957,7 +982,7 @@ function getPriceDetails(){
 		  +'<div class="form-group" id="error-rise_rate">'
 		  +'<label class="control-label col-sm-4">Floor Rise Rate</label>'
 		  +'<div class="col-sm-8">'
-		  +'<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="'+data.riseRate+'"/>'
+		  +'<input type="text" class="form-control" id="rise_rate" onkeypress=" onlyNumbers();" name="rise_rate" value="'+data.riseRate+'"/>'
 		  +'</div>'
 		  +'<div class="messageContainer"></div>'
 		  +'</div>'
@@ -966,7 +991,7 @@ function getPriceDetails(){
 		  +'<div class="form-group" id="error-post">'
 		  +'<label class="control-label col-sm-4">Applicable Post </label>'
 		  +'<div class="col-sm-8 input-group" style="padding: 0px 12px;">'
-		  +'<input type="text" class="form-control" id="post" name="post" value="'+data.post+'"/>'
+		  +'<input type="text" class="form-control" id="post" onkeypress=" onlyNumbers();" name="post" value="'+data.post+'"/>'
 		  +'<span class="input-group-addon">floor</span>'
 		  +'</div>'
 		  +'<div class="messageContainer"></div>'
@@ -978,7 +1003,7 @@ function getPriceDetails(){
 		  +'<div class="form-group" id="error-maintenance">'
 		  +'<label class="control-label col-sm-4">Maintenance Charge </label>'
 		  +'<div class="col-sm-8">'
-		  +'<input type="text" class="form-control" id="maintenance" name="maintenance" value="'+data.maintainance+'"/>'
+		  +'<input type="text" class="form-control" onkeypress=" onlyNumbers();" id="maintenance" name="maintenance" value="'+data.maintainance+'"/>'
 		  +'</div>'
 		  +'<div class="messageContainer"></div>'
 		  +'</div>'
@@ -987,7 +1012,7 @@ function getPriceDetails(){
 		  +'<div class="form-group" id="error-tenure">'
 		  +'<label class="control-label col-sm-4">Tenure </label>'
 		  +'<div class="col-sm-8 input-group" style="padding: 0px 12px;">'
-		  +'<input type="text" class="form-control" id="tenure" name="tenure" value="'+data.tenure+'"/>'
+		  +'<input type="text" class="form-control" id="tenure" onkeypress=" onlyNumbers();" name="tenure" value="'+data.tenure+'"/>'
 		  +'<span class="input-group-addon">Months</span>'
 		  +'</div>'
 		  +'<div class="messageContainer"></div>'
@@ -999,7 +1024,7 @@ function getPriceDetails(){
 		  +'<div class="form-group" id="error-amenity_rate">'
 		  +'<label class="control-label col-sm-4">Amenities Facing Rate</label>'
 		  +'<div class="col-sm-8">'
-		  +'<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="'+data.amenityRate+'"/>'
+		  +'<input type="text" class="form-control"  onkeypress=" onlyNumbers();" id="amenity_rate" name="amenity_rate" value="'+data.amenityRate+'"/>'
 		  +'</div>'
 		  +'<div class="messageContainer"></div>'
 		  +'</div>'
@@ -1023,7 +1048,7 @@ function getPriceDetails(){
 		  +'<div class="form-group" id="error-landmark">'
 		  +'<label class="control-label col-sm-4">Parking</label>'
 		  +'<div class="col-sm-8">'
-		  +'<input type="text" class="form-control" id="parking" name="parking" value="'+data.parking+'"/>'
+		  +'<input type="text" class="form-control" onkeypress=" onlyNumbers();" id="parking" name="parking" value="'+data.parking+'"/>'
 		  +'</div>'
 		  +'<div class="messageContainer"></div>'
 		  +'</div>'
@@ -1032,7 +1057,7 @@ function getPriceDetails(){
 		  +'<div class="form-group" id="error-landmark">'
 		  +'<label class="control-label col-sm-4">Stamp Duty </label>'
 	      +'<div class="col-sm-8 input-group"  style="padding: 0px 12px;">'
-		  +'<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="'+data.stampDuty+'"/>'
+		  +'<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="stamp_duty" name="stamp_duty" value="'+data.stampDuty+'"/>'
 		  +'<span class="input-group-addon">%</span>'
 		  +'</div>'
 		  +'<div class="messageContainer"></div>'
@@ -1044,7 +1069,7 @@ function getPriceDetails(){
 		  +'<div class="form-group" id="error-tax">'
 		  +'<label class="control-label col-sm-4">Tax</label>'
 		  +'<div class="col-sm-8 input-group"  style="padding: 0px 12px;">'
-		  +'<input type="text" class="form-control" id="tax" name="tax" value="'+data.tax+'"/>'
+		  +'<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="tax" name="tax" value="'+data.tax+'"/>'
 		  +'<span class="input-group-addon">%</span>'
 		  +'</div>'
 		  +'<div class="messageContainer"></div>'
@@ -1054,7 +1079,7 @@ function getPriceDetails(){
 		  +'<div class="form-group" id="error-vat">'
 		  +'<label class="control-label col-sm-4">VAT </label>'
 		  +'<div class="col-sm-8 input-group"  style="padding: 0px 12px;">'
-		  +'<input type="text" class="form-control" id="vat" name="vat" value="'+data.vat+'"/>'
+		  +'<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="vat" name="vat" value="'+data.vat+'"/>'
 		  +'<span class="input-group-addon">%</span>'
 		  +'</div>'
 		  +'<div class="messageContainer"></div>'
@@ -1066,7 +1091,7 @@ function getPriceDetails(){
 		  +'<div class="form-group" id="error-tech_fee">'
 		  +'<label class="control-label col-sm-4">Tech Fees</label>'
 		  +'<div class="col-sm-8">'
-		  +'<input type="text" class="form-control" id="tech_fee" name="tech_fee" value="'+data.fee+'"/>'
+		  +'<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="tech_fee" name="tech_fee" value="'+data.fee+'"/>'
 		  +'</div>'
 		  +'<div class="messageContainer"></div>'
 		  +'</div>'

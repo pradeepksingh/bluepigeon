@@ -120,6 +120,8 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Building Name </label>
@@ -139,7 +141,7 @@
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-5">Status </label>
+													<label class="control-label col-sm-5">Floor Status </label>
 													<div class="col-sm-7">
 														<select id="status" name="status" class="form-control">
 															<% for(BuilderFloorStatus builderFloorStatus :builderFloorStatuses) { %>
@@ -150,6 +152,20 @@
 													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
 											</div>
+											<div class="col-lg-4 margin-bottom-5">
+												<div class="form-group" id="error-landmark">
+													<label class="control-label col-sm-6">Status</label>
+													<div class="col-sm-6">
+														<select id="status_id" name="status_id" class="form-control">
+															<option value="0"<%if(builderFloor.getStatus()==0){ %>selected<%} %>>Inactive</option>
+															<option value="1"<%if(builderFloor.getStatus() == 1){ %>selected<%} %>>Active</option>
+														</select>
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-12">
 												<hr/>
 											</div>
@@ -197,7 +213,7 @@
 															<div class="row">
 																<label class="control-label col-sm-3" style="padding-top:5px;text-align:left;"><strong><% out.print(builderFloorAmenity.getName());%> (%)</strong></label>
 																<div class="col-sm-4">
-																	<input type="text" class="form-control errorMsg" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderFloorAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
+																	<input type="text" onkeypress=" return isNumber(event, this);" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderFloorAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
 																</div>
 															</div>
 															<% 	for(BuilderFloorAmenityStages bpaStages :builderFloorAmenity.getBuilderFloorAmenityStageses()) { 
@@ -211,7 +227,7 @@
 															<fieldset class="scheduler-border">
 																<legend class="scheduler-border">Stages</legend>
 																<div class="col-sm-12">
-																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(builderFloorAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" class="form-control errorMsg" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %> (%)</b> - </label><div class="col-sm-4"><input onkeypress=" return isNumber(event, this);" name="stage_weightage<% out.print(builderFloorAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" class="form-control errorMsg" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
 																	<fieldset class="scheduler-border" style="margin-bottom:0px !important">
 																		<legend class="scheduler-border">Sub Stages</legend>
 																	<% 	for(BuilderFloorAmenitySubstages bpaSubstage :bpaStages.getBuilderFloorAmenitySubstageses()) { 
@@ -224,7 +240,7 @@
 																	%>
 																		<div class="col-sm-3">
 																			<% out.print(bpaSubstage.getName()); %> (%)<br>
-																			<input type="text" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control errorMsg" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																			<input type="text" onkeypress=" return isNumber(event, this);" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
 																		</div>
 																	<% } %>
 																	</fieldset>
@@ -305,7 +321,7 @@
 																<div class="form-group" id="error-amenity_weightage">
 																	<label class="control-label col-sm-6">Amenity Weightage </label>
 																	<div class="col-sm-6">
-																		<input type="text" class="form-control" id="amenity_weightage" name="amenity_weightage" value="<%out.print(builderFloor.getAmenityWeightage());%>" placeholder="amenity weightage in %"/>
+																		<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="amenity_weightage" name="amenity_weightage" value="<%out.print(builderFloor.getAmenityWeightage());%>" placeholder="amenity weightage in %"/>
 																	</div>
 																	<div class="messageContainer"></div>
 																</div>
@@ -316,7 +332,7 @@
 																<div class="form-group" id="error-discount_amount">
 																	<label class="control-label col-sm-6">Flat Weightage</label>
 																	<div class="col-sm-6">
-																		<input type="text" class="form-control" id="flat_weightage" name="flat_weightage" value="<%out.print(builderFloor.getFlatWeightage());%>"/>
+																		<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="flat_weightage" name="flat_weightage" value="<%out.print(builderFloor.getFlatWeightage());%>"/>
 																	</div>
 																	<div class="messageContainer"></div>
 																</div>
@@ -334,7 +350,7 @@
 															<div class="form-group" id="error-discount_amount">
 																<label class="control-label col-sm-6"><%out.print(builderFlat.getFlatNo()); %></label>
 																<div class="col-sm-6">
-																	<input type="text" class="form-control" id="weightage[]" name="weightage[]" value="<%out.print(builderFlat.getWeightage());%>"/>
+																	<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="weightage[]" name="weightage[]" value="<%out.print(builderFlat.getWeightage());%>"/>
 																</div>
 																<div class="messageContainer"></div>
 															</div>
@@ -356,7 +372,7 @@
 																<fieldset class="scheduler-border">
 																	<legend class="scheduler-border">Stages</legend>
 																	<div class="col-sm-12">
-																		<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(floorStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage[]" id="<% out.print(floorStage.getId());%>" type="text" class="form-control" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																		<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(floorStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage[]" onkeypress=" return isNumber(event, this);" id="<% out.print(floorStage.getId());%>" type="text" class="form-control" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
 																		<fieldset class="scheduler-border" style="margin-bottom:0px !important">
 																			<legend class="scheduler-border">Sub Stages</legend>
 																		<% 	for(FloorSubstage floorSubstage :floorStage.getFloorSubstages()) { 
@@ -369,7 +385,7 @@
 																		%>
 																			<div class="col-sm-3">
 																				<% out.print(floorSubstage.getName()); %> (%)<br>
-																				<input type="text" name="substage_weightage<% out.print(floorStage.getId());%>[]" id="<% out.print(floorSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																				<input onkeypress=" return isNumber(event, this);" type="text" name="substage_weightage<% out.print(floorStage.getId());%>[]" id="<% out.print(floorSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
 																			</div>
 																		<% } %>
 																		</fieldset>

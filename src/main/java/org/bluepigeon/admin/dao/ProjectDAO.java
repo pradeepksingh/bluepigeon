@@ -392,7 +392,31 @@ public class ProjectDAO {
 		response.setMessage("Project Payment Updated Successfully.");
 		return response;
 	}
-	
+	/******************************************Update Project Payment Info *****************************/
+	/**
+	 * Update Project payment info
+	 * @param builderProjectPaymentInfos
+	 */
+	public void updateProjectPaymentInfo(List<BuilderProjectPaymentInfo> builderProjectPaymentInfos){
+		HibernateUtil hibernateUtil =new HibernateUtil();
+		Session session =hibernateUtil.openSession();
+		session.beginTransaction();
+		for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
+			session.update(builderProjectPaymentInfo);
+		}
+		session.getTransaction().commit();
+		session.close();
+	}
+	public void saveProjectPaymentInfo(List<BuilderProjectPaymentInfo> builderProjectPaymentInfos){
+		HibernateUtil hibernateUtil =new HibernateUtil();
+		Session session =hibernateUtil.openSession();
+		session.beginTransaction();
+		for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
+			session.save(builderProjectPaymentInfo);
+		}
+		session.getTransaction().commit();
+		session.close();
+	}
 	public ResponseMessage updateOfferInfo(ProjectOffer projectOffer) {
 		ResponseMessage response = new ResponseMessage();
 		BuilderProject builderProject = projectOffer.getBuilderProject();
@@ -1042,6 +1066,7 @@ public class ProjectDAO {
 		}
 		newsession.getTransaction().commit();
 		newsession.close();
+		
 		return resp;
 	}
 	
