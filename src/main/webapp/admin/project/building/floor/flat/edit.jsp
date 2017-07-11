@@ -518,6 +518,8 @@
 </style>
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
+<script src="${baseUrl}/js/bootstrap-datepicker.min.js"></script>
+<script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script>
 $(".errorMsg").keypress(function(event){
 	return isNumber(event, this)
@@ -560,7 +562,10 @@ $('#floor_no').keyup(function() {
     $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
 });
 $('#possession_date').datepicker({
-	format: "dd MM yyyy"
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#addfloor').data('bootstrapValidator').revalidateField('possession_date');
 });
 $('#addfloor').bootstrapValidator({
 	container: function($field, validator) {
@@ -610,6 +615,21 @@ $('#addfloor').bootstrapValidator({
         	validators: {
                 notEmpty: {
                     message: 'Number of balcony is required and cannot be empty'
+                }
+            }
+        },
+        possession_date: {
+            validators: {
+                callback: {
+                    message: 'Wrong Possession Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
                 }
             }
         },

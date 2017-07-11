@@ -643,9 +643,6 @@
 	    margin-bottom:5px;
 	}
 </style>
-<script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
-<script src="${baseUrl}/js/jquery.form.js"></script>
-<script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script>
 
 $('#name').keyup(function() {
@@ -690,14 +687,14 @@ $('#launch_date').datepicker({
 	autoclose:true,
 	format: "dd M yyyy"
 }).on('change',function(e){
-	 $('#detailfrm').data('bootstrapValidator').revalidateField('launch_date');
+	 $('#updatebuilding').data('bootstrapValidator').revalidateField('launch_date');
 });
 
 $('#possession_date').datepicker({
 	autoclose:true,
 	format: "dd M yyyy"
 }).on('change',function(e){
-	 $('#detailfrm').data('bootstrapValidator').revalidateField('possession_date');
+	 $('#updatebuilding').data('bootstrapValidator').revalidateField('possession_date');
 });
 $('#updatebuilding').bootstrapValidator({
 	container: function($field, validator) {
@@ -763,10 +760,10 @@ $('#updatebuilding').bootstrapValidator({
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
-	updateBuilding();
+	updateProjectBuilding();
 });
 
-function updateBuilding() {
+function updateProjectBuilding() {
 	var amenityWeightage = "";
 	$('input[name="amenity_type[]"]:checked').each(function() {
 		amenity_id = $(this).val();

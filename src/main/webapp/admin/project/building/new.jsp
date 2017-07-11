@@ -700,11 +700,8 @@ $('#discount_amount').keypress(function (event) {
 });
 
 $('#possession_date').datepicker({
-	format: "dd MM yyyy"
-});
-$('#possession_date').datepicker({
 	autoclose:true,
-	format: "dd MM yyyy"
+	format: "dd M yyyy"
 }).on('change',function(e){
 	 $('#addbuilding').data('bootstrapValidator').revalidateField('possession_date');
 });

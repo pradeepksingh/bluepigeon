@@ -169,7 +169,7 @@ public class CampaignDAO {
 	 */
 	public List<CampaignList> getCampaignList(){
 		List<CampaignList> campaignLists = new ArrayList<CampaignList>();
-		String hql = "from Campaign";
+		String hql = "from Campaign where is_deleted=0";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);

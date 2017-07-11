@@ -121,96 +121,173 @@
                                				<form id="addemployee" name="addemployee" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
                                 				<input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_uid); %>" />
                                 				<input type="hidden" id="reporting_id" name="reporting_id" value="<%out.print(builder.getId());%>"/>
-                                					<div class="form-group row">
-                                    					<label for="example-text-input" class="col-3 col-form-label">Name*</label>
-                                    					<div class="col-3">
-                                        					<input class="form-control" type="text" value="" id="name" name="name">
-                                    					</div>
-                                  						<div class="messageContainer"></div>
-                                    					<label for="example-text-input" class="col-3 col-form-label">Contact*</label>
-                                    					<div class="col-3">
-                                       						<input class="form-control" type="text" value="" id="contact" name="contact">
-                                    					</div>
-                                   		 				<div class="messageContainer"></div>
-                               			 			</div>
-                                					<div class="form-group row">
-                                    					<label for="example-search-input" class="col-3 col-form-label">Email*</label>
-                                    					<div class="col-3">
-                                        					<input class="form-control" type="text" value="" id="email" name="email">
-                                    					</div>
-                                    					<label for="example-search-input" class="col-3 col-form-label">Current Address</label>
-                                    					<div class="col-3">
-															<textarea rows="" cols="" class="form-control" id="address" name="address"></textarea>
-                                    					</div>
+                                				<div class="row">
+                                					<div class="col-sm-6">
+	                                					<div class="form-group row">
+		                                    					<label for="example-text-input" class="col-sm-6 col-form-label">Name<span class='text-danger'>*</span></label>
+		                                    					<div class="col-sm-6">
+		                                    						<div>
+		                                        						<input class="form-control" type="text" value="" id="name" name="name">
+		                                        					</div>
+		                                        					<div class="messageContainer"></div>
+		                                    					</div>
+		                                    			</div>
+		                                    		</div>
+		                                    		<div class="col-sm-6">
+		                                    				<div class="form-group row">
+		                                    					<label for="example-text-input" class="col-sm-6 col-form-label">Contact<span class='text-danger'>*</span></label>
+		                                    					<div class="col-sm-6">
+		                                    						<div>
+		                                       							<input class="form-control" type="text" value="" id="contact" name="contact">
+		                                       						</div>
+		                                       						<div class="messageContainer"></div>
+		                                    					</div>
+		                                    				</div>
+		                                    		</div>
+								              </div> 
+								              <div class="row">
+								              		<div class="col-sm-6">       			 		
+	                                					<div class="form-group row">
+	                                    					<label for="example-search-input" class="col-sm-6 col-form-label">Email<span class='text-danger'>*</span></label>
+	                                    					<div class="col-sm-6">
+	                                    						<div>
+	                                        						<input class="form-control" type="text" value="" id="email" name="email">
+	                                        					</div>
+	                                        					<div class="messageContainer"></div>
+	                                    					</div>
+	                                    				</div>
+	                                    			</div>
+	                                    			<div class="col-sm-6">
+	                                    				<div class="form-group row">
+	                                    					<label for="example-search-input" class="col-sm-6 col-form-label">Current Address<span class='text-danger'>*</span></label>
+	                                    					<div class="col-sm-6">
+	                                    						<div>
+																	<textarea rows="" cols="" class="form-control" id="address" name="address"></textarea>
+																</div>
+																<div class="messageContainer"></div>
+	                                    					</div>
+	                               		 				</div>
                                		 				</div>
+                               		 		</div>
+                               		 		<div class="row">
+                               		 			<div class="col-sm-6">		
                                  					<div class="form-group row">
-                                    					<label for="example-tel-input" class="col-3 col-form-label">Permanent Address</label>
-                                    					<div class="col-3">
-                                        					<textarea rows="" cols="" class="form-control" id="address1" name="address1"></textarea>
+                                    					<label for="example-tel-input" class="col-sm-6 col-form-label">Permanent Address<span class='text-danger'>*</span></label>
+                                    					<div class="col-sm-6">
+                                    						<div>
+                                        						<textarea rows="" cols="" class="form-control" id="address1" name="address1"></textarea>
+                                        					</div>
+                                        					<div class="messageContainer"></div>
                                     					</div>
-                                    					<label for="example-tel-input" class="col-3 col-form-label">Designation</label>
-                                    					<div class="col-3">
-                                        					<input class="form-control" type="text" value="" name="designation" id="designation">
-                                    					</div>
-                                					</div>
-                                					<div class="form-group row">
-                                    					<label for="example-tel-input" class="col-3 col-form-label">Access Type</label>
-                                    					<div class="col-3">
-                                         					<select class="form-control" name="access" id="access">
-                                          						<option value="">Select Access</option>
-																<%
-																if(access_list !=null){
-																for (BuilderEmployeeAccessType access : access_list) { %>
-																<option value="<%out.print(access.getId());%>"> <% out.print(access.getName()); %> </option>
-																<% }} %>
-															</select>
-                                    					</div>
-                                    					<label for="example-tel-input" class="col-3 col-form-label">Employee ID</label>
-                                    					<div class="col-3">
-                                         					<input class="form-control" type="text" value="" id="empid" name="empid">
+                                    				</div>
+                                    			</div>
+                                    			<div class="col-sm-6">
+                                    				<div class="form-group row">
+                                    					<label for="example-tel-input" class="col-sm-6 col-form-label">Designation<span class='text-danger'>*</span></label>
+                                    					<div class="col-sm-6">
+                                    						<div>
+                                        						<input class="form-control" type="text" value="" name="designation" id="designation">
+                                        					</div>
+                                        					<div class="messageContainer"></div>
                                     					</div>
                                 					</div>
+                                				</div>
+                                			</div>
+                                			<div class="row">
+                                				<div class="col-sm-6">
                                 					<div class="form-group row">
-                                    					<label for="example-text-input" class="col-3 col-form-label">Project</label>
-                                    					<div class="col-3">
-                                       						<select class="form-control" multiple name="project" id="project">
-																	<% for (ProjectData project : project_list) { %>
-																	<option value="<%out.print(project.getId());%>"> <% out.print(project.getName()); %> </option>
-																	<% } %>
-															</select>
+                                    					<label for="example-tel-input" class="col-sm-6 col-form-label">Access Type<span class='text-danger'>*</span></label>
+                                    					<div class="col-sm-6">
+                                    						<div>
+	                                         					<select class="form-control" name="access" id="access">
+	                                          						<option value="">Select Access</option>
+																	<%
+																	if(access_list !=null){
+																	for (BuilderEmployeeAccessType access : access_list) { %>
+																	<option value="<%out.print(access.getId());%>"> <% out.print(access.getName()); %> </option>
+																	<% }} %>
+																</select>
+															</div>
+															<div class="messageContainer"></div>
+                                    					</div>
+                                    				</div>
+                                    			</div>
+                                    			<div class="col-sm-6">
+                                    				<div class="form-group row">
+                                    					<label for="example-tel-input" class="col-sm-6 col-form-label">Employee ID<span class='text-danger'>*</span></label>
+                                    					<div class="col-sm-6">
+                                    						<div>
+                                         						<input class="form-control" type="text" value="" id="empid" name="empid">
+                                         					</div>
+                                         					<div class="messageContainer"></div>
+                                    					</div>
+                                					</div>
+                                				</div>
+                                			</div>
+                                			<div class="row">
+                                				<div class="col-sm-6">
+                                					<div class="form-group row">
+                                    					<label for="example-text-input" class="col-sm-6 col-form-label">Project<span class='text-danger'>*</span></label>
+                                    					<div class="col-sm-6">
+                                    						<div>
+	                                       						<select class="form-control" multiple required name="project" id="project">
+																		<% for (ProjectData project : project_list) { %>
+																		<option value="<%out.print(project.getId());%>"> <% out.print(project.getName()); %> </option>
+																		<% } %>
+																</select>
+															</div>
+															<div class="messageContainer"></div>
                                    			 			</div>
-                                    					<label for="example-text-input" class="col-3 col-form-label">Area</label>
-                                    					<div class="col-3">
-                                      						<select name="area" id="area" class="form-control">
-																<option value=""> Select Area </option>
-															</select>
+                                   			 		</div>
+                                   			 	</div>
+                                   			 	<div class="col-sm-6">
+                                   			 		<div class="form-group row">
+                                    					<label for="example-text-input" class="col-sm-6 col-form-label">Area<span class='text-danger'>*</span></label>
+                                    					<div class="col-sm-6">
+                                    						<div>
+	                                      						<select name="area" id="area" class="form-control">
+																	<option value=""> Select Area </option>
+																</select>
+															</div>
+															<div class="messageContainer"></div>
                                     					</div>
-                                					</div>
+                                    				</div>
+                                				</div>
+                                			</div>
+                                			<div class="row">
+                                				<div class="col-sm-6">
                                 					<div class="form-group row">
-                                    					<label for="example-search-input" class="col-3 col-form-label">City</label>
-                                    					<div class="col-3">
-                                         					<select name="city_id" id="city_id" class="form-control">
-																<option value=""> Select City </option>
-																<% for(City city : cityList){ %>
-																<option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
-																<% } %>
-															</select>
+                                    					<label for="example-search-input" class="col-sm-6 col-form-label">City<span class='text-danger'>*</span></label>
+                                    					<div class="col-sm-6">
+                                    						<div>
+	                                         					<select name="city_id" id="city_id" class="form-control">
+																	<option value=""> Select City </option>
+																	<% for(City city : cityList){ %>
+																	<option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
+																	<% } %>
+																</select>
+															</div>
+															<div class="messageContainer"></div>
                                     					</div>
                                 					</div>
-                                					<div class="offset-sm-5 col-sm-7">
-                                        				<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
-                                 					</div>
-                               					</form>
-                              				 </div>
-                              			</div>
-                        		</div>
+                                				</div>
+                                			</div>
+                                			<div class="row">
+                               					<div class="offset-sm-5 col-sm-7">
+                                       				<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+                               					</div>
+                                 			</div>
+                               			</form>
+                              		</div>
+                              	</div>
                         	</div>
-                    	</div>
-                	</div>
-            	</div>
-            <div id="sidebar1"> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+           <div id="sidebar1"> 
 		       <%@include file="../partial/footer.jsp"%>
-			</div> 
+		  </div> 
 	</body>
 </html>
 
@@ -235,7 +312,15 @@
 // });
 
 $("#city_id").change(function(){
-	alert("City Name "+$("#city_id").val());
+	if($("#city_id").val() != "") {
+		$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
+			var html = '<option value="">Select Locality</optio>';
+			$(data).each(function(index){
+				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
+			});
+			$("#area").html(html);
+		},'json');
+	}
 });
 $('#addemployee').bootstrapValidator({
 	container: function($field, validator) {
@@ -315,7 +400,28 @@ $('#addemployee').bootstrapValidator({
         project: {
             validators: {
                 notEmpty: {
-                    message: 'Project is required and cannot be empty'
+                    message: 'minimum one project must be selected'
+                }
+            }
+        },
+        empid:{
+        	validators: {
+                notEmpty: {
+                    message: 'Employee Id is required and cannot be empty'
+                }
+            }
+        },
+        city_id:{
+        	validators: {
+                notEmpty: {
+                    message: 'City is required and cannot be empty'
+                }
+            },
+           area:{
+            	validators: {
+                    notEmpty: {
+                        message: 'Area is required and cannot be empty'
+                    }
                 }
             }
         }
@@ -327,6 +433,13 @@ $('#addemployee').bootstrapValidator({
 	addEmployee();
 });
 function addEmployee() {
+// 	 $('#addemployee').submit(function(){
+//          var multipleoptions = $('#project > option:selected');
+//          if(multipleoptions.length == 0){
+//              alert('no value selected');
+//              return false;
+//          }
+//    });
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,

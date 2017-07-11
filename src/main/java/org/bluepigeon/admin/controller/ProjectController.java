@@ -878,69 +878,73 @@ public class ProjectController extends ResourceConfig {
 		BuilderBuilding builderBuilding = new BuilderBuilding();
 		builderBuilding.setId(building_id);
 		//add gallery images
-		try {	
-			List<BuildingImageGallery> buildingImageGalleries = new ArrayList<BuildingImageGallery>();
-			//for multiple inserting images.
-			if (building_images.size() > 0) {
-				for(int i=0 ;i < building_images.size();i++)
-				{
-					if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-						BuildingImageGallery buildingImageGallery = new BuildingImageGallery();
-						String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
-						long millis = System.currentTimeMillis() % 1000;
-						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-						gallery_name = "images/project/building/images/"+gallery_name;
-						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-						//System.out.println("for loop image path: "+uploadGalleryLocation);
-						this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-						buildingImageGallery.setImage(gallery_name);
-						buildingImageGallery.setTitle("New Image");
-						buildingImageGallery.setBuilderBuilding(builderBuilding);
-						buildingImageGalleries.add(buildingImageGallery);
+		if(building_images != null){
+			try {	
+				List<BuildingImageGallery> buildingImageGalleries = new ArrayList<BuildingImageGallery>();
+				//for multiple inserting images.
+				if (building_images.size() > 0) {
+					for(int i=0 ;i < building_images.size();i++)
+					{
+						if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+							BuildingImageGallery buildingImageGallery = new BuildingImageGallery();
+							String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
+							long millis = System.currentTimeMillis() % 1000;
+							gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+							gallery_name = "images/project/building/images/"+gallery_name;
+							String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+							//System.out.println("for loop image path: "+uploadGalleryLocation);
+							this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+							buildingImageGallery.setImage(gallery_name);
+							buildingImageGallery.setTitle("New Image");
+							buildingImageGallery.setBuilderBuilding(builderBuilding);
+							buildingImageGalleries.add(buildingImageGallery);
+						}
+					}
+					if(buildingImageGalleries.size() > 0) {
+						projectDAO.addBuildingImageGallery(buildingImageGalleries);
 					}
 				}
-				if(buildingImageGalleries.size() > 0) {
-					projectDAO.addBuildingImageGallery(buildingImageGalleries);
-				}
+				msg.setStatus(1);
+				msg.setMessage("Builing images updated successfully.");
+			} catch(Exception e) {
+				msg.setStatus(0);
+				msg.setMessage("Unable to save images");
 			}
-			msg.setStatus(1);
-			msg.setMessage("Builing images updated successfully.");
-		} catch(Exception e) {
-			msg.setStatus(0);
-			msg.setMessage("Unable to save images");
 		}
 		//add elevation images
-		try {	
-			List<BuildingPanoramicImage> buildingPanoramicImages = new ArrayList<BuildingPanoramicImage>();
-			//for multiple inserting images.
-			if (elevation_images.size() > 0) {
-				for(int i=0 ;i < elevation_images.size();i++)
-				{
-					if(elevation_images.get(i).getFormDataContentDisposition().getFileName() != null && !elevation_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-						System.out.println("Image:"+elevation_images.get(i).getFormDataContentDisposition().getFileName());
-						BuildingPanoramicImage buildingPanoramicImage = new BuildingPanoramicImage();
-						String elv_name = elevation_images.get(i).getFormDataContentDisposition().getFileName();
-						long millis = System.currentTimeMillis() % 1000;
-						elv_name = Long.toString(millis) + elv_name.replaceAll(" ", "_").toLowerCase();
-						elv_name = "images/project/building/elevation/"+elv_name;
-						String uploadElevationLocation = this.context.getInitParameter("building_elevation_url")+elv_name;
-						//System.out.println("for loop image path: "+uploadElevationLocation);
-						this.imageUploader.writeToFile(elevation_images.get(i).getValueAs(InputStream.class), uploadElevationLocation);
-						buildingPanoramicImage.setPanoImage(elv_name);
-						buildingPanoramicImage.setTitle("New Image");
-						buildingPanoramicImage.setBuilderBuilding(builderBuilding);
-						buildingPanoramicImages.add(buildingPanoramicImage);
+		if(elevation_images != null){
+			try {	
+				List<BuildingPanoramicImage> buildingPanoramicImages = new ArrayList<BuildingPanoramicImage>();
+				//for multiple inserting images.
+				if (elevation_images.size() > 0) {
+					for(int i=0 ;i < elevation_images.size();i++)
+					{
+						if(elevation_images.get(i).getFormDataContentDisposition().getFileName() != null && !elevation_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+							System.out.println("Image:"+elevation_images.get(i).getFormDataContentDisposition().getFileName());
+							BuildingPanoramicImage buildingPanoramicImage = new BuildingPanoramicImage();
+							String elv_name = elevation_images.get(i).getFormDataContentDisposition().getFileName();
+							long millis = System.currentTimeMillis() % 1000;
+							elv_name = Long.toString(millis) + elv_name.replaceAll(" ", "_").toLowerCase();
+							elv_name = "images/project/building/elevation/"+elv_name;
+							String uploadElevationLocation = this.context.getInitParameter("building_elevation_url")+elv_name;
+							//System.out.println("for loop image path: "+uploadElevationLocation);
+							this.imageUploader.writeToFile(elevation_images.get(i).getValueAs(InputStream.class), uploadElevationLocation);
+							buildingPanoramicImage.setPanoImage(elv_name);
+							buildingPanoramicImage.setTitle("New Image");
+							buildingPanoramicImage.setBuilderBuilding(builderBuilding);
+							buildingPanoramicImages.add(buildingPanoramicImage);
+						}
+					}
+					if(buildingPanoramicImages.size() > 0) {
+						projectDAO.addBuildingPanoImage(buildingPanoramicImages);
 					}
 				}
-				if(buildingPanoramicImages.size() > 0) {
-					projectDAO.addBuildingPanoImage(buildingPanoramicImages);
-				}
+				msg.setStatus(1);
+				msg.setMessage("Builing images updated successfully.");
+			} catch(Exception e) {
+				msg.setStatus(0);
+				msg.setMessage("Unable to save images");
 			}
-			msg.setStatus(1);
-			msg.setMessage("Builing images updated successfully.");
-		} catch(Exception e) {
-			msg.setStatus(0);
-			msg.setMessage("Unable to save images");
 		}
 		return msg;
 	}
