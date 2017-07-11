@@ -95,7 +95,7 @@
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="flat_no" name="flat_no" value="" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -109,7 +109,7 @@
 															<% } %>
 														</select>
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -126,9 +126,11 @@
 															<% } %>
 														</select>
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Floor No. </label>
@@ -169,16 +171,18 @@
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="bedroom" name="bedroom" value="" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-5">Bathrooms <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="bathroom" name="bathroom" value="" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -187,7 +191,7 @@
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="balcony" name="balcony" value="" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -199,6 +203,8 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Flat Status </label>
@@ -278,17 +284,20 @@
 													<div class="messageContainer"></div>
 												</div>
 											</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-12">
-								<span class="pull-right">
-									<button type="submit" name="flooradd" class="btn btn-success btn-sm">Submit</button>
-								</span>
+							<div class="row">
+								<div class="col-sm-12">
+									<span class="pull-right">
+										<button type="submit" name="flooradd" class="btn btn-success btn-sm">Submit</button>
+									</span>
+								</div>
 							</div>
 						</div>
-					</div>
+					
 						<div id="pricing" class="tab-pane fade">
 					
 			 			<div class="row">
@@ -601,7 +610,14 @@ $('#addfloor').bootstrapValidator({
         flat_no: {
             validators: {
                 notEmpty: {
-                    message: 'Flat Number is required and cannot be empty'
+                    message: 'Flat ID is required and cannot be empty'
+                }
+            }
+        },
+        floor_id: {
+            validators: {
+                notEmpty: {
+                    message: 'Floor Name is required and cannot be empty'
                 }
             }
         },
@@ -609,6 +625,27 @@ $('#addfloor').bootstrapValidator({
             validators: {
                 notEmpty: {
                     message: 'Floor Number is required and cannot be empty'
+                }
+            }
+        },
+        bedroom:{
+        	validators: {
+                notEmpty: {
+                    message: 'Number of bedroom is required and cannot be empty'
+                }
+            }
+        },
+        bathroom:{
+        	validators: {
+                notEmpty: {
+                    message: 'Number of bathroom is required and cannot be empty'
+                }
+            }
+        },
+        balcony:{
+        	validators: {
+                notEmpty: {
+                    message: 'Number of balcony is required and cannot be empty'
                 }
             }
         },

@@ -121,6 +121,8 @@
 													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Total Floors </label>
@@ -137,16 +139,18 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="launch_date" name="launch_date" value="<% if(builderBuilding.getLaunchDate() != null) { out.print(dt1.format(builderBuilding.getLaunchDate()));}%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Possession Date </label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control" id="possession_date" name="possession_date" value="<% if(builderBuilding.getPossessionDate() != null) { out.print(dt1.format(builderBuilding.getPossessionDate()));}%>"/>
 													</div>
-													<div class="messageContainer"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -162,6 +166,8 @@
 													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Status </label>
@@ -223,7 +229,7 @@
 															<div class="row">
 																<label class="control-label col-sm-3" style="padding-top:5px;text-align:left;"><strong><% out.print(builderBuildingAmenity.getName());%> (%)</strong></label>
 																<div class="col-sm-4">
-																	<input type="text" class="form-control errorMsg" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderBuildingAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
+																	<input type="text" class="form-control errorMsg" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderBuildingAmenity.getId());%>" placeholder="Amenity Weightage" onkeypress=" return isNumber(event, this);" value="<% out.print(amenity_wt);%>">
 																</div>
 															</div>
 															<% 	for(BuilderBuildingAmenityStages bpaStages :builderBuildingAmenity.getBuilderBuildingAmenityStageses()) { 
@@ -237,7 +243,7 @@
 															<fieldset class="scheduler-border">
 																<legend class="scheduler-border">Stages</legend>
 																<div class="col-sm-12">
-																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage<% out.print(builderBuildingAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" class="form-control errorMsg" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(bpaStages.getName()); %> (%)</b> - </label><div class="col-sm-4"><input onkeypress=" return isNumber(event, this);" name="stage_weightage<% out.print(builderBuildingAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="text" class="form-control errorMsg" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
 																	<fieldset class="scheduler-border" style="margin-bottom:0px !important">
 																		<legend class="scheduler-border">Sub Stages</legend>
 																	<% 	for(BuilderBuildingAmenitySubstages bpaSubstage :bpaStages.getBuilderBuildingAmenitySubstageses()) { 
@@ -250,7 +256,7 @@
 																	%>
 																		<div class="col-sm-3">
 																			<% out.print(bpaSubstage.getName()); %> (%)<br>
-																			<input type="text" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control errorMsg" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																			<input type="text" onkeypress=" return isNumber(event, this);" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control errorMsg" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
 																		</div>
 																	<% } %>
 																	</fieldset>
@@ -359,7 +365,7 @@
 													<div class="form-group" id="error-payable">
 														<label class="control-label col-sm-8">% of Net Payable </label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control errorMsg"  id="payable" name="payable[]" value="<% out.print(buildingPaymentInfo.getPayable());%>"/>
+															<input type="text" class="form-control" onkeypress=" return isNumber(event, this);"  id="payable" name="payable[]" value="<% out.print(buildingPaymentInfo.getPayable());%>"/>
 														</div>
 														<div class="messageContainer col-sm-offset-6"></div>
 													</div>
@@ -368,7 +374,7 @@
 													<div class="form-group" id="error-amount">
 														<label class="control-label col-sm-6">Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control errorMsg" id="amount" name="amount[]" value="<% out.print(buildingPaymentInfo.getAmount());%>"/>
+															<input type="text" class="form-control" id="amount" onkeypress=" return isNumber(event, this);" name="amount[]" value="<% out.print(buildingPaymentInfo.getAmount());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -430,7 +436,7 @@
 													<div class="form-group" id="error-discount">
 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control errorMsg" id="discount" name="discount[]" value="<% out.print(buildingOfferInfo.getDiscount()); %>"/>
+															<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="discount" name="discount[]" value="<% out.print(buildingOfferInfo.getDiscount()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -439,7 +445,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control errorMsg" id="discount_amount" name="discount_amount[]" value="<% out.print(buildingOfferInfo.getAmount()); %>"/>
+															<input type="text" class="form-control" id="discount_amount" onkeypress=" return isNumber(event, this);" name="discount_amount[]" value="<% out.print(buildingOfferInfo.getAmount()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -528,7 +534,7 @@
 																<div class="form-group" id="error-discount_amount">
 																	<label class="control-label col-sm-6">Floor Weightage</label>
 																	<div class="col-sm-6">
-																		<input type="text" class="form-control" id="floor_weightage" name="floor_weightage" value="<%out.print(builderBuilding.getFloorWeightage());%>"/>
+																		<input type="text" class="form-control"  id="floor_weightage" name="floor_weightage" value="<%out.print(builderBuilding.getFloorWeightage());%>"/>
 																	</div>
 																	<div class="messageContainer"></div>
 																</div>
@@ -546,7 +552,7 @@
 															<div class="form-group" id="error-discount_amount">
 																<label class="control-label col-sm-6"><%out.print(builderFloorList.getName()); %></label>
 																<div class="col-sm-6">
-																	<input type="text" class="form-control errorMsg" id="weightage[]" name="weightage[]" value="<%out.print(builderFloorList.getWeightage());%>"/>
+																	<input type="text"  onkeypress=" return isNumber(event, this);" class="form-control errorMsg" id="weightage[]" name="weightage[]" value="<%out.print(builderFloorList.getWeightage());%>"/>
 																</div>
 																<div class="messageContainer"></div>
 															</div>
@@ -569,7 +575,7 @@
 															<fieldset class="scheduler-border">
 																<legend class="scheduler-border">Stages</legend>
 																<div class="col-sm-12">
-																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(buildingStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage[]" id="<% out.print(buildingStage.getId());%>" type="text" class="form-control" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(buildingStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input  onkeypress=" return isNumber(event, this);" name="stage_weightage[]" id="<% out.print(buildingStage.getId());%>" type="text" class="form-control" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
 																	<fieldset class="scheduler-border" style="margin-bottom:0px !important">
 																		<legend class="scheduler-border">Sub Stages</legend>
 																	<% 	for(BuildingSubstage buildingSubstage :buildingStage.getBuildingSubstages()) { 
@@ -582,7 +588,7 @@
 																	%>
 																		<div class="col-sm-3">
 																			<% out.print(buildingSubstage.getName()); %> (%)<br>
-																			<input type="text" name="substage_weightage<% out.print(buildingStage.getId());%>[]" id="<% out.print(buildingSubstage.getId()); %>" class="form-control errorMsg" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																			<input type="text" onkeypress=" return isNumber(event, this);"  name="substage_weightage<% out.print(buildingStage.getId());%>[]" id="<% out.print(buildingSubstage.getId()); %>" class="form-control" onkeypress="alert(hi);" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
 																		</div>
 																	<% } %>
 																	</fieldset>
@@ -615,9 +621,9 @@
 	</div>
 <%@include file="../../../footer.jsp"%>
 <!-- inline scripts related to this page -->
-<script src="../js/bootstrapValidator.min.js"></script>
-<script src="../js/bootstrap-datepicker.min.js"></script>
-<script src="../js/jquery.form.js"></script>
+<script src="../../../js/bootstrapValidator.min.js"></script>
+<script src="../../../js/bootstrap-datepicker.min.js"></script>
+<script src="../../../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <style>
 	.row {
@@ -1021,7 +1027,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount">'
 				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount" name="discount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount" name="discount[]" onkeypress=" return isNumber(event, this);" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1030,7 +1036,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount_amount" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount_amount" name="discount_amount[]" onkeypress=" return isNumber(event, this);" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1095,7 +1101,7 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-payable">'
 				+'<label class="control-label col-sm-8">% of Net Payable </label>'
 				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control errorMsg" id="payable" name="payable[]" value=""/>'
+				+'<input type="text" class="form-control errorMsg" id="payable" name="payable[]"  value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 				+'</div>'
