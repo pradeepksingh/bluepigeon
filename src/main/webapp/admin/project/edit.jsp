@@ -593,7 +593,7 @@
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-4">Project Area <span class='text-danger'>*</span></label>
 													<div class="col-sm-4">
-														<input type="text" class="form-control" id="project_area" name="project_area" value="<% if(builderProject.getProjectArea() != null) { out.print(builderProject.getProjectArea());}%>"/>
+														<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="project_area" name="project_area" value="<% if(builderProject.getProjectArea() != null) { out.print(builderProject.getProjectArea());}%>"/>
 													</div>
 													<div class="messageContainer"></div>
 													<div class="col-sm-4">
@@ -611,7 +611,7 @@
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Launch Date </label>
-													<div class="col-sm-8">
+													<div class="col-sm-4">
 														<input type="text" class="form-control" id="launch_date" name="launch_date" value="<% if(builderProject.getLaunchDate() != null) { out.print(dt1.format(builderProject.getLaunchDate()));} %>"/>
 													</div>
 													<div class="messageContainer"></div>
@@ -621,7 +621,7 @@
 										<div class="row">
 											<div class="col-lg-6">
 												<div class="col-sm-12">
-													<button type="button" class="btn btn-success btn-sm" id="detailbtn">SAVE</button>
+													<button type="submit" class="btn btn-success btn-sm" id="detailbtn">SAVE</button>
 												</div>
 											</div>
 										</div>
@@ -1173,9 +1173,9 @@
 </div>
 <%@include file="../../footer.jsp"%>
 <!-- inline scripts related to this page -->
-<script src="../js/bootstrapValidator.min.js"></script>
-<script src="../js/bootstrap-datepicker.min.js"></script>
-<script src="../js/jquery.form.js"></script>
+<script src="../../js/bootstrapValidator.min.js"></script>
+<script src="../../js/bootstrap-datepicker.min.js"></script>
+<script src="../../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <style>
 	.row {
@@ -1200,6 +1200,7 @@
 </style>
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
+<script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script>
 // $(".errorMsg").keypress(function(event){
 // 	alert("Hello");
@@ -1888,7 +1889,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control errorMsg" id="offer_title" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" required id="offer_title" name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1897,7 +1898,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount">'
 				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control" id="discount" name="discount[]" value="" onkeypress=" return isNumber(event, this);"/>'
+					+'<input type="text" class="form-control" required id="discount" name="discount[]" value="" onkeypress=" return isNumber(event, this);"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1906,7 +1907,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="" onkeypress=" return isNumber(event, this);"/>'
+					+'<input type="text" class="form-control" required id="discount_amount" name="discount_amount[]" value="" onkeypress=" return isNumber(event, this);"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1963,25 +1964,25 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-schedule">'
 				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-				+'<input type="text" class="form-control"  name="schedule[]"/>'
+				+'<input type="text" class="form-control" required name="schedule[]"/>'
 				+'</div>'
 				+'<div class="messageContainer col-sm-offset-5"></div>'
 				+'</div>'
 				+'</div>'
 				+'<div class="col-lg-3 margin-bottom-5">'
 				+'<div class="form-group" id="error-payable">'
-				+'<label class="control-label col-sm-8">% of Net Payable </label>'
+				+'<label class="control-label col-sm-8">% of Net Payable <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control errorMsg" onkeypress=" return isNumber(event, this);" name="payable[]"/>'
+				+'<input type="text" class="form-control"  required=true onkeypress=" return isNumber(event, this);" name="payable[]"/>'
 				+'</div>'
 				+'<div class="messageContainer col-sm-offset-5"></div>'
 				+'</div>'
 				+'</div>'
 				+'<div class="col-lg-3 margin-bottom-5">'
 				+'<div class="form-group" id="error-amount">'
-				+'<label class="control-label col-sm-6">Amount </label>'
+				+'<label class="control-label col-sm-6">Amount <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-6">'
-				+'<input type="text" class="form-control errorMsg" onkeypress=" return isNumber(event, this);" name="amount[]"/>'
+				+'<input type="text" class="form-control" required=true onkeypress=" return isNumber(event, this);" name="amount[]"/>'
 				+'</div>'
 				+'<div class="messageContainer col-sm-offset-5"></div>'
 				+'</div>'
@@ -2062,6 +2063,14 @@ $('#detailfrm').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
+    	project_area:{
+            validators: {
+            	 notEmpty: {
+                     message: 'Project Area is required and cannot be empty'
+                 }   	
+            }
+    	},
+    
     	launch_date: {
             validators: {
                 callback: {

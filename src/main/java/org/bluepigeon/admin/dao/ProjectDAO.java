@@ -60,6 +60,7 @@ import org.bluepigeon.admin.model.BuildingOfferInfo;
 import org.bluepigeon.admin.model.BuildingPanoramicImage;
 import org.bluepigeon.admin.model.BuildingPaymentInfo;
 import org.bluepigeon.admin.model.BuildingWeightage;
+import org.bluepigeon.admin.model.Campaign;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
 import org.bluepigeon.admin.model.FlatAmenityWeightage;
 import org.bluepigeon.admin.model.FlatImageGallery;
@@ -333,6 +334,9 @@ public class ProjectDAO {
 		newBuilderProject.setProjectArea(builderProject.getProjectArea());
 		newBuilderProject.setAreaUnit(builderProject.getAreaUnit());
 		newBuilderProject.setLaunchDate(builderProject.getLaunchDate());
+		if(builderProject.getPossessionDate() != null){
+			newBuilderProject.setPossessionDate(builderProject.getPossessionDate());
+		}
 		Session session8 = hibernateUtil.openSession();
 		session8.beginTransaction();
 		session8.update(newBuilderProject);
@@ -772,7 +776,7 @@ public class ProjectDAO {
 	 * @return
 	 */
 	public List<BuilderBuilding> getBuilderActiveProjectBuildings(int project_id) {
-		String hql = "from BuilderBuilding where builderProject.id = :project_id";
+		String hql = "from BuilderBuilding where builderProject.id = :project_id and builderProject.status=1 and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -1478,7 +1482,7 @@ public class ProjectDAO {
 	 * @return List<BuilderFloor>
 	 */
 	public List<BuilderFloor> getBuildingActiveFloors(int building_id) {
-		String hql = "from BuilderFloor where builderBuilding.id = :building_id and builderBuilding.builderProject.status=1 and status=1";
+		String hql = "from BuilderFloor where builderBuilding.id = :building_id and builderBuilding.status=1 and builderBuilding.builderProject.status=1 and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -2128,7 +2132,7 @@ public class ProjectDAO {
 	 * @return List<BuilderFlat>
 	 */
 	public List<BuilderFlat> getBuilderActiveFloorFlats(int floor_id) {
-		String hql = "from BuilderFlat where builderFloor.id = :floor_id and builderFloor.builderBuilding.builderProject.status=1 and status=1";
+		String hql = "from BuilderFlat where builderFloor.id = :floor_id and builderFloor.status=1 and builderFloor.builderBuilding.status=1 and builderFloor.builderBuilding.builderProject.status=1 and status=1 order by builderFloor.builderBuilding.builderProject.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -3209,7 +3213,7 @@ public class ProjectDAO {
 	 * @return List<BuilderFloor>
 	 */
 	public List<BuilderFloor> getAllActiveFloorsByBuilderId(int builderId) {
-		String hql = "from BuilderFloor where builderBuilding.builderProject.builder.id = :builder_id and builderBuilding.builderProject.status=1 and status=1 order by builderBuilding.builderProject.id DESC";
+		String hql = "from BuilderFloor where builderBuilding.builderProject.builder.id = :builder_id and builderBuilding.status=1 and builderBuilding.builderProject.status=1 and status=1 order by builderBuilding.builderProject.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -3220,7 +3224,7 @@ public class ProjectDAO {
 	}
 	
 	public List<BuilderFlat> getBuilderAllFlatsByBuilderId(int builderId) {
-		String hql = "from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and builderFloor.builderBuilding.builderProject.status=1 order by builderFloor.builderBuilding.builderProject.id DESC";
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and builderFloor.status=1 and builderFloor.builderBuilding.status=1 and builderFloor.builderBuilding.builderProject.status=1 order by builderFloor.builderBuilding.builderProject.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);

@@ -34,13 +34,14 @@ public class Campaign implements java.io.Serializable {
 	private Date setDate;
 	private String content;
 	private String terms;
+	private Byte isDeleted = 0;
 	private Integer recipientType;
 
 	public Campaign() {
 	}
 
 	public Campaign(AdminUser adminUser,BuilderProject builderProject,Builder builder, City city, String title, Integer type, Date setDate, String content,
-			String terms, Integer recipientType) {
+			String terms, Integer recipientType, Byte isDeleted) {
 		this.adminUser = adminUser;
 		this.builderProject = builderProject;
 		this.city = city;
@@ -50,6 +51,7 @@ public class Campaign implements java.io.Serializable {
 		this.content = content;
 		this.terms = terms;
 		this.recipientType = recipientType;
+		this.isDeleted = isDeleted;
 	}
 
 
@@ -158,4 +160,15 @@ public class Campaign implements java.io.Serializable {
 	public void setRecipientType(Integer recipientType) {
 		this.recipientType = recipientType;
 	}
+
+	@Column(name = "is_deleted")
+	public Byte getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Byte isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
+	
 }

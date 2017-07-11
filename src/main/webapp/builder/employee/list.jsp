@@ -157,7 +157,8 @@
                                        <%
                                      if(employeeLists != null){
                                     	  
-                                      	for(EmployeeList employeeList: employeeLists) { %>
+                                      	for(EmployeeList employeeList: employeeLists) {
+                                      		%>
 									<tr>
 										<td><%out.print(employeeList.getCount());%></td>
 										<td>
@@ -173,8 +174,7 @@
 										<td>
 											 <a href="${baseUrl}/builder/employee/edit.jsp?emp_id=<% out.print(employeeList.getId());%>" ><span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
 										</td>
-										<% 	
-											} 
+										<% 		}	
                                       	}
 										%>
                                     </tbody>

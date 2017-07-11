@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
+import org.bluepigeon.admin.dao.CampaignDAO;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.data.BuilderProjectList;
@@ -1111,6 +1112,16 @@ public class ProjectController extends ResourceConfig {
 	}
 	
 	@GET
+	@Path("/campaign/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteCampaign(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		CampaignDAO projectDAO = new CampaignDAO();
+		msg = projectDAO.deleteCampaignById(id);
+		return msg;
+	}
+	
+	@GET
 	@Path("/offer/delete/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage deleteProjectOfferInfo(@PathParam("id") int id) {
@@ -1275,11 +1286,12 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
 			@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
 			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("status_id") byte floor_status,
 			@FormDataParam("amenity_wt") String amenity_wts
 	) {
 		String [] amenityWeightages = amenity_wts.split(",");
 		List<FloorAmenityWeightage> baws = new ArrayList<FloorAmenityWeightage>();
-		byte floor_status = 1;
+		//byte floor_status = 1;
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderFloorStatus builderFloorStatus = new BuilderFloorStatus();
@@ -1395,6 +1407,7 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("floor_no") int floor_no,
 			@FormDataParam("total_flats") int total_flats,
 			@FormDataParam("status") Integer status,
+			@FormDataParam("status_id") byte floor_status,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
 			@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
 			@FormDataParam("admin_id") int admin_id,
@@ -1402,7 +1415,7 @@ public class ProjectController extends ResourceConfig {
 	) {
 		String [] amenityWeightages = amenity_wts.split(",");
 		List<FloorAmenityWeightage> baws = new ArrayList<FloorAmenityWeightage>();
-		byte floor_status = 1;
+		//byte floor_status = 1;
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderFloorStatus builderFloorStatus = new BuilderFloorStatus();
@@ -1940,6 +1953,7 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("bathroom") Integer bathroom,
 			@FormDataParam("balcony") Integer balcony,
 			@FormDataParam("status") Integer status,
+			@FormDataParam("status_id") byte flat_status,
 			@FormDataParam("possession_date") String possession_date,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
 			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
@@ -1957,7 +1971,7 @@ public class ProjectController extends ResourceConfig {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		byte floor_status = 1;
+		//byte floor_status = 1;
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderFloor builderFloor = new BuilderFloor();
@@ -1981,7 +1995,7 @@ public class ProjectController extends ResourceConfig {
 		builderFlat.setRevenue(0.0);
 		builderFlat.setPossessionDate(possessionDate);
 		builderFlat.setAdminUser(adminUser);
-		builderFlat.setStatus(floor_status);
+		builderFlat.setStatus(flat_status);
 		msg = projectDAO.addBuildingFlat(builderFlat);
 		if(msg.getId() > 0) {
 			builderFlat.setId(msg.getId());
@@ -2076,6 +2090,7 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("bathroom") Integer bathroom,
 			@FormDataParam("balcony") Integer balcony,
 			@FormDataParam("status") Integer status,
+			@FormDataParam("status_id") byte flat_status,
 			@FormDataParam("possession_date") String possession_date,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
 			@FormDataParam("payment_id[]") List<FormDataBodyPart> payment_id,
@@ -2094,7 +2109,7 @@ public class ProjectController extends ResourceConfig {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		byte floor_status = 1;
+		//byte floor_status = 1;
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderFloor builderFloor = new BuilderFloor();
@@ -2113,6 +2128,7 @@ public class ProjectController extends ResourceConfig {
 		builderFlat.setBedroom(bedroom);
 		builderFlat.setBathroom(bathroom);
 		builderFlat.setBalcony(balcony);
+		builderFlat.setStatus(flat_status);
 		builderFlat.setPossessionDate(possessionDate);
 		builderFlat.setAdminUser(adminUser);
 		msg = projectDAO.updateBuildingFlat(builderFlat);
