@@ -643,10 +643,19 @@
 	    margin-bottom:5px;
 	}
 </style>
-<script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
-<script src="${baseUrl}/js/jquery.form.js"></script>
 <script>
-
+$('#launch_date').datepicker({
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#updatebuilding').data('bootstrapValidator').revalidateField('launch_date');
+});
+$('#possession_date').datepicker({
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#updatebuilding').data('bootstrapValidator').revalidateField('possession_date');
+});
 $('#name').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^a-zA-Z0-9- ]/g, function(str) { alert('Please use only letters and numbers.'); return ''; } ) );
@@ -685,19 +694,7 @@ function isNumber(evt, element) {
 
     return true;
 }   
-$('#launch_date').datepicker({
-	autoclose:true,
-	format: "dd M yyyy"
-}).on('change',function(e){
-	 $('#detailfrm').data('bootstrapValidator').revalidateField('launch_date');
-});
 
-$('#possession_date').datepicker({
-	autoclose:true,
-	format: "dd M yyyy"
-}).on('change',function(e){
-	 $('#detailfrm').data('bootstrapValidator').revalidateField('possession_date');
-});
 $('#updatebuilding').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -762,10 +759,10 @@ $('#updatebuilding').bootstrapValidator({
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
-	updateBuilding();
+	updateProjectBuilding();
 });
 
-function updateBuilding() {
+function updateProjectBuilding() {
 	var amenityWeightage = "";
 	$('input[name="amenity_type[]"]:checked').each(function() {
 		amenity_id = $(this).val();
@@ -1082,7 +1079,32 @@ function addMoreOffer() {
 function removeOffer(id) {
 	$("#offer-"+id).remove();
 }
-
+var options = {
+	    fields: {
+	        'offer_title[]': {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Enter a value 1'
+	                }
+	            }
+	        },
+	        'discount[]': {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Enter a value 2'
+	                }
+	            }
+	        },
+	        'discount_amount[]': {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Enter a value 3'
+	                }
+	            }
+	        }
+	    }
+	};
+	$('#updateoffer').bootstrapValidator(options);
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
@@ -1125,18 +1147,7 @@ function addMoreSchedule() {
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();
 }
-$('#launch_date').datepicker({
-	autoclose:true,
-	format: "dd M yyyy"
-}).on('change',function(e){
-	 $('#detailfrm').data('bootstrapValidator').revalidateField('launch_date');
-});
-$('#possession_date').datepicker({
-	autoclose:true,
-	format: "dd M yyyy"
-}).on('change',function(e){
-	 $('#detailfrm').data('bootstrapValidator').revalidateField('possession_date');
-});
+
 $('input[name="amenity_type[]"]').click(function() {
 	if($(this).prop("checked")) {
 		$("#amenity_stage"+$(this).val()).show();
@@ -1183,6 +1194,57 @@ $("#subpbtn").click(function(){
 			alert("Fail to save data");
 		}
 		
+	});
+});
+// $('#updateoffer').bootstrapValidator({
+// 	container: function($field, validator) {
+// 		return $field.parent().next('.messageContainer');
+//    	},
+//     feedbackIcons: {
+//         validating: 'glyphicon glyphicon-refresh'
+//     },
+//     excluded: ':disabled',
+//     fields: {
+//     	'offer_title[]': {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'offer title is required and cannot be empty'
+//                 }
+//             }
+//         },
+//     }
+// }).on('success.form.bv', function(event,data) {
+// 	// Prevent form submission
+// //	event.preventDefault();
+// 	//updateProjectBuilding();
+// });
+ $(document).ready(function() {
+$('#updateoffer').bootstrapValidator({
+    feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    fields: {
+        question: {
+            validators: {
+                notEmpty: {
+                    message: 'The question required and cannot be empty'
+                }
+            }
+        },
+        'offer_title[]': {
+            validators: {
+                notEmpty: {
+                    message: 'The offer title required and cannot be empty'
+                },
+                stringLength: {
+                    max: 100,
+                    message: 'The option must be less than 100 characters long'
+                }
+            }
+        }
+    }
 	});
 });
 

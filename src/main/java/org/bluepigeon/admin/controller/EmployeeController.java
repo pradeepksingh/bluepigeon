@@ -236,7 +236,7 @@ public class EmployeeController {
 			@FormDataParam("empid") String employeeId,
 			@FormDataParam("project") List<FormDataBodyPart> projectId,
 			@FormDataParam("area") int areaId,
-			@FormDataParam("city") int cityId,
+			@FormDataParam("city_id") int cityId,
 			@FormDataParam("builder_id") int builderId,
 			@FormDataParam("reporting_id") int reporting_id){
 		

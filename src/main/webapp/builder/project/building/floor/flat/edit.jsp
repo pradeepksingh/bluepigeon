@@ -321,9 +321,13 @@
 	 </div> 
 </body>
 </html>
+<script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script>
 $('#possession_date').datepicker({
-	format: "dd MM yyyy"
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#addfloor').data('bootstrapValidator').revalidateField('possession_date');
 });
 $('#addfloor').bootstrapValidator({
 	container: function($field, validator) {
@@ -352,6 +356,21 @@ $('#addfloor').bootstrapValidator({
             validators: {
                 notEmpty: {
                     message: 'Floor Number is required and cannot be empty'
+                }
+            }
+        },
+        possession_date: {
+            validators: {
+                callback: {
+                    message: 'Wrong Possession Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
                 }
             }
         },

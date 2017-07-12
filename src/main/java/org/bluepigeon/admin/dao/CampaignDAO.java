@@ -169,7 +169,7 @@ public class CampaignDAO {
 	 */
 	public List<CampaignList> getCampaignList(){
 		List<CampaignList> campaignLists = new ArrayList<CampaignList>();
-		String hql = "from Campaign";
+		String hql = "from Campaign where is_deleted=0";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -218,7 +218,7 @@ public class CampaignDAO {
 	 */
 	public List<CampaignList> getActiveCampaignListByBuilderId(int builderId){
 		List<CampaignList> campaignLists = new ArrayList<CampaignList>();
-		String hql = "from Campaign where builderProject.builder.id = :builder_id and builderProject.status=1";
+		String hql = "from Campaign where builderProject.builder.id = :builder_id and builderProject.status=1 and isDeleted=0";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -280,7 +280,7 @@ public class CampaignDAO {
 		newsession.getTransaction().commit();
 		newsession.close();
 		responseMessage.setStatus(1);
-		responseMessage.setMessage("Buying Details Updated Successfully");
+		responseMessage.setMessage("Campaign Updated Successfully");
 		return responseMessage;
 	}
 	
@@ -316,6 +316,31 @@ public class CampaignDAO {
 			responseMessage.setMessage("Buyer Offers Updated Successfully");
 		}
 		
+		return responseMessage;
+	}
+	
+	public Campaign getCampaignById(int id){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "from Campaign where id= :id";
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		Campaign campaign = (Campaign)query.list().get(0);
+		return campaign;
+	}
+	
+	public ResponseMessage deleteCampaignById(int id){
+		ResponseMessage responseMessage = new ResponseMessage();
+		byte deleted = 1;
+		Campaign campaign = getCampaignById(id);
+		campaign.setIsDeleted(deleted);
+		responseMessage = updateCampaign(campaign);
+		if(responseMessage.getStatus()==1){
+			responseMessage.setMessage("Campaign is deleted successflly");
+		}else{
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Fail to delete campaign. Please try again");
+		}
 		return responseMessage;
 	}
 }

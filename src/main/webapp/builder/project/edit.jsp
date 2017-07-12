@@ -249,10 +249,9 @@
 																</select>
 						                                    </div>
 					                                    	<div class="messageContainer"></div>
-				                                    </div>
-			                                  </div> 
-			                                    
-			                                </div>
+				                                    	</div>
+			                                 		 </div> 
+			                                	</div>
 			                                </div>
 			                                <div class="row">
 			                                	<div class="col-md-6">
@@ -597,33 +596,42 @@
 	                                    </div>
 	                                    <% } %>
 	                                </div><hr>
-	                                
+	                                <div class="row">
 	                                 <div class="form-group row">
-	                                   <label for="example-text-input" class="col-sm-3 col-form-label">Project Area</label>
-	                                   <div class="col-sm-3">
-	                                    <input class="" type="text" class="col-lg-6" id="project_area" name="project_area" value="<% if(builderProject.getProjectArea() != null) { out.print(builderProject.getProjectArea());}%>"/>
-	                                   </div>
-	                                   <div class="col-sm-4">
-	                                   <select name="area_unit" id="area_unit" class="form-control col-lg-3">
-											<% for(AreaUnit areaUnit :areaUnits) { %>
-											<option value="<% out.print(areaUnit.getId()); %>" <% if(builderProject.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
-											<% } %>
-										</select>
-	                                   </div>
+	                                 	
+		                                   <label for="example-text-input" class="col-sm-3 col-form-label">Project Area</label>
+		                                   <div class="col-sm-3">
+		                                   		<input  type="text"  class="form-control" id="project_area" name="project_area" value="<% if(builderProject.getProjectArea() != null) { out.print(builderProject.getProjectArea());}%>"/>
+		                                   </div>
+		                                   <div class="col-sm-4">
+			                                   <select name="area_unit" id="area_unit" class="form-control col-lg-3">
+													<% for(AreaUnit areaUnit :areaUnits) { %>
+													<option value="<% out.print(areaUnit.getId()); %>" <% if(builderProject.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
+													<% } %>
+												</select>
+		                                   </div>
+		                                  </div>
+	                                    <div class="form-group row">
 	                                    <%
 											SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
 									 	%>
-									 	<label class="control-label col-sm-3">Launch Date </label>
-	                                    <div class="col-sm-3 form-group">
+									 	<label class="control-label col-sm-4">Launch Date </label>
+	                                    <div class="col-sm-6 form-group">
 	                                    	<div class="">
 	                                   			<input type="text" class="form-control" id="launch_date" name="launch_date" value="<% if(builderProject.getLaunchDate() != null) { out.print(dt1.format(builderProject.getLaunchDate()));} %>"/>
 	                                   		</div>
 	                                   		<div class="messageContainer"></div>
 	                                   </div>
-	                                   <label class="control-label col-sm-3">Possession Date </label>
-	                                    <div class="col-sm-3">
-	                                   		<input type="text"  id="possession_date" name="possession_date" value="<% if(builderProject.getPossessionDate() != null) { out.print(dt1.format(builderProject.getPossessionDate()));} %>"/>
 	                                   </div>
+	                                    <div class="form-group row">
+	                                   <label class="control-label col-sm-6">Possession Date </label>
+	                                    <div class="col-sm-6">
+	                                    	<div>
+	                                   			<input type="text" class="form-control"  id="possession_date" name="possession_date" value="<% if(builderProject.getPossessionDate() != null) { out.print(dt1.format(builderProject.getPossessionDate()));} %>"/>
+	                                   		</div>
+	                                   		<div class="messageContainer"></div>
+	                                   </div>
+	                                 </div>
 	                                 </div>
 	                                <div class="offset-sm-5 col-sm-7">
 	                                        <button type="submit" id="detailbtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
@@ -1190,17 +1198,17 @@ $("#amenity_weightage").keypress(function(event){
 $("#building_weightage").keypress(function(event){
 	return isNumber(event, this)
 });
-function isNumber(evt, element) {
+// function isNumber(evt, element) {
 
-    var charCode = (evt.which) ? evt.which : event.keyCode
+//     var charCode = (evt.which) ? evt.which : event.keyCode
 
-    if (
-        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
-        (charCode < 48 || charCode > 57))
-        return false;
+//     if (
+//         (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+//         (charCode < 48 || charCode > 57))
+//         return false;
 
-    return true;
-} 
+//     return true;
+// } 
 $('#schedule').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^a-zA-Z0-9, ]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
@@ -1566,7 +1574,7 @@ function saveProjectDetails(){
 			});
 		});
 	});
-	var project = {id:$("#id").val(),projectArea:$("#project_area").val(),areaUnit:{id:$("#area_unit").val()},launchDate:new Date($("#launch_date").val())};
+	var project = {id:$("#id").val(),projectArea:$("#project_area").val(),areaUnit:{id:$("#area_unit").val()},launchDate:new Date($("#launch_date").val()), possessionDate:new Date($("#possession_date").val())};
 	$('input[name="project_type[]"]:checked').each(function() {
 		projectType.push({builderProjectType:{id:$(this).val()},builderProject:{id:$("#id").val()}});
 	});
@@ -1833,35 +1841,6 @@ function removeOffer(id) {
 	
 	$("#offer-"+id).remove();
 }
-
-
-var template = $('#offer-1').clone();
-var options = {
-    fields: {
-        'firstField[]': {
-            validators: {
-                notEmpty: {
-                    message: 'Enter a value 1'
-                }
-            }
-        },
-        'secondField[]': {
-            validators: {
-                notEmpty: {
-                    message: 'Enter a value 2'
-                }
-            }
-        },
-        'thirdField[]': {
-            validators: {
-                notEmpty: {
-                    message: 'Enter a value 3'
-                }
-            }
-        }
-    }
-};
-$('#myForm').bootstrapValidator(options);
 
 $('#addMoreOffers').click(function () {
     var rowId = $('.row').length + 1;

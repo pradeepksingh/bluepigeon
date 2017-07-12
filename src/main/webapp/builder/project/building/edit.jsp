@@ -202,13 +202,19 @@
 									<div class="form-group row">
                                  		<label for="example-search-input" class="col-3 col-form-label">Building Launch Date*</label>
                                  		<div class="col-6">
-                                     		<input class="form-control" type="text" id="launch_date" name="launch_date" value="<% if(builderBuilding.getLaunchDate() != null) { out.print(dt1.format(builderBuilding.getLaunchDate()));}%>">
+                                 			<div>
+                                     			<input class="form-control" type="text" id="launch_date" name="launch_date" value="<% if(builderBuilding.getLaunchDate() != null) { out.print(dt1.format(builderBuilding.getLaunchDate()));}%>">
+                                     		</div>
+                                     		<div class="messageContainer"></div>
                                  		</div>
                              		</div>
                              		<div class="form-group row">
                                  		<label for="example-search-input" class="col-3 col-form-label">Possession</label>
                                  		<div class="col-6">
-                                     		<input class="form-control" type="text" id="possession_date" name="possession_date" value="<% if(builderBuilding.getPossessionDate() != null) { out.print(dt1.format(builderBuilding.getPossessionDate()));}%>"/>
+                                 			<div>
+                                     			<input class="form-control" type="text" id="possession_date" name="possession_date" value="<% if(builderBuilding.getPossessionDate() != null) { out.print(dt1.format(builderBuilding.getPossessionDate()));}%>"/>
+                                     		</div>
+                                     		<div class="messageContainer"></div>
                                  		</div>
                              		</div>
                              		<div class="form-group row">
@@ -443,23 +449,23 @@
 			</div> 
 </body>
 </html>
-<script src="../js/bootstrapValidator.min.js"></script>
-<script src="../js/bootstrap-datepicker.min.js"></script>
-<script src="../js/jquery.form.js"></script>
+<script src="../../js/bootstrapValidator.min.js"></script>
+<script src="../../js/bootstrap-datepicker.min.js"></script>
+<script src="../../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script type="text/javascript">
 $('#launch_date').datepicker({
 	autoclose:true,
 	format: "dd M yyyy"
 }).on('change',function(e){
-	 $('#detailfrm').data('bootstrapValidator').revalidateField('launch_date');
+	 $('#updateoffer').data('bootstrapValidator').revalidateField('launch_date');
 });
 
 $('#possession_date').datepicker({
 	autoclose:true,
 	format: "dd M yyyy"
 }).on('change',function(e){
-	 $('#detailfrm').data('bootstrapValidator').revalidateField('possession_date');
+	 $('#updateoffer').data('bootstrapValidator').revalidateField('possession_date');
 });
 function showDemand()
 {

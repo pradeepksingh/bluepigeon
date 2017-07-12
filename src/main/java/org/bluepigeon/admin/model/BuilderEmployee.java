@@ -143,7 +143,7 @@ public class BuilderEmployee implements java.io.Serializable {
 		this.builderEmployee = builderEmployee;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "access_type_id")
 	public BuilderEmployeeAccessType getBuilderEmployeeAccessType() {
 		return builderEmployeeAccessType;

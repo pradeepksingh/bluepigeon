@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
+import org.bluepigeon.admin.dao.CampaignDAO;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.data.BuilderProjectList;
@@ -877,69 +878,73 @@ public class ProjectController extends ResourceConfig {
 		BuilderBuilding builderBuilding = new BuilderBuilding();
 		builderBuilding.setId(building_id);
 		//add gallery images
-		try {	
-			List<BuildingImageGallery> buildingImageGalleries = new ArrayList<BuildingImageGallery>();
-			//for multiple inserting images.
-			if (building_images.size() > 0) {
-				for(int i=0 ;i < building_images.size();i++)
-				{
-					if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-						BuildingImageGallery buildingImageGallery = new BuildingImageGallery();
-						String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
-						long millis = System.currentTimeMillis() % 1000;
-						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-						gallery_name = "images/project/building/images/"+gallery_name;
-						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-						//System.out.println("for loop image path: "+uploadGalleryLocation);
-						this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-						buildingImageGallery.setImage(gallery_name);
-						buildingImageGallery.setTitle("New Image");
-						buildingImageGallery.setBuilderBuilding(builderBuilding);
-						buildingImageGalleries.add(buildingImageGallery);
+		if(building_images != null){
+			try {	
+				List<BuildingImageGallery> buildingImageGalleries = new ArrayList<BuildingImageGallery>();
+				//for multiple inserting images.
+				if (building_images.size() > 0) {
+					for(int i=0 ;i < building_images.size();i++)
+					{
+						if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+							BuildingImageGallery buildingImageGallery = new BuildingImageGallery();
+							String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
+							long millis = System.currentTimeMillis() % 1000;
+							gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+							gallery_name = "images/project/building/images/"+gallery_name;
+							String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+							//System.out.println("for loop image path: "+uploadGalleryLocation);
+							this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+							buildingImageGallery.setImage(gallery_name);
+							buildingImageGallery.setTitle("New Image");
+							buildingImageGallery.setBuilderBuilding(builderBuilding);
+							buildingImageGalleries.add(buildingImageGallery);
+						}
+					}
+					if(buildingImageGalleries.size() > 0) {
+						projectDAO.addBuildingImageGallery(buildingImageGalleries);
 					}
 				}
-				if(buildingImageGalleries.size() > 0) {
-					projectDAO.addBuildingImageGallery(buildingImageGalleries);
-				}
+				msg.setStatus(1);
+				msg.setMessage("Builing images updated successfully.");
+			} catch(Exception e) {
+				msg.setStatus(0);
+				msg.setMessage("Unable to save images");
 			}
-			msg.setStatus(1);
-			msg.setMessage("Builing images updated successfully.");
-		} catch(Exception e) {
-			msg.setStatus(0);
-			msg.setMessage("Unable to save images");
 		}
 		//add elevation images
-		try {	
-			List<BuildingPanoramicImage> buildingPanoramicImages = new ArrayList<BuildingPanoramicImage>();
-			//for multiple inserting images.
-			if (elevation_images.size() > 0) {
-				for(int i=0 ;i < elevation_images.size();i++)
-				{
-					if(elevation_images.get(i).getFormDataContentDisposition().getFileName() != null && !elevation_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-						System.out.println("Image:"+elevation_images.get(i).getFormDataContentDisposition().getFileName());
-						BuildingPanoramicImage buildingPanoramicImage = new BuildingPanoramicImage();
-						String elv_name = elevation_images.get(i).getFormDataContentDisposition().getFileName();
-						long millis = System.currentTimeMillis() % 1000;
-						elv_name = Long.toString(millis) + elv_name.replaceAll(" ", "_").toLowerCase();
-						elv_name = "images/project/building/elevation/"+elv_name;
-						String uploadElevationLocation = this.context.getInitParameter("building_elevation_url")+elv_name;
-						//System.out.println("for loop image path: "+uploadElevationLocation);
-						this.imageUploader.writeToFile(elevation_images.get(i).getValueAs(InputStream.class), uploadElevationLocation);
-						buildingPanoramicImage.setPanoImage(elv_name);
-						buildingPanoramicImage.setTitle("New Image");
-						buildingPanoramicImage.setBuilderBuilding(builderBuilding);
-						buildingPanoramicImages.add(buildingPanoramicImage);
+		if(elevation_images != null){
+			try {	
+				List<BuildingPanoramicImage> buildingPanoramicImages = new ArrayList<BuildingPanoramicImage>();
+				//for multiple inserting images.
+				if (elevation_images.size() > 0) {
+					for(int i=0 ;i < elevation_images.size();i++)
+					{
+						if(elevation_images.get(i).getFormDataContentDisposition().getFileName() != null && !elevation_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+							System.out.println("Image:"+elevation_images.get(i).getFormDataContentDisposition().getFileName());
+							BuildingPanoramicImage buildingPanoramicImage = new BuildingPanoramicImage();
+							String elv_name = elevation_images.get(i).getFormDataContentDisposition().getFileName();
+							long millis = System.currentTimeMillis() % 1000;
+							elv_name = Long.toString(millis) + elv_name.replaceAll(" ", "_").toLowerCase();
+							elv_name = "images/project/building/elevation/"+elv_name;
+							String uploadElevationLocation = this.context.getInitParameter("building_elevation_url")+elv_name;
+							//System.out.println("for loop image path: "+uploadElevationLocation);
+							this.imageUploader.writeToFile(elevation_images.get(i).getValueAs(InputStream.class), uploadElevationLocation);
+							buildingPanoramicImage.setPanoImage(elv_name);
+							buildingPanoramicImage.setTitle("New Image");
+							buildingPanoramicImage.setBuilderBuilding(builderBuilding);
+							buildingPanoramicImages.add(buildingPanoramicImage);
+						}
+					}
+					if(buildingPanoramicImages.size() > 0) {
+						projectDAO.addBuildingPanoImage(buildingPanoramicImages);
 					}
 				}
-				if(buildingPanoramicImages.size() > 0) {
-					projectDAO.addBuildingPanoImage(buildingPanoramicImages);
-				}
+				msg.setStatus(1);
+				msg.setMessage("Builing images updated successfully.");
+			} catch(Exception e) {
+				msg.setStatus(0);
+				msg.setMessage("Unable to save images");
 			}
-			msg.setStatus(1);
-			msg.setMessage("Builing images updated successfully.");
-		} catch(Exception e) {
-			msg.setStatus(0);
-			msg.setMessage("Unable to save images");
 		}
 		return msg;
 	}
@@ -1111,6 +1116,16 @@ public class ProjectController extends ResourceConfig {
 	}
 	
 	@GET
+	@Path("/campaign/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteCampaign(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		CampaignDAO projectDAO = new CampaignDAO();
+		msg = projectDAO.deleteCampaignById(id);
+		return msg;
+	}
+	
+	@GET
 	@Path("/offer/delete/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage deleteProjectOfferInfo(@PathParam("id") int id) {
@@ -1275,11 +1290,12 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
 			@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
 			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("status_id") byte floor_status,
 			@FormDataParam("amenity_wt") String amenity_wts
 	) {
 		String [] amenityWeightages = amenity_wts.split(",");
 		List<FloorAmenityWeightage> baws = new ArrayList<FloorAmenityWeightage>();
-		byte floor_status = 1;
+		//byte floor_status = 1;
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderFloorStatus builderFloorStatus = new BuilderFloorStatus();
@@ -1395,6 +1411,7 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("floor_no") int floor_no,
 			@FormDataParam("total_flats") int total_flats,
 			@FormDataParam("status") Integer status,
+			@FormDataParam("status_id") byte floor_status,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
 			@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
 			@FormDataParam("admin_id") int admin_id,
@@ -1402,7 +1419,7 @@ public class ProjectController extends ResourceConfig {
 	) {
 		String [] amenityWeightages = amenity_wts.split(",");
 		List<FloorAmenityWeightage> baws = new ArrayList<FloorAmenityWeightage>();
-		byte floor_status = 1;
+		//byte floor_status = 1;
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderFloorStatus builderFloorStatus = new BuilderFloorStatus();
@@ -1940,6 +1957,7 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("bathroom") Integer bathroom,
 			@FormDataParam("balcony") Integer balcony,
 			@FormDataParam("status") Integer status,
+			@FormDataParam("status_id") byte flat_status,
 			@FormDataParam("possession_date") String possession_date,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
 			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
@@ -1957,7 +1975,7 @@ public class ProjectController extends ResourceConfig {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		byte floor_status = 1;
+		//byte floor_status = 1;
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderFloor builderFloor = new BuilderFloor();
@@ -1981,7 +1999,7 @@ public class ProjectController extends ResourceConfig {
 		builderFlat.setRevenue(0.0);
 		builderFlat.setPossessionDate(possessionDate);
 		builderFlat.setAdminUser(adminUser);
-		builderFlat.setStatus(floor_status);
+		builderFlat.setStatus(flat_status);
 		msg = projectDAO.addBuildingFlat(builderFlat);
 		if(msg.getId() > 0) {
 			builderFlat.setId(msg.getId());
@@ -2076,6 +2094,7 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("bathroom") Integer bathroom,
 			@FormDataParam("balcony") Integer balcony,
 			@FormDataParam("status") Integer status,
+			@FormDataParam("status_id") byte flat_status,
 			@FormDataParam("possession_date") String possession_date,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
 			@FormDataParam("payment_id[]") List<FormDataBodyPart> payment_id,
@@ -2094,7 +2113,7 @@ public class ProjectController extends ResourceConfig {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		byte floor_status = 1;
+		//byte floor_status = 1;
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderFloor builderFloor = new BuilderFloor();
@@ -2113,6 +2132,7 @@ public class ProjectController extends ResourceConfig {
 		builderFlat.setBedroom(bedroom);
 		builderFlat.setBathroom(bathroom);
 		builderFlat.setBalcony(balcony);
+		builderFlat.setStatus(flat_status);
 		builderFlat.setPossessionDate(possessionDate);
 		builderFlat.setAdminUser(adminUser);
 		msg = projectDAO.updateBuildingFlat(builderFlat);

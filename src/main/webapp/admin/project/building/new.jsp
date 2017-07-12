@@ -635,6 +635,10 @@
 </div>
 <%@include file="../../../footer.jsp"%>
 <!-- inline scripts related to this page -->
+<script src="../../../js/bootstrapValidator.min.js"></script>
+<script src="../../../js/bootstrap-datepicker.min.js"></script>
+<script src="../../../js/jquery.form.js"></script>
+<script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <style>
 	.row {
 		margin-bottom:5px;
@@ -653,11 +657,9 @@
 	    margin-bottom:5px;
 	}
 </style>
-<script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
-<script src="${baseUrl}/js/jquery.form.js"></script>
 <script>
 $(".errorMsg").keypress(function(event){
-	return isNumber(event, this)
+	return isNumber(event, this);
 });
 
 function isNumber(evt, element) {
@@ -698,10 +700,16 @@ $('#discount_amount').keypress(function (event) {
 });
 
 $('#possession_date').datepicker({
-	format: "dd MM yyyy"
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#addbuilding').data('bootstrapValidator').revalidateField('possession_date');
 });
 $('#launch_date').datepicker({
-	format: "dd MM yyyy"
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#addbuilding').data('bootstrapValidator').revalidateField('launch_date');
 });
 $('#addbuilding').bootstrapValidator({
 	container: function($field, validator) {
