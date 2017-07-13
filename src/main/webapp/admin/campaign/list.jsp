@@ -66,6 +66,7 @@ campaignLists = new CampaignDAO().getCampaignList();
                                             %></td>
                                             <td class="alignRight">
 <%--                                             	<a href="${baseUrl}/admin/leads/edit.jsp?lead_id=<% out.print(campaignList.getCampaignId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
+													<a href="javascript:deleteCampaign(<% out.print(campaignList.getCampaignId());%>)" class="btn btn-danger icon-btn btn-xs"><i class="fa fa-delete"></i> Delete</a>
                                             </td>
                                             
                                         </tr>
@@ -92,6 +93,18 @@ $(document).ready(function(
         "aaSorting": []
     });
 });
+function deleteCampaign(id) {
+	var b=$("#offer").val();
+	var flag = confirm("Are you sure ? You want to delete Campaign ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/project/campaign/delete/"+id, { }, function(data){
+			alert(data.message);
+			if(data.status == 1) {
+				window.location.reload();
+			}
+		});
+	}
+}
 </script>
 	</body>
 </html>

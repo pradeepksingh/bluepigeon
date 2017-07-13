@@ -1016,4 +1016,24 @@ public class BuyerDAO {
 		}
 	}
 	
+	public ResponseMessage validateBuyer(GlobalBuyer globalBuyer){
+		ResponseMessage responseMessage = new ResponseMessage();
+		String hql = "from GlobalBuyer where pancard = :pancard and password = :password";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("pancard", globalBuyer.getPancard());
+		query.setParameter("password", globalBuyer.getPassword());
+		GlobalBuyer globalBuyer2 = (GlobalBuyer) query.uniqueResult();
+		if(globalBuyer2 != null){
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("User doesn't exists");
+		}else{
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Login successfully");
+		}
+		return responseMessage;
+	}
+	
+	
 }

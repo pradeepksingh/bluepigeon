@@ -686,7 +686,9 @@ $('#floor_weightage').keypress(function (event) {
 function isNumber(evt, element) {
 
     var charCode = (evt.which) ? evt.which : event.keyCode
-
+//    	if($(element).hasClass('errorMsg')){
+//    		alert("Hello");
+//    	}
     if (
         (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
         (charCode < 48 || charCode > 57))
@@ -694,7 +696,9 @@ function isNumber(evt, element) {
 
     return true;
 }   
-
+function notEmpty(){
+	alert($(this).val());
+}
 $('#updatebuilding').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -1015,7 +1019,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control" id="offer_title" name="offer_title[]"   required value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1079,32 +1083,7 @@ function addMoreOffer() {
 function removeOffer(id) {
 	$("#offer-"+id).remove();
 }
-var options = {
-	    fields: {
-	        'offer_title[]': {
-	            validators: {
-	                notEmpty: {
-	                    message: 'Enter a value 1'
-	                }
-	            }
-	        },
-	        'discount[]': {
-	            validators: {
-	                notEmpty: {
-	                    message: 'Enter a value 2'
-	                }
-	            }
-	        },
-	        'discount_amount[]': {
-	            validators: {
-	                notEmpty: {
-	                    message: 'Enter a value 3'
-	                }
-	            }
-	        }
-	    }
-	};
-	$('#updateoffer').bootstrapValidator(options);
+
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
@@ -1218,7 +1197,7 @@ $("#subpbtn").click(function(){
 // //	event.preventDefault();
 // 	//updateProjectBuilding();
 // });
- $(document).ready(function() {
+// $(document).ready(function() {
 $('#updateoffer').bootstrapValidator({
     feedbackIcons: {
         valid: 'glyphicon glyphicon-ok',
@@ -1246,7 +1225,7 @@ $('#updateoffer').bootstrapValidator({
         }
     }
 	});
-});
+//});
 
 </script>
 </body>

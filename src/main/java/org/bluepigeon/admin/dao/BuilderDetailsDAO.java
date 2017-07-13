@@ -938,4 +938,29 @@ public class BuilderDetailsDAO {
 		return responseMessage;
 		
 	}
+	
+	public ResponseMessage updateAllotProjects(List<AllotProject> allotProjectList){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(AllotProject allotProject : allotProjectList){
+			session.update(allotProject);
+		}
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Empolyee Added Successfully.");
+		return responseMessage;
+		
+	}
+	public List<AllotProject> getAllotedrojectsByEmpId(int emp_id){
+		String hql = "from AllotProject where builderEmployee.id = :emp_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("emp_id", emp_id);
+		List<AllotProject> allotProjects = query.list();
+		return allotProjects;
+	}
 }

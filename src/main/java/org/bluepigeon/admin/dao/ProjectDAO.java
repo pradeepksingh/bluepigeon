@@ -3224,7 +3224,7 @@ public class ProjectDAO {
 	}
 	
 	public List<BuilderFlat> getBuilderAllFlatsByBuilderId(int builderId) {
-		String hql = "from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and builderFloor.status=1 and builderFloor.builderBuilding.status=1 and builderFloor.builderBuilding.builderProject.status=1 order by builderFloor.builderBuilding.builderProject.id DESC";
+		String hql = "from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and builderFloor.status=1 and builderFloor.builderBuilding.status=1 and builderFloor.builderBuilding.builderProject.status=1 and status=1 order by builderFloor.builderBuilding.builderProject.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
