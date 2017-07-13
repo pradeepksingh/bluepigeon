@@ -25,7 +25,7 @@
    	
    BuilderEmployee builder = new BuilderEmployee();
  	int p_user_id = 0;
- 	List<City> city_list = new CityNamesImp().getCityActiveNames();
+ 	List<City> city_list = new CityNamesImp().getCityNames();
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -118,12 +118,26 @@
                   
                     <!-- /.col-lg-12 -->
                 </div>
+             
+        
+
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
                              <!-- <h4 class="page-title">Add New Project</h4>
                              <br>-->
+                                <ul class="nav tabs-horizontal">
+                                    <li class="tab nav-item" aria-expanded="false">
+                                        <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"><span>+ New Campaign</span></a>
+                                    </li>
+                                     <li class="tab nav-item">
+                                        <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages1"><span>Select Recipients</span></a>
+                                    </li>
+                                </ul>
+                                
                                  <form id="addcampaign" name="addcampaign" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                              <div class="tab-content"> 
+                              
                                <div id="vimessages" class="tab-pane active" aria-expanded="false">
                                 <div class="col-12">
                                		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(builder.getId());%>"/>
@@ -236,6 +250,7 @@
 	                                 </div>
                                  </div>
                                </div>
+                             </div>
                               </form>  
                         </div>
                         </div>
@@ -256,7 +271,6 @@
 $('#set_date').datepicker({
 	format: "dd MM yyyy"
 });
-
 $("#city_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/projectlist/"+$("#city_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Project</option>';
@@ -273,7 +287,6 @@ $("#city_id").change(function(){
  		$("#appendbuyer").html(checkbox);
 	},'json');
 });
-
 $("#project_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/building/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
@@ -306,7 +319,6 @@ $("#building_id").change(function(){
 		$("#appendbuyer").html(checkbox);
 	},'json');
 });
-
 $("#flat_id").change(function(){
 	$.get("${baseUrl}/webapi/campaign/flat/buyer/names/"+$("#flat_id").val(),{ }, function(data){
 		var checkbox = '';
@@ -318,7 +330,6 @@ $("#flat_id").change(function(){
 		$("#appendbuyer").html(checkbox);
 	},'json');
 });
-
 $('#addcampaign').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -402,7 +413,6 @@ function addCampaign() {
 	 	};
    	$('#addcampaign').ajaxSubmit(options);
 }
-
 function showAddRequest(formData, jqForm, options){
 	$("#response").hide();
    	var queryString = $.param(formData);
@@ -424,8 +434,6 @@ function showAddResponse(resp, statusText, xhr, $form){
         window.location.href = "${baseUrl}/builder/campaign/list.jsp";
   	}
 }
-
-
 function show()
 {
 	$("#vimessages1").show();
