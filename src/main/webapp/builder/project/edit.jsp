@@ -904,9 +904,12 @@
 																		<div class="form-group" id="error-offer_title">
 																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 																			<div class="col-sm-8">
-																				<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
+																				<div>
+																					<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
+																				</div>
+																				<div class="messageContainer"></div>
 																			</div>
-																			<div class="messageContainer"></div>
+																			
 																		</div>
 																	</div>
 																	<div class="col-lg-3 margin-bottom-5">
@@ -1043,14 +1046,14 @@
 													
 												</div>
 											</div>
+											<div class="row">
+												 <div class="offset-sm-5 col-sm-7">
+	                                        		<button type="submit" id="offerbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+	                                   			</div>
+	                                   		</div>
 											</form>
 									</div>
 	                            
-                                   <div class="offset-sm-5 col-sm-7">
-                                        <button type="submit" id="offerbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
-                                   </div>
-                              
-                               
                                 </div>
                            </div>
                         </div>
@@ -1271,6 +1274,80 @@ $("#city_id").change(function(){
 		},'json');
 	}
 });
+
+// $('#offerfrm').bootstrapValidator({
+// 	container: function($field, validator) {
+// 		return $field.parent().next('.messageContainer');
+//    	},
+//     feedbackIcons: {
+//         validating: 'glyphicon glyphicon-refresh'
+//     },
+//    // excluded: ':disabled',
+//     fields: {
+//     	'offer_title[]': {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Offer title is required and cannot be empty'
+//                 }
+//             }
+//         }
+//     }
+// }).on('success.form.bv', function(event,data) {
+// 	// Prevent form submission
+// 	event.preventDefault();
+// 	alert("success");
+// 	//updateProject();
+// });
+    
+$('#offerfrm')
+.bootstrapValidator({
+    message: 'This value is not valid',
+    feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    fields: {
+        'offer_title[]': {
+            validators: {
+                notEmpty: {
+                    message: 'The textbox field is required'
+                }
+            }
+        },
+        'discount[]': {
+            validators: {
+                notEmpty: {
+                    message: 'The checkbox field is required'
+                }
+            }
+        },
+        'discount_amount[]': {
+            validators: {
+                notEmpty: {
+                    message: 'The radio field is required'
+                }
+            }
+        }
+    }
+})
+.on('error.field.bv', function(e, data) {
+    console.log('error.field.bv -->', data.element);
+    alert('error.field.bv -->', data.element);
+})
+.on('success.field.bv', function(e, data) {
+    console.log('success.field.bv -->', data.element);
+    alert('success.field.bv -->', data.element);
+})
+.on('added.field.bv', function(e, data) {
+    console.log('Added element -->', data.field, data.element);
+    alert('Added element -->', data.field, data.element);
+})
+.on('removed.field.bv', function(e, data) {
+    console.log('Removed element -->', data.field, data.element);
+    alert('Removed element -->', data.field, data.element);
+});
+
 $('#basicfrm').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -1663,7 +1740,62 @@ $("#paymentbtn").click(function(){
 	}
 });
 
-$("#offerbtn").click(function(){
+// $("#offerbtn").click(function(){
+// 	var offerInfo = [];
+// 	var discount = [];
+// 	var amount = [];
+// 	var description = [];
+// 	var type = [];
+// 	var status = [];
+// 	$('input[name="discount[]"]').each(function(index) {
+// 		discount.push($(this).val());
+// 	});
+// 	$('input[name="discount_amount[]"]').each(function(index) {
+// 		amount.push($(this).val());
+// 	});
+// 	$('input[name="description[]"]').each(function(index) {
+// 		description.push($(this).val());
+// 	});
+// 	$('select[name="offer_type[]"] option:selected').each(function(index) {
+// 		type.push($(this).val());
+// 	});
+// 	$('select[name="offer_status[]"] option:selected').each(function(index) {
+// 		status.push($(this).val());
+// 	});
+// 	$('input[name="offer_title[]"]').each(function(index) {
+// 		if($(this).val() != "") {
+// 			offerInfo.push({title:$(this).val(),per:discount[index],amount:amount[index],description:description[index],type:type[index],status:status[index],builderProject:{id:$("#id").val()}});
+// 		}
+// 	});
+// 	var project = {id:$("#id").val()};
+// 	var final_data = {builderProjectOfferInfos:offerInfo,builderProject:project}
+// 	if(offerInfo.length > 0) {
+// 		$.ajax({
+// 		    url: '${baseUrl}/webapi/project/offer/update',
+// 		    type: 'POST',
+// 		    data: JSON.stringify(final_data),
+// 		    contentType: 'application/json; charset=utf-8',
+// 		    dataType: 'json',
+// 		    async: false,
+// 		    success: function(data) {
+// 				if (data.status == 0) {
+// 					alert(data.message);
+// 				} else {
+// 					alert(data.message);
+// 				}
+// 			},
+// 			error : function(data)
+// 			{
+// 				alert("Fail to save data");
+// 			}
+			
+// 		});
+// 	} else {
+// 		alert("Please enter offer details");
+// 	}
+// });
+
+function addOffers(){
 	var offerInfo = [];
 	var discount = [];
 	var amount = [];
@@ -1716,7 +1848,7 @@ $("#offerbtn").click(function(){
 	} else {
 		alert("Please enter offer details");
 	}
-});
+}
 
 // function addMoreOffer() {
 // 	var offers = parseInt($("#offer_count").val());
@@ -1776,7 +1908,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control"  name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1785,7 +1917,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount">'
 				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control discount" id="discount" name="discount[]" value="" onkeypress=" return isNumber(event, this);"/>'
+					+'<input type="text" class="form-control discount"  name="discount[]" value="" onkeypress=" return isNumber(event, this);"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1794,7 +1926,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="" onkeypress=" return isNumber(event, this);"/>'
+					+'<input type="text" class="form-control" name="discount_amount[]" value="" onkeypress=" return isNumber(event, this);"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1842,18 +1974,18 @@ function removeOffer(id) {
 	$("#offer-"+id).remove();
 }
 
-$('#addMoreOffers').click(function () {
-    var rowId = $('.row').length + 1;
-    var validator = $('#myForm').data('bootstrapValidator');
-    var klon = template.clone();          
-    klon.attr('id', 'line_' + rowId)
-        .insertAfter($('.row').last())
-        .find('input')
-        .each(function () {
-            $(this).attr('id', $(this).attr('id').replace(/_(\d*)$/, "_"+rowId));
-            validator.addField($(this));
-        })                   
-});
+// $('#addMoreOffers').click(function () {
+//     var rowId = $('.row').length + 1;
+//     var validator = $('#myForm').data('bootstrapValidator');
+//     var klon = template.clone();          
+//     klon.attr('id', 'line_' + rowId)
+//         .insertAfter($('.row').last())
+//         .find('input')
+//         .each(function () {
+//             $(this).attr('id', $(this).attr('id').replace(/_(\d*)$/, "_"+rowId));
+//             validator.addField($(this));
+//         })                   
+// });
 
 
 function addMoreSchedule() {

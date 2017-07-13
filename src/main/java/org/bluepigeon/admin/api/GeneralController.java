@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import javax.mail.internet.AddressException;
@@ -27,14 +28,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.tomcat.jni.Time;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
-
+import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.model.GlobalBuyer;
 
 @Path("api1.0/post/")
 public class GeneralController extends ResourceConfig {
@@ -42,4 +45,29 @@ public class GeneralController extends ResourceConfig {
 	public GeneralController() {
 		register(MultiPartFeature.class);
     }
+	
+	@POST
+	@Path("signup")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage signupUser(
+			@FormParam("pancard") String pancard,
+			@FormParam("password") String password){
+		ResponseMessage responseMessage = new ResponseMessage();
+		String characters = "0123456789";
+		String otp = RandomStringUtils.random( 6, characters );
+		responseMessage.setData(otp);
+		return responseMessage;
+	}
+	
+	@POST
+	@Path("login")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage loginUser(@FormParam("pancard") String pancard,
+			@FormParam("password") String password){
+		ResponseMessage responseMessage = new ResponseMessage();
+		GlobalBuyer globalBuyer = new GlobalBuyer();
+		globalBuyer.setPancard(pancard);
+		globalBuyer.setPassword(password);
+		return responseMessage = new BuyerDAO().validateBuyer(globalBuyer);
+	}
 }

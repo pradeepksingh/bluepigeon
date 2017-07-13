@@ -25,7 +25,7 @@
    	
    BuilderEmployee builder = new BuilderEmployee();
  	int p_user_id = 0;
- 	List<City> city_list = new CityNamesImp().getCityNames();
+ 	List<City> city_list = new CityNamesImp().getCityActiveNames();
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
