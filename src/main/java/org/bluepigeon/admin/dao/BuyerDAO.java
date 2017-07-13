@@ -1035,5 +1035,27 @@ public class BuyerDAO {
 		return responseMessage;
 	}
 	
+	public ResponseMessage isUserExist(GlobalBuyer globalBuyer){
+		String hql = "from GlobalBuyer where pancard=:pancard";
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Session innerSession = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		GlobalBuyer  globalBuyer2 = (GlobalBuyer) query.uniqueResult();
+		if(globalBuyer2 != null){
+			globalBuyer2.setOtp(globalBuyer.getOtp());
+			innerSession.beginTransaction();
+			innerSession.update(globalBuyer2);
+			innerSession.getTransaction().commit();
+			innerSession.close();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage(globalBuyer.getOtp());
+		}else{
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("User Not registered");
+		}
+		return responseMessage;
+	}
 	
 }
