@@ -218,7 +218,7 @@ public class CampaignDAO {
 	 */
 	public List<CampaignList> getActiveCampaignListByBuilderId(int builderId){
 		List<CampaignList> campaignLists = new ArrayList<CampaignList>();
-		String hql = "from Campaign where builderProject.builder.id = :builder_id and builderProject.status=1 and isDeleted=0";
+		String hql = "from Campaign where builderProject.builder.id = :builder_id and isDeleted=0";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);

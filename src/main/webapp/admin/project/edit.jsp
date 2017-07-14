@@ -855,9 +855,11 @@
 													<div class="form-group" id="error-schedule">
 														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
+															<div>
+																<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
+															</div>
+															<div class="messageContainer"></div>
 														</div>
-														<div class="messageContainer col-sm-offset-5"></div>
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
@@ -866,7 +868,7 @@
 														<div class="col-sm-4">
 															<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 														</div>
-														<div class="messageContainer col-sm-offset-5"></div>
+														<div class="messageContainer"></div>
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
@@ -875,7 +877,7 @@
 														<div class="col-sm-6">
 															<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="amount" name="amount[]" value="<% if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/>
 														</div>
-														<div class="messageContainer col-sm-offset-5"></div>
+														<div class="messageContainer"></div>
 													</div>
 												</div>
 												<div class="col-lg-1">
@@ -1102,7 +1104,7 @@
 											<div class="row">
 												<div class="col-lg-12">
 													<div class="col-sm-12">
-														<button type="button" class="btn btn-success btn-sm" id="offerbtn">SAVE</button>
+														<button type="submit" class="btn btn-success btn-sm" id="offerbtn">SAVE</button>
 													</div>
 												</div>
 											</div>
@@ -1226,10 +1228,6 @@
 </div>
 <%@include file="../../footer.jsp"%>
 <!-- inline scripts related to this page -->
-<script src="../../js/bootstrapValidator.min.js"></script>
-<script src="../../js/bootstrap-datepicker.min.js"></script>
-<script src="../../js/jquery.form.js"></script>
-<script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <style>
 	.row {
 		margin-bottom:5px;
@@ -1251,9 +1249,11 @@
 	    margin-bottom:5px;
 	}
 </style>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/css/bootstrap-select.min.css" />
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/js/bootstrap-select.min.js"></script>
 <script>
 // $(".errorMsg").keypress(function(event){
 // 	alert("Hello");
@@ -1264,18 +1264,6 @@ $("input.errorMsg").keypress(function(event){
 	alert("Hello");
 	return isNumber(event, this)
 });
-
-// function isNumber(evt, element) {
-
-//     var charCode = (evt.which) ? evt.which : event.keyCode
-
-//     if (
-//         (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
-//         (charCode < 48 || charCode > 57))
-//         return false;
-
-//     return true;
-// } 
 
 $('#latitude').keypress(function (event) {
     return isNumber(event, this)
@@ -1357,10 +1345,10 @@ $("#building_weightage").keypress(function(event){
 function isNumber(evt, element) {
 
     var charCode = (evt.which) ? evt.which : event.keyCode
-	if(($(element).val() == "")  && ($(element).hasClass('notEmpty'))){
-		alert("notEmpty");
-		notEmpty();
-	}
+// 	if(($(element).val() == "")  && ($(element).hasClass('notEmpty'))){
+// 		alert("notEmpty");
+// 		notEmpty();
+// 	}
     if (
         (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
         (charCode < 48 || charCode > 57))
@@ -1427,6 +1415,44 @@ $("#city_id").change(function(){
 		},'json');
 	}
 });
+
+$('#offerfrm').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	'offer_title[]':{
+    		validators: {
+	            notEmpty: {
+	                message: 'offer title is required and cannot be empty'
+	            }
+	        }
+	    },
+	    'discount[]': {
+	        validators: {
+	            notEmpty: {
+	                message: 'discount is required and cannot be empty'
+	            }
+	        }
+	    },
+	    'discount_amount[]': {
+	        validators: {
+	            notEmpty: {
+	                message: 'discount amount is required and cannot be empty'
+	            }
+	        }
+	    }
+    		
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	updateOffers();
+});  
 $('#basicfrm').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -1816,44 +1842,181 @@ function saveProjectDetails(){
 // 	}
 // });
 
-$("#paymentfrm").bootstrapValidator({
-	container: function($field, validator) {
-		return $field.parent().next('.messageContainer');
-   	},
-    feedbackIcons: {
-        validating: 'glyphicon glyphicon-refresh'
-    },
-    excluded: ':disabled',
-    fields: {
-    	'schedule[]': {
-    		validators: {
-                notEmpty: {
-                    message: 'Schedule is required and cannot be empty'
+// $("#paymentfrm").bootstrapValidator({
+// 	container: function($field, validator) {
+// 		return $field.parent().next('.messageContainer');
+//    	},
+//     feedbackIcons: {
+//         validating: 'glyphicon glyphicon-refresh'
+//     },
+//     excluded: ':disabled',
+//     fields: {
+//     	'schedule[]': {
+//     		validators: {
+//                 notEmpty: {
+//                     message: 'Schedule is required and cannot be empty'
+//                 }
+//             },
+//            // $('#paymentfrm').bootstrapValidator('revalidateField', 'schedule[]');
+//         },
+//         'payable[]': {
+//     		validators: {
+//                 notEmpty: {
+//                     message: 'Payment is required and cannot be empty'
+//                 },
+//             }
+//         },
+//        'amount[]':{
+//         	validators: {
+//                 notEmpty: {
+//                     message: 'Amount is required and cannot be empty'
+//                 },
+//             }
+//         }
+//     }
+   
+// }).on('success.form.bv', function(event,data) {
+// 	// Prevent form submission
+// 	event.preventDefault();
+	
+// 	updatePaymentSchudle();
+// });
+
+
+//$(document).ready(function() {
+    $('#paymentfrm').find('[name="schedule[]"]')
+    .selectpicker()
+      .change(function(e) {
+        $('#bootstrapSelectForm').bootstrapValidator('revalidateField', 'schedule[]');
+      })
+      .end()
+  .find('[name="payable[]"]')
+    .selectpicker()
+     .change(function(e) {
+       $('#bootstrapSelectForm').bootstrapValidator('revalidateField', 'payable[]');
+     })
+     .end()
+     find('[name="amount[]"]')
+    .selectpicker()
+     .change(function(e) {
+       $('#bootstrapSelectForm').bootstrapValidator('revalidateField', 'amount[]');
+     })
+     .end()
+        .bootstrapValidator({
+        	container: function($field, validator) {
+        		return $field.parent().next('.messageContainer');
+           	},
+        feedbackIcons: {
+          //  valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+           //// validating: 'glyphicon glyphicon-refresh'
+        },
+//         fields: {
+//          	'schedule[]': {
+//         		validators: {
+//                     notEmpty: {
+//                         message: 'Schedule is required and cannot be empty'
+//                     }
+//                 },
+//                // $('#paymentfrm').bootstrapValidator('revalidateField', 'schedule[]');
+//             },
+//             'payable[]': {
+//         		validators: {
+//                     notEmpty: {
+//                         message: 'Payment is required and cannot be empty'
+//                     },
+//                 }
+//             },
+//            'amount[]':{
+//             	validators: {
+//                     notEmpty: {
+//                         message: 'Amount is required and cannot be empty'
+//                     },
+//                 }
+//             }
+//         }
+        
+        
+        fields: {
+        	'schedule[]': {
+                validators: {
+                    callback: {
+                        message: 'Schedule is required and cannot be empty',
+                        callback: function(value, validator, $field) {
+                            /* Get the selected options */
+                            var options = validator.getFieldElements('schedule[]').val();
+                            return options != null;
+                        }
+                    }
+                }
+            },
+            'payable[]': {
+                validators: {
+                    callback: {
+                        message: 'Payable is required and cannot be empty',
+                        callback: function(value, validator, $field) {
+                            /* Get the selected options */
+                            var options = validator.getFieldElements('payable[]').val();
+                            return options != null;
+                        }
+                    }
+                }
+            },
+            'amount[]': {
+                validators: {
+                    callback: {
+                        message: 'Amount is required and cannot be empty',
+                        callback: function(value, validator, $field) {
+                            /* Get the selected options */
+                            var options = validator.getFieldElements('amount[]').val();
+                            return options != null;
+                        }
+                    }
                 }
             }
-        },
-        'payable[]': {
-    		validators: {
-                notEmpty: {
-                    message: 'Payment is required and cannot be empty'
-                },
-            }
-        },
-       'amount[]':{
-        	validators: {
-                notEmpty: {
-                    message: 'Amount is required and cannot be empty'
-                },
-            }
         }
-    }
-}).on('success.form.bv', function(event,data) {
-	// Prevent form submission
-	event.preventDefault();
-	
-	updatePaymentSchudle();
-});
+    }).on('success.form.bv', function(event,data) {
+    	// Prevent form submission
+    	event.preventDefault();
+    	
+    	updatePaymentSchudle();
+    });
+ 
+  //  .on('keyup', 'input[name="schedule[]"], input[name="payable[]"],input[name="amount[]"]', function(e) {
+    //	alert("Hello");
+//         var s = $('#paymentfrm').find('[name="schedule[]"]').val(),
+//             m = $('#paymentfrm').find('[name="payable[]"]').val();  //<= keep ; here 
+// 		//alert(s+m);
+//             var count=parseInt($("#schedule_count").val());
+//             $($('#paymentfrm').find('[name="schedule[]"]')).each(function(index){
+//             	if(s==''){
+//             	//alert("This dot val :: "+$(this).val());
+//             		$('#s-'+count).html('');
+//             		$('#s-'+count).append('Error in schedule');
+//             		alert("Schudle count :: "+count);
+//             }
+//             	//count++;
+//             });
+        // Set the user_info field value
+       // $('#paymentfrm').find('[name="schedule"]').val(y === '');
 
+        // Revalidate it
+     //   $('#paymentfrm').bootstrapValidator('revalidateField', 'schedule[]');
+   // });
+//}); 
+
+// function validate(){
+
+// 	var AnswerInput = document.getElementsByName('schedule[]');
+// 	for (i=0; i<AnswerInput.length; i++)
+// 		{
+// 		 if (AnswerInput[i].value == "")
+// 			{
+// 		 	 alert('Complete all the fields');		
+// 		 	 return false;
+// 			}
+// 		}
+// }
 function updatePaymentSchudle(){
 		var options = {
 		 		target : '#paymentresponse', 
@@ -1885,7 +2048,7 @@ function showPaymentResponse(resp, statusText, xhr, $form){
         alert(resp.message);
   	}
 }
-$("#offerbtn").click(function(){
+function updateOffers(){
 	var offerInfo = [];
 	var discount = [];
 	var amount = [];
@@ -1938,7 +2101,7 @@ $("#offerbtn").click(function(){
 	} else {
 		alert("Please enter offer details");
 	}
-});
+}
 
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
@@ -1958,7 +2121,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount">'
 				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control  notEmpty" required id="discount" name="discount[]" value="" onkeyup="return isNumber(event, this);"/>'
+					+'<input type="text" class="form-control  notEmpty" required id="discount" name="discount[]" value="" onkeypress="return isNumber(event, this);"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -2024,9 +2187,12 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-schedule">'
 				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-				+'<input type="text" class="form-control" required name="schedule[]"/>'
+				+'<div>'
+				+'<input type="text" class="form-control" id="schedule" required name="schedule[]"/>'
 				+'</div>'
-				+'<div class="messageContainer col-sm-offset-5"></div>'
+// 				+'<div  id="s-'+schedule_count+'"></div>'
+				+'<div class="messageContainer"></div>'
+				+'</div>'
 				+'</div>'
 				+'</div>'
 				+'<div class="col-lg-3 margin-bottom-5">'

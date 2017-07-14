@@ -396,7 +396,7 @@
 											<div class="row">
 												<div class="col-lg-12">
 													<div class="col-sm-12">
-														<button type="button" name="paymentbtn" class="btn btn-success btn-sm" id="paymentbtn" onclick="updateBuildingPayments();">SAVE</button>
+														<button type="submit" name="paymentbtn" class="btn btn-success btn-sm" id="paymentbtn" >SAVE</button>
 													</div>
 												</div>
 											</div>
@@ -423,33 +423,42 @@
 												<div class="col-lg-12" style="padding-bottom:5px;">
 													<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(buildingOfferInfo.getId()); %>);" class="btn btn-danger btn-xs">x</a></span>
 												</div>
+												<div class="row">
 												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-offer_title">
 														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>"/>
+															<div>
+																<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>"/>
+															</div>
+															<div class="messageContainer"></div>
 														</div>
-														<div class="messageContainer"></div>
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-discount">
 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="discount" name="discount[]" value="<% out.print(buildingOfferInfo.getDiscount()); %>"/>
+															<div>
+																<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="discount" name="discount[]" value="<% out.print(buildingOfferInfo.getDiscount()); %>"/>
+															</div>
+															<div class="messageContainer"></div>
 														</div>
-														<div class="messageContainer"></div>
 													</div>
 												</div>
 												<div class="col-lg-4 margin-bottom-5">
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="discount_amount" onkeypress=" return isNumber(event, this);" name="discount_amount[]" value="<% out.print(buildingOfferInfo.getAmount()); %>"/>
+															<div>
+																<input type="text" class="form-control" id="discount_amount" onkeypress=" return isNumber(event, this);" name="discount_amount[]" value="<% out.print(buildingOfferInfo.getAmount()); %>"/>
+															</div>
+															<div class="messageContainer"></div>
 														</div>
-														<div class="messageContainer"></div>
 													</div>
 												</div>
+											</div>
+											<div class="row">
 												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-applicable_on">
 														<label class="control-label col-sm-4">Description </label>
@@ -484,6 +493,7 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
+											</div>
 											</div>
 											<% } %>
 										</div>
@@ -683,6 +693,44 @@ $('#amenity_weightage').keypress(function (event) {
 $('#floor_weightage').keypress(function (event) {
     return isNumber(event, this)
 });
+$('#post').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease use only numbers.'); return ''; } ) );
+});
+$('#tenure').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease use only numbers.'); return ''; } ) );
+});
+$('#base_rate').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#rise_rate').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#maintenance').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#amenity_rate').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#parking').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#stamp_duty').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#tax').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#vat').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#tech_fee').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#payable').keypress(function (event) {
+    return isNumber(event, this)
+});
 function isNumber(evt, element) {
 
     var charCode = (evt.which) ? evt.which : event.keyCode
@@ -700,6 +748,43 @@ function notEmpty(){
 	alert($(this).val());
 }
 $('#updatebuilding').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	'schedule[]': {
+            validators: {
+                notEmpty: {
+                    message: 'Schedule is required and cannot be empty'
+                }
+            }
+        },
+        'payable[]': {
+            validators: {
+                notEmpty: {
+                    message: 'Payable is required and cannot be empty'
+                }
+            }
+        },
+        'amount':{
+        	 validators: {
+                 notEmpty: {
+                     message: 'Amount of floors is required and cannot be empty'
+                 }
+             }
+        }
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	updateBuildingPayments();
+});
+
+$('#updatepayment').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},
@@ -1200,26 +1285,29 @@ $("#subpbtn").click(function(){
 // $(document).ready(function() {
 $('#updateoffer').bootstrapValidator({
     feedbackIcons: {
-        valid: 'glyphicon glyphicon-ok',
+     //   valid: 'glyphicon glyphicon-ok',
         invalid: 'glyphicon glyphicon-remove',
-        validating: 'glyphicon glyphicon-refresh'
+      //  validating: 'glyphicon glyphicon-refresh'
     },
     fields: {
-        question: {
-            validators: {
-                notEmpty: {
-                    message: 'The question required and cannot be empty'
-                }
-            }
-        },
         'offer_title[]': {
             validators: {
                 notEmpty: {
                     message: 'The offer title required and cannot be empty'
-                },
-                stringLength: {
-                    max: 100,
-                    message: 'The option must be less than 100 characters long'
+                }
+            },
+        },
+        'discount[]':{
+        	 validators: {
+                 notEmpty: {
+                     message: 'Discount required and cannot be empty'
+                 }
+             }
+        },
+        'discount_amount[]':{
+        	validators: {
+                notEmpty: {
+                    message: 'Discount amount required and cannot be empty'
                 }
             }
         }

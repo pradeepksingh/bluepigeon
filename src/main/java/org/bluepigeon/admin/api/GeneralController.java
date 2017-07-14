@@ -42,6 +42,7 @@ import org.bluepigeon.admin.model.GlobalBuyer;
 @Path("api1.0/post/")
 public class GeneralController extends ResourceConfig {
 	@Context ServletContext context;
+	GlobalBuyer globalBuyer=new GlobalBuyer();
 	public GeneralController() {
 		register(MultiPartFeature.class);
     }
@@ -49,13 +50,17 @@ public class GeneralController extends ResourceConfig {
 	@POST
 	@Path("signup")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseMessage signupUser(
 			@FormParam("pancard") String pancard,
 			@FormParam("password") String password){
 		ResponseMessage responseMessage = new ResponseMessage();
 		String characters = "0123456789";
 		String otp = RandomStringUtils.random( 6, characters );
-		responseMessage.setData(otp);
+		globalBuyer.setPancard(pancard);
+		globalBuyer.setPassword(password);
+		globalBuyer.setOtp(otp);
+		responseMessage = new BuyerDAO().isUserExist(globalBuyer);
 		return responseMessage;
 	}
 	
@@ -68,6 +73,31 @@ public class GeneralController extends ResourceConfig {
 		GlobalBuyer globalBuyer = new GlobalBuyer();
 		globalBuyer.setPancard(pancard);
 		globalBuyer.setPassword(password);
-		return responseMessage = new BuyerDAO().validateBuyer(globalBuyer);
+		responseMessage = new BuyerDAO().validateBuyer(globalBuyer);
+		 return responseMessage;
+	}
+	
+	@POST
+	@Path("opt")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage verifyOtp(@FormParam("otp") String otp){
+		ResponseMessage responseMessage = new ResponseMessage();
+		GlobalBuyer globalBuyer = new GlobalBuyer();
+		globalBuyer.setOtp(otp);
+		
+		return responseMessage;
+	}
+	
+	
+	@POST
+	@Path("forgotpassword")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage retrivePassword(@FormParam("pancard") String pancard){
+		ResponseMessage responseMessage = new ResponseMessage();
+		
+		
+		return responseMessage;
+		
+		
 	}
 }

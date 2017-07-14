@@ -106,18 +106,22 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Building Name </label>
 													<div class="col-sm-7">
-														<input type="text" class="form-control" id="name" name="name" />
+														<div>
+															<input type="text" class="form-control" id="name" name="name" />
+														</div>
+														<div class="messageContainer"></div>
 													</div>
-													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-6">Total Floors </label>
 													<div class="col-sm-6">
-														<input type="text" class="form-control" id="total_floor" name="total_floor" />
+														<div>
+															<input type="text" class="form-control" id="total_floor" name="total_floor" />
+														</div>
+														<div class="messageContainer"></div>
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
 										</div>
@@ -126,18 +130,22 @@
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-5">Launch Date <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
-														<input type="text" class="form-control" id="launch_date" name="launch_date"/>
+														<div>
+															<input type="text" class="form-control" id="launch_date" name="launch_date"/>
+														</div>
+														<div class="messageContainer"></div>
 													</div>
-													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Possession Date </label>
 													<div class="col-sm-7">
-														<input type="text" class="form-control" id="possession_date" name="possession_date" />
+														<div>
+															<input type="text" class="form-control" id="possession_date" name="possession_date" />
+														</div>
+														<div class="messageContainer"></div>
 													</div>
-													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -710,6 +718,45 @@ $('#launch_date').datepicker({
 	format: "dd M yyyy"
 }).on('change',function(e){
 	 $('#addbuilding').data('bootstrapValidator').revalidateField('launch_date');
+});
+
+$('#post').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease use only numbers.'); return ''; } ) );
+});
+$('#tenure').keyup(function() {
+    var $th = $(this);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease use only numbers.'); return ''; } ) );
+});
+$('#base_rate').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#rise_rate').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#maintenance').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#amenity_rate').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#parking').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#stamp_duty').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#tax').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#vat').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#tech_fee').keypress(function (event) {
+    return isNumber(event, this)
+});
+$('#payable').keypress(function (event) {
+    return isNumber(event, this)
 });
 $('#addbuilding').bootstrapValidator({
 	container: function($field, validator) {
