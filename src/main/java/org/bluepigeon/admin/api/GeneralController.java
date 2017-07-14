@@ -50,7 +50,7 @@ public class GeneralController extends ResourceConfig {
 	@POST
 	@Path("signup")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseMessage signupUser(
 			@FormParam("pancard") String pancard,
 			@FormParam("password") String password){
@@ -82,9 +82,8 @@ public class GeneralController extends ResourceConfig {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage verifyOtp(@FormParam("otp") String otp){
 		ResponseMessage responseMessage = new ResponseMessage();
-		GlobalBuyer globalBuyer = new GlobalBuyer();
-		globalBuyer.setOtp(otp);
-		
+	
+		responseMessage = new BuyerDAO().validateOtp(otp,globalBuyer.getPassword());
 		return responseMessage;
 	}
 	

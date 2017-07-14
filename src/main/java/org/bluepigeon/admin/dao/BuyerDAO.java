@@ -1018,19 +1018,25 @@ public class BuyerDAO {
 	
 	public ResponseMessage validateBuyer(GlobalBuyer globalBuyer){
 		ResponseMessage responseMessage = new ResponseMessage();
-		String hql = "from GlobalBuyer where pancard = :pancard and password = :password";
+		String hql = "from GlobalBuyer where pancard = :pancard";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("pancard", globalBuyer.getPancard());
-		query.setParameter("password", globalBuyer.getPassword());
-		GlobalBuyer globalBuyer2 = (GlobalBuyer) query.uniqueResult();
+		try{
+		GlobalBuyer globalBuyer2 = (GlobalBuyer) query.list().get(0);
 		if(globalBuyer2 != null){
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("User doesn't exists");
 		}else{
 			responseMessage.setStatus(1);
 			responseMessage.setMessage("Login successfully");
+			responseMessage.setData(globalBuyer2);
+		}
+		}catch(Exception e){
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("User doesn't exists");
+			//e.printStackTrace();
 		}
 		return responseMessage;
 	}
@@ -1042,7 +1048,9 @@ public class BuyerDAO {
 		Session session = hibernateUtil.openSession();
 		Session innerSession = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		GlobalBuyer  globalBuyer2 = (GlobalBuyer) query.uniqueResult();
+		query.setParameter("pancard", globalBuyer.getPancard());
+		try{
+		GlobalBuyer  globalBuyer2 = (GlobalBuyer) query.list().get(0);
 		if(globalBuyer2 != null){
 			globalBuyer2.setOtp(globalBuyer.getOtp());
 			innerSession.beginTransaction();
@@ -1053,9 +1061,37 @@ public class BuyerDAO {
 			responseMessage.setMessage(globalBuyer.getOtp());
 		}else{
 			responseMessage.setStatus(0);
-			responseMessage.setMessage("User Not registered");
+			responseMessage.setMessage("Unregistered User");
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Unregistered User");
 		}
 		return responseMessage;
 	}
 	
+	public ResponseMessage validateOtp(String otp, String password){
+		ResponseMessage responseMessage = new ResponseMessage();
+		String hql = "from GlobalBuyer where otp = :otp";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		GlobalBuyer globalBuyer = (GlobalBuyer) query.uniqueResult();
+		if(globalBuyer != null){
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Unregisted user. Please register with us to use this app");
+		}else{
+			Session updatesession = hibernateUtil.openSession();
+			updatesession.beginTransaction();
+			globalBuyer.setPassword(password);
+			updatesession.update(globalBuyer);
+			updatesession.getTransaction().commit();
+			updatesession.close();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("User registered sucessfully.");
+		}
+		
+		return responseMessage;
+	}
 }

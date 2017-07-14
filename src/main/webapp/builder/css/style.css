@@ -15380,3 +15380,8 @@ a.fc-event:not([href]):not([tabindex]) {
     margin-top: -1.5em;
   }
 }
+.img-fix{
+	    padding: 5%;
+    width: 200px;
+    height: 200px;
+}

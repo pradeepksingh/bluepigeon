@@ -136,53 +136,50 @@
                                 </ul>
                                 
                                  <form id="addcampaign" name="addcampaign" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-                              <div class="tab-content"> 
-                              
-                               <div id="vimessages" class="tab-pane active" aria-expanded="false">
-                                <div class="col-12">
-                               		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(builder.getId());%>"/>
-                                	 <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(p_user_id); %>" />
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Campaign Title*</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="title" name="title">
-                                    </div>
-                                     <label for="example-search-input" class="col-3 col-form-label">Terms</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="terms" name="terms">
-                                    </div>
-                                </div>
+                             		 <div class="tab-content"> 
+                               			<div id="vimessages" class="tab-pane active" aria-expanded="false">
+			                                <div class="col-12">
+			                               		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(builder.getId());%>"/>
+			                                	 <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(p_user_id); %>" />
+			                                	<div class="form-group row">
+	                                    			<label for="example-search-input" class="col-3 col-form-label">Campaign Title*</label>
+			                                    	<div class="col-3">
+			                                        	<input class="form-control" type="text" id="title" name="title">
+			                                    	</div>
+	                                     			<label for="example-search-input" class="col-3 col-form-label">Terms</label>
+			                                    	<div class="col-3">
+			                                        	<input class="form-control" type="text" id="terms" name="terms">
+			                                    	</div>
+                               			 		</div>
+			                                 	<div class="form-group row">
+				                                    <label for="example-search-input" class="col-3 col-form-label">Campaign Type*</label>
+				                                    <div class="col-3">
+				                                      <select name="campaign_type" id="campaign_type" class="form-control">
+									                 	   	<option value="">Select Campaign</option>
+									                 	   	<option value="1">New Project</option>
+									                 	   	<option value="2">New Property</option>
+									                 	   	<option value="3">Offers</option>
+									                 	   	<option value="4">Event</option>
+									                 	   	<option value="5">Referral</option>
+											       	  	</select>
+				                                    </div>
+				                                     <label for="example-search-input" class="col-3 col-form-label">Valid Till</label>
+				                                    <div class="col-3">
+				                                        <input class="form-control" type="text" id="set_date" name="set_date">
+				                                    </div>
+			                                	</div>
+				                                <div class="form-group row">
+				                                    <label for="example-search-input" class="col-3 col-form-label">Content</label>
+				                                    <div class="col-3">
+				                                         <input class="form-control" type="text" id="content" name="content">
+				                                    </div>
+				                                </div>
                                 
-                                 <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Campaign Type*</label>
-                                    <div class="col-3">
-                                      <select name="campaign_type" id="campaign_type" class="form-control">
-						                 	   	<option value="">Select Campaign</option>
-						                 	   	<option value="1">New Project</option>
-						                 	   	<option value="2">New Property</option>
-						                 	   	<option value="3">Offers</option>
-						                 	   	<option value="4">Event</option>
-						                 	   	<option value="5">Referral</option>
-								       	  	</select>
-                                    </div>
-                                     <label for="example-search-input" class="col-3 col-form-label">Valid Till</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" id="set_date" name="set_date">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Content</label>
-                                    <div class="col-3">
-                                         <input class="form-control" type="text" id="content" name="content">
-                                    </div>
-                                </div>
-                                
-                                <div class="offset-sm-5 col-sm-7">
-                                        <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="show();">Save</button>
-                                 </div>
-                              
-                               </div>
-                              </div>
+				                                <div class="offset-sm-5 col-sm-7">
+				                                        <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="showNext" onclick="show();">Next</button>
+				                                 </div>
+                               			</div>
+                              		</div>
                              <div id="vimessages1" class="tab-pane" aria-expanded="false">
                                   <div class="form-group row">
                                        <label for="example-search-input" class="col-3 col-form-label">City</label>
@@ -436,7 +433,15 @@ function showAddResponse(resp, statusText, xhr, $form){
 }
 function show()
 {
-	$("#vimessages1").show();
-	$("#vimessages").hide();
+	//alert("Hi");
+	if($("#campaign_type").val()=="" || $("#title").val()==""){
+		$("#showNext").attr('disable','disable');
+		//alert("Hello from if");
+	}else{
+		//alert("Hello from else");
+		$("#showNext").prop('disable',false);
+		$("#vimessages1").show();
+		$("#vimessages").hide();
+	}
 }
 </script>
