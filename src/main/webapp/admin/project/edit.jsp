@@ -1228,10 +1228,6 @@
 </div>
 <%@include file="../../footer.jsp"%>
 <!-- inline scripts related to this page -->
-<script src="../../js/bootstrapValidator.min.js"></script>
-<script src="../../js/bootstrap-datepicker.min.js"></script>
-<script src="../../js/jquery.form.js"></script>
-<script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <style>
 	.row {
 		margin-bottom:5px;
@@ -1253,9 +1249,11 @@
 	    margin-bottom:5px;
 	}
 </style>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/css/bootstrap-select.min.css" />
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/js/bootstrap-select.min.js"></script>
 <script>
 // $(".errorMsg").keypress(function(event){
 // 	alert("Hello");
@@ -1266,18 +1264,6 @@ $("input.errorMsg").keypress(function(event){
 	alert("Hello");
 	return isNumber(event, this)
 });
-
-// function isNumber(evt, element) {
-
-//     var charCode = (evt.which) ? evt.which : event.keyCode
-
-//     if (
-//         (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
-//         (charCode < 48 || charCode > 57))
-//         return false;
-
-//     return true;
-// } 
 
 $('#latitude').keypress(function (event) {
     return isNumber(event, this)
@@ -1897,8 +1883,25 @@ function saveProjectDetails(){
 // });
 
 
-$(document).ready(function() {
-    $('#paymentfrm')
+//$(document).ready(function() {
+    $('#paymentfrm').find('[name="schedule[]"]')
+    .selectpicker()
+      .change(function(e) {
+        $('#bootstrapSelectForm').bootstrapValidator('revalidateField', 'schedule[]');
+      })
+      .end()
+  .find('[name="payable[]"]')
+    .selectpicker()
+     .change(function(e) {
+       $('#bootstrapSelectForm').bootstrapValidator('revalidateField', 'payable[]');
+     })
+     .end()
+     find('[name="amount[]"]')
+    .selectpicker()
+     .change(function(e) {
+       $('#bootstrapSelectForm').bootstrapValidator('revalidateField', 'amount[]');
+     })
+     .end()
         .bootstrapValidator({
         	container: function($field, validator) {
         		return $field.parent().next('.messageContainer');
@@ -1908,52 +1911,99 @@ $(document).ready(function() {
             invalid: 'glyphicon glyphicon-remove',
            //// validating: 'glyphicon glyphicon-refresh'
         },
+//         fields: {
+//          	'schedule[]': {
+//         		validators: {
+//                     notEmpty: {
+//                         message: 'Schedule is required and cannot be empty'
+//                     }
+//                 },
+//                // $('#paymentfrm').bootstrapValidator('revalidateField', 'schedule[]');
+//             },
+//             'payable[]': {
+//         		validators: {
+//                     notEmpty: {
+//                         message: 'Payment is required and cannot be empty'
+//                     },
+//                 }
+//             },
+//            'amount[]':{
+//             	validators: {
+//                     notEmpty: {
+//                         message: 'Amount is required and cannot be empty'
+//                     },
+//                 }
+//             }
+//         }
+        
+        
         fields: {
-         	'schedule[]': {
-        		validators: {
-                    notEmpty: {
-                        message: 'Schedule is required and cannot be empty'
+        	'schedule[]': {
+                validators: {
+                    callback: {
+                        message: 'Schedule is required and cannot be empty',
+                        callback: function(value, validator, $field) {
+                            /* Get the selected options */
+                            var options = validator.getFieldElements('schedule[]').val();
+                            return options != null;
+                        }
                     }
-                },
-               // $('#paymentfrm').bootstrapValidator('revalidateField', 'schedule[]');
-            },
-            'payable[]': {
-        		validators: {
-                    notEmpty: {
-                        message: 'Payment is required and cannot be empty'
-                    },
                 }
             },
-           'amount[]':{
-            	validators: {
-                    notEmpty: {
-                        message: 'Amount is required and cannot be empty'
-                    },
+            'payable[]': {
+                validators: {
+                    callback: {
+                        message: 'Payable is required and cannot be empty',
+                        callback: function(value, validator, $field) {
+                            /* Get the selected options */
+                            var options = validator.getFieldElements('payable[]').val();
+                            return options != null;
+                        }
+                    }
+                }
+            },
+            'amount[]': {
+                validators: {
+                    callback: {
+                        message: 'Amount is required and cannot be empty',
+                        callback: function(value, validator, $field) {
+                            /* Get the selected options */
+                            var options = validator.getFieldElements('amount[]').val();
+                            return options != null;
+                        }
+                    }
                 }
             }
         }
-    })
-    .on('keyup', 'input[name="schedule[]"], input[name="payable[]"],input[name="amount[]"]', function(e) {
-    	alert("Hello");
-        var s = $('#paymentfrm').find('[name="schedule[]"]').val(),
-            m = $('#paymentfrm').find('[name="payable[]"]').val();  //<= keep ; here 
-		//alert(s+m);
-            var count=parseInt($("#schedule_count").val());
-            $($('#paymentfrm').find('[name="schedule[]"]')).each(function(index){
-            	if($(this).val()==''){
-            	//alert("This dot val :: "+$(this).val());
-            		$('#s-'+count).append('Error in schedule');
-            	//	alert("Schudle count :: "+$('#s-'+count).val());
-            }
-            	count++;
-            });
+    }).on('success.form.bv', function(event,data) {
+    	// Prevent form submission
+    	event.preventDefault();
+    	
+    	updatePaymentSchudle();
+    });
+ 
+  //  .on('keyup', 'input[name="schedule[]"], input[name="payable[]"],input[name="amount[]"]', function(e) {
+    //	alert("Hello");
+//         var s = $('#paymentfrm').find('[name="schedule[]"]').val(),
+//             m = $('#paymentfrm').find('[name="payable[]"]').val();  //<= keep ; here 
+// 		//alert(s+m);
+//             var count=parseInt($("#schedule_count").val());
+//             $($('#paymentfrm').find('[name="schedule[]"]')).each(function(index){
+//             	if(s==''){
+//             	//alert("This dot val :: "+$(this).val());
+//             		$('#s-'+count).html('');
+//             		$('#s-'+count).append('Error in schedule');
+//             		alert("Schudle count :: "+count);
+//             }
+//             	//count++;
+//             });
         // Set the user_info field value
        // $('#paymentfrm').find('[name="schedule"]').val(y === '');
 
         // Revalidate it
-       // $('#paymentfrm').bootstrapValidator('revalidateField', 'schedule');
-    });
-}); 
+     //   $('#paymentfrm').bootstrapValidator('revalidateField', 'schedule[]');
+   // });
+//}); 
 
 // function validate(){
 
@@ -2071,7 +2121,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount">'
 				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control  notEmpty" required id="discount" name="discount[]" value="" onkeyup="return isNumber(event, this);"/>'
+					+'<input type="text" class="form-control  notEmpty" required id="discount" name="discount[]" value="" onkeypress="return isNumber(event, this);"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -2140,7 +2190,8 @@ function addMoreSchedule() {
 				+'<div>'
 				+'<input type="text" class="form-control" id="schedule" required name="schedule[]"/>'
 				+'</div>'
-				+'<div  id="s-'+schedule_count+'"></div>'
+// 				+'<div  id="s-'+schedule_count+'"></div>'
+				+'<div class="messageContainer"></div>'
 				+'</div>'
 				+'</div>'
 				+'</div>'

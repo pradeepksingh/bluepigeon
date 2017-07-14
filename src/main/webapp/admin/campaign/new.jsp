@@ -54,112 +54,132 @@
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Campaign Title <span class="text-danger">*</span> </label>
 										<div class="col-sm-9">
-											<input type="text" id="title" name="title" placeholder="Enter Campaign title" class="form-control" />
+											<div>
+												<input type="text" id="title" name="title" placeholder="Enter Campaign title" class="form-control" />
+											</div>
+											<div class="messageContainer"></div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
 								  	</div>
 							  	</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Campaign Type <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
-											<select name="campaign_type" id="campaign_type" class="form-control">
-						                 	   	<option value="">Select Campaign</option>
-						                 	   	<option value="1">New Project</option>
-						                 	   	<option value="2">New Property</option>
-						                 	   	<option value="3">Offers</option>
-						                 	   	<option value="4">Event</option>
-						                 	   	<option value="5">Referral</option>
-								       	  	</select>
+											<div>
+												<select name="campaign_type" id="campaign_type" class="form-control">
+							                 	   	<option value="">Select Campaign</option>
+							                 	   	<option value="1">New Project</option>
+							                 	   	<option value="2">New Property</option>
+							                 	   	<option value="3">Offers</option>
+							                 	   	<option value="4">Event</option>
+							                 	   	<option value="5">Referral</option>
+									       	  	</select>
+											</div>
+											<div class="messageContainer"></div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Set date <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
-											<input type="text" id="set_date" name="set_date" placeholder="Enter Campaign start date" class="form-control" />
+											<div>
+												<input type="text" id="set_date" name="set_date" placeholder="Enter Campaign start date" class="form-control" />
+											</div>
+											<div class="messageContainer"></div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Content <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
+											<div>
 											<textarea id="content" name="content" placeholder="Enter content " class="form-control" ></textarea>
+											</div>
+											<div class="messageContainer"></div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Terms <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
-											<textarea id="terms" name="terms" placeholder="Enter terms" class="form-control" ></textarea>
+											<div>
+												<textarea id="terms" name="terms" placeholder="Enter terms" class="form-control" ></textarea>
+											</div>
+											<div class="messageContainer"></div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Recipient Type <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
-										 	<select name="recipient_type_id" id="recipient_type_id" class="form-control">
-							                    <option value="0">Select Recipient Type</option>
-							                     <option value="1">Lead</option>
-							                     <option value="2">Buyer</option>
-							                </select>
+											<div>
+											 	<select name="recipient_type_id" id="recipient_type_id" class="form-control">
+								                    <option value="0">Select Recipient Type</option>
+								                     <option value="1">Lead</option>
+								                     <option value="2">Buyer</option>
+								                </select>
+											</div>
+											<div class="messageContainer"></div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select City <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
-										 	<select name="city_id" id="city_id" class="form-control">
-							                    <option value="0">Select City</option>
-							                     <% for(City city : city_list){ %>
-												<option value="<% out.print(city.getId());%>"><% out.print(city.getName());%></option>
-												<% } %>
-							                </select>
+											<div>
+											 	<select name="city_id" id="city_id" class="form-control">
+								                    <option value="0">Select City</option>
+								                     <% for(City city : city_list){ %>
+													<option value="<% out.print(city.getId());%>"><% out.print(city.getName());%></option>
+													<% } %>
+								                </select>
+							                </div>
+											<div class="messageContainer"></div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select Project <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
-										 	<select name="project_id" id="project_id" class="form-control">
-							                    <option value="0">Select Project</option>
-							                </select>
+											<div>
+											 	<select name="project_id" id="project_id" class="form-control">
+								                    <option value="0">Select Project</option>
+								                </select>
+							                </div>
+											<div class="messageContainer"></div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select Building </label>
 										<div class="col-sm-9">
-										 	<select name="building_id" id="building_id" class="form-control">
-							                    <option value="0">Select Building</option>
-							                </select>
+											<div>
+											 	<select name="building_id" id="building_id" class="form-control">
+								                    <option value="0">Select Building</option>
+								                </select>
+											</div>
+											<div class="messageContainer"></div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
 								</div>
 								<div class="col-lg-6 margin-bottom-5">
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">Select Flat </label>
 										<div class="col-sm-9">
-										 	<select name="flat_id" id="flat_id" class="form-control">
-							                    <option value="0">Select Flat</option>
-							                </select>
+											<div>
+											 	<select name="flat_id" id="flat_id" class="form-control">
+								                    <option value="0">Select Flat</option>
+								                </select>
+											</div>
+											<div class="messageContainer col-sm-offset-3"></div>
 										</div>
-										<div class="messageContainer col-sm-offset-3"></div>
 									</div>
 								</div>
 								<div class="col-lg-12 margin-bottom-6">
