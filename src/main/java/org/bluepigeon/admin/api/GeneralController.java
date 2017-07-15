@@ -50,7 +50,7 @@ public class GeneralController extends ResourceConfig {
 	@POST
 	@Path("signup")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseMessage signupUser(
 			@FormParam("pancard") String pancard,
 			@FormParam("password") String password){
@@ -58,7 +58,6 @@ public class GeneralController extends ResourceConfig {
 		String characters = "0123456789";
 		String otp = RandomStringUtils.random( 6, characters );
 		globalBuyer.setPancard(pancard);
-		globalBuyer.setPassword(password);
 		globalBuyer.setOtp(otp);
 		responseMessage = new BuyerDAO().isUserExist(globalBuyer);
 		return responseMessage;
@@ -78,13 +77,12 @@ public class GeneralController extends ResourceConfig {
 	}
 	
 	@POST
-	@Path("opt")
+	@Path("otp")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage verifyOtp(@FormParam("otp") String otp){
 		ResponseMessage responseMessage = new ResponseMessage();
-		GlobalBuyer globalBuyer = new GlobalBuyer();
-		globalBuyer.setOtp(otp);
-		
+	
+		responseMessage = new BuyerDAO().validateOtp(otp);
 		return responseMessage;
 	}
 	
@@ -99,5 +97,44 @@ public class GeneralController extends ResourceConfig {
 		return responseMessage;
 		
 		
+	}
+	
+	@POST
+	@Path("changepassword")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String changePassword(
+			@FormParam("pancard") String pancard,
+			@FormParam("oldpassword") String oldpassword, 
+			@FormParam("newpassword") String newpassword){
+		String responseMessage = new String();
+		responseMessage = new BuyerDAO().userChangePassword(pancard, oldpassword, newpassword);
+		return responseMessage;
+	}
+	
+	@POST
+	@Path("accountsettings")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getBuyerDetails(@FormParam("pancard") String pancard){
+		String response = new String();
+		response = new BuyerDAO().getBuyerAccountDetailsByPancard(pancard);
+		return response;
+	}
+	
+	@POST
+	@Path("project")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getProjectdetails(@FormParam("pancard") String pancard){
+		String response = new String();
+		response = new BuyerDAO().getProjectDetails(pancard);
+		return response;
+	}
+	
+	@POST
+	@Path("buildings")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getBuildingdetails(@FormParam("pancard") String pancard){
+		String response = new String();
+		response = new BuyerDAO().getBuildingDetails(pancard);
+		return response;
 	}
 }

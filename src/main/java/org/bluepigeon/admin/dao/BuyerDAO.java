@@ -17,6 +17,7 @@ import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuildingStatus;
 import org.bluepigeon.admin.model.BuilderBuyer;
@@ -36,6 +37,8 @@ import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import com.google.gson.Gson;
 
 public class BuyerDAO {
 	
@@ -1018,19 +1021,25 @@ public class BuyerDAO {
 	
 	public ResponseMessage validateBuyer(GlobalBuyer globalBuyer){
 		ResponseMessage responseMessage = new ResponseMessage();
-		String hql = "from GlobalBuyer where pancard = :pancard and password = :password";
+		String hql = "from GlobalBuyer where pancard = :pancard";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("pancard", globalBuyer.getPancard());
-		query.setParameter("password", globalBuyer.getPassword());
-		GlobalBuyer globalBuyer2 = (GlobalBuyer) query.uniqueResult();
+		try{
+		GlobalBuyer globalBuyer2 = (GlobalBuyer) query.list().get(0);
 		if(globalBuyer2 != null){
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("User doesn't exists");
 		}else{
 			responseMessage.setStatus(1);
 			responseMessage.setMessage("Login successfully");
+			responseMessage.setData(globalBuyer2);
+		}
+		}catch(Exception e){
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("User doesn't exists");
+			//e.printStackTrace();
 		}
 		return responseMessage;
 	}
@@ -1042,7 +1051,9 @@ public class BuyerDAO {
 		Session session = hibernateUtil.openSession();
 		Session innerSession = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		GlobalBuyer  globalBuyer2 = (GlobalBuyer) query.uniqueResult();
+		query.setParameter("pancard", globalBuyer.getPancard());
+		try{
+		GlobalBuyer  globalBuyer2 = (GlobalBuyer) query.list().get(0);
 		if(globalBuyer2 != null){
 			globalBuyer2.setOtp(globalBuyer.getOtp());
 			innerSession.beginTransaction();
@@ -1053,9 +1064,216 @@ public class BuyerDAO {
 			responseMessage.setMessage(globalBuyer.getOtp());
 		}else{
 			responseMessage.setStatus(0);
-			responseMessage.setMessage("User Not registered");
+			responseMessage.setMessage("Unregistered User");
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Unregistered User");
 		}
 		return responseMessage;
 	}
 	
+	public ResponseMessage validateOtp(String otp){
+		ResponseMessage responseMessage = new ResponseMessage();
+		String hql = "from GlobalBuyer where otp = :otp";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("otp", otp);
+		GlobalBuyer globalBuyer = (GlobalBuyer) query.uniqueResult();
+		if(globalBuyer != null){
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("User registered sucessfully.");
+		}else{
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Unregisted user");
+		}
+		
+		return responseMessage;
+	}
+	
+	public String userChangePassword(String pancard,String oldPassword, String newPassword){
+		ResponseMessage responseMessage = new ResponseMessage();
+		Gson gson = new Gson();
+		String json = null;
+		GlobalBuyer globalBuyer = null;
+		String hql = "Update GlobalBuyer set password=:password, status=1 where id = :id";
+		try{
+			if(isValidUserPassword(oldPassword)){
+				globalBuyer = new BuyerDAO().getGlobalBuyerByPancard(pancard);
+				HibernateUtil hibernateUtil = new HibernateUtil();
+				Session session = hibernateUtil.openSession();
+				session.beginTransaction();
+				Query query = session.createQuery(hql);
+				query.setString("password",newPassword);
+				query.setInteger("id", globalBuyer.getId());
+				int result = query.executeUpdate();
+				session.getTransaction().commit();
+				session.close();
+				GlobalBuyer globalBuyer2 = new GlobalBuyer();
+				globalBuyer2.setAvatar(globalBuyer.getAvatar());
+				globalBuyer2.setName(globalBuyer.getName());
+				 
+			     json = gson.toJson(globalBuyer2);
+				responseMessage.setData(json);
+				responseMessage.setStatus(1);
+				responseMessage.setMessage("Password Rest Successfully");
+			}else{
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("Invalid Password");
+				json = gson.toJson(responseMessage);
+			}
+		}catch(Exception e){
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Invalid Password");
+			json = gson.toJson(responseMessage);
+		}
+		
+		return json;
+	}
+	public boolean isValidUserPassword(String password) {
+		boolean isValid = false;
+		String hql = "from GlobalBuyer a where a.password =  :password";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setString("password", password);
+		List<Builder> result = query.list();
+		if(result.size()>0)
+			isValid = true;
+		session.close();
+		return isValid;
+	}
+	
+	public GlobalBuyer getGlobalBuyerByPancard(String pancard) {
+		boolean isValid = false;
+		String hql = "from GlobalBuyer a where a.pancard =  :pancard";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setString("pancard", pancard);
+		List<GlobalBuyer> result = query.list();
+		return result.get(0);
+	}
+	
+	 public String getBuyerAccountDetailsByPancard(String pancard){
+		 ResponseMessage responseMessage = new ResponseMessage();
+			Gson gson = new Gson();
+			String json = null;
+			Buyer buyer = new Buyer();
+			String hql = "from Buyer where pancard = :pancard";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("pancard", pancard);
+			List<Buyer> buyerList = query.list();
+			try{
+				if(buyerList != null){
+					buyer.setName(buyerList.get(0).getName());
+					buyer.setAddress(buyerList.get(0).getAddress());
+					buyer.setEmail(buyerList.get(0).getEmail());
+					buyer.setMobile(buyerList.get(0).getMobile());
+					if(buyerList.get(0).getIsDeleted() == 0)
+						buyer.setIsDeleted(buyerList.get(0).getIsDeleted());
+					if(buyerList.get(0).getIsPrimary())
+						buyer.setIsPrimary(buyerList.get(0).getIsPrimary());
+					json = gson.toJson(buyer);
+				}
+				return json;
+			}catch(Exception e){
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("No account Detail found");
+				json = gson.toJson(responseMessage);
+				return json;
+			}
+			
+	 }
+	 
+	 public String getProjectDetails(String pancard){
+		 ResponseMessage responseMessage = new ResponseMessage();
+		 Gson gson = new Gson();
+			String json = null;
+			String hql = "from Buyer where pancard = :pancard";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			String projectHql = "from BuilderProject where id = :id";
+			Session projectSession = hibernateUtil.openSession();
+			Query projectQuery = projectSession.createQuery(projectHql);
+ 			Query query = session.createQuery(hql);
+			query.setParameter("pancard", pancard);
+			List<Buyer> buyerList = query.list();
+			try{
+				if(buyerList != null){
+					if(buyerList.get(0).getBuilderProject()!= null){
+						projectQuery.setParameter("id", buyerList.get(0).getBuilderProject().getId());
+						List<BuilderProject> projectList = projectQuery.list();
+						BuilderProject project = new BuilderProject();
+						project.setName(projectList.get(0).getName());
+						project.setAddr1(projectList.get(0).getAddr1());
+						project.setAddr2(projectList.get(0).getAddr2());
+						project.setCompletionStatus(projectList.get(0).getCompletionStatus());
+						project.setProjectArea(projectList.get(0).getProjectArea());
+						System.out.println("Project Id :: "+projectList.get(0).getId());
+						System.out.println("Possession date :: "+projectList.get(0).getPossessionDate());
+						project.setPossessionDate(projectList.get(0).getPossessionDate());
+						//projectQuery.list().get(0);
+						//project.setProjectImageGalleries(projectList.get(0).getProjectImageGalleries());
+						json = gson.toJson(project);
+						
+					}
+				}
+				return json;
+			}catch(Exception e){
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("No project Detail found");
+				json = gson.toJson(responseMessage);
+				return json;
+			}
+	 }
+	 
+	 public String getBuildingDetails(String pancard){
+		 ResponseMessage responseMessage = new ResponseMessage();
+		 Gson gson = new Gson();
+			String json = null;
+			String hql = "from Buyer where pancard = :pancard";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			String projectHql = "from BuilderBuilding where id = :id";
+			Session projectSession = hibernateUtil.openSession();
+			Query projectQuery = projectSession.createQuery(projectHql);
+ 			Query query = session.createQuery(hql);
+			query.setParameter("pancard", pancard);
+			List<Buyer> buyerList = query.list();
+			try{
+				if(buyerList != null){
+					if(buyerList.get(0).getBuilderProject()!= null){
+						projectQuery.setParameter("id", buyerList.get(0).getBuilderBuilding().getId());
+						List<BuilderBuilding> buildingList = projectQuery.list();
+						BuilderBuilding building = new BuilderBuilding();
+						building.setName(buildingList.get(0).getName());
+						BuilderProject project = new BuilderProject();
+						project.setAddr1(buildingList.get(0).getBuilderProject().getAddr1());
+						project.setAddr2(buildingList.get(0).getBuilderProject().getAddr2());
+						project.setProjectArea(buildingList.get(0).getBuilderProject().getProjectArea());
+						building.setBuilderProject(project);
+						building.setCompletionStatus(buildingList.get(0).getCompletionStatus());
+						System.out.println("Project Id :: "+buildingList.get(0).getId());
+						System.out.println("Possession date :: "+buildingList.get(0).getPossessionDate());
+						building.setPossessionDate(buildingList.get(0).getPossessionDate());
+						//projectQuery.list().get(0);
+						//project.setProjectImageGalleries(projectList.get(0).getProjectImageGalleries());
+						json = gson.toJson(building);
+						
+					}
+				}
+				return json;
+			}catch(Exception e){
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("No project Detail found");
+				json = gson.toJson(responseMessage);
+				return json;
+			}
+	 }
+	 
 }

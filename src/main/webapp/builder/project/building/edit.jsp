@@ -397,7 +397,7 @@
 						<div class="col-lg-4 margin-bottom-5" id="b_image<% out.print(buildingImageGallery.getId()); %>">
 							<div class="form-group" id="error-landmark">
 								<div class="col-sm-12">
-									<img alt="Building Images" src="${baseUrl}/<% out.print(buildingImageGallery.getImage()); %>" width="200px;">
+									<img class="img-fix" alt="Building Images" src="${baseUrl}/<% out.print(buildingImageGallery.getImage()); %>" width="200px;">
 								</div>
 								<label class="col-sm-12 text-left"><a href="javascript:deleteImage(<% out.print(buildingImageGallery.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
 								<div class="messageContainer col-sm-offset-4"></div>
