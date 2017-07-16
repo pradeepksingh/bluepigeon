@@ -3,11 +3,14 @@ package org.bluepigeon.admin.model;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -21,6 +24,7 @@ public class BuilderBuildingAmenity implements java.io.Serializable {
 
 	private Integer id;
 	private String name;
+	private String iconUrl = "";
 	private Byte status;
 	private Byte isDeleted;
 	private Set<BuilderBuildingAmenityStages> builderBuildingAmenityStageses = new HashSet<BuilderBuildingAmenityStages>(
@@ -29,9 +33,10 @@ public class BuilderBuildingAmenity implements java.io.Serializable {
 	public BuilderBuildingAmenity() {
 	}
 
-	public BuilderBuildingAmenity(String name, Byte status, Byte isDeleted,
+	public BuilderBuildingAmenity(String name, Byte status, String iconUrl, Byte isDeleted,
 			Set<BuilderBuildingAmenityStages> builderBuildingAmenityStageses) {
 		this.name = name;
+		this.iconUrl = iconUrl;
 		this.status = status;
 		this.isDeleted = isDeleted;
 		this.builderBuildingAmenityStageses = builderBuildingAmenityStageses;
@@ -56,6 +61,15 @@ public class BuilderBuildingAmenity implements java.io.Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@Column(name = "icon_url", length = 255)
+	public String getIconUrl() {
+		return iconUrl;
+	}
+
+	public void setIconUrl(String iconUrl) {
+		this.iconUrl = iconUrl;
 	}
 
 	@Column(name = "status")

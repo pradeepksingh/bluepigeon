@@ -19,7 +19,7 @@
 		projectAmenityIcon = builderProjectAmenityDAO.getProjectAmenityIconById(amenity_id);
 	}
 %>	
-<form class="form-horizontal" role="form" method="post" action="" id="editProjectAmenity" name="editProjectAmenity" enctype="multipart/form-data">
+	<form class="form-horizontal" role="form" method="post" action="" id="editMyProjectAmenity" name="editMyProjectAmenity" enctype="multipart/form-data">
 		<input type="hidden" name="uamenity_id" id="uamenity_id" value="<% out.print(builderProjectAmenity.getId()); %>"/>
               	<div class="row">
               		<div class="col-xs-12">
@@ -33,13 +33,14 @@
               	<div class="row">
               		<div class="col-xs-12">
                   		<div class="form-group">
-                       		<label for="password" class="control-label">Project Amenity Icon</label>
-							<input type="hidden" id="project_amenity_id" name="project_amenity_id[]" value="0"/>
-                       		<input type="file" class="form-control" id="project_amenity_icon" name="project_amenity_icon[]" />
-                       		<% if(projectAmenityIcon != null) {%>
-							<input type="hidden" value="<%out.print(projectAmenityIcon.getId()); %>" name="project_amenity_id[]" id="project_amenity_id"/>
+                       		<label for="password" class="control-label"><% if(builderProjectAmenity.getIconUrl() != null && !builderProjectAmenity.getIconUrl().equals("")) {%>Select New<% } else { %>Project<% } %> Amenity Icon</label>
+							<input type="hidden" value="<% out.print(builderProjectAmenity.getId()); %>" name="project_amenity_id[]" id="project_amenity_id"/>
+							<div class="col-sm-8" style="padding:0px;">
+                       			<input type="file" class="form-control" id="project_amenity_icon" name="project_amenity_icon[]" />
+                       		</div>
+                       		<% if(builderProjectAmenity.getIconUrl() != null && !builderProjectAmenity.getIconUrl().equals("")) {%>
 							<div class="col-sm-4">
-									<img alt="project amenity icon" src="${baseUrl}/<% out.print(projectAmenityIcon.getIconUrl()); %>" width="50px;">
+									<img alt="project amenity icon" src="${baseUrl}/<% out.print(builderProjectAmenity.getIconUrl()); %>" width="50px;">
 							</div>
 							<div class="messageContainer col-sm-offset-4"></div>
 							<% } %>
@@ -70,7 +71,7 @@ $('#uname').keyup(function() {
 });
 
 
-$('#editProjectAmenity').bootstrapValidator({
+$('#editMyProjectAmenity').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},
@@ -111,7 +112,7 @@ function updateProjectAmenity() {
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
-   	$('#editProjectAmenity').ajaxSubmit(options);
+   	$('#editMyProjectAmenity').ajaxSubmit(options);
 }
 
 function showUpdateRequest(formData, jqForm, options){

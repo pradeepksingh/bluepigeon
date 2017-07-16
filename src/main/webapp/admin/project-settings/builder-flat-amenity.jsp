@@ -41,6 +41,7 @@ int amenity_size=amenity_list.size();
                                     <thead>
                                         <tr>
                                             <th>Name</th>
+                                            <th>Icon</th>
                                             <th>Status</th>
                                             <th class="alignRight">Actions</th>
                                         </tr>
@@ -51,6 +52,7 @@ int amenity_size=amenity_list.size();
                                         %>
                                         <tr>
                                             <td><% out.print(amenity_list.get(i).getName()); %></td>
+                                            <td><img src="${baseUrl}/<% out.print(amenity_list.get(i).getIconUrl()); %>" width="32px" height="32px"/> </td>
                                             <td><% if(amenity_list.get(i).getStatus() == 1) { out.print("<span class='label label-success'>Active</span>"); } else { out.print("<span class='label label-warning'>Inactive</span>"); } %></td>
                                             <td class="alignRight">
                                             	<a href="javascript:editFlatAmenity(<% out.print(amenity_list.get(i).getId()); %>);" class="btn btn-success btn-xs icon-btn"><i class="fa fa-pencil"></i></a>

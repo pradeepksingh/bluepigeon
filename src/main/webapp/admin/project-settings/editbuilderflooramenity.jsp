@@ -15,7 +15,6 @@
 	if (amenity_id > 0) {
 		amenity_list = builderFloorAmenityDAO.getBuilderFloorAmenityById(amenity_id);
 		builderFloorAmenity = amenity_list.get(0);
-		floorAmenityIcon = builderFloorAmenityDAO.getFloorAmenityIconById(amenity_id);
 	}
 %>
 <form class="form-horizontal" role="form" method="post" action="" id="updateFloorAmenity" name="updateFloorAmenity" enctype="multipart/form-data">			
@@ -31,15 +30,18 @@
               	<div class="row">
 			         <div class="col-xs-12">
 			              <div class="form-group">
-			              		<label for="password" class="control-label">Floor Amenity Icon</label>
-			                    <input type="file" class="form-control" id="floor_amenity_icon" name="floor_amenity_icon[]" />
-			                    <% if(floorAmenityIcon != null) {%>
-								<input type="hidden" value="<%out.print(floorAmenityIcon.getId()); %>" name="floor_amenity_id[]" id="floor_amenity_id"/>
-								<div class="col-sm-4">
-									<img alt="floor amenity icon" src="${baseUrl}/<% out.print(floorAmenityIcon.getIconUrl()); %>" width="50px;">
+			              		<label for="password" class="control-label"><% if(builderFloorAmenity.getIconUrl() != null && !builderFloorAmenity.getIconUrl().equals("")) {%>Select New<% } else { %>Floor<% } %> Amenity Icon</label>
+			              		<div class="row">
+				              		<div class="col-sm-8">
+				                    	<input type="file" class="form-control" id="floor_amenity_icon" name="floor_amenity_icon[]" />
+				                    </div>
+				                    <% if(builderFloorAmenity.getIconUrl() != null && !builderFloorAmenity.getIconUrl().equals("")) {%>
+				                    <div class="col-sm-4">
+										<img alt="floor amenity icon" src="${baseUrl}/<% out.print(builderFloorAmenity.getIconUrl()); %>" width="50px;">
+									</div>
+									<% } %>
+									<div class="messageContainer col-sm-offset-4"></div>
 								</div>
-								<div class="messageContainer col-sm-offset-4"></div>
-								<% } %>
 			               </div>
 			          </div>
 			    </div>

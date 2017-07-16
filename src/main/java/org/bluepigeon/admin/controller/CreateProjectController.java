@@ -454,65 +454,29 @@ public class CreateProjectController {
         builderBuildingAmenity.setIsDeleted(isDeleted);
 		builderBuildingAmenity.setName(name);
 		builderBuildingAmenity.setStatus(status);
+		try {	
+			if (amenity_icons.size() > 0) {
+				for(int i=0 ;i < amenity_icons.size();i++)
+				{
+					if(amenity_icons.get(i).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = amenity_icons.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/building/amenityicon/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(amenity_icons.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						builderBuildingAmenity.setIconUrl(gallery_name);
+					}
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			builderBuildingAmenity.setIconUrl("");
+		}
 		BuilderBuildingAmenityDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityDAO();
 		responseMessage = builderBuildingAmenityDAO.save(builderBuildingAmenity);
-		if(amenity_icons != null){
-			if(responseMessage.getId() > 0){
-				builderBuildingAmenity.setId(responseMessage.getId());
-				  try {	
-						List<BuildingAmenityIcon> buildingAmenityIconList = new ArrayList<BuildingAmenityIcon>();
-						//for multiple inserting images.
-						if (amenity_icons.size() > 0) {
-							for(int i=0 ;i < amenity_icons.size();i++)
-							{
-								if(amenity_icons.get(i).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-									BuildingAmenityIcon buildingAmenityIcon = new BuildingAmenityIcon();
-									String gallery_name = amenity_icons.get(i).getFormDataContentDisposition().getFileName();
-									long millis = System.currentTimeMillis() % 1000;
-									gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-									gallery_name = "images/project/building/amenityicon/"+gallery_name;
-									String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-									//System.out.println("for loop image path: "+uploadGalleryLocation);
-									this.imageUploader.writeToFile(amenity_icons.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-									buildingAmenityIcon.setBuilderBuildingAmenity(builderBuildingAmenity);
-									buildingAmenityIcon.setIconUrl(gallery_name);
-									buildingAmenityIconList.add(buildingAmenityIcon);
-								}
-							}
-							if(buildingAmenityIconList.size() > 0) {
-								builderBuildingAmenityDAO.saveBuildingAmenityIcon(buildingAmenityIconList);
-							}
-						}
-						responseMessage.setStatus(1);
-						responseMessage.setMessage("Building Amenity added successfully");
-					} catch(Exception e) {
-						e.printStackTrace();
-						responseMessage.setStatus(0);
-						responseMessage.setMessage("Unable to save image");
-					}
-			}else{
-				responseMessage.setStatus(0);
-				responseMessage.setMessage("Fail to save Building Amenity");
-			} 
-		}
 		return responseMessage;
 	}
-	
-	
-	
-//	@POST
-//	@Path("/builder/building/amenity/save")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public ResponseMessage addBuilderBuildingAmenity(@FormParam("name") String name, @FormParam("status") byte status) {
-//		byte isDeleted = 0;
-//		BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
-//        builderBuildingAmenity.setIsDeleted(isDeleted);
-//		builderBuildingAmenity.setName(name);
-//		builderBuildingAmenity.setStatus(status);
-//		BuilderBuildingAmenityDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityDAO();
-//		return builderBuildingAmenityDAO.save(builderBuildingAmenity);
-//	}
-
 	
 	
 	@POST
@@ -523,7 +487,6 @@ public class CreateProjectController {
 			@FormDataParam("uamenity_id") int id,
 			@FormDataParam("uname") String name,
 			@FormDataParam("ustatus") byte status,
-			@FormDataParam("building_amenity_id[]") List<FormDataBodyPart> amenity_ids,
 			@FormDataParam("building_amenity_icon[]") List<FormDataBodyPart> amenity_icons) {
 		
 		ResponseMessage responseMessage = new ResponseMessage();
@@ -533,97 +496,30 @@ public class CreateProjectController {
 		builderBuildingAmenity.setName(name);
 		builderBuildingAmenity.setStatus(status);
 		builderBuildingAmenity.setIsDeleted(isDeleted);
-
-		BuilderBuildingAmenityDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityDAO();
-		 builderBuildingAmenityDAO.update(builderBuildingAmenity);
-		 if(amenity_icons != null){
-			 if(amenity_icons.size() > 0){
-					try {	
-						System.out.println("Inside Builder logo");
-						List<BuildingAmenityIcon> updateBuildingAmenityIcon = new ArrayList<BuildingAmenityIcon>();
-						List<BuildingAmenityIcon> saveBuildingAmenityIcon = new ArrayList<BuildingAmenityIcon>();
-						//for multiple inserting images.
-						//if (builder_logo.size() > 0) {
-							for(int j=0 ;j < amenity_icons.size();j++)
-							{
-								System.out.println("Inside For loop");
-								if(amenity_ids != null){
-								if(amenity_icons.get(j).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(j).getFormDataContentDisposition().getFileName().isEmpty()) {
-									if(amenity_ids.get(j).getValueAs(Integer.class) != 0 && amenity_ids.get(j).getValueAs(Integer.class) != null){
-										BuildingAmenityIcon buildingAmenityIcon = new BuildingAmenityIcon();
-										String gallery_name = amenity_icons.get(j).getFormDataContentDisposition().getFileName();
-										long millis = System.currentTimeMillis() % 1000;
-										gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-										gallery_name = "images/project/building/amenityicon/"+gallery_name;
-										String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-										System.out.println("for loop image path update: "+uploadGalleryLocation);
-										this.imageUploader.writeToFile(amenity_icons.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
-										buildingAmenityIcon.setId(amenity_ids.get(j).getValueAs(Integer.class));
-										buildingAmenityIcon.setIconUrl(gallery_name);
-										buildingAmenityIcon.setBuilderBuildingAmenity(builderBuildingAmenity);
-										updateBuildingAmenityIcon.add(buildingAmenityIcon);
-									}}}else{
-										System.out.println("Inside else condition..");
-										BuildingAmenityIcon buildingAmenityIcon = new BuildingAmenityIcon();
-										String gallery_name = amenity_icons.get(j).getFormDataContentDisposition().getFileName();
-										long millis = System.currentTimeMillis() % 1000;
-										gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-										gallery_name = "images/project/building/amenityicon/"+gallery_name;
-										String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-										System.out.println("for loop image path add: "+uploadGalleryLocation);
-										this.imageUploader.writeToFile(amenity_icons.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
-										buildingAmenityIcon.setIconUrl(gallery_name);
-										buildingAmenityIcon.setBuilderBuildingAmenity(builderBuildingAmenity);
-										saveBuildingAmenityIcon.add(buildingAmenityIcon);
-									}
-							}
-							if(updateBuildingAmenityIcon.size() > 0) {
-								builderBuildingAmenityDAO.updateBuildingAmenityIcon(updateBuildingAmenityIcon);
-							}
-							if(saveBuildingAmenityIcon.size() > 0){
-								builderBuildingAmenityDAO.saveBuildingAmenityIcon(saveBuildingAmenityIcon);
-							}
-							responseMessage.setStatus(1);
-							responseMessage.setMessage("Building Amenity updated successfully.");
-						}
-					 catch(Exception e) {
-						 e.printStackTrace();
-						 responseMessage.setStatus(0);
-						 responseMessage.setMessage("Unable to save image");
+		try {	
+			if (amenity_icons.size() > 0) {
+				for(int i=0 ;i < amenity_icons.size();i++)
+				{
+					if(amenity_icons.get(i).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = amenity_icons.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/building/amenityicon/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(amenity_icons.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						builderBuildingAmenity.setIconUrl(gallery_name);
 					}
-			 }	 System.err.println("Elece in building amenity icon....");
-				 if(amenity_ids != null){
-					 BuildingAmenityIcon buildingAmenityIcon = builderBuildingAmenityDAO.getBuildingAmenityIconById(amenity_ids.get(0).getValueAs(Integer.class));
-					 List<BuildingAmenityIcon> buildingAmenityIcons = new ArrayList<BuildingAmenityIcon>();
-					 buildingAmenityIcons.add(buildingAmenityIcon);
-					 if(buildingAmenityIcons.size() > 0) {
-							builderBuildingAmenityDAO.updateBuildingAmenityIcon(buildingAmenityIcons);
-						}
-					 responseMessage.setStatus(1);
-					 responseMessage.setMessage("Building Amenity Updated Successfully");
-				 }
-		 }
-		 return responseMessage;
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			builderBuildingAmenity.setIconUrl("");
+		}
+		BuilderBuildingAmenityDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityDAO();
+		responseMessage = builderBuildingAmenityDAO.update(builderBuildingAmenity);
+		return responseMessage;
 	}
 	
-	
-	
-//	@POST
-//	@Path("/builder/building/amenity/update")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public ResponseMessage updateBuilderBuildingAmenity(@FormParam("id") int id, @FormParam("name") String name,
-//			@FormParam("status") byte status) {
-//		byte isDeleted = 0;
-//		BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
-//		builderBuildingAmenity.setId(id);
-//		builderBuildingAmenity.setName(name);
-//		builderBuildingAmenity.setStatus(status);
-//		builderBuildingAmenity.setIsDeleted(isDeleted);
-//
-//		BuilderBuildingAmenityDAO builderBuildingAmenityDAO = new BuilderBuildingAmenityDAO();
-//		return builderBuildingAmenityDAO.update(builderBuildingAmenity);
-//	}
-
 	@DELETE
 	@Path("/builder/building/amenity/delete")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -763,7 +659,9 @@ public class CreateProjectController {
 	public ResponseMessage addBuilderProjectAmenity(
 			@FormDataParam("name") String name,
 			@FormDataParam("status") byte status,
-			@FormDataParam("project_amenity_icon[]")List<FormDataBodyPart> amenity_icons) {
+			@FormDataParam("project_amenity_icon[]")List<FormDataBodyPart> amenity_icons
+	) {
+		String gallery_name = "";
 		ResponseMessage responseMessage = new ResponseMessage();
 		BuilderProjectAmenity builderProjectAmenity = new BuilderProjectAmenity();
 
@@ -771,48 +669,30 @@ public class CreateProjectController {
 		builderProjectAmenity.setStatus(status);
 		BuilderProjectAmenityDAO builderProjectAmenityDAO = new BuilderProjectAmenityDAO();
 		
-		responseMessage=builderProjectAmenityDAO.save(builderProjectAmenity);
-		if(amenity_icons != null){
-			if(responseMessage.getId()>0){
-				builderProjectAmenity.setId(responseMessage.getId());
-					  try {	
-							List<ProjectAmenityIcon> projectAmenityIconList = new ArrayList<ProjectAmenityIcon>();
-							//for multiple inserting images.
-							if (amenity_icons.size() > 0) {
-								for(int i=0 ;i < amenity_icons.size();i++)
-								{
-									if(amenity_icons.get(i).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-										ProjectAmenityIcon projectAmenityIcon = new ProjectAmenityIcon();
-										String gallery_name = amenity_icons.get(i).getFormDataContentDisposition().getFileName();
-										long millis = System.currentTimeMillis() % 1000;
-										gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-										gallery_name = "images/project/projectamenityicon/"+gallery_name;
-										String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-										System.out.println("for loop image path: "+uploadGalleryLocation);
-										this.imageUploader.writeToFile(amenity_icons.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-										projectAmenityIcon.setBuilderProjectAmenity(builderProjectAmenity);
-										projectAmenityIcon.setIconUrl(gallery_name);
-										projectAmenityIconList.add(projectAmenityIcon);
-									}
-								}
-								if(projectAmenityIconList.size() > 0) {
-									builderProjectAmenityDAO.saveProjectAmenityIcon(projectAmenityIconList);
-									responseMessage.setStatus(1);
-									responseMessage.setMessage("save image");
-								}
-							}
-							responseMessage.setStatus(1);
-							responseMessage.setMessage("Project Amenity added successfully");
-						} catch(Exception e) {
-							e.printStackTrace();
-							responseMessage.setStatus(0);
-							responseMessage.setMessage("Unable to save image");
-						}
-			}else{
-				responseMessage.setStatus(1);
-				responseMessage.setMessage("Project Amenity added successfully");
+		try {	
+			if (amenity_icons.size() > 0) {
+				for(int i=0 ;i < amenity_icons.size();i++)
+				{
+					if(amenity_icons.get(i).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						gallery_name = amenity_icons.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/projectamenityicon/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						System.out.println("URL:"+uploadGalleryLocation);
+						this.imageUploader.writeToFile(amenity_icons.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+					}
+				}
 			}
+		} catch(Exception e) {
+			//e.printStackTrace();
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Unable to save image");
 		}
+		if(!gallery_name.equals("")) {
+			builderProjectAmenity.setIconUrl(gallery_name);
+		}
+		responseMessage = builderProjectAmenityDAO.save(builderProjectAmenity);
 		return responseMessage;
 	}
 
@@ -829,80 +709,43 @@ public class CreateProjectController {
 	@Path("/builder/project/amenity/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public ResponseMessage updateBuilderProjectAmenity(
+	public ResponseMessage updateMyBuilderProjectAmenity(
 			@FormDataParam("uamenity_id") int amenity_id,
 			@FormDataParam("uname") String name,
 			@FormDataParam("ustatus") byte status,
 			@FormDataParam("project_amenity_id[]") List<FormDataBodyPart> amenity_ids,
 			@FormDataParam("project_amenity_icon[]") List<FormDataBodyPart> amenity_icons
-			){
+	){
+		String gallery_name = "";
 		ResponseMessage responseMessage = new ResponseMessage();
 		BuilderProjectAmenityDAO builderProjectAmenityDAO = new BuilderProjectAmenityDAO();
 		BuilderProjectAmenity builderProjectAmenity = new BuilderProjectAmenity();
 		builderProjectAmenity.setId(amenity_id);
 		builderProjectAmenity.setName(name);
 		builderProjectAmenity.setStatus(status);
-		responseMessage = builderProjectAmenityDAO.update(builderProjectAmenity);
-		if(amenity_icons != null){
-		if(amenity_icons.size() > 0){
-			try {	
-				System.out.println("Inside Builder logo");
-				List<ProjectAmenityIcon> updateProjectAmenityIcon = new ArrayList<ProjectAmenityIcon>();
-				List<ProjectAmenityIcon> saveProjectAmenityIcon = new ArrayList<ProjectAmenityIcon>();
-				//for multiple inserting images.
-				//if (builder_logo.size() > 0) {
-					for(int j=0 ;j < amenity_icons.size();j++)
-					{
-						System.out.println("Inside For loop");
-						if(amenity_ids != null){
-						if(amenity_icons.get(j).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(j).getFormDataContentDisposition().getFileName().isEmpty()) {
-							if(amenity_ids.get(j).getValueAs(Integer.class) != 0 && amenity_ids.get(j).getValueAs(Integer.class) != null){
-								ProjectAmenityIcon projectAmenityIcon = new ProjectAmenityIcon();
-								String gallery_name = amenity_icons.get(j).getFormDataContentDisposition().getFileName();
-								long millis = System.currentTimeMillis() % 1000;
-								gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-								gallery_name = "images/project/projectamenityicon/"+gallery_name;
-								String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-								System.out.println("for loop image path update: "+uploadGalleryLocation);
-								this.imageUploader.writeToFile(amenity_icons.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
-								projectAmenityIcon.setId(amenity_ids.get(j).getValueAs(Integer.class));
-								projectAmenityIcon.setIconUrl(gallery_name);
-								projectAmenityIcon.setBuilderProjectAmenity(builderProjectAmenity);
-								updateProjectAmenityIcon.add(projectAmenityIcon);
-							}}}else{
-								ProjectAmenityIcon projectAmenityIcon = new ProjectAmenityIcon();
-								String gallery_name = amenity_icons.get(j).getFormDataContentDisposition().getFileName();
-								long millis = System.currentTimeMillis() % 1000;
-								gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-								gallery_name = "images/project/projectamenityicon/"+gallery_name;
-								String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-								System.out.println("for loop image path add: "+uploadGalleryLocation);
-								this.imageUploader.writeToFile(amenity_icons.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
-								projectAmenityIcon.setIconUrl(gallery_name);
-								projectAmenityIcon.setBuilderProjectAmenity(builderProjectAmenity);
-								saveProjectAmenityIcon.add(projectAmenityIcon);
-							}
-						}
-					
-					if(updateProjectAmenityIcon.size() > 0) {
-						builderProjectAmenityDAO.updateProjectAmenityIcon(updateProjectAmenityIcon);
+		try {	
+			if (amenity_icons.size() > 0) {
+				for(int i=0 ;i < amenity_icons.size();i++)
+				{
+					if(amenity_icons.get(i).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						gallery_name = amenity_icons.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/projectamenityicon/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(amenity_icons.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
 					}
-					if(saveProjectAmenityIcon.size() > 0){
-						builderProjectAmenityDAO.saveProjectAmenityIcon(saveProjectAmenityIcon);
-					}
-					responseMessage.setStatus(1);
-					responseMessage.setMessage("Project Amenity updated successfully.");
 				}
-			 catch(Exception e) {
-				 responseMessage.setStatus(0);
-				 responseMessage.setMessage("Unable to save image");
 			}
+		} catch(Exception e) {
+			//e.printStackTrace();
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Unable to save image");
 		}
-			
-		}else{
-			responseMessage.setStatus(1);
-			responseMessage.setMessage("Project Amenity updated successfully without icon.");
+		if(gallery_name.length() > 0) {
+			builderProjectAmenity.setIconUrl(gallery_name);
 		}
+		responseMessage = builderProjectAmenityDAO.update(builderProjectAmenity);
 		return responseMessage;
 		
 	}
@@ -1054,47 +897,27 @@ public class CreateProjectController {
 		ResponseMessage responseMessage = new ResponseMessage();
 		builderFloorAmenity.setName(name);
 		builderFloorAmenity.setStatus(status);
+		try {	
+			if (amenity_icons.size() > 0) {
+				for(int i=0 ;i < amenity_icons.size();i++)
+				{
+					if(amenity_icons.get(i).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = amenity_icons.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/floor/amenityicon/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(amenity_icons.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						builderFloorAmenity.setIconUrl(gallery_name);
+					}
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			builderFloorAmenity.setIconUrl("");
+		}
 		BuilderFloorAmenityDAO builderFloorAmenityDAO = new BuilderFloorAmenityDAO();
 		responseMessage = builderFloorAmenityDAO.save(builderFloorAmenity);
-		if(amenity_icons != null){
-			if(responseMessage.getId()>0){
-					builderFloorAmenity.setId(responseMessage.getId());
-					  try {	
-							List<FloorAmenityIcon> floorAmenityIconList = new ArrayList<FloorAmenityIcon>();
-							//for multiple inserting images.
-							if (amenity_icons.size() > 0) {
-								for(int i=0 ;i < amenity_icons.size();i++)
-								{
-									if(amenity_icons.get(i).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-										FloorAmenityIcon floorAmenityIcon = new FloorAmenityIcon();
-										String gallery_name = amenity_icons.get(i).getFormDataContentDisposition().getFileName();
-										long millis = System.currentTimeMillis() % 1000;
-										gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-										gallery_name = "images/project/floor/amenityicon/"+gallery_name;
-										String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-										//System.out.println("for loop image path: "+uploadGalleryLocation);
-										this.imageUploader.writeToFile(amenity_icons.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-										floorAmenityIcon.setBuilderFloorAmenity(builderFloorAmenity);
-										floorAmenityIcon.setIconUrl(gallery_name);
-										floorAmenityIconList.add(floorAmenityIcon);
-									}
-								}
-								if(floorAmenityIconList.size() > 0) {
-									builderFloorAmenityDAO.saveFloorAmenityIcon(floorAmenityIconList);
-								}
-							}
-							responseMessage.setStatus(1);
-							responseMessage.setMessage("Floor Amenity added successfully");
-						} catch(Exception e) {
-							//e.printStackTrace();
-							responseMessage.setStatus(0);
-							responseMessage.setMessage("Unable to save image");
-						}	
-			}else{
-				responseMessage.setStatus(0);
-				responseMessage.setMessage("Fail to save Floor Amenity");
-			}
-		}
 		return responseMessage;
 	}
 
@@ -1106,75 +929,34 @@ public class CreateProjectController {
 			@FormDataParam("uamenity_id") int id, 
 			@FormDataParam("uname") String name,
 			@FormDataParam("ustatus") byte status,
-			@FormDataParam("floor_amenity_id[]")List<FormDataBodyPart> amenity_ids,
 			@FormDataParam("floor_amenity_icon[]")List<FormDataBodyPart> amenity_icons) {
 		ResponseMessage responseMessage = new ResponseMessage();
 		BuilderFloorAmenity builderFloorAmenity = new BuilderFloorAmenity();
 		builderFloorAmenity.setId(id);
 		builderFloorAmenity.setName(name);
 		builderFloorAmenity.setStatus(status);
+		try {	
+			if (amenity_icons.size() > 0) {
+				for(int i=0 ;i < amenity_icons.size();i++)
+				{
+					if(amenity_icons.get(i).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = amenity_icons.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/floor/amenityicon/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(amenity_icons.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						builderFloorAmenity.setIconUrl(gallery_name);
+					}
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			builderFloorAmenity.setIconUrl("");
+		}
 		BuilderFloorAmenityDAO builderFloorAmenityDAO = new BuilderFloorAmenityDAO();
 		responseMessage = builderFloorAmenityDAO.update(builderFloorAmenity);
-		if(amenity_icons != null){
-			 if(amenity_icons.size() > 0){
-					try {	
-						List<FloorAmenityIcon> updateFloorAmenityIcon = new ArrayList<FloorAmenityIcon>();
-						List<FloorAmenityIcon> saveFloorAmenityIcon = new ArrayList<FloorAmenityIcon>();
-						//for multiple inserting images.
-						//if (builder_logo.size() > 0) {
-							for(int j=0 ;j < amenity_icons.size();j++)
-							{
-								System.out.println("Inside For loop");
-								if(amenity_ids != null){
-								if(amenity_icons.get(j).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(j).getFormDataContentDisposition().getFileName().isEmpty()) {
-									if(amenity_ids.get(j).getValueAs(Integer.class) != 0 && amenity_ids.get(j).getValueAs(Integer.class) != null){
-										FloorAmenityIcon floorAmenityIcon = new FloorAmenityIcon();
-										String gallery_name = amenity_icons.get(j).getFormDataContentDisposition().getFileName();
-										long millis = System.currentTimeMillis() % 1000;
-										gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-										gallery_name = "images/project/floor/amenityicon/"+gallery_name;
-										String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-										System.out.println("for loop image path update: "+uploadGalleryLocation);
-										this.imageUploader.writeToFile(amenity_icons.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
-										floorAmenityIcon.setId(amenity_ids.get(j).getValueAs(Integer.class));
-										floorAmenityIcon.setIconUrl(gallery_name);
-										floorAmenityIcon.setBuilderFloorAmenity(builderFloorAmenity);
-										updateFloorAmenityIcon.add(floorAmenityIcon);
-									}}}else{
-										System.out.println("Inside else condition..");
-										FloorAmenityIcon floorAmenityIcon = new FloorAmenityIcon();
-										String gallery_name = amenity_icons.get(j).getFormDataContentDisposition().getFileName();
-										long millis = System.currentTimeMillis() % 1000;
-										gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-										gallery_name = "images/project/floor/amenityicon/"+gallery_name;
-										String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-										System.out.println("for loop image path add: "+uploadGalleryLocation);
-										this.imageUploader.writeToFile(amenity_icons.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
-										floorAmenityIcon.setIconUrl(gallery_name);
-										floorAmenityIcon.setBuilderFloorAmenity(builderFloorAmenity);
-										saveFloorAmenityIcon.add(floorAmenityIcon);
-									}
-							}
-							if(updateFloorAmenityIcon.size() > 0) {
-								builderFloorAmenityDAO.updateFloorAmenityIcon(updateFloorAmenityIcon);
-							}
-							if(saveFloorAmenityIcon.size() > 0){
-								builderFloorAmenityDAO.saveFloorAmenityIcon(saveFloorAmenityIcon);
-							}
-							responseMessage.setStatus(1);
-							responseMessage.setMessage("Floor Amenity updated successfully.");
-						}
-					 catch(Exception e) {
-						 e.printStackTrace();
-						 responseMessage.setStatus(0);
-						 responseMessage.setMessage("Unable to save image");
-					}
-			 }else{
-				 responseMessage.setStatus(0);
-				 responseMessage.setMessage("Fail to update Floor Amenity");
-			 }
-		}
-		 return responseMessage;
+		return responseMessage;
 	}
 	
 //	@POST
@@ -1338,62 +1120,32 @@ public class CreateProjectController {
 		ResponseMessage responseMessage = new ResponseMessage();
 		builderFlatAmenity.setName(name);
 		builderFlatAmenity.setStatus(status);
+		try {	
+			if (amenity_icons.size() > 0) {
+				for(int i=0 ;i < amenity_icons.size();i++)
+				{
+					if(amenity_icons.get(i).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = amenity_icons.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/flat/amenityicon/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(amenity_icons.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						builderFlatAmenity.setIconUrl(gallery_name);
+					}
+				}
+			} else {
+				builderFlatAmenity.setIconUrl("");
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			builderFlatAmenity.setIconUrl("");
+		}
 		BuilderFlatAmenityDAO builderFlatAmenityDAO = new BuilderFlatAmenityDAO();
 		responseMessage=builderFlatAmenityDAO.save(builderFlatAmenity);
-		 if(amenity_icons != null){
-			if(responseMessage.getId()>0){
-				builderFlatAmenity.setId(responseMessage.getId());
-					  try {	
-							List<FlatAmenityIcon> flatAmenityIconList = new ArrayList<FlatAmenityIcon>();
-							//for multiple inserting images.
-							if (amenity_icons.size() > 0) {
-								for(int i=0 ;i < amenity_icons.size();i++)
-								{
-									if(amenity_icons.get(i).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-										FlatAmenityIcon flatAmenityIcon = new FlatAmenityIcon();
-										String gallery_name = amenity_icons.get(i).getFormDataContentDisposition().getFileName();
-										long millis = System.currentTimeMillis() % 1000;
-										gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-										gallery_name = "images/project/flat/amenityicon/"+gallery_name;
-										String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-										//System.out.println("for loop image path: "+uploadGalleryLocation);
-										this.imageUploader.writeToFile(amenity_icons.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-										flatAmenityIcon.setBuilderFlatAmenity(builderFlatAmenity);
-										flatAmenityIcon.setIconUrl(gallery_name);
-										flatAmenityIconList.add(flatAmenityIcon);
-									}
-								}
-								if(flatAmenityIconList.size() > 0) {
-									builderFlatAmenityDAO.saveFlatAmenityIcon(flatAmenityIconList);
-								}
-							}
-//							responseMessage.setStatus(1);
-//							responseMessage.setMessage("Flat Amenity added successfully");
-						} catch(Exception e) {
-							e.printStackTrace();
-							responseMessage.setStatus(0);
-							responseMessage.setMessage("Unable to save image");
-						}
-			}else{
-				responseMessage.setStatus(0);
-				responseMessage.setMessage("Unable to save Project Amenity");
-			}
-		 }
-			return responseMessage;
+		return responseMessage;
 	}
 	
-//	@POST
-//	@Path("/builder/flat/amenity/save")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public ResponseMessage addBuilderFlatAmenity(@FormParam("name") String name, @FormParam("status") byte status) {
-//		BuilderFlatAmenity builderFlatAmenity = new BuilderFlatAmenity();
-//
-//		builderFlatAmenity.setName(name);
-//		builderFlatAmenity.setStatus(status);
-//		BuilderFlatAmenityDAO builderFloorAmenityDAO = new BuilderFlatAmenityDAO();
-//		return builderFloorAmenityDAO.save(builderFlatAmenity);
-//	}
-
 	@POST
 	@Path("/builder/flat/amenity/update")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -1402,7 +1154,6 @@ public class CreateProjectController {
 			@FormDataParam("uamenity_id") int id, 
 			@FormDataParam("uname") String name,
 			@FormDataParam("ustatus") byte status,
-			@FormDataParam("flat_amenity_id[]")List<FormDataBodyPart> amenity_ids,
 			@FormDataParam("flat_amenity_icon[]") List<FormDataBodyPart> amenity_icons
 			) {
 		ResponseMessage responseMessage = new ResponseMessage();
@@ -1410,62 +1161,29 @@ public class CreateProjectController {
 		builderFlatAmenity.setId(id);
 		builderFlatAmenity.setName(name);
 		builderFlatAmenity.setStatus(status);
+		try {	
+			if (amenity_icons.size() > 0) {
+				for(int i=0 ;i < amenity_icons.size();i++)
+				{
+					if(amenity_icons.get(i).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = amenity_icons.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/flat/amenityicon/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(amenity_icons.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						builderFlatAmenity.setIconUrl(gallery_name);
+					}
+				}
+			} else {
+				builderFlatAmenity.setIconUrl("");
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			builderFlatAmenity.setIconUrl("");
+		}
 		BuilderFlatAmenityDAO builderFlatAmenityDAO = new BuilderFlatAmenityDAO();
 		responseMessage = builderFlatAmenityDAO.update(builderFlatAmenity);
-		if(amenity_icons != null){
-			if(amenity_icons.size() > 0){
-				try {	
-					List<FlatAmenityIcon> updateFlatAmenityIcon = new ArrayList<FlatAmenityIcon>();
-					List<FlatAmenityIcon> saveFlatAmenityIcon = new ArrayList<FlatAmenityIcon>();
-					//for multiple inserting images.
-					//if (builder_logo.size() > 0) {
-						for(int j=0 ;j < amenity_icons.size();j++)
-						{
-							if(amenity_ids != null){
-							if(amenity_icons.get(j).getFormDataContentDisposition().getFileName() != null && !amenity_icons.get(j).getFormDataContentDisposition().getFileName().isEmpty()) {
-								if(amenity_ids.get(j).getValueAs(Integer.class) != 0 && amenity_ids.get(j).getValueAs(Integer.class) != null){
-									FlatAmenityIcon flatAmenityIcon = new FlatAmenityIcon();
-									String gallery_name = amenity_icons.get(j).getFormDataContentDisposition().getFileName();
-									long millis = System.currentTimeMillis() % 1000;
-									gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-									gallery_name = "images/project/flat/amenityicon/"+gallery_name;
-									String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-									//System.out.println("for loop image path update: "+uploadGalleryLocation);
-									this.imageUploader.writeToFile(amenity_icons.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
-									flatAmenityIcon.setId(amenity_ids.get(j).getValueAs(Integer.class));
-									flatAmenityIcon.setIconUrl(gallery_name);
-									flatAmenityIcon.setBuilderFlatAmenity(builderFlatAmenity);
-									updateFlatAmenityIcon.add(flatAmenityIcon);
-								}}}else{
-									FlatAmenityIcon flatAmenityIcon = new FlatAmenityIcon();
-									String gallery_name = amenity_icons.get(j).getFormDataContentDisposition().getFileName();
-									long millis = System.currentTimeMillis() % 1000;
-									gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-									gallery_name = "images/project/flat/amenityicon/"+gallery_name;
-									String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-									//System.out.println("for loop image path add: "+uploadGalleryLocation);
-									this.imageUploader.writeToFile(amenity_icons.get(j).getValueAs(InputStream.class), uploadGalleryLocation);
-									flatAmenityIcon.setIconUrl(gallery_name);
-									flatAmenityIcon.setBuilderFlatAmenity(builderFlatAmenity);
-									saveFlatAmenityIcon.add(flatAmenityIcon);
-								}
-							}
-						if(updateFlatAmenityIcon.size() > 0) {
-							builderFlatAmenityDAO.updateFlatAmenityIcon(updateFlatAmenityIcon);
-						}
-						if(saveFlatAmenityIcon.size() > 0){
-							builderFlatAmenityDAO.saveFlatAmenityIcon(saveFlatAmenityIcon);
-						}
-//						responseMessage.setStatus(1);
-//						responseMessage.setMessage("Flat Amenity updated successfully.");
-					}
-				 catch(Exception e) {
-					 responseMessage.setStatus(0);
-					 responseMessage.setMessage("Unable to save image");
-				}
-			
-			}
-		}
 		return responseMessage;
 	}
 

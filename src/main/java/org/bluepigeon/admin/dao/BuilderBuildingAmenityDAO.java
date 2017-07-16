@@ -82,18 +82,28 @@ public class BuilderBuildingAmenityDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("name", builderBuildingAmenity.getName());
 		query.setParameter("id", builderBuildingAmenity.getId());
-		// System.out.println("Country status ::"+country.getStatus());
-		// query.setParameter("status", country.getStatus());
-		System.out.println("id :: "+builderBuildingAmenity.getId()+" Name :: "+builderBuildingAmenity.getName());
 		List<BuilderBuildingAmenity> result = query.list();
 		session.close();
 		if (result.size() > 0) {
 			response.setStatus(0);
 			response.setMessage("Building amenity name already exists");
 		} else {
+			String hql1 = "from BuilderBuildingAmenity where id = :id";
+			Session session1 = hibernateUtil.openSession();
+			Query query1 = session1.createQuery(hql1);
+			query1.setParameter("id", builderBuildingAmenity.getId());
+			List<BuilderBuildingAmenity> result1 = query1.list();
+			session1.close();
+			BuilderBuildingAmenity newBuilderAmenity = new BuilderBuildingAmenity();
+			newBuilderAmenity = result1.get(0);
+			newBuilderAmenity.setName(builderBuildingAmenity.getName());
+			newBuilderAmenity.setStatus(builderBuildingAmenity.getStatus());
+			if(builderBuildingAmenity.getIconUrl().length() > 0) {
+				newBuilderAmenity.setIconUrl(builderBuildingAmenity.getIconUrl());
+			}
 			Session newsession = hibernateUtil.openSession();
 			newsession.beginTransaction();
-			newsession.update(builderBuildingAmenity);
+			newsession.update(newBuilderAmenity);
 			newsession.getTransaction().commit();
 			newsession.close();
 			response.setStatus(1);

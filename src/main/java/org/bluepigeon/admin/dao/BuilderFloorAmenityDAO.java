@@ -84,9 +84,22 @@ public class BuilderFloorAmenityDAO {
 			response.setStatus(0);
 			response.setMessage("Floor amenity name already exists");
 		} else {
+			String hql1 = "from BuilderFloorAmenity where id = :id";
+			Session session1 = hibernateUtil.openSession();
+			Query query1 = session1.createQuery(hql1);
+			query1.setParameter("id", builderFloorAmenity.getId());
+			List<BuilderFloorAmenity> result1 = query1.list();
+			session1.close();
+			BuilderFloorAmenity newBuilderFloorAmenity = new BuilderFloorAmenity();
+			newBuilderFloorAmenity = result1.get(0);
+			newBuilderFloorAmenity.setName(builderFloorAmenity.getName());
+			newBuilderFloorAmenity.setStatus(builderFloorAmenity.getStatus());
+			if(builderFloorAmenity.getIconUrl().length() > 0) {
+				newBuilderFloorAmenity.setIconUrl(builderFloorAmenity.getIconUrl());
+			}
 			Session newsession = hibernateUtil.openSession();
 			newsession.beginTransaction();
-			newsession.update(builderFloorAmenity);
+			newsession.update(newBuilderFloorAmenity);
 			newsession.getTransaction().commit();
 			newsession.close();
 			response.setStatus(1);

@@ -103,9 +103,22 @@ public class BuilderFlatAmenityDAO {
 			response.setStatus(0);
 			response.setMessage("Flat amenity name already exists");
 		} else {
+			String hql1 = "from BuilderFlatAmenity where id = :id";
+			Session session1 = hibernateUtil.openSession();
+			Query query1 = session1.createQuery(hql1);
+			query1.setParameter("id", builderFlatAmenity.getId());
+			List<BuilderFlatAmenity> result1 = query1.list();
+			session1.close();
+			BuilderFlatAmenity newBuilderFlatAmenity = new BuilderFlatAmenity();
+			newBuilderFlatAmenity = result1.get(0);
+			newBuilderFlatAmenity.setName(builderFlatAmenity.getName());
+			newBuilderFlatAmenity.setStatus(builderFlatAmenity.getStatus());
+			if(builderFlatAmenity.getIconUrl().length() > 0) {
+				newBuilderFlatAmenity.setIconUrl(builderFlatAmenity.getIconUrl());
+			}
 			Session newsession = hibernateUtil.openSession();
 			newsession.beginTransaction();
-			newsession.update(builderFlatAmenity);
+			newsession.update(newBuilderFlatAmenity);
 			newsession.getTransaction().commit();
 			newsession.close();
 			response.setStatus(1);

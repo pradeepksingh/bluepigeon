@@ -35,8 +35,8 @@ public class BuilderProjectAmenityDAO {
 				newsession.getTransaction().commit();
 				newsession.close();
 				response.setId(builderProjectAmenity.getId());
-				//response.setStatus(1);
-				//response.setMessage("Project amenity added Successfully");
+				response.setStatus(1);
+				response.setMessage("Project amenity added Successfully");
 			}
 		}
 		return response;
@@ -83,9 +83,22 @@ public class BuilderProjectAmenityDAO {
 			response.setStatus(0);
 			response.setMessage("Project amenity name already exists");
 		} else {
+			String hql2 = "from BuilderProjectAmenity where id = :id";
+			Session session2 = hibernateUtil.openSession();
+			Query query2 = session2.createQuery(hql2);
+			query2.setParameter("id", builderProjectAmenity.getId());
+			List<BuilderProjectAmenity> result2 = query2.list();
+			BuilderProjectAmenity builderProjectAmenitynew = result2.get(0);
+			session2.close();
+			builderProjectAmenitynew.setId(builderProjectAmenity.getId());
+			builderProjectAmenitynew.setName(builderProjectAmenity.getName());
+			builderProjectAmenitynew.setStatus(builderProjectAmenity.getStatus());
+			if(builderProjectAmenity.getIconUrl().length() > 0) {
+				builderProjectAmenitynew.setIconUrl(builderProjectAmenity.getIconUrl());
+			}
 			Session newsession = hibernateUtil.openSession();
 			newsession.beginTransaction();
-			newsession.update(builderProjectAmenity);
+			newsession.update(builderProjectAmenitynew);
 			newsession.getTransaction().commit();
 			newsession.close();
 			response.setStatus(1);
