@@ -24,6 +24,7 @@ public class BuilderProjectAmenity implements java.io.Serializable {
 
 	private Integer id;
 	private String name;
+	private String iconUrl="";
 	private Byte status;
 	private Set<BuilderProjectAmenityStages> builderProjectAmenityStageses = new HashSet<BuilderProjectAmenityStages>(0);
 	private Set<BuilderProjectAmenityInfo> builderProjectAmenityInfos = new HashSet<BuilderProjectAmenityInfo>(0);
@@ -31,10 +32,11 @@ public class BuilderProjectAmenity implements java.io.Serializable {
 	public BuilderProjectAmenity() {
 	}
 
-	public BuilderProjectAmenity(String name, Byte status,
+	public BuilderProjectAmenity(String name, Byte status, String iconUrl,
 			Set<BuilderProjectAmenityStages> builderProjectAmenityStageses) {
 		this.name = name;
 		this.status = status;
+		this.iconUrl = iconUrl;
 		this.builderProjectAmenityStageses = builderProjectAmenityStageses;
 	}
 
@@ -57,6 +59,15 @@ public class BuilderProjectAmenity implements java.io.Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@Column(name = "icon_url", length = 255)
+	public String getIconUrl() {
+		return iconUrl;
+	}
+
+	public void setIconUrl(String iconUrl) {
+		this.iconUrl = iconUrl;
 	}
 
 	@Column(name = "status")

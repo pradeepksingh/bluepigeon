@@ -15,7 +15,6 @@
 	if (amenity_id > 0) {
 		amenity_list = builderBuildingAmenityDAO.getBuilderBuildingAmenityById(amenity_id);
 		builderBuildingAmenity = amenity_list.get(0);
-		buildingAmenityIcon = builderBuildingAmenityDAO.getBuildingAmenityIconById(amenity_id);
 	}
 %>
 
@@ -29,20 +28,23 @@
                   		</div>
               		</div>
               	</div>
-              	<div class="col-xs-12">
+              	<div class="row">
+              		<div class="col-xs-12">
                   		<div class="form-group">
-                       		<label for="password" class="control-label">Building Amenity Icon</label>
-<!-- 							<input type="hidden" id="building_amenity_id" name="building_amenity_id[]" value="0"/> -->
-                       		<input type="file" class="form-control" id="building_amenity_icon" name="building_amenity_icon[]" />
-                       		<% if(buildingAmenityIcon != null) {%>
-							<input type="hidden" value="<%out.print(buildingAmenityIcon.getId()); %>" name="building_amenity_id[]" id="building_amenity_id"/>
+                       		<label for="password" class="control-label"><% if(builderBuildingAmenity.getIconUrl() != null && !builderBuildingAmenity.getIconUrl().equals("")) {%>Select New<% } else { %>Building<% } %> Amenity Icon</label>
+							<input type="hidden" id="building_amenity_id" name="building_amenity_id[]" value="0"/>
+							<div class="col-sm-8" style="padding-left:0px;">
+                       			<input type="file" class="form-control" id="building_amenity_icon" name="building_amenity_icon[]" />
+                       		</div>
+                       		<% if(builderBuildingAmenity.getIconUrl() != null && !builderBuildingAmenity.getIconUrl().equals("")) {%>
 							<div class="col-sm-4">
-									<img alt="building amenity icon" src="${baseUrl}/<% out.print(buildingAmenityIcon.getIconUrl()); %>" width="50px;">
+									<img alt="project amenity icon" src="${baseUrl}/<% out.print(builderBuildingAmenity.getIconUrl()); %>" width="50px;">
 							</div>
 							<div class="messageContainer col-sm-offset-4"></div>
 							<% } %>
                   		</div>
               		</div>
+              	</div>
               	<div class="row">
               		<div class="col-xs-12">
                   		<div class="form-group">
