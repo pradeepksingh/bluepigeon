@@ -1,3 +1,6 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.bluepigeon.admin.dao.AreaUnitDAO"%>
+<%@page import="org.bluepigeon.admin.model.AreaUnit"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFloor"%>
 <%@page import="org.bluepigeon.admin.data.PaymentInfoData"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectPaymentInfo"%>
@@ -19,6 +22,8 @@
 <%@page import="org.bluepigeon.admin.model.BuildingStage"%>
 <%@page import="org.bluepigeon.admin.model.BuildingSubstage"%>
 <%@page import="org.bluepigeon.admin.model.BuildingWeightage"%>
+<%@page import="org.bluepigeon.admin.data.BuildingPriceInfoData"%>
+<%@page import="org.bluepigeon.admin.model.Tax"%>
 <%@page import="org.bluepigeon.admin.dao.BuildingStageDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuildingSubstagesDAO"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
@@ -44,10 +49,13 @@
 		}
 	}
 	BuilderBuilding builderBuilding = null;
+	List<BuildingPriceInfoData> buildingPriceInfo = new ArrayList<BuildingPriceInfoData>();
+	List<Tax> taxes = null;
 	List<BuilderBuilding> builderBuildings = new ProjectDAO().getBuilderProjectBuildingById(building_id);
 	if(builderBuildings.size() > 0) {
 		builderBuilding = builderBuildings.get(0);
 	}
+	List<AreaUnit> areaUnits = new AreaUnitDAO().getActiveAreaUnitList();
 	List<BuilderProject> builderProjects = new ProjectDAO().getBuilderActiveProjects();
 	List<BuilderBuildingStatus> builderBuildingStatusList = new BuilderBuildingStatusDAO().getBuilderBuildingStatus();
 	List<BuilderBuildingAmenity> builderBuildingAmenities = new BuilderBuildingAmenityDAO().getBuilderActiveBuildingAmenityList();
@@ -60,6 +68,14 @@
 	List<BuildingStage> buildingStages = new BuildingStageDAO().getActiveBuildingStages();
 	List<BuildingWeightage> buildingWeightages = new ProjectDAO().getBuildingWeightage(building_id);
 	List<BuilderFloor> builderFloors = new ProjectDAO().getBuildingFloors(builderBuilding.getId());
+	if(building_id > 0){
+		int project_id = builderBuildings.get(0).getBuilderProject().getId();
+		buildingPriceInfo = new ProjectDAO().getBuilderBuildingPriceInfo(building_id);
+		BuilderProject builderProject = new ProjectDAO().getBuilderProjectById(project_id);
+		if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
+			taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
+		}
+	}
 %>
 <div class="main-content">
 	<div class="main-content-inner">
@@ -82,6 +98,7 @@
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Basic Details</a></li>
 			  	<li><a data-toggle="tab" href="#buildingdetail">Building Images</a></li>
+			  	<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
 			  	<li><a data-toggle="tab" href="#offer">Offers</a></li>
 			  	<li><a data-toggle="tab" href="#productsubstage">Building Weightage</a></li>
@@ -339,6 +356,173 @@
 						</div>
 					</form>
 				</div>
+				<div id="pricing" class="tab-pane fade">
+					<form id="updatepricing" name="updatepricing" action="" method="post" class="form-horizontal" >
+						<input type="hidden" name="building_id" value="<% out.print(building_id);%>"/>
+			 			<div class="row">
+			 				<div id="pricingresponse"></div>
+			 				<div id="price_schedule">
+								<div class="col-lg-12">
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<div class="row">
+												<div class="col-lg-6">
+												   <input type="hidden" name="id" value="<% if(buildingPriceInfo.size() > 0){ out.print(buildingPriceInfo.get(0).getId()); } else {%>0<% }%>"/>
+													<div class="form-group" id="error-base_unit">
+														<label class="control-label col-sm-4">Pricing Unit <span class='text-danger'>*</span></label>
+														<div class="col-sm-8">
+															<select name="base_unit" id="base_unit" class="form-control">
+																<%	if(areaUnits.size() > 0){ 
+																for(AreaUnit areaUnit :areaUnits) { %>
+																<option value="<% out.print(areaUnit.getId()); %>" <% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getUnitId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
+																<% }} %>
+															</select>
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-base_rate">
+														<label class="control-label col-sm-4">Base Rate <span class='text-danger'>*</span></label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="base_rate" name="base_rate" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getBaseRate() != null){ out.print(buildingPriceInfo.get(0).getBaseRate());}%>"/>
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-rise_rate">
+														<label class="control-label col-sm-4">Floor Rise Rate</label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getRiseRate() != null){ out.print(buildingPriceInfo.get(0).getRiseRate());}%>"/>
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-post">
+														<label class="control-label col-sm-4">Applicable Post </label>
+														<div class="col-sm-8 input-group" style="padding: 0px 12px;">
+															<input type="text" class="form-control" id="post" name="post" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getPost() != 0){ out.print(buildingPriceInfo.get(0).getPost());}%>"/>
+															<span class="input-group-addon">floor</span>
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-maintenance">
+														<label class="control-label col-sm-4">Maintenance Charge </label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="maintenance" name="maintenance" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getMaintainance() != null){ out.print(buildingPriceInfo.get(0).getMaintainance());}%>"/>
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-tenure">
+														<label class="control-label col-sm-4">Tenure </label>
+														<div class="col-sm-8 input-group" style="padding: 0px 12px;">
+															<input type="text" class="form-control" id="tenure" name="tenure" value="<%if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getTenure() != 0){ out.print(buildingPriceInfo.get(0).getTenure()); } %>"/>
+															<span class="input-group-addon">Months</span>
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-amenity_rate">
+														<label class="control-label col-sm-4">Amenities Facing Rate</label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getAmenityRate() != null){ out.print(buildingPriceInfo.get(0).getAmenityRate());}%>"/>
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-landmark">
+														<label class="control-label col-sm-4">Parking Type </label>
+														<div class="col-sm-8">
+															<select id="parking_id" name="parking_id" class="form-control">
+																<option value="0">Select Parking Type</option>
+																<option value="1">Open Parking</option>
+																<option value="2">Shed Parking</option>
+															</select>
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-landmark">
+														<label class="control-label col-sm-4">Parking</label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="parking" name="parking" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getParking() != null){ out.print(buildingPriceInfo.get(0).getParking());}%>"/>
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-landmark">
+														<label class="control-label col-sm-4">Stamp Duty </label>
+														<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
+															<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getStampDuty() != null){ out.print(buildingPriceInfo.get(0).getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
+															<span class="input-group-addon">%</span>
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-tax">
+														<label class="control-label col-sm-4">Tax</label>
+														<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
+															<input type="text" class="form-control" id="tax" name="tax" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getTax() != null){ out.print(buildingPriceInfo.get(0).getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
+															<span class="input-group-addon">%</span>
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												</div>
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-vat">
+														<label class="control-label col-sm-4">VAT </label>
+														<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
+															<input type="text" class="form-control" id="vat" name="vat" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getVat() != null){ out.print(buildingPriceInfo.get(0).getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
+															<span class="input-group-addon">%</span>
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-tech_fee">
+														<label class="control-label col-sm-4">Tech Fees</label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="tech_fee" name="tech_fee" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getFee() != null){ out.print(buildingPriceInfo.get(0).getFee());}%>"/>
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6 margin-bottom-5">
+								<div class="col-sm-12">
+									<button type="submit" class="btn btn-success btn-sm" id="pricebtn">SAVE</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
 				<div id="payment" class="tab-pane fade">
 					<form id="updatepayment" name="updatepayment" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 						<input type="hidden" name="schedule_count" id="schedule_count" value="100000000000"/>
@@ -367,10 +551,10 @@
 														<div class="col-sm-4">
 															<input type="text" class="form-control" onkeypress=" return isNumber(event, this);"  id="payable" name="payable[]" value="<% out.print(buildingPaymentInfo.getPayable());%>"/>
 														</div>
-														<div class="messageContainer col-sm-offset-6"></div>
+														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-3 margin-bottom-5">
+												<!-- div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-amount">
 														<label class="control-label col-sm-6">Amount </label>
 														<div class="col-sm-6">
@@ -378,20 +562,10 @@
 														</div>
 														<div class="messageContainer"></div>
 													</div>
-												</div>
-<!-- 												<div class="col-lg-1"> -->
-<%-- 													<span><a href="javascript:deletePayment(<% out.print(buildingPaymentInfo.getId());%>);" class="btn btn-danger btn-xs">x</a></span> --%>
-<!-- 												</div> -->
+												</div-->
 											</div>
 											<% } %>
 										</div>
-<!-- 										<div> -->
-<!-- 											<div class="col-lg-12"> -->
-<!-- 												<span class="pull-right"> -->
-<!-- 													<a href="javascript:addMoreSchedule();" class="btn btn-info btn-xs">+ Add More Schedule</a> -->
-<!-- 												</span> -->
-<!-- 											</div> -->
-<!-- 										</div> -->
 										<div>
 											<div class="row">
 												<div class="col-lg-12">
@@ -636,6 +810,9 @@
 <script src="../../../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <style>
+.messageContainer {
+	padding-left:15px;
+}
 	.row {
 		margin-bottom:5px;
 	}
@@ -747,7 +924,7 @@ function isNumber(evt, element) {
 function notEmpty(){
 	alert($(this).val());
 }
-$('#updatebuilding').bootstrapValidator({
+$("#updatepricing").bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},
@@ -756,13 +933,157 @@ $('#updatebuilding').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-    	'schedule[]': {
+    	base_unit: {
             validators: {
                 notEmpty: {
-                    message: 'Schedule is required and cannot be empty'
+                    message: 'Area unit is required'
                 }
             }
         },
+        base_rate: {
+            validators: {
+                notEmpty: {
+                    message: 'Base rate is required'
+                },
+        		numeric: {
+        			message: 'Base rate is invalid'
+        		}
+            }
+        },
+        rise_rate: {
+            validators: {
+            	notEmpty: {
+                    message: 'Rise rate is required'
+                },
+        		numeric: {
+        			message: 'Rise rate is invalid'
+        		}
+            }
+        },
+        post: {
+            validators: {
+            	notEmpty: {
+                    message: 'Applicable Post is required'
+                },
+        		integer: {
+        			message: 'Applicable Post is invalid'
+        		}
+            }
+        },
+        maintenance: {
+            validators: {
+        		numeric: {
+        			message: 'Maintenance is invalid'
+        		}
+            }
+        },
+        tenure: {
+            validators: {
+            	numeric: {
+        			message: 'Tenure is invalid'
+        		}
+            }
+        },
+        amenity_rate: {
+            validators: {
+            	notEmpty: {
+                    message: 'Amenity facing rate is required'
+                },
+        		numeric: {
+        			message: 'Amenity facing rate is invalid'
+        		}
+            }
+        },
+        parking: {
+            validators: {
+            	notEmpty: {
+                    message: 'Parking rate is required'
+                },
+        		numeric: {
+        			message: 'Parking rate is invalid'
+        		}
+            }
+        },
+        stamp_duty: {
+            validators: {
+            	notEmpty: {
+                    message: 'Stamp duty is required'
+                },
+        		numeric: {
+        			message: 'Stamp duty is invalid'
+        		}
+            }
+        },
+        tax: {
+            validators: {
+            	notEmpty: {
+                    message: 'Tax is required'
+                },
+        		numeric: {
+        			message: 'Tax is invalid'
+        		}
+            }
+        },
+        vat: {
+            validators: {
+            	notEmpty: {
+                    message: 'Vat is required'
+                },
+        		numeric: {
+        			message: 'Vat is invalid'
+        		}
+            }
+        },
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	updateBuildingPricing();
+});
+
+function updateBuildingPricing() {
+	var options = {
+	 		target : '#priceresponse', 
+	 		beforeSubmit : showAddPriceRequest,
+	 		success :  showAddPriceResponse,
+	 		url : '${baseUrl}/webapi/project/building/pricing/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#updatepricing').ajaxSubmit(options);
+}
+
+function showAddPriceRequest(formData, jqForm, options){
+	$("#priceresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddPriceResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#priceresponse").removeClass('alert-success');
+       	$("#priceresponse").addClass('alert-danger');
+		$("#priceresponse").html(resp.message);
+		$("#priceresponse").show();
+  	} else {
+  		$("#priceresponse").removeClass('alert-danger');
+        $("#priceresponse").addClass('alert-success');
+        $("#priceresponse").html(resp.message);
+        $("#priceresponse").show();
+        alert(resp.message);
+  	}
+}
+
+
+$('#updatepayment').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
         'payable[]': {
             validators: {
                 notEmpty: {
@@ -770,13 +1091,6 @@ $('#updatebuilding').bootstrapValidator({
                 }
             }
         },
-        'amount':{
-        	 validators: {
-                 notEmpty: {
-                     message: 'Amount of floors is required and cannot be empty'
-                 }
-             }
-        }
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
@@ -784,7 +1098,7 @@ $('#updatebuilding').bootstrapValidator({
 	updateBuildingPayments();
 });
 
-$('#updatepayment').bootstrapValidator({
+$('#updatebuilding').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},

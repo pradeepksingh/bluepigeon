@@ -871,11 +871,39 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-3 margin-bottom-5">
+												<!-- div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-amount">
 														<label class="control-label col-sm-6">Amount <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
 															<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="amount" name="amount[]" value="<% if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div-->
+												<div class="col-lg-1">
+													<span><a href="javascript:removeSchedule(<% out.print(i); %>);" class="btn btn-danger btn-xs">x</a></span>
+												</div>
+											</div>
+											<% i++; } %>
+											<% if(i <= 1) { %>
+											<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>
+											<div class="row" id="schedule-0">
+												<div class="col-lg-5 margin-bottom-5">
+													<div class="form-group" id="error-schedule">
+														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label>
+														<div class="col-sm-8">
+															<div>
+																<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>
+															</div>
+															<div class="messageContainer"></div>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-3 margin-bottom-5">
+													<div class="form-group" id="error-payable">
+														<label class="control-label col-sm-8">% of Net Payable <span class='text-danger'>*</span></label>
+														<div class="col-sm-4">
+															<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -884,43 +912,7 @@
 													<span><a href="javascript:removeSchedule(<% out.print(i); %>);" class="btn btn-danger btn-xs">x</a></span>
 												</div>
 											</div>
-											<% i++; } %>
-<%-- 											<div class="row" id="schedule-<% out.print(i);%>"> --%>
-<%-- 												<% if(i > 1) { %> --%>
-<!-- 												<hr/> -->
-<%-- 												<% } %> --%>
-<!-- 												<div class="col-lg-5 margin-bottom-5"> -->
-<!-- 													<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/> -->
-<!-- 													<div class="form-group" id="error-schedule"> -->
-<!-- 														<label class="control-label col-sm-4">Milestone <span class='text-danger'>*</span></label> -->
-<!-- 														<div class="col-sm-8"> -->
-<!-- 															<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/> -->
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer col-sm-offset-5"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 												<div class="col-lg-3 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-payable"> -->
-<!-- 														<label class="control-label col-sm-8">% of Net Payable <span class='text-danger'>*</span></label> -->
-<!-- 														<div class="col-sm-4"> -->
-<!-- 															<input type="text" class="form-control errorMsg" id="payable" name="payable[]" value=""/> -->
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer col-sm-offset-5"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 												<div class="col-lg-3 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-amount"> -->
-<!-- 														<label class="control-label col-sm-6">Amount <span class='text-danger'>*</span></label> -->
-<!-- 														<div class="col-sm-6"> -->
-<!-- 															<input type="text" class="form-control errorMsg" id="amount" name="amount[]" value=""/> -->
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer col-sm-offset-5"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 												<div class="col-lg-1"> -->
-<%-- 													<span><a href="javascript:removeSchedule(<% out.print(i);%>);" class="btn btn-danger btn-xs">x</a></span> --%>
-<!-- 												</div> -->
-<!-- 											</div> -->
+											<% } %>
 										</div>
 										<div>
 											<div class="col-lg-12">
@@ -1023,75 +1015,6 @@
 												</div>
 											</div>
 											<% j++; } %>
-<%-- 											<div class="row" id="offer-<% out.print(j);%>"> --%>
-<%-- 												<% if(j > 1) { %> --%>
-<!-- 												<hr/> -->
-<%-- 												<% } %> --%>
-<!-- 												<div class="col-lg-12" style="padding-bottom:5px;"> -->
-<!-- 													<span class="pull-right"><a href="javascript:removeOffer(1);" class="btn btn-danger btn-xs">x</a></span> -->
-<!-- 												</div> -->
-<!-- 												<div class="col-lg-5 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-offer_title"> -->
-<!-- 														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label> -->
-<!-- 														<div class="col-sm-8"> -->
-<!-- 															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/> -->
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 												<div class="col-lg-3 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-discount"> -->
-<!-- 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label> -->
-<!-- 														<div class="col-sm-6"> -->
-<!-- 															<input type="number" class="form-control" id="discount" name="discount[]" value=""/> -->
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 												<div class="col-lg-4 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-discount_amount"> -->
-<!-- 														<label class="control-label col-sm-6">Discount Amount </label> -->
-<!-- 														<div class="col-sm-6"> -->
-<!-- 															<input type="number" class="form-control" id="discount_amount" name="discount_amount[]" value=""/> -->
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 												<div class="col-lg-5 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-applicable_on"> -->
-<!-- 														<label class="control-label col-sm-4">Description </label> -->
-<!-- 														<div class="col-sm-8"> -->
-<!-- 															<textarea class="form-control" id="description" name="description[]" ></textarea> -->
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 												<div class="col-lg-3 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-applicable_on"> -->
-<!-- 														<label class="control-label col-sm-6">Offer Type </label> -->
-<!-- 														<div class="col-sm-6"> -->
-<!-- 															<select class="form-control" id="offer_type" name="offer_type[]"> -->
-<!-- 																<option value="1">Percentage</option> -->
-<!-- 																<option value="2">Flat Amount</option> -->
-<!-- 																<option value="3">Other</option> -->
-<!-- 															</select> -->
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 												<div class="col-lg-4 margin-bottom-5"> -->
-<!-- 													<div class="form-group" id="error-apply"> -->
-<!-- 														<label class="control-label col-sm-6">Status </label> -->
-<!-- 														<div class="col-sm-6"> -->
-<!-- 															<select class="form-control" id="offer_status" name="offer_status[]"> -->
-<!-- 																<option value="1" >Active</option> -->
-<!-- 																<option value="0" >Inactive</option> -->
-<!-- 															</select> -->
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer"></div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 											</div> -->
 										</div>
 										<div>
 											<div class="col-lg-12">
@@ -1124,43 +1047,6 @@
 										<div id="offer_area">
 											<div class="row">
 												<div class="col-lg-12 margin-bottom-5">
-<!-- 													<div class="form-group" id="error-amenity_type"> -->
-<!-- 														<div class="col-sm-12"> -->
-<%-- 															<% 	for(ProjectStage projectStage :projectStages) {  --%>
-<!-- // 																Double stage_wt = 0.0; -->
-<!-- // 																for(ProjectWeightage projectWeightage :projectWeightages) { -->
-<!-- // 																	if(projectStage.getId() == projectWeightage.getProjectStage().getId()) { -->
-<!-- // 																		stage_wt = projectWeightage.getStageWeightage(); -->
-<!-- // 																	} -->
-<!-- // 																} -->
-<%-- 															%> --%>
-<!-- 															<fieldset class="scheduler-border"> -->
-<!-- 																<legend class="scheduler-border">Stages</legend> -->
-<!-- 																<div class="col-sm-12"> -->
-<%-- 																	<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(projectStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input name="stage_weightage[]" id="<% out.print(projectStage.getId());%>" type="text" class="form-control" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div> --%>
-<!-- 																	<fieldset class="scheduler-border" style="margin-bottom:0px !important"> -->
-<!-- 																		<legend class="scheduler-border">Sub Stages</legend> -->
-<%-- 																	<% 	for(ProjectSubstage projectSubstage :projectStage.getProjectSubstages()) {  --%>
-<!-- // 																		Double substage_wt = 0.0; -->
-<!-- // 																		for(ProjectWeightage projectWeightage :projectWeightages) { -->
-<!-- // 																			if(projectSubstage.getId() == projectWeightage.getProjectSubstage().getId()) { -->
-<!-- // 																				substage_wt = projectWeightage.getSubstageWeightage(); -->
-<!-- // 																			} -->
-<!-- // 																		} -->
-<%-- 																	%> --%>
-<!-- 																		<div class="col-sm-3"> -->
-<%-- 																			<% out.print(projectSubstage.getName()); %> (%)<br> --%>
-<%-- 																			<input type="number" name="substage_weightage<% out.print(projectStage.getId());%>[]" id="<% out.print(projectSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/> --%>
-<!-- 																		</div> -->
-<%-- 																	<% } %> --%>
-<!-- 																	</fieldset> -->
-<!-- 																</div> -->
-<!-- 															</fieldset> -->
-<%-- 															<% } %> --%>
-<!-- 														</div> -->
-<!-- 														<div class="messageContainer"></div> -->
-<!-- 													</div> -->
-
 														<div class="row" id="error-amenity_type">
 															<div class="col-sm-6">
 																<div class="form-group" id="error-amenity_weightage">
@@ -1345,13 +1231,7 @@ $("#building_weightage").keypress(function(event){
 function isNumber(evt, element) {
 
     var charCode = (evt.which) ? evt.which : event.keyCode
-// 	if(($(element).val() == "")  && ($(element).hasClass('notEmpty'))){
-// 		alert("notEmpty");
-// 		notEmpty();
-// 	}
-    if (
-        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
-        (charCode < 48 || charCode > 57))
+    if ((charCode != 46 || $(element).val().indexOf('.') != -1) && (charCode < 48 || charCode > 57))
         return false;
 
     return true;
@@ -1799,224 +1679,36 @@ function saveProjectDetails(){
 	});
 }
 
-// $("#paymentbtn").click(function(){
-// 	var paymentInfo = [];
-// 	var payable = [];
-// 	var amount = [];
-// 	$('input[name="payable[]"]').each(function(index) {
-// 		payable.push($(this).val());
-// 	});
-// 	$('input[name="amount[]"]').each(function(index) {
-// 		amount.push($(this).val());
-// 	});
-// 	$('input[name="schedule[]"]').each(function(index) {
-// 		if($(this).val() != "") {
-// 			paymentInfo.push({schedule:$(this).val(),payable:payable[index],amount:amount[index],status:1,builderProject:{id:$("#id").val()}});
-// 		}
-// 	});
-// 	var project = {id:$("#id").val()};
-// 	var final_data = {builderProjectPaymentInfos:paymentInfo,builderProject:project}
-// 	if(paymentInfo.length > 0) {
-// 		$.ajax({
-// 		    url: '${baseUrl}/webapi/project/payment/update',
-// 		    type: 'POST',
-// 		    data: JSON.stringify(final_data),
-// 		    contentType: 'application/json; charset=utf-8',
-// 		    dataType: 'json',
-// 		    async: false,
-// 		    success: function(data) {
-// 				if (data.status == 0) {
-// 					alert(data.message);
-// 				} else {
-// 					alert(data.message);
-// 				}
-// 			},
-// 			error : function(data)
-// 			{
-// 				alert("Fail to save data");
-// 			}
-			
-// 		});
-// 	} else {
-// 		alert("Please enter payment schedule details");
-// 	}
-// });
-
-// $("#paymentfrm").bootstrapValidator({
-// 	container: function($field, validator) {
-// 		return $field.parent().next('.messageContainer');
-//    	},
-//     feedbackIcons: {
-//         validating: 'glyphicon glyphicon-refresh'
-//     },
-//     excluded: ':disabled',
-//     fields: {
-//     	'schedule[]': {
-//     		validators: {
-//                 notEmpty: {
-//                     message: 'Schedule is required and cannot be empty'
-//                 }
-//             },
-//            // $('#paymentfrm').bootstrapValidator('revalidateField', 'schedule[]');
-//         },
-//         'payable[]': {
-//     		validators: {
-//                 notEmpty: {
-//                     message: 'Payment is required and cannot be empty'
-//                 },
-//             }
-//         },
-//        'amount[]':{
-//         	validators: {
-//                 notEmpty: {
-//                     message: 'Amount is required and cannot be empty'
-//                 },
-//             }
-//         }
-//     }
-   
-// }).on('success.form.bv', function(event,data) {
-// 	// Prevent form submission
-// 	event.preventDefault();
-	
-// 	updatePaymentSchudle();
-// });
-
-
-//$(document).ready(function() {
-    $('#paymentfrm').find('[name="schedule[]"]')
-    .selectpicker()
-      .change(function(e) {
-        $('#bootstrapSelectForm').bootstrapValidator('revalidateField', 'schedule[]');
-      })
-      .end()
-  .find('[name="payable[]"]')
-    .selectpicker()
-     .change(function(e) {
-       $('#bootstrapSelectForm').bootstrapValidator('revalidateField', 'payable[]');
-     })
-     .end()
-     find('[name="amount[]"]')
-    .selectpicker()
-     .change(function(e) {
-       $('#bootstrapSelectForm').bootstrapValidator('revalidateField', 'amount[]');
-     })
-     .end()
-        .bootstrapValidator({
-        	container: function($field, validator) {
-        		return $field.parent().next('.messageContainer');
-           	},
-        feedbackIcons: {
-          //  valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-           //// validating: 'glyphicon glyphicon-refresh'
-        },
-//         fields: {
-//          	'schedule[]': {
-//         		validators: {
-//                     notEmpty: {
-//                         message: 'Schedule is required and cannot be empty'
-//                     }
-//                 },
-//                // $('#paymentfrm').bootstrapValidator('revalidateField', 'schedule[]');
-//             },
-//             'payable[]': {
-//         		validators: {
-//                     notEmpty: {
-//                         message: 'Payment is required and cannot be empty'
-//                     },
-//                 }
-//             },
-//            'amount[]':{
-//             	validators: {
-//                     notEmpty: {
-//                         message: 'Amount is required and cannot be empty'
-//                     },
-//                 }
-//             }
-//         }
-        
-        
-        fields: {
-        	'schedule[]': {
-                validators: {
-                    callback: {
-                        message: 'Schedule is required and cannot be empty',
-                        callback: function(value, validator, $field) {
-                            /* Get the selected options */
-                            var options = validator.getFieldElements('schedule[]').val();
-                            return options != null;
-                        }
-                    }
-                }
-            },
-            'payable[]': {
-                validators: {
-                    callback: {
-                        message: 'Payable is required and cannot be empty',
-                        callback: function(value, validator, $field) {
-                            /* Get the selected options */
-                            var options = validator.getFieldElements('payable[]').val();
-                            return options != null;
-                        }
-                    }
-                }
-            },
-            'amount[]': {
-                validators: {
-                    callback: {
-                        message: 'Amount is required and cannot be empty',
-                        callback: function(value, validator, $field) {
-                            /* Get the selected options */
-                            var options = validator.getFieldElements('amount[]').val();
-                            return options != null;
-                        }
-                    }
-                }
+$('#paymentfrm').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	'schedule[]': {
+            validators: {
+		    	notEmpty: {
+		    		message: 'Schedule is required and cannot be empty'
+		        },
             }
-        }
-    }).on('success.form.bv', function(event,data) {
-    	// Prevent form submission
-    	event.preventDefault();
-    	
-    	updatePaymentSchudle();
-    });
+        },
+        'payable[]': {
+            validators: {
+		        notEmpty: {
+		    		message: 'Payable is required and cannot be empty'
+		        },
+            }
+        },
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	updatePaymentSchudle();
+});
  
-  //  .on('keyup', 'input[name="schedule[]"], input[name="payable[]"],input[name="amount[]"]', function(e) {
-    //	alert("Hello");
-//         var s = $('#paymentfrm').find('[name="schedule[]"]').val(),
-//             m = $('#paymentfrm').find('[name="payable[]"]').val();  //<= keep ; here 
-// 		//alert(s+m);
-//             var count=parseInt($("#schedule_count").val());
-//             $($('#paymentfrm').find('[name="schedule[]"]')).each(function(index){
-//             	if(s==''){
-//             	//alert("This dot val :: "+$(this).val());
-//             		$('#s-'+count).html('');
-//             		$('#s-'+count).append('Error in schedule');
-//             		alert("Schudle count :: "+count);
-//             }
-//             	//count++;
-//             });
-        // Set the user_info field value
-       // $('#paymentfrm').find('[name="schedule"]').val(y === '');
-
-        // Revalidate it
-     //   $('#paymentfrm').bootstrapValidator('revalidateField', 'schedule[]');
-   // });
-//}); 
-
-// function validate(){
-
-// 	var AnswerInput = document.getElementsByName('schedule[]');
-// 	for (i=0; i<AnswerInput.length; i++)
-// 		{
-// 		 if (AnswerInput[i].value == "")
-// 			{
-// 		 	 alert('Complete all the fields');		
-// 		 	 return false;
-// 			}
-// 		}
-// }
 function updatePaymentSchudle(){
 		var options = {
 		 		target : '#paymentresponse', 
@@ -2199,26 +1891,57 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-payable">'
 				+'<label class="control-label col-sm-8">% of Net Payable <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control"  required=true onkeypress=" return isNumber(event, this);" name="payable[]"/>'
+				+'<input type="text" class="form-control" required=true onkeypress="return isNumber(event, this);" name="payable[]"/>'
 				+'</div>'
-				+'<div class="messageContainer col-sm-offset-5"></div>'
+				+'<div class="messageContainer"></div>'
 				+'</div>'
 				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
+				+'<!--div class="col-lg-3 margin-bottom-5">'
 				+'<div class="form-group" id="error-amount">'
 				+'<label class="control-label col-sm-6">Amount <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-6">'
 				+'<input type="text" class="form-control" required=true onkeypress=" return isNumber(event, this);" name="amount[]"/>'
 				+'</div>'
-				+'<div class="messageContainer col-sm-offset-5"></div>'
+				+'<div class="messageContainer"></div>'
 				+'</div>'
-				+'</div>'
+				+'</div -->'
 				+'<div class="col-lg-1">'
 				+'<span><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span>'
 				+'</div>'
 			+'</div>';
 	$("#payment_schedule").append(html);
 	$("#schedule_count").val(schedule_count);
+	$('#paymentfrm').bootstrapValidator('destroy');
+	$('#paymentfrm').data('bootstrapValidator', null);
+	$('#paymentfrm').bootstrapValidator({
+		container: function($field, validator) {
+			return $field.parent().next('.messageContainer');
+	   	},
+	    feedbackIcons: {
+	        validating: 'glyphicon glyphicon-refresh'
+	    },
+	    excluded: ':disabled',
+	    fields: {
+	    	'schedule[]': {
+	            validators: {
+			    	notEmpty: {
+			    		message: 'Schedule is required and cannot be empty'
+			        },
+	            }
+	        },
+	        'payable[]': {
+	            validators: {
+			        notEmpty: {
+			    		message: 'Payable is required and cannot be empty'
+			        },
+	            }
+	        },
+	    }
+	}).on('success.form.bv', function(event,data) {
+		// Prevent form submission
+		event.preventDefault();
+		updatePaymentSchudle();
+	});
 }
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();
