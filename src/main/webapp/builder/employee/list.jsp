@@ -172,7 +172,7 @@
 											<%out.print(employeeList.getAccess()); %>
 										</td>
 										<td>
-<%-- 											 <a href="${baseUrl}/builder/employee/edit.jsp?emp_id=<% out.print(employeeList.getId());%>" ><span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a> --%>
+											 <a href="${baseUrl}/builder/employee/edit.jsp?emp_id=<% out.print(employeeList.getId());%>" ><span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
 										</td>
 										<% 		}	
                                       	}

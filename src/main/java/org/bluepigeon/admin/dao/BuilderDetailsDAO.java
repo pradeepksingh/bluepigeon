@@ -961,6 +961,10 @@ public class BuilderDetailsDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("emp_id", emp_id);
 		List<AllotProject> allotProjects = query.list();
+		System.out.println("EmpId ::"+emp_id);
+		for(int a=0;a<allotProjects.size();a++){
+			System.out.println("Project Id ::"+allotProjects.get(a).getBuilderProject().getId());
+		}
 		return allotProjects;
 	}
 }
