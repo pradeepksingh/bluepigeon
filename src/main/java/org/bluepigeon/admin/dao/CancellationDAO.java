@@ -6,6 +6,7 @@ import java.util.List;
 import org.bluepigeon.admin.data.CancellationList;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Cancellation;
 import org.bluepigeon.admin.util.HibernateUtil;
@@ -14,7 +15,7 @@ import org.hibernate.Session;
 
 public class CancellationDAO {
 	
-	public ResponseMessage save(Cancellation cancellation){
+	public ResponseMessage save(Cancellation cancellation, BuilderEmployee builderEmployee){
 		ResponseMessage responseMessage = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
@@ -22,13 +23,33 @@ public class CancellationDAO {
 		session.save(cancellation);
 		session.getTransaction().commit();
 		session.close();
-		updateFlatStatus(cancellation.getBuilderFlat().getId());
-		updatePrimaryBuyer(cancellation.getBuilderFlat().getId());
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 7)
+			updateBuyerStatus(cancellation.getBuilderFlat().getId());
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1 ||
+		   builderEmployee.getBuilderEmployeeAccessType().getId() ==2 ||
+		   builderEmployee.getBuilderEmployeeAccessType().getId()==4||
+		   builderEmployee.getBuilderEmployeeAccessType().getId()==5||
+		   builderEmployee.getBuilderEmployeeAccessType().getId()==6){
+			updateFlatStatus(cancellation.getBuilderFlat().getId());
+			updatePrimaryBuyer(cancellation.getBuilderFlat().getId());
+		}
 		responseMessage.setId(cancellation.getId());
 		responseMessage.setStatus(1);
 		return responseMessage;
 	}
-
+	public void updateBuyerStatus(int flatId){
+		String hql = "UPDATE Buyer set status=1 where builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flatId);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		
+				
+	}
 	public void updateFlatStatus(int flatId){
 		System.out.println("FlatId :: "+flatId);
 		String hql = "UPDATE BuilderFlat set builderFlatStatus.id = 1 WHERE id = :id";

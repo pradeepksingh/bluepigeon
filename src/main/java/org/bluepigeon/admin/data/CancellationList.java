@@ -6,6 +6,8 @@ public class CancellationList {
 	private String projectName;
 	private String buildingName;
 	private String flatNo;
+	private Short isDeleted;
+	private Short status;
 	public int getCount() {
 		return count;
 	}
@@ -35,5 +37,17 @@ public class CancellationList {
 	}
 	public void setFlatNo(String flatNo) {
 		this.flatNo = flatNo;
+	}
+	public Short getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(Short isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	public Short getStatus() {
+		return status;
+	}
+	public void setStatus(Short status) {
+		this.status = status;
 	}
 }

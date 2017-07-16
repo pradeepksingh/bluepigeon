@@ -35,6 +35,7 @@
 	BuilderEmployee builder = new BuilderEmployee();
     DecimalFormat decimalFormat = new DecimalFormat("#.##");
 	int builder_id = 0;
+	int access_id = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -42,20 +43,23 @@
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			
 				builder_id = builder.getBuilder().getId();
+				access_id = builder.getBuilderEmployeeAccessType().getId();
+				if(builder_id > 0){
+					totalBuyers = new BuyerDAO().getTotalBuyers(builder_id);
+					totalInventory = new ProjectDAO().getTotalInventory(builder_id);
+					project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
+					cityDataList = new CityNamesImp().getCityActiveNames();
+					totalLeads = new ProjectDAO().getTotalLeads(builder_id);
+					totalProjects = new ProjectDAO().getTotalNumberOfProjects(builder_id);
+					barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder_id);
+					totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder_id);
+					totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
+					totalRevenue = totalSaleValue * totalSoldInventory;
+				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
+				}
+						
 		}
-		if(builder_id > 0){
-			totalBuyers = new BuyerDAO().getTotalBuyers(builder_id);
-			totalInventory = new ProjectDAO().getTotalInventory(builder_id);
-			project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
-			cityDataList = new CityNamesImp().getCityActiveNames();
-			totalLeads = new ProjectDAO().getTotalLeads(builder_id);
-			totalProjects = new ProjectDAO().getTotalNumberOfProjects(builder_id);
-			barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder_id);
-			totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder_id);
-			totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
-			totalRevenue = totalSaleValue * totalSoldInventory;
-		//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
-		}
+		
 	}
 	
 %>
@@ -117,7 +121,7 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <!--.row -->
-                <%if(builder!=null){if(builder.getBuilderEmployeeAccessType().getId() == 1 || builder.getBuilderEmployeeAccessType().getId() == 2){ %>
+                <%if(access_id == 1 || access_id == 2){ %>
                 <div class="row re">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border">
@@ -159,8 +163,8 @@
                         </div>
                     </div>
                 </div>
-                <%}} %>
-                    <%if(builder!=null){if(builder.getBuilderEmployeeAccessType().getId() == 3){ %>
+                <%} %>
+                    <%if(access_id == 3){ %>
                 <div class="row re">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border" style="padding: 15px;">
@@ -202,7 +206,7 @@
                         </div>
                     </div>
                 </div>
-                <%}} %>
+                <%} %>
                 <div class="white-box">
                    <div class="row re">
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -219,9 +223,11 @@
                     <div class="col-md-3 col-sm-6 col-xs-12">
                       <select class="selectpicker" data-style="form-control" id="city_id" name="city_id">
                                    		<option value="0">City</option>
-                                        <%for(City city : cityDataList){ %>
+                                        <%
+                                        if(cityDataList != null){
+                                        for(City city : cityDataList){ %>
                                         <option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
-                                        <%} %>
+                                        <%}} %>
                           </select>
                              
                     </div>
@@ -495,13 +501,10 @@
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
         $('.js-switch').each(function() {
             new Switchery($(this)[0], $(this).data());
-
         });
         // For select 2
-
         $(".select2").select2();
         $('.selectpicker').selectpicker();
-
         //Bootstrap-TouchSpin
         $(".vertical-spin").TouchSpin({
             verticalbuttons: true,
@@ -514,7 +517,6 @@
         if (vspinTrue) {
             $('.vertical-spin').prev('.bootstrap-touchspin-prefix').remove();
         }
-
         $("input[name='tch1']").TouchSpin({
             min: 0,
             max: 100,
@@ -532,23 +534,18 @@
             prefix: '$'
         });
         $("input[name='tch3']").TouchSpin();
-
         $("input[name='tch3_22']").TouchSpin({
             initval: 40
         });
-
         $("input[name='tch5']").TouchSpin({
             prefix: "pre",
             postfix: "post"
         });
-
         // For multiselect
-
         $('#pre-selected-options').multiSelect();
         $('#optgroup').multiSelect({
             selectableOptgroup: true
         });
-
         $('#public-methods').multiSelect();
         $('#select-all').click(function() {
             $('#public-methods').multiSelect('select_all');
@@ -570,7 +567,6 @@
             });
             return false;
         });
-
     });
     </script>
     <script>
@@ -596,7 +592,6 @@
  	        lineWidth: el.getAttribute('data-line') || 5,
  	        rotate: el.getAttribute('data-rotate') || 0
  	    }
-
  	    var canvas = document.createElement('canvas');
  	    var span = document.createElement('span');
  	    span.textContent = options.percent + '%';
@@ -604,19 +599,14 @@
  	    if (typeof(G_vmlCanvasManager) !== 'undefined') {
  	        G_vmlCanvasManager.initElement(canvas);
  	    }
-
  	    var ctx = canvas.getContext('2d');
  	    canvas.width = canvas.height = options.size;
-
  	    el.appendChild(span);
  	    el.appendChild(canvas);
-
  	    ctx.translate(options.size / 2, options.size / 2); // change center
  	    ctx.rotate((-1 / 2 + options.rotate / 180) * Math.PI); // rotate -90 deg
-
  	    //imd = ctx.getImageData(0, 0, 240, 240);
  	    var radius = (options.size - options.lineWidth) / 2;
-
  	    var drawCircle = function(color, lineWidth, percent) {
  	    		percent = Math.min(Math.max(0, percent || 1), 1);
  	    		ctx.beginPath();
@@ -626,7 +616,6 @@
  	    		ctx.lineWidth = lineWidth
  	    		ctx.stroke();
  	    };
-
  	    drawCircle('#efefef', options.lineWidth, 100 / 100);
  	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
     }
@@ -872,9 +861,7 @@
      	    gridLineColor: '#eef0f2',
      	    resize: true
      	});
-
      	//This is for the sparkline chart
-
 //      	var sparklineLogin = function() { 
      	    
 //      	    $('#sparkline2dash').sparkline([6, 10, 9, 11, 9, 10, 12], {
@@ -896,16 +883,13 @@
      	    
 //      	}
 //      	var sparkResize;
-
 //      	    $(window).resize(function(e) {
 //      	        clearTimeout(sparkResize);
 //      	        sparkResize = setTimeout(sparklineLogin, 500);
 //      	    });
 //      	    sparklineLogin();
-
      	
-     <%
- 	} %>
+     <%	} %>
  	
  	$("#graph_project_id").change(function(){
  		barGraph();

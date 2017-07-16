@@ -1,30 +1,40 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:set var="req" value="${pageContext.request}" />
-<c:set var="url">${req.requestURL}</c:set>
-<c:set var="uri" value="${req.requestURI}" />
-<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
-<%@page import="org.bluepigeon.admin.model.Builder"%>
+<%@page import="org.bluepigeon.admin.data.CancellationList"%>
+<%@page import="org.bluepigeon.admin.dao.CancellationDAO"%>
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
+<%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
+<%@page import="org.bluepigeon.admin.model.City"%>
+<%@page import="org.bluepigeon.admin.data.BuildingList"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.data.ProjectList"%>
+<%@page import="org.bluepigeon.admin.data.PossessionList"%>
+<%@page import="org.bluepigeon.admin.dao.CancellationDAO"%>
+<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
-<%@page import="org.bluepigeon.admin.dao.CampaignDAO"%>
-<%@page import="org.bluepigeon.admin.data.CampaignList"%>
 <%
-List<CampaignList> campaignLists = null;
-session = request.getSession(false);
-BuilderEmployee builder = new BuilderEmployee();
-int session_id = 0;
-if(session!=null)
-{
-	if(session.getAttribute("ubname") != null)
+	List<CancellationList> cancellation_list = null;
+	List<ProjectData> projectDatas = null;
+	session = request.getSession(false);
+	BuilderEmployee builder = new BuilderEmployee();
+	List<City> cityList = new CityNamesImp().getCityNames();
+	int builder_uid = 0;
+	int access_id = 0;
+	if(session!=null)
 	{
-		builder  = (BuilderEmployee)session.getAttribute("ubname");
-		session_id = builder.getBuilder().getId();
+		if(session.getAttribute("ubname") != null)
+		{
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			builder_uid = builder.getBuilder().getId();
+			access_id = builder.getBuilderEmployeeAccessType().getId();
+		}
+   	}
+	if(builder_uid > 0){
+		cancellation_list = new CancellationDAO().getCancellationByBuilderId(builder_uid);
+		int builder_size = cancellation_list.size();
+		projectDatas = new ProjectDAO().getActiveProjectsByBuilderId(builder_uid);
 	}
-	}
-if(session_id > 0){
-	campaignLists = new CampaignDAO().getActiveCampaignListByBuilderId(session_id); 
-}
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,70 +74,101 @@ if(session_id > 0){
     <!-- Preloader -->
    
     <div id="wrapper">
-         <div id="header">
-	       <%@include file="../partial/header.jsp"%>
-      </div>
-      <div id="sidebar1"> 
-       	<%@include file="../partial/sidebar.jsp"%>
-      </div>
-     </div>
+        <div id="header">
+	    	<%@include file="../partial/header.jsp"%>
+        </div>
+        <div id="sidebar1"> 
+       		<%@include file="../partial/sidebar.jsp"%>
+    	</div>
+    </div>
 <div id="page-wrapper">
             <div class="container-fluid">
-              
                 <!-- /row -->
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box"><br>
-                          <center><h1>Manage Campaign</h1></center> 
-                           <br>
-                            <a href="${baseUrl}/builder/campaign/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add Campaign</span></a>
-                           <br><br><br>
+                          <h3>Manage Cancellation</h3>
+<!-- 						<div class="row re white-box"> -->
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 								<select name="project_id" id="project_id" class="form-control"> -->
+<!-- 				                    <option value="0">Select Project</option> -->
+<%-- 				                    <% --%>
+ 				                  <!--   if(projectDatas != null){-->
+<%-- 				                    for(int i=0; i < projectDatas.size() ; i++){ %> --%>
+<%-- 									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option> --%>
+<%-- 									<% } --%>
+<%-- 				                    }%> --%>
+<!-- 						         </select>    -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 							   <select name="building_id" id="building_id" class="form-control"> -->
+<!-- 				                    <option value="0">Select Building</option> -->
+<!-- 							   </select> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
+<!-- 								<select name="flat_id" id="flat_id" class="form-control"> -->
+<!-- 				                    <option value="0">Select Flat</option> -->
+<!-- 								</select> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+						  <a href="${baseUrl}/builder/cancellation/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">New Cancellation</span></a>
+                          <br><br><br>
                             <div class="table-responsive">
-                                <table id="tblCampaign" class="table table-striped">
+                                <table id="tblCancellation" class="table table-striped">
                                     <thead>
                                         <tr>
-                                          	<td>Campaign Title</td>
-                                           	<td>Start Date</td>
-                                            <td>Campaign Type</td>
-                                            <td>Actions</td>
+                                            <td>Sr No.</td>
+                                            <td>Buyer</td>
+                                             <td>Project</td>
+                                             <td>Building</td>
+                                            <td>Flat No</td>
+                                            <td>Action</td>
                                         </tr>
                                         <tr>
-                                          	<th>Campaign Title</th>
-                                           	<th>Start Date</th>
-                                            <th>Campaign Type</th>
-                                            <th>Actions</th>
+                                            <th>Sr No.</th>
+                                            <th>Buyer Name</th>
+                                             <th>Project Name</th>
+                                             <th>Building Name</th>
+                                            <th>Flat No</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <%
-                                        if(campaignLists != null){
-                                       		for(CampaignList campaignList : campaignLists){
-                                        %>
-                                        <tr>
-                                            <td><% out.print(campaignList.getTitle()); %></td>
-                                            <td><% out.print(campaignList.getSetdate()); %></td>
-                                            <td><% 
-					                 	   	    if(campaignList.getCampaignType() ==1)
-                                            		out.print("New Project");
-					                 	   	    if(campaignList.getCampaignType() == 2)
-					                 	   	    	out.print("New Property");
-					                 	   	    if(campaignList.getCampaignType() == 3)
-					                 	   	    	out.print("Offers");
-					                 	   	    if(campaignList.getCampaignType() == 4)
-					                 	   	    	out.print("Event");
-					                 	   	    if(campaignList.getCampaignType() == 5)
-					                 	   	    	out.print("Referral");
-                                            %></td>
-                                            <td class="alignRight">
-<%--                                             	<a href="${baseUrl}/admin/leads/edit.jsp?lead_id=<% out.print(campaignList.getCampaignId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
-													<a href="javascript:deleteCampaign(<% out.print(campaignList.getCampaignId());%>)" class="btn btn-danger icon-btn btn-xs"><i class="fa fa-delete"></i>Delete</a>
-                                            </td>
-                                            
-                                        </tr>
-                                        <% 
-                                        	} 
-                                        }
-                                        %>
+                                       <%
+                                      if(cancellation_list != null){
+                                    	  int i=1;
+                                      	for(CancellationList cancellationList : cancellation_list) { %>
+									<tr>
+										<td><%out.print(i);%></td>
+										<td>
+											<% out.print(cancellationList.getBuyerName()); %>
+										</td>
+										<td>
+											<% out.print(cancellationList.getProjectName()); %>
+										</td>
+										
+										<td>
+											<% out.print(cancellationList.getBuildingName()); %>
+										</td>
+										<td>
+											<% out.print(cancellationList.getFlatNo());
+											%>
+										</td>
+									  <%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5 || access_id ==6){ %>
+									 	<td>
+									 		<button type="button" onclick="approve();">Approve</button>
+									 		<button type="button" onclick="cancel();">Cancel</button>
+									 	</td>	
+									 <%} %>
+										<%if(access_id==7){ %>
+										<td>
+											<button type="button" onclick="cancelRequest();">Cancel Request</button>
+										</td>
+										<%} %>
+										<% 	
+											i++;} 
+                                      	}
+										%>
                                     </tbody>
                                 </table>
                             </div>
@@ -136,13 +177,13 @@ if(session_id > 0){
                </div>
             </div>
             <!-- /.container-fluid -->
-          <div id="sidebar1"> 
-		       <%@include file="../partial/footer.jsp"%>
+           <div id="sidebar1"> 
+	      		<%@include file="../partial/footer.jsp"%>
 			</div> 
         </div>
         <!-- /#page-wrapper -->
     
-<!--     <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script> -->
+     <script src="../plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
     <!-- start - This is for export functionality only -->
     <script src="../cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
     <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
@@ -150,7 +191,7 @@ if(session_id > 0){
 <!--     <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script> -->
 <!--     <script src="../../cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script> -->
     <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
-    <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+      <script src="../cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <!-- end - This is for export functionality only -->
     <script>
     $(document).ready(function() {
@@ -171,7 +212,6 @@ if(session_id > 0){
 //                         page: 'current'
 //                     }).nodes();
 //                     var last = null;
-
 //                     api.column(2, {
 //                         page: 'current'
 //                     }).data().each(function(group, i) {
@@ -179,13 +219,11 @@ if(session_id > 0){
 //                             $(rows).eq(i).before(
 //                                 '<tr class="group"><td colspan="5">' + group + '</td></tr>'
 //                             );
-
 //                             last = group;
 //                         }
 //                     });
 //                 }
             });
-
             // Order by the grouping
             $('#example tbody').on('click', 'tr.group', function() {
                 var currentOrder = table.order()[0];
@@ -197,27 +235,27 @@ if(session_id > 0){
             });
 //         });
 //     });
-    $('#tblCampaign').DataTable({
+    $('#tblCancellation').DataTable({
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
     </script>
-     <script type="text/javascript">
+    <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#tblCampaign thead td').each( function () {
+        $('#tblDemand thead td').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
         } );
      
         // DataTable
-        var table = $('#tblCampaign').DataTable();
+        var table = $('#tblDemand').DataTable();
      
         // Apply the search
         table.columns().every(function (index) {
-            $('#tblCampaign thead  td:eq(' + index + ') input').on('keyup change', function () {
+            $('#tblDemand thead  td:eq(' + index + ') input').on('keyup change', function () {
                 table.column($(this).parent().index() + ':visible')
                     .search(this.value)
                     .draw();
@@ -225,20 +263,6 @@ if(session_id > 0){
         });
     } );
     
-function deleteCampaign(id) {
-	var b=$("#offer").val();
-	var flag = confirm("Are you sure ? You want to delete Campaign ?");
-	if(flag) {
-		$.get("${baseUrl}/webapi/project/campaign/delete/"+id, { }, function(data){
-			alert(data.message);
-			if(data.status == 1) {
-				window.location.reload();
-			}
-		});
-	}
-}
     </script>
 </body>
 </html>
-
-        
