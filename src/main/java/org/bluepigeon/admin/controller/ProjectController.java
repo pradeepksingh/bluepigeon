@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -18,6 +19,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.bluepigeon.admin.dao.AreaUnitDAO;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
@@ -77,6 +79,7 @@ import org.bluepigeon.admin.model.BuildingOfferInfo;
 import org.bluepigeon.admin.model.BuildingPanoramicImage;
 import org.bluepigeon.admin.model.BuildingPaymentInfo;
 import org.bluepigeon.admin.model.BuilderPropertyType;
+import org.bluepigeon.admin.model.BuildingPriceInfo;
 import org.bluepigeon.admin.model.BuildingWeightage;
 import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.model.Country;
@@ -85,6 +88,7 @@ import org.bluepigeon.admin.model.FlatAmenityWeightage;
 import org.bluepigeon.admin.model.FlatImageGallery;
 import org.bluepigeon.admin.model.FlatPanoramicImage;
 import org.bluepigeon.admin.model.FlatPaymentSchedule;
+import org.bluepigeon.admin.model.FlatPricingDetails;
 import org.bluepigeon.admin.model.FlatTypeImage;
 import org.bluepigeon.admin.model.FlatWeightage;
 import org.bluepigeon.admin.model.FloorAmenityInfo;
@@ -344,8 +348,8 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("project_id") int project_id,
 			@FormDataParam("schedule_id[]") List<FormDataBodyPart> schedule_ids,
  			@FormDataParam("schedule[]") List<FormDataBodyPart> schudles,
-			@FormDataParam("payable[]") List<FormDataBodyPart> payables,
-			@FormDataParam("amount[]") List<FormDataBodyPart> amounts
+			@FormDataParam("payable[]") List<FormDataBodyPart> payables
+//			@FormDataParam("amount[]") List<FormDataBodyPart> amounts
 		) {
 		ResponseMessage responseMessage = new ResponseMessage();
 		BuilderProject builderProject = new BuilderProject();
@@ -367,9 +371,9 @@ public class ProjectController extends ResourceConfig {
 					if(payables.get(i).getValueAs(Double.class) != 0 && payables.get(i).getValueAs(Double.class) !=null){
 						builderProjectPaymentInfo.setPayable(payables.get(i).getValueAs(Double.class));
 					}
-					if(amounts.get(i).getValueAs(Double.class) !=0 && amounts.get(i).getValueAs(Double.class) != null){
-						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
-					}
+//					if(amounts.get(i).getValueAs(Double.class) !=0 && amounts.get(i).getValueAs(Double.class) != null){
+//						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
+//					}
 					updateProjectPaymentInfos.add(builderProjectPaymentInfo);
 				}else{
 					BuilderProjectPaymentInfo builderProjectPaymentInfo = new BuilderProjectPaymentInfo();
@@ -380,9 +384,9 @@ public class ProjectController extends ResourceConfig {
 					if(payables.get(i).getValueAs(Double.class) != 0 && payables.get(i).getValueAs(Double.class) !=null){
 						builderProjectPaymentInfo.setPayable(payables.get(i).getValueAs(Double.class));
 					}
-					if(amounts.get(i).getValueAs(Double.class) !=0 && amounts.get(i).getValueAs(Double.class) != null){
-						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
-					}
+//					if(amounts.get(i).getValueAs(Double.class) !=0 && amounts.get(i).getValueAs(Double.class) != null){
+//						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
+//					}
 					saveProjectPaymentInfos.add(builderProjectPaymentInfo);
 				}
 				i++;
@@ -553,7 +557,6 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
 			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
 			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
-			@FormDataParam("amount[]") List<FormDataBodyPart> amount,
 			@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_title,
 			@FormDataParam("discount[]") List<FormDataBodyPart> discount,
 			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amount,
@@ -718,7 +721,6 @@ public class ProjectController extends ResourceConfig {
 						BuildingPaymentInfo buildingPaymentInfo = new BuildingPaymentInfo();
 						buildingPaymentInfo.setMilestone(milestone.getValueAs(String.class).toString());
 						buildingPaymentInfo.setPayable(payable.get(i).getValueAs(Double.class));
-						buildingPaymentInfo.setAmount(amount.get(i).getValueAs(Double.class));
 						buildingPaymentInfo.setStatus(milestone_status);
 						buildingPaymentInfo.setBuilderBuilding(builderBuilding);
 						buildingPaymentInfos.add(buildingPaymentInfo);
@@ -957,8 +959,7 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("building_id") int building_id,
 			@FormDataParam("payment_id[]") List<FormDataBodyPart> payment_id,
 			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
-			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
-			@FormDataParam("amount[]") List<FormDataBodyPart> amount
+			@FormDataParam("payable[]") List<FormDataBodyPart> payable
 	) {
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
@@ -977,7 +978,6 @@ public class ProjectController extends ResourceConfig {
 						buildingPaymentInfo.setId(payment_id.get(i).getValueAs(Integer.class));
 						buildingPaymentInfo.setMilestone(milestone.getValueAs(String.class).toString());
 						buildingPaymentInfo.setPayable(payable.get(i).getValueAs(Double.class));
-						buildingPaymentInfo.setAmount(amount.get(i).getValueAs(Double.class));
 						buildingPaymentInfo.setStatus(milestone_status);
 						buildingPaymentInfo.setBuilderBuilding(builderBuilding);
 						buildingPaymentInfos.add(buildingPaymentInfo);
@@ -986,7 +986,6 @@ public class ProjectController extends ResourceConfig {
 						BuildingPaymentInfo buildingPaymentInfo = new BuildingPaymentInfo();
 						buildingPaymentInfo.setMilestone(milestone.getValueAs(String.class).toString());
 						buildingPaymentInfo.setPayable(payable.get(i).getValueAs(Double.class));
-						buildingPaymentInfo.setAmount(amount.get(i).getValueAs(Double.class));
 						buildingPaymentInfo.setStatus(milestone_status);
 						buildingPaymentInfo.setBuilderBuilding(builderBuilding);
 						newBuildingPaymentInfos.add(buildingPaymentInfo);
@@ -1005,6 +1004,57 @@ public class ProjectController extends ResourceConfig {
 		} else {
 			msg.setMessage("Failed to add building.");
 			msg.setStatus(0);
+		}
+		return msg;
+	}
+	
+	@POST
+	@Path("/building/pricing/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateBuildingPricingInfo (
+			@FormParam("id") int id,
+			@FormParam("building_id") int building_id,
+			@FormParam("base_unit") short base_unit,
+			@FormParam("base_rate") Double base_rate,
+			@FormParam("rise_rate") Double rise_rate,
+			@FormParam("post") int post,
+			@FormParam("maintenance") Double maintenance,
+			@FormParam("tenure") int tenure,
+			@FormParam("amenity_rate") Double amenity_rate,
+			@FormParam("parking_id") int parking_id,
+			@FormParam("parking") Double parking,
+			@FormParam("stamp_duty") Double stamp_duty,
+			@FormParam("tax") Double tax,
+			@FormParam("vat") Double vat,
+			@FormParam("tech_fee") Double tech_fee
+	) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		AreaUnit areaUnit = new AreaUnit();
+		areaUnit.setId(base_unit);
+		BuilderBuilding builderBuilding = new BuilderBuilding();
+		builderBuilding.setId(building_id);
+		BuildingPriceInfo buildingPriceInfo = new BuildingPriceInfo();
+		
+		buildingPriceInfo.setBuilderBuilding(builderBuilding);
+		buildingPriceInfo.setAreaUnit(areaUnit);
+		buildingPriceInfo.setBasePrice(base_rate);
+		buildingPriceInfo.setRiseRate(rise_rate);
+		buildingPriceInfo.setPost(post);
+		buildingPriceInfo.setMaintenance(maintenance);
+		buildingPriceInfo.setTenure(tenure);
+		buildingPriceInfo.setAmenityRate(amenity_rate);
+		buildingPriceInfo.setParkingId(parking_id);
+		buildingPriceInfo.setParking(parking);
+		buildingPriceInfo.setStampDuty(stamp_duty);
+		buildingPriceInfo.setTax(tax);
+		buildingPriceInfo.setVat(vat);
+		buildingPriceInfo.setFee(tech_fee);
+		if(id > 0) {
+			buildingPriceInfo.setId(id);
+			msg = projectDAO.updateBuildingPriceInfo(buildingPriceInfo);
+		} else {
+			msg = projectDAO.addBuildingPriceInfo(buildingPriceInfo);
 		}
 		return msg;
 	}
@@ -1960,9 +2010,22 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("status_id") byte flat_status,
 			@FormDataParam("possession_date") String possession_date,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
+			@FormDataParam("base_unit") short base_unit,
+			@FormDataParam("base_rate") Double base_rate,
+			@FormDataParam("rise_rate") Double rise_rate,
+			@FormDataParam("post") int post,
+			@FormDataParam("maintenance") Double maintenance,
+			@FormDataParam("tenure") int tenure,
+			@FormDataParam("amenity_rate") Double amenity_rate,
+			@FormDataParam("parking_id") int parking_id,
+			@FormDataParam("parking") Double parking,
+			@FormDataParam("stamp_duty") Double stamp_duty,
+			@FormDataParam("tax") Double tax,
+			@FormDataParam("vat") Double vat,
+			@FormDataParam("tech_fee") Double tech_fee,
 			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
 			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
-			@FormDataParam("amount[]") List<FormDataBodyPart> amount,
+			//@FormDataParam("amount[]") List<FormDataBodyPart> amount,
 			@FormDataParam("admin_id") int admin_id,
 			@FormDataParam("amenity_wt") String amenity_wts
 	) {
@@ -2003,6 +2066,26 @@ public class ProjectController extends ResourceConfig {
 		msg = projectDAO.addBuildingFlat(builderFlat);
 		if(msg.getId() > 0) {
 			builderFlat.setId(msg.getId());
+			Double totalCost = getFlatTotalCost(msg.getId(),base_rate,rise_rate,post,amenity_rate,parking_id,parking,maintenance,stamp_duty,tax,vat,base_unit);
+			FlatPricingDetails flatPricingDetails = new FlatPricingDetails();
+			flatPricingDetails.setBuilderFlat(builderFlat);
+			flatPricingDetails.setRiseRate(rise_rate);
+			flatPricingDetails.setBasePrice(base_rate);
+			flatPricingDetails.setPost(post);
+			flatPricingDetails.setAmenityRate(amenity_rate);
+			flatPricingDetails.setParkingId(parking_id);
+			flatPricingDetails.setParking(parking);
+			flatPricingDetails.setMaintenance(maintenance);
+			flatPricingDetails.setStampDuty(stamp_duty);
+			flatPricingDetails.setTenure(tenure);
+			flatPricingDetails.setTax(tax);
+			flatPricingDetails.setVat(vat);
+			flatPricingDetails.setFee(tech_fee);
+			flatPricingDetails.setTotalCost(totalCost);
+			AreaUnit areaUnit = new AreaUnit();
+			areaUnit.setId(base_unit);
+			flatPricingDetails.setAreaUnit(areaUnit);
+			projectDAO.addFlatPriceInfo(flatPricingDetails);
 			//add gallery images
 			if (amenity_type.size() > 0) {
 				List<FlatAmenityInfo> flatAmenityInfos = new ArrayList<FlatAmenityInfo>();
@@ -2063,7 +2146,7 @@ public class ProjectController extends ResourceConfig {
 						FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
 						flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
 						flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
-						flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
+						flatPaymentSchedule.setAmount(totalCost*payable.get(i).getValueAs(Double.class)/100);
 						flatPaymentSchedule.setStatus(milestone_status);
 						flatPaymentSchedule.setBuilderFlat(builderFlat);
 						flatPaymentSchedules.add(flatPaymentSchedule);
@@ -2079,6 +2162,27 @@ public class ProjectController extends ResourceConfig {
 			msg.setStatus(0);
 		}
 		return msg;
+	}
+	
+	public Double getFlatTotalCost(
+			int flat_id, Double baseRate, Double riseRate, int post, Double amenityRate,
+			int parkingId, Double parking, Double maintenance, Double stampDuty,
+			Double tax, Double vat, short unit_id
+	) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		AreaUnitDAO areaUnitDAO = new AreaUnitDAO();
+		AreaUnit areaUnit = areaUnitDAO.getAreaUnitById(unit_id).get(0);
+		BuilderFlat builderFlat = projectDAO.getBuilderFlatById(flat_id);
+		BuilderFloor builderFloor = projectDAO.getBuildingFloorById(builderFlat.getBuilderFloor().getId()).get(0);
+		BuilderFlatType builderFlatType = projectDAO.getBuilderBuildingFlatTypeById(builderFlat.getBuilderFlatType().getId()).get(0);
+		Double superArea = builderFlatType.getSuperBuiltupArea();
+		Double totalCost = superArea*baseRate;
+		Double riseCost = 0.0;
+		if(builderFloor.getFloorNo() > post) {
+			riseCost = (builderFloor.getFloorNo() - post)*riseRate*superArea;
+		}
+		totalCost = totalCost+ riseCost + parking + maintenance + stampDuty + tax + vat;
+		return totalCost;
 	}
 	
 	@POST
@@ -2097,10 +2201,6 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("status_id") byte flat_status,
 			@FormDataParam("possession_date") String possession_date,
 			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
-			@FormDataParam("payment_id[]") List<FormDataBodyPart> payment_id,
-			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
-			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
-			@FormDataParam("amount[]") List<FormDataBodyPart> amount,
 			@FormDataParam("admin_id") int admin_id,
 			@FormDataParam("amenity_wt") String amenity_wts
 	) {
@@ -2136,8 +2236,7 @@ public class ProjectController extends ResourceConfig {
 		builderFlat.setPossessionDate(possessionDate);
 		builderFlat.setAdminUser(adminUser);
 		msg = projectDAO.updateBuildingFlat(builderFlat);
-		if(msg.getId() > 0) {
-			//add gallery images
+		if(flat_id > 0) {
 			if (amenity_type.size() > 0) {
 				List<FlatAmenityInfo> flatAmenityInfos = new ArrayList<FlatAmenityInfo>();
 				int i = 0;
@@ -2189,7 +2288,84 @@ public class ProjectController extends ResourceConfig {
 				projectDAO.deleteFlatAmenityWeightage(flat_id);
 				projectDAO.addFlatAmenityWeightage(baws);
 			}
-			try{
+		} else {
+			msg.setMessage("Failed to update flat.");
+			msg.setStatus(0);
+		}
+		return msg;
+	}
+	
+	@POST
+	@Path("/building/floor/flat/update/price")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateBuildingFloorFlat (
+			@FormDataParam("flat_id") int flat_id,
+			@FormDataParam("price_id") int price_id,
+			@FormDataParam("base_unit") short base_unit,
+			@FormDataParam("base_rate") Double base_rate,
+			@FormDataParam("rise_rate") Double rise_rate,
+			@FormDataParam("post") int post,
+			@FormDataParam("maintenance") Double maintenance,
+			@FormDataParam("tenure") int tenure,
+			@FormDataParam("amenity_rate") Double amenity_rate,
+			@FormDataParam("parking_id") int parking_id,
+			@FormDataParam("parking") Double parking,
+			@FormDataParam("stamp_duty") Double stamp_duty,
+			@FormDataParam("tax") Double tax,
+			@FormDataParam("vat") Double vat,
+			@FormDataParam("tech_fee") Double tech_fee
+	) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		BuilderFlat builderFlat = projectDAO.getBuildingFlatById(flat_id).get(0);
+		Double totalCost = getFlatTotalCost(flat_id,base_rate,rise_rate,post,amenity_rate,parking_id,parking,maintenance,stamp_duty,tax,vat,base_unit);
+		FlatPricingDetails flatPricingDetails = new FlatPricingDetails();
+		flatPricingDetails.setBuilderFlat(builderFlat);
+		flatPricingDetails.setRiseRate(rise_rate);
+		flatPricingDetails.setBasePrice(base_rate);
+		flatPricingDetails.setPost(post);
+		flatPricingDetails.setAmenityRate(amenity_rate);
+		flatPricingDetails.setParkingId(parking_id);
+		flatPricingDetails.setParking(parking);
+		flatPricingDetails.setMaintenance(maintenance);
+		flatPricingDetails.setStampDuty(stamp_duty);
+		flatPricingDetails.setTenure(tenure);
+		flatPricingDetails.setTax(tax);
+		flatPricingDetails.setVat(vat);
+		flatPricingDetails.setFee(tech_fee);
+		flatPricingDetails.setTotalCost(totalCost);
+		AreaUnit areaUnit = new AreaUnit();
+		areaUnit.setId(base_unit);
+		flatPricingDetails.setAreaUnit(areaUnit);
+		if(price_id > 0) {
+			flatPricingDetails.setId(price_id);
+			msg = projectDAO.updateFlatPriceInfo(flatPricingDetails);
+		} else {
+			msg = projectDAO.addFlatPriceInfo(flatPricingDetails);
+		}
+		return msg;
+	}
+	
+	@POST
+	@Path("/building/floor/flat/update/payment")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateBuildingFloorFlat (
+			@FormDataParam("flat_id") int flat_id,
+			@FormDataParam("payment_id[]") List<FormDataBodyPart> payment_id,
+			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
+			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
+			@FormDataParam("amount[]") List<FormDataBodyPart> amount
+	) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		BuilderFlat builderFlat = new BuilderFlat();
+		builderFlat.setId(flat_id);
+		FlatPricingDetails flatPricingDetails = projectDAO.getFlatPriceInfos(flat_id).get(0);
+		Double totalCost = getFlatTotalCost(flat_id,flatPricingDetails.getBasePrice(),flatPricingDetails.getRiseRate(),flatPricingDetails.getPost(),flatPricingDetails.getAmenityRate(),flatPricingDetails.getParkingId(),flatPricingDetails.getParking(),flatPricingDetails.getMaintenance(),flatPricingDetails.getStampDuty(),flatPricingDetails.getTax(),flatPricingDetails.getVat(),flatPricingDetails.getAreaUnit().getId());
+		if(flat_id > 0) {
+			try {
 				if (schedule.size() > 0) {
 					List<FlatPaymentSchedule> flatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
 					List<FlatPaymentSchedule> newFlatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
@@ -2197,22 +2373,24 @@ public class ProjectController extends ResourceConfig {
 					for(FormDataBodyPart milestone : schedule)
 					{
 						if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
+							System.out.println("ScheduleName:"+milestone.getValueAs(String.class).toString());
 							if(payment_id.get(i).getValueAs(Integer.class) != 0 && payment_id.get(i).getValueAs(Integer.class) != null) {
 								Byte milestone_status = 0;
 								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
 								flatPaymentSchedule.setId(payment_id.get(i).getValueAs(Integer.class));
 								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
 								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
-								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
+								flatPaymentSchedule.setAmount(totalCost*payable.get(i).getValueAs(Double.class)/100);
 								flatPaymentSchedule.setStatus(milestone_status);
 								flatPaymentSchedule.setBuilderFlat(builderFlat);
 								flatPaymentSchedules.add(flatPaymentSchedule);
+								System.out.println("ScheduleName:"+milestone.getValueAs(String.class).toString());
 							} else {
 								Byte milestone_status = 0;
 								FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
 								flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
 								flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
-								flatPaymentSchedule.setAmount(amount.get(i).getValueAs(Double.class));
+								flatPaymentSchedule.setAmount(totalCost*payable.get(i).getValueAs(Double.class)/100);
 								flatPaymentSchedule.setStatus(milestone_status);
 								flatPaymentSchedule.setBuilderFlat(builderFlat);
 								newFlatPaymentSchedules.add(flatPaymentSchedule);
@@ -2221,8 +2399,10 @@ public class ProjectController extends ResourceConfig {
 						i++;
 					}
 					if(flatPaymentSchedules.size() > 0) {
-						projectDAO.updateFlatPaymentInfo(flatPaymentSchedules);
-						projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
+						msg = projectDAO.updateFlatPaymentInfo(flatPaymentSchedules);
+					}
+					if(newFlatPaymentSchedules.size() > 0) {
+						msg = projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
 					}
 				}
 			} catch(Exception e) {

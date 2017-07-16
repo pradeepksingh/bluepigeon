@@ -72,7 +72,7 @@
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Basic Details</a></li>
 			  	<li><a data-toggle="tab" href="#buildingdetail">Building Images</a></li>
-			  		<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
+		  		<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
 			  	<li><a data-toggle="tab" href="#offer">Offers</a></li>
 			</ul>
@@ -502,18 +502,6 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-amount">
-														<label class="control-label col-sm-6">Amount </label>
-														<div class="col-sm-6">
-															<input type="text" class="form-control errorMsg" id="amount" name="amount[]" value="<%out.print(builderProjectPaymentInfo.getAmount());%>"/>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-<!-- 												<div class="col-lg-1"> -->
-<!-- 													<span><a href="javascript:removeSchedule(1);" class="btn btn-danger btn-xs">x</a></span> -->
-<!-- 												</div> -->
 											</div>
 										</div>
 										<div>

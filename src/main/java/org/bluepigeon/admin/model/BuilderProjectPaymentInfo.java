@@ -22,7 +22,7 @@ public class BuilderProjectPaymentInfo implements java.io.Serializable {
 	private BuilderProject builderProject;
 	private String schedule;
 	private Double payable;
-	private Double amount;
+	private Double amount = 0.0;
 	private Byte status;
 
 	public BuilderProjectPaymentInfo() {

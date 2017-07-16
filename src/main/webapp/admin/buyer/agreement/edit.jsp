@@ -92,7 +92,7 @@
 															<% } %>
 														</select>
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -109,7 +109,7 @@
 															<% } %>
 														</select>
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -126,16 +126,18 @@
 															<% } %>
 														</select>
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-5">Name <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
 														<input type="text" class="form-control" value="<%out.print(agreement.getName()); %>" id="name" name="name" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -144,7 +146,7 @@
 													<div class="col-sm-7">
 														<input type="text" class="form-control" value="<%out.print(agreement.getEmail()); %>" id="email" name="email" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -153,9 +155,11 @@
 													<div class="col-sm-7">
 														<input type="text" class="form-control" value="<%out.print(agreement.getContact()); %>" id="contact" name="contact" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<%
 												SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
 											%>
@@ -165,17 +169,17 @@
 													<div class="col-sm-7">
 														<input type="text" class="form-control" id="last_date" name="last_date" value="<% if(agreement.getLastDate() != null) { out.print(dt1.format(agreement.getLastDate()));} %>" />
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-5">Remind Every <span class='text-danger'>*</span></label>
-													<div class="col-sm-7">
+													<div class="col-sm-7 input-group" style="padding:0px 11px;">
 														<input type="text" class="form-control" id="remind" value="<%out.print(agreement.getRemind()); %>" name="remind" />
 														<span class="input-group-addon">Days</span>
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											<div class="col-lg-4 margin-bottom-5">
@@ -184,7 +188,7 @@
 													<div class="col-sm-7">
 														<textarea rows="" cols="" class="form-control" id="contect" name="content"><%out.print(agreement.getContent()); %></textarea>
 													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
+													<div class="messageContainer col-sm-offset-5"></div>
 												</div>
 											</div>
 											
@@ -262,6 +266,9 @@
 	.row {
 		margin-bottom:5px;
 	}
+	.messageContainer {
+		padding-left:15px;
+	}
 </style>
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
@@ -289,6 +296,45 @@ $('#updateagreement').bootstrapValidator({
             validators: {
                 notEmpty: {
                     message: 'Buyer Name is required and cannot be empty'
+                }
+            }
+        },
+        email: {
+            validators: {
+                notEmpty: {
+                    message: 'Email is required and cannot be empty'
+                },
+                regexp: {
+                    regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
+                    message: 'The value is not a valid email address'
+                }
+            }
+        },
+        contact: {
+            validators: {
+                notEmpty: {
+                    message: 'Contact is required and cannot be empty'
+                },
+                regexp: {
+                    regexp: '^[7-9][0-9]{9}$',
+                    message: 'Invalid Mobile Number'
+                }
+            }
+        },
+        content: {
+            validators: {
+                notEmpty: {
+                    message: 'Content is required and cannot be empty'
+                }
+            }
+        },
+        remind: {
+            validators: {
+                notEmpty: {
+                    message: 'Remind days is required and cannot be empty'
+                },
+                integer: {
+                	message: 'Remind days is invalid'
                 }
             }
         },

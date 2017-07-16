@@ -8,6 +8,7 @@ import java.util.Set;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.BuildingListData;
+import org.bluepigeon.admin.data.BuildingPriceInfoData;
 import org.bluepigeon.admin.data.BuildingWeightageData;
 import org.bluepigeon.admin.data.FlatAmenityTotal;
 import org.bluepigeon.admin.data.FlatData;
@@ -59,6 +60,7 @@ import org.bluepigeon.admin.model.BuildingImageGallery;
 import org.bluepigeon.admin.model.BuildingOfferInfo;
 import org.bluepigeon.admin.model.BuildingPanoramicImage;
 import org.bluepigeon.admin.model.BuildingPaymentInfo;
+import org.bluepigeon.admin.model.BuildingPriceInfo;
 import org.bluepigeon.admin.model.BuildingWeightage;
 import org.bluepigeon.admin.model.Campaign;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
@@ -66,6 +68,7 @@ import org.bluepigeon.admin.model.FlatAmenityWeightage;
 import org.bluepigeon.admin.model.FlatImageGallery;
 import org.bluepigeon.admin.model.FlatPanoramicImage;
 import org.bluepigeon.admin.model.FlatPaymentSchedule;
+import org.bluepigeon.admin.model.FlatPricingDetails;
 import org.bluepigeon.admin.model.FlatTypeImage;
 import org.bluepigeon.admin.model.FlatWeightage;
 import org.bluepigeon.admin.model.FloorAmenityInfo;
@@ -1242,6 +1245,36 @@ public class ProjectDAO {
 		return resp;
 	}
 	
+	public List<BuildingPriceInfoData> getBuilderBuildingPriceInfo(int building_id) {
+		String hql = "from BuildingPriceInfo where builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuildingPriceInfo> result = query.list();
+		session.close();
+		List<BuildingPriceInfoData> buildingPrices = new ArrayList<BuildingPriceInfoData>();
+		for(BuildingPriceInfo buildingPriceInfo :result) {
+			BuildingPriceInfoData bpn = new BuildingPriceInfoData();
+			bpn.setId(buildingPriceInfo.getId());
+			bpn.setBuildingId(buildingPriceInfo.getBuilderBuilding().getId());
+			bpn.setBaseRate(buildingPriceInfo.getBasePrice());
+			bpn.setRiseRate(buildingPriceInfo.getRiseRate());
+			bpn.setPost(buildingPriceInfo.getPost());
+			bpn.setAmenityRate(buildingPriceInfo.getAmenityRate());
+			bpn.setParking(buildingPriceInfo.getParking());
+			bpn.setMaintainance(buildingPriceInfo.getMaintenance());
+			bpn.setStampDuty(buildingPriceInfo.getStampDuty());
+			bpn.setTenure(buildingPriceInfo.getTenure());
+			bpn.setTax(buildingPriceInfo.getTax());
+			bpn.setVat(buildingPriceInfo.getVat());
+			bpn.setFee(buildingPriceInfo.getFee());
+			bpn.setUnitId(buildingPriceInfo.getAreaUnit().getId());
+			buildingPrices.add(bpn);
+		}
+		return buildingPrices;
+	}
+	
 	/* ******************** Project Floors ******************** */
 	/**
 	 * Save Floor data
@@ -2309,7 +2342,7 @@ public class ProjectDAO {
 	
 	public void updateProjectInventory(int flatId){
 		String hql = "UPDATE BuilderProject set availbale = :availbale, totalInventory = :totalInventory where id = :project_id ";
-		Long available = (long)0;
+		int available = 0;
 		Long totalInventory = (long)0;
 		Long soldInventory = (long)0;
 		BuilderFlat builderFlat = getBuilderFlatById(flatId);
@@ -2317,24 +2350,26 @@ public class ProjectDAO {
 		available = getAvaiableFlatCount(projectId);
 		soldInventory = getSoldFlatCount(projectId);
 		totalInventory = available + soldInventory;
+		Double total_inventory = (double) totalInventory;
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
 		query.setParameter("availbale", available);
-		query.setParameter("totalInventory",totalInventory );
+		query.setParameter("totalInventory",total_inventory );
+		query.setParameter("project_id",projectId );
 		query.executeUpdate();
 		session.getTransaction().commit();
 		session.close();
 	}
 	
-	public Long getAvaiableFlatCount(int project_id){
-		String hql = "Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and builderFlatStatus =1 AND status=1";
+	public int getAvaiableFlatCount(int project_id){
+		String hql = "select id from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and builderFlatStatus =1 AND status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("project_id", project_id);
-		Long available = (Long) query.uniqueResult();
+		int available = query.list().size();
 		return available;
 	}
 	
@@ -2397,6 +2432,8 @@ public class ProjectDAO {
 		}
 		newsession.getTransaction().commit();
 		newsession.close();
+		resp.setStatus(1);
+		resp.setMessage("Payment Schedules Added");
 		return resp;
 	}
 	
@@ -2410,6 +2447,8 @@ public class ProjectDAO {
 		}
 		newsession.getTransaction().commit();
 		newsession.close();
+		resp.setStatus(1);
+		resp.setMessage("Payment Schedules Updated");
 		return resp;
 	}
 	
@@ -4065,4 +4104,77 @@ public class ProjectDAO {
 		return paymentInfoDatas;
 				
 	}
+	
+	public ResponseMessage addBuildingPriceInfo(BuildingPriceInfo buildingPriceInfo) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		session.save(buildingPriceInfo);
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Pricing added successfully");
+		return responseMessage;
+	}
+	
+	public ResponseMessage updateBuildingPriceInfo(BuildingPriceInfo buildingPriceInfo) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		session.update(buildingPriceInfo);
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Pricing updated successfully");
+		return responseMessage;
+	}
+	
+	public List<BuildingPriceInfo> getBuildingPriceInfos(int building_id) {
+		String hql = "from BuildingPriceInfo where builderBuilding.id = :building_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuildingPriceInfo> sourceList = query.list();
+		return sourceList;
+	}
+	
+	public ResponseMessage addFlatPriceInfo(FlatPricingDetails flatPriceInfo) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		session.save(flatPriceInfo);
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Pricing added successfully");
+		return responseMessage;
+	}
+	
+	public ResponseMessage updateFlatPriceInfo(FlatPricingDetails flatPriceInfo) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		session.update(flatPriceInfo);
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Pricing updated successfully");
+		return responseMessage;
+	}
+	
+	public List<FlatPricingDetails> getFlatPriceInfos(int flat_id) {
+		String hql = "from FlatPricingDetails where builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flat_id);
+		List<FlatPricingDetails> sourceList = query.list();
+		return sourceList;
+	}
+	
 }
