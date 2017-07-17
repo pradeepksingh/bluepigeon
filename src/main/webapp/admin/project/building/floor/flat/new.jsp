@@ -480,8 +480,9 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 									<%
-									if(buildingPaymentInfos.size() > 0){
-										for(BuildingPaymentInfo paymentInfoData: buildingPaymentInfos){ %>
+									if(buildingPaymentInfos != null){
+										if(buildingPaymentInfos.size() > 0){
+											for(BuildingPaymentInfo paymentInfoData: buildingPaymentInfos){ %>
 										<div class="col-lg-12">
 											<div class="row" id="schedule-1">
 												<div class="col-lg-5 margin-bottom-5">
@@ -514,6 +515,7 @@
 											</div>
 										</div>
 										<%	
+												}
 											}
 										}
 										%>

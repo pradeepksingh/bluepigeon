@@ -311,6 +311,7 @@
 					<div id="pricing" class="tab-pane fade">
 			 			<div class="row">
 			 				<div id="pricingresponse"></div>
+			 				<div id="ajaxpricing"></div>
 			 				<%if(projectPriceInfo != null){ %>
 			 				<div id="price_schedule">
 								<div class="col-lg-12">
@@ -992,6 +993,7 @@ $("#project_id").change(function(){
 });
 function getPriceDetails(){
 	$("#price_schedule").empty();
+	$("#ajaxpricing").empty();
 	var html ="";
 	var project_id = $("#project_id").val();
 	$.get("${baseUrl}/webapi/project/building/prices/"+project_id, { }, function(data){
@@ -1144,7 +1146,7 @@ function getPriceDetails(){
 		  +'</div>'
 	      +'</div>';
 	  	html = html.replace("NaN","");
-	$("#pricingresponse").append(html);
+	$("#ajaxpricing").append(html);
 	});
 }
 function getProjectShedule(){
@@ -1176,16 +1178,16 @@ function getProjectShedule(){
 			+'<div class="messageContainer"></div>'
 			+'</div>'
 			+'</div>'
-			+'<div class="col-lg-3 margin-bottom-5">'
-			+'<div class="form-group" id="error-amount">'
-			+'<label class="control-label col-sm-6">Amount </label>'
-			+'<div class="col-sm-6">'
-			+'<input type="number" class="form-control" id="amount" name="amount[]" value="'+data[index].amount+'"/>'
-			+'</div>'
-			+'<div class="messageContainer"></div>'
-			+'</div>'
-			+'</div>'
-			+'</div>'
+// 			+'<div class="col-lg-3 margin-bottom-5">'
+// 			+'<div class="form-group" id="error-amount">'
+// 			+'<label class="control-label col-sm-6">Amount </label>'
+// 			+'<div class="col-sm-6">'
+// 			+'<input type="number" class="form-control" id="amount" name="amount[]" value="'+data[index].amount+'"/>'
+// 			+'</div>'
+// 			+'<div class="messageContainer"></div>'
+// 			+'</div>'
+// 			+'</div>'
+// 			+'</div>'
 			+'</div>'
 			+'</div>'
 			+'</div>';
