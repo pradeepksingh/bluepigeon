@@ -145,7 +145,7 @@
                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a>
                                     </li>-->
                                 </ul>
-                                 <form id="addbuyer" name="addbuyer" action="" method="post" enctype="multipart/form-data"> 
+                                 <form id="addnewbuyer" name="addnewbuyer" action="" method="post" enctype="multipart/form-data"> 
                               	<div class="tab-content"> 
                               	<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
                                		<div class="tab-pane active" id="vimessages" aria-expanded="false">
@@ -225,7 +225,7 @@
                                     </div>
                                  </div>
                                  <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Assign Manager</label>
+                                    <label for="example-text-input" class="col-3 col-form-label">Flat Number</label>
                                     <div class="col-6">
                                       <input type="text" readonly="true" value="<%out.print(builderFlat.getFlatNo());%>">
                                     </div>
@@ -518,7 +518,7 @@
                                   </div>
 	                             <div class="offset-sm-5 col-sm-7">
 	                             	<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous4();">Previous</button>
-                                 	<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+                                 	<button type="submit"  name="addbuyers" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
                                  </div>
                                 </div>
                                 </div>
@@ -607,7 +607,7 @@ $("#vimessages3").append(html);
 
 
 
-$('#addbuyer').bootstrapValidator({
+$('#addnewbuyer').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},
@@ -760,12 +760,13 @@ $('#addbuyer').bootstrapValidator({
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
+	alert("hello");
 	event.preventDefault();
 	addBuyer1();
 });
 
 function addBuyer1() {
-	//alert("inside add");
+	alert("inside add");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -774,7 +775,7 @@ function addBuyer1() {
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
-   	$('#addbuyer').ajaxSubmit(options);
+   	$('#addnewbuyer').ajaxSubmit(options);
 }
 
 function showAddRequest(formData, jqForm, options){
@@ -995,28 +996,28 @@ function previous4()
 	
 }
 $("#base_rate").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#tax").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#vat").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#rise_rate").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#parking").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#amenity_rate").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#maintenance").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#stamp_duty").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 function calculateTotalSaleValue(){
 	$.post("${baseUrl}/webapi/buyer/sale",{project_id : $("#project_id").val(),base_rate : $("#base_rate").val(), rise_rate : $("#rise_rate").val(), amenity_rate : $("#amenity_rate").val(),parking : $("#parking").val(), maintenance : $("#maintenance").val(), stamp_duty : $("#stamp_duty").val(), tax : $("#tax").val(),vat : $("#vat").val(), no_of_floors : $("#post").val() },function(data){
