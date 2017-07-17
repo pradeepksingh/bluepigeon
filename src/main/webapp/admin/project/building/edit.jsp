@@ -1626,7 +1626,11 @@ $('#updateoffer').bootstrapValidator({
             }
         }
     }
-	});
+	}).on('success.form.bv', function(event,data) {
+		// Prevent form submission
+		event.preventDefault();
+		updateBuildingOffers();
+	});;
 //});
 
 </script>
