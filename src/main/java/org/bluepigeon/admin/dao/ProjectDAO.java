@@ -4174,7 +4174,11 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("flat_id", flat_id);
 		List<FlatPricingDetails> sourceList = query.list();
-		return sourceList;
+		if(sourceList !=null){
+			return sourceList;
+		}else{
+			return null;
+		}
 	}
 	
 }

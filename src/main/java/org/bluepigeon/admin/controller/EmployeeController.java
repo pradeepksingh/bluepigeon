@@ -366,38 +366,40 @@ public class EmployeeController {
 		builderEmployee.setEmployeeId(employeeId);
 		builderEmployee.setBuilderEmployee(reportingEmployee);
 		builderEmployee.setStatus(status);
-		new BuilderDetailsDAO().updateBuilderEmployee(builderEmployee);
-		if(projectId.size()>0){
-			List<AllotProject> updateallotProjectList = new ArrayList<>();
-			List<AllotProject> saveallotProjectList = new ArrayList<>();
-			int i=0;
-			for(FormDataBodyPart projects : projectId){
-				if(projects.getValueAs(Integer.class) != null ){
-					if(allotprojectIds.get(i).getValueAs(Integer.class)!= null){
-						AllotProject allotProject = new AllotProject();
-						allotProject.setBuilderEmployee(builderEmployee);
-						BuilderProject builderProject = new BuilderProject();
-						builderProject.setId(projects.getValueAs(Integer.class));
-						allotProject.setId(allotprojectIds.get(i).getValueAs(Integer.class));
-						allotProject.setBuilderProject(builderProject);
-						updateallotProjectList.add(allotProject);
-					}else{
-						AllotProject allotProject = new AllotProject();
-						allotProject.setBuilderEmployee(builderEmployee);
-						BuilderProject builderProject = new BuilderProject();
-						builderProject.setId(projects.getValueAs(Integer.class));
-						allotProject.setId(allotprojectIds.get(i).getValueAs(Integer.class));
-						allotProject.setBuilderProject(builderProject);
-						saveallotProjectList.add(allotProject);
+		responseMessage = new BuilderDetailsDAO().updateBuilderEmployee(builderEmployee);
+		if(projectId != null){
+			if(projectId.size()>0){
+				List<AllotProject> updateallotProjectList = new ArrayList<>();
+				List<AllotProject> saveallotProjectList = new ArrayList<>();
+				int i=0;
+				for(FormDataBodyPart projects : projectId){
+					if(projects.getValueAs(Integer.class) != null ){
+						if(allotprojectIds.get(i).getValueAs(Integer.class)!= null){
+							AllotProject allotProject = new AllotProject();
+							allotProject.setBuilderEmployee(builderEmployee);
+							BuilderProject builderProject = new BuilderProject();
+							builderProject.setId(projects.getValueAs(Integer.class));
+							allotProject.setId(allotprojectIds.get(i).getValueAs(Integer.class));
+							allotProject.setBuilderProject(builderProject);
+							updateallotProjectList.add(allotProject);
+						}else{
+							AllotProject allotProject = new AllotProject();
+							allotProject.setBuilderEmployee(builderEmployee);
+							BuilderProject builderProject = new BuilderProject();
+							builderProject.setId(projects.getValueAs(Integer.class));
+							allotProject.setId(allotprojectIds.get(i).getValueAs(Integer.class));
+							allotProject.setBuilderProject(builderProject);
+							saveallotProjectList.add(allotProject);
+						}
 					}
+					i++;
 				}
-				i++;
-			}
-			if(updateallotProjectList.size() > 0){
-				 new BuilderDetailsDAO().updateAllotProjects(updateallotProjectList);
-			}
-			if(saveallotProjectList.size() > 0){
-				 new BuilderDetailsDAO().saveAllotProjects(updateallotProjectList);
+				if(updateallotProjectList.size() > 0){
+					 new BuilderDetailsDAO().updateAllotProjects(updateallotProjectList);
+				}
+				if(saveallotProjectList.size() > 0){
+					 new BuilderDetailsDAO().saveAllotProjects(updateallotProjectList);
+				}
 			}
 		}
 	return responseMessage;
@@ -422,6 +424,31 @@ public class EmployeeController {
 		return projectDAO.getCityareabyproject(project);
 		
 		
+	}
+	
+	@POST
+	@Path("/account/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateEmployeeAccont(
+			@FormDataParam("emp_id") int emp_id,
+			@FormDataParam("name") String name,
+			@FormDataParam("contact") String mobile,
+			@FormDataParam("email") String email,
+ 			@FormDataParam("address") String currentAddress,
+			@FormDataParam("address1") String permanentAddress
+			){
+		ResponseMessage responseMessage = new ResponseMessage();
+		BuilderEmployee builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
+		
+		builderEmployee.setId(emp_id);
+		builderEmployee.setName(name);
+		builderEmployee.setEmail(email);
+		builderEmployee.setMobile(mobile);
+		builderEmployee.setCurrentAddress(currentAddress);
+		builderEmployee.setPermanentAddress(permanentAddress);
+		responseMessage = new BuilderDetailsDAO().updateBuilderEmployeeAccount(builderEmployee);
+		return responseMessage;
 	}
 	
 }

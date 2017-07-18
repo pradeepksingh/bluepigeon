@@ -538,6 +538,19 @@ public class BuilderDetailsDAO {
 		response.setMessage("Employee updated Successfully");
 		return response;
 	}
+	
+	public ResponseMessage updateBuilderEmployeeAccount(BuilderEmployee builderEmployee){
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.update(builderEmployee);
+		newsession.getTransaction().commit();
+		newsession.close();
+		response.setStatus(1);
+		response.setMessage("Employee Account updated Successfully");
+		return response;
+	}
 	/**
 	 * Save builder logo
 	 * @author pankaj
@@ -746,7 +759,7 @@ public class BuilderDetailsDAO {
 	public List<BarGraphData> getBarGraphByBuilderId(int builderId){
 		List<BarGraphData> barGraphDatas = new ArrayList<BarGraphData>();
 		String hql = "Select COUNT(DISTINCT B.possessionDate) from BuilderProject B where B.builder.id = :builder_id and B.status=1";
-		String projectHql = "from BuilderProject where builder.id =:builder_id and status=1";
+		String projectHql = "from BuilderProject where builder.id =:builder_id and status=1 group by year(possessionDate)";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -950,7 +963,7 @@ public class BuilderDetailsDAO {
 		session.getTransaction().commit();
 		session.close();
 		responseMessage.setStatus(1);
-		responseMessage.setMessage("Empolyee Added Successfully.");
+		responseMessage.setMessage("Empolyee Updated Successfully.");
 		return responseMessage;
 		
 	}

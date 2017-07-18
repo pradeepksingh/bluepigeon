@@ -114,7 +114,7 @@
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">New Employee</h4>
+                        <h4 class="page-title">Update Employee</h4>
                     </div>
                 </div>
                 <div class="row">
@@ -207,10 +207,10 @@
 	                                         					<select class="form-control" name="access" id="access">
 	                                          						<option value="">Select Access</option>
 																	<%
-																	if(access_list !=null){
+																	//if(access_list !=null){
 																	for (BuilderEmployeeAccessType access : access_list) { %>
 																  <option value="<%out.print(access.getId());%>" <%if(access.getId() == builderEmployee.getBuilderEmployeeAccessType().getId()){%>selected<%} %>> <% out.print(access.getName()); %> </option>
-																	<% }} %>
+																	<% }//} %>
 																</select>
 															</div>
 															<div class="messageContainer"></div>
@@ -241,12 +241,15 @@
 <%-- 																		for (ProjectData project : project_list) { %> --%>
 <%-- 																		<option value="<%out.print(project.getId());%>" <%if(project.getId() == allotProjects.get(i).getBuilderProject().getId() ) { %>selected<%} %>> <% out.print(project.getName()); %> </option> --%>
 <%-- 																		<% i++;} %> --%>
-																		<% for(int i=0;i<allotProjects.size();i++){
-																			
-																		}
-																			
-																		for (ProjectData project : project_list) { %>
-																		<option value="<%out.print(project.getId());%>" > <% out.print(project.getName()); %> </option>
+																		<% 
+																			for(ProjectData project : project_list){
+																			String is_selected = "";	
+																				for(AllotProject allotProject : allotProjects){
+																					if(allotProject.getBuilderProject().getId() == project.getId())
+																						is_selected = "selected";
+																				}
+																		%>
+																		<option value="<%out.print(project.getId());%>" <%out.print(is_selected); %> > <% out.print(project.getName()); %> </option>
 																		<%} %>
 																</select>
 															</div>
