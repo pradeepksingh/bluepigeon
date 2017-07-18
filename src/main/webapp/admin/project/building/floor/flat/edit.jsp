@@ -274,7 +274,7 @@
 											</div>
 											<div class="col-lg-12 margin-bottom-5">
 												<div class="form-group" id="error-amenity_type">
-													<label class="control-label col-sm-2">Floor Amenities Weightage </label>
+													<label class="control-label col-sm-2">Flat Amenities Weightage </label>
 													<div class="col-sm-10">
 													<script type="text/javascript">
 														var count=1;
