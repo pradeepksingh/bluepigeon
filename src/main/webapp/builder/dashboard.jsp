@@ -27,7 +27,7 @@
 	Long totalInventory = (long) 0;
 	Long totalLeads = (long)0;
 	Double totalRevenue = 0.0;
-	Double totalSaleValue = 0.0;
+	//Double totalSaleValue = 0.0;
 	Long totalCampaign = (long)0;
 	Long totalSoldInventory = (long)0;
 	Long totalProjects = (long)0;
@@ -36,6 +36,7 @@
     DecimalFormat decimalFormat = new DecimalFormat("#.##");
 	int builder_id = 0;
 	int access_id = 0;
+	Double totalPropertySold = 0.0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -53,9 +54,11 @@
 					totalProjects = new ProjectDAO().getTotalNumberOfProjects(builder_id);
 					barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder_id);
 					totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder_id);
-					totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
-					totalRevenue = totalSaleValue * totalSoldInventory;
+					//totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
+					
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
+					totalPropertySold = new ProjectDAO().getRevenueOfsoldInventoryByBuilderId(builder_id);
+					totalRevenue = totalPropertySold * totalSoldInventory;
 				}
 						
 		}
@@ -423,8 +426,8 @@
                                     <h3 class="box-title">Property sales</h3>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                                            <h1 class="text-info sales-income">Rs 64057</h1>
-                                            <p class="text-muted">APRIL 2017</p> <b>(150 Sales)</b> </div>
+                                            <h1 class="text-info sales-income">Rs <%out.print(Math.round(totalPropertySold)); %></h1>
+                                            <p class="text-muted"></p> <b>(<%out.print(totalSoldInventory); %> Sales)</b> </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sparkline2dash" class="text-center"></div>
                                         </div>
@@ -436,8 +439,8 @@
                                     <h3 class="text-white box-title">PROPERTY SALE INCOME</h3>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                                            <h1 class="text-white sales-income">Rs 30447</h1>
-                                            <p class="light_op_text"><br></p> <b class="text-white">(110 Sales)</b> </div>
+                                            <h1 class="text-white sales-income">Rs  <%out.print(Math.round(totalPropertySold)); %></h1>
+                                            <p class="light_op_text"><br></p> <b class="text-white">(<%out.print(totalSoldInventory); %> Sales)</b> </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sales1" class="text-center"></div>
                                         </div>

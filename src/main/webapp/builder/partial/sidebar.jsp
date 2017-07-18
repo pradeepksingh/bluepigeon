@@ -36,7 +36,7 @@
                         <ul class="nav nav-second-level">
                             <li><a href="javascript:void(0)"><i class="ti-user"></i> My Profile</a></li>
                             <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
-                            <li><a href="${baseUrl }/builder/accountSettings.jsp?emp_id=<%out.print(builder_new_id);%>"><i class="ti-settings"></i> Account Setting</a></li>
+                            <li><a href="${baseUrl }/builder/accountsettings.jsp?emp_id=<%out.print(builder_new_id);%>"><i class="ti-settings"></i> Account Setting</a></li>
                             <li><a href="${baseUrl }/webapi/validatebuilder/logoutbuilder"><i class="fa fa-power-off"></i> Logout</a></li>
                         </ul>
                     </li>

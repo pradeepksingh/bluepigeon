@@ -14,6 +14,7 @@ public class ProjectList {
 	private double sold;
 	private double totalSold;
 	private int totalLeads;
+	private Double totalRevenu;
 	private Double completionStatus;
 	public int getId() {
 		return id;
@@ -94,4 +95,11 @@ public class ProjectList {
 	public void setCompletionStatus(Double completionStatus) {
 		this.completionStatus = completionStatus;
 	}
+	public Double getTotalRevenu() {
+		return totalRevenu;
+	}
+	public void setTotalRevenu(Double totalRevenu) {
+		this.totalRevenu = totalRevenu;
+	}
+	
 }

@@ -758,8 +758,8 @@ public class BuilderDetailsDAO {
      */
 	public List<BarGraphData> getBarGraphByBuilderId(int builderId){
 		List<BarGraphData> barGraphDatas = new ArrayList<BarGraphData>();
-		String hql = "Select COUNT(DISTINCT B.possessionDate) from BuilderProject B where B.builder.id = :builder_id and B.status=1";
-		String projectHql = "from BuilderProject where builder.id =:builder_id and status=1 group by year(possessionDate)";
+		String hql = "Select DISTINCT YEAR(B.possessionDate) from BuilderProject B where B.builder.id = :builder_id and B.status=1";
+		String projectHql = "from BuilderProject where builder.id =:builder_id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -782,6 +782,8 @@ public class BuilderDetailsDAO {
 					
 				}
 			}catch(IndexOutOfBoundsException e){
+				System.err.println("Index Out of bound exception :: Data not present in DB");
+				e.printStackTrace();
 				//Return this when no data present in database.
 				BarGraphData barGraphData = new BarGraphData();
 				barGraphData.setBuiltYear(null);
@@ -789,6 +791,9 @@ public class BuilderDetailsDAO {
 				barGraphData.setTotalBuyers((long)0);
 				barGraphData.setTotalSold((long)0);
 				barGraphDatas.add(barGraphData);
+			}catch(Exception ew){
+				System.err.println("Error::");
+				ew.printStackTrace();
 			}
 		}
 		return barGraphDatas;

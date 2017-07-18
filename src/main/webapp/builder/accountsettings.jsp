@@ -309,7 +309,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        //window.location.href = "${baseUrl}/builder/employee/list.jsp";
+         window.location.reload();
   	}
 }
 </script>
