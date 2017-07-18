@@ -24,6 +24,7 @@
 <%
 	int p_user_id = 0;
 	int project_id=0;
+	int access_id=0;
 	BuilderProject projectList = null;
 	List<BuilderBuilding> buildingList = null;
 	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>();
@@ -44,6 +45,7 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			p_user_id = builder.getBuilder().getId();
+			access_id = builder.getBuilderEmployeeAccessType().getId();
 			buildingList =  new ProjectDAO().getBuilderProjectBuildings(project_id);
 		}
 	}
@@ -349,10 +351,12 @@
                                  
                             </div>
                         </div>
+                        <% if(access_id == 1||access_id==2||access_id==4||access_id==5||access_id==6||access_id==7){%>
                         <div class="white-box col-sm-12">
                         <a href="#addCountry" class="btn btn-info btn-lg btn-round pull-right col-sm-12" style="margin: -22px 1px;" onclick="javascript:getActiveProjectFlats();"><i class="fa fa-plus"></i>&nbsp;Book Now</a>
 <!--                         <button id="#addCountry" type="button" onclick="getActiveProjectFlats();" class="btn btn-info bt-sm btn-rounded pull-right" style="margin-right:-20px;">New Request</button> -->
                         </div>
+                        <% } %>
 <!--                         <div class="white-box p-0"> -->
                     
 <!--                             <hr class="m-0"> -->

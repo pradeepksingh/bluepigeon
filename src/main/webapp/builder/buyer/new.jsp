@@ -23,7 +23,8 @@
 	BuilderFlat builderFlat = null;
 	int builder_id1 = 0;
 	int flat_id = 0;
-	
+	int building_id = 0;
+	int project_id = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -46,6 +47,8 @@
 		flat_id = Integer.parseInt(request.getParameter("flat_id"));
 		flatPayments = new ProjectDAO().getFlatPaymentByFlatId(flat_id);
 		builderFlat = new ProjectDAO().getBuilderFlatById(flat_id);
+		building_id = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
+		project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
 	}
 %>
 <!DOCTYPE html>
@@ -145,46 +148,73 @@
                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a>
                                     </li>-->
                                 </ul>
-                                 <form id="addbuyer" name="addbuyer" action="" method="post" enctype="multipart/form-data"> 
+                                <form id="addnewbuyer" name="addnewbuyer" action="" method="post" enctype="multipart/form-data"> 
                               	<div class="tab-content"> 
                               	<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
+                              	<input type="hidden" name="project_id" id="project_id" value="<%out.print(project_id);%>"/>
+                              	<input type="hidden" name="building_id" id="building_id" value="<%out.print(building_id);%>"/>
+                              	<input type="hidden" name="flat_id" id="flat_id" value="<%out.print(flat_id);%>"/>
                                		<div class="tab-pane active" id="vimessages" aria-expanded="false">
                                 		<div class="col-12" >
                                 			<input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
-                                			<div class="form-group row">
-                                   				<label for="example-text-input" class="col-3 col-form-label">Buyer Name*</label>
-                                   				<div class="col-3">
-                                       				<input class="form-control" type="text" id="buyer_name" name="buyer_name[]" value="">
-                                   				</div>
-                                   				<label for="example-text-input" class="col-3 col-form-label">Contact*</label>
-                                   				<div class="col-3">
-                                       				<input class="form-control" type="text" id="contact" name="contact[]" value="">
-                                   				</div>
-                                			</div>
-                                			<div class="form-group row">
-                                    			<label for="example-search-input" class="col-3 col-form-label">Email*</label>
-                                    			<div class="col-3">
-                                        			<input class="form-control" type="text" id="email" name="email[]" value="">
-                                    			</div>
-                                    			<label for="example-search-input" class="col-3 col-form-label">Pan*</label>
-                                    			<div class="col-3">
-                                        			<input class="form-control" type="text" id="pan" name="pan[]" value="">
-                                    			</div>
-                                			</div>
-                                 			<div class="form-group row">
-                                    			<label for="example-tel-input" class="col-3 col-form-label">Permanent Address*</label>
-                                    			<div class="col-3">
-                                         			<textarea class="form-control" rows="" cols="" id="address" name="address[]"></textarea>
-                                    			</div>
-                                    			<label for="example-tel-input" class="col-3 col-form-label">Owner*</label>
-                                    			<div class="col-3">
-                                      				<select name="is_primary[]" id="is_primary" class="form-control">
-<!-- 			                       					<option value="">Select Owner</option> -->
-<!-- 			                     					<option value="0">Co-Owner</option> -->
-			                      						<option value="1" selected>Owner</option>
-							          				</select>
-                                    			</div>
-                                			</div>
+                                			 <div class="row">
+			                               		<div class="col-sm -6"> 
+		                                			<div class="form-group row">
+			                                   				<label for="example-text-input" class="col-sm-6 col-form-label">Buyer Name*</label>
+			                                   				<div class="col-sm-6">
+			                                       				<input class="form-control" type="text" id="buyer_name" name="buyer_name[]" value="">
+			                                   				</div>
+			                                   		</div>
+			                                   	</div>
+			                                   	<div class="col-sm-6">
+			                                   		<div class="form-group row">
+			                                   				<label for="example-text-input" class="col-sm-6 col-form-label">Contact*</label>
+			                                   				<div class="col-sm-6">
+			                                       				<input class="form-control" type="text" id="contact" name="contact[]" value="">
+			                                   				</div>
+		                                			</div>
+		                                		</div>
+		                                	</div>
+		                                	<div class="row">
+		                                		<div class="col-sm-6">
+		                                			<div class="form-group row">
+		                                    			<label for="example-search-input" class="col-sm-6 col-form-label">Email*</label>
+		                                    			<div class="col-sm-6">
+		                                        			<input class="form-control" type="text" id="email" name="email[]" value="">
+		                                    			</div>
+		                                    		</div>
+		                                    	</div>
+		                                    	<div class="col-sm-6">
+		                                    		<div class="form-group row">
+		                                    			<label for="example-search-input" class="col-sm-6 col-form-label">Pan*</label>
+		                                    			<div class="col-sm-6">
+		                                        			<input class="form-control" type="text" id="pan" name="pan[]" value="">
+		                                    			</div>
+		                                			</div>
+		                                		</div>
+		                                	</div>
+		                                	<div class="row">
+		                                		<div class="col-sm-6">
+		                                 			<div class="form-group row">
+		                                    			<label for="example-tel-input" class="col-sm-6 col-form-label">Permanent Address*</label>
+		                                    			<div class="col-sm-6">
+		                                         			<textarea class="form-control" rows="" cols="" id="address" name="address[]"></textarea>
+		                                    			</div>
+		                                    		</div>
+		                                    	</div>
+		                                    	<div class="col-sm-6">
+		                                    		<div class="form-group row">
+		                                    			<label for="example-tel-input" class="col-sm-6 col-form-label">Owner*</label>
+		                                    			<div class="col-sm-6">
+		                                      				<select name="is_primary[]" id="is_primary" class="form-control">
+		<!-- 			                       					<option value="">Select Owner</option> -->
+		<!-- 			                     					<option value="0">Co-Owner</option> -->
+					                      						<option value="1" selected>Owner</option>
+									          				</select>
+		                                    			</div>
+		                                    		</div>
+		                                    	</div>
+		                                	</div>
 											<div class="form-group row" id="error-project_type">
 												<label class="col-12 col-form-label">Documents <span class='text-danger'>*</span></label>
 												<div class="col-3">
@@ -211,168 +241,264 @@
                                  			</div>
                               			</div>
                              		</div>
-                             <div id="vimessages1" class="tab-pane" aria-expanded="false">
-                             	  <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Project Name</label>
-                                    <div class="col-6">
-                                      <input type="text" readonly="true" value="<%out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName());%>">
-                                    </div>
-                                  </div>
-                                  <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Building Name</label>
-                                    <div class="col-6">
-                                     <input type="text" readonly="true" value="<%out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getName());%>">
-                                    </div>
-                                 </div>
-                                 <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Assign Manager</label>
-                                    <div class="col-6">
-                                      <input type="text" readonly="true" value="<%out.print(builderFlat.getFlatNo());%>">
-                                    </div>
-                                 </div>
-                                 <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Assign Manager</label>
-                                    <div class="col-6">
-                                      <select name="admin_id" id="admin_id" class="form-control">
-						                  	<option value="<% out.print(builder.getId());%>"><% out.print(builder.getName());%></option>
-							          </select>
-                                    </div>
-                                </div>
-								  <div class="offset-sm-5 col-sm-7">
-                                	<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous1();">Previous</button>
-                                    <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next1" onclick="show1();">Next</button>
-                                 </div>
-                               </div>
+		                             <div id="vimessages1" class="tab-pane" aria-expanded="false">
+			                             	  <div class="form-group row">
+			                                    <label for="example-text-input" class="col-3 col-form-label">Project Name</label>
+			                                    <div class="col-6">
+			                                      <input type="text" readonly="true" value="<%out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName());%>">
+			                                    </div>
+			                                  </div>
+			                                  <div class="form-group row">
+			                                    <label for="example-text-input" class="col-3 col-form-label">Building Name</label>
+			                                    <div class="col-6">
+			                                     <input type="text" readonly="true" value="<%out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getName());%>">
+			                                    </div>
+		                                </div>
+		                                 <div class="form-group row">
+		                                    <label for="example-text-input" class="col-3 col-form-label">Flat Number</label>
+		                                    <div class="col-6">
+		                                      <input type="text" readonly="true" value="<%out.print(builderFlat.getFlatNo());%>">
+		                                    </div>
+		                                 </div>
+		                                 <div class="form-group row">
+		                                    <label for="example-text-input" class="col-3 col-form-label">Assign Manager</label>
+		                                    <div class="col-6">
+		                                      <select name="admin_id" id="admin_id" class="form-control">
+								                  	<option value="<% out.print(builder.getId());%>"><% out.print(builder.getName());%></option>
+									          </select>
+		                                    </div>
+		                                </div>
+										<div class="offset-sm-5 col-sm-7">
+		                                  <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous1();">Previous</button>
+		                                  <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next1" onclick="show1();">Next</button>
+		                               </div>
+                               	</div>
                                 <div id="vimessages2" class="tab-pane" aria-expanded="false">
                                  <div class="col-12">
     							<%
     								if(projectPriceInfoData != null){
     							%>                     
     							<input type="hidden" id="project_id" name="project_id" value="<%out.print(project_list.get(0).getId());%>"/>  
-                                <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Booking Date</label>
-                                    <div class="col-3">
-                                       <input type="text" class="form-control" id="booking_date" name="booking_date" value=""/>
-                                    </div>
-                                    <label for="example-text-input" class="col-3 col-form-label">Base Rate</label>
-                                    <div class="col-3">
-                                        <input type="text" value="<%out.print(projectPriceInfoData.getBasePrice()); %>" class="form-control" id="base_rate" name="base_rate" />
-                                    </div>
-                                </div> 
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate</label>
-                                    <div class="col-3">
-                                       <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getRiseRate()); %>" id="rise_rate" name="rise_rate"/>
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Aminities Facing Rise Rates</label>
-                                    <div class="col-3">
-                                        <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getAmenityRate()); %>" id="amenity_rate" name="amenity_rate" />
-                                    </div>
+    							<div class="row">
+    								<div class="col-sm-6">
+		                                <div class="form-group row">
+		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Booking Date</label>
+		                                    <div class="col-sm-6">
+		                                       <input type="text" class="form-control" id="booking_date" name="booking_date" value=""/>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                            <div class="col-sm-6">
+	                            	     <div class="form-group row">
+		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Base Rate</label>
+		                                    <div class="col-sm-6">
+		                                        <input type="text" value="<%out.print(projectPriceInfoData.getBasePrice()); %>" class="form-control" id="base_rate" name="base_rate" />
+		                                    </div>
+	                              		 </div>
+		                             </div>
+		                          </div>
+		                          <div class="row">
+		                                <div class="col-sm-6">
+			                                <div class="form-group row">
+			                                    <label for="example-search-input" class="col-sm-6 col-form-label">Floor Rising Rate</label>
+			                                    <div class="col-sm-6">
+			                                       <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getRiseRate()); %>" id="rise_rate" name="rise_rate"/>
+			                                    </div>
+			                                  </div>
+				                         </div>
+				                         <div class="col-sm-6">
+					                         <div class="form-group row">
+				                                    <label for="example-search-input" class="col-sm-6 col-form-label">Aminities Facing Rise Rates</label>
+				                                    <div class="col-sm-6">
+				                                        <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getAmenityRate()); %>" id="amenity_rate" name="amenity_rate" />
+				                                    </div>
+					                         </div>
+				                         </div>
+			                        </div>
+			                      <div class="row">
+				                      <div class="col-sm-6">
+		                                 <div class="form-group row">
+		                                    <label for="example-tel-input" class="col-3 col-form-label">Parking Rates</label>
+		                                    <div class="col-3">
+		                                       	<input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getParking()); %>" id="parking" name="parking" />
+		                                    </div>
+		                                  </div>
+			                           </div>
+			                           <div class="col-sm-6">
+			                           		<div class="form-group row">
+			                                    <label for="example-tel-input" class="col-3 col-form-label">Maintance</label>
+			                                    <div class="col-3">
+			                                        <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getMaintenance()); %>" id="maintenance" name="maintenance" />
+			                                    </div>
+		                                   </div>
+			                           </div>
+		                         </div>
+		                         <div class="row">
+		                        	 <div class="col-sm-6">
+		                                <div class="form-group row">
+		                                    <label for="example-tel-input" class="col-3 col-form-label">Stamp Duty</label>
+		                                    <div class="col-3">
+		                                       <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getStampDuty()); %>" id="stamp_duty" name="stamp_duty" />
+		                                    </div>
+		                                 </div>
+		                              </div>
+		                             <div class="col-sm-6">
+		                                 <div class="form-group row">
+		                                    <label for="example-tel-input" class="col-3 col-form-label">Taxes</label>
+		                                    <div class="col-3">
+		                                         <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getTax()); %>" id="tax" name="tax" />
+		                                    </div>
+		                                </div>
+		                             </div>
+		                        </div>
+		                        <div class="row">
+		                        	<div class="col-sm-6">
+		                                <div class="form-group row">
+		                                    <label for="example-search-input" class="col-sm-6 col-form-label">VAT</label>
+		                                    <div class="col-sm-6">
+		                                       <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getVat()); %>" id="vat" name="vat" />
+		                                    </div>
+		                                 </div>
+                                 	</div>
+                                 	<div class="col-sm-6">
+                                 	  <div class="form-group row">
+		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Tenure</label>
+		                                    <div class="col-3">
+		                                      <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getTenure()); %>" id="tenure" name="tenure" />
+											  <span class="input-group-addon">Months</span>
+		                                    </div>
+		                               </div>
+		                            </div>
                                 </div>
-                                 <div class="form-group row">
-                                    <label for="example-tel-input" class="col-3 col-form-label">Parking Rates</label>
-                                    <div class="col-3">
-                                       	<input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getParking()); %>" id="parking" name="parking" />
-                                    </div>
-                                    <label for="example-tel-input" class="col-3 col-form-label">Maintance</label>
-                                    <div class="col-3">
-                                        <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getMaintenance()); %>" id="maintenance" name="maintenance" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="example-tel-input" class="col-3 col-form-label">Stamp Duty</label>
-                                    <div class="col-3">
-                                       <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getStampDuty()); %>" id="stamp_duty" name="stamp_duty" />
-                                    </div>
-                                    <label for="example-tel-input" class="col-3 col-form-label">Taxes</label>
-                                    <div class="col-3">
-                                         <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getTax()); %>" id="tax" name="tax" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">VAT</label>
-                                    <div class="col-3">
-                                       <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getVat()); %>" id="vat" name="vat" />
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Tenure</label>
-                                    <div class="col-3">
-                                      <input type="text" class="form-control" value="<%out.print(projectPriceInfoData.getTenure()); %>" id="tenure" name="tenure" />
-									  <span class="input-group-addon">Months</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">No. of Post</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" value="<%out.print(projectPriceInfoData.getPost()); %>" id="post" name="post">
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Total Sale Value</label>
-                                    <div class="col-3">
-                                        <input class="form-control" readonly="true" type="text" value="<%out.print(projectPriceInfoData.getPost()); %>" id="toatl_sale_value" name="total_sale_value">
-                                    </div>
-                               </div>
+                                <div class="row">
+                                	<div class="col-sm-6">
+		                                <div class="form-group row">
+		                                    <label for="example-search-input" class="col-3 col-form-label">No. of Post</label>
+		                                    <div class="col-3">
+		                                        <input class="form-control" type="text" value="<%out.print(projectPriceInfoData.getPost()); %>" id="post" name="post">
+		                                    </div>
+		                                 </div>
+		                             </div>
+		                             <div class="col-sm-6">
+		                               	<div class="form-group row">
+		                                    <label for="example-search-input" class="col-3 col-form-label">Total Sale Value</label>
+		                                    <div class="col-3">
+		                                        <input class="form-control" readonly="true" type="text" value="<%out.print(projectPriceInfoData.getPost()); %>" id="toatl_sale_value" name="total_sale_value">
+		                                    </div>
+		                               </div>
+		                             </div>
+		                          </div>
                                <%} else{%>
                                <input type="hidden" id="project_id" name="project_id" value=""/>  
-                                <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Booking Date</label>
-                                    <div class="col-3">
-                                       <input type="text" class="form-control" id="booking_date" name="booking_date" value=""/>
-                                    </div>
-                                    <label for="example-text-input" class="col-3 col-form-label">Base Rate</label>
-                                    <div class="col-3">
-                                        <input type="text" value="" class="form-control" id="base_rate" name="base_rate" />
-                                    </div>
-                                </div> 
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Floor Rising Rate</label>
-                                    <div class="col-3">
-                                       <input type="text" class="form-control" value="" id="rise_rate" name="rise_rate"/>
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Aminities Facing Rise Rates</label>
-                                    <div class="col-3">
-                                        <input type="text" class="form-control" value="" id="amenity_rate" name="amenity_rate" />
-                                    </div>
-                                </div>
-                                 <div class="form-group row">
-                                    <label for="example-tel-input" class="col-3 col-form-label">Parking Rates</label>
-                                    <div class="col-3">
-                                       	<input type="text" class="form-control" value="" id="parking" name="parking" />
-                                    </div>
-                                    <label for="example-tel-input" class="col-3 col-form-label">Maintance</label>
-                                    <div class="col-3">
-                                        <input type="text" class="form-control" value="" id="maintenance" name="maintenance" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="example-tel-input" class="col-3 col-form-label">Stamp Duty</label>
-                                    <div class="col-3">
-                                       <input type="text" class="form-control" value="" id="stamp_duty" name="stamp_duty" />
-                                    </div>
-                                    <label for="example-tel-input" class="col-3 col-form-label">Taxes</label>
-                                    <div class="col-3">
-                                         <input type="text" class="form-control" value="" id="tax" name="tax" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">VAT</label>
-                                    <div class="col-3">
-                                       <input type="text" class="form-control" value="" id="vat" name="vat" />
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Tenure</label>
-                                    <div class="col-3">
-                                      <input type="text" class="form-control" value="" id="tenure" name="tenure" />
-									  <span class="input-group-addon">Months</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">No. of Post</label>
-                                    <div class="col-3">
-                                        <input class="form-control" type="text" value="" id="post" name="post">
-                                    </div>
-                                    <label for="example-search-input" class="col-3 col-form-label">Total Sale Value</label>
-                                    <div class="col-3">
-                                        <input class="form-control" readonly="true" type="text" value="" id="toatl_sale_value" name="total_sale_value">
-                                    </div>
-                               </div>
+                               <div class="row">
+                               		<div class="col-sm-6">
+		                                <div class="form-group row">
+		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Booking Date</label>
+		                                    <div class="col-sm-6">
+		                                       <input type="text" class="form-control" id="booking_date" name="booking_date" value=""/>
+		                                    </div>
+		                                 </div>
+		                            </div>
+		                            <div class="col-sm-6">
+		                               	<div class="form-group row">
+		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Base Rate</label>
+		                                    <div class="col-sm-6">
+		                                        <input type="text" value="" class="form-control" id="base_rate" name="base_rate" />
+		                                    </div>
+			                             </div>
+		                             </div> 
+		                        </div>
+		                        <div class="row">
+	                        		<div class="col-sm-6">
+		                                <div class="form-group row">
+		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Floor Rising Rate</label>
+		                                    <div class="col-sm-6">
+		                                       <input type="text" class="form-control" value="" id="rise_rate" name="rise_rate"/>
+		                                    </div>
+		                                 </div>
+		                             </div>
+		                             <div class="col-sm-6">
+		                              	<div class="form-group row">
+		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Aminities Facing Rise Rates</label>
+		                                    <div class="col-sm-6">
+		                                        <input type="text" class="form-control" value="" id="amenity_rate" name="amenity_rate" />
+		                                    </div>
+		                                 </div>
+		                             </div>
+		                         </div>
+		                         <div class="row">
+		                         	  <div class="col-sm-6">
+		                                 <div class="form-group row">
+		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Parking Rates</label>
+		                                    <div class="col-sm-6">
+		                                       	<input type="text" class="form-control" value="" id="parking" name="parking" />
+		                                    </div>
+		                                  </div>
+		                              </div>
+		                              <div class="col-sm-6">
+		                               		<div class="form-group row">
+			                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Maintance</label>
+			                                    <div class="col-sm-6">
+			                                        <input type="text" class="form-control" value="" id="maintenance" name="maintenance" />
+			                                    </div>
+		                                    </div>
+		                              </div>
+		                         </div>
+		                         <div class="row">
+		                         	<div class="col-sm-6">
+		                                <div class="form-group row">
+		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Stamp Duty</label>
+		                                    <div class="col-sm-6">
+		                                       <input type="text" class="form-control" value="" id="stamp_duty" name="stamp_duty" />
+		                                    </div>
+		                                 </div>
+		                            </div>
+		                            <div class="col-sm-6">
+		                            	 <div class="form-group row">
+		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Taxes</label>
+		                                    <div class="col-sm-6">
+		                                         <input type="text" class="form-control" value="" id="tax" name="tax" />
+		                                    </div>
+		                                </div>
+		                             </div>
+		                        </div>
+		                        <div class="row">
+		                        	<div class="col-sm-6">
+		                                <div class="form-group row">
+		                                    <label for="example-search-input" class="col-sm-6 col-form-label">VAT</label>
+		                                    <div class="col-sm-6">
+		                                       <input type="text" class="form-control" value="" id="vat" name="vat" />
+		                                    </div>
+		                                 </div>
+		                             </div>
+		                             <div class="col-sm-6">
+		                              	<div class="form-group row">
+		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Tenure</label>
+		                                    <div class="col-sm-6">
+		                                      <input type="text" class="form-control" value="" id="tenure" name="tenure" />
+											  <span class="input-group-addon">Months</span>
+		                                    </div>
+		                                 </div>
+		                              </div>
+		                         </div>
+		                         <div class="row">
+		                         	<div class="col-sm-6">
+		                                <div class="form-group row">
+		                                    <label for="example-search-input" class="col-sm-6 col-form-label">No. of Post</label>
+		                                    <div class="col-sm-6">
+		                                        <input class="form-control" type="text" value="" id="post" name="post">
+		                                    </div>
+		                                 </div>
+		                            </div>
+		                            <div class="col-sm-6">
+	                                	<div class="form-group row">
+		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Total Sale Value</label>
+		                                    <div class="col-sm-6">
+		                                        <input class="form-control" readonly="true" type="text" value="" id="toatl_sale_value" name="total_sale_value">
+		                                    </div>
+		                                 </div>
+		                             </div>
+		                         </div>
                                <%} %>
 <!--                                <div class="form-group row"> -->
 <!--                                     <button type="button" class="col-2" onclick="showOffers()">+ADD offers</button> -->
@@ -400,7 +526,7 @@
 	                                    <label for="example-search-input" class="col-2 col-form-label">Description</label>
 	                                    <div class="col-2">
 	                                        <textarea class="form-control" id="description" class="description"></textarea>
-	                                    </div>p
+	                                    </div>
 ;	                                    <label for="example-search-input" class="col-2 col-form-label">Offer Type</label>
 	                                    <div class="col-2">
 	                                     <select class="form-control" id="offer" name="offer">
@@ -518,16 +644,16 @@
                                   </div>
 	                             <div class="offset-sm-5 col-sm-7">
 	                             	<button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous4();">Previous</button>
-                                 	<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+                                 	<button type="submit"  name="addbuyers" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
                                  </div>
-                                </div>
-                                </div>
-                                </form>
-                        </div>
-                        </div>
-                    </div>
-                </div>
+                              </div>
+                           </div>
+                        </form>
+                     </div>
+                   </div>
+               </div>
             </div>
+         </div>
             <!-- /.container-fluid -->
              <div id="sidebar1"> 
 	      		<%@include file="../partial/footer.jsp"%>
@@ -607,7 +733,7 @@ $("#vimessages3").append(html);
 
 
 
-$('#addbuyer').bootstrapValidator({
+$('#addnewbuyer').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},
@@ -616,27 +742,27 @@ $('#addbuyer').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-    	project_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Please select project'
-                }
-            }
-        },
-        building_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Please select building'
-                }
-            }
-        },
-        flat_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Please select flat'
-                }
-            }
-        },
+//     	project_id: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Please select project'
+//                 }
+//             }
+//         },
+//         building_id: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Please select building'
+//                 }
+//             }
+//         },
+//         flat_id: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Please select flat'
+//                 }
+//             }
+//         },
         'buyer_name[]': {
             validators: {
                 notEmpty: {
@@ -665,20 +791,20 @@ $('#addbuyer').bootstrapValidator({
                 }
             }
         },
-        'photo[]': {
-            validators: {
-                notEmpty: {
-                    message: 'Buyer photo is required and cannot be empty'
-                }
-            }
-        },
-        flat_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Please select flat'
-                }
-            }
-        },
+//         'photo[]': {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Buyer photo is required and cannot be empty'
+//                 }
+//             }
+//         },
+//         flat_id: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Please select flat'
+//                 }
+//             }
+//         },
         booking_date: {
             validators: {
                 notEmpty: {
@@ -760,6 +886,7 @@ $('#addbuyer').bootstrapValidator({
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
+	//alert("hello");
 	event.preventDefault();
 	addBuyer1();
 });
@@ -774,7 +901,7 @@ function addBuyer1() {
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
-   	$('#addbuyer').ajaxSubmit(options);
+   	$('#addnewbuyer').ajaxSubmit(options);
 }
 
 function showAddRequest(formData, jqForm, options){
@@ -995,28 +1122,28 @@ function previous4()
 	
 }
 $("#base_rate").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#tax").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#vat").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#rise_rate").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#parking").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#amenity_rate").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#maintenance").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 $("#stamp_duty").keyup(function(){
-	calculateTotalSaleValue();
+	//calculateTotalSaleValue();
 });
 function calculateTotalSaleValue(){
 	$.post("${baseUrl}/webapi/buyer/sale",{project_id : $("#project_id").val(),base_rate : $("#base_rate").val(), rise_rate : $("#rise_rate").val(), amenity_rate : $("#amenity_rate").val(),parking : $("#parking").val(), maintenance : $("#maintenance").val(), stamp_duty : $("#stamp_duty").val(), tax : $("#tax").val(),vat : $("#vat").val(), no_of_floors : $("#post").val() },function(data){

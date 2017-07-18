@@ -106,7 +106,7 @@ public class BuyerController {
 			@FormDataParam("document_voterid[]") List<FormDataBodyPart> voterid,
 			@FormDataParam("builder_id") int builder_id,
 			@FormDataParam("project_id") int project_id,
-			//@FormDataParam("building_id") int building_id,
+			@FormDataParam("building_id") int building_id,
 			@FormDataParam("flat_id") int flat_id,
 			@FormDataParam("booking_date") String booking_date,
 			@FormDataParam("base_rate") Double base_rate,
@@ -156,12 +156,22 @@ public class BuyerController {
 					BuilderProject builderProject = new BuilderProject();
 					builderProject.setId(project_id);
 					buyer.setBuilderProject(builderProject);
+				}else{
+					project_id =  new ProjectDAO().getBuildingFlatById(flat_id).get(0).getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
+					BuilderProject builderProject = new BuilderProject();
+					builderProject.setId(project_id);
+					buyer.setBuilderProject(builderProject);
 				}
 				
-				int building_id = new ProjectDAO().getBuildingFlatById(flat_id).get(0).getBuilderFloor().getBuilderBuilding().getId();
+			//	int building_id = new ProjectDAO().getBuildingFlatById(flat_id).get(0).getBuilderFloor().getBuilderBuilding().getId();
 				if(building_id > 0){
 					BuilderBuilding builderBuilding = new BuilderBuilding();
 					builderBuilding.setId(building_id);
+					buyer.setBuilderBuilding(builderBuilding);
+				}else{
+					 building_id = new ProjectDAO().getBuildingFlatById(flat_id).get(0).getBuilderFloor().getBuilderBuilding().getId();
+					 BuilderBuilding builderBuilding = new BuilderBuilding();
+					 builderBuilding.setId(building_id);
 					buyer.setBuilderBuilding(builderBuilding);
 				}
 				
@@ -276,25 +286,27 @@ public class BuyerController {
 				buyingDetails.setVat(vat);
 				buyerDAO.saveBuyingDetails(buyingDetails);
 			}
-			if (schedule.size() > 0) {
-				List<BuyerPayment> buyerPayments = new ArrayList<BuyerPayment>();
-				i = 0;
-				for(FormDataBodyPart milestone : schedule)
-				{
-					if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
-						boolean isPaid = false;
-						BuyerPayment buyerPayment = new BuyerPayment();
-						buyerPayment.setMilestone(milestone.getValueAs(String.class).toString());
-						buyerPayment.setNetPayable(payable.get(i).getValueAs(Double.class));
-						buyerPayment.setAmount(amount.get(i).getValueAs(Double.class));
-						buyerPayment.setPaid(isPaid);
-						buyerPayment.setBuyer(primaryBuyer);
-						buyerPayments.add(buyerPayment);
+			if(schedule != null){
+				if (schedule.size() > 0) {
+					List<BuyerPayment> buyerPayments = new ArrayList<BuyerPayment>();
+					i = 0;
+					for(FormDataBodyPart milestone : schedule)
+					{
+						if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
+							boolean isPaid = false;
+							BuyerPayment buyerPayment = new BuyerPayment();
+							buyerPayment.setMilestone(milestone.getValueAs(String.class).toString());
+							buyerPayment.setNetPayable(payable.get(i).getValueAs(Double.class));
+							buyerPayment.setAmount(amount.get(i).getValueAs(Double.class));
+							buyerPayment.setPaid(isPaid);
+							buyerPayment.setBuyer(primaryBuyer);
+							buyerPayments.add(buyerPayment);
+						}
+						i++;
 					}
-					i++;
-				}
-				if(buyerPayments.size() > 0) {
-					buyerDAO.saveBuyerPayment(buyerPayments);
+					if(buyerPayments.size() > 0) {
+						buyerDAO.saveBuyerPayment(buyerPayments);
+					}
 				}
 			}
 			
