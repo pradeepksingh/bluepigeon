@@ -1,5 +1,6 @@
 package org.bluepigeon.admin.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -767,34 +768,56 @@ public class BuilderDetailsDAO {
 		Session projectSession = hibernateUtil.openSession();
 		Query projectQuery = projectSession.createQuery(projectHql);
 		projectQuery.setParameter("builder_id", builderId);
-		Long builderProjectLists = (Long)query.uniqueResult();
-		List<BuilderProject> projectList = projectQuery.list();
+		//Double builderProjectLists = (Double)query.list();
+	//	List<BuilderProject> builderProjectList = query.list();
+		int arr[]= new int[query.list().size()];
+		System.err.println("Query List :: "+query.list());
+		//List<BuilderProject> projectList = projectQuery.list();
 		System.err.println("Builder Id :: "+builderId);
-		if(projectList != null && builderProjectLists != null){
-			try{
-				for(int i=0;i< builderProjectLists.intValue();i++){
-					BarGraphData barGraphData = new BarGraphData();
-					barGraphData.setBuiltYear(projectList.get(i).getPossessionDate());
-					barGraphData.setTotalFlats(getTotalFlatsByProjectId(projectList.get(i).getId()));
-					barGraphData.setTotalBuyers(getTotalBuyersByProjectId(projectList.get(i).getId()));
-					barGraphData.setTotalSold(getTotalsoldFlatsByProjectId(projectList.get(i).getId()));
-					barGraphDatas.add(barGraphData);
-					
-				}
-			}catch(IndexOutOfBoundsException e){
-				System.err.println("Index Out of bound exception :: Data not present in DB");
-				e.printStackTrace();
-				//Return this when no data present in database.
-				BarGraphData barGraphData = new BarGraphData();
-				barGraphData.setBuiltYear(null);
-				barGraphData.setTotalFlats((long)0);
-				barGraphData.setTotalBuyers((long)0);
-				barGraphData.setTotalSold((long)0);
-				barGraphDatas.add(barGraphData);
-			}catch(Exception ew){
-				System.err.println("Error::");
-				ew.printStackTrace();
-			}
+		//if(projectList != null && builderProjectLists != null){
+//			try{
+//				for(int i=0;i< builderProjectLists.SIZE;i++){
+//					BarGraphData barGraphData = new BarGraphData();
+//					barGraphData.setBuiltYear(projectList.get(i).getPossessionDate());
+//					barGraphData.setTotalFlats(getTotalFlatsByProjectId(projectList.get(i).getId()));
+//					barGraphData.setTotalBuyers(getTotalBuyersByProjectId(projectList.get(i).getId()));
+//					barGraphData.setTotalSold(getTotalsoldFlatsByProjectId(projectList.get(i).getId()));
+//					barGraphDatas.add(barGraphData);
+//					System.err.println("Year :: "+builderProjectLists);
+//				}
+//			}catch(IndexOutOfBoundsException e){
+//				System.err.println("Index Out of bound exception :: Data not present in DB");
+//				e.printStackTrace();
+//				//Return this when no data present in database.
+//				BarGraphData barGraphData = new BarGraphData();
+//				barGraphData.setBuiltYear(null);
+//				barGraphData.setTotalFlats((long)0);
+//				barGraphData.setTotalBuyers((long)0);
+//				barGraphData.setTotalSold((long)0);
+//				barGraphDatas.add(barGraphData);
+//			}catch(Exception ew){
+//				System.err.println("Error::");
+//				ew.printStackTrace();
+//			}
+		//}
+		// for(BuilderProject builderProject : builderProjectList){
+//			 BarGraphData barGraphData = new BarGraphData();
+//			 	barGraphData.setBuiltYear(builderProject.getPossessionDate());
+//				barGraphData.setTotalFlats(getTotalFlatsByProjectId(builderProject.getId()));
+//				barGraphData.setTotalBuyers(getTotalBuyersByProjectId(builderProject.getId()));
+//				barGraphData.setTotalSold(getTotalsoldFlatsByProjectId(builderProject.getId()));
+				//barGraphDatas.add(barGraphData);
+//			 System.err.println("Year :: "+builderProject.getPossessionDate());
+//			 System.err.println("Total Flats :: "+getTotalFlatsByProjectId(builderProject.getId()));
+//			 System.err.println("Total Buyers :: "+getTotalBuyersByProjectId(builderProject.getId()));
+//			 System.err.println("Total Sold Flats :: "+getTotalsoldFlatsByProjectId(builderProject.getId()));
+		// }
+		System.err.println("Array :: "+arr);
+		for(int i=0;i<arr.length;i++){
+			System.err.println("Array value :: "+query.list().get(i));
+			int year =(int) query.list().get(i);
+			System.err.println("Year :: "+year);
+			System.err.println("Toatl Buyers :: "+getTotalBuyersByProjectId(year));
 		}
 		return barGraphDatas;
 	}
@@ -805,9 +828,43 @@ public class BuilderDetailsDAO {
      * @param builderId
      * @return List<BarGraphData>
      */
+//	public List<BarGraphData> getBarGraphByProjectId(int projectId){
+//		List<BarGraphData> barGraphDatas = new ArrayList<BarGraphData>();
+//		String projectHql = "from BuilderProject where id =:id and status=1";
+//		HibernateUtil hibernateUtil = new HibernateUtil();
+//		Session projectSession = hibernateUtil.openSession();
+//		Query projectQuery = projectSession.createQuery(projectHql);
+//		if(projectId > 0){
+//			projectQuery.setParameter("id", projectId);
+//		}
+//		List<BuilderProject> projectList = projectQuery.list();
+//		if(projectList != null){
+//			try{
+//				for(int i=0;i< projectList.size();i++){
+//					BarGraphData barGraphData = new BarGraphData();
+//					barGraphData.setBuiltYear(projectList.get(i).getPossessionDate());
+//					barGraphData.setTotalFlats(getTotalFlatsByProjectId(projectList.get(i).getId()));
+//					barGraphData.setTotalBuyers(getTotalBuyersByProjectId(projectList.get(i).getId()));
+//					barGraphData.setTotalSold(getTotalsoldFlatsByProjectId(projectList.get(i).getId()));
+//					barGraphDatas.add(barGraphData);
+//					
+//				}
+//			}catch(IndexOutOfBoundsException e){
+//				//Return this when no data present in database.
+//				BarGraphData barGraphData = new BarGraphData();
+//				barGraphData.setBuiltYear(null);
+//				barGraphData.setTotalFlats((long)0);
+//				barGraphData.setTotalBuyers((long)0);
+//				barGraphData.setTotalSold((long)0);
+//				barGraphDatas.add(barGraphData);
+//			}
+//		}
+//		return barGraphDatas;
+//	}
+	
 	public List<BarGraphData> getBarGraphByProjectId(int projectId){
 		List<BarGraphData> barGraphDatas = new ArrayList<BarGraphData>();
-		String projectHql = "from BuilderProject where id =:id and status=1";
+		String projectHql = "Select DISTINCT YEAR(B.possessionDate) from BuilderProject B where B.id = :id and B.status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session projectSession = hibernateUtil.openSession();
 		Query projectQuery = projectSession.createQuery(projectHql);
@@ -821,7 +878,7 @@ public class BuilderDetailsDAO {
 					BarGraphData barGraphData = new BarGraphData();
 					barGraphData.setBuiltYear(projectList.get(i).getPossessionDate());
 					barGraphData.setTotalFlats(getTotalFlatsByProjectId(projectList.get(i).getId()));
-					barGraphData.setTotalBuyers(getTotalBuyersByProjectId(projectList.get(i).getId()));
+					//barGraphData.setTotalBuyers(getTotalBuyersByProjectId(projectList.get(i).getId()));
 					barGraphData.setTotalSold(getTotalsoldFlatsByProjectId(projectList.get(i).getId()));
 					barGraphDatas.add(barGraphData);
 					
@@ -884,6 +941,8 @@ public class BuilderDetailsDAO {
 	public Long getTotalBuyersByBuilderId(int builderId){
 		Long totalBuyers = (long)0;
 		String hql = "Select COUNt(*) from Buyer where builder.id = :builder_id and is_primary=1 and is_deleted=0";
+		//;
+
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -897,14 +956,22 @@ public class BuilderDetailsDAO {
 	 * @param projectId
 	 * @return buyer's count
 	 */
-	public Long getTotalBuyersByProjectId(int projectId){
-		Long totalBuyers = (long)0;
-		String hql = "Select COUNt(*) from Buyer where builderProject.id = :project_id and is_primary=1 and is_deleted=0";
+	public int getTotalBuyersByProjectId(int projectId){
+		//Long totalBuyers = (long)0;
+		int totalBuyers = 0;
+		//String hql = "Select COUNT(a.id) from Buyer as a left join BuilderProject as b a.builderProject.id = b.id where year(b.possessionDate) = :year and a.is_primary=1 and a.is_deleted=0";
+//		System.err.println("Year In Total Buyer :: "+projectId);
+		//String hql ="Select COUNT(a.id) from Buyer a left join a.builderProject.id=b.id ";
+		//SELECT count(a.id) FROM blue_pigeon.buyer as a left join blue_pigeon.builder_project as b on a.project_id =b.id where year(b.possession_date) =2018 
+		String sql = "SELECT count(a.id) FROM buyer as a left join builder_project as b on a.project_id =b.id where year(b.possession_date) = :year";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("project_id", projectId);
-		totalBuyers = (Long) query.uniqueResult();
+		Query query = session.createSQLQuery(sql);
+		query.setParameter("year", projectId);
+		System.err.println("Query Output :: "+query.list());
+	//	totalBuyers = (Long) query.uniqueResult();
+		BigInteger totalBuyer =(BigInteger) query.list().get(0);
+		totalBuyers = Integer.parseInt(totalBuyer.toString());
 		return totalBuyers;
 	}
 	/**
