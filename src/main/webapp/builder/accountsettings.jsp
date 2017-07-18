@@ -139,17 +139,6 @@
 		                                    		</div>
 								              </div> 
 								              <div class="row">
-								              		<div class="col-sm-6">       			 		
-	                                					<div class="form-group row">
-	                                    					<label for="example-search-input" class="col-sm-6 col-form-label">Email<span class='text-danger'>*</span></label>
-	                                    					<div class="col-sm-6">
-	                                    						<div>
-	                                        						<input class="form-control" type="text" value="<%out.print(builderEmployee.getEmail()); %>" id="email" name="email">
-	                                        					</div>
-	                                        					<div class="messageContainer"></div>
-	                                    					</div>
-	                                    				</div>
-	                                    			</div>
 	                                    			<div class="col-sm-6">
 	                                    				<div class="form-group row">
 	                                    					<label for="example-search-input" class="col-sm-6 col-form-label">Current Address<span class='text-danger'>*</span></label>
@@ -161,19 +150,17 @@
 	                                    					</div>
 	                               		 				</div>
                                		 				</div>
-                               		 		</div>
-                               		 		<div class="row">
-                               		 			<div class="col-sm-6">		
-                                 					<div class="form-group row">
-                                    					<label for="example-tel-input" class="col-sm-6 col-form-label">Permanent Address<span class='text-danger'>*</span></label>
-                                    					<div class="col-sm-6">
-                                    						<div>
-                                        						<textarea rows="" cols="" class="form-control" id="address1" name="address1"><%if(builderEmployee.getPermanentAddress() != null){out.print(builderEmployee.getPermanentAddress()); }%></textarea>
-                                        					</div>
-                                        					<div class="messageContainer"></div>
-                                    					</div>
-                                    				</div>
-                                    			</div>
+	                               		 			<div class="col-sm-6">		
+	                                 					<div class="form-group row">
+	                                    					<label for="example-tel-input" class="col-sm-6 col-form-label">Permanent Address<span class='text-danger'>*</span></label>
+	                                    					<div class="col-sm-6">
+	                                    						<div>
+	                                        						<textarea rows="" cols="" class="form-control" id="address1" name="address1"><%if(builderEmployee.getPermanentAddress() != null){out.print(builderEmployee.getPermanentAddress()); }%></textarea>
+	                                        					</div>
+	                                        					<div class="messageContainer"></div>
+	                                    					</div>
+	                                    				</div>
+	                                    			</div>
                                     		</div>
                                     		
                                 			<div class="row">

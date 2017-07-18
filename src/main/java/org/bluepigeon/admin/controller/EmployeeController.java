@@ -434,7 +434,6 @@ public class EmployeeController {
 			@FormDataParam("emp_id") int emp_id,
 			@FormDataParam("name") String name,
 			@FormDataParam("contact") String mobile,
-			@FormDataParam("email") String email,
  			@FormDataParam("address") String currentAddress,
 			@FormDataParam("address1") String permanentAddress
 			){
@@ -443,7 +442,6 @@ public class EmployeeController {
 		
 		builderEmployee.setId(emp_id);
 		builderEmployee.setName(name);
-		builderEmployee.setEmail(email);
 		builderEmployee.setMobile(mobile);
 		builderEmployee.setCurrentAddress(currentAddress);
 		builderEmployee.setPermanentAddress(permanentAddress);

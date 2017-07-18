@@ -453,9 +453,11 @@
                 <!-- /.row -->
                 <div class="white-box">
 	                <div class="row">
+	                <%if((access_id >=1 && access_id <=2) || (access_id>=4 && access_id <= 6)) {%>
 		                <div class="col-md-4">
 		                    <button type="button" onclick="addEmployee();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Employee</button>
 		                </div>
+		                <%} %>
 		                 <div class="col-md-4">
 		                    <button type="button" onclick="addLead();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Lead</button>
 		                 </div>
@@ -808,7 +810,7 @@
                   	+'</div>'
   	                +'</div>'
   	                +'<div class="col-md-6 right">'
-  		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"></div>'
+  		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+data[index].completionStatus+'"></div>'
   		            +'<div class="bottom">'
                       +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
                       +'</div>'
@@ -839,8 +841,8 @@
     //	 alert("Total Flats :: "+totalFlats);
     	//Morris bar chart
     	 <%
-     	if(barGraphDatas != null){
-      		%>
+      	if(barGraphDatas != null){
+       		%> 
      // alert("Total Flats :: "+totalFlats);
      // alert("Total buyers :: "+totalBuyers);
       //alert("totalSold :: "+totalSold);
@@ -849,15 +851,15 @@
      		 
     	    element: 'morris-bar-chart',
     	    data: [
-    	    	<% for(BarGraphData barGraphData : barGraphDatas){
-    	    		System.out.println("graph Count :: "+barGraphDatas.size());%>
+    	    	<% for(BarGraphData barGraphData : barGraphDatas){ %>
+    	    		 
     	    	{
     	    	
     	    	
-   		      y: '<% DateFormat dateFormat = new SimpleDateFormat("yyyy");
-    	    	    if(barGraphData.getBuiltYear() != null){
-    	    	    	Date date = barGraphData.getBuiltYear();
-   		      out.print(dateFormat.format(date));}%>',
+   		      y: '<%
+
+     	    	    if(barGraphData.getBuiltYear() != 0){
+    		      out.print(barGraphData.getBuiltYear());}%>', 
     	        Flat: <%out.print(barGraphData.getTotalFlats());%>,
              Buyer: <%out.print(barGraphData.getTotalBuyers()); %>,
              Purchases: <% out.print(barGraphData.getTotalSold());%>

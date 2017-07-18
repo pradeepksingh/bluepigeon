@@ -3,10 +3,10 @@ package org.bluepigeon.admin.data;
 import java.util.Date;
 
 public class BarGraphData {
-	private Long totalFlats;
-	private Long totalBuyers;
-	private Long totalSold;
-	private Date builtYear;
+	private int totalFlats;
+	private int totalBuyers;
+	private int totalSold;
+	private int builtYear;
 	private int id;
 	
 	public int getId() {
@@ -17,35 +17,35 @@ public class BarGraphData {
 		this.id = id;
 	}
 
-	public Long getTotalFlats() {
+	public int getTotalFlats() {
 		return totalFlats;
 	}
 	
-	public void setTotalFlats(Long totalFlats) {
+	public void setTotalFlats(int totalFlats) {
 		this.totalFlats = totalFlats;
 	}
 	
-	public Long getTotalBuyers() {
+	public int getTotalBuyers() {
 		return totalBuyers;
 	}
 	
-	public void setTotalBuyers(Long totalBuyers) {
+	public void setTotalBuyers(int totalBuyers) {
 		this.totalBuyers = totalBuyers;
 	}
 	
-	public Long getTotalSold() {
+	public int getTotalSold() {
 		return totalSold;
 	}
 	
-	public void setTotalSold(Long totalSold) {
+	public void setTotalSold(int totalSold) {
 		this.totalSold = totalSold;
 	}
 
-	public Date getBuiltYear() {
+	public int getBuiltYear() {
 		return builtYear;
 	}
 
-	public void setBuiltYear(Date builtYear) {
+	public void setBuiltYear(int builtYear) {
 		this.builtYear = builtYear;
 	}
 
