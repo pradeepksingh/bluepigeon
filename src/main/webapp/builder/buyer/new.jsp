@@ -286,7 +286,7 @@
     							<div class="row">
     								<div class="col-sm-6">
 		                                <div class="form-group row">
-		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Booking Date</label>
+		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Booking Date *</label>
 		                                    <div class="col-sm-6">
 		                                       <input type="text" class="form-control" id="booking_date" name="booking_date" value=""/>
 		                                    </div>
@@ -294,7 +294,7 @@
 		                            </div>
 		                            <div class="col-sm-6">
 	                            	     <div class="form-group row">
-		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Base Rate</label>
+		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Base Rate *</label>
 		                                    <div class="col-sm-6">
 		                                        <input type="text" value="<%out.print(flatPricingDetails.get(0).getBasePrice()); %>" class="form-control" id="base_rate" name="base_rate" />
 		                                    </div>
@@ -304,7 +304,7 @@
 		                          <div class="row">
 		                                <div class="col-sm-6">
 			                                <div class="form-group row">
-			                                    <label for="example-search-input" class="col-sm-6 col-form-label">Floor Rising Rate</label>
+			                                    <label for="example-search-input" class="col-sm-6 col-form-label">Floor Rising Rate *</label>
 			                                    <div class="col-sm-6">
 			                                       <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getRiseRate()); %>" id="rise_rate" name="rise_rate"/>
 			                                    </div>
@@ -322,7 +322,7 @@
 			                      <div class="row">
 				                      <div class="col-sm-6">
 		                                 <div class="form-group row">
-		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Parking Rates</label>
+		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Parking Rates *</label>
 		                                    <div class="col-sm-6">
 		                                       	<input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getParking()); %>" id="parking" name="parking" />
 		                                    </div>
@@ -330,7 +330,7 @@
 			                           </div>
 			                           <div class="col-sm-6">
 			                           		<div class="form-group row">
-			                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Maintance</label>
+			                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Maintance *</label>
 			                                    <div class="col-sm-6">
 			                                        <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getMaintenance()); %>" id="maintenance" name="maintenance" />
 			                                    </div>
@@ -340,7 +340,7 @@
 		                         <div class="row">
 		                        	 <div class="col-sm-6">
 		                                <div class="form-group row">
-		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Stamp Duty</label>
+		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Stamp Duty *</label>
 		                                    <div class="col-sm-6">
 		                                       <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getStampDuty()); %>" id="stamp_duty" name="stamp_duty" />
 		                                    </div>
@@ -348,7 +348,7 @@
 		                              </div>
 		                             <div class="col-sm-6">
 		                                 <div class="form-group row">
-		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Taxes</label>
+		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Taxes *</label>
 		                                    <div class="col-sm-6">
 		                                         <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getTax()); %>" id="tax" name="tax" />
 		                                    </div>
@@ -358,7 +358,7 @@
 		                        <div class="row">
 		                        	<div class="col-sm-6">
 		                                <div class="form-group row">
-		                                    <label for="example-search-input" class="col-sm-6 col-form-label">VAT</label>
+		                                    <label for="example-search-input" class="col-sm-6 col-form-label">VAT *</label>
 		                                    <div class="col-sm-6">
 		                                       <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getVat()); %>" id="vat" name="vat" />
 		                                    </div>
@@ -366,7 +366,7 @@
                                  	</div>
                                  	<div class="col-sm-6">
                                  	  <div class="form-group row">
-		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Tenure</label>
+		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Tenure *</label>
 		                                    <div class="col-sm-6">
 		                                      <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getTenure()); %>" id="tenure" name="tenure" />
 											  <span class="input-group-addon">Months</span>
@@ -377,7 +377,7 @@
                                 <div class="row">
                                 	<div class="col-sm-6">
 		                                <div class="form-group row">
-		                                    <label for="example-search-input" class="col-sm-6 col-form-label">No. of Post</label>
+		                                    <label for="example-search-input" class="col-sm-6 col-form-label">No. of Post *</label>
 		                                    <div class="col-sm-6">
 		                                        <input class="form-control" type="text" value="<%out.print(flatPricingDetails.get(0).getPost()); %>" id="post" name="post">
 		                                    </div>
@@ -397,7 +397,7 @@
                                <div class="row">
                                		<div class="col-sm-6">
 		                                <div class="form-group row">
-		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Booking Date</label>
+		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Booking Date *</label>
 		                                    <div class="col-sm-6">
 		                                       <input type="text" class="form-control" id="booking_date" name="booking_date" value=""/>
 		                                    </div>
@@ -405,7 +405,7 @@
 		                            </div>
 		                            <div class="col-sm-6">
 		                               	<div class="form-group row">
-		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Base Rate</label>
+		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Base Rate *</label>
 		                                    <div class="col-sm-6">
 		                                        <input type="text" value="" class="form-control" id="base_rate" name="base_rate" />
 		                                    </div>
@@ -415,7 +415,7 @@
 		                        <div class="row">
 	                        		<div class="col-sm-6">
 		                                <div class="form-group row">
-		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Floor Rising Rate</label>
+		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Floor Rising Rate *</label>
 		                                    <div class="col-sm-6">
 		                                       <input type="text" class="form-control" value="" id="rise_rate" name="rise_rate"/>
 		                                    </div>
@@ -423,7 +423,7 @@
 		                             </div>
 		                             <div class="col-sm-6">
 		                              	<div class="form-group row">
-		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Aminities Facing Rise Rates</label>
+		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Aminities Facing Rise Rates *</label>
 		                                    <div class="col-sm-6">
 		                                        <input type="text" class="form-control" value="" id="amenity_rate" name="amenity_rate" />
 		                                    </div>
@@ -433,7 +433,7 @@
 		                         <div class="row">
 		                         	  <div class="col-sm-6">
 		                                 <div class="form-group row">
-		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Parking Rates</label>
+		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Parking Rates *</label>
 		                                    <div class="col-sm-6">
 		                                       	<input type="text" class="form-control" value="" id="parking" name="parking" />
 		                                    </div>
@@ -441,7 +441,7 @@
 		                              </div>
 		                              <div class="col-sm-6">
 		                               		<div class="form-group row">
-			                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Maintance</label>
+			                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Maintance *</label>
 			                                    <div class="col-sm-6">
 			                                        <input type="text" class="form-control" value="" id="maintenance" name="maintenance" />
 			                                    </div>
@@ -451,7 +451,7 @@
 		                         <div class="row">
 		                         	<div class="col-sm-6">
 		                                <div class="form-group row">
-		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Stamp Duty</label>
+		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Stamp Duty *</label>
 		                                    <div class="col-sm-6">
 		                                       <input type="text" class="form-control" value="" id="stamp_duty" name="stamp_duty" />
 		                                    </div>

@@ -25,12 +25,14 @@
    	session = request.getSession(false);
    	BuilderEmployee builder = new BuilderEmployee();
    	int builder_id = 0;
+   	int emp_id=0;
    	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
+			emp_id = builder.getId();
 			if(builder_id > 0){
 				builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
 			}
@@ -122,6 +124,7 @@
 	                                	<form id="newcancellation" name="newcancellation" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
 	                                  		<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id); %>" />
 	                                  		<input type="hidden" name="is_primary" id="is_primary" value=""/>
+	                                  		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
 			                                 <div class="form-group row">
 			                                    <label for="example-tel-input" class="col-3 col-form-label">Project</label>
 			                                    <div class="col-3">

@@ -1147,7 +1147,7 @@
 // });
 
 $("input.errorMsg").keypress(function(event){
-	alert("Hello");
+	//alert("Hello");
 	return isNumber(event, this)
 });
 
@@ -1237,7 +1237,7 @@ function isNumber(evt, element) {
     return true;
 } 
 function notEmpty(){
-	alert("Again Not Empty");
+	//alert("Again Not Empty");
 	
 }
 $('#schedule').keyup(function() {

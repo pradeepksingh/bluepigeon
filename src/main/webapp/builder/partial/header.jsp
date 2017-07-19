@@ -10,12 +10,14 @@
 session = request.getSession(false);
 	BuilderEmployee mainadmin = new BuilderEmployee();
 	int session_uid = 0;
+	int access_uid =0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			mainadmin  = (BuilderEmployee)session.getAttribute("ubname");
 			session_uid = mainadmin.getId();
+			access_uid = mainadmin.getBuilderEmployeeAccessType().getId();
 		}
    	}
 	if(session_uid <= 0) {
@@ -83,8 +85,9 @@ session = request.getSession(false);
                         
                     </li>
                    
+                  <%if(access_uid == 1 || access_uid == 2 || access_uid ==4 || access_uid ==5 || access_uid == 6) {%>
                     <li class="dropdown">
-                        <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#"><i class="icon-note"></i>
+                        <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#"><i class="fa fa-bell-o"></i>
                     <div class="notify"><span class="heartbit"></span><span class="point"></span></div>
                 </a>
                         <ul class="dropdown-menu dropdown-tasks animated slideInUp">
@@ -138,6 +141,7 @@ session = request.getSession(false);
                         </ul>
 <!--                         /.dropdown-tasks -->
                     </li>
+                    <%} %>
                     <!-- /.dropdown -->
                     <li class="dropdown">
                         <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="${baseUrl}/builder/plugins/images/users/1.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs"><%out.print(mainadmin.getName()); %></b> </a>

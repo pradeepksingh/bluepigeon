@@ -60,11 +60,8 @@
 					totalPropertySold = new ProjectDAO().getRevenueOfsoldInventoryByBuilderId(builder_id);
 					totalRevenue = totalPropertySold * totalSoldInventory;
 				}
-						
 		}
-		
 	}
-	
 %>
 <!DOCTYPE html>
 <html lang="en">
