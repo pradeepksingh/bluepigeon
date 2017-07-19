@@ -18,12 +18,14 @@
 	BuilderEmployee builder = new BuilderEmployee();
 	List<City> cityList = new CityNamesImp().getCityNames();
 	int builder_uid = 0;
+	int access_id = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_uid = builder.getBuilder().getId();
+			access_id = builder.getBuilderEmployeeAccessType().getId();
 		}
    	}
 	if(builder_uid > 0){
@@ -120,6 +122,7 @@
                                              <td>Project</td>
                                              <td>Building</td>
                                             <td>Flat No</td>
+<!--                                             <td>Action</td> -->
                                         </tr>
                                         <tr>
                                             <th>Sr No.</th>
@@ -127,6 +130,7 @@
                                              <th>Project Name</th>
                                              <th>Building Name</th>
                                             <th>Flat No</th>
+<!--                                             <th>Action</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -150,7 +154,17 @@
 											<% out.print(cancellationList.getFlatNo());
 											%>
 										</td>
-										
+<%-- 									  <%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5 || access_id ==6){ %> --%>
+<!-- 									 	<td> -->
+<!-- 									 		<button type="button" onclick="approve();">Approve</button> -->
+<!-- 									 		<button type="button" onclick="cancel();">Cancel</button> -->
+<!-- 									 	</td>	 -->
+<%-- 									 <%} %> --%>
+<%-- 										<%if(access_id==7){ %> --%>
+<!-- 										<td> -->
+<!-- 											<button type="button" onclick="cancelRequest();">Cancel Request</button> -->
+<!-- 										</td> -->
+<%-- 										<%} %> --%>
 										<% 	
 											i++;} 
                                       	}
@@ -198,7 +212,6 @@
 //                         page: 'current'
 //                     }).nodes();
 //                     var last = null;
-
 //                     api.column(2, {
 //                         page: 'current'
 //                     }).data().each(function(group, i) {
@@ -206,13 +219,11 @@
 //                             $(rows).eq(i).before(
 //                                 '<tr class="group"><td colspan="5">' + group + '</td></tr>'
 //                             );
-
 //                             last = group;
 //                         }
 //                     });
 //                 }
             });
-
             // Order by the grouping
             $('#example tbody').on('click', 'tr.group', function() {
                 var currentOrder = table.order()[0];
@@ -252,7 +263,6 @@
         });
     } );
     
-
     </script>
 </body>
 </html>

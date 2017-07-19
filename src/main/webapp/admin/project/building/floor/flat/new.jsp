@@ -299,7 +299,7 @@
 							<div class="row">
 								<div class="col-sm-12">
 									<span class="pull-right">
-										<button type="submit" name="flooradd" class="btn btn-success btn-sm">Submit</button>
+										<button type="button" name="addbasic" onclick="show2();" class="btn btn-success btn-sm">Next</button>
 									</span>
 								</div>
 							</div>
@@ -466,7 +466,7 @@
 							
 							<div class="col-sm-12">
 								<span class="pull-right">
-									<button type="submit" name="flooradd" class="btn btn-success btn-sm" >Submit</button>
+									<button type="button" name="addPrice" onclick="show3();" class="btn btn-success btn-sm" >Next</button>
 								</span>
 							</div>
 						</div>
@@ -853,6 +853,16 @@ $('input[name="amenity_type[]"]').click(function() {
 		$("#amenity_stage"+$(this).val()).hide();
 	}
 });
+
+function show2()
+{
+	$('#buildingTabs a[href="#pricing"]').tab('show');
+	
+}
+
+function show3(){
+	$('#buildingTabs a[href="#payment"]').tab('show');
+}
 </script>
 </body>
 </html>

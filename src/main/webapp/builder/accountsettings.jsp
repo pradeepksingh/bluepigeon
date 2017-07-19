@@ -113,8 +113,7 @@
                                		<div id="vimessages" class="tab-pane active" aria-expanded="false">
                                 		<div class="col-12">
                                				<form id="addemployee" name="addemployee" class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-                                				<input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_uid); %>" />
-                                				<input type="hidden" id="reporting_id" name="reporting_id" value="<%out.print(builder.getId());%>"/>
+                                				<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
                                 				<div class="row">
                                 					<div class="col-sm-6">
 	                                					<div class="form-group row">
@@ -140,17 +139,6 @@
 		                                    		</div>
 								              </div> 
 								              <div class="row">
-								              		<div class="col-sm-6">       			 		
-	                                					<div class="form-group row">
-	                                    					<label for="example-search-input" class="col-sm-6 col-form-label">Email<span class='text-danger'>*</span></label>
-	                                    					<div class="col-sm-6">
-	                                    						<div>
-	                                        						<input class="form-control" type="text" value="<%out.print(builderEmployee.getEmail()); %>" id="email" name="email">
-	                                        					</div>
-	                                        					<div class="messageContainer"></div>
-	                                    					</div>
-	                                    				</div>
-	                                    			</div>
 	                                    			<div class="col-sm-6">
 	                                    				<div class="form-group row">
 	                                    					<label for="example-search-input" class="col-sm-6 col-form-label">Current Address<span class='text-danger'>*</span></label>
@@ -162,26 +150,19 @@
 	                                    					</div>
 	                               		 				</div>
                                		 				</div>
-                               		 		</div>
-                               		 		<div class="row">
-                               		 			<div class="col-sm-6">		
-                                 					<div class="form-group row">
-                                    					<label for="example-tel-input" class="col-sm-6 col-form-label">Permanent Address<span class='text-danger'>*</span></label>
-                                    					<div class="col-sm-6">
-                                    						<div>
-                                        						<textarea rows="" cols="" class="form-control" id="address1" name="address1"><%if(builderEmployee.getPermanentAddress() != null){out.print(builderEmployee.getPermanentAddress()); }%></textarea>
-                                        					</div>
-                                        					<div class="messageContainer"></div>
-                                    					</div>
-                                    				</div>
-                                    			</div>
+	                               		 			<div class="col-sm-6">		
+	                                 					<div class="form-group row">
+	                                    					<label for="example-tel-input" class="col-sm-6 col-form-label">Permanent Address<span class='text-danger'>*</span></label>
+	                                    					<div class="col-sm-6">
+	                                    						<div>
+	                                        						<textarea rows="" cols="" class="form-control" id="address1" name="address1"><%if(builderEmployee.getPermanentAddress() != null){out.print(builderEmployee.getPermanentAddress()); }%></textarea>
+	                                        					</div>
+	                                        					<div class="messageContainer"></div>
+	                                    					</div>
+	                                    				</div>
+	                                    			</div>
                                     		</div>
                                     		
-                                    		<input type="hidden" value="<%out.print(builderEmployee.getBuilderEmployeeAccessType().getId()); %>" id="access" name="access" />
-                      						<input  type="hidden" value="<%out.print(builderEmployee.getDesignation()); %>" name="designation" id="designation">
-                       						<input type="hidden" value="<%out.print(builderEmployee.getEmployeeId()); %>" id="empid" name="empid">
-                       						<input type="hidden" value="<%out.print(builderEmployee.getCity().getId()); %>" id="city" name="city"/>
-                       						<input type="hidden" value="<%out.print(builderEmployee.getLocality().getId()); %>" id="area" name="area"/>
                                 			<div class="row">
                                					<div class="offset-sm-5 col-sm-7">
                                        				<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
@@ -291,7 +272,7 @@ function addEmployee() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/employee/save1',
+	 		url : '${baseUrl}/webapi/employee/account/update',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -315,7 +296,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/builder/employee/list.jsp";
+         window.location.reload();
   	}
 }
 </script>

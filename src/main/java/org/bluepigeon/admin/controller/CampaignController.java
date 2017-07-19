@@ -166,53 +166,57 @@ public class CampaignController {
 				adminUser.setId(1);
 				Builder builder = new Builder();
 				Campaign campaign = new Campaign();
-				campaign.setAdminUser(adminUser);
-				campaign.setTitle(name);
-				campaign.setType(campaignType);
-				campaign.setContent(content);
-				campaign.setTerms(terms);
-				if(builderId > 0){
-					builder.setId(builderId);
-					campaign.setBuilder(builder);
-				}
-				if(city_id > 0){
-					City city = new City();
-					city.setId(city_id);
-					campaign.setCity(city); 
-				}
-				if(project_id > 0){
-					BuilderProject builderProject = new BuilderProject();
-					builderProject.setId(project_id);
-					campaign.setBuilderProject(builderProject);
-				}
-				SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
-				Date startDate = null;
-				try {
-					startDate = format.parse(setDate);
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				campaign.setSetDate(startDate);
-				campaign.setRecipientType(recipientType);
-				CampaignDAO campaignDAO = new CampaignDAO();
-				msg=campaignDAO.saveCampaign(campaign);
-				if(msg.getId()>0){
-					campaign.setId(msg.getId());
-					List<CampaignBuyer> campaignBuyers = new ArrayList<CampaignBuyer>();
-					
-					for(FormDataBodyPart campaignList :buyerNames ){
-						if(campaignList.getValueAs(Integer.class) != null || campaignList.getValueAs(Integer.class) !=0){
-							CampaignBuyer campaignBuyer = new CampaignBuyer();
-							campaignBuyer.setCampaign(campaign);
-							Buyer buyer = new Buyer();
-							buyer.setId(campaignList.getValueAs(Integer.class));
-							campaignBuyer.setBuyer(buyer);
-							campaignBuyers.add(campaignBuyer);
+				if(buyerNames != null){
+					campaign.setAdminUser(adminUser);
+					campaign.setTitle(name);
+					campaign.setType(campaignType);
+					campaign.setContent(content);
+					campaign.setTerms(terms);
+					if(builderId > 0){
+						builder.setId(builderId);
+						campaign.setBuilder(builder);
+					}
+					if(city_id > 0){
+						City city = new City();
+						city.setId(city_id);
+						campaign.setCity(city); 
+					}
+					if(project_id > 0){
+						BuilderProject builderProject = new BuilderProject();
+						builderProject.setId(project_id);
+						campaign.setBuilderProject(builderProject);
+					}
+					SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+					Date startDate = null;
+					try {
+						startDate = format.parse(setDate);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					campaign.setSetDate(startDate);
+					campaign.setRecipientType(recipientType);
+					CampaignDAO campaignDAO = new CampaignDAO();
+					msg=campaignDAO.saveCampaign(campaign);
+					if(msg.getId()>0){
+						campaign.setId(msg.getId());
+						List<CampaignBuyer> campaignBuyers = new ArrayList<CampaignBuyer>();
+							for(FormDataBodyPart campaignList :buyerNames ){
+								if(campaignList.getValueAs(Integer.class) != null || campaignList.getValueAs(Integer.class) !=0){
+									CampaignBuyer campaignBuyer = new CampaignBuyer();
+									campaignBuyer.setCampaign(campaign);
+									Buyer buyer = new Buyer();
+									buyer.setId(campaignList.getValueAs(Integer.class));
+									campaignBuyer.setBuyer(buyer);
+									campaignBuyers.add(campaignBuyer);
+								}
+							}
+							if(campaignBuyers.size()>0){
+								msg=campaignDAO.saveBuyerCampaign(campaignBuyers);
+							}
 						}
-					}
-					if(campaignBuyers.size()>0){
-						msg=campaignDAO.saveBuyerCampaign(campaignBuyers);
-					}
+				}else{
+					msg.setStatus(0);
+					msg.setMessage("Please Select Recipients Name");
 				}
 				return msg;
 	}

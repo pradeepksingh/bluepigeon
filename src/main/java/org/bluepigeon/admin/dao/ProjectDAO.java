@@ -3914,6 +3914,22 @@ public class ProjectDAO {
 		}
 	}
 	/**
+	 * 
+	 * @author pankaj
+	 * @param builderId
+	 * @return
+	 */
+	public Double getRevenueOfsoldInventoryByBuilderId(int builderId){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "SELECT SUM(revenue)from BuilderProject where builder.id = :builder_id ";
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderId);
+		Double totalRevenue = (Double) query.uniqueResult();
+		return totalRevenue;
+		
+	}
+	/**
 	 * Save source
 	 * @author pankaj
 	 * @param source
@@ -4174,7 +4190,11 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("flat_id", flat_id);
 		List<FlatPricingDetails> sourceList = query.list();
-		return sourceList;
+		if(sourceList !=null){
+			return sourceList;
+		}else{
+			return null;
+		}
 	}
 	
 }

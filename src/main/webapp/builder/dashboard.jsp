@@ -27,7 +27,7 @@
 	Long totalInventory = (long) 0;
 	Long totalLeads = (long)0;
 	Double totalRevenue = 0.0;
-	Double totalSaleValue = 0.0;
+	//Double totalSaleValue = 0.0;
 	Long totalCampaign = (long)0;
 	Long totalSoldInventory = (long)0;
 	Long totalProjects = (long)0;
@@ -36,6 +36,7 @@
     DecimalFormat decimalFormat = new DecimalFormat("#.##");
 	int builder_id = 0;
 	int access_id = 0;
+	Double totalPropertySold = 0.0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -53,15 +54,14 @@
 					totalProjects = new ProjectDAO().getTotalNumberOfProjects(builder_id);
 					barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder_id);
 					totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder_id);
-					totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
-					totalRevenue = totalSaleValue * totalSoldInventory;
+					//totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
+					
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
+					totalPropertySold = new ProjectDAO().getRevenueOfsoldInventoryByBuilderId(builder_id);
+					totalRevenue = totalPropertySold * totalSoldInventory;
 				}
-						
 		}
-		
 	}
-	
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -423,8 +423,8 @@
                                     <h3 class="box-title">Property sales</h3>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                                            <h1 class="text-info sales-income">Rs 64057</h1>
-                                            <p class="text-muted">APRIL 2017</p> <b>(150 Sales)</b> </div>
+                                            <h1 class="text-info sales-income">Rs <%out.print(Math.round(totalPropertySold)); %></h1>
+                                            <p class="text-muted"></p> <b>(<%out.print(totalSoldInventory); %> Sales)</b> </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sparkline2dash" class="text-center"></div>
                                         </div>
@@ -436,8 +436,8 @@
                                     <h3 class="text-white box-title">PROPERTY SALE INCOME</h3>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                                            <h1 class="text-white sales-income">Rs 30447</h1>
-                                            <p class="light_op_text"><br></p> <b class="text-white">(110 Sales)</b> </div>
+                                            <h1 class="text-white sales-income">Rs  <%out.print(Math.round(totalPropertySold)); %></h1>
+                                            <p class="light_op_text"><br></p> <b class="text-white">(<%out.print(totalSoldInventory); %> Sales)</b> </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sales1" class="text-center"></div>
                                         </div>
@@ -450,9 +450,11 @@
                 <!-- /.row -->
                 <div class="white-box">
 	                <div class="row">
+	                <%if((access_id >=1 && access_id <=2) || (access_id>=4 && access_id <= 6)) {%>
 		                <div class="col-md-4">
 		                    <button type="button" onclick="addEmployee();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Employee</button>
 		                </div>
+		                <%} %>
 		                 <div class="col-md-4">
 		                    <button type="button" onclick="addLead();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Lead</button>
 		                 </div>
@@ -805,7 +807,7 @@
                   	+'</div>'
   	                +'</div>'
   	                +'<div class="col-md-6 right">'
-  		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+projectId+'"></div>'
+  		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+data[index].completionStatus+'"></div>'
   		            +'<div class="bottom">'
                       +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
                       +'</div>'
@@ -836,8 +838,8 @@
     //	 alert("Total Flats :: "+totalFlats);
     	//Morris bar chart
     	 <%
-     	if(barGraphDatas != null){
-      		%>
+      	if(barGraphDatas != null){
+       		%> 
      // alert("Total Flats :: "+totalFlats);
      // alert("Total buyers :: "+totalBuyers);
       //alert("totalSold :: "+totalSold);
@@ -846,15 +848,15 @@
      		 
     	    element: 'morris-bar-chart',
     	    data: [
-    	    	<% for(BarGraphData barGraphData : barGraphDatas){
-    	    		System.out.println("graph Count :: "+barGraphDatas.size());%>
+    	    	<% for(BarGraphData barGraphData : barGraphDatas){ %>
+    	    		 
     	    	{
     	    	
     	    	
-   		      y: '<% DateFormat dateFormat = new SimpleDateFormat("yyyy");
-    	    	    if(barGraphData.getBuiltYear() != null){
-    	    	    	Date date = barGraphData.getBuiltYear();
-   		      out.print(dateFormat.format(date));}%>',
+   		      y: '<%
+
+     	    	    if(barGraphData.getBuiltYear() != 0){
+    		      out.print(barGraphData.getBuiltYear());}%>', 
     	        Flat: <%out.print(barGraphData.getTotalFlats());%>,
              Buyer: <%out.print(barGraphData.getTotalBuyers()); %>,
              Purchases: <% out.print(barGraphData.getTotalSold());%>
