@@ -39,6 +39,7 @@ import org.bluepigeon.admin.model.AreaUnit;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuildingFlatType;
 import org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom;
+import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderFlatType;
 import org.bluepigeon.admin.model.BuilderFloor;
@@ -2955,6 +2956,67 @@ public class ProjectDAO {
 		session.close();
 		return projects;
 	}
+	
+	/**
+	 * Get all active projects by builderEmployee
+	 * @author pankaj
+	 * @param builderEmployee
+	 * @return List<ProjectList>
+	 */
+	public List<ProjectList> getBuilderActiveProjectsByBuilderEmployee(BuilderEmployee builderEmployee) {
+	//	System.err.println("builderId :: "+builderId);
+		Long totalLeads = (long)0;
+		String sql ="";
+		String hql = "";
+		Query query = null;
+		if(builderEmployee.getBuilderEmployeeAccessType().getId()==1 || builderEmployee.getBuilderEmployeeAccessType().getId()==2){
+			hql = "from BuilderProject where builder.id = :builder_id and status=1 order by id desc";
+		}
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=3 && builderEmployee.getBuilderEmployeeAccessType().getId()<=7)
+		 sql = "select * from builder_project as a inner join allot_project as b on a.id=b.project_id where b.emp_id=:emp_id and a.status=1 order by a.id desc";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		if(builderEmployee.getBuilderEmployeeAccessType().getId()==1 || builderEmployee.getBuilderEmployeeAccessType().getId()==2)
+			 query = session.createQuery(hql);
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=3 && builderEmployee.getBuilderEmployeeAccessType().getId()<=7)
+			query = session.createSQLQuery(sql);
+		query.setFirstResult(0);
+		query.setMaxResults(100);
+		if(builderEmployee.getBuilderEmployeeAccessType().getId()==1 || builderEmployee.getBuilderEmployeeAccessType().getId()==2)
+			query.setParameter("builder_id", builderEmployee.getBuilder().getId());
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=3 && builderEmployee.getBuilderEmployeeAccessType().getId()<=7)
+			query.setParameter("emp_id", builderEmployee.getId());
+		List<BuilderProject> result = query.list();
+		List<ProjectList> projects = new ArrayList<ProjectList>();
+		for(BuilderProject builderproject : result) {
+			ProjectList newproject = new ProjectList();
+			newproject.setId(builderproject.getId());
+			newproject.setName(builderproject.getName());
+			newproject.setStatus(builderproject.getStatus());
+			newproject.setBuilderId(builderproject.getBuilder().getId());
+			newproject.setBuilderName(builderproject.getBuilder().getName());
+			newproject.setCityId(builderproject.getCity().getId());
+			newproject.setCityName(builderproject.getCity().getName());
+			newproject.setLocalityId(builderproject.getLocality().getId());
+			newproject.setLocalityName(builderproject.getLocality().getName());
+			newproject.setCompletionStatus(builderproject.getCompletionStatus());
+			if(builderproject.getInventorySold() != null){
+				newproject.setSold(builderproject.getInventorySold());
+			}
+			if(builderproject.getTotalInventory() != null){
+				newproject.setTotalSold(builderproject.getTotalInventory());
+			}
+			totalLeads = getTotalLeadsByProjectId(builderproject.getId());
+			if(totalLeads != null){
+				newproject.setTotalLeads(totalLeads.intValue());
+			}
+			System.out.println("Project name :: "+builderproject.getName());
+			projects.add(newproject);
+		}
+		session.close();
+		return projects;
+	}
+	
 	//To display first 4 active projects on dash board
 	/**
 	 * Get first 4 active projects by builder id
@@ -2962,8 +3024,8 @@ public class ProjectDAO {
 	 * @param builderId
 	 * @return List<ProjectList>
 	 */
-	public List<ProjectList> getBuilderFirstFourActiveProjectsByBuilderId(int builderId) {
-		System.err.println("builderId :: "+builderId);
+	public List<ProjectList> getBuilderFirstFourActiveProjectsByBuilderId(BuilderEmployee builderEmployee) {
+		System.err.println("builderId :: "+builderEmployee.getId());
 		Long totalLeads = (long)0;
 		String hql = "from BuilderProject where builder.id = :builder_id and status=1 order by id desc";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -2971,7 +3033,7 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setFirstResult(0);
 		query.setMaxResults(4);
-		query.setParameter("builder_id", builderId);
+		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
 		List<BuilderProject> result = query.list();
 		List<ProjectList> projects = new ArrayList<ProjectList>();
 		if(result != null){
@@ -3331,13 +3393,13 @@ public class ProjectDAO {
 	 * @param builderId
 	 * @return total number of inventory(Flats)
 	 */
-	public Long getTotalInventory(int builderId){
+	public Long getTotalInventory(BuilderEmployee builderEmployee){
 		Long totalInventory= (long) 0;
 		String hql = "select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and status = 1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setInteger("builder_id", builderId);
+		query.setInteger("builder_id", builderEmployee.getBuilder().getId());
 		totalInventory = (Long) query.uniqueResult();
 		if(totalInventory != null){
 			return totalInventory;
@@ -3855,13 +3917,13 @@ public class ProjectDAO {
 	 * @param builder_id
 	 * @return totalLeads
 	 */
-	public Long getTotalLeads(int builder_id){
+	public Long getTotalLeads(BuilderEmployee builderEmployee){
 		Long totalLeads =(long) 0;
 		String hql = "Select COUNT(*) from BuilderLead where builderProject.builder.id = :builder_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setParameter("builder_id", builder_id);
+		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
 		totalLeads = (Long) query.uniqueResult();
 		if(totalLeads != null){
 			return totalLeads;
@@ -3875,13 +3937,13 @@ public class ProjectDAO {
 	 * @param builder_id
 	 * @return total number of project count
 	 */
-	public Long getTotalNumberOfProjects(int builder_id){
+	public Long getTotalNumberOfProjects(BuilderEmployee builderEmployee){
 		Long totalProjects =(long) 0;
 		String hql = "Select COUNT(*) from BuilderProject where builder.id = :builder_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setParameter("builder_id", builder_id);
+		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
 		totalProjects = (Long) query.uniqueResult();
 		if(totalProjects != null){
 			return totalProjects;
@@ -3911,13 +3973,17 @@ public class ProjectDAO {
 	 * @param builderId
 	 * @return Long
 	 */
-	public Long getTotalSoldInventory(int builderId){
+	public Long getTotalSoldInventory(BuilderEmployee builderEmployee){
 		Long totalSoldInventory =(long)0;
-		String hql ="Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and builderFlatStatus.id=2";
+		int access_id = builderEmployee.getBuilderEmployeeAccessType().getId();
+		String hql = "";
+		//if(access_id >= 1 && access_id <= 2)
+			 hql ="Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and builderFlatStatus.id=2";
+		//if(access_id == 4 || access_id ==5 || access_id==6)
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setParameter("builder_id", builderId);
+		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
 		totalSoldInventory = (Long) query.uniqueResult();
 		if(totalSoldInventory != null){
 			return totalSoldInventory;
@@ -3931,12 +3997,12 @@ public class ProjectDAO {
 	 * @param builderId
 	 * @return
 	 */
-	public Double getRevenueOfsoldInventoryByBuilderId(int builderId){
+	public Double getRevenueOfsoldInventoryByBuilderId(BuilderEmployee builderEmployee){
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		String hql = "SELECT SUM(revenue)from BuilderProject where builder.id = :builder_id ";
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setParameter("builder_id", builderId);
+		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
 		Double totalRevenue = (Double) query.uniqueResult();
 		return totalRevenue;
 		

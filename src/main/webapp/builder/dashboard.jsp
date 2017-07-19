@@ -46,18 +46,18 @@
 				builder_id = builder.getBuilder().getId();
 				access_id = builder.getBuilderEmployeeAccessType().getId();
 				if(builder_id > 0){
-					totalBuyers = new BuyerDAO().getTotalBuyers(builder_id);
-					totalInventory = new ProjectDAO().getTotalInventory(builder_id);
-					project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder_id);
+					totalBuyers = new BuyerDAO().getTotalBuyers(builder);
+					totalInventory = new ProjectDAO().getTotalInventory(builder);
+					project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder);
 					cityDataList = new CityNamesImp().getCityActiveNames();
-					totalLeads = new ProjectDAO().getTotalLeads(builder_id);
-					totalProjects = new ProjectDAO().getTotalNumberOfProjects(builder_id);
-					barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder_id);
-					totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder_id);
+					totalLeads = new ProjectDAO().getTotalLeads(builder);
+					totalProjects = new ProjectDAO().getTotalNumberOfProjects(builder);
+					barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder);
+					totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder);
 					//totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
 					
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
-					totalPropertySold = new ProjectDAO().getRevenueOfsoldInventoryByBuilderId(builder_id);
+					totalPropertySold = new ProjectDAO().getRevenueOfsoldInventoryByBuilderId(builder);
 					totalRevenue = totalPropertySold * totalSoldInventory;
 				}
 		}

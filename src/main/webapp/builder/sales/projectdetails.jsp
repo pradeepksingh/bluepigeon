@@ -467,12 +467,12 @@
 $(document).ready(function(){ 
 	$('.item').first().addClass('active');
 });
-window.openNewModal = function() {
-	$('#addCountry').modal('hide');
-	setTimeout(function() {
-    	$('#addCountry').modal('show');
-    }, 500);
-}
+// window.openNewModal = function() {
+// 	$('#saleFlat').modal('hide');
+// 	setTimeout(function() {
+//     	$('#saleFlat').modal('show');
+//     }, 500);
+// }
 $("#building_id").change(function(){
 	$.get("${baseUrl}/webapi/project/building/floor/names/"+$("#building_id").val(),{},function(data){
 		var html = '<option value="0">Select Floor</option>';
@@ -534,7 +534,7 @@ function getActiveProjectFlats(){
 			});
 			//alert(html);
 		   $("#flatList").append(html);
-		   $("#addCountry").modal('show');
+		   $("#saleFlat").modal('show');
 		  
 		}
 	},'json');
