@@ -48,7 +48,7 @@
 										<th>Property Bought</th>
 										<th>Agreement</th>
 										<th>Possession</th>
-										<th>Status</th>
+<!-- 										<th>Status</th> -->
 										<th>Actions</th>
 									</tr>
 								</thead>
@@ -84,13 +84,13 @@
 											<span class='label label-success'>Yes</span>
 											<% } %>
 										</td>
-										<td>
-											<% if(buyer.getStatus() == 0) { %>
-											<span class='label label-warning'>Inactive</span>
-											<% } else { %>
-											<span class='label label-success'>Active</span>
-											<% } %>
-										</td>
+<!-- 										<td> -->
+<%-- 											<% if(buyer.getStatus() == 0) { %> --%>
+<!-- 											<span class='label label-warning'>Inactive</span> -->
+<%-- 											<% } else { %> --%>
+<!-- 											<span class='label label-success'>Active</span> -->
+<%-- 											<% } %> --%>
+<!-- 										</td> -->
 										<td>
 											<a href="${baseUrl}/admin/buyer/edit.jsp?flat_id=<% out.print(buyer.getBuilderFlat().getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>
 										</td>

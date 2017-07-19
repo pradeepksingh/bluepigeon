@@ -197,8 +197,8 @@
                                  <li>
                                      <a  data-toggle="tab" href="#vimessages2"><span>Pricing Details</span></a>
                                  </li>
-<!--                                      <li class="tab nav-item"> -->
-<!--                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages3"><span>Payment Schedules</span></a> -->
+<!--                                      <li > -->
+<!--                                         <a  data-toggle="tab" href="#vimessages3"><span>Payment Schedules</span></a> -->
 <!--                                     </li> -->
                                  <li>
                                      <a  data-toggle="tab" href="#vimessages4"><span>Offers</span></a>
@@ -823,61 +823,58 @@
 	                    	            </form>
                                 	</div>
              					</div>
-                                 <div id="vimessages3" class="tab-pane" aria-expanded="true">        
+                                 <div id="vimessages3" class="tab-pane" aria-expanded="false">        
                                  	<form id="paymentfrm" name="paymentfrm" method="post">
                                  	 <input type="hidden" id="id" name="id" value="<% out.print(project_id);%>"/>
-                                   	<input type="hidden" name="schedule_count" id="schedule_count" value="<% //out.print(projectPaymentInfos.size()+1);%>"/>
-                                   	<% 	//int i = 1;
+                                   	<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(projectPaymentInfos.size()+1);%>"/>
+                                   	<% 	int i = 1;
+                                   	if(projectPaymentInfos != null){
+                                   			for(BuilderProjectPaymentInfo projectPaymentInfo :projectPaymentInfos) {  
 											%>
+											<input type="hidden" id="schedule_id" name="schedule_id[]" value="<%out.print(projectPaymentInfo.getId());%>"/>
 											<!--  <div class="row" id="schedule- --><% //out.print(i); %>
-											<%// if(i > 1) { %>
+											<% if(i > 1) { %>
 												<hr/>
-												<%// } %>
+												<% } %>
+										
 	                                	<div class="form-group row" id="payment_schedule">
 	                                    <label for="example-search-input" class="col-sm-2 col-form-label">Milestone<span class='text-danger'>*</span></label>
 	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="schedule" name="schedule[]" value="<% //if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
+	                                        <input class="form-control" type="text" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
 	                                    </div>
 	                                    <label for="example-search-input" class="col-sm-2 col-form-label">% of net payable<span class='text-danger'>*</span></label>
 	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="payable" name="payable[]" value="<% //if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
+	                                        <input class="form-control" type="text" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 	                                    </div>
-	                                    <label for="example-search-input" class="col-sm-1 col-form-label">Amount<span class='text-danger'>*</span></label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="amount" name="amount[]" value="<% //if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/>
-	                                    </div>
+<!-- 	                                    <label for="example-search-input" class="col-sm-1 col-form-label">Amount<span class='text-danger'>*</span></label> -->
+<!-- 	                                    <div class="col-2"> -->
+<%-- 	                                        <input class="form-control" type="text" id="amount" name="amount[]" value="<% //if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/> --%>
+<!-- 	                                    </div> -->
 	                                </div>
-	                                <div class="form-group row">
-	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
+	                               <%}}else{ %>
+	                               <div class="form-group row" id="payment_schedule">
+	                               		<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>
+	                                    <label for="example-search-input" class="col-sm-2 col-form-label">Milestone<span class='text-danger'>*</span></label>
 	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" value="First Payment" id="example-search-input">
+	                                        <input class="form-control" type="text" id="schedule" name="schedule[]" value=""/>
 	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
+	                                    <label for="example-search-input" class="col-sm-2 col-form-label">% of net payable<span class='text-danger'>*</span></label>
 	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" value="15.0" id="example-search-input">
+	                                        <input class="form-control" type="text" id="payable" name="payable[]" value=""/>
 	                                    </div>
-	                                    <label for="example-search-input" class="col-1 col-form-label">Amount</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" value="75000.0" id="example-search-input">
-	                                    </div>
-	                                     <i class="fa fa-times"></i>
+<!-- 	                                    <label for="example-search-input" class="col-sm-1 col-form-label">Amount<span class='text-danger'>*</span></label> -->
+<!-- 	                                    <div class="col-2"> -->
+<%-- 	                                        <input class="form-control" type="text" id="amount" name="amount[]" value="<% //if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/> --%>
+<!-- 	                                    </div> -->
 	                                </div>
-	                                <div class="form-group row">
-	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" value="First Payment" id="example-search-input">
-	                                    </div>
-	                                    <label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" value="15.0" id="example-search-input">
-	                                    </div>
-	                                    <label for="example-search-input" class="col-1 col-form-label">Amount</label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" value="75000.0" id="example-search-input">
-	                                    </div>
-	                                     <i class="fa fa-times"></i>
-	                                </div>
-	                                
+	                                <%} %>
+	                                <div>
+											<div class="col-lg-12">
+												<span class="pull-right">
+													<a href="javascript:addMoreSchedule();" class="btn btn-info btn-sm">+ Add More Schedule</a>
+												</span>
+											</div>
+										</div>
 	                                <div class="offset-sm-5 col-sm-7">
                                         <button type="submit" id="paymentbtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
                                     </div>
@@ -1989,6 +1986,7 @@ function removeOffer(id) {
 
 
 function addMoreSchedule() {
+	alert("Hi");
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
 	var html = '<div class="row" id="schedule-'+schedule_count+'">'
