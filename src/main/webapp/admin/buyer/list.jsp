@@ -46,8 +46,8 @@
 										<th>Phone</th>
 										<th>Email</th>
 										<th>Property Bought</th>
-										<th>Agreement</th>
-										<th>Possession</th>
+<!-- 										<th>Agreement</th> -->
+<!-- 										<th>Possession</th> -->
 <!-- 										<th>Status</th> -->
 										<th>Actions</th>
 									</tr>
@@ -70,20 +70,20 @@
 										<td>
 											<% out.print(buyer.getBuilderBuilding().getName()+" "+buyer.getBuilderFlat().getFlatNo()); %>
 										</td>
-										<td>
-											<% if(buyer.getAgreement() == 0) { %>
-											<span class='label label-warning'>No</span>
-											<% } else { %>
-											<span class='label label-success'>Yes</span>
-											<% } %>
-										</td>
-										<td>
-											<% if(buyer.getPossession() == 0) { %>
-											<span class='label label-warning'>No</span>
-											<% } else { %>
-											<span class='label label-success'>Yes</span>
-											<% } %>
-										</td>
+<!-- 										<td> -->
+<%-- 											<% if(buyer.getAgreement() == 0) { %> --%>
+<!-- 											<span class='label label-warning'>No</span> -->
+<%-- 											<% } else { %> --%>
+<!-- 											<span class='label label-success'>Yes</span> -->
+<%-- 											<% } %> --%>
+<!-- 										</td> -->
+<!-- 										<td> -->
+<%-- 											<% if(buyer.getPossession() == 0) { %> --%>
+<!-- 											<span class='label label-warning'>No</span> -->
+<%-- 											<% } else { %> --%>
+<!-- 											<span class='label label-success'>Yes</span> -->
+<%-- 											<% } %> --%>
+<!-- 										</td> -->
 <!-- 										<td> -->
 <%-- 											<% if(buyer.getStatus() == 0) { %> --%>
 <!-- 											<span class='label label-warning'>Inactive</span> -->
