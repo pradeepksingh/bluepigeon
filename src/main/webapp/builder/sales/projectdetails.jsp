@@ -113,9 +113,16 @@
                         </div>
                     <!-- /.page title -->
                     <!-- .breadcrumb -->
+                    <%if((access_id >=1 && access_id<=2) || (access_id >=4 && access_id<=6)){ %>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> 
                     <span class="pull-right"><a href="${baseUrl}/builder/sales/list.jsp" class="btn btn-default btn-sm"> << Project List</a></span>
                     </div>
+                    <%} %>
+                    <%if(access_id == 3 || access_id ==7){ %>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> 
+                    <span class="pull-right"><a href="${baseUrl}/builder/dashboard.jsp" class="btn btn-default btn-sm"> << Back</a></span>
+                    </div>
+                    <%} %>
                     <!-- /.breadcrumb -->
                 </div>
                 <!-- .row -->
