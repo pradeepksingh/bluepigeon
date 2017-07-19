@@ -2050,6 +2050,7 @@ public class ProjectController extends ResourceConfig {
 		BuilderFlatType builderFlatType = new BuilderFlatType();
 		builderFlatType.setId(flat_type_id);
 		BuilderFlat builderFlat = new BuilderFlat();
+		if(schedule != null){
 		builderFlat.setBuilderFloor(builderFloor);
 		builderFlat.setBuilderFlatStatus(builderFlatStatus);
 		builderFlat.setBuilderFlatType(builderFlatType);
@@ -2136,6 +2137,7 @@ public class ProjectController extends ResourceConfig {
 				}
 				projectDAO.addFlatAmenityWeightage(baws);
 			}
+			
 			if (schedule.size() > 0) {
 				List<FlatPaymentSchedule> flatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
 				int i = 0;
@@ -2157,13 +2159,14 @@ public class ProjectController extends ResourceConfig {
 					projectDAO.addFlatPaymentInfo(flatPaymentSchedules);
 				}
 			}
-		} else {
-			msg.setMessage("Failed to add flat.");
-			msg.setStatus(0);
 		}
-		return msg;
+		
+	}else {
+		msg.setMessage("Failed to add flat.");
+		msg.setStatus(0);
 	}
-	
+		return msg;
+}
 	public Double getFlatTotalCost(
 			int flat_id, Double baseRate, Double riseRate, int post, Double amenityRate,
 			int parkingId, Double parking, Double maintenance, Double stampDuty,

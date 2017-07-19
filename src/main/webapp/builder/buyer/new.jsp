@@ -150,7 +150,7 @@
 <!--                                     </li> -->
 <!--                                       <li class="tab nav-item">
 <!--                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a> -->
-<!--                                     </li>--> -->
+<!--                                     </li>--> 
 <!--                                 </ul> -->
                                 
                                 <ul class="nav nav-tabs">

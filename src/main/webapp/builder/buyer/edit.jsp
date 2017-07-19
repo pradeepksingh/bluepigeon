@@ -161,9 +161,9 @@
 <!-- 									</li> -->
 <!-- 									  <li class="tab nav-item">
 <!--                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a> -->
-<!--                                     </li>--> -->
+<!--                                     </li>--> 
 <!-- 								</ul> -->
-								<ul class="nav tabs-horizontal">
+								<ul class="nav nav-tabs">
 									<li class="active">
 										<a data-toggle="tab" href="#vimessages"><span>Update Buyer</span></a>
 									</li>

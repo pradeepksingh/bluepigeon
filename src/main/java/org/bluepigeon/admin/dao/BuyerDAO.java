@@ -21,6 +21,7 @@ import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuildingStatus;
 import org.bluepigeon.admin.model.BuilderBuyer;
+import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderFlatStatus;
 import org.bluepigeon.admin.model.BuilderFlatType;
@@ -1004,13 +1005,13 @@ public class BuyerDAO {
 	 * @param builderId
 	 * @return count of buyers
 	 */
-	public Long getTotalBuyers(int builderId){
+	public Long getTotalBuyers(BuilderEmployee builderEmployee){
 		Long totalBuyers = (long) 0;
 		String hql = "select COUNT(*) from Buyer where builder.id = :builder_id and is_deleted = 0";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setInteger("builder_id", builderId);
+		query.setInteger("builder_id", builderEmployee.getBuilder().getId());
 		totalBuyers = (Long) query.uniqueResult();
 		if(totalBuyers != null){
 			return totalBuyers;

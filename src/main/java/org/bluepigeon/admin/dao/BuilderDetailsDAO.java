@@ -759,22 +759,22 @@ public class BuilderDetailsDAO {
      * @param builderId
      * @return List<BarGraphData>
      */
-	public List<BarGraphData> getBarGraphByBuilderId(int builderId){
+	public List<BarGraphData> getBarGraphByBuilderId(BuilderEmployee builderEmployee){
 		List<BarGraphData> barGraphDatas = new ArrayList<BarGraphData>();
 		String hql = "Select DISTINCT YEAR(B.possessionDate) from BuilderProject B where B.builder.id = :builder_id and B.status=1 order by YEAR(B.possessionDate) ASC";
 		String projectHql = "from BuilderProject where builder.id =:builder_id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setParameter("builder_id", builderId);
+		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
 		Session projectSession = hibernateUtil.openSession();
 		Query projectQuery = projectSession.createQuery(projectHql);
-		projectQuery.setParameter("builder_id", builderId);
+		projectQuery.setParameter("builder_id",  builderEmployee.getBuilder().getId());
 		//Double builderProjectLists = (Double)query.list();
 	//	List<BuilderProject> builderProjectList = query.list();
 		
 		//List<BuilderProject> projectList = projectQuery.list();
-		System.err.println("Builder Id :: "+builderId);
+		//System.err.println("Builder Id :: "+builderId);
 		//if(projectList != null && builderProjectLists != null){
 //			try{
 //				for(int i=0;i< builderProjectLists.SIZE;i++){

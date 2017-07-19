@@ -538,14 +538,16 @@
 						<form id="updatePayment" name="updatePayment" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 						<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(flatPaymentSchedules.size() + 1);%>"/>
 						<input type="hidden" name="flat_id" value="<% out.print(flat_id);%>"/>
+						<input type="hidden" name="h_sale_value" id="h_sale_value" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getTotalCost() != null){ out.print(buildingPriceInfo.get(0).getTotalCost());}%>"/>
 			 			<div class="row">
 			 				<div id="paymentresponse"></div>
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<div id="payment_schedule">
-										
-											<% for(PaymentInfoData flatPaymentSchedule : flatPaymentSchedules) { %>
+											<input type="hidden" id="count_pay" name="count_pay" value="<%if(flatPaymentSchedules.size() > 0 && flatPaymentSchedules != null) {out.print(flatPaymentSchedules.size());}%>"/>
+											<% int ii=1;
+											for(PaymentInfoData flatPaymentSchedule : flatPaymentSchedules) { %>
 											<div class="row" id="schedule-<% out.print(flatPaymentSchedule.getId());%>">
 												<input type="hidden" name="payment_id[]" value="<% out.print(flatPaymentSchedule.getId()); %>" />
 												<div class="col-lg-5 margin-bottom-5">
@@ -561,7 +563,7 @@
 													<div class="form-group" id="error-payable">
 														<label class="control-label col-sm-8">% of Net Payable </label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control" id="payable" onkeypress=" return isNumber(event, this);" name="payable[]" value="<% out.print(flatPaymentSchedule.getPayable());%>"/>
+															<input type="text" class="form-control" id="payable<%out.print(ii); %>" onkeyup="calculateAmount(<%out.print(ii); %>);" onkeypress=" return isNumber(event, this);" name="payable[]" value="<% out.print(flatPaymentSchedule.getPayable());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -570,13 +572,13 @@
 													<div class="form-group" id="error-amount">
 														<label class="control-label col-sm-6">Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="amount" name="amount[]" value="<% out.print(flatPaymentSchedule.getAmount());%>"/>
+															<input type="text" class="form-control" id="amount<%out.print(ii); %>" onkeyup="calcultatePercentage(<%out.print(ii); %>);"  onkeypress=" return isNumber(event, this);" id="amount" name="amount[]" value="<% out.print(flatPaymentSchedule.getAmount());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
 											</div>
-											<% } %>
+											<% ii++;} %>
 										</div>
 									</div>
 								</div>
@@ -696,6 +698,17 @@
 $(".errorMsg").keypress(function(event){
 	return isNumber(event, this)
 });
+var count = $("#count_pay").val();
+function calculateAmount(id){
+
+var amount = $("#payable"+id).val()*$("#h_sale_value").val()/100;
+	$("#amount"+id).val(amount.toFixed(1));
+}
+
+function calcultatePercentage(id){
+	var percentage = $("#amount"+id).val()/$("#h_sale_value").val()*100;
+	$("#payable"+id).val(percentage.toFixed(1));
+}
 
 function isNumber(evt, element) {
 

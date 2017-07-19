@@ -760,6 +760,8 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		alert(resp.message);
+		 window.location.reload();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');

@@ -97,6 +97,16 @@
                              </ul>
                     </li>
                     <% }%>
+                    <%if(builder_new.getBuilderEmployeeAccessType().getId()==7){ %>
+                     <li class="nav-small-cap m-t-10">--Professional--</li>
+                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Sales<span class="fa arrow"></span></span></a>
+                        <ul class="nav nav-second-level">
+<!--                             <li> <a href="inbox.html">Add</a></li> -->
+<!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
+							  <li> <a href="${baseUrl }/builder/sales/list.jsp">Manage Project</a></li>
+                             </ul>
+                    </li>
+                    <%} %>
                     <%if(builder_new.getBuilderEmployeeAccessType().getId()==1 || builder_new.getBuilderEmployeeAccessType().getId() == 2 || builder_new.getBuilderEmployeeAccessType().getId() ==3){ %>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Marketing<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
