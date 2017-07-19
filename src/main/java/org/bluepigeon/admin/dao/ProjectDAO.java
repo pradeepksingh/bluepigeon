@@ -1459,7 +1459,7 @@ public class ProjectDAO {
 		System.err.println("No of flats :::: "+builderFlatList.size());
 		int buildingid = 0;
 		int floorid = 0;
-		
+		try{
 		for(BuilderFlat builderFlat : builderFlatList){
 			FlatListData flatListData = new FlatListData();
 			List<BuildingListData> buildingListDatas = new ArrayList<BuildingListData>();
@@ -1488,13 +1488,19 @@ public class ProjectDAO {
 				BuildingListData buildingListData = new BuildingListData();
 				List<BuildingImageGallery> buildingImageGalleries =  getBuilderBuildingImagesById(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
 				buildingListData.setBuildingId( builderFlat.getBuilderFloor().getBuilderBuilding().getId());
-				if(buildingImageGalleries.get(0) != null)	
+				try{
+				if(buildingImageGalleries.get(0) != null){	
 					buildingListData.setBuildingImage(buildingImageGalleries.get(0).getImage());
-				else
+				}
+				else{
 					buildingListData.setBuildingImage("");
+				}
 				buildingListData.setBuildingName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
 				buildingListData.setFloorListDatas(floorListDatas);
 				buildingListDatas.add(buildingListData);
+			}catch(Exception ee){
+				buildingListData.setBuildingImage("");
+				System.err.println("Inner error "+ee);
 			}
 //			BuildingData buildingData = new BuildingData();
 //			buildingData.setId(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
@@ -1505,6 +1511,12 @@ public class ProjectDAO {
 			flatListData.setProjectid(projectId);
 			newFlatList.add(flatListData);
 		}
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+			System.err.println("outer error :: "+e.getMessage());
+		}
+		
 		//session.close();
 		return newFlatList;
 	}

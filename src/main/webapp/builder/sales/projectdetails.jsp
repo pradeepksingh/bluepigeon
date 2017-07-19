@@ -360,7 +360,7 @@
                         </div>
                         <% if(access_id == 1||access_id==2||access_id==4||access_id==5||access_id==6||access_id==7){%>
                         <div class="white-box col-sm-12">
-                        <a href="#addCountry" class="btn btn-info btn-lg btn-round pull-right col-sm-12" style="margin: -22px 1px;" onclick="javascript:getActiveProjectFlats();"><i class="fa fa-plus"></i>&nbsp;Book Now</a>
+                        <a href="#saleFlat" class="btn btn-info btn-lg btn-round pull-right col-sm-12" style="margin: -22px 1px;" onclick="javascript:getActiveProjectFlats();"><i class="fa fa-plus"></i>&nbsp;Book Now</a>
 <!--                         <button id="#addCountry" type="button" onclick="getActiveProjectFlats();" class="btn btn-info bt-sm btn-rounded pull-right" style="margin-right:-20px;">New Request</button> -->
                         </div>
                         <% } %>
@@ -400,7 +400,7 @@
                 </div>
               </div>
             </div>
-            <div id="addCountry" class="modal fade" style="">
+            <div id="saleFlat" class="modal fade" style="">
 				<div id="cancel-overlay" class="modal-dialog" style="opacity:1 ;width:400px ">
   					<div class="modal-content-new" style="margin-top:25%;">
 		          	<div class="modal-header">

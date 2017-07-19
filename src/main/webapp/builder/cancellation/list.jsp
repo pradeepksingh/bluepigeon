@@ -154,17 +154,17 @@
 											<% out.print(cancellationList.getFlatNo());
 											%>
 										</td>
-<%-- 									  <%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5 || access_id ==6){ %> --%>
-<!-- 									 	<td> -->
-<!-- 									 		<button type="button" onclick="approve();">Approve</button> -->
-<!-- 									 		<button type="button" onclick="cancel();">Cancel</button> -->
-<!-- 									 	</td>	 -->
-<%-- 									 <%} %> --%>
-<%-- 										<%if(access_id==7){ %> --%>
-<!-- 										<td> -->
-<!-- 											<button type="button" onclick="cancelRequest();">Cancel Request</button> -->
-<!-- 										</td> -->
-<%-- 										<%} %> --%>
+									  <%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5 || access_id ==6){ %>
+									 	<td>
+									 		<button type="button" onclick="approve();">Approve</button>
+									 		<button type="button" onclick="cancel();">Cancel</button>
+									 	</td>	
+									 <%} %>
+										<%if(access_id==7){ %>
+										<td>
+											<button type="button" onclick="cancelRequest();">Cancel Request</button>
+										</td>
+										<%} %>
 										<% 	
 											i++;} 
                                       	}
