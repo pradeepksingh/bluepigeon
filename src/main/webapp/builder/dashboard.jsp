@@ -454,10 +454,21 @@
 		                <div class="col-md-4">
 		                    <button type="button" onclick="addEmployee();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Employee</button>
 		                </div>
-		                <%} %>
+		               
 		                 <div class="col-md-4">
 		                    <button type="button" onclick="addLead();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Lead</button>
 		                 </div>
+		                  <%} %>
+		                  <%if(access_id == 7){ %>
+		                   <div class="col-md-4">
+		                    <button type="button" onclick="addLead();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Lead</button>
+		                 </div>
+		                 <%} %>
+		                 <%if(access_id ==3) {%>
+		                  <div class="col-md-4">
+		                    <button type="button" onclick="addCampaign();" class="btn11 btn-info waves-effect waves-light m-t-10">Add Campaign</button>
+		                 </div>
+		                  <%} %>
 <!-- 		                 <div class="col-md-4"> -->
 <!-- 		                    <button type="button" onclick="addBuyer();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Buyer</button> -->
 <!-- 		                </div> -->
@@ -491,7 +502,9 @@
     function addBuyer(){
     	window.location.href="${baseUrl }/builder/buyer/new.jsp";
     }
-    
+    function addCampaign(){
+    	window.location.href="${baseUrl}/builder/campaign/new.jsp";
+    }
     $("#city_id").change(function(){
     	$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
     		var html = '<option value="">Select Locality</option>';
