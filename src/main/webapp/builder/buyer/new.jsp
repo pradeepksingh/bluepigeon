@@ -132,26 +132,48 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
-                                <ul class="nav tabs-horizontal">
-                                    <li class="tab nav-item" aria-expanded="false">
-                                        <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"><span>Add New Buyer</span></a>
+<!--                                 <ul class="nav tabs-horizontal"> -->
+<!--                                     <li class="tab nav-item" aria-expanded="false"> -->
+<!--                                         <a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"><span>Add New Buyer</span></a> -->
+<!--                                     </li> -->
+<!--                                      <li class="tab nav-item"> -->
+<!--                                         <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages1"><span>Project Details</span></a> -->
+<!--                                     </li> -->
+<!--                                     <li class="tab nav-item"> -->
+<!--                                         <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages2"><span>Buying Details</span></a> -->
+<!--                                     </li> -->
+<!--                                      <li class="tab nav-item"> -->
+<!--                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages3"><span>Payment Schedule</span></a> -->
+<!--                                     </li> -->
+<!--                                     <li class="tab nav-item"> -->
+<!--                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages4"><span>Documents</span></a> -->
+<!--                                     </li> -->
+<!--                                       <li class="tab nav-item">
+<!--                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a> -->
+<!--                                     </li>--> -->
+<!--                                 </ul> -->
+                                
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a data-toggle="tab"  href="#vimessages"><span>Add New Buyer</span></a>
                                     </li>
-                                     <li class="tab nav-item">
-                                        <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages1"><span>Project Details</span></a>
+                                     <li>
+                                        <a  data-toggle="tab" href="#vimessages1"><span>Project Details</span></a>
                                     </li>
-                                    <li class="tab nav-item">
-                                        <a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages2"><span>Buying Details</span></a>
+                                    <li>
+                                        <a  data-toggle="tab" href="#vimessages2"><span>Buying Details</span></a>
                                     </li>
-                                     <li class="tab nav-item">
-                                        <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages3"><span>Payment Schedule</span></a>
+                                     <li>
+                                        <a  data-toggle="tab" href="#vimessages3"><span>Payment Schedule</span></a>
                                     </li>
-                                    <li class="tab nav-item">
-                                        <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages4"><span>Documents</span></a>
+                                    <li>
+                                        <a  data-toggle="tab" href="#vimessages4"><span>Documents</span></a>
                                     </li>
                                     <!--   <li class="tab nav-item">
                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a>
                                     </li>-->
                                 </ul>
+                                
                                 <form id="addnewbuyer" name="addnewbuyer" action="" method="post" enctype="multipart/form-data"> 
                               	<div class="tab-content"> 
                               	<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id1); %>" />
@@ -166,7 +188,10 @@
 		                                			<div class="form-group row">
 			                                   				<label for="example-text-input" class="col-sm-6 col-form-label">Buyer Name*</label>
 			                                   				<div class="col-sm-6">
+			                                   					<div>
 			                                       				<input class="form-control" type="text" id="buyer_name" name="buyer_name[]" value="">
+			                                       				</div>
+			                                       				<div class="messageContainer"></div>
 			                                   				</div>
 			                                   		</div>
 			                                   	</div>
@@ -174,7 +199,10 @@
 			                                   		<div class="form-group row">
 			                                   				<label for="example-text-input" class="col-sm-6 col-form-label">Contact*</label>
 			                                   				<div class="col-sm-6">
-			                                       				<input class="form-control" type="text" id="contact" name="contact[]" value="">
+			                                   					<div>
+			                                       					<input class="form-control" type="text" id="contact" name="contact[]" value="">
+			                                       				</div>
+			                                       				<div class="messageContainer"></div>
 			                                   				</div>
 		                                			</div>
 		                                		</div>
@@ -184,7 +212,10 @@
 		                                			<div class="form-group row">
 		                                    			<label for="example-search-input" class="col-sm-6 col-form-label">Email*</label>
 		                                    			<div class="col-sm-6">
-		                                        			<input class="form-control" type="text" id="email" name="email[]" value="">
+		                                    				<div>
+		                                        				<input class="form-control" type="text" id="email" name="email[]" value="">
+		                                        			</div>
+		                                        			<div class="messageContainer"></div>
 		                                    			</div>
 		                                    		</div>
 		                                    	</div>
@@ -192,7 +223,10 @@
 		                                    		<div class="form-group row">
 		                                    			<label for="example-search-input" class="col-sm-6 col-form-label">Pan*</label>
 		                                    			<div class="col-sm-6">
-		                                        			<input class="form-control" type="text" id="pan" name="pan[]" value="">
+		                                    				<div>
+		                                        				<input class="form-control" type="text" id="pan" name="pan[]" value="">
+		                                        			</div>
+		                                        			<div class="messageContainer"></div>
 		                                    			</div>
 		                                			</div>
 		                                		</div>
@@ -202,7 +236,10 @@
 		                                 			<div class="form-group row">
 		                                    			<label for="example-tel-input" class="col-sm-6 col-form-label">Permanent Address*</label>
 		                                    			<div class="col-sm-6">
-		                                         			<textarea class="form-control" rows="" cols="" id="address" name="address[]"></textarea>
+		                                    				<div>
+		                                         				<textarea class="form-control" rows="" cols="" id="address" name="address[]"></textarea>
+		                                    				</div>
+		                                    				<div class="messageContainer"></div>
 		                                    			</div>
 		                                    		</div>
 		                                    	</div>
@@ -210,11 +247,14 @@
 		                                    		<div class="form-group row">
 		                                    			<label for="example-tel-input" class="col-sm-6 col-form-label">Owner*</label>
 		                                    			<div class="col-sm-6">
-		                                      				<select name="is_primary[]" id="is_primary" class="form-control">
-		<!-- 			                       					<option value="">Select Owner</option> -->
-		<!-- 			                     					<option value="0">Co-Owner</option> -->
-					                      						<option value="1" selected>Owner</option>
-									          				</select>
+		                                    				<div>
+			                                      				<select name="is_primary[]" id="is_primary" class="form-control">
+			<!-- 			                       					<option value="">Select Owner</option> -->
+			<!-- 			                     					<option value="0">Co-Owner</option> -->
+						                      						<option value="1" selected>Owner</option>
+										          				</select>
+									          				</div>
+									          				<div class="messageContainer"></div>
 		                                    			</div>
 		                                    		</div>
 		                                    	</div>
@@ -288,7 +328,10 @@
 		                                <div class="form-group row">
 		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Booking Date *</label>
 		                                    <div class="col-sm-6">
-		                                       <input type="text" class="form-control" id="booking_date" name="booking_date" value=""/>
+		                                    	<div>
+		                                       		<input type="text" class="form-control" id="booking_date" name="booking_date" value=""/>
+		                                       </div>
+		                                       <div class="messageContainer"></div>
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -296,7 +339,10 @@
 	                            	     <div class="form-group row">
 		                                    <label for="example-text-input" class="col-sm-6 col-form-label">Base Rate *</label>
 		                                    <div class="col-sm-6">
-		                                        <input type="text" value="<%out.print(flatPricingDetails.get(0).getBasePrice()); %>" class="form-control" id="base_rate" name="base_rate" />
+		                                    	<div>
+		                                        	<input type="text" value="<%out.print(flatPricingDetails.get(0).getBasePrice()); %>" class="form-control" id="base_rate" name="base_rate" />
+		                                        </div>
+		                                        <div class="messageContainer"></div>
 		                                    </div>
 	                              		 </div>
 		                             </div>
@@ -306,16 +352,22 @@
 			                                <div class="form-group row">
 			                                    <label for="example-search-input" class="col-sm-6 col-form-label">Floor Rising Rate *</label>
 			                                    <div class="col-sm-6">
-			                                       <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getRiseRate()); %>" id="rise_rate" name="rise_rate"/>
+			                                    	<div>
+			                                       		<input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getRiseRate()); %>" id="rise_rate" name="rise_rate"/>
+			                                       	</div>
+			                                       	<div class="messageContainer"></div>
 			                                    </div>
 			                                  </div>
 				                         </div>
 				                         <div class="col-sm-6">
 					                         <div class="form-group row">
-				                                    <label for="example-search-input" class="col-sm-6 col-form-label">Aminities Facing Rise Rates</label>
-				                                    <div class="col-sm-6">
-				                                        <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getAmenityRate()); %>" id="amenity_rate" name="amenity_rate" />
-				                                    </div>
+			                                    <label for="example-search-input" class="col-sm-6 col-form-label">Aminities Facing Rise Rates *</label>
+			                                    <div class="col-sm-6">
+			                                    	<div>
+			                                        	<input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getAmenityRate()); %>" id="amenity_rate" name="amenity_rate" />
+			                                        </div>
+			                                        <div class="messageContainer"></div>
+			                                    </div>
 					                         </div>
 				                         </div>
 			                        </div>
@@ -324,7 +376,10 @@
 		                                 <div class="form-group row">
 		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Parking Rates *</label>
 		                                    <div class="col-sm-6">
-		                                       	<input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getParking()); %>" id="parking" name="parking" />
+		                                    	<div>
+		                                       		<input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getParking()); %>" id="parking" name="parking" />
+		                                       	</div>
+		                                       	<div class="messageContainer"></div>
 		                                    </div>
 		                                  </div>
 			                           </div>
@@ -332,7 +387,10 @@
 			                           		<div class="form-group row">
 			                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Maintance *</label>
 			                                    <div class="col-sm-6">
-			                                        <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getMaintenance()); %>" id="maintenance" name="maintenance" />
+			                                    	<div>
+			                                        	<input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getMaintenance()); %>" id="maintenance" name="maintenance" />
+			                                        </div>
+			                                        <div class="messageContainer"></div>
 			                                    </div>
 		                                   </div>
 			                           </div>
@@ -342,7 +400,10 @@
 		                                <div class="form-group row">
 		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Stamp Duty *</label>
 		                                    <div class="col-sm-6">
-		                                       <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getStampDuty()); %>" id="stamp_duty" name="stamp_duty" />
+		                                    	<div>
+		                                       		<input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getStampDuty()); %>" id="stamp_duty" name="stamp_duty" />
+		                                       	</div>
+		                                       	<div class="messageContainer"></div>
 		                                    </div>
 		                                 </div>
 		                              </div>
@@ -350,7 +411,10 @@
 		                                 <div class="form-group row">
 		                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Taxes *</label>
 		                                    <div class="col-sm-6">
-		                                         <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getTax()); %>" id="tax" name="tax" />
+		                                    	<div>
+		                                         	<input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getTax()); %>" id="tax" name="tax" />
+		                                        </div>
+		                                        <div class="messageContainer"></div>
 		                                    </div>
 		                                </div>
 		                             </div>
@@ -360,7 +424,10 @@
 		                                <div class="form-group row">
 		                                    <label for="example-search-input" class="col-sm-6 col-form-label">VAT *</label>
 		                                    <div class="col-sm-6">
-		                                       <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getVat()); %>" id="vat" name="vat" />
+		                                    	<div>
+		                                       		<input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getVat()); %>" id="vat" name="vat" />
+		                                       </div>
+		                                       <div class="messageContainer"></div>
 		                                    </div>
 		                                 </div>
                                  	</div>
@@ -368,8 +435,11 @@
                                  	  <div class="form-group row">
 		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Tenure *</label>
 		                                    <div class="col-sm-6">
-		                                      <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getTenure()); %>" id="tenure" name="tenure" />
-											  <span class="input-group-addon">Months</span>
+		                                    	<div>
+			                                      <input type="text" class="form-control" value="<%out.print(flatPricingDetails.get(0).getTenure()); %>" id="tenure" name="tenure" />
+												  <span class="input-group-addon">Months</span>
+											  </div>
+											  <div class="messageContainer"></div>
 		                                    </div>
 		                               </div>
 		                            </div>
@@ -379,7 +449,10 @@
 		                                <div class="form-group row">
 		                                    <label for="example-search-input" class="col-sm-6 col-form-label">No. of Post *</label>
 		                                    <div class="col-sm-6">
-		                                        <input class="form-control" type="text" value="<%out.print(flatPricingDetails.get(0).getPost()); %>" id="post" name="post">
+		                                    	<div>
+		                                       		 <input class="form-control" type="text" value="<%out.print(flatPricingDetails.get(0).getPost()); %>" id="post" name="post">
+		                                        </div>
+		                                        <div class="messageContainer"></div>
 		                                    </div>
 		                                 </div>
 		                             </div>
@@ -387,7 +460,10 @@
 		                               	<div class="form-group row">
 		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Total Sale Value</label>
 		                                    <div class="col-sm-6">
-		                                        <input class="form-control" readonly="true" type="text" value="<%out.print(flatPricingDetails.get(0).getPost()); %>" id="toatl_sale_value" name="total_sale_value">
+		                                    	<div>
+		                                        	<input class="form-control" readonly="true" type="text" value="<%out.print(flatPricingDetails.get(0).getPost()); %>" id="toatl_sale_value" name="total_sale_value">
+		                                        </div>
+		                                        <div class="messageContainer"></div>
 		                                    </div>
 		                               </div>
 		                             </div>

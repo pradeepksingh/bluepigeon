@@ -143,21 +143,37 @@
 							<div class="white-box">
 								<h4 class="page-title">Update Buyer</h4>
 								<br>
+<!-- 								<ul class="nav tabs-horizontal"> -->
+<!-- 									<li class="tab nav-item" aria-expanded="false"> -->
+<!-- 										<a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"><span>Update Buyer</span></a> -->
+<!-- 									</li> -->
+<!-- 									<li class="tab nav-item"> -->
+<!-- 										<a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages1"><span>Project Details</span></a> -->
+<!-- 									</li> -->
+<!-- 									<li class="tab nav-item"><a aria-expanded="false" -->
+<!-- 										class="nav-link space1" data-toggle="tab" href="#vimessages2"><span>Buying -->
+<!-- 												Details</span></a></li> -->
+<!-- 									<li class="tab nav-item"><a aria-expanded="true" -->
+<!-- 										class="nav-link space1" data-toggle="tab" href="#vimessages3"><span>Payment -->
+<!-- 												Schedule</span></a></li> -->
+<!-- 									<li class="tab nav-item"><a aria-expanded="true" -->
+<!-- 										class="nav-link space1" data-toggle="tab" href="#vimessages4"><span>Documents</span></a> -->
+<!-- 									</li> -->
+<!-- 									  <li class="tab nav-item">
+<!--                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a> -->
+<!--                                     </li>--> -->
+<!-- 								</ul> -->
 								<ul class="nav tabs-horizontal">
-									<li class="tab nav-item" aria-expanded="false">
-										<a data-toggle="tab" class="nav-link active" href="#vimessages" aria-expanded="false"><span>Update Buyer</span></a>
+									<li class="active">
+										<a data-toggle="tab" href="#vimessages"><span>Update Buyer</span></a>
 									</li>
-									<li class="tab nav-item">
-										<a aria-expanded="false" class="nav-link space1" data-toggle="tab" href="#vimessages1"><span>Project Details</span></a>
+									<li >
+										<a  data-toggle="tab" href="#vimessages1"><span>Project Details</span></a>
 									</li>
-									<li class="tab nav-item"><a aria-expanded="false"
-										class="nav-link space1" data-toggle="tab" href="#vimessages2"><span>Buying
-												Details</span></a></li>
-									<li class="tab nav-item"><a aria-expanded="true"
-										class="nav-link space1" data-toggle="tab" href="#vimessages3"><span>Payment
-												Schedule</span></a></li>
-									<li class="tab nav-item"><a aria-expanded="true"
-										class="nav-link space1" data-toggle="tab" href="#vimessages4"><span>Documents</span></a>
+									<li >
+									<a  data-toggle="tab" href="#vimessages2"><span>Buying Details</span></a></li>
+									<li><a  data-toggle="tab" href="#vimessages3"><span>Payment	Schedule</span></a></li>
+									<li><a  data-toggle="tab" href="#vimessages4"><span>Documents</span></a>
 									</li>
 									<!--   <li class="tab nav-item">
                                         <a aria-expanded="true" class="nav-link space1" data-toggle="tab" href="#vimessages5"><span>Pricing Rate</span></a>
