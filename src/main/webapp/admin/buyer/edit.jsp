@@ -844,6 +844,27 @@ if (request.getParameterMap().containsKey("flat_id")) {
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script>
+function isNumber(evt, element) {
+
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+} 
+function calculateAmount(id){
+
+	var amount = $("#payable"+id).val()*$("#h_sale_value").val()/100;
+		$("#amount"+id).val(amount.toFixed(1));
+	}
+
+	function calcultatePercentage(id){
+		var percentage = $("#amount"+id).val()/$("#h_sale_value").val()*100;
+		$("#payable"+id).val(percentage.toFixed(1));
+	}
 $('#launch_date').datepicker({
 	format: "dd MM yyyy"
 });

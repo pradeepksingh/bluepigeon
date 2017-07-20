@@ -761,7 +761,7 @@ public class BuilderDetailsDAO {
      */
 	public List<BarGraphData> getBarGraphByBuilderId(BuilderEmployee builderEmployee){
 		List<BarGraphData> barGraphDatas = new ArrayList<BarGraphData>();
-		String hql = "Select DISTINCT YEAR(B.possessionDate) from BuilderProject B where B.builder.id = :builder_id and B.status=1 order by YEAR(B.possessionDate) ASC";
+		String hql = "Select DISTINCT YEAR(B.possessionDate) from BuilderProject B where B.builder.id = :builder_id and B.status=1 group by YEAR(B.possessionDate)";
 		String projectHql = "from BuilderProject where builder.id =:builder_id and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();

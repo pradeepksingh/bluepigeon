@@ -1,5 +1,6 @@
 package org.bluepigeon.admin.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ import org.bluepigeon.admin.model.BuyerOffer;
 import org.bluepigeon.admin.model.BuyerPayment;
 import org.bluepigeon.admin.model.BuyerUploadDocuments;
 import org.bluepigeon.admin.model.BuyingDetails;
+import org.bluepigeon.admin.model.FlatPricingDetails;
 import org.bluepigeon.admin.model.GlobalBuyer;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
@@ -116,6 +118,7 @@ public class BuyerDAO {
 		buyerSession.getTransaction().commit();
 		buyerSession.close();
 		updateFlatStatus(buyer.getBuilderFlat().getId());
+		updateProject(buyer);
 		response.setId(buyer.getId());
 		response.setStatus(1);
 		response.setMessage("Buyer Added Successfully");
@@ -133,6 +136,30 @@ public class BuyerDAO {
 		query.executeUpdate();
 		session.getTransaction().commit();
 		session.close();
+	}
+	public void updateProject(Buyer buyer){
+		String projecthql = "from BuilderProject where id = :id";
+		String flatTotal = "from FlatPricingDetails where builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session projectSession = hibernateUtil.openSession();
+		Query projectQuery = projectSession.createQuery(projecthql);
+		projectQuery.setParameter("id", buyer.getBuilderProject().getId());
+		BuilderProject builderProject = (BuilderProject) projectQuery.list().get(0);
+		Session flatSession = hibernateUtil.openSession();
+		Query flatQuery = flatSession.createQuery(flatTotal);
+		Session updateSession = hibernateUtil.openSession();
+		if(builderProject != null){
+			flatQuery.setParameter("flat_id",buyer.getBuilderFlat().getId() );
+			FlatPricingDetails flatPricingDetails = (FlatPricingDetails)flatQuery.uniqueResult();
+			double revenue = builderProject.getRevenue() + flatPricingDetails.getTotalCost();
+			builderProject.setRevenue(revenue);
+			updateSession.beginTransaction();
+			updateSession.update(builderProject);
+			updateSession.getTransaction().commit();
+			updateSession.close();
+		}
+		projectSession.close();
+		flatSession.close();
 	}
 	
 	public void insertBuilderBuyer(List<Buyer> buyers){
@@ -1007,11 +1034,26 @@ public class BuyerDAO {
 	 */
 	public Long getTotalBuyers(BuilderEmployee builderEmployee){
 		Long totalBuyers = (long) 0;
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1 || builderEmployee.getBuilderEmployeeAccessType().getId() ==2){
+			totalBuyers = getTotalBuyersByBuilderId(builderEmployee.getBuilder().getId());
+		}else{
+			totalBuyers = getTotalBuyersByEmpId(builderEmployee.getId());
+		}
+		return totalBuyers;
+	}
+	
+	/**
+	 * Get total buyers by passing builder id
+	 * @param builderId
+	 * @return Long
+	 */
+	public Long getTotalBuyersByBuilderId(int builderId){
+		Long totalBuyers = (long) 0;
 		String hql = "select COUNT(*) from Buyer where builder.id = :builder_id and is_deleted = 0";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setInteger("builder_id", builderEmployee.getBuilder().getId());
+		query.setInteger("builder_id", builderId);
 		totalBuyers = (Long) query.uniqueResult();
 		if(totalBuyers != null){
 			return totalBuyers;
@@ -1019,6 +1061,23 @@ public class BuyerDAO {
 			return (long)0;
 		}
 	}
+	
+	public Long getTotalBuyersByEmpId(int empId){
+		Long totalBuyers = (long) 0;
+		String hql = "select COUNT(buy.id) from buyer as buy left join  builder_project as project on buy.project_id = project.id left join allot_project as ap on ap.project_id = project.id where ap.emp_id = :emp_id and buy.is_deleted = 0";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createSQLQuery(hql);
+		query.setInteger("emp_id", empId);
+		BigInteger totalBuyer = (BigInteger) query.uniqueResult();
+		if(totalBuyers != null){
+			totalBuyers = Long.parseLong(totalBuyer.toString());
+			return totalBuyers;
+		}else{
+			return (long)0;
+		}
+	}
+	
 	
 	public ResponseMessage validateBuyer(GlobalBuyer globalBuyer){
 		ResponseMessage responseMessage = new ResponseMessage();

@@ -456,6 +456,7 @@
 														<input class="form-control" type="text" id="registration" name="registration" value="<% out.print(buyingDetails.getRegistration()); %>" />
 													</div>
 												</div>
+												
 												<% if(buyeroffersize <= 0) {%>
 												<div class="form-group row">
 													<button type="button" class="col-2" onclick="showOffers()">+ADD offers</button>
@@ -517,7 +518,7 @@
 											<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
 											<% if(buyerPayments.size() > 0) { %>
 											<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(buyerPayments.size()); %>" />
-											<% for(BuyerPayment buyerPayment :buyerPayments) { %>
+											<% int ii=0; for(BuyerPayment buyerPayment :buyerPayments) { %>
 											<div class="form-group row" id="schedule-<% out.print(buyerPayment.getId()); %>">
 												<input type="hidden" name="payment_id[]" id="payment_id" value="<%out.print(buyerPayment.getId());%>" />
 												<label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
@@ -526,15 +527,15 @@
 												</div>
 												<label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
 												<div class="col-2">
-													<input type="text" class="form-control" id="payable" name="payable[]" value="<% out.print(buyerPayment.getNetPayable());%>" />
+													<input type="text" class="form-control" id="payable<%out.print(ii); %>"  onkeypress=" return isNumber(event, this);"  name="payable[]" value="<% out.print(buyerPayment.getNetPayable());%>" />
 												</div>
 												<label for="example-search-input" class="col-1 col-form-label">Amount</label>
 												<div class="col-2">
-													<input type="text" class="form-control" id="amount" name="amount[]" value="<% out.print(buyerPayment.getAmount());%>" />
+													<input type="text" class="form-control" id="amount<%out.print(ii); %>"  onkeypress=" return isNumber(event, this);" name="amount[]" value="<% out.print(buyerPayment.getAmount());%>" />
 												</div>
 <%-- 												<a href="javascript:deleteSchedule(<%out.print(buyerPayment.getId());%>);" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a> --%>
 											</div>
-											<% } %>
+											<%ii++; } %>
 											<% } 
 											//else { %>
 <!-- 											<input type="hidden" name="schedule_count" id="schedule_count" value="1" /> -->
@@ -618,10 +619,31 @@
 </body>
 </html>
 <script type="text/javascript">
+function calculateAmount(id){
+
+	var amount = $("#payable"+id).val()*$("#h_sale_value").val()/100;
+		$("#amount"+id).val(amount.toFixed(1));
+	}
+
+	function calcultatePercentage(id){
+		var percentage = $("#amount"+id).val()/$("#h_sale_value").val()*100;
+		$("#payable"+id).val(percentage.toFixed(1));
+	}
 	function showOffers() {
 		$("#displayoffers").show();
 	}
+	function isNumber(evt, element) {
 
+	    var charCode = (evt.which) ? evt.which : event.keyCode
+
+	    if (
+	        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+	        (charCode < 48 || charCode > 57))
+	        return false;
+
+	    return true;
+	} 
+	
 	$('#booking_date').datepicker({
 		format : "dd MM yyyy"
 	});
