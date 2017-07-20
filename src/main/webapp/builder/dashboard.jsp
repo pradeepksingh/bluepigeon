@@ -24,12 +24,12 @@
 	List<BarGraphData> barGraphDatas = null;
 	ProjectImageGallery imageGaleries = null;
 	Long totalBuyers = (long)0;
-	Long totalInventory = (long) 0;
+	Long totalInventorySold = (long) 0;
 	Long totalLeads = (long)0;
 	Double totalRevenue = 0.0;
 	//Double totalSaleValue = 0.0;
 	Long totalCampaign = (long)0;
-	Long totalSoldInventory = (long)0;
+	//Long totalSoldInventory = (long)0;
 	Long totalProjects = (long)0;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
@@ -47,18 +47,19 @@
 				access_id = builder.getBuilderEmployeeAccessType().getId();
 				if(builder_id > 0){
 					totalBuyers = new BuyerDAO().getTotalBuyers(builder);
-					totalInventory = new ProjectDAO().getTotalInventory(builder);
+					totalInventorySold = new ProjectDAO().getTotalInventory(builder);
 					project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder);
 					cityDataList = new CityNamesImp().getCityActiveNames();
 					totalLeads = new ProjectDAO().getTotalLeads(builder);
 					totalProjects = new ProjectDAO().getTotalNumberOfProjects(builder);
 					barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder);
-					totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder);
+					//totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder);
 					//totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
 					
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 					totalPropertySold = new ProjectDAO().getRevenueOfsoldInventoryByBuilderId(builder);
-					totalRevenue = totalPropertySold * totalSoldInventory;
+					//totalRevenue = totalPropertySold * totalInventorySold;
+					
 				}
 		}
 	}
@@ -121,7 +122,30 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <!--.row -->
-                <%if(access_id == 1 || access_id == 2){ %>
+                <%if(access_id == 7){%>
+                  <div class="row re">
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box white-border">
+                            <h3 class="box-title">Total Projects</h3>
+                            <ul class="list-inline two-part">
+                                <li><i class="ti-home text-info-new"></i></li>
+                                <li class="text-right"><span class="counter dashboard-text"><%out.print(totalProjects); %></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                     <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box white-border">
+                            <h3 class="box-title">Total leads</h3>
+                            <ul class="list-inline two-part">
+<!--                                 <li><i class="icon-user text-danger"></i></li> -->
+                                 <li><i class="icon-user text-info-new"></i></li>
+                                <li class="text-right"><span class="counter dashboard-text"><%out.print(totalLeads); %></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                  </div>
+                  <%} %>
+                <%if(access_id == 1 || access_id == 2 || access_id == 4 || access_id == 5){ %>
                 <div class="row re">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border">
@@ -138,7 +162,7 @@
                             <ul class="list-inline two-part">
 <!--                                 <li><i class="icon-tag text-purple"></i></li> -->
 									 <li><i class="icon-tag text-info-new"></i></li>
-                                <li class="text-right"><span class="counter dashboard-text" ><%out.print(totalSoldInventory); %></span></li>
+                                <li class="text-right"><span class="counter dashboard-text" ><%out.print(totalInventorySold); %></span></li>
                             </ul>
                         </div>
                     </div>
@@ -424,7 +448,7 @@
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
                                             <h1 class="text-info sales-income">Rs <%out.print(Math.round(totalPropertySold)); %></h1>
-                                            <p class="text-muted"></p> <b>(<%out.print(totalSoldInventory); %> Sales)</b> </div>
+                                            <p class="text-muted"></p> <b>(<%out.print(totalInventorySold); %> Sales)</b> </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sparkline2dash" class="text-center"></div>
                                         </div>
@@ -437,7 +461,7 @@
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
                                             <h1 class="text-white sales-income">Rs  <%out.print(Math.round(totalPropertySold)); %></h1>
-                                            <p class="light_op_text"><br></p> <b class="text-white">(<%out.print(totalSoldInventory); %> Sales)</b> </div>
+                                            <p class="light_op_text"><br></p> <b class="text-white">(<%out.print(totalInventorySold); %> Sales)</b> </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sales1" class="text-center"></div>
                                         </div>

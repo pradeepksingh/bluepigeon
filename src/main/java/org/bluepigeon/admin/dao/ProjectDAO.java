@@ -1,5 +1,6 @@
 package org.bluepigeon.admin.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -3395,19 +3396,46 @@ public class ProjectDAO {
 	 */
 	public Long getTotalInventory(BuilderEmployee builderEmployee){
 		Long totalInventory= (long) 0;
-		String hql = "select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and status = 1";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setInteger("builder_id", builderEmployee.getBuilder().getId());
-		totalInventory = (Long) query.uniqueResult();
-		if(totalInventory != null){
-			return totalInventory;
-		}else{
-			return (long)0;
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1 || builderEmployee.getBuilderEmployeeAccessType().getId()==2){
+			totalInventory = getTotalFlatsByBuilderId(builderEmployee.getBuilder().getId());
 		}
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==4 || builderEmployee.getBuilderEmployeeAccessType().getId() ==5 || builderEmployee.getBuilderEmployeeAccessType().getId()==7 ){
+			totalInventory = getTotalFlatsByEmpId(builderEmployee.getId());
+		}
+			return totalInventory;
 	}
 	
+		public Long getTotalFlatsByBuilderId(int builderId){
+			String hql = "select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.builder.id = :builder_id and  builderFlatStatus.id=2 and status = 1";
+		
+			Long totalInventory= (long) 0;
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setInteger("builder_id", builderId);
+			totalInventory = (Long) query.uniqueResult();
+			if(totalInventory != null){
+				return totalInventory;
+			}else{
+				return (long)0;
+			}
+		}
+		
+		public Long getTotalFlatsByEmpId(int empId){
+			Long totalBuyers = (long)0;
+			String sql = "Select count(flat.id) from builder_flat as flat join builder_floor as floor on flat.floor_no = floor.id join builder_building as building on floor.building_id = building.id join builder_project as project on building.project_id = project.id join allot_project as ap on project.id=ap.project_id where flat.status_id=2 and ap.emp_id = :emp_id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			Query query = session.createSQLQuery(sql);
+			query.setParameter("emp_id", empId);
+			BigInteger totalBuyer = (BigInteger) query.uniqueResult();
+			if(totalBuyer != null){
+				totalBuyers = Long.parseLong(totalBuyer.toString());
+				return totalBuyers;
+			}else{
+				return (long)0;
+			}
+		}
 	/* **************************** Stages / Substages **************************** */
 	
 	public List<ProjectWeightage> getProjectWeightage(int project_id) {
@@ -3919,13 +3947,48 @@ public class ProjectDAO {
 	 */
 	public Long getTotalLeads(BuilderEmployee builderEmployee){
 		Long totalLeads =(long) 0;
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1|| builderEmployee.getBuilderEmployeeAccessType().getId() ==2){
+			totalLeads = getTotalLeadsByBuilderId(builderEmployee.getBuilder().getId());
+		}if((builderEmployee.getBuilderEmployeeAccessType().getId() >=4 && builderEmployee.getBuilderEmployeeAccessType().getId() <= 6) || builderEmployee.getBuilderEmployeeAccessType().getId() ==7){
+			totalLeads = getTotalLeadsByEmpId(builderEmployee.getId());
+		}
+		return totalLeads;
+	}
+	/**
+	 * @author pankaj
+	 * @param builderId
+	 * @return
+	 */
+	public Long getTotalLeadsByBuilderId(int builderId){
+		Long totalLeads =(long) 0;
 		String hql = "Select COUNT(*) from BuilderLead where builderProject.builder.id = :builder_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
+		query.setParameter("builder_id", builderId);
 		totalLeads = (Long) query.uniqueResult();
 		if(totalLeads != null){
+			return totalLeads;
+		}else{
+			return (long)0;
+		}
+	}
+	
+	/**
+	 * @author pankaj 
+	 * @param empId
+	 * @return
+	 */
+	public Long getTotalLeadsByEmpId(int empId){
+		Long totalLeads =(long) 0;
+		String hql = "Select COUNT(bl.id) from builder_lead as bl left join allot_leads as al on bl.id = al.lead_id where al.emp_id = :emp_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createSQLQuery(hql);
+		query.setParameter("emp_id", empId);
+		BigInteger totalLead = (BigInteger) query.uniqueResult();
+		if(totalLeads != null){
+			totalLeads = Long.parseLong(totalLead.toString());
 			return totalLeads;
 		}else{
 			return (long)0;
@@ -3939,13 +4002,41 @@ public class ProjectDAO {
 	 */
 	public Long getTotalNumberOfProjects(BuilderEmployee builderEmployee){
 		Long totalProjects =(long) 0;
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1 || builderEmployee.getBuilderEmployeeAccessType().getId() ==2){
+			totalProjects = getTotalNumberOfProjectsByBuilderId(builderEmployee.getBuilder().getId());
+		}
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 4 || builderEmployee.getBuilderEmployeeAccessType().getId() ==5 || builderEmployee.getBuilderEmployeeAccessType().getId()==7){
+			totalProjects = getTotalNumberOfProjectsByEmpId(builderEmployee.getId());
+		}
+		return totalProjects;
+	}
+	
+	public Long getTotalNumberOfProjectsByBuilderId(int builderId){
+		Long totalProjects =(long) 0;
 		String hql = "Select COUNT(*) from BuilderProject where builder.id = :builder_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
+		query.setParameter("builder_id", builderId);
 		totalProjects = (Long) query.uniqueResult();
 		if(totalProjects != null){
+			return totalProjects;
+		}else{
+			return (long)0;
+		}
+	}
+	
+	
+	public Long getTotalNumberOfProjectsByEmpId(int empId){
+		Long totalProjects =(long) 0;
+		String hql = "Select COUNT(project.id) from builder_project as project left join allot_project as ap on ap.project_id = project.id where ap.emp_id = :emp_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createSQLQuery(hql);
+		query.setParameter("emp_id", empId);
+		BigInteger totalProject = (BigInteger) query.uniqueResult();
+		if(totalProjects != null){
+			totalProjects = Long.parseLong(totalProject.toString());
 			return totalProjects;
 		}else{
 			return (long)0;
@@ -3991,6 +4082,8 @@ public class ProjectDAO {
 			return (long)0;
 		}
 	}
+	
+	
 	/**
 	 * 
 	 * @author pankaj
@@ -4006,6 +4099,22 @@ public class ProjectDAO {
 		Double totalRevenue = (Double) query.uniqueResult();
 		return totalRevenue;
 		
+	}
+	
+	public Double getTotalRevenueByEmpId(int empId){
+		Double totalRevenue = 0.0;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "SELECT SUM(project.revenue) from builder_project as project left join allot_project as ap on ap.project_id = project.id where ap.emp_id = :emp_id ";
+		Session session = hibernateUtil.openSession();
+		Query query = session.createSQLQuery(hql);
+		query.setParameter("emp_id", empId);
+		BigInteger totalRevenues = (BigInteger) query.uniqueResult();
+		if(totalRevenues != null){
+			totalRevenue = Double.parseDouble(totalRevenues.toString());
+			return totalRevenue;
+		}else{
+			return totalRevenue;
+		}
 	}
 	/**
 	 * Save source
