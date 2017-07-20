@@ -463,17 +463,18 @@ public class ProjectController extends ResourceConfig {
 		}
 		List<ProjectWeightage> projectWeightages = new ArrayList<ProjectWeightage>();
 		if(ssubstagewt_id != null){
-		for(int i=0 ;i < ssubstagewt_id.size();i++) {
-			ProjectWeightage paw = new ProjectWeightage();
-			paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
-			paw.setStatus(bstatus);
-			projectWeightages.add(paw);
+			for(int i=0 ;i < ssubstagewt_id.size();i++) {
+				ProjectWeightage paw = new ProjectWeightage();
+				paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
+				paw.setStatus(bstatus);
+				projectWeightages.add(paw);
+			}
+			if(projectWeightages.size() > 0) {
+				msg = projectDAO.updateProjectWeightageStatus(projectWeightages, project_id);
+			}
 		}
-		if(projectWeightages.size() > 0) {
-			msg = projectDAO.updateProjectWeightageStatus(projectWeightages, project_id);
-		}
-		}
-		try {	
+		try {
+			projectDAO.updateProjectCompletion(project_id);
 			List<ProjectImageGallery> projectImageGalleries = new ArrayList<ProjectImageGallery>();
 			//for multiple inserting images.
 			if (project_images.size() > 0) {
