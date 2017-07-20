@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.bluepigeon.admin.data.BuilderCompletionStatus;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.BuildingListData;
@@ -3729,6 +3730,12 @@ public class ProjectDAO {
 	public ResponseMessage updateFlatCompletion(int flat_id) {
 		ResponseMessage resp = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
+		String newhql = "from BuilderFlat where id = :flat_id";
+		Session newsession = hibernateUtil.openSession();
+		Query newquery = newsession.createQuery(newhql);
+		newquery.setParameter("flat_id", flat_id);
+		List<BuilderFlat> resultnew = newquery.list();
+		newsession.close();
 		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from flat_weightage as a where a.flat_id = "+flat_id+" group by a.stage_id";
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql)
@@ -3745,9 +3752,12 @@ public class ProjectDAO {
 		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
 		List<FlatAmenityTotal> resultRaw2 = query2.list();
 		session2.close();
+		Double amenity_weightage = 0.0;
 		for(FlatAmenityTotal flatAmenityTotal :resultRaw2) {
-			finalWeightage += (flatAmenityTotal.getTotalSubstageWeightage()/percent*flatAmenityTotal.getAmenityWeightage());
+			amenity_weightage += (flatAmenityTotal.getTotalSubstageWeightage()*flatAmenityTotal.getAmenityWeightage()/percent);
 		}
+		amenity_weightage = amenity_weightage * resultnew.get(0).getAmenityWeightage()/100;
+		finalWeightage = finalWeightage + amenity_weightage;
 		Session session1 = hibernateUtil.openSession();
 		session1.beginTransaction();
 		String hql1 = "UPDATE BuilderFlat set completionStatus = "+finalWeightage+" where id = "+flat_id;
@@ -3761,6 +3771,19 @@ public class ProjectDAO {
 	public ResponseMessage updateFloorCompletion(int floor_id) {
 		ResponseMessage resp = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
+		String newhql = "from BuilderFloor where id = :floor_id";
+		Session newsession = hibernateUtil.openSession();
+		Query newquery = newsession.createQuery(newhql);
+		newquery.setParameter("floor_id", floor_id);
+		List<BuilderFloor> resultnew = newquery.list();
+		newsession.close();
+		String flathql = "SELECT sum(a.completion_status*a.weightage/100) as completionStatus from builder_flat as a where a.floor_no = :floor_id";
+		Session flatsession = hibernateUtil.getSessionFactory().openSession();
+		Query flatquery = flatsession.createSQLQuery(flathql)
+				.setResultTransformer(Transformers.aliasToBean(BuilderCompletionStatus.class));
+		flatquery.setParameter("floor_id", floor_id);
+		List<BuilderCompletionStatus> flatresult = flatquery.list();
+		flatsession.close();
 		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from floor_weightage as a where a.floor_id = "+floor_id+" group by a.stage_id";
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql)
@@ -3769,17 +3792,21 @@ public class ProjectDAO {
 		session.close();
 		Double finalWeightage = 0.0;
 		Double percent = 100.00;
+		Double flatWeightage = flatresult.get(0).getCompletionStatus()*resultnew.get(0).getFlatWeightage()/percent;
 		for(FlatTotal flatTotal :resultRaw) {
-			finalWeightage += (flatTotal.getTotalSubstageWeight()/percent*flatTotal.getStageWeight());
+			finalWeightage += (flatTotal.getTotalSubstageWeight()*flatTotal.getStageWeight()/percent);
 		}
 		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from floor_amenity_weightage as a where a.floor_id = "+floor_id+" group by a.amenity_id";
 		Session session2 = hibernateUtil.getSessionFactory().openSession();
 		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
 		List<FlatAmenityTotal> resultRaw2 = query2.list();
 		session2.close();
+		Double amenity_weightage = 0.0;
 		for(FlatAmenityTotal flatAmenityTotal :resultRaw2) {
-			finalWeightage += (flatAmenityTotal.getTotalSubstageWeightage()/percent*flatAmenityTotal.getAmenityWeightage());
+			amenity_weightage += (flatAmenityTotal.getTotalSubstageWeightage()*flatAmenityTotal.getAmenityWeightage()/percent);
 		}
+		amenity_weightage = amenity_weightage * resultnew.get(0).getAmenityWeightage()/100;
+		finalWeightage = finalWeightage + amenity_weightage + flatWeightage;
 		Session session1 = hibernateUtil.openSession();
 		session1.beginTransaction();
 		String hql1 = "UPDATE BuilderFloor set completionStatus = "+finalWeightage+" where id = "+floor_id;
@@ -3793,6 +3820,19 @@ public class ProjectDAO {
 	public ResponseMessage updateBuildingCompletion(int building_id) {
 		ResponseMessage resp = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
+		String newhql = "from BuilderBuilding where id = :building_id";
+		Session newsession = hibernateUtil.openSession();
+		Query newquery = newsession.createQuery(newhql);
+		newquery.setParameter("building_id", building_id);
+		List<BuilderBuilding> resultnew = newquery.list();
+		newsession.close();
+		String flathql = "SELECT sum(a.completion_status*a.weightage/100) as completionStatus from builder_floor as a where a.building_id = :building_id";
+		Session flatsession = hibernateUtil.getSessionFactory().openSession();
+		Query flatquery = flatsession.createSQLQuery(flathql)
+				.setResultTransformer(Transformers.aliasToBean(BuilderCompletionStatus.class));
+		flatquery.setParameter("building_id", building_id);
+		List<BuilderCompletionStatus> flatresult = flatquery.list();
+		flatsession.close();
 		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from building_weightage as a where a.building_id = "+building_id+" group by a.stage_id";
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql)
@@ -3801,6 +3841,10 @@ public class ProjectDAO {
 		session.close();
 		Double finalWeightage = 0.0;
 		Double percent = 100.00;
+		
+		Double flatWeightage = 0.0;
+		if(flatresult.get(0).getCompletionStatus() != null)
+		flatWeightage = flatresult.get(0).getCompletionStatus()*resultnew.get(0).getFloorWeightage()/percent;
 		for(FlatTotal flatTotal :resultRaw) {
 			finalWeightage += (flatTotal.getTotalSubstageWeight()/percent*flatTotal.getStageWeight());
 		}
@@ -3809,9 +3853,12 @@ public class ProjectDAO {
 		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
 		List<FlatAmenityTotal> resultRaw2 = query2.list();
 		session2.close();
+		Double amenity_weightage = 0.0;
 		for(FlatAmenityTotal flatAmenityTotal :resultRaw2) {
-			finalWeightage += (flatAmenityTotal.getTotalSubstageWeightage()/percent*flatAmenityTotal.getAmenityWeightage());
+			amenity_weightage += (flatAmenityTotal.getTotalSubstageWeightage()*flatAmenityTotal.getAmenityWeightage()/percent);
 		}
+		amenity_weightage = amenity_weightage * resultnew.get(0).getAmenityWeightage()/100;
+		finalWeightage = finalWeightage + amenity_weightage + flatWeightage;
 		Session session1 = hibernateUtil.openSession();
 		session1.beginTransaction();
 		String hql1 = "UPDATE BuilderBuilding set completionStatus = "+finalWeightage+" where id = "+building_id;
@@ -3825,25 +3872,43 @@ public class ProjectDAO {
 	public ResponseMessage updateProjectCompletion(int project_id) {
 		ResponseMessage resp = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from project_weightage as a where a.project_id = "+project_id+" group by a.stage_id";
+		String newhql = "from BuilderProject where id = :project_id";
+		Session newsession = hibernateUtil.openSession();
+		Query newquery = newsession.createQuery(newhql);
+		newquery.setParameter("project_id", project_id);
+		List<BuilderProject> resultnew = newquery.list();
+		newsession.close();
+		String flathql = "SELECT sum(a.completion_status*a.weightage/100) as completionStatus from builder_building as a where a.project_id = :project_id";
+		Session flatsession = hibernateUtil.getSessionFactory().openSession();
+		Query flatquery = flatsession.createSQLQuery(flathql)
+				.setResultTransformer(Transformers.aliasToBean(BuilderCompletionStatus.class));
+		flatquery.setParameter("project_id", project_id);
+		List<BuilderCompletionStatus> flatresult = flatquery.list();
+		flatsession.close();
+		/*String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from project_weightage as a where a.project_id = "+project_id+" group by a.stage_id";
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql)
 				.setResultTransformer(Transformers.aliasToBean(FlatTotal.class));
 		List<FlatTotal> resultRaw = query.list();
-		session.close();
+		session.close();*/
 		Double finalWeightage = 0.0;
 		Double percent = 100.00;
-		for(FlatTotal flatTotal :resultRaw) {
+		Double flatWeightage = flatresult.get(0).getCompletionStatus()*resultnew.get(0).getBuildingWeightage()/percent;
+		System.out.println("Percentage:"+flatWeightage);
+		/*for(FlatTotal flatTotal :resultRaw) {
 			finalWeightage += (flatTotal.getTotalSubstageWeight()/percent*flatTotal.getStageWeight());
-		}
+		}*/
 		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from project_amenity_weightage as a where a.project_id = "+project_id+" group by a.amenity_id";
 		Session session2 = hibernateUtil.getSessionFactory().openSession();
 		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
 		List<FlatAmenityTotal> resultRaw2 = query2.list();
 		session2.close();
+		Double amenity_weightage = 0.0;
 		for(FlatAmenityTotal flatAmenityTotal :resultRaw2) {
-			finalWeightage += (flatAmenityTotal.getTotalSubstageWeightage()/percent*flatAmenityTotal.getAmenityWeightage());
+			amenity_weightage += (flatAmenityTotal.getTotalSubstageWeightage()*flatAmenityTotal.getAmenityWeightage()/percent);
 		}
+		amenity_weightage = amenity_weightage * resultnew.get(0).getAmenityWeightage()/100;
+		finalWeightage = (double) Math.round(finalWeightage + amenity_weightage + flatWeightage);
 		Session session1 = hibernateUtil.openSession();
 		session1.beginTransaction();
 		String hql1 = "UPDATE BuilderProject set completionStatus = "+finalWeightage+" where id = "+project_id;
