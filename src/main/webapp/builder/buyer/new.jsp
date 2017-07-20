@@ -461,13 +461,14 @@
 		                                    <label for="example-search-input" class="col-sm-6 col-form-label">Total Sale Value</label>
 		                                    <div class="col-sm-6">
 		                                    	<div>
-		                                        	<input class="form-control" readonly="true" type="text" value="<%out.print(flatPricingDetails.get(0).getPost()); %>" id="toatl_sale_value" name="total_sale_value">
+		                                        	<input class="form-control" readonly="true" type="text" value="<%out.print(flatPricingDetails.get(0).getTotalCost()); %>" id="toatl_sale_value" name="total_sale_value">
 		                                        </div>
 		                                        <div class="messageContainer"></div>
 		                                    </div>
 		                               </div>
 		                             </div>
 		                          </div>
+		                          <input type="hidden" id="h_sale_vale" name="h_sale_value" value="<%out.print(flatPricingDetails.get(0).getTotalCost());%>"/>
                                <%} else{%>
                                <input type="hidden" id="project_id" name="project_id" value=""/>  
                                <div class="row">
@@ -631,7 +632,8 @@
                                 </div>
                                </div>
                                 <div id="vimessages3" class="tab-pane" aria-expanded="true">      
-                                 <%for(FlatPaymentSchedule flatPayment: flatPayments ) {%>  
+                                 <% int a=1;
+                                 for(FlatPaymentSchedule flatPayment: flatPayments ) {%>  
                                 <input type="hidden" name="schedule_count" id="schedule_count" value="1"/>
 	                                <div class="form-group row">
 	                                    <label for="example-search-input" class="col-2 col-form-label">Milestone*</label>
@@ -640,11 +642,11 @@
 	                                    </div>
 	                                    <label for="example-search-input" class="col-2 col-form-label">% of net payable</label>
 	                                    <div class="col-2">
-	                                       <input type="text" class="form-control" id="payable" name="payable[]" value="<%out.print(flatPayment.getPayable());%>"/>
+	                                       <input type="text" class="form-control" id="payable<%out.print(a); %>" onkeyup="calculateAmount(<%out.print(a); %>);" onkeypress=" return isNumber(event, this);" name="payable[]" value="<%out.print(flatPayment.getPayable());%>"/>
 	                                    </div>
 	                                    <label for="example-search-input" class="col-1 col-form-label">Amount</label>
 	                                    <div class="col-2">
-	                                       <input type="text" class="form-control" id="amount" name="amount[]" value="<%out.print(flatPayment.getAmount());%>"/>
+	                                       <input type="text" class="form-control" id="amount<%out.print(a); %>" onkeyup="calculateAmount(<%out.print(a); %>);" onkeypress=" return isNumber(event, this);" name="amount[]" value="<%out.print(flatPayment.getAmount());%>"/>
 	                                    </div>
 <!-- 	                                     <i class="fa fa-times"></i> -->
 	                                </div>
@@ -668,7 +670,7 @@
 <!-- 	                                <div class="offset-sm-9 col-sm-7"> -->
 <!--                                        <a href="javascript:addMoreSchedule();"> <button type="button" class="">+ Add More Schedules</button></a> -->
 <!--                                     </div> -->
-										<%} %>
+										<%a++;} %>
 	                                <div class="offset-sm-5 col-sm-7">
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" onclick="previous3();">Previous</button>
                                         <button type="button" class="btn btn-info waves-effect waves-light m-t-10" id="next3" onclick="show3();">Next</button>
@@ -746,7 +748,16 @@
 </body>
 </html>
 <script type="text/javascript">
+function calculateAmount(id){
 
+	var amount = $("#payable"+id).val()*$("#h_sale_value").val()/100;
+		$("#amount"+id).val(amount.toFixed(1));
+	}
+
+	function calcultatePercentage(id){
+		var percentage = $("#amount"+id).val()/$("#h_sale_value").val()*100;
+		$("#payable"+id).val(percentage.toFixed(1));
+	}
 function showOffers()
 {
 	$("#displayoffers").show(); 
@@ -1090,6 +1101,17 @@ function addMoreBuyers() {
 function removeBuyer(id) {
 	$("#buyer-"+id).remove();
 }
+function isNumber(evt, element) {
+
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+} 
 
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());

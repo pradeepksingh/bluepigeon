@@ -33,6 +33,7 @@ import org.bluepigeon.admin.model.BuyerOffer;
 import org.bluepigeon.admin.model.BuyerPayment;
 import org.bluepigeon.admin.model.BuyerUploadDocuments;
 import org.bluepigeon.admin.model.BuyingDetails;
+import org.bluepigeon.admin.model.FlatPricingDetails;
 import org.bluepigeon.admin.model.GlobalBuyer;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
@@ -116,6 +117,7 @@ public class BuyerDAO {
 		buyerSession.getTransaction().commit();
 		buyerSession.close();
 		updateFlatStatus(buyer.getBuilderFlat().getId());
+		updateProject(buyer);
 		response.setId(buyer.getId());
 		response.setStatus(1);
 		response.setMessage("Buyer Added Successfully");
@@ -133,6 +135,30 @@ public class BuyerDAO {
 		query.executeUpdate();
 		session.getTransaction().commit();
 		session.close();
+	}
+	public void updateProject(Buyer buyer){
+		String projecthql = "from BuilderProject where id = :id";
+		String flatTotal = "from FlatPricingDetails where builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session projectSession = hibernateUtil.openSession();
+		Query projectQuery = projectSession.createQuery(projecthql);
+		projectQuery.setParameter("id", buyer.getBuilderProject().getId());
+		BuilderProject builderProject = (BuilderProject) projectQuery.list().get(0);
+		Session flatSession = hibernateUtil.openSession();
+		Query flatQuery = flatSession.createQuery(flatTotal);
+		Session updateSession = hibernateUtil.openSession();
+		if(builderProject != null){
+			flatQuery.setParameter("flat_id",buyer.getBuilderFlat().getId() );
+			FlatPricingDetails flatPricingDetails = (FlatPricingDetails)flatQuery.uniqueResult();
+			double revenue = builderProject.getRevenue() + flatPricingDetails.getTotalCost();
+			builderProject.setRevenue(revenue);
+			updateSession.beginTransaction();
+			updateSession.update(builderProject);
+			updateSession.getTransaction().commit();
+			updateSession.close();
+		}
+		projectSession.close();
+		flatSession.close();
 	}
 	
 	public void insertBuilderBuyer(List<Buyer> buyers){
