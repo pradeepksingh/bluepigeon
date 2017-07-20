@@ -4090,15 +4090,29 @@ public class ProjectDAO {
 	 * @param builderId
 	 * @return
 	 */
-	public Double getRevenueOfsoldInventoryByBuilderId(BuilderEmployee builderEmployee){
+	public Double getTotalRevenues(BuilderEmployee builderEmployee){
+		Double totalRevenue = 0.0;
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1 || builderEmployee.getBuilderEmployeeAccessType().getId() ==2){
+			totalRevenue = getRevenueOfsoldInventoryByBuilderId(builderEmployee.getBuilder().getId());
+		}
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 4 || builderEmployee.getBuilderEmployeeAccessType().getId() == 5 || builderEmployee.getBuilderEmployeeAccessType().getId() ==7){
+			
+			totalRevenue = getTotalRevenueByEmpId(builderEmployee.getId());
+		}
+	    return totalRevenue;
+	}
+	public Double getRevenueOfsoldInventoryByBuilderId(int builderId){
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		String hql = "SELECT SUM(revenue)from BuilderProject where builder.id = :builder_id ";
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
+		query.setParameter("builder_id", builderId);
 		Double totalRevenue = (Double) query.uniqueResult();
-		return totalRevenue;
-		
+		if(totalRevenue != null){
+			return totalRevenue;
+		}else{
+			return 0.0;
+		}
 	}
 	
 	public Double getTotalRevenueByEmpId(int empId){

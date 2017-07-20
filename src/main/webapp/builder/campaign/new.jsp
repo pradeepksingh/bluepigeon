@@ -19,6 +19,8 @@
  	int project_size = 0;
 	int type_size = 0;
 	int city_size = 0;
+	int emp_id = 0;
+	int access_id =0;
  	List<ProjectData> builderProjects = null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
    	session = request.getSession(false);
@@ -32,6 +34,8 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			p_user_id = builder.getBuilder().getId();
+			access_id = builder.getBuilderEmployeeAccessType().getId();
+			
 		}
 		if(p_user_id > 0){
 			builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
@@ -140,7 +144,9 @@
                               
                                <div id="vimessages" class="tab-pane active" aria-expanded="false">
                                 <div class="col-12">
-                               		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(builder.getId());%>"/>
+                                	<%if(access_id == 3){ %>
+                               		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
+                               		<%} %>
                                 	 <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(p_user_id); %>" />
 		                               <div class="row">
 		                               	<div class="col-sm-6"> 	 

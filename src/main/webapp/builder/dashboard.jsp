@@ -57,7 +57,7 @@
 					//totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
 					
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
-					totalPropertySold = new ProjectDAO().getRevenueOfsoldInventoryByBuilderId(builder);
+					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
 					//totalRevenue = totalPropertySold * totalInventorySold;
 					
 				}
@@ -122,30 +122,7 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <!--.row -->
-                <%if(access_id == 7){%>
-                  <div class="row re">
-                    <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box white-border">
-                            <h3 class="box-title">Total Projects</h3>
-                            <ul class="list-inline two-part">
-                                <li><i class="ti-home text-info-new"></i></li>
-                                <li class="text-right"><span class="counter dashboard-text"><%out.print(totalProjects); %></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                     <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box white-border">
-                            <h3 class="box-title">Total leads</h3>
-                            <ul class="list-inline two-part">
-<!--                                 <li><i class="icon-user text-danger"></i></li> -->
-                                 <li><i class="icon-user text-info-new"></i></li>
-                                <li class="text-right"><span class="counter dashboard-text"><%out.print(totalLeads); %></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                  </div>
-                  <%} %>
-                <%if(access_id == 1 || access_id == 2 || access_id == 4 || access_id == 5){ %>
+                <%if(access_id == 1 || access_id == 2 || access_id == 4 || access_id == 5 || access_id == 7){ %>
                 <div class="row re">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border">
