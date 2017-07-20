@@ -92,6 +92,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.transform.Transformers;
+import org.school.admin.data.RatingReviewData;
 
 
 public class ProjectDAO {
@@ -2964,30 +2965,39 @@ public class ProjectDAO {
 	 * @param builderEmployee
 	 * @return List<ProjectList>
 	 */
-	public List<ProjectList> getBuilderActiveProjectsByBuilderEmployee(BuilderEmployee builderEmployee) {
+	public List<ProjectList> getBuilderActiveProjectsByEmployeeId(int empId) {
 	//	System.err.println("builderId :: "+builderId);
-		Long totalLeads = (long)0;
-		String sql ="";
-		String hql = "";
-		Query query = null;
-		if(builderEmployee.getBuilderEmployeeAccessType().getId()==1 || builderEmployee.getBuilderEmployeeAccessType().getId()==2){
-			hql = "from BuilderProject where builder.id = :builder_id and status=1 order by id desc";
-		}
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=3 && builderEmployee.getBuilderEmployeeAccessType().getId()<=7)
-		 sql = "select * from builder_project as a inner join allot_project as b on a.id=b.project_id where b.emp_id=:emp_id and a.status=1 order by a.id desc";
+//		Long totalLeads = (long)0;
+//		String sql ="";
+//		String hql = "";
+//		Query query = null;
+//		if(builderEmployee.getBuilderEmployeeAccessType().getId()==1 || builderEmployee.getBuilderEmployeeAccessType().getId()==2){
+//			hql = "from BuilderProject where builder.id = :builder_id and status=1 order by id desc";
+//		}
+//		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=3 && builderEmployee.getBuilderEmployeeAccessType().getId()<=7)
+//		 sql = "select * from builder_project as a inner join allot_project as b on a.id=b.project_id where b.emp_id=:emp_id and a.status=1 order by a.id desc";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		if(builderEmployee.getBuilderEmployeeAccessType().getId()==1 || builderEmployee.getBuilderEmployeeAccessType().getId()==2)
-			 query = session.createQuery(hql);
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=3 && builderEmployee.getBuilderEmployeeAccessType().getId()<=7)
-			query = session.createSQLQuery(sql);
+		
+		
+		String hql = "SELECT ap.project_id as id, project.name as name, project.status as status,project.revenue as totalRevenu,"
+		+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
+		+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
+		+" c.name as cityName , l.id as localityId, l.name as localityName,  "
+		+"lead.* as totalLeads "
+		+"FROM allot_project ap inner join builder_project project ON(ap.project_id = project.id) "
+		+"left join builder build ON(project.group_id = build.id) left join city c ON(project.city_id = c.id)"
+		+" left join locality l ON(project.locality_id = l.id) left join builder_lead lead ON(project.id = lead.project_id)"
+		+"WHERE ap.emp_id = :emp_id group by project.id";
+				
+		Query query = session.createQuery(hql)
+				.setParameter("emp_id", empId)
+				.setResultTransformer(Transformers.aliasToBean(ProjectList.class));
+		List<ProjectList> projects 
+		
 		query.setFirstResult(0);
 		query.setMaxResults(100);
-		if(builderEmployee.getBuilderEmployeeAccessType().getId()==1 || builderEmployee.getBuilderEmployeeAccessType().getId()==2)
-			query.setParameter("builder_id", builderEmployee.getBuilder().getId());
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=3 && builderEmployee.getBuilderEmployeeAccessType().getId()<=7)
-			query.setParameter("emp_id", builderEmployee.getId());
-		List<BuilderProject> result = query.list();
+	
 		List<ProjectList> projects = new ArrayList<ProjectList>();
 		for(BuilderProject builderproject : result) {
 			ProjectList newproject = new ProjectList();
@@ -3067,6 +3077,8 @@ public class ProjectDAO {
 		session.close();
 		return projects;
 	}
+	
+	
 	public ResponseMessage deleteProjectOfferInfo(int id) {
 		String hql = "delete from BuilderProjectOfferInfo where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
