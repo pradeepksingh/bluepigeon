@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AllotProject;
 import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
+import org.bluepigeon.admin.model.BuilderFloorAmenity;
 import org.bluepigeon.admin.model.BuilderLogo;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Country;
@@ -21,6 +24,7 @@ import org.bluepigeon.admin.data.BarGraphData;
 import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.EmployeeList;
+import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.util.HibernateUtil;
 
 public class BuilderDetailsDAO {
@@ -577,46 +581,60 @@ public class BuilderDetailsDAO {
 	 * @param localityId
 	 * @return List<BuilderProjectList>
 	 */
-	public List<BuilderProjectList> getProjectFilters(int builderId,int countryId,int stateId,int cityId, int localityId){
+	public List<BuilderProjectList> getProjectFilters(int empId,int countryId,int stateId,int cityId, int localityId){
 		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
-		String hql = "from BuilderProject where ";
+		String hqlnew = "from BuilderEmployee where id = "+empId;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session sessionnew = hibernateUtil.openSession();
+		Query querynew = sessionnew.createQuery(hqlnew);
+		List<BuilderEmployee> employees = querynew.list();
+		BuilderEmployee builderEmployee = employees.get(0);
+		sessionnew.close();
+		String hql = "SELECT project.id as id, project.name as name, "
+				+"project.completion_status as completionStatus,project.inventory_sold as sold, "
+				+"project.total_inventory as totalSold, "
+				+"c.name as city, "
+				+"count(lead.id) as totalLeads ";
 		String where = "";
-		
-		if(builderId > 0){
-			where +="builder.id = :builder_id";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
+			hql = hql + "FROM  builder_project as project inner join allot_project as ap on project.id=ap.project_id "
+					+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+					+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id WHERE ";
+			where +="ap.emp_id = "+builderEmployee.getId();
+		} else {
+			hql = hql + "FROM  builder_project as project "
+			+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+			+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id WHERE ";
+			where +="build.id = "+builderEmployee.getBuilder().getId();
 		}
 		if(countryId > 0){
 			if(where!="")
-				where += " AND country.id = :country_id";
+				where += " AND project.country_id = :country_id";
 			else
-				where += "country.id = :country_id";
+				where += "project.country_id = :country_id";
 		}
 		if(stateId > 0){
 			if(where !="")
-				where += " AND state.id = :state_id";
+				where += " AND project.state_id = :state_id";
 			else
-				where += "state.id = :state_id";
+				where += "project.state_id = :state_id";
 		}
 		if(cityId > 0){
 			if(where != "")
-				where +=" AND city.id = :city_id";
+				where +=" AND project.city_id = :city_id";
 			else
-				where +="city.id = :city_id";
+				where +="project.city_id = :city_id";
 		}
 		if(localityId > 0){
 			if(where != "")
-				where +=" AND locality.id = :locality_id";
+				where +=" AND project.area_id = :locality_id";
 			else
-				where +="locality.id = :locality_id";
-			
+				where +="project.area_id = :locality_id";
 		}
-		hql += where + " AND status=1 order by id desc";
-	//	String imageHql = "from ProjectImageGallery where builderProject.id = :project_id";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		if(builderId > 0)
-			query.setParameter("builder_id", builderId);
+		hql += where + " AND project.status=1 order by project.id desc";
+		try {
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuilderProjectList.class));
 		if(countryId > 0)
 			query.setParameter("country_id", countryId);
 		if(stateId > 0)
@@ -625,25 +643,9 @@ public class BuilderDetailsDAO {
 			query.setParameter("city_id",cityId);
 		if(localityId > 0)
 			query.setParameter("locality_id", localityId);
-		List<BuilderProject> builderProjects = query.list();
-		for(BuilderProject builderProject : builderProjects){
-			BuilderProjectList builderProjectList = new BuilderProjectList();
-			builderProjectList.setId(builderProject.getId());
-			builderProjectList.setName(builderProject.getName());
-			builderProjectList.setCity(builderProject.getCity().getName());
-			if(builderProject.getTotalInventory()!=null)
-				builderProjectList.setTotalSold(builderProject.getTotalInventory());
-			if(builderProject.getInventorySold() != null)
-				builderProjectList.setSold(builderProject.getInventorySold());
-			builderProjectList.setCompletionStatus(builderProject.getCompletionStatus());
-			ProjectDAO projectDAO = new ProjectDAO();
-			builderProjectList.setTotalLeads(projectDAO.getTotalLeadsByProjectId(builderProject.getId()));
-			try{
-				builderProjectList.setImage(projectDAO.getProjectImagesByProjectId(builderProject.getId()).get(0).getImage());
-			}catch(Exception e){
-				builderProjectList.setImage("");
-			}
-			builderProjectLists.add(builderProjectList);
+			builderProjectLists = query.list();
+		} catch(Exception e) {
+			//
 		}
 		return builderProjectLists;
 	}
@@ -761,58 +763,16 @@ public class BuilderDetailsDAO {
      */
 	public List<BarGraphData> getBarGraphByBuilderId(BuilderEmployee builderEmployee){
 		List<BarGraphData> barGraphDatas = new ArrayList<BarGraphData>();
-		String hql = "Select DISTINCT YEAR(B.possessionDate) from BuilderProject B where B.builder.id = :builder_id and B.status=1 group by YEAR(B.possessionDate)";
-		String projectHql = "from BuilderProject where builder.id =:builder_id and status=1";
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2) {
+			hql = "SELECT DISTINCT YEAR(b.possession_date) from builder_project as b inner join builder_employee as e on b.id = e.id where b.group_id = :builder_id and b.status=1 and e.id = "+builderEmployee.getId()+" group by YEAR(b.possession_date)";
+		} else {
+			hql = "SELECT DISTINCT YEAR(b.possession_date) from builder_project as b where b.group_id = :builder_id and b.status=1 group by YEAR(b.possession_date)";
+		}
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
+		Query query = session.createSQLQuery(hql);
 		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
-		Session projectSession = hibernateUtil.openSession();
-		Query projectQuery = projectSession.createQuery(projectHql);
-		projectQuery.setParameter("builder_id",  builderEmployee.getBuilder().getId());
-		//Double builderProjectLists = (Double)query.list();
-	//	List<BuilderProject> builderProjectList = query.list();
-		
-		//List<BuilderProject> projectList = projectQuery.list();
-		//System.err.println("Builder Id :: "+builderId);
-		//if(projectList != null && builderProjectLists != null){
-//			try{
-//				for(int i=0;i< builderProjectLists.SIZE;i++){
-//					BarGraphData barGraphData = new BarGraphData();
-//					barGraphData.setBuiltYear(projectList.get(i).getPossessionDate());
-//					barGraphData.setTotalFlats(getTotalFlatsByProjectId(projectList.get(i).getId()));
-//					barGraphData.setTotalBuyers(getTotalBuyersByProjectId(projectList.get(i).getId()));
-//					barGraphData.setTotalSold(getTotalsoldFlatsByProjectId(projectList.get(i).getId()));
-//					barGraphDatas.add(barGraphData);
-//					System.err.println("Year :: "+builderProjectLists);
-//				}
-//			}catch(IndexOutOfBoundsException e){
-//				System.err.println("Index Out of bound exception :: Data not present in DB");
-//				e.printStackTrace();
-//				//Return this when no data present in database.
-//				BarGraphData barGraphData = new BarGraphData();
-//				barGraphData.setBuiltYear(null);
-//				barGraphData.setTotalFlats((long)0);
-//				barGraphData.setTotalBuyers((long)0);
-//				barGraphData.setTotalSold((long)0);
-//				barGraphDatas.add(barGraphData);
-//			}catch(Exception ew){
-//				System.err.println("Error::");
-//				ew.printStackTrace();
-//			}
-		//}
-		// for(BuilderProject builderProject : builderProjectList){
-//			 BarGraphData barGraphData = new BarGraphData();
-//			 	barGraphData.setBuiltYear(builderProject.getPossessionDate());
-//				barGraphData.setTotalFlats(getTotalFlatsByProjectId(builderProject.getId()));
-//				barGraphData.setTotalBuyers(getTotalBuyersByProjectId(builderProject.getId()));
-//				barGraphData.setTotalSold(getTotalsoldFlatsByProjectId(builderProject.getId()));
-				//barGraphDatas.add(barGraphData);
-//			 System.err.println("Year :: "+builderProject.getPossessionDate());
-//			 System.err.println("Total Flats :: "+getTotalFlatsByProjectId(builderProject.getId()));
-//			 System.err.println("Total Buyers :: "+getTotalBuyersByProjectId(builderProject.getId()));
-//			 System.err.println("Total Sold Flats :: "+getTotalsoldFlatsByProjectId(builderProject.getId()));
-		// }
 		if(query.list() != null){
 			int arr[]= new int[query.list().size()];
 			System.err.println("Array :: "+arr);

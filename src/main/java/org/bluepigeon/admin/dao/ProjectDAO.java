@@ -93,7 +93,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.transform.Transformers;
-import org.school.admin.data.RatingReviewData;
 
 
 public class ProjectDAO {
@@ -2919,114 +2918,35 @@ public class ProjectDAO {
 	 * @param builderId
 	 * @return List<BuilderProject>
 	 */
-	public List<ProjectList> getBuilderActiveProjectsByBuilderId(int builderId) {
-		System.err.println("builderId :: "+builderId);
-		Long totalLeads = (long)0;
-		String hql = "from BuilderProject where builder.id = :builder_id and status=1 order by id desc";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setFirstResult(0);
-		query.setMaxResults(100);
-		query.setParameter("builder_id", builderId);
-		List<BuilderProject> result = query.list();
-		List<ProjectList> projects = new ArrayList<ProjectList>();
-		for(BuilderProject builderproject : result) {
-			ProjectList newproject = new ProjectList();
-			newproject.setId(builderproject.getId());
-			newproject.setName(builderproject.getName());
-			newproject.setStatus(builderproject.getStatus());
-			newproject.setBuilderId(builderproject.getBuilder().getId());
-			newproject.setBuilderName(builderproject.getBuilder().getName());
-			newproject.setCityId(builderproject.getCity().getId());
-			newproject.setCityName(builderproject.getCity().getName());
-			newproject.setLocalityId(builderproject.getLocality().getId());
-			newproject.setLocalityName(builderproject.getLocality().getName());
-			newproject.setCompletionStatus(builderproject.getCompletionStatus());
-			if(builderproject.getInventorySold() != null){
-				newproject.setSold(builderproject.getInventorySold());
-			}
-			if(builderproject.getTotalInventory() != null){
-				newproject.setTotalSold(builderproject.getTotalInventory());
-			}
-			totalLeads = getTotalLeadsByProjectId(builderproject.getId());
-			if(totalLeads != null){
-				newproject.setTotalLeads(totalLeads.intValue());
-			}
-			System.out.println("Project name :: "+builderproject.getName());
-			projects.add(newproject);
+	public List<ProjectList> getBuilderActiveProjectsByBuilder(BuilderEmployee builderEmployee) {
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
+			hql = "SELECT project.id as id, project.name as name, project.status as status,project.revenue as totalRevenu,"
+				+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
+				+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
+				+"c.name as cityName, l.id as localityId, l.name as localityName, "
+				+"count(lead.id) as totalLeads "
+				+"FROM  builder_project as project "
+				+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+				+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
+				+"WHERE project.group_id = "+builderEmployee.getBuilder().getId()+" group by project.id";
+		} else {
+			hql = "SELECT project.id as id, project.name as name, project.status as status,project.revenue as totalRevenu,"
+					+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
+					+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
+					+"c.name as cityName, l.id as localityId, l.name as localityName, "
+					+"count(lead.id) as totalLeads "
+					+"FROM  builder_project as project inner join allot_project ap ON project.id = ap.project_id "
+					+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+					+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
+					+"WHERE ap.emp_id = "+builderEmployee.getId()+" group by project.id";
 		}
-		session.close();
-		return projects;
-	}
-	
-	/**
-	 * Get all active projects by builderEmployee
-	 * @author pankaj
-	 * @param builderEmployee
-	 * @return List<ProjectList>
-	 */
-	public List<ProjectList> getBuilderActiveProjectsByEmployeeId(int empId) {
-	//	System.err.println("builderId :: "+builderId);
-//		Long totalLeads = (long)0;
-//		String sql ="";
-//		String hql = "";
-//		Query query = null;
-//		if(builderEmployee.getBuilderEmployeeAccessType().getId()==1 || builderEmployee.getBuilderEmployeeAccessType().getId()==2){
-//			hql = "from BuilderProject where builder.id = :builder_id and status=1 order by id desc";
-//		}
-//		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=3 && builderEmployee.getBuilderEmployeeAccessType().getId()<=7)
-//		 sql = "select * from builder_project as a inner join allot_project as b on a.id=b.project_id where b.emp_id=:emp_id and a.status=1 order by a.id desc";
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		
-		
-		String hql = "SELECT ap.project_id as id, project.name as name, project.status as status,project.revenue as totalRevenu,"
-		+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
-		+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
-		+" c.name as cityName , l.id as localityId, l.name as localityName,  "
-		+"lead.* as totalLeads "
-		+"FROM allot_project ap inner join builder_project project ON(ap.project_id = project.id) "
-		+"left join builder build ON(project.group_id = build.id) left join city c ON(project.city_id = c.id)"
-		+" left join locality l ON(project.locality_id = l.id) left join builder_lead lead ON(project.id = lead.project_id)"
-		+"WHERE ap.emp_id = :emp_id group by project.id";
-				
-		Query query = session.createQuery(hql)
-				.setParameter("emp_id", empId)
-				.setResultTransformer(Transformers.aliasToBean(ProjectList.class));
-		List<ProjectList> projects 
-		
-		query.setFirstResult(0);
-		query.setMaxResults(100);
-	
-		List<ProjectList> projects = new ArrayList<ProjectList>();
-		for(BuilderProject builderproject : result) {
-			ProjectList newproject = new ProjectList();
-			newproject.setId(builderproject.getId());
-			newproject.setName(builderproject.getName());
-			newproject.setStatus(builderproject.getStatus());
-			newproject.setBuilderId(builderproject.getBuilder().getId());
-			newproject.setBuilderName(builderproject.getBuilder().getName());
-			newproject.setCityId(builderproject.getCity().getId());
-			newproject.setCityName(builderproject.getCity().getName());
-			newproject.setLocalityId(builderproject.getLocality().getId());
-			newproject.setLocalityName(builderproject.getLocality().getName());
-			newproject.setCompletionStatus(builderproject.getCompletionStatus());
-			if(builderproject.getInventorySold() != null){
-				newproject.setSold(builderproject.getInventorySold());
-			}
-			if(builderproject.getTotalInventory() != null){
-				newproject.setTotalSold(builderproject.getTotalInventory());
-			}
-			totalLeads = getTotalLeadsByProjectId(builderproject.getId());
-			if(totalLeads != null){
-				newproject.setTotalLeads(totalLeads.intValue());
-			}
-			System.out.println("Project name :: "+builderproject.getName());
-			projects.add(newproject);
-		}
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectList.class));
+		List<ProjectList> result = query.list();
 		session.close();
-		return projects;
+		return result;
 	}
 	
 	//To display first 4 active projects on dash board
@@ -3037,46 +2957,35 @@ public class ProjectDAO {
 	 * @return List<ProjectList>
 	 */
 	public List<ProjectList> getBuilderFirstFourActiveProjectsByBuilderId(BuilderEmployee builderEmployee) {
-		System.err.println("builderId :: "+builderEmployee.getId());
-		Long totalLeads = (long)0;
-		String hql = "from BuilderProject where builder.id = :builder_id and status=1 order by id desc";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setFirstResult(0);
-		query.setMaxResults(4);
-		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
-		List<BuilderProject> result = query.list();
-		List<ProjectList> projects = new ArrayList<ProjectList>();
-		if(result != null){
-			for(BuilderProject builderproject : result) {
-				ProjectList newproject = new ProjectList();
-				newproject.setId(builderproject.getId());
-				newproject.setName(builderproject.getName());
-				newproject.setStatus(builderproject.getStatus());
-				newproject.setBuilderId(builderproject.getBuilder().getId());
-				newproject.setBuilderName(builderproject.getBuilder().getName());
-				newproject.setCityId(builderproject.getCity().getId());
-				newproject.setCityName(builderproject.getCity().getName());
-				newproject.setLocalityId(builderproject.getLocality().getId());
-				newproject.setLocalityName(builderproject.getLocality().getName());
-				newproject.setCompletionStatus(builderproject.getCompletionStatus());
-				if(builderproject.getInventorySold() != null){
-					newproject.setSold(builderproject.getInventorySold());
-				}
-				if(builderproject.getTotalInventory() != null){
-					newproject.setTotalSold(builderproject.getTotalInventory());
-				}
-				totalLeads = getTotalLeadsByProjectId(builderproject.getId());
-				if(totalLeads != null){
-					newproject.setTotalLeads(totalLeads.intValue());
-				}
-				System.out.println("Project name :: "+builderproject.getName());
-				projects.add(newproject);
-			}
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
+			hql = "SELECT project.id as id, project.name as name, project.status as status,project.revenue as totalRevenu,"
+				+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
+				+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
+				+"c.name as cityName, l.id as localityId, l.name as localityName, "
+				+"count(lead.id) as totalLeads "
+				+"FROM  builder_project as project "
+				+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+				+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
+				+"WHERE project.group_id = "+builderEmployee.getBuilder().getId()+" group by project.id";
+		} else {
+			hql = "SELECT project.id as id, project.name as name, project.status as status,project.revenue as totalRevenu,"
+					+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
+					+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
+					+"c.name as cityName, l.id as localityId, l.name as localityName, "
+					+"count(lead.id) as totalLeads "
+					+"FROM  builder_project as project inner join allot_project ap ON project.id = ap.project_id "
+					+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+					+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
+					+"WHERE ap.emp_id = "+builderEmployee.getId()+" group by project.id";
 		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectList.class));
+		query.setMaxResults(4);
+		List<ProjectList> result = query.list();
 		session.close();
-		return projects;
+		return result;
 	}
 	
 	
@@ -4474,5 +4383,4 @@ public class ProjectDAO {
 			return null;
 		}
 	}
-	
 }

@@ -278,7 +278,7 @@
 					                         <div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="<%out.print(Math.round(projectList.getCompletionStatus())); %>">
 					                         </div>
 						                        <div class="bottom">
-						                        <h4><%out.print(projectList.getTotalLeads()) ;%> NEW LEADS</h4>
+						                        <h4><% out.print(projectList.getTotalLeads()) ;%> NEW LEADS</h4>
 						                        </div>
 				                       </div>
 			                       </div>

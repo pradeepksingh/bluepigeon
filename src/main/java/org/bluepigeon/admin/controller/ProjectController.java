@@ -142,13 +142,13 @@ public class ProjectController extends ResourceConfig {
 	@Path("/data/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuilderProjectList> getProjectsById(
-			@FormParam("builder_id") int builderId,
+			@FormParam("emp_id") int empId,
 			@FormParam("country_id") int countryId,
 			@FormParam("state_id") int stateId,
 			@FormParam("city_id") int cityId,
 			@FormParam("locality_id") int localityId){
 		
-		return new BuilderDetailsDAO().getProjectFilters(builderId,countryId, stateId, cityId, localityId);
+		return new BuilderDetailsDAO().getProjectFilters(empId,countryId, stateId, cityId, localityId);
 	}
 	
 	@POST
