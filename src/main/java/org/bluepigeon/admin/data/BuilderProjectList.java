@@ -1,5 +1,7 @@
 package org.bluepigeon.admin.data;
 
+import java.math.BigInteger;
+
 public class BuilderProjectList {
 	private int id;
 	private String name;
@@ -7,7 +9,7 @@ public class BuilderProjectList {
 	private String city;
 	private double sold;
 	private double totalSold;
-	private Long totalLeads;
+	private BigInteger totalLeads;
 	private Double completionStatus;
 	public int getId() {
 		return id;
@@ -45,11 +47,11 @@ public class BuilderProjectList {
 	public void setTotalSold(double totalSold) {
 		this.totalSold = totalSold;
 	}
-	public Long getTotalLeads() {
+	public BigInteger getTotalLeads() {
 		return totalLeads;
 	}
-	public void setTotalLeads(Long long1) {
-		this.totalLeads = long1;
+	public void setTotalLeads(BigInteger totalLeads) {
+		this.totalLeads = totalLeads;
 	}
 	public Double getCompletionStatus() {
 		return completionStatus;

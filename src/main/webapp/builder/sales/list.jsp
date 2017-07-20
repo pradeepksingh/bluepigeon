@@ -18,15 +18,17 @@
 	BuilderEmployee builder = new BuilderEmployee();
 	ProjectImageGallery imageGaleries = null;
 	int builder_uid = 0;
+	int emp_id = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_uid = builder.getBuilder().getId();
+			emp_id = builder.getId();
 		}
 		if(builder_uid > 0){
-			project_list = new ProjectDAO().getBuilderActiveProjectsByBuilderId(builder_uid);
+			project_list = new ProjectDAO().getBuilderActiveProjectsByBuilder(builder);
 			int builder_size = project_list.size();
 		}
    	}
@@ -121,6 +123,7 @@
                         </select>
                     </div>
                     <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_uid); %>"/>
+                    <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>"/>
                     <div class="container" id="project_list">
                        
                        	<%
@@ -316,7 +319,7 @@
 		var cityName = "";
 		var projectId = "";
 		$("#project_list").empty();
-	   $.post("${baseUrl}/webapi/project/data/list",{builder_id: $("#builder_id").val(), country_id: 1,state_id: $("#state_id").val(), city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
+	   $.post("${baseUrl}/webapi/project/data/list",{emp_id: $("#emp_id").val(), country_id: 1,state_id: $("#state_id").val(), city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
 		   if(data == ""){
 			   $("#project_list").empty();
 			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
