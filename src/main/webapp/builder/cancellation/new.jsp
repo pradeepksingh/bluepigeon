@@ -125,69 +125,119 @@
 	                                  		<input type="hidden" name="builder_id" id="builder_id" value="<% out.print(builder_id); %>" />
 	                                  		<input type="hidden" name="is_primary" id="is_primary" value=""/>
 	                                  		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
-			                                 <div class="form-group row">
-			                                    <label for="example-tel-input" class="col-3 col-form-label">Project</label>
-			                                    <div class="col-3">
-			                                        <select name="project_id" id="project_id" class="form-control">
-								                 	   	<option value="">Select Project</option>
-								                  	   	<%
-								                  	   	if(builderProjects != null){
-								                  	   	for(int i=0; i < project_size ; i++){ %>
-														<option value="<% out.print(builderProjects.get(i).getId());%>"><% out.print(builderProjects.get(i).getName());%></option>
-											  			<% }
-								                  	   	}%>
-										       	 	</select>
-			                                    </div>
-<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
-			                                    <label for="example-text-input" class="col-3 col-form-label">Building</label>
-			                                    <div class="col-3">
-		                                        	<select name="building_id" id="building_id" class="form-control">
-								                 	   	<option value="">Select Building</option>
-										       	  	</select>
-			                                    </div>
-<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
-			                                </div>
-			                                <div class="form-group row">
-			                               		<label for="example-search-input" class="col-3 col-form-label">Flat</label>
-			                                    <div class="col-3">
-			                                        <select name="flat_id" id="flat_id" class="form-control">
-									                 	<option value="">Select Flat</option>
-											       	 </select>
-			                                    </div>
-<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
-			                                    <label for="example-text-input" class="col-3 col-form-label">Buyer Name*</label>
-			                                    <div class="col-3">
-			                                        <input class="form-control" type="text" value="" id="buyer_name" name="buyer_name">
-			                                    </div>
-<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
-			                                </div>
-			                                <div class="form-group row">
-			                                	<label for="example-search-input" class="col-3 col-form-label">Buyer Pan Card*</label>
-			                                    <div class="col-3">
-			                                        <input class="form-control" type="text" value="" id="pan_card" name="pan_card">
-			                                    </div>
-<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
-			                                    <label for="example-tel-input" class="col-3 col-form-label">Buyer Contact</label>
-			                                    <div class="col-3">
-			                                       <input class="form-control" type="text" value="" id="buyer_contact" name="buyer_contact" >
-			                                    </div>
-<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
-			                                </div>
-			                                <div class="form-group row">
-			                                    <label for="example-search-input" class="col-3 col-form-label">Reason of Cancellation</label>
-			                                    <div class="col-3">
-			                                        <input class="form-control" type="text" value="" id="reason" name="reason">
-			                                    </div>
-<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
-			                                    <label for="example-search-input" class="col-3 col-form-label">Cancellation Charges</label>
-			                                    <div class="col-3">
-			                                        <input class="form-control" type="text" value="" id="charges" name="charges">
-			                                    </div>
-<!-- 				                                    <div class="messageContainer col-sm-3"></div> -->
-			                                </div>
-			                                <div class="offset-sm-5 col-sm-7">
-			                                 	<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
-			                                </div>
+	                                  		<div class="row">
+	                                  			<div class="col-sm-6">
+					                                 <div class="form-group row">
+					                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Project</label>
+					                                    <div class="col-sm-6">
+					                                    	<div>
+						                                        <select name="project_id" id="project_id" class="form-control">
+											                 	   	<option value="">Select Project</option>
+											                  	   	<%
+											                  	   	if(builderProjects != null){
+											                  	   	for(int i=0; i < project_size ; i++){ %>
+																	<option value="<% out.print(builderProjects.get(i).getId());%>"><% out.print(builderProjects.get(i).getName());%></option>
+														  			<% }
+											                  	   	}%>
+													       	 	</select>
+													       	 	<div class="messageContainer"></div>
+													       	 </div>
+					                                    </div>
+					                                  </div>
+					                             </div>
+				                                 <div class="col-sm-6">
+				                                	<div class="orm-group row">
+					                                    <label for="example-text-input" class="col-sm-6 col-form-label">Building *</label>
+					                                    <div class="col-sm-6">
+					                                    	<div>
+				                                        	<select name="building_id" id="building_id" class="form-control">
+										                 	   	<option value="">Select Building</option>
+												       	  	</select>
+					                                    	</div>
+						                                    <div class="messageContainer"></div>
+						                                 </div>
+						                             </div>
+				                                 </div>
+					                         </div>
+					                         <div class="row">
+					                         	<div class="col-sm-6">
+					                                <div class="form-group row">
+					                               		<label for="example-search-input" class="col-sm-6 col-form-label">Flat *</label>
+					                                    <div class="col-sm-6">
+					                                    	<div>
+						                                        <select name="flat_id" id="flat_id" class="form-control">
+												                 	<option value="">Select Flat</option>
+														       	 </select>
+													       	 </div>
+													       	  <div class="messageContainer"></div>
+					                                    </div>
+					                                 </div>
+					                             </div>
+					                             <div class="col-sm-6">
+					                             	 <div class="form-group row">
+					                                    <label for="example-text-input" class="col-sm-6 col-form-label">Buyer Name *</label>
+					                                    <div class="col-sm-6">
+					                                    	<div>
+					                                      	 	<input class="form-control" type="text" value="" id="buyer_name" name="buyer_name">
+					                                    	</div>
+					                                    	<div class="messageContainer"></div>
+					                                	</div>
+					                             	</div>
+					                        	</div>
+					                        </div>
+					                        <div class="row">
+					                        	<div class="col-sm-6">
+					                                <div class="form-group row">
+					                                	<label for="example-search-input" class="col-sm-6 col-form-label">Buyer Pan Card *</label>
+					                                    <div class="col-sm-6">
+					                                    	<div>
+						                                    	<input class="form-control" type="text" value="" id="pan_card" name="pan_card">
+						                                    </div>
+							                                <div class="messageContainer"></div>
+								                         </div>
+								                     </div>
+								                </div>
+								                <div class="col-sm-6">
+								                	<div class="form-group row">
+					                                    <label for="example-tel-input" class="col-sm-6 col-form-label">Buyer Contact *</label>
+					                                    <div class="col-sm-6">
+					                                    	<div>
+							                                     <input class="form-control" type="text" value="" id="buyer_contact" name="buyer_contact" >
+							                                 </div>
+								                             <div class="messageContainer"></div>
+								                        </div>
+					                                </div>
+					                             </div>
+					                         </div>
+					                         <div class="row">
+					                        	 <div class="col-sm-6">
+						                                <div class="form-group row">
+						                                    <label for="example-search-input" class="col-sm-6 col-form-label">Reason of Cancellation *</label>
+						                                    <div class="col-sm-6">
+						                                    	<div>
+						                                        <input class="form-control" type="text" value="" id="reason" name="reason">
+						                                        </div>
+						                                         <div class="messageContainer"></div>
+						                                    </div>
+						                                </div>
+						                          </div>
+						                          <div class="col-sm-6">
+						                          		<div class="form-group row">
+						                                    <label for="example-search-input" class="col-sm-6 col-form-label">Cancellation Charges *</label>
+						                                    <div class="col-sm-6">
+						                                    	<div>
+						                                        	<input class="form-control" type="text" value="" id="charges" name="charges">
+						                                        </div>
+						                                        <div class="messageContainer"></div>
+						                                    </div>
+						                                </div>
+						                          </div>
+						                       </div>
+						                       <div class="row">
+					                                <div class="offset-sm-5 col-sm-7">
+					                                 	<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+					                                </div>
+					                           </div>
 	                               		</form>
                                		</div>
                               	</div>

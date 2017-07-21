@@ -3120,20 +3120,20 @@ public class ProjectDAO {
 		
 		String hql = "";
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
-			hql = "SELECT lead.id as id, lead.name as name, project.name as projectName, lead.mobile as mobile, lead.email as email "
+			hql = "SELECT lead.id as leadId, lead.name as name, lead.mobile as mobile, lead.email as email, project.name as projectName "
 				+"FROM  builder_lead as lead left join builder_project as project ON lead.project_id = project.id "
 				+"left join builder as build ON project.group_id = build.id "
-				+"WHERE build.id = "+builderEmployee.getBuilder().getId()+" group by project.id";
+				+"WHERE build.id = "+builderEmployee.getBuilder().getId()+" group by lead.id";
 		} else {
-			hql = "SELECT lead.id as id, lead.name as name, project.name as projectName, lead.mobile as mobile, lead.email as email "
-					+"FROM  builder_lead as lead left join builder_project as project inner join allot_project ap ON project.id = ap.project_id "
+			hql = "SELECT lead.id as id, lead.name as name, lead.mobile as mobile, lead.email as email, project.name as projectName "
+					+"FROM  builder_lead as lead left join builder_project as project ON lead.project_id = project.id inner join allot_project ap ON project.id = ap.project_id "
 					+"left join builder as build ON project.group_id = build.id "
-					+"WHERE ap.emp_id = "+builderEmployee.getId()+" group by project.id";
+					+"WHERE ap.emp_id = "+builderEmployee.getId()+" group by lead.id";
 		}
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(LeadList.class));
-		query.setMaxResults(4);
+		System.err.println(hql);
 		List<LeadList> result = query.list();
 		session.close();
 		return result;

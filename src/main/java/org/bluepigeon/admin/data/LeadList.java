@@ -1,16 +1,16 @@
 package org.bluepigeon.admin.data;
 
 public class LeadList {
- private int id;
+ private int leadId;
  private String name;
  private String projectName;
  private String mobile;
  private String email;
-public int getId() {
-	return id;
+public int getLeadId() {
+	return leadId;
 }
-public void setId(int id) {
-	this.id = id;
+public void setLeadId(int leadId) {
+	this.leadId = leadId;
 }
 public String getName() {
 	return name;

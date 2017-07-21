@@ -13,12 +13,14 @@
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	int builder_uid = 0;
+	int access_id=0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_uid = builder.getBuilder().getId();
+			access_id = builder.getBuilderEmployeeAccessType().getId();
 			if(builder_uid > 0){
 				project_list = new ProjectDAO().getBuilderLeadByBuilder(builder);
 				int builder_size = project_list.size();
@@ -80,9 +82,12 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box"><br>
-                          <center><h1>Manage Leads</h1></center> <br>
+                          <center><h1>Manage Leads</h1></center> 
+                          <%if(access_id != 3){ %>
+                          <br>
                           <a href="${baseUrl}/builder/leads/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add New Lead</span></a>
                           <br><br><br>
+                          <%} %>
                             <div class="table-responsive">
                                 <table id="tblLeads" class="table table-striped">
                                     <thead>
@@ -92,7 +97,9 @@
                                             <td>Builder Name</td>
                                             <td>City Name</td>
                                             <td>Locality</td>
+                                            <%if(access_id !=3){ %>
                                             <td>Action</td>
+                                            <%} %>
                                         </tr>
                                           <tr>
                                         	<th>Sr. No</th>
@@ -100,7 +107,9 @@
                                             <th>Builder Name</th>
                                             <th>City Name</th>
                                             <th>Locality</th>
+                                            <%if(access_id != 3){ %>
                                             <th>Action</th>
+                                            <%} %>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -124,9 +133,11 @@
 										<td>
 											<% out.print(project.getEmail()); %>
 										</td>
+										<%if(access_id != 3){ %>
 										<td>
-										<a href="${baseUrl}/builder/leads/edit.jsp?lead_id=<% out.print(project.getId());%>"> <span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
+										<a href="${baseUrl}/builder/leads/edit.jsp?lead_id=<% out.print(project.getLeadId());%>"> <span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
 										</td>
+										<%} %>
 										<% 	i++;
 											} 
                                       	}
