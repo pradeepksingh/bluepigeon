@@ -247,11 +247,11 @@ public class BuilderDetailsDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		if(accessId != 3 || accessId !=6 || accessId != 7){
-		Query query = session.createQuery(hql);
-		if(accessId > 0) {
-			query.setParameter("access_id", accessId);
-		}
-		result = query.list();
+			Query query = session.createQuery(hql);
+			if(accessId > 0) {
+				query.setParameter("access_id", accessId);
+			}
+			result = query.list();
 		}
 		session.close();
 		

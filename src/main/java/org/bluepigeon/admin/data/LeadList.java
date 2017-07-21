@@ -3,7 +3,7 @@ package org.bluepigeon.admin.data;
 public class LeadList {
  private int id;
  private String name;
- private String projectname;
+ private String projectName;
  private String mobile;
  private String email;
 public int getId() {
@@ -18,11 +18,11 @@ public String getName() {
 public void setName(String name) {
 	this.name = name;
 }
-public String getProjectname() {
-	return projectname;
+public String getProjectName() {
+	return projectName;
 }
-public void setProjectname(String projectname) {
-	this.projectname = projectname;
+public void setProjectName(String projectName) {
+	this.projectName = projectName;
 }
 public String getMobile() {
 	return mobile;

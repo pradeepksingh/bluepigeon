@@ -5,7 +5,7 @@ import java.util.Date;
 public class CampaignList {
 	private int campaignId;
 	private String title;
-	private Date setdate;
+	private Date setDate;
 	private int campaignType;
 	public int getCampaignId() {
 		return campaignId;
@@ -19,16 +19,17 @@ public class CampaignList {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Date getSetdate() {
-		return setdate;
+	public Date getSetDate() {
+		return setDate;
 	}
-	public void setSetdate(Date setdate) {
-		this.setdate = setdate;
+	public void setSetdate(Date setDate) {
+		this.setDate = setDate;
 	}
 	public int getCampaignType() {
 		return campaignType;
 	}
 	public void setCampaignType(int campaignType) {
 		this.campaignType = campaignType;
-	}	
+	}
+	
 }

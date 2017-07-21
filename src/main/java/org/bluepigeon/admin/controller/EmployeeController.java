@@ -354,18 +354,16 @@ public class EmployeeController {
 			locality.setId(areaId);
 			builderEmployee.setLocality(locality);
 		}
-		String pwd = new BuilderDetailsDAO().getBuilderEmployeeById(emp_id).getPassword();
+		builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
 		builderEmployee.setId(emp_id);
 		builderEmployee.setName(name);
 		builderEmployee.setEmail(email);
-		builderEmployee.setPassword(pwd);
 		builderEmployee.setMobile(mobile);
 		builderEmployee.setCurrentAddress(currentAddress);
 		builderEmployee.setPermanentAddress(permanentAddress);
 		builderEmployee.setDesignation(designation);
 		builderEmployee.setEmployeeId(employeeId);
 		builderEmployee.setBuilderEmployee(reportingEmployee);
-		builderEmployee.setStatus(status);
 		responseMessage = new BuilderDetailsDAO().updateBuilderEmployee(builderEmployee);
 		if(projectId != null){
 			if(projectId.size()>0){

@@ -116,7 +116,7 @@
 											<% out.print(project.getName()); %>
 										</td>
 										<td>
-											<% out.print(project.getProjectname()); %>
+											<% out.print(project.getProjectName()); %>
 										</td>
 										<td>
 											<% out.print(project.getMobile()); %>
