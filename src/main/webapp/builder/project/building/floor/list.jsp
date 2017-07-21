@@ -90,17 +90,17 @@
                                     <thead>
                                         <tr>
                                             <td></td>
-                                            <td>Builder Name</td>
-                                             <td>Project Name</td>
+                                            <td>Floor Name</td>
                                              <td>Building Name</td>
+                                              <td>Project Name</td>
                                             <td>status</td>
                                             <td></td>
                                         </tr>
                                          <tr>
                                             <th>No.</th>
-                                            <th>Builder Name</th>
-                                             <th>Project Name</th>
+                                            <th>Floor Name</th>
                                              <th>Building Name</th>
+                                             <th>Project Name</th>
                                             <th>status</th>
                                             <th>Action</th>
                                         </tr>
