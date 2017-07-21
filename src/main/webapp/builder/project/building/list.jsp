@@ -7,6 +7,7 @@
 <%@page import="org.bluepigeon.admin.data.ProjectList"%>
 <%@page import="org.bluepigeon.admin.data.PossessionList"%>
 <%@page import="org.bluepigeon.admin.dao.PossessionDAO"%>
+<%@page import="org.bluepigeon.admin.data.BuildingPojo"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
@@ -30,14 +31,14 @@
 		}
    	}
 	
-	List<BuilderBuilding> builderBuildings = null;
+	List<BuildingPojo> builderBuildings = null;
 	if (request.getParameterMap().containsKey("project_id")) {
 		project_id = Integer.parseInt(request.getParameter("project_id"));
 		if(project_id > 0) {
-			builderBuildings = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
+			builderBuildings = new ProjectDAO().getBuilderActiveBuildingsByProjectId(project_id);
 		}
 	} else {
-		builderBuildings = new ProjectDAO().getActiveBuildingsByBuilderId(builder_uid);
+		builderBuildings = new ProjectDAO().getActiveBuildingsByBuilder(builder);
 		int builder_size = builderBuildings.size();
 		projectDatas = new ProjectDAO().getActiveProjectsByBuilderId(builder_uid);
 	}
@@ -119,13 +120,13 @@
                                        <%
                                       if(builderBuildings != null){
                                     	  int i=1;
-                                      	for(BuilderBuilding buildingList : builderBuildings) { %>
+                                      	for(BuildingPojo buildingList : builderBuildings) { %>
 									<tr>
 										<td><% out.print(i); %></td>
-										<td><% out.print(buildingList.getBuilderProject().getBuilder().getName()); %></td>
-										<td><% out.print(buildingList.getBuilderProject().getName()); %></td>
+										<td><% out.print(buildingList.getBuilderName()); %></td>
+										<td><% out.print(buildingList.getProjectName()); %></td>
 										<td><% out.print(buildingList.getName()); %></td>
-										<td><% out.print(buildingList.getBuilderBuildingStatus().getName()); %></td>
+										<td><% out.print(buildingList.getBuildingStatus()); %></td>
 										<td>
 										  <a href="${baseUrl}/builder/project/building/edit.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
 										   <a href="${baseUrl}/builder/project/building/floor/list.jsp?building_id=<% out.print(buildingList.getId());%>"> <span class="btn btn-info pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Floor</span></a>

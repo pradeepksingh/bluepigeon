@@ -306,7 +306,7 @@ if(session!=null)
 								<i class="menu-icon fa fa-caret-right"></i> Manage Projects
 							</a> <b class="arrow"></b>
 						</li>
-						<li class="">
+						<!-- li class="">
 							<a href="${baseUrl}/admin/project/building/list.jsp"> 
 								<i class="menu-icon fa fa-caret-right"></i> Manage Buildings
 							</a> <b class="arrow"></b>
@@ -325,7 +325,7 @@ if(session!=null)
 							<a href="${baseUrl}/admin/project/building/floor/flat/list.jsp"> 
 								<i class="menu-icon fa fa-caret-right"></i> Manage Flats
 							</a> <b class="arrow"></b>
-						</li>
+						</li-->
 					</ul>
 				</li>
 				<li class="active">

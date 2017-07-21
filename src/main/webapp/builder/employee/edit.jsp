@@ -20,6 +20,7 @@
 	int builder_uid = 0;
 	int builder_size =0;
 	int emp_id = 0;
+	int access_type_id = 0;
 	List<City> cityList = null;
 	BuilderDetailsDAO builderDetailsDAO = null;
 	List<Locality> localityList = null;
@@ -32,12 +33,13 @@
 		{
 			builderEmployee  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_uid = builderEmployee.getBuilder().getId();
+			access_type_id = builderEmployee.getBuilderEmployeeAccessType().getId();
 			if(builder_uid > 0){
 				project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_uid);
 			    builder_size = project_list.size();
 			    builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
 			    builderDetailsDAO = new BuilderDetailsDAO();
-			    access_list = builderDetailsDAO.getBuilderAccessList(builderEmployee.getBuilderEmployeeAccessType().getId());
+			    access_list = builderDetailsDAO.getBuilderAccessList(access_type_id);
 			    cityList = new CityNamesImp().getCityActiveNames();
 			    localityList = new LocalityNamesImp().getLocalityActiveList();
 			    allotProjects = new BuilderDetailsDAO().getAllotedrojectsByEmpId(emp_id);
@@ -222,7 +224,7 @@
                                     					<label for="example-tel-input" class="col-sm-6 col-form-label">Employee ID<span class='text-danger'>*</span></label>
                                     					<div class="col-sm-6">
                                     						<div>
-                                         						<input class="form-control" type="text" value="" id="empid" name="empid">
+                                         						<input class="form-control" type="text" value="<%if(builderEmployee.getEmployeeId() != null){out.print(builderEmployee.getEmployeeId());}%>" id="empid" name="empid" />
                                          					</div>
                                          					<div class="messageContainer"></div>
                                     					</div>
@@ -235,7 +237,7 @@
                                     					<label for="example-text-input" class="col-sm-6 col-form-label">Project<span class='text-danger'>*</span></label>
                                     					<div class="col-sm-6">
                                     						<div>
-	                                       						<select class="form-control" multiple required name="project" id="project">
+	                                       						<select class="form-control" multiple required name="project[]" id="project[]">
 <%-- 																		<%  --%>
 <!-- // 																			int i=0; -->
 <%-- 																		for (ProjectData project : project_list) { %> --%>
@@ -464,7 +466,7 @@ function addEmployee() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/employee/save1',
+	 		url : '${baseUrl}/webapi/employee/builder/update',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};

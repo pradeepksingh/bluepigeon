@@ -320,9 +320,9 @@ public class EmployeeController {
 			@FormDataParam("designation") String designation,
 			@FormDataParam("access") int accessId,
 			@FormDataParam("empid") String employeeId,
-			@FormDataParam("project") List<FormDataBodyPart> projectId,
+			@FormDataParam("project[]") List<FormDataBodyPart> projectId,
 			@FormDataParam("area") int areaId,
-			@FormDataParam("city") int cityId,
+			@FormDataParam("city_id") int cityId,
 			@FormDataParam("builder_id") int builderId,
 			@FormDataParam("reporting_id") int reporting_id,
 			@FormDataParam("allot_id")List<FormDataBodyPart> allotprojectIds){
@@ -369,36 +369,22 @@ public class EmployeeController {
 		responseMessage = new BuilderDetailsDAO().updateBuilderEmployee(builderEmployee);
 		if(projectId != null){
 			if(projectId.size()>0){
-				List<AllotProject> updateallotProjectList = new ArrayList<>();
 				List<AllotProject> saveallotProjectList = new ArrayList<>();
 				int i=0;
 				for(FormDataBodyPart projects : projectId){
 					if(projects.getValueAs(Integer.class) != null ){
-						if(allotprojectIds.get(i).getValueAs(Integer.class)!= null){
-							AllotProject allotProject = new AllotProject();
-							allotProject.setBuilderEmployee(builderEmployee);
-							BuilderProject builderProject = new BuilderProject();
-							builderProject.setId(projects.getValueAs(Integer.class));
-							allotProject.setId(allotprojectIds.get(i).getValueAs(Integer.class));
-							allotProject.setBuilderProject(builderProject);
-							updateallotProjectList.add(allotProject);
-						}else{
-							AllotProject allotProject = new AllotProject();
-							allotProject.setBuilderEmployee(builderEmployee);
-							BuilderProject builderProject = new BuilderProject();
-							builderProject.setId(projects.getValueAs(Integer.class));
-							allotProject.setId(allotprojectIds.get(i).getValueAs(Integer.class));
-							allotProject.setBuilderProject(builderProject);
-							saveallotProjectList.add(allotProject);
-						}
+						AllotProject allotProject = new AllotProject();
+						allotProject.setBuilderEmployee(builderEmployee);
+						BuilderProject builderProject = new BuilderProject();
+						builderProject.setId(projects.getValueAs(Integer.class));
+						allotProject.setBuilderProject(builderProject);
+						saveallotProjectList.add(allotProject);
 					}
 					i++;
 				}
-				if(updateallotProjectList.size() > 0){
-					 new BuilderDetailsDAO().updateAllotProjects(updateallotProjectList);
-				}
 				if(saveallotProjectList.size() > 0){
-					 new BuilderDetailsDAO().saveAllotProjects(updateallotProjectList);
+					new BuilderDetailsDAO().deleteAllotedrojectsByEmpId(emp_id);
+					new BuilderDetailsDAO().saveAllotProjects(saveallotProjectList);
 				}
 			}
 		}

@@ -3,11 +3,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFloor"%>
+<%@page import="org.bluepigeon.admin.data.FloorPojo"%>
 <%@page import="java.util.List"%>
 <%
 	int building_id = 0;
 	int p_user_id = 0;
-	List<BuilderFloor> builderFloors = null;
+	List<FloorPojo> builderFloors = null;
 	List<ProjectData> projectDatas = null;
 	session = request.getSession(false);
 	BuilderEmployee adminuserproject = new BuilderEmployee();
@@ -22,10 +23,10 @@
 			if (request.getParameterMap().containsKey("building_id")) {
 				building_id = Integer.parseInt(request.getParameter("building_id"));
 				if(building_id > 0) {
-					builderFloors = new ProjectDAO().getBuildingActiveFloors(building_id);
+					builderFloors = new ProjectDAO().getBuildingActiveFloorsByBuilderAndBuildingId(adminuserproject,building_id);
 				}
 			} else {
-				builderFloors = new ProjectDAO().getAllActiveFloorsByBuilderId(p_user_id);
+				builderFloors = new ProjectDAO().getBuildingActiveFloorsByBuilder(adminuserproject);
 				projectDatas = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
 			}
 		}
@@ -99,33 +100,23 @@
                                          <tr>
                                             <th>No.</th>
                                             <th>Floor Name</th>
-                                             <th>Building Name</th>
-                                             <th>Project Name</th>
+                                            <th>Building Name</th>
+                                            <th>Project Name</th>
                                             <th>status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-<!--                                      <tfoot> -->
-<!--                                         <tr> -->
-<!--                                             <th></th> -->
-<!--                                             <th>Builder Name</th> -->
-<!--                                              <th>Project Name</th> -->
-<!--                                              <th>Building Name</th> -->
-<!--                                             <th>status</th> -->
-<!--                                             <th></th> -->
-<!--                                         </tr> -->
-<!--                                     </tfoot> -->
                                     <tbody>
                                        <%
                                       if(builderFloors != null){
                                     	  int i=1;
-                                    	  for(BuilderFloor builderFloor :builderFloors) { %>
+                                    	  for(FloorPojo builderFloor :builderFloors) { %>
       									<tr>
       										<td><%out.print(i); %></td>
       										<td><% out.print(builderFloor.getName()); %></td>
-      										<td><% out.print(builderFloor.getBuilderBuilding().getName()); %></td>
-      										<td><% out.print(builderFloor.getBuilderBuilding().getBuilderProject().getName()); %></td>
-      										<td><% out.print(builderFloor.getBuilderFloorStatus().getName()); %></td>
+      										<td><% out.print(builderFloor.getBuildingName()); %></td>
+      										<td><% out.print(builderFloor.getProjectName()); %></td>
+      										<td><% out.print(builderFloor.getFloorStatus()); %></td>
       										<td>
       											<a href="${baseUrl}/builder/project/building/floor/edit.jsp?floor_id=<% out.print(builderFloor.getId());%>"><span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a>
 <%--       											<a href="${baseUrl}/admin/project/building/floor/updates.jsp?floor_id=<% out.print(builderFloor.getId());%>" class="btn btn-warning icon-btn btn-xs"><i class="fa fa-pencil"></i> Updates</a> --%>
