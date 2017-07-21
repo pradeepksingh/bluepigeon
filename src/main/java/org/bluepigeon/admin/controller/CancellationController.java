@@ -36,6 +36,7 @@ public class CancellationController {
 			@FormDataParam("project_id") int projectId,
 			@FormDataParam("building_id") int buildingId,
 			@FormDataParam("flat_id") int flatId,
+			@FormDataParam("is_primary") int is_primary,
 			@FormDataParam("buyer_name") String name,
 			@FormDataParam("buyer_contact") String mobile,
 			@FormDataParam("pan_card") String pancard,

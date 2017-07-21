@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.LeadList"%>
 <%@page import="org.bluepigeon.admin.model.BuilderLead"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.data.ProjectList"%>
@@ -8,7 +9,7 @@
 <%@page import="java.util.List"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%
-	List<BuilderLead> project_list = null;
+	List<LeadList> project_list = null;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	int builder_uid = 0;
@@ -19,7 +20,7 @@
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_uid = builder.getBuilder().getId();
 			if(builder_uid > 0){
-				project_list = new ProjectDAO().getBuilderLeadByBuilderId(builder_uid);
+				project_list = new ProjectDAO().getBuilderLeadByBuilder(builder);
 				int builder_size = project_list.size();
 			}
 		}
@@ -106,7 +107,7 @@
                                         <%
                                       if(project_list != null){
                                     	  int i=1;
-                                      	for(BuilderLead project : project_list) { %>
+                                      	for(LeadList project : project_list) { %>
 									<tr>
 									<td>
 											<% out.print(i); %>
@@ -115,7 +116,7 @@
 											<% out.print(project.getName()); %>
 										</td>
 										<td>
-											<% out.print(project.getBuilderProject().getName()); %>
+											<% out.print(project.getProjectname()); %>
 										</td>
 										<td>
 											<% out.print(project.getMobile()); %>

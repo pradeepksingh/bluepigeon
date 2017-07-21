@@ -11,12 +11,14 @@
 	session = request.getSession(false);
 	BuilderEmployee builder_new = new BuilderEmployee();
 	int builder_new_id = 0;
+	int emp_access_id =0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder_new  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_new_id = builder_new.getId();
+			emp_access_id = builder_new.getBuilderEmployeeAccessType().getId();
 			 if(builder_new != null){
 		%>
      <div class="navbar-default sidebar" role="navigation">
@@ -44,7 +46,7 @@
                     <li> <a href="${baseUrl }/builder/dashboard.jsp" class="waves-effect"><i class="ti-dashboard p-r-10"></i> <span class="hide-menu">Dashboard</span></a> </li>
                     <%
                     
-                     if(builder_new.getBuilderEmployeeAccessType().getId() ==1 || builder_new.getBuilderEmployeeAccessType().getId()==2){%>
+                     if(emp_access_id ==1 ||emp_access_id==2){%>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="linea-icon linea-basic fa-fw" data-icon="7"></i> <span class="hide-menu">Project<span class="fa arrow"></span> 
                     </span></a>
                         <ul class="nav nav-second-level">
@@ -62,7 +64,7 @@
 <!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
 <!--                         </ul> -->
 <!--                     </li> -->
-					<%if(builder_new.getBuilderEmployeeAccessType().getId() == 1|| builder_new.getBuilderEmployeeAccessType().getId() ==2 || builder_new.getBuilderEmployeeAccessType().getId() == 4 || builder_new.getBuilderEmployeeAccessType().getId() == 5 || builder_new.getBuilderEmployeeAccessType().getId() == 6 || builder_new.getBuilderEmployeeAccessType().getId() == 7){ %>
+					<%if(emp_access_id== 1|| emp_access_id ==2 || emp_access_id== 4 ||emp_access_id == 5 || emp_access_id == 6 ||emp_access_id == 7){ %>
                      <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="ti-layout fa-fw"></i><span class="hide-menu"> Buyer<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/buyer/list.jsp">Manage</a></li>
@@ -84,29 +86,23 @@
 <!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
 <!--                         </ul> -->
 <!--                     </li> -->
-					<%if(builder_new.getBuilderEmployeeAccessType().getId()==1 || builder_new.getBuilderEmployeeAccessType().getId() == 2 || builder_new.getBuilderEmployeeAccessType().getId()==4 || builder_new.getBuilderEmployeeAccessType().getId() == 5||builder_new.getBuilderEmployeeAccessType().getId()==6){ %>
+					
                      <li class="nav-small-cap m-t-10">--Professional--</li>
                      <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Sales<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
 <!--                             <li> <a href="inbox.html">Add</a></li> -->
 <!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
+					<%if(emp_access_id >=1 && emp_access_id<=7) {%>
 							  <li> <a href="${baseUrl }/builder/sales/list.jsp">Manage Project</a></li>
                               <li> <a href="${baseUrl }/builder/leads/list.jsp">Manage Leads</a></li>
+                    <%}%>
+                    <%if(emp_access_id >= 1 && emp_access_id <=2){ %>
                               <li> <a href="${baseUrl }/builder/sales/source.jsp">Add Source</a></li>
                                 <li> <a href="${baseUrl }/builder/sales/source-list.jsp">Manage Source</a></li>
                              </ul>
                     </li>
                     <% }%>
-                    <%if(builder_new.getBuilderEmployeeAccessType().getId()==7){ %>
-                     <li class="nav-small-cap m-t-10">--Professional--</li>
-                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Sales<span class="fa arrow"></span></span></a>
-                        <ul class="nav nav-second-level">
-<!--                             <li> <a href="inbox.html">Add</a></li> -->
-<!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
-							  <li> <a href="${baseUrl }/builder/sales/list.jsp">Manage Project</a></li>
-                             </ul>
-                    </li>
-                    <%} %>
+                   
                     <%if(builder_new.getBuilderEmployeeAccessType().getId()==1 || builder_new.getBuilderEmployeeAccessType().getId() == 2 || builder_new.getBuilderEmployeeAccessType().getId() ==3){ %>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Marketing<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">

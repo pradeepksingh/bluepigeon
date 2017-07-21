@@ -91,9 +91,9 @@
                                     <thead>
                                         <tr>
                                             <td></td>
-                                            <td>Builder Name</td>
-                                             <td>Project Name</td>
+                                            <td>Floor Name</td>
                                              <td>Building Name</td>
+                                              <td>Project Name</td>
                                             <td>status</td>
                                             <td></td>
                                         </tr>

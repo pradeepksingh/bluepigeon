@@ -54,7 +54,7 @@
 	                       	<table class="table table-striped table-bordered table-hover" id="tblProjects">
 								<thead class="bg-info">
 									<tr>
-										<th>Building Name</th>
+										<th>Floor Name</th>
 										<th>Building Name</th>
 										<th>Project Name</th>
 										<th>Status</th>
