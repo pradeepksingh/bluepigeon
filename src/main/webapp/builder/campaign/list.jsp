@@ -13,16 +13,19 @@ List<CampaignList> campaignLists = null;
 session = request.getSession(false);
 BuilderEmployee builder = new BuilderEmployee();
 int session_id = 0;
+int access_id = 0;
 if(session!=null)
 {
 	if(session.getAttribute("ubname") != null)
 	{
 		builder  = (BuilderEmployee)session.getAttribute("ubname");
 		session_id = builder.getBuilder().getId();
+		access_id = builder.getBuilderEmployeeAccessType().getId();
+		if(session_id > 0){
+			campaignLists = new CampaignDAO().getActiveCampaignListByBuilder(builder); 
 	}
 	}
-if(session_id > 0){
-	campaignLists = new CampaignDAO().getActiveCampaignListByBuilderId(session_id); 
+
 }
 %>
 <!DOCTYPE html>
@@ -79,9 +82,11 @@ if(session_id > 0){
                     <div class="col-sm-12">
                         <div class="white-box"><br>
                           <center><h1>Manage Campaign</h1></center> 
+                          <%if(access_id >= 1 && access_id <= 3){ %>
                            <br>
                             <a href="${baseUrl}/builder/campaign/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add Campaign</span></a>
                            <br><br><br>
+                           <%} %>
                             <div class="table-responsive">
                                 <table id="tblCampaign" class="table table-striped">
                                     <thead>
@@ -118,11 +123,12 @@ if(session_id > 0){
 					                 	   	    if(campaignList.getCampaignType() == 5)
 					                 	   	    	out.print("Referral");
                                             %></td>
+                                            <% if(access_id >= 1 && access_id <= 3){%>
                                             <td class="alignRight">
 <%--                                             	<a href="${baseUrl}/admin/leads/edit.jsp?lead_id=<% out.print(campaignList.getCampaignId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
 													<a href="javascript:deleteCampaign(<% out.print(campaignList.getCampaignId());%>)" class="btn btn-danger icon-btn btn-xs"><i class="fa fa-delete"></i>Delete</a>
                                             </td>
-                                            
+                                            <%} %>
                                         </tr>
                                         <% 
                                         	} 

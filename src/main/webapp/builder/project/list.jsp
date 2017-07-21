@@ -26,7 +26,7 @@
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_uid = builder.getBuilder().getId();
 			if(builder_uid > 0){
-				project_list = new ProjectDAO().getBuilderActiveProjectsByBuilderId(builder_uid);
+				project_list = new ProjectDAO().getBuilderActiveProjectsByBuilder(builder);
 				int builder_size = project_list.size();
 			}
 		}

@@ -8,7 +8,6 @@
      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
 <mvc:annotation-driven />
-<context:component-scan base-package="org.pankaj.spring.login.loginschool" />
 <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
  	<property name="prefix" value="/WEB-INF/" />
  	<property name="suffix" value=".jsp" />

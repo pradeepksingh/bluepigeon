@@ -7,8 +7,10 @@ import org.bluepigeon.admin.data.BuyerBuildingList;
 import org.bluepigeon.admin.data.BuyerFlatList;
 import org.bluepigeon.admin.data.BuyerProjectList;
 import org.bluepigeon.admin.data.CampaignList;
+import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.BuilderBuilding;
+import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Buyer;
@@ -17,6 +19,7 @@ import org.bluepigeon.admin.model.CampaignBuyer;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
 
 public class CampaignDAO {
 
@@ -216,24 +219,25 @@ public class CampaignDAO {
 	 * @param builderId
 	 * @return List<CampaignList>
 	 */
-	public List<CampaignList> getActiveCampaignListByBuilderId(int builderId){
-		List<CampaignList> campaignLists = new ArrayList<CampaignList>();
-		String hql = "from Campaign where builderProject.builder.id = :builder_id and isDeleted=0";
-		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("builder_id", builderId);
-		List<Campaign> campaigns = query.list();
-		for(Campaign campaign : campaigns){
-			CampaignList campaignList = new CampaignList();
-			campaignList.setCampaignId(campaign.getId());
-			campaignList.setTitle(campaign.getTitle());
-			campaignList.setCampaignType(campaign.getType());
-			campaignList.setSetdate(campaign.getSetDate());
-			campaignLists.add(campaignList);
+	public List<CampaignList> getActiveCampaignListByBuilder(BuilderEmployee builderEmployee){
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
+			hql = "SELECT camp.id as campaignId, camp.title as title, camp.type as campaignType, camp.set_date as setDate "
+				+"FROM  campaign as camp left join builder as build ON camp.builder_id = build.id "
+				+"WHERE build.id = "+builderEmployee.getBuilder().getId()+" and camp.is_deleted = 0 group by camp.id";
+		} else {
+			hql = "SELECT camp.id as campaignId, camp.title as title, camp.type as campaignType, camp.set_date as setDate "
+					+"FROM  campaign as camp inner join allot_project ap ON camp.project_id = ap.project_id "
+					+"left join builder as build ON camp.builder_id = build.id"
+					+"WHERE ap.emp_id = "+builderEmployee.getId()+" and camp.is_deleted = 0 group by camp.id";
 		}
+		System.err.println(hql);
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(CampaignList.class));
+		List<CampaignList> result = query.list();
 		session.close();
-		return campaignLists;
+		return result;
 	}
 	
 	public ResponseMessage saveCampaign(Campaign campaign){
