@@ -25,6 +25,7 @@ import org.bluepigeon.admin.data.FloorImageData;
 import org.bluepigeon.admin.data.FloorListData;
 import org.bluepigeon.admin.data.FloorPanoData;
 import org.bluepigeon.admin.data.FloorWeightageData;
+import org.bluepigeon.admin.data.LeadList;
 import org.bluepigeon.admin.data.NewProjectList;
 import org.bluepigeon.admin.data.PaymentInfoData;
 import org.bluepigeon.admin.data.ProjectAmenityData;
@@ -3042,6 +3043,30 @@ public class ProjectDAO {
 		return builderLeads;
 	}
 	
+	public List<LeadList> getBuilderLeadByBuilder(BuilderEmployee builderEmployee){
+		
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
+			hql = "SELECT lead.id as id, lead.name as name, project.name as projectName, lead.mobile as mobile, lead.email as email"
+				+"FROM  builder_lead as lead left join builder_project as project ON lead.project_id = project.id "
+				+"left join builder as build ON project.group_id = build.id "
+				+"WHERE build.id = "+builderEmployee.getBuilder().getId()+" group by project.id";
+		} else {
+			hql = "SELECT lead.id as id, lead.name as name, project.name as projectName, lead.mobile as mobile, lead.email as email"
+					+"FROM  builder_lead as lead left join builder_project as project inner join allot_project ap ON project.id = ap.project_id "
+					+"left join builder as build ON project.group_id = build.id "
+					+"WHERE ap.emp_id = "+builderEmployee.getId()+" group by project.id";
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(LeadList.class));
+		query.setMaxResults(4);
+		List<LeadList> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	
 	public List<ProjectCityData> getCityareabyproject(int project) {
 		String hql = "from BuilderProject where id = :id order by id desc";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -4409,4 +4434,6 @@ public class ProjectDAO {
 			return null;
 		}
 	}
+	
+	
 }
