@@ -10,11 +10,13 @@ import org.bluepigeon.admin.data.BuilderCompletionStatus;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.BuildingListData;
+import org.bluepigeon.admin.data.BuildingPojo;
 import org.bluepigeon.admin.data.BuildingPriceInfoData;
 import org.bluepigeon.admin.data.BuildingWeightageData;
 import org.bluepigeon.admin.data.FlatAmenityTotal;
 import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatListData;
+import org.bluepigeon.admin.data.FlatPojo;
 import org.bluepigeon.admin.data.FlatTotal;
 import org.bluepigeon.admin.data.FlatWeightageData;
 import org.bluepigeon.admin.data.FlatPayment;
@@ -24,6 +26,7 @@ import org.bluepigeon.admin.data.FloorDetail;
 import org.bluepigeon.admin.data.FloorImageData;
 import org.bluepigeon.admin.data.FloorListData;
 import org.bluepigeon.admin.data.FloorPanoData;
+import org.bluepigeon.admin.data.FloorPojo;
 import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.NewProjectList;
 import org.bluepigeon.admin.data.PaymentInfoData;
@@ -792,6 +795,16 @@ public class ProjectDAO {
 		return result;
 	}
 	
+	public List<BuildingPojo> getBuilderActiveBuildingsByProjectId(int project_id) {
+		String hql = "select a.id as id, a.project_id as projectId,a.name as name,a.emp_id as empId,a.total_floor as totalFloor,a.status_id as statusId, a.amenity_weightage as amenityWeightage,a.floor_weightage as floorWeightage, a.weightage as weightage, a.launch_date as launchDate, a.possession_date as possessionDate, a.total_inventory as totalInventory, a.inventory_sold as inventorySold, a.revenue as revenue, a.completion_status as completionStatus, a.status as status,b.name as projectName,d.name as buildingStatus,e.name as builderName from builder_building as a inner join builder_project as b on a.project_id = b.id inner join builder_building_status as d on a.status_id=d.id inner join builder as e on b.group_id = e.id where a.project_id = "+project_id+" and a.status = 1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuildingPojo.class));
+		List<BuildingPojo> result = query.list();
+		session.close();
+		return result;
+	}
+	
 	public List<BuilderBuilding> getBuilderBuildings() {
 		String hql = "from BuilderBuilding";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -1536,6 +1549,66 @@ public class ProjectDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("building_id", building_id);
 		List<BuilderFloor> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<FloorPojo> getBuildingActiveFloorsByBuilderAndBuildingId(BuilderEmployee builderEmployee, int building_id) {
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2) {
+			hql = "select a.id as id, a.building_id as buildingId, a.name as name, a.floor_no as floorNo, a.total_flats as totalFlats, a.completion_status as completionStatus,a.status_id as statusId,a.amenity_weightage as amenityWeightage,a.flat_weightage as flatWeightage,a.weightage as weightage,a.status status,b.name as buildingName,c.name as projectName,d.name as floorStatus from builder_floor as a inner join builder_building as b on a.building_id=b.id inner join builder_project as c on b.project_id=c.id inner join builder_floor_status as d on a.status_id=d.id inner join alloted_project as e on c.id=e.project_id where a.building_id = "+building_id+" and e.emp_id = "+builderEmployee.getId()+" and b.status=1 and c.status=1 and a.status=1";
+		} else {
+			hql = "select a.id as id, a.building_id as buildingId, a.name as name, a.floor_no as floorNo, a.total_flats as totalFlats, a.completion_status as completionStatus,a.status_id as statusId,a.amenity_weightage amenityWeightage,a.flat_weightage as flatWeightage,a.weightage as weightage,a.status status,b.name as buildingName,c.name as projectName,d.name as floorStatus from builder_floor as a inner join builder_building as b on a.building_id=b.id inner join builder_project as c on b.project_id=c.id inner join builder_floor_status as d on a.status_id=d.id where a.building_id = "+building_id+" and c.group_id="+builderEmployee.getBuilder().getId()+" and b.status=1 and c.status=1 and a.status=1";
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(FloorPojo.class));
+		List<FloorPojo> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<FloorPojo> getBuildingActiveFloorsByBuilder(BuilderEmployee builderEmployee) {
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2) {
+			hql = "select a.id as id, a.building_id as buildingId, a.name as name, a.floor_no as floorNo, a.total_flats as totalFlats, a.completion_status as completionStatus,a.status_id as statusId,a.amenity_weightage as amenityWeightage,a.flat_weightage as flatWeightage,a.weightage as weightage,a.status status,b.name as buildingName,c.name as projectName,d.name as floorStatus from builder_floor as a inner join builder_building as b on a.building_id=b.id inner join builder_project as c on b.project_id=c.id inner join builder_floor_status as d on a.status_id=d.id inner join alloted_project as e on c.id=e.project_id where e.emp_id = "+builderEmployee.getId()+" and b.status=1 and c.status=1 and a.status=1";
+		} else {
+			hql = "select a.id as id, a.building_id as buildingId, a.name as name, a.floor_no as floorNo, a.total_flats as totalFlats, a.completion_status as completionStatus,a.status_id as statusId,a.amenity_weightage as amenityWeightage,a.flat_weightage as flatWeightage,a.weightage as weightage,a.status status,b.name as buildingName,c.name as projectName,d.name as floorStatus from builder_floor as a inner join builder_building as b on a.building_id=b.id inner join builder_project as c on b.project_id=c.id inner join builder_floor_status as d on a.status_id=d.id where c.group_id="+builderEmployee.getBuilder().getId()+" and b.status=1 and c.status=1 and a.status=1";
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(FloorPojo.class));
+		List<FloorPojo> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<FlatPojo> getFloorActiveFlatsByBuilderAndBuildingId(BuilderEmployee builderEmployee, int floor_id) {
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2) {
+			hql = "select a.id as id, a.floor_no as floorNo, a.flat_no as flatNo, a.emp_id as empId,a.flat_type_id as flatTypeId,a.bedroom as bedroom, a.bathroom as bathroom, a.balcony as balcony, a.total_inventory as totalInventory,a.inventory_sold as inventorySold,a.revenue as revenue,a.completion_status as completionStatus,a.possession_date as possessionDate,a.status_id as statusId,a.amenity_weightage as amenityWeightage,a.weightage as weightage,a.status status,bf.name as floorName,b.name as buildingName,c.name as projectName,d.name as flatStatus from builder_flat as a inner join builder_floor as bf on a.floor_no=bf.id inner join builder_building as b on bf.building_id=b.id inner join builder_project as c on b.project_id=c.id inner join builder_flat_status as d on a.status_id=d.id inner join alloted_project as e on c.id=e.project_id where a.floor_no = "+floor_id+" and e.emp_id = "+builderEmployee.getId()+" and b.status=1 and c.status=1 and a.status=1 and bf.status = 1";
+		} else {
+			hql = "select a.id as id, a.floor_no as floorNo, a.flat_no as flatNo, a.emp_id as empId,a.flat_type_id as flatTypeId,a.bedroom as bedroom, a.bathroom as bathroom, a.balcony as balcony, a.total_inventory as totalInventory,a.inventory_sold as inventorySold,a.revenue as revenue,a.completion_status as completionStatus,a.possession_date as possessionDate,a.status_id as statusId,a.amenity_weightage as amenityWeightage,a.weightage as weightage,a.status status,bf.name as floorName,b.name as buildingName,c.name as projectName,d.name as flatStatus from builder_flat as a inner join builder_floor as bf on a.floor_no=bf.id inner join builder_building as b on bf.building_id=b.id inner join builder_project as c on b.project_id=c.id inner join builder_flat_status as d on a.status_id=d.id where a.floor_no = "+floor_id+" and c.group_id="+builderEmployee.getBuilder().getId()+" and b.status=1 and c.status=1 and a.status=1 and bf.status = 1";
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(FlatPojo.class));
+		List<FlatPojo> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<FlatPojo> getFloorActiveFlatsByBuilder(BuilderEmployee builderEmployee) {
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2) {
+			hql = "select a.id as id, a.floor_no as floorNo, a.flat_no as flatNo, a.emp_id as empId,a.flat_type_id as flatTypeId,a.bedroom as bedroom, a.bathroom as bathroom, a.balcony as balcony, a.total_inventory as totalInventory,a.inventory_sold as inventorySold,a.revenue as revenue,a.completion_status as completionStatus,a.possession_date as possessionDate,a.status_id as statusId,a.amenity_weightage as amenityWeightage,a.weightage as weightage,a.status status,bf.name as floorName,b.name as buildingName,c.name as projectName,d.name as flatStatus from builder_flat as a inner join builder_floor as bf on a.floor_no=bf.id inner join builder_building as b on bf.building_id=b.id inner join builder_project as c on b.project_id=c.id inner join builder_flat_status as d on a.status_id=d.id inner join alloted_project as e on c.id=e.project_id where e.emp_id = "+builderEmployee.getId()+" and b.status=1 and c.status=1 and a.status=1 and bf.status = 1";
+		} else {
+			hql = "select a.id as id, a.floor_no as floorNo, a.flat_no as flatNo, a.emp_id as empId,a.flat_type_id as flatTypeId,a.bedroom as bedroom, a.bathroom as bathroom, a.balcony as balcony, a.total_inventory as totalInventory,a.inventory_sold as inventorySold,a.revenue as revenue,a.completion_status as completionStatus,a.possession_date as possessionDate,a.status_id as statusId,a.amenity_weightage as amenityWeightage,a.weightage as weightage,a.status status,bf.name as floorName,b.name as buildingName,c.name as projectName,d.name as flatStatus from builder_flat as a inner join builder_floor as bf on a.floor_no=bf.id inner join builder_building as b on bf.building_id=b.id inner join builder_project as c on b.project_id=c.id inner join builder_flat_status as d on a.status_id=d.id where c.group_id="+builderEmployee.getBuilder().getId()+" and b.status=1 and c.status=1 and a.status=1 and bf.status = 1";
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(FlatPojo.class));
+		List<FlatPojo> result = query.list();
 		session.close();
 		return result;
 	}
@@ -3232,6 +3305,22 @@ public class ProjectDAO {
 		return result;
 	}
 	
+	public List<BuildingPojo> getActiveBuildingsByBuilder(BuilderEmployee builderEmployee) {
+		
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2) {
+			hql = "select a.id as id, a.project_id as projectId,a.name as name,a.emp_id as empId,a.total_floor as totalFloor,a.status_id as statusId, a.amenity_weightage as amenityWeightage,a.floor_weightage as floorWeightage, a.weightage as weightage, a.launch_date as launchDate, a.possession_date as possessionDate, a.total_inventory as totalInventory, a.inventory_sold as inventorySold, a.revenue as revenue, a.completion_status as completionStatus, a.status as status,c.name as projectName,d.name as buildingStatus,e.name as builderName from builder_building as a inner join alloted_project as b on a.project_id = b.project_id inner join builder_project as c on a.project_id=c.id inner join builder_building_status as d on a.status_id=d.id inner join builder as e on c.group_id = e.id where b.emp_id = "+builderEmployee.getId()+" and c.status=1 and a.status=1";
+		} else {
+			hql = "select a.id as id, a.project_id as projectId,a.name as name,a.emp_id as empId,a.total_floor as totalFloor,a.status_id as statusId, a.amenity_weightage as amenityWeightage,a.floor_weightage as floorWeightage, a.weightage as weightage, a.launch_date as launchDate, a.possession_date as possessionDate, a.total_inventory as totalInventory, a.inventory_sold as inventorySold, a.revenue as revenue, a.completion_status as completionStatus, a.status as status,b.name as projectName,d.name as buildingStatus,e.name as builderName from builder_building as a inner join builder_project as b on a.project_id = b.id inner join builder_building_status as d on a.status_id=d.id inner join builder as e on b.group_id = e.id where b.group_id = "+builderEmployee.getBuilder().getId()+" and b.status=1 and b.status=1";
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuildingPojo.class));
+		List<BuildingPojo> result = query.list();
+		session.close();
+		return result;
+	}
+	
 	public List<BuilderFloor> getAllFloorsByBuilderId(int builderId) {
 		String hql = "from BuilderFloor where builderBuilding.builderProject.builder.id = :builder_id order by builderBuilding.builderProject.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -4108,7 +4197,7 @@ public class ProjectDAO {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createSQLQuery(hql);
 		query.setParameter("emp_id", empId);
-		BigInteger totalRevenues = (BigInteger) query.uniqueResult();
+		Double totalRevenues = (Double) query.uniqueResult();
 		if(totalRevenues != null){
 			totalRevenue = Double.parseDouble(totalRevenues.toString());
 			return totalRevenue;

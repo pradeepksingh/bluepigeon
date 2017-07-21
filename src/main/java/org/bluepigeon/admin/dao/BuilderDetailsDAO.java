@@ -248,12 +248,19 @@ public class BuilderDetailsDAO {
 	}
 	public List<BuilderEmployeeAccessType> getBuilderAccessList(int accessId) {
 		List<BuilderEmployeeAccessType> result = null;
-		String hql = "from BuilderEmployeeAccessType where id > :access_id";
+		String hql = "";
+		if(accessId > 0) {
+			hql = "from BuilderEmployeeAccessType where id > :access_id";
+		} else {
+			hql = "from BuilderEmployeeAccessType";
+		}
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		if(accessId != 3 || accessId !=6 || accessId != 7){
 		Query query = session.createQuery(hql);
-		query.setParameter("access_id", accessId);
+		if(accessId > 0) {
+			query.setParameter("access_id", accessId);
+		}
 		result = query.list();
 		}
 		session.close();
@@ -1102,6 +1109,19 @@ public class BuilderDetailsDAO {
 		return responseMessage;
 		
 	}
+	
+	public void deleteAllotedrojectsByEmpId(int emp_id){
+		String hql = "delete from AllotProject where builderEmployee.id = :emp_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("emp_id", emp_id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+	}
+	
 	public List<AllotProject> getAllotedrojectsByEmpId(int emp_id){
 		String hql = "from AllotProject where builderEmployee.id = :emp_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();

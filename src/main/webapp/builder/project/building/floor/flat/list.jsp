@@ -3,11 +3,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
+<%@page import="org.bluepigeon.admin.data.FlatPojo"%>
 <%@page import="java.util.List"%>
 <%
 	int floor_id = 0;
 	int p_user_id = 0;
-	List<BuilderFlat> builderFlats = null;
+	List<FlatPojo> builderFlats = null;
 	session = request.getSession(false);
 	BuilderEmployee adminuserproject = new BuilderEmployee();
 	if(session!=null){
@@ -18,10 +19,10 @@
 				if (request.getParameterMap().containsKey("floor_id")) {
 					floor_id = Integer.parseInt(request.getParameter("floor_id"));
 					if(floor_id > 0) {
-						builderFlats = new ProjectDAO().getBuilderActiveFloorFlats(floor_id);
+						builderFlats = new ProjectDAO().getFloorActiveFlatsByBuilderAndBuildingId(adminuserproject,floor_id);
 					}
 				} else {
-					builderFlats = new ProjectDAO().getBuilderAllFlatsByBuilderId(p_user_id);
+					builderFlats = new ProjectDAO().getFloorActiveFlatsByBuilder(adminuserproject);
 				}
 			}
 		}
@@ -108,16 +109,16 @@
                                        <%
                                        		if(builderFlats != null){
                                        			int i=1;
-                                       			for(BuilderFlat builderFlat : builderFlats){	
+                                       			for(FlatPojo builderFlat : builderFlats){	
                                        		
                                        %>
                                        <tr>
                                        	<td><% out.print(i); %></td>
 										<td><% out.print(builderFlat.getFlatNo()); %></td>
-										<td><% out.print(builderFlat.getBuilderFloor().getName()); %></td>
-										<td><% out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getName()); %></td>
-										<td><% out.print(builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName()); %></td>
-										<td><% out.print(builderFlat.getBuilderFlatStatus().getName()); %></td>
+										<td><% out.print(builderFlat.getFloorName()); %></td>
+										<td><% out.print(builderFlat.getBuildingName()); %></td>
+										<td><% out.print(builderFlat.getProjectName()); %></td>
+										<td><% out.print(builderFlat.getFlatStatus()); %></td>
 										 <td><a href="${baseUrl}/builder/project/building/floor/flat/edit.jsp?flat_id=<% out.print(builderFlat.getId());%>"><span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a></td>
 										</tr>
                                        <%	i++;
