@@ -22,7 +22,7 @@
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
 			if(builder_id > 0){
-				project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+				project_list = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 				
 				builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
 			}

@@ -303,7 +303,7 @@ $('#newcancellation').bootstrapValidator({
     excluded: ':disabled',
     fields: {
     	
-    	'project_id': {
+    	project_id: {
             validators: {
                 notEmpty: {
                     message: 'Project is required and cannot be empty'
@@ -311,14 +311,14 @@ $('#newcancellation').bootstrapValidator({
             }
         },
         
-        'building_id': {
+        building_id: {
             validators: {
                 notEmpty: {
                     message: 'building is required and cannot be empty'
                 }
             }
         },
-        'flat_id' : {
+        flat_id : {
             validators: {
                 notEmpty: {
                     message: 'flat is required and cannot be empty'

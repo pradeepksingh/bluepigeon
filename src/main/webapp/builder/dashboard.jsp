@@ -35,6 +35,7 @@
 	BuilderEmployee builder = new BuilderEmployee();
     DecimalFormat decimalFormat = new DecimalFormat("#.##");
 	int builder_id = 0;
+	int emp_id = 0;
 	int access_id = 0;
 	Double totalPropertySold = 0.0;
 	if(session!=null)
@@ -44,6 +45,7 @@
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			
 				builder_id = builder.getBuilder().getId();
+				emp_id = builder.getId();
 				access_id = builder.getBuilderEmployeeAccessType().getId();
 				if(builder_id > 0){
 					totalBuyers = new BuyerDAO().getTotalBuyers(builder);
@@ -247,6 +249,7 @@
                                
                     </div>
                     <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_id);%>"/>
+                    <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
                     <div class="container" id="project_list">
                    		<%
                        		if(project_list !=null){
@@ -329,9 +332,10 @@
                             <div class="col-md-3 col-sm-6 col-xs-12">
                         		<select class="selectpicker border-drop-down" data-style="form-control" id="graph_project_id" name="graph_project_id">
                                         <option>Project Name</option>
-                                       <% for(ProjectList projectList : project_list){%>
+                                       <% if(project_list != null){
+                                       for(ProjectList projectList : project_list){%>
                                        <option value="<%out.print(projectList.getId());%>"><%out.print(projectList.getName()); %></option>
-                                       <% }%>
+                                       <%} }%>
                            		</select>
                     		</div>
                             <ul class="list-inline text-right">
@@ -710,7 +714,7 @@
   		var projectId = "";
   		
   		$("#project_list").empty();
-  	   $.post("${baseUrl}/webapi/project/filter/builder",{builder_id:$("#builder_id").val()},function(data){
+  	   $.post("${baseUrl}/webapi/project/filter/builderemp",{project_id:$("#project_id").val(),emp_id:$("#emp_id").val(),country_id: 1,state_id:1, city_id: $("#city_id").val(),locality_id : $("#locality_id").val()},function(data){
   		   if(data == ""){
   			   $("#project_list").empty();
   			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
