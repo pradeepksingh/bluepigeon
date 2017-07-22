@@ -3321,7 +3321,7 @@ public class ProjectDAO {
 	    Session session = hibernateUtil.getSessionFactory().openSession();
 	    Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectData.class));
 	    System.err.println(hql);
-	    query.setMaxResults(4);
+	   // query.setMaxResults(4);
 	    List<ProjectData> result = query.list();
 	    session.close();
 	    return result;

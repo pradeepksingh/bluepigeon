@@ -72,7 +72,15 @@ public class CancellationController {
 		BuilderEmployee builderEmployee = null;
 		if(empId >0){
 			builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(empId);
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() >= 1 && builderEmployee.getBuilderEmployeeAccessType().getId() <= 5 ){
+				cancellation.setApproved(true);
+				cancellation.setCancelStatus(1);
+			}else{
+				cancellation.setApproved(false);
+				cancellation.setCancelStatus(0);
+			}
 		}
+		
 		
 		return new CancellationDAO().save(cancellation, builderEmployee);
 	}

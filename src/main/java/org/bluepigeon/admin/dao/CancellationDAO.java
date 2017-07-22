@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bluepigeon.admin.data.CancellationList;
+import org.bluepigeon.admin.data.LeadList;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.BuilderEmployee;
@@ -12,6 +13,7 @@ import org.bluepigeon.admin.model.Cancellation;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
 
 public class CancellationDAO {
 	
@@ -107,7 +109,7 @@ public class CancellationDAO {
 		int i=1;
 		for(Cancellation cancellation : cancellation_list){
 			CancellationList bList = new CancellationList();
-			bList.setCount(i);
+			//bList.setCount(i);
 			bList.setProjectName(cancellation.getBuilderProject().getName());
 			bList.setBuyerName(cancellation.getBuyerName());
 			bList.setBuildingName(cancellation.getBuilderBuilding().getName());
@@ -158,7 +160,7 @@ public class CancellationDAO {
 		int i=1;
 		for(Cancellation cancellation : result) {
 			CancellationList bList = new CancellationList();
-			bList.setCount(i);
+			//bList.setCount(i);
 			bList.setProjectName(cancellation.getBuilderProject().getName());
 			bList.setBuyerName(cancellation.getBuyerName());
 			bList.setBuildingName(cancellation.getBuilderBuilding().getName());
@@ -168,5 +170,31 @@ public class CancellationDAO {
 		}
 		session.close();
 		return cancellationList;
+	}
+	
+	public List<CancellationList> getCancellationByBuilderEmployee(BuilderEmployee builderEmployee){
+		
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
+			hql = "SELECT cancel.buyer_name as buyerName,  project.name as projectName, building.name as buildingName, flat.flat_no as flatNo "
+				+"FROM  cancellation as cancel left join builder_project as project ON cancel.project_id = project.id left join builder_building as building"
+				+ "ON cancel.building_id = building.id left join builder_flat as flat ON cancel.flat_id = flat.id"
+				+"left join builder as build ON project.group_id = build.id "
+				+"WHERE build.id = "+builderEmployee.getBuilder().getId()+" group by cancel.id";
+		} else {
+			hql = "SELECT cancel.buyer_name as buyerName,  project.name as projectName, building.name as buildingName, flat.flat_no as flatNo "
+					+"FROM  cancellation as cancel left join builder_project as project ON cancel.project_id = project.id inner join allot_project ap ON project.id = ap.project_id "
+					+ "left join builder_building as building"
+				+ "ON cancel.building_id = building.id left join builder_flat as flat ON cancel.flat_id = flat.id"
+					+"left join builder as build ON project.group_id = build.id "
+					+"WHERE ap.emp_id = "+builderEmployee.getId()+" group by cancel.id";
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(CancellationList.class));
+		System.err.println(hql);
+		List<CancellationList> result = query.list();
+		session.close();
+		return result;
 	}
 }

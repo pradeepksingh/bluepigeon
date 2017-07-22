@@ -37,6 +37,7 @@
 			if(builder_uid > 0){
 				project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_uid);
 			    builder_size = project_list.size();
+			    access_type_id = builderEmployee.getBuilderEmployeeAccessType().getId();
 			    builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
 			    builderDetailsDAO = new BuilderDetailsDAO();
 			    access_list = builderDetailsDAO.getBuilderAccessList(access_type_id);
