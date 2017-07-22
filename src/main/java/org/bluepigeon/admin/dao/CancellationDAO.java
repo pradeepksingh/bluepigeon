@@ -176,13 +176,13 @@ public class CancellationDAO {
 		
 		String hql = "";
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
-			hql = "SELECT cancel.buyer_name as buyerName,  project.name as projectName, building.name as buildingName, flat.flat_no as flatNo "
+			hql = "SELECT cancel.buyer_name as buyerName, cancel.cancel_status as status, cancel.is_approved as isApproved,  project.name as projectName, building.name as buildingName, flat.flat_no as flatNo "
 				+"FROM  cancellation as cancel left join builder_project as project ON cancel.project_id = project.id left join builder_building as building"
 				+ "ON cancel.building_id = building.id left join builder_flat as flat ON cancel.flat_id = flat.id"
 				+"left join builder as build ON project.group_id = build.id "
 				+"WHERE build.id = "+builderEmployee.getBuilder().getId()+" group by cancel.id";
 		} else {
-			hql = "SELECT cancel.buyer_name as buyerName,  project.name as projectName, building.name as buildingName, flat.flat_no as flatNo "
+			hql = "SELECT cancel.buyer_name as buyerName, cancel.cancel_status as status,cancel.is_approved as isApproved, project.name as projectName, building.name as buildingName, flat.flat_no as flatNo "
 					+"FROM  cancellation as cancel left join builder_project as project ON cancel.project_id = project.id inner join allot_project ap ON project.id = ap.project_id "
 					+ "left join builder_building as building"
 				+ "ON cancel.building_id = building.id left join builder_flat as flat ON cancel.flat_id = flat.id"

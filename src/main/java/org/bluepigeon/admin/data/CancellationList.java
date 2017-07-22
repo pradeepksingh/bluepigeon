@@ -6,8 +6,8 @@ public class CancellationList {
 	private String buildingName;
 	private String flatNo;
 	private Short isDeleted;
-	private Short status;
-	
+	private Integer status = 0;
+	private boolean isApproved = false;
 	public String getBuyerName() {
 		return buyerName;
 	}
@@ -38,10 +38,16 @@ public class CancellationList {
 	public void setIsDeleted(Short isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	public Short getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
-	public void setStatus(Short status) {
+	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	public boolean isApproved() {
+		return isApproved;
+	}
+	public void setApproved(boolean isApproved) {
+		this.isApproved = isApproved;
 	}
 }

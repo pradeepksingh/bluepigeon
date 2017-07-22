@@ -659,19 +659,21 @@ public class BuilderDetailsDAO {
 		sessionnew.close();
 		String hql = "SELECT project.id as id, project.name as name, "
 				+"project.completion_status as completionStatus,project.inventory_sold as sold, "
-				+"project.total_inventory as totalSold, "
+				+"project.total_inventory as totalSold,IFNULL('',(select pg.image from project_image_gallery as pg where pg.project_id=project.id limit 1)) as image,"
 				+"c.name as city, "
 				+"count(lead.id) as totalLeads ";
 		String where = "";
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
 			hql = hql + "FROM  builder_project as project inner join allot_project as ap on project.id=ap.project_id "
 					+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
-					+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id WHERE ";
+					+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
+					+ "WHERE ";
 			where +="ap.emp_id = "+builderEmployee.getId();
 		} else {
 			hql = hql + "FROM  builder_project as project "
 			+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
-			+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id WHERE ";
+			+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
+			+ "WHERE ";
 			where +="build.id = "+builderEmployee.getBuilder().getId();
 		}
 		if(projectId > 0){
@@ -702,10 +704,11 @@ public class BuilderDetailsDAO {
 					where +="project.area_id = :locality_id";
 			}
 		}
-		hql += where + " AND project.status=1 order by project.id desc";
+		hql += where + " AND project.status=1 GROUP by project.id order by project.id desc";
 		try {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuilderProjectList.class));
+		System.err.println(hql);
 		if(projectId > 0){
 			
 		}
@@ -721,6 +724,7 @@ public class BuilderDetailsDAO {
 		} catch(Exception e) {
 			//
 		}
+		
 		return builderProjectLists;
 	}
 	/**

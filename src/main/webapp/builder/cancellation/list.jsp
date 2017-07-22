@@ -1,3 +1,4 @@
+<%@page import="org.bouncycastle.crypto.engines.ISAACEngine"%>
 <%@page import="org.bluepigeon.admin.data.CancellationList"%>
 <%@page import="org.bluepigeon.admin.dao.CancellationDAO"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
@@ -98,7 +99,10 @@
                                              <td>Project</td>
                                              <td>Building</td>
                                             <td>Flat No</td>
-<!--                                             <td>Action</td> -->
+                                            <td>status</td>
+                                              <%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5){ %>
+                                            <td>Action</td>
+											<%} %>
                                         </tr>
                                         <tr>
                                             <th>Sr No.</th>
@@ -106,14 +110,19 @@
                                              <th>Project Name</th>
                                              <th>Building Name</th>
                                             <th>Flat No</th>
-<!--                                             <th>Action</th> -->
+                                            <th>status</th>
+                                              <%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5){ %>
+                                            <th>Action</th>
+                                            <%} %>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       <%
-                                      if(cancellation_list != null){
-                                    	  int i=1;
-                                      	for(CancellationList cancellationList : cancellation_list) { %>
+                                	<%
+                                  	if(cancellation_list.size() > 0){
+                                    	int i=1;
+                                      	for(CancellationList cancellationList : cancellation_list) {
+                                     		try{
+                                  	%>
 									<tr>
 										<td><%out.print(i);%></td>
 										<td>
@@ -130,20 +139,29 @@
 											<% out.print(cancellationList.getFlatNo());
 											%>
 										</td>
-									  <%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5 || access_id ==6){ %>
-									 	<td>
-									 		<button type="button" onclick="approve();">Approve</button>
-									 		<button type="button" onclick="cancel();">Cancel</button>
-									 	</td>	
-									 <%} %>
-										<%if(access_id==7){ %>
 										<td>
-											<button type="button" onclick="cancelRequest();">Cancel Request</button>
+											<%if(cancellationList.isApproved() && cancellationList.getStatus()==1) {
+												out.print("Approved by Admin");
+											} else if(cancellationList.getStatus() == 0) {
+												out.print("Waiting for approval");
+											}
+											%>
 										</td>
-										<%} %>
-										<% 	
-											i++;} 
+										<%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5){ %>
+										<td>
+											<% if(!cancellationList.isApproved() && cancellationList.getStatus()==0) { %>
+											<button type="button" onclick="approve();">Approve</button>
+									 		<button type="button" onclick="cancel();">Cancel</button>
+									 		<% } %>
+										</td>
+										<% } %>
+										<%
+                                     		} catch(Exception e){
+    											e.printStackTrace();
+    										}
+										i++;
                                       	}
+                                      }
 										%>
                                     </tbody>
                                 </table>

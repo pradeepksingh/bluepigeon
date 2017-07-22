@@ -5,7 +5,7 @@ import java.math.BigInteger;
 public class BuilderProjectList {
 	private int id;
 	private String name;
-	private String image;
+	private String image = "builder/plugins/images/Untitled-1.png";
 	private String city;
 	private double sold;
 	private double totalSold;
