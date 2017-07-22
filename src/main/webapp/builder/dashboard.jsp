@@ -312,78 +312,6 @@
                        	}
                        	}%>
                         </div>
-<!--                         <div class="image"> -->
-<!--                           <div class="image"> -->
-<!-- 	                       <img src="plugins/images/Untitled-1.png" alt="Project image"/> -->
-<!-- 	                       <div class="overlay"> -->
-<!-- 		                       <div class="row"> -->
-<!-- 			                       <div class="col-md-6 left"> -->
-<!-- 				                       <h3>Rohan Lehare</h3> -->
-<!-- 				                       <h4>Baner</h4> -->
-<!-- 				                       <br> -->
-<!-- 					                       <div class="bottom"> -->
-<!-- 					                       <h4>50/500 SOLD</h4> -->
-<!-- 					                       </div> -->
-<!-- 			                       </div> -->
-<!-- 			                        <div class="col-md-6 right"> -->
-<!-- 				                         <div class="chart" id="graph1" data-percent="50"> -->
-<!-- 				                         </div> -->
-<!-- 					                        <div class="bottom"> -->
-<!-- 					                        <h4>10 NEW LEADS</h4> -->
-<!-- 					                        </div> -->
-<!-- 			                       </div> -->
-<!-- 		                       </div> -->
-<!--                            </div> -->
-<!--                        </div> -->
-<!--                         </div> -->
-<!--                        </div> -->
-<!--                        <div class="col-md-6 col-sm-6 col-xs-12 projectsection"> -->
-<!--                       <div class="image"> -->
-<!-- 	                       <img src="plugins/images/Untitled-1.png" alt="Project image"/> -->
-<!-- 	                       <div class="overlay"> -->
-<!-- 		                       <div class="row"> -->
-<!-- 			                       <div class="col-md-6 left"> -->
-<!-- 				                       <h3>Rohan Lehare</h3> -->
-<!-- 				                       <h4>Baner</h4> -->
-<!-- 				                       <br> -->
-<!-- 					                       <div class="bottom"> -->
-<!-- 					                       <h4>50/500 SOLD</h4> -->
-<!-- 					                       </div> -->
-<!-- 			                       </div> -->
-<!-- 			                        <div class="col-md-6 right"> -->
-<!-- 				                         <div class="chart" id="graph" data-percent="30"> -->
-<!-- 				                         </div> -->
-<!-- 					                        <div class="bottom"> -->
-<!-- 					                        <h4>10 NEW LEADS</h4> -->
-<!-- 					                        </div> -->
-<!-- 			                       </div> -->
-<!-- 		                       </div> -->
-<!--                            </div> -->
-<!--                        </div>   -->
-<!--                        <div class="image"> -->
-<!-- 	                       <img src="plugins/images/Untitled-1.png" alt="Project image"/> -->
-<!-- 	                       <div class="overlay"> -->
-<!-- 		                       <div class="row"> -->
-<!-- 			                       <div class="col-md-6 left"> -->
-<!-- 				                       <h3>Rohan Lehare</h3> -->
-<!-- 				                       <h4>Baner</h4> -->
-<!-- 				                       <br> -->
-<!-- 					                       <div class="bottom"> -->
-<!-- 					                       <h4>50/500 SOLD</h4> -->
-<!-- 					                       </div> -->
-<!-- 			                       </div> -->
-<!-- 			                        <div class="col-md-6 right"> -->
-<!-- 				                         <div class="chart" id="graph" data-percent="90"> -->
-<!-- 				                         </div> -->
-<!-- 					                        <div class="bottom"> -->
-<!-- 					                        <h4>10 NEW LEADS</h4> -->
-<!-- 					                        </div> -->
-<!-- 			                       </div> -->
-<!-- 		                       </div> -->
-<!--                            </div> -->
-<!--                        </div> -->
-<!--                        </div> -->
-
 	                    <div class="offset-sm-5 col-sm-7" id="showMore">
 	                        <button type="button" onclick="getAllProjectsByBuiderId();" class="btn btn11 btn-default waves-effect waves-light m-t-10">More...</button>
 	                     </div>
@@ -451,7 +379,7 @@
                 <!-- /.row -->
                 <div class="white-box">
 	                <div class="row">
-	                <%if((access_id >=1 && access_id <=2) || (access_id>=4 && access_id <= 6)) {%>
+	                <%if((access_id >=1 && access_id <=2) || (access_id>=4 && access_id <= 5)) {%>
 		                <div class="col-md-4">
 		                    <button type="button" onclick="addEmployee();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Employee</button>
 		                </div>
@@ -605,12 +533,9 @@
 	<%}}%>
     
     function createGraph(graphId){
-    	//alert(graphId);
     	 var el = document.getElementById(graphId); 
-    	//var el = $('div #'+graphId).attr('data-percent');
-    	// alert("Graph Id "+el);
+    	
     	var per= el.getAttribute('data-percent');
-    	//alert("per : "+per);
  	    var options = {
  	        percent:  el.getAttribute('data-percent') || 2,
  	        size: el.getAttribute('data-size') || 100,
@@ -783,10 +708,7 @@
   		var projectName = "";
   		var cityName = "";
   		var projectId = "";
-  		//alert($("#project_id").val());
-  	//  $('#project_id').prop('selectedIndex',0);
-  	//$("#project_id").val('0');
-  		//alert("Builder Id :: "+$("#builder_id").val());
+  		
   		$("#project_list").empty();
   	   $.post("${baseUrl}/webapi/project/filter/builder",{builder_id:$("#builder_id").val()},function(data){
   		   if(data == ""){
@@ -844,20 +766,12 @@
   		    },'json');
   	   $("#showMore").empty();
       }
-    </script>
-    
-    <script>
    
-    
-    //	 alert("Total Flats :: "+totalFlats);
     	//Morris bar chart
     	 <%
       	if(barGraphDatas != null){
        		%> 
-     // alert("Total Flats :: "+totalFlats);
-     // alert("Total buyers :: "+totalBuyers);
-      //alert("totalSold :: "+totalSold);
-     	//getMorrisBar(totalFlats,totalBuyers,totalSold);
+  
      	Morris.Bar({
      		 
     	    element: 'morris-bar-chart',
@@ -886,33 +800,7 @@
      	    gridLineColor: '#eef0f2',
      	    resize: true
      	});
-     	//This is for the sparkline chart
-//      	var sparklineLogin = function() { 
-     	    
-//      	    $('#sparkline2dash').sparkline([6, 10, 9, 11, 9, 10, 12], {
-//      	        type: 'bar',
-//      	        height: '154',
-//      	        barWidth: '4',
-//      	        resize: true,
-//      	        barSpacing: '10',
-//      	        barColor: '#25a6f7'
-//      	    });
-//      	   $('#sales1').sparkline([6, 10, 9, 11, 9, 10, 12], {
-//      	        type: 'bar',
-//      	        height: '154',
-//      	        barWidth: '4',
-//      	        resize: true,
-//      	        barSpacing: '10',
-//      	        barColor: '#fff'
-//      	    });
-     	    
-//      	}
-//      	var sparkResize;
-//      	    $(window).resize(function(e) {
-//      	        clearTimeout(sparkResize);
-//      	        sparkResize = setTimeout(sparklineLogin, 500);
-//      	    });
-//      	    sparklineLogin();
+     
      	
      <%	} %>
  	
@@ -952,14 +840,6 @@
  			
  			
  		 });
-  		   
-   	
-    // alert("Total Flats :: "+totalFlats);
-    // alert("Total buyers :: "+totalBuyers);
-     //alert("totalSold :: "+totalSold);
-    	//getMorrisBar(totalFlats,totalBuyers,totalSold);
-    	
-    	
     	
     }
     </script>

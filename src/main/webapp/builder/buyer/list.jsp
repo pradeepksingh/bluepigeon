@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.BuyerList"%>
 <%@page import="org.bluepigeon.admin.dao.BuyerDAO"%>
 <%@page import="org.bluepigeon.admin.model.Buyer"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
@@ -9,7 +10,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%
-	List<Buyer> buyerList = null;
+	List<BuyerList> buyerList = null;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	int builder_id = 0;
@@ -19,7 +20,7 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
-			buyerList = new BuyerDAO().getAllBuyerByBuilderId(builder_id);
+			buyerList = new BuyerDAO().getBuyersByBuilderEmployee(builder);
 		}
    }
 	
@@ -137,18 +138,18 @@
                                        <%
                                        		if(buyerList != null){
                                        			int i=1;
-                                       			for(Buyer buyer: buyerList){
+                                       			for(BuyerList buyer: buyerList){
                                        %>
                                        		<tr>
                                        		<td><% out.print(i); %></td>
-                                       		<td><% out.print(buyer.getBuilderProject().getName()); %></td>
+                                       		<td><% out.print(buyer.getProjectName()); %></td>
                                        		<td><% out.print(buyer.getName()); %></td>
                                        		<td><% out.print(buyer.getEmail()); %></td>
-                                       		<td><% out.print(buyer.getMobile()); %></td>
-                                       		<td><% out.print(buyer.getBuilderBuilding().getName()); %></td>
-                                       		<td><% out.print(buyer.getBuilderFlat().getFlatNo()); %></td>
+                                       		<td><% out.print(buyer.getPhone()); %></td>
+                                       		<td><% out.print(buyer.getBuildingName()); %></td>
+                                       		<td><% out.print(buyer.getFlatNumber()); %></td>
                                        		<td>
-                                       		<a href="${baseUrl}/builder/buyer/edit.jsp?flat_id=<% out.print(buyer.getBuilderFlat().getId()); %>"> <span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a></td>
+                                       		<a href="${baseUrl}/builder/buyer/edit.jsp?flat_id=<% out.print(buyer.getId()); %>"> <span class="btn btn-success pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Manage</span></a></td>
                                        		</tr>
                                        <% i++;}
                                        }%>

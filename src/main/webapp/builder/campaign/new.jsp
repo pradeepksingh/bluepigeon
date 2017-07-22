@@ -38,7 +38,7 @@
 			
 		}
 		if(p_user_id > 0){
-			builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
+			builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 			if(builderProjects.size()>0)
 		    	project_size = builderProjects.size();
 		 	if(builderPropertyTypes.size()>0)

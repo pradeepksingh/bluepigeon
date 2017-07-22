@@ -34,7 +34,7 @@
 			builder_id = builder.getBuilder().getId();
 			emp_id = builder.getId();
 			if(builder_id > 0){
-				builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+				builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 			}
 			if(builderProjects.size()>0)
 		    	project_size = builderProjects.size();
@@ -282,9 +282,7 @@ $("#building_id").change(function(){
 
 $("#flat_id").change(function(){
 	$.get("${baseUrl}/webapi/cancellation/buyer/"+$("#flat_id").val(),{ }, function(data){
-// 		alert(data.name);
-// 		alert(data.mobile);
-// 		alert(data.pancard);
+
 		$("#buyer_name").val(data.name);
 		$("#buyer_contact").val(data.mobile);
 		$("#pan_card").val(data.pancard);
@@ -377,7 +375,7 @@ $('#newcancellation').bootstrapValidator({
 });
 
 function addCancellation() {
-	alert("Hello again");
+	//alert("Hello again");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showCancellationRequest,

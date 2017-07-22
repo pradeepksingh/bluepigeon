@@ -94,13 +94,17 @@ if(session!=null)
                                           	<td>Campaign Title</td>
                                            	<td>Start Date</td>
                                             <td>Campaign Type</td>
+                                             <%if(access_id >= 1 && access_id <= 3){ %>
                                             <td>Actions</td>
+                                            <%} %>
                                         </tr>
                                         <tr>
                                           	<th>Campaign Title</th>
                                            	<th>Start Date</th>
                                             <th>Campaign Type</th>
+                                             <%if(access_id >= 1 && access_id <= 3){ %>
                                             <th>Actions</th>
+                                            <%} %>
                                         </tr>
                                     </thead>
                                     <tbody>
