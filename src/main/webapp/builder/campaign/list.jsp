@@ -232,7 +232,6 @@ if(session!=null)
         });
     } );
     function deleteCampaign(id) {
-    	 	var b=$("#offer").val();
     	 	var flag = confirm("Are you sure ? You want to delete Campaign ?");
     	 	if(flag) {
     	 		$.get("${baseUrl}/webapi/project/campaign/delete/"+id, { }, function(data){

@@ -1,6 +1,7 @@
 package org.bluepigeon.admin.data;
 
 public class CancellationList {
+	private int flatId;
 	private String buyerName;
 	private String projectName;
 	private String buildingName;
@@ -8,6 +9,14 @@ public class CancellationList {
 	private Short isDeleted;
 	private Integer status = 0;
 	private boolean isApproved = false;
+	
+	
+	public int getFlatId() {
+		return flatId;
+	}
+	public void setFlatId(int flatId) {
+		this.flatId = flatId;
+	}
 	public String getBuyerName() {
 		return buyerName;
 	}

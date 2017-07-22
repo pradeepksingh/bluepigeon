@@ -65,7 +65,7 @@ public class CancellationDAO {
 		session.close();
 	}
 	public void updatePrimaryBuyer(int flatId){
-		String hql ="UPDATE Buyer set is_deleted=1 where builderFlat.id = :flat_id ";
+		String hql ="UPDATE Buyer set is_deleted=1, status=1 where builderFlat.id = :flat_id ";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
@@ -173,28 +173,63 @@ public class CancellationDAO {
 	}
 	
 	public List<CancellationList> getCancellationByBuilderEmployee(BuilderEmployee builderEmployee){
-		
 		String hql = "";
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
-			hql = "SELECT cancel.buyer_name as buyerName, cancel.cancel_status as status, cancel.is_approved as isApproved,  project.name as projectName, building.name as buildingName, flat.flat_no as flatNo "
+			hql = "SELECT cancel.buyer_name as buyerName, cancel.cancel_status as status, cancel.is_approved as isApproved,  project.name as projectName, building.name as buildingName, flat.id as flatId, flat.flat_no as flatNo "
 				+"FROM  cancellation as cancel left join builder_project as project ON cancel.project_id = project.id left join builder_building as building"
-				+ "ON cancel.building_id = building.id left join builder_flat as flat ON cancel.flat_id = flat.id"
-				+"left join builder as build ON project.group_id = build.id "
+				+ " ON cancel.building_id = building.id left join builder_flat as flat ON cancel.flat_id = flat.id "
+				+" left join builder as build ON project.group_id = build.id "
 				+"WHERE build.id = "+builderEmployee.getBuilder().getId()+" group by cancel.id";
 		} else {
-			hql = "SELECT cancel.buyer_name as buyerName, cancel.cancel_status as status,cancel.is_approved as isApproved, project.name as projectName, building.name as buildingName, flat.flat_no as flatNo "
+			hql = "SELECT cancel.buyer_name as buyerName, cancel.cancel_status as status,cancel.is_approved as isApproved, project.name as projectName, building.name as buildingName, flat.id as flatId, flat.flat_no as flatNo "
 					+"FROM  cancellation as cancel left join builder_project as project ON cancel.project_id = project.id inner join allot_project ap ON project.id = ap.project_id "
-					+ "left join builder_building as building"
-				+ "ON cancel.building_id = building.id left join builder_flat as flat ON cancel.flat_id = flat.id"
-					+"left join builder as build ON project.group_id = build.id "
+					+ "left join builder_building as building "
+				+ " ON cancel.building_id = building.id left join builder_flat as flat ON cancel.flat_id = flat.id "
+					+" left join builder as build ON project.group_id = build.id "
 					+"WHERE ap.emp_id = "+builderEmployee.getId()+" group by cancel.id";
 		}
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(CancellationList.class));
-		System.err.println(hql);
+		//System.err.println(hql);
 		List<CancellationList> result = query.list();
 		session.close();
 		return result;
+	}
+	
+	public ResponseMessage deletePrimaryBuyerByFlatId(int flatId){
+		ResponseMessage responseMessage = new ResponseMessage();
+		updateBuyerStatus(flatId);
+		updateCancelStatus(flatId);
+		updateFlatStatus(flatId);
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Buyer is Deleted Successfully");
+		return responseMessage;
+	}
+	public void updateCancelStatus(int flatId){
+		System.out.println("FlatId :: "+flatId);
+		String hql = "UPDATE Cancellation set cancel_status = 2, is_approved = 1 WHERE builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id",flatId);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public ResponseMessage cancelApproval(int flatId){
+		String hql = "UPDATE Cancellation set cancel_status = 0 where builderFlat.id = :flat_id";
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flatId);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		return responseMessage;
 	}
 }
