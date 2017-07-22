@@ -1,3 +1,4 @@
+<%@page import="org.bouncycastle.crypto.engines.ISAACEngine"%>
 <%@page import="org.bluepigeon.admin.data.CancellationList"%>
 <%@page import="org.bluepigeon.admin.dao.CancellationDAO"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
@@ -13,7 +14,6 @@
 <%@page import="java.util.List"%>
 <%
 	List<CancellationList> cancellation_list = null;
-	List<ProjectData> projectDatas = null;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	List<City> cityList = new CityNamesImp().getCityNames();
@@ -31,7 +31,6 @@
 	if(builder_uid > 0){
 		cancellation_list = new CancellationDAO().getCancellationByBuilderId(builder_uid);
 		int builder_size = cancellation_list.size();
-		projectDatas = new ProjectDAO().getActiveProjectsByBuilderId(builder_uid);
 	}
 %>
 
@@ -88,29 +87,7 @@
                     <div class="col-sm-12">
                         <div class="white-box"><br>
                           <h3>Manage Cancellation</h3>
-<!-- 						<div class="row re white-box"> -->
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 								<select name="project_id" id="project_id" class="form-control"> -->
-<!-- 				                    <option value="0">Select Project</option> -->
-<%-- 				                    <% --%>
- 				                  <!--   if(projectDatas != null){-->
-<%-- 				                    for(int i=0; i < projectDatas.size() ; i++){ %> --%>
-<%-- 									<option value="<% out.print(projectDatas.get(i).getId());%>"><% out.print(projectDatas.get(i).getName());%></option> --%>
-<%-- 									<% } --%>
-<%-- 				                    }%> --%>
-<!-- 						         </select>    -->
-<!-- 							</div> -->
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 							   <select name="building_id" id="building_id" class="form-control"> -->
-<!-- 				                    <option value="0">Select Building</option> -->
-<!-- 							   </select> -->
-<!-- 							</div> -->
-<!-- 							<div class="col-md-3 col-sm-6 col-xs-12"> -->
-<!-- 								<select name="flat_id" id="flat_id" class="form-control"> -->
-<!-- 				                    <option value="0">Select Flat</option> -->
-<!-- 								</select> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
+
 						  <a href="${baseUrl}/builder/cancellation/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">New Cancellation</span></a>
                           <br><br><br>
                             <div class="table-responsive">
@@ -122,7 +99,10 @@
                                              <td>Project</td>
                                              <td>Building</td>
                                             <td>Flat No</td>
-<!--                                             <td>Action</td> -->
+                                            <td>status</td>
+                                              <%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5){ %>
+                                            <td>Action</td>
+											<%} %>
                                         </tr>
                                         <tr>
                                             <th>Sr No.</th>
@@ -130,14 +110,19 @@
                                              <th>Project Name</th>
                                              <th>Building Name</th>
                                             <th>Flat No</th>
-<!--                                             <th>Action</th> -->
+                                            <th>status</th>
+                                              <%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5){ %>
+                                            <th>Action</th>
+                                            <%} %>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       <%
-                                      if(cancellation_list != null){
-                                    	  int i=1;
-                                      	for(CancellationList cancellationList : cancellation_list) { %>
+                                	<%
+                                  	if(cancellation_list.size() > 0){
+                                    	int i=1;
+                                      	for(CancellationList cancellationList : cancellation_list) {
+                                     		try{
+                                  	%>
 									<tr>
 										<td><%out.print(i);%></td>
 										<td>
@@ -154,20 +139,29 @@
 											<% out.print(cancellationList.getFlatNo());
 											%>
 										</td>
-									  <%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5 || access_id ==6){ %>
-									 	<td>
-									 		<button type="button" onclick="approve();">Approve</button>
-									 		<button type="button" onclick="cancel();">Cancel</button>
-									 	</td>	
-									 <%} %>
-										<%if(access_id==7){ %>
 										<td>
-											<button type="button" onclick="cancelRequest();">Cancel Request</button>
+											<%if(cancellationList.isApproved() && cancellationList.getStatus()==1) {
+												out.print("Approved by Admin");
+											} else if(cancellationList.getStatus() == 0) {
+												out.print("Waiting for approval");
+											}
+											%>
 										</td>
-										<%} %>
-										<% 	
-											i++;} 
+										<%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5){ %>
+										<td>
+											<% if(!cancellationList.isApproved() && cancellationList.getStatus()==0) { %>
+											<button type="button" onclick="approve();">Approve</button>
+									 		<button type="button" onclick="cancel();">Cancel</button>
+									 		<% } %>
+										</td>
+										<% } %>
+										<%
+                                     		} catch(Exception e){
+    											e.printStackTrace();
+    										}
+										i++;
                                       	}
+                                      }
 										%>
                                     </tbody>
                                 </table>

@@ -51,7 +51,7 @@ campaignLists = new CampaignDAO().getCampaignList();
                                         %>
                                         <tr>
                                             <td><% out.print(campaignList.getTitle()); %></td>
-                                            <td><% out.print(campaignList.getSetdate()); %></td>
+                                            <td><% out.print(campaignList.getSetDate()); %></td>
                                             <td><% 
 					                 	   	    if(campaignList.getCampaignType() ==1)
                                             		out.print("New Project");

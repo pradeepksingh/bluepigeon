@@ -40,6 +40,7 @@ import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.transform.Transformers;
 
 import com.google.gson.Gson;
 
@@ -300,11 +301,8 @@ public class BuyerDAO {
 				buyerList.setBuildingName("");
 				buyerList.setFlatNumber("");
 			}
-			buyerList.setAgreement(buyer.getAgreement());
-			buyerList.setPossession(buyer.getPossession());
 			buyerList.setPhone(buyer.getMobile());
 			buyerList.setEmail(buyer.getEmail());
-			buyerList.setStatus(buyer.getStatus());
 			buyerLists.add(buyerList);
 		}
 		session.close();
@@ -368,10 +366,6 @@ public class BuyerDAO {
 				buyerList.setName(buyer.getName());
 				buyerList.setPhone(buyer.getMobile());
 				buyerList.setEmail(buyer.getEmail());
-				buyerList.setAgreement(buyer.getAgreement());
-				System.out.println("Possession :: "+buyer.getPossession());
-				buyerList.setPossession(buyer.getPossession());
-				buyerList.setStatus(buyer.getStatus());
 				Query buildingQuery = buildingSession.createQuery(get_building_list);
 				buildingQuery.setParameter("id", buyer.getBuilderProject().getId());
 				List<BuilderBuilding> building_list = buildingQuery.list();
@@ -954,6 +948,33 @@ public class BuyerDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("builder_id", builderId);
 		List<Buyer> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<BuyerList> getBuyersByBuilderEmployee(BuilderEmployee builderEmployee){
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
+			hql = "SELECT  buy.name as name, buy.email as email, buy.mobile as phone, "
+				+"project.name as projectName, building.name as buildingName,flat.id as id, flat.flat_no as flatNumber "
+				+" FROM  buyer as buy left join builder_project as project ON buy.project_id = project.id left join builder_building as building "
+				+ "ON buy.building_id = building.id left join builder_flat as flat ON buy.flat_id = flat.id left join "
+				+ "builder as build ON buy.builder_id = build.id "
+				+"WHERE build.id = "+builderEmployee.getBuilder().getId()+" and buy.is_deleted = 0 and buy.is_primary=1 group by buy.id";
+		} else {
+			hql = "SELECT buy.name as name, buy.email as email, buy.mobile as phone, "
+				+"project.name as projectName, building.name as buildingName, flat.id as id, flat.flat_no as flatNumber "
+				+"FROM  buyer as buy inner join allot_project as ap ON buy.project_id = ap.project_id "
+				+ "left join builder_building as building "
+				+ "ON buy.building_id = building.id left join builder_flat as flat ON buy.flat_id = flat.id "
+				+"left join builder as build ON buy.builder_id = build.id "
+				+"WHERE ap.emp_id = "+builderEmployee.getId()+" and buy.is_deleted = 0 and buy.is_primary=1 group by buy.id";
+		}
+		System.err.println(hql);
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuyerList.class));
+		List<BuyerList> result = query.list();
 		session.close();
 		return result;
 	}

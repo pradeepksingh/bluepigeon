@@ -50,7 +50,7 @@
 		}
 		if(builder_id > 0){
 			builderLead = new ProjectDAO().getBuilderProjectLeadById(lead_id);
-			project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+			project_list = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 		    builder_size = project_list.size();
 		}
 		if(builderLead !=null){

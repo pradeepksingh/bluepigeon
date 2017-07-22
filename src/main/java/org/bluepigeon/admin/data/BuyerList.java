@@ -8,9 +8,7 @@ public class BuyerList {
 	private String email;
 	private String buildingName;
 	private String flatNumber;
-	private Short agreement;
-	private Short possession;
-	private Short status;
+
 	public int getId() {
 		return id;
 	}
@@ -54,25 +52,6 @@ public class BuyerList {
 	}
 	public void setFlatNumber(String flatNumber) {
 		this.flatNumber = flatNumber;
-	}
-	public Short getAgreement() {
-		return agreement;
-	}
-	public void setAgreement(Short agreements) {
-		this.agreement = agreements;
-	}
-	
-	public Short getPossession() {
-		return possession;
-	}
-	public void setPossession(Short possession) {
-		this.possession = possession;
-	}
-	public Short getStatus() {
-		return status;
-	}
-	public void setStatus(Short status) {
-		this.status = status;
 	}
 	
 }

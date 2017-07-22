@@ -183,7 +183,7 @@ public class CampaignDAO {
 			campaignList.setCampaignId(campaign.getId());
 			campaignList.setTitle(campaign.getTitle());
 			campaignList.setCampaignType(campaign.getType());
-			campaignList.setSetdate(campaign.getSetDate());
+			campaignList.setSetDate(campaign.getSetDate());
 			campaignLists.add(campaignList);
 		}
 		return campaignLists;
@@ -207,7 +207,7 @@ public class CampaignDAO {
 			campaignList.setCampaignId(campaign.getId());
 			campaignList.setTitle(campaign.getTitle());
 			campaignList.setCampaignType(campaign.getType());
-			campaignList.setSetdate(campaign.getSetDate());
+			campaignList.setSetDate(campaign.getSetDate());
 			campaignLists.add(campaignList);
 		}
 		session.close();
@@ -228,7 +228,7 @@ public class CampaignDAO {
 		} else {
 			hql = "SELECT camp.id as campaignId, camp.title as title, camp.type as campaignType, camp.set_date as setDate "
 					+"FROM  campaign as camp inner join allot_project ap ON camp.project_id = ap.project_id "
-					+"left join builder as build ON camp.builder_id = build.id"
+					+"left join builder as build ON camp.builder_id = build.id "
 					+"WHERE ap.emp_id = "+builderEmployee.getId()+" and camp.is_deleted = 0 group by camp.id";
 		}
 		System.err.println(hql);

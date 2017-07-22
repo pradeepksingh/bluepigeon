@@ -22,7 +22,7 @@ public class CampaignList {
 	public Date getSetDate() {
 		return setDate;
 	}
-	public void setSetdate(Date setDate) {
+	public void setSetDate(Date setDate) {
 		this.setDate = setDate;
 	}
 	public int getCampaignType() {

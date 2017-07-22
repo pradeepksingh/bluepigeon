@@ -1029,14 +1029,11 @@ function addMoreBuyers() {
 				+'<div class="col-3">'
 					+' <input class="form-control" type="text" id="buyer_name" name="buyer_name[]" value="">'
 				+'</div>'
-				
-		
 				+'<label for="example-text-input" class="col-3 col-form-label">Contact</label>'
 				+'<div class="col-3">'
 					+'<input class="form-control" type="text" id="contact" name="contact[]" value="">'
 				+'</div>'
 				+'</div>'
-				
 				+'<div class="form-group row">'
 				
 				+'<label for="example-text-input" class="col-3 col-form-label">Email</label>'
