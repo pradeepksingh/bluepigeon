@@ -965,7 +965,7 @@
 													<div class="form-group" id="error-discount">
 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="number" class="form-control " id="discount" onkeypress=" return isNumber(event, this);" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
+															<input type="text" class="form-control " id="discount" onkeypress=" return isNumber(event, this);" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -974,7 +974,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="number" class="form-control" id="discount_amount" onkeypress=" return isNumber(event, this);" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
+															<input type="text" class="form-control" id="discount_amount<%out.print(j); %>" onkeyup=" javascript:onlyNumber(<%out.print(j); %>);" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -1236,6 +1236,11 @@ function isNumber(evt, element) {
 
     return true;
 } 
+function onlyNumber(id){
+	
+	 var $th = $("#discount_amount"+id);
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+}
 function notEmpty(){
 	//alert("Again Not Empty");
 	
@@ -1314,6 +1319,11 @@ $('#offerfrm').bootstrapValidator({
 	    },
 	    'discount[]': {
 	        validators: {
+	        	between: {
+                    min: 0,
+                    max: 100,
+                    message: 'The percentage must be between 0 and 100'
+	        	},
 	            notEmpty: {
 	                message: 'discount is required and cannot be empty'
 	            }
@@ -1697,6 +1707,11 @@ $('#paymentfrm').bootstrapValidator({
         },
         'payable[]': {
             validators: {
+            	between: {
+                    min: 0,
+                    max: 100,
+                    message: 'The percentage must be between 0 and 100'
+	        	},
 		        notEmpty: {
 		    		message: 'Payable is required and cannot be empty'
 		        },
@@ -1869,80 +1884,6 @@ function removeOffer(id) {
 	$("#offer-"+id).remove();
 }
 
-function addMoreSchedule() {
-	var schedule_count = parseInt($("#schedule_count").val());
-	schedule_count++;
-	var html = '<div class="row" id="schedule-'+schedule_count+'">'
-				+'<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>'
-				+'<hr/>'
-				+'<div class="col-lg-5 margin-bottom-5">'
-				+'<div class="form-group" id="error-schedule">'
-				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-				+'<div>'
-				+'<input type="text" class="form-control" id="schedule" required name="schedule[]"/>'
-				+'</div>'
-// 				+'<div  id="s-'+schedule_count+'"></div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-payable">'
-				+'<label class="control-label col-sm-8">% of Net Payable <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control" required=true onkeypress="return isNumber(event, this);" name="payable[]"/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<!--div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-amount">'
-				+'<label class="control-label col-sm-6">Amount <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-6">'
-				+'<input type="text" class="form-control" required=true onkeypress=" return isNumber(event, this);" name="amount[]"/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div -->'
-				+'<div class="col-lg-1">'
-				+'<span><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span>'
-				+'</div>'
-			+'</div>';
-	$("#payment_schedule").append(html);
-	$("#schedule_count").val(schedule_count);
-	$('#paymentfrm').bootstrapValidator('destroy');
-	$('#paymentfrm').data('bootstrapValidator', null);
-	$('#paymentfrm').bootstrapValidator({
-		container: function($field, validator) {
-			return $field.parent().next('.messageContainer');
-	   	},
-	    feedbackIcons: {
-	        validating: 'glyphicon glyphicon-refresh'
-	    },
-	    excluded: ':disabled',
-	    fields: {
-	    	'schedule[]': {
-	            validators: {
-			    	notEmpty: {
-			    		message: 'Schedule is required and cannot be empty'
-			        },
-	            }
-	        },
-	        'payable[]': {
-	            validators: {
-			        notEmpty: {
-			    		message: 'Payable is required and cannot be empty'
-			        },
-	            }
-	        },
-	    }
-	}).on('success.form.bv', function(event,data) {
-		// Prevent form submission
-		event.preventDefault();
-		updatePaymentSchudle();
-	});
-}
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();
 }

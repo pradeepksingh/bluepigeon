@@ -1296,12 +1296,9 @@ $("#city_id").change(function(){
 // 	//updateProject();
 // });
     
-$('#offerfrm')
-.bootstrapValidator({
+$('#offerfrm').bootstrapValidator({
     message: 'This value is not valid',
     feedbackIcons: {
-        valid: 'glyphicon glyphicon-ok',
-        invalid: 'glyphicon glyphicon-remove',
         validating: 'glyphicon glyphicon-refresh'
     },
     fields: {
@@ -1327,23 +1324,11 @@ $('#offerfrm')
             }
         }
     }
-})
-.on('error.field.bv', function(e, data) {
-    console.log('error.field.bv -->', data.element);
-    alert('error.field.bv -->', data.element);
-})
-.on('success.field.bv', function(e, data) {
-    console.log('success.field.bv -->', data.element);
-    alert('success.field.bv -->', data.element);
-})
-.on('added.field.bv', function(e, data) {
-    console.log('Added element -->', data.field, data.element);
-    alert('Added element -->', data.field, data.element);
-})
-.on('removed.field.bv', function(e, data) {
-    console.log('Removed element -->', data.field, data.element);
-    alert('Removed element -->', data.field, data.element);
+}).on('success.form.bv', function(e, data) {
+	e.preventDefault();
+    addOffers();
 });
+
 
 $('#basicfrm').bootstrapValidator({
 	container: function($field, validator) {
@@ -1986,7 +1971,6 @@ function removeOffer(id) {
 
 
 function addMoreSchedule() {
-	alert("Hi");
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
 	var html = '<div class="row" id="schedule-'+schedule_count+'">'

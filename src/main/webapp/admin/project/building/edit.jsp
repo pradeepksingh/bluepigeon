@@ -1574,29 +1574,7 @@ $("#subpbtn").click(function(){
 		
 	});
 });
-// $('#updateoffer').bootstrapValidator({
-// 	container: function($field, validator) {
-// 		return $field.parent().next('.messageContainer');
-//    	},
-//     feedbackIcons: {
-//         validating: 'glyphicon glyphicon-refresh'
-//     },
-//     excluded: ':disabled',
-//     fields: {
-//     	'offer_title[]': {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'offer title is required and cannot be empty'
-//                 }
-//             }
-//         },
-//     }
-// }).on('success.form.bv', function(event,data) {
-// 	// Prevent form submission
-// //	event.preventDefault();
-// 	//updateProjectBuilding();
-// });
-// $(document).ready(function() {
+
 $('#updateoffer').bootstrapValidator({
     feedbackIcons: {
      //   valid: 'glyphicon glyphicon-ok',
@@ -1613,6 +1591,11 @@ $('#updateoffer').bootstrapValidator({
         },
         'discount[]':{
         	 validators: {
+        		 between: {
+                     min: 0,
+                     max: 100,
+                     message: 'The percentage must be between 0 and 100'
+ 	        	},
                  notEmpty: {
                      message: 'Discount required and cannot be empty'
                  }
