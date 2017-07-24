@@ -554,7 +554,7 @@
 													<div class="form-group" id="error-discount">
 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control errorMsg" id="discount" name="discount[]" value=""/>
+															<input type="text" class="form-control errorMsg" id="discount1" onkeyup="javascript:validPer(1)" onkeypress=" return isNumber(event, this);" name="discount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -563,7 +563,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control errorMsg" id="discount_amount" name="discount_amount[]" value=""/>
+															<input type="text" class="form-control errorMsg" id="discount_amount1"  onkeyup=" javascript:onlyNumber(1);" name="discount_amount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -674,6 +674,12 @@ function onlyNumbers(){
 	 var $th = $(this);
 	    $th.val( $th.val().replace(/[^a-zA-Z0-9- ]/g, function(str) { alert('Please use only letters and numbers.'); return ''; } ) );
 }
+function onlyNumber(id){
+	
+	 var $th = $("#discount_amount"+id);
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+}
+
 $('#name').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^a-zA-Z0-9- ]/g, function(str) { alert('Please use only letters and numbers.'); return ''; } ) );
@@ -689,12 +695,13 @@ $('#payable').keypress(function (event) {
 $('#amount').keypress(function (event) {
     return isNumber(event, this)
 });
-$('#discount').keypress(function (event) {
-    return isNumber(event, this)
-});
-$('#discount_amount').keypress(function (event) {
-    return isNumber(event, this)
-});
+// $('#discount').keypress(function (event) {
+//     return isNumber(event, this)
+// });
+
+// $('#discount_amount').keypress(function (event) {
+//     return isNumber(event, this)
+// });
 
 $('#possession_date').datepicker({
 	autoclose:true,
@@ -747,6 +754,16 @@ $('#tech_fee').keypress(function (event) {
 $('#payable').keypress(function (event) {
     return isNumber(event, this)
 });
+function validPer(id){
+	//alert($("#discount"+id).val());
+	var x = $("#discount"+id).val();
+	//alert(x);
+	if( x<0 || x >100){
+		alert("The percentage must be between 0 and 100");
+		$("#discount"+id).val('');
+	}
+}
+
 $('#addbuilding').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -930,7 +947,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount">'
 				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount" name="discount[]" onkeypress=" return isNumber(event, this);" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount'+offers+'" onkeyup="validPer('+offers+')" name="discount[]" onkeypress=" return isNumber(event, this);" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -939,7 +956,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount_amount" onkeypress=" return isNumber(event, this);" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup="javascript:onlyNumber('+offers+');" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'

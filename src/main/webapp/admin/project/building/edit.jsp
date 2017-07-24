@@ -591,7 +591,8 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<div id="offer_area">
-											<% for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) { %>
+											<% int j=0; 
+											for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) { %>
 											<div class="row" id="offer-<% out.print(buildingOfferInfo.getId()); %>">
 												<input type="hidden" name="offer_id[]" value="<% out.print(buildingOfferInfo.getId()); %>" />
 												<div class="col-lg-12" style="padding-bottom:5px;">
@@ -625,7 +626,7 @@
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
 															<div>
-																<input type="text" class="form-control" id="discount_amount" onkeypress=" return isNumber(event, this);" name="discount_amount[]" value="<% out.print(buildingOfferInfo.getAmount()); %>"/>
+																<input type="text" class="form-control" id="discount_amount<%out.print(j); %>" onkeyup=" javascript:onlyNumber(<%out.print(j); %>);" name="discount_amount[]" value="<% out.print(buildingOfferInfo.getAmount()); %>"/>
 															</div>
 															<div class="messageContainer"></div>
 														</div>
@@ -669,7 +670,7 @@
 												</div>
 											</div>
 											</div>
-											<% } %>
+											<% j++; } %>
 										</div>
 										<div>
 											<div class="col-lg-12">
@@ -861,9 +862,6 @@ $('#amount').keypress(function (event) {
 $('#discount').keypress(function (event) {
     return isNumber(event, this)
 });
-$('#discount_amount').keypress(function (event) {
-    return isNumber(event, this)
-});
 $('#amenity_weightage').keypress(function (event) {
     return isNumber(event, this)
 });
@@ -921,6 +919,14 @@ function isNumber(evt, element) {
 
     return true;
 }   
+
+
+function onlyNumber(id){
+	
+	 var $th = $("#discount_amount"+id);
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+}
+
 function notEmpty(){
 	alert($(this).val());
 }
@@ -1086,6 +1092,11 @@ $('#updatepayment').bootstrapValidator({
     fields: {
         'payable[]': {
             validators: {
+            	between: {
+                    min: 0,
+                    max: 100,
+                    message: 'The percentage must be between 0 and 100'
+	        	},
                 notEmpty: {
                     message: 'Payable is required and cannot be empty'
                 }
@@ -1412,7 +1423,7 @@ function showDetailTab() {
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
-	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="0" />'
+	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="'+offers+'" />'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs">x</a></span></div>'
 		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-offer_title">'
@@ -1436,7 +1447,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount_amount" name="discount_amount[]" onkeypress=" return isNumber(event, this);" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" name="discount_amount[]" onkeyup="javascript:onlyNumber('+offers+');" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'

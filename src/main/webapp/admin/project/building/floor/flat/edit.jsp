@@ -700,11 +700,14 @@ $(".errorMsg").keypress(function(event){
 });
 var count = $("#count_pay").val();
 function calculateAmount(id){
-
-var amount = $("#payable"+id).val()*$("#h_sale_value").val()/100;
-	$("#amount"+id).val(amount.toFixed(1));
+	if($("#payable"+id).val() <0 || $("#payable"+id).val() >100){
+		alert("The percentage must be between 0 and 100");
+		$("#payable"+id).val('');
+	}else{
+	var amount = $("#payable"+id).val()*$("#h_sale_value").val()/100;
+		$("#amount"+id).val(amount.toFixed(0));
+	}
 }
-
 function calcultatePercentage(id){
 	var $th = $("#amount"+id);
 	$th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );

@@ -479,7 +479,7 @@
 							<div id="payment_schedule">
 								<div class="panel panel-default">
 									<div class="panel-body">
-									<%
+									<% int j=1;
 									if(buildingPaymentInfos != null){
 										if(buildingPaymentInfos.size() > 0){
 											for(BuildingPaymentInfo paymentInfoData: buildingPaymentInfos){ %>
@@ -498,7 +498,7 @@
 													<div class="form-group" id="error-payable">
 														<label class="control-label col-sm-8">% of Net Payable </label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control errorMsg" id="payable" name="payable[]" value="<%out.print(paymentInfoData.getPayable());%>"/>
+															<input type="text" class="form-control errorMsg" id="payable<%out.print(j); %>" onkeyup="javascript:validPer(<%out.print(j); %>"  onkeypress=" return isNumber(event, this);" name="payable[]" value="<%out.print(paymentInfoData.getPayable());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -573,6 +573,15 @@ function isNumber(evt, element) {
 
     return true;
 } 
+function validPer(id){
+	//alert($("#discount"+id).val());
+	var x = $("#payable"+id).val();
+	//alert(x);
+	if( x<0 || x >100){
+		alert("The percentage must be between 0 and 100");
+		$("#payable"+id).val('');
+	}
+}
 $('#flat_no').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
