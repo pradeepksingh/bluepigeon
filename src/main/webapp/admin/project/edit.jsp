@@ -125,6 +125,7 @@
 			</div>
 			<ul class="nav nav-tabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Basic Details</a></li>
+			  	<li><a data-toggle="tab" href="#projectimageupload">Project Image</a></li>
 			  	<li><a data-toggle="tab" href="#projectdetail">Project Details</a></li>
 			  	<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
@@ -394,6 +395,48 @@
 										</div>
 									</div>
 								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div id="projectimageupload" class="tab-pane fade">
+					<form id="updateimage" name="updateimage" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+						<div class="row">
+							<div id="imageresponse"></div>
+							<input type="hidden" name="project_id" id="project_id" value="<% out.print(builderProject.getId());%>"/>
+							<div class="col-lg-12">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h3>Upload Project Image</h3>
+										<br>
+										<div class="row" id="project_images">
+											<div class="col-lg-4 margin-bottom-5">
+											<% if( builderProject != null) { %>
+											
+												<div class="form-group" id="error-landmark">
+													<div class="col-sm-12">
+														<img alt="Project Images" src="${baseUrl}/<% out.print(builderProject.getImage()); %>" width="200px;">
+													</div>
+												</div>
+											<% } %>
+											</div>
+											<div class="col-lg-6 margin-bottom-5" id="imgdiv-'+img_count+'">
+												<div class="form-group" id="error-landmark">'
+												<label class="control-label col-sm-4">Select Image </label>
+													<div class="col-sm-8 input-group" style="padding:0px 12px;">
+														<input type="file" class="form-control" id="building_image" name="building_image[]" />
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<span class="pull-right">
+									<button type="button" name="imagebtn" class="btn btn-success btn-sm" onclick="updateProjectImages();">SAVE</button>
+								</span>
 							</div>
 						</div>
 					</form>
@@ -1315,7 +1358,38 @@ $("#city_id").change(function(){
 		},'json');
 	}
 });
+function updateProjectImages() {
+	var options = {
+	 		target : '#imageresponse', 
+	 		beforeSubmit : showAddImageRequest,
+	 		success :  showAddImageResponse,
+	 		url : '${baseUrl}/webapi/project/images/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#updateimage').ajaxSubmit(options);
+}
 
+function showAddImageRequest(formData, jqForm, options){
+	$("#imageresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddImageResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#imageresponse").removeClass('alert-success');
+       	$("#imageresponse").addClass('alert-danger');
+		$("#imageresponse").html(resp.message);
+		$("#imageresponse").show();
+  	} else {
+  		$("#imageresponse").removeClass('alert-danger');
+        $("#imageresponse").addClass('alert-success');
+        $("#imageresponse").html(resp.message);
+        $("#imageresponse").show();
+        alert(resp.message);
+  	}
+}
 $('#basicfrm').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -1858,7 +1932,6 @@ $('#offerfrm').bootstrapValidator({
 	updateProjectOffers();
 });
 function updateProjectOffers(){
-	alert("Hello");
 		var options = {
 		 		target : '#offerresponse', 
 		 		beforeSubmit : showOfferRequest,

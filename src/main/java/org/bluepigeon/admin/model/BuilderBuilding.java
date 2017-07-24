@@ -43,6 +43,7 @@ public class BuilderBuilding implements java.io.Serializable {
 	private Double floorWeightage = 0.0;
 	private Double weightage = 0.0;
 	private Byte status;
+	private String image = "";
 	private Set<BuilderFloor> builderFloors = new HashSet<BuilderFloor>(0);
 
 	public BuilderBuilding() {
@@ -51,7 +52,7 @@ public class BuilderBuilding implements java.io.Serializable {
 	public BuilderBuilding(AdminUser adminUser, BuilderBuildingStatus builderBuildingStatus, Double completionStatus,
 			BuilderProject builderProject, String name, Integer totalFloor, Date launchDate, Date possessionDate,
 			Double totalInventory, Double inventorySold, Double revenue, Byte status, Set<BuilderFloor> builderFloors,
-			Double amenityWeightage, Double floorWeightage, Double weightage) {
+			Double amenityWeightage, Double floorWeightage, Double weightage,String image) {
 		this.adminUser = adminUser;
 		this.builderBuildingStatus = builderBuildingStatus;
 		this.builderProject = builderProject;
@@ -68,6 +69,7 @@ public class BuilderBuilding implements java.io.Serializable {
 		this.amenityWeightage = amenityWeightage;
 		this.floorWeightage = floorWeightage;
 		this.weightage = weightage;
+		this.image = image;
 	}
 
 	@Id
@@ -227,5 +229,12 @@ public class BuilderBuilding implements java.io.Serializable {
 	public void setWeightage(Double weightage) {
 		this.weightage = weightage;
 	}
+	@Column(name = "image", length=225)
+	public String getImage() {
+		return image;
+	}
 
+	public void setImage(String image) {
+		this.image = image;
+	}
 }

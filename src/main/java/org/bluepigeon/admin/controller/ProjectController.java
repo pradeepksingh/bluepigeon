@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.AreaUnitDAO;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
+import org.bluepigeon.admin.dao.BuilderProjectAmenityDAO;
 import org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.CampaignDAO;
@@ -68,6 +69,7 @@ import org.bluepigeon.admin.model.BuilderFloorAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderFloorStatus;
 import org.bluepigeon.admin.model.BuilderLead;
 import org.bluepigeon.admin.model.BuilderProject;
+import org.bluepigeon.admin.model.BuilderProjectAmenity;
 import org.bluepigeon.admin.model.BuilderProjectOfferInfo;
 import org.bluepigeon.admin.model.BuilderProjectPaymentInfo;
 import org.bluepigeon.admin.model.BuilderProjectPriceInfo;
@@ -502,7 +504,45 @@ public class ProjectController extends ResourceConfig {
 		return responseMessage;
 	}
 	
-	
+	@POST
+	@Path("/image/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateMyBuilderProjectAmenity(
+			@FormDataParam("project_id") int project_id,
+			@FormDataParam("project_image[]") List<FormDataBodyPart> project_images
+	){
+		String gallery_name = "";
+		ResponseMessage responseMessage = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		BuilderProject builderProject = new BuilderProject();
+		builderProject = projectDAO.getBuilderActiveProjectById(project_id);
+		try {	
+			if (project_images.size() > 0) {
+				for(int i=0 ;i < project_images.size();i++)
+				{
+					if(project_images.get(i).getFormDataContentDisposition().getFileName() != null && !project_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						gallery_name = project_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/projectamenityicon/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(project_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+					}
+				}
+			}
+		} catch(Exception e) {
+			//e.printStackTrace();
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Unable to save image");
+		}
+		if(gallery_name.length() > 0) {
+			builderProject.setImage(gallery_name);
+		}
+		responseMessage = projectDAO.updateProjectImage(builderProject);
+		return responseMessage;
+		
+	}	
 	@GET
 	@Path("/image/delete/{id}")
 	@Produces(MediaType.APPLICATION_JSON)

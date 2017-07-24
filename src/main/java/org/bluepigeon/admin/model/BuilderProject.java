@@ -55,6 +55,7 @@ public class BuilderProject implements java.io.Serializable {
 	private Double amenityWeightage = 0.0;
 	private Double buildingWeightage = 0.0;
 	private Byte status;
+	private String image="";
 	private Set<BuilderBuilding> builderBuildings = new HashSet<BuilderBuilding>(0);
 	private Set<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos = new HashSet<BuilderProjectPropertyConfigurationInfo>(
 			0);
@@ -87,7 +88,7 @@ public class BuilderProject implements java.io.Serializable {
 			Set<BuilderProjectBankInfo> builderProjectBankInfos,
 			Set<BuilderProjectProjectType> builderProjectProjectTypes, Set<BuilderFlatType> builderFlatTypes,
 			Set<BuilderProjectApprovalInfo> builderProjectApprovalInfos, Double completionStatus, Integer availbale,
-			Double amenityWeightage, Double buildingWeightage) {
+			Double amenityWeightage, Double buildingWeightage, String image) {
 		this.state = state;
 		this.adminUser = adminUser;
 		this.areaUnit = areaUnit;
@@ -129,6 +130,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.availbale = availbale;
 		this.amenityWeightage = amenityWeightage;
 		this.buildingWeightage = buildingWeightage;
+		this.image = image;
 	}
 
 	@Id
@@ -510,6 +512,14 @@ public class BuilderProject implements java.io.Serializable {
 
 	public void setBuildingWeightage(Double buildingWeightage) {
 		this.buildingWeightage = buildingWeightage;
+	}
+	@Column(name = "image", length=225)
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	
