@@ -68,6 +68,7 @@ import org.bluepigeon.admin.model.BuilderFloorAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderFloorStatus;
 import org.bluepigeon.admin.model.BuilderLead;
 import org.bluepigeon.admin.model.BuilderProject;
+import org.bluepigeon.admin.model.BuilderProjectOfferInfo;
 import org.bluepigeon.admin.model.BuilderProjectPaymentInfo;
 import org.bluepigeon.admin.model.BuilderProjectPriceInfo;
 import org.bluepigeon.admin.model.BuilderProjectProjectType;
@@ -417,7 +418,11 @@ public class ProjectController extends ResourceConfig {
 		}
 		return responseMessage;
 	}
-	
+	/**
+	 * @Pradeep sir
+	 * @param projectOffer
+	 * @return
+	 */
 	@POST
 	@Path("/offer/update")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -426,6 +431,77 @@ public class ProjectController extends ResourceConfig {
 		ResponseMessage resp = new ProjectDAO().updateOfferInfo(projectOffer); 
 		return resp;
 	}
+	/**
+	 * Update Project offers
+	 * @author pankaj
+	 * @param 
+	 * @return ResponseMessage
+	 */
+	@POST
+	@Path("/offerdetails/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateProjectOffers(
+			@FormDataParam("project_id") int project_id,
+			@FormDataParam("offer_count") int offer_count,
+			@FormDataParam("offer_id[]") List<FormDataBodyPart> offer_ids,
+ 			@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_titles,
+			@FormDataParam("discount[]") List<FormDataBodyPart> discounts,
+			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amounts,
+			@FormDataParam("description[]") List<FormDataBodyPart> descriptions,
+			@FormDataParam("offer_type[]") List<FormDataBodyPart> offer_types,
+			@FormDataParam("offer_status[]") List<FormDataBodyPart> offer_statuses
+			) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		BuilderProject builderProject = new BuilderProject();
+		ProjectDAO projectDAO = new ProjectDAO();
+		if(project_id > 0){
+			builderProject.setId(project_id);
+		}
+		if(offer_titles.size() > 0){
+			List<BuilderProjectOfferInfo> updateProjectOfferInfos = new ArrayList<BuilderProjectOfferInfo>();
+			int i=0;
+			for(FormDataBodyPart names : offer_titles)
+			{
+				if(offer_ids.get(i).getValueAs(Integer.class) != 0 && offer_ids.get(i).getValueAs(Integer.class) != null){
+					BuilderProjectOfferInfo builderProjectOfferInfo = new BuilderProjectOfferInfo();
+					builderProjectOfferInfo.setBuilderProject(builderProject);
+					
+					if(names.getValueAs(String.class) != null || names.getValueAs(String.class).trim().length() > 0){
+						builderProjectOfferInfo.setTitle(names.getValueAs(String.class).toString());
+					}
+					if(discounts.get(i).getValueAs(Double.class) != 0 && discounts.get(i).getValueAs(Double.class) !=null){
+						builderProjectOfferInfo.setPer(discounts.get(i).getValueAs(Double.class));
+					}
+					if(discount_amounts.get(i).getValueAs(Double.class) != 0 && discount_amounts.get(i).getValueAs(Double.class) !=null){
+						builderProjectOfferInfo.setAmount(discount_amounts.get(i).getValueAs(Double.class));
+					}
+					if((descriptions.get(i).getValueAs(String.class).toString() != null && !descriptions.get(i).getValueAs(String.class).toString().isEmpty())){
+						builderProjectOfferInfo.setDescription(descriptions.get(i).getValueAs(String.class).toString());
+					}
+					if(offer_types.get(i).getValueAs(Integer.class) != 0 && offer_types.get(i).getValueAs(Integer.class) != null){
+						builderProjectOfferInfo.setType(offer_types.get(i).getValueAs(Integer.class));
+					}
+					if(offer_statuses.get(i).getValueAs(Byte.class) != 0 && offer_types.get(i).getValueAs(Byte.class) != null){
+						builderProjectOfferInfo.setStatus(offer_statuses.get(i).getValueAs(Byte.class));
+					}
+//					if(amounts.get(i).getValueAs(Double.class) !=0 && amounts.get(i).getValueAs(Double.class) != null){
+//						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
+//					}
+					updateProjectOfferInfos.add(builderProjectOfferInfo);
+				}
+				i++;
+			}
+			if(updateProjectOfferInfos.size() > 0){
+				projectDAO.updateOffers(updateProjectOfferInfos);
+			}
+			
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Project offer Info updated successfully");
+		}
+		return responseMessage;
+	}
+	
 	
 	@GET
 	@Path("/image/delete/{id}")

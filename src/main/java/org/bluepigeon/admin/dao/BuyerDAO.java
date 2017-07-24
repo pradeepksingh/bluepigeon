@@ -964,7 +964,8 @@ public class BuyerDAO {
 		} else {
 			hql = "SELECT buy.name as name, buy.email as email, buy.mobile as phone, "
 				+"project.name as projectName, building.name as buildingName, flat.id as id, flat.flat_no as flatNumber "
-				+"FROM  buyer as buy inner join allot_project as ap ON buy.project_id = ap.project_id "
+				+"FROM  buyer as buy left join builder_project as project ON buy.project_id = project.id "
+				+ "inner join allot_project as ap ON buy.project_id = ap.project_id "
 				+ "left join builder_building as building "
 				+ "ON buy.building_id = building.id left join builder_flat as flat ON buy.flat_id = flat.id "
 				+"left join builder as build ON buy.builder_id = build.id "

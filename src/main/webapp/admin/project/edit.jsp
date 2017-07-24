@@ -937,9 +937,11 @@
 					</form>
 				</div>
 				<div id="offer" class="tab-pane fade">
-					<form id="offerfrm" name="offerfrm" method="post">
+					<form id="offerfrm" name="offerfrm" method="post" action=""  enctype="multipart/form-data">
 						<input type="hidden" name="offer_count" id="offer_count" value="<%out.print(projectOfferInfos.size()+10000); %>"/>
+						<input type="hidden" name="project_id" id="project_id" value="<%out.print(project_id);%>"/>
 			 			<div class="row">
+			 			<div id="offerresponse"></div>
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
@@ -965,7 +967,7 @@
 													<div class="form-group" id="error-discount">
 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="number" class="form-control " id="discount" onkeypress=" return isNumber(event, this);" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
+															<input type="text" class="form-control " id="discount" onkeypress=" return isNumber(event, this);" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -974,7 +976,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="number" class="form-control" id="discount_amount" onkeypress=" return isNumber(event, this);" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
+															<input type="text" class="form-control" id="discount_amount<%out.print(j); %>" onkeyup=" javascript:onlyNumber(<%out.print(j); %>);" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -993,9 +995,9 @@
 														<label class="control-label col-sm-6">Offer Type </label>
 														<div class="col-sm-6">
 															<select class="form-control" id="offer_type" name="offer_type[]">
-																<option value="1" <% if(projectOfferInfo.getType().toString() == "1") { %>selected<% } %>>Percentage</option>
-																<option value="2" <% if(projectOfferInfo.getType().toString() == "2") { %>selected<% } %>>Flat Amount</option>
-																<option value="3" <% if(projectOfferInfo.getType().toString() == "3") { %>selected<% } %>>Other</option>
+																<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
 															</select>
 														</div>
 														<div class="messageContainer"></div>
@@ -1236,6 +1238,16 @@ function isNumber(evt, element) {
 
     return true;
 } 
+
+
+
+
+function onlyNumber(id){
+	
+	 var $th = $("#discount_amount"+id);
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+}
+
 function notEmpty(){
 	//alert("Again Not Empty");
 	
@@ -1296,43 +1308,6 @@ $("#city_id").change(function(){
 	}
 });
 
-$('#offerfrm').bootstrapValidator({
-	container: function($field, validator) {
-		return $field.parent().next('.messageContainer');
-   	},
-    feedbackIcons: {
-        validating: 'glyphicon glyphicon-refresh'
-    },
-    excluded: ':disabled',
-    fields: {
-    	'offer_title[]':{
-    		validators: {
-	            notEmpty: {
-	                message: 'offer title is required and cannot be empty'
-	            }
-	        }
-	    },
-	    'discount[]': {
-	        validators: {
-	            notEmpty: {
-	                message: 'discount is required and cannot be empty'
-	            }
-	        }
-	    },
-	    'discount_amount[]': {
-	        validators: {
-	            notEmpty: {
-	                message: 'discount amount is required and cannot be empty'
-	            }
-	        }
-	    }
-    		
-    }
-}).on('success.form.bv', function(event,data) {
-	// Prevent form submission
-	event.preventDefault();
-	updateOffers();
-});  
 $('#basicfrm').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -1697,6 +1672,29 @@ $('#paymentfrm').bootstrapValidator({
         },
         'payable[]': {
             validators: {
+            	between: {
+                    min: 0,
+                    max: 100,
+                    message: 'The percentage must be between 0 and 100'
+	        	},
+// 	        	 callback: {
+//                      message: 'The sum of percentages must be 100',
+//                      callback: function(value, validator, $field) {
+//                          var percentage = validator.getFieldElements('payable[]'),
+//                              length     = percentage.length,
+//                              sum        = 0;
+
+//                          for (var i = 0; i < length; i++) {
+//                              sum += parseFloat($(percentage[i]).val());
+//                          }
+//                          if (sum === 100) {
+//                              validator.updateStatus('payable[]', 'VALID', 'callback');
+//                              return true;
+//                          }
+
+//                          return false;
+//                      }
+//                  },
 		        notEmpty: {
 		    		message: 'Payable is required and cannot be empty'
 		        },
@@ -1740,65 +1738,145 @@ function showPaymentResponse(resp, statusText, xhr, $form){
         alert(resp.message);
   	}
 }
-function updateOffers(){
-	var offerInfo = [];
-	var discount = [];
-	var amount = [];
-	var description = [];
-	var type = [];
-	var status = [];
-	$('input[name="discount[]"]').each(function(index) {
-		discount.push($(this).val());
-	});
-	$('input[name="discount_amount[]"]').each(function(index) {
-		amount.push($(this).val());
-	});
-	$('input[name="description[]"]').each(function(index) {
-		description.push($(this).val());
-	});
-	$('select[name="offer_type[]"] option:selected').each(function(index) {
-		type.push($(this).val());
-	});
-	$('select[name="offer_status[]"] option:selected').each(function(index) {
-		status.push($(this).val());
-	});
-	$('input[name="offer_title[]"]').each(function(index) {
-		if($(this).val() != "") {
-			offerInfo.push({title:$(this).val(),per:discount[index],amount:amount[index],description:description[index],type:type[index],status:status[index],builderProject:{id:$("#id").val()}});
-		}
-	});
-	var project = {id:$("#id").val()};
-	var final_data = {builderProjectOfferInfos:offerInfo,builderProject:project}
-	if(offerInfo.length > 0) {
-		$.ajax({
-		    url: '${baseUrl}/webapi/project/offer/update',
-		    type: 'POST',
-		    data: JSON.stringify(final_data),
-		    contentType: 'application/json; charset=utf-8',
-		    dataType: 'json',
-		    async: false,
-		    success: function(data) {
-				if (data.status == 0) {
-					alert(data.message);
-				} else {
-					alert(data.message);
-				}
-			},
-			error : function(data)
-			{
-				alert("Fail to save data");
-			}
+// function updateOffers(){
+// 	var offerInfo = [];
+// 	var discount = [];
+// 	var amount = [];
+// 	var description = [];
+// 	var type = [];
+// 	var status = [];
+// 	$('input[name="discount[]"]').each(function(index) {
+// 		alert($(this).val());
+// 		discount.push($(this).val());
+// 	});
+// 	$('input[name="discount_amount[]"]').each(function(index) {
+// 		alert($(this).val());
+// 		amount.push($(this).val());
+// 	});
+// 	$('input[name="description[]"]').each(function(index) {
+// 		alert($(this).val());
+// 		description.push($(this).val());
+// 	});
+// 	$('select[name="offer_type[]"] option:selected').each(function(index) {
+// 		alert($(this).val());
+// 		type.push($(this).val());
+// 	});
+// 	$('select[name="offer_status[]"] option:selected').each(function(index) {
+// 		status.push($(this).val());
+// 	});
+// 	$('input[name="offer_title[]"]').each(function(index) {
+// 		if($(this).val() != "") {
+// 			offerInfo.push({title:$(this).val(),per:discount[index],amount:amount[index],description:description[index],type:type[index],status:status[index],builderProject:{id:$("#id").val()}});
+// 		}
+// 	});
+// 	var project = {id:$("#id").val()};
+// 	var final_data = {builderProjectOfferInfos:offerInfo,builderProject:project}
+// 	if(offerInfo.length > 0) {
+// 		$.ajax({
+// 		    url: '${baseUrl}/webapi/project/offer/project/update',
+// 		    type: 'POST',
+// 		    data: JSON.stringify(final_data),
+// 		    contentType: 'application/json; charset=utf-8',
+// 		    dataType: 'json',
+// 		    async: false,
+// 		    success: function(data) {
+// 				if (data.status == 0) {
+// 					alert(data.message);
+// 				} else {
+// 					alert(data.message);
+// 				}
+// 			},
+// 			error : function(data)
+// 			{
+// 				alert("Fail to save data");
+// 			}
 			
-		});
-	} else {
-		alert("Please enter offer details");
-	}
+// 		});
+// 	} else {
+// 		alert("Please enter offer details");
+// 	}
+// }
+
+$('#offerfrm').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	'offer_title[]':{
+    		validators: {
+	            notEmpty: {
+	                message: 'offer title is required and cannot be empty'
+	            }
+	        }
+	    },
+	    'discount[]': {
+	        validators: {
+	        	between: {
+                    min: 0,
+                    max: 100,
+                    message: 'The percentage must be between 0 and 100'
+	        	},
+	            notEmpty: {
+	                message: 'discount is required and cannot be empty'
+	            }
+	        }
+	    },
+	    'discount_amount[]': {
+	        validators: {
+	            notEmpty: {
+	                message: 'discount amount is required and cannot be empty'
+	            }
+	        }
+	    }
+    		
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	updateProjectOffers();
+});
+function updateProjectOffers(){
+	alert("Hello");
+		var options = {
+		 		target : '#offerresponse', 
+		 		beforeSubmit : showOfferRequest,
+		 		success :  showOfferResponse,
+		 		url : '${baseUrl}/webapi/project/offerdetails/update',
+		 		semantic : true,
+		 		dataType : 'json'
+		 	};
+	   	$('#offerfrm').ajaxSubmit(options);
 }
+function showOfferRequest(formData, jqForm, options){
+	$("#offerresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+
+function showOfferResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#offerresponse").removeClass('alert-success');
+       	$("#offerresponse").addClass('alert-danger');
+		$("#offerresponse").html(resp.message);
+		$("#offerresponse").show();
+  	} else {
+  		$("#offerresponse").removeClass('alert-danger');
+        $("#offerresponse").addClass('alert-success');
+        $("#offerresponse").html(resp.message);
+        $("#offerresponse").show();
+        alert(resp.message);
+  	}
+}
+
 
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
-	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="0" />'
+	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="'+offers+'" />'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs">x</a></span></div>'
 		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-offer_title">'
@@ -1822,7 +1900,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control  notEmpty" required id="discount_amount" name="discount_amount[]" value="" onkeypress=" return isNumber(event, this);"/>'
+					+'<input type="text" class="form-control  notEmpty" required id="discount_amount'+offers+'" name="discount_amount[]" value=""  onkeyup="javascript:onlyNumber('+offers+');"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1868,7 +1946,6 @@ function addMoreOffer() {
 function removeOffer(id) {
 	$("#offer-"+id).remove();
 }
-
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
@@ -1891,7 +1968,7 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-payable">'
 				+'<label class="control-label col-sm-8">% of Net Payable <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control" required=true onkeypress="return isNumber(event, this);" name="payable[]"/>'
+				+'<input type="text" class="form-control" required=true id="payable"onkeypress="return isNumber(event, this);" name="payable[]"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 				+'</div>'
@@ -1911,41 +1988,11 @@ function addMoreSchedule() {
 			+'</div>';
 	$("#payment_schedule").append(html);
 	$("#schedule_count").val(schedule_count);
-	$('#paymentfrm').bootstrapValidator('destroy');
-	$('#paymentfrm').data('bootstrapValidator', null);
-	$('#paymentfrm').bootstrapValidator({
-		container: function($field, validator) {
-			return $field.parent().next('.messageContainer');
-	   	},
-	    feedbackIcons: {
-	        validating: 'glyphicon glyphicon-refresh'
-	    },
-	    excluded: ':disabled',
-	    fields: {
-	    	'schedule[]': {
-	            validators: {
-			    	notEmpty: {
-			    		message: 'Schedule is required and cannot be empty'
-			        },
-	            }
-	        },
-	        'payable[]': {
-	            validators: {
-			        notEmpty: {
-			    		message: 'Payable is required and cannot be empty'
-			        },
-	            }
-	        },
-	    }
-	}).on('success.form.bv', function(event,data) {
-		// Prevent form submission
-		event.preventDefault();
-		updatePaymentSchudle();
-	});
 }
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();
 }
+
 
 $("#subpbtn").click(function(){
 // 	var amenityWeightage = [];

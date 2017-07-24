@@ -572,7 +572,7 @@
 													<div class="form-group" id="error-amount">
 														<label class="control-label col-sm-6">Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="amount<%out.print(ii); %>" onkeyup="calcultatePercentage(<%out.print(ii); %>);"  onkeypress=" return isNumber(event, this);" id="amount" name="amount[]" value="<% out.print(flatPaymentSchedule.getAmount());%>"/>
+															<input type="text" class="form-control" id="amount<%out.print(ii); %>" onkeyup="calcultatePercentage(<%out.print(ii); %>);"  id="amount" name="amount[]" value="<% out.print(flatPaymentSchedule.getAmount());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -706,6 +706,8 @@ var amount = $("#payable"+id).val()*$("#h_sale_value").val()/100;
 }
 
 function calcultatePercentage(id){
+	var $th = $("#amount"+id);
+	$th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
 	var percentage = $("#amount"+id).val()/$("#h_sale_value").val()*100;
 	$("#payable"+id).val(percentage.toFixed(1));
 }
@@ -959,50 +961,6 @@ function deletePayment(id) {
 		},'json');
 	}
 }
-
-// function addMoreSchedule() {
-// 	var schedule_count = parseInt($("#schedule_count").val());
-// 	schedule_count++;
-// 	var html = '<div class="row" id="schedule-'+schedule_count+'"><input type="hidden" name="payment_id[]" value="0" />'
-// 				+'<hr/>'
-// 				+'<div class="col-lg-5 margin-bottom-5">'
-// 				+'<div class="form-group" id="error-schedule">'
-// 				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
-// 				+'<div class="col-sm-8">'
-// 				+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
-// 				+'</div>'
-// 				+'<div class="messageContainer"></div>'
-// 				+'</div>'
-// 				+'</div>'
-// 				+'<div class="col-lg-3 margin-bottom-5">'
-// 				+'<div class="form-group" id="error-payable">'
-// 				+'<label class="control-label col-sm-8">% of Net Payable </label>'
-// 				+'<div class="col-sm-4">'
-// 				+'<input type="number" class="form-control" id="payable" name="payable[]" value=""/>'
-// 				+'</div>'
-// 				+'<div class="messageContainer"></div>'
-// 				+'</div>'
-// 				+'</div>'
-// 				+'<div class="col-lg-3 margin-bottom-5">'
-// 				+'<div class="form-group" id="error-amount">'
-// 				+'<label class="control-label col-sm-6">Amount </label>'
-// 				+'<div class="col-sm-6">'
-// 				+'<input type="number" class="form-control" id="amount" name="amount[]" value=""/>'
-// 				+'</div>'
-// 				+'<div class="messageContainer"></div>'
-// 				+'</div>'
-// 				+'</div>'
-// 				+'<div class="col-lg-1">'
-// 				+'<span><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span>'
-// 				+'</div>'
-// 			+'</div>';
-// 	$("#payment_schedule").append(html);
-// 	$("#schedule_count").val(schedule_count);
-// }
-// function removeSchedule(id) {
-// 	$("#schedule-"+id).remove();
-// }
-
 
 function showDetailTab() {
 	$('#buildingTabs a[href="#payment"]').tab('show');

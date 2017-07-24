@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
+import org.bluepigeon.admin.dao.CampaignDAO;
 import org.bluepigeon.admin.dao.CancellationDAO;
 import org.bluepigeon.admin.data.CancellationList;
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -74,10 +75,10 @@ public class CancellationController {
 			builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(empId);
 			if(builderEmployee.getBuilderEmployeeAccessType().getId() >= 1 && builderEmployee.getBuilderEmployeeAccessType().getId() <= 5 ){
 				cancellation.setApproved(true);
-				cancellation.setCancelStatus(1);
+				cancellation.setCancelStatus(2);
 			}else{
 				cancellation.setApproved(false);
-				cancellation.setCancelStatus(0);
+				cancellation.setCancelStatus(1);
 			}
 		}
 		
@@ -101,6 +102,25 @@ public class CancellationController {
 	) {
 		List<CancellationList> project_list = new CancellationDAO().getCancellationListFilter(project_id, building_id, flat_id);
 		return project_list;
+	}
+	
+	@GET
+	@Path("/approve/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage approveCancelation(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		CancellationDAO cancellationDAO = new CancellationDAO();
+		msg = cancellationDAO.deletePrimaryBuyerByFlatId(id);
+		return msg;
+	}
+	@GET
+	@Path("/cancel/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage notApproveCancelation(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		CancellationDAO cancellationDAO = new CancellationDAO();
+		msg = cancellationDAO.cancelApproval(id);
+		return msg;
 	}
 	
 }

@@ -29,7 +29,7 @@
 		}
    	}
 	if(builder_uid > 0){
-		cancellation_list = new CancellationDAO().getCancellationByBuilderId(builder_uid);
+		cancellation_list = new CancellationDAO().getCancellationByBuilderEmployee(builder);
 		int builder_size = cancellation_list.size();
 	}
 %>
@@ -87,8 +87,9 @@
                     <div class="col-sm-12">
                         <div class="white-box"><br>
                           <h3>Manage Cancellation</h3>
-
+							  <%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5 || access_id == 7){ %>
 						  <a href="${baseUrl}/builder/cancellation/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">New Cancellation</span></a>
+						  <%} %>
                           <br><br><br>
                             <div class="table-responsive">
                                 <table id="tblCancellation" class="table table-striped">
@@ -118,7 +119,7 @@
                                     </thead>
                                     <tbody>
                                 	<%
-                                  	if(cancellation_list.size() > 0){
+                                  	if(cancellation_list != null){
                                     	int i=1;
                                       	for(CancellationList cancellationList : cancellation_list) {
                                      		try{
@@ -140,7 +141,7 @@
 											%>
 										</td>
 										<td>
-											<%if(cancellationList.isApproved() && cancellationList.getStatus()==1) {
+											<%if(cancellationList.isApproved() && cancellationList.getStatus()==2) {
 												out.print("Approved by Admin");
 											} else if(cancellationList.getStatus() == 0) {
 												out.print("Waiting for approval");
@@ -150,8 +151,8 @@
 										<%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5){ %>
 										<td>
 											<% if(!cancellationList.isApproved() && cancellationList.getStatus()==0) { %>
-											<button type="button" onclick="approve();">Approve</button>
-									 		<button type="button" onclick="cancel();">Cancel</button>
+												<a href="javascript:approve(<% out.print(cancellationList.getFlatId());%>)"><span class="btn btn-info pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Approve</span></a>
+												<a href="javascript:cancel(<% out.print(cancellationList.getFlatId());%>)"><span class="btn btn-danger pull-left btn-sm btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Cancel</span></a>
 									 		<% } %>
 										</td>
 										<% } %>
@@ -239,23 +240,49 @@
     <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#tblDemand thead td').each( function () {
+        $('#tblCancellation thead td').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" class="inputbox" />' );
         } );
      
         // DataTable
-        var table = $('#tblDemand').DataTable();
+        var table = $('#tblCancellation').DataTable();
      
         // Apply the search
         table.columns().every(function (index) {
-            $('#tblDemand thead  td:eq(' + index + ') input').on('keyup change', function () {
+            $('#tblCancellation thead  td:eq(' + index + ') input').on('keyup change', function () {
                 table.column($(this).parent().index() + ':visible')
                     .search(this.value)
                     .draw();
             });
         });
     } );
+    
+    <%if(access_id == 1|| access_id==2 || access_id == 4||access_id==5){%>
+    function approve(id){
+    	var flag = confirm("Are you sure ? You want to Approve Cancelation ?");
+    	if(flag){
+    		$.get("${baseUrl}/webapi/cancellation/approve/"+id, { }, function(data){
+	 			alert(data.message);
+	 			if(data.status == 1) {
+	 				window.location.reload();
+	 			}
+    		});
+    	}
+    }
+    function cancel(id){
+    	alert(id);
+    	var flag = confirm("Are you sure ? You want to Approve Cancelation ?");
+    	if(flag){
+    		$.get("${baseUrl}/webapi/cancellation/cancel/"+id, { }, function(data){
+	 			alert(data.message);
+	 			if(data.status == 1) {
+	 				window.location.reload();
+	 			}
+    		});
+    	}
+    }
+   <% }%>
     
     </script>
 </body>

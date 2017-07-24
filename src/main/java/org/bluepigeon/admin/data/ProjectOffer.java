@@ -20,8 +20,7 @@ public class ProjectOffer {
 	public Set<BuilderProjectOfferInfo> getBuilderProjectOfferInfos() {
 		return builderProjectOfferInfos;
 	}
-
-	public void setBuilderProjectOfferInfos(Set<BuilderProjectOfferInfo> builderProjectProjectTypes) {
+	public void setBuilderProjectOfferInfos(Set<BuilderProjectOfferInfo> builderProjectOfferInfos) {
 		this.builderProjectOfferInfos = builderProjectOfferInfos;
 	}
 	
