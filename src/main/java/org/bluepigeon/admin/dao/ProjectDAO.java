@@ -465,6 +465,43 @@ public class ProjectDAO {
 		response.setMessage("Project Offer Updated Successfully.");
 		return response;
 	}
+	/**
+	 * new code for updating project offer details
+	 * @author pankaj
+	 * @param projectOffer
+	 * @return responseMessage
+	 */
+	public ResponseMessage updateOffers(List<BuilderProjectOfferInfo> updateProjectOfferInfos) {
+		ResponseMessage response = new ResponseMessage();
+		
+		/******* delete enteries **********/
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String delete_project_type = "DELETE from BuilderProjectOfferInfo where builderProject.id = :project_id";
+		Session newsession1 = hibernateUtil.openSession();
+		newsession1.beginTransaction();
+		Query smdelete = newsession1.createQuery(delete_project_type);
+		smdelete.setParameter("project_id", updateProjectOfferInfos.get(0).getBuilderProject().getId());
+		smdelete.executeUpdate();
+		newsession1.getTransaction().commit();
+		newsession1.close();
+		
+		/***** Add New Enteries *******/
+		
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		
+		for(BuilderProjectOfferInfo builderProjectOfferInfo : updateProjectOfferInfos){
+			session1.save(builderProjectOfferInfo);
+		}
+		
+		session1.getTransaction().commit();
+		session1.close();
+		
+		response.setId(updateProjectOfferInfos.get(0).getBuilderProject().getId());
+		response.setStatus(1);
+		response.setMessage("Project Offer Updated Successfully.");
+		return response;
+	}
 	
 	public List<ProjectList> getBuilderProjects() {
 		String hql = "from BuilderProject order by id desc";
