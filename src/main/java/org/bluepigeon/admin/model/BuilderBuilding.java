@@ -229,7 +229,7 @@ public class BuilderBuilding implements java.io.Serializable {
 	public void setWeightage(Double weightage) {
 		this.weightage = weightage;
 	}
-	@Column(name = "image", length=225)
+	@Column(name = "image")
 	public String getImage() {
 		return image;
 	}

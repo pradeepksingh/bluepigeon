@@ -59,7 +59,7 @@
 			</div>
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Floor Details</a></li>
-			  	<li><a data-toggle="tab" href="#floorimages">Floor Layouts</a></li>
+			  	<li><a data-toggle="tab" href="#floorimages">Floor Layout</a></li>
 			</ul>
 			<form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 				<div class="tab-content">
@@ -222,31 +222,19 @@
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
-										<h3>Upload Floor Plans</h3>
+										<h3>Upload Floor Image</h3>
 										<br>
 										<div class="row" id="project_images">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Select Image </label>
 													<div class="col-sm-8">
-														<input type="file" class="form-control" id="building_image" name="building_image[]" />
+														<input type="file" class="form-control" id="floor_image" name="floor_image[]" />
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
-											<div class="col-lg-6 margin-bottom-5" id="imgdiv-2">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Select Image </label>
-													<div class="col-sm-8 input-group" style="padding:0px 12px;">
-														<input type="file" class="form-control" id="building_image" name="building_image[]" />
-														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a></span>
-													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-xs"> + Add More</a></span>
+											
 										</div>
 									</div>
 								</div>
@@ -367,7 +355,7 @@ function addFloor() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/project/building/floor/add',
+	 		url : '${baseUrl}/webapi/project/building/floor/new',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};

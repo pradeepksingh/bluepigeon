@@ -82,6 +82,7 @@
 			</div>
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Flat Details</a></li>
+			  		<li><a data-toggle="tab" href="#flatimages">Flat Image</a></li>
 			  	<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Details</a></li>
 			</ul>
@@ -301,12 +302,40 @@
 							<div class="row">
 								<div class="col-sm-12">
 									<span class="pull-right">
-										<button type="button" name="addbasic" onclick="show2();" class="btn btn-success btn-sm">Next</button>
+										<button type="button" name="addbasic" onclick="show1();" class="btn btn-success btn-sm">Next</button>
 									</span>
 								</div>
 							</div>
 						</div>
-					
+						<div id="flatimages" class="tab-pane fade">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<h3>Upload Flat Image</h3>
+											<br>
+											<div class="row" id="project_images">
+												<div class="col-lg-6 margin-bottom-5">
+													<div class="form-group" id="error-landmark">
+														<label class="control-label col-sm-4">Select Image </label>
+														<div class="col-sm-8">
+															<input type="file" class="form-control" id="flat_image" name="flat_image[]" />
+														</div>
+														<div class="messageContainer col-sm-offset-3"></div>
+													</div>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<span class="pull-right">
+										<button type="button" name="flatadd"  onclick="show2();" class="btn btn-success btn-sm" >Next</button>
+									</span>
+								</div>
+							</div>
+						</div>
 						<div id="pricing" class="tab-pane fade">
 					
 			 			<div class="row">
@@ -853,7 +882,7 @@ function addFloor() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/project/building/floor/flat/add',
+	 		url : '${baseUrl}/webapi/project/building/floor/flat/new',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -967,7 +996,9 @@ $('input[name="amenity_type[]"]').click(function() {
 		$("#amenity_stage"+$(this).val()).hide();
 	}
 });
-
+function show1(){
+	$('#buildingTabs a[href="#flatimages"]').tab('show');
+}
 function show2()
 {
 	$('#buildingTabs a[href="#pricing"]').tab('show');

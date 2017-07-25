@@ -77,7 +77,7 @@
 			</div>
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Floor Details</a></li>
-			  	<li><a data-toggle="tab" href="#floorimages">Floor Layouts</a></li>
+			  	<li><a data-toggle="tab" href="#floorimages">Floor Image</a></li>
 			  	<li><a data-toggle="tab" href="#productsubstage">Floor Amenity</a></li>
 			</ul>
 			<form id="updatefloor" name="updatefloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
@@ -89,7 +89,7 @@
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
 										<input type="hidden" name="project_id" id = "project_id" value="<%out.print(project_id);%>"/>
-										<input type="hidden" name="building_id" id="building_id" value=<%out.print(building_id); %>"/>
+										<input type="hidden" name="building_id" id="building_id" value="<%out.print(building_id); %>"/>
 										<input type="hidden" name="floor_id" id="floor_id" value="<% out.print(floor_id);%>"/>
 										<input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
 										<input type="hidden" name="img_count" id="img_count" value="2"/>
@@ -275,33 +275,28 @@
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
-										<h3>Upload Floor Plans</h3>
+										<h3>Upload Floor Image</h3>
 										<br>
 										<div class="row" id="project_images">
-											<% for (FloorLayoutImage floorLayoutImage :floorLayoutImages) { %>
-											<div class="col-lg-4 margin-bottom-5" id="b_image<% out.print(floorLayoutImage.getId()); %>">
+											<div class="col-lg-4 margin-bottom-5">
+											<%if(builderFloor.getImage()!=null){ %>
 												<div class="form-group" id="error-landmark">
 													<div class="col-sm-12">
-														<img alt="Building Images" src="${baseUrl}/<% out.print(floorLayoutImage.getLayout()); %>" width="200px;">
+														<img alt="Building Images" src="${baseUrl}/<% out.print(builderFloor.getImage()); %>" width="200px;">
 													</div>
-													<label class="col-sm-12 text-left"><a href="javascript:deleteImage(<% out.print(floorLayoutImage.getId()); %>);" class="btn btn-danger btn-sm">x Delete Plan</a> </label>
 													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
-											</div>
 											<% } %>
+											</div>
 											<div class="col-lg-6 margin-bottom-5" id="imgdiv-2">
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-4">Select Image </label>
 													<div class="col-sm-8 input-group" style="padding:0px 12px;">
-														<input type="file" class="form-control" id="building_image" name="building_image[]" />
-														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a></span>
+														<input type="file" class="form-control" id="floor_image" name="floor_image[]" />
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
-										</div>
-										<div class="row">
-											<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-xs"> + Add More</a></span>
 										</div>
 									</div>
 								</div>
@@ -534,7 +529,7 @@ function addFloor() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/project/building/floor/update',
+	 		url : '${baseUrl}/webapi/project/floor/update',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};

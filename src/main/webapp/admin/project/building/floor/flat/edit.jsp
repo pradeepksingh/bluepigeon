@@ -90,6 +90,7 @@
 			</div>
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Flat Details</a></li>
+			  		<li><a data-toggle="tab" href="#flatimage">Pricing Details</a></li>
 			  	<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Details</a></li>
 			  	<li><a data-toggle="tab" href="#productsubstage">Flat Weightage</a></li>
@@ -354,6 +355,48 @@
 								<div class="col-sm-12">
 									<span class="pull-right">
 										<button type="submit" name="flooradd" class="btn btn-success btn-sm">Update</button>
+									</span>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div id="flatimage" class="tab-pane fade">
+						<form id="updateflatimage" name="updateflatimage" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+							<div class="row">
+								<div id="imageresponse"></div>
+								<div class="col-lg-12">
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<h3>Upload Flat Image</h3>
+											<br>
+											<div class="row" id="project_images">
+												<div class="col-lg-4 margin-bottom-5">
+												<input type="hidden" name="flat_id" value="<% out.print(flat_id);%>"/>
+												<%if(builderFlat.getImage()!=null){ %>
+													<div class="form-group" id="error-landmark">
+														<div class="col-sm-12">
+															<img alt="Building Images" src="${baseUrl}/<% out.print(builderFlat.getImage()); %>" width="200px;">
+														</div>
+														<div class="messageContainer col-sm-offset-4"></div>
+													</div>
+												<% } %>
+												</div>
+												<div class="col-lg-6 margin-bottom-5" id="imgdiv-2">
+													<div class="form-group" id="error-landmark">
+														<label class="control-label col-sm-4">Select Image </label>
+														<div class="col-sm-8 input-group" style="padding:0px 12px;">
+															<input type="file" class="form-control" id="flat_image" name="flat_image[]" />
+														</div>
+														<div class="messageContainer col-sm-offset-3"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<span class="pull-right">
+										<button type="button" name="flatimageadd" id="flatupdateimage" class="btn btn-success btn-sm" >Submit</button>
 									</span>
 								</div>
 							</div>
@@ -665,12 +708,12 @@
 										</div>
 									</div>
 								</div>
-								</form>
-							</div>
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 <%@include file="../../../../../footer.jsp"%>
 
 <!-- inline scripts related to this page -->
@@ -989,6 +1032,41 @@ function showAddResponse(resp, statusText, xhr, $form){
         window.location.reload();
   	}
 }
+
+$("#flatupdateimage").click(function(){
+	var options = {
+			target: '#imageresponse',
+			beforeSubmit : showPriceAddRequest,
+	 		success :  showPriceAddResponse,
+	 		url : '${baseUrl}/webapi/project/building/floor/flat/update/image',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#updateflatimage').ajaxSubmit(options);
+});
+function showPriceAddRequest(formData, jqForm, options){
+	$("#imageresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showPriceAddResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#imageresponse").removeClass('alert-success');
+       	$("#imageresponse").addClass('alert-danger');
+		$("#imageresponse").html(resp.message);
+		$("#imageresponse").show();
+  	} else {
+  		$("#imageresponse").removeClass('alert-danger');
+        $("#imageresponse").addClass('alert-success');
+        $("#imageresponse").html(resp.message);
+        $("#imageresponse").show();
+        alert(resp.message);
+        window.location.reload();
+  	}
+}
+
+
 
 $("#priceupdatebtn").click(function(){
 	var options = {
