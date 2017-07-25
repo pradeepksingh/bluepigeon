@@ -96,7 +96,7 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-6">Project Name </label>
 													<div class="col-sm-6">
-														<select id="project_id" name="project_id" class="form-control" disable>
+														<select id="project_id" name="project_id" class="form-control" disabled>
 															<option value="0">Select Project</option>
 															<% for(BuilderProject builderProject :builderProjects) { %>
 															<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
@@ -112,14 +112,14 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Building Name </label>
 													<div class="col-sm-7">
-														<select id="building_id" name="building_id" class="form-control" disable>
+														<select id="building_id" name="building_id" class="form-control" disabled>
 															<% if(buildings != null) { %>
 															<% for(BuilderBuilding builderBuilding2 :buildings) { %>
 															<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName());%></option>
 															<% } %>
-															<% } else { %>
-															<option value="0">Select Building</option>
-															<% } %>
+															<% } //else { %>
+<!-- 															<option value="0">Select Building</option> -->
+															<% //} %>
 														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>

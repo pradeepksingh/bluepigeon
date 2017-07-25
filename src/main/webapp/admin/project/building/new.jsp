@@ -258,16 +258,6 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
-											<div class="col-lg-6 margin-bottom-5" id="imgdiv-2">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Select Image </label>
-													<div class="col-sm-8 input-group" style="padding:0px 12px;">
-														<input type="file" class="form-control" id="building_image" name="building_image[]" />
-														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a>
-													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
-												</div>
-											</div>
 										</div>
 									</div>
 								</div>

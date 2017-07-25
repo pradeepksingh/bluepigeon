@@ -68,7 +68,7 @@
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-5">Select Project <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
-														<select id="project_id" name="project_id" class="form-control" disable>
+														<select id="project_id" name="project_id" class="form-control" disabled>
 															<option value="0">Select Project</option>
 														<% for(BuilderProject builderProject :builderProjects) { %>
 															<option value="<% out.print(builderProject.getId());%>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
