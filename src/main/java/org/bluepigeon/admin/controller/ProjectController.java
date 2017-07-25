@@ -459,47 +459,51 @@ public class ProjectController extends ResourceConfig {
 		ProjectDAO projectDAO = new ProjectDAO();
 		if(project_id > 0){
 			builderProject.setId(project_id);
-		}
-		if(offer_titles.size() > 0){
-			List<BuilderProjectOfferInfo> updateProjectOfferInfos = new ArrayList<BuilderProjectOfferInfo>();
-			int i=0;
-			for(FormDataBodyPart names : offer_titles)
-			{
-				if(offer_ids.get(i).getValueAs(Integer.class) != 0 && offer_ids.get(i).getValueAs(Integer.class) != null){
-					BuilderProjectOfferInfo builderProjectOfferInfo = new BuilderProjectOfferInfo();
-					builderProjectOfferInfo.setBuilderProject(builderProject);
-					
-					if(names.getValueAs(String.class) != null || names.getValueAs(String.class).trim().length() > 0){
-						builderProjectOfferInfo.setTitle(names.getValueAs(String.class).toString());
+		}if(offer_titles != null){
+			if(offer_titles.size() > 0){
+				List<BuilderProjectOfferInfo> updateProjectOfferInfos = new ArrayList<BuilderProjectOfferInfo>();
+				int i=0;
+				for(FormDataBodyPart names : offer_titles)
+				{
+					if(offer_ids.get(i).getValueAs(Integer.class) != 0 && offer_ids.get(i).getValueAs(Integer.class) != null){
+						BuilderProjectOfferInfo builderProjectOfferInfo = new BuilderProjectOfferInfo();
+						builderProjectOfferInfo.setBuilderProject(builderProject);
+						
+						if(names.getValueAs(String.class) != null || names.getValueAs(String.class).trim().length() > 0){
+							builderProjectOfferInfo.setTitle(names.getValueAs(String.class).toString());
+						}
+						if(discounts.get(i).getValueAs(Double.class) != 0 && discounts.get(i).getValueAs(Double.class) !=null){
+							builderProjectOfferInfo.setPer(discounts.get(i).getValueAs(Double.class));
+						}
+						if(discount_amounts.get(i).getValueAs(Double.class) != 0 && discount_amounts.get(i).getValueAs(Double.class) !=null){
+							builderProjectOfferInfo.setAmount(discount_amounts.get(i).getValueAs(Double.class));
+						}
+						if((descriptions.get(i).getValueAs(String.class).toString() != null && !descriptions.get(i).getValueAs(String.class).toString().isEmpty())){
+							builderProjectOfferInfo.setDescription(descriptions.get(i).getValueAs(String.class).toString());
+						}
+						if(offer_types.get(i).getValueAs(Integer.class) != 0 && offer_types.get(i).getValueAs(Integer.class) != null){
+							builderProjectOfferInfo.setType(offer_types.get(i).getValueAs(Integer.class));
+						}
+						if(offer_statuses.get(i).getValueAs(Byte.class) != 0 && offer_types.get(i).getValueAs(Byte.class) != null){
+							builderProjectOfferInfo.setStatus(offer_statuses.get(i).getValueAs(Byte.class));
+						}
+	//					if(amounts.get(i).getValueAs(Double.class) !=0 && amounts.get(i).getValueAs(Double.class) != null){
+	//						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
+	//					}
+						updateProjectOfferInfos.add(builderProjectOfferInfo);
 					}
-					if(discounts.get(i).getValueAs(Double.class) != 0 && discounts.get(i).getValueAs(Double.class) !=null){
-						builderProjectOfferInfo.setPer(discounts.get(i).getValueAs(Double.class));
-					}
-					if(discount_amounts.get(i).getValueAs(Double.class) != 0 && discount_amounts.get(i).getValueAs(Double.class) !=null){
-						builderProjectOfferInfo.setAmount(discount_amounts.get(i).getValueAs(Double.class));
-					}
-					if((descriptions.get(i).getValueAs(String.class).toString() != null && !descriptions.get(i).getValueAs(String.class).toString().isEmpty())){
-						builderProjectOfferInfo.setDescription(descriptions.get(i).getValueAs(String.class).toString());
-					}
-					if(offer_types.get(i).getValueAs(Integer.class) != 0 && offer_types.get(i).getValueAs(Integer.class) != null){
-						builderProjectOfferInfo.setType(offer_types.get(i).getValueAs(Integer.class));
-					}
-					if(offer_statuses.get(i).getValueAs(Byte.class) != 0 && offer_types.get(i).getValueAs(Byte.class) != null){
-						builderProjectOfferInfo.setStatus(offer_statuses.get(i).getValueAs(Byte.class));
-					}
-//					if(amounts.get(i).getValueAs(Double.class) !=0 && amounts.get(i).getValueAs(Double.class) != null){
-//						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
-//					}
-					updateProjectOfferInfos.add(builderProjectOfferInfo);
+					i++;
 				}
-				i++;
+				if(updateProjectOfferInfos.size() > 0){
+					projectDAO.updateOffers(updateProjectOfferInfos);
+				}
+				
+				responseMessage.setStatus(1);
+				responseMessage.setMessage("Project offer Info updated successfully");
 			}
-			if(updateProjectOfferInfos.size() > 0){
-				projectDAO.updateOffers(updateProjectOfferInfos);
-			}
-			
-			responseMessage.setStatus(1);
-			responseMessage.setMessage("Project offer Info updated successfully");
+		}else{
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Please click on Add offer button and add offer, then try again");
 		}
 		return responseMessage;
 	}
@@ -1876,6 +1880,138 @@ public class ProjectController extends ResourceConfig {
 		return msg;
 	}
 	
+	/**
+	 * @author pankaj
+	 * @param building_id
+	 * @param name
+	 * @param floor_no
+	 * @param total_flats
+	 * @param status
+	 * @param amenity_type
+	 * @param floor_images
+	 * @param admin_id
+	 * @param floor_status
+	 * @param amenity_wts
+	 * @return
+	 */
+	@POST
+	@Path("/building/floor/new")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addFloors (
+			@FormDataParam("building_id") int building_id,
+			@FormDataParam("name") String name, 
+			@FormDataParam("floor_no") int floor_no,
+			@FormDataParam("total_flats") int total_flats,
+			@FormDataParam("status") Integer status,
+			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
+			@FormDataParam("floor_image[]") List<FormDataBodyPart> floor_images,
+			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("status_id") byte floor_status,
+			@FormDataParam("amenity_wt") String amenity_wts
+	) {
+		String [] amenityWeightages = amenity_wts.split(",");
+		List<FloorAmenityWeightage> baws = new ArrayList<FloorAmenityWeightage>();
+		//byte floor_status = 1;
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		BuilderFloorStatus builderFloorStatus = new BuilderFloorStatus();
+		builderFloorStatus.setId(status);
+		AdminUser adminUser = new AdminUser();
+		adminUser.setId(admin_id);
+		BuilderBuilding builderBuilding = new BuilderBuilding();
+		builderBuilding.setId(building_id);
+		BuilderFloor builderFloor = new BuilderFloor();
+		builderFloor.setBuilderBuilding(builderBuilding);
+		builderFloor.setBuilderFloorStatus(builderFloorStatus);
+		builderFloor.setFloorNo(floor_no);
+		builderFloor.setName(name);
+		builderFloor.setTotalFlats(total_flats);
+		builderFloor.setStatus(floor_status);
+		try {	
+			//for multiple inserting images.
+			if (floor_images.size() > 0) {
+				for(int i=0 ;i < floor_images.size();i++)
+				{
+					if(floor_images.get(i).getFormDataContentDisposition().getFileName() != null && !floor_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = floor_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/floor/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						//System.out.println("for loop image path: "+uploadGalleryLocation);
+						this.imageUploader.writeToFile(floor_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						builderFloor.setImage(gallery_name);
+					}
+				}
+			
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save image");
+		}
+		msg = projectDAO.addBuildingFloor(builderFloor);
+		if(msg.getId() > 0) {
+			builderFloor.setId(msg.getId());
+			//add gallery images
+			
+			if (amenity_type.size() > 0) {
+				List<FloorAmenityInfo> floorAmenityInfos = new ArrayList<FloorAmenityInfo>();
+				int i = 0;
+				for(FormDataBodyPart amenity : amenity_type)
+				{
+					if(amenity.getValueAs(Integer.class) != null && amenity.getValueAs(Integer.class) != 0) {
+						Byte milestone_status = 0;
+						BuilderFloorAmenity builderFloorAmenity = new BuilderFloorAmenity();
+						builderFloorAmenity.setId(amenity.getValueAs(Integer.class));
+						FloorAmenityInfo amenityInfo = new FloorAmenityInfo();
+						amenityInfo.setBuilderFloorAmenity(builderFloorAmenity);
+						amenityInfo.setBuilderFloor(builderFloor);
+						floorAmenityInfos.add(amenityInfo);
+					}
+					i++;
+				}
+				if(floorAmenityInfos.size() > 0) {
+					projectDAO.addBuildingFloorAmenityInfo(floorAmenityInfos);
+				}
+			}
+			if(amenity_wts != "") {
+				for(String aw :amenityWeightages) {
+					FloorAmenityWeightage baw = new FloorAmenityWeightage();
+					String [] amenityWeightage = aw.split("#");
+					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
+					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
+					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
+					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
+					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
+					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
+					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+					BuilderFloorAmenity builderFloorAmenity = new BuilderFloorAmenity();
+					builderFloorAmenity.setId(amenity_id);
+					BuilderFloorAmenityStages builderFloorAmenityStages = new BuilderFloorAmenityStages();
+					builderFloorAmenityStages.setId(stage_id);
+					BuilderFloorAmenitySubstages builderFloorAmenitySubstages = new BuilderFloorAmenitySubstages();
+					builderFloorAmenitySubstages.setId(substage_id);
+					baw.setBuilderFloorAmenity(builderFloorAmenity);
+					baw.setAmenityWeightage(amenity_weightage);
+					baw.setBuilderFloorAmenityStages(builderFloorAmenityStages);
+					baw.setStageWeightage(stage_weightage);
+					baw.setBuilderFloorAmenitySubstages(builderFloorAmenitySubstages);
+					baw.setSubstageWeightage(substage_weightage);
+					baw.setStatus(wstatus);
+					baw.setBuilderFloor(builderFloor);
+					baws.add(baw);
+				}
+				projectDAO.addFloorAmenityWeightage(baws);
+			}
+		} else {
+			msg.setMessage("Failed to add floor.");
+			msg.setStatus(0);
+		}
+		return msg;
+	}
+	
+	
 	@POST
 	@Path("/building/floor/update")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -1944,6 +2080,125 @@ public class ProjectController extends ResourceConfig {
 				msg.setStatus(0);
 				msg.setMessage("Unable to save floor plan");
 			}
+			if (amenity_type.size() > 0) {
+				List<FloorAmenityInfo> floorAmenityInfos = new ArrayList<FloorAmenityInfo>();
+				int i = 0;
+				for(FormDataBodyPart amenity : amenity_type)
+				{
+					if(amenity.getValueAs(Integer.class) != null && amenity.getValueAs(Integer.class) != 0) {
+						Byte milestone_status = 0;
+						BuilderFloorAmenity builderFloorAmenity = new BuilderFloorAmenity();
+						builderFloorAmenity.setId(amenity.getValueAs(Integer.class));
+						FloorAmenityInfo amenityInfo = new FloorAmenityInfo();
+						amenityInfo.setBuilderFloorAmenity(builderFloorAmenity);
+						amenityInfo.setBuilderFloor(builderFloor);
+						floorAmenityInfos.add(amenityInfo);
+					}
+					i++;
+				}
+				if(floorAmenityInfos.size() > 0) {
+					projectDAO.deleteFloorAmenityInfo(floor_id);
+					projectDAO.addBuildingFloorAmenityInfo(floorAmenityInfos);
+				}
+			}
+			if(amenity_wts != "") {
+				for(String aw :amenityWeightages) {
+					FloorAmenityWeightage baw = new FloorAmenityWeightage();
+					String [] amenityWeightage = aw.split("#");
+					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
+					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
+					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
+					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
+					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
+					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
+					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+					BuilderFloorAmenity builderFloorAmenity = new BuilderFloorAmenity();
+					builderFloorAmenity.setId(amenity_id);
+					BuilderFloorAmenityStages builderFloorAmenityStages = new BuilderFloorAmenityStages();
+					builderFloorAmenityStages.setId(stage_id);
+					BuilderFloorAmenitySubstages builderFloorAmenitySubstages = new BuilderFloorAmenitySubstages();
+					builderFloorAmenitySubstages.setId(substage_id);
+					baw.setBuilderFloorAmenity(builderFloorAmenity);
+					baw.setAmenityWeightage(amenity_weightage);
+					baw.setBuilderFloorAmenityStages(builderFloorAmenityStages);
+					baw.setStageWeightage(stage_weightage);
+					baw.setBuilderFloorAmenitySubstages(builderFloorAmenitySubstages);
+					baw.setSubstageWeightage(substage_weightage);
+					baw.setStatus(wstatus);
+					baw.setBuilderFloor(builderFloor);
+					baws.add(baw);
+				}
+				projectDAO.deleteFloorAmenityWeightage(floor_id);
+				projectDAO.addFloorAmenityWeightage(baws);
+			}
+		} else {
+			msg.setMessage("Failed to update floor.");
+			msg.setStatus(0);
+		}
+		return msg;
+	}
+	
+	@POST
+	@Path("/floor/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateFloorImage (
+			@FormDataParam("building_id") int building_id,
+			@FormDataParam("floor_id") int floor_id,
+			@FormDataParam("name") String name, 
+			@FormDataParam("floor_no") int floor_no,
+			@FormDataParam("total_flats") int total_flats,
+			@FormDataParam("status") Integer status,
+			@FormDataParam("status_id") byte floor_status,
+			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
+			@FormDataParam("floor_image[]") List<FormDataBodyPart> floor_images,
+			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("amenity_wt") String amenity_wts
+	) {
+		String [] amenityWeightages = amenity_wts.split(",");
+		List<FloorAmenityWeightage> baws = new ArrayList<FloorAmenityWeightage>();
+		//byte floor_status = 1;
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		BuilderFloorStatus builderFloorStatus = new BuilderFloorStatus();
+		builderFloorStatus.setId(status);
+		AdminUser adminUser = new AdminUser();
+		adminUser.setId(admin_id);
+		BuilderBuilding builderBuilding = new BuilderBuilding();
+		builderBuilding.setId(building_id);
+		BuilderFloor builderFloor = new BuilderFloor();
+		builderFloor.setId(floor_id);
+		builderFloor.setBuilderBuilding(builderBuilding);
+		builderFloor.setBuilderFloorStatus(builderFloorStatus);
+		builderFloor.setFloorNo(floor_no);
+		builderFloor.setName(name);
+		builderFloor.setTotalFlats(total_flats);
+		builderFloor.setStatus(floor_status);
+		try {	
+			//for multiple inserting images.
+			if (floor_images.size() > 0) {
+				for(int i=0 ;i < floor_images.size();i++)
+				{
+					if(floor_images.get(i).getFormDataContentDisposition().getFileName() != null && !floor_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = floor_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/floor/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						//System.out.println("for loop image path: "+uploadGalleryLocation);
+						this.imageUploader.writeToFile(floor_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						builderFloor.setImage(gallery_name);
+					}
+				}
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save floor image");
+		}
+		msg = projectDAO.updateBuildingFloor(builderFloor);
+		if(msg.getId() > 0) {
+			//add gallery images
+			
 			if (amenity_type.size() > 0) {
 				List<FloorAmenityInfo> floorAmenityInfos = new ArrayList<FloorAmenityInfo>();
 				int i = 0;

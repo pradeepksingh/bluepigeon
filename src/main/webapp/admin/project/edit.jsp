@@ -420,11 +420,20 @@
 												</div>
 											<% } %>
 											</div>
-											<div class="col-lg-6 margin-bottom-5" id="imgdiv-'+img_count+'">
+											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-landmark">'
 												<label class="control-label col-sm-4">Select Image </label>
 													<div class="col-sm-8 input-group" style="padding:0px 12px;">
-														<input type="file" class="form-control" id="building_image" name="building_image[]" />
+														<input type="file" class="form-control" id="project_image" name="project_image[]" />
+													</div>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+											<div class="col-lg-4 margin-bottom">
+												<div class="form-group" id="error-landmark">'
+												<label class="control-label col-sm-4">Image Title </label>
+													<div class="col-sm-8 input-group" style="padding:0px 12px;">
+														<input type="text" class="form-control" id="project_image_title" name="project_image_title" />
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
