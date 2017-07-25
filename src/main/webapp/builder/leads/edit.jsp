@@ -1,4 +1,5 @@
-  <%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
+  <%@page import="org.bluepigeon.admin.model.Source"%>
+<%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
 <%@page import="org.bluepigeon.admin.model.BuilderBuilding"%>
 <%@page import="org.bluepigeon.admin.model.BuilderLead"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
@@ -28,6 +29,7 @@
 	int flat_size =	0;
 	List<BuilderBuilding> builderBuildings = null;
 	List<BuilderFlat> builderFlats = null;
+	List<Source> sourceList = null;
 	lead_id = Integer.parseInt(request.getParameter("lead_id"));
  	List<BuilderProject> builderProjects = new ProjectLeadDAO().getProjectList();
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
@@ -52,6 +54,7 @@
 			builderLead = new ProjectDAO().getBuilderProjectLeadById(lead_id);
 			project_list = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 		    builder_size = project_list.size();
+		    sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
 		}
 		if(builderLead !=null){
 			builderBuildings = new ProjectLeadDAO().getBuildingByProjectId(builderLead.getBuilderProject().getId());
@@ -153,7 +156,7 @@
                                 <input type="hidden" name="status" id="status" value="<%out.print(builderLead.getStatus());%>"/>
                                 <input type="hidden" name="type_id" id="type_id" value="<%out.print(builderLead.getBuilderPropertyType().getId()); %>" />
                                 <input type="hidden" name="interest" id="interest" value="<%out.print(builderLead.getIntrestedIn()); %>" />
-                                <input type="hidden" name="source" id="source" value="<%out.print(builderLead.getSource());%>"/>
+                                <input type="hidden" name="source" id="source" value="<%out.print(builderLead.getSource().getId());%>"/>
                                 <div class="form-group row">
                                     <label for="example-text-input" class="col-3 col-form-label">Interested In*</label>
                                     <div class="col-3">
@@ -212,10 +215,9 @@
                                        <select name="source" id="source" class="form-control" disabled>
                                        
 						                    <option value="0">Select Source</option>
-						                    <option value="1" <%if(builderLead.getSource() == 1){ %>selected<%} %> >App</option>
-						                    <option value="2" <%if(builderLead.getSource() == 2){ %>selected<%} %> >Website</option>
-						                    <option value="3" <%if(builderLead.getSource() == 3){ %>selected<%} %> >Google</option>
-						                    <option value="4" <%if(builderLead.getSource() == 4){ %>selected<%} %>>Facebook</option>
+						                    <% for(Source source: sourceList){ %>
+						                    <option value="<%out.print(source.getId());%>" <%if(source.getId() == builderLead.getSource().getId()){ %>selected<%} %>><%out.print(source.getName()); %></option>
+						                    <%} %>
 							             </select>
                                     </div>
                                     <label for="example-text-input" class="col-3 col-form-label">Area</label>

@@ -1363,7 +1363,7 @@ function updateProjectImages() {
 	 		target : '#imageresponse', 
 	 		beforeSubmit : showAddImageRequest,
 	 		success :  showAddImageResponse,
-	 		url : '${baseUrl}/webapi/project/images/update',
+	 		url : '${baseUrl}/webapi/project/image/update',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};

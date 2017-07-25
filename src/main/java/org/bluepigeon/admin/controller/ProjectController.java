@@ -525,7 +525,7 @@ public class ProjectController extends ResourceConfig {
 						gallery_name = project_images.get(i).getFormDataContentDisposition().getFileName();
 						long millis = System.currentTimeMillis() % 1000;
 						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-						gallery_name = "images/project/projectamenityicon/"+gallery_name;
+						gallery_name = "images/project/"+gallery_name;
 						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
 						this.imageUploader.writeToFile(project_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
 					}
@@ -892,6 +892,250 @@ public class ProjectController extends ResourceConfig {
 		}
 		return msg;
 	}
+	/**
+	 * @author pankaj
+	 * @param project_id
+	 * @param name
+	 * @param total_floor
+	 * @param building_images
+	 * @param launch_date
+	 * @param possession_date
+	 * @param status
+	 * @param amenity_type
+	 * @param base_unit
+	 * @param base_rate
+	 * @param rise_rate
+	 * @param post
+	 * @param maintenance
+	 * @param tenure
+	 * @param amenity_rate
+	 * @param parking_id
+	 * @param parking
+	 * @param stamp_duty
+	 * @param tax
+	 * @param vat
+	 * @param tech_fee
+	 * @param schedule
+	 * @param payable
+	 * @param offer_title
+	 * @param discount
+	 * @param discount_amount
+	 * @param description
+	 * @param offer_type
+	 * @param offer_status
+	 * @param admin_id
+	 * @param bstatus
+	 * @param amenity_wts
+	 * @return
+	 */
+	@POST
+	@Path("/building/newadd")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addBuildingInfos (
+			@FormDataParam("project_id") int project_id,
+			@FormDataParam("name") String name, 
+			@FormDataParam("total_floor") int total_floor,
+			@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
+			@FormDataParam("launch_date") String launch_date,
+			@FormDataParam("possession_date") String possession_date,
+			@FormDataParam("status") Integer status,
+			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
+			@FormDataParam("base_unit") short base_unit,
+			@FormDataParam("base_rate") Double base_rate,
+			@FormDataParam("rise_rate") Double rise_rate,
+			@FormDataParam("post") int post,
+			@FormDataParam("maintenance") Double maintenance,
+			@FormDataParam("tenure") int tenure,
+			@FormDataParam("amenity_rate") Double amenity_rate,
+			@FormDataParam("parking_id") int parking_id,
+			@FormDataParam("parking") Double parking,
+			@FormDataParam("stamp_duty") Double stamp_duty,
+			@FormDataParam("tax") Double tax,
+			@FormDataParam("vat") Double vat,
+			@FormDataParam("tech_fee") Double tech_fee,
+			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
+			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
+			@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_title,
+			@FormDataParam("discount[]") List<FormDataBodyPart> discount,
+			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amount,
+			@FormDataParam("description[]") List<FormDataBodyPart> description,
+			@FormDataParam("offer_type[]") List<FormDataBodyPart> offer_type,
+			@FormDataParam("offer_status[]") List<FormDataBodyPart> offer_status,
+			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("status_id") byte bstatus,
+			@FormDataParam("amenity_wt") String amenity_wts
+	) {
+		String [] amenityWeightages = amenity_wts.split(",");
+		List<BuildingAmenityWeightage> baws = new ArrayList<BuildingAmenityWeightage>();
+		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+		Date launchDate = null,possessionDate = null;
+		try {
+			launchDate = format.parse(launch_date);
+			possessionDate = format.parse(possession_date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		//byte bstatus = 1;
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		BuilderProject builderProject = new BuilderProject();
+		builderProject.setId(project_id);
+		BuilderBuildingStatus builderBuildingStatus = new BuilderBuildingStatus();
+		builderBuildingStatus.setId(status);
+		AdminUser adminUser = new AdminUser();
+		adminUser.setId(admin_id);
+		BuilderBuilding builderBuilding = new BuilderBuilding();
+		builderBuilding.setBuilderProject(builderProject);
+		builderBuilding.setName(name);
+		builderBuilding.setTotalFloor(total_floor);
+		builderBuilding.setLaunchDate(launchDate);
+		builderBuilding.setPossessionDate(possessionDate);
+		builderBuilding.setAdminUser(adminUser);
+		builderBuilding.setBuilderBuildingStatus(builderBuildingStatus);
+		builderBuilding.setStatus(bstatus);
+		builderBuilding.setInventorySold(0.0);
+		builderBuilding.setRevenue(0.0);
+		builderBuilding.setTotalInventory(0.0);
+		if(building_images.get(0) != null){
+			if (building_images.size() > 0) {
+				for(int i=0 ;i < building_images.size();i++)
+				{
+					if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/building/images/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						//System.out.println("for loop image path: "+uploadGalleryLocation);
+						this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						builderBuilding.setImage(gallery_name);
+					}
+				}
+			}
+		}else{
+			builderBuilding.setImage("");
+		}
+		msg = projectDAO.addBuilding(builderBuilding);
+		if(msg.getId() > 0) {
+			builderBuilding.setId(msg.getId());
+			AreaUnit areaUnit = new AreaUnit();
+			areaUnit.setId(base_unit);
+			BuildingPriceInfo buildingPriceInfo = new BuildingPriceInfo();
+			buildingPriceInfo.setAmenityRate(amenity_rate);
+			buildingPriceInfo.setAreaUnit(areaUnit);
+			buildingPriceInfo.setBasePrice(base_rate);
+			buildingPriceInfo.setBuilderBuilding(builderBuilding);
+			buildingPriceInfo.setFee(tech_fee);
+			buildingPriceInfo.setMaintenance(maintenance);
+			buildingPriceInfo.setParking(parking);
+			buildingPriceInfo.setParkingId(parking_id);
+			buildingPriceInfo.setPost(post);
+			buildingPriceInfo.setRiseRate(rise_rate);
+			buildingPriceInfo.setStampDuty(stamp_duty);
+			buildingPriceInfo.setVat(vat);
+			buildingPriceInfo.setTax(tax);
+			buildingPriceInfo.setTenure(tenure);
+			projectDAO.addBuildingPriceInfo(buildingPriceInfo);
+			
+			if (amenity_type.size() > 0) {
+				List<BuildingAmenityInfo> buildingAmenityInfos = new ArrayList<BuildingAmenityInfo>();
+				int i = 0;
+				for(FormDataBodyPart amenity : amenity_type)
+				{
+					if(amenity.getValueAs(Integer.class) != null && amenity.getValueAs(Integer.class) != 0) {
+						Byte milestone_status = 0;
+						BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
+						builderBuildingAmenity.setId(amenity.getValueAs(Integer.class));
+						BuildingAmenityInfo amenityInfo = new BuildingAmenityInfo();
+						amenityInfo.setBuilderBuildingAmenity(builderBuildingAmenity);
+						amenityInfo.setBuilderBuilding(builderBuilding);
+						buildingAmenityInfos.add(amenityInfo);
+					}
+					i++;
+				}
+				if(buildingAmenityInfos.size() > 0) {
+					projectDAO.addBuildingAmenityInfo(buildingAmenityInfos);
+				}
+			}
+			if(amenity_wts != "") {
+				for(String aw :amenityWeightages) {
+					BuildingAmenityWeightage baw = new BuildingAmenityWeightage();
+					String [] amenityWeightage = aw.split("#");
+					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
+					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
+					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
+					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
+					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
+					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
+					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+					BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
+					builderBuildingAmenity.setId(amenity_id);
+					BuilderBuildingAmenityStages builderBuildingAmenityStages = new BuilderBuildingAmenityStages();
+					builderBuildingAmenityStages.setId(stage_id);
+					BuilderBuildingAmenitySubstages builderBuildingAmenitySubstages = new BuilderBuildingAmenitySubstages();
+					builderBuildingAmenitySubstages.setId(substage_id);
+					baw.setBuilderBuildingAmenity(builderBuildingAmenity);
+					baw.setAmenityWeightage(amenity_weightage);
+					baw.setBuilderBuildingAmenityStages(builderBuildingAmenityStages);
+					baw.setStageWeightage(stage_weightage);
+					baw.setBuilderBuildingAmenitySubstages(builderBuildingAmenitySubstages);
+					baw.setSubstageWeightage(substage_weightage);
+					baw.setStatus(wstatus);
+					baw.setBuilderBuilding(builderBuilding);
+					baws.add(baw);
+				}
+				projectDAO.addBuildingAmenityWeightage(baws);
+			}
+			if (schedule.size() > 0) {
+				List<BuildingPaymentInfo> buildingPaymentInfos = new ArrayList<BuildingPaymentInfo>();
+				int i = 0;
+				for(FormDataBodyPart milestone : schedule)
+				{
+					if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
+						Byte milestone_status = 0;
+						BuildingPaymentInfo buildingPaymentInfo = new BuildingPaymentInfo();
+						buildingPaymentInfo.setMilestone(milestone.getValueAs(String.class).toString());
+						buildingPaymentInfo.setPayable(payable.get(i).getValueAs(Double.class));
+						buildingPaymentInfo.setStatus(milestone_status);
+						buildingPaymentInfo.setBuilderBuilding(builderBuilding);
+						buildingPaymentInfos.add(buildingPaymentInfo);
+					}
+					i++;
+				}
+				if(buildingPaymentInfos.size() > 0) {
+					projectDAO.addBuildingPaymentInfo(buildingPaymentInfos);
+				}
+			}
+			
+			if (offer_title.size() > 0) {
+				List<BuildingOfferInfo> buildingOfferInfos = new ArrayList<BuildingOfferInfo>();
+				int i = 0;
+				for(FormDataBodyPart title : offer_title)
+				{
+					if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
+						BuildingOfferInfo buildingOfferInfo = new BuildingOfferInfo();
+						buildingOfferInfo.setTitle(title.getValueAs(String.class).toString());
+						buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
+						buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
+						buildingOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
+						buildingOfferInfo.setType(offer_type.get(i).getValueAs(Byte.class));
+						buildingOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
+						buildingOfferInfo.setBuilderBuilding(builderBuilding);
+						buildingOfferInfos.add(buildingOfferInfo);
+					}
+					i++;
+				}
+				if(buildingOfferInfos.size() > 0) {
+					projectDAO.addBuildingOfferInfo(buildingOfferInfos);
+				}
+			}
+		} else {
+			msg.setMessage("Failed to add building.");
+			msg.setStatus(0);
+		}
+		return msg;
+	}
 	
 	@POST
 	@Path("/building/info/update")
@@ -1082,6 +1326,56 @@ public class ProjectController extends ResourceConfig {
 		}
 		return msg;
 	}
+	
+	
+	@POST
+	@Path("/building/image/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateBuildingImage (
+			@FormDataParam("building_id") int building_id,
+			@FormDataParam("building_image[]") List<FormDataBodyPart> building_images
+	) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		BuilderBuilding builderBuilding = projectDAO.getBuildingById(building_id);
+		builderBuilding.setId(building_id);
+		//add gallery images
+		if(building_images != null){
+			try {	
+				List<BuilderBuilding> building = new ArrayList<BuilderBuilding>();
+				//for multiple inserting images.
+				if (building_images.size() > 0) {
+					for(int i=0 ;i < building_images.size();i++)
+					{
+						if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+							String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
+							long millis = System.currentTimeMillis() % 1000;
+							gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+							gallery_name = "images/project/building/images/"+gallery_name;
+							String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+							System.out.println("for loop image path: "+uploadGalleryLocation);
+							this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+							builderBuilding.setImage(gallery_name);
+							building.add(builderBuilding);
+						}
+					}
+					if(building.size() > 0) {
+						projectDAO.updateBuilding(builderBuilding);
+					}
+				}
+				msg.setStatus(1);
+				msg.setMessage("Building images updated successfully.");
+			} catch(Exception e) {
+				e.printStackTrace();
+				msg.setStatus(0);
+				msg.setMessage("Unable to save images");
+			}
+		}
+		
+		return msg;
+	}
+	
 	
 	@POST
 	@Path("/building/payment/update")
@@ -2698,7 +2992,7 @@ public class ProjectController extends ResourceConfig {
 			@FormParam("email") String email,
 			@FormParam("city") String city,
 			@FormParam("area") String area,
-			@FormParam("source") int source,
+			@FormParam("source") int source_id,
 			@FormParam("discount_offered") String discount_offered,
 			@FormParam("interest") int interest,
 			@FormParam("type_id") int type_id,
@@ -2725,11 +3019,16 @@ public class ProjectController extends ResourceConfig {
 			builderPropertyType.setId(type_id);
 			builderLead.setBuilderPropertyType(builderPropertyType);
 		}
+		if(source_id > 0){
+			Source source = new Source();
+			source.setId(source_id);
+			builderLead.setSource(source);
+		}
 		builderLead.setName(name);
 		builderLead.setMobile(mobile);
 		builderLead.setEmail(email);
 		builderLead.setArea(area);
-		builderLead.setSource(source);
+		
 		builderLead.setCity(city);
 		builderLead.setDiscountOffered(discount_offered);
 		builderLead.setIntrestedIn(interest);
@@ -2752,7 +3051,7 @@ public class ProjectController extends ResourceConfig {
 			@FormParam("email") String email,
 			@FormParam("city") String city,
 			@FormParam("area") String area,
-			@FormParam("source") int source,
+			@FormParam("source") int source_id,
 			@FormParam("discount_offered") String discount_offered
 	) {
 		
@@ -2777,12 +3076,15 @@ public class ProjectController extends ResourceConfig {
 			BuilderPropertyType builderPropertyType = new BuilderPropertyType();
 			builderPropertyType.setId(1);
 			builderLead.setBuilderPropertyType(builderPropertyType);
-		
+		if(source_id > 0){
+			Source source = new Source();
+			source.setId(source_id);
+			builderLead.setSource(source);
+		}
 		builderLead.setName(name);
 		builderLead.setMobile(mobile);
 		builderLead.setEmail(email);
 		builderLead.setArea(area);
-		builderLead.setSource(source);
 		builderLead.setCity(city);
 			builderLead.setDiscountOffered(discount_offered);
 			builderLead.setIntrestedIn(1);
@@ -2804,7 +3106,7 @@ public class ProjectController extends ResourceConfig {
 			@FormParam("email") String email,
 			@FormParam("city") String city,
 			@FormParam("area") String area,
-			@FormParam("source") int source,
+			@FormParam("source") int source_id,
 			@FormParam("discount_offered") String discount_offered,
 			@FormParam("interest") int interest,
 			@FormParam("type_id") int type_id,
@@ -2831,14 +3133,17 @@ public class ProjectController extends ResourceConfig {
 			builderPropertyType.setId(type_id);
 			builderLead.setBuilderPropertyType(builderPropertyType);
 		}
-		
+		if(source_id > 0){
+			Source source = new Source();
+			source.setId(source_id);
+			builderLead.setSource(source);
+		}
 		builderLead.setId(lead_id);
 		builderLead.setName(name);
 		builderLead.setMobile(mobile);
 		builderLead.setEmail(email);
 		builderLead.setArea(area);
 		builderLead.setCity(city);
-		builderLead.setSource(source);
 		builderLead.setDiscountOffered(discount_offered);
 		builderLead.setIntrestedIn(interest);
 		builderLead.setStatus(status);
@@ -2860,7 +3165,7 @@ public class ProjectController extends ResourceConfig {
 			@FormParam("email") String email,
 			@FormParam("city") String city,
 			@FormParam("area") String area,
-			@FormParam("source") int source,
+			@FormParam("source") int source_id,
 			@FormParam("discount_offered") String discount_offered
 	) {
 		BuilderLead builderLead = new ProjectDAO().getBuilderProjectLeadById(lead_id);
@@ -2879,13 +3184,17 @@ public class ProjectController extends ResourceConfig {
 			builderFlat.setId(flat_id);
 			builderLead.setBuilderFlat(builderFlat);
 		}
+		if(source_id > 0){
+			Source source = new Source();
+			source.setId(source_id);
+			builderLead.setSource(source);
+		}
 		builderLead.setId(lead_id);
 		builderLead.setName(name);
 		builderLead.setMobile(mobile);
 		builderLead.setEmail(email);
 		builderLead.setArea(area);
 		builderLead.setCity(city);
-		builderLead.setSource(source);
 		builderLead.setDiscountOffered(discount_offered);
 		
 		ResponseMessage resp = new ProjectDAO().updateProjectLead(builderLead);
