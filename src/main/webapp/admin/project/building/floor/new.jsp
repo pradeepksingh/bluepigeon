@@ -59,7 +59,7 @@
 			</div>
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Floor Details</a></li>
-			  	<li><a data-toggle="tab" href="#floorimages">Floor Layouts</a></li>
+			  	<li><a data-toggle="tab" href="#floorimages">Floor Layout</a></li>
 			</ul>
 			<form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 				<div class="tab-content">

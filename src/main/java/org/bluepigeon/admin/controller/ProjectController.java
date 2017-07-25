@@ -2848,6 +2848,204 @@ public class ProjectController extends ResourceConfig {
 	}
 		return msg;
 }
+	
+	@POST
+	@Path("/building/floor/flat/new")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addFlat (
+			@FormDataParam("floor_id") int floor_id,
+			@FormDataParam("flat_type_id") int flat_type_id,
+			@FormDataParam("flat_no") String flat_no, 
+			@FormDataParam("bedroom") Integer bedroom,
+			@FormDataParam("bathroom") Integer bathroom,
+			@FormDataParam("balcony") Integer balcony,
+			@FormDataParam("status") Integer status,
+			@FormDataParam("status_id") byte flat_status,
+			@FormDataParam("possession_date") String possession_date,
+			@FormDataParam("amenity_type[]") List<FormDataBodyPart> amenity_type,
+			@FormDataParam("flat_image[]") List<FormDataBodyPart> flat_images,
+			@FormDataParam("base_unit") short base_unit,
+			@FormDataParam("base_rate") Double base_rate,
+			@FormDataParam("rise_rate") Double rise_rate,
+			@FormDataParam("post") int post,
+			@FormDataParam("maintenance") Double maintenance,
+			@FormDataParam("tenure") int tenure,
+			@FormDataParam("amenity_rate") Double amenity_rate,
+			@FormDataParam("parking_id") int parking_id,
+			@FormDataParam("parking") Double parking,
+			@FormDataParam("stamp_duty") Double stamp_duty,
+			@FormDataParam("tax") Double tax,
+			@FormDataParam("vat") Double vat,
+			@FormDataParam("tech_fee") Double tech_fee,
+			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
+			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
+			//@FormDataParam("amount[]") List<FormDataBodyPart> amount,
+			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("amenity_wt") String amenity_wts
+	) {
+		String [] amenityWeightages = amenity_wts.split(",");
+		List<FlatAmenityWeightage> baws = new ArrayList<FlatAmenityWeightage>();
+		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+		Date possessionDate = null;
+		try {
+			possessionDate = format.parse(possession_date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		//byte floor_status = 1;
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		BuilderFloor builderFloor = new BuilderFloor();
+		builderFloor.setId(floor_id);
+		AdminUser adminUser = new AdminUser();
+		adminUser.setId(admin_id);
+		BuilderFlatStatus builderFlatStatus = new BuilderFlatStatus();
+		builderFlatStatus.setId(status);
+		BuilderFlatType builderFlatType = new BuilderFlatType();
+		builderFlatType.setId(flat_type_id);
+		BuilderFlat builderFlat = new BuilderFlat();
+		if(schedule != null){
+		builderFlat.setBuilderFloor(builderFloor);
+		builderFlat.setBuilderFlatStatus(builderFlatStatus);
+		builderFlat.setBuilderFlatType(builderFlatType);
+		builderFlat.setFlatNo(flat_no);
+		builderFlat.setBedroom(bedroom);
+		builderFlat.setBathroom(bathroom);
+		builderFlat.setBalcony(balcony);
+		builderFlat.setInventorySold(0.0);
+		builderFlat.setTotalInventory(0.0);
+		builderFlat.setRevenue(0.0);
+		builderFlat.setPossessionDate(possessionDate);
+		builderFlat.setAdminUser(adminUser);
+		try {	
+			//for multiple inserting images.
+			if (flat_images.size() > 0) {
+				for(int i=0 ;i < flat_images.size();i++)
+				{
+					if(flat_images.get(i).getFormDataContentDisposition().getFileName() != null && !flat_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = flat_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/flat/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						//System.out.println("for loop image path: "+uploadGalleryLocation);
+						this.imageUploader.writeToFile(flat_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						builderFlat.setImage(gallery_name);
+					}
+				}
+			
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save image");
+		}
+		builderFlat.setStatus(flat_status);
+		msg = projectDAO.addBuildingFlat(builderFlat);
+		if(msg.getId() > 0) {
+			builderFlat.setId(msg.getId());
+			Double totalCost = getFlatTotalCost(msg.getId(),base_rate,rise_rate,post,amenity_rate,parking_id,parking,maintenance,stamp_duty,tax,vat,base_unit);
+			FlatPricingDetails flatPricingDetails = new FlatPricingDetails();
+			flatPricingDetails.setBuilderFlat(builderFlat);
+			flatPricingDetails.setRiseRate(rise_rate);
+			flatPricingDetails.setBasePrice(base_rate);
+			flatPricingDetails.setPost(post);
+			flatPricingDetails.setAmenityRate(amenity_rate);
+			flatPricingDetails.setParkingId(parking_id);
+			flatPricingDetails.setParking(parking);
+			flatPricingDetails.setMaintenance(maintenance);
+			flatPricingDetails.setStampDuty(stamp_duty);
+			flatPricingDetails.setTenure(tenure);
+			flatPricingDetails.setTax(tax);
+			flatPricingDetails.setVat(vat);
+			flatPricingDetails.setFee(tech_fee);
+			flatPricingDetails.setTotalCost(totalCost);
+			AreaUnit areaUnit = new AreaUnit();
+			areaUnit.setId(base_unit);
+			flatPricingDetails.setAreaUnit(areaUnit);
+			projectDAO.addFlatPriceInfo(flatPricingDetails);
+			//add gallery images
+			if (amenity_type.size() > 0) {
+				List<FlatAmenityInfo> flatAmenityInfos = new ArrayList<FlatAmenityInfo>();
+				int i = 0;
+				for(FormDataBodyPart amenity : amenity_type)
+				{
+					if(amenity.getValueAs(Integer.class) != null && amenity.getValueAs(Integer.class) != 0) {
+						Byte milestone_status = 0;
+						BuilderFlatAmenity builderFlatAmenity = new BuilderFlatAmenity();
+						builderFlatAmenity.setId(amenity.getValueAs(Integer.class));
+						FlatAmenityInfo amenityInfo = new FlatAmenityInfo();
+						amenityInfo.setBuilderFlatAmenity(builderFlatAmenity);
+						amenityInfo.setBuilderFlat(builderFlat);
+						flatAmenityInfos.add(amenityInfo);
+					}
+					i++;
+				}
+				if(flatAmenityInfos.size() > 0) {
+					projectDAO.addFlatAmenityInfo(flatAmenityInfos);
+				}
+			}
+			if(amenity_wts != "") {
+				for(String aw :amenityWeightages) {
+					FlatAmenityWeightage baw = new FlatAmenityWeightage();
+					String [] amenityWeightage = aw.split("#");
+					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
+					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
+					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
+					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
+					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
+					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
+					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+					BuilderFlatAmenity builderFlatAmenity = new BuilderFlatAmenity();
+					builderFlatAmenity.setId(amenity_id);
+					BuilderFlatAmenityStages builderFlatAmenityStages = new BuilderFlatAmenityStages();
+					builderFlatAmenityStages.setId(stage_id);
+					BuilderFlatAmenitySubstages builderFlatAmenitySubstages = new BuilderFlatAmenitySubstages();
+					builderFlatAmenitySubstages.setId(substage_id);
+					baw.setBuilderFlatAmenity(builderFlatAmenity);
+					baw.setAmenityWeightage(amenity_weightage);
+					baw.setBuilderFlatAmenityStages(builderFlatAmenityStages);
+					baw.setStageWeightage(stage_weightage);
+					baw.setBuilderFlatAmenitySubstages(builderFlatAmenitySubstages);
+					baw.setSubstageWeightage(substage_weightage);
+					baw.setStatus(wstatus);
+					baw.setBuilderFlat(builderFlat);
+					baws.add(baw);
+				}
+				projectDAO.addFlatAmenityWeightage(baws);
+			}
+			
+			if (schedule.size() > 0) {
+				List<FlatPaymentSchedule> flatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
+				int i = 0;
+				for(FormDataBodyPart milestone : schedule)
+				{
+					if(milestone.getValueAs(String.class).toString() != null && !milestone.getValueAs(String.class).toString().isEmpty()) {
+						Byte milestone_status = 0;
+						FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+						flatPaymentSchedule.setMilestone(milestone.getValueAs(String.class).toString());
+						flatPaymentSchedule.setPayable(payable.get(i).getValueAs(Double.class));
+						flatPaymentSchedule.setAmount(totalCost*payable.get(i).getValueAs(Double.class)/100);
+						flatPaymentSchedule.setStatus(milestone_status);
+						flatPaymentSchedule.setBuilderFlat(builderFlat);
+						flatPaymentSchedules.add(flatPaymentSchedule);
+					}
+					i++;
+				}
+				if(flatPaymentSchedules.size() > 0) {
+					projectDAO.addFlatPaymentInfo(flatPaymentSchedules);
+				}
+			}
+		}
+		
+	}else {
+		msg.setMessage("Failed to add flat.");
+		msg.setStatus(0);
+	}
+		return msg;
+}
+
+	
 	public Double getFlatTotalCost(
 			int flat_id, Double baseRate, Double riseRate, int post, Double amenityRate,
 			int parkingId, Double parking, Double maintenance, Double stampDuty,
@@ -2976,6 +3174,44 @@ public class ProjectController extends ResourceConfig {
 			msg.setMessage("Failed to update flat.");
 			msg.setStatus(0);
 		}
+		return msg;
+	}
+	
+	@POST
+	@Path("/building/floor/flat/update/image")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateFlatImage (
+			@FormDataParam("flat_id") int flat_id,
+			@FormDataParam("flat_image[]") List<FormDataBodyPart> flat_images
+			
+	) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		ResponseMessage msg = new ResponseMessage();
+		BuilderFlat builderFlat = projectDAO.getBuilderFlatById(flat_id);
+		try {	
+			//for multiple inserting images.
+			if (flat_images.size() > 0) {
+				for(int i=0 ;i < flat_images.size();i++)
+				{
+					if(flat_images.get(i).getFormDataContentDisposition().getFileName() != null && !flat_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = flat_images.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/flat/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						//System.out.println("for loop image path: "+uploadGalleryLocation);
+						this.imageUploader.writeToFile(flat_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						builderFlat.setImage(gallery_name);
+					}
+				}
+			 msg = projectDAO.updateBuildingFlat(builderFlat);
+			}
+		} catch(Exception e) {
+			msg.setStatus(0);
+			msg.setMessage("Unable to save image");
+		}
+		
 		return msg;
 	}
 	
