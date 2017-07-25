@@ -4575,5 +4575,15 @@ public class ProjectDAO {
 		}
 	}
 	
+	public BuilderBuilding getBuildingById(int id){
+		String hql = "from BuilderBuilding where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		BuilderBuilding builderBuilding = (BuilderBuilding)query.uniqueResult();
+		session.close();
+		return builderBuilding;
+	}
 	
 }

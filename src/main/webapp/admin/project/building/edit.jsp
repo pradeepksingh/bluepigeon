@@ -36,6 +36,7 @@
 <%
 	ServletContext webcontext = pageContext.getServletContext();
 	int building_id = 0;
+	int project_id = 0;
 	int p_user_id = 0;
 	building_id = Integer.parseInt(request.getParameter("building_id"));
 	session = request.getSession(false);
@@ -69,7 +70,7 @@
 	List<BuildingWeightage> buildingWeightages = new ProjectDAO().getBuildingWeightage(building_id);
 	List<BuilderFloor> builderFloors = new ProjectDAO().getBuildingFloors(builderBuilding.getId());
 	if(building_id > 0){
-		int project_id = builderBuildings.get(0).getBuilderProject().getId();
+		 project_id = builderBuildings.get(0).getBuilderProject().getId();
 		buildingPriceInfo = new ProjectDAO().getBuilderBuildingPriceInfo(building_id);
 		BuilderProject builderProject = new ProjectDAO().getBuilderProjectById(project_id);
 		if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
@@ -113,13 +114,14 @@
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
 										<input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
+										<input type="hidden" name="project_id" id ="project_id" value="<%out.print(project_id);%>"/>
 										<input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-4">Project Name <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
-														<select id="project_id" name="project_id" class="form-control">
+														<select id="project_id" name="project_id" class="form-control" disable>
 															<option value="0">Select Project</option>
 															<% for(BuilderProject builderProject :builderProjects) { %>
 															<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == builderBuilding.getBuilderProject().getId()) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
@@ -311,39 +313,25 @@
 										<h3>Upload Building Images</h3>
 										<br>
 										<div class="row" id="project_images">
-											<% for (BuildingImageGallery buildingImageGallery :buildingImageGalleries) { %>
-											<div class="col-lg-4 margin-bottom-5" id="b_image<% out.print(buildingImageGallery.getId()); %>">
+											<div class="col-lg-4 margin-bottom-5">
+											<% if(builderBuilding != null) { %>
 												<div class="form-group" id="error-landmark">
 													<div class="col-sm-12">
-														<img alt="Building Images" src="${baseUrl}/<% out.print(buildingImageGallery.getImage()); %>" width="200px;">
+														<img alt="Building Images" src="${baseUrl}/<% out.print(builderBuilding.getImage()); %>" width="200px;">
 													</div>
-													<label class="col-sm-12 text-left"><a href="javascript:deleteImage(<% out.print(buildingImageGallery.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
-													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
-											</div>
+											
 											<% } %>
-										</div>
-										<div class="row">
-											<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-xs"> + Add More</a></span>
-										</div>
-										<hr/>
-										<h3>Upload Elevation Images</h3>
-										<br>
-										<div class="row" id="elevation_images">
-											<% for (BuildingPanoramicImage buildingPanoramicImage :buildingPanoramicImages) { %>
-											<div class="col-lg-4 margin-bottom-5" id="b_elv_image<% out.print(buildingPanoramicImage.getId()); %>">
+											</div>
+											<div class="col-lg-6 margin-bottom-5" id="imgdiv-'+img_count+'">
 												<div class="form-group" id="error-landmark">
-													<div class="col-sm-12">
-														<img alt="Building Images" src="${baseUrl}/<% out.print(buildingPanoramicImage.getPanoImage()); %>" width="100%;">
+													<label class="control-label col-sm-4">Select Image </label>
+													<div class="col-sm-8 input-group" style="padding:0px 12px;">
+														<input type="file" class="form-control" id="building_image" name="building_image[]" />
 													</div>
-													<label class="col-sm-12 text-left"><a href="javascript:deleteElvImage(<% out.print(buildingPanoramicImage.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
-											<% } %>
-										</div>
-										<div class="row">
-											<span class="pull-right"><a href="javascript:addMoreElvImages();" class="btn btn-info btn-xs"> + Add More</a></span>
 										</div>
 									</div>
 								</div>
@@ -554,7 +542,7 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<!-- div class="col-lg-3 margin-bottom-5">
+												<!-- <div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-amount">
 														<label class="control-label col-sm-6">Amount </label>
 														<div class="col-sm-6">
@@ -562,7 +550,7 @@
 														</div>
 														<div class="messageContainer"></div>
 													</div>
-												</div-->
+												</div>-->
 											</div>
 											<% } %>
 										</div>
@@ -1231,7 +1219,7 @@ function updateBuildingImages() {
 	 		target : '#imageresponse', 
 	 		beforeSubmit : showAddImageRequest,
 	 		success :  showAddImageResponse,
-	 		url : '${baseUrl}/webapi/project/building/images/update',
+	 		url : '${baseUrl}/webapi/project/building/image/update',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};

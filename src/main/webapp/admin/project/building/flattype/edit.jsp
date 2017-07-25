@@ -16,6 +16,7 @@
 <%
 	int flat_type_id = 0;
 	int p_user_id = 0;
+	int project_id = 0;
 	flat_type_id = Integer.parseInt(request.getParameter("flat_type_id"));
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
@@ -32,6 +33,7 @@
 	List<BuilderFlatType> builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeById(flat_type_id);
 	if(builderFlatTypes.size() > 0) {
 		builderFlatType = builderFlatTypes.get(0);
+		project_id = builderFlatType.getBuilderProject().getId();
 	}
 	List<BuilderProjectPropertyConfiguration> projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderActiveProjectConfigurations();
 	List<FlatTypeImage> flatTypeImages = new ProjectDAO().getBuildingFlatTypeImages(flat_type_id);
@@ -70,13 +72,14 @@
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
 										<input type="hidden" name="flat_type_id" id="flat_type_id" value="<% out.print(flat_type_id);%>"/>
+										<input type="hidden" name="project_id" id="project_id" value="<%out.print(project_id);%>"/>
 										<input type="hidden" name="img_count" id="img_count" value="<% out.print(flatTypeImages.size()+1); %>"/>
 										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-5">Select Project <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
-														<select id="project_id" name="project_id" class="form-control">
+														<select id="project_id" name="project_id" class="form-control" disable>
 															<option value="0">Select Project</option>
 														<% for(BuilderProject builderProject :builderProjects) { %>
 															<option value="<% out.print(builderProject.getId());%>" <% if(builderProject.getId() == builderFlatType.getBuilderProject().getId()) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
