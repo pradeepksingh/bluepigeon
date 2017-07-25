@@ -62,12 +62,13 @@
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
 										<input type="hidden" name="img_count" id="img_count" value="2"/>
+										<input type="hidden" name="project_id" id="project_id" value="<%out.print(project_id);%>"/>
 										<div class="row">
 											<div class="col-lg-4 margin-bottom-5">
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-5">Select Project <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
-														<select id="project_id" name="project_id" class="form-control">
+														<select id="project_id" name="project_id" class="form-control" disabled>
 															<option value="0">Select Project</option>
 														<% for(BuilderProject builderProject :builderProjects) { %>
 															<option value="<% out.print(builderProject.getId());%>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>

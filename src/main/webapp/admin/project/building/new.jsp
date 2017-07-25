@@ -92,12 +92,13 @@
 												<div class="form-group" id="error-name">
 													<label class="control-label col-sm-5">Project Name <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
-														<select id="project_id" name="project_id" class="form-control">
+														<select id="project_id" name="project_id" class="form-control" disabled>
 															<option value="0">Select Project</option>
 															<% for(BuilderProject builderProject :builderProjects) { %>
 															<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
 															<% } %>
 														</select>
+														<input type="hidden" id="project_id" name="project_id" value="<%out.print(project_id);%>"/>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
@@ -245,7 +246,7 @@
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
-										<h3>Upload Building Images</h3>
+										<h3>Upload Building Image</h3>
 										<br>
 										<div class="row" id="project_images">
 											<div class="col-lg-6 margin-bottom-5">
@@ -257,46 +258,6 @@
 													<div class="messageContainer col-sm-offset-3"></div>
 												</div>
 											</div>
-											<div class="col-lg-6 margin-bottom-5" id="imgdiv-2">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Select Image </label>
-													<div class="col-sm-8 input-group" style="padding:0px 12px;">
-														<input type="file" class="form-control" id="building_image" name="building_image[]" />
-														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a>
-													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-xs"> + Add More</a></span>
-										</div>
-										<hr/>
-										<h3>Upload Elevation Images</h3>
-										<br>
-										<div class="row" id="elevation_images">
-											<div class="col-lg-6 margin-bottom-5">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Select Image </label>
-													<div class="col-sm-8">
-														<input type="file" class="form-control" id="elevation_image" name="elevation_image[]" />
-													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
-												</div>
-											</div>
-											<div class="col-lg-6 margin-bottom-5" id="elvimgdiv-2">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Select Image </label>
-													<div class="col-sm-8 input-group" style="padding:0px 12px;">
-														<input type="file" class="form-control" id="elevation_image" name="elevation_image[]" />
-														<a href="javascript:removeElvImage(2);" class="input-group-addon btn-danger">x</a>
-													</div>
-													<div class="messageContainer col-sm-offset-3"></div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<span class="pull-right"><a href="javascript:addMoreElvImages();" class="btn btn-info btn-xs"> + Add More</a></span>
 										</div>
 									</div>
 								</div>
@@ -338,7 +299,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="base_rate" name="base_rate" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
 											</div>
@@ -349,7 +310,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -359,7 +320,7 @@
 															<input type="text" class="form-control" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
 															<span class="input-group-addon">floor</span>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
 											</div>
@@ -370,7 +331,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="maintenance" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -380,7 +341,7 @@
 															<input type="text" class="form-control" id="tenure" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>"/>
 															<span class="input-group-addon">Months</span>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
 											</div>
@@ -391,7 +352,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -404,7 +365,7 @@
 																<option value="2">Shed Parking</option>
 															</select>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
 											</div>
@@ -415,7 +376,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="parking" name="parking" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -425,7 +386,7 @@
 															<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
 															<span class="input-group-addon">%</span>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
 											</div>
@@ -437,7 +398,7 @@
 															<input type="text" class="form-control" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
 															<span class="input-group-addon">%</span>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
 												<div class="col-lg-6 margin-bottom-5">
@@ -447,7 +408,7 @@
 															<input type="text" class="form-control" id="vat" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
 															<span class="input-group-addon">%</span>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
 											</div>
@@ -458,7 +419,7 @@
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="tech_fee" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
 											</div>
@@ -554,7 +515,7 @@
 													<div class="form-group" id="error-discount">
 														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control errorMsg" id="discount" name="discount[]" value=""/>
+															<input type="text" class="form-control errorMsg" id="discount1" onkeyup="javascript:validPer(1)" onkeypress=" return isNumber(event, this);" name="discount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -563,7 +524,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control errorMsg" id="discount_amount" name="discount_amount[]" value=""/>
+															<input type="text" class="form-control errorMsg" id="discount_amount1"  onkeyup=" javascript:onlyNumber(1);" name="discount_amount[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -674,6 +635,12 @@ function onlyNumbers(){
 	 var $th = $(this);
 	    $th.val( $th.val().replace(/[^a-zA-Z0-9- ]/g, function(str) { alert('Please use only letters and numbers.'); return ''; } ) );
 }
+function onlyNumber(id){
+	
+	 var $th = $("#discount_amount"+id);
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+}
+
 $('#name').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^a-zA-Z0-9- ]/g, function(str) { alert('Please use only letters and numbers.'); return ''; } ) );
@@ -689,12 +656,13 @@ $('#payable').keypress(function (event) {
 $('#amount').keypress(function (event) {
     return isNumber(event, this)
 });
-$('#discount').keypress(function (event) {
-    return isNumber(event, this)
-});
-$('#discount_amount').keypress(function (event) {
-    return isNumber(event, this)
-});
+// $('#discount').keypress(function (event) {
+//     return isNumber(event, this)
+// });
+
+// $('#discount_amount').keypress(function (event) {
+//     return isNumber(event, this)
+// });
 
 $('#possession_date').datepicker({
 	autoclose:true,
@@ -747,6 +715,16 @@ $('#tech_fee').keypress(function (event) {
 $('#payable').keypress(function (event) {
     return isNumber(event, this)
 });
+function validPer(id){
+	//alert($("#discount"+id).val());
+	var x = $("#discount"+id).val();
+	//alert(x);
+	if( x<0 || x >100){
+		alert("The percentage must be between 0 and 100");
+		$("#discount"+id).val('');
+	}
+}
+
 $('#addbuilding').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -806,6 +784,107 @@ $('#addbuilding').bootstrapValidator({
                     }
                 }
             }
+        },
+        base_unit: {
+            validators: {
+                notEmpty: {
+                    message: 'Area unit is required'
+                }
+            }
+        },
+        base_rate: {
+            validators: {
+                notEmpty: {
+                    message: 'Base rate is required'
+                },
+        		numeric: {
+        			message: 'Base rate is invalid'
+        		}
+            }
+        },
+        rise_rate: {
+            validators: {
+            	notEmpty: {
+                    message: 'Rise rate is required'
+                },
+        		numeric: {
+        			message: 'Rise rate is invalid'
+        		}
+            }
+        },
+        post: {
+            validators: {
+            	notEmpty: {
+                    message: 'Applicable Post is required'
+                },
+        		integer: {
+        			message: 'Applicable Post is invalid'
+        		}
+            }
+        },
+        maintenance: {
+            validators: {
+        		numeric: {
+        			message: 'Maintenance is invalid'
+        		}
+            }
+        },
+        tenure: {
+            validators: {
+            	numeric: {
+        			message: 'Tenure is invalid'
+        		}
+            }
+        },
+        amenity_rate: {
+            validators: {
+            	notEmpty: {
+                    message: 'Amenity facing rate is required'
+                },
+        		numeric: {
+        			message: 'Amenity facing rate is invalid'
+        		}
+            }
+        },
+        parking: {
+            validators: {
+            	notEmpty: {
+                    message: 'Parking rate is required'
+                },
+        		numeric: {
+        			message: 'Parking rate is invalid'
+        		}
+            }
+        },
+        stamp_duty: {
+            validators: {
+            	notEmpty: {
+                    message: 'Stamp duty is required'
+                },
+        		numeric: {
+        			message: 'Stamp duty is invalid'
+        		}
+            }
+        },
+        tax: {
+            validators: {
+            	notEmpty: {
+                    message: 'Tax is required'
+                },
+        		numeric: {
+        			message: 'Tax is invalid'
+        		}
+            }
+        },
+        vat: {
+            validators: {
+            	notEmpty: {
+                    message: 'Vat is required'
+                },
+        		numeric: {
+        			message: 'Vat is invalid'
+        		}
+            }
         }
     }
 }).on('success.form.bv', function(event,data) {
@@ -836,7 +915,7 @@ function addBuilding() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/project/building/add',
+	 		url : '${baseUrl}/webapi/project/building/newadd',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -930,7 +1009,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount">'
 				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount" name="discount[]" onkeypress=" return isNumber(event, this);" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount'+offers+'" onkeyup="validPer('+offers+')" name="discount[]" onkeypress=" return isNumber(event, this);" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -939,7 +1018,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount_amount" onkeypress=" return isNumber(event, this);" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup="javascript:onlyNumber('+offers+');" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'

@@ -164,10 +164,10 @@
 										<div class="col-sm-9">
 										 	<select name="source" id="source" class="form-control">
 							                    <option value="0">Select Source</option>
-							                    <option value="1" <%if(builderLead.getSource() == 1){ %>selected<%} %>>App</option>
-							                    <option value="2" <%if(builderLead.getSource() == 2){ %>selected<%} %>>Website</option>
-							                    <option value="3" <%if(builderLead.getSource() == 3){ %>selected<%} %>>Google</option>
-							                    <option value="4" <%if(builderLead.getSource() == 4){ %>selected<%} %>>Facebook</option>
+							                    <option value="1" <%if(builderLead.getSource().getId() == 1){ %>selected<%} %>>App</option>
+							                    <option value="2" <%if(builderLead.getSource().getId() == 2){ %>selected<%} %>>Website</option>
+							                    <option value="3" <%if(builderLead.getSource().getId() == 3){ %>selected<%} %>>Google</option>
+							                    <option value="4" <%if(builderLead.getSource().getId() == 4){ %>selected<%} %>>Facebook</option>
 							                </select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>

@@ -93,6 +93,8 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
+										<input type="hidden" name="project_id" id="project_id" value="<%out.print(project_id);%>">
+										<input type="hidden" name="building_id" id="building_id" value="<%out.print(building_id); %>">
 										<input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
 										<input type="hidden" name="img_count" id="img_count" value="2"/>
 										<div class="row">
@@ -109,7 +111,7 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-6">Project Name </label>
 													<div class="col-sm-6">
-														<select id="project_id" name="project_id" class="form-control">
+														<select id="project_id" name="project_id" class="form-control" disabled>
 															<option value="0">Select Project</option>
 															<% for(BuilderProject builderProject :builderProjects) { %>
 															<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
@@ -123,14 +125,14 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Building Name </label>
 													<div class="col-sm-7">
-														<select id="building_id" name="building_id" class="form-control">
+														<select id="building_id" name="building_id" class="form-control" disabled>
 															<% if(buildings != null) { %>
 															<% for(BuilderBuilding builderBuilding2 :buildings) { %>
 															<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName());%></option>
 															<% } %>
-															<% } else { %>
-															<option value="0">Select Building</option>
-															<% } %>
+															<% } else //{ %>
+<!-- 															<option value="0">Select Building</option> -->
+															<%// } %>
 														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-4"></div>
@@ -479,7 +481,7 @@
 							<div id="payment_schedule">
 								<div class="panel panel-default">
 									<div class="panel-body">
-									<%
+									<% int j=1;
 									if(buildingPaymentInfos != null){
 										if(buildingPaymentInfos.size() > 0){
 											for(BuildingPaymentInfo paymentInfoData: buildingPaymentInfos){ %>
@@ -498,7 +500,7 @@
 													<div class="form-group" id="error-payable">
 														<label class="control-label col-sm-8">% of Net Payable </label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control errorMsg" id="payable" name="payable[]" value="<%out.print(paymentInfoData.getPayable());%>"/>
+															<input type="text" class="form-control errorMsg" id="payable<%out.print(j); %>" onkeyup="javascript:validPer(<%out.print(j); %>"  onkeypress=" return isNumber(event, this);" name="payable[]" value="<%out.print(paymentInfoData.getPayable());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -573,6 +575,15 @@ function isNumber(evt, element) {
 
     return true;
 } 
+function validPer(id){
+	//alert($("#discount"+id).val());
+	var x = $("#payable"+id).val();
+	//alert(x);
+	if( x<0 || x >100){
+		alert("The percentage must be between 0 and 100");
+		$("#payable"+id).val('');
+	}
+}
 $('#flat_no').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
@@ -711,6 +722,107 @@ $('#addfloor').bootstrapValidator({
                 notEmpty: {
                     message: 'Please select amenity'
                 }
+            }
+        },
+        base_unit: {
+            validators: {
+                notEmpty: {
+                    message: 'Area unit is required'
+                }
+            }
+        },
+        base_rate: {
+            validators: {
+                notEmpty: {
+                    message: 'Base rate is required'
+                },
+        		numeric: {
+        			message: 'Base rate is invalid'
+        		}
+            }
+        },
+        rise_rate: {
+            validators: {
+            	notEmpty: {
+                    message: 'Rise rate is required'
+                },
+        		numeric: {
+        			message: 'Rise rate is invalid'
+        		}
+            }
+        },
+        post: {
+            validators: {
+            	notEmpty: {
+                    message: 'Applicable Post is required'
+                },
+        		integer: {
+        			message: 'Applicable Post is invalid'
+        		}
+            }
+        },
+        maintenance: {
+            validators: {
+        		numeric: {
+        			message: 'Maintenance is invalid'
+        		}
+            }
+        },
+        tenure: {
+            validators: {
+            	numeric: {
+        			message: 'Tenure is invalid'
+        		}
+            }
+        },
+        amenity_rate: {
+            validators: {
+            	notEmpty: {
+                    message: 'Amenity facing rate is required'
+                },
+        		numeric: {
+        			message: 'Amenity facing rate is invalid'
+        		}
+            }
+        },
+        parking: {
+            validators: {
+            	notEmpty: {
+                    message: 'Parking rate is required'
+                },
+        		numeric: {
+        			message: 'Parking rate is invalid'
+        		}
+            }
+        },
+        stamp_duty: {
+            validators: {
+            	notEmpty: {
+                    message: 'Stamp duty is required'
+                },
+        		numeric: {
+        			message: 'Stamp duty is invalid'
+        		}
+            }
+        },
+        tax: {
+            validators: {
+            	notEmpty: {
+                    message: 'Tax is required'
+                },
+        		numeric: {
+        			message: 'Tax is invalid'
+        		}
+            }
+        },
+        vat: {
+            validators: {
+            	notEmpty: {
+                    message: 'Vat is required'
+                },
+        		numeric: {
+        			message: 'Vat is invalid'
+        		}
             }
         }
     }

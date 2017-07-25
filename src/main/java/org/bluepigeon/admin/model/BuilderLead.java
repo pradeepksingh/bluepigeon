@@ -28,7 +28,7 @@ public class BuilderLead implements java.io.Serializable {
 	private String email;
 	private String area;
 	private String city;
-	private Integer source;
+	private Source source;
 	private Integer intrestedIn;
 	private String discountOffered;
 	private Integer addedBy;
@@ -43,7 +43,7 @@ public class BuilderLead implements java.io.Serializable {
 
 	public BuilderLead(BuilderBuilding builderBuilding, BuilderFlat builderFlat, BuilderProject builderProject,
 			BuilderPropertyType builderPropertyType, String name, String mobile, String email, String area, String city,
-			Integer source, Integer intrestedIn, String discountOffered, Integer addedBy, Integer status) {
+			Source source, Integer intrestedIn, String discountOffered, Integer addedBy, Integer status) {
 		this.builderBuilding = builderBuilding;
 		this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
@@ -157,12 +157,13 @@ public class BuilderLead implements java.io.Serializable {
 		this.city = city;
 	}
 
-	@Column(name = "source")
-	public Integer getSource() {
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "source")
+	public Source getSource() {
 		return this.source;
 	}
 
-	public void setSource(Integer source) {
+	public void setSource(Source source) {
 		this.source = source;
 	}
 

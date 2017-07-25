@@ -162,7 +162,7 @@
 	                       </div>
 	                       <div class="row">
                            	<div class="col-md-6 center"> 
-                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-success waves-effect waves-light m-t-10">Edit</a>
+                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-success waves-effect waves-light m-t-10">Manage</a>
                            	</div>
                          	<div class="col-md-6 center">
                           		 <a href="${baseUrl}/builder/project/building/list.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-10">Building</a>

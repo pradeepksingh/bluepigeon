@@ -291,7 +291,7 @@
 	                       <div class="row">
 	                      
                            	<div class="col-md-6 left"> 
-                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-1">Edit</a>
+                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>
                            	</div>
                          	<div class="col-md-6 center">
                           		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>

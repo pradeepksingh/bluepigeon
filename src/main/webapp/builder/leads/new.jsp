@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.Source"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -19,6 +20,7 @@
 	int type_size = 0;
 	int city_size = 0;
  	List<ProjectData> builderProjects =null;
+ 	List<Source> sourceList = null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
  	
    	session = request.getSession(false);
@@ -33,6 +35,7 @@
 		}
 		if(builder_id > 0){
 			builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
+			sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
 		}
 		if(builderProjects.size()>0)
 	    	project_size = builderProjects.size();
@@ -169,10 +172,9 @@
 	                                    		<div class="col-3">
 	                                       			<select name="source" id="source" class="form-control">
 									                    <option value="0">Select Source</option>
-									                    <option value="1">App</option>
-									                    <option value="2">Website</option>
-									                    <option value="3">Google</option>
-									                    <option value="4">Facebook</option>
+									                   <%for(Source source : sourceList){ %>
+									                   <option value="<%out.print(source.getId());%>"><%out.print(source.getName()); %></option>
+									                   <%} %>
 								                	</select>
 	                                    		</div>
 	                                    		<label for="example-text-input" class="col-3 col-form-label">Area</label>

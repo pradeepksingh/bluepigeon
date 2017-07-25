@@ -25,6 +25,8 @@
 <%
 	int floor_id = 0;
 	int p_user_id = 0;
+	int project_id = 0;
+	int building_id = 0;
 	floor_id = Integer.parseInt(request.getParameter("floor_id"));
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
@@ -41,6 +43,8 @@
 	List<BuilderFloor> builderFloors = new ProjectDAO().getBuildingFloorById(floor_id);
 	if(builderFloors.size() > 0) {
 		builderFloor = builderFloors.get(0);
+		project_id = builderFloor.getBuilderBuilding().getBuilderProject().getId();
+		building_id = builderFloor.getBuilderBuilding().getId();
 		buildings = new ProjectDAO().getBuilderProjectBuildings(builderFloor.getBuilderBuilding().getBuilderProject().getId());
 	}
 	List<FloorAmenityInfo> floorAmenityInfos = new ProjectDAO().getBuildingFloorAmenityInfo(floor_id);
@@ -84,6 +88,8 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
+										<input type="hidden" name="project_id" id = "project_id" value="<%out.print(project_id);%>"/>
+										<input type="hidden" name="building_id" id="building_id" value=<%out.print(building_id); %>"/>
 										<input type="hidden" name="floor_id" id="floor_id" value="<% out.print(floor_id);%>"/>
 										<input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
 										<input type="hidden" name="img_count" id="img_count" value="2"/>
@@ -110,7 +116,7 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Project Name </label>
 													<div class="col-sm-7">
-														<select id="project_id" name="project_id" class="form-control">
+														<select id="project_id" name="project_id" class="form-control" disabled>
 															<option value="0">Select Project</option>
 															<% for(BuilderProject builderProject :builderProjects) { %>
 															<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == builderFloor.getBuilderBuilding().getBuilderProject().getId()) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
@@ -126,14 +132,14 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Building Name </label>
 													<div class="col-sm-7">
-														<select id="building_id" name="building_id" class="form-control">
+														<select id="building_id" name="building_id" class="form-control" disabled>
 															<% if(buildings != null) { %>
 															<% for(BuilderBuilding builderBuilding2 :buildings) { %>
 															<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == builderFloor.getBuilderBuilding().getId()) { %>selected<% } %>><% out.print(builderBuilding2.getName());%></option>
 															<% } %>
-															<% } else { %>
-															<option value="0">Select Building</option>
-															<% } %>
+															<% } //else { %>
+<!-- 															<option value="0">Select Building</option> -->
+															<%// } %>
 														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>

@@ -895,7 +895,7 @@
 																<div class="row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
 																	<input type="hidden" name="offer_id[]" value="<% out.print(projectOfferInfo.getId()); %>" />
 																	<div class="col-lg-12" style="padding-bottom:5px;">
-																		<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(j); %>);" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span>
+																		<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(projectOfferInfo.getId()); %>);" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span>
 																	</div>
 																	<div class="col-lg-5 margin-bottom-5">
 																		<div class="form-group" id="error-offer_title">

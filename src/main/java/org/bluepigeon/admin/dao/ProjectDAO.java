@@ -183,6 +183,20 @@ public class ProjectDAO {
 		return response;
 	}
 	
+	public ResponseMessage updateProjectImage(BuilderProject builderProject){
+		ResponseMessage responeMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		session.update(builderProject);
+		session.getTransaction().commit();
+		session.close();
+		responeMessage.setStatus(1);
+		responeMessage.setMessage("Project Image uploaded succssefuly");
+				
+		return responeMessage;
+	}
+	
 	public ResponseMessage updateDetailInfo(ProjectDetail projectDetail) {
 		ResponseMessage response = new ResponseMessage();
 		BuilderProject builderProject = projectDetail.getBuilderProject();
@@ -4561,5 +4575,15 @@ public class ProjectDAO {
 		}
 	}
 	
+	public BuilderBuilding getBuildingById(int id){
+		String hql = "from BuilderBuilding where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		BuilderBuilding builderBuilding = (BuilderBuilding)query.uniqueResult();
+		session.close();
+		return builderBuilding;
+	}
 	
 }
