@@ -395,7 +395,7 @@
 												<div class="form-group row">
 													<label for="example-text-input" class="col-3 col-form-label">Booking Date</label>
 													<div class="col-3">
-														<input type="text" class="form-control" id="booking_date" name="booking_date" value="<% out.print(dt1.format(buyingDetails.getBookingDate())); %>" />
+														<input type="text" class="form-control" id="booking_date" name="booking_date" value="<%if(buyingDetails.getBookingDate()!=null) {out.print(dt1.format(buyingDetails.getBookingDate())); }%>" />
 													</div>
 													<label for="example-text-input" class="col-3 col-form-label">Base Rate</label>
 													<div class="col-3">
@@ -715,9 +715,13 @@ function calculateAmount(id){
 	            }
 	        },
 	        'contact[]': {
-	            validators: {
-	                notEmpty: {
-	                    message: 'Buyer contact is required and cannot be empty'
+	        	validators: {
+	            	notEmpty: {
+	                    message: 'The Mobile is required and cannot be empty'
+	                },
+	                regexp: {
+	                    regexp: '^[7-9][0-9]{9}$',
+	                    message: 'Invalid Mobile Number'
 	                }
 	            }
 	        },

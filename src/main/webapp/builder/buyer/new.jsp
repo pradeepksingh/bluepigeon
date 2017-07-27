@@ -862,9 +862,13 @@ $('#addnewbuyer').bootstrapValidator({
             }
         },
         'contact[]': {
-            validators: {
-                notEmpty: {
-                    message: 'Buyer mobile is required and cannot be empty'
+        	validators: {
+            	notEmpty: {
+                    message: 'The Mobile is required and cannot be empty'
+                },
+                regexp: {
+                    regexp: '^[7-9][0-9]{9}$',
+                    message: 'Invalid Mobile Number'
                 }
             }
         },

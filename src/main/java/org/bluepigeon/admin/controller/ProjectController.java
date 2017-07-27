@@ -30,6 +30,7 @@ import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.BuildingWeightageData;
+import org.bluepigeon.admin.data.FlatTypeData;
 import org.bluepigeon.admin.data.FlatWeightageData;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.FloorWeightageData;
@@ -3909,5 +3910,15 @@ public class ProjectController extends ResourceConfig {
 		BuilderProjectPriceInfoDAO  builderProjectPriceInfoDAO= new BuilderProjectPriceInfoDAO();
 		return builderProjectPriceInfoDAO.getBuilderProjectPriceInfos(project_id);
 	}
+	
+	@GET
+	@Path("/flattype/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public FlatTypeData getFlatType(@QueryParam("flat_type_id") int flat_type_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		return projectDAO.getFlatType(flat_type_id);
+		//return builderBuildingAmenityDAO.getBuilderCompanyNameList(builder_id);
+	}
+	
 }
 

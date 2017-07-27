@@ -117,9 +117,11 @@ public class BuyerDAO {
 		buyerSession.beginTransaction();
 		buyerSession.save(buyer);
 		buyerSession.getTransaction().commit();
-		buyerSession.close();
 		updateFlatStatus(buyer.getBuilderFlat().getId());
-		updateProject(buyer);
+	//	updateProject(buyer);
+		new ProjectDAO().updateProjectInventory(buyer.getBuilderFlat().getId());
+		buyerSession.close();
+		
 		response.setId(buyer.getId());
 		response.setStatus(1);
 		response.setMessage("Buyer Added Successfully");
@@ -146,20 +148,20 @@ public class BuyerDAO {
 		Query projectQuery = projectSession.createQuery(projecthql);
 		projectQuery.setParameter("id", buyer.getBuilderProject().getId());
 		BuilderProject builderProject = (BuilderProject) projectQuery.list().get(0);
+		projectSession.close();
 		Session flatSession = hibernateUtil.openSession();
 		Query flatQuery = flatSession.createQuery(flatTotal);
-		Session updateSession = hibernateUtil.openSession();
+		//Session updateSession = hibernateUtil.openSession();
 		if(builderProject != null){
 			flatQuery.setParameter("flat_id",buyer.getBuilderFlat().getId() );
-			FlatPricingDetails flatPricingDetails = (FlatPricingDetails)flatQuery.uniqueResult();
+			FlatPricingDetails flatPricingDetails = (FlatPricingDetails)flatQuery.list().get(0);
 			double revenue = builderProject.getRevenue() + flatPricingDetails.getTotalCost();
 			builderProject.setRevenue(revenue);
-			updateSession.beginTransaction();
-			updateSession.update(builderProject);
-			updateSession.getTransaction().commit();
-			updateSession.close();
+			flatSession.beginTransaction();
+			flatSession.update(builderProject);
+			flatSession.getTransaction().commit();
 		}
-		projectSession.close();
+		
 		flatSession.close();
 	}
 	

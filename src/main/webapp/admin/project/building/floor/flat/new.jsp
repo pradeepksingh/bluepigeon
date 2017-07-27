@@ -96,6 +96,7 @@
 										<input type="hidden" name="admin_id" id="admin_id" value="<% out.print(p_user_id);%>"/>
 										<input type="hidden" name="project_id" id="project_id" value="<%out.print(project_id);%>">
 										<input type="hidden" name="building_id" id="building_id" value="<%out.print(building_id); %>">
+										<input type="hidden" name="floor_id" id="floor_id" value="<%out.print(floor_id); %>">
 										<input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
 										<input type="hidden" name="img_count" id="img_count" value="2"/>
 										<div class="row">
@@ -131,7 +132,7 @@
 															<% for(BuilderBuilding builderBuilding2 :buildings) { %>
 															<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName());%></option>
 															<% } %>
-															<% } else //{ %>
+															<% } //else { %>
 <!-- 															<option value="0">Select Building</option> -->
 															<%// } %>
 														</select>
@@ -145,14 +146,14 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Floor No. </label>
 													<div class="col-sm-7">
-														<select id="floor_id" name="floor_id" class="form-control">
+														<select id="floor_id" name="floor_id" class="form-control" disabled>
 															<% if(floors != null) { %>
 															<% for(BuilderFloor builderFloor2 :floors) { %>
 															<option value="<% out.print(builderFloor2.getId());%>" <% if(builderFloor2.getId() == floor_id) { %>selected<% } %>><% out.print(builderFloor2.getName());%></option>
 															<% } %>
-															<% } else { %>
-															<option value="0">Select Floor</option>
-															<% } %>
+															<% } //else { %>
+<!-- 															<option value="0">Select Floor</option> -->
+															<%// } %>
 														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
@@ -163,13 +164,14 @@
 													<label class="control-label col-sm-5">Flat Type <span class='text-danger'>*</span></label>
 													<div class="col-sm-7">
 														<select id="flat_type_id" name="flat_type_id" class="form-control">
+															<option value="0">Select Flat Type</option>
 															<% if(builderFlatTypes != null) { %>
 															<% for(BuilderBuildingFlatType builderFlatType :builderFlatTypes) { %>
 															<option value="<% out.print(builderFlatType.getBuilderFlatType().getId());%>"><% out.print(builderFlatType.getBuilderFlatType().getName());%></option>
 															<% } %>
-															<% } else { %>
-															<option value="0">Select Flat Type</option>
-															<% } %>
+															<% } //else { %>
+<!-- 															<option value="0">Select Flat Type</option> -->
+															<%// } %>
 														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
@@ -239,6 +241,8 @@
 													</div>
 													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
+											</div>
+											<div class="col-lg-12" id="rooms">
 											</div>
 											<div class="col-lg-12">
 												<hr/>
@@ -591,6 +595,32 @@
 <script>
 $(".errorMsg").keypress(function(event){
 	return isNumber(event, this)
+});
+$("#flat_type_id").change(function(){
+	var row = "";
+	if($("#flat_type_id").val() > 0){
+		$.get("${baseUrl}/webapi/project/flattype/list",{ flat_type_id: $("#flat_type_id").val() }, function(data){
+			$("#bathroom").val(data.bathRoom);
+			$("#balcony").val(data.balcony);
+			$("#bedroom").val(data.bedRoom);
+			$(data.roomdata).each(function(index){
+				row = row + '<hr><div class="col-sm-12"><div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Room Name</label><div class="col-sm-6"><input type="text" class="form-control" name="room_name[]" readonly="true"  value="'+data.roomdata[index].roomName+'"/></div></div></div>'
+				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Length</label><div class="col-sm-6"><input type="text" onkeypress=" return isNumber(event, this);" name="length[]"value="'+data.roomdata[index].length+'" readonly="true" class="form-control"/></div></div></div>'
+				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Breadth</label><div class="col-sm-6"><input type="text" onkeypress=" return isNumber(event, this);" name="breadth[]" value="'+data.roomdata[index].width+'" readonly="true" class="form-control"/></div></div></div>'
+				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Unit</label><div class="col-sm-6"><select name="length_unit[]" disabled class="form-control">'
+				+'<option>'+data.roomdata[index].unitName+'</option>'
+				+'</select></div></div></div>'
+				+'</div>';
+				$("#rooms").html(row);
+			});
+			
+		},'json');
+	}else{
+		$("#bathroom").val('');
+		$("#balcony").val('');
+		$("#bedroom").val('');
+		$("#rooms").empty();
+	}
 });
 
 function isNumber(evt, element) {
