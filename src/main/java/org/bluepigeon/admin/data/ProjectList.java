@@ -18,6 +18,7 @@ public class ProjectList {
 	private BigInteger totalLeads;
 	private Double totalRevenu = 0.0;
 	private Double completionStatus = 0.0;
+	private String image = "";
 	public int getId() {
 		return id;
 	}
@@ -102,6 +103,12 @@ public class ProjectList {
 	}
 	public void setTotalRevenu(Double totalRevenu) {
 		this.totalRevenu = totalRevenu;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 }

@@ -260,12 +260,12 @@
 	                       <div class="image">
 		                      <%
 	                       		try{
-	                       		imageGaleries = new ProjectDAO().getProjectImagesByProjectId(projectList.getId()).get(0);
-	                       	     if(imageGaleries.getImage() != null){
+	                       	//	imageGaleries = new ProjectDAO().getProjectImagesByProjectId(projectList.getId()).get(0);
+	                       	     if(projectList.getImage() != null){
 	                       	%>
-		                       	<img  src="${baseUrl}/<% out.print(imageGaleries.getImage()); %>" height="348" width="438" alt="Project image"/>
+		                       	<img  src="${baseUrl}/<% out.print(projectList.getImage()); %>" height="348" width="438" alt="Project image"/>
 		                       	<%}}catch(Exception e){ %>
-		                       		 <img  src="${baseUrl}/builder/plugins/images/Untitled-1.png" height="348"  width="438" alt="Project image"/>
+		                       		 <img  src="" height="348"  width="438" alt="Project image"/>
 		                       	<%} %>
 		                       <div class="overlay">
 			                       <div class="row">
@@ -586,7 +586,7 @@
 		var cityName = "";
 		var projectId = "";
 		$("#project_list").empty();
-	   $.post("${baseUrl}/webapi/project/data/list",{builder_id: $("#builder_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
+	   $.post("${baseUrl}/webapi/project/data/list",{emp_id: $("#emp_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
 		   if(data == ""){
 			   $("#project_list").empty();
 			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
@@ -594,8 +594,10 @@
 			$(data).each(function(index){
 				if(data[index].image != "")
 					image = "${baseUrl}/"+data[index].image;
-				else
-					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
+ 				else
+// 					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
+					image = "";
+					
 				if(data[index].name != ""){
 					projectName = data[index].name;
 				}
@@ -628,9 +630,11 @@
                     +'</div>'
                		+'</div>'
                		+'<div class="row">'
+               		<%if(access_id == 1 || access_id==2){%>
                		+'<div class="col-md-6 left">' 
-               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Edit</a>'
+               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>'
                		+'</div>'
+               		<%}%>
              		+'<div class="col-md-6 center">'
               		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
@@ -659,7 +663,8 @@
 				if(data[index].image != "")
 					image = "${baseUrl}/"+data[index].image;
 				else
-					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
+					image="";
+					//image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
 				if(data[index].name != ""){
 					projectName = data[index].name;
 				}
@@ -691,10 +696,12 @@
                     +'</div>'
                     +'</div>'
                		+'</div>'
+               		<%if(access_id ==1 || access_id == 2){%>
                		+'<div class="row">'
                		+'<div class="col-md-6 left">' 
-               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Edit</a>'
+               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>'
                		+'</div>'
+               		<%}%>
              		+'<div class="col-md-6 center">'
               		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
@@ -723,7 +730,8 @@
   				if(data[index].image != "")
   					image = "${baseUrl}/"+data[index].image;
   				else
-  					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
+  					image = "";
+  				//	image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
   				if(data[index].name != ""){
   					projectName = data[index].name;
   				}
@@ -756,9 +764,11 @@
                       +'</div>'
                  		+'</div>'
                  		+'<div class="row">'
+                 		<%if(access_id ==1 || access_id == 2){%>
                  		+'<div class="col-md-6 left">' 
-                 		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Edit</a>'
+                 		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
+                 		<%}%>
                		+'<div class="col-md-6 center">'
                 		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
   			 	 	+'</div>'

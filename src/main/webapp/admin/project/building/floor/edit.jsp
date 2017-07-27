@@ -78,7 +78,7 @@
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Floor Details</a></li>
 			  	<li><a data-toggle="tab" href="#floorimages">Floor Image</a></li>
-			  	<li><a data-toggle="tab" href="#productsubstage">Floor Amenity</a></li>
+			  	<li><a data-toggle="tab" href="#productsubstage">Floor Weightage</a></li>
 			</ul>
 			<form id="updatefloor" name="updatefloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 				<div class="tab-content">
