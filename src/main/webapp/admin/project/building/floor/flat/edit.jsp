@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom"%>
 <%@page import="org.bluepigeon.admin.model.FlatPricingDetails"%>
 <%@page import="org.bluepigeon.admin.dao.AreaUnitDAO"%>
 <%@page import="org.bluepigeon.admin.model.AreaUnit"%>
@@ -48,6 +49,7 @@
 	List<BuilderBuilding> buildings = null;
 	List<BuilderFloor> floors = null;
 	BuilderFlat builderFlat = null;
+	//List<BuilderBuildingFlatTypeRoom> builderBuildingFlatTypeRooms = null;
 	List<AreaUnit> areaUnits = new AreaUnitDAO().getActiveAreaUnitList();
 	List<BuilderFlat> builderFlats = new ProjectDAO().getBuildingFlatById(flat_id);
 	if(builderFlats.size() > 0) {
@@ -68,6 +70,7 @@
 	List<FlatAmenityWeightage> flatAmenityWeightages = new ProjectDAO().getFlatAmenityWeightageByFlatId(flat_id);
 	List<FlatStage> flatStages = new FlatStageDAO().getActiveFlatStages();
 	List<FlatWeightage> flatWeightages = new ProjectDAO().getFlatWeightage(flat_id);
+	//builderBuildingFlatTypeRooms = new ProjectDAO().getBuilderBuildingFlatTypeRoomById(builderFlat.getBuilderFlatType().getId());
 	List<FlatPricingDetails> buildingPriceInfo = new ProjectDAO().getFlatPriceInfos(flat_id);
 %>
 <div class="main-content">
@@ -251,6 +254,26 @@
 													</div>
 													<div class="messageContainer col-sm-offset-6"></div>
 												</div>
+											</div>
+											<div class="col-lg-12" id="rooms">
+											<hr>
+											<%// for(BuilderBuildingFlatTypeRoom builderBuildingFlatTypeRoom: builderBuildingFlatTypeRooms){ %>
+<!-- 											<div class="col-sm-12"> -->
+<!-- 												<div class="col-sm-3"> -->
+<!-- 													<div class="form-group"> -->
+<!-- 														<label class="control-label col-sm-6">Room Name</label> -->
+<!-- 											<div class="col-sm-6"> -->
+<!-- 											<input type="text" class="form-control" name="room_name[]" readonly="true"  value="'+data.roomdata[index].roomName+'"/> -->
+<!-- 											</div></div></div>' -->
+<!-- 										<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Length</label><div class="col-sm-6"> -->
+<!-- 										<input type="text" onkeypress=" return isNumber(event, this);" name="length[]"value="'+data.roomdata[index].length+'" readonly="true" class="form-control"/> -->
+<!-- 										</div></div></div> -->
+<!-- 				<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Breadth</label><div class="col-sm-6"><input type="text" onkeypress=" return isNumber(event, this);" name="breadth[]" value="'+data.roomdata[index].width+'" readonly="true" class="form-control"/></div></div></div> -->
+<!-- 				<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Unit</label><div class="col-sm-6"><select name="length_unit[]" disabled class="form-control"> -->
+<!-- 				<option>'+data.roomdata[index].unitName+'</option> -->
+<!-- 				</select></div></div></div> -->
+<!-- 				</div> -->
+							<%//} %>
 											</div>
 											<div class="col-lg-12">
 												<hr/>

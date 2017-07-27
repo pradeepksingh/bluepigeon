@@ -513,7 +513,7 @@ public class BuilderProject implements java.io.Serializable {
 	public void setBuildingWeightage(Double buildingWeightage) {
 		this.buildingWeightage = buildingWeightage;
 	}
-	@Column(name = "image", length=225)
+	@Column(name = "image")
 	public String getImage() {
 		return image;
 	}

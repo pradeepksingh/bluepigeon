@@ -18,6 +18,7 @@ import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.data.FlatPojo;
 import org.bluepigeon.admin.data.FlatTotal;
+import org.bluepigeon.admin.data.FlatTypeData;
 import org.bluepigeon.admin.data.FlatWeightageData;
 import org.bluepigeon.admin.data.FlatPayment;
 import org.bluepigeon.admin.data.FlatStatusData;
@@ -39,6 +40,7 @@ import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.data.ProjectOffer;
 import org.bluepigeon.admin.data.ProjectPaymentSchedule;
 import org.bluepigeon.admin.data.ProjectWeightageData;
+import org.bluepigeon.admin.data.RoomData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AllotProject;
 import org.bluepigeon.admin.model.AreaUnit;
@@ -2481,7 +2483,7 @@ public class ProjectDAO {
 	}
 	
 	public void updateProjectInventory(int flatId){
-		String hql = "UPDATE BuilderProject set availbale = :availbale, totalInventory = :totalInventory where id = :project_id ";
+		String hql = "UPDATE BuilderProject set availbale = :availbale, inventorySold =:soldInventory, totalInventory = :totalInventory where id = :project_id ";
 		int available = 0;
 		Long totalInventory = (long)0;
 		Long soldInventory = (long)0;
@@ -2496,6 +2498,7 @@ public class ProjectDAO {
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
 		query.setParameter("availbale", available);
+		query.setParameter("soldInventory", soldInventory);
 		query.setParameter("totalInventory",total_inventory );
 		query.setParameter("project_id",projectId );
 		query.executeUpdate();
@@ -4585,5 +4588,76 @@ public class ProjectDAO {
 		session.close();
 		return builderBuilding;
 	}
-	
+	/**
+	 * Get Flat type details by passing flat type id on ajax call
+	 * @author pankaj
+	 * @param flatTypeId
+	 * @return flatTypeData
+	 */
+	public FlatTypeData getFlatType(int flatTypeId){
+		FlatTypeData flatTypeData = new FlatTypeData();
+		String hql = "from BuilderFlatType where id = :id";
+		String roomHql = "from BuilderBuildingFlatTypeRoom where builderFlatType.id = :flat_type_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Session roomSession = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", flatTypeId);
+		BuilderFlatType builderFlatType = (BuilderFlatType) query.uniqueResult();
+		if(builderFlatType != null){
+			flatTypeData.setBalcony(builderFlatType.getBalcony());
+			flatTypeData.setBathRoom(builderFlatType.getBathroom());
+			flatTypeData.setBedRoom(builderFlatType.getBedroom());
+			flatTypeData.setDryBalcony(builderFlatType.getDrybalcony());
+			flatTypeData.setSuperBuildupArea(builderFlatType.getSuperBuiltupArea().intValue());
+			Query roomQuery = roomSession.createQuery(roomHql);
+			roomQuery.setParameter("flat_type_id", flatTypeId);
+			List<RoomData> roomDataList = new ArrayList<RoomData>();
+			List<BuilderBuildingFlatTypeRoom> flatTypeRoomList = roomQuery.list();
+			for(BuilderBuildingFlatTypeRoom builderBuildingFlatTypeRoom : flatTypeRoomList){
+				RoomData roomData = new RoomData();
+				roomData.setLength(builderBuildingFlatTypeRoom.getLength());
+				roomData.setWidth(builderBuildingFlatTypeRoom.getBreadth());
+				roomData.setRoomName(builderBuildingFlatTypeRoom.getRoomName());
+				if(builderBuildingFlatTypeRoom.getLengthUnit() == 1){
+					roomData.setUnitName("Feet");
+				}
+				else if(builderBuildingFlatTypeRoom.getLengthUnit() == 2){
+					roomData.setUnitName("Meter");
+				}
+				else if(builderBuildingFlatTypeRoom.getLengthUnit() == 3){
+					roomData.setUnitName("Inch");
+				}
+				else if(builderBuildingFlatTypeRoom.getLengthUnit() == 4){
+					roomData.setUnitName("Yard");
+				}
+				roomDataList.add(roomData);
+			}
+			flatTypeData.setRoomdata(roomDataList);
+		}
+		session.close();
+		roomSession.close();
+		return flatTypeData;
+	}
+	/**
+	 * @author pankaj
+	 * @param flat_type_id
+	 * @return List<BuilderBuildingFlatTypeRoom>
+	 */
+	public List<BuilderBuildingFlatTypeRoom> getBuilderBuildingFlatTypeRoomById(int flat_type_id){
+		String hql = "from BuilderBuildingFlatTypeRoom where builderFlattype.id = :flat_type_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_type_id", flat_type_id);
+		List<BuilderBuildingFlatTypeRoom> result = query.list();
+		
+		session.close();
+		return result;
+ 		
+		
+		
+		
+		
+	}
 }
