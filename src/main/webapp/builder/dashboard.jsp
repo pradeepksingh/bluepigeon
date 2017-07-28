@@ -37,6 +37,8 @@
 	int builder_id = 0;
 	int emp_id = 0;
 	int access_id = 0;
+	int project_size_list = 0;
+	int city_size_list =0 ;
 	Double totalPropertySold = 0.0;
 	if(session!=null)
 	{
@@ -57,7 +59,8 @@
 					barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder);
 					//totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder);
 					//totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
-					
+					project_size_list = project_list.size();
+					city_size_list = cityDataList.size();
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
 					//totalRevenue = totalPropertySold * totalInventorySold;
@@ -96,6 +99,7 @@
     <link href="${baseUrl}/builder/plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
     <link href="${baseUrl}/builder/plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
     <link href="${baseUrl}/builder/plugins/bower_components/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
+     <link rel="stylesheet" type="text/css" href="${baseUrl}/builder/css/selectize.css" />
     <!-- jQuery -->
     <script src="${baseUrl}/builder/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     
@@ -125,7 +129,7 @@
                 </div>
                 <!--.row -->
                 <%if(access_id == 1 || access_id == 2 || access_id == 4 || access_id == 5 || access_id == 7){ %>
-                <div class="row re">
+                <div class="row">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border">
                             <h3 class="box-title">Total Projects</h3>
@@ -168,7 +172,7 @@
                 </div>
                 <%} %>
                     <%if(access_id == 3){ %>
-                <div class="row re">
+                <div class="row">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border" style="padding: 15px;">
                             <h3 class="box-title">Total No. Of Campaigns</h3>
@@ -211,10 +215,10 @@
                 </div>
                 <%} %>
                 <div class="white-box">
-                   <div class="row re">
+                   <div class="row">
                     <div class="col-md-3 col-sm-6 col-xs-12">
-                        <select class="selectpicker border-drop-down" data-style="form-control" id="project_id" name="project_id">
-                                        <option value="0">Project Name</option>
+                        <select id="project_id" name="project_id">
+                                       <option value="0">Enter Project Name</option>
                                        <%
                                        if(project_list != null){
                                        for(ProjectList projectList : project_list){%>
@@ -224,8 +228,8 @@
                                
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
-                      <select class="selectpicker" data-style="form-control" id="city_id" name="city_id">
-                                   		<option value="0">City</option>
+                      <select  id="city_id" name="city_id">
+                                   		<option value="0">Enter City Name</option>
                                         <%
                                         if(cityDataList != null){
                                         for(City city : cityDataList){ %>
@@ -425,7 +429,105 @@
     <script src="${baseUrl}/builder/js/real-estate.js"></script>
 <%--     <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.charts-sparkline.js"></script> --%>
 <%--     <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script> --%>
+
+    	<script type="text/javascript" src="${baseUrl}/builder/js/selectize.min.js"></script>
     <script>
+   
+    $select_project = $("#project_id").selectize({
+		persist: false,
+// 		create: function(input) {
+// 		   return {
+// 		       value: input,
+// 		       text: input
+// 		   }
+// 		},
+		 onChange: function(value) {
+			 getProjectFilterList(value);
+		 },
+		 onDropdownOpen: function(value){
+	    	 var obj = $(this);
+    		var textClear =	 $("#project_id :selected").text();
+	    	 if(textClear.trim() == "Enter Project Name"){
+	    		 obj[0].setValue("");
+	    	 }
+	     }
+});
+    <%if(project_size_list > 0){%>
+    	select_project = $select_project[0].selectize;
+    <%}%>
+    <%//int locality_size_list = 0;
+    ///int locality_count=0;%>
+   $select_city = $("#city_id").selectize({
+	  persist:false,
+	  onChange:function(value){
+		  $.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
+	    		var html = '<option value="">Select Locality</option>';
+	    		$(data).each(function(index){
+	    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+	    			<% //locality_count++;%>
+	    		});
+	    		$("#locality_id").html(html);
+	    		//$("#locality_id").refreshOptions();
+ 	    		$('.selectpicker').selectpicker('refresh');
+	    	},'json');
+	    	getProjectList();
+	    	<%//locality_size_list = locality_count;%>
+	  },
+	  onDropdownOpen: function(value){
+	    	 var obj = $(this);
+ 			 var textClear =	 $("#city_id :selected").text();
+	    	 if(textClear.trim() == "Enter City Name"){
+	    		 obj[0].setValue("");
+	    	 }
+	     }
+   });
+    <%if(city_size_list > 0){%>
+    	select_city = $select_city[0].selectize;
+    	//select_city.clear(true);
+    <%}%>
+    
+//     $select_locality = $("#locality_id").selectize({
+// 	  persist:false,
+// 	  onChange:function(value){
+// 		  getProjectList();
+// 	  },
+//     onDropdownOpen: function(value){
+//    		 var obj = $(this);
+// 		 var textClear =	 $("#locality_id :selected").text();
+// 	   	 if(textClear.trim() == "Enter Locality Name"){
+// 	   		 obj[0].setValue("");
+// 	   	 }
+// 	    }
+//     });
+<%--     <%if(locality_size_list > 0){%> --%>
+// 	select_locality = $select_locality[0].selectize;
+<%-- <%}%> --%>
+// $('#locality_id').selectize({
+//     valueField: 'name',
+//     labelField: 'name',
+//     searchField: 'name',
+//     options: [],
+//     create: false,
+//     load: function(query, callback) {
+//         if (!query.length) return callback();
+//         $.ajax({
+//             url: 'http://127.0.0.1:8080/getnames.php',
+//             type: 'GET',
+//             dataType: 'json',
+//             data: {
+//                 name: query,
+//             },
+//             error: function() {
+//                 callback();
+//             },
+//             success: function(res) {
+//                 callback(res);
+//             }
+//         });
+//        getProjectList();
+//     }
+// });
+
     function addLead(){
     	window.location.href="${baseUrl }/builder/leads/new.jsp"
     }
@@ -438,20 +540,20 @@
     function addCampaign(){
     	window.location.href="${baseUrl}/builder/campaign/new.jsp";
     }
-    $("#city_id").change(function(){
-    	$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
-    		var html = '<option value="">Select Locality</option>';
-    		$(data).each(function(index){
-    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-    		});
-    		$("#locality_id").html(html);
-    		$('.selectpicker').selectpicker('refresh');
-    	},'json');
-    	getProjectList();
-    });
-    $("#locality_id").change(function(){
-    	getProjectList();
-    });
+//     $("#city_id").change(function(){
+//     	$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
+//     		var html = '<option value="">Select Locality</option>';
+//     		$(data).each(function(index){
+//     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+//     		});
+//     		$("#locality_id").html(html);
+//     		$('.selectpicker').selectpicker('refresh');
+//     	},'json');
+//     	getProjectList();
+//     });
+//     $("#locality_id").change(function(){
+//     	getProjectList();
+//     });
     
     jQuery(document).ready(function() {
         // Switchery
@@ -574,9 +676,9 @@
  	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
     }
     
-    $("#project_id").change(function(){
-    	getProjectFilterList($("#project_id").val());
-    });
+//     $("#project_id").change(function(){
+//     	getProjectFilterList($("#project_id").val());
+//     });
     
  function getProjectList(){
     	
