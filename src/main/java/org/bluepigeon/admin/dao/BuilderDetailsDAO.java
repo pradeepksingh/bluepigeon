@@ -587,7 +587,7 @@ public class BuilderDetailsDAO {
 		List<BuilderEmployee> employees = querynew.list();
 		BuilderEmployee builderEmployee = employees.get(0);
 		sessionnew.close();
-		String hql = "SELECT project.id as id, project.name as name, "
+		String hql = "SELECT project.id as id, project.name as name, project.image as image, "
 				+"project.completion_status as completionStatus,project.inventory_sold as sold, "
 				+"project.total_inventory as totalSold, "
 				+"c.name as city, "
@@ -628,10 +628,11 @@ public class BuilderDetailsDAO {
 			else
 				where +="project.area_id = :locality_id";
 		}
-		hql += where + " AND project.status=1 order by project.id desc";
+		hql += where + " AND project.status=1 GROUP by project.id order by project.id desc";
 		try {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuilderProjectList.class));
+		System.err.println("hql : "+hql);
 		if(countryId > 0)
 			query.setParameter("country_id", countryId);
 		if(stateId > 0)
@@ -657,9 +658,16 @@ public class BuilderDetailsDAO {
 		List<BuilderEmployee> employees = querynew.list();
 		BuilderEmployee builderEmployee = employees.get(0);
 		sessionnew.close();
-		String hql = "SELECT project.id as id, project.name as name, "
+		//hql written by Pradeep sir
+//		String hql = "SELECT project.id as id, project.name as name, "
+//				+"project.completion_status as completionStatus,project.inventory_sold as sold, "
+//				+"project.total_inventory as totalSold,IFNULL('',(select pg.image from project_image_gallery as pg where pg.project_id=project.id limit 1)) as image,"
+//				+"c.name as city, "
+//				+"count(lead.id) as totalLeads ";
+		//hql written by Pankaj
+		String hql = "SELECT project.id as id, project.name as name, project.image as image, "
 				+"project.completion_status as completionStatus,project.inventory_sold as sold, "
-				+"project.total_inventory as totalSold,IFNULL('',(select pg.image from project_image_gallery as pg where pg.project_id=project.id limit 1)) as image,"
+				+"project.total_inventory as totalSold,"
 				+"c.name as city, "
 				+"count(lead.id) as totalLeads ";
 		String where = "";
@@ -754,7 +762,7 @@ public class BuilderDetailsDAO {
 			ProjectDAO projectDAO = new ProjectDAO();
 			builderProjectList.setTotalLeads(projectDAO.getTotalLeadsByProjectId(builderProject.getId()));
 			try{
-				builderProjectList.setImage(projectDAO.getProjectImagesByProjectId(builderProject.getId()).get(0).getImage());
+				builderProjectList.setImage(builderProject.getImage());
 			}catch(Exception e){
 				builderProjectList.setImage("");
 			}
@@ -843,17 +851,19 @@ public class BuilderDetailsDAO {
 		List<BarGraphData> barGraphDatas = new ArrayList<BarGraphData>();
 		String hql = "";
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2) {
-			hql = "SELECT DISTINCT YEAR(b.possession_date) from builder_project as b inner join builder_employee as e on b.id = e.id where b.group_id = :builder_id and b.status=1 and e.id = "+builderEmployee.getId()+" group by YEAR(b.possession_date)";
+			hql = "SELECT DISTINCT YEAR(b.possession_date) from builder_project as b inner join allot_project as ap ON b.id = ap.project_id where b.group_id = :builder_id and b.status=1 and ap.emp_id = "+builderEmployee.getId()+" group by YEAR(b.possession_date)";
 		} else {
 			hql = "SELECT DISTINCT YEAR(b.possession_date) from builder_project as b where b.group_id = :builder_id and b.status=1 group by YEAR(b.possession_date)";
 		}
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createSQLQuery(hql);
+		System.err.println("HQL :: "+hql);
 		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
 		if(query.list() != null){
 			int arr[]= new int[query.list().size()];
 			System.err.println("Array :: "+arr);
+			System.err.println("Array Lenght :: "+arr.length);
 			for(int i=0;i<arr.length;i++){
 				//System.err.println("Array value :: "+query.list().get(i));
 				try{
@@ -867,9 +877,9 @@ public class BuilderDetailsDAO {
 					System.err.println("Toatl Buyers :: "+getTotalBuyersByYear(year));
 					System.err.println("Total Sold Flats :: "+getTotalsoldFlatsByYear(year));
 					System.err.println("Total Flats :: "+getTotalFlatsByYear(year));
-				barGraphDatas.add(barGraphData);
+					barGraphDatas.add(barGraphData);
 				}catch(Exception e){
-					
+					e.printStackTrace();
 				}
 			}
 		

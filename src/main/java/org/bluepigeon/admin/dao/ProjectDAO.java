@@ -3087,7 +3087,7 @@ public class ProjectDAO {
 	public List<ProjectList> getBuilderFirstFourActiveProjectsByBuilderId(BuilderEmployee builderEmployee) {
 		String hql = "";
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
-			hql = "SELECT project.id as id, project.name as name, project.status as status,project.revenue as totalRevenu,"
+			hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
 				+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
 				+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
 				+"c.name as cityName, l.id as localityId, l.name as localityName, "
@@ -3097,7 +3097,7 @@ public class ProjectDAO {
 				+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
 				+"WHERE project.group_id = "+builderEmployee.getBuilder().getId()+" group by project.id";
 		} else {
-			hql = "SELECT project.id as id, project.name as name, project.status as status,project.revenue as totalRevenu,"
+			hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
 					+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
 					+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
 					+"c.name as cityName, l.id as localityId, l.name as localityName, "

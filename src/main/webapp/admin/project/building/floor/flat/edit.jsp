@@ -93,9 +93,9 @@
 			</div>
 			<ul class="nav nav-tabs" id="buildingTabs">
 			  	<li class="active"><a data-toggle="tab" href="#basic">Flat Details</a></li>
-			  		<li><a data-toggle="tab" href="#flatimage">Pricing Details</a></li>
+			  		<li><a data-toggle="tab" href="#flatimage">Flat Image</a></li>
 			  	<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
-			  	<li><a data-toggle="tab" href="#payment">Payment Details</a></li>
+			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
 			  	<li><a data-toggle="tab" href="#productsubstage">Flat Weightage</a></li>
 			</ul>
 			
