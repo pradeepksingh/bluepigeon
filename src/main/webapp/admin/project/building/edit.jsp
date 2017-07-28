@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.dao.BuilderProjectOfferInfoDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectOfferInfo"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.bluepigeon.admin.dao.AreaUnitDAO"%>
 <%@page import="org.bluepigeon.admin.model.AreaUnit"%>
@@ -38,6 +40,7 @@
 	int building_id = 0;
 	int project_id = 0;
 	int p_user_id = 0;
+	List<BuilderProjectOfferInfo> builderProjectOfferInfos = null;
 	building_id = Integer.parseInt(request.getParameter("building_id"));
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
@@ -73,6 +76,7 @@
 		 project_id = builderBuildings.get(0).getBuilderProject().getId();
 		buildingPriceInfo = new ProjectDAO().getBuilderBuildingPriceInfo(building_id);
 		BuilderProject builderProject = new ProjectDAO().getBuilderProjectById(project_id);
+		builderProjectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderProjectOfferInfo(project_id);
 		if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
 			taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
 		}
@@ -578,11 +582,71 @@
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
+										<div id="project_offer_area">
+											<%  if(builderProjectOfferInfos != null){
+												for(BuilderProjectOfferInfo projectOfferInfo :builderProjectOfferInfos) { 
+											%>
+											<div class="row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
+												<div class="col-lg-5 margin-bottom-5">
+													<div class="form-group" id="error-offer_title">
+														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="project_offer_title" readonly="true" name="project_offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>"/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-3 margin-bottom-5">
+													<div class="form-group" id="error-applicable_on">
+	 													<label class="control-label col-sm-6">Offer Type </label>
+														<div class="col-sm-6">
+															<select class="form-control" id="project_offer_type"  disabled  name="proejct_offer_type[]">
+																<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+															</select>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-discount_amount">
+														<label class="control-label col-sm-6">Discount Amount </label>
+														<div class="col-sm-6">
+															<input type="text" class="form-control" readonly="true" id="project_discount_amount"  name="project_discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-5 margin-bottom-5">
+													<div class="form-group" id="error-applicable_on">
+														<label class="control-label col-sm-4">Description </label>
+														<div class="col-sm-8">
+															<textarea class="form-control" id="project_description" readonly="true" name="proejct_description[]" ><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-3 margin-bottom-5">
+													<div class="form-group" id="error-apply">
+														<label class="control-label col-sm-6">Status </label>
+														<div class="col-sm-6">
+															<select class="form-control" id="project_offer_status" name="project_offer_status[]" disabled>
+																<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
+																<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
+															</select>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+											</div>
+											<% } }%>
+										</div>
 										<div id="offer_area">
 											<% int j=0; 
 											for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) { %>
 											<div class="row" id="offer-<% out.print(buildingOfferInfo.getId()); %>">
-												<input type="hidden" name="offer_id[]" value="<% out.print(buildingOfferInfo.getId()); %>" />
+												<input type="hidden" id="offer_id" name="offer_id[]" value="<% out.print(buildingOfferInfo.getId()); %>" />
 												<div class="col-lg-12" style="padding-bottom:5px;">
 													<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(buildingOfferInfo.getId()); %>);" class="btn btn-danger btn-xs">x</a></span>
 												</div>
@@ -592,21 +656,23 @@
 														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
 															<div>
-																<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>"/>
+																<input type="text" class="form-control" id="offer_title<%out.print(j); %>" name="offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>"/>
 															</div>
 															<div class="messageContainer"></div>
 														</div>
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-discount">
-														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
+													<div class="form-group" id="error-applicable_on">
+														<label class="control-label col-sm-6">Offer Type </label>
 														<div class="col-sm-6">
-															<div>
-																<input type="text" class="form-control" onkeypress=" return isNumber(event, this);" id="discount" name="discount[]" value="<% out.print(buildingOfferInfo.getDiscount()); %>"/>
-															</div>
-															<div class="messageContainer"></div>
+															<select class="form-control" id="offer_type<%out.print(j); %>" onchange="txtEnabaleDisable(<%out.print(j); %>);" name="offer_type[]">
+																<option value="1" <% if(buildingOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																<option value="2" <% if(buildingOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																<option value="3" <% if(buildingOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+															</select>
 														</div>
+														<div class="messageContainer"></div>
 													</div>
 												</div>
 												<div class="col-lg-4 margin-bottom-5">
@@ -614,7 +680,7 @@
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
 															<div>
-																<input type="text" class="form-control" id="discount_amount<%out.print(j); %>" onkeyup=" javascript:onlyNumber(<%out.print(j); %>);" name="discount_amount[]" value="<% out.print(buildingOfferInfo.getAmount()); %>"/>
+																<input type="text" class="form-control"   <%if(buildingOfferInfo.getType() == 3){ %> disabled <%} %>id="discount_amount<%out.print(j); %>" onkeyup=" javascript:onlyNumber(<%out.print(j); %>);" name="discount_amount[]" value="<% out.print(buildingOfferInfo.getAmount()); %>"/>
 															</div>
 															<div class="messageContainer"></div>
 														</div>
@@ -632,19 +698,6 @@
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-applicable_on">
-														<label class="control-label col-sm-6">Offer Type </label>
-														<div class="col-sm-6">
-															<select class="form-control" id="offer_type" name="offer_type[]">
-																<option value="1" <% if(buildingOfferInfo.getType().toString() == "1") { %>selected<% } %>>Percentage</option>
-																<option value="2" <% if(buildingOfferInfo.getType().toString() == "2") { %>selected<% } %>>Flat Amount</option>
-																<option value="3" <% if(buildingOfferInfo.getType().toString() == "3") { %>selected<% } %>>Other</option>
-															</select>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-4 margin-bottom-5">
 													<div class="form-group" id="error-apply">
 														<label class="control-label col-sm-6">Status </label>
 														<div class="col-sm-6">
@@ -1197,7 +1250,15 @@ function showAddRequest(formData, jqForm, options){
    	var queryString = $.param(formData);
 	return true;
 }
-   	
+function txtEnabaleDisable(id){
+	$th = $("#offer_type"+id).val();
+	alert
+	 if($th == 3){
+	  	$('#discount_amount'+id).attr('disabled', true);
+	 }else{
+		$('#discount_amount'+id).attr('disabled', false); 
+	 }
+}
 function showAddResponse(resp, statusText, xhr, $form){
 	if(resp.status == '0') {
 		$("#basicresponse").removeClass('alert-success');
@@ -1411,31 +1472,36 @@ function showDetailTab() {
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
-	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="'+offers+'" />'
+	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="0" />'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs">x</a></span></div>'
 		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title" name="offer_title[]"   required value=""/>'
+					+'<input type="text" class="form-control" id="offer_title'+offers+'" name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
 		+'<div class="col-lg-3 margin-bottom-5">'
-			+'<div class="form-group" id="error-discount">'
-				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount" name="discount[]" onkeypress=" return isNumber(event, this);" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
+		+'<div class="form-group" id="error-applicable_on">'
+		+'<label class="control-label col-sm-6">Offer Type </label>'
+		+'<div class="col-sm-6">'
+		+'<select class="form-control"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
+		+'<option value="1">Percentage</option>'
+		+'<option value="2">Flat Amount</option>'
+		+'<option value="3">Other</option>'
+		+'</select>'
 		+'</div>'
+		+'<div class="messageContainer"></div>'
+		+'</div>'
+		+'</div>'
+		
 		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" name="discount_amount[]" onkeyup="javascript:onlyNumber('+offers+');" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup="javascript:onlyNumber('+offers+');" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1449,20 +1515,8 @@ function addMoreOffer() {
 			+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
+		
 		+'<div class="col-lg-3 margin-bottom-5">'
-		+'<div class="form-group" id="error-applicable_on">'
-		+'<label class="control-label col-sm-6">Offer Type </label>'
-		+'<div class="col-sm-6">'
-		+'<select class="form-control" id="offer_type" name="offer_type[]">'
-		+'<option value="1">Percentage</option>'
-		+'<option value="2">Flat Amount</option>'
-		+'<option value="3">Other</option>'
-		+'</select>'
-		+'</div>'
-		+'<div class="messageContainer"></div>'
-		+'</div>'
-		+'</div>'
-		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-apply">'
 			+'<label class="control-label col-sm-6">Status </label>'
 			+'<div class="col-sm-6">'

@@ -551,9 +551,9 @@
 //     	},'json');
 //     	getProjectList();
 //     });
-//     $("#locality_id").change(function(){
-//     	getProjectList();
-//     });
+    $("#locality_id").change(function(){
+    	getProjectList();
+    });
     
     jQuery(document).ready(function() {
         // Switchery

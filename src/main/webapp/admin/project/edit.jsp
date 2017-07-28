@@ -988,6 +988,7 @@
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
+									    
 										<div id="offer_area">
 											<% 	int j = 1;
 												for(BuilderProjectOfferInfo projectOfferInfo :projectOfferInfos) { 
@@ -1007,10 +1008,14 @@
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-discount">
-														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
+													<div class="form-group" id="error-applicable_on">
+														<label class="control-label col-sm-6">Offer Type </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control " id="discount" onkeypress=" return isNumber(event, this);" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>"/>
+															<select class="form-control" id="offer_type<%out.print(j); %>" onchange="txtEnabaleDisable(<%out.print(j); %>);" name="offer_type[]">
+																<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+															</select>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -1019,7 +1024,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="discount_amount<%out.print(j); %>" onkeyup=" javascript:onlyNumber(<%out.print(j); %>);" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>"/>
+															<input type="text" class="form-control" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>" onkeyup=" javascript:onlyNumber(<%out.print(j); %>);" name="discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -1034,19 +1039,6 @@
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-applicable_on">
-														<label class="control-label col-sm-6">Offer Type </label>
-														<div class="col-sm-6">
-															<select class="form-control" id="offer_type" name="offer_type[]">
-																<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
-																<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
-																<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
-															</select>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-4 margin-bottom-5">
 													<div class="form-group" id="error-apply">
 														<label class="control-label col-sm-6">Status </label>
 														<div class="col-sm-6">
@@ -1962,12 +1954,10 @@ function showOfferResponse(resp, statusText, xhr, $form){
         alert(resp.message);
   	}
 }
-
-
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
-	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="'+offers+'" />'
+	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="0" />'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs">x</a></span></div>'
 		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-offer_title">'
@@ -1979,13 +1969,17 @@ function addMoreOffer() {
 			+'</div>'
 		+'</div>'
 		+'<div class="col-lg-3 margin-bottom-5">'
-			+'<div class="form-group" id="error-discount">'
-				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control  notEmpty" required id="discount'+offers+'" onkeyup="javascript:vaildPer('+offers+')"name="discount[]" value="" onkeypress="return isNumber(event, this);"/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
+		+'<div class="form-group" id="error-applicable_on">'
+		+'<label class="control-label col-sm-6">Offer Type </label>'
+		+'<div class="col-sm-6">'
+		+'<select class="form-control" id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');" name="offer_type[]">'
+		+'<option value="1">Percentage</option>'
+		+'<option value="2">Flat Amount</option>'
+		+'<option value="3">Other</option>'
+		+'</select>'
+		+'</div>'
+		+'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
 		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-discount_amount">'
@@ -2005,20 +1999,8 @@ function addMoreOffer() {
 			+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
+		
 		+'<div class="col-lg-3 margin-bottom-5">'
-		+'<div class="form-group" id="error-applicable_on">'
-		+'<label class="control-label col-sm-6">Offer Type </label>'
-		+'<div class="col-sm-6">'
-		+'<select class="form-control" id="offer_type" name="offer_type[]">'
-		+'<option value="1">Percentage</option>'
-		+'<option value="2">Flat Amount</option>'
-		+'<option value="3">Other</option>'
-		+'</select>'
-		+'</div>'
-		+'<div class="messageContainer"></div>'
-		+'</div>'
-		+'</div>'
-		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-apply">'
 			+'<label class="control-label col-sm-6">Status </label>'
 			+'<div class="col-sm-6">'
@@ -2037,6 +2019,17 @@ function addMoreOffer() {
 function removeOffer(id) {
 	$("#offer-"+id).remove();
 }
+
+function txtEnabaleDisable(id){
+	$th = $("#offer_type"+id).val();
+	alert
+	 if($th == 3){
+	  	$('#discount_amount'+id).attr('disabled', true);
+	 }else{
+		$('#discount_amount'+id).attr('disabled', false); 
+	 }
+}
+
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;

@@ -24,14 +24,14 @@ public class BuildingOfferInfo implements java.io.Serializable {
 	private Double discount;
 	private Double amount;
 	private String description;
-	private Byte type;
+	private Integer type=1;
 	private Byte status;
 
 	public BuildingOfferInfo() {
 	}
 
 	public BuildingOfferInfo(BuilderBuilding builderBuilding, String title, Double discount, Double amount,
-			String description, Byte type, Byte status) {
+			String description, Integer type, Byte status) {
 		this.builderBuilding = builderBuilding;
 		this.title = title;
 		this.discount = discount;
@@ -100,11 +100,11 @@ public class BuildingOfferInfo implements java.io.Serializable {
 	}
 
 	@Column(name = "type")
-	public Byte getType() {
+	public Integer getType() {
 		return this.type;
 	}
 
-	public void setType(Byte type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
 	

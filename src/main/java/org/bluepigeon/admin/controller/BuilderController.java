@@ -211,7 +211,7 @@ public class BuilderController {
 							buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
 							buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
 							buildingOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
-							buildingOfferInfo.setType(offer_type.get(i).getValueAs(Byte.class));
+							buildingOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
 							buildingOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
 							buildingOfferInfo.setBuilderBuilding(builderBuilding);
 							buildingOfferInfos.add(buildingOfferInfo);
@@ -221,7 +221,7 @@ public class BuilderController {
 							buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
 							buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
 							buildingOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
-							buildingOfferInfo.setType(offer_type.get(i).getValueAs(Byte.class));
+							buildingOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
 							buildingOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
 							buildingOfferInfo.setBuilderBuilding(builderBuilding);
 							newBuildingOfferInfos.add(buildingOfferInfo);
