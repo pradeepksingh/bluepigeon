@@ -508,6 +508,7 @@
 												for(BuilderProjectOfferInfo projectOfferInfo :builderProjectOfferInfos) { 
 											%>
 											<div class="row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
+											<hr>
 <%-- 												<input type="hidden" name="offer_id[]" value="<% out.print(projectOfferInfo.getId()); %>" /> --%>
 <!-- 												<div class="col-lg-12" style="padding-bottom:5px;"> -->
 <%-- 													<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(projectOfferInfo.getId()); %>);" class="btn btn-danger btn-xs">x</a></span> --%>
@@ -727,6 +728,23 @@ function validPer(id){
 	}
 }
 
+function validPerAmount(id){
+	if($("#offer_type"+id).val()==1){
+			 isNumber(event, this);
+				 validPercentage(id);
+	}
+	if($("#offer_type"+id).val()==2){
+		onlyNumber(id);
+	}
+}
+function validPercentage(id){
+	 var x = $("#discount_amount"+id).val();
+	 if(isNaN(x) || x<0 || x >100){
+		 alert("The percentage must be between 0 and 100");
+		 $("#discount_amount"+id).val('');
+	 }
+}
+
 $('#addbuilding').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -905,6 +923,18 @@ $('#addbuilding').bootstrapValidator({
                  	message: 'The percentage must be between 0 and 100'
                  }
             }
+        },
+        'payable[]': {
+            validators: {
+            	between: {
+                    min: 0,
+                    max: 100,
+                    message: 'The percentage must be between 0 and 100'
+	        	},
+                notEmpty: {
+                    message: 'Payable is required and cannot be empty'
+                }
+            }
         }
     }
 }).on('success.form.bv', function(event,data) {
@@ -1043,7 +1073,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup="javascript:onlyNumber('+offers+');" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup=" javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1073,6 +1103,12 @@ function addMoreOffer() {
 		+'</div>';
 	$("#offer_area").append(html);
 	$("#offer_count").val(offers);
+// 	$("#addbuilding").formValidation('addField', 'discount_amount' + offers, {
+//         validators: {
+//             // Here, add your field validators.
+//             notEmpty: {message: 'Please enter value for this field' }
+//         }
+//     });
 }
 function removeOffer(id) {
 	$("#offer-"+id).remove();
