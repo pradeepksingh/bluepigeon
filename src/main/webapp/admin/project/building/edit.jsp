@@ -814,7 +814,7 @@
 																	%>
 																		<div class="col-sm-3">
 																			<% out.print(buildingSubstage.getName()); %> (%)<br>
-																			<input type="text" onkeypress=" return isNumber(event, this);"  name="substage_weightage<% out.print(buildingStage.getId());%>[]" id="<% out.print(buildingSubstage.getId()); %>" class="form-control" onkeypress="alert(hi);" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																			<input type="text" onkeypress=" return isNumber(event, this);"  name="substage_weightage<% out.print(buildingStage.getId());%>[]" id="<% out.print(buildingSubstage.getId()); %>" onkeyup="javascript:validPer(<% out.print(buildingSubstage.getId());%>);" class="form-control"  placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
 																		</div>
 																	<% } %>
 																	</fieldset>
@@ -950,9 +950,6 @@ $('#payable').keypress(function (event) {
 function isNumber(evt, element) {
 
     var charCode = (evt.which) ? evt.which : event.keyCode
-//    	if($(element).hasClass('errorMsg')){
-//    		alert("Hello");
-//    	}
     if (
         (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
         (charCode < 48 || charCode > 57))
@@ -961,6 +958,15 @@ function isNumber(evt, element) {
     return true;
 }   
 
+function validPer(id){
+	alert(id);
+	//var x = id.value;
+	//alert(x);
+// 	if( x<0 || x >100){
+// 		alert("The percentage must be between 0 and 100");
+// 		$("#"+id).val('');
+// 	}
+}
 
 function onlyNumber(id){
 	
@@ -1058,7 +1064,12 @@ $("#updatepricing").bootstrapValidator({
                 },
         		numeric: {
         			message: 'Stamp duty is invalid'
-        		}
+        		},
+        		 between:{
+                 	min:0,
+                 	max:100,
+                 	message: 'The percentage must be between 0 and 100'
+                 }
             }
         },
         tax: {
@@ -1068,7 +1079,12 @@ $("#updatepricing").bootstrapValidator({
                 },
         		numeric: {
         			message: 'Tax is invalid'
-        		}
+        		},
+        		 between:{
+                 	min:0,
+                 	max:100,
+                 	message: 'The percentage must be between 0 and 100'
+                 }
             }
         },
         vat: {
@@ -1078,7 +1094,12 @@ $("#updatepricing").bootstrapValidator({
                 },
         		numeric: {
         			message: 'Vat is invalid'
-        		}
+        		},
+        		 between:{
+                 	min:0,
+                 	max:100,
+                 	message: 'The percentage must be between 0 and 100'
+                 }
             }
         },
     }

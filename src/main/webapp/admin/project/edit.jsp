@@ -754,14 +754,12 @@
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-post">
-													<label class="control-label col-sm-4">Applicable Post <span class='text-danger'>*</span></label>
+													<label class="control-label col-sm-4">Applicable Post </label>
 													<div class="col-sm-8 input-group" style="padding: 0px 12px;">
-														<div>
-															<input type="text" class="form-control" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
-															<span class="input-group-addon">floor</span>
-														</div>
-														<div class="messageContainer"></div>
+														<input type="text" class="form-control" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
+														<span class="input-group-addon">floor</span>
 													</div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 										</div>
@@ -781,13 +779,10 @@
 												<div class="form-group" id="error-tenure">
 													<label class="control-label col-sm-4">Tenure <span class='text-danger'>*</span></label>
 													<div class="col-sm-8 input-group" style="padding: 0px 12px;">
-															<div>
-																<input type="text" class="form-control" id="tenure" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>"/>
-																<span class="input-group-addon">Months</span>
-															</div>
-															<div class="messageContainer"></div>
+														<input type="text" class="form-control" id="tenure" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>"/>
+														<span class="input-group-addon">Months</span>
 													</div>
-														
+													<div class="messageContainer col-sm-offset-4"></div>	
 												</div>
 											</div>
 										</div>
@@ -818,37 +813,34 @@
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Stamp Duty <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-														<div>
-															<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
-														</div>
-														<div class="messageContainer"></div>
+													<label class="control-label col-sm-4">Stamp Duty </label>
+													<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
+														<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
+														<span class="input-group-addon">%</span>
 													</div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-tax">
-													<label class="control-label col-sm-4">Tax<span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-														<div>
-															<input type="text" class="form-control" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
-														</div>
-														<div class="messageContainer"></div>
+													<label class="control-label col-sm-4">Tax</label>
+													<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
+														<input type="text" class="form-control" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
+														<span class="input-group-addon">%</span>
 													</div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-lg-6 margin-bottom-5">
 												<div class="form-group" id="error-vat">
-													<label class="control-label col-sm-4">VAT <span class='text-danger'>*</span></label>
-													<div class="col-sm-8">
-														<div>
+													<label class="control-label col-sm-4">VAT </label>
+													<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
 														<input type="text" class="form-control" id="vat" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
-														</div>
-														<div class="messageContainer"></div>
+														<span class="input-group-addon">%</span>
 													</div>
+													<div class="messageContainer col-sm-offset-4"></div>
 												</div>
 											</div>
 											<div class="col-lg-6 margin-bottom-5">
@@ -1196,6 +1188,7 @@ function vaildPayablePer(id){
 		$("#payable"+id).val('');
 	}
 }
+
 $('#latitude').keypress(function (event) {
     return isNumber(event, this)
 });
@@ -1243,12 +1236,21 @@ $('#amenity_rate').keypress(function (event) {
 $('#parking').keypress(function (event) {
     return isNumber(event, this)
 });
+$('#stamp_duty').keyup(function(){
+	var x = $(this).val();
+	if( x<0 || x >100){
+		alert("The percentage must be between 0 and 100");
+		$("#stamp_duty").val('');
+	}
+});
 $('#stamp_duty').keypress(function (event) {
     return isNumber(event, this)
 });
+
 $('#tax').keypress(function (event) {
     return isNumber(event, this)
 });
+
 $('#vat').keypress(function (event) {
     return isNumber(event, this)
 });
@@ -1291,10 +1293,7 @@ function onlyNumber(id){
 	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
 }
 
-function notEmpty(){
-	//alert("Again Not Empty");
-	
-}
+
 $('#schedule').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^a-zA-Z0-9, ]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
@@ -1569,11 +1568,14 @@ $('#pricingfrm').bootstrapValidator({
                 },
             }
         },
-        tenure:{
-        	validators: {
-                notEmpty: {
-                    message: 'Tenure is required and cannot be empty'
+        tenure: {
+            validators: {
+            	notEmpty: {
+                    message: 'Tenure is required'
                 },
+            	numeric: {
+        			message: 'Tenure is invalid'
+        		}
             }
         },
         amenity_rate:{
@@ -1595,6 +1597,11 @@ $('#pricingfrm').bootstrapValidator({
                 notEmpty: {
                     message: 'Stamp duty is required and cannot be empty'
                 },
+                between:{
+                	min:0,
+                	max:100,
+                	message: 'The percentage must be between 0 and 100'
+                }
             }
         },
         tax:{
@@ -1602,6 +1609,11 @@ $('#pricingfrm').bootstrapValidator({
                 notEmpty: {
                     message: 'Tax is required and cannot be empty'
                 },
+                between:{
+                	min:0,
+                	max:100,
+                	message: 'The percentage must be between 0 and 100'
+                }
             }
         },
         vat:{
@@ -1609,6 +1621,11 @@ $('#pricingfrm').bootstrapValidator({
                 notEmpty: {
                     message: 'Vat is required and cannot be empty'
                 },
+                between:{
+                	min:0,
+                	max:100,
+                	message: 'The percentage must be between 0 and 100'
+                }
             }
         },
         tech_fee:{
@@ -1812,64 +1829,6 @@ function showPaymentResponse(resp, statusText, xhr, $form){
         alert(resp.message);
   	}
 }
-// function updateOffers(){
-// 	var offerInfo = [];
-// 	var discount = [];
-// 	var amount = [];
-// 	var description = [];
-// 	var type = [];
-// 	var status = [];
-// 	$('input[name="discount[]"]').each(function(index) {
-// 		alert($(this).val());
-// 		discount.push($(this).val());
-// 	});
-// 	$('input[name="discount_amount[]"]').each(function(index) {
-// 		alert($(this).val());
-// 		amount.push($(this).val());
-// 	});
-// 	$('input[name="description[]"]').each(function(index) {
-// 		alert($(this).val());
-// 		description.push($(this).val());
-// 	});
-// 	$('select[name="offer_type[]"] option:selected').each(function(index) {
-// 		alert($(this).val());
-// 		type.push($(this).val());
-// 	});
-// 	$('select[name="offer_status[]"] option:selected').each(function(index) {
-// 		status.push($(this).val());
-// 	});
-// 	$('input[name="offer_title[]"]').each(function(index) {
-// 		if($(this).val() != "") {
-// 			offerInfo.push({title:$(this).val(),per:discount[index],amount:amount[index],description:description[index],type:type[index],status:status[index],builderProject:{id:$("#id").val()}});
-// 		}
-// 	});
-// 	var project = {id:$("#id").val()};
-// 	var final_data = {builderProjectOfferInfos:offerInfo,builderProject:project}
-// 	if(offerInfo.length > 0) {
-// 		$.ajax({
-// 		    url: '${baseUrl}/webapi/project/offer/project/update',
-// 		    type: 'POST',
-// 		    data: JSON.stringify(final_data),
-// 		    contentType: 'application/json; charset=utf-8',
-// 		    dataType: 'json',
-// 		    async: false,
-// 		    success: function(data) {
-// 				if (data.status == 0) {
-// 					alert(data.message);
-// 				} else {
-// 					alert(data.message);
-// 				}
-// 			},
-// 			error : function(data)
-// 			{
-// 				alert("Fail to save data");
-// 			}
-			
-// 		});
-// 	} else {
-// 		alert("Please enter offer details");
-// 	}
-// }
 
 function validPer(id){
 	//alert($("#discount"+id).val());
@@ -1957,7 +1916,7 @@ function showOfferResponse(resp, statusText, xhr, $form){
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
-	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="0" />'
+	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="" />'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs">x</a></span></div>'
 		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-offer_title">'

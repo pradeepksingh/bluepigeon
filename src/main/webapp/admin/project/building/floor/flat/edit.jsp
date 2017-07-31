@@ -110,6 +110,7 @@
 										<input type="hidden" name="project_id" id="project_id" value="<%out.print(project_id);%>">
 										<input type="hidden"id="building_id" name="building_id" value="<%out.print(building_id);%>">
 										<input type="hidden" name="flat_id" id="flat_id" value="<% out.print(flat_id);%>"/>
+										<input type="hidden" id="floor_id" name="floor_id" value="<%out.print(floor_id);%>"/>
 										<input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
 										<input type="hidden" name="img_count" id="img_count" value="2"/>
 										<div class="row">
@@ -140,14 +141,14 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Building Name </label>
 													<div class="col-sm-7">
-														<select id="building_id" name="building_id" class="form-control" disable>
+														<select id="building_id" name="building_id" class="form-control" disabled>
 															<% if(buildings != null) { %>
 															<% for(BuilderBuilding builderBuilding2 :buildings) { %>
 															<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName());%></option>
 															<% } %>
-															<% } else { %>
-															<option value="0">Select Building</option>
-															<% } %>
+															<% }// else { %>
+<!-- 															<option value="0">Select Building</option> -->
+															<% //} %>
 														</select>
 													</div>
 													<div class="messageContainer col-sm-offset-3"></div>
@@ -159,7 +160,7 @@
 												<div class="form-group" id="error-landmark">
 													<label class="control-label col-sm-5">Floor No. </label>
 													<div class="col-sm-7">
-														<select id="floor_id" name="floor_id" class="form-control">
+														<select id="floor_id" name="floor_id" class="form-control" disabled>
 															<% if(floors != null) { %>
 															<% for(BuilderFloor builderFloor2 :floors) { %>
 															<option value="<% out.print(builderFloor2.getId());%>" <% if(builderFloor2.getId() == floor_id) { %>selected<% } %>><% out.print(builderFloor2.getName());%></option>
@@ -596,7 +597,7 @@
 							
 							<div class="col-sm-12">
 								<span class="pull-right">
-									<button type="button" name="priceUpdate" id="priceupdatebtn" class="btn btn-success btn-sm" >Update</button>
+									<button type="submit" name="priceUpdate" id="priceupdatebtn" class="btn btn-success btn-sm" >Update</button>
 								</span>
 							</div>
 						</div>
@@ -897,107 +898,6 @@ $('#addfloor').bootstrapValidator({
                     message: 'Please select amenity'
                 }
             }
-        },
-        base_unit: {
-            validators: {
-                notEmpty: {
-                    message: 'Area unit is required'
-                }
-            }
-        },
-        base_rate: {
-            validators: {
-                notEmpty: {
-                    message: 'Base rate is required'
-                },
-        		numeric: {
-        			message: 'Base rate is invalid'
-        		}
-            }
-        },
-        rise_rate: {
-            validators: {
-            	notEmpty: {
-                    message: 'Rise rate is required'
-                },
-        		numeric: {
-        			message: 'Rise rate is invalid'
-        		}
-            }
-        },
-        post: {
-            validators: {
-            	notEmpty: {
-                    message: 'Applicable Post is required'
-                },
-        		integer: {
-        			message: 'Applicable Post is invalid'
-        		}
-            }
-        },
-        maintenance: {
-            validators: {
-        		numeric: {
-        			message: 'Maintenance is invalid'
-        		}
-            }
-        },
-        tenure: {
-            validators: {
-            	numeric: {
-        			message: 'Tenure is invalid'
-        		}
-            }
-        },
-        amenity_rate: {
-            validators: {
-            	notEmpty: {
-                    message: 'Amenity facing rate is required'
-                },
-        		numeric: {
-        			message: 'Amenity facing rate is invalid'
-        		}
-            }
-        },
-        parking: {
-            validators: {
-            	notEmpty: {
-                    message: 'Parking rate is required'
-                },
-        		numeric: {
-        			message: 'Parking rate is invalid'
-        		}
-            }
-        },
-        stamp_duty: {
-            validators: {
-            	notEmpty: {
-                    message: 'Stamp duty is required'
-                },
-        		numeric: {
-        			message: 'Stamp duty is invalid'
-        		}
-            }
-        },
-        tax: {
-            validators: {
-            	notEmpty: {
-                    message: 'Tax is required'
-                },
-        		numeric: {
-        			message: 'Tax is invalid'
-        		}
-            }
-        },
-        vat: {
-            validators: {
-            	notEmpty: {
-                    message: 'Vat is required'
-                },
-        		numeric: {
-        			message: 'Vat is invalid'
-        		}
-            }
         }
     }
 }).on('success.form.bv', function(event,data) {
@@ -1089,9 +989,147 @@ function showPriceAddResponse(resp, statusText, xhr, $form){
   	}
 }
 
+$("#updateprice").bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	
+    	 base_unit: {
+             validators: {
+                 notEmpty: {
+                     message: 'Area unit is required'
+                 }
+             }
+         },
+         base_rate: {
+             validators: {
+                 notEmpty: {
+                     message: 'Base rate is required'
+                 },
+         		numeric: {
+         			message: 'Base rate is invalid'
+         		}
+             }
+         },
+         rise_rate: {
+             validators: {
+             	notEmpty: {
+                     message: 'Rise rate is required'
+                 },
+         		numeric: {
+         			message: 'Rise rate is invalid'
+         		}
+             }
+         },
+         post: {
+             validators: {
+             	notEmpty: {
+                     message: 'Applicable Post is required'
+                 },
+         		integer: {
+         			message: 'Applicable Post is invalid'
+         		}
+             }
+         },
+         maintenance: {
+             validators: {
+            	 notEmpty: {
+                     message: 'Maintenance is required'
+                 },
+         		numeric: {
+         			message: 'Maintenance is invalid'
+         		}
+             }
+         },
+         tenure: {
+             validators: {
+            	 notEmpty: {
+                     message: 'Tenure is required'
+                 },
+             	numeric: {
+         			message: 'Tenure is invalid'
+         		}
+             }
+         },
+         amenity_rate: {
+             validators: {
+             	notEmpty: {
+                     message: 'Amenity facing rate is required'
+                 },
+         		numeric: {
+         			message: 'Amenity facing rate is invalid'
+         		}
+             }
+         },
+         parking: {
+             validators: {
+             	notEmpty: {
+                     message: 'Parking rate is required'
+                 },
+         		numeric: {
+         			message: 'Parking rate is invalid'
+         		}
+             }
+         },
+         stamp_duty: {
+             validators: {
+             	notEmpty: {
+                     message: 'Stamp duty is required'
+                 },
+         		numeric: {
+         			message: 'Stamp duty is invalid'
+         		},
+         		 between:{
+                  	min:0,
+                  	max:100,
+                  	message: 'The percentage must be between 0 and 100'
+                  }
+             }
+         },
+         tax: {
+             validators: {
+             	notEmpty: {
+                     message: 'Tax is required'
+                 },
+         		numeric: {
+         			message: 'Tax is invalid'
+         		},
+         		 between:{
+                  	min:0,
+                  	max:100,
+                  	message: 'The percentage must be between 0 and 100'
+                  }
+             }
+         },
+         vat: {
+             validators: {
+             	notEmpty: {
+                     message: 'Vat is required'
+                 },
+         		numeric: {
+         			message: 'Vat is invalid'
+         		},
+         		 between:{
+                  	min:0,
+                  	max:100,
+                  	message: 'The percentage must be between 0 and 100'
+                  }
+             }
+         }
+     }
+ }).on('success.form.bv', function(event,data) {
+ 	// Prevent form submission
+ 	event.preventDefault();
+ 	updateFlatPricing();
+ });
 
 
-$("#priceupdatebtn").click(function(){
+function updateFlatPricing(){
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showPriceAddRequest,
@@ -1101,7 +1139,7 @@ $("#priceupdatebtn").click(function(){
 	 		dataType : 'json'
 	 	};
    	$('#updateprice').ajaxSubmit(options);
-});
+}
 function showPriceAddRequest(formData, jqForm, options){
 	$("#response").hide();
    	var queryString = $.param(formData);

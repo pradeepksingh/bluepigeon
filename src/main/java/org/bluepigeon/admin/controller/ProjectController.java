@@ -126,7 +126,7 @@ public class ProjectController extends ResourceConfig {
 		BuilderDetailsDAO builderBuildingAmenityDAO = new BuilderDetailsDAO();
 		return builderBuildingAmenityDAO.getBuilderCompanyNameList(builder_id);
 	}
-	
+ 
 	@POST
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -447,7 +447,7 @@ public class ProjectController extends ResourceConfig {
 	public ResponseMessage updateProjectOffers(
 			@FormDataParam("project_id") int project_id,
 			@FormDataParam("offer_count") int offer_count,
-			@FormDataParam("offer_id[]") List<FormDataBodyPart> offer_ids,
+			//@FormDataParam("offer_id[]") List<FormDataBodyPart> offer_ids,
  			@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_titles,
 			//@FormDataParam("discount[]") List<FormDataBodyPart> discounts,
 			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amounts,
@@ -466,7 +466,7 @@ public class ProjectController extends ResourceConfig {
 				int i=0;
 				for(FormDataBodyPart names : offer_titles)
 				{
-					if(offer_ids.get(i).getValueAs(Integer.class) != 0 && offer_ids.get(i).getValueAs(Integer.class) != null){
+					//if(offer_ids.get(i).getValueAs(Integer.class) != 0 && offer_ids.get(i).getValueAs(Integer.class) != null){
 						BuilderProjectOfferInfo builderProjectOfferInfo = new BuilderProjectOfferInfo();
 						builderProjectOfferInfo.setBuilderProject(builderProject);
 						
@@ -495,7 +495,7 @@ public class ProjectController extends ResourceConfig {
 	//						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
 	//					}
 						updateProjectOfferInfos.add(builderProjectOfferInfo);
-					}
+					//}
 					i++;
 				}
 				if(updateProjectOfferInfos.size() > 0){
