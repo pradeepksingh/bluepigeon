@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.dao.BuilderProjectOfferInfoDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectOfferInfo"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectPaymentInfo"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectPaymentInfoDAO"%>
 <%@page import="java.util.ArrayList"%>
@@ -25,9 +27,11 @@
 	int p_user_id = 0;
 	List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = null;
 	BuilderProjectPriceInfo projectPriceInfo = null;
+	List<BuilderProjectOfferInfo> builderProjectOfferInfos = null;
 	List<Tax> taxes = new ArrayList<Tax>();
 	project_id = Integer.parseInt(request.getParameter("project_id"));
 	session = request.getSession(false);
+	
 	AdminUser adminuserproject = new AdminUser();
 	if(session!=null)
 	{
@@ -45,6 +49,7 @@
 	    builderProjectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(project_id);
 		projectPriceInfo = new BuilderProjectPriceInfoDAO().getBuilderProjectPriceInfo(project_id);
 		BuilderProject builderProject = new ProjectDAO().getBuilderProjectById(project_id);
+		builderProjectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderProjectOfferInfo(project_id);
 		if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
 			taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
 		}
@@ -497,25 +502,34 @@
 							<div class="col-lg-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
-										<div id="offer_area">
-											<div class="row" id="offer-1">
-												<div class="col-lg-12" style="padding-bottom:5px;">
-													<span class="pull-right"><a href="javascript:removeOffer(1);" class="btn btn-danger btn-xs">x</a></span>
-												</div>
+									<div id="offer_area">
+											<% 	int j = 1;
+											     if(builderProjectOfferInfos != null){
+												for(BuilderProjectOfferInfo projectOfferInfo :builderProjectOfferInfos) { 
+											%>
+											<div class="row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
+<%-- 												<input type="hidden" name="offer_id[]" value="<% out.print(projectOfferInfo.getId()); %>" /> --%>
+<!-- 												<div class="col-lg-12" style="padding-bottom:5px;"> -->
+<%-- 													<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(projectOfferInfo.getId()); %>);" class="btn btn-danger btn-xs">x</a></span> --%>
+<!-- 												</div> -->
 												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-offer_title">
 														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>
+															<input type="text" class="form-control" id="project_offer_title" readonly="true" name="project_offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-discount">
-														<label class="control-label col-sm-6">Discount(%) <span class='text-danger'>*</span></label>
+													<div class="form-group" id="error-applicable_on">
+	 													<label class="control-label col-sm-6">Offer Type </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control errorMsg" id="discount1" onkeyup="javascript:validPer(1)" onkeypress=" return isNumber(event, this);" name="discount[]" value=""/>
+															<select class="form-control" id="offer_type<%out.print(j); %>" onchange="txtEnabaleDisable(<%out.print(j); %>);" disabled  name="proejct_offer_type[]">
+																<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+															</select>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -524,7 +538,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control errorMsg" id="discount_amount1"  onkeyup=" javascript:onlyNumber(1);" name="discount_amount[]" value=""/>
+															<input type="text" class="form-control" readonly="true" id="project_discount_amount"  name="project_discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -533,37 +547,25 @@
 													<div class="form-group" id="error-applicable_on">
 														<label class="control-label col-sm-4">Description </label>
 														<div class="col-sm-8">
-															<textarea class="form-control" id="description" name="description[]" ></textarea>
+															<textarea class="form-control" id="project_description" readonly="true" name="proejct_description[]" ><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
 												<div class="col-lg-3 margin-bottom-5">
-													<div class="form-group" id="error-applicable_on">
-														<label class="control-label col-sm-6">Offer Type </label>
-														<div class="col-sm-6">
-															<select class="form-control" id="offer_type" name="offer_type[]">
-																<option value="1">Percentage</option>
-																<option value="2">Flat Amount</option>
-																<option value="3">Other</option>
-															</select>
-														</div>
-														<div class="messageContainer"></div>
-													</div>
-												</div>
-												<div class="col-lg-4 margin-bottom-5">
 													<div class="form-group" id="error-apply">
 														<label class="control-label col-sm-6">Status </label>
 														<div class="col-sm-6">
-															<select class="form-control" id="offer_status" name="offer_status[]">
-																<option value="1" >Active</option>
-																<option value="0" >Inactive</option>
+															<select class="form-control" id="project_offer_status" name="project_offer_status[]" disabled>
+																<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
+																<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
 															</select>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
 											</div>
+											<% j++; } }%>
 										</div>
 										<div>
 											<div class="col-lg-12">
@@ -831,6 +833,9 @@ $('#addbuilding').bootstrapValidator({
         },
         tenure: {
             validators: {
+            	notEmpty: {
+                    message: 'Tenure is required'
+                },
             	numeric: {
         			message: 'Tenure is invalid'
         		}
@@ -863,7 +868,12 @@ $('#addbuilding').bootstrapValidator({
                 },
         		numeric: {
         			message: 'Stamp duty is invalid'
-        		}
+        		},
+        		 between:{
+                 	min:0,
+                 	max:100,
+                 	message: 'The percentage must be between 0 and 100'
+                 }
             }
         },
         tax: {
@@ -873,7 +883,12 @@ $('#addbuilding').bootstrapValidator({
                 },
         		numeric: {
         			message: 'Tax is invalid'
-        		}
+        		},
+        		 between:{
+                 	min:0,
+                 	max:100,
+                 	message: 'The percentage must be between 0 and 100'
+                 }
             }
         },
         vat: {
@@ -883,7 +898,12 @@ $('#addbuilding').bootstrapValidator({
                 },
         		numeric: {
         			message: 'Vat is invalid'
-        		}
+        		},
+        		 between:{
+                 	min:0,
+                 	max:100,
+                 	message: 'The percentage must be between 0 and 100'
+                 }
             }
         }
     }
@@ -1000,20 +1020,25 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control" id="offer_title'+offers+'" name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
 		+'<div class="col-lg-3 margin-bottom-5">'
-			+'<div class="form-group" id="error-discount">'
-				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount'+offers+'" onkeyup="validPer('+offers+')" name="discount[]" onkeypress=" return isNumber(event, this);" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
+		+'<div class="form-group" id="error-applicable_on">'
+		+'<label class="control-label col-sm-6">Offer Type </label>'
+		+'<div class="col-sm-6">'
+		+'<select class="form-control"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
+		+'<option value="1">Percentage</option>'
+		+'<option value="2">Flat Amount</option>'
+		+'<option value="3">Other</option>'
+		+'</select>'
 		+'</div>'
+		+'<div class="messageContainer"></div>'
+		+'</div>'
+		+'</div>'
+		
 		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
@@ -1032,20 +1057,8 @@ function addMoreOffer() {
 			+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
+		
 		+'<div class="col-lg-3 margin-bottom-5">'
-		+'<div class="form-group" id="error-applicable_on">'
-		+'<label class="control-label col-sm-6">Offer Type </label>'
-		+'<div class="col-sm-6">'
-		+'<select class="form-control" id="offer_type" name="offer_type[]">'
-		+'<option value="1">Percentage</option>'
-		+'<option value="2">Flat Amount</option>'
-		+'<option value="3">Other</option>'
-		+'</select>'
-		+'</div>'
-		+'<div class="messageContainer"></div>'
-		+'</div>'
-		+'</div>'
-		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-apply">'
 			+'<label class="control-label col-sm-6">Status </label>'
 			+'<div class="col-sm-6">'
@@ -1063,6 +1076,16 @@ function addMoreOffer() {
 }
 function removeOffer(id) {
 	$("#offer-"+id).remove();
+}
+
+function txtEnabaleDisable(id){
+	$th = $("#offer_type"+id).val();
+	alert
+	 if($th == 3){
+	  	$('#discount_amount'+id).attr('disabled', true);
+	 }else{
+		$('#discount_amount'+id).attr('disabled', false); 
+	 }
 }
 
 $("#project_id").change(function(){

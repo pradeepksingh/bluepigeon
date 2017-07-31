@@ -126,7 +126,7 @@ public class ProjectController extends ResourceConfig {
 		BuilderDetailsDAO builderBuildingAmenityDAO = new BuilderDetailsDAO();
 		return builderBuildingAmenityDAO.getBuilderCompanyNameList(builder_id);
 	}
-	
+ 
 	@POST
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -447,9 +447,9 @@ public class ProjectController extends ResourceConfig {
 	public ResponseMessage updateProjectOffers(
 			@FormDataParam("project_id") int project_id,
 			@FormDataParam("offer_count") int offer_count,
-			@FormDataParam("offer_id[]") List<FormDataBodyPart> offer_ids,
+			//@FormDataParam("offer_id[]") List<FormDataBodyPart> offer_ids,
  			@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_titles,
-			@FormDataParam("discount[]") List<FormDataBodyPart> discounts,
+			//@FormDataParam("discount[]") List<FormDataBodyPart> discounts,
 			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amounts,
 			@FormDataParam("description[]") List<FormDataBodyPart> descriptions,
 			@FormDataParam("offer_type[]") List<FormDataBodyPart> offer_types,
@@ -466,19 +466,22 @@ public class ProjectController extends ResourceConfig {
 				int i=0;
 				for(FormDataBodyPart names : offer_titles)
 				{
-					if(offer_ids.get(i).getValueAs(Integer.class) != 0 && offer_ids.get(i).getValueAs(Integer.class) != null){
+					//if(offer_ids.get(i).getValueAs(Integer.class) != 0 && offer_ids.get(i).getValueAs(Integer.class) != null){
 						BuilderProjectOfferInfo builderProjectOfferInfo = new BuilderProjectOfferInfo();
 						builderProjectOfferInfo.setBuilderProject(builderProject);
 						
 						if(names.getValueAs(String.class) != null || names.getValueAs(String.class).trim().length() > 0){
 							builderProjectOfferInfo.setTitle(names.getValueAs(String.class).toString());
 						}
-						if(discounts.get(i).getValueAs(Double.class) != 0 && discounts.get(i).getValueAs(Double.class) !=null){
-							builderProjectOfferInfo.setPer(discounts.get(i).getValueAs(Double.class));
+//						if(discounts.get(i).getValueAs(Double.class) != 0 && discounts.get(i).getValueAs(Double.class) !=null){
+//							builderProjectOfferInfo.setPer(discounts.get(i).getValueAs(Double.class));
+//						}
+						if(discount_amounts != null){
+							if(discount_amounts.get(i).getValueAs(Double.class) != 0 && discount_amounts.get(i).getValueAs(Double.class) !=null){
+								builderProjectOfferInfo.setAmount(discount_amounts.get(i).getValueAs(Double.class));
+							}
 						}
-						if(discount_amounts.get(i).getValueAs(Double.class) != 0 && discount_amounts.get(i).getValueAs(Double.class) !=null){
-							builderProjectOfferInfo.setAmount(discount_amounts.get(i).getValueAs(Double.class));
-						}
+						
 						if((descriptions.get(i).getValueAs(String.class).toString() != null && !descriptions.get(i).getValueAs(String.class).toString().isEmpty())){
 							builderProjectOfferInfo.setDescription(descriptions.get(i).getValueAs(String.class).toString());
 						}
@@ -492,7 +495,7 @@ public class ProjectController extends ResourceConfig {
 	//						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
 	//					}
 						updateProjectOfferInfos.add(builderProjectOfferInfo);
-					}
+					//}
 					i++;
 				}
 				if(updateProjectOfferInfos.size() > 0){
@@ -880,7 +883,7 @@ public class ProjectController extends ResourceConfig {
 						buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
 						buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
 						buildingOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
-						buildingOfferInfo.setType(offer_type.get(i).getValueAs(Byte.class));
+						buildingOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
 						buildingOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
 						buildingOfferInfo.setBuilderBuilding(builderBuilding);
 						buildingOfferInfos.add(buildingOfferInfo);
@@ -962,7 +965,7 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
 			@FormDataParam("payable[]") List<FormDataBodyPart> payable,
 			@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_title,
-			@FormDataParam("discount[]") List<FormDataBodyPart> discount,
+			//@FormDataParam("discount[]") List<FormDataBodyPart> discount,
 			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amount,
 			@FormDataParam("description[]") List<FormDataBodyPart> description,
 			@FormDataParam("offer_type[]") List<FormDataBodyPart> offer_type,
@@ -1043,54 +1046,67 @@ public class ProjectController extends ResourceConfig {
 			buildingPriceInfo.setTenure(tenure);
 			projectDAO.addBuildingPriceInfo(buildingPriceInfo);
 			
-			if (amenity_type.size() > 0) {
-				List<BuildingAmenityInfo> buildingAmenityInfos = new ArrayList<BuildingAmenityInfo>();
-				int i = 0;
-				for(FormDataBodyPart amenity : amenity_type)
-				{
-					if(amenity.getValueAs(Integer.class) != null && amenity.getValueAs(Integer.class) != 0) {
-						Byte milestone_status = 0;
-						BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
-						builderBuildingAmenity.setId(amenity.getValueAs(Integer.class));
-						BuildingAmenityInfo amenityInfo = new BuildingAmenityInfo();
-						amenityInfo.setBuilderBuildingAmenity(builderBuildingAmenity);
-						amenityInfo.setBuilderBuilding(builderBuilding);
-						buildingAmenityInfos.add(amenityInfo);
+			if(amenity_type != null){
+				if (amenity_type.size() > 0) {
+					List<BuildingAmenityInfo> buildingAmenityInfos = new ArrayList<BuildingAmenityInfo>();
+					int i = 0;
+					for(FormDataBodyPart amenity : amenity_type)
+					{
+						if(amenity.getValueAs(Integer.class) != null && amenity.getValueAs(Integer.class) != 0) {
+							Byte milestone_status = 0;
+							BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
+							builderBuildingAmenity.setId(amenity.getValueAs(Integer.class));
+							BuildingAmenityInfo amenityInfo = new BuildingAmenityInfo();
+							amenityInfo.setBuilderBuildingAmenity(builderBuildingAmenity);
+							amenityInfo.setBuilderBuilding(builderBuilding);
+							buildingAmenityInfos.add(amenityInfo);
+						}
+						i++;
 					}
-					i++;
+					if(buildingAmenityInfos.size() > 0) {
+						projectDAO.addBuildingAmenityInfo(buildingAmenityInfos);
+					}
 				}
-				if(buildingAmenityInfos.size() > 0) {
-					projectDAO.addBuildingAmenityInfo(buildingAmenityInfos);
+				
+				if(amenity_wts != "") {
+					for(String aw :amenityWeightages) {
+						BuildingAmenityWeightage baw = new BuildingAmenityWeightage();
+						Double amenity_weightage = 0.0;
+						Integer  amenity_id= 0;
+						String [] amenityWeightage = aw.split("#");
+						if(amenityWeightage[0] != "")
+							amenity_id	= Integer.parseInt(amenityWeightage[0]);
+						if(amenityWeightage[1] != "")
+							amenity_weightage = Double.parseDouble(amenityWeightage[1]);
+						
+						Integer stage_id = Integer.parseInt(amenityWeightage[2]);
+						Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
+						Integer substage_id = Integer.parseInt(amenityWeightage[4]);
+						Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
+						Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+						if(amenity_id >0){
+							BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
+							
+							builderBuildingAmenity.setId(amenity_id);
+							BuilderBuildingAmenityStages builderBuildingAmenityStages = new BuilderBuildingAmenityStages();
+							builderBuildingAmenityStages.setId(stage_id);
+							BuilderBuildingAmenitySubstages builderBuildingAmenitySubstages = new BuilderBuildingAmenitySubstages();
+							builderBuildingAmenitySubstages.setId(substage_id);
+							baw.setBuilderBuildingAmenity(builderBuildingAmenity);
+							baw.setAmenityWeightage(amenity_weightage);
+							baw.setBuilderBuildingAmenityStages(builderBuildingAmenityStages);
+							baw.setStageWeightage(stage_weightage);
+							baw.setBuilderBuildingAmenitySubstages(builderBuildingAmenitySubstages);
+							baw.setSubstageWeightage(substage_weightage);
+							baw.setStatus(wstatus);
+							baw.setBuilderBuilding(builderBuilding);
+							baws.add(baw);
+						}
+					}
+					if(baws.size() >0 && baws != null){
+						projectDAO.addBuildingAmenityWeightage(baws);
+					}
 				}
-			}
-			if(amenity_wts != "") {
-				for(String aw :amenityWeightages) {
-					BuildingAmenityWeightage baw = new BuildingAmenityWeightage();
-					String [] amenityWeightage = aw.split("#");
-					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
-					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
-					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
-					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
-					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
-					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
-					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
-					BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
-					builderBuildingAmenity.setId(amenity_id);
-					BuilderBuildingAmenityStages builderBuildingAmenityStages = new BuilderBuildingAmenityStages();
-					builderBuildingAmenityStages.setId(stage_id);
-					BuilderBuildingAmenitySubstages builderBuildingAmenitySubstages = new BuilderBuildingAmenitySubstages();
-					builderBuildingAmenitySubstages.setId(substage_id);
-					baw.setBuilderBuildingAmenity(builderBuildingAmenity);
-					baw.setAmenityWeightage(amenity_weightage);
-					baw.setBuilderBuildingAmenityStages(builderBuildingAmenityStages);
-					baw.setStageWeightage(stage_weightage);
-					baw.setBuilderBuildingAmenitySubstages(builderBuildingAmenitySubstages);
-					baw.setSubstageWeightage(substage_weightage);
-					baw.setStatus(wstatus);
-					baw.setBuilderBuilding(builderBuilding);
-					baws.add(baw);
-				}
-				projectDAO.addBuildingAmenityWeightage(baws);
 			}
 			if (schedule.size() > 0) {
 				List<BuildingPaymentInfo> buildingPaymentInfos = new ArrayList<BuildingPaymentInfo>();
@@ -1121,10 +1137,14 @@ public class ProjectController extends ResourceConfig {
 					if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
 						BuildingOfferInfo buildingOfferInfo = new BuildingOfferInfo();
 						buildingOfferInfo.setTitle(title.getValueAs(String.class).toString());
-						buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
-						buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
+						try{
+							buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
+						}catch(Exception e){
+							buildingOfferInfo.setAmount(0.0);
+						}
+						//buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
 						buildingOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
-						buildingOfferInfo.setType(offer_type.get(i).getValueAs(Byte.class));
+						buildingOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
 						buildingOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
 						buildingOfferInfo.setBuilderBuilding(builderBuilding);
 						buildingOfferInfos.add(buildingOfferInfo);
@@ -1498,7 +1518,7 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("building_id") int building_id,
 			@FormDataParam("offer_id[]") List<FormDataBodyPart> offer_id,
 			@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_title,
-			@FormDataParam("discount[]") List<FormDataBodyPart> discount,
+			//@FormDataParam("discount[]") List<FormDataBodyPart> discount,
 			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amount,
 			@FormDataParam("description[]") List<FormDataBodyPart> description,
 			@FormDataParam("offer_type[]") List<FormDataBodyPart> offer_type,
@@ -1519,20 +1539,28 @@ public class ProjectController extends ResourceConfig {
 						BuildingOfferInfo buildingOfferInfo = new BuildingOfferInfo();
 						buildingOfferInfo.setId(offer_id.get(i).getValueAs(Integer.class));
 						buildingOfferInfo.setTitle(title.getValueAs(String.class).toString());
-						buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
-						buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
+						try{
+							buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
+						}catch(Exception e){
+							buildingOfferInfo.setAmount(0.0);
+						}
+						//buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
 						buildingOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
-						buildingOfferInfo.setType(offer_type.get(i).getValueAs(Byte.class));
+						buildingOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
 						buildingOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
 						buildingOfferInfo.setBuilderBuilding(builderBuilding);
 						buildingOfferInfos.add(buildingOfferInfo);
 					} else {
 						BuildingOfferInfo buildingOfferInfo = new BuildingOfferInfo();
 						buildingOfferInfo.setTitle(title.getValueAs(String.class).toString());
-						buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
-						buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
+						try{
+							buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
+						}catch(Exception e){
+							buildingOfferInfo.setAmount(0.0);
+						}
+					//	buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
 						buildingOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
-						buildingOfferInfo.setType(offer_type.get(i).getValueAs(Byte.class));
+						buildingOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
 						buildingOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
 						buildingOfferInfo.setBuilderBuilding(builderBuilding);
 						newBuildingOfferInfos.add(buildingOfferInfo);
