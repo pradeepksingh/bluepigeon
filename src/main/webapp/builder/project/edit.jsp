@@ -179,14 +179,32 @@
        </div>
         <div id="page-wrapper" style="min-height: 2038px;">
             <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Update Project</h4>
+                 <div class="row">
+                    <div class="col-lg-3 col-sm-6 col-xs-12 m-t-15 ">
+                        <div class="top-blue-box " style="font-size:20px;">
+                     <p class="center" style="color:#FFF">PROJECT</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
+                        <div class="top-white-box " style="font-size:20px;">
+                         <p class="center">   BUILDING</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
+                        <div class="top-white-box" style="font-size:20px;">
+                        <p class="center">  FLOOR</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
+                        <div class="top-white-box" style="font-size:20px;">
+                         <p class="center"> FLAT</p>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
+                        	<div class="color-box">
                              <ul class="nav  nav-tabs">
                                  <li class="active">
                                      <a data-toggle="tab"  href="#vimessages" > <span>Basic Information</span></a>
@@ -450,7 +468,7 @@
 			                                <input type="hidden" id="status" name="status" value="<%out.print(builderProject.getStatus());%>"/>
 			                            
 		                                	<div class="offset-sm-5 col-sm-7">
-		                                        <button type="submit" name="basicbtn" class="btn btn-success btn-sm">Submit</button>
+		                                        <button type="submit" name="basicbtn" class="btn btn-info waves-effect waves-light m-t-10">Submit</button>
 		                                 	</div>
 		                               </form>
 	                               </div>
@@ -1053,6 +1071,7 @@
 	                            
                                 </div>
                            </div>
+                        </div>
                         </div>
                      </div>
                  </div>
