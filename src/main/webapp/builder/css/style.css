@@ -1134,11 +1134,32 @@ label {
     background-color: #6ABE5E;
     border-color: #6ABE5E;
 }
-.btn-info-new.disabled.focus, .btn-info-new.disabled:focus, .btn-info-new.disabled:hover, .btn-info-new.focus, .btn-info-new:focus, .btn-info-new:hover {
-	background: #6ABE5E;
+.btn-submit.disabled.focus, .btn-submit.disabled:focus, .btn-submit.disabled:hover, .btn-submit.focus, .btn-submit:focus, .btn-submit:hover {
+	background: #00bdd3;
 	opacity: .8;
-	border: 1px solid #6ABE5E;
+	border: 1px solid #00bdd3;
 }
+
+.btn-submit, .btn-submit.disabled {
+	background: #00bdd3;
+	border: 1px solid #00bdd3
+}
+.btn-submit{
+	 color: #fff;
+    background-color: #00bdd3;
+    border-color: #00bdd3;
+}
+.btn-submit:hover {
+    color: #fff;
+    background-color: #00bdd3;
+    border-color: #00bdd3;
+}
+.btn-info-new.disabled.focus, .btn-info-new.disabled:focus, .btn-info-new.disabled:hover, .btn-info-new.focus, .btn-info-new:focus, .btn-info-new:hover {
+	background: #00bdd3;
+	opacity: .8;
+	border: 1px solid #00bdd3;
+}
+
 .btn-warning, .btn-warning.disabled {
 	background: #fec107;
 	border: 1px solid #fec107
@@ -1423,6 +1444,9 @@ table.dataTable thead .sorting:after {
 	margin-bottom: 15px;
 	 border-radius: 5px;
 	 border: 2px solid #32C8CD;
+	 color: #FFF;
+	 text-align: center;
+	 font-size:15px;
 }
 .top-blue-box .box-title {
 	margin: 0 0 12px;
@@ -1436,6 +1460,8 @@ table.dataTable thead .sorting:after {
 	margin-bottom: 15px;
 	 border-radius: 5px;
 	 border: 2px solid #E6E6E6;
+	  text-align: center;
+	 font-size:15px;
 }
 .top-white-box .box-title {
 	margin: 0 0 12px;
@@ -4162,7 +4188,9 @@ ul#themecolors li:first-child {
 .btn-1b.btn-info-new:after, .btn-1c.btn-info-new:after, .btn-1d.btn-info-new:after, .btn-1e.btn-info-new:after, .btn-1f.btn-info-new:after {
 	background: #6ABE5E
 }
-
+.btn-1b.btn-submit:after, .btn-1c.btn-submit:after, .btn-1d.btn-submit:after, .btn-1e.btn-submit:after, .btn-1f.btn-submit:after {
+	background: #00bdd3
+}
 .btn-1b.btn-warning:after, .btn-1c.btn-warning:after, .btn-1d.btn-warning:after, .btn-1e.btn-warning:after, .btn-1f.btn-warning:after {
 	background: #fec107
 }

@@ -239,8 +239,8 @@
                              
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
-                       <select class="selectpicker" data-style="form-control" id="locality_id" name="locality_id">
-                                        <option value="0">Locality</option>
+                       <select class="selectpicker" data-style="form-control"  id="locality_id" name="locality_id">
+                                        <option value="0">Enter Locality Name</option>
                          </select>
                               
                     </div>
@@ -461,13 +461,14 @@
 	  persist:false,
 	  onChange:function(value){
 		  $.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
-	    		var html = '<option value="">Select Locality</option>';
+	    		var htmlData = '<option value="0">Enter Locality Name</option>';
 	    		$(data).each(function(index){
-	    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+	    			htmlData = htmlData + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 	    			<% //locality_count++;%>
 	    		});
-	    		$("#locality_id").html(html);
-	    		//$("#locality_id").refreshOptions();
+	    		
+	    		//$("#locality_id").refreshOptions(true);
+	    		$("#locality_id").html(htmlData);
  	    		$('.selectpicker').selectpicker('refresh');
 	    	},'json');
 	    	getProjectList();
@@ -499,10 +500,12 @@
 // 	   	 }
 // 	    }
 //     });
+   // $select_locality.refreshOptions(true);
 <%--     <%if(locality_size_list > 0){%> --%>
 // 	select_locality = $select_locality[0].selectize;
 <%-- <%}%> --%>
-// $('#locality_id').selectize({
+
+//$('#locality_id').selectize({
 //     valueField: 'name',
 //     labelField: 'name',
 //     searchField: 'name',
@@ -511,11 +514,11 @@
 //     load: function(query, callback) {
 //         if (!query.length) return callback();
 //         $.ajax({
-//             url: 'http://127.0.0.1:8080/getnames.php',
+//             url: '${baseUrl}/webapi/general/locality/list',
 //             type: 'GET',
 //             dataType: 'json',
 //             data: {
-//                 name: query,
+//                 city_id: $("#city_id").val(),
 //             },
 //             error: function() {
 //                 callback();

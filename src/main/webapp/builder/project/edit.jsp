@@ -181,23 +181,23 @@
             <div class="container-fluid">
                  <div class="row">
                     <div class="col-lg-3 col-sm-6 col-xs-12 m-t-15 ">
-                        <div class="top-blue-box " style="font-size:20px;">
-                     <p class="center" style="color:#FFF">PROJECT</p>
+                        <div id="project" class="top-blue-box ">
+                    PROJECT
                         </div>
                     </div>
-                    <div class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
-                        <div class="top-white-box " style="font-size:20px;">
-                         <p class="center">   BUILDING</p>
+                    <div  class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
+                        <div id="building" class="top-white-box ">
+                           BUILDING
                         </div>
                     </div>
-                    <div class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
-                        <div class="top-white-box" style="font-size:20px;">
-                        <p class="center">  FLOOR</p>
+                    <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
+                        <div id="floor" class="top-white-box" >
+                          FLOOR
                         </div>
                     </div>
-                    <div class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
-                        <div class="top-white-box" style="font-size:20px;">
-                         <p class="center"> FLAT</p>
+                    <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
+                        <div id="flat" class="top-white-box">
+                         FLAT
                         </div>
                     </div>
                 </div>
@@ -231,13 +231,14 @@
 		                                <form id="basicfrm" name="basicfrm" method="post">
 		                                <input type="hidden" id="id" name="id" value="<% out.print(project_id);%>"/>
 			                                <div class="row">
-			                                	<div class="col-lg-6 ">
+			                                	<div class="col-md-6 ">
 				                                	<div class="form-group row" id="error-builder_id">
 				                                  	  <label  class="col-sm-4 control-label">Builder Group<span class='text-danger'>*</span></label>
-				                                    <div class="col-sm-8">
+				                                    <div class="col-sm-6">
 				                                    <div>
 				                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
-				                                        <select id="builder_id" name="builder_id" class="form-control">
+				                                        <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builderProject.getBuilder().getId());%>">
+				                                        <select id="builder_id" name="builder_id" class="form-control" disabled>
 															<option value="">Select Builder Group</option>
 			<%-- 												<% for (Builder builder : builders) { %> --%>
 			<%-- 												<option value="<%out.print(builder.getId());%>" <% if(builderProject.getBuilder().getId() ==  builder.getId()) { %>selected<% } %>> <% out.print(builder.getName()); %> </option> --%>
@@ -250,12 +251,13 @@
 				                                    
 				                                  </div>
 			                                    </div>
-			                                    <div class="col-lg-6 ">
+			                                    <div class="col-md-6 ">
 				                                    <div class="form-group row" id="error-builder_id">
 				                                    	<label for="example-text-input" class="col-sm-4 control-label">Builder Company<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
+					                                    <input type="hidden"id="company_id" name="company_id" value="<%out.print(builderProject.getBuilderCompanyNames().getId());%>"/>
 						                                    <div>
-						                                       <select id="company_id" name="company_id" class="form-control">
+						                                       <select id="company_id" name="company_id" class="form-control" disabled>
 																	<option value="">Select Builder Company</option>
 																	<% for (Builder builder : builders) { %>
 																	<% for (BuilderCompanyNames builderCompanyNames : builder.getBuilderCompanyNameses()) { %>
@@ -275,9 +277,9 @@
 			                                	<div class="col-md-6">
 					                                <div class="form-group row">
 					                                    <label for="example-search-input" class="col-sm-4 control-label">Project Name<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
 					                                    	<div>
-					                                        	<input class="form-control" type="text" id="name" name="name" value="<% out.print(builderProject.getName());%>">
+					                                        	<input class="form-control" type="text" readonly="true" id="name" name="name" value="<% out.print(builderProject.getName());%>">
 					                                    	</div>
 					                                    	<div class="messageContainer"></div>
 					                                    </div>
@@ -286,9 +288,9 @@
 					                              <div class="col-md-6">
 					                                 	<div class="form-group row">
 					                                    	<label for="example-search-input" class="col-sm-4 control-label">Landmark<span class='text-danger'>*</span></label>
-					                                    	<div class="col-sm-8">
+					                                    	<div class="col-sm-6">
 					                                    		<div>
-					                                        		<input class="form-control" type="text" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>">
+					                                        		<input class="form-control" type="text" readonly="true" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>">
 					                                    		</div>
 					                                   		 	<div class="messageContainer"></div>
 					                                   		 </div>
@@ -299,10 +301,10 @@
 			                                	<div class="col-md-6">
 					                                 <div class="form-group row">
 					                                      <label for="example-tel-input" class="col-sm-4 control-label">Sub Location<span class='text-danger'>*</span></label>
-					                                      <div class="col-sm-8">
+					                                      <div class="col-sm-6">
 						                                      <div>
 							                                     <div>
-							                                        <input class="form-control" type="text" id="sublocation" name="sublocation" value="<% out.print(builderProject.getAddr2());%>">
+							                                        <input class="form-control" type="text" readonly="true" id="sublocation" name="sublocation" value="<% out.print(builderProject.getAddr2());%>">
 							                                    </div>
 							                                    <div class="messageContainer"></div>
 						                                    </div>
@@ -312,10 +314,11 @@
 					                            <div class="col-md-6">
 							                          <div class="form-group row">
 							                               <label for="example-tel-input" class="col-sm-4 control-label">Country<span class='text-danger'>*</span></label>
-							                               <div class="col-sm-8">
+							                               <div class="col-sm-6">
+							                               <input type="hidden" name="country_id" id="country_id" value="<%out.print(builderProject.getCountry().getId());%>">
 						                                       <div>
 							                                    	<div>
-								                                        <select name="country_id" id="country_id" class="form-control">
+								                                        <select name="country_id" id="country_id" class="form-control" disabled>
 																		    <option value="">Select Country</option>
 														                    <% for(Country country : listCountry){ %>
 														                    <% 	if(builderProject.getCountry().getId() == country.getId()) { 
@@ -337,10 +340,10 @@
 			                                	<div class="col-md-6">
 			                                		<div class="form-group row">
 			                                   		 	<label for="example-tel-input" class="col-sm-4 control-label">State<span class='text-danger'>*</span></label>
-			                                    		<div class="col-sm-8">
-			                                    			<div>
+			                                    		<div class="col-sm-6">
+			                                    		<input type="hidden" name="state_id" id="state_id" value="<%out.print(builderProject.getState().getId());%>"/>			                                    			<div>
 				                                    			<div>
-							                                         <select name="state_id" id="state_id" class="form-control">
+							                                         <select name="state_id" id="state_id" class="form-control" disabled>
 													                    <option value="">Select State</option>
 													                    <%
 													                    if(states != null){
@@ -362,9 +365,10 @@
 			                                   	<div class="col-md-6">
 			                                   		<div class="form-group row">
 					                                    <label for="example-tel-input" class="col-sm-4 control-label">City<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
 						                                     <div>
-						                                         <select name="city_id" id="city_id" class="form-control">
+						                                     	<input type="hidden" id="city_id" name="city_id" value="<%out.print(builderProject.getCity().getId());%>"/>
+						                                         <select name="city_id" id="city_id" class="form-control" disabled>
 												                	<option value="">Select City</option>
 												                    <%
 												                    if(cities != null){
@@ -386,11 +390,12 @@
 			                                	<div class="col-md-6">
 					                                <div class="form-group row">
 					                                    <label for="example-text-input" class="col-sm-4 control-label">Locality<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
 					                                    	<div>
 							                                    <div>
 							                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
-							                                        <select name="locality_id" id="locality_id" class="form-control">
+							                                        <input type="hidden" name="locality_id" id="locality_id" value="<%out.print(builderProject.getLocality().getId());%>"/>
+							                                        <select name="locality_id" id="locality_id" class="form-control" disabled>
 													                	<option value="">Select Locality</option>
 													                	<%
 													                	if(localities != null){
@@ -407,10 +412,10 @@
 												<div class="col-md-6">
 					                                <div class="form-group row">		
 					                                    <label for="example-text-input" class="col-sm-4 control-label">Pincode<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
 					                                    	<div>
 							                                    <div>
-							                                        <input class="form-control" type="text" id="pincode" name="pincode" autocomplete="off" value="<% out.print(builderProject.getPincode());%>"/>
+							                                        <input class="form-control" type="text"  readonly="true" id="pincode" name="pincode" autocomplete="off" value="<% out.print(builderProject.getPincode());%>"/>
 							                                    </div>
 							                                    <div class="messageContainer"></div>
 							                                    </div>
@@ -422,10 +427,10 @@
 			                                	<div class="col-md-6">
 					                                <div class="form-group row">
 					                                    <label for="example-search-input" class="col-sm-4 control-label">Latitude<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
 					                                    	<div>
 						                                    	<div>
-						                                        	<input class="form-control" type="text" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
+						                                        	<input class="form-control" type="text" readonly="true" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
 						                                   		</div>
 						                                    	<div class="messageContainer"></div>
 					                                    	</div>
@@ -435,12 +440,12 @@
 					                            <div class="col-md-6">
 					                                <div class="form-group row">  
 					                                    <label for="example-search-input" class="col-sm-4 control-label">Longitude<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
 					                                    	<div>
 							                                    <div>
-							                                        <input class="form-control" type="text" id="longitude" name="longitude" autocomplete="off" value="<% out.print(builderProject.getLongitude());%>"/>
+							                                        <input class="form-control" type="text" id="longitude" name="longitude" readonly="true" autocomplete="off" value="<% out.print(builderProject.getLongitude());%>"/>
 							                                    </div>
-							                                    <div class="messageContainer"></div>
+<!-- 							                                    <div class="messageContainer"></div> -->
 							                                </div>
 					                                    </div>
 					                                </div>
@@ -450,25 +455,25 @@
 			                               		<div class="col-sm -6">   
 					                                <div class="form-group row">
 					                                    <label for="example-tel-input" class="col-sm-4 control-label">Description</label>
-					                                    <div class="col-sm-8">
-					                                        <textarea class="form-control" id="description" name="description"><% out.print(builderProject.getDescription());%></textarea>
+					                                    <div class="col-sm-6">
+					                                        <textarea class="form-control" id="description"  name="description"><% out.print(builderProject.getDescription());%></textarea>
 					                                    </div>
 					                                 </div>
 					                              </div>
 					                              <div class="col-sm -6">   
 					                                <div class="form-group row">  
 					                                    <label for="example-tel-input" class="col-sm-4 control-label">Highlight(USP)</label>
-					                                    <div class="col-sm-8">
-					                                    	<textarea class="form-control" id="highlight" name="highlight"><% out.print(builderProject.getHighlights());%></textarea>
+					                                    <div class="col-sm-6">
+					                                    	<textarea class="form-control" id="highlight"  name="highlight"><% out.print(builderProject.getHighlights());%></textarea>
 					                                    </div>
-					                                    <div class="messageContainer"></div>
+<!-- 					                                    <div class="messageContainer"></div> -->
 					                                </div>
 					                            </div> 
 			                                </div>
 			                                <input type="hidden" id="status" name="status" value="<%out.print(builderProject.getStatus());%>"/>
 			                            
 		                                	<div class="offset-sm-5 col-sm-7">
-		                                        <button type="submit" name="basicbtn" class="btn btn-info waves-effect waves-light m-t-10">Submit</button>
+		                                        <button type="submit" name="basicbtn" class="btn btn-submit waves-effect waves-light m-t-10">Submit</button>
 		                                 	</div>
 		                               </form>
 	                               </div>
@@ -652,7 +657,7 @@
 	                                 </div>
 	                                 </div>
 	                                <div class="offset-sm-5 col-sm-7">
-	                                        <button type="submit" id="detailbtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
+	                                        <button type="submit" id="detailbtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
 	                                 </div>
 	                                </form>   
 	                            </div>
@@ -664,7 +669,7 @@
 											<div class="row">
 												<div class="col-md-6">
 			                                	 	<div class="form-group row">
-			                                    		<label for="example-text-input" class="col-sm-6 col-form-label">Pricing Unit<span class='text-danger'>*</span></label>
+			                                    		<label for="example-text-input" class="col-sm-4 col-form-label">Pricing Unit<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6"> 
 			                                    			<div>
 				                                        		<select name="base_unit" id="base_unit" class="form-control">
@@ -687,7 +692,7 @@
 			                                      </div>
 			                                      <div class="col-md-6">
 				                                      <div class="form-group row">
-				                                    		<label for="example-text-input" class="col-sm-6 col-form-label">Base Rate<span class='text-danger'>*</span></label>
+				                                    		<label for="example-text-input" class="col-sm-4 col-form-label">Base Rate<span class='text-danger'>*</span></label>
 						                                    <div class="col-sm-6">
 						                                    	<div>
 						                                    		<div>
@@ -702,7 +707,7 @@
 					                        <div class="row">
 					                        	<div class="col-md-6">
 					                                <div class="form-group row">
-				        		                            <label for="example-search-input" class="col-sm-6 col-form-label">Floor Rising Rate<span class='text-danger'>*</span></label>
+				        		                            <label for="example-search-input" class="col-sm-4 col-form-label">Floor Rising Rate<span class='text-danger'>*</span></label>
 				                		                    <div class="col-sm-6">
 				                		                    	<div>
 						                		                    <div>
@@ -715,7 +720,7 @@
 				                                </div>
 				                                <div class="col-md-6"> 	
 				                                	<div class="form-group row">
-				                                    		<label for="example-search-input" class="col-sm-6 col-form-label">Application Post<span class='text-danger'>*</span></label>
+				                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Application Post<span class='text-danger'>*</span></label>
 						                                    <div class="col-sm-6">
 						                                    <div>
 						                                        <input class="form-control" type="text" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
@@ -728,7 +733,7 @@
 	                                		<div class="row">
 	                                			<div class="col-sm-6">
 			                                 		<div class="form-group row">
-			                                    		<label for="example-tel-input" class="col-sm-6 col-form-label">Maintainence Charge<span class='text-danger'>*</span></label>
+			                                    		<label for="example-tel-input" class="col-sm-4 col-form-label">Maintainence Charge<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 					                                    		<div>
@@ -741,7 +746,7 @@
 			                                    </div>
 			                                    <div class="col-sm-6">
 			                                    	<div class="form-group row">
-			                                    		<label for="example-tel-input" class="col-sm-6 col-form-label">Tenure</label>
+			                                    		<label for="example-tel-input" class="col-sm-4 col-form-label">Tenure</label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 					                                    		<div>
@@ -756,7 +761,7 @@
 			                                <div class="row">
 			                                	<div class="col-sm-6">	
 					                                <div class="form-group row">
-			        		                            <label for="example-tel-input" class="col-sm-6 col-form-label">Aminities facing Rate<span class='text-danger'>*</span></label>
+			        		                            <label for="example-tel-input" class="col-sm-4 col-form-label">Aminities facing Rate<span class='text-danger'>*</span></label>
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 					                		                    <div>
@@ -769,7 +774,7 @@
 			                                	</div>
 			                                	<div class="col-sm-6">
 			                                		<div class="form-group row">
-			                                    		<label for="example-tel-input" class="col-sm-6 col-form-label">Parking<span class='text-danger'>*</span></label>
+			                                    		<label for="example-tel-input" class="col-sm-4 col-form-label">Parking<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
@@ -784,7 +789,7 @@
 			                                <div class="row">
 			                                	<div class="col-sm-6">
 					                                <div class="form-group row">
-			        		                            <label for="example-text-input" class="col-sm-6 col-form-label">Stamp Duty<span class='text-danger'>*</span></label>
+			        		                            <label for="example-text-input" class="col-sm-4 col-form-label">Stamp Duty<span class='text-danger'>*</span></label>
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 				                		                    	<div>
@@ -797,7 +802,7 @@
 			                                   </div>
 			                                   <div class="col-sm-6">
 			                                		<div class="form-group row">
-			                                   			<label for="example-text-input" class="col-sm-6 col-form-label">Tax<span class='text-danger'>*</span></label>
+			                                   			<label for="example-text-input" class="col-sm-4 col-form-label">Tax<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
@@ -812,7 +817,7 @@
 			                                <div class="row">
 			                                	 <div class="col-sm-6">
 			                                		<div class="form-group row">
-			                                    		<label for="example-search-input" class="col-sm-6 col-form-label">VAT<span class='text-danger'>*</span></label>
+			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">VAT<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
@@ -825,7 +830,7 @@
 			                                    </div>
 			                                    <div class="col-sm-6">
 			                                    	<div class="form-group row">	
-			                                    		<label for="example-search-input" class="col-sm-6 col-form-label">Tech Fees<span class='text-danger'>*</span></label>
+			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Tech Fees<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 			                                        			<input class="form-control" type="text" id="tech_fee" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
@@ -836,7 +841,7 @@
 			                                	</div>
 			                                </div>
 			                                <div class="offset-sm-5 col-sm-7">
-	        	                               	<button type="submit" id="pricebtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
+	        	                               	<button type="submit" id="pricebtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
 	            		                     </div>
 	                    	            </form>
                                 	</div>
@@ -894,7 +899,7 @@
 											</div>
 										</div>
 	                                <div class="offset-sm-5 col-sm-7">
-                                        <button type="submit" id="paymentbtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
+                                        <button type="submit" id="paymentbtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
                                     </div>
                                 </form>
                             </div>
@@ -1063,7 +1068,7 @@
 											</div>
 											<div class="row">
 												 <div class="offset-sm-5 col-sm-7">
-	                                        		<button type="submit" id="offerbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+	                                        		<button type="submit" id="offerbtn" class="btn btn-submit waves-effect waves-light m-t-10">SAVE</button>
 	                                   			</div>
 	                                   		</div>
 											</form>
@@ -1088,6 +1093,20 @@
 <script src="../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script>
+// var selector = '.nav li a';
+
+// $(selector).on('click', function(){
+// 	 $(selector).removeClass('active');
+// 	    $(this).addClass('active');
+//    // alert($(this).attr('href'));
+//    var prev = $(this).prev().attr('href');
+//    var next = $(this).next().attr('href');
+//     var id = $(this).attr('href');
+//    $(prev).hide();
+//   // $(id).hide();
+//     $(next).show();
+// });
+
 $('#detailfrm').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -1320,9 +1339,99 @@ $("#city_id").change(function(){
 // 	alert("success");
 // 	//updateProject();
 // });
-    
 
+// $("#project").click(function(){
+// 	var check = $("#project").hasClass('top-blue-box');
+// 	if(!check){
+// 		$("#project").removeClass('top-white-box');
+// 		$("#project").addClass('top-blue-box');
+// 		var isBuilding = $("#building").hasClass('top-blue-box');
+// 		if(isBuilding){
+// 			$("#building").removeClass('top-blue-box');
+// 			$("#building").addClass('top-white-box');
+// 		}
+// 		var isFloor = $("#floor").hasClass('top-blue-box');
+// 		if(isFloor){
+// 			$("#floor").removeClass('top-blue-box');
+// 			$('#floor').addClass('top-white-box');
+// 		}
+// 		var isFlat = $("#flat").hasClass('top-blue-box');
+// 		if(isFlat){
+// 			$("#flat").removeClass('top-blue-box');
+// 			$("#flat").addClass('top-white-box');
+// 		}
+// 	}
+// });
 
+// $("#building").click(function(){
+// 	 var check = $("#building").hasClass('top-lue-box');
+// 	 if(!check){
+// 		 $("#building").removeClass('top-white-box');
+// 		 $("#building").addClass('top-blue-box');
+// 		 var isProject = $("#project").hasClass('top-blue-box');
+// 		 if(isProject){
+// 			 $("#project").removeClass('top-blue-box');
+// 			 $('#project').addClass('top-white-box');
+// 		 }
+// 		 var isFloor = $('#floor').hasClass('top-blue-box');
+// 		 if(isFloor){
+// 			 $('#floor').removeClass('top-blue-box');
+// 			 $('#floor').addClass('top-white-box');
+// 		 }
+// 		 var isFlat = $("#flat").hasClass('top-blue-box');
+// 		 if(isFlat){
+// 			 $('#flat').removeClass('top-blue-box');
+// 			 $('#flat').addClass('top-white-box');
+// 		 }
+// 	 }
+	
+// });
+
+// $("#floor").click(function(){
+// 	var check = $("#floor").hasClass('top-blue-box');
+// 	if(!check){
+// 		$("#floor").removeClass('top-white-box');
+// 		$('#floor').addClass('top-blue-box');
+// 		var isProject = $("#project").hasClass('top-blue-box');
+// 		if(isProject){
+// 			$('#project').removeClass('top-blue-box');
+// 			$("#project").addClass('top-white-box');
+// 		}
+// 		var isBuilding = $('#building').hasClass('top-blue-box');
+// 		if(isBuilding){
+// 			$("#building").removeClass('top-blue-box');
+// 			$("#building").addClass('top-white-box');
+// 		}
+// 		var isFlat = $("#flat").hasClass('top-blue-box');
+// 		if(isFlat){
+// 			$('#flat').removeClass('top-blue-box');
+// 			$("#flat").addClass('top-white-box');
+// 		}
+// 	}
+// });
+
+// $("#flat").click(function(){
+// 	var check = $('#flat').hasClass('top-blue-top');
+// 	if(!check){
+// 		$('#flat').removeClass('top-white-box');
+// 		$('#flat').addClass('top-blue-box');
+// 		var isProject = $('#project').hasClass('top-blue-box');
+// 		if(isProject){
+// 			$('#project').removeClass('top-blue-box');
+// 			$('#project').addClass('top-white-box');
+// 		}
+// 		var isBuilding = $('#building').hasClass('top-blue-box');
+// 		if(isBuilding){
+// 			$('#building').removeClass('top-blue-box');
+// 			$('#building').addClass('top-white-box');
+// 		}
+// 		var isFloor = $('#floor').hasClass('top-blue-box');
+// 		if(isFloor){
+// 			$('#floor').removeClass('top-blue-box');
+// 			$('#floor').addClass('top-white-box');
+// 		}
+// 	}
+// });
 
 $('#basicfrm').bootstrapValidator({
 	container: function($field, validator) {
@@ -1459,8 +1568,11 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#basicresponse").html(resp.message);
         $("#basicresponse").show();
         alert(resp.message);
+        $('.active').removeClass('active').next('li').addClass('active');
+        $("#vimessages1").addClass('active');
   	}
 }
+
 
 $('#pricingfrm').bootstrapValidator({
 	container: function($field, validator) {
@@ -1657,11 +1769,10 @@ function saveProjectDetails(){
 	    async: false,
 	    success: function(data) {
 			if (data.status == 0) {
-				//alert(data.id);
-			//	alert(data.status);
+				
 				alert(data.message);
 			} else {
-			//	alert(data.id);
+			
 				alert(data.message);
 			}
 		},
