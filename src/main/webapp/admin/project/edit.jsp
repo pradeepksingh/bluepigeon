@@ -986,6 +986,7 @@
 												for(BuilderProjectOfferInfo projectOfferInfo :projectOfferInfos) { 
 											%>
 											<div class="row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
+											<hr>
 												<input type="hidden" name="offer_id[]" value="<% out.print(projectOfferInfo.getId()); %>" />
 												<div class="col-lg-12" style="padding-bottom:5px;">
 													<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(projectOfferInfo.getId()); %>);" class="btn btn-danger btn-xs">x</a></span>
@@ -1016,7 +1017,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>" onkeyup=" javascript:onlyNumber(<%out.print(j); %>);" name="discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
+															<input type="text" class="form-control" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -1170,19 +1171,12 @@
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/js/bootstrap-select.min.js"></script>
 <script>
-// $(".errorMsg").keypress(function(event){
-// 	alert("Hello");
-// 	return isNumber(event, this)
-// });
 
 $("input.errorMsg").keypress(function(event){
-	//alert("Hello");
 	return isNumber(event, this)
 });
 function vaildPayablePer(id){
-	//alert($("#discount"+id).val());
 	var x = $("#payable"+id).val();
-	//alert(x);
 	if( x<0 || x >100){
 		alert("The percentage must be between 0 and 100");
 		$("#payable"+id).val('');
@@ -1260,15 +1254,7 @@ $('#tech_fee').keypress(function (event) {
 $('#payable').keypress(function (event) {
     return isNumber(event, this)
 });
-$('#amount').keypress(function (event) {
-    return isNumber(event, this)
-});
-$('#discount').keypress(function (event) {
-    return isNumber(event, this)
-});
-$('#discount_amount').keypress(function (event) {
-    return isNumber(event, this)
-});
+
 $("#amenity_weightage").keypress(function(event){
 	return isNumber(event, this)
 });
@@ -1284,13 +1270,26 @@ function isNumber(evt, element) {
     return true;
 } 
 
-
-
-
+function validPerAmount(id){
+	if($("#offer_type"+id).val()==1){
+			 isNumber(event, this);
+				 validPercentage(id);
+	}
+	if($("#offer_type"+id).val()==2){
+		onlyNumber(id);
+	}
+}
+function validPercentage(id){
+	 var x = $("#discount_amount"+id).val();
+	 if(isNaN(x) || x<0 || x >100){
+		 alert("The percentage must be between 0 and 100");
+		 $("#discount_amount"+id).val('');
+	 }
+}
 function onlyNumber(id){
 	
 	 var $th = $("#discount_amount"+id);
-	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
 }
 
 
@@ -1872,11 +1871,29 @@ $('#offerfrm').bootstrapValidator({
 	        validators: {
 	            notEmpty: {
 	                message: 'discount amount is required and cannot be empty'
+	            },
+// 	            callback:{
+	            	
+// 	            		message : 'discount amount is required and cannot be empty',
+// 	            			callback: function(value, validator, $field) {
+// 	                          var percentage = validator.getFieldElements('discount_amount[]');
+// 	                           var   length     = percentage.length;
+// 	                          alert(length);
+// 	                             if(lenght != 0){
+// 		                      		return  true;
+// 	                          }
+
+// 	                          return false;
+// 	                      }
+// 	                  },
 	            }
+	        },
+	    
+	           
 	        }
-	    }
+	   // }
     		
-    }
+   // }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
@@ -1944,7 +1961,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control  notEmpty" required id="discount_amount'+offers+'" name="discount_amount[]" value=""  onkeyup="javascript:onlyNumber('+offers+');"/>'
+					+'<input type="text" class="form-control  notEmpty" required id="discount_amount'+offers+'" name="discount_amount[]" value="" onkeyup=" javascript:validPerAmount('+offers+');"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'

@@ -328,7 +328,8 @@
 				if(data[index].image != "")
 					image = "${baseUrl}/"+data[index].image;
 				else
-					image = "../plugins/images/Untitled-1.png";
+					image = "";
+					//image = "../plugins/images/Untitled-1.png";
 				if(data[index].name != ""){
 					projectName = data[index].name;
 				}

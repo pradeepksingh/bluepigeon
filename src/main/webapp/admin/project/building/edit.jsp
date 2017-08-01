@@ -587,6 +587,7 @@
 												for(BuilderProjectOfferInfo projectOfferInfo :builderProjectOfferInfos) { 
 											%>
 											<div class="row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
+												<hr>
 												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-offer_title">
 														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
@@ -646,6 +647,7 @@
 											<% int j=0; 
 											for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) { %>
 											<div class="row" id="offer-<% out.print(buildingOfferInfo.getId()); %>">
+												<hr>
 												<input type="hidden" id="offer_id" name="offer_id[]" value="<% out.print(buildingOfferInfo.getId()); %>" />
 												<div class="col-lg-12" style="padding-bottom:5px;">
 													<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(buildingOfferInfo.getId()); %>);" class="btn btn-danger btn-xs">x</a></span>
@@ -680,7 +682,7 @@
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
 															<div>
-																<input type="text" class="form-control"   <%if(buildingOfferInfo.getType() == 3){ %> disabled <%} %>id="discount_amount<%out.print(j); %>" onkeyup=" javascript:onlyNumber(<%out.print(j); %>);" name="discount_amount[]" value="<% out.print(buildingOfferInfo.getAmount()); %>"/>
+																<input type="text" class="form-control"   <%if(buildingOfferInfo.getType() == 3){ %> disabled <%} %> id="discount_amount<%out.print(j); %>"  onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<% out.print(buildingOfferInfo.getAmount()); %>"/>
 															</div>
 															<div class="messageContainer"></div>
 														</div>
@@ -958,20 +960,20 @@ function isNumber(evt, element) {
     return true;
 }   
 
-function validPer(id){
-	alert(id);
-	//var x = id.value;
-	//alert(x);
-// 	if( x<0 || x >100){
-// 		alert("The percentage must be between 0 and 100");
-// 		$("#"+id).val('');
-// 	}
-}
+// function validPer(id){
+// 	alert(id);
+// 	//var x = id.value;
+// 	//alert(x);
+// // 	if( x<0 || x >100){
+// // 		alert("The percentage must be between 0 and 100");
+// // 		$("#"+id).val('');
+// // 	}
+// }
 
 function onlyNumber(id){
 	
 	 var $th = $("#discount_amount"+id);
-	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
 }
 
 function notEmpty(){
@@ -1108,7 +1110,22 @@ $("#updatepricing").bootstrapValidator({
 	event.preventDefault();
 	updateBuildingPricing();
 });
-
+function validPerAmount(id){
+	if($("#offer_type"+id).val()==1){
+			 isNumber(event, this);
+				 validPercentage(id);
+	}
+	if($("#offer_type"+id).val()==2){
+		onlyNumber(id);
+	}
+}
+function validPercentage(id){
+	 var x = $("#discount_amount"+id).val();
+	 if(isNaN(x) || x<0 || x >100){
+		 alert("The percentage must be between 0 and 100");
+		 $("#discount_amount"+id).val('');
+	 }
+}
 function updateBuildingPricing() {
 	var options = {
 	 		target : '#priceresponse', 
@@ -1522,7 +1539,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup="javascript:onlyNumber('+offers+');" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup=" javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
