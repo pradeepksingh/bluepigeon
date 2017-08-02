@@ -848,7 +848,7 @@
              					</div>
                                  <div id="vimessages3" class="tab-pane" aria-expanded="false">        
                                  	<form id="paymentfrm" name="paymentfrm" method="post" action=""  enctype="multipart/form-data">
-                                 	 	<input type="hidden" id="id" name="id" value="<% out.print(project_id);%>"/>
+                                 	 	<input type="hidden" id="project_id" name="project_id" value="<% out.print(project_id);%>"/>
                                    		<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(projectPaymentInfos.size()+1000);%>"/>
                                    		<div id="payment_schedule">
 	                                   	<% 	int i = 1;
@@ -860,37 +860,41 @@
 												<% if(i > 1) { %>
 													<hr/>
 													<% } %>
-											<div class="row">
-												<div class="col-sm-6">
-		                                			<div class="form-group row">
-					                                    <label for="example-search-input" class="col-sm-4 control-label">Milestone<span class='text-danger'>*</span></label>
-		                                    			<div class="col-sm-6">
-		                                    				<div>
-		                                        				<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
-			                                    			</div>
-			                                    			<div class="messageContainer"></div>
-			                                 			</div>
-			                                 		</div>
-			                                 	</div>
-			                                 	<div class="col-sm-6">
-			                                 		<div class="form-group row">
-		                                    			<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class='text-danger'>*</span></label>
-		                                    			<div class="col-sm-6">
-		                                    				<div>
-		                                        				<input class="form-control" type="text" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
-			                                    			</div>
-			                                    			<div class="messageContainer"></div>
-			                                  			</div>
-		                                			</div>
-		                               			</div>
-	                               			</div>
-	                               			</div>
-	                               <%}}%>
+														<div class="col-lg-12" style="padding-bottom:5px;">
+															<span class="pull-right"><a href="javascript:deleteSchudle(<% out.print(projectPaymentInfo.getId()); %>);" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span>
+														</div>
+														<div class="col-sm-6">
+				                                			<div class="form-group row">
+							                                    <label for="example-search-input" class="col-sm-4 control-label">Milestone<span class='text-danger'>*</span></label>
+				                                    			<div class="col-sm-6">
+				                                    				<div>
+				                                        				<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
+					                                    			</div>
+					                                    			<div class="messageContainer"></div>
+					                                 			</div>
+					                                 		</div>
+					                                 	</div>
+					                                 	<div class="col-sm-6">
+					                                 		<div class="form-group row">
+				                                    			<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class='text-danger'>*</span></label>
+				                                    			<div class="col-sm-6">
+				                                    				<div>
+				                                        				<input class="form-control" type="text" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
+					                                    			</div>
+					                                    			<div class="messageContainer"></div>
+					                                  			</div>
+				                                			</div>
+				                               			</div>
+			                               			
+	                               				</div>
+	                               <%i++;}}%>
 	                               		</div>
-										<div class="col-sm-12">
-											<span class="pull-right">
-												<a href="javascript:addMoreSchedule();" class="btn btn-submit btn-sm">+ Add More Schedule</a>
-											</span>
+	                               		<div>
+											<div class="col-sm-12">
+												<span class="pull-right">
+													<a href="javascript:addMoreSchedule();" class="btn btn-submit btn-sm">+ Add More Schedule</a>
+												</span>
+											</div>
 										</div>
 										<div class="row">
 			                                <div class="offset-sm-5 col-sm-7">
@@ -929,10 +933,14 @@
 																		</div>
 																	</div>
 																	<div class="col-lg-3 margin-bottom-5">
-																		<div class="form-group" id="error-discount">
-																			<label class="control-label col-sm-8">Discount(%) <span class="text-danger">*</span></label>
+																		<div class="form-group" id="error-applicable_on">
+																			<label class="control-label col-sm-6">Offer Type </label>
 																			<div class="col-sm-6">
-																				<input type="text" class="form-control discount" id="discount<%out.print(j); %>" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>" onkeyup=" javascript:onlyNumber(<%out.print(j); %>);">
+																				<select class="form-control" id="offer_type<%out.print(j); %>"  onchange="txtEnabaleDisable(<%out.print(j); %>);" name="offer_type[]">
+																					<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																					<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																					<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+																				</select>
 																			</div>
 																			<div class="messageContainer"></div>
 																		</div>
@@ -941,7 +949,7 @@
 																		<div class="form-group" id="error-discount_amount">
 																			<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
 																			<div class="col-sm-6">
-																				<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>">
+																				<input type="text" class="form-control" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
 																			</div>
 																			<div class="messageContainer"></div>
 																		</div>
@@ -955,19 +963,7 @@
 																			<div class="messageContainer"></div>
 																		</div>
 																	</div>
-																	<div class="col-lg-3 margin-bottom-5">
-																		<div class="form-group" id="error-applicable_on">
-																			<label class="control-label col-sm-6">Offer Type </label>
-																			<div class="col-sm-6">
-																				<select class="form-control" id="offer_type" name="offer_type[]">
-																					<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
-																					<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
-																					<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
-																				</select>
-																			</div>
-																			<div class="messageContainer"></div>
-																		</div>
-																	</div>
+																	
 																	<div class="col-lg-4 margin-bottom-5">
 																		<div class="form-group" id="error-apply">
 																			<label class="control-label col-sm-6">Status </label>
@@ -1021,7 +1017,27 @@
 <script src="../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script>
-
+function validPerAmount(id){
+	if($("#offer_type"+id).val()==1){
+			 isNumber(event, this);
+				 validPercentage(id);
+	}
+	if($("#offer_type"+id).val()==2){
+		onlyNumber(id);
+	}
+}
+function validPercentage(id){
+	 var x = $("#discount_amount"+id).val();
+	 if(isNaN(x) || x<0 || x >100){
+		 alert("The percentage must be between 0 and 100");
+		 $("#discount_amount"+id).val('');
+	 }
+}
+function onlyNumber(id){
+	
+	 var $th = $("#discount_amount"+id);
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
+}
 function vaildPayablePer(id){
 	var x = $("#payable"+id).val();
 	if( x<0 || x >100){
@@ -1163,7 +1179,7 @@ $("#building_weightage").keypress(function(event){
 function onlyNumber(id){
 	
 	 var $th = $("#discount_amount"+id);
-	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
 }
 $('#schedule').keyup(function() {
     var $th = $(this);
@@ -1227,7 +1243,16 @@ $("#city_id").change(function(){
 		},'json');
 	}
 });
-
+function txtEnabaleDisable(id){
+	$th = $("#offer_type"+id).val();
+	 if($th == 3){
+	  	$('#discount_amount'+id).attr('disabled', true);
+	  	$("#discount_amount"+id).val('');
+	 }else{
+		$('#discount_amount'+id).attr('disabled', false); 
+		$("#discount_amount"+id).val('');
+	 }
+}
 
 //needed to change color of div on click event.
 // $("#project").click(function(){
@@ -1599,6 +1624,8 @@ function showPriceResponse(resp, statusText, xhr, $form){
         $("#pricingresponse").html(resp.message);
         $("#pricingresponse").show();
         alert(resp.message);
+        $('.active').removeClass('active').next('li').addClass('active');
+        $("#vimessages3").addClass('active');
   	}
 }
 
@@ -1756,6 +1783,8 @@ function showPaymentResponse(resp, statusText, xhr, $form){
         $("#paymentresponse").html(resp.message);
         $("#paymentresponse").show();
         alert(resp.message);
+        $('.active').removeClass('active').next('li').addClass('active');
+        $("#vimessages4").addClass('active');
   	}
 }
 
@@ -1838,7 +1867,7 @@ function showOfferResponse(resp, statusText, xhr, $form){
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
-	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="'+offers+'" />'
+	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="" />'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>'
 		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-offer_title">'
@@ -1925,13 +1954,11 @@ function removeOffer(id) {
 
 
 function addMoreSchedule() {
-	
-	//alert("Hello");
-	
-	
 	var schedule_count = parseInt($("#schedule_count").val());
+	alert(schedule_count);
 	schedule_count++;
 	var html = +'<div class="row" id="schedule-'+schedule_count+'>'
+			   +'<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>'
 			   +'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>'
 			   +'<div class="row">'
 			   +'<div class="col-sm-6">'
@@ -1950,7 +1977,7 @@ function addMoreSchedule() {
 			   +'<label for="example-search-input" class="col-sm-4 col-form-label">% of net payable<span class="text-danger">*</span></label>'
 			   +'<div class="col-sm-6">'
 			   +'<div>'
-			   +'<input class="form-control" type="text" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value=""/>'
+			   +'<input class="form-control" type="text" id="payable'+schedule_count+'" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress="return isNumber(event, this);" name="payable[]" value=""/>'
 			   +'</div>'
 			   +'<div class="messageContainer"></div>'
 			   +'</div>'
@@ -1959,16 +1986,15 @@ function addMoreSchedule() {
 			   +'</div>'
 			   +'</div>'
 			   +'</div>';
-			
-			
 	$("#payment_schedule").append(html);
 	$("#schedule_count").val(schedule_count);
 }
 function removeSchedule(id) {
+	//alert("Remove schedule "+id);
 	$("#schedule-"+id).remove();
 }
 function deleteOffer(id) {
-	var b=$("#offer").val();
+	
 	var flag = confirm("Are you sure ? You want to delete offer ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/offer/delete/"+id, { }, function(data){
@@ -1977,6 +2003,19 @@ function deleteOffer(id) {
 				$("#offer-"+id).remove();
 			}
 		});
+	}
+}
+
+function deleteSchudle(id){
+	
+	var flag = confirm("Are you sure ? You want to delete schudle ?");
+	if(flag){
+// 		$.get("${baseUrl}/webapi/project/payment/delete/"+id,{}, function(data){
+// 			alert(data.message);
+// 			if(data.status == 1){
+				$("#schedule-"+id).remove();
+// 			}
+// 		})
 	}
 }
 </script>

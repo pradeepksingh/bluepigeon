@@ -1293,8 +1293,10 @@ function txtEnabaleDisable(id){
 	alert
 	 if($th == 3){
 	  	$('#discount_amount'+id).attr('disabled', true);
+	  	 $("#discount_amount"+id).val('');
 	 }else{
 		$('#discount_amount'+id).attr('disabled', false); 
+		 $("#discount_amount"+id).val('');
 	 }
 }
 function showAddResponse(resp, statusText, xhr, $form){
