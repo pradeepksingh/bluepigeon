@@ -209,15 +209,15 @@
                                  <li class="active">
                                      <a data-toggle="tab"  href="#vimessages" > <span>Basic Information</span></a>
                                  </li>
-                                  <li>
-                                     <a  data-toggle="tab" href="#vimessages1"><span>Project Details</span></a>
-                                 </li>
+<!--                                   <li> -->
+<!--                                      <a  data-toggle="tab" href="#vimessages1"><span>Project Details</span></a> -->
+<!--                                  </li> -->
                                  <li>
                                      <a  data-toggle="tab" href="#vimessages2"><span>Pricing Details</span></a>
                                  </li>
-<!--                                      <li > -->
-<!--                                         <a  data-toggle="tab" href="#vimessages3"><span>Payment Schedules</span></a> -->
-<!--                                     </li> -->
+                                     <li >
+                                        <a  data-toggle="tab" href="#vimessages3"><span>Payment Schedules</span></a>
+                                    </li>
                                  <li>
                                      <a  data-toggle="tab" href="#vimessages4"><span>Offers</span></a>
                                  </li>
@@ -848,61 +848,57 @@
              					</div>
                                  <div id="vimessages3" class="tab-pane" aria-expanded="false">        
                                  	<form id="paymentfrm" name="paymentfrm" method="post" action=""  enctype="multipart/form-data">
-                                 	 <input type="hidden" id="id" name="id" value="<% out.print(project_id);%>"/>
-                                   	<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(projectPaymentInfos.size()+1);%>"/>
-                                   	<% 	int i = 1;
-                                   	if(projectPaymentInfos != null){
-                                   			for(BuilderProjectPaymentInfo projectPaymentInfo :projectPaymentInfos) {  
-											%>
-											<input type="hidden" id="schedule_id" name="schedule_id[]" value="<%out.print(projectPaymentInfo.getId());%>"/>
-											<!--  <div class="row" id="schedule- --><% //out.print(i); %>
-											<% if(i > 1) { %>
-												<hr/>
-												<% } %>
-										
-	                                	<div class="form-group row" id="payment_schedule">
-	                                    <label for="example-search-input" class="col-sm-2 col-form-label">Milestone<span class='text-danger'>*</span></label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-sm-2 col-form-label">% of net payable<span class='text-danger'>*</span></label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
-	                                    </div>
-<!-- 	                                    <label for="example-search-input" class="col-sm-1 col-form-label">Amount<span class='text-danger'>*</span></label> -->
-<!-- 	                                    <div class="col-2"> -->
-<%-- 	                                        <input class="form-control" type="text" id="amount" name="amount[]" value="<% //if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/> --%>
-<!-- 	                                    </div> -->
-	                                </div>
-	                               <%}}else{ %>
-	                               <div class="form-group row" id="payment_schedule">
-	                               		<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>
-	                                    <label for="example-search-input" class="col-sm-2 col-form-label">Milestone<span class='text-danger'>*</span></label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="schedule" name="schedule[]" value=""/>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-sm-2 col-form-label">% of net payable<span class='text-danger'>*</span></label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="payable" name="payable[]" value=""/>
-	                                    </div>
-<!-- 	                                    <label for="example-search-input" class="col-sm-1 col-form-label">Amount<span class='text-danger'>*</span></label> -->
-<!-- 	                                    <div class="col-2"> -->
-<%-- 	                                        <input class="form-control" type="text" id="amount" name="amount[]" value="<% //if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/> --%>
-<!-- 	                                    </div> -->
-	                                </div>
-	                                <%} %>
-	                                <div>
-											<div class="col-lg-12">
-												<span class="pull-right">
-													<a href="javascript:addMoreSchedule();" class="btn btn-info btn-sm">+ Add More Schedule</a>
-												</span>
-											</div>
+                                 	 	<input type="hidden" id="id" name="id" value="<% out.print(project_id);%>"/>
+                                   		<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(projectPaymentInfos.size()+1000);%>"/>
+                                   		<div id="payment_schedule">
+	                                   	<% 	int i = 1;
+	                                   	if(projectPaymentInfos != null){
+	                                   			for(BuilderProjectPaymentInfo projectPaymentInfo :projectPaymentInfos) {  
+												%>
+												<input type="hidden" id="schedule_id" name="schedule_id[]" value="<%out.print(projectPaymentInfo.getId());%>"/>
+												  <div class="row" id="schedule-<% out.print(i); %>">
+												<% if(i > 1) { %>
+													<hr/>
+													<% } %>
+											<div class="row">
+												<div class="col-sm-6">
+		                                			<div class="form-group row">
+					                                    <label for="example-search-input" class="col-sm-4 control-label">Milestone<span class='text-danger'>*</span></label>
+		                                    			<div class="col-sm-6">
+		                                    				<div>
+		                                        				<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
+			                                    			</div>
+			                                    			<div class="messageContainer"></div>
+			                                 			</div>
+			                                 		</div>
+			                                 	</div>
+			                                 	<div class="col-sm-6">
+			                                 		<div class="form-group row">
+		                                    			<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class='text-danger'>*</span></label>
+		                                    			<div class="col-sm-6">
+		                                    				<div>
+		                                        				<input class="form-control" type="text" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
+			                                    			</div>
+			                                    			<div class="messageContainer"></div>
+			                                  			</div>
+		                                			</div>
+		                               			</div>
+	                               			</div>
+	                               			</div>
+	                               <%}}%>
+	                               		</div>
+										<div class="col-sm-12">
+											<span class="pull-right">
+												<a href="javascript:addMoreSchedule();" class="btn btn-submit btn-sm">+ Add More Schedule</a>
+											</span>
 										</div>
-	                                <div class="offset-sm-5 col-sm-7">
-                                        <button type="submit" id="paymentbtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
-                                    </div>
-                                </form>
-                            </div>
+										<div class="row">
+			                                <div class="offset-sm-5 col-sm-7">
+		                                        <button type="submit" id="paymentbtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
+		                                    </div>
+	                                 	</div>
+	                                </form>
+	                           </div>
                          
                                <div id="vimessages4" class="tab-pane" aria-expanded="true">
                                 <div id="offer" class="tab-pane fade active in">
@@ -986,75 +982,7 @@
 																	</div>
 																</div>
 																<% j++; } %>
-<%-- 																<div class="row" id="offer-<% out.print(j);%>"> --%>
-<%-- 																<% if(j > 1) { %> --%>
-<!-- 																<hr/> -->
-<%-- 																<% } %> --%>
-<!-- 																	<div class="col-lg-12" style="padding-bottom:5px;"> -->
-<!-- 																		<span class="pull-right"><a href="javascript:removeOffer(1);" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span> -->
-<!-- 																	</div> -->
-<!-- 																	<div class="col-lg-5 margin-bottom-5"> -->
-<!-- 																		<div class="form-group" id="error-offer_title"> -->
-<!-- 																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label> -->
-<!-- 																			<div class="col-sm-8"> -->
-<!-- 																				<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""> -->
-<!-- 																			</div> -->
-<!-- 																			<div class="messageContainer"></div> -->
-<!-- 																		</div> -->
-<!-- 																	</div> -->
-<!-- 																	<div class="col-lg-3 margin-bottom-5"> -->
-<!-- 																		<div class="form-group" id="error-discount"> -->
-<!-- 																			<label class="control-label col-sm-8">Discount(%) <span class="text-danger">*</span></label> -->
-<!-- 																			<div class="col-sm-6"> -->
-<!-- 																				<input type="text" class="form-control" id="discount" name="discount[]" value=""> -->
-<!-- 																			</div> -->
-<!-- 																			<div class="messageContainer"></div> -->
-<!-- 																		</div> -->
-<!-- 																	</div> -->
-<!-- 																	<div class="col-lg-4 margin-bottom-5"> -->
-<!-- 																		<div class="form-group" id="error-discount_amount"> -->
-<!-- 																			<label class="control-label col-sm-6">Discount Amount </label> -->
-<!-- 																			<div class="col-sm-6"> -->
-<!-- 																				<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""> -->
-<!-- 																			</div> -->
-<!-- 																			<div class="messageContainer"></div> -->
-<!-- 																		</div> -->
-<!-- 																	</div> -->
-<!-- 																	<div class="col-lg-5 margin-bottom-5"> -->
-<!-- 																		<div class="form-group" id="error-applicable_on"> -->
-<!-- 																			<label class="control-label col-sm-4">Description </label> -->
-<!-- 																			<div class="col-sm-8"> -->
-<!-- 																				<textarea class="form-control" id="description" name="description[]"></textarea> -->
-<!-- 																			</div> -->
-<!-- 																			<div class="messageContainer"></div> -->
-<!-- 																		</div> -->
-<!-- 																	</div> -->
-<!-- 																	<div class="col-lg-3 margin-bottom-5"> -->
-<!-- 																		<div class="form-group" id="error-applicable_on"> -->
-<!-- 																			<label class="control-label col-sm-6">Offer Type </label> -->
-<!-- 																			<div class="col-sm-6"> -->
-<!-- 																				<select class="form-control" id="offer_type" name="offer_type[]"> -->
-<!-- 																					<option value="1">Percentage</option> -->
-<!-- 																					<option value="2">Flat Amount</option> -->
-<!-- 																					<option value="3">Other</option> -->
-<!-- 																				</select> -->
-<!-- 																			</div> -->
-<!-- 																			<div class="messageContainer"></div> -->
-<!-- 																		</div> -->
-<!-- 																	</div> -->
-<!-- 																	<div class="col-lg-4 margin-bottom-5"> -->
-<!-- 																		<div class="form-group" id="error-apply"> -->
-<!-- 																			<label class="control-label col-sm-6">Status </label> -->
-<!-- 																			<div class="col-sm-6"> -->
-<!-- 																				<select class="form-control" id="offer_status" name="offer_status[]"> -->
-<!-- 																					<option value="1">Active</option> -->
-<!-- 																					<option value="0">Inactive</option> -->
-<!-- 																				</select> -->
-<!-- 																			</div> -->
-<!-- 																			<div class="messageContainer"></div> -->
-<!-- 																		</div> -->
-<!-- 																	</div> -->
-<!-- 																</div> -->
+
 															</div>
 															<div>
 																<div class="col-lg-12">
@@ -1093,20 +1021,14 @@
 <script src="../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script>
-// var selector = '.nav li a';
 
-// $(selector).on('click', function(){
-// 	 $(selector).removeClass('active');
-// 	    $(this).addClass('active');
-//    // alert($(this).attr('href'));
-//    var prev = $(this).prev().attr('href');
-//    var next = $(this).next().attr('href');
-//     var id = $(this).attr('href');
-//    $(prev).hide();
-//   // $(id).hide();
-//     $(next).show();
-// });
-
+function vaildPayablePer(id){
+	var x = $("#payable"+id).val();
+	if( x<0 || x >100){
+		alert("The percentage must be between 0 and 100");
+		$("#payable"+id).val('');
+	}
+}
 $('#detailfrm').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -1236,17 +1158,7 @@ $("#amenity_weightage").keypress(function(event){
 $("#building_weightage").keypress(function(event){
 	return isNumber(event, this)
 });
-// function isNumber(evt, element) {
-
-//     var charCode = (evt.which) ? evt.which : event.keyCode
-
-//     if (
-//         (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
-//         (charCode < 48 || charCode > 57))
-//         return false;
-
-//     return true;
-// } 
+ 
 
 function onlyNumber(id){
 	
@@ -1316,30 +1228,8 @@ $("#city_id").change(function(){
 	}
 });
 
-// $('#offerfrm').bootstrapValidator({
-// 	container: function($field, validator) {
-// 		return $field.parent().next('.messageContainer');
-//    	},
-//     feedbackIcons: {
-//         validating: 'glyphicon glyphicon-refresh'
-//     },
-//    // excluded: ':disabled',
-//     fields: {
-//     	'offer_title[]': {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Offer title is required and cannot be empty'
-//                 }
-//             }
-//         }
-//     }
-// }).on('success.form.bv', function(event,data) {
-// 	// Prevent form submission
-// 	event.preventDefault();
-// 	alert("success");
-// 	//updateProject();
-// });
 
+//needed to change color of div on click event.
 // $("#project").click(function(){
 // 	var check = $("#project").hasClass('top-blue-box');
 // 	if(!check){
@@ -1569,7 +1459,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#basicresponse").show();
         alert(resp.message);
         $('.active').removeClass('active').next('li').addClass('active');
-        $("#vimessages1").addClass('active');
+        $("#vimessages2").addClass('active');
   	}
 }
 
@@ -1869,109 +1759,6 @@ function showPaymentResponse(resp, statusText, xhr, $form){
   	}
 }
 
-// $("#paymentbtn").click(function(){
-// 	var paymentInfo = [];
-// 	var payable = [];
-// 	var amount = [];
-// 	$('input[name="payable[]"]').each(function(index) {
-// 		payable.push($(this).val());
-// 	});
-// 	$('input[name="amount[]"]').each(function(index) {
-// 		amount.push($(this).val());
-// 	});
-// 	$('input[name="schedule[]"]').each(function(index) {
-// 		if($(this).val() != "") {
-// 			paymentInfo.push({schedule:$(this).val(),payable:payable[index],amount:amount[index],status:1,builderProject:{id:$("#id").val()}});
-// 		}
-// 	});
-// 	var project = {id:$("#id").val()};
-// 	var final_data = {builderProjectPaymentInfos:paymentInfo,builderProject:project}
-// 	if(paymentInfo.length > 0) {
-// 		$.ajax({
-// 		    url: '${baseUrl}/webapi/project/payment/update',
-// 		    type: 'POST',
-// 		    data: JSON.stringify(final_data),
-// 		    contentType: 'application/json; charset=utf-8',
-// 		    dataType: 'json',
-// 		    async: false,
-// 		    success: function(data) {
-// 				if (data.status == 0) {
-// 					alert(data.message);
-// 				} else {
-// 					alert(data.message);
-// 				}
-// 			},
-// 			error : function(data)
-// 			{
-// 				alert("Fail to save data");
-// 			}
-			
-// 		});
-// 	} else {
-// 		alert("Please enter payment schedule details");
-// 	}
-// });
-
-// $("#offerbtn").click(function(){
-// 	var offerInfo = [];
-// 	var discount = [];
-// 	var amount = [];
-// 	var description = [];
-// 	var type = [];
-// 	var status = [];
-// 	$('input[name="discount[]"]').each(function(index) {
-// 		discount.push($(this).val());
-// 	});
-// 	$('input[name="discount_amount[]"]').each(function(index) {
-// 		amount.push($(this).val());
-// 	});
-// 	$('input[name="description[]"]').each(function(index) {
-// 		description.push($(this).val());
-// 	});
-// 	$('select[name="offer_type[]"] option:selected').each(function(index) {
-// 		type.push($(this).val());
-// 	});
-// 	$('select[name="offer_status[]"] option:selected').each(function(index) {
-// 		status.push($(this).val());
-// 	});
-// 	$('input[name="offer_title[]"]').each(function(index) {
-// 		if($(this).val() != "") {
-// 			offerInfo.push({title:$(this).val(),per:discount[index],amount:amount[index],description:description[index],type:type[index],status:status[index],builderProject:{id:$("#id").val()}});
-// 		}
-// 	});
-// 	var project = {id:$("#id").val()};
-// 	var final_data = {builderProjectOfferInfos:offerInfo,builderProject:project}
-// 	if(offerInfo.length > 0) {
-// 		$.ajax({
-// 		    url: '${baseUrl}/webapi/project/offer/update',
-// 		    type: 'POST',
-// 		    data: JSON.stringify(final_data),
-// 		    contentType: 'application/json; charset=utf-8',
-// 		    dataType: 'json',
-// 		    async: false,
-// 		    success: function(data) {
-// 				if (data.status == 0) {
-// 					alert(data.message);
-// 				} else {
-// 					alert(data.message);
-// 				}
-// 			},
-// 			error : function(data)
-// 			{
-// 				alert("Fail to save data");
-// 			}
-			
-// 		});
-// 	} else {
-// 		alert("Please enter offer details");
-// 	}
-// });
-
-
-
-
-
-
 $('#offerfrm').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -2015,7 +1802,7 @@ $('#offerfrm').bootstrapValidator({
 	updateProjectOffers();
 });
 function updateProjectOffers(){
-	alert("Hello");
+	//alert("Hello");
 		var options = {
 		 		target : '#offerresponse', 
 		 		beforeSubmit : showOfferRequest,
@@ -2046,54 +1833,7 @@ function showOfferResponse(resp, statusText, xhr, $form){
         alert(resp.message);
   	}
 }
-// function addMoreOffer() {
-// 	var offers = parseInt($("#offer_count").val());
-// 	offers++;
-// 	var html = '<div class="form-group row" id="offer-"'+offers+'>'
-// 		+'<label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>'
-// 		+'<div class="col-2">'
-//             +'<input class="form-control" type="text" id="offer_title" name="offer_title[]" value=""/>'
-//         +'</div>'
-//         +'<div class="messageContainer"></div>'
-//         +'<label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>'
-//         +'<div class="col-2">'
-//             +'<input class="form-control" type="text" id="discount" name="discount[]" value=""/>'
-//         +'</div>'
-//         +'<div class="messageContainer"></div>'
-//         +'<label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>'
-//         +'<div class="col-2">'
-//             +'<input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value=""/>'
-//         +'</div>'
-//         +'<div class="messageContainer"></div>'
-//         +'<label for="example-search-input" class="col-2 col-form-label">Description</label>'
-//         +'<div class="col-2">'
-//             +'<textarea class="form-control" id="description" name="description[]" ></textarea>'
-//         +'</div>'
-//         +'<label for="example-search-input" class="col-2 col-form-label">Offer Type</label>'
-//         +'<div class="col-2">'
-//         +'<select class="form-control" id="offer_type" name="offer_type[]">'
-// 			+'<option value="1">Percentage</option>'
-// 			+'<option value="2">Flat Amount</option>'
-// 			+'<option value="3">Other</option>'
-// 		+'</select>'
-//         +'</div>'
-//         +'<label for="example-search-input" class="col-2 col-form-label">Status</label>'
-//         +'<div class="col-2">'
-//          +'<select class="form-control" id="offer_status" name="offer_status[]">'
-// 			+'<option value="1" >Active</option>'
-// 			+'<option value="0" >Inactive</option>'
-// 		+'</select>'
-// 		+'</div>'
-//     +'</div>'
-//  +'</div>';
-// 	$("#offer_area").append(html);
-// 	$("#offer_count").val(offers);
-// }
-// function removeOffer(id) {
-// 	var a=$("#offer").val();
-// 	alert("remove="+a);
-// 	$("#offer-"+id).remove();
-// }
+
 
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
@@ -2185,41 +1925,42 @@ function removeOffer(id) {
 
 
 function addMoreSchedule() {
+	
+	//alert("Hello");
+	
+	
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
-	var html = '<div class="row" id="schedule-'+schedule_count+'">'
-				+'<hr/>'
-				+'<div class="col-lg-5 margin-bottom-5">'
-				+'<div class="form-group" id="error-schedule">'
-				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-				+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-payable">'
-				+'<label class="control-label col-sm-8">% of Net Payable </label>'
-				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control" id="payable" name="payable[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-amount">'
-				+'<label class="control-label col-sm-6">Amount </label>'
-				+'<div class="col-sm-6">'
-				+'<input type="text" class="form-control" id="amount" name="amount[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-1">'
-				+'<span><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span>'
-				+'</div>'
-			+'</div>';
+	var html = +'<div class="row" id="schedule-'+schedule_count+'>'
+			   +'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>'
+			   +'<div class="row">'
+			   +'<div class="col-sm-6">'
+			   +'<div class="form-group row">'
+			   +'<label for="example-search-input" class="col-sm-4 col-form-label">Milestone<span class="text-danger">*</span></label>'
+			   +'<div class="col-sm-6">'
+			   +'<div>'
+			   +'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
+			   +'</div>'
+			   +'<div class="messageContainer"></div>'
+			   +'</div>'
+			   +'</div>'
+			   +'</div>'
+			   +'<div class="col-sm-6">'
+			   +'<div class="form-group row">'
+			   +'<label for="example-search-input" class="col-sm-4 col-form-label">% of net payable<span class="text-danger">*</span></label>'
+			   +'<div class="col-sm-6">'
+			   +'<div>'
+			   +'<input class="form-control" type="text" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value=""/>'
+			   +'</div>'
+			   +'<div class="messageContainer"></div>'
+			   +'</div>'
+			   +'</div>'
+			   +'</div>'
+			   +'</div>'
+			   +'</div>'
+			   +'</div>';
+			
+			
 	$("#payment_schedule").append(html);
 	$("#schedule_count").val(schedule_count);
 }
