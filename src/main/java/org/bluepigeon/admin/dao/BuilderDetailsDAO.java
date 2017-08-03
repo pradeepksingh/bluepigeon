@@ -647,6 +647,85 @@ public class BuilderDetailsDAO {
 		}
 		return builderProjectLists;
 	}
+	/**
+	 * @author pankaj
+	 * @param empId
+	 * @param countryId
+	 * @param stateId
+	 * @param cityId
+	 * @param localityName
+	 * @return
+	 */
+	
+	public List<BuilderProjectList> getProjectFilters(int empId,int countryId,int stateId,int cityId, String localityName){
+		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
+		String hqlnew = "from BuilderEmployee where id = "+empId;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session sessionnew = hibernateUtil.openSession();
+		Query querynew = sessionnew.createQuery(hqlnew);
+		List<BuilderEmployee> employees = querynew.list();
+		BuilderEmployee builderEmployee = employees.get(0);
+		sessionnew.close();
+		String hql = "SELECT project.id as id, project.name as name, project.image as image, "
+				+"project.completion_status as completionStatus,project.inventory_sold as sold, "
+				+"project.total_inventory as totalSold, "
+				+"c.name as city, "
+				+"count(lead.id) as totalLeads ";
+		String where = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
+			hql = hql + "FROM  builder_project as project inner join allot_project as ap on project.id=ap.project_id "
+					+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+					+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id WHERE ";
+			where +="ap.emp_id = "+builderEmployee.getId();
+		} else {
+			hql = hql + "FROM  builder_project as project "
+			+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+			+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id WHERE ";
+			where +="build.id = "+builderEmployee.getBuilder().getId();
+		}
+		if(countryId > 0){
+			if(where!="")
+				where += " AND project.country_id = :country_id";
+			else
+				where += "project.country_id = :country_id";
+		}
+		if(stateId > 0){
+			if(where !="")
+				where += " AND project.state_id = :state_id";
+			else
+				where += "project.state_id = :state_id";
+		}
+		if(cityId > 0){
+			if(where != "")
+				where +=" AND project.city_id = :city_id";
+			else
+				where +="project.city_id = :city_id";
+		}
+		if(localityName != null){
+			if(where != "")
+				where +=" AND project.locality_name like :locality_name";
+			else
+				where +="project.locality_name like :locality_name";
+		}
+		hql += where + " AND project.status=1 GROUP by project.id order by project.id desc";
+		try {
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuilderProjectList.class));
+		System.err.println("hql : "+hql);
+		if(countryId > 0)
+			query.setParameter("country_id", countryId);
+		if(stateId > 0)
+			query.setParameter("state_id", stateId);
+		if(cityId > 0)
+			query.setParameter("city_id",cityId);
+		if(localityName != null)
+			query.setParameter("locality_name", localityName+"%");
+			builderProjectLists = query.list();
+		} catch(Exception e) {
+			//
+		}
+		return builderProjectLists;
+	}
 	
 	
 	public List<BuilderProjectList> getProjectFilter(int projectId,int empId,int countryId,int stateId,int cityId, int localityId){

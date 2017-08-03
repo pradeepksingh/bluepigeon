@@ -181,23 +181,23 @@
             <div class="container-fluid">
                  <div class="row">
                     <div class="col-lg-3 col-sm-6 col-xs-12 m-t-15 ">
-                        <div class="top-blue-box " style="font-size:20px;">
-                     <p class="center" style="color:#FFF">PROJECT</p>
+                        <div id="project" class="top-blue-box ">
+                    PROJECT
                         </div>
                     </div>
-                    <div class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
-                        <div class="top-white-box " style="font-size:20px;">
-                         <p class="center">   BUILDING</p>
+                    <div  class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
+                        <div id="building" class="top-white-box ">
+                           BUILDING
                         </div>
                     </div>
-                    <div class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
-                        <div class="top-white-box" style="font-size:20px;">
-                        <p class="center">  FLOOR</p>
+                    <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
+                        <div id="floor" class="top-white-box" >
+                          FLOOR
                         </div>
                     </div>
-                    <div class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
-                        <div class="top-white-box" style="font-size:20px;">
-                         <p class="center"> FLAT</p>
+                    <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
+                        <div id="flat" class="top-white-box">
+                         FLAT
                         </div>
                     </div>
                 </div>
@@ -209,15 +209,15 @@
                                  <li class="active">
                                      <a data-toggle="tab"  href="#vimessages" > <span>Basic Information</span></a>
                                  </li>
-                                  <li>
-                                     <a  data-toggle="tab" href="#vimessages1"><span>Project Details</span></a>
-                                 </li>
+<!--                                   <li> -->
+<!--                                      <a  data-toggle="tab" href="#vimessages1"><span>Project Details</span></a> -->
+<!--                                  </li> -->
                                  <li>
                                      <a  data-toggle="tab" href="#vimessages2"><span>Pricing Details</span></a>
                                  </li>
-<!--                                      <li > -->
-<!--                                         <a  data-toggle="tab" href="#vimessages3"><span>Payment Schedules</span></a> -->
-<!--                                     </li> -->
+                                     <li >
+                                        <a  data-toggle="tab" href="#vimessages3"><span>Payment Schedules</span></a>
+                                    </li>
                                  <li>
                                      <a  data-toggle="tab" href="#vimessages4"><span>Offers</span></a>
                                  </li>
@@ -231,13 +231,14 @@
 		                                <form id="basicfrm" name="basicfrm" method="post">
 		                                <input type="hidden" id="id" name="id" value="<% out.print(project_id);%>"/>
 			                                <div class="row">
-			                                	<div class="col-lg-6 ">
+			                                	<div class="col-md-6 ">
 				                                	<div class="form-group row" id="error-builder_id">
 				                                  	  <label  class="col-sm-4 control-label">Builder Group<span class='text-danger'>*</span></label>
-				                                    <div class="col-sm-8">
+				                                    <div class="col-sm-6">
 				                                    <div>
 				                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
-				                                        <select id="builder_id" name="builder_id" class="form-control">
+				                                        <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builderProject.getBuilder().getId());%>">
+				                                        <select id="builder_id" name="builder_id" class="form-control" disabled>
 															<option value="">Select Builder Group</option>
 			<%-- 												<% for (Builder builder : builders) { %> --%>
 			<%-- 												<option value="<%out.print(builder.getId());%>" <% if(builderProject.getBuilder().getId() ==  builder.getId()) { %>selected<% } %>> <% out.print(builder.getName()); %> </option> --%>
@@ -250,12 +251,13 @@
 				                                    
 				                                  </div>
 			                                    </div>
-			                                    <div class="col-lg-6 ">
+			                                    <div class="col-md-6 ">
 				                                    <div class="form-group row" id="error-builder_id">
 				                                    	<label for="example-text-input" class="col-sm-4 control-label">Builder Company<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
+					                                    <input type="hidden"id="company_id" name="company_id" value="<%out.print(builderProject.getBuilderCompanyNames().getId());%>"/>
 						                                    <div>
-						                                       <select id="company_id" name="company_id" class="form-control">
+						                                       <select id="company_id" name="company_id" class="form-control" disabled>
 																	<option value="">Select Builder Company</option>
 																	<% for (Builder builder : builders) { %>
 																	<% for (BuilderCompanyNames builderCompanyNames : builder.getBuilderCompanyNameses()) { %>
@@ -275,9 +277,9 @@
 			                                	<div class="col-md-6">
 					                                <div class="form-group row">
 					                                    <label for="example-search-input" class="col-sm-4 control-label">Project Name<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
 					                                    	<div>
-					                                        	<input class="form-control" type="text" id="name" name="name" value="<% out.print(builderProject.getName());%>">
+					                                        	<input class="form-control" type="text" readonly="true" id="name" name="name" value="<% out.print(builderProject.getName());%>">
 					                                    	</div>
 					                                    	<div class="messageContainer"></div>
 					                                    </div>
@@ -286,9 +288,9 @@
 					                              <div class="col-md-6">
 					                                 	<div class="form-group row">
 					                                    	<label for="example-search-input" class="col-sm-4 control-label">Landmark<span class='text-danger'>*</span></label>
-					                                    	<div class="col-sm-8">
+					                                    	<div class="col-sm-6">
 					                                    		<div>
-					                                        		<input class="form-control" type="text" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>">
+					                                        		<input class="form-control" type="text" readonly="true" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>">
 					                                    		</div>
 					                                   		 	<div class="messageContainer"></div>
 					                                   		 </div>
@@ -299,10 +301,10 @@
 			                                	<div class="col-md-6">
 					                                 <div class="form-group row">
 					                                      <label for="example-tel-input" class="col-sm-4 control-label">Sub Location<span class='text-danger'>*</span></label>
-					                                      <div class="col-sm-8">
+					                                      <div class="col-sm-6">
 						                                      <div>
 							                                     <div>
-							                                        <input class="form-control" type="text" id="sublocation" name="sublocation" value="<% out.print(builderProject.getAddr2());%>">
+							                                        <input class="form-control" type="text" readonly="true" id="sublocation" name="sublocation" value="<% out.print(builderProject.getAddr2());%>">
 							                                    </div>
 							                                    <div class="messageContainer"></div>
 						                                    </div>
@@ -312,10 +314,11 @@
 					                            <div class="col-md-6">
 							                          <div class="form-group row">
 							                               <label for="example-tel-input" class="col-sm-4 control-label">Country<span class='text-danger'>*</span></label>
-							                               <div class="col-sm-8">
+							                               <div class="col-sm-6">
+							                               <input type="hidden" name="country_id" id="country_id" value="<%out.print(builderProject.getCountry().getId());%>">
 						                                       <div>
 							                                    	<div>
-								                                        <select name="country_id" id="country_id" class="form-control">
+								                                        <select name="country_id" id="country_id" class="form-control" disabled>
 																		    <option value="">Select Country</option>
 														                    <% for(Country country : listCountry){ %>
 														                    <% 	if(builderProject.getCountry().getId() == country.getId()) { 
@@ -337,10 +340,10 @@
 			                                	<div class="col-md-6">
 			                                		<div class="form-group row">
 			                                   		 	<label for="example-tel-input" class="col-sm-4 control-label">State<span class='text-danger'>*</span></label>
-			                                    		<div class="col-sm-8">
-			                                    			<div>
+			                                    		<div class="col-sm-6">
+			                                    		<input type="hidden" name="state_id" id="state_id" value="<%out.print(builderProject.getState().getId());%>"/>			                                    			<div>
 				                                    			<div>
-							                                         <select name="state_id" id="state_id" class="form-control">
+							                                         <select name="state_id" id="state_id" class="form-control" disabled>
 													                    <option value="">Select State</option>
 													                    <%
 													                    if(states != null){
@@ -362,9 +365,10 @@
 			                                   	<div class="col-md-6">
 			                                   		<div class="form-group row">
 					                                    <label for="example-tel-input" class="col-sm-4 control-label">City<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
 						                                     <div>
-						                                         <select name="city_id" id="city_id" class="form-control">
+						                                     	<input type="hidden" id="city_id" name="city_id" value="<%out.print(builderProject.getCity().getId());%>"/>
+						                                         <select name="city_id" id="city_id" class="form-control" disabled>
 												                	<option value="">Select City</option>
 												                    <%
 												                    if(cities != null){
@@ -386,11 +390,12 @@
 			                                	<div class="col-md-6">
 					                                <div class="form-group row">
 					                                    <label for="example-text-input" class="col-sm-4 control-label">Locality<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
 					                                    	<div>
 							                                    <div>
 							                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
-							                                        <select name="locality_id" id="locality_id" class="form-control">
+							                                        <input type="hidden" name="locality_id" id="locality_id" value="<%out.print(builderProject.getLocality().getId());%>"/>
+							                                        <select name="locality_id" id="locality_id" class="form-control" disabled>
 													                	<option value="">Select Locality</option>
 													                	<%
 													                	if(localities != null){
@@ -407,10 +412,10 @@
 												<div class="col-md-6">
 					                                <div class="form-group row">		
 					                                    <label for="example-text-input" class="col-sm-4 control-label">Pincode<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
 					                                    	<div>
 							                                    <div>
-							                                        <input class="form-control" type="text" id="pincode" name="pincode" autocomplete="off" value="<% out.print(builderProject.getPincode());%>"/>
+							                                        <input class="form-control" type="text"  readonly="true" id="pincode" name="pincode" autocomplete="off" value="<% out.print(builderProject.getPincode());%>"/>
 							                                    </div>
 							                                    <div class="messageContainer"></div>
 							                                    </div>
@@ -422,10 +427,10 @@
 			                                	<div class="col-md-6">
 					                                <div class="form-group row">
 					                                    <label for="example-search-input" class="col-sm-4 control-label">Latitude<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
 					                                    	<div>
 						                                    	<div>
-						                                        	<input class="form-control" type="text" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
+						                                        	<input class="form-control" type="text" readonly="true" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
 						                                   		</div>
 						                                    	<div class="messageContainer"></div>
 					                                    	</div>
@@ -435,12 +440,12 @@
 					                            <div class="col-md-6">
 					                                <div class="form-group row">  
 					                                    <label for="example-search-input" class="col-sm-4 control-label">Longitude<span class='text-danger'>*</span></label>
-					                                    <div class="col-sm-8">
+					                                    <div class="col-sm-6">
 					                                    	<div>
 							                                    <div>
-							                                        <input class="form-control" type="text" id="longitude" name="longitude" autocomplete="off" value="<% out.print(builderProject.getLongitude());%>"/>
+							                                        <input class="form-control" type="text" id="longitude" name="longitude" readonly="true" autocomplete="off" value="<% out.print(builderProject.getLongitude());%>"/>
 							                                    </div>
-							                                    <div class="messageContainer"></div>
+<!-- 							                                    <div class="messageContainer"></div> -->
 							                                </div>
 					                                    </div>
 					                                </div>
@@ -450,25 +455,25 @@
 			                               		<div class="col-sm -6">   
 					                                <div class="form-group row">
 					                                    <label for="example-tel-input" class="col-sm-4 control-label">Description</label>
-					                                    <div class="col-sm-8">
-					                                        <textarea class="form-control" id="description" name="description"><% out.print(builderProject.getDescription());%></textarea>
+					                                    <div class="col-sm-6">
+					                                        <textarea class="form-control" id="description"  name="description"><% out.print(builderProject.getDescription());%></textarea>
 					                                    </div>
 					                                 </div>
 					                              </div>
 					                              <div class="col-sm -6">   
 					                                <div class="form-group row">  
 					                                    <label for="example-tel-input" class="col-sm-4 control-label">Highlight(USP)</label>
-					                                    <div class="col-sm-8">
-					                                    	<textarea class="form-control" id="highlight" name="highlight"><% out.print(builderProject.getHighlights());%></textarea>
+					                                    <div class="col-sm-6">
+					                                    	<textarea class="form-control" id="highlight"  name="highlight"><% out.print(builderProject.getHighlights());%></textarea>
 					                                    </div>
-					                                    <div class="messageContainer"></div>
+<!-- 					                                    <div class="messageContainer"></div> -->
 					                                </div>
 					                            </div> 
 			                                </div>
 			                                <input type="hidden" id="status" name="status" value="<%out.print(builderProject.getStatus());%>"/>
 			                            
 		                                	<div class="offset-sm-5 col-sm-7">
-		                                        <button type="submit" name="basicbtn" class="btn btn-info waves-effect waves-light m-t-10">Submit</button>
+		                                        <button type="submit" name="basicbtn" class="btn btn-submit waves-effect waves-light m-t-10">Submit</button>
 		                                 	</div>
 		                               </form>
 	                               </div>
@@ -652,7 +657,7 @@
 	                                 </div>
 	                                 </div>
 	                                <div class="offset-sm-5 col-sm-7">
-	                                        <button type="submit" id="detailbtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
+	                                        <button type="submit" id="detailbtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
 	                                 </div>
 	                                </form>   
 	                            </div>
@@ -664,7 +669,7 @@
 											<div class="row">
 												<div class="col-md-6">
 			                                	 	<div class="form-group row">
-			                                    		<label for="example-text-input" class="col-sm-6 col-form-label">Pricing Unit<span class='text-danger'>*</span></label>
+			                                    		<label for="example-text-input" class="col-sm-4 col-form-label">Pricing Unit<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6"> 
 			                                    			<div>
 				                                        		<select name="base_unit" id="base_unit" class="form-control">
@@ -687,7 +692,7 @@
 			                                      </div>
 			                                      <div class="col-md-6">
 				                                      <div class="form-group row">
-				                                    		<label for="example-text-input" class="col-sm-6 col-form-label">Base Rate<span class='text-danger'>*</span></label>
+				                                    		<label for="example-text-input" class="col-sm-4 col-form-label">Base Rate<span class='text-danger'>*</span></label>
 						                                    <div class="col-sm-6">
 						                                    	<div>
 						                                    		<div>
@@ -702,7 +707,7 @@
 					                        <div class="row">
 					                        	<div class="col-md-6">
 					                                <div class="form-group row">
-				        		                            <label for="example-search-input" class="col-sm-6 col-form-label">Floor Rising Rate<span class='text-danger'>*</span></label>
+				        		                            <label for="example-search-input" class="col-sm-4 col-form-label">Floor Rising Rate<span class='text-danger'>*</span></label>
 				                		                    <div class="col-sm-6">
 				                		                    	<div>
 						                		                    <div>
@@ -715,7 +720,7 @@
 				                                </div>
 				                                <div class="col-md-6"> 	
 				                                	<div class="form-group row">
-				                                    		<label for="example-search-input" class="col-sm-6 col-form-label">Application Post<span class='text-danger'>*</span></label>
+				                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Application Post<span class='text-danger'>*</span></label>
 						                                    <div class="col-sm-6">
 						                                    <div>
 						                                        <input class="form-control" type="text" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
@@ -728,7 +733,7 @@
 	                                		<div class="row">
 	                                			<div class="col-sm-6">
 			                                 		<div class="form-group row">
-			                                    		<label for="example-tel-input" class="col-sm-6 col-form-label">Maintainence Charge<span class='text-danger'>*</span></label>
+			                                    		<label for="example-tel-input" class="col-sm-4 col-form-label">Maintainence Charge<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 					                                    		<div>
@@ -741,7 +746,7 @@
 			                                    </div>
 			                                    <div class="col-sm-6">
 			                                    	<div class="form-group row">
-			                                    		<label for="example-tel-input" class="col-sm-6 col-form-label">Tenure</label>
+			                                    		<label for="example-tel-input" class="col-sm-4 col-form-label">Tenure</label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 					                                    		<div>
@@ -756,7 +761,7 @@
 			                                <div class="row">
 			                                	<div class="col-sm-6">	
 					                                <div class="form-group row">
-			        		                            <label for="example-tel-input" class="col-sm-6 col-form-label">Aminities facing Rate<span class='text-danger'>*</span></label>
+			        		                            <label for="example-tel-input" class="col-sm-4 col-form-label">Aminities facing Rate<span class='text-danger'>*</span></label>
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 					                		                    <div>
@@ -769,7 +774,7 @@
 			                                	</div>
 			                                	<div class="col-sm-6">
 			                                		<div class="form-group row">
-			                                    		<label for="example-tel-input" class="col-sm-6 col-form-label">Parking<span class='text-danger'>*</span></label>
+			                                    		<label for="example-tel-input" class="col-sm-4 col-form-label">Parking<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
@@ -784,7 +789,7 @@
 			                                <div class="row">
 			                                	<div class="col-sm-6">
 					                                <div class="form-group row">
-			        		                            <label for="example-text-input" class="col-sm-6 col-form-label">Stamp Duty<span class='text-danger'>*</span></label>
+			        		                            <label for="example-text-input" class="col-sm-4 col-form-label">Stamp Duty<span class='text-danger'>*</span></label>
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 				                		                    	<div>
@@ -797,7 +802,7 @@
 			                                   </div>
 			                                   <div class="col-sm-6">
 			                                		<div class="form-group row">
-			                                   			<label for="example-text-input" class="col-sm-6 col-form-label">Tax<span class='text-danger'>*</span></label>
+			                                   			<label for="example-text-input" class="col-sm-4 col-form-label">Tax<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
@@ -812,7 +817,7 @@
 			                                <div class="row">
 			                                	 <div class="col-sm-6">
 			                                		<div class="form-group row">
-			                                    		<label for="example-search-input" class="col-sm-6 col-form-label">VAT<span class='text-danger'>*</span></label>
+			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">VAT<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
@@ -825,7 +830,7 @@
 			                                    </div>
 			                                    <div class="col-sm-6">
 			                                    	<div class="form-group row">	
-			                                    		<label for="example-search-input" class="col-sm-6 col-form-label">Tech Fees<span class='text-danger'>*</span></label>
+			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Tech Fees<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 			                                        			<input class="form-control" type="text" id="tech_fee" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
@@ -836,68 +841,68 @@
 			                                	</div>
 			                                </div>
 			                                <div class="offset-sm-5 col-sm-7">
-	        	                               	<button type="submit" id="pricebtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
+	        	                               	<button type="submit" id="pricebtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
 	            		                     </div>
 	                    	            </form>
                                 	</div>
              					</div>
                                  <div id="vimessages3" class="tab-pane" aria-expanded="false">        
                                  	<form id="paymentfrm" name="paymentfrm" method="post" action=""  enctype="multipart/form-data">
-                                 	 <input type="hidden" id="id" name="id" value="<% out.print(project_id);%>"/>
-                                   	<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(projectPaymentInfos.size()+1);%>"/>
-                                   	<% 	int i = 1;
-                                   	if(projectPaymentInfos != null){
-                                   			for(BuilderProjectPaymentInfo projectPaymentInfo :projectPaymentInfos) {  
-											%>
-											<input type="hidden" id="schedule_id" name="schedule_id[]" value="<%out.print(projectPaymentInfo.getId());%>"/>
-											<!--  <div class="row" id="schedule- --><% //out.print(i); %>
-											<% if(i > 1) { %>
-												<hr/>
-												<% } %>
-										
-	                                	<div class="form-group row" id="payment_schedule">
-	                                    <label for="example-search-input" class="col-sm-2 col-form-label">Milestone<span class='text-danger'>*</span></label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-sm-2 col-form-label">% of net payable<span class='text-danger'>*</span></label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
-	                                    </div>
-<!-- 	                                    <label for="example-search-input" class="col-sm-1 col-form-label">Amount<span class='text-danger'>*</span></label> -->
-<!-- 	                                    <div class="col-2"> -->
-<%-- 	                                        <input class="form-control" type="text" id="amount" name="amount[]" value="<% //if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/> --%>
-<!-- 	                                    </div> -->
-	                                </div>
-	                               <%}}else{ %>
-	                               <div class="form-group row" id="payment_schedule">
-	                               		<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>
-	                                    <label for="example-search-input" class="col-sm-2 col-form-label">Milestone<span class='text-danger'>*</span></label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="schedule" name="schedule[]" value=""/>
-	                                    </div>
-	                                    <label for="example-search-input" class="col-sm-2 col-form-label">% of net payable<span class='text-danger'>*</span></label>
-	                                    <div class="col-2">
-	                                        <input class="form-control" type="text" id="payable" name="payable[]" value=""/>
-	                                    </div>
-<!-- 	                                    <label for="example-search-input" class="col-sm-1 col-form-label">Amount<span class='text-danger'>*</span></label> -->
-<!-- 	                                    <div class="col-2"> -->
-<%-- 	                                        <input class="form-control" type="text" id="amount" name="amount[]" value="<% //if(projectPaymentInfo.getAmount() != null) { out.print(projectPaymentInfo.getAmount());}%>"/> --%>
-<!-- 	                                    </div> -->
-	                                </div>
-	                                <%} %>
-	                                <div>
-											<div class="col-lg-12">
+                                 	 	<input type="hidden" id="project_id" name="project_id" value="<% out.print(project_id);%>"/>
+                                   		<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(projectPaymentInfos.size()+1000);%>"/>
+                                   		<div id="payment_schedule">
+	                                   	<% 	int i = 1;
+	                                   	if(projectPaymentInfos != null){
+	                                   			for(BuilderProjectPaymentInfo projectPaymentInfo :projectPaymentInfos) {  
+												%>
+												<input type="hidden" id="schedule_id" name="schedule_id[]" value="<%out.print(projectPaymentInfo.getId());%>"/>
+												  <div class="row" id="schedule-<% out.print(i); %>">
+												<% if(i > 1) { %>
+													<hr/>
+													<% } %>
+														<div class="col-lg-12" style="padding-bottom:5px;">
+															<span class="pull-right"><a href="javascript:deleteSchudle(<% out.print(projectPaymentInfo.getId()); %>);" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span>
+														</div>
+														<div class="col-sm-6">
+				                                			<div class="form-group row">
+							                                    <label for="example-search-input" class="col-sm-4 control-label">Milestone<span class='text-danger'>*</span></label>
+				                                    			<div class="col-sm-6">
+				                                    				<div>
+				                                        				<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
+					                                    			</div>
+					                                    			<div class="messageContainer"></div>
+					                                 			</div>
+					                                 		</div>
+					                                 	</div>
+					                                 	<div class="col-sm-6">
+					                                 		<div class="form-group row">
+				                                    			<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class='text-danger'>*</span></label>
+				                                    			<div class="col-sm-6">
+				                                    				<div>
+				                                        				<input class="form-control" type="text" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
+					                                    			</div>
+					                                    			<div class="messageContainer"></div>
+					                                  			</div>
+				                                			</div>
+				                               			</div>
+			                               			
+	                               				</div>
+	                               <%i++;}}%>
+	                               		</div>
+	                               		<div>
+											<div class="col-sm-12">
 												<span class="pull-right">
-													<a href="javascript:addMoreSchedule();" class="btn btn-info btn-sm">+ Add More Schedule</a>
+													<a href="javascript:addMoreSchedule();" class="btn btn-submit btn-sm">+ Add More Schedule</a>
 												</span>
 											</div>
 										</div>
-	                                <div class="offset-sm-5 col-sm-7">
-                                        <button type="submit" id="paymentbtn" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
-                                    </div>
-                                </form>
-                            </div>
+										<div class="row">
+			                                <div class="offset-sm-5 col-sm-7">
+		                                        <button type="submit" id="paymentbtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
+		                                    </div>
+	                                 	</div>
+	                                </form>
+	                           </div>
                          
                                <div id="vimessages4" class="tab-pane" aria-expanded="true">
                                 <div id="offer" class="tab-pane fade active in">
@@ -928,10 +933,14 @@
 																		</div>
 																	</div>
 																	<div class="col-lg-3 margin-bottom-5">
-																		<div class="form-group" id="error-discount">
-																			<label class="control-label col-sm-8">Discount(%) <span class="text-danger">*</span></label>
+																		<div class="form-group" id="error-applicable_on">
+																			<label class="control-label col-sm-6">Offer Type </label>
 																			<div class="col-sm-6">
-																				<input type="text" class="form-control discount" id="discount<%out.print(j); %>" name="discount[]" value="<% out.print(projectOfferInfo.getPer()); %>" onkeyup=" javascript:onlyNumber(<%out.print(j); %>);">
+																				<select class="form-control" id="offer_type<%out.print(j); %>"  onchange="txtEnabaleDisable(<%out.print(j); %>);" name="offer_type[]">
+																					<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																					<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																					<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+																				</select>
 																			</div>
 																			<div class="messageContainer"></div>
 																		</div>
@@ -940,7 +949,7 @@
 																		<div class="form-group" id="error-discount_amount">
 																			<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
 																			<div class="col-sm-6">
-																				<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% out.print(projectOfferInfo.getAmount()); %>">
+																				<input type="text" class="form-control" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
 																			</div>
 																			<div class="messageContainer"></div>
 																		</div>
@@ -954,19 +963,7 @@
 																			<div class="messageContainer"></div>
 																		</div>
 																	</div>
-																	<div class="col-lg-3 margin-bottom-5">
-																		<div class="form-group" id="error-applicable_on">
-																			<label class="control-label col-sm-6">Offer Type </label>
-																			<div class="col-sm-6">
-																				<select class="form-control" id="offer_type" name="offer_type[]">
-																					<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
-																					<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
-																					<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
-																				</select>
-																			</div>
-																			<div class="messageContainer"></div>
-																		</div>
-																	</div>
+																	
 																	<div class="col-lg-4 margin-bottom-5">
 																		<div class="form-group" id="error-apply">
 																			<label class="control-label col-sm-6">Status </label>
@@ -981,75 +978,7 @@
 																	</div>
 																</div>
 																<% j++; } %>
-<%-- 																<div class="row" id="offer-<% out.print(j);%>"> --%>
-<%-- 																<% if(j > 1) { %> --%>
-<!-- 																<hr/> -->
-<%-- 																<% } %> --%>
-<!-- 																	<div class="col-lg-12" style="padding-bottom:5px;"> -->
-<!-- 																		<span class="pull-right"><a href="javascript:removeOffer(1);" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span> -->
-<!-- 																	</div> -->
-<!-- 																	<div class="col-lg-5 margin-bottom-5"> -->
-<!-- 																		<div class="form-group" id="error-offer_title"> -->
-<!-- 																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label> -->
-<!-- 																			<div class="col-sm-8"> -->
-<!-- 																				<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""> -->
-<!-- 																			</div> -->
-<!-- 																			<div class="messageContainer"></div> -->
-<!-- 																		</div> -->
-<!-- 																	</div> -->
-<!-- 																	<div class="col-lg-3 margin-bottom-5"> -->
-<!-- 																		<div class="form-group" id="error-discount"> -->
-<!-- 																			<label class="control-label col-sm-8">Discount(%) <span class="text-danger">*</span></label> -->
-<!-- 																			<div class="col-sm-6"> -->
-<!-- 																				<input type="text" class="form-control" id="discount" name="discount[]" value=""> -->
-<!-- 																			</div> -->
-<!-- 																			<div class="messageContainer"></div> -->
-<!-- 																		</div> -->
-<!-- 																	</div> -->
-<!-- 																	<div class="col-lg-4 margin-bottom-5"> -->
-<!-- 																		<div class="form-group" id="error-discount_amount"> -->
-<!-- 																			<label class="control-label col-sm-6">Discount Amount </label> -->
-<!-- 																			<div class="col-sm-6"> -->
-<!-- 																				<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""> -->
-<!-- 																			</div> -->
-<!-- 																			<div class="messageContainer"></div> -->
-<!-- 																		</div> -->
-<!-- 																	</div> -->
-<!-- 																	<div class="col-lg-5 margin-bottom-5"> -->
-<!-- 																		<div class="form-group" id="error-applicable_on"> -->
-<!-- 																			<label class="control-label col-sm-4">Description </label> -->
-<!-- 																			<div class="col-sm-8"> -->
-<!-- 																				<textarea class="form-control" id="description" name="description[]"></textarea> -->
-<!-- 																			</div> -->
-<!-- 																			<div class="messageContainer"></div> -->
-<!-- 																		</div> -->
-<!-- 																	</div> -->
-<!-- 																	<div class="col-lg-3 margin-bottom-5"> -->
-<!-- 																		<div class="form-group" id="error-applicable_on"> -->
-<!-- 																			<label class="control-label col-sm-6">Offer Type </label> -->
-<!-- 																			<div class="col-sm-6"> -->
-<!-- 																				<select class="form-control" id="offer_type" name="offer_type[]"> -->
-<!-- 																					<option value="1">Percentage</option> -->
-<!-- 																					<option value="2">Flat Amount</option> -->
-<!-- 																					<option value="3">Other</option> -->
-<!-- 																				</select> -->
-<!-- 																			</div> -->
-<!-- 																			<div class="messageContainer"></div> -->
-<!-- 																		</div> -->
-<!-- 																	</div> -->
-<!-- 																	<div class="col-lg-4 margin-bottom-5"> -->
-<!-- 																		<div class="form-group" id="error-apply"> -->
-<!-- 																			<label class="control-label col-sm-6">Status </label> -->
-<!-- 																			<div class="col-sm-6"> -->
-<!-- 																				<select class="form-control" id="offer_status" name="offer_status[]"> -->
-<!-- 																					<option value="1">Active</option> -->
-<!-- 																					<option value="0">Inactive</option> -->
-<!-- 																				</select> -->
-<!-- 																			</div> -->
-<!-- 																			<div class="messageContainer"></div> -->
-<!-- 																		</div> -->
-<!-- 																	</div> -->
-<!-- 																</div> -->
+
 															</div>
 															<div>
 																<div class="col-lg-12">
@@ -1063,7 +992,7 @@
 											</div>
 											<div class="row">
 												 <div class="offset-sm-5 col-sm-7">
-	                                        		<button type="submit" id="offerbtn" class="btn btn-info waves-effect waves-light m-t-10">SAVE</button>
+	                                        		<button type="submit" id="offerbtn" class="btn btn-submit waves-effect waves-light m-t-10">SAVE</button>
 	                                   			</div>
 	                                   		</div>
 											</form>
@@ -1088,6 +1017,34 @@
 <script src="../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script>
+function validPerAmount(id){
+	if($("#offer_type"+id).val()==1){
+			 isNumber(event, this);
+				 validPercentage(id);
+	}
+	if($("#offer_type"+id).val()==2){
+		onlyNumber(id);
+	}
+}
+function validPercentage(id){
+	 var x = $("#discount_amount"+id).val();
+	 if(isNaN(x) || x<0 || x >100){
+		 alert("The percentage must be between 0 and 100");
+		 $("#discount_amount"+id).val('');
+	 }
+}
+function onlyNumber(id){
+	
+	 var $th = $("#discount_amount"+id);
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
+}
+function vaildPayablePer(id){
+	var x = $("#payable"+id).val();
+	if( x<0 || x >100){
+		alert("The percentage must be between 0 and 100");
+		$("#payable"+id).val('');
+	}
+}
 $('#detailfrm').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -1217,22 +1174,12 @@ $("#amenity_weightage").keypress(function(event){
 $("#building_weightage").keypress(function(event){
 	return isNumber(event, this)
 });
-// function isNumber(evt, element) {
-
-//     var charCode = (evt.which) ? evt.which : event.keyCode
-
-//     if (
-//         (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
-//         (charCode < 48 || charCode > 57))
-//         return false;
-
-//     return true;
-// } 
+ 
 
 function onlyNumber(id){
 	
 	 var $th = $("#discount_amount"+id);
-	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
 }
 $('#schedule').keyup(function() {
     var $th = $(this);
@@ -1296,33 +1243,110 @@ $("#city_id").change(function(){
 		},'json');
 	}
 });
+function txtEnabaleDisable(id){
+	$th = $("#offer_type"+id).val();
+	 if($th == 3){
+	  	$('#discount_amount'+id).attr('disabled', true);
+	  	$("#discount_amount"+id).val('');
+	 }else{
+		$('#discount_amount'+id).attr('disabled', false); 
+		$("#discount_amount"+id).val('');
+	 }
+}
 
-// $('#offerfrm').bootstrapValidator({
-// 	container: function($field, validator) {
-// 		return $field.parent().next('.messageContainer');
-//    	},
-//     feedbackIcons: {
-//         validating: 'glyphicon glyphicon-refresh'
-//     },
-//    // excluded: ':disabled',
-//     fields: {
-//     	'offer_title[]': {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Offer title is required and cannot be empty'
-//                 }
-//             }
-//         }
-//     }
-// }).on('success.form.bv', function(event,data) {
-// 	// Prevent form submission
-// 	event.preventDefault();
-// 	alert("success");
-// 	//updateProject();
+//needed to change color of div on click event.
+// $("#project").click(function(){
+// 	var check = $("#project").hasClass('top-blue-box');
+// 	if(!check){
+// 		$("#project").removeClass('top-white-box');
+// 		$("#project").addClass('top-blue-box');
+// 		var isBuilding = $("#building").hasClass('top-blue-box');
+// 		if(isBuilding){
+// 			$("#building").removeClass('top-blue-box');
+// 			$("#building").addClass('top-white-box');
+// 		}
+// 		var isFloor = $("#floor").hasClass('top-blue-box');
+// 		if(isFloor){
+// 			$("#floor").removeClass('top-blue-box');
+// 			$('#floor').addClass('top-white-box');
+// 		}
+// 		var isFlat = $("#flat").hasClass('top-blue-box');
+// 		if(isFlat){
+// 			$("#flat").removeClass('top-blue-box');
+// 			$("#flat").addClass('top-white-box');
+// 		}
+// 	}
 // });
-    
 
+// $("#building").click(function(){
+// 	 var check = $("#building").hasClass('top-lue-box');
+// 	 if(!check){
+// 		 $("#building").removeClass('top-white-box');
+// 		 $("#building").addClass('top-blue-box');
+// 		 var isProject = $("#project").hasClass('top-blue-box');
+// 		 if(isProject){
+// 			 $("#project").removeClass('top-blue-box');
+// 			 $('#project').addClass('top-white-box');
+// 		 }
+// 		 var isFloor = $('#floor').hasClass('top-blue-box');
+// 		 if(isFloor){
+// 			 $('#floor').removeClass('top-blue-box');
+// 			 $('#floor').addClass('top-white-box');
+// 		 }
+// 		 var isFlat = $("#flat").hasClass('top-blue-box');
+// 		 if(isFlat){
+// 			 $('#flat').removeClass('top-blue-box');
+// 			 $('#flat').addClass('top-white-box');
+// 		 }
+// 	 }
+	
+// });
 
+// $("#floor").click(function(){
+// 	var check = $("#floor").hasClass('top-blue-box');
+// 	if(!check){
+// 		$("#floor").removeClass('top-white-box');
+// 		$('#floor').addClass('top-blue-box');
+// 		var isProject = $("#project").hasClass('top-blue-box');
+// 		if(isProject){
+// 			$('#project').removeClass('top-blue-box');
+// 			$("#project").addClass('top-white-box');
+// 		}
+// 		var isBuilding = $('#building').hasClass('top-blue-box');
+// 		if(isBuilding){
+// 			$("#building").removeClass('top-blue-box');
+// 			$("#building").addClass('top-white-box');
+// 		}
+// 		var isFlat = $("#flat").hasClass('top-blue-box');
+// 		if(isFlat){
+// 			$('#flat').removeClass('top-blue-box');
+// 			$("#flat").addClass('top-white-box');
+// 		}
+// 	}
+// });
+
+// $("#flat").click(function(){
+// 	var check = $('#flat').hasClass('top-blue-top');
+// 	if(!check){
+// 		$('#flat').removeClass('top-white-box');
+// 		$('#flat').addClass('top-blue-box');
+// 		var isProject = $('#project').hasClass('top-blue-box');
+// 		if(isProject){
+// 			$('#project').removeClass('top-blue-box');
+// 			$('#project').addClass('top-white-box');
+// 		}
+// 		var isBuilding = $('#building').hasClass('top-blue-box');
+// 		if(isBuilding){
+// 			$('#building').removeClass('top-blue-box');
+// 			$('#building').addClass('top-white-box');
+// 		}
+// 		var isFloor = $('#floor').hasClass('top-blue-box');
+// 		if(isFloor){
+// 			$('#floor').removeClass('top-blue-box');
+// 			$('#floor').addClass('top-white-box');
+// 		}
+// 	}
+// });
 
 $('#basicfrm').bootstrapValidator({
 	container: function($field, validator) {
@@ -1459,8 +1483,11 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#basicresponse").html(resp.message);
         $("#basicresponse").show();
         alert(resp.message);
+        $('.active').removeClass('active').next('li').addClass('active');
+        $("#vimessages2").addClass('active');
   	}
 }
+
 
 $('#pricingfrm').bootstrapValidator({
 	container: function($field, validator) {
@@ -1597,6 +1624,8 @@ function showPriceResponse(resp, statusText, xhr, $form){
         $("#pricingresponse").html(resp.message);
         $("#pricingresponse").show();
         alert(resp.message);
+        $('.active').removeClass('active').next('li').addClass('active');
+        $("#vimessages3").addClass('active');
   	}
 }
 
@@ -1657,11 +1686,10 @@ function saveProjectDetails(){
 	    async: false,
 	    success: function(data) {
 			if (data.status == 0) {
-				//alert(data.id);
-			//	alert(data.status);
+				
 				alert(data.message);
 			} else {
-			//	alert(data.id);
+			
 				alert(data.message);
 			}
 		},
@@ -1755,111 +1783,10 @@ function showPaymentResponse(resp, statusText, xhr, $form){
         $("#paymentresponse").html(resp.message);
         $("#paymentresponse").show();
         alert(resp.message);
+        $('.active').removeClass('active').next('li').addClass('active');
+        $("#vimessages4").addClass('active');
   	}
 }
-
-// $("#paymentbtn").click(function(){
-// 	var paymentInfo = [];
-// 	var payable = [];
-// 	var amount = [];
-// 	$('input[name="payable[]"]').each(function(index) {
-// 		payable.push($(this).val());
-// 	});
-// 	$('input[name="amount[]"]').each(function(index) {
-// 		amount.push($(this).val());
-// 	});
-// 	$('input[name="schedule[]"]').each(function(index) {
-// 		if($(this).val() != "") {
-// 			paymentInfo.push({schedule:$(this).val(),payable:payable[index],amount:amount[index],status:1,builderProject:{id:$("#id").val()}});
-// 		}
-// 	});
-// 	var project = {id:$("#id").val()};
-// 	var final_data = {builderProjectPaymentInfos:paymentInfo,builderProject:project}
-// 	if(paymentInfo.length > 0) {
-// 		$.ajax({
-// 		    url: '${baseUrl}/webapi/project/payment/update',
-// 		    type: 'POST',
-// 		    data: JSON.stringify(final_data),
-// 		    contentType: 'application/json; charset=utf-8',
-// 		    dataType: 'json',
-// 		    async: false,
-// 		    success: function(data) {
-// 				if (data.status == 0) {
-// 					alert(data.message);
-// 				} else {
-// 					alert(data.message);
-// 				}
-// 			},
-// 			error : function(data)
-// 			{
-// 				alert("Fail to save data");
-// 			}
-			
-// 		});
-// 	} else {
-// 		alert("Please enter payment schedule details");
-// 	}
-// });
-
-// $("#offerbtn").click(function(){
-// 	var offerInfo = [];
-// 	var discount = [];
-// 	var amount = [];
-// 	var description = [];
-// 	var type = [];
-// 	var status = [];
-// 	$('input[name="discount[]"]').each(function(index) {
-// 		discount.push($(this).val());
-// 	});
-// 	$('input[name="discount_amount[]"]').each(function(index) {
-// 		amount.push($(this).val());
-// 	});
-// 	$('input[name="description[]"]').each(function(index) {
-// 		description.push($(this).val());
-// 	});
-// 	$('select[name="offer_type[]"] option:selected').each(function(index) {
-// 		type.push($(this).val());
-// 	});
-// 	$('select[name="offer_status[]"] option:selected').each(function(index) {
-// 		status.push($(this).val());
-// 	});
-// 	$('input[name="offer_title[]"]').each(function(index) {
-// 		if($(this).val() != "") {
-// 			offerInfo.push({title:$(this).val(),per:discount[index],amount:amount[index],description:description[index],type:type[index],status:status[index],builderProject:{id:$("#id").val()}});
-// 		}
-// 	});
-// 	var project = {id:$("#id").val()};
-// 	var final_data = {builderProjectOfferInfos:offerInfo,builderProject:project}
-// 	if(offerInfo.length > 0) {
-// 		$.ajax({
-// 		    url: '${baseUrl}/webapi/project/offer/update',
-// 		    type: 'POST',
-// 		    data: JSON.stringify(final_data),
-// 		    contentType: 'application/json; charset=utf-8',
-// 		    dataType: 'json',
-// 		    async: false,
-// 		    success: function(data) {
-// 				if (data.status == 0) {
-// 					alert(data.message);
-// 				} else {
-// 					alert(data.message);
-// 				}
-// 			},
-// 			error : function(data)
-// 			{
-// 				alert("Fail to save data");
-// 			}
-			
-// 		});
-// 	} else {
-// 		alert("Please enter offer details");
-// 	}
-// });
-
-
-
-
-
 
 $('#offerfrm').bootstrapValidator({
 	container: function($field, validator) {
@@ -1904,7 +1831,7 @@ $('#offerfrm').bootstrapValidator({
 	updateProjectOffers();
 });
 function updateProjectOffers(){
-	alert("Hello");
+	//alert("Hello");
 		var options = {
 		 		target : '#offerresponse', 
 		 		beforeSubmit : showOfferRequest,
@@ -1935,59 +1862,12 @@ function showOfferResponse(resp, statusText, xhr, $form){
         alert(resp.message);
   	}
 }
-// function addMoreOffer() {
-// 	var offers = parseInt($("#offer_count").val());
-// 	offers++;
-// 	var html = '<div class="form-group row" id="offer-"'+offers+'>'
-// 		+'<label for="example-search-input" class="col-2 col-form-label">Offer Title*</label>'
-// 		+'<div class="col-2">'
-//             +'<input class="form-control" type="text" id="offer_title" name="offer_title[]" value=""/>'
-//         +'</div>'
-//         +'<div class="messageContainer"></div>'
-//         +'<label for="example-search-input" class="col-2 col-form-label">Discount(%)*</label>'
-//         +'<div class="col-2">'
-//             +'<input class="form-control" type="text" id="discount" name="discount[]" value=""/>'
-//         +'</div>'
-//         +'<div class="messageContainer"></div>'
-//         +'<label for="example-search-input" class="col-2 col-form-label">Discount Amount</label>'
-//         +'<div class="col-2">'
-//             +'<input class="form-control" type="text" id="discount_amount" name="discount_amount[]" value=""/>'
-//         +'</div>'
-//         +'<div class="messageContainer"></div>'
-//         +'<label for="example-search-input" class="col-2 col-form-label">Description</label>'
-//         +'<div class="col-2">'
-//             +'<textarea class="form-control" id="description" name="description[]" ></textarea>'
-//         +'</div>'
-//         +'<label for="example-search-input" class="col-2 col-form-label">Offer Type</label>'
-//         +'<div class="col-2">'
-//         +'<select class="form-control" id="offer_type" name="offer_type[]">'
-// 			+'<option value="1">Percentage</option>'
-// 			+'<option value="2">Flat Amount</option>'
-// 			+'<option value="3">Other</option>'
-// 		+'</select>'
-//         +'</div>'
-//         +'<label for="example-search-input" class="col-2 col-form-label">Status</label>'
-//         +'<div class="col-2">'
-//          +'<select class="form-control" id="offer_status" name="offer_status[]">'
-// 			+'<option value="1" >Active</option>'
-// 			+'<option value="0" >Inactive</option>'
-// 		+'</select>'
-// 		+'</div>'
-//     +'</div>'
-//  +'</div>';
-// 	$("#offer_area").append(html);
-// 	$("#offer_count").val(offers);
-// }
-// function removeOffer(id) {
-// 	var a=$("#offer").val();
-// 	alert("remove="+a);
-// 	$("#offer-"+id).remove();
-// }
+
 
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
-	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="'+offers+'" />'
+	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="" />'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>'
 		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-offer_title">'
@@ -2075,48 +1955,46 @@ function removeOffer(id) {
 
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
+	alert(schedule_count);
 	schedule_count++;
-	var html = '<div class="row" id="schedule-'+schedule_count+'">'
-				+'<hr/>'
-				+'<div class="col-lg-5 margin-bottom-5">'
-				+'<div class="form-group" id="error-schedule">'
-				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-				+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-payable">'
-				+'<label class="control-label col-sm-8">% of Net Payable </label>'
-				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control" id="payable" name="payable[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-3 margin-bottom-5">'
-				+'<div class="form-group" id="error-amount">'
-				+'<label class="control-label col-sm-6">Amount </label>'
-				+'<div class="col-sm-6">'
-				+'<input type="text" class="form-control" id="amount" name="amount[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-				+'</div>'
-				+'</div>'
-				+'<div class="col-lg-1">'
-				+'<span><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs">x</a></span>'
-				+'</div>'
-			+'</div>';
+	var html = +'<div class="row" id="schedule-'+schedule_count+'>'
+			   +'<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>'
+			   +'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>'
+			   +'<div class="row">'
+			   +'<div class="col-sm-6">'
+			   +'<div class="form-group row">'
+			   +'<label for="example-search-input" class="col-sm-4 col-form-label">Milestone<span class="text-danger">*</span></label>'
+			   +'<div class="col-sm-6">'
+			   +'<div>'
+			   +'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
+			   +'</div>'
+			   +'<div class="messageContainer"></div>'
+			   +'</div>'
+			   +'</div>'
+			   +'</div>'
+			   +'<div class="col-sm-6">'
+			   +'<div class="form-group row">'
+			   +'<label for="example-search-input" class="col-sm-4 col-form-label">% of net payable<span class="text-danger">*</span></label>'
+			   +'<div class="col-sm-6">'
+			   +'<div>'
+			   +'<input class="form-control" type="text" id="payable'+schedule_count+'" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress="return isNumber(event, this);" name="payable[]" value=""/>'
+			   +'</div>'
+			   +'<div class="messageContainer"></div>'
+			   +'</div>'
+			   +'</div>'
+			   +'</div>'
+			   +'</div>'
+			   +'</div>'
+			   +'</div>';
 	$("#payment_schedule").append(html);
 	$("#schedule_count").val(schedule_count);
 }
 function removeSchedule(id) {
+	//alert("Remove schedule "+id);
 	$("#schedule-"+id).remove();
 }
 function deleteOffer(id) {
-	var b=$("#offer").val();
+	
 	var flag = confirm("Are you sure ? You want to delete offer ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/offer/delete/"+id, { }, function(data){
@@ -2125,6 +2003,19 @@ function deleteOffer(id) {
 				$("#offer-"+id).remove();
 			}
 		});
+	}
+}
+
+function deleteSchudle(id){
+	
+	var flag = confirm("Are you sure ? You want to delete schudle ?");
+	if(flag){
+// 		$.get("${baseUrl}/webapi/project/payment/delete/"+id,{}, function(data){
+// 			alert(data.message);
+// 			if(data.status == 1){
+				$("#schedule-"+id).remove();
+// 			}
+// 		})
 	}
 }
 </script>

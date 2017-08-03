@@ -239,9 +239,7 @@
                              
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
-                       <select class="selectpicker" data-style="form-control" id="locality_id" name="locality_id">
-                                        <option value="0">Locality</option>
-                         </select>
+                      <input class="form-control" type="text" id="locality_name" name="locality_name">
                               
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -435,12 +433,6 @@
    
     $select_project = $("#project_id").selectize({
 		persist: false,
-// 		create: function(input) {
-// 		   return {
-// 		       value: input,
-// 		       text: input
-// 		   }
-// 		},
 		 onChange: function(value) {
 			 getProjectFilterList(value);
 		 },
@@ -455,23 +447,11 @@
     <%if(project_size_list > 0){%>
     	select_project = $select_project[0].selectize;
     <%}%>
-    <%//int locality_size_list = 0;
-    ///int locality_count=0;%>
+
    $select_city = $("#city_id").selectize({
 	  persist:false,
 	  onChange:function(value){
-		  $.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
-	    		var html = '<option value="">Select Locality</option>';
-	    		$(data).each(function(index){
-	    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-	    			<% //locality_count++;%>
-	    		});
-	    		$("#locality_id").html(html);
-	    		//$("#locality_id").refreshOptions();
- 	    		$('.selectpicker').selectpicker('refresh');
-	    	},'json');
 	    	getProjectList();
-	    	<%//locality_size_list = locality_count;%>
 	  },
 	  onDropdownOpen: function(value){
 	    	 var obj = $(this);
@@ -483,50 +463,15 @@
    });
     <%if(city_size_list > 0){%>
     	select_city = $select_city[0].selectize;
-    	//select_city.clear(true);
+    	
     <%}%>
     
-//     $select_locality = $("#locality_id").selectize({
-// 	  persist:false,
-// 	  onChange:function(value){
-// 		  getProjectList();
-// 	  },
-//     onDropdownOpen: function(value){
-//    		 var obj = $(this);
-// 		 var textClear =	 $("#locality_id :selected").text();
-// 	   	 if(textClear.trim() == "Enter Locality Name"){
-// 	   		 obj[0].setValue("");
-// 	   	 }
-// 	    }
-//     });
-<%--     <%if(locality_size_list > 0){%> --%>
-// 	select_locality = $select_locality[0].selectize;
-<%-- <%}%> --%>
-// $('#locality_id').selectize({
-//     valueField: 'name',
-//     labelField: 'name',
-//     searchField: 'name',
-//     options: [],
-//     create: false,
-//     load: function(query, callback) {
-//         if (!query.length) return callback();
-//         $.ajax({
-//             url: 'http://127.0.0.1:8080/getnames.php',
-//             type: 'GET',
-//             dataType: 'json',
-//             data: {
-//                 name: query,
-//             },
-//             error: function() {
-//                 callback();
-//             },
-//             success: function(res) {
-//                 callback(res);
-//             }
-//         });
-//        getProjectList();
-//     }
-// });
+    $("#locality_name").keyup(function(){
+    	alert("Hello from locality");
+    	alert($("#locality_name").val());
+    	getProjectList();
+    });
+
 
     function addLead(){
     	window.location.href="${baseUrl }/builder/leads/new.jsp"
@@ -540,21 +485,8 @@
     function addCampaign(){
     	window.location.href="${baseUrl}/builder/campaign/new.jsp";
     }
-//     $("#city_id").change(function(){
-//     	$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
-//     		var html = '<option value="">Select Locality</option>';
-//     		$(data).each(function(index){
-//     			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-//     		});
-//     		$("#locality_id").html(html);
-//     		$('.selectpicker').selectpicker('refresh');
-//     	},'json');
-//     	getProjectList();
-//     });
-    $("#locality_id").change(function(){
-    	getProjectList();
-    });
-    
+
+      
     jQuery(document).ready(function() {
         // Switchery
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
@@ -680,15 +612,87 @@
 //     	getProjectFilterList($("#project_id").val());
 //     });
     
- function getProjectList(){
+//  function getProjectList(){
     	
-    	var html = "";
+//     	var html = "";
+// 		var image = "";
+// 		var projectName = "";
+// 		var cityName = "";
+// 		var projectId = "";
+// 		$("#project_list").empty();
+		
+// 	   $.post("${baseUrl}/webapi/project/data/list",{emp_id: $("#emp_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
+// 		   if(data == ""){
+// 			   $("#project_list").empty();
+// 			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
+// 		   }
+// 			$(data).each(function(index){
+// 				if(data[index].image != "")
+// 					image = "${baseUrl}/"+data[index].image;
+//  				else
+// // 					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
+// 					image = "";
+					
+// 				if(data[index].name != ""){
+// 					projectName = data[index].name;
+// 				}
+// 				if(data[index].city != ""){
+// 					cityName = data[index].city;
+// 				}
+// 				if(data[index].id != ""){
+// 					projectId = data[index].id;
+// 				}
+// 				html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
+// 		    		+'<div class="image">'
+//                    	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
+//                    	+'<div class="overlay">'
+//                     +'<div class="row">'
+// 	                +'<div class="col-md-6 left">'
+// 		            +'<h3>'+projectName+'</h3>'
+// 		            +'<h4>'+cityName+'</h4>'
+// 		            +'<br>'
+//                		+'<div class="bottom">'
+//                 	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
+//                 	+'</div>'
+// 	                +'</div>'
+// 	                +'<div class="col-md-6 right">'
+// 		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+data[index].completionStatus+'"></div>'
+// 		            +'<div class="bottom">'
+//                     +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
+//                     +'</div>'
+// 	                +'</div>'
+//                     +'</div>'
+//                     +'</div>'
+//                		+'</div>'
+//                		+'<div class="row">'
+<%--                		<%if(access_id == 1 || access_id==2){%> --%>
+//                		+'<div class="col-md-6 left">' 
+//                		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>'
+//                		+'</div>'
+<%--                		<%}%> --%>
+//              		+'<div class="col-md-6 center">'
+//               		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
+// 			 	 	+'</div>'
+// 			 		+'</div>'
+// 	            	+'</div>';
+// 	            		$("#project_list").append(html);
+// 	            		createGraph("graph"+projectId);
+// 			});
+// 		    },'json');
+// 	   }
+$("#locality_name").attr('disabled',true);
+ function getProjectList(){
+ 	
+ 	var html = "";
 		var image = "";
 		var projectName = "";
 		var cityName = "";
 		var projectId = "";
+		
 		$("#project_list").empty();
-	   $.post("${baseUrl}/webapi/project/data/list",{emp_id: $("#emp_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
+		if($("#city_id").val()>0)
+			$("#locality_name").attr('disabled',false);
+	   $.post("${baseUrl}/webapi/project/data/newlist",{emp_id: $("#emp_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_name : $("#locality_name").val() },function(data){
 		   if(data == ""){
 			   $("#project_list").empty();
 			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
@@ -696,8 +700,8 @@
 			$(data).each(function(index){
 				if(data[index].image != "")
 					image = "${baseUrl}/"+data[index].image;
- 				else
-// 					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
+				else
+//					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
 					image = "";
 					
 				if(data[index].name != ""){
@@ -711,34 +715,34 @@
 				}
 				html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
 		    		+'<div class="image">'
-                   	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
-                   	+'<div class="overlay">'
-                    +'<div class="row">'
+                	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
+                	+'<div class="overlay">'
+                 +'<div class="row">'
 	                +'<div class="col-md-6 left">'
 		            +'<h3>'+projectName+'</h3>'
 		            +'<h4>'+cityName+'</h4>'
 		            +'<br>'
-               		+'<div class="bottom">'
-                	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
-                	+'</div>'
+            		+'<div class="bottom">'
+             	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
+             	+'</div>'
 	                +'</div>'
 	                +'<div class="col-md-6 right">'
 		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+data[index].completionStatus+'"></div>'
 		            +'<div class="bottom">'
-                    +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
-                    +'</div>'
+                 +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
+                 +'</div>'
 	                +'</div>'
-                    +'</div>'
-                    +'</div>'
-               		+'</div>'
-               		+'<div class="row">'
-               		<%if(access_id == 1 || access_id==2){%>
-               		+'<div class="col-md-6 left">' 
-               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>'
-               		+'</div>'
-               		<%}%>
-             		+'<div class="col-md-6 center">'
-              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
+                 +'</div>'
+                 +'</div>'
+            		+'</div>'
+            		+'<div class="row">'
+            		<%if(access_id == 1 || access_id==2){%>
+            		+'<div class="col-md-6 left">' 
+            		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>'
+            		+'</div>'
+            		<%}%>
+          		+'<div class="col-md-6 center">'
+           		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
 			 		+'</div>'
 	            	+'</div>';

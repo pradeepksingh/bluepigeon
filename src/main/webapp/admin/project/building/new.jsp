@@ -641,7 +641,7 @@ function onlyNumbers(){
 function onlyNumber(id){
 	
 	 var $th = $("#discount_amount"+id);
-	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only letters and numbers.'); return ''; } ) );
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
 }
 
 $('#name').keyup(function() {
@@ -719,9 +719,7 @@ $('#payable').keypress(function (event) {
     return isNumber(event, this)
 });
 function validPer(id){
-	//alert($("#discount"+id).val());
 	var x = $("#discount"+id).val();
-	//alert(x);
 	if( x<0 || x >100){
 		alert("The percentage must be between 0 and 100");
 		$("#discount"+id).val('');
@@ -1119,8 +1117,10 @@ function txtEnabaleDisable(id){
 	alert
 	 if($th == 3){
 	  	$('#discount_amount'+id).attr('disabled', true);
+	  	 $("#discount_amount"+id).val('');
 	 }else{
 		$('#discount_amount'+id).attr('disabled', false); 
+		 $("#discount_amount"+id).val('');
 	 }
 }
 

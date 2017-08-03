@@ -156,6 +156,19 @@ public class ProjectController extends ResourceConfig {
 	}
 	
 	@POST
+	@Path("/data/newlist")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderProjectList> getProjects(
+			@FormParam("emp_id") int empId,
+			@FormParam("country_id") int countryId,
+			@FormParam("state_id") int stateId,
+			@FormParam("city_id") int cityId,
+			@FormParam("locality_name") String localityName){
+		
+		return new BuilderDetailsDAO().getProjectFilters(empId,countryId, stateId, cityId, localityName);
+	}
+	
+	@POST
 	@Path("/filter")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuilderProjectList> getProjectById(@FormParam("project_id") int projectId){
