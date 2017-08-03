@@ -2492,21 +2492,21 @@ public class ProjectDAO {
 	public void updateProjectInventory(int flatId){
 		String hql = "UPDATE BuilderProject set availbale = :availbale, inventorySold =:soldInventory, totalInventory = :totalInventory where id = :project_id ";
 		int available = 0;
-		Long totalInventory = (long)0;
-		Long soldInventory = (long)0;
+		int totalInventory = 0;
+		int soldInventory = 0;
 		BuilderFlat builderFlat = getBuilderFlatById(flatId);
 		int projectId = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
 		available = getAvaiableFlatCount(projectId);
 		soldInventory = getSoldFlatCount(projectId);
 		totalInventory = available + soldInventory;
-		Double total_inventory = (double) totalInventory;
+		//Double total_inventory =  totalInventory;
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
 		query.setParameter("availbale", available);
 		query.setParameter("soldInventory", soldInventory);
-		query.setParameter("totalInventory",total_inventory );
+		query.setParameter("totalInventory",totalInventory );
 		query.setParameter("project_id",projectId );
 		query.executeUpdate();
 		session.getTransaction().commit();
@@ -2523,13 +2523,13 @@ public class ProjectDAO {
 		return available;
 	}
 	
-	public Long getSoldFlatCount(int projectId){
-		String hql = "Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and builderFlatStatus =2 and status=1";
+	public int getSoldFlatCount(int projectId){
+		String hql = "Select id from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and builderFlatStatus =2 and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("project_id", projectId);
-		Long available = (Long) query.uniqueResult();
+		int available =  query.list().size();
 		return available;
 	}
 	public ResponseMessage updateBuildingFlat(BuilderFlat builderFlat) {

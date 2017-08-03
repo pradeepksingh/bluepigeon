@@ -300,16 +300,17 @@
 													<label class="control-label col-sm-4">Locality <span class='text-danger'>*</span></label>
 													<div class="col-sm-8">
 														<div>
-															<select name="locality_id" id="locality_id" class="form-control">
-											                	<option value="">Select Locality</option>
-											                	<% 
-											                		if(localities != null){
-											                			for(Locality locality : localities){ 
-											                				if(locality.getStatus()) {
-											                	%>
-																<option value="<% out.print(locality.getId());%>" <% if(builderProject.getLocality().getId() == locality.getId()) { %>selected<% } %>><% out.print(locality.getName());%></option>
-																<% }}} %>
-												          	</select>
+															<input type="text" class="form-control" id="locality_name" name="locality_name" autocomplete="off" value="<% out.print(builderProject.getLocalityName());%>"/>
+<!-- 															<select name="locality_id" id="locality_id" class="form-control"> -->
+<!-- 											                	<option value="">Select Locality</option> -->
+<%-- 											                	<%  --%>
+<!-- // 											                		if(localities != null){ -->
+<!-- // 											                			for(Locality locality : localities){  -->
+<!-- // 											                				if(locality.getStatus()) { -->
+<%-- 											                	%> --%>
+<%-- 																<option value="<% out.print(locality.getId());%>" <% if(builderProject.getLocality().getId() == locality.getId()) { %>selected<% } %>><% out.print(locality.getName());%></option> --%>
+<%-- 																<% }}} %> --%>
+<!-- 												          	</select> -->
 											          	</div>
 											          	<div class="messageContainer"></div>
 													</div>
@@ -1337,17 +1338,17 @@ $("#state_id").change(function(){
 		},'json');
 	}
 });
-$("#city_id").change(function(){
-	if($("#city_id").val() != "") {
-		$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
-			var html = '<option value="">Select Locality</optio>';
-			$(data).each(function(index){
-				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
-			});
-			$("#locality_id").html(html);
-		},'json');
-	}
-});
+// $("#city_id").change(function(){
+// 	if($("#city_id").val() != "") {
+// 		$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
+// 			var html = '<option value="">Select Locality</optio>';
+// 			$(data).each(function(index){
+// 				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
+// 			});
+// 			$("#locality_id").html(html);
+// 		},'json');
+// 	}
+// });
 function updateProjectImages() {
 	var options = {
 	 		target : '#imageresponse', 

@@ -247,7 +247,7 @@ public class ProjectController extends ResourceConfig {
 		builderProject.setCountry(country);
 		builderProject.setState(state);
 		builderProject.setCity(city);
-		builderProject.setLocalityId(0);
+		builderProject.setAreaId(0);
 		builderProject.setLocalityName(localityName);
 		builderProject.setPincode(pincode);
 		builderProject.setLatitude(latitude);
@@ -309,7 +309,7 @@ public class ProjectController extends ResourceConfig {
 		builderProject.setCountry(country);
 		builderProject.setState(state);
 		builderProject.setCity(city);
-		builderProject.setLocalityId(0);
+		builderProject.setAreaId(0);
 		builderProject.setLocalityName(localityName);
 		builderProject.setPincode(pincode);
 		builderProject.setLatitude(latitude);
@@ -541,7 +541,7 @@ public class ProjectController extends ResourceConfig {
 		ResponseMessage responseMessage = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderProject builderProject = new BuilderProject();
-		builderProject = projectDAO.getBuilderActiveProjectById(project_id);
+		builderProject = projectDAO.getBuilderProjectById(project_id);
 		try {	
 			if (project_images.size() > 0) {
 				for(int i=0 ;i < project_images.size();i++)

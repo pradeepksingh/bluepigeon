@@ -119,7 +119,7 @@ public class BuyerDAO {
 		buyerSession.getTransaction().commit();
 		updateFlatStatus(buyer.getBuilderFlat().getId());
 	//	updateProject(buyer);
-		new ProjectDAO().updateProjectInventory(buyer.getBuilderFlat().getId());
+	//	new ProjectDAO().updateProjectInventory(buyer.getBuilderFlat().getId());
 		buyerSession.close();
 		
 		response.setId(buyer.getId());
