@@ -753,7 +753,8 @@ public class BuilderDetailsDAO {
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
 			hql = hql + "FROM  builder_project as project inner join allot_project as ap on project.id=ap.project_id "
 					+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
-					+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
+					+"left join locali@nki!986"
+					+ "ty as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
 					+ "WHERE ";
 			where +="ap.emp_id = "+builderEmployee.getId();
 		} else {

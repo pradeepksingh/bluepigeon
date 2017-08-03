@@ -181,24 +181,16 @@
             <div class="container-fluid">
                  <div class="row">
                     <div class="col-lg-3 col-sm-6 col-xs-12 m-t-15 ">
-                        <div id="project" class="top-blue-box ">
-                    PROJECT
-                        </div>
+                        <div id="project" class="top-blue-box ">PROJECT</div>
                     </div>
                     <div  class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
-                        <div id="building" class="top-white-box ">
-                           BUILDING
-                        </div>
+                        <div id="building" class="top-white-box ">BUILDING</div>
                     </div>
                     <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
-                        <div id="floor" class="top-white-box" >
-                          FLOOR
-                        </div>
+                        <div id="floor" class="top-white-box" >FLOOR</div>
                     </div>
                     <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
-                        <div id="flat" class="top-white-box">
-                         FLAT
-                        </div>
+                        <div id="flat" class="top-white-box">FLAT</div>
                     </div>
                 </div>
                 <div class="row">
@@ -209,9 +201,9 @@
                                  <li class="active">
                                      <a data-toggle="tab"  href="#vimessages" > <span>Basic Information</span></a>
                                  </li>
-<!--                                   <li> -->
-<!--                                      <a  data-toggle="tab" href="#vimessages1"><span>Project Details</span></a> -->
-<!--                                  </li> -->
+                                  <li>
+                                     <a  data-toggle="tab" href="#vimessages1"><span>Project Details</span></a>
+                                 </li>
                                  <li>
                                      <a  data-toggle="tab" href="#vimessages2"><span>Pricing Details</span></a>
                                  </li>
@@ -394,15 +386,8 @@
 					                                    	<div>
 							                                    <div>
 							                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
-							                                        <input type="hidden" name="locality_id" id="locality_id" value="<%out.print(builderProject.getLocality().getId());%>"/>
-							                                        <select name="locality_id" id="locality_id" class="form-control" disabled>
-													                	<option value="">Select Locality</option>
-													                	<%
-													                	if(localities != null){
-													                	for(Locality locality : localities){ %>
-																		<option value="<% out.print(locality.getId());%>" <% if(builderProject.getLocality().getId() == locality.getId()) { %>selected<% } %>><% out.print(locality.getName());%></option>
-																		<% }} %>
-														          	</select>
+							                                        <input class="form-control" type="text" name="locality_name" id="locality_name" value="<%out.print(builderProject.getLocalityName());%>"/>
+							                                        
 																</div>
 																<div class="messageContainer"></div>
 															</div>
@@ -482,182 +467,114 @@
 	                          	 <form  id="detailfrm" name="detailfrm" method="post">
 	                          	  <input type="hidden" id="id" name="id" value="<% out.print(project_id);%>"/>
 	                               <div class="form-group row">
-	                                  <label for="example-text-input" class="col-12 col-form-label">Project Type<span class='text-danger'>*</span></label><br/>
-	                                  <% 	for(BuilderProjectType builderProjectType : projectTypes) { 
-									String is_checked = "";
-									for(BuilderProjectProjectType projectProjectType :projectProjectTypes) {
-										if(builderProjectType.getId() == projectProjectType.getBuilderProjectType().getId()) {
-											is_checked = "checked";
-										}
-									}
+	                                  <label for="example-text-input" class="col-sm-2 col-form-label">Project Type<span class='text-danger'>*</span></label>
+	                                 <% 	int a = projectProjectTypes.size();
+                                     for(int i = 0;i < projectProjectTypes.size();i++ ){
+                                     	if(a > 1){
+                                     		out.print(projectProjectTypes.get(i).getBuilderProjectType().getName()+", ");
+                                     			a--;
+                                     	}else{
+                                     		out.print(projectProjectTypes.get(i).getBuilderProjectType().getName());
+                                     	}
+                                  }
 								%>
-	                                  <div class="col-3">
-	                                      <input type="checkbox" name="project_type[]" value="<% out.print(builderProjectType.getId());%>" <% out.print(is_checked); %>/> <% out.print(builderProjectType.getName());%>
-	                                  </div>
-	                                  <% } %>
-	                                  <% 	for(BuilderProjectAmenity projectAmenity : projectAmenities) { 
-										String is_checked = "";
-											for(BuilderProjectAmenityInfo projectAmenityInfo :projectAmenityInfos) {
-												if(projectAmenity.getId() == projectAmenityInfo.getBuilderProjectAmenity().getId()) {
-														is_checked = "checked";
-												}
-											}
-											Double amenity_wt = 0.0;
-											for(ProjectAmenityWeightage projectAmenityWeightage :amenityWeightages) {
-												if(projectAmenity.getId() == projectAmenityWeightage.getBuilderProjectAmenity().getId()) {
-														amenity_wt = projectAmenityWeightage.getAmenityWeightage();
-												}
-											}
-								%>
-									<input type="hidden" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(projectAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
-									
-								<% 	for(BuilderProjectAmenityStages bpaStages :projectAmenity.getBuilderProjectAmenityStageses()) { 
-										Double stage_wt = 0.0;
-										for(ProjectAmenityWeightage projectAmenityWeightage :amenityWeightages) {
-											if(bpaStages.getId() == projectAmenityWeightage.getBuilderProjectAmenityStages().getId()) {
-												stage_wt = projectAmenityWeightage.getStageWeightage();
-											}
-										}
-								%>
-								<% 	for(BuilderProjectAmenitySubstages bpaSubstage :bpaStages.getBuilderProjectAmenitySubstageses()) { 
-										Double substage_wt = 0.0;
-										for(ProjectAmenityWeightage projectAmenityWeightage :amenityWeightages) {
-											if(bpaSubstage.getId() == projectAmenityWeightage.getBuilderProjectAmenitySubstages().getId()) {
-												substage_wt = projectAmenityWeightage.getSubstageWeightage();
-											}
-										}
-								%>
-									<input name="stage_weightage<% out.print(projectAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="hidden" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/>
-									<input type="hidden" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
-								<% 
-									}
-									}
-								}
-								%>
-								
 	                              </div><hr>
-	                                
 	                                <div class="form-group row">
-	                                  <label for="example-text-input" class="col-12 col-form-label">Property Type<span class='text-danger'>*</span></label>
-	                                  <% 	for(BuilderPropertyType builderPropertyType : propertyTypes) { 
-											String is_checked = "";
-											int prop_value = 0;
-											for(BuilderProjectPropertyType projectPropertyType :projectPropertyTypes) {
-												if(builderPropertyType.getId() == projectPropertyType.getBuilderPropertyType().getId()) {
-													is_checked = "checked";
-													if(projectPropertyType.getValue() != null)
-													prop_value = projectPropertyType.getValue();
-												}
+	                                  <label for="example-text-input" class="col-sm-2 col-form-label">Property Type<span class='text-danger'>*</span></label>
+	                                  <% 	
+	                                  int propertytypeCount = projectPropertyTypes.size();
+										for(int i = 0;i < projectPropertyTypes.size();i++){
+											if(propertytypeCount > 1){
+												out.print(projectPropertyTypes.get(i).getBuilderPropertyType().getName()+"("+projectPropertyTypes.get(i).getValue()+"), ");
+												propertytypeCount--;
+											}else{
+												out.print(projectPropertyTypes.get(i).getBuilderPropertyType().getName()+"("+projectPropertyTypes.get(i).getValue()+")");
 											}
+										}
 										%>
-	                                    <div class="col-3">
-	                                        <input type="checkbox" name="property_type[]" value="<% out.print(builderPropertyType.getId());%>" <% out.print(is_checked); %>/> <% out.print(builderPropertyType.getName());%>
-	                                    </div>
-	                                	<input type="hidden" class="form-control" id="property_type<% out.print(builderPropertyType.getId());%>" name="property_type<% out.print(builderPropertyType.getId());%>" value="<% out.print(prop_value); %>" placeholder="No. Of <% out.print(builderPropertyType.getName());%>"/>
-	                                <%} %>
 	                                </div><hr>
 	                                 <div class="form-group row">
-	                                    <label for="example-text-input" class="col-12 col-form-label">Configurations*</label>
-	                                    <% 	for(BuilderProjectPropertyConfiguration projectConfiguration : projectConfigurations) { 
-											String is_checked = "";
-											for(BuilderProjectPropertyConfigurationInfo projectConfigurationInfo :projectConfigurationInfos) {
-												if(projectConfiguration.getId() == projectConfigurationInfo.getBuilderProjectPropertyConfiguration().getId()) {
-													is_checked = "checked";
-												}
-											}
+	                                    <label for="example-text-input" class="col-sm-2 col-form-label">Configurations*</label>
+	                                    <% 	
+	                                      int cg = projectConfigurationInfos.size();
+	                                    		for(int i = 0;i < projectConfigurationInfos.size();i++){
+	                                    			if(cg > 1){
+	                                    				out.print(projectConfigurationInfos.get(i).getBuilderProjectPropertyConfiguration().getName()+", ");
+	                                    				cg--;
+	                                    			}else{
+	                                    				out.print(projectConfigurationInfos.get(i).getBuilderProjectPropertyConfiguration().getName());
+	                                    			}
+	                                    		}
 										%>
-	                                    <div class="col-3">
-	                                        <input type="checkbox" name="configuration[]" value="<% out.print(projectConfiguration.getId());%>" <% out.print(is_checked); %>/> <% out.print(projectConfiguration.getName());%>
-	                                    </div>
-	                                    <% } %>
 	                                </div><hr>
 	                                <div class="form-group row">
-	                                    <label for="example-text-input" class="col-12 col-form-label">Project Amenities<span class='text-danger'>*</span></label>
-	                                    <% 	for(BuilderProjectAmenity projectAmenity : projectAmenities) { 
-											String is_checked = "";
-											for(BuilderProjectAmenityInfo projectAmenityInfo :projectAmenityInfos) {
-												if(projectAmenity.getId() == projectAmenityInfo.getBuilderProjectAmenity().getId()) {
-													is_checked = "checked";
-												}
-											}
-										%>
-	                                    <div class="col-3">
-	                                        <input type="checkbox" name="amenity_type[]" value="<% out.print(projectAmenity.getId());%>" <% out.print(is_checked); %>/> <% out.print(projectAmenity.getName());%>
-	                                    </div>
-	                                    <%} %>
-	                                    <div class="messageContainer"></div>
+	                                    <label for="example-text-input" class="col-sm-2 col-form-label">Project Amenities<span class='text-danger'>*</span></label>
+	                                    <% int pai = projectAmenityInfos.size();
+	                                    		for(int i=0;i<projectAmenityInfos.size();i++){
+	                                    			if(pai > 1){
+	                                    				out.print(projectAmenityInfos.get(i).getBuilderProjectAmenity().getName()+", ");
+	                                    				pai--;
+	                                    			}else{
+	                                    				out.print(projectAmenityInfos.get(i).getBuilderProjectAmenity().getName());
+	                                    			}
+	                                    		}
+	                                    		%>
 	                                </div><hr>
-	                                
 	                                <div class="form-group row">
-	                                   <label for="example-text-input" class="col-12 col-form-label">Project Approval<span class='text-danger'>*</span></label>
-	                                   <% for(BuilderProjectApprovalType projectApproval : projectApprovals) { 
-											String is_checked1 = "";
-											for(BuilderProjectApprovalInfo projectApprovalInfo :projectApprovalInfos) {
-												if(projectApproval.getId() == projectApprovalInfo.getBuilderProjectApprovalType().getId()) {
-													is_checked1 = "checked";
-												}
-											}
-										%>
-	                                    <div class="col-3">
-	 										<input type="checkbox" name="approval_type[]" value="<% out.print(projectApproval.getId());%>" <% out.print(is_checked1); %>/> <% out.print(projectApproval.getName());%>
-	                                    </div>
-	                                    <% } %>
+	                                   <label for="example-text-input" class="col-sm-2 col-form-label">Project Approval<span class='text-danger'>*</span></label>
+	                                   <%
+	                                      int pa = projectApprovalInfos.size();
+	                                		   for(int i = 0;i<projectApprovalInfos.size();i++){
+	                                			   if(pa > 1){
+	                                				   out.print(projectApprovalInfos.get(i).getBuilderProjectApprovalType().getName()+", ");
+	                                				   pa--;
+	                                			   }else{
+	                                				   out.print(projectApprovalInfos.get(i).getBuilderProjectApprovalType().getName());
+	                                			   }
+	                                		   }
+	                                   %>
 	                                </div><hr>
-	
 	                                <div class="form-group row">
-	                                   <label for="example-text-input" class="col-12 col-form-label">Home Loan Banks</label>
-	                                   <% 	for(HomeLoanBanks homeLoanBank : homeLoanBanks) { 
-											String is_checked2 = "";
-											for(BuilderProjectBankInfo projectBankInfo :projectBankInfos) {
-												if(homeLoanBank.getId() == projectBankInfo.getHomeLoanBanks().getId()) {
-													is_checked2 = "checked";
-												}
-											}
-										%>
-	                                    <div class="col-3">
-	                                        <input type="checkbox" name="homeloan_bank[]" value="<% out.print(homeLoanBank.getId());%>" <% out.print(is_checked2); %>/> <% out.print(homeLoanBank.getName());%>
-	                                    </div>
-	                                    <% } %>
+	                                   <label for="example-text-input" class="col-sm-2 col-form-label">Home Loan Banks</label>
+	                                   <% int hlb = projectBankInfos.size();
+	                                		for(int i = 0; i < projectBankInfos.size(); i++){
+	                                			if(hlb > 1){
+	                                				out.print(projectBankInfos.get(i).getHomeLoanBanks().getName()+", ");
+	                                				hlb--;
+	                                			}else{
+	                                				out.print(projectBankInfos.get(i).getHomeLoanBanks().getName());
+	                                			}
+	                                		}
+	                                   %>
 	                                </div><hr>
-	                                <div class="row">
 	                                 <div class="form-group row">
-	                                 	
-		                                   <label for="example-text-input" class="col-sm-3 col-form-label">Project Area</label>
-		                                   <div class="col-sm-3">
-		                                   		<input  type="text"  class="form-control" id="project_area" name="project_area" value="<% if(builderProject.getProjectArea() != null) { out.print(builderProject.getProjectArea());}%>"/>
-		                                   </div>
-		                                   <div class="col-sm-4">
-			                                   <select name="area_unit" id="area_unit" class="form-control col-lg-3">
-													<% for(AreaUnit areaUnit :areaUnits) { %>
-													<option value="<% out.print(areaUnit.getId()); %>" <% if(builderProject.getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
-													<% } %>
-												</select>
-		                                   </div>
-		                                  </div>
-	                                    <div class="form-group row">
+		                                  <label for="example-text-input" class="col-sm-2 col-form-label">Project Area</label>
+		                                   	<div class="col-sm-3 form-group">
+		                                   		<% if(builderProject.getProjectArea() != null) { out.print(builderProject.getProjectArea());} %>
+		                                   		<% if(builderProject.getAreaUnit() != null){ out.print(builderProject.getAreaUnit().getName());} %>
+		                                   	</div>
+		                             </div><hr>
+	                                 <div class="form-group row">
 	                                    <%
 											SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
 									 	%>
-									 	<label class="control-label col-sm-4">Launch Date </label>
-	                                    <div class="col-sm-6 form-group">
+									 	 <label for="example-text-input" class="col-sm-2 col-form-label">Launch Date </label>
+	                                    <div class="col-sm-3 form-group">
 	                                    	<div class="">
-	                                   			<input type="text" class="form-control" id="launch_date" name="launch_date" value="<% if(builderProject.getLaunchDate() != null) { out.print(dt1.format(builderProject.getLaunchDate()));} %>"/>
+	                                   			<% if(builderProject.getLaunchDate() != null) { out.print(dt1.format(builderProject.getLaunchDate()));} %>
 	                                   		</div>
-	                                   		<div class="messageContainer"></div>
 	                                   </div>
-	                                   </div>
+	                                   </div><hr>
 	                                    <div class="form-group row">
-	                                   <label class="control-label col-sm-6">Possession Date </label>
-	                                    <div class="col-sm-6">
+	                                    <label for="example-text-input" class="col-sm-2 col-form-label">Possession Date </label>
+	                                    <div class="col-sm-3">
 	                                    	<div>
-	                                   			<input type="text" class="form-control"  id="possession_date" name="possession_date" value="<% if(builderProject.getPossessionDate() != null) { out.print(dt1.format(builderProject.getPossessionDate()));} %>"/>
+	                                   			<% if(builderProject.getPossessionDate() != null) { out.print(dt1.format(builderProject.getPossessionDate()));} %>
 	                                   		</div>
-	                                   		<div class="messageContainer"></div>
 	                                   </div>
-	                                 </div>
-	                                 </div>
+	                                 </div><hr>
 	                                <div class="offset-sm-5 col-sm-7">
-	                                        <button type="submit" id="detailbtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
+	                                        <button type="button" id="detailbtn" class="btn btn-submit waves-effect waves-light m-t-10">NEXT</button>
 	                                 </div>
 	                                </form>   
 	                            </div>
@@ -1045,51 +962,56 @@ function vaildPayablePer(id){
 		$("#payable"+id).val('');
 	}
 }
-$('#detailfrm').bootstrapValidator({
-	container: function($field, validator) {
-		return $field.parent().next('.messageContainer');
-   	},
-    feedbackIcons: {
-        validating: 'glyphicon glyphicon-refresh'
-    },
-    excluded: ':disabled',
-    fields: {
-    	launch_date: {
-            validators: {
-                callback: {
-                    message: 'Wrong Launch Date',
-                    callback: function (value, validator) {
-                        var m = new moment(value, 'DD MMM YYYY', true);
-                        if (!m.isValid()) {
-                            return false;
-                        } else {
-                        	return true;
-                        }
-                    }
-                }
-            }
-        },
-        possession_date: {
-            validators: {
-                callback: {
-                    message: 'Wrong Possession Date',
-                    callback: function (value, validator) {
-                        var m = new moment(value, 'DD MMM YYYY', true);
-                        if (!m.isValid()) {
-                            return false;
-                        } else {
-                        	return true;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}).on('success.form.bv', function(event,data) {
-	// Prevent form submission
-	event.preventDefault();
-	saveProjectDetails();
+// $('#detailfrm').bootstrapValidator({
+// 	container: function($field, validator) {
+// 		return $field.parent().next('.messageContainer');
+//    	},
+//     feedbackIcons: {
+//         validating: 'glyphicon glyphicon-refresh'
+//     },
+//     excluded: ':disabled',
+//     fields: {
+//     	launch_date: {
+//             validators: {
+//                 callback: {
+//                     message: 'Wrong Launch Date',
+//                     callback: function (value, validator) {
+//                         var m = new moment(value, 'DD MMM YYYY', true);
+//                         if (!m.isValid()) {
+//                             return false;
+//                         } else {
+//                         	return true;
+//                         }
+//                     }
+//                 }
+//             }
+//         },
+//         possession_date: {
+//             validators: {
+//                 callback: {
+//                     message: 'Wrong Possession Date',
+//                     callback: function (value, validator) {
+//                         var m = new moment(value, 'DD MMM YYYY', true);
+//                         if (!m.isValid()) {
+//                             return false;
+//                         } else {
+//                         	return true;
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }).on('success.form.bv', function(event,data) {
+// 	// Prevent form submission
+// 	event.preventDefault();
+// 	saveProjectDetails();
+// });
+$("#detailbtn").click(function(){
+	$('.active').removeClass('active').next('li').addClass('active');
+    $("#vimessages2").addClass('active');
 });
+
 $('#latitude').keypress(function (event) {
     return isNumber(event, this)
 });
@@ -1175,9 +1097,7 @@ $("#building_weightage").keypress(function(event){
 	return isNumber(event, this)
 });
  
-
 function onlyNumber(id){
-	
 	 var $th = $("#discount_amount"+id);
 	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
 }
@@ -1413,7 +1333,7 @@ $('#basicfrm').bootstrapValidator({
                 }
             }
         },
-        locality_id: {
+        locality_name: {
             validators: {
                 notEmpty: {
                     message: 'Locality Name is required and cannot be empty'
@@ -1484,7 +1404,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#basicresponse").show();
         alert(resp.message);
         $('.active').removeClass('active').next('li').addClass('active');
-        $("#vimessages2").addClass('active');
+        $("#vimessages1").addClass('active');
   	}
 }
 

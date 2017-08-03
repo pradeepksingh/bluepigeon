@@ -211,7 +211,8 @@ public class ProjectController extends ResourceConfig {
 			@FormParam("country_id") int country_id,
 			@FormParam("state_id") int state_id,
 			@FormParam("city_id") int city_id,
-			@FormParam("locality_id") int locality_id,
+			//@FormParam("locality_id") int locality_id,
+			@FormParam("locality_name") String localityName,
 			@FormParam("pincode") String pincode,
 			@FormParam("latitude") String latitude,
 			@FormParam("longitude") String longitude,
@@ -233,8 +234,8 @@ public class ProjectController extends ResourceConfig {
 		state.setId(state_id);
 		City city = new City();
 		city.setId(city_id);
-		Locality locality = new Locality();
-		locality.setId(locality_id);
+//		Locality locality = new Locality();
+//		locality.setId(locality_id);
 		AreaUnit areaUnit = new AreaUnit();
 		areaUnit.setId(unit);
 		BuilderProject builderProject = new BuilderProject();
@@ -246,7 +247,8 @@ public class ProjectController extends ResourceConfig {
 		builderProject.setCountry(country);
 		builderProject.setState(state);
 		builderProject.setCity(city);
-		builderProject.setLocality(locality);
+		builderProject.setLocalityId(0);
+		builderProject.setLocalityName(localityName);
 		builderProject.setPincode(pincode);
 		builderProject.setLatitude(latitude);
 		builderProject.setLongitude(longitude);
@@ -273,7 +275,8 @@ public class ProjectController extends ResourceConfig {
 			@FormParam("country_id") int country_id,
 			@FormParam("state_id") int state_id,
 			@FormParam("city_id") int city_id,
-			@FormParam("locality_id") int locality_id,
+			//@FormParam("locality_id") int locality_id,
+			@FormParam("locality_name") String localityName,
 			@FormParam("pincode") String pincode,
 			@FormParam("latitude") String latitude,
 			@FormParam("longitude") String longitude,
@@ -292,8 +295,8 @@ public class ProjectController extends ResourceConfig {
 		state.setId(state_id);
 		City city = new City();
 		city.setId(city_id);
-		Locality locality = new Locality();
-		locality.setId(locality_id);
+//		Locality locality = new Locality();
+//		locality.setId(locality_id);
 		AreaUnit areaUnit = new AreaUnit();
 		areaUnit.setId(unit);
 		BuilderProject builderProject = new BuilderProject();
@@ -306,7 +309,8 @@ public class ProjectController extends ResourceConfig {
 		builderProject.setCountry(country);
 		builderProject.setState(state);
 		builderProject.setCity(city);
-		builderProject.setLocality(locality);
+		builderProject.setLocalityId(0);
+		builderProject.setLocalityName(localityName);
 		builderProject.setPincode(pincode);
 		builderProject.setLatitude(latitude);
 		builderProject.setLongitude(longitude);

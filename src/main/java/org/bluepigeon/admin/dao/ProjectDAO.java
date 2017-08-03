@@ -106,11 +106,14 @@ public class ProjectDAO {
 	public ResponseMessage saveProject(BuilderProject builderProject) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
+		//String hql = "from BuilderProject where name = :name AND locality.id = :locality_id";
+		//new code
 		String hql = "from BuilderProject where name = :name AND locality.id = :locality_id";
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("name", builderProject.getName());
-		query.setParameter("locality_id", builderProject.getLocality().getId());
+		//query.setParameter("locality_id", builderProject.getLocality().getId());
+		query.setParameter("locality_id", builderProject.getLocalityName());
 		List<BuilderProject> result = query.list();
 		session.close();
 		if (result.size() > 0) {
@@ -161,11 +164,13 @@ public class ProjectDAO {
 	public ResponseMessage updateBasicInfo(BuilderProject builderProject) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		String hql = "from BuilderProject where name = :name AND locality.id = :locality_id AND id != :id";
+		//String hql = "from BuilderProject where name = :name AND locality.id = :locality_id AND id != :id";
+		String hql = "from BuilderProject where name = :name AND localityName = :locality_name AND id != :id";
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("name", builderProject.getName());
-		query.setParameter("locality_id", builderProject.getLocality().getId());
+//		query.setParameter("locality_id", builderProject.getLocality().getId());
+		query.setParameter("locality_name", builderProject.getLocalityName());
 		query.setParameter("id", builderProject.getId());
 		List<BuilderProject> result = query.list();
 		session.close();
@@ -538,8 +543,9 @@ public class ProjectDAO {
 			System.out.println("Builder Name :: "+newproject.getBuilderName());
 			newproject.setCityId(builderproject.getCity().getId());
 			newproject.setCityName(builderproject.getCity().getName());
-			newproject.setLocalityId(builderproject.getLocality().getId());
-			newproject.setLocalityName(builderproject.getLocality().getName());
+			//newproject.setLocalityId(builderproject.getLocality().getId());
+			//newproject.setLocalityName(builderproject.getLocality().getName());
+			newproject.setLocalityName(builderproject.getLocalityName());
 			projects.add(newproject);
 			
 		}
@@ -656,8 +662,9 @@ public class ProjectDAO {
 			newproject.setBuilderName(builderproject.getBuilder().getName());
 			newproject.setCityId(builderproject.getCity().getId());
 			newproject.setCityName(builderproject.getCity().getName());
-			newproject.setLocalityId(builderproject.getLocality().getId());
-			newproject.setLocalityName(builderproject.getLocality().getName());
+			//newproject.setLocalityId(builderproject.getLocality().getId());
+		//	newproject.setLocalityName(builderproject.getLocality().getName());
+			newproject.setLocalityName(builderproject.getLocalityName());
 			newproject.setCompletionStatus(builderproject.getCompletionStatus());
 			projects.add(newproject);
 			
@@ -3032,8 +3039,9 @@ public class ProjectDAO {
 			newproject.setBuilderName(builderproject.getBuilder().getName());
 			newproject.setCityId(builderproject.getCity().getId());
 			newproject.setCityName(builderproject.getCity().getName());
-			newproject.setLocalityId(builderproject.getLocality().getId());
-			newproject.setLocalityName(builderproject.getLocality().getName());
+		//	newproject.setLocalityId(builderproject.getLocality().getId());
+			//newproject.setLocalityName(builderproject.getLocality().getName());
+			newproject.setLocalityName(builderproject.getLocalityName());
 			System.out.println("Project name :: "+builderproject.getName());
 			projects.add(newproject);
 		}
@@ -3206,8 +3214,9 @@ public class ProjectDAO {
 			ProjectCityData newproject = new ProjectCityData();
 			newproject.setCityId(builderproject.getCity().getId());
 			newproject.setCityName(builderproject.getCity().getName());
-			newproject.setAreaId(builderproject.getLocality().getId());
-			newproject.setAreaName(builderproject.getLocality().getName());
+			//newproject.setAreaId(builderproject.getLocality().getId());
+			//newproject.setAreaName(builderproject.getLocality().getName());
+			newproject.setAreaName(builderproject.getLocalityName());
 			projects.add(newproject);
 		}
 		session.close();

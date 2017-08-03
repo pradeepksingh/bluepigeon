@@ -124,6 +124,9 @@
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                         <h4 class="page-title">Dashboard</h4> </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> 
+                    	<a href="${baseUrl}/builder/project/new.jsp"><span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add new Project</span></a>
+                    </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> 
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -225,7 +228,6 @@
                                        <option value="<%out.print(projectList.getId());%>"><%out.print(projectList.getName()); %></option>
                                        <% }}%>
                            </select>
-                               
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                       <select  id="city_id" name="city_id">
@@ -236,10 +238,9 @@
                                         <option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
                                         <%}} %>
                           </select>
-                             
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
-                      <input class="form-control" type="text" id="locality_name" name="locality_name">
+                      <input class="form-control" type="text" id="locality_name" name="locality_name" placeholder="Enter locality name" title="Please select City First and then enter locality name">
                               
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -248,7 +249,6 @@
                                         <option value="1">Pending Projects</option>
                                         <option value="2">Complete Projects</option>
                          </select>
-                               
                     </div>
                     <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_id);%>"/>
                     <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
@@ -467,8 +467,6 @@
     <%}%>
     
     $("#locality_name").keyup(function(){
-    	alert("Hello from locality");
-    	alert($("#locality_name").val());
     	getProjectList();
     });
 

@@ -32,7 +32,7 @@ public class BuilderProject implements java.io.Serializable {
 	private AdminUser adminUser;
 	private AreaUnit areaUnit;
 	private Country country;
-	private Locality locality;
+	private Integer locality_id=0;
 	private String localityName="";
 	private City city;
 	private Builder builder;
@@ -75,7 +75,7 @@ public class BuilderProject implements java.io.Serializable {
 	public BuilderProject() {
 	}
 
-	public BuilderProject(State state, AdminUser adminUser, AreaUnit areaUnit, Country country, Locality locality, String localityName,
+	public BuilderProject(State state, AdminUser adminUser, AreaUnit areaUnit, Country country, Integer locality_id, String localityName,
 			City city, Builder builder, BuilderCompanyNames builderCompanyNames, String name, String addr1,
 			String addr2, String pincode, String latitude, String longitude, Double projectArea, String description,
 			String highlights, Date launchDate, Date possessionDate, Double totalInventory, Double inventorySold,
@@ -94,7 +94,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.adminUser = adminUser;
 		this.areaUnit = areaUnit;
 		this.country = country;
-		this.locality = locality;
+		this.locality_id = locality_id;
 		this.city = city;
 		this.builder = builder;
 		this.builderCompanyNames = builderCompanyNames;
@@ -187,20 +187,28 @@ public class BuilderProject implements java.io.Serializable {
 		this.country = country;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "area_id")
-	public Locality getLocality() {
-		return this.locality;
-	}
-
-	public void setLocality(Locality locality) {
-		this.locality = locality;
-	}
-
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name = "area_id")
+//	public Locality getLocality() {
+//		return this.locality;
+//	}
+//
+//	public void setLocality(Locality locality) {
+//		this.locality = locality;
+//	}
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "city_id")
 	public City getCity() {
 		return this.city;
+	}
+
+	public Integer getLocality_id() {
+		return locality_id;
+	}
+
+	public void setLocalityId(Integer localityId) {
+		this.locality_id = localityId;
 	}
 
 	public void setCity(City city) {
