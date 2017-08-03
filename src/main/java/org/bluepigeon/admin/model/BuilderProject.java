@@ -33,6 +33,7 @@ public class BuilderProject implements java.io.Serializable {
 	private AreaUnit areaUnit;
 	private Country country;
 	private Locality locality;
+	private String localityName="";
 	private City city;
 	private Builder builder;
 	private BuilderCompanyNames builderCompanyNames;
@@ -74,7 +75,7 @@ public class BuilderProject implements java.io.Serializable {
 	public BuilderProject() {
 	}
 
-	public BuilderProject(State state, AdminUser adminUser, AreaUnit areaUnit, Country country, Locality locality,
+	public BuilderProject(State state, AdminUser adminUser, AreaUnit areaUnit, Country country, Locality locality, String localityName,
 			City city, Builder builder, BuilderCompanyNames builderCompanyNames, String name, String addr1,
 			String addr2, String pincode, String latitude, String longitude, Double projectArea, String description,
 			String highlights, Date launchDate, Date possessionDate, Double totalInventory, Double inventorySold,
@@ -131,6 +132,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.amenityWeightage = amenityWeightage;
 		this.buildingWeightage = buildingWeightage;
 		this.image = image;
+		this.localityName = localityName;
 	}
 
 	@Id
@@ -520,6 +522,14 @@ public class BuilderProject implements java.io.Serializable {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+	@Column(name="locality_name")
+	public String getLocalityName() {
+		return localityName;
+	}
+
+	public void setLocalityName(String localityName) {
+		this.localityName = localityName;
 	}
 
 	
