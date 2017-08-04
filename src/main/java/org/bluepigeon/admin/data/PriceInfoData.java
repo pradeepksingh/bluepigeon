@@ -11,13 +11,14 @@ public class PriceInfoData {
 	private int post;
 	private double amenityRate;
 	private double parking;
+	private int parkingId = 0;
 	private double tax;
 	private double vat;
 	private int tenure;
 	private double maintainance;
 	private double stampDuty;
 	private double fee;
-	private AreaUnit areaUnits;
+	private int areaUnits;
 	public int getId() {
 		return id;
 	}
@@ -90,10 +91,20 @@ public class PriceInfoData {
 	public void setFee(double fee) {
 		this.fee = fee;
 	}
-	public AreaUnit getAreaUnits() {
+	public int getAreaUnits() {
 		return areaUnits;
 	}
-	public void setAreaUnits(AreaUnit areaUnits) {
+	public void setAreaUnits(int areaUnits) {
 		this.areaUnits = areaUnits;
 	}
+	public int getParkingId() {
+		return parkingId;
+	}
+	public void setParkingId(int parkingId) {
+		this.parkingId = parkingId;
+	}
+	
+
 }
+
+

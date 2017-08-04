@@ -38,8 +38,10 @@ public class BuilderProjectPriceInfoDAO {
 			priceInfoData.setId(result.get(0).getId());
 			priceInfoData.setAmenityRate(result.get(0).getAmenityRate());
 			//priceInfoData.setAreaUnits(result.get(0).getAreaUnit());
+			priceInfoData.setAreaUnits(result.get(0).getAreaUnit().getId());
 			priceInfoData.setBaseRate(result.get(0).getBasePrice());
 			priceInfoData.setMaintainance(result.get(0).getMaintenance());
+			priceInfoData.setParkingId(0);
 			priceInfoData.setParking(result.get(0).getParking());
 			priceInfoData.setPost(result.get(0).getPost());
 			priceInfoData.setRiseRate(result.get(0).getRiseRate());
