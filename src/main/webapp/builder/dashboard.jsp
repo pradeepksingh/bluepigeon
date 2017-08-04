@@ -293,7 +293,7 @@
 	                       <div class="row">
 	                      
                            	<div class="col-md-6 left"> 
-                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>
+                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
                            	</div>
                          	<div class="col-md-6 center">
                           		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
@@ -342,7 +342,7 @@
                     		</div>
                             <ul class="list-inline text-right">
                                 <li>
-                                    <h5><i class="fa fa-circle m-r-5" style="color: #00bfc7;"></i>Flats</h5> </li>
+                                    <h5><i class="fa fa-circle m-r-5" style="color: #24bcd3;"></i>Flats</h5> </li>
                                 <li>
                                     <h5><i class="fa fa-circle m-r-5" style="color: #fb9678;"></i>Buyers</h5> </li>
                                 <li>
@@ -358,7 +358,7 @@
                                     <h3 class="box-title">Property sales</h3>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                                            <h1 class="text-info sales-income">Rs <%out.print(Math.round(totalPropertySold)); %></h1>
+                                            <h1 class="text-info-new sales-income">Rs <%out.print(Math.round(totalPropertySold)); %></h1>
                                             <p class="text-muted"></p> <b>(<%out.print(totalInventorySold); %> Sales)</b> </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sparkline2dash" class="text-center"></div>
@@ -387,21 +387,21 @@
 	                <div class="row">
 	                <%if((access_id >=1 && access_id <=2) || (access_id>=4 && access_id <= 5)) {%>
 		                <div class="col-md-4">
-		                    <button type="button" onclick="addEmployee();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Employee</button>
+		                    <button type="button" onclick="addEmployee();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add New Employee</button>
 		                </div>
 		               
 		                 <div class="col-md-4">
-		                    <button type="button" onclick="addLead();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Lead</button>
+		                    <button type="button" onclick="addLead();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add New Lead</button>
 		                 </div>
 		                  <%} %>
 		                  <%if(access_id == 7){ %>
 		                   <div class="col-md-4">
-		                    <button type="button" onclick="addLead();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Lead</button>
+		                    <button type="button" onclick="addLead();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add New Lead</button>
 		                 </div>
 		                 <%} %>
 		                 <%if(access_id ==3) {%>
 		                  <div class="col-md-4">
-		                    <button type="button" onclick="addCampaign();" class="btn11 btn-info waves-effect waves-light m-t-10">Add Campaign</button>
+		                    <button type="button" onclick="addCampaign();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add Campaign</button>
 		                 </div>
 		                  <%} %>
 <!-- 		                 <div class="col-md-4"> -->
@@ -736,7 +736,7 @@ $("#locality_name").attr('disabled',true);
             		+'<div class="row">'
             		<%if(access_id == 1 || access_id==2){%>
             		+'<div class="col-md-6 left">' 
-            		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>'
+            		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
             		+'</div>'
             		<%}%>
           		+'<div class="col-md-6 center">'
@@ -803,7 +803,7 @@ $("#locality_name").attr('disabled',true);
                		<%if(access_id ==1 || access_id == 2){%>
                		+'<div class="row">'
                		+'<div class="col-md-6 left">' 
-               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>'
+               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                		+'</div>'
                		<%}%>
              		+'<div class="col-md-6 center">'
@@ -870,7 +870,7 @@ $("#locality_name").attr('disabled',true);
                  		+'<div class="row">'
                  		<%if(access_id ==1 || access_id == 2){%>
                  		+'<div class="col-md-6 left">' 
-                 		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>'
+                 		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
                  		<%}%>
                		+'<div class="col-md-6 center">'
@@ -912,7 +912,7 @@ $("#locality_name").attr('disabled',true);
              xkey: 'y',
      	    ykeys: ['Flat', 'Buyer', 'Purchases'],
      	    labels: ['Flat', 'Buyer', 'Purchases'],
-     	    barColors:['#00bfc7', '#fb9678', '#9675ce'],
+     	    barColors:['#24bcd3', '#fb9678', '#9675ce'],
      	    hideHover: 'auto',
      	   
      	    gridLineColor: '#eef0f2',

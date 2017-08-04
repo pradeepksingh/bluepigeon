@@ -183,9 +183,11 @@
                     <div class="col-lg-3 col-sm-6 col-xs-12 m-t-15 ">
                         <div id="project" class="top-blue-box ">PROJECT</div>
                     </div>
-                    <div  class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
-                        <div id="building" class="top-white-box ">BUILDING</div>
-                    </div>
+	                <div  class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
+	                    <a href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id);%>&building_id=<%out.print(new ProjectDAO().getBuilderProjectBuildings(project_id).get(0).getId());%>">
+	                        <div id="building" class="top-white-box ">BUILDING</div>
+	                    </a>
+	               </div>
                     <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
                         <div id="floor" class="top-white-box" >FLOOR</div>
                     </div>
@@ -386,7 +388,7 @@
 					                                    	<div>
 							                                    <div>
 							                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
-							                                        <input class="form-control" type="text" name="locality_name" id="locality_name" value="<%out.print(builderProject.getLocalityName());%>"/>
+							                                        <input class="form-control" type="text" readonly="true" name="locality_name" id="locality_name" value="<%out.print(builderProject.getLocalityName());%>"/>
 							                                        
 																</div>
 																<div class="messageContainer"></div>

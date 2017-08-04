@@ -25,7 +25,9 @@
 	int building_id = 0;
 	int project_id = 0;
 	int p_user_id = 0;
+	int building_size_list = 0;
 	BuilderBuilding builderBuilding = null;
+	List<BuilderBuilding> builderBuildings = null;
 	List<BuilderBuilding> builderBuildingList = null;
 	List<ProjectData> builderProjects = null;
 	List<BuilderBuildingAmenity> builderBuildingAmenities = null;
@@ -48,25 +50,14 @@
 			if(adminuserproject != null){
 				p_user_id = adminuserproject.getBuilder().getId();
 				builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
-			}
-			List<BuilderBuilding> builderBuildings = new ProjectDAO().getBuilderProjectBuildingById(building_id);
-			if(builderBuildings.size() > 0) {
-				builderBuilding = builderBuildings.get(0);
-			}
-			if(building_id>0){
-				builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
-				builderBuildingStatusList = new BuilderBuildingStatusDAO().getActiveBuilderBuildingStatus();
-				builderBuildingAmenities = new BuilderBuildingAmenityDAO().getActiveBuilderBuildingAmenityList();
-				buildingImageGalleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
-			    buildingPanoramicImages = new ProjectDAO().getBuilderBuildingElevationImagesById(building_id);
-				buildingAmenityInfos = new ProjectDAO().getBuilderBuildingAmenityInfoById(building_id);
-				buildingPaymentInfos = new ProjectDAO().getActiveBuilderBuildingPaymentInfoById(building_id);
-				buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
-				buildingAmenityWeightages = new ProjectDAO().getActiveBuilderBuildingAmenityWeightageById(building_id);
-			}else{
-				builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
-				if(builderBuildingList.size()>0){
-					building_id = builderBuildingList.get(0).getId();
+				if(building_id>0 && project_id > 0){
+					System.err.println("projectId :: "+project_id+" \n Building Id :: "+building_id);
+					builderBuildings = new ProjectDAO().getBuilderProjectBuildingById(building_id);
+					if(builderBuildings.size() > 0) {
+						builderBuilding = builderBuildings.get(0);
+					}
+					builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
+					building_size_list = builderBuildingList.size();
 					builderBuildingStatusList = new BuilderBuildingStatusDAO().getActiveBuilderBuildingStatus();
 					builderBuildingAmenities = new BuilderBuildingAmenityDAO().getActiveBuilderBuildingAmenityList();
 					buildingImageGalleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
@@ -76,14 +67,25 @@
 					buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
 					buildingAmenityWeightages = new ProjectDAO().getActiveBuilderBuildingAmenityWeightageById(building_id);
 				}
+// 				}else if(project_id > 0 && building_id == 0){
+// 					out.println("projectId :: "+project_id+" \n Building Id :: "+building_id);
+// 					builderBuildings = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
+// 					if(builderBuildings.size()>0){
+// 						building_id = builderBuildings.get(0).getId();
+// 						builderBuildingStatusList = new BuilderBuildingStatusDAO().getActiveBuilderBuildingStatus();
+// 						builderBuildingAmenities = new BuilderBuildingAmenityDAO().getActiveBuilderBuildingAmenityList();
+// 						buildingImageGalleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
+// 					    buildingPanoramicImages = new ProjectDAO().getBuilderBuildingElevationImagesById(building_id);
+// 						buildingAmenityInfos = new ProjectDAO().getBuilderBuildingAmenityInfoById(building_id);
+// 						buildingPaymentInfos = new ProjectDAO().getActiveBuilderBuildingPaymentInfoById(building_id);
+// 						buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
+// 						buildingAmenityWeightages = new ProjectDAO().getActiveBuilderBuildingAmenityWeightageById(building_id);
+// 					}
+				}
 			}
 		}
-		
-	}
-	
-	
+	//}
 %>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -107,6 +109,7 @@
     <link href="../../css/style.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom1.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="${baseUrl}/builder/css/selectize.css" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -147,23 +150,51 @@
     </div>
     <div id="page-wrapper" style="min-height: 2038px;">
         <div class="container-fluid">
-           <div class="row bg-title">
-               <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                   <h4 class="page-title">Building Review</h4>
-               </div>
+          <div class="row">
+                <div class="col-lg-3 col-sm-6 col-xs-12 m-t-15 ">
+                	<a href="${baseUrl}/builder/project/edit.jsp?project_id=<%out.print(project_id);%>">
+                    <div id="project" class="top-white-box ">PROJECT</div>
+                    </a>
+                </div>
+            	 <div  class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
+	                 <a href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id);%>&building_id=<%out.print(building_id);%>">
+	                     <div id="building" class="top-blue-box ">BUILDING</div>
+	                 </a>
+            	</div>
+                <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
+                    <div id="floor" class="top-white-box" >FLOOR</div>
+                </div>
+                <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
+                    <div id="flat" class="top-white-box">FLAT</div>
+                </div>
            </div>
+          
+           		<div class="row">
+           			<div class="col-md-3 col-sm-6 col-xs-12">
+                        <select id="filter_building_id" name="filter_building_id" class="form-control">
+                                <% for(BuilderBuilding builderBuilding2 : builderBuildingList){ %>
+                      			<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName()); %></option>
+                      			<%} %>
+                        </select>
+                    </div>
+          	 	</div>
+           
            <div class="row">
                <div class="col-lg-12">
                    <div class="white-box">
+                   	<div class="color-box">
                            <ul class="nav nav-tabs">
                                <li class="active" >
-                                   <a data-toggle="tab"  href="#vimessages" > <span>Project Details</span></a>
+                                   <a data-toggle="tab"  href="#vimessages" > <span>Basic Details</span></a>
                                </li>
                                 <li>
-                                   <a  data-toggle="tab" href="#vimessages1"><span>Building Details</span></a>
+                                   <a  data-toggle="tab" href=""><span>Pricing Details</span></a>
                                </li>
                                <li>
-                                   <a  data-toggle="tab" href="#vimessages2"><span>Images</span></a>
+                                   <a  data-toggle="tab" href=""><span>Payment Schedule</span></a>
+                               </li>
+                               <li>
+                                   <a  data-toggle="tab" href=""><span>Offers</span></a>
                                </li>
                            </ul>
                            <div class="tab-content"> 
@@ -172,80 +203,96 @@
                            <div class="col-12">
                            	<form id="updatebuilding" name="updatebuilding" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
                            		<input type="hidden" name="admin_id" id="admin_id" value="1"/>
-								<input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
-                           		<div class="form-group row">
-                             		  <label for="example-search-input" class="col-3 col-form-label">Project Name*</label>
-                              		  <div class="col-6">
-                              		  <div>
+								<input type="hidden" name="building_id" id="building_id" value="<% out.print(building_id);%>"/>
+								<div class="row">
+									<div class="col-md-6">
+                           				<div class="form-group row">
+                             		  	<label for="example-search-input" class="col-sm-4 col-form-label">Project Name*</label>
+                              		  		<div class="col-sm-6">
+                              		 	 		<div>
                                 	   <!-- <input class="form-control" type="text" value="project" id="example-search-input">-->
-                                		  <select id="project_id" name="project_id" class="form-control">
-											  <% for(ProjectData builderProject :builderProjects) { %>
-											  <option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == builderBuilding.getBuilderProject().getId()) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
-											  <% } %>
-										  </select>
+                                		  			<select id="project_id" name="project_id" class="form-control" disabled>
+													  <% 
+													  if(builderProjects !=null){
+													  
+													    	for(ProjectData builderProject :builderProjects) {
+													  %>
+													   <option value="<%if(builderProject != null && builderProjects.size() >0){ out.print(builderProject.getId()); }%>" <% if(builderProject != null){if(builderProject.getId() == builderBuilding.getBuilderProject().getId()) { %>selected<% }} %>><% out.print(builderProject.getName()); %></option>
+													   <%}} %>
+												  </select>
+                               	  	  			</div>
+                               	  	  		</div>
                                	  	  </div>
-                               	  	  <div class="messageContainer col-6"></div>
-                               	  	  </div>
+                               	</div>
+                              	<div class="col-md-6">
+                                	<div class="form-group row">
+                                		<label for="example-search-input" class="col-sm-4 col-form-label">Building Name</label>
+                                		<div class="col-sm-6">
+                                			<div>
+												<input class="form-control" type="text" readonly="true" id="name" name="name" value="<% out.print(builderBuilding.getName()); %>">
+                                			</div>
+                                		</div>
+                               		</div>
+                               	</div>
+                           </div>
+                           <% SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy"); %>
+                           <div class="row">
+                           		<div class="col-md-6">
+	                               <div class="form-group row">
+	                                    <label for="example-search-input" class="col-sm-4 col-form-label">Total Floors</label>
+	                                    <div class="col-sm-6">
+		                                    <div>
+		                                        <input class="form-control" readonly="true" type="text" id="total_floor" name="total_floor" value="<% out.print(builderBuilding.getTotalFloor());%>"/>
+		                                    </div>
+	                                    </div>
+	                               </div>
                                </div>
-                               <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Total Floors</label>
-                                    <div class="col-6">
-                                    <div>
-                                        <input class="form-control" type="text" id="total_floor" name="total_floor" value="<% out.print(builderBuilding.getTotalFloor());%>"/>
-                                    </div>
-                                    <div class="messageContainer col-6"></div>
-                                    </div>
+                               <div class="col-md-6">
+                               		<div class="form-group row">
+                               			<label for="example-search-input" class="col-sm-4 col-form-label">Launch Date*</label>
+                               			<div class="col-sm-6">
+                               				<input class="form-control" type="text" disabled id="launch_date" name="launch_date" value="<% if(builderBuilding.getLaunchDate() != null) { out.print(dt1.format(builderBuilding.getLaunchDate()));}%>">
+                               			</div>
+                               		</div>
                                </div>
-                               <div class="form-group row">
-                                	<label for="example-search-input" class="col-3 col-form-label">Building Name</label>
-                                	<div class="col-6">
-                                	<div>
-										<input class="form-control" type="text" id="name" name="name" value="<% out.print(builderBuilding.getName()); %>">
-                                	</div>
-                                	<div class="messageContainer col-6"></div>
-                                	</div>
-                               </div>
+                           </div>
+                           <div class="row">
+                           		<div class="col-md-6">
+                           			<div class="form-group row">
+                           			<label for="example-search-input" class="col-sm-4 col-form-label">Possession Date</label>
+                           				<div class="col-sm-6">
+                           					<input class="form-control" type="text" disabled id="possession_date" name="possession_date" value="<% if(builderBuilding.getPossessionDate() != null) { out.print(dt1.format(builderBuilding.getPossessionDate()));}%>"/>
+                           				</div>
+                           			</div>
+                           		</div>
+                           		<div class="col-md-6">
+                           			<div class="form-group row">
+                           				<label for="example-search-input" class="col-sm-4 col-form-label">Status *</label>
+                           				<div class="col-sm-6">
+                           					<select id="status" name="status" class="form-control" disabled>
+												<% 	for(BuilderBuildingStatus builderBuildingStatus :builderBuildingStatusList) { %>
+												<option value="<% out.print(builderBuildingStatus.getId());%>" <% if(builderBuildingStatus.getId() == builderBuilding.getBuilderBuildingStatus().getId()) { %>selected<% } %>><% out.print(builderBuildingStatus.getName()); %></option>
+												<% } %>
+											</select>
+										</div>
+                           			</div>
+                           		</div>
+                           </div>
                                <div class="offset-sm-5 col-sm-7">
                                     <button type="submit" name="basicdetail"  class="btn btn-info waves-effect waves-light m-t-10">Save</button>
                                </div>
                           </form>
                       </div>
                    </div>
-                   <% SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy"); %>
+                   
                         <div id="vimessages1" class="tab-pane" aria-expanded="false">
                            <div id="offerresponse" class="col-sm-12"></div><br>
 						   		<form id="updateoffer" name="updateoffer" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 									<input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
 									<input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
-									<div class="form-group row">
-                                 		<label for="example-search-input" class="col-3 col-form-label">Building Launch Date*</label>
-                                 		<div class="col-6">
-                                 			<div>
-                                     			<input class="form-control" type="text" id="launch_date" name="launch_date" value="<% if(builderBuilding.getLaunchDate() != null) { out.print(dt1.format(builderBuilding.getLaunchDate()));}%>">
-                                     		</div>
-                                     		<div class="messageContainer"></div>
-                                 		</div>
-                             		</div>
-                             		<div class="form-group row">
-                                 		<label for="example-search-input" class="col-3 col-form-label">Possession</label>
-                                 		<div class="col-6">
-                                 			<div>
-                                     			<input class="form-control" type="text" id="possession_date" name="possession_date" value="<% if(builderBuilding.getPossessionDate() != null) { out.print(dt1.format(builderBuilding.getPossessionDate()));}%>"/>
-                                     		</div>
-                                     		<div class="messageContainer"></div>
-                                 		</div>
-                             		</div>
-                             		<div class="form-group row">
-                               			<label for="example-search-input" class="col-3 col-form-label">Status *</label>
-                              			<div class="col-6">
-                                    <!-- <input class="form-control" type="text" value="project" id="example-search-input">-->
-                                 		 	<select id="status" name="status" class="form-control">
-												<% 	for(BuilderBuildingStatus builderBuildingStatus :builderBuildingStatusList) { %>
-												<option value="<% out.print(builderBuildingStatus.getId());%>" <% if(builderBuildingStatus.getId() == builderBuilding.getBuilderBuildingStatus().getId()) { %>selected<% } %>><% out.print(builderBuildingStatus.getName()); %></option>
-												<% } %>
-											</select>
-                           				</div>
-                             		</div>
+									
+                             		
+                             		
 		                            <%
 		                            if(builderBuildingAmenities != null){
 		                            for(BuilderBuildingAmenity builderBuildingAmenity :builderBuildingAmenities) {  
@@ -403,75 +450,49 @@
 									</div>
 								</form>
 							</div>
-                           <div id="vimessages2" class="tab-pane" aria-expanded="false">
-                            <div class="col-12">
-                           <form id="updateimage" name="updateimage" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
-                           <input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
-                           <div class="form-group row">
-                           <div id="imageresponse"></div>
-                               <label for="example-text-input" class="col-3 col-form-label">Upload Project Images</label>
-                               <div class="row" id="project_images">
-						<% for (BuildingImageGallery buildingImageGallery :buildingImageGalleries) { %>
-						<div class="col-lg-4 margin-bottom-5" id="b_image<% out.print(buildingImageGallery.getId()); %>">
-							<div class="form-group" id="error-landmark">
-								<div class="col-sm-12">
-									<img class="img-fix" alt="Building Images" src="${baseUrl}/<% out.print(buildingImageGallery.getImage()); %>" width="200px;">
-								</div>
-								<label class="col-sm-12 text-left"><a href="javascript:deleteImage(<% out.print(buildingImageGallery.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
-								<div class="messageContainer col-sm-offset-4"></div>
-							</div>
-						</div>
-						<% } %>
-					</div>
-					<div class="row">
-						<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-sm"> + Add More</a></span>
-					</div>
-					<hr/>
-                           </div> 
-                           
-                            <div class="form-group row">
-                           <label for="example-text-input" class="col-3 col-form-label">Upload Elavation Images</label>
-                               <div class="row" id="elevation_images">
-						<% for (BuildingPanoramicImage buildingPanoramicImage :buildingPanoramicImages) { %>
-						<div class="col-lg-4 margin-bottom-5" id="b_elv_image<% out.print(buildingPanoramicImage.getId()); %>">
-							<div class="form-group" id="error-landmark">
-								<div class="col-sm-12">
-									<img alt="Building Images" src="${baseUrl}/<% out.print(buildingPanoramicImage.getPanoImage()); %>" width="100%;">
-								</div>
-								<label class="col-sm-12 text-left"><a href="javascript:deleteElvImage(<% out.print(buildingPanoramicImage.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
-								<div class="messageContainer col-sm-offset-3"></div>
-							</div>
-						</div>
-						<% } %>
-					</div>
-					<div class="row">
-						<span class="pull-right"><a href="javascript:addMoreElvImages();" class="btn btn-info btn-sm"> + Add More</a></span>
-					</div>
-                             </div>  
-                         
-                           <div class="offset-sm-5 col-sm-7">
-                                   <button type="button" name="imagebtn" class="btn btn-info waves-effect waves-light m-t-10"  onclick="updateBuildingImages();">Update</button>
-                            </div>
-                           </form>
-                           </div>
-                          </div>
                         </div>
                    </div>
-                   </div>
-               </div>
                 </div>
-            </div>
+             </div>
+           </div>
+        </div>
+      </div>
             <!-- /.container-fluid -->
-            <div id="sidebar1"> 
-	      		<%@include file="../../partial/footer.jsp"%>
-			</div> 
+ <div id="sidebar1"> 
+	<%@include file="../../partial/footer.jsp"%>
+</div> 
 </body>
 </html>
 <script src="../../js/bootstrapValidator.min.js"></script>
 <script src="../../js/bootstrap-datepicker.min.js"></script>
 <script src="../../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
+<script type="text/javascript" src="${baseUrl}/builder/js/selectize.min.js"></script>
 <script type="text/javascript">
+// $select_building = $("#filter_building_id").selectize({
+// 	persist: false,
+// 	 onChange: function(value) {
+// 		// getProjectFilterList(value);
+// 		//alert($("#project_id").val()+" "+value);
+// 		window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+value;
+// 	 },
+// 	 onDropdownOpen: function(value){
+//     	 var obj = $(this);
+// 		var textClear =	 $("#filter_building_id :selected").text();
+//     	 if(textClear.trim() == "Enter Building Name"){
+//     		 obj[0].setValue("");
+//     	 }
+//      }
+// });
+<%-- <%if(building_size_list > 0){%> --%>
+// 	select_building = $select_building[0].selectize;
+<%-- <%}%> --%>
+
+$("#filter_building_id").change(function(){
+	
+	window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val();
+});
+
 $('#launch_date').datepicker({
 	autoclose:true,
 	format: "dd M yyyy"
@@ -789,6 +810,30 @@ function addMoreElvImages() {
 function removeElvImage(id) {
 	$("#elvimgdiv-"+id).remove();
 }
+
+$("#building").click(function(){
+	 var check = $("#building").hasClass('top-lue-box');
+	 if(!check){
+		 $("#building").removeClass('top-white-box');
+		 $("#building").addClass('top-blue-box');
+		 var isProject = $("#project").hasClass('top-blue-box');
+		 if(isProject){
+			 $("#project").removeClass('top-blue-box');
+			 $('#project').addClass('top-white-box');
+		 }
+		 var isFloor = $('#floor').hasClass('top-blue-box');
+		 if(isFloor){
+			 $('#floor').removeClass('top-blue-box');
+			 $('#floor').addClass('top-white-box');
+		 }
+		 var isFlat = $("#flat").hasClass('top-blue-box');
+		 if(isFlat){
+			 $('#flat').removeClass('top-blue-box');
+			 $('#flat').addClass('top-white-box');
+		 }
+	 }
+	
+});
 
 $('#updatebuilding').bootstrapValidator({
 	container: function($field, validator) {

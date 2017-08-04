@@ -490,7 +490,7 @@ hr {
 	color: #03a9f3 !important
 }
 .text-info-new{
-	color: #0FAEB9 !important
+	color: #24bcd3 !important
 }
 .text-inverse {
 	color: #4c5667 !important
@@ -608,7 +608,7 @@ hr {
 	background-color: #9675ce !important
 }
 .bg-blue {
-	background-color : #0FAEB9 !important
+ background-color : #24bcd3 !important
 }
 .bg-white {
 	background-color: #fff !important
@@ -13054,12 +13054,12 @@ a.mytooltip {
 	margin: -7px 0 0 -15px;
 	width: 30px;
 	height: 20px;
-	background: url(http://eliteadmin.themedesigner.in/demos/plugins/images/tooltip/tooltip1.svg) center center no-repeat;
+/* 	background: url(http://eliteadmin.themedesigner.in/demos/plugins/images/tooltip/tooltip1.svg) center center no-repeat; */
 	background-size: 100%
 }
 .tooltip-content3 {
 	position: absolute;
-	background: url(http://eliteadmin.themedesigner.in/demos/plugins/images/tooltip/shape1.svg) center bottom no-repeat;
+/* 	background: url(http://eliteadmin.themedesigner.in/demos/plugins/images/tooltip/shape1.svg) center bottom no-repeat; */
 	background-size: 100% 100%;
 	z-index: 9999;
 	width: 200px;
