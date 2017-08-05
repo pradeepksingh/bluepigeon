@@ -30,7 +30,7 @@
                             <input type="text" class="form-control" placeholder="Search..."> <span class="input-group-btn">
             <button class="btn btn-default" type="button"> <i class="fa fa-search"></i> </button>
             </span> </div>
-                        /input-group
+<!--                         input-group -->
                     </li>
                     <li class="user-pro">
                         <a href="#" class="waves-effect"><img src="${baseUrl }/builder/plugins/images/users/d1.jpg" alt="user-img" class="img-circle"> <span class="hide-menu"><%out.print(builder_new.getName()); %><span class="fa arrow"></span></span>
@@ -48,9 +48,9 @@
                     
                      if(emp_access_id ==1 ||emp_access_id==2){%>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="linea-icon linea-basic fa-fw" data-icon="7"></i> <span class="hide-menu">Project<span class="fa arrow"></span> 
-                    </span></a>
+<!--                     </span></a> -->
                         <ul class="nav nav-second-level">
-<%--                             <li> <a href="${baseUrl }/builder/project/new.jsp">Add</a> </li> --%>
+                            <li> <a href="${baseUrl }/builder/project/new.jsp">Add</a> </li>
                             <li> <a href="${baseUrl }/builder/project/list.jsp">Manage Project</a></li>
                              <li> <a href="${baseUrl }/builder/project/building/list.jsp">Manage Buildings</a></li>
                               <li> <a href="${baseUrl }/builder/project/building/floor/list.jsp">Manage Floor</a></li>

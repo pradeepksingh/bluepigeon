@@ -165,7 +165,7 @@
                                     		
                                 			<div class="row">
                                					<div class="offset-sm-5 col-sm-7">
-                                       				<button type="submit" class="btn btn-info waves-effect waves-light m-t-10">UPDATE</button>
+                                       				<button type="submit" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
                                					</div>
                                  			</div>
                                			</form>

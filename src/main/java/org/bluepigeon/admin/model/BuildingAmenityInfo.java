@@ -52,7 +52,7 @@ public class BuildingAmenityInfo implements java.io.Serializable {
 		this.builderBuilding = builderBuilding;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "amenity_id")
 	public BuilderBuildingAmenity getBuilderBuildingAmenity() {
 		return this.builderBuildingAmenity;

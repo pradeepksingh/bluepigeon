@@ -193,7 +193,7 @@
 						    </div>
 						  </div>
 						</div>
-                            <h4 class="p-t-20 fw-500"><%out.print(projectList.getCity().getName());%>, <%out.print(projectList.getLocality().getName());%>, <%out.print(projectList.getName());%></h4>
+                            <h4 class="p-t-20 fw-500"><%out.print(projectList.getCity().getName());%>, <%out.print(projectList.getLocalityName());%>, <%out.print(projectList.getName());%></h4>
                             <h5><span class="text-muted"><i class="fa fa-map-marker text-danger m-r-10" aria-hidden="true"></i><%out.print(projectList.getState().getName());%> / <%out.print(projectList.getCountry().getName());%></span></h5>
                             <hr class="m-0">
                             <p class="text-dark p-t-20 pro-desc"><%out.print(projectList.getDescription()); %></p>
@@ -241,7 +241,7 @@
                                         </tr>
                                         <tr>
                                             <td>Subdivision</td>
-                                            <td><%out.print(projectList.getLocality().getName()); %></td>
+                                            <td><%out.print(projectList.getLocalityName()); %></td>
                                         </tr>
                                         <tr>
                                             <td>City</td>

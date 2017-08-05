@@ -32,7 +32,7 @@ public class BuilderProject implements java.io.Serializable {
 	private AdminUser adminUser;
 	private AreaUnit areaUnit;
 	private Country country;
-	private Locality locality;
+	private Integer areaId=0;
 	private String localityName="";
 	private City city;
 	private Builder builder;
@@ -48,8 +48,8 @@ public class BuilderProject implements java.io.Serializable {
 	private String highlights;
 	private Date launchDate;
 	private Date possessionDate;
-	private Double totalInventory = 0.0;
-	private Double inventorySold =0.0;
+	private Integer totalInventory = 0;
+	private Integer inventorySold =0;
 	private Integer availbale = 0;
 	private Double revenue = 0.0;
 	private Double completionStatus = 0.0;
@@ -75,10 +75,10 @@ public class BuilderProject implements java.io.Serializable {
 	public BuilderProject() {
 	}
 
-	public BuilderProject(State state, AdminUser adminUser, AreaUnit areaUnit, Country country, Locality locality, String localityName,
+	public BuilderProject(State state, AdminUser adminUser, AreaUnit areaUnit, Country country, Integer areaId, String localityName,
 			City city, Builder builder, BuilderCompanyNames builderCompanyNames, String name, String addr1,
 			String addr2, String pincode, String latitude, String longitude, Double projectArea, String description,
-			String highlights, Date launchDate, Date possessionDate, Double totalInventory, Double inventorySold,
+			String highlights, Date launchDate, Date possessionDate, Integer totalInventory, Integer inventorySold,
 			Double revenue, Byte status, Set<BuilderBuilding> builderBuildings,
 			Set<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos,
 			Set<ProjectPanoramicImage> projectPanoramicImages, Set<BuilderProjectPriceInfo> builderProjectPriceInfos,
@@ -94,7 +94,7 @@ public class BuilderProject implements java.io.Serializable {
 		this.adminUser = adminUser;
 		this.areaUnit = areaUnit;
 		this.country = country;
-		this.locality = locality;
+		this.areaId = areaId;
 		this.city = city;
 		this.builder = builder;
 		this.builderCompanyNames = builderCompanyNames;
@@ -187,22 +187,29 @@ public class BuilderProject implements java.io.Serializable {
 		this.country = country;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "area_id")
-	public Locality getLocality() {
-		return this.locality;
-	}
-
-	public void setLocality(Locality locality) {
-		this.locality = locality;
-	}
-
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name = "area_id")
+//	public Locality getLocality() {
+//		return this.locality;
+//	}
+//
+//	public void setLocality(Locality locality) {
+//		this.locality = locality;
+//	}
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "city_id")
 	public City getCity() {
 		return this.city;
 	}
+	@Column(name="area_id")
+	public Integer getAreaId() {
+		return areaId;
+	}
 
+	public void setAreaId(Integer areaId) {
+		this.areaId = areaId;
+	}
 	public void setCity(City city) {
 		this.city = city;
 	}
@@ -338,20 +345,20 @@ public class BuilderProject implements java.io.Serializable {
 	}
 
 	@Column(name = "total_inventory", precision = 22, scale = 0)
-	public Double getTotalInventory() {
+	public Integer getTotalInventory() {
 		return this.totalInventory;
 	}
 
-	public void setTotalInventory(Double totalInventory) {
+	public void setTotalInventory(Integer totalInventory) {
 		this.totalInventory = totalInventory;
 	}
 
 	@Column(name = "inventory_sold", precision = 22, scale = 0)
-	public Double getInventorySold() {
+	public Integer getInventorySold() {
 		return this.inventorySold;
 	}
 
-	public void setInventorySold(Double inventorySold) {
+	public void setInventorySold(Integer inventorySold) {
 		this.inventorySold = inventorySold;
 	}
 

@@ -124,6 +124,9 @@
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                         <h4 class="page-title">Dashboard</h4> </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> 
+                    	<a href="${baseUrl}/builder/project/new.jsp"><span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add new Project</span></a>
+                    </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> 
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -225,7 +228,6 @@
                                        <option value="<%out.print(projectList.getId());%>"><%out.print(projectList.getName()); %></option>
                                        <% }}%>
                            </select>
-                               
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                       <select  id="city_id" name="city_id">
@@ -236,10 +238,9 @@
                                         <option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
                                         <%}} %>
                           </select>
-                             
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
-                      <input class="form-control" type="text" id="locality_name" name="locality_name">
+                      <input class="form-control" type="text" id="locality_name" name="locality_name" placeholder="Enter locality name" title="Please select City First and then enter locality name">
                               
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -248,7 +249,6 @@
                                         <option value="1">Pending Projects</option>
                                         <option value="2">Complete Projects</option>
                          </select>
-                               
                     </div>
                     <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_id);%>"/>
                     <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
@@ -293,7 +293,7 @@
 	                       <div class="row">
 	                      
                            	<div class="col-md-6 left"> 
-                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>
+                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
                            	</div>
                          	<div class="col-md-6 center">
                           		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
@@ -342,7 +342,7 @@
                     		</div>
                             <ul class="list-inline text-right">
                                 <li>
-                                    <h5><i class="fa fa-circle m-r-5" style="color: #00bfc7;"></i>Flats</h5> </li>
+                                    <h5><i class="fa fa-circle m-r-5" style="color: #24bcd3;"></i>Flats</h5> </li>
                                 <li>
                                     <h5><i class="fa fa-circle m-r-5" style="color: #fb9678;"></i>Buyers</h5> </li>
                                 <li>
@@ -358,7 +358,7 @@
                                     <h3 class="box-title">Property sales</h3>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                                            <h1 class="text-info sales-income">Rs <%out.print(Math.round(totalPropertySold)); %></h1>
+                                            <h1 class="text-info-new sales-income">Rs <%out.print(Math.round(totalPropertySold)); %></h1>
                                             <p class="text-muted"></p> <b>(<%out.print(totalInventorySold); %> Sales)</b> </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sparkline2dash" class="text-center"></div>
@@ -387,21 +387,21 @@
 	                <div class="row">
 	                <%if((access_id >=1 && access_id <=2) || (access_id>=4 && access_id <= 5)) {%>
 		                <div class="col-md-4">
-		                    <button type="button" onclick="addEmployee();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Employee</button>
+		                    <button type="button" onclick="addEmployee();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add New Employee</button>
 		                </div>
 		               
 		                 <div class="col-md-4">
-		                    <button type="button" onclick="addLead();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Lead</button>
+		                    <button type="button" onclick="addLead();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add New Lead</button>
 		                 </div>
 		                  <%} %>
 		                  <%if(access_id == 7){ %>
 		                   <div class="col-md-4">
-		                    <button type="button" onclick="addLead();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Lead</button>
+		                    <button type="button" onclick="addLead();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add New Lead</button>
 		                 </div>
 		                 <%} %>
 		                 <%if(access_id ==3) {%>
 		                  <div class="col-md-4">
-		                    <button type="button" onclick="addCampaign();" class="btn11 btn-info waves-effect waves-light m-t-10">Add Campaign</button>
+		                    <button type="button" onclick="addCampaign();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add Campaign</button>
 		                 </div>
 		                  <%} %>
 <!-- 		                 <div class="col-md-4"> -->
@@ -467,8 +467,6 @@
     <%}%>
     
     $("#locality_name").keyup(function(){
-    	alert("Hello from locality");
-    	alert($("#locality_name").val());
     	getProjectList();
     });
 
@@ -738,7 +736,7 @@ $("#locality_name").attr('disabled',true);
             		+'<div class="row">'
             		<%if(access_id == 1 || access_id==2){%>
             		+'<div class="col-md-6 left">' 
-            		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>'
+            		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
             		+'</div>'
             		<%}%>
           		+'<div class="col-md-6 center">'
@@ -805,7 +803,7 @@ $("#locality_name").attr('disabled',true);
                		<%if(access_id ==1 || access_id == 2){%>
                		+'<div class="row">'
                		+'<div class="col-md-6 left">' 
-               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>'
+               		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                		+'</div>'
                		<%}%>
              		+'<div class="col-md-6 center">'
@@ -872,7 +870,7 @@ $("#locality_name").attr('disabled',true);
                  		+'<div class="row">'
                  		<%if(access_id ==1 || access_id == 2){%>
                  		+'<div class="col-md-6 left">' 
-                 		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>'
+                 		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
                  		<%}%>
                		+'<div class="col-md-6 center">'
@@ -914,7 +912,7 @@ $("#locality_name").attr('disabled',true);
              xkey: 'y',
      	    ykeys: ['Flat', 'Buyer', 'Purchases'],
      	    labels: ['Flat', 'Buyer', 'Purchases'],
-     	    barColors:['#00bfc7', '#fb9678', '#9675ce'],
+     	    barColors:['#24bcd3', '#fb9678', '#9675ce'],
      	    hideHover: 'auto',
      	   
      	    gridLineColor: '#eef0f2',

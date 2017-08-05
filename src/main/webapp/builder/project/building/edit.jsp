@@ -1,3 +1,10 @@
+<%@page import="org.bluepigeon.admin.data.PaymentInfoData"%>
+<%@page import="org.bluepigeon.admin.dao.BuilderProjectOfferInfoDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectOfferInfo"%>
+<%@page import="org.bluepigeon.admin.model.Tax"%>
+<%@page import="org.bluepigeon.admin.dao.AreaUnitDAO"%>
+<%@page import="org.bluepigeon.admin.model.AreaUnit"%>
+<%@page import="org.bluepigeon.admin.data.PriceInfoData"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
@@ -24,8 +31,12 @@
 	ServletContext webcontext = pageContext.getServletContext();
 	int building_id = 0;
 	int project_id = 0;
+	int floor_id = 0;
+	int flat_id = 0;
 	int p_user_id = 0;
+	int building_size_list = 0;
 	BuilderBuilding builderBuilding = null;
+	List<BuilderBuilding> builderBuildings = null;
 	List<BuilderBuilding> builderBuildingList = null;
 	List<ProjectData> builderProjects = null;
 	List<BuilderBuildingAmenity> builderBuildingAmenities = null;
@@ -33,9 +44,14 @@
 	List<BuildingImageGallery> buildingImageGalleries = null;
 	List<BuildingPanoramicImage> buildingPanoramicImages = null;
 	List<BuildingAmenityInfo> buildingAmenityInfos  = null;
-	List<BuildingPaymentInfo> buildingPaymentInfos = null;
+//	List<BuildingPaymentInfo> buildingPaymentInfos = null;
+	List<PaymentInfoData> buildingPaymentInfos = null;
 	List<BuildingOfferInfo> buildingOfferInfos = null;
+	List<BuilderProjectOfferInfo> builderProjectOfferInfos = null;
+	PriceInfoData priceInfoData = null;
+	List<AreaUnit> areaUnits = null;
 	List<BuildingAmenityWeightage> buildingAmenityWeightages = null;
+	List<Tax> taxes = null;
 	project_id = Integer.parseInt(request.getParameter("project_id"));
 	building_id = Integer.parseInt(request.getParameter("building_id"));
 	session = request.getSession(false);
@@ -48,42 +64,53 @@
 			if(adminuserproject != null){
 				p_user_id = adminuserproject.getBuilder().getId();
 				builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
-			}
-			List<BuilderBuilding> builderBuildings = new ProjectDAO().getBuilderProjectBuildingById(building_id);
-			if(builderBuildings.size() > 0) {
-				builderBuilding = builderBuildings.get(0);
-			}
-			if(building_id>0){
-				builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
-				builderBuildingStatusList = new BuilderBuildingStatusDAO().getActiveBuilderBuildingStatus();
-				builderBuildingAmenities = new BuilderBuildingAmenityDAO().getActiveBuilderBuildingAmenityList();
-				buildingImageGalleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
-			    buildingPanoramicImages = new ProjectDAO().getBuilderBuildingElevationImagesById(building_id);
-				buildingAmenityInfos = new ProjectDAO().getBuilderBuildingAmenityInfoById(building_id);
-				buildingPaymentInfos = new ProjectDAO().getActiveBuilderBuildingPaymentInfoById(building_id);
-				buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
-				buildingAmenityWeightages = new ProjectDAO().getActiveBuilderBuildingAmenityWeightageById(building_id);
-			}else{
-				builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
-				if(builderBuildingList.size()>0){
-					building_id = builderBuildingList.get(0).getId();
+				if(building_id>0 && project_id > 0){
+					System.err.println("projectId :: "+project_id+" \n Building Id :: "+building_id);
+					builderBuildings = new ProjectDAO().getBuilderProjectBuildingById(building_id);
+					if(builderBuildings.size() > 0) {
+						builderBuilding = builderBuildings.get(0);
+					}
+					builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
+					building_size_list = builderBuildingList.size();
 					builderBuildingStatusList = new BuilderBuildingStatusDAO().getActiveBuilderBuildingStatus();
 					builderBuildingAmenities = new BuilderBuildingAmenityDAO().getActiveBuilderBuildingAmenityList();
 					buildingImageGalleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
 				    buildingPanoramicImages = new ProjectDAO().getBuilderBuildingElevationImagesById(building_id);
 					buildingAmenityInfos = new ProjectDAO().getBuilderBuildingAmenityInfoById(building_id);
-					buildingPaymentInfos = new ProjectDAO().getActiveBuilderBuildingPaymentInfoById(building_id);
+					//buildingPaymentInfos = new ProjectDAO().getActiveBuilderBuildingPaymentInfoById(building_id);
+					buildingPaymentInfos = new ProjectDAO().getBuildingPaymentInfoById(building_id);
 					buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
 					buildingAmenityWeightages = new ProjectDAO().getActiveBuilderBuildingAmenityWeightageById(building_id);
+					priceInfoData = new ProjectDAO().getBuildingPriceData(building_id);
+					builderProjectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderProjectOfferInfo(project_id);
+					areaUnits = new AreaUnitDAO().getActiveAreaUnitList();
+					buildingPaymentInfos = new ProjectDAO().getBuildingPaymentInfoById(building_id);
+					floor_id = new ProjectDAO().getActiveFloorsByBuildingId(building_id).get(0).getId();
+					flat_id = new ProjectDAO().getBuilderActiveFloorFlats(floor_id).get(0).getId();
+					BuilderProject builderProject = new ProjectDAO().getBuilderProjectById(project_id);
+					if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
+						taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
+					}
+				}
+// 				}else if(project_id > 0 && building_id == 0){
+// 					out.println("projectId :: "+project_id+" \n Building Id :: "+building_id);
+// 					builderBuildings = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
+// 					if(builderBuildings.size()>0){
+// 						building_id = builderBuildings.get(0).getId();
+// 						builderBuildingStatusList = new BuilderBuildingStatusDAO().getActiveBuilderBuildingStatus();
+// 						builderBuildingAmenities = new BuilderBuildingAmenityDAO().getActiveBuilderBuildingAmenityList();
+// 						buildingImageGalleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
+// 					    buildingPanoramicImages = new ProjectDAO().getBuilderBuildingElevationImagesById(building_id);
+// 						buildingAmenityInfos = new ProjectDAO().getBuilderBuildingAmenityInfoById(building_id);
+// 						buildingPaymentInfos = new ProjectDAO().getActiveBuilderBuildingPaymentInfoById(building_id);
+// 						buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
+// 						buildingAmenityWeightages = new ProjectDAO().getActiveBuilderBuildingAmenityWeightageById(building_id);
+// 					}
 				}
 			}
 		}
-		
-	}
-	
-	
+	//}
 %>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -107,6 +134,7 @@
     <link href="../../css/style.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom1.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="${baseUrl}/builder/css/selectize.css" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -147,331 +175,604 @@
     </div>
     <div id="page-wrapper" style="min-height: 2038px;">
         <div class="container-fluid">
-           <div class="row bg-title">
-               <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                   <h4 class="page-title">Building Review</h4>
-               </div>
+          <div class="row">
+                <div class="col-lg-3 col-sm-6 col-xs-12 m-t-15 ">
+                	<a href="${baseUrl}/builder/project/edit.jsp?project_id=<%out.print(project_id);%>">
+                    <div id="project" class="top-white-box ">PROJECT</div>
+                    </a>
+                </div>
+            	 <div  class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
+	                 <a href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id);%>&building_id=<%out.print(building_id);%>">
+	                     <div id="building" class="top-blue-box ">BUILDING</div>
+	                 </a>
+            	</div>
+                <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
+                	<a href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id); %>&floor_id=<%out.print(floor_id); %>">
+                    <div id="floor" class="top-white-box" >FLOOR</div>
+                    </a>
+                </div>
+                <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
+                    <div id="flat" class="top-white-box">FLAT</div>
+                </div>
+           </div>
+           <div class="row">
+          		<div class="col-md-3 col-sm-6 col-xs-12">
+                     <select id="filter_building_id" name="filter_building_id" class="form-control">
+                             <% for(BuilderBuilding builderBuilding2 : builderBuildingList){ %>
+                     		<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName()); %></option>
+                     		<%} %>
+                     </select>
+                </div>
            </div>
            <div class="row">
                <div class="col-lg-12">
                    <div class="white-box">
+                   	<div class="color-box">
                            <ul class="nav nav-tabs">
                                <li class="active" >
-                                   <a data-toggle="tab"  href="#vimessages" > <span>Project Details</span></a>
+                                   <a data-toggle="tab"  href="#vimessages" > <span>Basic Details</span></a>
                                </li>
                                 <li>
-                                   <a  data-toggle="tab" href="#vimessages1"><span>Building Details</span></a>
+                                   <a  data-toggle="tab" href="#vimessages1"><span>Pricing Details</span></a>
                                </li>
                                <li>
-                                   <a  data-toggle="tab" href="#vimessages2"><span>Images</span></a>
+                                   <a  data-toggle="tab" href="#vimessages2"><span>Payment Schedule</span></a>
+                               </li>
+                               <li>
+                                   <a  data-toggle="tab" href="#vimessages3"><span>Offers</span></a>
                                </li>
                            </ul>
                            <div class="tab-content"> 
                              <div id="vimessages" class="tab-pane active" aria-expanded="false">
                                <div id="basicresponse" class="col-sm-12"></div><br>
                            <div class="col-12">
-                           	<form id="updatebuilding" name="updatebuilding" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+                           		<form id="updatebuilding" name="updatebuilding" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
                            		<input type="hidden" name="admin_id" id="admin_id" value="1"/>
-								<input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
-                           		<div class="form-group row">
-                             		  <label for="example-search-input" class="col-3 col-form-label">Project Name*</label>
-                              		  <div class="col-6">
-                              		  <div>
+								<input type="hidden" name="building_id" id="building_id" value="<% out.print(building_id);%>"/>
+								<div class="row">
+									<div class="col-md-6">
+                           				<div class="form-group row">
+                             		  	<label for="example-search-input" class="col-sm-4 col-form-label">Project Name*</label>
+                              		  		<div class="col-sm-6">
+                              		 	 		<div>
                                 	   <!-- <input class="form-control" type="text" value="project" id="example-search-input">-->
-                                		  <select id="project_id" name="project_id" class="form-control">
-											  <% for(ProjectData builderProject :builderProjects) { %>
-											  <option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == builderBuilding.getBuilderProject().getId()) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
-											  <% } %>
-										  </select>
+                                		  			<select id="project_id" name="project_id" class="form-control" disabled>
+													  <% 
+													  if(builderProjects !=null){
+													  
+													    	for(ProjectData builderProject :builderProjects) {
+													  %>
+													   <option value="<%if(builderProject != null && builderProjects.size() >0){ out.print(builderProject.getId()); }%>" <% if(builderProject != null){if(builderProject.getId() == builderBuilding.getBuilderProject().getId()) { %>selected<% }} %>><% out.print(builderProject.getName()); %></option>
+													   <%}} %>
+												  </select>
+                               	  	  			</div>
+                               	  	  		</div>
                                	  	  </div>
-                               	  	  <div class="messageContainer col-6"></div>
-                               	  	  </div>
+                               	</div>
+                              	<div class="col-md-6">
+                                	<div class="form-group row">
+                                		<label for="example-search-input" class="col-sm-4 col-form-label">Building Name</label>
+                                		<div class="col-sm-6">
+                                			<div>
+												<input class="form-control" type="text" readonly="true" id="name" name="name" value="<% out.print(builderBuilding.getName()); %>">
+                                			</div>
+                                		</div>
+                               		</div>
+                               	</div>
+                           </div>
+                           <% SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy"); %>
+                           <div class="row">
+                           		<div class="col-md-6">
+	                               <div class="form-group row">
+	                                    <label for="example-search-input" class="col-sm-4 col-form-label">Total Floors</label>
+	                                    <div class="col-sm-6">
+		                                    <div>
+		                                        <input class="form-control" readonly="true" type="text" id="total_floor" name="total_floor" value="<% out.print(builderBuilding.getTotalFloor());%>"/>
+		                                    </div>
+	                                    </div>
+	                               </div>
                                </div>
-                               <div class="form-group row">
-                                    <label for="example-search-input" class="col-3 col-form-label">Total Floors</label>
-                                    <div class="col-6">
-                                    <div>
-                                        <input class="form-control" type="text" id="total_floor" name="total_floor" value="<% out.print(builderBuilding.getTotalFloor());%>"/>
-                                    </div>
-                                    <div class="messageContainer col-6"></div>
-                                    </div>
+                               <div class="col-md-6">
+                               		<div class="form-group row">
+                               			<label for="example-search-input" class="col-sm-4 col-form-label">Launch Date*</label>
+                               			<div class="col-sm-6">
+                               				<input class="form-control" type="text" disabled id="launch_date" name="launch_date" value="<% if(builderBuilding.getLaunchDate() != null) { out.print(dt1.format(builderBuilding.getLaunchDate()));}%>">
+                               			</div>
+                               		</div>
                                </div>
-                               <div class="form-group row">
-                                	<label for="example-search-input" class="col-3 col-form-label">Building Name</label>
-                                	<div class="col-6">
-                                	<div>
-										<input class="form-control" type="text" id="name" name="name" value="<% out.print(builderBuilding.getName()); %>">
-                                	</div>
-                                	<div class="messageContainer col-6"></div>
-                                	</div>
-                               </div>
-                               <div class="offset-sm-5 col-sm-7">
-                                    <button type="submit" name="basicdetail"  class="btn btn-info waves-effect waves-light m-t-10">Save</button>
-                               </div>
-                          </form>
-                      </div>
-                   </div>
-                   <% SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy"); %>
-                        <div id="vimessages1" class="tab-pane" aria-expanded="false">
-                           <div id="offerresponse" class="col-sm-12"></div><br>
-						   		<form id="updateoffer" name="updateoffer" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
-									<input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
-									<input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
-									<div class="form-group row">
-                                 		<label for="example-search-input" class="col-3 col-form-label">Building Launch Date*</label>
-                                 		<div class="col-6">
-                                 			<div>
-                                     			<input class="form-control" type="text" id="launch_date" name="launch_date" value="<% if(builderBuilding.getLaunchDate() != null) { out.print(dt1.format(builderBuilding.getLaunchDate()));}%>">
-                                     		</div>
-                                     		<div class="messageContainer"></div>
-                                 		</div>
-                             		</div>
-                             		<div class="form-group row">
-                                 		<label for="example-search-input" class="col-3 col-form-label">Possession</label>
-                                 		<div class="col-6">
-                                 			<div>
-                                     			<input class="form-control" type="text" id="possession_date" name="possession_date" value="<% if(builderBuilding.getPossessionDate() != null) { out.print(dt1.format(builderBuilding.getPossessionDate()));}%>"/>
-                                     		</div>
-                                     		<div class="messageContainer"></div>
-                                 		</div>
-                             		</div>
-                             		<div class="form-group row">
-                               			<label for="example-search-input" class="col-3 col-form-label">Status *</label>
-                              			<div class="col-6">
-                                    <!-- <input class="form-control" type="text" value="project" id="example-search-input">-->
-                                 		 	<select id="status" name="status" class="form-control">
+                           </div>
+                           <div class="row">
+                           		<div class="col-md-6">
+                           			<div class="form-group row">
+                           			<label for="example-search-input" class="col-sm-4 col-form-label">Possession Date</label>
+                           				<div class="col-sm-6">
+                           					<input class="form-control" type="text" disabled id="possession_date" name="possession_date" value="<% if(builderBuilding.getPossessionDate() != null) { out.print(dt1.format(builderBuilding.getPossessionDate()));}%>"/>
+                           				</div>
+                           			</div>
+                           		</div>
+                           		<div class="col-md-6">
+                           			<div class="form-group row">
+                           				<label for="example-search-input" class="col-sm-4 col-form-label">Building Status *</label>
+                           				<div class="col-sm-6">
+                           					<select id="status" name="status" class="form-control" disabled>
 												<% 	for(BuilderBuildingStatus builderBuildingStatus :builderBuildingStatusList) { %>
 												<option value="<% out.print(builderBuildingStatus.getId());%>" <% if(builderBuildingStatus.getId() == builderBuilding.getBuilderBuildingStatus().getId()) { %>selected<% } %>><% out.print(builderBuildingStatus.getName()); %></option>
 												<% } %>
 											</select>
-                           				</div>
-                             		</div>
-		                            <%
-		                            if(builderBuildingAmenities != null){
-		                            for(BuilderBuildingAmenity builderBuildingAmenity :builderBuildingAmenities) {  
-										String is_selected = "";
-										if(buildingAmenityInfos.size() > 0) { 
-											for(BuildingAmenityInfo buildingAmenityInfo :buildingAmenityInfos) {
-												if(buildingAmenityInfo.getBuilderBuildingAmenity() != null){
-													if(buildingAmenityInfo.getBuilderBuildingAmenity().getId() == builderBuildingAmenity.getId()) {
-														is_selected = "checked";
-													}
-												}
-											}
-										}
-									%>
-									<input type="hidden" name="amenity_type[]" value="<% out.print(builderBuildingAmenity.getId());%>" <% out.print(is_selected); %>/> <%// out.print(builderBuildingAmenity.getName());%>
-									<%} %>
-									<% 	for(BuilderBuildingAmenity builderBuildingAmenity : builderBuildingAmenities) { 
-										String is_checked = "";
-										if(buildingAmenityInfos.size() > 0) { 
-											for(BuildingAmenityInfo buildingAmenityInfo :buildingAmenityInfos) {
-												if(buildingAmenityInfo.getBuilderBuildingAmenity() != null){
-													if(buildingAmenityInfo.getBuilderBuildingAmenity().getId() == builderBuildingAmenity.getId()) {
-														is_checked = "checked";
-													}
-												}
-											}
-										}
-										Double amenity_wt = 0.0;
-										for(BuildingAmenityWeightage buildingAmenityWeightage :buildingAmenityWeightages) {
-											if(builderBuildingAmenity.getId() == buildingAmenityWeightage.getBuilderBuildingAmenity().getId()) {
-												amenity_wt = buildingAmenityWeightage.getAmenityWeightage();
-											}
-										}
-									%>
-									<input type="hidden" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderBuildingAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
-									<% 	for(BuilderBuildingAmenityStages bpaStages :builderBuildingAmenity.getBuilderBuildingAmenityStageses()) { 
-										Double stage_wt = 0.0;
-										for(BuildingAmenityWeightage buildingAmenityWeightage :buildingAmenityWeightages) {
-											if(bpaStages.getId() == buildingAmenityWeightage.getBuilderBuildingAmenityStages().getId()) {
-												stage_wt = buildingAmenityWeightage.getStageWeightage();
-											}
-										}
-									%>
-									<input name="stage_weightage<% out.print(builderBuildingAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="hidden" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/>
-									<% 	for(BuilderBuildingAmenitySubstages bpaSubstage :bpaStages.getBuilderBuildingAmenitySubstageses()) { 
-										Double substage_wt = 0.0;
-										for(BuildingAmenityWeightage buildingAmenityWeightage :buildingAmenityWeightages) {
-											if(bpaSubstage.getId() == buildingAmenityWeightage.getBuilderBuildingAmenitySubstages().getId()) {
-												substage_wt = buildingAmenityWeightage.getSubstageWeightage();
-											}
-										}
-									%>
-									<input type="hidden" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
-									<% } 
-									}
-									}}
-									%>
-			                   		<div id="offer" class="tab-pane fade active in">
-										<input type="hidden" name="offer_count" id="offer_count" value="10002">
-							 			<div class="row">
-											<div class="col-lg-12">
-												<div class="panel panel-default">
-													<div class="panel-body">
-														<div id="offer_area">
-															<% for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) { %>
-															<div class="row" id="offer-<% out.print(buildingOfferInfo.getId()); %>">
-																<input type="hidden" name="offer_id[]" value="<% out.print(buildingOfferInfo.getId()); %>" />
-																<div class="col-lg-12" style="padding-bottom:5px;">
-																	<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(buildingOfferInfo.getId()); %>);" class="btn btn-primary btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span>
-																</div>
-																<div class="col-lg-5 margin-bottom-5">
-																	<div class="form-group" id="error-offer_title">
-																		<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
-																		<div class="col-sm-8">
-																			<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>">
+										</div>
+                           			</div>
+                           		</div>
+                           </div>
+<!--                            <hr> -->
+<!--                            <div class="form-group row"> -->
+<!--                              <label for="example-text-input" class="col-sm-2 col-form-label">Building Amenities *</label> -->
+<%--                             <% --%>
+<!-- // 		                            if(buildingAmenityInfos != null){ -->
+<!-- // 		                            	int bai = buildingAmenityInfos.size(); -->
+<!-- // 		                            	for(int i = 0; i < buildingAmenityInfos.size(); i++){ -->
+<!-- // 		                            		if(bai > 1){ -->
+<!-- // 		                            			out.print(buildingAmenityInfos.get(i).getBuilderBuildingAmenity().getName()+", "); -->
+<!-- // 		                            			bai--; -->
+<!-- // 		                            		}else{ -->
+<!-- // 		                            			out.print(buildingAmenityInfos.get(i).getBuilderBuildingAmenity().getName()); -->
+<!-- // 		                            		} -->
+<!-- // 		                            	} -->
+<!-- // 		                            } -->
+<%-- 		                     %> --%>
+<!--                            </div> -->
+                               <div class="offset-sm-5 col-sm-7">
+                                    <button type="button" id="basicdetail"  class="btn btn-submit waves-effect waves-light m-t-10">NEXT</button>
+                               </div>
+                          </form>
+                      </div>
+                   </div>
+                   	<div id="vimessages1" class="tab-pane" aria-expanded="false">
+	                                 <div class="col-12">
+	                                 	<form id="updatepricing" name="updatepricing" method="post">
+		                                	 <input type="hidden" name="id" value="<% if(priceInfoData != null){ out.print(priceInfoData.getId()); } else {%>0<% }%>"/>
+											<input type="hidden" name="building_id" id="building_id" value="<% out.print(building_id);%>"/>
+											<div class="row">
+												<div class="col-md-6">
+			                                	 	<div class="form-group row">
+			                                    		<label for="example-text-input" class="col-sm-4 col-form-label">Pricing Unit<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-6"> 
+			                                    			<div>
+				                                        		<select name="base_unit" id="base_unit" class="form-control">
+																	<% for(AreaUnit areaUnit :areaUnits) {
+																		%>
+																		<option value="<% out.print(areaUnit.getId()); %>" <% if(priceInfoData.getAreaUnits() > 0 && priceInfoData.getAreaUnits() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
+																	<% } 
+																	%>	
+																</select>
+			                                    			</div>
+			                                    			<div class="messageContainer"></div>
+			                                    		</div>
+			                                      </div>
+			                                      </div>
+			                                      <div class="col-md-6">
+				                                      <div class="form-group row">
+				                                    		<label for="example-text-input" class="col-sm-4 col-form-label">Base Rate<span class='text-danger'>*</span></label>
+						                                    <div class="col-sm-6">
+						                                    	<div>
+						                                    		<div>
+						                                        		<input type="text" class="form-control" id="base_rate" name="base_rate" value="<% if(priceInfoData.getBaseRate() > 0 && priceInfoData.getBaseRate() != 0){ out.print(priceInfoData.getBaseRate());}%>"/>
+						                                    		</div>
+						                                    		<div class="messageContainer"></div>
+						                                    	</div>
+						                                   </div>
+						                              </div> 
+					                              </div>
+					                        </div>
+					                        <div class="row">
+					                        	<div class="col-md-6">
+					                                <div class="form-group row">
+				        		                            <label for="example-search-input" class="col-sm-4 col-form-label">Floor Rising Rate<span class='text-danger'>*</span></label>
+				                		                    <div class="col-sm-6">
+				                		                    	<div>
+						                		                    <div>
+						                        		                <input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<% if(priceInfoData.getRiseRate() > 0){ out.print(priceInfoData.getRiseRate());}%>"/>
+						                                	        </div>
+						                                   	 		<div class="messageContainer"></div>
+						                                   	 	</div>
+				                                   	 		</div>
+				                                   	</div>	
+				                                </div>
+				                                <div class="col-md-6"> 	
+				                                	<div class="form-group row">
+				                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Application Post<span class='text-danger'>*</span></label>
+						                                    <div class="col-sm-6">
+						                                    <div>
+						                                        <input type="text" class="form-control" id="post" name="post" value="<% if(priceInfoData !=null && priceInfoData.getPost() != 0){ out.print(priceInfoData.getPost());}%>"/>
+						                                    </div>
+				                                    		<div class="messageContainer"></div>
+				                                    		</div>
+			                                		</div>
+			                                	</div>	
+	                                		</div>
+	                                		<div class="row">
+	                                			<div class="col-sm-6">
+			                                 		<div class="form-group row">
+			                                    		<label for="example-tel-input" class="col-sm-4 col-form-label">Maintenance Charge<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-6">
+			                                    			<div>
+					                                    		<div>
+					                                        		<input type="text" class="form-control" id="maintenance" name="maintenance" value="<% if(priceInfoData.getMaintainance() > 0 && priceInfoData.getMaintainance() != 0){ out.print(priceInfoData.getMaintainance());}%>"/>
+					                                    		</div>
+					                                    		<div class="messageContainer"></div>
+					                                    	</div>	
+			                                    		</div>
+			                                    	</div>
+			                                    </div>
+			                                    <div class="col-sm-6">
+			                                    	<div class="form-group row">
+			                                    		<label for="example-tel-input" class="col-sm-4 col-form-label">Tenure</label>
+			                                    		<div class="col-sm-6">
+			                                    			<div>
+					                                    		<div>
+					                                        		<input type="text" class="form-control" id="tenure" name="tenure" value="<%if(priceInfoData.getTenure() > 0 && priceInfoData.getTenure() != 0){ out.print(priceInfoData.getTenure()); } %>"/>
+					                                    		</div>
+					                                    		<div class="messageContainer"></div>
+					                                    	</div>
+			                                    		</div>
+			                                		</div>
+			                                	</div>
+			                                </div>	
+			                                <div class="row">
+			                                	<div class="col-sm-6">	
+					                                <div class="form-group row">
+			        		                            <label for="example-tel-input" class="col-sm-4 col-form-label">Amenities facing Rate<span class='text-danger'>*</span></label>
+			                		                    <div class="col-sm-6">
+			                		                    	<div>
+					                		                    <div>
+					                        		                <input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<% if(priceInfoData.getAmenityRate() > 0 && priceInfoData.getAmenityRate() != 0){ out.print(priceInfoData.getAmenityRate());}%>"/>
+					                                		    </div>
+					                                		    <div class="messageContainer"></div>
+					                                		</div>
+			                                		    </div>
+			                                		 </div>
+			                                	</div>
+			                                	<div class="col-sm-6">
+			                                		<div class="form-group row">
+			                                			<label for="example-tel-input" class="col-sm-4 col-form-label">Parking<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-6">
+			                                    			<select id="parking_id" name="parking_id" class="form-control">
+																<option value="0"<%if(priceInfoData.getParkingId() == 0){ %>selected<%} %>>Select Parking Type</option>
+																<option value="1" <%if(priceInfoData.getParkingId() == 1){ %>selected<%} %>>Open Parking</option>
+																<option value="2" <%if(priceInfoData.getParkingId() == 2){ %>selected<%} %>>Shed Parking</option>
+															</select>
+			                                    		</div>
+			                                		</div>
+			                                	</div>
+			                                	
+			                                </div>
+			                                <div class="row">
+			                                	<div class="col-sm-6">
+			                                		<div class="form-group row">
+			                                    		<label for="example-tel-input" class="col-sm-4 col-form-label">Parking<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-6">
+			                                    			<div>
+				                                    			<div>
+				                                         			<input type="text" class="form-control" id="parking" name="parking" value="<% if(priceInfoData.getParking() > 0 && priceInfoData.getParking() != 0){ out.print(priceInfoData.getParking());}%>"/>
+				                                         		</div>	
+			                                    				<div class="messageContainer"></div>
+			                                    			</div>
+			                                    		</div>
+			                                		</div>
+			                                	</div>
+			                                	<div class="col-sm-6">
+					                                <div class="form-group row">
+			        		                            <label for="example-text-input" class="col-sm-4 col-form-label">Stamp Duty<span class='text-danger'>*</span></label>
+			                		                    <div class="col-sm-6">
+			                		                    	<div>
+				                		                    	<div>
+				                        		               		<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(priceInfoData.getStampDuty() > 0 && priceInfoData.getStampDuty() != 0){ out.print(priceInfoData.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
+				                                		    	</div>
+				                                		    	<div class="messageContainer"></div>
+				                                		    </div>
+			                                		    </div>
+			                                		</div>
+			                                   </div>
+			                                </div>
+			                                <div class="row">
+			                                	<div class="col-sm-6">
+			                                		<div class="form-group row">
+			                                   			<label for="example-text-input" class="col-sm-4 col-form-label">Tax<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-6">
+			                                    			<div>
+				                                    			<div>
+				                                        			<input type="text" class="form-control" id="tax" name="tax" value="<% if(priceInfoData.getTax() > 0 && priceInfoData.getTax() != 0){ out.print(priceInfoData.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
+				                                    			</div>
+				                                    			<div class="messageContainer"></div>
+				                                    		</div>
+			                                    		</div>
+			                                    	</div>
+			                                     </div>
+			                                	 <div class="col-sm-6">
+			                                		<div class="form-group row">
+			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">VAT<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-6">
+			                                    			<div>
+				                                    			<div>
+				                                        			<input type="text" class="form-control" id="vat" name="vat" value="<% if(priceInfoData.getVat() > 0 && priceInfoData.getVat() != 0){ out.print(priceInfoData.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
+				                                    			</div>
+				                                    			<div class="messageContainer"></div>
+				                                    		</div>
+			                                    		</div>
+			                                    	</div>
+			                                    </div>
+			                                </div>
+			                                <div class="row">
+			                                	<div class="col-sm-6">
+			                                    	<div class="form-group row">	
+			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Tech Fees<span class='text-danger'>*</span></label>
+			                                    		<div class="col-sm-6">
+			                                    			<div>
+			                                        			<input type="text" class="form-control" id="tech_fee" name="tech_fee" value="<% if(priceInfoData.getFee() > 0 && priceInfoData.getFee() != 0){ out.print(priceInfoData.getFee());}%>"/>
+			                                    			</div>
+			                                    			<div class="messageContainer"></div>
+			                                    		</div>	
+			                                		</div>
+			                                	</div>
+			                                </div>
+			                                <div class="offset-sm-5 col-sm-7">
+	        	                               	<button type="submit" id="pricebtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
+	            		                     </div>
+	                    	            </form>
+                                	</div>
+             					</div>
+             		       		<div id="vimessages2" class="tab-pane" aria-expanded="false">        
+                                 	<form id="updatepayment" name="updatepayment" method="post" action=""  enctype="multipart/form-data">
+                                 	 	<input type="hidden" id="building_id" name="building_id" value="<% out.print(building_id);%>"/>
+                                   		<input type="hidden" name="schedule_count" id="schedule_count" value="<%if(buildingPaymentInfos != null && buildingPaymentInfos.size() >0 ){ out.print(buildingPaymentInfos.size()+1000);}else{%>1000<%}%>"/>
+                                   		<div id="payment_schedule">
+	                                   	<% 	int i = 1;
+	                                   	if(buildingPaymentInfos != null){
+	                                   			for(PaymentInfoData projectPaymentInfo :buildingPaymentInfos) {  
+												%>
+												<input type="hidden"  name="payment_id[]" value="<%out.print(projectPaymentInfo.getId());%>"/>
+												  <div class="row" id="schedule-<% out.print(i); %>">
+												<% if(i > 1) { %>
+													<hr/>
+													<% } %>
+														<div class="col-sm-6">
+				                                			<div class="form-group row">
+							                                    <label for="example-search-input" class="col-sm-4 control-label">Milestone<span class='text-danger'>*</span></label>
+				                                    			<div class="col-sm-6">
+				                                    				<div>
+				                                        				<input type="text" class="form-control" readonly="true" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getName() != null) { out.print(projectPaymentInfo.getName());}%>"/>
+					                                    			</div>
+					                                    			<div class="messageContainer"></div>
+					                                 			</div>
+					                                 		</div>
+					                                 	</div>
+					                                 	<div class="col-sm-6">
+					                                 		<div class="form-group row">
+				                                    			<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class='text-danger'>*</span></label>
+				                                    			<div class="col-sm-6">
+				                                    				<div>
+				                                        				<input class="form-control" type="text" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
+					                                    			</div>
+					                                    			<div class="messageContainer"></div>
+					                                  			</div>
+				                                			</div>
+				                               			</div>
+			                               			
+	                               				</div>
+	                               <%i++;}}%>
+	                               		</div>
+										<div class="row">
+			                                <div class="offset-sm-5 col-sm-7">
+		                                        <button type="submit" id="paymentbtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
+		                                    </div>
+	                                 	</div>
+	                                </form>
+	                 		</div>
+                    	   <div id="vimessages3" class="tab-pane" aria-expanded="true">
+                                <div id="offer" class="tab-pane fade active in">
+										<form id="updateoffer" name="updateoffer" method="post" action=""  enctype="multipart/form-data">
+										 	<input type="hidden" id="building_id" name="building_id" value="<% out.print(building_id);%>"/>
+											<input type="hidden" name="offer_count" id="offer_count" value="<%out.print(builderProjectOfferInfos.size()+10000); %>"/>
+								 			<div class="row">
+												<div class="col-lg-12">
+															<div id="project_offer_area">
+																<% int jj = 1;
+																		for(BuilderProjectOfferInfo projectOfferInfo :builderProjectOfferInfos) { 
+																%>
+																<%if(jj > 1){
+																%>
+																<hr>
+																<%} %>
+																<div class="row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
+																	<div class="col-lg-5 margin-bottom-5">
+																		<div class="form-group" id="error-offer_title">
+																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
+																			<div class="col-sm-8">
+																				<div>
+																					<input type="text" class="form-control" readonly="true" id="project_offer_title" name="project_offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
+																				</div>
+																				<div class="messageContainer"></div>
+																			</div>
 																		</div>
-																		<div class="messageContainer"></div>
+																	</div>
+																	<div class="col-lg-3 margin-bottom-5">
+																		<div class="form-group" id="error-applicable_on">
+																			<label class="control-label col-sm-6">Offer Type </label>
+																			<div class="col-sm-6">
+																				<select class="form-control" id="project_offer_type<%out.print(jj); %>"  onchange="txtEnabaleDisable(<%out.print(jj); %>);" disabled name="project_offer_type[]">
+																					<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																					<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																					<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+																				</select>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-4 margin-bottom-5">
+																		<div class="form-group" id="error-discount_amount">
+																			<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
+																			<div class="col-sm-6">
+																				<input type="text" class="form-control" readonly="true" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="project_discount_amount<%out.print(jj); %>"   onkeyup=" javascript:validPerAmount(<%out.print(jj); %>);" name="project_discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-5 margin-bottom-5">
+																		<div class="form-group" id="error-applicable_on">
+																			<label class="control-label col-sm-4">Description </label>
+																			<div class="col-sm-8">
+																				<textarea class="form-control" disabled id="project_description" name="project_description[]"><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	
+																	<div class="col-lg-4 margin-bottom-5">
+																		<div class="form-group" id="error-apply">
+																			<label class="control-label col-sm-6">Status </label>
+																			<div class="col-sm-6">
+																				<select class="form-control" id="project_offer_status" name="project_offer_status[]" disabled>
+																					<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
+																					<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
+																				</select>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
 																	</div>
 																</div>
-																<div class="col-lg-3 margin-bottom-5">
-																	<div class="form-group" id="error-discount">
-																		<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>
-																		<div class="col-sm-6">
-																			<input type="text" class="form-control" id="discount" name="discount[]" value="<% out.print(buildingOfferInfo.getDiscount()); %>">
-																		</div>
-																		<div class="messageContainer"></div>
-																	</div>
-																</div>
-																<div class="col-lg-4 margin-bottom-5">
-																	<div class="form-group" id="error-discount_amount">
-																		<label class="control-label col-sm-6">Discount Amount </label>
-																		<div class="col-sm-6">
-																			<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value="<% out.print(buildingOfferInfo.getAmount()); %>">
-																		</div>
-																		<div class="messageContainer"></div>
-																	</div>
-																</div>
-																<div class="col-lg-5 margin-bottom-5">
-																	<div class="form-group" id="error-applicable_on">
-																		<label class="control-label col-sm-4">Description </label>
-																		<div class="col-sm-8">
-																			<textarea class="form-control" id="description" name="description[]"><% out.print(buildingOfferInfo.getDescription()); %></textarea>
-																		</div>
-																		<div class="messageContainer"></div>
-																	</div>
-																</div>
-																<div class="col-lg-3 margin-bottom-5">
-																	<div class="form-group" id="error-applicable_on">
-																		<label class="control-label col-sm-6">Offer Type </label>
-																		<div class="col-sm-6">
-																			<select class="form-control" id="offer_type" name="offer_type[]">
-																				<option value="1" <% if(buildingOfferInfo.getType().toString() == "1") { %>selected<% } %>>Percentage</option>
-																				<option value="2" <% if(buildingOfferInfo.getType().toString() == "2") { %>selected<% } %>>Flat Amount</option>
-																				<option value="3" <% if(buildingOfferInfo.getType().toString() == "3") { %>selected<% } %>>Other</option>
-																			</select>
-																		</div>
-																		<div class="messageContainer"></div>
-																	</div>
-																</div>
-																<div class="col-lg-4 margin-bottom-5">
-																	<div class="form-group" id="error-apply">
-																		<label class="control-label col-sm-6">Status </label>
-																		<div class="col-sm-6">
-																			<select class="form-control" id="offer_status" name="offer_status[]">
-																				<option value="1" <% if(buildingOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
-																				<option value="0" <% if(buildingOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
-																			</select>
-																		</div>
-																		<div class="messageContainer"></div>
-																	</div>
-																</div>
+																<% jj++; } %>
+
 															</div>
-															<% } %>
-														</div>
-														<div>
-															<div class="col-lg-12">
-																<span class="pull-right">
-																	<a href="javascript:addMoreOffer();" class="btn btn-info btn-md">+ Add More Offers</a>
-																</span>
+															<div id="offer_area">
+																<% int j = 1;
+																		for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) { 
+																%>
+																<%if(j >1){ %>
+																<hr>
+																<%} %>
+																<div class="row" id="offer-<% out.print(buildingOfferInfo.getId()); %>">
+																	<input type="hidden" name="offer_id[]" value="<% out.print(buildingOfferInfo.getId()); %>" />
+																	<div class="col-lg-5 margin-bottom-5">
+																		<div class="form-group" id="error-offer_title">
+																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
+																			<div class="col-sm-8">
+																				<div>
+																					<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>">
+																				</div>
+																				<div class="messageContainer"></div>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-lg-3 margin-bottom-5">
+																		<div class="form-group" id="error-applicable_on">
+																			<label class="control-label col-sm-6">Offer Type </label>
+																			<div class="col-sm-6">
+																				<select class="form-control" id="offer_type<%out.print(j); %>"  onchange="txtEnabaleDisable(<%out.print(j); %>);"  name="offer_type[]">
+																					<option value="1" <% if(buildingOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																					<option value="2" <% if(buildingOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																					<option value="3" <% if(buildingOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+																				</select>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-4 margin-bottom-5">
+																		<div class="form-group" id="error-discount_amount">
+																			<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
+																			<div class="col-sm-6">
+																				<input type="text" class="form-control"  <%if(buildingOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(buildingOfferInfo.getAmount()!=null){ out.print(buildingOfferInfo.getAmount());} %>"/>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	<div class="col-lg-5 margin-bottom-5">
+																		<div class="form-group" id="error-applicable_on">
+																			<label class="control-label col-sm-4">Description </label>
+																			<div class="col-sm-8">
+																				<textarea class="form-control"  id="description" name="description[]"><% if(buildingOfferInfo.getDescription() != null) { out.print(buildingOfferInfo.getDescription());} %></textarea>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																	
+																	<div class="col-lg-4 margin-bottom-5">
+																		<div class="form-group" id="error-apply">
+																			<label class="control-label col-sm-6">Status </label>
+																			<div class="col-sm-6">
+																				<select class="form-control" id="offer_status" name="offer_status[]">
+																					<option value="1" <% if(buildingOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
+																					<option value="0" <% if(buildingOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
+																				</select>
+																			</div>
+																			<div class="messageContainer"></div>
+																		</div>
+																	</div>
+																</div>
+																<% j++; } %>
+
 															</div>
-														</div>
-														<div>
-															<div class="row">
+															<div>
 																<div class="col-lg-12">
-																	<div class="col-sm-12">
-																		<button type="button" class="btn btn-success btn-md" id="offerbtn" onclick="updateBuildingOffers();">Approve</button>
-																	</div>
+																	<span class="pull-right">
+																		<a href="javascript:addMoreOffer();" id="addMoreOffers" class="btn btn-submit btn-sm">+ Add More Offers</a>
+																	</span>
 																</div>
 															</div>
 														</div>
 													</div>
-												</div>
-											</div>
+												<div class="row">
+													 <div class="offset-sm-5 col-sm-7">
+		                                        		<button type="submit" id="offerbtn" class="btn btn-submit waves-effect waves-light m-t-10">SAVE</button>
+		                                   			</div>
+		                                   		</div>
+											</form>
 										</div>
-									</div>
-								</form>
-							</div>
-                           <div id="vimessages2" class="tab-pane" aria-expanded="false">
-                            <div class="col-12">
-                           <form id="updateimage" name="updateimage" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
-                           <input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
-                           <div class="form-group row">
-                           <div id="imageresponse"></div>
-                               <label for="example-text-input" class="col-3 col-form-label">Upload Project Images</label>
-                               <div class="row" id="project_images">
-						<% for (BuildingImageGallery buildingImageGallery :buildingImageGalleries) { %>
-						<div class="col-lg-4 margin-bottom-5" id="b_image<% out.print(buildingImageGallery.getId()); %>">
-							<div class="form-group" id="error-landmark">
-								<div class="col-sm-12">
-									<img class="img-fix" alt="Building Images" src="${baseUrl}/<% out.print(buildingImageGallery.getImage()); %>" width="200px;">
-								</div>
-								<label class="col-sm-12 text-left"><a href="javascript:deleteImage(<% out.print(buildingImageGallery.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
-								<div class="messageContainer col-sm-offset-4"></div>
-							</div>
-						</div>
-						<% } %>
-					</div>
-					<div class="row">
-						<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-sm"> + Add More</a></span>
-					</div>
-					<hr/>
-                           </div> 
-                           
-                            <div class="form-group row">
-                           <label for="example-text-input" class="col-3 col-form-label">Upload Elavation Images</label>
-                               <div class="row" id="elevation_images">
-						<% for (BuildingPanoramicImage buildingPanoramicImage :buildingPanoramicImages) { %>
-						<div class="col-lg-4 margin-bottom-5" id="b_elv_image<% out.print(buildingPanoramicImage.getId()); %>">
-							<div class="form-group" id="error-landmark">
-								<div class="col-sm-12">
-									<img alt="Building Images" src="${baseUrl}/<% out.print(buildingPanoramicImage.getPanoImage()); %>" width="100%;">
-								</div>
-								<label class="col-sm-12 text-left"><a href="javascript:deleteElvImage(<% out.print(buildingPanoramicImage.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
-								<div class="messageContainer col-sm-offset-3"></div>
-							</div>
-						</div>
-						<% } %>
-					</div>
-					<div class="row">
-						<span class="pull-right"><a href="javascript:addMoreElvImages();" class="btn btn-info btn-sm"> + Add More</a></span>
-					</div>
-                             </div>  
-                         
-                           <div class="offset-sm-5 col-sm-7">
-                                   <button type="button" name="imagebtn" class="btn btn-info waves-effect waves-light m-t-10"  onclick="updateBuildingImages();">Update</button>
-                            </div>
-                           </form>
-                           </div>
-                          </div>
+                                	</div>
                         </div>
                    </div>
-                   </div>
-               </div>
                 </div>
-            </div>
+             </div>
+           </div>
+        </div>
+      </div>
             <!-- /.container-fluid -->
-            <div id="sidebar1"> 
-	      		<%@include file="../../partial/footer.jsp"%>
-			</div> 
+ <div id="sidebar1"> 
+	<%@include file="../../partial/footer.jsp"%>
+</div> 
 </body>
 </html>
 <script src="../../js/bootstrapValidator.min.js"></script>
 <script src="../../js/bootstrap-datepicker.min.js"></script>
 <script src="../../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
+<script type="text/javascript" src="${baseUrl}/builder/js/selectize.min.js"></script>
 <script type="text/javascript">
+// $select_building = $("#filter_building_id").selectize({
+// 	persist: false,
+// 	 onChange: function(value) {
+// 		// getProjectFilterList(value);
+// 		//alert($("#project_id").val()+" "+value);
+// 		window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+value;
+// 	 },
+// 	 onDropdownOpen: function(value){
+//     	 var obj = $(this);
+// 		var textClear =	 $("#filter_building_id :selected").text();
+//     	 if(textClear.trim() == "Enter Building Name"){
+//     		 obj[0].setValue("");
+//     	 }
+//      }
+// });
+<%-- <%if(building_size_list > 0){%> --%>
+// 	select_building = $select_building[0].selectize;
+<%-- <%}%> --%>
+$("#basicdetail").click(function(){
+	$('.active').removeClass('active').next('li').addClass('active');
+    $("#vimessages1").addClass('active');
+})
+$("#filter_building_id").change(function(){
+	
+	window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val();
+});
+
 $('#launch_date').datepicker({
 	autoclose:true,
 	format: "dd M yyyy"
@@ -495,34 +796,77 @@ function showOffers()
 	$("#displayoffers").show(); 
 }
 
+function addMoreSchedule() {
+	var schedule_count = parseInt($("#schedule_count").val());
+	schedule_count++;
+			   
+	 var html = '<div class="row" id="schedule-'+schedule_count+'">'
+				+'<div class="col-lg-12" style="padding-bottom:5px;">'
+				+'<span class="pull-right"><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span>'
+				+'</div>'
+				+'<div class="col-sm-6">'
+               	+'<div class="form-group row">'
+                +'<label for="example-search-input" class="col-sm-4 control-label">Milestone<span class="text-danger">*</span></label>'
+           		+'<div class="col-sm-6">'
+           		+'<div>'
+               	+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
+               	+'</div>'
+               	+'<div class="messageContainer"></div>'
+            	+'</div>'
+            	+'</div>'
+            	+'</div>'
+              	+'<div class="col-sm-6">'
+	    		+'<div class="form-group row">'
+	   			+'<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class="text-danger">*</span></label>'
+	   			+'<div class="col-sm-6">'
+	   			+'<div>'
+	       		+'<input class="form-control" type="text" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value=""/>'
+       			+'</div>'
+       			+'<div class="messageContainer"></div>'
+     			+'</div>'
+				+'</div>'
+				+'</div>'
+				+'</div>';
+	$("#payment_schedule").append(html);
+	$("#schedule_count").val(schedule_count);
+}
+function removeSchedule(id) {
+	$("#schedule-"+id).remove();
+}
+
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
 	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="0" />'
-		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-primary btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>'
+		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>'
 		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control" id="offer_title'+offers+'" name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
 		+'<div class="col-lg-3 margin-bottom-5">'
-			+'<div class="form-group" id="error-discount">'
-				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control" id="discount" name="discount[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
+		+'<div class="form-group" id="error-applicable_on">'
+		+'<label class="control-label col-sm-6">Offer Type </label>'
+		+'<div class="col-sm-6">'
+		+'<select class="form-control"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
+		+'<option value="1">Percentage</option>'
+		+'<option value="2">Flat Amount</option>'
+		+'<option value="3">Other</option>'
+		+'</select>'
 		+'</div>'
+		+'<div class="messageContainer"></div>'
+		+'</div>'
+		+'</div>'
+		
 		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control" id="discount_amount" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup=" javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -536,20 +880,8 @@ function addMoreOffer() {
 			+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
+		
 		+'<div class="col-lg-3 margin-bottom-5">'
-		+'<div class="form-group" id="error-applicable_on">'
-		+'<label class="control-label col-sm-6">Offer Type </label>'
-		+'<div class="col-sm-6">'
-		+'<select class="form-control" id="offer_type" name="offer_type[]">'
-		+'<option value="1">Percentage</option>'
-		+'<option value="2">Flat Amount</option>'
-		+'<option value="3">Other</option>'
-		+'</select>'
-		+'</div>'
-		+'<div class="messageContainer"></div>'
-		+'</div>'
-		+'</div>'
-		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-apply">'
 			+'<label class="control-label col-sm-6">Status </label>'
 			+'<div class="col-sm-6">'
@@ -565,7 +897,6 @@ function addMoreOffer() {
 	$("#offer_area").append(html);
 	$("#offer_count").val(offers);
 }
-
 function removeOffer(id) {
 	$("#offer-"+id).remove();
 }
@@ -601,7 +932,47 @@ function showAddImageResponse(resp, statusText, xhr, $form){
         alert(resp.message);
   	}
 }
-$('#updateoffer').bootstrapValidator({
+function validPerAmount(id){
+	if($("#offer_type"+id).val()==1){
+			 isNumber(event, this);
+				 validPercentage(id);
+	}
+	if($("#offer_type"+id).val()==2){
+		onlyNumber(id);
+	}
+}
+function validPercentage(id){
+	 var x = $("#discount_amount"+id).val();
+	 if(isNaN(x) || x<0 || x >100){
+		 alert("The percentage must be between 0 and 100");
+		 $("#discount_amount"+id).val('');
+	 }
+}
+function onlyNumber(id){
+	
+	 var $th = $("#discount_amount"+id);
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
+}
+
+function vaildPayablePer(id){
+	var x = $("#payable"+id).val();
+	if( x<0 || x >100){
+		alert("The percentage must be between 0 and 100");
+		$("#payable"+id).val('');
+	}
+}
+
+function txtEnabaleDisable(id){
+	$th = $("#offer_type"+id).val();
+	 if($th == 3){
+	  	$('#discount_amount'+id).attr('disabled', true);
+	  	$("#discount_amount"+id).val('');
+	 }else{
+		$('#discount_amount'+id).attr('disabled', false); 
+		$("#discount_amount"+id).val('');
+	 }
+}
+$("#updatepricing").bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},
@@ -610,76 +981,298 @@ $('#updateoffer').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-    	launch_date: {
-            validators: {
-                callback: {
-                    message: 'Wrong Launch Date',
-                    callback: function (value, validator) {
-                        var m = new moment(value, 'DD MMM YYYY', true);
-                        if (!m.isValid()) {
-                            return false;
-                        } else {
-                        	return true;
-                        }
-                    }
-                }
-            }
-        },
-        possession_date: {
-            validators: {
-                callback: {
-                    message: 'Wrong Possession Date',
-                    callback: function (value, validator) {
-                        var m = new moment(value, 'DD MMM YYYY', true);
-                        if (!m.isValid()) {
-                            return false;
-                        } else {
-                        	return true;
-                        }
-                    }
-                }
-            }
-        },
-        total_floor: {
+    	base_unit: {
             validators: {
                 notEmpty: {
-                    message: 'Total floor number is required and cannot be empty'
+                    message: 'Area unit is required'
                 }
             }
+        },
+        base_rate: {
+            validators: {
+                notEmpty: {
+                    message: 'Base rate is required'
+                },
+        		numeric: {
+        			message: 'Base rate is invalid'
+        		}
+            }
+        },
+        rise_rate: {
+            validators: {
+            	notEmpty: {
+                    message: 'Rise rate is required'
+                },
+        		numeric: {
+        			message: 'Rise rate is invalid'
+        		}
+            }
+        },
+        post: {
+            validators: {
+            	notEmpty: {
+                    message: 'Applicable Post is required'
+                },
+        		integer: {
+        			message: 'Applicable Post is invalid'
+        		}
+            }
+        },
+        maintenance: {
+            validators: {
+            	notEmpty: {
+                    message: 'Maintenance is required'
+                },
+        		numeric: {
+        			message: 'Maintenance is invalid'
+        		}
+            }
+        },
+        tenure: {
+            validators: {
+            	notEmpty: {
+                    message: 'Tenure is required'
+                },
+            	numeric: {
+        			message: 'Tenure is invalid'
+        		}
+            }
+        },
+        amenity_rate: {
+            validators: {
+            	notEmpty: {
+                    message: 'Amenity facing rate is required'
+                },
+        		numeric: {
+        			message: 'Amenity facing rate is invalid'
+        		}
+            }
+        },
+        parking: {
+            validators: {
+            	notEmpty: {
+                    message: 'Parking rate is required'
+                },
+        		numeric: {
+        			message: 'Parking rate is invalid'
+        		}
+            }
+        },
+        stamp_duty: {
+            validators: {
+            	notEmpty: {
+                    message: 'Stamp duty is required'
+                },
+        		numeric: {
+        			message: 'Stamp duty is invalid'
+        		},
+        		 between:{
+                 	min:0,
+                 	max:100,
+                 	message: 'The percentage must be between 0 and 100'
+                 }
+            }
+        },
+        tax: {
+            validators: {
+            	notEmpty: {
+                    message: 'Tax is required'
+                },
+        		numeric: {
+        			message: 'Tax is invalid'
+        		},
+        		 between:{
+                 	min:0,
+                 	max:100,
+                 	message: 'The percentage must be between 0 and 100'
+                 }
+            }
+        },
+        vat: {
+            validators: {
+            	notEmpty: {
+                    message: 'Vat is required'
+                },
+        		numeric: {
+        			message: 'Vat is invalid'
+        		},
+        		 between:{
+                 	min:0,
+                 	max:100,
+                 	message: 'The percentage must be between 0 and 100'
+                 }
+            }
+        },
+        tech_fee : {
+        	 validators: {
+             	notEmpty: {
+                     message: 'Tech fee is required'
+                 },
+         		numeric: {
+         			message: 'Tech fee is invalid'
+         		}
+             }
         }
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
-	updateBuildingOffers();
+	updateBuildingPricing();
 });
-function updateBuildingOffers() {
-	var amenityWeightage = "";
-	$('input[name="amenity_type[]"]:checked').each(function() {
-		amenity_id = $(this).val();
-		$('input[name="stage_weightage'+amenity_id+'[]"]').each(function() {
-			stage_id = $(this).attr("id");
-			stage_weightage = $(this).val();
-			$('input[name="substage'+stage_id+'[]"]').each(function() {
-				if(amenityWeightage != "") {
-					amenityWeightage = amenityWeightage + "," + amenity_id + "#" + $("#amenity_weightage"+amenity_id).val() + "#" + stage_id + "#" + stage_weightage + "#" + $(this).attr("id") + "#" + $(this).val() + "#" + false;
-				} else {
-					amenityWeightage = amenity_id + "#" + $("#amenity_weightage"+amenity_id).val() + "#" + stage_id + "#" + stage_weightage + "#" + $(this).attr("id") + "#" + $(this).val() + "#" + false;
-				}
-			});
-		});
-	});
-	$("#amenity_wt").val(amenityWeightage);
+function isNumber(evt, element) {
+
+    var charCode = (evt.which) ? evt.which : event.keyCode
+
+    if (
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
+} 
+function validPercentage(id){
+	 var x = $("#discount_amount"+id).val();
+	 if(isNaN(x) || x<0 || x >100){
+		 alert("The percentage must be between 0 and 100");
+		 $("#discount_amount"+id).val('');
+	 }
+}
+function updateBuildingPricing() {
 	var options = {
-	 		target : '#offerresponse', 
+	 		target : '#priceresponse', 
+	 		beforeSubmit : showAddPriceRequest,
+	 		success :  showAddPriceResponse,
+	 		url : '${baseUrl}/webapi/project/building/pricing/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#updatepricing').ajaxSubmit(options);
+}
+
+function showAddPriceRequest(formData, jqForm, options){
+	$("#priceresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddPriceResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#priceresponse").removeClass('alert-success');
+       	$("#priceresponse").addClass('alert-danger');
+		$("#priceresponse").html(resp.message);
+		$("#priceresponse").show();
+  	} else {
+  		$("#priceresponse").removeClass('alert-danger');
+        $("#priceresponse").addClass('alert-success');
+        $("#priceresponse").html(resp.message);
+        $("#priceresponse").show();
+        alert(resp.message);
+        $('.active').removeClass('active').next('li').addClass('active');
+        $("#vimessages2").addClass('active');
+  	}
+}
+$('#updatepayment').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+        'payable[]': {
+            validators: {
+            	between: {
+                    min: 0,
+                    max: 100,
+                    message: 'The percentage must be between 0 and 100'
+	        	},
+                notEmpty: {
+                    message: 'Payable is required and cannot be empty'
+                }
+            }
+        },
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	updateBuildingPayments();
+});
+function updateBuildingPayments() {
+	var options = {
+	 		target : '#imageresponse', 
+	 		beforeSubmit : showAddPaymentRequest,
+	 		success :  showAddPaymentResponse,
+	 		url : '${baseUrl}/webapi/project/building/payment/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#updatepayment').ajaxSubmit(options);
+}
+
+function showAddPaymentRequest(formData, jqForm, options){
+	$("#paymentresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddPaymentResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#paymentresponse").removeClass('alert-success');
+       	$("#paymentresponse").addClass('alert-danger');
+		$("#paymentresponse").html(resp.message);
+		$("#paymentresponse").show();
+  	} else {
+  		$("#paymentresponse").removeClass('alert-danger');
+        $("#paymentresponse").addClass('alert-success');
+        $("#paymentresponse").html(resp.message);
+        $("#paymentresponse").show();
+        alert(resp.message);
+        $('.active').removeClass('active').next('li').addClass('active');
+        $("#vimessages3").addClass('active');
+  	}
+}
+
+// function updateBuildingOffers() {
+// 	var amenityWeightage = "";
+// 	$('input[name="amenity_type[]"]:checked').each(function() {
+// 		amenity_id = $(this).val();
+// 		$('input[name="stage_weightage'+amenity_id+'[]"]').each(function() {
+// 			stage_id = $(this).attr("id");
+// 			stage_weightage = $(this).val();
+// 			$('input[name="substage'+stage_id+'[]"]').each(function() {
+// 				if(amenityWeightage != "") {
+// 					amenityWeightage = amenityWeightage + "," + amenity_id + "#" + $("#amenity_weightage"+amenity_id).val() + "#" + stage_id + "#" + stage_weightage + "#" + $(this).attr("id") + "#" + $(this).val() + "#" + false;
+// 				} else {
+// 					amenityWeightage = amenity_id + "#" + $("#amenity_weightage"+amenity_id).val() + "#" + stage_id + "#" + stage_weightage + "#" + $(this).attr("id") + "#" + $(this).val() + "#" + false;
+// 				}
+// 			});
+// 		});
+// 	});
+// 	$("#amenity_wt").val(amenityWeightage);
+// 	var options = {
+// 	 		target : '#offerresponse', 
+// 	 		beforeSubmit : showAddOfferRequest,
+// 	 		success :  showAddOfferResponse,
+// 	 		url : '${baseUrl}/webapi/builder/building/offer/update',
+// 	 		semantic : true,
+// 	 		dataType : 'json'
+// 	 	};
+//    	$('#updateoffer').ajaxSubmit(options);
+// }
+
+function updateBuildingOffers() {
+	var options = {
+	 		target : '#imageresponse', 
 	 		beforeSubmit : showAddOfferRequest,
 	 		success :  showAddOfferResponse,
-	 		url : '${baseUrl}/webapi/builder/building/offer/update',
+	 		url : '${baseUrl}/webapi/project/building/offer/update',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
    	$('#updateoffer').ajaxSubmit(options);
 }
+
 function showAddOfferRequest(formData, jqForm, options){
 	$("#offerresponse").hide();
    	var queryString = $.param(formData);
@@ -700,6 +1293,74 @@ function showAddOfferResponse(resp, statusText, xhr, $form){
         alert(resp.message);
   	}
 }
+function showAddOfferRequest(formData, jqForm, options){
+	$("#offerresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+   	
+   	
+   	
+   	
+   	
+function showAddOfferResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#offerresponse").removeClass('alert-success');
+       	$("#offerresponse").addClass('alert-danger');
+		$("#offerresponse").html(resp.message);
+		$("#offerresponse").show();
+  	} else {
+  		$("#offerresponse").removeClass('alert-danger');
+        $("#offerresponse").addClass('alert-success');
+        $("#offerresponse").html(resp.message);
+        $("#offerresponse").show();
+        alert(resp.message);
+  	}
+}
+
+
+
+$('#updateoffer').bootstrapValidator({
+    feedbackIcons: {
+     //   valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+      //  validating: 'glyphicon glyphicon-refresh'
+    },
+    fields: {
+        'offer_title[]': {
+            validators: {
+                notEmpty: {
+                    message: 'The offer title required and cannot be empty'
+                }
+            },
+        },
+        'discount[]':{
+        	 validators: {
+        		 between: {
+                     min: 0,
+                     max: 100,
+                     message: 'The percentage must be between 0 and 100'
+ 	        	},
+                 notEmpty: {
+                     message: 'Discount required and cannot be empty'
+                 }
+             }
+        },
+        'discount_amount[]':{
+        	validators: {
+                notEmpty: {
+                    message: 'Discount amount required and cannot be empty'
+                }
+            }
+        }
+    }
+	}).on('success.form.bv', function(event,data) {
+		// Prevent form submission
+		event.preventDefault();
+		updateBuildingOffers();
+	});;
+	
 function deleteImage(id) {
 	var flag = confirm("Are you sure ? You want to delete image ?");
 	if(flag) {
@@ -789,6 +1450,30 @@ function addMoreElvImages() {
 function removeElvImage(id) {
 	$("#elvimgdiv-"+id).remove();
 }
+
+$("#building").click(function(){
+	 var check = $("#building").hasClass('top-lue-box');
+	 if(!check){
+		 $("#building").removeClass('top-white-box');
+		 $("#building").addClass('top-blue-box');
+		 var isProject = $("#project").hasClass('top-blue-box');
+		 if(isProject){
+			 $("#project").removeClass('top-blue-box');
+			 $('#project').addClass('top-white-box');
+		 }
+		 var isFloor = $('#floor').hasClass('top-blue-box');
+		 if(isFloor){
+			 $('#floor').removeClass('top-blue-box');
+			 $('#floor').addClass('top-white-box');
+		 }
+		 var isFlat = $("#flat").hasClass('top-blue-box');
+		 if(isFlat){
+			 $('#flat').removeClass('top-blue-box');
+			 $('#flat').addClass('top-white-box');
+		 }
+	 }
+	
+});
 
 $('#updatebuilding').bootstrapValidator({
 	container: function($field, validator) {

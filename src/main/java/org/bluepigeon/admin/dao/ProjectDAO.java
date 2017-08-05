@@ -32,6 +32,7 @@ import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.LeadList;
 import org.bluepigeon.admin.data.NewProjectList;
 import org.bluepigeon.admin.data.PaymentInfoData;
+import org.bluepigeon.admin.data.PriceInfoData;
 import org.bluepigeon.admin.data.ProjectAmenityData;
 import org.bluepigeon.admin.data.ProjectCityData;
 import org.bluepigeon.admin.data.ProjectData;
@@ -39,6 +40,7 @@ import org.bluepigeon.admin.data.ProjectDetail;
 import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.data.ProjectOffer;
 import org.bluepigeon.admin.data.ProjectPaymentSchedule;
+import org.bluepigeon.admin.data.ProjectPriceInfoData;
 import org.bluepigeon.admin.data.ProjectWeightageData;
 import org.bluepigeon.admin.data.RoomData;
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -106,11 +108,14 @@ public class ProjectDAO {
 	public ResponseMessage saveProject(BuilderProject builderProject) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
+		//String hql = "from BuilderProject where name = :name AND locality.id = :locality_id";
+		//new code
 		String hql = "from BuilderProject where name = :name AND locality.id = :locality_id";
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("name", builderProject.getName());
-		query.setParameter("locality_id", builderProject.getLocality().getId());
+		//query.setParameter("locality_id", builderProject.getLocality().getId());
+		query.setParameter("locality_id", builderProject.getLocalityName());
 		List<BuilderProject> result = query.list();
 		session.close();
 		if (result.size() > 0) {
@@ -161,11 +166,13 @@ public class ProjectDAO {
 	public ResponseMessage updateBasicInfo(BuilderProject builderProject) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		String hql = "from BuilderProject where name = :name AND locality.id = :locality_id AND id != :id";
+		//String hql = "from BuilderProject where name = :name AND locality.id = :locality_id AND id != :id";
+		String hql = "from BuilderProject where name = :name AND localityName = :locality_name AND id != :id";
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("name", builderProject.getName());
-		query.setParameter("locality_id", builderProject.getLocality().getId());
+//		query.setParameter("locality_id", builderProject.getLocality().getId());
+		query.setParameter("locality_name", builderProject.getLocalityName());
 		query.setParameter("id", builderProject.getId());
 		List<BuilderProject> result = query.list();
 		session.close();
@@ -538,8 +545,9 @@ public class ProjectDAO {
 			System.out.println("Builder Name :: "+newproject.getBuilderName());
 			newproject.setCityId(builderproject.getCity().getId());
 			newproject.setCityName(builderproject.getCity().getName());
-			newproject.setLocalityId(builderproject.getLocality().getId());
-			newproject.setLocalityName(builderproject.getLocality().getName());
+			//newproject.setLocalityId(builderproject.getLocality().getId());
+			//newproject.setLocalityName(builderproject.getLocality().getName());
+			newproject.setLocalityName(builderproject.getLocalityName());
 			projects.add(newproject);
 			
 		}
@@ -656,8 +664,9 @@ public class ProjectDAO {
 			newproject.setBuilderName(builderproject.getBuilder().getName());
 			newproject.setCityId(builderproject.getCity().getId());
 			newproject.setCityName(builderproject.getCity().getName());
-			newproject.setLocalityId(builderproject.getLocality().getId());
-			newproject.setLocalityName(builderproject.getLocality().getName());
+			//newproject.setLocalityId(builderproject.getLocality().getId());
+		//	newproject.setLocalityName(builderproject.getLocality().getName());
+			newproject.setLocalityName(builderproject.getLocalityName());
 			newproject.setCompletionStatus(builderproject.getCompletionStatus());
 			projects.add(newproject);
 			
@@ -963,6 +972,17 @@ public class ProjectDAO {
 			}
 		}
 		catch(Exception e){
+			BuilderBuilding building = getBuilderProjectBuildingById(building_id).get(0);
+			System.err.println("Project Id :: "+building.getBuilderProject().getId());
+			List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(building.getBuilderProject().getId());
+			for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
+				PaymentInfoData paymentInfoData = new PaymentInfoData();
+				paymentInfoData.setId(0);
+				paymentInfoData.setName(builderProjectPaymentInfo.getSchedule());
+				paymentInfoData.setAmount(builderProjectPaymentInfo.getAmount());
+				paymentInfoData.setPayable(builderProjectPaymentInfo.getPayable());
+				paymentInfoDatas.add(paymentInfoData);
+			}
 			e.printStackTrace();
 		}
 		session.close();
@@ -2300,6 +2320,17 @@ public class ProjectDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<BuilderFloor> getActiveFloorsByBuildingId(int buildingId){
+		String hql = "from BuilderFloor where builderBuilding.id = :building_id and builderBuilding.status = 1 and builderBuilding.builderProject.status = 1 and status = 1 order by builderBuilding.builderProject.id DESC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", buildingId);
+		List<BuilderFloor> builderFloors = query.list();
+		return builderFloors;
+				
+	}
 	/**
 	 * Get all active flats by floor id
 	 * @author pankaj
@@ -2485,21 +2516,21 @@ public class ProjectDAO {
 	public void updateProjectInventory(int flatId){
 		String hql = "UPDATE BuilderProject set availbale = :availbale, inventorySold =:soldInventory, totalInventory = :totalInventory where id = :project_id ";
 		int available = 0;
-		Long totalInventory = (long)0;
-		Long soldInventory = (long)0;
+		int totalInventory = 0;
+		int soldInventory = 0;
 		BuilderFlat builderFlat = getBuilderFlatById(flatId);
 		int projectId = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
 		available = getAvaiableFlatCount(projectId);
 		soldInventory = getSoldFlatCount(projectId);
 		totalInventory = available + soldInventory;
-		Double total_inventory = (double) totalInventory;
+		//Double total_inventory =  totalInventory;
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
 		query.setParameter("availbale", available);
 		query.setParameter("soldInventory", soldInventory);
-		query.setParameter("totalInventory",total_inventory );
+		query.setParameter("totalInventory",totalInventory );
 		query.setParameter("project_id",projectId );
 		query.executeUpdate();
 		session.getTransaction().commit();
@@ -2516,13 +2547,13 @@ public class ProjectDAO {
 		return available;
 	}
 	
-	public Long getSoldFlatCount(int projectId){
-		String hql = "Select COUNT(*) from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and builderFlatStatus =2 and status=1";
+	public int getSoldFlatCount(int projectId){
+		String hql = "Select id from BuilderFlat where builderFloor.builderBuilding.builderProject.id = :project_id and builderFlatStatus =2 and status=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("project_id", projectId);
-		Long available = (Long) query.uniqueResult();
+		int available =  query.list().size();
 		return available;
 	}
 	public ResponseMessage updateBuildingFlat(BuilderFlat builderFlat) {
@@ -3032,8 +3063,9 @@ public class ProjectDAO {
 			newproject.setBuilderName(builderproject.getBuilder().getName());
 			newproject.setCityId(builderproject.getCity().getId());
 			newproject.setCityName(builderproject.getCity().getName());
-			newproject.setLocalityId(builderproject.getLocality().getId());
-			newproject.setLocalityName(builderproject.getLocality().getName());
+		//	newproject.setLocalityId(builderproject.getLocality().getId());
+			//newproject.setLocalityName(builderproject.getLocality().getName());
+			newproject.setLocalityName(builderproject.getLocalityName());
 			System.out.println("Project name :: "+builderproject.getName());
 			projects.add(newproject);
 		}
@@ -3086,30 +3118,54 @@ public class ProjectDAO {
 	 */
 	public List<ProjectList> getBuilderFirstFourActiveProjectsByBuilderId(BuilderEmployee builderEmployee) {
 		String hql = "";
+		//code by Pradeep sir
+//		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
+//			hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
+//				+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
+//				+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
+//				+"c.name as cityName, l.id as localityId, l.name as localityName, "
+//				+"count(lead.id) as totalLeads "
+//				+"FROM  builder_project as project "
+//				+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+//				+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
+//				+"WHERE project.group_id = "+builderEmployee.getBuilder().getId()+" group by project.id order by project.id desc";
+//		} else {
+//			hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
+//					+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
+//					+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
+//					+"c.name as cityName, l.id as localityId, l.name as localityName, "
+//					+"count(lead.id) as totalLeads "
+//					+"FROM  builder_project as project inner join allot_project ap ON project.id = ap.project_id "
+//					+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+//					+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
+//					+"WHERE ap.emp_id = "+builderEmployee.getId()+" group by project.id order by project.id desc";
+//		}
+		//code changes done by pankaj
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
 			hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
-				+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
+				+"project.completion_status as completionStatus,project.inventory_sold as sold, project.locality_name as localityName, build.id as builderId, "
 				+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
-				+"c.name as cityName, l.id as localityId, l.name as localityName, "
+				+"c.name as cityName, "
 				+"count(lead.id) as totalLeads "
 				+"FROM  builder_project as project "
 				+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
-				+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
-				+"WHERE project.group_id = "+builderEmployee.getBuilder().getId()+" group by project.id";
+				+"left join builder_lead as lead ON project.id = lead.project_id "
+				+"WHERE project.status=1 and project.group_id = "+builderEmployee.getBuilder().getId()+" group by project.id order by project.id desc";
 		} else {
 			hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
-					+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
+					+"project.completion_status as completionStatus,project.inventory_sold as sold, project.locality_name as localityName, build.id as builderId, "
 					+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
-					+"c.name as cityName, l.id as localityId, l.name as localityName, "
+					+"c.name as cityName, "
 					+"count(lead.id) as totalLeads "
 					+"FROM  builder_project as project inner join allot_project ap ON project.id = ap.project_id "
 					+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
-					+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
-					+"WHERE ap.emp_id = "+builderEmployee.getId()+" group by project.id";
+					+"left join builder_lead as lead ON project.id = lead.project_id "
+					+"WHERE project.status=1 and ap.emp_id = "+builderEmployee.getId()+" group by project.id order by project.id desc";
 		}
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectList.class));
+		System.err.println(hql);
 		query.setMaxResults(4);
 		List<ProjectList> result = query.list();
 		session.close();
@@ -3206,8 +3262,9 @@ public class ProjectDAO {
 			ProjectCityData newproject = new ProjectCityData();
 			newproject.setCityId(builderproject.getCity().getId());
 			newproject.setCityName(builderproject.getCity().getName());
-			newproject.setAreaId(builderproject.getLocality().getId());
-			newproject.setAreaName(builderproject.getLocality().getName());
+			//newproject.setAreaId(builderproject.getLocality().getId());
+			//newproject.setAreaName(builderproject.getLocality().getName());
+			newproject.setAreaName(builderproject.getLocalityName());
 			projects.add(newproject);
 		}
 		session.close();
@@ -4654,10 +4711,58 @@ public class ProjectDAO {
 		
 		session.close();
 		return result;
- 		
-		
-		
-		
-		
 	}
+	
+	public PriceInfoData getBuildingPriceData(int buildingId){
+		PriceInfoData priceInfoData = new PriceInfoData();
+		String hql = "from BuildingPriceInfo where builderBuilding.id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", buildingId);
+		try{
+			BuildingPriceInfo buildingPriceInfo =(BuildingPriceInfo) query.list().get(0);
+			priceInfoData.setId(buildingPriceInfo.getId());
+			priceInfoData.setAreaUnits(buildingPriceInfo.getAreaUnit().getId());
+			priceInfoData.setBaseRate(buildingPriceInfo.getBasePrice());
+			priceInfoData.setRiseRate(buildingPriceInfo.getRiseRate());
+			priceInfoData.setPost(buildingPriceInfo.getPost());
+			priceInfoData.setMaintainance(buildingPriceInfo.getMaintenance());
+			priceInfoData.setParkingId(buildingPriceInfo.getParkingId());
+			priceInfoData.setAmenityRate(buildingPriceInfo.getAmenityRate());
+			priceInfoData.setTenure(buildingPriceInfo.getTenure());
+			priceInfoData.setParking(buildingPriceInfo.getParking());
+			priceInfoData.setStampDuty(buildingPriceInfo.getStampDuty());
+			priceInfoData.setTax(buildingPriceInfo.getTax());
+			priceInfoData.setVat(buildingPriceInfo.getVat());
+			priceInfoData.setFee(buildingPriceInfo.getFee());
+		}catch(Exception e){
+			BuilderBuilding building = getBuildingById(buildingId);
+			String innerHql = "from BuilderProjectPriceInfo where builderProject.id = :project_id";
+			Session innerSession = hibernateUtil.openSession();
+			Query innerQuery = innerSession.createQuery(innerHql);
+			innerQuery.setParameter("project_id", building.getBuilderProject().getId());
+			try{
+			BuilderProjectPriceInfo builderProjectPriceInfo =(BuilderProjectPriceInfo) innerQuery.list().get(0);
+			
+			priceInfoData.setAreaUnits(builderProjectPriceInfo.getAreaUnit().getId());
+			priceInfoData.setBaseRate(builderProjectPriceInfo.getBasePrice());
+			priceInfoData.setRiseRate(builderProjectPriceInfo.getRiseRate());
+			priceInfoData.setPost(builderProjectPriceInfo.getPost());
+			priceInfoData.setMaintainance(builderProjectPriceInfo.getMaintenance());
+			priceInfoData.setParkingId(0);
+			priceInfoData.setAmenityRate(builderProjectPriceInfo.getAmenityRate());
+			priceInfoData.setTenure(builderProjectPriceInfo.getTenure());
+			priceInfoData.setParking(builderProjectPriceInfo.getParking());
+			priceInfoData.setStampDuty(builderProjectPriceInfo.getStampDuty());
+			priceInfoData.setTax(builderProjectPriceInfo.getTax());
+			priceInfoData.setVat(builderProjectPriceInfo.getVat());
+			priceInfoData.setFee(builderProjectPriceInfo.getFee());
+			}catch(Exception e1){
+				System.err.println("Fail to load data from project pricing info");
+			}
+		}
+		return priceInfoData;
+	}
+	
 }
