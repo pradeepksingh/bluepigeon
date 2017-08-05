@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.PaymentInfoData"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectOfferInfoDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectOfferInfo"%>
 <%@page import="org.bluepigeon.admin.model.Tax"%>
@@ -30,6 +31,8 @@
 	ServletContext webcontext = pageContext.getServletContext();
 	int building_id = 0;
 	int project_id = 0;
+	int floor_id = 0;
+	int flat_id = 0;
 	int p_user_id = 0;
 	int building_size_list = 0;
 	BuilderBuilding builderBuilding = null;
@@ -41,7 +44,8 @@
 	List<BuildingImageGallery> buildingImageGalleries = null;
 	List<BuildingPanoramicImage> buildingPanoramicImages = null;
 	List<BuildingAmenityInfo> buildingAmenityInfos  = null;
-	List<BuildingPaymentInfo> buildingPaymentInfos = null;
+//	List<BuildingPaymentInfo> buildingPaymentInfos = null;
+	List<PaymentInfoData> buildingPaymentInfos = null;
 	List<BuildingOfferInfo> buildingOfferInfos = null;
 	List<BuilderProjectOfferInfo> builderProjectOfferInfos = null;
 	PriceInfoData priceInfoData = null;
@@ -73,12 +77,16 @@
 					buildingImageGalleries = new ProjectDAO().getBuilderBuildingImagesById(building_id);
 				    buildingPanoramicImages = new ProjectDAO().getBuilderBuildingElevationImagesById(building_id);
 					buildingAmenityInfos = new ProjectDAO().getBuilderBuildingAmenityInfoById(building_id);
-					buildingPaymentInfos = new ProjectDAO().getActiveBuilderBuildingPaymentInfoById(building_id);
+					//buildingPaymentInfos = new ProjectDAO().getActiveBuilderBuildingPaymentInfoById(building_id);
+					buildingPaymentInfos = new ProjectDAO().getBuildingPaymentInfoById(building_id);
 					buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
 					buildingAmenityWeightages = new ProjectDAO().getActiveBuilderBuildingAmenityWeightageById(building_id);
 					priceInfoData = new ProjectDAO().getBuildingPriceData(building_id);
 					builderProjectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderProjectOfferInfo(project_id);
 					areaUnits = new AreaUnitDAO().getActiveAreaUnitList();
+					buildingPaymentInfos = new ProjectDAO().getBuildingPaymentInfoById(building_id);
+					floor_id = new ProjectDAO().getActiveFloorsByBuildingId(building_id).get(0).getId();
+					flat_id = new ProjectDAO().getBuilderActiveFloorFlats(floor_id).get(0).getId();
 					BuilderProject builderProject = new ProjectDAO().getBuilderProjectById(project_id);
 					if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
 						taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
@@ -179,7 +187,9 @@
 	                 </a>
             	</div>
                 <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
+                	<a href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id); %>&floor_id=<%out.print(floor_id); %>">
                     <div id="floor" class="top-white-box" >FLOOR</div>
+                    </a>
                 </div>
                 <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
                     <div id="flat" class="top-white-box">FLAT</div>
@@ -517,7 +527,7 @@
                                    		<div id="payment_schedule">
 	                                   	<% 	int i = 1;
 	                                   	if(buildingPaymentInfos != null){
-	                                   			for(BuildingPaymentInfo projectPaymentInfo :buildingPaymentInfos) {  
+	                                   			for(PaymentInfoData projectPaymentInfo :buildingPaymentInfos) {  
 												%>
 												<input type="hidden"  name="payment_id[]" value="<%out.print(projectPaymentInfo.getId());%>"/>
 												  <div class="row" id="schedule-<% out.print(i); %>">
@@ -529,7 +539,7 @@
 							                                    <label for="example-search-input" class="col-sm-4 control-label">Milestone<span class='text-danger'>*</span></label>
 				                                    			<div class="col-sm-6">
 				                                    				<div>
-				                                        				<input type="text" class="form-control" readonly="true" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getMilestone() != null) { out.print(projectPaymentInfo.getMilestone());}%>"/>
+				                                        				<input type="text" class="form-control" readonly="true" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getName() != null) { out.print(projectPaymentInfo.getName());}%>"/>
 					                                    			</div>
 					                                    			<div class="messageContainer"></div>
 					                                 			</div>

@@ -217,8 +217,10 @@
 															String is_selected = "";
 															if(buildingAmenityInfos.size() > 0) { 
 																for(BuildingAmenityInfo buildingAmenityInfo :buildingAmenityInfos) {
+																	if(buildingAmenityInfo.getBuilderBuildingAmenity() != null){
 																	if(buildingAmenityInfo.getBuilderBuildingAmenity().getId() == builderBuildingAmenity.getId()) {
 																		is_selected = "checked";
+																		}
 																	}
 																}
 															}
@@ -239,10 +241,12 @@
 															String is_checked = "";
 															if(buildingAmenityInfos.size() > 0) { 
 																for(BuildingAmenityInfo buildingAmenityInfo :buildingAmenityInfos) {
+																	if(buildingAmenityInfo.getBuilderBuildingAmenity() != null){
 																	if(buildingAmenityInfo.getBuilderBuildingAmenity().getId() == builderBuildingAmenity.getId()) {
 																		is_checked = "checked";
 																	}
 																}
+																}	
 															}
 															Double amenity_wt = 0.0;
 															for(BuildingAmenityWeightage buildingAmenityWeightage :buildingAmenityWeightages) {

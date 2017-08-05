@@ -54,6 +54,9 @@
 
 <%
 	int project_id = 0;
+	int building_id = 0;
+	int floor_id = 0;
+	int flat_id = 0;
 	int p_user_id = 0;
 	project_id = Integer.parseInt(request.getParameter("project_id"));
 	BuilderProject builderProject = new ProjectDAO().getBuilderActiveProjectById(project_id);
@@ -107,6 +110,9 @@
 				projectPriceInfo = new BuilderProjectPriceInfoDAO().getBuilderProjectPriceInfo(project_id);
 				projectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderActiveProjectPaymentInfo(project_id);
 				projectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderActiveProjectOfferInfo(project_id);
+				building_id = new ProjectDAO().getBuilderActiveProjectBuildings(project_id).get(0).getId();
+				floor_id = new ProjectDAO().getActiveFloorsByBuildingId(building_id).get(0).getId();
+				flat_id = new ProjectDAO().getBuilderActiveFloorFlats(floor_id).get(0).getId();
 				amenityWeightages = new ProjectDAO().getActiveProjectAmenityWeightageByProjectId(project_id);
 				if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
 					taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
@@ -184,12 +190,14 @@
                         <div id="project" class="top-blue-box ">PROJECT</div>
                     </div>
 	                <div  class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
-	                    <a href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id);%>&building_id=<%out.print(new ProjectDAO().getBuilderProjectBuildings(project_id).get(0).getId());%>">
+	                    <a href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id);%>&building_id=<%out.print(building_id);%>">
 	                        <div id="building" class="top-white-box ">BUILDING</div>
 	                    </a>
 	               </div>
                     <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
-                        <div id="floor" class="top-white-box" >FLOOR</div>
+                    	<a href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %> ">
+                        	<div id="floor" class="top-white-box" >FLOOR</div>
+                        </a>
                     </div>
                     <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
                         <div id="flat" class="top-white-box">FLAT</div>

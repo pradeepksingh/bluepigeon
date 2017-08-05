@@ -972,6 +972,17 @@ public class ProjectDAO {
 			}
 		}
 		catch(Exception e){
+			BuilderBuilding building = getBuilderProjectBuildingById(building_id).get(0);
+			System.err.println("Project Id :: "+building.getBuilderProject().getId());
+			List<BuilderProjectPaymentInfo> builderProjectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderProjectPaymentInfo(building.getBuilderProject().getId());
+			for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
+				PaymentInfoData paymentInfoData = new PaymentInfoData();
+				paymentInfoData.setId(0);
+				paymentInfoData.setName(builderProjectPaymentInfo.getSchedule());
+				paymentInfoData.setAmount(builderProjectPaymentInfo.getAmount());
+				paymentInfoData.setPayable(builderProjectPaymentInfo.getPayable());
+				paymentInfoDatas.add(paymentInfoData);
+			}
 			e.printStackTrace();
 		}
 		session.close();
@@ -2308,6 +2319,17 @@ public class ProjectDAO {
 		List<BuilderFlat> result = query.list();
 		session.close();
 		return result;
+	}
+	
+	public List<BuilderFloor> getActiveFloorsByBuildingId(int buildingId){
+		String hql = "from BuilderFloor where builderBuilding.id = :building_id and builderBuilding.status = 1 and builderBuilding.builderProject.status = 1 and status = 1 order by builderBuilding.builderProject.id DESC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", buildingId);
+		List<BuilderFloor> builderFloors = query.list();
+		return builderFloors;
+				
 	}
 	/**
 	 * Get all active flats by floor id

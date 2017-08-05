@@ -16,7 +16,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%
+	int project_id = 0;
+	int building_id = 0;
 	int floor_id = 0;
+	int flat_id = 0;
 	int p_user_id = 0;
 	BuilderFloor builderFloor = null;
 	List<BuilderBuilding> buildings = null;
@@ -26,6 +29,8 @@
 	List<BuilderFloorAmenity> builderFloorAmenities = null;
 	List<ProjectData> builderProjects  = null;
 	List<FloorAmenityWeightage> floorAmenityWeightages  = null;
+	project_id = Integer.parseInt(request.getParameter("project_id"));
+	building_id = Integer.parseInt(request.getParameter("building_id"));
 	floor_id = Integer.parseInt(request.getParameter("floor_id"));
 	session = request.getSession(false);
 	BuilderEmployee adminuserproject = new BuilderEmployee();
@@ -110,161 +115,192 @@
        </div>
         <div id="page-wrapper" style="min-height: 2038px;">
             <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Floor Update</h4>
+                   <div class="row">
+                    <div class="col-lg-3 col-sm-6 col-xs-12 m-t-15 ">
+                    	<a href="${baseUrl}/builder/project/edit.jsp?project_id=<%out.print(project_id);%>">
+                        <div id="project" class="top-white-box ">PROJECT</div>
+                        </a>
                     </div>
-                    <!-- /.col-lg-12 -->
+	                <div  class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
+	                    <a href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id);%>&building_id=<%out.print(building_id);%>">
+	                        <div id="building" class="top-white-box ">BUILDING</div>
+	                    </a>
+	               </div>
+                    <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
+                    	<a href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %> ">
+                        	<div id="floor" class="top-blue-box" >FLOOR</div>
+                        </a>
+                    </div>
+                    <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
+                        <div id="flat" class="top-white-box">FLAT</div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="white-box"><br>
+                        <div class="white-box">
+                        	<div class="color-box">
+                        	 <ul class="nav  nav-tabs">
+                                 <li class="active">
+                                     <a data-toggle="tab"  href="#vimessages" > <span>Floor Details</span></a>
+                                 </li>
+                             </ul>
+                            <div class="tab-content"> 
                              <div class="col-12">
                                   <form id="updatefloor" name="updatefloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 										<input type="hidden" name="floor_id" id="floor_id" value="<% out.print(floor_id);%>"/>
 										<input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
 										<input type="hidden" name="img_count" id="img_count" value="2"/>
-                                        <div class="form-group row">
-                                            <label for="example-text-input" class="col-4 col-form-label">Floor Name</label>
-                                            <div class="col-8">
-                                                <input class="form-control" type="text" id="name" name="name" value="<% out.print(builderFloor.getName()); %>">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="example-search-input" class="col-4 col-form-label">Floor No.</label>
-                                            <div class="col-8">
-                                                <div class="input-group bootstrap-touchspin"><input type="text" id="floor_no" name="floor_no" value="<% out.print(builderFloor.getFloorNo()); %>" ></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="example-text-input" class="col-4 col-form-label">Project Name</label>
-                                            <div class="col-8">
-                                               <select id="project_id" name="project_id" class="form-control">
-													<option value="0">Select Project</option>
-													<% for(ProjectData builderProject :builderProjects) { %>
-													<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == builderFloor.getBuilderBuilding().getBuilderProject().getId()) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
-													<% } %>
-												</select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="example-text-input" class="col-4 col-form-label">Building Name</label>
-                                            <div class="col-8">
-                                               <select id="building_id" name="building_id" class="form-control">
-													<% if(buildings != null) { %>
-													<% for(BuilderBuilding builderBuilding2 :buildings) { %>
-													<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == builderFloor.getBuilderBuilding().getId()) { %>selected<% } %>><% out.print(builderBuilding2.getName());%></option>
-													<% } %>
-													<% } else { %>
-													<option value="0">Select Building</option>
-													<% } %>
-												</select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="example-text-input" class="col-4 col-form-label">Status</label>
-                                            <div class="col-8">
-                                               <select id="status" name="status" class="form-control">
-													<% for(BuilderFloorStatus builderFloorStatus :builderFloorStatuses) { %>
-													<option value="<% out.print(builderFloorStatus.getId());%>" <% if(builderFloor.getBuilderFloorStatus().getId() == builderFloorStatus.getId()) { %>selected<% } %>><% out.print(builderFloorStatus.getName()); %></option>
-													<% } %>
-												</select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="example-text-input" class="col-4 col-form-label">Floor Amenities</label>
-                                            <div class="col-8">
-                                              <% 	for(BuilderFloorAmenity builderFloorAmenity :builderFloorAmenities) { 
-													String is_checked = "";
-													for(FloorAmenityInfo floorAmenityInfo :floorAmenityInfos) {
-														if(floorAmenityInfo.getBuilderFloorAmenity().getId() == builderFloorAmenity.getId()) {
-															is_checked = "checked";
-														}
-													}
-											 %>
-												<div class="checkbox checkbox-inverse">
-													<input id="checkbox1c" type="checkbox" name="amenity_type[]" value="<% out.print(builderFloorAmenity.getId());%>" <% out.print(is_checked); %>/> <label for="checkbox1c"><% out.print(builderFloorAmenity.getName());%></label>
-												</div>
-											<% } %>
-                                            </div>
-                                        </div>
-                                        <% 	for(BuilderFloorAmenity builderFloorAmenity : builderFloorAmenities) { 
-											String is_checked = "";
-											if(floorAmenityInfos.size() > 0) { 
-												for(FloorAmenityInfo floorAmenityInfo :floorAmenityInfos) {
-													if(floorAmenityInfo.getBuilderFloorAmenity().getId() == builderFloorAmenity.getId()) {
-														is_checked = "checked";
-													}
-												}
-											}
-											Double amenity_wt = 0.0;
-											for(FloorAmenityWeightage floorAmenityWeightage :floorAmenityWeightages) {
-												if(builderFloorAmenity.getId() == floorAmenityWeightage.getBuilderFloorAmenity().getId()) {
-													amenity_wt = floorAmenityWeightage.getAmenityWeightage();
-												}
-											}
-										%>
-										<input type="hidden" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderFloorAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
-										<% 	for(BuilderFloorAmenityStages bpaStages :builderFloorAmenity.getBuilderFloorAmenityStageses()) { 
-											Double stage_wt = 0.0;
-											for(FloorAmenityWeightage floorAmenityWeightage :floorAmenityWeightages) {
-												if(bpaStages.getId() == floorAmenityWeightage.getBuilderFloorAmenityStages().getId()) {
-													stage_wt = floorAmenityWeightage.getStageWeightage();
-												}
-											}
-										%>
-										<input name="stage_weightage<% out.print(builderFloorAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="hidden" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/>
-										<% 	for(BuilderFloorAmenitySubstages bpaSubstage :bpaStages.getBuilderFloorAmenitySubstageses()) { 
-											Double substage_wt = 0.0;
-											for(FloorAmenityWeightage floorAmenityWeightage :floorAmenityWeightages) {
-												if(bpaSubstage.getId() == floorAmenityWeightage.getBuilderFloorAmenitySubstages().getId()) {
-													substage_wt = floorAmenityWeightage.getSubstageWeightage();
-												}
-											}
-										%>
-										<input type="hidden" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
-										<% } %>
-										<% } %>
-										<% } %>
-                                        <div class="row" id="project_images">
-											<% for (FloorLayoutImage floorLayoutImage :floorLayoutImages) { %>
-											<div class="col-lg-4 margin-bottom-5" id="b_image<% out.print(floorLayoutImage.getId()); %>">
-												<div class="form-group" id="error-landmark">
-													<div class="col-sm-12">
-														<img alt="Building Images" src="${baseUrl}/<% out.print(floorLayoutImage.getLayout()); %>" width="200px;">
-													</div>
-													<label class="col-sm-12 text-left"><a href="javascript:deleteImage(<% out.print(floorLayoutImage.getId()); %>);" class="btn btn-danger btn-sm">x Delete Plan</a> </label>
-													<div class="messageContainer col-sm-offset-4"></div>
-												</div>
-											</div>
-											<% } %>
-											<div class="col-lg-6 margin-bottom-5" id="imgdiv-2">
-												<div class="form-group" id="error-landmark">
-													<label class="control-label col-sm-4">Select Image </label>
-													<div class="col-sm-8 input-group" style="padding:0px 12px;">
-														<input type="file" class="form-control" id="building_image" name="building_image[]" />
-														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a>
-													</div>
-												<div class="messageContainer col-sm-offset-3"></div>
-											</div>
-										</div>
 										<div class="row">
-											<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-ms"> + Add More</a></span>
-										</div>
-									</div>
-                                          <button type="submit" name="floorupdate" class="btn btn-success waves-effect waves-light m-r-10">Update</button>
+											<div class="col-sm-6">
+		                                        <div class="form-group row">
+		                                            <label for="example-text-input" class="col-sm-4 col-form-label">Floor No</label>
+		                                            <div class="col-sm-6">
+		                                                <input disabled type="text" id="floor_no" name="floor_no" value="<% out.print(builderFloor.getFloorNo()); %>" >
+		                                            </div>
+		                                        </div>
+		                                    </div>
+		                                    <div class="col-sm-6">
+		                                        <div class="form-group row">
+		                                            <label for="example-search-input" class="col-sm-4 col-form-label">Floor Status</label>
+		                                            <div class="col-sm-6">
+			                                             <select id="status" name="status" class="form-control" disabled>
+															<% for(BuilderFloorStatus builderFloorStatus :builderFloorStatuses) { %>
+															<option value="<% out.print(builderFloorStatus.getId());%>" <% if(builderFloor.getBuilderFloorStatus().getId() == builderFloorStatus.getId()) { %>selected<% } %>><% out.print(builderFloorStatus.getName()); %></option>
+															<% } %>
+														</select>
+		                                            </div>
+		                                        </div>
+		                                     </div>
+		                                 </div>
+		                                 <div class="row">
+		                                 	<div class="col-sm-6">
+		                                 		<div class="form-group row">
+                                            		<label for="example-text-input" class="col-4 col-form-label">Building Name</label>
+                                            		<div class="col-sm-6">
+														<input disabled type="text" id="building_name" name="building_name" value="<% out.print(builderFloor.getBuilderBuilding().getName()); %>" >
+                                            		</div>
+                                            	</div>
+                                        	</div>
+                                        	<div class="col-sm-6">
+		                                        <div class="form-group row">
+		                                            <label for="example-text-input" class="col-sm-4 col-form-label">Project Name</label>
+		                                            <div class="col-sm-6">
+		                                               <select id="project_id" name="project_id" class="form-control" disabled>
+															<option value="0">Select Project</option>
+															<% for(ProjectData builderProject :builderProjects) { %>
+															<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == builderFloor.getBuilderBuilding().getBuilderProject().getId()) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
+															<% } %>
+														</select>
+		                                            </div>
+		                                        </div>
+                                        	</div>
+                                       </div> 
+                                       <div class="row">
+                                       		<div class="col-sm-6">
+		                                        <div class="form-group row">
+		                                            <label for="example-text-input" class="col-sm-4 col-form-label">Floor Name</label>
+		                                            <div class="col-sm-6">
+		                                                <input class="form-control" type="text" readonly="true" id="name" name="name" value="<% out.print(builderFloor.getName()); %>">
+		                                            </div>
+		                                      	</div>
+		                                   	</div>
+                                      </div>
+<!--                                         <div class="form-group row"> -->
+<!--                                             <label for="example-text-input" class="col-4 col-form-label">Floor Amenities</label> -->
+<!--                                             <div class="col-8"> -->
+<%--                                               <% 	for(BuilderFloorAmenity builderFloorAmenity :builderFloorAmenities) {  --%>
+<!-- // 													String is_checked = ""; -->
+<!-- // 													for(FloorAmenityInfo floorAmenityInfo :floorAmenityInfos) { -->
+<!-- // 														if(floorAmenityInfo.getBuilderFloorAmenity().getId() == builderFloorAmenity.getId()) { -->
+<!-- // 															is_checked = "checked"; -->
+<!-- // 														} -->
+<!-- // 													} -->
+<%-- 											 %> --%>
+<!-- 												<div class="checkbox checkbox-inverse"> -->
+<%-- 													<input id="checkbox1c" type="checkbox" name="amenity_type[]" value="<% out.print(builderFloorAmenity.getId());%>" <% out.print(is_checked); %>/> <label for="checkbox1c"><% out.print(builderFloorAmenity.getName());%></label> --%>
+<!-- 												</div> -->
+<%-- 											<% } %> --%>
+<!--                                             </div> -->
+<!--                                         </div> -->
+<%--                                         <% 	for(BuilderFloorAmenity builderFloorAmenity : builderFloorAmenities) {  --%>
+<!-- // 											String is_checked = ""; -->
+<!-- // 											if(floorAmenityInfos.size() > 0) {  -->
+<!-- // 												for(FloorAmenityInfo floorAmenityInfo :floorAmenityInfos) { -->
+<!-- // 													if(floorAmenityInfo.getBuilderFloorAmenity().getId() == builderFloorAmenity.getId()) { -->
+<!-- // 														is_checked = "checked"; -->
+<!-- // 													} -->
+<!-- // 												} -->
+<!-- // 											} -->
+<!-- // 											Double amenity_wt = 0.0; -->
+<!-- // 											for(FloorAmenityWeightage floorAmenityWeightage :floorAmenityWeightages) { -->
+<!-- // 												if(builderFloorAmenity.getId() == floorAmenityWeightage.getBuilderFloorAmenity().getId()) { -->
+<!-- // 													amenity_wt = floorAmenityWeightage.getAmenityWeightage(); -->
+<!-- // 												} -->
+<!-- // 											} -->
+<!-- 										%> -->
+<%-- 										<input type="hidden" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderFloorAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>"> --%>
+<%-- 										<% 	for(BuilderFloorAmenityStages bpaStages :builderFloorAmenity.getBuilderFloorAmenityStageses()) {  --%>
+<!-- // 											Double stage_wt = 0.0; -->
+<!-- // 											for(FloorAmenityWeightage floorAmenityWeightage :floorAmenityWeightages) { -->
+<!-- // 												if(bpaStages.getId() == floorAmenityWeightage.getBuilderFloorAmenityStages().getId()) { -->
+<!-- // 													stage_wt = floorAmenityWeightage.getStageWeightage(); -->
+<!-- // 												} -->
+<!-- // 											} -->
+<%-- 										%> --%>
+<%-- 										<input name="stage_weightage<% out.print(builderFloorAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="hidden" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/> --%>
+<%-- 										<% 	for(BuilderFloorAmenitySubstages bpaSubstage :bpaStages.getBuilderFloorAmenitySubstageses()) {  --%>
+<!-- // 											Double substage_wt = 0.0; -->
+<!-- // 											for(FloorAmenityWeightage floorAmenityWeightage :floorAmenityWeightages) { -->
+<!-- // 												if(bpaSubstage.getId() == floorAmenityWeightage.getBuilderFloorAmenitySubstages().getId()) { -->
+<!-- // 													substage_wt = floorAmenityWeightage.getSubstageWeightage(); -->
+<!-- // 												} -->
+<!-- // 											} -->
+<%-- 										%> --%>
+<%-- 										<input type="hidden" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/> --%>
+<%-- 										<% } %> --%>
+<%-- 										<% } %> --%>
+<%-- 										<% } %> --%>
+<!--                                         <div class="row" id="project_images"> -->
+<%-- 											<% for (FloorLayoutImage floorLayoutImage :floorLayoutImages) { %> --%>
+<%-- 											<div class="col-lg-4 margin-bottom-5" id="b_image<% out.print(floorLayoutImage.getId()); %>"> --%>
+<!-- 												<div class="form-group" id="error-landmark"> -->
+<!-- 													<div class="col-sm-12"> -->
+<%-- 														<img alt="Building Images" src="${baseUrl}/<% out.print(floorLayoutImage.getLayout()); %>" width="200px;"> --%>
+<!-- 													</div> -->
+<%-- 													<label class="col-sm-12 text-left"><a href="javascript:deleteImage(<% out.print(floorLayoutImage.getId()); %>);" class="btn btn-danger btn-sm">x Delete Plan</a> </label> --%>
+<!-- 													<div class="messageContainer col-sm-offset-4"></div> -->
+<!-- 												</div> -->
+<!-- 											</div> -->
+<%-- 											<% } %> --%>
+<!-- 											<div class="col-lg-6 margin-bottom-5" id="imgdiv-2"> -->
+<!-- 												<div class="form-group" id="error-landmark"> -->
+<!-- 													<label class="control-label col-sm-4">Select Image </label> -->
+<!-- 													<div class="col-sm-8 input-group" style="padding:0px 12px;"> -->
+<!-- 														<input type="file" class="form-control" id="building_image" name="building_image[]" /> -->
+<!-- 														<a href="javascript:removeImage(2);" class="input-group-addon btn-danger">x</a> -->
+<!-- 													</div> -->
+<!-- 												<div class="messageContainer col-sm-offset-3"></div> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 										<div class="row"> -->
+<!-- 											<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-ms"> + Add More</a></span> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!--                                           <button type="submit" name="floorupdate" class="btn btn-success waves-effect waves-light m-r-10">Update</button> -->
                                    </form>
                                 </div>
+                             </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
         <!-- /.container-fluid -->
-     <div id="sidebar1"> 
-      	<%@include file="../../../partial/footer.jsp"%>
-	</div> 
+ <div id="sidebar1"> 
+     <%@include file="../../../partial/footer.jsp"%>
+</div> 
 </body>
 
 </html>
