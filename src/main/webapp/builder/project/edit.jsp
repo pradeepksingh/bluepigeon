@@ -652,7 +652,7 @@
 	                                		<div class="row">
 	                                			<div class="col-sm-6">
 			                                 		<div class="form-group row">
-			                                    		<label for="example-tel-input" class="col-sm-4 col-form-label">Maintainence Charge<span class='text-danger'>*</span></label>
+			                                    		<label for="example-tel-input" class="col-sm-4 col-form-label">Maintenance Charge<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 					                                    		<div>
@@ -680,7 +680,7 @@
 			                                <div class="row">
 			                                	<div class="col-sm-6">	
 					                                <div class="form-group row">
-			        		                            <label for="example-tel-input" class="col-sm-4 col-form-label">Aminities facing Rate<span class='text-danger'>*</span></label>
+			        		                            <label for="example-tel-input" class="col-sm-4 col-form-label">Amenities facing Rate<span class='text-danger'>*</span></label>
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 					                		                    <div>
@@ -768,7 +768,7 @@
                                  <div id="vimessages3" class="tab-pane" aria-expanded="false">        
                                  	<form id="paymentfrm" name="paymentfrm" method="post" action=""  enctype="multipart/form-data">
                                  	 	<input type="hidden" id="project_id" name="project_id" value="<% out.print(project_id);%>"/>
-                                   		<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(projectPaymentInfos.size()+1000);%>"/>
+                                   		<input type="hidden" name="schedule_count" id="schedule_count" value="<%if(projectPaymentInfos != null && projectPaymentInfos.size() >0 ){ out.print(projectPaymentInfos.size()+1000);}else{%>1000<%}%>"/>
                                    		<div id="payment_schedule">
 	                                   	<% 	int i = 1;
 	                                   	if(projectPaymentInfos != null){
@@ -848,7 +848,6 @@
 																				</div>
 																				<div class="messageContainer"></div>
 																			</div>
-																			
 																		</div>
 																	</div>
 																	<div class="col-lg-3 margin-bottom-5">
@@ -906,20 +905,18 @@
 																	</span>
 																</div>
 															</div>
-													
-												</div>
-											</div>
-											<div class="row">
-												 <div class="offset-sm-5 col-sm-7">
-	                                        		<button type="submit" id="offerbtn" class="btn btn-submit waves-effect waves-light m-t-10">SAVE</button>
-	                                   			</div>
-	                                   		</div>
+														</div>
+													</div>
+												<div class="row">
+													 <div class="offset-sm-5 col-sm-7">
+		                                        		<button type="submit" id="offerbtn" class="btn btn-submit waves-effect waves-light m-t-10">SAVE</button>
+		                                   			</div>
+		                                   		</div>
 											</form>
-									</div>
-	                            
-                                </div>
-                           </div>
-                        </div>
+										</div>
+                                	</div>
+                           		</div>
+                        	</div>
                         </div>
                      </div>
                  </div>
@@ -1646,24 +1643,24 @@ $('#paymentfrm').bootstrapValidator({
                     max: 100,
                     message: 'The percentage must be between 0 and 100'
 	        	},
-// 	        	 callback: {
-//                      message: 'The sum of percentages must be 100',
-//                      callback: function(value, validator, $field) {
-//                          var percentage = validator.getFieldElements('payable[]'),
-//                              length     = percentage.length,
-//                              sum        = 0;
+	        	 callback: {
+                     message: 'The sum of percentages must be 100',
+                     callback: function(value, validator, $field) {
+                         var percentage = validator.getFieldElements('payable[]'),
+                             length     = percentage.length,
+                             sum        = 0;
 
-//                          for (var i = 0; i < length; i++) {
-//                              sum += parseFloat($(percentage[i]).val());
-//                          }
-//                          if (sum === 100) {
-//                              validator.updateStatus('payable[]', 'VALID', 'callback');
-//                              return true;
-//                          }
+                         for (var i = 0; i < length; i++) {
+                             sum += parseFloat($(percentage[i]).val());
+                         }
+                         if (sum === 100) {
+                             validator.updateStatus('payable[]', 'VALID', 'callback');
+                             return true;
+                         }
 
-//                          return false;
-//                      }
-//                  },
+                         return false;
+                     }
+                 },
 		        notEmpty: {
 		    		message: 'Payable is required and cannot be empty'
 		        },
@@ -1789,31 +1786,35 @@ function showOfferResponse(resp, statusText, xhr, $form){
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
-	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="" />'
+	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="0" />'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>'
 		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control"  name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control" id="offer_title'+offers+'" name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
 		+'<div class="col-lg-3 margin-bottom-5">'
-			+'<div class="form-group" id="error-discount">'
-				+'<label class="control-label col-sm-6">Discount(%) <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control discount"  name="discount[]" value="" onkeypress=" return isNumber(event, this);"/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
+		+'<div class="form-group" id="error-applicable_on">'
+		+'<label class="control-label col-sm-6">Offer Type </label>'
+		+'<div class="col-sm-6">'
+		+'<select class="form-control"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
+		+'<option value="1">Percentage</option>'
+		+'<option value="2">Flat Amount</option>'
+		+'<option value="3">Other</option>'
+		+'</select>'
+		+'</div>'
+		+'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
 		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control"  id="discount_amount'+offers+'"  name="discount_amount[]" value="" onkeyup="javascript:onlyNumber('+offers+');"/>'
+					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup=" javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1827,20 +1828,8 @@ function addMoreOffer() {
 			+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
+		
 		+'<div class="col-lg-3 margin-bottom-5">'
-		+'<div class="form-group" id="error-applicable_on">'
-		+'<label class="control-label col-sm-6">Offer Type </label>'
-		+'<div class="col-sm-6">'
-		+'<select class="form-control" id="offer_type" name="offer_type[]">'
-		+'<option value="1">Percentage</option>'
-		+'<option value="2">Flat Amount</option>'
-		+'<option value="3">Other</option>'
-		+'</select>'
-		+'</div>'
-		+'<div class="messageContainer"></div>'
-		+'</div>'
-		+'</div>'
-		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-apply">'
 			+'<label class="control-label col-sm-6">Status </label>'
 			+'<div class="col-sm-6">'
@@ -1857,62 +1846,44 @@ function addMoreOffer() {
 	$("#offer_count").val(offers);
 }
 function removeOffer(id) {
-	
 	$("#offer-"+id).remove();
 }
 
-// $('#addMoreOffers').click(function () {
-//     var rowId = $('.row').length + 1;
-//     var validator = $('#myForm').data('bootstrapValidator');
-//     var klon = template.clone();          
-//     klon.attr('id', 'line_' + rowId)
-//         .insertAfter($('.row').last())
-//         .find('input')
-//         .each(function () {
-//             $(this).attr('id', $(this).attr('id').replace(/_(\d*)$/, "_"+rowId));
-//             validator.addField($(this));
-//         })                   
-// });
-
-
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
-	alert(schedule_count);
 	schedule_count++;
-	var html = +'<div class="row" id="schedule-'+schedule_count+'>'
-			   +'<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>'
-			   +'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>'
-			   +'<div class="row">'
-			   +'<div class="col-sm-6">'
-			   +'<div class="form-group row">'
-			   +'<label for="example-search-input" class="col-sm-4 col-form-label">Milestone<span class="text-danger">*</span></label>'
-			   +'<div class="col-sm-6">'
-			   +'<div>'
-			   +'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
-			   +'</div>'
-			   +'<div class="messageContainer"></div>'
-			   +'</div>'
-			   +'</div>'
-			   +'</div>'
-			   +'<div class="col-sm-6">'
-			   +'<div class="form-group row">'
-			   +'<label for="example-search-input" class="col-sm-4 col-form-label">% of net payable<span class="text-danger">*</span></label>'
-			   +'<div class="col-sm-6">'
-			   +'<div>'
-			   +'<input class="form-control" type="text" id="payable'+schedule_count+'" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress="return isNumber(event, this);" name="payable[]" value=""/>'
-			   +'</div>'
-			   +'<div class="messageContainer"></div>'
-			   +'</div>'
-			   +'</div>'
-			   +'</div>'
-			   +'</div>'
-			   +'</div>'
-			   +'</div>';
+			   
+	 var html = '<div class="row" id="schedule-'+schedule_count+'">'
+				+'<div class="col-lg-12" style="padding-bottom:5px;">'
+				+'<span class="pull-right"><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span>'
+				+'</div>'
+				+'<div class="col-sm-6">'
+               	+'<div class="form-group row">'
+                +'<label for="example-search-input" class="col-sm-4 control-label">Milestone<span class="text-danger">*</span></label>'
+           		+'<div class="col-sm-6">'
+           		+'<div>'
+               	+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
+               	+'</div>'
+               	+'<div class="messageContainer"></div>'
+            	+'</div>'
+            	+'</div>'
+            	+'</div>'
+              	+'<div class="col-sm-6">'
+	    		+'<div class="form-group row">'
+	   			+'<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class="text-danger">*</span></label>'
+	   			+'<div class="col-sm-6">'
+	   			+'<div>'
+	       		+'<input class="form-control" type="text" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value=""/>'
+       			+'</div>'
+       			+'<div class="messageContainer"></div>'
+     			+'</div>'
+				+'</div>'
+				+'</div>'
+				+'</div>';
 	$("#payment_schedule").append(html);
 	$("#schedule_count").val(schedule_count);
 }
 function removeSchedule(id) {
-	//alert("Remove schedule "+id);
 	$("#schedule-"+id).remove();
 }
 function deleteOffer(id) {
