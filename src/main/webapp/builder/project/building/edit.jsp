@@ -53,7 +53,9 @@
 	List<BuildingAmenityWeightage> buildingAmenityWeightages = null;
 	List<Tax> taxes = null;
 	project_id = Integer.parseInt(request.getParameter("project_id"));
-	building_id = Integer.parseInt(request.getParameter("building_id"));
+	String sbuilding_id =  request.getParameter("building_id");
+	if(sbuilding_id != "" || sbuilding_id != null)
+		building_id = Integer.parseInt(sbuilding_id);
 	session = request.getSession(false);
 	BuilderEmployee adminuserproject = new BuilderEmployee();
 	if(session!=null)
@@ -85,8 +87,11 @@
 					builderProjectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderProjectOfferInfo(project_id);
 					areaUnits = new AreaUnitDAO().getActiveAreaUnitList();
 					buildingPaymentInfos = new ProjectDAO().getBuildingPaymentInfoById(building_id);
-					floor_id = new ProjectDAO().getActiveFloorsByBuildingId(building_id).get(0).getId();
-					flat_id = new ProjectDAO().getBuilderActiveFloorFlats(floor_id).get(0).getId();
+					try{
+						floor_id = new ProjectDAO().getActiveFloorsByBuildingId(building_id).get(0).getId();
+						flat_id = new ProjectDAO().getBuilderActiveFloorFlats(floor_id).get(0).getId();
+					}catch(Exception e){
+					}
 					BuilderProject builderProject = new ProjectDAO().getBuilderProjectById(project_id);
 					if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
 						taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
@@ -134,7 +139,7 @@
     <link href="../../css/style.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom1.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="${baseUrl}/builder/css/selectize.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/selectize.css" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -186,18 +191,22 @@
 	                     <div id="building" class="top-blue-box ">BUILDING</div>
 	                 </a>
             	</div>
+            	<%if(floor_id > 0){ %>
                 <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
                 	<a href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id); %>&floor_id=<%out.print(floor_id); %>">
                     <div id="floor" class="top-white-box" >FLOOR</div>
                     </a>
                 </div>
+                <%} %>
+                <%if(floor_id > 0 && flat_id > 0){ %>
                 <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
                     <div id="flat" class="top-white-box">FLAT</div>
                 </div>
+                <%} %>
            </div>
            <div class="row">
           		<div class="col-md-3 col-sm-6 col-xs-12">
-                     <select id="filter_building_id" name="filter_building_id" class="form-control">
+                     <select id="filter_building_id" name="filter_building_id">
                              <% for(BuilderBuilding builderBuilding2 : builderBuildingList){ %>
                      		<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName()); %></option>
                      		<%} %>
@@ -740,38 +749,35 @@
 </div> 
 </body>
 </html>
-<script src="../../js/bootstrapValidator.min.js"></script>
-<script src="../../js/bootstrap-datepicker.min.js"></script>
-<script src="../../js/jquery.form.js"></script>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
-<script type="text/javascript" src="${baseUrl}/builder/js/selectize.min.js"></script>
+<script type="text/javascript" src="../../js/selectize.min.js"></script>
 <script type="text/javascript">
-// $select_building = $("#filter_building_id").selectize({
-// 	persist: false,
-// 	 onChange: function(value) {
-// 		// getProjectFilterList(value);
-// 		//alert($("#project_id").val()+" "+value);
-// 		window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+value;
-// 	 },
-// 	 onDropdownOpen: function(value){
-//     	 var obj = $(this);
-// 		var textClear =	 $("#filter_building_id :selected").text();
-//     	 if(textClear.trim() == "Enter Building Name"){
-//     		 obj[0].setValue("");
-//     	 }
-//      }
-// });
-<%-- <%if(building_size_list > 0){%> --%>
-// 	select_building = $select_building[0].selectize;
-<%-- <%}%> --%>
+$select_building = $("#filter_building_id").selectize({
+	persist: false,
+	 onChange: function(value) {
+		if($("#filter_building_id").val() > 0 || $("#filter_building_id").val() != '' ){
+			window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+value;
+		}
+	 },
+	 onDropdownOpen: function(value){
+    	 var obj = $(this);
+		var textClear =	 $("#filter_building_id :selected").text();
+    	 if(textClear.trim() == "Enter Building Name"){
+    		 obj[0].setValue("");
+    	 }
+     }
+});
+<%if(building_size_list > 0){%>
+	select_building = $select_building[0].selectize;
+<%}%>
 $("#basicdetail").click(function(){
 	$('.active').removeClass('active').next('li').addClass('active');
     $("#vimessages1").addClass('active');
 })
-$("#filter_building_id").change(function(){
+// $("#filter_building_id").change(function(){
 	
-	window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val();
-});
+// 	window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val();
+// });
 
 $('#launch_date').datepicker({
 	autoclose:true,

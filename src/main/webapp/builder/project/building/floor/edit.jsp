@@ -21,7 +21,11 @@
 	int floor_id = 0;
 	int flat_id = 0;
 	int p_user_id = 0;
+	int building_size_list =0;
+	int floor_size_list = 0;
+	List<BuilderFloor> floorList = null;
 	BuilderFloor builderFloor = null;
+	List<BuilderBuilding> builderBuildingList = null;
 	List<BuilderBuilding> buildings = null;
 	List<FloorAmenityInfo> floorAmenityInfos = null;
 	List<FloorLayoutImage> floorLayoutImages = null;
@@ -40,10 +44,20 @@
 			if(adminuserproject != null){
 				p_user_id = adminuserproject.getBuilder().getId();
 			}
+			if(project_id > 0 && building_id > 0 && floor_id > 0){
 			List<BuilderFloor> builderFloors = new ProjectDAO().getBuildingActiveFloorById(floor_id);
 			if(builderFloors.size() > 0) {
 				builderFloor = builderFloors.get(0);
 				buildings = new ProjectDAO().getBuilderActiveProjectBuildings(builderFloor.getBuilderBuilding().getBuilderProject().getId());
+			}
+			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
+			building_size_list = builderBuildingList.size();
+			floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id);
+			floor_size_list = floorList.size();
+			try{
+				flat_id = new ProjectDAO().getBuilderActiveFloorFlats(floor_id).get(0).getId();
+			}catch(Exception e){
+				
 			}
 			 floorAmenityInfos = new ProjectDAO().getBuildingFloorAmenityInfo(floor_id);
 			 floorLayoutImages = new ProjectDAO().getBuildingFloorPlanInfo(floor_id);
@@ -51,6 +65,8 @@
 			 builderFloorAmenities = new BuilderFloorAmenityDAO().getBuilderActiveFloorAmenityList();
 			 builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
 			floorAmenityWeightages = new ProjectDAO().getActiveFloorAmenityWeightages(floor_id);
+			
+			}
 		}
 	}
 %>
@@ -70,13 +86,14 @@
     <link href="../../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
     <!-- animation CSS -->
-    <link href="../../css/animate.css" rel="stylesheet">
+   
     <!-- Menu CSS -->
     <link href="../../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
-    <link href="../../../css/animate.css" rel="stylesheet">
+   
     <!-- Custom CSS -->
     <link href="../../../css/style.css" rel="stylesheet">
+     <link rel="stylesheet" type="text/css" href="../../../css/selectize.css" />
     <link rel="stylesheet" type="text/css" href="../../../css/custom.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -89,6 +106,7 @@
       <script src="../../../js/jquery.form.js"></script>
     <script src="../../../js/bootstrap-datepicker.min.js"></script>
   <script src="../../../js/bootstrapValidator.min.js"></script>
+  <script type="text/javascript" src="../../../js/selectize.min.js"></script>
     <script type="text/javascript">
     $('input[type=checkbox]').click(function() {
         if ($(this).is(':checked')) {
@@ -126,24 +144,50 @@
 	                        <div id="building" class="top-white-box ">BUILDING</div>
 	                    </a>
 	               </div>
+	              
                     <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
                     	<a href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %> ">
                         	<div id="floor" class="top-blue-box" >FLOOR</div>
                         </a>
                     </div>
+                    <% if(floor_id > 0 && flat_id > 0){ %>
                     <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
                         <div id="flat" class="top-white-box">FLAT</div>
                     </div>
+                    <%} %>
                 </div>
+                 <div class="row">
+          			<div class="col-md-3 col-sm-6 col-xs-12">
+	                     <select id="filter_building_id" name="filter_building_id">
+	                             <% for(BuilderBuilding builderBuilding2 : builderBuildingList){ %>
+	                     		<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName()); %></option>
+	                     		<%} %>
+	                     </select>
+                	</div>
+                	<div class="col-md-3 col-sm-6 col-xs-12">
+                		<select id="filter_floor_id" name="filter_floor_id">
+                			<%
+                			if(floorList != null){
+                			for(BuilderFloor builderFloors : floorList){ %>
+                			<option value="<%out.print(builderFloors.getId()); %>" <% if(builderFloors.getId() == floor_id) {%> selected<%} %>><%out.print(builderFloors.getName()); %></option>
+                			<%}}else{ %>
+                			<option value=""></option>
+                			<%} %>
+                		</select>
+                	</div>
+           		</div>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
                         	<div class="color-box">
+                        	<div id="floorDetailsTab1"></div>
+                        	<div  id="floorDetailsTab">
                         	 <ul class="nav  nav-tabs">
                                  <li class="active">
                                      <a data-toggle="tab"  href="#vimessages" > <span>Floor Details</span></a>
                                  </li>
                              </ul>
+                             
                             <div class="tab-content"> 
                              <div class="col-12">
                                   <form id="updatefloor" name="updatefloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
@@ -290,6 +334,7 @@
                                    </form>
                                 </div>
                              </div>
+                             </div>
                             </div>
                         </div>
                     </div>
@@ -305,6 +350,93 @@
 
 </html>
 <script>
+$select_building = $("#filter_building_id").selectize({
+	persist: false,
+	 onChange: function(value) {
+		if($("#filter_building_id").val() > 0 || $("#filter_building_id").val() != '' ){
+			$.get("${baseUrl}/webapi/project/building/floor/list/",{ building_id: value }, function(data){
+				var html = '<option value="">Enter Floor Name</option>';
+				if(data != ""){
+					$(data).each(function(index){
+						html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+					});
+					$select_floor[0].selectize.destroy();
+					$("#filter_floor_id").html(html);
+					$select_floor = $("#filter_floor_id").selectize({
+						persist: false,
+						 onChange: function(value) {
+							 if(value > 0 || value != '' ){
+									window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
+								}
+						 },
+						 onDropdownOpen: function(value){
+					   	 var obj = $(this);
+							var textClear =	 $("#filter_floor_id :selected").text();
+					   	 if(textClear.trim() == "Enter Floor Name"){
+					   		 obj[0].setValue("");
+					   	 }
+					    }
+					});
+				}else{
+					
+					$select_floor[0].selectize.destroy();
+					$("#filter_floor_id").html("");
+					$("#floorDetailsTab").hide();
+					$("#floorDetailsTab1").html("Sorry No floor found..");
+					$("#floorDetailstab1").show();
+					$select_floor = $("#filter_floor_id").selectize({
+						persist: false,
+						 onChange: function(value) {
+
+						 },
+						 onDropdownOpen: function(value){
+					   	 var obj = $(this);
+							var textClear =	 $("#filter_floor_id :selected").text();
+					   	 if(textClear.trim() == "Enter Floor Name"){
+					   		 obj[0].setValue("");
+					   	 }
+					    }
+					});
+				}
+				
+			},'json');
+			//window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+value;
+		}
+	 },
+	 onDropdownOpen: function(value){
+    	 var obj = $(this);
+		var textClear =	 $("#filter_building_id :selected").text();
+    	 if(textClear.trim() == "Enter Building Name"){
+    		 obj[0].setValue("");
+    	 }
+     }
+});
+<%if(building_size_list > 0){%>
+	select_building = $select_building[0].selectize;
+<%}%>
+
+$select_floor = $("#filter_floor_id").selectize({
+	persist: false,
+	 onChange: function(value) {
+
+		if($("#filter_floor_id").val() > 0 || $("#filter_floor_id").val() != '' ){
+			window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
+		}
+	 },
+	 onDropdownOpen: function(value){
+   	 var obj = $(this);
+		var textClear =	 $("#filter_floor_id :selected").text();
+   	 if(textClear.trim() == "Enter Floor Name"){
+   		 obj[0].setValue("");
+   	 }
+    }
+});
+
+<% if(floor_size_list > 0){%>
+  select_floor = $select_floor[0].selectize;
+<%}%>
+
+
 $('#updatefloor').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -429,16 +561,7 @@ function removeImage(id) {
 function showDetailTab() {
 	$('#buildingTabs a[href="#floorimages"]').tab('show');
 }
-$("#project_id").change(function(){
-	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{},function(data){
-		var html = "";
-		$(data).each(function(index){
-			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
-		});
-		$("#building_id").html(html);
-	},'json');
-	
-});
+
 $('input[name="amenity_type[]"]').click(function() {
 	if($(this).prop("checked")) {
 		$("#amenity_stage"+$(this).val()).show();

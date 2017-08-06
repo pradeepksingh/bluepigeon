@@ -3964,6 +3964,13 @@ public class ProjectController extends ResourceConfig {
 		return projectDAO.getFlatType(flat_type_id);
 		//return builderBuildingAmenityDAO.getBuilderCompanyNameList(builder_id);
 	}
-	
+	@GET
+	@Path("/building/floor/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<FloorData> getActiveFloorList(@QueryParam("building_id") int building_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		List<FloorData> floorList = projectDAO.getActiveFloorNamesByBuildingId(building_id);
+		return floorList;
+	}
 }
 

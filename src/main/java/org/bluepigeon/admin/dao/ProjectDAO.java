@@ -2320,7 +2320,12 @@ public class ProjectDAO {
 		session.close();
 		return result;
 	}
-	
+	/**
+	 * Get all Active floors by building id
+	 * @author pankaj
+	 * @param buildingId
+	 * @return
+	 */
 	public List<BuilderFloor> getActiveFloorsByBuildingId(int buildingId){
 		String hql = "from BuilderFloor where builderBuilding.id = :building_id and builderBuilding.status = 1 and builderBuilding.builderProject.status = 1 and status = 1 order by builderBuilding.builderProject.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -2331,6 +2336,25 @@ public class ProjectDAO {
 		return builderFloors;
 				
 	}
+	
+	public List<FloorData> getActiveFloorNamesByBuildingId(int building_id) {
+		String hql = "from BuilderFloor where builderBuilding.id = :building_id and builderBuilding.status = 1 and builderBuilding.builderProject.status = 1 and status = 1 order by builderBuilding.builderProject.id DESC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", building_id);
+		List<BuilderFloor> result = query.list();
+		List<FloorData> floorDatas = new ArrayList<FloorData> ();
+		for(BuilderFloor builderFloor : result) {
+			FloorData floorData = new FloorData();
+			floorData.setId(builderFloor.getId());
+			floorData.setName(builderFloor.getName());
+			floorDatas.add(floorData);
+		}
+		session.close();
+		return floorDatas;
+	}
+	
 	
 	/**
 	 * Get all active flats by floor id

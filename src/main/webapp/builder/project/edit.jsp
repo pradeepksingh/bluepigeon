@@ -110,9 +110,12 @@
 				projectPriceInfo = new BuilderProjectPriceInfoDAO().getBuilderProjectPriceInfo(project_id);
 				projectPaymentInfos = new BuilderProjectPaymentInfoDAO().getBuilderActiveProjectPaymentInfo(project_id);
 				projectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderActiveProjectOfferInfo(project_id);
-				building_id = new ProjectDAO().getBuilderActiveProjectBuildings(project_id).get(0).getId();
-				floor_id = new ProjectDAO().getActiveFloorsByBuildingId(building_id).get(0).getId();
-				flat_id = new ProjectDAO().getBuilderActiveFloorFlats(floor_id).get(0).getId();
+				try{
+					building_id = new ProjectDAO().getBuilderActiveProjectBuildings(project_id).get(0).getId();
+					floor_id = new ProjectDAO().getActiveFloorsByBuildingId(building_id).get(0).getId();
+					flat_id = new ProjectDAO().getBuilderActiveFloorFlats(floor_id).get(0).getId();
+				}catch(Exception e){
+				}
 				amenityWeightages = new ProjectDAO().getActiveProjectAmenityWeightageByProjectId(project_id);
 				if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
 					taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
@@ -189,19 +192,25 @@
                     <div class="col-lg-3 col-sm-6 col-xs-12 m-t-15 ">
                         <div id="project" class="top-blue-box ">PROJECT</div>
                     </div>
+                    <%if(building_id > 0){ %>
 	                <div  class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
 	                    <a href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id);%>&building_id=<%out.print(building_id);%>">
 	                        <div id="building" class="top-white-box ">BUILDING</div>
 	                    </a>
 	               </div>
+	               <%} %>
+	               <%if(building_id > 0 && floor_id > 0){ %>
                     <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
                     	<a href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %> ">
                         	<div id="floor" class="top-white-box" >FLOOR</div>
                         </a>
                     </div>
+                    <%} %>
+                    <%if(building_id > 0 && floor_id > 0 && flat_id > 0){ %>
                     <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
                         <div id="flat" class="top-white-box">FLAT</div>
                     </div>
+                    <%} %>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
