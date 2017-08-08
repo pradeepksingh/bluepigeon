@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.FlatData"%>
 <%@page import="org.bluepigeon.admin.data.PaymentInfoData"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.model.Builder"%>
@@ -26,7 +27,22 @@
 	int building_id = 0;
 	int project_id = 0;
 	int floor_id = 0;
+	int building_size_list =0;
+	int floor_size_list = 0;
+	int flat_size_list = 0;
+	List<BuilderFloor> floorList = null;
+	List<FlatData> flatList = null;
+	List<BuilderBuilding> builderBuildingList = null;
 	List<ProjectData> builderProjects = null;
+	List<BuilderFlatStatus> builderFlatStatuses = null;
+	List<BuilderFlatAmenity> builderFlatAmenities = null;
+	List<FlatAmenityInfo> flatAmenityInfos = null;
+	List<PaymentInfoData> flatPaymentSchedules = null;
+	List<BuilderBuildingFlatType> builderFlatTypes = null;
+	List<FlatAmenityWeightage> flatAmenityWeightages = null;
+	project_id = Integer.parseInt(request.getParameter("project_id"));
+	building_id = Integer.parseInt(request.getParameter("building_id"));
+	floor_id = 	Integer.parseInt(request.getParameter("floor_id"));
 	flat_id = Integer.parseInt(request.getParameter("flat_id"));
 	session = request.getSession(false);
 	BuilderEmployee adminuserproject = new BuilderEmployee();
@@ -44,21 +60,30 @@
 	List<BuilderBuilding> buildings = null;
 	List<BuilderFloor> floors = null;
 	BuilderFlat builderFlat = null;
-	List<BuilderFlat> builderFlats = new ProjectDAO().getBuildingActiveFlatById(flat_id);
-	if(builderFlats.size() > 0) {
-		builderFlat = builderFlats.get(0);
-		floor_id = builderFlat.getBuilderFloor().getId();
-		building_id = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
-		project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
-		buildings = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
-		floors = new ProjectDAO().getBuildingActiveFloors(building_id);
+	if(project_id > 0 && building_id > 0 && floor_id > 0 && flat_id > 0){
+		List<BuilderFlat> builderFlats = new ProjectDAO().getBuildingActiveFlatById(flat_id);
+		if(builderFlats.size() > 0) {
+			builderFlat = builderFlats.get(0);
+			floor_id = builderFlat.getBuilderFloor().getId();
+			building_id = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
+			project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
+			buildings = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
+			floors = new ProjectDAO().getBuildingActiveFloors(building_id);
+			
+			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
+			building_size_list = builderBuildingList.size();
+			floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id);
+			floor_size_list = floorList.size();
+			flatList = new ProjectDAO().getActiveFlatsByFloorId(floor_id);
+			builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderActiveFlatStatus();
+			builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderActiveFlatAmenityList();
+			flatAmenityInfos= new ProjectDAO().getBuilderFlatAmenityInfos(flat_id);
+			flatPaymentSchedules = new ProjectDAO().getFlatPaymentSchedules(flat_id);
+			builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeByBuildingId(building_id);
+			flatAmenityWeightages = new ProjectDAO().getActiveFlatAmenityWeightageByFlatId(flat_id);
+		}
+		
 	}
-	List<BuilderFlatStatus> builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderActiveFlatStatus();
-	List<BuilderFlatAmenity> builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderActiveFlatAmenityList();
-	List<FlatAmenityInfo> flatAmenityInfos = new ProjectDAO().getBuilderFlatAmenityInfos(flat_id);
-	List<PaymentInfoData> flatPaymentSchedules = new ProjectDAO().getFlatPaymentSchedules(flat_id);
-	List<BuilderBuildingFlatType> builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeByBuildingId(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
-	List<FlatAmenityWeightage> flatAmenityWeightages = new ProjectDAO().getActiveFlatAmenityWeightageByFlatId(flat_id);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,19 +100,21 @@
     <link href="../../../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
     <!-- animation CSS -->
-    <link href="../../../../css/animate.css" rel="stylesheet">
+   
     <!-- Menu CSS -->
     <link href="../../../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
-    <link href="../../../../css/animate.css" rel="stylesheet">
+   
     <!-- Custom CSS -->
     <link href="../../../../css/style.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../../../css/custom.css">
- 
+     <link rel="stylesheet" type="text/css" href="../../../../css/topbutton.css">
+     <link rel="stylesheet" type="text/css" href="../../../../css/selectize.css" />
     <script src="../../../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../../../../js/jquery.form.js"></script>
     <script src="../../../../js/bootstrap-datepicker.min.js"></script>
     <script src="../../../../js/bootstrapValidator.min.js"></script>
+     <script type="text/javascript" src="../../../../js/selectize.min.js"></script>
     <script type="text/javascript">
     $('input[type=checkbox]').click(function() {
         if ($(this).is(':checked')) {
@@ -114,181 +141,276 @@
        </div>
         <div id="page-wrapper" style="min-height: 2038px;">
             <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Flat Update</h4>
+                  <div class="row">
+                   		<div class="col-lg-3 col-sm-6 col-xs-12">
+                    		 <button type="submit" id="project" class="btn11 top-white-box waves-effect waves-light m-t-15">PROJECT</button>
+                   		 </div>
+                   		 <%if(building_id > 0){ %>
+	                	 <div  class="col-lg-3 col-sm-6 col-xs-12">
+	                    	<button type="submit" id="building" class="btn11 top-white-box waves-effect waves-light m-t-15">BUILDING</button>
+	               		</div>
+	              		<%} %>
+	              		<% if(building_id > 0 && floor_id > 0){ %>
+                    	<div  class="col-lg-3 col-sm-6 col-xs-12">
+                    		<button type="submit" id="floor"  class="btn11 top-white-box waves-effect waves-light m-t-15">FLOOR</button>
+                    	</div>
+                    	<%} %>
+                    	<% if(building_id > 0 && floor_id > 0 && flat_id > 0){ %>
+                    	<div  class="col-lg-3 col-sm-6 col-xs-12">
+	                    	<button type="submit" id="flat"  class="btn11 btn-submit waves-effect waves-light m-t-15">FLAT</button>
+                    	</div>
+                    	<%} %>
                     </div>
-                    <!-- /.col-lg-12 -->
-                </div>
+                   <div class="row">
+          			<div class="col-md-4 col-sm-6 col-xs-12">
+	                     <select id="filter_building_id" name="filter_building_id">
+	                             <% for(BuilderBuilding builderBuilding2 : builderBuildingList){ %>
+	                     		<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName()); %></option>
+	                     		<%} %>
+	                     </select>
+                	</div>
+                	<div class="col-md-4 col-sm-6 col-xs-12">
+                		<select id="filter_floor_id" name="filter_floor_id">
+                			<%
+                			if(floorList != null){
+                			for(BuilderFloor builderFloors : floorList){ %>
+                			<option value="<%out.print(builderFloors.getId()); %>" <% if(builderFloors.getId() == floor_id) {%> selected<%} %>><%out.print(builderFloors.getName()); %></option>
+                			<%}}else{ %>
+                			<option value=""></option>
+                			<%} %>
+                		</select>
+                	</div>
+                	<div class="col-md-4 col-sm-6 col-xs-12">
+                		<select id="filter_flat_id" name="filter_flat_id">
+                			<%
+                			if(flatList != null){
+                			for(FlatData flatData : flatList){ %>
+                			<option value="<%out.print(flatData.getId()); %>" <% if(flatData.getId() == flat_id) {%> selected<%} %>><%out.print(flatData.getName()); %></option>
+                			<%}}else{ %>
+                			<option value=""></option>
+                			<%} %>
+                		</select>
+                	</div>
+           		</div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="white-box"><br>
-                              <div class="col-12">
-                                   <form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
-                                   		 <input type="hidden" name="flat_id" id="flat_id" value="<% out.print(flat_id);%>"/>
-                                   		 <input type="hidden" name="admin_id" id="admin_id" value="1"/>
-										 <input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
-										 <input type="hidden" name="img_count" id="img_count" value="2"/>
-                                         <div class="form-group row">
-                                             <label for="example-text-input" class="col-4 col-form-label">Flat No.</label>
-                                             <div class="col-8">
-                                                 <input class="form-control" type="text" id="flat_no" name="flat_no" value="<% out.print(builderFlat.getFlatNo()); %>" >
-                                             </div>
-                                             <div class="messageContainer col-sm-offset-3"></div>
-                                         </div>
-                                         <div class="form-group row">
-                                             <label for="example-search-input" class="col-4 col-form-label">Project Name</label>
-                                             <div class="col-8">
-                                                <select id="project_id" name="project_id" class="form-control">
-													<option value="0">Select Project</option>
-													<% for(ProjectData builderProject :builderProjects) { %>
-													<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
-													<% } %>
-												</select>
-                                             </div>
-                                             <div class="messageContainer col-sm-offset-3"></div>
-                                         </div>
-                                    	 <div class="form-group row">
-                                             <label for="example-search-input" class="col-4 col-form-label">Building Name</label>
-                                             <div class="col-8">
-                                                <select id="building_id" name="building_id" class="form-control">
-													<% if(buildings != null) { %>
-													<% for(BuilderBuilding builderBuilding2 :buildings) { %>
-													<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName());%></option>
-													<% } %>
-													<% } else { %>
-													<option value="0">Select Building</option>
-													<% } %>
-												</select>
-                                             </div>
-                                             <div class="messageContainer col-sm-offset-3"></div>
-                                         </div>
-                                          <div class="form-group row">
-                                             <label for="example-search-input" class="col-4 col-form-label">Floor No.</label>
-                                             <div class="col-8">
-                                                <select id="floor_id" name="floor_id" class="form-control">
-													<% if(floors != null) { %>
-													<% for(BuilderFloor builderFloor2 :floors) { %>
-													<option value="<% out.print(builderFloor2.getId());%>" <% if(builderFloor2.getId() == floor_id) { %>selected<% } %>><% out.print(builderFloor2.getName());%></option>
-													<% } %>
-													<% } else { %>
-													<option value="0">Select Floor</option>
-													<% } %>
-												</select>
-                                             </div>
-                                             <div class="messageContainer col-sm-offset-3"></div>
-                                         </div>
-                                          <div class="form-group row">
-                                             <label for="example-search-input" class="col-4 col-form-label">Flat Type Name</label>
-                                             <div class="col-8">
-                                               <select id="flat_type_id" name="flat_type_id" class="form-control">
-													<% if(builderFlatTypes != null) { %>
-													<% for(BuilderBuildingFlatType builderFlatType :builderFlatTypes) { %>
-													<option value="<% out.print(builderFlatType.getBuilderFlatType().getId());%>" <% if(builderFlat.getBuilderFlatType().getId() == builderFlatType.getBuilderFlatType().getId()) { %>selected<% } %>><% out.print(builderFlatType.getBuilderFlatType().getName());%></option>
-													<% } %>
-													<% } else { %>
-													<option value="0">Select Flat Type</option>
-													<% } %>
-												</select>
-                                             </div>
-                                             <div class="messageContainer col-sm-offset-3"></div>
-                                         </div>
-                                         <div class="form-group row">
-                                             <label for="example-text-input" class="col-4 col-form-label">Bedrooms</label>
-                                             <div class="col-8">
-                                                 <input class="form-control" type="text" id="bedroom" name="bedroom" value="<% out.print(builderFlat.getBedroom()); %>" >
-                                             </div>
-                                             <div class="messageContainer col-sm-offset-3"></div>
-                                         </div>
-                                         <div class="form-group row">
-                                             <label for="example-text-input" class="col-4 col-form-label">Bathrooms</label>
-                                             <div class="col-8">
-                                                 <input class="form-control" type="text" id="bathroom" name="bathroom" value="<% out.print(builderFlat.getBathroom()); %>" >
-                                             </div>
-                                             <div class="messageContainer col-sm-offset-3"></div>
-                                         </div>
-                                         <div class="form-group row">
-                                             <label for="example-text-input" class="col-4 col-form-label">Balcony</label>
-                                             <div class="col-8">
-                                                 <input class="form-control" type="text" id="balcony" name="balcony" value="<% out.print(builderFlat.getBalcony()); %>" >
-                                             </div>
-                                             <div class="messageContainer col-sm-offset-3"></div>
-                                         </div>
-                                         <% SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy"); %>
-                                         <div class="form-group row">
-                                             <label for="example-text-input" class="col-4 col-form-label">Possession Date </label>
-                                             <div class="col-8">
-                                                 <input class="form-control" type="text" id="possession_date" name="possession_date" value="<% if(builderFlat.getPossessionDate() != null) { out.print(dt1.format(builderFlat.getPossessionDate()));}%>" >
-                                             </div>
-                                             <div class="messageContainer col-sm-offset-3"></div>
-                                         </div>
-                                         <div class="form-group row">
-                                             <label for="example-text-input" class="col-4 col-form-label">Status</label>
-                                             <div class="col-8">
-                                                <select id="status" name="status" class="form-control">
-													<% for(BuilderFlatStatus builderFlatStatus :builderFlatStatuses) { %>
-													<option value="<% out.print(builderFlatStatus.getId());%>" <% if(builderFlat.getBuilderFlatStatus().getId() ==  builderFlatStatus.getId()) { %>selected<% } %>><% out.print(builderFlatStatus.getName()); %></option>
-													<% } %>
-												</select>
-                                             </div>
-                                         </div>
-		                                 <div class="form-group row">
-		                                     <label for="example-tel-input" class="col-4 col-form-label">Flat Configuration</label>
-		                                     <div class="form-group row block">
-			                                     <div class="checkbox checkbox-inverse">
-			                                     <% for(BuilderFlatAmenity builderFlatAmenity :builderFlatAmenities) {  
-													String is_checked = "";
-													for(FlatAmenityInfo flatAmenityInfo :flatAmenityInfos) {
-														if(flatAmenityInfo.getBuilderFlatAmenity().getId() == builderFlatAmenity.getId()) {
-															is_checked = "checked";
-														}
-													}
-												%>
-													<div class="col-sm-3">
-														<input id="checkbox8c" type="checkbox" name="amenity_type[]" value="<% out.print(builderFlatAmenity.getId());%>" <% out.print(is_checked); %>/><label for="checkbox8c"> <% out.print(builderFlatAmenity.getName());%></label>
-													</div>
-												<% } %>
-                                 				</div>
-                                 			</div>
-	                                    </div>
-	                                    <% 	for(BuilderFlatAmenity builderFlatAmenity : builderFlatAmenities) { 
-											String is_checked = "";
-											if(flatAmenityInfos.size() > 0) { 
-												for(FlatAmenityInfo flatAmenityInfo :flatAmenityInfos) {
-													if(flatAmenityInfo.getBuilderFlatAmenity().getId() == builderFlatAmenity.getId()) {
-														is_checked = "checked";
-													}
-												}
-											}
-											Double amenity_wt = 0.0;
-											for(FlatAmenityWeightage flatAmenityWeightage :flatAmenityWeightages) {
-												if(builderFlatAmenity.getId() == flatAmenityWeightage.getBuilderFlatAmenity().getId()) {
-													amenity_wt = flatAmenityWeightage.getAmenityWeightage();
-												}
-											}
-										%>
-										<input type="hidden" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderFlatAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>">
-										<% 	for(BuilderFlatAmenityStages bpaStages :builderFlatAmenity.getBuilderFlatAmenityStageses()) { 
-											Double stage_wt = 0.0;
-											for(FlatAmenityWeightage flatAmenityWeightage :flatAmenityWeightages) {
-												if(bpaStages.getId() == flatAmenityWeightage.getBuilderFlatAmenityStages().getId()) {
-													stage_wt = flatAmenityWeightage.getStageWeightage();
-												}
-											}
-										%>
-										<input name="stage_weightage<% out.print(builderFlatAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="hidden" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/>
-										<% 	for(BuilderFlatAmenitySubstages bpaSubstage :bpaStages.getBuilderFlatAmenitySubstageses()) { 
-											Double substage_wt = 0.0;
-											for(FlatAmenityWeightage flatAmenityWeightage :flatAmenityWeightages) {
-												if(bpaSubstage.getId() == flatAmenityWeightage.getBuilderFlatAmenitySubstages().getId()) {
-													substage_wt = flatAmenityWeightage.getSubstageWeightage();
-												}
-											}
-										%>
-										<input type="hidden" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
-										<% } %>
-										<% } %>
-										<% } %>
+                        <div class="white-box">
+	                        <div class="color-box">
+	                        <div id="flatDetailsTab1"></div>
+                        	<div  id="flatDetailsTab">
+	                           <ul class="nav nav-tabs">
+	                               <li class="active" >
+	                                   <a data-toggle="tab"  href="#vimessages" > <span>Flat Details</span></a>
+	                               </li>
+	                                <li>
+	                                   <a  data-toggle="tab" href="#vimessages1"><span>Pricing Details</span></a>
+	                               </li>
+	                               <li>
+	                                   <a  data-toggle="tab" href="#vimessages2"><span>Payment Schedule</span></a>
+	                               </li>
+	                               <li>
+	                                   <a  data-toggle="tab" href="#vimessages3"><span>Offers</span></a>
+	                               </li>
+	                           </ul>
+	                           <div class="tab-content"> 
+                             	<div id="vimessages" class="tab-pane active" aria-expanded="false">
+                              		<div class="col-12">
+                                   		<form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+	                                   		 <input type="hidden" name="flat_id" id="flat_id" value="<% out.print(flat_id);%>"/>
+	                                   		 <input type="hidden" name="admin_id" id="admin_id" value="1"/>
+											 <input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
+											 <input type="hidden" name="img_count" id="img_count" value="2"/>
+											 <div class="row">
+											 	<div class="col-sm-6">
+	                                         		<div class="form-group row">
+	                                             		<label for="example-text-input" class="col-sm-4 col-form-label">Flat No.</label>
+	                                             		<div class="col-sm-6">
+	                                                 		<input class="form-control" type="text" disabled id="flat_no" name="flat_no" value="<% out.print(builderFlat.getFlatNo()); %>" >
+	                                             		</div>
+	                                             		<div class="messageContainer col-sm-offset-3"></div>
+	                                         		</div>
+	                                         	</div>
+	                                          	<div class="col-sm-6">
+	                                         		<div class="form-group row">
+	                                             		<label for="example-search-input" class="col-sm-4 col-form-label">Project Name</label>
+	                                             		<div class="col-sm-6">
+			                                                <select id="project_id" name="project_id" class="form-control" disabled>
+																<option value="0">Select Project</option>
+																<% for(ProjectData builderProject :builderProjects) { %>
+																<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
+																<% } %>
+															</select>
+			                                             </div>
+	                                             		<div class="messageContainer col-sm-offset-3"></div>
+	                                             	</div>
+	                                         	</div>
+                                       	 	</div>
+                                       	 
+	                                       	 <div class="row">
+		                                       	 <div class="col-sm-6">
+			                                    	 <div class="form-group row">
+			                                             <label for="example-search-input" class="col-sm-4 col-form-label">Building Name</label>
+			                                             <div class="col-sm-6">
+			                                                <select id="building_id" name="building_id" class="form-control" disabled>
+																<% if(buildings != null) { %>
+																<% for(BuilderBuilding builderBuilding2 :buildings) { %>
+																<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName());%></option>
+																<% } %>
+																<% } else { %>
+																<option value="0">Select Building</option>
+																<% } %>
+															</select>
+			                                             </div>
+			                                             <div class="messageContainer col-sm-offset-3"></div>
+			                                         </div>
+		                                         </div>
+		                                         <div class="col-sm-6">
+			                                          <div class="form-group row">
+			                                             <label for="example-search-input" class="col-sm-4 col-form-label">Floor No.</label>
+			                                             <div class="col-sm-6">
+			                                                <select id="floor_id" name="floor_id" class="form-control" disabled>
+																<% if(floors != null) { %>
+																<% for(BuilderFloor builderFloor2 :floors) { %>
+																<option value="<% out.print(builderFloor2.getId());%>" <% if(builderFloor2.getId() == floor_id) { %>selected<% } %>><% out.print(builderFloor2.getName());%></option>
+																<% } %>
+																<% } else { %>
+																<option value="0">Select Floor</option>
+																<% } %>
+															</select>
+			                                             </div>
+			                                             <div class="messageContainer col-sm-offset-3"></div>
+			                                         </div>
+			                                      </div>
+			                                   </div>
+			                                   <div class="row">
+			                                   		<div class="col-sm-6">
+				                                         <div class="form-group row">
+				                                             <label for="example-search-input" class="col-sm-4 col-form-label">Flat Type</label>
+				                                             <div class="col-sm-6">
+				                                               <select id="flat_type_id" name="flat_type_id" class="form-control" disabled>
+																	<% if(builderFlatTypes != null) { %>
+																	<% for(BuilderBuildingFlatType builderFlatType :builderFlatTypes) { %>
+																	<option value="<% out.print(builderFlatType.getBuilderFlatType().getId());%>" <% if(builderFlat.getBuilderFlatType().getId() == builderFlatType.getBuilderFlatType().getId()) { %>selected<% } %>><% out.print(builderFlatType.getBuilderFlatType().getName());%></option>
+																	<% } %>
+																	<% } else { %>
+																	<option value="0">Select Flat Type</option>
+																	<% } %>
+																</select>
+				                                             </div>
+				                                             <div class="messageContainer col-sm-offset-3"></div>
+				                                        </div>
+				                                   </div>
+				                                   <div class="col-sm-6">
+				                                        <div class="form-group row">
+				                                             <label for="example-text-input" class="col-sm-4 col-form-label">Bedrooms</label>
+				                                             <div class="col-sm-6">
+				                                                 <input class="form-control" disabled type="text" id="bedroom" name="bedroom" value="<% out.print(builderFlat.getBedroom()); %>" >
+				                                             </div>
+				                                             <div class="messageContainer col-sm-offset-3"></div>
+				                                       </div>
+				                                  </div>
+				                             </div>
+				                             <div class="row">
+				                             	<div class="col-sm-6">
+			                                         <div class="form-group row">
+			                                             <label for="example-text-input" class="col-sm-4 col-form-label">Bathrooms</label>
+			                                             <div class="col-sm-6">
+			                                                 <input class="form-control" type="text" disabled id="bathroom" name="bathroom" value="<% out.print(builderFlat.getBathroom()); %>" >
+			                                             </div>
+			                                             <div class="messageContainer col-sm-offset-3"></div>
+			                                         </div>
+			                                    </div>
+			                                    <div class="col-sm-6">
+			                                         <div class="form-group row">
+			                                             <label for="example-text-input" class="col-sm-4 col-form-label">Balcony</label>
+			                                             <div class="col-sm-6">
+			                                                 <input class="form-control" disabled type="text" id="balcony" name="balcony" value="<% out.print(builderFlat.getBalcony()); %>" >
+			                                             </div>
+			                                             <div class="messageContainer col-sm-offset-3"></div>
+			                                         </div>
+			                                    </div>
+			                                 </div>
+                                         	<% SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy"); %>
+	                                         <div class="row">
+	                                         	<div class="col-sm-6">
+			                                         <div class="form-group row">
+			                                             <label for="example-text-input" class="col-sm-4 col-form-label">Possession Date </label>
+			                                             <div class="col-sm-6">
+			                                                 <input class="form-control" type="text" disabled id="possession_date" name="possession_date" value="<% if(builderFlat.getPossessionDate() != null) { out.print(dt1.format(builderFlat.getPossessionDate()));}%>" >
+			                                             </div>
+			                                             <div class="messageContainer col-sm-offset-3"></div>
+			                                         </div>
+			                                    </div>
+			                                    <div class="col-sm-6">
+			                                         <div class="form-group row">
+			                                             <label for="example-text-input" class="col-sm-4 col-form-label">Status</label>
+			                                             <div class="col-sm-6">
+			                                                <select id="status" name="status" class="form-control" disabled>
+																<% for(BuilderFlatStatus builderFlatStatus :builderFlatStatuses) { %>
+																<option value="<% out.print(builderFlatStatus.getId());%>" <% if(builderFlat.getBuilderFlatStatus().getId() ==  builderFlatStatus.getId()) { %>selected<% } %>><% out.print(builderFlatStatus.getName()); %></option>
+																<% } %>
+															</select>
+			                                             </div>
+			                                         </div>
+			                                   </div>
+			                                </div>
+<!-- 		                                 <div class="form-group row"> -->
+<!-- 		                                     <label for="example-tel-input" class="col-4 col-form-label">Flat Configuration</label> -->
+<!-- 		                                     <div class="form-group row block"> -->
+<!-- 			                                     <div class="checkbox checkbox-inverse"> -->
+<%-- 			                                     <% for(BuilderFlatAmenity builderFlatAmenity :builderFlatAmenities) {   --%>
+<!-- // 													String is_checked = ""; -->
+<!-- // 													for(FlatAmenityInfo flatAmenityInfo :flatAmenityInfos) { -->
+<!-- // 														if(flatAmenityInfo.getBuilderFlatAmenity().getId() == builderFlatAmenity.getId()) { -->
+<!-- // 															is_checked = "checked"; -->
+<!-- // 														} -->
+<!-- // 													} -->
+<%-- 												%> --%>
+<!-- 													<div class="col-sm-3"> -->
+<%-- 														<input id="checkbox8c" type="checkbox" name="amenity_type[]" value="<% out.print(builderFlatAmenity.getId());%>" <% out.print(is_checked); %>/><label for="checkbox8c"> <% out.print(builderFlatAmenity.getName());%></label> --%>
+<!-- 													</div> -->
+<%-- 												<% } %> --%>
+<!--                                  				</div> -->
+<!--                                  			</div> -->
+<!-- 	                                    </div> -->
+<%-- 	                                    <% 	for(BuilderFlatAmenity builderFlatAmenity : builderFlatAmenities) {  --%>
+<!-- // 											String is_checked = ""; -->
+<!-- // 											if(flatAmenityInfos.size() > 0) {  -->
+<!-- // 												for(FlatAmenityInfo flatAmenityInfo :flatAmenityInfos) { -->
+<!-- // 													if(flatAmenityInfo.getBuilderFlatAmenity().getId() == builderFlatAmenity.getId()) { -->
+<!-- // 														is_checked = "checked"; -->
+<!-- // 													} -->
+<!-- // 												} -->
+<!-- // 											} -->
+<!-- // 											Double amenity_wt = 0.0; -->
+<!-- // 											for(FlatAmenityWeightage flatAmenityWeightage :flatAmenityWeightages) { -->
+<!-- // 												if(builderFlatAmenity.getId() == flatAmenityWeightage.getBuilderFlatAmenity().getId()) { -->
+<!-- // 													amenity_wt = flatAmenityWeightage.getAmenityWeightage(); -->
+<!-- // 												} -->
+<!-- // 											} -->
+<%-- 										%> --%>
+<%-- 										<input type="hidden" class="form-control" name="amenity_weightage[]" id="amenity_weightage<% out.print(builderFlatAmenity.getId());%>" placeholder="Amenity Weightage" value="<% out.print(amenity_wt);%>"> --%>
+<%-- 										<% 	for(BuilderFlatAmenityStages bpaStages :builderFlatAmenity.getBuilderFlatAmenityStageses()) {  --%>
+<!-- // 											Double stage_wt = 0.0; -->
+<!-- // 											for(FlatAmenityWeightage flatAmenityWeightage :flatAmenityWeightages) { -->
+<!-- // 												if(bpaStages.getId() == flatAmenityWeightage.getBuilderFlatAmenityStages().getId()) { -->
+<!-- // 													stage_wt = flatAmenityWeightage.getStageWeightage(); -->
+<!-- // 												} -->
+<!-- // 											} -->
+<%-- 										%> --%>
+<%-- 										<input name="stage_weightage<% out.print(builderFlatAmenity.getId());%>[]" id="<% out.print(bpaStages.getId());%>" type="hidden" class="form-control" placeholder="Amenity Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/> --%>
+<%-- 										<% 	for(BuilderFlatAmenitySubstages bpaSubstage :bpaStages.getBuilderFlatAmenitySubstageses()) {  --%>
+<!-- // 											Double substage_wt = 0.0; -->
+<!-- // 											for(FlatAmenityWeightage flatAmenityWeightage :flatAmenityWeightages) { -->
+<!-- // 												if(bpaSubstage.getId() == flatAmenityWeightage.getBuilderFlatAmenitySubstages().getId()) { -->
+<!-- // 													substage_wt = flatAmenityWeightage.getSubstageWeightage(); -->
+<!-- // 												} -->
+<!-- // 											} -->
+<%-- 										%> --%>
+<%-- 										<input type="hidden" name="substage<% out.print(bpaStages.getId());%>[]" id="<% out.print(bpaSubstage.getId()); %>" class="form-control" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/> --%>
+<%-- 										<% } %> --%>
+<%-- 										<% } %> --%>
+<%-- 										<% } %> --%>
 <!--                                         <div class="form-group row"> -->
 <!--                                              <label for="example-tel-input" class="col-4 col-form-label">Building Name</label> -->
 <!--                                              <div class="col-8"> -->
@@ -307,9 +429,21 @@
 <!--                                                  <input class="form-control" type="file" value="How do I shoot web" id="example-search-input"> -->
 <!--                                              </div> -->
 <!--                                         </div> -->
-                                   		<button type="submit" name="floorUpdate" class="btn btn-success waves-effect waves-light m-r-10">Update</button>
-                              	    </form>
+                                   			<button type="button" name="floorUpdate" class="btn btn-submit waves-effect waves-light m-r-10">NEXT</button>
+                              	   	 	</form>
+                              	  	</div>
+                              	 </div>
+                              	 <div id="vimessages1" class="tab-pane" aria-expanded="false">
+                              	 		<button type="button" name="flatPriceupdatebtn" class="btn btn-submit waves-effect waves-light m-r-10">NEXT</button>
+                              	 </div>
+                              	 <div id="vimessages2" class="tab-pane" aria-expanded="false">
+                              	 		<button type="button" name="flatPaymentupdatebtn" class="btn btn-submit waves-effect waves-light m-r-10">NEXT</button>
+                              	 </div>
+                              	 <div id="vimessages3" class="tab-pane" aria-expanded="false">
+                              	 		<button type="button" name="flatOfferupdatebtn" class="btn btn-submit waves-effect waves-light m-r-10">NEXT</button>
+                              	 </div>
                               </div>
+                           </div>
                            </div>
                        </div>
                     </div>
@@ -323,6 +457,232 @@
 </html>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script>
+$("#project").click(function(){
+	window.location.href="${baseUrl}/builder/project/edit.jsp?project_id=<%out.print(project_id);%>";
+});
+
+$("#floor").click(function(){
+	window.location.href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>";
+});
+
+$("#building").click(function(){
+	window.location.href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>";
+});
+$("#flat").click(function(){
+	alert("Hello from flat");
+	window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>&flat_id=<%out.print(flat_id); %>";
+});
+
+$select_building = $("#filter_building_id").selectize({
+	persist: false,
+	 onChange: function(value) {
+		if($("#filter_building_id").val() > 0 || $("#filter_building_id").val() != '' ){
+			$.get("${baseUrl}/webapi/project/building/floor/list/",{ building_id: value }, function(data){
+				var html = '<option value="">Enter Floor Name</option>';
+				if(data != ""){
+					$(data).each(function(index){
+						html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+					});
+					$select_floor[0].selectize.destroy();
+					$("#filter_floor_id").html(html);
+					$select_floor = $("#filter_floor_id").selectize({
+						persist: false,
+						 onChange: function(value1) {
+							 if($("#filter_floor_id").val() > 0 || $("#filter_floor_id").val() != '' ){
+								 $select_flat[0].selectize.destroy();
+									//window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
+								 $.get("${baseUrl}/webapi/project/building/flat/list/",{ floor_id: $("#filter_floor_id").val() }, function(data){
+										var html = '<option value="">Enter Flat Number</option>';
+										if(data != ""){
+											$(data).each(function(index){
+												html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+											});
+											
+											$("#filter_flat_id").html(html);
+											$select_flat = $("#filter_flat_id").selectize({
+												persist: false,
+												 onChange: function(value2) {
+													 if(value2 > 0 || value2 != '' ){
+															window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+$("#filter_floor_id").val()+"&flat_id="+value2;
+														}
+												 },
+												 onDropdownOpen: function(value){
+											   	 var obj = $(this);
+													var textClear =	 $("#filter_flat_id :selected").text();
+											   	 if(textClear.trim() == "Enter Flat Name"){
+											   		 obj[0].setValue("");
+											   	 }
+											    }
+											});
+										}else{
+											$select_flat[0].selectize.destroy();
+											$("#filter_flat_id").html("");
+											$("#flatDetailsTab").hide();
+											$("#flatDetailsTab1").html("Sorry No flat found..");
+											$("#flatDetailstab1").show();
+											$select_flat = $("#filter_flat_id").selectize({
+												persist: false,
+												 onChange: function(value) {
+
+												 },
+												 onDropdownOpen: function(value){
+											   	 var obj = $(this);
+													var textClear =	 $("#filter_flat_id :selected").text();
+											   	 if(textClear.trim() == "Enter Flat Number"){
+											   		 obj[0].setValue("");
+											   	 }
+											    }
+											});
+										}
+									},'json');
+								}
+						 },
+						 onDropdownOpen: function(value){
+					   	 var obj = $(this);
+							var textClear =	 $("#filter_floor_id :selected").text();
+					   	 if(textClear.trim() == "Enter Floor Name"){
+					   		 obj[0].setValue("");
+					   	 }
+					    }
+					});
+				}else{
+					
+					$select_floor[0].selectize.destroy();
+					$select_flat[0].selectize.destroy();
+					$("#filter_floor_id").html("");
+					$("#filter_flat_id").html("");
+					$("#flatDetailsTab").hide();
+					$("#flatDetailsTab1").html("Sorry No floor found..");
+					$("#flatDetailstab1").show();
+					$select_floor = $("#filter_floor_id").selectize({
+						persist: false,
+						 onChange: function(value) {
+
+						 },
+						 onDropdownOpen: function(value){
+					   	 var obj = $(this);
+							var textClear =	 $("#filter_floor_id :selected").text();
+					   	 if(textClear.trim() == "Enter Floor Name"){
+					   		 obj[0].setValue("");
+					   	 }
+					    }
+					});
+					$select_flat = $("#filter_flat_id").selectize({
+						persist: false,
+						 onChange: function(value) {
+
+						 },
+						 onDropdownOpen: function(value){
+					   	 var obj = $(this);
+							var textClear =	 $("#filter_flat_id :selected").text();
+					   	 if(textClear.trim() == "Enter Flat Number"){
+					   		 obj[0].setValue("");
+					   	 }
+					    }
+					});
+				}
+				
+			},'json');
+			//window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+value;
+		}
+	 },
+	 onDropdownOpen: function(value){
+    	 var obj = $(this);
+		var textClear =	 $("#filter_building_id :selected").text();
+    	 if(textClear.trim() == "Enter Building Name"){
+    		 obj[0].setValue("");
+    	 }
+     }
+});
+<%if(building_size_list > 0){%>
+	select_building = $select_building[0].selectize;
+<%}%>
+
+$select_floor = $("#filter_floor_id").selectize({
+	persist: false,
+	 onChange: function(value) {
+
+		if($("#filter_floor_id").val() > 0 || $("#filter_floor_id").val() != '' ){
+			
+			//window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
+			$.get("${baseUrl}/webapi/project/building/flat/list/",{ floor_id: value }, function(data){
+				var html = '<option value="">Enter Flat Number</option>';
+				if(data != ""){
+					$(data).each(function(index){
+						html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+					});
+					$select_flat[0].selectize.destroy();
+					$("#filter_flat_id").html(html);
+					$select_flat = $("#filter_flat_id").selectize({
+						persist: false,
+						 onChange: function(value2) {
+							 if(value2 > 0 || value2 != '' ){
+									window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+$("#filter_floor_id").val()+"&flat_id="+value2;
+									
+								}
+						 },
+						 onDropdownOpen: function(value){
+					   	 var obj = $(this);
+							var textClear =	 $("#filter_flat_id :selected").text();
+					   	 if(textClear.trim() == "Enter Flat Name"){
+					   		 obj[0].setValue("");
+					   	 }
+					    }
+					});
+		}else{
+			$select_flat[0].selectize.destroy();
+			$("#filter_flat_id").html("");
+			$("#flatDetailsTab").hide();
+			$("#flatDetailsTab1").html("Sorry No flat found..");
+			alert("No flat found");
+			$("#flatDetailstab1").show();
+			$select_flat = $("#filter_flat_id").selectize({
+				persist: false,
+				 onChange: function(value) {
+
+				 },
+				 onDropdownOpen: function(value){
+			   	 var obj = $(this);
+					var textClear =	 $("#filter_flat_id :selected").text();
+			   	 if(textClear.trim() == "Enter Flat Number"){
+			   		 obj[0].setValue("");
+			   	 }
+			    }
+			});
+		}
+		
+	 },'json');
+	}
+	 },
+	 onDropdownOpen: function(value){
+   	 var obj = $(this);
+		var textClear =	 $("#filter_floor_id :selected").text();
+   	 if(textClear.trim() == "Enter Floor Name"){
+   		 obj[0].setValue("");
+   	 }
+    }
+});
+
+<% if(floor_size_list > 0){%>
+  select_floor = $select_floor[0].selectize;
+<%}%>
+
+$select_flat = $("#filter_flat_id").selectize({
+	persist: false,
+	 onChange: function(value) {
+		 if(value > 0 || value != ''){
+			 window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+$("#filter_floor_id").val()+"&flat_id="+value;
+		 }
+	 },
+	 onDropdownOpen: function(value){
+	   	 var obj = $(this);
+			var textClear =	 $("#filter_flat_id :selected").text();
+	   	 if(textClear.trim() == "Enter Flat Number"){
+	   		 obj[0].setValue("");
+	   	 }
+	    }
+	});
+
 $('#possession_date').datepicker({
 	autoclose:true,
 	format: "dd M yyyy"

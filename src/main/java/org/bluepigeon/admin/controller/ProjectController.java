@@ -30,6 +30,7 @@ import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.BuildingWeightageData;
+import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatTypeData;
 import org.bluepigeon.admin.data.FlatWeightageData;
 import org.bluepigeon.admin.data.FloorData;
@@ -3963,6 +3964,23 @@ public class ProjectController extends ResourceConfig {
 		ProjectDAO projectDAO = new ProjectDAO();
 		return projectDAO.getFlatType(flat_type_id);
 		//return builderBuildingAmenityDAO.getBuilderCompanyNameList(builder_id);
+	}
+	@GET
+	@Path("/building/floor/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<FloorData> getActiveFloorList(@QueryParam("building_id") int building_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		List<FloorData> floorList = projectDAO.getActiveFloorNamesByBuildingId(building_id);
+		return floorList;
+	}
+	
+	@GET
+	@Path("/building/flat/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<FlatData> getActiveFlatList(@QueryParam("floor_id") int floor_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		List<FlatData> floorList = projectDAO.getActiveFlatListByFloorId(floor_id);
+		return floorList;
 	}
 	
 }
