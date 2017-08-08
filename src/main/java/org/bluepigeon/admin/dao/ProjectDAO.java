@@ -2220,6 +2220,24 @@ public class ProjectDAO {
 		return flatDatas;
 	}
 	
+	
+	public List<FlatData> getActiveFlatListByFloorId(int floorId){
+		List<FlatData> flatDatas = new ArrayList<FlatData>();
+		String hql = "from BuilderFlat where builderFloor.id = :floor_id and builderFloor.builderBuilding.builderProject.status = 1 and builderFloor.builderBuilding.status = 1 and builderFloor.status = 1 and status =1 order by builderFloor.builderBuilding.builderProject.id desc";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("floor_id", floorId);
+		List<BuilderFlat> builderFlats = query.list();
+		for(BuilderFlat builderFlat : builderFlats){
+			FlatData flatData = new FlatData();
+			flatData.setId(builderFlat.getId());
+			flatData.setName(builderFlat.getFlatNo());
+			flatDatas.add(flatData);
+		}
+		return flatDatas;
+	}
+	
 	public List<BuilderFlat> getActiveFlatByFloorId(int floorId){
 		String hql = "from BuilderFlat where builderFloor.id = :floor_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -2478,14 +2496,37 @@ public class ProjectDAO {
 		}catch(IndexOutOfBoundsException e){
 			e.printStackTrace();
 			BuilderFlat flat =  getBuilderFlatById(flat_id);
-			List<BuildingPaymentInfo> buildingPaymentInfos = getActiveBuilderBuildingPaymentInfoById(flat.getBuilderFloor().getBuilderBuilding().getId());
-			for(BuildingPaymentInfo buildingPaymentInfo : buildingPaymentInfos){
-				PaymentInfoData paymentInfoData = new PaymentInfoData();
-				paymentInfoData.setId(0);
-				paymentInfoData.setName(buildingPaymentInfo.getMilestone());
-				paymentInfoData.setAmount(buildingPaymentInfo.getAmount());
-				paymentInfoData.setPayable(buildingPaymentInfo.getPayable());
-				paymentInfoDatas.add(paymentInfoData);
+			try{
+				List<BuildingPaymentInfo> buildingPaymentInfos = getActiveBuilderBuildingPaymentInfoById(flat.getBuilderFloor().getBuilderBuilding().getId());
+				for(BuildingPaymentInfo buildingPaymentInfo : buildingPaymentInfos){
+					PaymentInfoData paymentInfoData = new PaymentInfoData();
+					paymentInfoData.setId(0);
+					paymentInfoData.setName(buildingPaymentInfo.getMilestone());
+					paymentInfoData.setAmount(buildingPaymentInfo.getAmount());
+					paymentInfoData.setPayable(buildingPaymentInfo.getPayable());
+					paymentInfoDatas.add(paymentInfoData);
+				}
+			}catch(Exception e1){
+				try{
+				List<BuilderProjectPaymentInfo> projectPaymentInfo = getActiveProjectPaymentInfo(flat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId());
+					if(projectPaymentInfo != null){
+						for(BuilderProjectPaymentInfo builderProjectPaymentInfo : projectPaymentInfo){
+							PaymentInfoData paymentInfoData = new PaymentInfoData();
+							paymentInfoData.setId(0);
+							paymentInfoData.setName(builderProjectPaymentInfo.getSchedule());
+							paymentInfoData.setAmount(builderProjectPaymentInfo.getAmount());
+							paymentInfoData.setPayable(builderProjectPaymentInfo.getPayable());
+							paymentInfoDatas.add(paymentInfoData);
+						}
+					}
+				}catch(Exception e2){
+					PaymentInfoData paymentInfoData = new PaymentInfoData();
+					paymentInfoData.setId(0);
+					paymentInfoData.setName("");
+					paymentInfoData.setAmount(0.0);
+					paymentInfoData.setPayable(0.0);
+					paymentInfoDatas.add(paymentInfoData);
+				}
 			}
 				
 		}catch(Exception e){
@@ -2494,7 +2535,21 @@ public class ProjectDAO {
 		session.close();
 		return paymentInfoDatas;
 	}
-	
+	public List<BuilderProjectPaymentInfo> getActiveProjectPaymentInfo(int projectId){
+		String hql = "from BuilderProjectPaymentInfo where builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", projectId);
+		List<BuilderProjectPaymentInfo> result = query.list();
+		if(result != null){
+			return result;
+		}else{
+			return null;
+		}
+				
+				
+	}
 	public BuilderFlat getBuilderFlatById(int flatId){
 		BuilderFlat builderFlat = null;
 		String hql = "from BuilderFlat where id = :id";

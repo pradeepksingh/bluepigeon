@@ -138,7 +138,8 @@
     <!-- Custom CSS -->
     <link href="../../css/style.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
-    <link href="../../css/custom1.css" rel="stylesheet">
+    <link href="../../css/topbutton.css" rel="stylesheet">
+<!--     <link href="../../css/custom1.css" rel="stylesheet"> -->
     <link rel="stylesheet" type="text/css" href="../../css/selectize.css" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -181,31 +182,25 @@
     <div id="page-wrapper" style="min-height: 2038px;">
         <div class="container-fluid">
           <div class="row">
-                <div class="col-lg-3 col-sm-6 col-xs-12 m-t-15 ">
-                	<a href="${baseUrl}/builder/project/edit.jsp?project_id=<%out.print(project_id);%>">
-                    <div id="project" class="top-white-box ">PROJECT</div>
-                    </a>
+                <div class="col-lg-3 col-sm-6 col-xs-12">
+                       <button type="submit" id="project" class="btn11 top-white-box waves-effect waves-light m-t-15">PROJECT</button>
                 </div>
-            	 <div  class="col-lg-3 col-sm-6 col-xs-12 m-t-15">
-	                 <a href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id);%>&building_id=<%out.print(building_id);%>">
-	                     <div id="building" class="top-blue-box ">BUILDING</div>
-	                 </a>
+            	 <div  class="col-lg-3 col-sm-3 col-xs-3">
+	                   <button type="submit" id="building" class="btn11 top-blue-box waves-effect waves-light m-t-15">BUILDING</button>
             	</div>
-            	<%if(floor_id > 0){ %>
-                <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
-                	<a href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id); %>&floor_id=<%out.print(floor_id); %>">
-                    <div id="floor" class="top-white-box" >FLOOR</div>
-                    </a>
+            	<%if(building_id >0 && floor_id > 0){ %>
+                <div  class="col-lg-3 col-sm-3 col-xs-3">
+                	 <button type="submit" id="floor"  class="btn11 top-white-box waves-effect waves-light m-t-15">FLOOR</button>
                 </div>
                 <%} %>
-                <%if(floor_id > 0 && flat_id > 0){ %>
-                <div  class="col-lg-3 col-sm-6 col-xs-12  m-t-15">
-                    <div id="flat" class="top-white-box">FLAT</div>
+                <%if(building_id > 0 && floor_id > 0 && flat_id > 0){ %>
+                <div  class="col-lg-3 col-sm-3 col-xs-3">
+                  <button type="submit" id="flat"  class="btn11 top-white-box waves-effect waves-light m-t-15">FLAT</button>
                 </div>
                 <%} %>
            </div>
            <div class="row">
-          		<div class="col-md-3 col-sm-6 col-xs-12">
+          		<div class="col-md-4 col-sm-6 col-xs-12">
                      <select id="filter_building_id" name="filter_building_id">
                              <% for(BuilderBuilding builderBuilding2 : builderBuildingList){ %>
                      		<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName()); %></option>
@@ -735,6 +730,7 @@
 		                                   		</div>
 											</form>
 										</div>
+
                                 	</div>
                         </div>
                    </div>
@@ -771,13 +767,26 @@ $select_building = $("#filter_building_id").selectize({
 	select_building = $select_building[0].selectize;
 <%}%>
 $("#basicdetail").click(function(){
+
 	$('.active').removeClass('active').next('li').addClass('active');
     $("#vimessages1").addClass('active');
-})
-// $("#filter_building_id").change(function(){
-	
-// 	window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val();
-// });
+});
+
+
+$("#project").click(function(){
+	window.location.href="${baseUrl}/builder/project/edit.jsp?project_id=<%out.print(project_id);%>";
+});
+
+$("#floor").click(function(){
+	window.location.href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>";
+});
+
+$("#building").click(function(){
+	window.location.href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>";
+});
+$("#flat").click(function(){
+	window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>&flat_id=<%out.print(flat_id); %>";
+});
 
 $('#launch_date').datepicker({
 	autoclose:true,

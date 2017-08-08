@@ -154,14 +154,14 @@
                     	<%} %>
                     </div>
                    <div class="row">
-          			<div class="col-md-4 col-sm-6 col-xs-12">
+          			<div class="col-md-3 col-sm-6 col-xs-12">
 	                     <select id="filter_building_id" name="filter_building_id">
 	                             <% for(BuilderBuilding builderBuilding2 : builderBuildingList){ %>
 	                     		<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName()); %></option>
 	                     		<%} %>
 	                     </select>
                 	</div>
-                	<div class="col-md-4 col-sm-6 col-xs-12">
+                	<div class="col-md-3 col-sm-6 col-xs-12">
                 		<select id="filter_floor_id" name="filter_floor_id">
                 			<%
                 			if(floorList != null){
