@@ -743,6 +743,23 @@ public class ProjectDAO {
 		return result;
 	}
 	
+	public ResponseMessage deleteProjectPayment(int projectId){
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		String hql = "delete from BuilderProjectPaymentInfo where id = :project_id";
+		Query query = session.createQuery(hql);
+		query.setInteger("project_id", projectId);
+		query.executeUpdate();
+		//query.executeUpdate();
+		transaction.commit();
+		session.close();
+		resp.setMessage("Project Payment Schedule deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
 	public ResponseMessage deleteProjectImage(int image_id) {
 		ResponseMessage resp = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -1154,6 +1171,19 @@ public class ProjectDAO {
 		return resp;
 	}
 	
+	public ResponseMessage addFlatOfferInfo(List<FlatOfferInfo> flatOfferInfos) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FlatOfferInfo flatOfferInfo :flatOfferInfos) {
+			newsession.save(flatOfferInfo);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
 	public ResponseMessage addBuildingAmenityInfo(List<BuildingAmenityInfo> buildingAmenityInfos) {
 		ResponseMessage resp = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -1272,6 +1302,19 @@ public class ProjectDAO {
 		newsession.beginTransaction();
 		for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) {
 			newsession.update(buildingOfferInfo);
+		}
+		newsession.getTransaction().commit();
+		newsession.close();
+		return resp;
+	}
+	
+	public ResponseMessage updateFlatOfferInfo(List<FlatOfferInfo> flatOfferInfos) {
+		ResponseMessage resp = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		for(FlatOfferInfo flatOfferInfo :flatOfferInfos) {
+			newsession.update(flatOfferInfo);
 		}
 		newsession.getTransaction().commit();
 		newsession.close();
@@ -2747,6 +2790,22 @@ public class ProjectDAO {
 		session.getTransaction().commit();
 		session.close();
 		resp.setMessage("Flat payment deleted successfully.");
+		resp.setStatus(1);
+		return resp;
+	}
+	
+	public ResponseMessage deleteFlatOfferInfo(int id) {
+		ResponseMessage resp = new ResponseMessage();
+		String hql = "delete from FlatOfferInfo where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		resp.setMessage("Flat offer deleted successfully.");
 		resp.setStatus(1);
 		return resp;
 	}
@@ -4943,4 +5002,29 @@ public class ProjectDAO {
 		List<FlatOfferInfo> result = query.list();
 		return result;
 	}
+	/**
+	 * Get flat type by id
+	 * @author pankaj
+	 * @param id
+	 * @return builderFlatType
+	 */
+	public BuilderFlatType getBuilderFlatType(int id){
+		String hql = "from BuilderFlatType where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id",id);
+		BuilderFlatType builderFlatType = (BuilderFlatType) query.list().get(0);
+		return builderFlatType;
+		
+	}
+    public FlatPricingDetails getFlatPriceDetails(int flatId){
+    	String hql = "from FlatPricingDetails where builderFlat.id = :flat_id";
+    	HibernateUtil hibernateUtil = new HibernateUtil();
+    	Session session = hibernateUtil.openSession();
+    	Query query = session.createQuery(hql);
+    	query.setParameter("flat_id", flatId);
+    	FlatPricingDetails flatPricingDetails = (FlatPricingDetails) query.list().get(0);
+    	return flatPricingDetails;
+    }
 }

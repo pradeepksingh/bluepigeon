@@ -653,6 +653,7 @@
 																<hr>
 																<%} %>
 																<div class="row" id="offer-<% out.print(buildingOfferInfo.getId()); %>">
+																<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:deleteOffer(<% out.print(buildingOfferInfo.getId()); %>);" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>
 																	<input type="hidden" name="offer_id[]" value="<% out.print(buildingOfferInfo.getId()); %>" />
 																	<div class="col-lg-5 margin-bottom-5">
 																		<div class="form-group" id="error-offer_title">
@@ -1139,7 +1140,6 @@ function isNumber(evt, element) {
         (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
         (charCode < 48 || charCode > 57))
         return false;
-
     return true;
 } 
 function validPercentage(id){
@@ -1210,6 +1210,17 @@ $('#updatepayment').bootstrapValidator({
 	event.preventDefault();
 	updateBuildingPayments();
 });
+function deleteOffer(id){
+	var flag = confirm("Are you sure ? You want to delete offers ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/project/building/offer/delete/"+id, { }, function(data){
+			alert(data.message);
+			if(data.status == 1) {
+				$("#offer-"+id).remove();
+			}
+		},'json');
+	}
+}
 function updateBuildingPayments() {
 	var options = {
 	 		target : '#imageresponse', 
@@ -1305,33 +1316,6 @@ function showAddOfferResponse(resp, statusText, xhr, $form){
         alert(resp.message);
   	}
 }
-function showAddOfferRequest(formData, jqForm, options){
-	$("#offerresponse").hide();
-   	var queryString = $.param(formData);
-	return true;
-}
-   	
-   	
-   	
-   	
-   	
-   	
-function showAddOfferResponse(resp, statusText, xhr, $form){
-	if(resp.status == '0') {
-		$("#offerresponse").removeClass('alert-success');
-       	$("#offerresponse").addClass('alert-danger');
-		$("#offerresponse").html(resp.message);
-		$("#offerresponse").show();
-  	} else {
-  		$("#offerresponse").removeClass('alert-danger');
-        $("#offerresponse").addClass('alert-success');
-        $("#offerresponse").html(resp.message);
-        $("#offerresponse").show();
-        alert(resp.message);
-  	}
-}
-
-
 
 $('#updateoffer').bootstrapValidator({
     feedbackIcons: {

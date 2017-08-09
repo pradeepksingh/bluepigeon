@@ -1340,6 +1340,32 @@ $("#subpbtn").click(function(){
 	});
 });
 
+$("#flat_type_id").change(function(){
+	var row = "";
+	if($("#flat_type_id").val() > 0){
+		$.get("${baseUrl}/webapi/project/flattype/list",{ flat_type_id: $("#flat_type_id").val() }, function(data){
+			$("#bathroom").val(data.bathRoom);
+			$("#balcony").val(data.balcony);
+			$("#bedroom").val(data.bedRoom);
+			$(data.roomdata).each(function(index){
+				row = row + '<hr><div class="col-sm-12"><div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Room Name</label><div class="col-sm-6"><input type="text" class="form-control" name="room_name[]" readonly="true"  value="'+data.roomdata[index].roomName+'"/></div></div></div>'
+				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Length</label><div class="col-sm-6"><input type="text" onkeypress=" return isNumber(event, this);" name="length[]"value="'+data.roomdata[index].length+'" readonly="true" class="form-control"/></div></div></div>'
+				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Breadth</label><div class="col-sm-6"><input type="text" onkeypress=" return isNumber(event, this);" name="breadth[]" value="'+data.roomdata[index].width+'" readonly="true" class="form-control"/></div></div></div>'
+				+'<div class="col-sm-3"><div class="form-group"><label class="control-label col-sm-6">Unit</label><div class="col-sm-6"><select name="length_unit[]" disabled class="form-control">'
+				+'<option>'+data.roomdata[index].unitName+'</option>'
+				+'</select></div></div></div>'
+				+'</div>';
+				$("#rooms").html(row);
+			});
+			
+		},'json');
+	}else{
+		$("#bathroom").val('');
+		$("#balcony").val('');
+		$("#bedroom").val('');
+		$("#rooms").empty();
+	}
+});
 </script>
 </body>
 </html>
