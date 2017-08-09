@@ -71,6 +71,7 @@
 	List<BuilderFloor> floors = null;
 	BuilderFlat builderFlat = null;
 	List<AreaUnit> areaUnits = null;
+	int flat_type_id = 0;
 	PriceInfoData priceInfoData = null;
 	if(project_id > 0 && building_id > 0 && floor_id > 0 && flat_id > 0){
 		List<BuilderFlat> builderFlats = new ProjectDAO().getBuildingActiveFlatById(flat_id);
@@ -97,6 +98,7 @@
 			buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
 			flatAmenityWeightages = new ProjectDAO().getActiveFlatAmenityWeightageByFlatId(flat_id);
 			priceInfoData = new ProjectDAO().getFlatPriceData(flat_id);
+			flat_type_id = builderFlat.getBuilderFlatType().getId();
 		}
 		
 	}
@@ -222,10 +224,10 @@
 	                                   <a  data-toggle="tab" href="#vimessages1"><span>Pricing Details</span></a>
 	                               </li>
 	                               <li>
-	                                   <a  data-toggle="tab" href="#vimessages2"><span>Payment Schedule</span></a>
+	                                   <a  data-toggle="tab" href="#vimessages3"><span>Offers</span></a>
 	                               </li>
 	                               <li>
-	                                   <a  data-toggle="tab" href="#vimessages3"><span>Offers</span></a>
+	                                   <a  data-toggle="tab" href="#vimessages2"><span>Payment Schedule</span></a>
 	                               </li>
 	                           </ul>
 	                           <div class="tab-content"> 
@@ -233,6 +235,7 @@
                               		<div class="col-12">
                                    		<form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 	                                   		 <input type="hidden" name="flat_id" id="flat_id" value="<% out.print(flat_id);%>"/>
+	                                   		 <input type="hidden" name="flat_type_id" id="flat_type_id" value="<%out.print(flat_type_id); %>" /> 
 	                                   		 <input type="hidden" name="admin_id" id="admin_id" value="1"/>
 											 <input type="hidden" name="amenity_wt" id="amenity_wt" value=""/>
 											 <input type="hidden" name="img_count" id="img_count" value="2"/>
@@ -382,6 +385,7 @@
 	                                 	<form id="updateprice" name="updateprice" method="post"  class="form-horizontal" enctype="multipart/form-data">
 		                                	 <input type="hidden" name="price_id" value="<% if(priceInfoData != null){ out.print(priceInfoData.getId()); } else {%>0<% }%>"/>
 											<input type="hidden" name="flat_id" id="flat_id" value="<% out.print(flat_id);%>"/>
+											<input type="hidden" name="flat_type_id" id="flat_type_id" value="<%out.print(flat_type_id);%>"/>
 											<div class="row">
 												<div class="col-md-6">
 			                                	 	<div class="form-group row">
@@ -642,8 +646,9 @@
                               	 			 <div id="vimessages3" class="tab-pane" aria-expanded="true">
 		                                		<div id="offer" class="tab-pane fade active in">
 													<form id="updateoffer" name="updateoffer" method="post" action=""  enctype="multipart/form-data">
-													 	<input type="hidden" id="building_id" name="building_id" value="<% out.print(building_id);%>"/>
-													 	<input type="hidden" name="h_sale_value" id="h_sale_value" value="<% if(priceInfoData.getTotalCost() > 0 && priceInfoData.getTotalCost() != 0){ out.print(priceInfoData.getTotalCost());}%>"/>
+													 	<input type="hidden" id="flat_id" name="flat_id" value="<% out.print(flat_id);%>"/>
+													 	<input type="hidden" id="flat_type_id" name="flat_type_id" value="<%out.print(flat_type_id); %>" />
+													 	<input type="hidden" name="base_sale_value" id="base_sale_value" value="<% if(priceInfoData.getTotalCost() > 0 && priceInfoData.getTotalCost() != 0){ out.print(priceInfoData.getTotalCost());}%>"/>
 														<input type="hidden" name="offer_count" id="offer_count" value="<%out.print(builderProjectOfferInfos.size()+10000); %>"/>
 										 				<div class="row">
 															<div class="col-lg-12">
@@ -822,7 +827,7 @@
 																					<div class="messageContainer"></div>
 																				</div>
 																			</div>
-																			<div class="col-lg-5 margin-bottom-5">
+																			<div class="col-lg-4 margin-bottom-5">
 																				<div class="form-group" id="error-applicable_on">
 																					<label class="control-label col-sm-4">Description </label>
 																					<div class="col-sm-8">
@@ -904,7 +909,15 @@ function calculateAmount(id){
 }
 
 function deleteOffer(id){
-	alert(id);
+	var flag = confirm("Are you sure ? You want to delete offers ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/project/building/floor/flat/offer/delete/"+id, { }, function(data){
+			alert(data.message);
+			if(data.status == 1) {
+				$("#offer-"+id).remove();
+			}
+		},'json');
+	}
 }
 
 function calcultatePercentage(id){
@@ -947,7 +960,6 @@ function validPercentage(id){
 	 }
 }
 function onlyNumber(id){
-	
 	 var $th = $("#discount_amount"+id);
 	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
 }
@@ -1721,4 +1733,75 @@ function removeOffer(id) {
 	$("#offer-"+id).remove();
 }
 
+function updateBuildingOffers() {
+	var options = {
+	 		target : '#imageresponse', 
+	 		beforeSubmit : showAddOfferRequest,
+	 		success :  showAddOfferResponse,
+	 		url : '${baseUrl}/webapi/project/building/flat/offer/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#updateoffer').ajaxSubmit(options);
+}
+
+function showAddOfferRequest(formData, jqForm, options){
+	$("#offerresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddOfferResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#offerresponse").removeClass('alert-success');
+       	$("#offerresponse").addClass('alert-danger');
+		$("#offerresponse").html(resp.message);
+		$("#offerresponse").show();
+  	} else {
+  		$("#offerresponse").removeClass('alert-danger');
+        $("#offerresponse").addClass('alert-success');
+        $("#offerresponse").html(resp.message);
+        $("#offerresponse").show();
+        alert(resp.message);
+        window.location.reload();
+  	}
+}
+
+$('#updateoffer').bootstrapValidator({
+    feedbackIcons: {
+        invalid: 'glyphicon glyphicon-remove',
+    },
+    fields: {
+        'offer_title[]': {
+            validators: {
+                notEmpty: {
+                    message: 'The offer title required and cannot be empty'
+                }
+            },
+        },
+        'discount[]':{
+        	 validators: {
+        		 between: {
+                     min: 0,
+                     max: 100,
+                     message: 'The percentage must be between 0 and 100'
+ 	        	},
+                 notEmpty: {
+                     message: 'Discount required and cannot be empty'
+                 }
+             }
+        },
+        'discount_amount[]':{
+        	validators: {
+                notEmpty: {
+                    message: 'Discount amount required and cannot be empty'
+                }
+            }
+        }
+    }
+	}).on('success.form.bv', function(event,data) {
+		// Prevent form submission
+		event.preventDefault();
+		updateBuildingOffers();
+	});
 </script>

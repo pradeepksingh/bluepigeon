@@ -1883,6 +1883,7 @@ function addMoreSchedule() {
 	schedule_count++;
 			   
 	 var html = '<div class="row" id="schedule-'+schedule_count+'">'
+	 			+'<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>'
 				+'<div class="col-lg-12" style="padding-bottom:5px;">'
 				+'<span class="pull-right"><a href="javascript:removeSchedule('+schedule_count+');" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span>'
 				+'</div>'
@@ -1932,12 +1933,12 @@ function deleteSchudle(id){
 	
 	var flag = confirm("Are you sure ? You want to delete schudle ?");
 	if(flag){
-// 		$.get("${baseUrl}/webapi/project/payment/delete/"+id,{}, function(data){
-// 			alert(data.message);
-// 			if(data.status == 1){
+		$.get("${baseUrl}/webapi/project/payment/delete/"+id,{}, function(data){
+			alert(data.message);
+			if(data.status == 1){
 				$("#schedule-"+id).remove();
-// 			}
-// 		})
+			}
+		})
 	}
 }
 </script>

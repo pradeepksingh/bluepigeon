@@ -91,6 +91,7 @@ import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
 import org.bluepigeon.admin.model.FlatAmenityWeightage;
 import org.bluepigeon.admin.model.FlatImageGallery;
+import org.bluepigeon.admin.model.FlatOfferInfo;
 import org.bluepigeon.admin.model.FlatPanoramicImage;
 import org.bluepigeon.admin.model.FlatPaymentSchedule;
 import org.bluepigeon.admin.model.FlatPricingDetails;
@@ -1629,6 +1630,16 @@ public class ProjectController extends ResourceConfig {
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		msg = projectDAO.deleteBuildingPaymentInfo(id);
+		return msg;
+	}
+	
+	@GET
+	@Path("/payment/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteProjectPayment(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		msg = projectDAO.deleteProjectPayment(id);
 		return msg;
 	}
 	
@@ -3287,10 +3298,15 @@ public class ProjectController extends ResourceConfig {
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderFlat builderFlat = projectDAO.getBuildingFlatById(flat_id).get(0);
-		Double baseSaleValue = base_rate * builderFlat.getBuilderFlatType().getSuperBuiltupArea()+rise_rate+amenity_rate;
-		builderFlat.setBaseSaleValue(baseSaleValue);
+		BuilderFlatType builderFlatType = projectDAO.getBuilderFlatType(flat_type_id);
+		
+		Double totalCost = 0.0;
+		Double baseSaleValue = base_rate * builderFlatType.getSuperBuiltupArea()+rise_rate+amenity_rate;
+		Double newBaseRateValue = baseSaleValue;
+		totalCost = getFlatTotalCost(flat_id,base_rate,rise_rate,post,amenity_rate,parking_id,parking,maintenance,stamp_duty,tax,vat,base_unit);
+		
+		builderFlat.setBaseSaleValue(newBaseRateValue);
 		projectDAO.updateBuildingFlat(builderFlat);
-		Double totalCost = getFlatTotalCost(flat_id,base_rate,rise_rate,post,amenity_rate,parking_id,parking,maintenance,stamp_duty,tax,vat,base_unit);
 		FlatPricingDetails flatPricingDetails = new FlatPricingDetails();
 		flatPricingDetails.setBuilderFlat(builderFlat);
 		flatPricingDetails.setRiseRate(rise_rate);
@@ -3986,6 +4002,114 @@ public class ProjectController extends ResourceConfig {
 		List<FlatData> floorList = projectDAO.getActiveFlatListByFloorId(floor_id);
 		return floorList;
 	}
+	@POST
+	@Path("/building/flat/offer/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addFlatOffer (
+			@FormDataParam("flat_id") int flat_id,
+			@FormDataParam("flat_type_id") int flat_type_id,
+			@FormDataParam("offer_id[]") List<FormDataBodyPart> offer_id,
+			@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_title,
+			//@FormDataParam("discount[]") List<FormDataBodyPart> discount,
+			@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amount,
+			@FormDataParam("description[]") List<FormDataBodyPart> description,
+			@FormDataParam("offer_type[]") List<FormDataBodyPart> offer_type,
+			@FormDataParam("offer_status[]") List<FormDataBodyPart> offer_status
+	) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		//BuilderFlat builderFlat = new BuilderFlat();
+		BuilderFlat builderFlat = projectDAO.getBuildingFlatById(flat_id).get(0);
+		BuilderFlatType builderFlatType = projectDAO.getBuilderFlatType(flat_type_id);
+		List<FlatOfferInfo> flatOfferInfos = projectDAO.getFlatOffersByFlatId(flat_id);
+		Double totalCost = 0.0;
+		FlatPricingDetails flatPricingDetails = projectDAO.getFlatPriceDetails(flat_id);
+		Double baseSaleValue = flatPricingDetails.getBasePrice() * builderFlatType.getSuperBuiltupArea()+flatPricingDetails.getRiseRate()+flatPricingDetails.getAmenityRate();
+		Double newBaseRateValue = baseSaleValue;
+		if(discount_amount != null && discount_amount.size() > 0){
+			 for(int i=0;i<flatOfferInfos.size();i++){
+				 if(flatOfferInfos.get(i).getType() == 1){
+					 newBaseRateValue = newBaseRateValue * discount_amount.get(i).getValueAs(Double.class).doubleValue()/100;
+				 }
+				 if(flatOfferInfos.get(i).getType() == 2){
+					 newBaseRateValue = newBaseRateValue - discount_amount.get(i).getValueAs(Double.class).doubleValue();
+				 }
+			 }
+			 totalCost = newBaseRateValue + flatPricingDetails.getParking() + flatPricingDetails.getMaintenance() + flatPricingDetails.getStampDuty() + flatPricingDetails.getTax() + flatPricingDetails.getVat() + flatPricingDetails.getFee();
+		}else{
+			totalCost = getFlatTotalCost(flat_id,flatPricingDetails.getBasePrice(),flatPricingDetails.getRiseRate(),flatPricingDetails.getPost(),flatPricingDetails.getAmenityRate(),flatPricingDetails.getParkingId(),flatPricingDetails.getParking(),flatPricingDetails.getMaintenance(),flatPricingDetails.getStampDuty(),flatPricingDetails.getTax(),flatPricingDetails.getVat(),flatPricingDetails.getAreaUnit().getId());
+		}
+		builderFlat.setBaseSaleValue(baseSaleValue);
+		builderFlat.setDiscount(newBaseRateValue);
+		builderFlat.setId(flat_id);
+		flatPricingDetails.setTotalCost(totalCost);
 	
+		if (offer_title.size() > 0) {
+			List<FlatOfferInfo> newFlatOfferInfos = new ArrayList<FlatOfferInfo>();
+			List<FlatOfferInfo> updateFlatOfferInfos = new ArrayList<FlatOfferInfo>();
+			int i = 0;
+			for(FormDataBodyPart title : offer_title)
+			{
+				if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
+					if(offer_id.get(i).getValueAs(Integer.class) != 0 && offer_id.get(i).getValueAs(Integer.class) != null) {
+						FlatOfferInfo flatOfferInfo = new FlatOfferInfo();
+						flatOfferInfo.setId(offer_id.get(i).getValueAs(Integer.class));
+						flatOfferInfo.setTitle(title.getValueAs(String.class).toString());
+						try{
+							flatOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
+						}catch(Exception e){
+							flatOfferInfo.setAmount(0.0);
+						}
+						//buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
+						flatOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
+						flatOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
+						flatOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
+						flatOfferInfo.setBuilderFlat(builderFlat);
+						updateFlatOfferInfos.add(flatOfferInfo);
+					} else {
+						FlatOfferInfo flatOfferInfo = new FlatOfferInfo();
+						flatOfferInfo.setTitle(title.getValueAs(String.class).toString());
+						try{
+							flatOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
+						}catch(Exception e){
+							flatOfferInfo.setAmount(0.0);
+						}
+					//	buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
+						flatOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
+						flatOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
+						flatOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
+						flatOfferInfo.setBuilderFlat(builderFlat);
+						newFlatOfferInfos.add(flatOfferInfo);
+					}
+				}
+				i++;
+			}
+			if(updateFlatOfferInfos.size() > 0) {
+				projectDAO.updateFlatOfferInfo(updateFlatOfferInfos);
+			}
+			if(newFlatOfferInfos.size() > 0) {
+				projectDAO.addFlatOfferInfo(newFlatOfferInfos);
+			}
+			msg.setStatus(1);
+			msg.setMessage("Flat offer updated successfully.");
+		} else {
+			msg.setMessage("Failed to update Flat offers.");
+			msg.setStatus(0);
+		}
+		projectDAO.updateFlatPriceInfo(flatPricingDetails);
+		projectDAO.updateBuildingFlat(builderFlat);
+		return msg;
+	}
+	
+	@GET
+	@Path("/building/floor/flat/offer/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteFlatOfferInfo(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO projectDAO = new ProjectDAO();
+		msg = projectDAO.deleteFlatOfferInfo(id);
+		return msg;
+	}
 }
 
