@@ -432,7 +432,7 @@ $select_floor = $("#filter_floor_id").selectize({
 	persist: false,
 	 onChange: function(value) {
 
-		if($("#filter_floor_id").val() > 0 || $("#filter_floor_id").val() != '' ){
+		if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '') && ($("#filter_floor_id").val() > 0 && $("#filter_floor_id").val() != '' )){
 			window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
 		}
 	 },

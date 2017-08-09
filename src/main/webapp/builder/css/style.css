@@ -1138,7 +1138,7 @@ label {
 .btn-submit.disabled.focus, .btn-submit.disabled:focus, .btn-submit.disabled:hover, .btn-submit.focus, .btn-submit:focus, .btn-submit:hover {
 	background: #24bcd3;
 	opacity: .8;
-	border: 1px solid #24bcd3;
+/* 	border: 1px solid #24bcd3; */
 }
 
 .btn-submit, .btn-submit.disabled {
@@ -1156,9 +1156,10 @@ label {
     border-color: #24bcd3;
 }
 .btn-info-new.disabled.focus, .btn-info-new.disabled:focus, .btn-info-new.disabled:hover, .btn-info-new.focus, .btn-info-new:focus, .btn-info-new:hover {
-	background: #24bcd3;
+/* 	background: #24bcd3; */
+	background: #6ABE5E;
 	opacity: .8;
-	border: 1px solid #24bcd3;
+/* 	border: 1px solid #24bcd3; */
 }
 
 .btn-warning, .btn-warning.disabled {

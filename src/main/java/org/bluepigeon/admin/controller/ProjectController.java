@@ -3268,6 +3268,7 @@ public class ProjectController extends ResourceConfig {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updateBuildingFloorFlat (
 			@FormDataParam("flat_id") int flat_id,
+			@FormDataParam("flat_type_id") int flat_type_id,
 			@FormDataParam("price_id") int price_id,
 			@FormDataParam("base_unit") short base_unit,
 			@FormDataParam("base_rate") Double base_rate,
@@ -3286,6 +3287,9 @@ public class ProjectController extends ResourceConfig {
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderFlat builderFlat = projectDAO.getBuildingFlatById(flat_id).get(0);
+		Double baseSaleValue = base_rate * builderFlat.getBuilderFlatType().getSuperBuiltupArea()+rise_rate+amenity_rate;
+		builderFlat.setBaseSaleValue(baseSaleValue);
+		projectDAO.updateBuildingFlat(builderFlat);
 		Double totalCost = getFlatTotalCost(flat_id,base_rate,rise_rate,post,amenity_rate,parking_id,parking,maintenance,stamp_duty,tax,vat,base_unit);
 		FlatPricingDetails flatPricingDetails = new FlatPricingDetails();
 		flatPricingDetails.setBuilderFlat(builderFlat);

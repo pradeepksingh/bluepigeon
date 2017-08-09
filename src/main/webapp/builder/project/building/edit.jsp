@@ -562,7 +562,7 @@
 				                               			</div>
 			                               			
 	                               				</div>
-	                               <%i++;}}%>
+	                               		<%i++;}}%>
 	                               		</div>
 										<div class="row">
 			                                <div class="offset-sm-5 col-sm-7">
@@ -644,7 +644,6 @@
 																	</div>
 																</div>
 																<% jj++; } %>
-
 															</div>
 															<div id="offer_area">
 																<% int j = 1;
@@ -712,7 +711,6 @@
 																	</div>
 																</div>
 																<% j++; } %>
-
 															</div>
 															<div>
 																<div class="col-lg-12">
@@ -723,26 +721,25 @@
 															</div>
 														</div>
 													</div>
-												<div class="row">
-													 <div class="offset-sm-5 col-sm-7">
-		                                        		<button type="submit" id="offerbtn" class="btn btn-submit waves-effect waves-light m-t-10">SAVE</button>
+													<div class="row">
+													 	<div class="offset-sm-5 col-sm-7">
+		                                        			<button type="submit" id="offerbtn" class="btn btn-submit waves-effect waves-light m-t-10">SAVE</button>
+		                                   				</div>
 		                                   			</div>
-		                                   		</div>
-											</form>
-										</div>
-
-                                	</div>
-                        </div>
-                   </div>
-                </div>
-             </div>
-           </div>
-        </div>
-      </div>
+												</form>
+											</div>
+                                		</div>
+                        			</div>
+                   				</div>
+               		 		</div>
+             			</div>
+           			</div>
+        		</div>
+      		</div>
             <!-- /.container-fluid -->
- <div id="sidebar1"> 
-	<%@include file="../../partial/footer.jsp"%>
-</div> 
+ 		<div id="sidebar1"> 
+			<%@include file="../../partial/footer.jsp"%>
+		</div> 
 </body>
 </html>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>

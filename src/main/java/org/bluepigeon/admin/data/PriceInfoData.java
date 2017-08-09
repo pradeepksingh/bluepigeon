@@ -19,6 +19,7 @@ public class PriceInfoData {
 	private double stampDuty;
 	private double fee;
 	private int areaUnits;
+	private Double totalCost = 0.0;
 	public int getId() {
 		return id;
 	}
@@ -102,6 +103,12 @@ public class PriceInfoData {
 	}
 	public void setParkingId(int parkingId) {
 		this.parkingId = parkingId;
+	}
+	public Double getTotalCost() {
+		return totalCost;
+	}
+	public void setTotalCost(Double totalCost) {
+		this.totalCost = totalCost;
 	}
 	
 

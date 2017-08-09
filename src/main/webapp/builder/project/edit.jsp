@@ -920,7 +920,7 @@
 															<div>
 																<div class="col-lg-12">
 																	<span class="pull-right">
-																		<a href="javascript:addMoreOffer();" id="addMoreOffers" class="btn btn-info btn-sm">+ Add More Offers</a>
+																		<a href="javascript:addMoreOffer();" id="addMoreOffers" class="btn btn-submit btn-sm">+ Add More Offers</a>
 																	</span>
 																</div>
 															</div>

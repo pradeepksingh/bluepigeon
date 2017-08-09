@@ -77,6 +77,7 @@ import org.bluepigeon.admin.model.Campaign;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
 import org.bluepigeon.admin.model.FlatAmenityWeightage;
 import org.bluepigeon.admin.model.FlatImageGallery;
+import org.bluepigeon.admin.model.FlatOfferInfo;
 import org.bluepigeon.admin.model.FlatPanoramicImage;
 import org.bluepigeon.admin.model.FlatPaymentSchedule;
 import org.bluepigeon.admin.model.FlatPricingDetails;
@@ -4715,6 +4716,88 @@ public class ProjectDAO {
 		}
 	}
 	
+	public PriceInfoData getFlatPriceData(int flatId){
+		PriceInfoData priceInfoData = new PriceInfoData();
+		String hql = "from FlatPricingDetails where builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flatId);
+		try{
+			FlatPricingDetails flatPriceInfo =(FlatPricingDetails) query.list().get(0);
+			priceInfoData.setId(flatPriceInfo.getId());
+			priceInfoData.setAreaUnits(flatPriceInfo.getAreaUnit().getId());
+			priceInfoData.setBaseRate(flatPriceInfo.getBasePrice());
+			priceInfoData.setRiseRate(flatPriceInfo.getRiseRate());
+			priceInfoData.setPost(flatPriceInfo.getPost());
+			priceInfoData.setMaintainance(flatPriceInfo.getMaintenance());
+			priceInfoData.setParkingId(flatPriceInfo.getParkingId());
+			priceInfoData.setAmenityRate(flatPriceInfo.getAmenityRate());
+			priceInfoData.setTenure(flatPriceInfo.getTenure());
+			priceInfoData.setParking(flatPriceInfo.getParking());
+			priceInfoData.setStampDuty(flatPriceInfo.getStampDuty());
+			priceInfoData.setTax(flatPriceInfo.getTax());
+			priceInfoData.setVat(flatPriceInfo.getVat());
+			priceInfoData.setFee(flatPriceInfo.getFee());
+			priceInfoData.setTotalCost(flatPriceInfo.getTotalCost());
+		}catch(Exception e){
+			
+			try{
+				BuilderFlat flat = getBuildingFlatById(flatId).get(0);
+				String buildinghql = "from BuildingPriceInfo where builderBuilding.id = :id";
+				Session buildingSession = hibernateUtil.openSession();
+				Query buildingQuery = buildingSession.createQuery(buildinghql);
+				buildingQuery.setParameter("id", flat.getBuilderFloor().getBuilderBuilding().getId());
+				BuildingPriceInfo buildingPriceInfo =(BuildingPriceInfo) query.list().get(0);
+				priceInfoData.setId(buildingPriceInfo.getId());
+				priceInfoData.setAreaUnits(buildingPriceInfo.getAreaUnit().getId());
+				priceInfoData.setBaseRate(buildingPriceInfo.getBasePrice());
+				priceInfoData.setRiseRate(buildingPriceInfo.getRiseRate());
+				priceInfoData.setPost(buildingPriceInfo.getPost());
+				priceInfoData.setMaintainance(buildingPriceInfo.getMaintenance());
+				priceInfoData.setParkingId(buildingPriceInfo.getParkingId());
+				priceInfoData.setAmenityRate(buildingPriceInfo.getAmenityRate());
+				priceInfoData.setTenure(buildingPriceInfo.getTenure());
+				priceInfoData.setParking(buildingPriceInfo.getParking());
+				priceInfoData.setStampDuty(buildingPriceInfo.getStampDuty());
+				priceInfoData.setTax(buildingPriceInfo.getTax());
+				priceInfoData.setVat(buildingPriceInfo.getVat());
+				priceInfoData.setFee(buildingPriceInfo.getFee());
+				priceInfoData.setTotalCost(0.0);
+			}catch(Exception ee){
+				BuilderFlat flat = getBuildingFlatById(flatId).get(0);
+				BuilderBuilding building = getBuildingById(flat.getBuilderFloor().getBuilderBuilding().getId());
+				String innerHql = "from BuilderProjectPriceInfo where builderProject.id = :project_id";
+				Session innerSession = hibernateUtil.openSession();
+				Query innerQuery = innerSession.createQuery(innerHql);
+				innerQuery.setParameter("project_id", building.getBuilderProject().getId());
+				try{
+				BuilderProjectPriceInfo builderProjectPriceInfo =(BuilderProjectPriceInfo) innerQuery.list().get(0);
+				
+				priceInfoData.setAreaUnits(builderProjectPriceInfo.getAreaUnit().getId());
+				priceInfoData.setBaseRate(builderProjectPriceInfo.getBasePrice());
+				priceInfoData.setRiseRate(builderProjectPriceInfo.getRiseRate());
+				priceInfoData.setPost(builderProjectPriceInfo.getPost());
+				priceInfoData.setMaintainance(builderProjectPriceInfo.getMaintenance());
+				priceInfoData.setParkingId(0);
+				priceInfoData.setAmenityRate(builderProjectPriceInfo.getAmenityRate());
+				priceInfoData.setTenure(builderProjectPriceInfo.getTenure());
+				priceInfoData.setParking(builderProjectPriceInfo.getParking());
+				priceInfoData.setStampDuty(builderProjectPriceInfo.getStampDuty());
+				priceInfoData.setTax(builderProjectPriceInfo.getTax());
+				priceInfoData.setVat(builderProjectPriceInfo.getVat());
+				priceInfoData.setFee(builderProjectPriceInfo.getFee());
+				priceInfoData.setTotalCost(0.0);
+				}catch(Exception e1){
+					System.err.println("Fail to load data from project pricing info");
+				}
+			}
+			
+			
+		}
+		return priceInfoData;
+	}
+	
 	public BuilderBuilding getBuildingById(int id){
 		String hql = "from BuilderBuilding where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -4844,5 +4927,20 @@ public class ProjectDAO {
 		}
 		return priceInfoData;
 	}
+	/**
+	 * Get flat offers by flat id
+	 * @author pankaj
+	 * @param flatId
+	 * @return List<FlatOfferInfo> 
+	 */
 	
+	public List<FlatOfferInfo> getFlatOffersByFlatId(int flatId){
+		String hql = "from FlatOfferInfo where builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flatId);
+		List<FlatOfferInfo> result = query.list();
+		return result;
+	}
 }
