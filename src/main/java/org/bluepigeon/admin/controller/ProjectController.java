@@ -4002,6 +4002,19 @@ public class ProjectController extends ResourceConfig {
 		List<FlatData> floorList = projectDAO.getActiveFlatListByFloorId(floor_id);
 		return floorList;
 	}
+	
+	/**
+	 * @author pankaj
+	 * @param flat_id
+	 * @param flat_type_id
+	 * @param offer_id
+	 * @param offer_title
+	 * @param discount_amount
+	 * @param description
+	 * @param offer_type
+	 * @param offer_status
+	 * @return
+	 */
 	@POST
 	@Path("/building/flat/offer/update")
 	@Produces(MediaType.APPLICATION_JSON)
