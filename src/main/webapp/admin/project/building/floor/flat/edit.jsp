@@ -1232,7 +1232,7 @@ function updatePaymentSchudle(){
 	 		dataType : 'json'
 	 	};
    	$('#updatePayment').ajaxSubmit(options);
-});
+}
 function showPaymentSlabRequest(formData, jqForm, options){
 	$("#response").hide();
    	var queryString = $.param(formData);

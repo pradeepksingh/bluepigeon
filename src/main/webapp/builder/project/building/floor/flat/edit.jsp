@@ -667,19 +667,22 @@
 																					</div>
 																				</div>
 																			</div>
-																			
 																			<div class="col-lg-4 margin-bottom-5">
-																				<div class="form-group" id="error-discount_amount">
-																					<label class="control-label col-sm-6">Discount Percentage <span class='text-danger'>*</span></label>
+																				<div class="form-group" id="error-applicable_on">
+																					<label class="control-label col-sm-6">Offer Type </label>
 																					<div class="col-sm-6">
-																						<input type="text" class="form-control" readonly id="project_discount<%out.print(jj); %>"   onkeyup=" javascript:validPerAmount(<%out.print(jj); %>);" name="project_discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
+																						<select class="form-control" id="project_offer_type<%out.print(jj); %>"  onchange="txtEnabaleDisable(<%out.print(jj); %>);" disabled name="project_offer_type[]">
+																							<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																							<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																							<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+																						</select>
 																					</div>
 																					<div class="messageContainer"></div>
 																				</div>
 																			</div>
 																			<div class="col-lg-4 margin-bottom-5">
 																				<div class="form-group" id="error-discount_amount">
-																					<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
+																					<label class="control-label col-sm-6">Discount <span class='text-danger'>*</span></label>
 																					<div class="col-sm-6">
 																						<input type="text" class="form-control" readonly id="project_discount_amount<%out.print(jj); %>"   onkeyup=" javascript:validPerAmount(<%out.print(jj); %>);" name="project_discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
 																					</div>
@@ -691,19 +694,6 @@
 																					<label class="control-label col-sm-4">Description </label>
 																					<div class="col-sm-8">
 																						<textarea class="form-control" disabled id="project_description" name="project_description[]"><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
-																					</div>
-																					<div class="messageContainer"></div>
-																				</div>
-																			</div>
-																			<div class="col-lg-4 margin-bottom-5">
-																				<div class="form-group" id="error-applicable_on">
-																					<label class="control-label col-sm-6">Offer Type </label>
-																					<div class="col-sm-6">
-																						<select class="form-control" id="project_offer_type<%out.print(jj); %>"  onchange="txtEnabaleDisable(<%out.print(jj); %>);" disabled name="project_offer_type[]">
-																							<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
-																							<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
-																							<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
-																						</select>
 																					</div>
 																					<div class="messageContainer"></div>
 																				</div>
@@ -744,17 +734,21 @@
 																				</div>
 																			</div>
 																			<div class="col-lg-4 margin-bottom-5">
-																				<div class="form-group" id="error-discount_amount">
-																					<label class="control-label col-sm-6">Discount Percentage<span class='text-danger'>*</span></label>
+																				<div class="form-group" id="error-applicable_on">
+																					<label class="control-label col-sm-6">Offer Type </label>
 																					<div class="col-sm-6">
-																						<input type="text" class="form-control" readonly <%if(buildingOfferInfo.getType() == 3){ %>disabled<%} %> id="building_discount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(buildingOfferInfo.getAmount()!=null){ out.print(buildingOfferInfo.getAmount());} %>"/>
+																						<select class="form-control" id="building_offer_type<%out.print(j); %>" disabled  onchange="txtEnabaleDisable(<%out.print(j); %>);"  name="building_offer_type[]">
+																							<option value="1" <% if(buildingOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																							<option value="2" <% if(buildingOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																							<option value="3" <% if(buildingOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+																						</select>
 																					</div>
 																					<div class="messageContainer"></div>
 																				</div>
 																			</div>
 																			<div class="col-lg-4 margin-bottom-5">
 																				<div class="form-group" id="error-discount_amount">
-																					<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
+																					<label class="control-label col-sm-6">Discount <span class='text-danger'>*</span></label>
 																					<div class="col-sm-6">
 																						<input type="text" class="form-control" readonly <%if(buildingOfferInfo.getType() == 3){ %>disabled<%} %> id="building_discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(buildingOfferInfo.getAmount()!=null){ out.print(buildingOfferInfo.getAmount());} %>"/>
 																					</div>
@@ -766,19 +760,6 @@
 																					<label class="control-label col-sm-4">Description </label>
 																					<div class="col-sm-8">
 																						<textarea class="form-control" disabled id="building_description" name="building_description[]"><% if(buildingOfferInfo.getDescription() != null) { out.print(buildingOfferInfo.getDescription());} %></textarea>
-																					</div>
-																					<div class="messageContainer"></div>
-																				</div>
-																			</div>
-																			<div class="col-lg-4 margin-bottom-5">
-																				<div class="form-group" id="error-applicable_on">
-																					<label class="control-label col-sm-6">Offer Type </label>
-																					<div class="col-sm-6">
-																						<select class="form-control" id="building_offer_type<%out.print(j); %>" disabled  onchange="txtEnabaleDisable(<%out.print(j); %>);"  name="building_offer_type[]">
-																							<option value="1" <% if(buildingOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
-																							<option value="2" <% if(buildingOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
-																							<option value="3" <% if(buildingOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
-																						</select>
 																					</div>
 																					<div class="messageContainer"></div>
 																				</div>
@@ -820,10 +801,14 @@
 																				</div>
 																			</div>
 																			<div class="col-lg-4 margin-bottom-5">
-																				<div class="form-group" id="error-discount_amount">
-																					<label class="control-label col-sm-6">Discount Percentage <span class='text-danger'>*</span></label>
+																				<div class="form-group" id="error-applicable_on">
+																					<label class="control-label col-sm-6">Offer Type </label>
 																					<div class="col-sm-6">
-																						<input type="text" class="form-control"  <%if(flatOfferInfo.getType() == 3){ %>disabled<%} %> id="discount<%out.print(k); %>"   onkeyup=" javascript:validPerAmount(<%out.print(k); %>);" name="discount_amount[]" value="<%if(flatOfferInfo.getAmount()!=null){ out.print(flatOfferInfo.getAmount());} %>"/>
+																						<select class="form-control" id="offer_type<%out.print(j); %>"   onchange="txtEnabaleDisable(<%out.print(k); %>);"  name="offer_type[]">
+																							<option value="1" <% if(flatOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																							<option value="2" <% if(flatOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																							<option value="3" <% if(flatOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+																						</select>
 																					</div>
 																					<div class="messageContainer"></div>
 																				</div>
@@ -842,19 +827,6 @@
 																					<label class="control-label col-sm-4">Description </label>
 																					<div class="col-sm-8">
 																						<textarea class="form-control"  id="description" name="description[]"><% if(flatOfferInfo.getDescription() != null) { out.print(flatOfferInfo.getDescription());} %></textarea>
-																					</div>
-																					<div class="messageContainer"></div>
-																				</div>
-																			</div>
-																			<div class="col-lg-4 margin-bottom-5">
-																				<div class="form-group" id="error-applicable_on">
-																					<label class="control-label col-sm-6">Offer Type </label>
-																					<div class="col-sm-6">
-																						<select class="form-control" id="offer_type<%out.print(j); %>"   onchange="txtEnabaleDisable(<%out.print(k); %>);"  name="offer_type[]">
-																							<option value="1" <% if(flatOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
-																							<option value="2" <% if(flatOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
-																							<option value="3" <% if(flatOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
-																						</select>
 																					</div>
 																					<div class="messageContainer"></div>
 																				</div>
@@ -907,14 +879,6 @@
 </html>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <script>
-var project_offer_count = <%out.print(jj);%>
-var building_offer_count = <%out.print(j);%>
-for(var poc = 1;poc < project_offer_count;poc++){
-	 calculatePFlatPercentage(poc);
-}
-for(var boc = 1; boc < building_offer_count; boc++){
-	calculateBFlatPercentage(boc);
-}
 $("#project").click(function(){
 	window.location.href="${baseUrl}/builder/project/edit.jsp?project_id=<%out.print(project_id);%>";
 });
@@ -939,47 +903,8 @@ function calculateAmount(id){
 	}
 }
 
-function calculateFlatPercentage(id){
-	
-}
-
-function calculateBFlatPercentage(id){
-	var percentage = 0;
-	var amount =0;
-	if($("#building_offer_type"+id).val() == 1){
-		var $th = $("#building_discount_amount"+id);
-		amount = $th.val()*$("#h_sale_value").val()/100;
-		$("#building_discount_amount"+id).val(amount.toFixed(0));
-	}
-	if($("#building_offer_type"+id).val() == 2){
-		var $th = $("#building_discount"+id);
-		amount = $("#h_sale_value").val()-$th.val();
-		$("#building_discount_amount"+id).val(amount.toFixed(0));
-		percentage = amount/$("#h_sale_value").val()*100;
-		var num = new Number(percentage);
-		$("#building_discount"+id).val(num.toPrecision(6));
-	}
-}
 function deleteOffer(id){
 	alert(id);
-}
-
-function calculatePFlatPercentage(id){
-	var percentage = 0;
-	var amount = 0;
-	if($("#project_offer_type"+id).val() == 1){
-		var $th = $("#project_discount"+id);
-		amount = $th.val()*$("#h_sale_value").val()/100;
-		$("#project_discount_amount"+id).val(amount.toFixed(0));
-	}
-	if($("#project_offer_type"+id).val() == 2){
-		var $th = $("#project_discount_amount"+id);
-		amount = $("#h_sale_value").val()-$th.val();
-		$("#project_discount_amount"+id).val(amount.toFixed(0));
-		percenatage = amount/$("#h_sale_value").val()*100;
-		var num = new Number(percentage);
-		$("#project_discount"+id).val(num.toPrecision(6));
-	}
 }
 
 function calcultatePercentage(id){
@@ -1746,17 +1671,21 @@ function addMoreOffer() {
 			+'</div>'
 		+'</div>'
 		+'<div class="col-lg-4 margin-bottom-5">'
-		+'<div class="form-group" id="error-discount_amount">'
-			+'<label class="control-label col-sm-6">Discount Percentage </label>'
-			+'<div class="col-sm-6">'
-				+'<input type="text" class="form-control errorMsg" id="discount'+offers+'" onkeyup="javascript:validateDiscountPer('+offers+');" onkeypress="return isNumber(event, this);" name="discount_percentage[]" value=""/>'
-			+'</div>'
-			+'<div class="messageContainer"></div>'
+		+'<div class="form-group" id="error-applicable_on">'
+		+'<label class="control-label col-sm-6">Offer Type </label>'
+		+'<div class="col-sm-6">'
+		+'<select class="form-control"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
+		+'<option value="1">Percentage</option>'
+		+'<option value="2">Flat Amount</option>'
+		+'<option value="3">Other</option>'
+		+'</select>'
 		+'</div>'
-	+'</div>'
+		+'<div class="messageContainer"></div>'
+		+'</div>'
+		+'</div>'
 		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-discount_amount">'
-				+'<label class="control-label col-sm-6">Discount Amount </label>'
+				+'<label class="control-label col-sm-6">Discount </label>'
 				+'<div class="col-sm-6">'
 					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup=" javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
 				+'</div>'
@@ -1771,19 +1700,6 @@ function addMoreOffer() {
 			+'</div>'
 			+'<div class="messageContainer"></div>'
 			+'</div>'
-		+'</div>'
-		+'<div class="col-lg-4 margin-bottom-5">'
-		+'<div class="form-group" id="error-applicable_on">'
-		+'<label class="control-label col-sm-6">Offer Type </label>'
-		+'<div class="col-sm-6">'
-		+'<select class="form-control"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
-		+'<option value="1">Percentage</option>'
-		+'<option value="2">Flat Amount</option>'
-		+'<option value="3">Other</option>'
-		+'</select>'
-		+'</div>'
-		+'<div class="messageContainer"></div>'
-		+'</div>'
 		+'</div>'
 		+'<div class="col-lg-3 margin-bottom-5">'
 			+'<div class="form-group" id="error-apply">'

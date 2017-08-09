@@ -3268,6 +3268,7 @@ public class ProjectController extends ResourceConfig {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updateBuildingFloorFlat (
 			@FormDataParam("flat_id") int flat_id,
+			@FormDataParam("flat_type_id") int flat_type_id,
 			@FormDataParam("price_id") int price_id,
 			@FormDataParam("base_unit") short base_unit,
 			@FormDataParam("base_rate") Double base_rate,
