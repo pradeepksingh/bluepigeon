@@ -42,6 +42,8 @@ public class BuilderFlat implements java.io.Serializable {
 	private Double revenue;
 	private Double completionStatus = 0.0;
 	private Date possessionDate;
+	private Double baseSaleValue = 0.0;
+	private Double discount = 0.0;
 	private Double amenityWeightage = 0.0;
 	private Double weightage = 0.0;
 	private Byte status;
@@ -54,7 +56,8 @@ public class BuilderFlat implements java.io.Serializable {
 	public BuilderFlat(BuilderFlatType builderFlatType, AdminUser adminUser, BuilderFloor builderFloor,
 			BuilderFlatStatus builderFlatStatus, String flatNo, Integer bedroom, Integer bathroom, Integer balcony,
 			Double totalInventory, Double inventorySold, Double revenue, Date possessionDate, Byte status,
-			Set<BuilderLead> builderLeads, Double completionStatus, Double weightage, Double amenityWeightage, String image) {
+			Set<BuilderLead> builderLeads, Double completionStatus, Double weightage, Double amenityWeightage, String image,
+			Double discount, Double baseSaleValue) {
 		this.builderFlatType = builderFlatType;
 		this.adminUser = adminUser;
 		this.builderFloor = builderFloor;
@@ -73,6 +76,8 @@ public class BuilderFlat implements java.io.Serializable {
 		this.weightage = weightage;
 		this.amenityWeightage = amenityWeightage;
 		this.image = image;
+		this.discount = discount;
+		this.baseSaleValue = baseSaleValue;
 	}
 	
 	@PrePersist
@@ -255,6 +260,22 @@ public class BuilderFlat implements java.io.Serializable {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+	@Column(name = "base_sale_value")
+	public Double getBaseSaleValue() {
+		return baseSaleValue;
+	}
+
+	public void setBaseSaleValue(Double baseSaleValue) {
+		this.baseSaleValue = baseSaleValue;
+	}
+	@Column(name = "discount")
+	public Double getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(Double discount) {
+		this.discount = discount;
 	}
 	
 	

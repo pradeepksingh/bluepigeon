@@ -162,5 +162,6 @@
         <mapping class="org.bluepigeon.admin.model.FlatWeightage" />
         <mapping class="org.bluepigeon.admin.model.BuildingPriceInfo" />
         <mapping class="org.bluepigeon.admin.model.FlatPricingDetails" />
+        <mapping class="org.bluepigeon.admin.model.FlatOfferInfo"/>
 	</session-factory>
 </hibernate-configuration>

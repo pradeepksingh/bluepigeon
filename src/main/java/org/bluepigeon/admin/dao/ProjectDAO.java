@@ -77,6 +77,7 @@ import org.bluepigeon.admin.model.Campaign;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
 import org.bluepigeon.admin.model.FlatAmenityWeightage;
 import org.bluepigeon.admin.model.FlatImageGallery;
+import org.bluepigeon.admin.model.FlatOfferInfo;
 import org.bluepigeon.admin.model.FlatPanoramicImage;
 import org.bluepigeon.admin.model.FlatPaymentSchedule;
 import org.bluepigeon.admin.model.FlatPricingDetails;
@@ -4926,5 +4927,20 @@ public class ProjectDAO {
 		}
 		return priceInfoData;
 	}
+	/**
+	 * Get flat offers by flat id
+	 * @author pankaj
+	 * @param flatId
+	 * @return List<FlatOfferInfo> 
+	 */
 	
+	public List<FlatOfferInfo> getFlatOffersByFlatId(int flatId){
+		String hql = "from FlatOfferInfo where builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flatId);
+		List<FlatOfferInfo> result = query.list();
+		return result;
+	}
 }

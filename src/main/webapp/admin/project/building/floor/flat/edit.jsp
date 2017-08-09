@@ -641,7 +641,7 @@
 													<div class="form-group" id="error-amount">
 														<label class="control-label col-sm-6">Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="amount<%out.print(ii); %>" onkeyup="calcultatePercentage(<%out.print(ii); %>);"  id="amount" name="amount[]" value="<% out.print(flatPaymentSchedule.getAmount());%>"/>
+															<input type="text" class="form-control" id="amount<%out.print(ii); %>" onkeyup="calcultatePercentage(<%out.print(ii); %>);"   name="amount[]" value="<% out.print(flatPaymentSchedule.getAmount());%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -1162,7 +1162,67 @@ function showPriceAddResponse(resp, statusText, xhr, $form){
   	}
 }
 
-$("#updatePaymentbtn").click(function(){
+$('#updatePayment').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	'schedule[]': {
+            validators: {
+		    	notEmpty: {
+		    		message: 'Schedule is required and cannot be empty'
+		        },
+            }
+        },
+        'payable[]': {
+            validators: {
+            	between: {
+                    min: 0,
+                    max: 100,
+                    message: 'The percentage must be between 0 and 100'
+	        	},
+	        	 callback: {
+                     message: 'The sum of percentages must be 100',
+                     callback: function(value, validator, $field) {
+                         var percentage = validator.getFieldElements('payable[]'),
+                             length     = percentage.length,
+                             sum        = 0;
+
+                         for (var i = 0; i < length; i++) {
+                             sum += parseFloat($(percentage[i]).val());
+                         }
+                         if (sum === 100) {
+                             validator.updateStatus('payable[]', 'VALID', 'callback');
+                             return true;
+                         }
+
+                         return false;
+                     }
+                 },
+		        notEmpty: {
+		    		message: 'Payable is required and cannot be empty'
+		        },
+            }
+        },
+        'amount[]':{
+        	validators:{
+        		notEmpty :{
+        			message: 'amount is required and cannot be empty'
+        		}
+        	}
+        }
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	updatePaymentSchudle();
+});
+
+function updatePaymentSchudle(){
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showPaymentSlabRequest,
