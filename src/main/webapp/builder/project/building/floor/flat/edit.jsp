@@ -898,6 +898,10 @@ $("#building").click(function(){
 $("#flat").click(function(){
 	window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>&flat_id=<%out.print(flat_id); %>";
 });
+$("#viewFlatDetails").click(function(){
+	 $('.active').removeClass('active').next('li').addClass('active');
+     $("#vimessages1").addClass('active');
+});
 function calculateAmount(id){
 	if($("#payable"+id).val() <0 || $("#payable"+id).val() >100){
 		alert("The percentage must be between 0 and 100");

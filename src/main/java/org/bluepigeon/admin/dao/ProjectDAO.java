@@ -2522,10 +2522,8 @@ public class ProjectDAO {
 				paymentInfoData.setAmount(flatPaymentSchedule.getAmount());
 				paymentInfoData.setPayable(flatPaymentSchedule.getPayable());
 				paymentInfoDatas.add(paymentInfoData);
-				System.out.println("GT :: "+flatPaymentSchedule.getPayable());
 			}
 		}else{
-			System.err.println("TR :: "+flat_id);
 			BuilderFlat flat =  getBuilderFlatById(flat_id);
 			List<BuildingPaymentInfo> buildingPaymentInfos = getActiveBuilderBuildingPaymentInfoById(flat.getBuilderFloor().getBuilderBuilding().getId());
 			for(BuildingPaymentInfo buildingPaymentInfo : buildingPaymentInfos){
@@ -2538,7 +2536,7 @@ public class ProjectDAO {
 			}
 		}
 		}catch(IndexOutOfBoundsException e){
-			e.printStackTrace();
+			//e.printStackTrace();
 			BuilderFlat flat =  getBuilderFlatById(flat_id);
 			try{
 				List<BuildingPaymentInfo> buildingPaymentInfos = getActiveBuilderBuildingPaymentInfoById(flat.getBuilderFloor().getBuilderBuilding().getId());
@@ -2579,6 +2577,7 @@ public class ProjectDAO {
 		session.close();
 		return paymentInfoDatas;
 	}
+	
 	public List<BuilderProjectPaymentInfo> getActiveProjectPaymentInfo(int projectId){
 		String hql = "from BuilderProjectPaymentInfo where builderProject.id = :project_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -2591,9 +2590,8 @@ public class ProjectDAO {
 		}else{
 			return null;
 		}
-				
-				
 	}
+	
 	public BuilderFlat getBuilderFlatById(int flatId){
 		BuilderFlat builderFlat = null;
 		String hql = "from BuilderFlat where id = :id";
@@ -5018,6 +5016,12 @@ public class ProjectDAO {
 		return builderFlatType;
 		
 	}
+	
+	/**
+	 * @author pankaj
+	 * @param flatId
+	 * @return FlatPricingDetails
+	 */
     public FlatPricingDetails getFlatPriceDetails(int flatId){
     	String hql = "from FlatPricingDetails where builderFlat.id = :flat_id";
     	HibernateUtil hibernateUtil = new HibernateUtil();
@@ -5026,5 +5030,20 @@ public class ProjectDAO {
     	query.setParameter("flat_id", flatId);
     	FlatPricingDetails flatPricingDetails = (FlatPricingDetails) query.list().get(0);
     	return flatPricingDetails;
+    }
+    
+    /**
+     * @author pankaj
+     * @param flatId
+     * @return List<FlatPaymentSchedule>
+     */
+    public List<FlatPaymentSchedule> getFlatPaymentSchedule(int flatId){
+    	String hql = "from FlatPaymentSchedule where builderFlat.id = :flat_id";
+    	HibernateUtil hibernateUtil = new HibernateUtil();
+    	Session session = hibernateUtil.openSession();
+    	Query query = session.createQuery(hql);
+    	query.setParameter("flat_id", flatId);
+    	List<FlatPaymentSchedule> result = query.list();
+    	return result;
     }
 }

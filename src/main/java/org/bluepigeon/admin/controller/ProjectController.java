@@ -4035,28 +4035,12 @@ public class ProjectController extends ResourceConfig {
 		//BuilderFlat builderFlat = new BuilderFlat();
 		BuilderFlat builderFlat = projectDAO.getBuildingFlatById(flat_id).get(0);
 		BuilderFlatType builderFlatType = projectDAO.getBuilderFlatType(flat_type_id);
-		List<FlatOfferInfo> flatOfferInfos = projectDAO.getFlatOffersByFlatId(flat_id);
-		Double totalCost = 0.0;
 		FlatPricingDetails flatPricingDetails = projectDAO.getFlatPriceDetails(flat_id);
-		Double baseSaleValue = flatPricingDetails.getBasePrice() * builderFlatType.getSuperBuiltupArea()+flatPricingDetails.getRiseRate()+flatPricingDetails.getAmenityRate();
-		Double newBaseRateValue = baseSaleValue;
-		if(discount_amount != null && discount_amount.size() > 0){
-			 for(int i=0;i<flatOfferInfos.size();i++){
-				 if(flatOfferInfos.get(i).getType() == 1){
-					 newBaseRateValue = newBaseRateValue * discount_amount.get(i).getValueAs(Double.class).doubleValue()/100;
-				 }
-				 if(flatOfferInfos.get(i).getType() == 2){
-					 newBaseRateValue = newBaseRateValue - discount_amount.get(i).getValueAs(Double.class).doubleValue();
-				 }
-			 }
-			 totalCost = newBaseRateValue + flatPricingDetails.getParking() + flatPricingDetails.getMaintenance() + flatPricingDetails.getStampDuty() + flatPricingDetails.getTax() + flatPricingDetails.getVat() + flatPricingDetails.getFee();
-		}else{
-			totalCost = getFlatTotalCost(flat_id,flatPricingDetails.getBasePrice(),flatPricingDetails.getRiseRate(),flatPricingDetails.getPost(),flatPricingDetails.getAmenityRate(),flatPricingDetails.getParkingId(),flatPricingDetails.getParking(),flatPricingDetails.getMaintenance(),flatPricingDetails.getStampDuty(),flatPricingDetails.getTax(),flatPricingDetails.getVat(),flatPricingDetails.getAreaUnit().getId());
-		}
-		builderFlat.setBaseSaleValue(baseSaleValue);
-		builderFlat.setDiscount(newBaseRateValue);
-		builderFlat.setId(flat_id);
-		flatPricingDetails.setTotalCost(totalCost);
+		List<PaymentInfoData> paymentInfoDatas = null;
+		Double totalCost = 0.0;
+		List<FlatOfferInfo> flatOfferInfos = null;
+		List<FlatPaymentSchedule> flatPaymentSchedules = null;
+		List<FlatPaymentSchedule> newFlatPaymentSchedules = null;
 	
 		if (offer_title.size() > 0) {
 			List<FlatOfferInfo> newFlatOfferInfos = new ArrayList<FlatOfferInfo>();
@@ -4100,9 +4084,84 @@ public class ProjectController extends ResourceConfig {
 			}
 			if(updateFlatOfferInfos.size() > 0) {
 				projectDAO.updateFlatOfferInfo(updateFlatOfferInfos);
+				flatOfferInfos = projectDAO.getFlatOffersByFlatId(flat_id);
+				flatPaymentSchedules = projectDAO.getFlatPaymentSchedule(flat_id);
+				if(flatPaymentSchedules == null){
+					paymentInfoDatas = projectDAO.getFlatPaymentSchedules(flat_id);
+				}
+				Double baseSaleValue = flatPricingDetails.getBasePrice() * builderFlatType.getSuperBuiltupArea()+flatPricingDetails.getRiseRate()+flatPricingDetails.getAmenityRate();
+				Double newBaseRateValue = baseSaleValue;
+				if((discount_amount != null && discount_amount.size() > 0) && (flatOfferInfos != null && flatOfferInfos.size() > 0)){
+					 for(int k=0;k<flatOfferInfos.size();k++){
+						 if(flatOfferInfos.get(k).getType() == 1){
+							 newBaseRateValue = newBaseRateValue * discount_amount.get(k).getValueAs(Double.class).doubleValue()/100;
+						 }
+						 if(flatOfferInfos.get(k).getType() == 2){
+							 newBaseRateValue = newBaseRateValue - discount_amount.get(k).getValueAs(Double.class).doubleValue();
+						 }
+					 }
+					 totalCost = newBaseRateValue + flatPricingDetails.getParking() + flatPricingDetails.getMaintenance() + flatPricingDetails.getStampDuty() + flatPricingDetails.getTax() + flatPricingDetails.getVat() + flatPricingDetails.getFee();
+				}else{
+					totalCost = getFlatTotalCost(flat_id,flatPricingDetails.getBasePrice(),flatPricingDetails.getRiseRate(),flatPricingDetails.getPost(),flatPricingDetails.getAmenityRate(),flatPricingDetails.getParkingId(),flatPricingDetails.getParking(),flatPricingDetails.getMaintenance(),flatPricingDetails.getStampDuty(),flatPricingDetails.getTax(),flatPricingDetails.getVat(),flatPricingDetails.getAreaUnit().getId());
+				}
+				builderFlat.setBaseSaleValue(baseSaleValue);
+				builderFlat.setDiscount(newBaseRateValue);
+				builderFlat.setId(flat_id);
+				flatPricingDetails.setTotalCost(totalCost);
+				if(flatPaymentSchedules != null && flatPaymentSchedules.size() > 0){
+					for(int w=0;w<flatPaymentSchedules.size();w++){
+						FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+						flatPaymentSchedule.setId(flatPaymentSchedules.get(w).getId());
+						flatPaymentSchedule.setMilestone(flatPaymentSchedules.get(w).getMilestone());
+						flatPaymentSchedule.setPayable(flatPaymentSchedules.get(w).getPayable());
+						flatPaymentSchedule.setAmount(totalCost*flatPaymentSchedules.get(w).getPayable()/100);
+						flatPaymentSchedule.setStatus(flatPaymentSchedules.get(w).getStatus());
+						flatPaymentSchedule.setBuilderFlat(builderFlat);
+						flatPaymentSchedules.add(flatPaymentSchedule);
+					}
+					if(flatPaymentSchedules.size() > 0){
+						projectDAO.updateFlatPaymentInfo(flatPaymentSchedules);
+					}
+				}else{
+					byte milestone_status = 0;
+					newFlatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
+					for(int u = 0;u < paymentInfoDatas.size();u++){
+						FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+						flatPaymentSchedule.setMilestone(paymentInfoDatas.get(u).getName());
+						flatPaymentSchedule.setPayable(paymentInfoDatas.get(u).getPayable());
+						flatPaymentSchedule.setAmount(totalCost*paymentInfoDatas.get(u).getPayable()/100);
+						flatPaymentSchedule.setStatus(milestone_status);
+						flatPaymentSchedule.setBuilderFlat(builderFlat);
+						newFlatPaymentSchedules.add(flatPaymentSchedule);
+					}
+					if(newFlatPaymentSchedules.size() > 0){
+						projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
+					}
+				}
+				
 			}
 			if(newFlatOfferInfos.size() > 0) {
 				projectDAO.addFlatOfferInfo(newFlatOfferInfos);
+				flatOfferInfos = projectDAO.getFlatOffersByFlatId(flat_id);
+				Double baseSaleValue = flatPricingDetails.getBasePrice() * builderFlatType.getSuperBuiltupArea()+flatPricingDetails.getRiseRate()+flatPricingDetails.getAmenityRate();
+				Double newBaseRateValue = baseSaleValue;
+				if(discount_amount != null && discount_amount.size() > 0){
+					 for(int ii=0;ii<flatOfferInfos.size();ii++){
+						 if(flatOfferInfos.get(ii).getType() == 1){
+							 newBaseRateValue = newBaseRateValue * discount_amount.get(ii).getValueAs(Double.class).doubleValue()/100;
+						 }
+						 if(flatOfferInfos.get(ii).getType() == 2){
+							 newBaseRateValue = newBaseRateValue - discount_amount.get(ii).getValueAs(Double.class).doubleValue();
+						 }
+					 }
+					 totalCost = newBaseRateValue + flatPricingDetails.getParking() + flatPricingDetails.getMaintenance() + flatPricingDetails.getStampDuty() + flatPricingDetails.getTax() + flatPricingDetails.getVat() + flatPricingDetails.getFee();
+				}else{
+					totalCost = getFlatTotalCost(flat_id,flatPricingDetails.getBasePrice(),flatPricingDetails.getRiseRate(),flatPricingDetails.getPost(),flatPricingDetails.getAmenityRate(),flatPricingDetails.getParkingId(),flatPricingDetails.getParking(),flatPricingDetails.getMaintenance(),flatPricingDetails.getStampDuty(),flatPricingDetails.getTax(),flatPricingDetails.getVat(),flatPricingDetails.getAreaUnit().getId());
+				}
+				builderFlat.setBaseSaleValue(baseSaleValue);
+				builderFlat.setDiscount(newBaseRateValue);
+				builderFlat.setId(flat_id);
+				flatPricingDetails.setTotalCost(totalCost);
 			}
 			msg.setStatus(1);
 			msg.setMessage("Flat offer updated successfully.");
@@ -4110,6 +4169,7 @@ public class ProjectController extends ResourceConfig {
 			msg.setMessage("Failed to update Flat offers.");
 			msg.setStatus(0);
 		}
+		
 		projectDAO.updateFlatPriceInfo(flatPricingDetails);
 		projectDAO.updateBuildingFlat(builderFlat);
 		return msg;

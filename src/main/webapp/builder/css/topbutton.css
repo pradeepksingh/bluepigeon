@@ -28,6 +28,10 @@ textarea{
     
 }
 }
+.selectize-input {
+    border: 1px solid #24bcd3 !important;
+    padding: 14px 8px !important;
+}
 .nav-pills > li + li {
        width: 16%;
     margin-left: 2%;

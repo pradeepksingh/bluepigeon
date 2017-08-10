@@ -1931,7 +1931,7 @@ function deleteOffer(id) {
 
 function deleteSchudle(id){
 	
-	var flag = confirm("Are you sure ? You want to delete schudle ?");
+	var flag = confirm("Are you sure ? You want to delete schedule ?");
 	if(flag){
 		$.get("${baseUrl}/webapi/project/payment/delete/"+id,{}, function(data){
 			alert(data.message);

@@ -320,10 +320,7 @@ text-align: center;
 .selectize-control.single .selectize-input:after {
 	border-color: #24bcd3 transparent transparent transparent !important;
 }
-.selectize-input{
-	border: 1px solid #24bcd3 !important;
-	padding : 14px 8px !important;
-}
+
 .new-dropdown{
 	min-width : 100%;
 	height : 500px;

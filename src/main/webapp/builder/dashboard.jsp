@@ -83,8 +83,7 @@
     <link href="${baseUrl}/builder/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="${baseUrl}/builder/plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
     <link href="${baseUrl}/builder/plugins/bower_components/morrisjs/morris.css" rel="stylesheet">
-    <!-- animation CSS -->
-    <link href="${baseUrl}/builder/css/animate.css" rel="stylesheet">
+  
     <!-- Menu CSS -->
     <link href="plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
@@ -100,6 +99,12 @@
     <link href="${baseUrl}/builder/plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
     <link href="${baseUrl}/builder/plugins/bower_components/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
      <link rel="stylesheet" type="text/css" href="${baseUrl}/builder/css/selectize.css" />
+     <style>
+     .selectize-input{
+	border: 1px solid #24bcd3 !important;
+	padding : 10px 8px !important;
+}
+     </style>
     <!-- jQuery -->
     <script src="${baseUrl}/builder/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     
