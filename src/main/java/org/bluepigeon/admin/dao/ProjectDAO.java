@@ -2793,9 +2793,55 @@ public class ProjectDAO {
 	}
 	
 	public ResponseMessage deleteFlatOfferInfo(int id) {
+		
 		ResponseMessage resp = new ResponseMessage();
+		String resetHql = "from FlatOfferInfo where id = :id";
 		String hql = "delete from FlatOfferInfo where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
+		
+		/************** Reset original amount of flat with updated discount before deleting offer***************/
+		Session resetSession = hibernateUtil.openSession();
+		Query resetQuery = resetSession.createQuery(resetHql);
+		resetQuery.setParameter("id", id);
+		FlatOfferInfo result = (FlatOfferInfo)resetQuery.list().get(0);
+		
+		FlatPricingDetails flatPricingDetails = getFlatPriceDetails(result.getBuilderFlat().getId());
+		Double totalCost = flatPricingDetails.getTotalCost();
+		BuilderFlat flat = getBuildingFlatById(result.getBuilderFlat().getId()).get(0);
+		List<FlatPaymentSchedule> flatPaymentSchedules = getBuilderFlatPaymentSchedules(result.getBuilderFlat().getId());
+		List<FlatPaymentSchedule> updateFlatPayment = new ArrayList<FlatPaymentSchedule>();
+		Double discount = flat.getDiscount();
+		
+		if(result != null){
+			if(result.getType() == 1){
+				totalCost = totalCost * result.getAmount();
+				discount = discount * result.getAmount();
+			}
+			if(result.getType() == 2){
+				totalCost = totalCost + result.getAmount();
+				discount = discount + result.getAmount();
+			}
+		}
+		if(flatPaymentSchedules != null && flatPaymentSchedules.size() > 0){
+			for(int w = 0;w < flatPaymentSchedules.size(); w++){
+				FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+				flatPaymentSchedule.setId(flatPaymentSchedules.get(w).getId());
+				flatPaymentSchedule.setMilestone(flatPaymentSchedules.get(w).getMilestone());
+				flatPaymentSchedule.setPayable(flatPaymentSchedules.get(w).getPayable());
+				flatPaymentSchedule.setAmount(totalCost*flatPaymentSchedules.get(w).getPayable()/100);
+				flatPaymentSchedule.setStatus(flatPaymentSchedules.get(w).getStatus());
+				flatPaymentSchedule.setBuilderFlat(flat);
+				updateFlatPayment.add(flatPaymentSchedule);
+			}
+			if(updateFlatPayment.size() > 0){
+				updateFlatPaymentInfo(updateFlatPayment);
+			}
+		}
+		flat.setDiscount(discount);
+		updateBuildingFlat(flat);
+		flatPricingDetails.setTotalCost(totalCost);
+		updateFlatPriceInfo(flatPricingDetails);
+	 /*********************Delete flat Offer***************/	
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
 		Query query = session.createQuery(hql);

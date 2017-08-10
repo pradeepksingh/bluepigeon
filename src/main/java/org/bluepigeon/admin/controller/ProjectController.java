@@ -4173,7 +4173,7 @@ public class ProjectController extends ResourceConfig {
 					paymentInfoDatas = projectDAO.getFlatPaymentSchedules(flat_id);
 				}
 				if(flatPaymentSchedules != null && flatPaymentSchedules.size() > 0){
-					for(int w=0;w<flatPaymentSchedules.size();w++){
+					for(int w = 0;w < flatPaymentSchedules.size(); w++){
 						FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
 						flatPaymentSchedule.setId(flatPaymentSchedules.get(w).getId());
 						flatPaymentSchedule.setMilestone(flatPaymentSchedules.get(w).getMilestone());

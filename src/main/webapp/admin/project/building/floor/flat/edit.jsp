@@ -1,3 +1,8 @@
+<%@page import="org.bluepigeon.admin.model.FlatOfferInfo"%>
+<%@page import="org.bluepigeon.admin.model.BuildingOfferInfo"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProjectOfferInfo"%>
+<%@page import="org.bluepigeon.admin.dao.BuilderProjectOfferInfoDAO"%>
+<%@page import="org.bluepigeon.admin.data.PriceInfoData"%>
 <%@page import="org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom"%>
 <%@page import="org.bluepigeon.admin.model.FlatPricingDetails"%>
 <%@page import="org.bluepigeon.admin.dao.AreaUnitDAO"%>
@@ -35,6 +40,7 @@
 	int building_id = 0;
 	int project_id = 0;
 	int floor_id = 0;
+	int flat_type_id = 0;
 	flat_id = Integer.parseInt(request.getParameter("flat_id"));
 	session = request.getSession(false);
 	AdminUser adminuserproject = new AdminUser();
@@ -48,7 +54,11 @@
 	}
 	List<BuilderBuilding> buildings = null;
 	List<BuilderFloor> floors = null;
+	List<BuilderProjectOfferInfo> builderProjectOfferInfos = null;
 	BuilderFlat builderFlat = null;
+	PriceInfoData priceInfoData = null;
+	List<FlatOfferInfo> flatOfferInfos = null;
+	List<BuildingOfferInfo> buildingOfferInfos = null;
 	//List<BuilderBuildingFlatTypeRoom> builderBuildingFlatTypeRooms = null;
 	List<AreaUnit> areaUnits = new AreaUnitDAO().getActiveAreaUnitList();
 	List<BuilderFlat> builderFlats = new ProjectDAO().getBuildingFlatById(flat_id);
@@ -59,6 +69,12 @@
 		project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
 		buildings = new ProjectDAO().getBuilderProjectBuildings(project_id);
 		floors = new ProjectDAO().getBuildingFloors(building_id);
+		priceInfoData = new ProjectDAO().getFlatPriceData(flat_id);
+		builderProjectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderProjectOfferInfo(project_id);
+		buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
+		flat_type_id = builderFlat.getBuilderFlatType().getId();
+		builderProjectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderProjectOfferInfo(project_id);
+		flatOfferInfos = new ProjectDAO().getFlatOffersByFlatId(flat_id);
 		
 	}
 	List<BuilderFlatStatus> builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderFlatStatus();
@@ -95,6 +111,7 @@
 			  	<li class="active"><a data-toggle="tab" href="#basic">Flat Details</a></li>
 			  		<li><a data-toggle="tab" href="#flatimage">Flat Image</a></li>
 			  	<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
+			  		<li><a data-toggle="tab" href="#flatoffer">Offer</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
 			  	<li><a data-toggle="tab" href="#productsubstage">Flat Weightage</a></li>
 			</ul>
@@ -603,6 +620,231 @@
 						</div>
 						</form>
 					</div>
+					 <div id="flatoffer" class="tab-pane" aria-expanded="true">
+                          <div id="offer" class="tab-pane fade active in">
+								<form id="updateoffer" name="updateoffer" method="post" action=""  enctype="multipart/form-data">
+						 	<input type="hidden" id="flat_id" name="flat_id" value="<% out.print(flat_id);%>"/>
+						 	<input type="hidden" id="flat_type_id" name="flat_type_id" value="<%out.print(flat_type_id); %>" />
+						 	<input type="hidden" name="base_sale_value" id="base_sale_value" value="<% if(priceInfoData.getTotalCost() > 0 && priceInfoData.getTotalCost() != 0){ out.print(priceInfoData.getTotalCost());}%>"/>
+							<input type="hidden" name="offer_count" id="offer_count" value="<%out.print(builderProjectOfferInfos.size()+10000); %>"/>
+			 				<div class="row">
+								<div class="col-lg-12">
+										<div id="project_offer_area">
+											<% int jj = 1;
+													for(BuilderProjectOfferInfo projectOfferInfo :builderProjectOfferInfos) { 
+											%>
+											<%if(jj > 1){
+											%>
+											<hr>
+											<%} %>
+											<div class="row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-offer_title">
+														<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
+														<div class="col-sm-8">
+															<div>
+																<input type="text" class="form-control" readonly="true" id="project_offer_title" name="project_offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
+															</div>
+															<div class="messageContainer"></div>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-applicable_on">
+														<label class="control-label col-sm-6">Offer Type </label>
+														<div class="col-sm-6">
+															<select class="form-control" id="project_offer_type<%out.print(jj); %>"  onchange="txtEnabaleDisable(<%out.print(jj); %>);" disabled name="project_offer_type[]">
+																<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+															</select>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-discount_amount">
+														<label class="control-label col-sm-6">Discount <span class='text-danger'>*</span></label>
+														<div class="col-sm-6">
+															<input type="text" class="form-control" readonly id="project_discount_amount<%out.print(jj); %>"   onkeyup=" javascript:validPerAmount(<%out.print(jj); %>);" name="project_discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-applicable_on">
+														<label class="control-label col-sm-4">Description </label>
+														<div class="col-sm-8">
+															<textarea class="form-control" disabled id="project_description" name="project_description[]"><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-apply">
+														<label class="control-label col-sm-6">Status </label>
+														<div class="col-sm-6">
+															<select class="form-control" id="project_offer_status" name="project_offer_status[]" disabled>
+																<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
+																<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
+															</select>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+											</div>
+											<% jj++; } %>
+										</div>
+										<div id="building_offer_area">
+											<% int j = 1;
+													for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) { 
+											%>
+											<%if(j >1){ %>
+											<hr>
+											<%} %>
+											<div class="row" id="building_offer-<% out.print(buildingOfferInfo.getId()); %>">
+												<input type="hidden" name="building_offer_id[]" value="<% out.print(buildingOfferInfo.getId()); %>" />
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-offer_title">
+														<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
+														<div class="col-sm-8">
+															<div>
+																<input type="text" class="form-control" id="building_offer_title" readonly name="building_offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>">
+															</div>
+															<div class="messageContainer"></div>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-applicable_on">
+														<label class="control-label col-sm-6">Offer Type </label>
+														<div class="col-sm-6">
+															<select class="form-control" id="building_offer_type<%out.print(j); %>" disabled  onchange="txtEnabaleDisable(<%out.print(j); %>);"  name="building_offer_type[]">
+																<option value="1" <% if(buildingOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																<option value="2" <% if(buildingOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																<option value="3" <% if(buildingOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+															</select>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-discount_amount">
+														<label class="control-label col-sm-6">Discount <span class='text-danger'>*</span></label>
+														<div class="col-sm-6">
+															<input type="text" class="form-control" readonly <%if(buildingOfferInfo.getType() == 3){ %>disabled<%} %> id="building_discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(buildingOfferInfo.getAmount()!=null){ out.print(buildingOfferInfo.getAmount());} %>"/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-applicable_on">
+														<label class="control-label col-sm-4">Description </label>
+														<div class="col-sm-8">
+															<textarea class="form-control" disabled id="building_description" name="building_description[]"><% if(buildingOfferInfo.getDescription() != null) { out.print(buildingOfferInfo.getDescription());} %></textarea>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-apply">
+														<label class="control-label col-sm-6">Status </label>
+														<div class="col-sm-6">
+															<select class="form-control" id="building_offer_status" name="offer_status[]" disabled>
+																<option value="1" <% if(buildingOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
+																<option value="0" <% if(buildingOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
+															</select>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+											</div>
+											<% j++; } %>
+										</div>
+										<div id="offer_area">
+											<% int k = 1;
+													for(FlatOfferInfo flatOfferInfo :flatOfferInfos) { 
+											%>
+											<%if(k >1){ %>
+											<hr>
+											<%} %>
+											<div class="row" id="offer-<% out.print(flatOfferInfo.getId()); %>">
+												<input type="hidden" name="offer_id[]" value="<% out.print(flatOfferInfo.getId()); %>" />
+												<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:deleteOffer(<% out.print(flatOfferInfo.getId()); %>);" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-offer_title">
+														<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
+														<div class="col-sm-8">
+															<div>
+																<input type="text" class="form-control" id="offer_title"  name="offer_title[]" value="<% out.print(flatOfferInfo.getTitle()); %>">
+															</div>
+															<div class="messageContainer"></div>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-applicable_on">
+														<label class="control-label col-sm-6">Offer Type </label>
+														<div class="col-sm-6">
+															<select class="form-control" id="offer_type<%out.print(j); %>"   onchange="txtEnabaleDisable(<%out.print(k); %>);"  name="offer_type[]">
+																<option value="1" <% if(flatOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
+																<option value="2" <% if(flatOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
+																<option value="3" <% if(flatOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
+															</select>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-discount_amount">
+														<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
+														<div class="col-sm-6">
+															<input type="text" class="form-control"  <%if(flatOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(k); %>"   onkeyup=" javascript:validPerAmount(<%out.print(k); %>);" name="discount_amount[]" value="<%if(flatOfferInfo.getAmount()!=null){ out.print(flatOfferInfo.getAmount());} %>"/>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-applicable_on">
+														<label class="control-label col-sm-4">Description </label>
+														<div class="col-sm-8">
+															<textarea class="form-control"  id="description" name="description[]"><% if(flatOfferInfo.getDescription() != null) { out.print(flatOfferInfo.getDescription());} %></textarea>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+												<div class="col-lg-4 margin-bottom-5">
+													<div class="form-group" id="error-apply">
+														<label class="control-label col-sm-6">Status </label>
+														<div class="col-sm-6">
+															<select class="form-control" id="offer_status" name="offer_status[]">
+																<option value="1" <% if(flatOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
+																<option value="0" <% if(flatOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
+															</select>
+														</div>
+														<div class="messageContainer"></div>
+													</div>
+												</div>
+											</div>
+											<% k++; } %>
+										</div>
+										<div>
+											<div class="col-lg-12">
+												<span class="pull-right">
+													<a href="javascript:addMoreOffer();" id="addMoreOffers" class="btn btn-submit btn-sm">+ Add More Offers</a>
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							<div class="row">
+								 <div class="offset-sm-5 col-sm-7">
+                                     		<button type="submit" id="offerbtn" class="btn btn-submit waves-effect waves-light m-t-10">SAVE</button>
+                                </div>
+                             </div>
+						</form>
+					</div>
+                    </div>
 					<div id="payment" class="tab-pane fade">
 						<form id="updatePayment" name="updatePayment" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 						<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(flatPaymentSchedules.size() + 1);%>"/>

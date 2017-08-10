@@ -317,9 +317,7 @@ text-align: center;
     text-decoration: none;
     background-color: #35baf6 !important; 
 }
-.selectize-control.single .selectize-input:after {
-	border-color: #24bcd3 transparent transparent transparent !important;
-}
+
 
 .new-dropdown{
 	min-width : 100%;
