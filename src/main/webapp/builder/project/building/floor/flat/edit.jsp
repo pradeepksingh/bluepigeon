@@ -87,6 +87,7 @@
 							floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id);
 							floor_size_list = floorList.size();
 							flatList = new ProjectDAO().getActiveFlatsByFloorId(floor_id);
+							flat_size_list = flatList.size();
 							builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderActiveFlatStatus();
 							builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderActiveFlatAmenityList();
 							flatAmenityInfos= new ProjectDAO().getBuilderFlatAmenityInfos(flat_id);
@@ -990,6 +991,8 @@ function txtEnabaleDisable(id){
 		$("#discount_amount"+id).val('');
 	 }
 }
+var $select_floor = null;
+
 $select_building = $("#filter_building_id").selectize({
 	persist: false,
 	 onChange: function(value) {
@@ -1006,14 +1009,13 @@ $select_building = $("#filter_building_id").selectize({
 						persist: false,
 						 onChange: function(value1) {
 							 if($("#filter_floor_id").val() > 0 || $("#filter_floor_id").val() != '' ){
-								 $select_flat[0].selectize.destroy();
 								 $.get("${baseUrl}/webapi/project/building/flat/list/",{ floor_id: $("#filter_floor_id").val() }, function(data){
 										var html = '<option value="">Enter Flat Number</option>';
 										if(data != ""){
 											$(data).each(function(index){
 												html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 											});
-											
+											 $select_flat[0].selectize.destroy();
 											$("#filter_flat_id").html(html);
 											$select_flat = $("#filter_flat_id").selectize({
 												persist: false,
@@ -1031,6 +1033,7 @@ $select_building = $("#filter_building_id").selectize({
 											    }
 											});
 										}else{
+											if($select_flat)
 											$select_flat[0].selectize.destroy();
 											$("#filter_flat_id").html("");
 											$("#flatDetailsTab").hide();
@@ -1177,7 +1180,7 @@ $select_floor = $("#filter_floor_id").selectize({
 });
 
 <% if(floor_size_list > 0){%>
-  select_floor = $select_floor[0].selectize;
+  	select_floor = $select_floor[0].selectize;
 <%}%>
 
 $select_flat = $("#filter_flat_id").selectize({
@@ -1195,6 +1198,10 @@ $select_flat = $("#filter_flat_id").selectize({
 	   	 }
 	    }
 	});
+	
+<% if(flat_size_list > 0){%>
+ 	select_flat = $select_flat[0].selectize;
+<%}%>
 
 $('#possession_date').datepicker({
 	autoclose:true,
