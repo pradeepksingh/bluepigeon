@@ -50,6 +50,12 @@
 	List<BuildingOfferInfo> buildingOfferInfos = null;
 	List<BuilderProjectOfferInfo> builderProjectOfferInfos = null;
 	List<FlatOfferInfo> flatOfferInfos = null;
+	List<BuilderBuilding> buildings = null;
+	List<BuilderFloor> floors = null;
+	BuilderFlat builderFlat = null;
+	List<AreaUnit> areaUnits = null;
+	int flat_type_id = 0;
+	PriceInfoData priceInfoData = null;
 	project_id = Integer.parseInt(request.getParameter("project_id"));
 	building_id = Integer.parseInt(request.getParameter("building_id"));
 	floor_id = 	Integer.parseInt(request.getParameter("floor_id"));
@@ -64,43 +70,39 @@
 			if(adminuserproject != null){
 				p_user_id = adminuserproject.getBuilder().getId();
 				builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
+				if(builderProjects != null){
+					if(project_id > 0 && building_id > 0 && floor_id > 0 && flat_id > 0){
+						List<BuilderFlat> builderFlats = new ProjectDAO().getBuildingActiveFlatById(flat_id);
+						if(builderFlats.size() > 0) {
+							areaUnits = new AreaUnitDAO().getActiveAreaUnitList();
+							builderFlat = builderFlats.get(0);
+							floor_id = builderFlat.getBuilderFloor().getId();
+							building_id = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
+							project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
+							buildings = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
+							floors = new ProjectDAO().getBuildingActiveFloors(building_id);
+							builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
+							builderProjectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderProjectOfferInfo(project_id);
+							building_size_list = builderBuildingList.size();
+							floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id);
+							floor_size_list = floorList.size();
+							flatList = new ProjectDAO().getActiveFlatsByFloorId(floor_id);
+							flat_size_list = flatList.size();
+							builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderActiveFlatStatus();
+							builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderActiveFlatAmenityList();
+							flatAmenityInfos= new ProjectDAO().getBuilderFlatAmenityInfos(flat_id);
+							flatPaymentSchedules = new ProjectDAO().getFlatPaymentSchedules(flat_id);
+							flatOfferInfos = new ProjectDAO().getFlatOffersByFlatId(flat_id);
+							builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeByBuildingId(building_id);
+							buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
+							flatAmenityWeightages = new ProjectDAO().getActiveFlatAmenityWeightageByFlatId(flat_id);
+							priceInfoData = new ProjectDAO().getFlatPriceData(flat_id);
+							flat_type_id = builderFlat.getBuilderFlatType().getId();
+						}
+					}
+				}
 			}
 		}
-	}
-	List<BuilderBuilding> buildings = null;
-	List<BuilderFloor> floors = null;
-	BuilderFlat builderFlat = null;
-	List<AreaUnit> areaUnits = null;
-	int flat_type_id = 0;
-	PriceInfoData priceInfoData = null;
-	if(project_id > 0 && building_id > 0 && floor_id > 0 && flat_id > 0){
-		List<BuilderFlat> builderFlats = new ProjectDAO().getBuildingActiveFlatById(flat_id);
-		if(builderFlats.size() > 0) {
-			areaUnits = new AreaUnitDAO().getActiveAreaUnitList();
-			builderFlat = builderFlats.get(0);
-			floor_id = builderFlat.getBuilderFloor().getId();
-			building_id = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
-			project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
-			buildings = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
-			floors = new ProjectDAO().getBuildingActiveFloors(building_id);
-			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
-			builderProjectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderProjectOfferInfo(project_id);
-			building_size_list = builderBuildingList.size();
-			floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id);
-			floor_size_list = floorList.size();
-			flatList = new ProjectDAO().getActiveFlatsByFloorId(floor_id);
-			builderFlatStatuses = new BuilderFlatStatusDAO().getBuilderActiveFlatStatus();
-			builderFlatAmenities = new BuilderFlatAmenityDAO().getBuilderActiveFlatAmenityList();
-			flatAmenityInfos= new ProjectDAO().getBuilderFlatAmenityInfos(flat_id);
-			flatPaymentSchedules = new ProjectDAO().getFlatPaymentSchedules(flat_id);
-			flatOfferInfos = new ProjectDAO().getFlatOffersByFlatId(flat_id);
-			builderFlatTypes = new ProjectDAO().getBuilderBuildingFlatTypeByBuildingId(building_id);
-			buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
-			flatAmenityWeightages = new ProjectDAO().getActiveFlatAmenityWeightageByFlatId(flat_id);
-			priceInfoData = new ProjectDAO().getFlatPriceData(flat_id);
-			flat_type_id = builderFlat.getBuilderFlatType().getId();
-		}
-		
 	}
 %>
 <!DOCTYPE html>
@@ -182,9 +184,11 @@
                    <div class="row">
           			<div class="col-md-4 col-sm-6 col-xs-12">
 	                     <select id="filter_building_id" name="filter_building_id">
-	                             <% for(BuilderBuilding builderBuilding2 : builderBuildingList){ %>
+	                             <%
+	                             if(builderBuildingList != null){
+	                             for(BuilderBuilding builderBuilding2 : builderBuildingList){ %>
 	                     		<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName()); %></option>
-	                     		<%} %>
+	                     		<%} }%>
 	                     </select>
                 	</div>
                 	<div class="col-md-4 col-sm-6 col-xs-12">
@@ -244,7 +248,7 @@
 	                                         		<div class="form-group row">
 	                                             		<label for="example-text-input" class="col-sm-4 col-form-label">Flat No.</label>
 	                                             		<div class="col-sm-6">
-	                                                 		<input class="form-control" type="text" disabled id="flat_no" name="flat_no" value="<% out.print(builderFlat.getFlatNo()); %>" >
+	                                                 		<input class="form-control" type="text" disabled id="flat_no" name="flat_no" value="<%if(builderFlat != null){ out.print(builderFlat.getFlatNo());} %>" >
 	                                             		</div>
 	                                             		<div class="messageContainer col-sm-offset-3"></div>
 	                                         		</div>
@@ -255,9 +259,10 @@
 	                                             		<div class="col-sm-6">
 			                                                <select id="project_id" name="project_id" class="form-control" disabled>
 																<option value="0">Select Project</option>
-																<% for(ProjectData builderProject :builderProjects) { %>
+																<% if(builderProjects != null){
+																for(ProjectData builderProject :builderProjects) { %>
 																<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
-																<% } %>
+																<% }} %>
 															</select>
 			                                             </div>
 	                                             		<div class="messageContainer col-sm-offset-3"></div>
@@ -898,6 +903,10 @@ $("#building").click(function(){
 $("#flat").click(function(){
 	window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>&flat_id=<%out.print(flat_id); %>";
 });
+$("#viewFlatDetails").click(function(){
+	 $('.active').removeClass('active').next('li').addClass('active');
+     $("#vimessages1").addClass('active');
+});
 function calculateAmount(id){
 	if($("#payable"+id).val() <0 || $("#payable"+id).val() >100){
 		alert("The percentage must be between 0 and 100");
@@ -982,6 +991,8 @@ function txtEnabaleDisable(id){
 		$("#discount_amount"+id).val('');
 	 }
 }
+var $select_floor = null;
+
 $select_building = $("#filter_building_id").selectize({
 	persist: false,
 	 onChange: function(value) {
@@ -998,14 +1009,13 @@ $select_building = $("#filter_building_id").selectize({
 						persist: false,
 						 onChange: function(value1) {
 							 if($("#filter_floor_id").val() > 0 || $("#filter_floor_id").val() != '' ){
-								 $select_flat[0].selectize.destroy();
 								 $.get("${baseUrl}/webapi/project/building/flat/list/",{ floor_id: $("#filter_floor_id").val() }, function(data){
 										var html = '<option value="">Enter Flat Number</option>';
 										if(data != ""){
 											$(data).each(function(index){
 												html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 											});
-											
+											 $select_flat[0].selectize.destroy();
 											$("#filter_flat_id").html(html);
 											$select_flat = $("#filter_flat_id").selectize({
 												persist: false,
@@ -1014,7 +1024,7 @@ $select_building = $("#filter_building_id").selectize({
 															window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+$("#filter_floor_id").val()+"&flat_id="+value2;
 														}
 												 },
-												 onDropdownOpen: function(value){
+												 onDropdownOpen: function(value2){
 											   	 var obj = $(this);
 													var textClear =	 $("#filter_flat_id :selected").text();
 											   	 if(textClear.trim() == "Enter Flat Name"){
@@ -1023,6 +1033,7 @@ $select_building = $("#filter_building_id").selectize({
 											    }
 											});
 										}else{
+											if($select_flat)
 											$select_flat[0].selectize.destroy();
 											$("#filter_flat_id").html("");
 											$("#flatDetailsTab").hide();
@@ -1030,10 +1041,10 @@ $select_building = $("#filter_building_id").selectize({
 											$("#flatDetailstab1").show();
 											$select_flat = $("#filter_flat_id").selectize({
 												persist: false,
-												 onChange: function(value) {
+												 onChange: function(value2) {
 
 												 },
-												 onDropdownOpen: function(value){
+												 onDropdownOpen: function(value2){
 											   	 var obj = $(this);
 													var textClear =	 $("#filter_flat_id :selected").text();
 											   	 if(textClear.trim() == "Enter Flat Number"){
@@ -1045,7 +1056,7 @@ $select_building = $("#filter_building_id").selectize({
 									},'json');
 								}
 						 },
-						 onDropdownOpen: function(value){
+						 onDropdownOpen: function(value1){
 					   	 var obj = $(this);
 							var textClear =	 $("#filter_floor_id :selected").text();
 					   	 if(textClear.trim() == "Enter Floor Name"){
@@ -1060,14 +1071,14 @@ $select_building = $("#filter_building_id").selectize({
 					$("#filter_floor_id").html("");
 					$("#filter_flat_id").html("");
 					$("#flatDetailsTab").hide();
-					$("#flatDetailsTab1").html("Sorry No floor found..");
+					$("#flatDetailsTab1").html("Sorry No floor and flat found..");
 					$("#flatDetailstab1").show();
 					$select_floor = $("#filter_floor_id").selectize({
 						persist: false,
-						 onChange: function(value) {
+						 onChange: function(value1) {
 
 						 },
-						 onDropdownOpen: function(value){
+						 onDropdownOpen: function(value1){
 					   	 var obj = $(this);
 							var textClear =	 $("#filter_floor_id :selected").text();
 					   	 if(textClear.trim() == "Enter Floor Name"){
@@ -1077,10 +1088,10 @@ $select_building = $("#filter_building_id").selectize({
 					});
 					$select_flat = $("#filter_flat_id").selectize({
 						persist: false,
-						 onChange: function(value) {
+						 onChange: function(value2) {
 
 						 },
-						 onDropdownOpen: function(value){
+						 onDropdownOpen: function(value2){
 					   	 var obj = $(this);
 							var textClear =	 $("#filter_flat_id :selected").text();
 					   	 if(textClear.trim() == "Enter Flat Number"){
@@ -1122,12 +1133,12 @@ $select_floor = $("#filter_floor_id").selectize({
 					$select_flat = $("#filter_flat_id").selectize({
 						persist: false,
 						 onChange: function(value2) {
-							 if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '' ) && ($("#filter_floor_id").val() > 0 && $("#filter_building_id").val() != '') && (value > 0 && value != '')){
+							 if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '' ) && ($("#filter_floor_id").val() > 0 && $("#filter_floor_id").val() != '') && (value2 > 0 && value2 != '')){
 									window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+$("#filter_floor_id").val()+"&flat_id="+value2;
 									
 								}
 						 },
-						 onDropdownOpen: function(value){
+						 onDropdownOpen: function(value2){
 					   	 var obj = $(this);
 							var textClear =	 $("#filter_flat_id :selected").text();
 					   	 if(textClear.trim() == "Enter Flat Name"){
@@ -1143,10 +1154,10 @@ $select_floor = $("#filter_floor_id").selectize({
 			$("#flatDetailstab1").show();
 			$select_flat = $("#filter_flat_id").selectize({
 				persist: false,
-				 onChange: function(value) {
+				 onChange: function(value2) {
 
 				 },
-				 onDropdownOpen: function(value){
+				 onDropdownOpen: function(value2){
 			   	 var obj = $(this);
 					var textClear =	 $("#filter_flat_id :selected").text();
 			   	 if(textClear.trim() == "Enter Flat Number"){
@@ -1169,13 +1180,13 @@ $select_floor = $("#filter_floor_id").selectize({
 });
 
 <% if(floor_size_list > 0){%>
-  select_floor = $select_floor[0].selectize;
+  	select_floor = $select_floor[0].selectize;
 <%}%>
 
 $select_flat = $("#filter_flat_id").selectize({
 	persist: false,
 	 onChange: function(value) {
-		 if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '' ) && ($("#filter_floor_id").val() > 0 && $("#filter_building_id").val() != '') && (value > 0 && value != '')){
+		 if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '' ) && ($("#filter_floor_id").val() > 0 && $("#filter_floor_id").val() != '') && (value > 0 && value != '')){
 			 window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+$("#filter_floor_id").val()+"&flat_id="+value;
 		 }
 	 },
@@ -1187,6 +1198,10 @@ $select_flat = $("#filter_flat_id").selectize({
 	   	 }
 	    }
 	});
+	
+<% if(flat_size_list > 0){%>
+ 	select_flat = $select_flat[0].selectize;
+<%}%>
 
 $('#possession_date').datepicker({
 	autoclose:true,

@@ -3299,7 +3299,7 @@ public class ProjectController extends ResourceConfig {
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderFlat builderFlat = projectDAO.getBuildingFlatById(flat_id).get(0);
 		BuilderFlatType builderFlatType = projectDAO.getBuilderFlatType(flat_type_id);
-		
+		List<PaymentInfoData> paymentInfoDatas = null;
 		Double totalCost = 0.0;
 		Double baseSaleValue = base_rate * builderFlatType.getSuperBuiltupArea()+rise_rate+amenity_rate;
 		Double newBaseRateValue = baseSaleValue;
@@ -3330,6 +3330,58 @@ public class ProjectController extends ResourceConfig {
 			msg = projectDAO.updateFlatPriceInfo(flatPricingDetails);
 		} else {
 			msg = projectDAO.addFlatPriceInfo(flatPricingDetails);
+		}
+		List<FlatPaymentSchedule> flatPaymentSchedules = projectDAO.getFlatPaymentSchedule(flat_id);
+		List<FlatPaymentSchedule> updateFlatPayment = new ArrayList<FlatPaymentSchedule>();
+		if(flatPaymentSchedules == null){
+			paymentInfoDatas = projectDAO.getFlatPaymentSchedules(flat_id);
+		}
+		if(flatPaymentSchedules != null && flatPaymentSchedules.size() > 0){
+			for(int w=0;w<flatPaymentSchedules.size();w++){
+				FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+				flatPaymentSchedule.setId(flatPaymentSchedules.get(w).getId());
+				flatPaymentSchedule.setMilestone(flatPaymentSchedules.get(w).getMilestone());
+				flatPaymentSchedule.setPayable(flatPaymentSchedules.get(w).getPayable());
+				flatPaymentSchedule.setAmount(totalCost*flatPaymentSchedules.get(w).getPayable()/100);
+				flatPaymentSchedule.setStatus(flatPaymentSchedules.get(w).getStatus());
+				flatPaymentSchedule.setBuilderFlat(builderFlat);
+				updateFlatPayment.add(flatPaymentSchedule);
+			}
+			if(updateFlatPayment.size() > 0){
+				projectDAO.updateFlatPaymentInfo(updateFlatPayment);
+			}
+		}else{
+			// if flat payment is not present child then call parent class of that child
+			byte milestone_status = 0;
+			List<FlatPaymentSchedule> newFlatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
+			if(paymentInfoDatas != null){
+				
+				for(int u = 0;u < paymentInfoDatas.size();u++){
+					FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+					flatPaymentSchedule.setMilestone(paymentInfoDatas.get(u).getName());
+					flatPaymentSchedule.setPayable(paymentInfoDatas.get(u).getPayable());
+					flatPaymentSchedule.setAmount(totalCost*paymentInfoDatas.get(u).getPayable()/100);
+					flatPaymentSchedule.setStatus(milestone_status);
+					flatPaymentSchedule.setBuilderFlat(builderFlat);
+					newFlatPaymentSchedules.add(flatPaymentSchedule);
+				}
+				if(newFlatPaymentSchedules.size() > 0){
+					projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
+				}
+			}else{
+				for(int u = 0;u < paymentInfoDatas.size();u++){
+					FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+					flatPaymentSchedule.setMilestone(paymentInfoDatas.get(u).getName());
+					flatPaymentSchedule.setPayable(paymentInfoDatas.get(u).getPayable());
+					flatPaymentSchedule.setAmount(totalCost*paymentInfoDatas.get(u).getPayable()/100);
+					flatPaymentSchedule.setStatus(milestone_status);
+					flatPaymentSchedule.setBuilderFlat(builderFlat);
+					newFlatPaymentSchedules.add(flatPaymentSchedule);
+				}
+				if(newFlatPaymentSchedules.size() > 0){
+					projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
+				}
+			}
 		}
 		return msg;
 	}
@@ -4035,80 +4087,132 @@ public class ProjectController extends ResourceConfig {
 		//BuilderFlat builderFlat = new BuilderFlat();
 		BuilderFlat builderFlat = projectDAO.getBuildingFlatById(flat_id).get(0);
 		BuilderFlatType builderFlatType = projectDAO.getBuilderFlatType(flat_type_id);
-		List<FlatOfferInfo> flatOfferInfos = projectDAO.getFlatOffersByFlatId(flat_id);
+		List<FlatOfferInfo> flatOfferInfos = null;
+		List<PaymentInfoData> paymentInfoDatas = null;
 		Double totalCost = 0.0;
 		FlatPricingDetails flatPricingDetails = projectDAO.getFlatPriceDetails(flat_id);
 		Double baseSaleValue = flatPricingDetails.getBasePrice() * builderFlatType.getSuperBuiltupArea()+flatPricingDetails.getRiseRate()+flatPricingDetails.getAmenityRate();
-		Double newBaseRateValue = baseSaleValue;
-		if(discount_amount != null && discount_amount.size() > 0){
-			 for(int i=0;i<flatOfferInfos.size();i++){
-				 if(flatOfferInfos.get(i).getType() == 1){
-					 newBaseRateValue = newBaseRateValue * discount_amount.get(i).getValueAs(Double.class).doubleValue()/100;
-				 }
-				 if(flatOfferInfos.get(i).getType() == 2){
-					 newBaseRateValue = newBaseRateValue - discount_amount.get(i).getValueAs(Double.class).doubleValue();
-				 }
-			 }
-			 totalCost = newBaseRateValue + flatPricingDetails.getParking() + flatPricingDetails.getMaintenance() + flatPricingDetails.getStampDuty() + flatPricingDetails.getTax() + flatPricingDetails.getVat() + flatPricingDetails.getFee();
-		}else{
-			totalCost = getFlatTotalCost(flat_id,flatPricingDetails.getBasePrice(),flatPricingDetails.getRiseRate(),flatPricingDetails.getPost(),flatPricingDetails.getAmenityRate(),flatPricingDetails.getParkingId(),flatPricingDetails.getParking(),flatPricingDetails.getMaintenance(),flatPricingDetails.getStampDuty(),flatPricingDetails.getTax(),flatPricingDetails.getVat(),flatPricingDetails.getAreaUnit().getId());
-		}
-		builderFlat.setBaseSaleValue(baseSaleValue);
-		builderFlat.setDiscount(newBaseRateValue);
-		builderFlat.setId(flat_id);
-		flatPricingDetails.setTotalCost(totalCost);
+		Double discount = baseSaleValue;
 	
-		if (offer_title.size() > 0) {
-			List<FlatOfferInfo> newFlatOfferInfos = new ArrayList<FlatOfferInfo>();
-			List<FlatOfferInfo> updateFlatOfferInfos = new ArrayList<FlatOfferInfo>();
-			int i = 0;
-			for(FormDataBodyPart title : offer_title)
-			{
-				if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
-					if(offer_id.get(i).getValueAs(Integer.class) != 0 && offer_id.get(i).getValueAs(Integer.class) != null) {
-						FlatOfferInfo flatOfferInfo = new FlatOfferInfo();
-						flatOfferInfo.setId(offer_id.get(i).getValueAs(Integer.class));
-						flatOfferInfo.setTitle(title.getValueAs(String.class).toString());
-						try{
-							flatOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
-						}catch(Exception e){
-							flatOfferInfo.setAmount(0.0);
+		if(offer_title != null){
+			if (offer_title.size() > 0) {
+				
+				List<FlatOfferInfo> newFlatOfferInfos = new ArrayList<FlatOfferInfo>();
+				List<FlatOfferInfo> updateFlatOfferInfos = new ArrayList<FlatOfferInfo>();
+				int i = 0;
+				for(FormDataBodyPart title : offer_title)
+				{
+					if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
+						if(offer_id.get(i).getValueAs(Integer.class) != 0 && offer_id.get(i).getValueAs(Integer.class) != null) {
+							FlatOfferInfo flatOfferInfo = new FlatOfferInfo();
+							flatOfferInfo.setId(offer_id.get(i).getValueAs(Integer.class));
+							flatOfferInfo.setTitle(title.getValueAs(String.class).toString());
+							try{
+								flatOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
+							}catch(Exception e){
+								flatOfferInfo.setAmount(0.0);
+							}
+							//buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
+							flatOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
+							flatOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
+							flatOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
+							flatOfferInfo.setBuilderFlat(builderFlat);
+							updateFlatOfferInfos.add(flatOfferInfo);
+						} else {
+							FlatOfferInfo flatOfferInfo = new FlatOfferInfo();
+							flatOfferInfo.setTitle(title.getValueAs(String.class).toString());
+							try{
+								flatOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
+							}catch(Exception e){
+								flatOfferInfo.setAmount(0.0);
+							}
+						//	buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
+							flatOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
+							flatOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
+							flatOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
+							flatOfferInfo.setBuilderFlat(builderFlat);
+							newFlatOfferInfos.add(flatOfferInfo);
 						}
-						//buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
-						flatOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
-						flatOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
-						flatOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
-						flatOfferInfo.setBuilderFlat(builderFlat);
-						updateFlatOfferInfos.add(flatOfferInfo);
-					} else {
-						FlatOfferInfo flatOfferInfo = new FlatOfferInfo();
-						flatOfferInfo.setTitle(title.getValueAs(String.class).toString());
-						try{
-							flatOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
-						}catch(Exception e){
-							flatOfferInfo.setAmount(0.0);
+					}
+					i++;
+				}
+				if(updateFlatOfferInfos.size() > 0) {
+					projectDAO.updateFlatOfferInfo(updateFlatOfferInfos);
+				}
+				if(newFlatOfferInfos.size() > 0) {
+					projectDAO.addFlatOfferInfo(newFlatOfferInfos);
+				}
+				msg.setStatus(1);
+				msg.setMessage("Flat offer updated successfully.");
+				
+				flatOfferInfos = projectDAO.getFlatOffersByFlatId(flat_id);
+				if((discount_amount != null && discount_amount.size() > 0) && (flatOfferInfos != null && flatOfferInfos.size() > 0)){
+					 for(int a=0;a<flatOfferInfos.size();a++){
+							 if(offer_type.get(a).getValueAs(Integer.class) != 0 && offer_type.get(a).getValueAs(Integer.class) != null){
+							 if(offer_type.get(a).getValueAs(Integer.class).intValue() == 1){
+								 discount = discount * discount_amount.get(a).getValueAs(Double.class).doubleValue()/100;
+							 }
+							 if(offer_type.get(a).getValueAs(Integer.class).intValue() == 2){
+								 discount = discount - discount_amount.get(a).getValueAs(Double.class).doubleValue();
+							 }
+						 }
+					 }
+					 totalCost = discount + flatPricingDetails.getParking() + flatPricingDetails.getMaintenance() + flatPricingDetails.getStampDuty() + flatPricingDetails.getTax() + flatPricingDetails.getVat() + flatPricingDetails.getFee();
+				}else{
+					totalCost = getFlatTotalCost(flat_id,flatPricingDetails.getBasePrice(),flatPricingDetails.getRiseRate(),flatPricingDetails.getPost(),flatPricingDetails.getAmenityRate(),flatPricingDetails.getParkingId(),flatPricingDetails.getParking(),flatPricingDetails.getMaintenance(),flatPricingDetails.getStampDuty(),flatPricingDetails.getTax(),flatPricingDetails.getVat(),flatPricingDetails.getAreaUnit().getId());
+				}
+				builderFlat.setBaseSaleValue(baseSaleValue);
+				builderFlat.setDiscount(discount);
+				builderFlat.setId(flat_id);
+				flatPricingDetails.setTotalCost(totalCost);
+				
+				
+				List<FlatPaymentSchedule> flatPaymentSchedules = projectDAO.getFlatPaymentSchedule(flat_id);
+				List<FlatPaymentSchedule> updateFlatPayment = new ArrayList<FlatPaymentSchedule>();
+				if(flatPaymentSchedules == null){
+					paymentInfoDatas = projectDAO.getFlatPaymentSchedules(flat_id);
+				}
+				if(flatPaymentSchedules != null && flatPaymentSchedules.size() > 0){
+					for(int w = 0;w < flatPaymentSchedules.size(); w++){
+						FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+						flatPaymentSchedule.setId(flatPaymentSchedules.get(w).getId());
+						flatPaymentSchedule.setMilestone(flatPaymentSchedules.get(w).getMilestone());
+						flatPaymentSchedule.setPayable(flatPaymentSchedules.get(w).getPayable());
+						flatPaymentSchedule.setAmount(totalCost*flatPaymentSchedules.get(w).getPayable()/100);
+						flatPaymentSchedule.setStatus(flatPaymentSchedules.get(w).getStatus());
+						flatPaymentSchedule.setBuilderFlat(builderFlat);
+						updateFlatPayment.add(flatPaymentSchedule);
+					}
+					if(updateFlatPayment.size() > 0){
+						projectDAO.updateFlatPaymentInfo(updateFlatPayment);
+					}
+				}else{
+					byte milestone_status = 0;
+					List<FlatPaymentSchedule> newFlatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
+					if(paymentInfoDatas != null){
+						for(int u = 0;u < paymentInfoDatas.size();u++){
+							FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+							flatPaymentSchedule.setMilestone(paymentInfoDatas.get(u).getName());
+							flatPaymentSchedule.setPayable(paymentInfoDatas.get(u).getPayable());
+							flatPaymentSchedule.setAmount(totalCost*paymentInfoDatas.get(u).getPayable()/100);
+							flatPaymentSchedule.setStatus(milestone_status);
+							flatPaymentSchedule.setBuilderFlat(builderFlat);
+							newFlatPaymentSchedules.add(flatPaymentSchedule);
 						}
-					//	buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
-						flatOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
-						flatOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
-						flatOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
-						flatOfferInfo.setBuilderFlat(builderFlat);
-						newFlatOfferInfos.add(flatOfferInfo);
+						if(newFlatPaymentSchedules.size() > 0){
+							projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
+						}
 					}
 				}
-				i++;
+			} else {
+				msg.setMessage("Failed to update Flat offers.");
+				msg.setStatus(0);
 			}
-			if(updateFlatOfferInfos.size() > 0) {
-				projectDAO.updateFlatOfferInfo(updateFlatOfferInfos);
-			}
-			if(newFlatOfferInfos.size() > 0) {
-				projectDAO.addFlatOfferInfo(newFlatOfferInfos);
-			}
-			msg.setStatus(1);
-			msg.setMessage("Flat offer updated successfully.");
-		} else {
-			msg.setMessage("Failed to update Flat offers.");
-			msg.setStatus(0);
+			
+		}else{
+			builderFlat.setBaseSaleValue(baseSaleValue);
+			builderFlat.setDiscount(0.0);
+			builderFlat.setId(flat_id);
 		}
 		projectDAO.updateFlatPriceInfo(flatPricingDetails);
 		projectDAO.updateBuildingFlat(builderFlat);
@@ -4125,4 +4229,3 @@ public class ProjectController extends ResourceConfig {
 		return msg;
 	}
 }
-

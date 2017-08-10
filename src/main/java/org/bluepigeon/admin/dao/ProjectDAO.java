@@ -2522,10 +2522,8 @@ public class ProjectDAO {
 				paymentInfoData.setAmount(flatPaymentSchedule.getAmount());
 				paymentInfoData.setPayable(flatPaymentSchedule.getPayable());
 				paymentInfoDatas.add(paymentInfoData);
-				System.out.println("GT :: "+flatPaymentSchedule.getPayable());
 			}
 		}else{
-			System.err.println("TR :: "+flat_id);
 			BuilderFlat flat =  getBuilderFlatById(flat_id);
 			List<BuildingPaymentInfo> buildingPaymentInfos = getActiveBuilderBuildingPaymentInfoById(flat.getBuilderFloor().getBuilderBuilding().getId());
 			for(BuildingPaymentInfo buildingPaymentInfo : buildingPaymentInfos){
@@ -2538,7 +2536,7 @@ public class ProjectDAO {
 			}
 		}
 		}catch(IndexOutOfBoundsException e){
-			e.printStackTrace();
+			//e.printStackTrace();
 			BuilderFlat flat =  getBuilderFlatById(flat_id);
 			try{
 				List<BuildingPaymentInfo> buildingPaymentInfos = getActiveBuilderBuildingPaymentInfoById(flat.getBuilderFloor().getBuilderBuilding().getId());
@@ -2579,6 +2577,7 @@ public class ProjectDAO {
 		session.close();
 		return paymentInfoDatas;
 	}
+	
 	public List<BuilderProjectPaymentInfo> getActiveProjectPaymentInfo(int projectId){
 		String hql = "from BuilderProjectPaymentInfo where builderProject.id = :project_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -2591,9 +2590,8 @@ public class ProjectDAO {
 		}else{
 			return null;
 		}
-				
-				
 	}
+	
 	public BuilderFlat getBuilderFlatById(int flatId){
 		BuilderFlat builderFlat = null;
 		String hql = "from BuilderFlat where id = :id";
@@ -2795,9 +2793,55 @@ public class ProjectDAO {
 	}
 	
 	public ResponseMessage deleteFlatOfferInfo(int id) {
+		
 		ResponseMessage resp = new ResponseMessage();
+		String resetHql = "from FlatOfferInfo where id = :id";
 		String hql = "delete from FlatOfferInfo where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
+		
+		/************** Reset original amount of flat with updated discount before deleting offer***************/
+		Session resetSession = hibernateUtil.openSession();
+		Query resetQuery = resetSession.createQuery(resetHql);
+		resetQuery.setParameter("id", id);
+		FlatOfferInfo result = (FlatOfferInfo)resetQuery.list().get(0);
+		
+		FlatPricingDetails flatPricingDetails = getFlatPriceDetails(result.getBuilderFlat().getId());
+		Double totalCost = flatPricingDetails.getTotalCost();
+		BuilderFlat flat = getBuildingFlatById(result.getBuilderFlat().getId()).get(0);
+		List<FlatPaymentSchedule> flatPaymentSchedules = getBuilderFlatPaymentSchedules(result.getBuilderFlat().getId());
+		List<FlatPaymentSchedule> updateFlatPayment = new ArrayList<FlatPaymentSchedule>();
+		Double discount = flat.getDiscount();
+		
+		if(result != null){
+			if(result.getType() == 1){
+				totalCost = totalCost * result.getAmount();
+				discount = discount * result.getAmount();
+			}
+			if(result.getType() == 2){
+				totalCost = totalCost + result.getAmount();
+				discount = discount + result.getAmount();
+			}
+		}
+		if(flatPaymentSchedules != null && flatPaymentSchedules.size() > 0){
+			for(int w = 0;w < flatPaymentSchedules.size(); w++){
+				FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+				flatPaymentSchedule.setId(flatPaymentSchedules.get(w).getId());
+				flatPaymentSchedule.setMilestone(flatPaymentSchedules.get(w).getMilestone());
+				flatPaymentSchedule.setPayable(flatPaymentSchedules.get(w).getPayable());
+				flatPaymentSchedule.setAmount(totalCost*flatPaymentSchedules.get(w).getPayable()/100);
+				flatPaymentSchedule.setStatus(flatPaymentSchedules.get(w).getStatus());
+				flatPaymentSchedule.setBuilderFlat(flat);
+				updateFlatPayment.add(flatPaymentSchedule);
+			}
+			if(updateFlatPayment.size() > 0){
+				updateFlatPaymentInfo(updateFlatPayment);
+			}
+		}
+		flat.setDiscount(discount);
+		updateBuildingFlat(flat);
+		flatPricingDetails.setTotalCost(totalCost);
+		updateFlatPriceInfo(flatPricingDetails);
+	 /*********************Delete flat Offer***************/	
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
@@ -5018,13 +5062,38 @@ public class ProjectDAO {
 		return builderFlatType;
 		
 	}
+	
+	/**
+	 * @author pankaj
+	 * @param flatId
+	 * @return FlatPricingDetails
+	 */
     public FlatPricingDetails getFlatPriceDetails(int flatId){
     	String hql = "from FlatPricingDetails where builderFlat.id = :flat_id";
     	HibernateUtil hibernateUtil = new HibernateUtil();
     	Session session = hibernateUtil.openSession();
     	Query query = session.createQuery(hql);
     	query.setParameter("flat_id", flatId);
+    	try{
     	FlatPricingDetails flatPricingDetails = (FlatPricingDetails) query.list().get(0);
     	return flatPricingDetails;
+    	}catch(Exception e){
+    		return null;
+    	}
+    }
+    
+    /**
+     * @author pankaj
+     * @param flatId
+     * @return List<FlatPaymentSchedule>
+     */
+    public List<FlatPaymentSchedule> getFlatPaymentSchedule(int flatId){
+    	String hql = "from FlatPaymentSchedule where builderFlat.id = :flat_id";
+    	HibernateUtil hibernateUtil = new HibernateUtil();
+    	Session session = hibernateUtil.openSession();
+    	Query query = session.createQuery(hql);
+    	query.setParameter("flat_id", flatId);
+    	List<FlatPaymentSchedule> result = query.list();
+    	return result;
     }
 }
