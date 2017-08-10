@@ -5028,8 +5028,12 @@ public class ProjectDAO {
     	Session session = hibernateUtil.openSession();
     	Query query = session.createQuery(hql);
     	query.setParameter("flat_id", flatId);
+    	try{
     	FlatPricingDetails flatPricingDetails = (FlatPricingDetails) query.list().get(0);
     	return flatPricingDetails;
+    	}catch(Exception e){
+    		return null;
+    	}
     }
     
     /**
