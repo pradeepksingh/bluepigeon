@@ -11,7 +11,7 @@ public class ProjectList {
 	private String builderName;
 	private int cityId;
 	private String cityName;
-	private int localityId;
+	private int localityId=0;
 	private String localityName;
 	private double sold = 0.0;
 	private double totalSold = 0.0;

@@ -186,19 +186,34 @@ public class ProjectController extends ResourceConfig {
 		return new BuilderDetailsDAO().getProjectFilterListByBuilderId(builderId);
 	}
 	
+//	@POST
+//	@Path("/filter/builderemp")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public List<BuilderProjectList> getProjectsByBuilderEmployee(
+//			@FormParam("project_id") int projectId,
+//			@FormParam("emp_id") int empId,
+//			@FormParam("country_id") int countryId,
+//			@FormParam("state_id") int stateId,
+//			@FormParam("city_id") int cityId,
+//			@FormParam("locality_id") int localityId
+//			){
+//		
+//		return new BuilderDetailsDAO().getProjectFilter(projectId,empId,countryId,stateId,cityId,localityId);
+//	}
+	
 	@POST
 	@Path("/filter/builderemp")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuilderProjectList> getProjectsByBuilderEmployee(
 			@FormParam("project_id") int projectId,
-			@FormParam("emp_id") int emp_id,
-			@FormParam("country_id") int country_id,
-			@FormParam("state_id") int state_id,
-			@FormParam("city_id") int city_id,
-			@FormParam("locality_id") int locality_id
+			@FormParam("emp_id") int empId,
+			@FormParam("country_id") int countryId,
+			@FormParam("state_id") int stateId,
+			@FormParam("city_id") int cityId,
+			@FormParam("locality_name") String localityName
 			){
 		
-		return new BuilderDetailsDAO().getProjectFilter(projectId,emp_id,country_id,state_id,city_id,locality_id);
+		return new BuilderDetailsDAO().getProjectFilter(projectId,empId,countryId,stateId,cityId,localityName);
 	}
 	
 	@POST

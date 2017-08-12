@@ -67,7 +67,6 @@
 				p_user_id = adminuserproject.getBuilder().getId();
 				builderProjects = new ProjectDAO().getActiveProjectsByBuilderId(p_user_id);
 				if(building_id>0 && project_id > 0){
-					System.err.println("projectId :: "+project_id+" \n Building Id :: "+building_id);
 					builderBuildings = new ProjectDAO().getBuilderProjectBuildingById(building_id);
 					if(builderBuildings.size() > 0) {
 						builderBuilding = builderBuildings.get(0);

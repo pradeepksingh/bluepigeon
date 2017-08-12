@@ -50,7 +50,7 @@
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="linea-icon linea-basic fa-fw" data-icon="7"></i> <span class="hide-menu">Project<span class="fa arrow"></span> 
 <!--                     </span></a> -->
                         <ul class="nav nav-second-level">
-                            <li> <a href="${baseUrl }/builder/project/new.jsp">Add</a> </li>
+<%--                             <li> <a href="${baseUrl }/builder/project/new.jsp">Add</a> </li> --%>
                             <li> <a href="${baseUrl }/builder/project/list.jsp">Manage Project</a></li>
                              <li> <a href="${baseUrl }/builder/project/building/list.jsp">Manage Buildings</a></li>
                               <li> <a href="${baseUrl }/builder/project/building/floor/list.jsp">Manage Floor</a></li>
