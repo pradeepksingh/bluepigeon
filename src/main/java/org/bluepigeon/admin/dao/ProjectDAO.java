@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.bluepigeon.admin.data.BookingFlatList;
 import org.bluepigeon.admin.data.BuilderCompletionStatus;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuildingList;
@@ -5246,6 +5247,89 @@ public class ProjectDAO {
     }
     
     
+    public BookingFlatList getFlatdetails(int projectId, int buildingId, int floorId,int evenOrodd){
+    	BookingFlatList booking = new BookingFlatList();
+    	String hql =" from BuilderFlat where ";
+    	String where = "";
+    	if(projectId > 0){
+    		where += " builderFloor.builderBuilding.builderProject.id = :project_id AND builderFloor.builderBuilding.builderProject.status = 1";
+    	}
+    	if(buildingId > 0){
+    		if(where != ""){
+    			where += " AND builderFloor.builderBuilding.id = :building_id AND builderFloor.builderBuilding.status = 1";
+    		}else{
+    			where += " builderFloor.builderBuilding.id = :building_id AND builderFloor.builderBuilding.status = 1";
+    		}
+    	}
+    	if(floorId > 0){
+    		if(where != ""){
+    			where +=" AND builderFloor.id = :builderFloor_id AND builderFloor.status = 1 ";
+    		}else{
+    			where +=" builderFloor.id = :builderFloor AND builderFloor.status = 1 ";
+    		}
+    	}
+    	if(evenOrodd > 0){
+    		if(evenOrodd % 2 == 0){
+				if(where != null){
+					where += " AND builderFloor.floorNo % 2 = 0 AND builderFloor.status=1";
+				}else{
+					where +=" builderFloor.floorNo % 2 = 0 AND builderFloor.status=1";
+				}
+			}else{
+				if(where != null){
+					where +=" AND builderFloor.floorNo %2 <> 0 AND builderFloor.status=1";
+				}else{
+					where +=" builderFloor.floorNo %2 <> 0 AND builderFloor.status=1";
+				}
+			}
+    	}
+    	hql += where+" AND status = 1 ORDER BY builderFloor.builderBuilding.builderProject.id DESC, builderFloor.builderBuilding.id DESC, builderFloor.floorNo DESC, flatNo DESC";
+    	HibernateUtil hibernateUtil = new HibernateUtil();
+    	Session session = hibernateUtil.openSession();
+    	Query query = session.createQuery(hql);
+    	if(projectId > 0){
+    		query.setParameter("project_id", projectId);
+    	}
+    	if(buildingId > 0){
+    		query.setParameter("building_id", buildingId);
+    	}
+    	if(floorId > 0){
+    		query.setParameter("floor_id", floorId);
+    	}
+    	try{
+	    	BuilderFlat builderFlat = (BuilderFlat) query.list().get(0);
+	    	if(builderFlat != null){
+	    		booking.setFlatId(builderFlat.getId());
+	    		booking.setFlatNo(builderFlat.getFlatNo());
+	    		booking.setBalcony(builderFlat.getBalcony());
+	    		booking.setBathroom(builderFlat.getBathroom());
+	    		booking.setBedroom(builderFlat.getBedroom());
+	    		booking.setCarpetArea(builderFlat.getBuilderFlatType().getCarpetArea());
+	    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
+	    		if(builderFlat.getImage() != null && builderFlat.getImage() != "")
+	    			booking.setImage(builderFlat.getImage());
+	    		else
+	    			booking.setImage("");
+	    		booking.setFlatType(builderFlat.getBuilderFlatType().getBuilderProjectPropertyConfiguration().getName());
+	    		BuilderBuildingFlatTypeRoom room = getFlatTypeRoom(builderFlat.getBuilderFlatType().getId());
+	    		booking.setBreadth(room.getBreadth());
+	    		booking.setLength(room.getLength());
+	    		if(room.getLengthUnit() == 1)
+	    			booking.setAreaUint("Feet");
+	    		if(room.getLengthUnit() == 2)
+	    			booking.setAreaUint("Meter");
+	    		if(room.getLengthUnit() == 3)
+	    			booking.setAreaUint("Inch");
+	    		if(room.getLengthUnit() == 4)
+	    			booking.setRoomName("Yard");
+	    	//	booking.setCarpetAreaunit(builderFlat.getBuilderFlatType().);
+	    	}
+    	}catch(Exception e){
+    		booking = null;
+    	}
+    	return booking;
+    }
+    
 //    public int getFloorCountByBuildingId(int buildingId){
 //    	int floorCount = 0;
 //    	String hql = "select COUNT(id) from BuilderFloor where builderBuilding.id = :building_id";
@@ -5256,4 +5340,29 @@ public class ProjectDAO {
 //    	floorCount = (int)query.uniqueResult();
 //    	return floorCount;
 //    }
+    
+    public BuilderBuildingFlatTypeRoom getFlatTypeRoom(int flatTypeId){
+    	String hql = "from BuilderBuildingFlatTypeRoom where builderFlatType.id = :flat_type_id";
+    	HibernateUtil hibernateUtil = new HibernateUtil();
+    	Session session = hibernateUtil.openSession();
+    	Query query = session.createQuery(hql);
+    	query.setParameter("flat_type_id", flatTypeId);
+    	BuilderBuildingFlatTypeRoom builderBuildingFlatTypeRoom = (BuilderBuildingFlatTypeRoom) query.list().get(0);
+    	return builderBuildingFlatTypeRoom;		
+    }
+    /**
+     * Get all project offers by project id
+     * @author pankaj
+     * @param projectId
+     * @return
+     */
+    public List<BuilderProjectOfferInfo> getProjectOffersByProjectId(int projectId){
+    	String hql = "from BuilderProjectOfferInfo where builderProject.id = :project_id";
+    	HibernateUtil hibernateUtil = new HibernateUtil();
+    	Session session = hibernateUtil.openSession();
+    	Query query =session.createQuery(hql);
+    	query.setParameter("project_id", projectId);
+    	List<BuilderProjectOfferInfo> result = query.list();
+    	return result;
+    }
 }

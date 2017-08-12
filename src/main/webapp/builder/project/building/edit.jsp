@@ -659,7 +659,7 @@
 																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 																			<div class="col-sm-8">
 																				<div>
-																					<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>">
+																					<input type="text" class="form-control" id="offer_title<%out.print(j); %>" onfocusout="checkDuplicateEntry(<%out.print(j);%>);" name="offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>">
 																				</div>
 																				<div class="messageContainer"></div>
 																			</div>
@@ -808,6 +808,32 @@ function showOffers()
 	$("#displayoffers").show(); 
 }
 
+var myarray = [];
+<%if(buildingOfferInfos != null){ 
+	for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) { 
+%>
+ myarray.push("<%out.print(buildingOfferInfo.getTitle());%>");
+ <%}}%>
+function checkDuplicateEntry(id){
+	
+	var offers = $("#offer_title"+id).val();
+	if($.inArray(offers,myarray) !== -1){
+		if(myarray.indexOf(offers) != -1){
+			alert("Duplicate Entery of offer");
+			$("#offer_title"+id).val('');
+		}else{
+			myarray.push(offers);
+		}
+	}else{
+		if(myarray.indexOf(offers) != -1){
+			alert("Duplicate Entery of offer");
+			$("#offer_title"+id).val('');
+		}else{
+			myarray.push(offers);
+		}
+	}
+}
+
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
@@ -864,7 +890,7 @@ function addMoreOffer() {
 		+'<div class="form-group" id="error-applicable_on">'
 		+'<label class="control-label col-sm-6">Offer Type </label>'
 		+'<div class="col-sm-6">'
-		+'<select class="form-control"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
+		+'<select class="form-control"  id="offer_title'+offers+'" onfocusout="checkDuplicateEntry('+offers+');"  onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
 		+'<option value="1">Percentage</option>'
 		+'<option value="2">Flat Amount</option>'
 		+'<option value="3">Other</option>'

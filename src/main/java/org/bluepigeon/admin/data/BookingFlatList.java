@@ -4,17 +4,20 @@ import java.util.List;
 
 public class BookingFlatList {
 	private int flatId;
-	private int flatNo;
+	private String flatNo;
 	private int floorId;
 	private String image;
 	private String flatType;
-	private String carpetArea;
+	private Double carpetArea;
 	private int bedroom;
 	private int bathroom;
 	private int balcony;
 	private int flatStatus;
 	private double length;
 	private double breadth;
+	private String areaUint;
+	private String carpetAreaunit;
+	private String roomName;
 	//private String bedroomSize;
 	
 	public int getFlatId() {
@@ -23,10 +26,10 @@ public class BookingFlatList {
 	public void setFlatId(int flatId) {
 		this.flatId = flatId;
 	}
-	public int getFlatNo() {
+	public String getFlatNo() {
 		return flatNo;
 	}
-	public void setFlatNo(int flatNo) {
+	public void setFlatNo(String flatNo) {
 		this.flatNo = flatNo;
 	}
 	
@@ -49,10 +52,10 @@ public class BookingFlatList {
 	public void setFlatType(String flatType) {
 		this.flatType = flatType;
 	}
-	public String getCarpetArea() {
+	public Double getCarpetArea() {
 		return carpetArea;
 	}
-	public void setCarpetArea(String carpetArea) {
+	public void setCarpetArea(Double carpetArea) {
 		this.carpetArea = carpetArea;
 	}
 	public int getBedroom() {
@@ -96,6 +99,24 @@ public class BookingFlatList {
 	}
 	public void setBreadth(double breadth) {
 		this.breadth = breadth;
+	}
+	public String getAreaUint() {
+		return areaUint;
+	}
+	public void setAreaUint(String areaUint) {
+		this.areaUint = areaUint;
+	}
+	public String getRoomName() {
+		return roomName;
+	}
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
+	}
+	public String getCarpetAreaunit() {
+		return carpetAreaunit;
+	}
+	public void setCarpetAreaunit(String carpetAreaunit) {
+		this.carpetAreaunit = carpetAreaunit;
 	}
 	
 }

@@ -493,7 +493,7 @@
 																<input type="checkbox" name="property_type[]" value="<% out.print(builderPropertyType.getId());%>" <% out.print(is_checked); %>/> <% out.print(builderPropertyType.getName());%>
 															</div>
 															<div>
-																<input type="number" class="form-control" id="property_type<% out.print(builderPropertyType.getId());%>" name="property_type<% out.print(builderPropertyType.getId());%>" value="<% out.print(prop_value); %>" placeholder="No. Of <% out.print(builderPropertyType.getName());%>"/>
+																<input type="text" onkeyup="javascript:onlyPropertyNumbers(<%out.print(builderPropertyType.getId()); %>)" class="form-control" id="property_type<% out.print(builderPropertyType.getId());%>" name="property_type<% out.print(builderPropertyType.getId());%>" value="<% out.print(prop_value); %>" placeholder="No. Of <% out.print(builderPropertyType.getName());%>"/>
 															</div>
 														</div>
 														<% } %>
@@ -996,7 +996,7 @@
 													<div class="form-group" id="error-offer_title">
 														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>"/>
+															<input type="text" class="form-control" id="offer_title<%out.print(j); %>" onfocusout="checkDuplicateEntry(<%out.print(j);%>);"  name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -1271,6 +1271,23 @@ function isNumber(evt, element) {
     return true;
 } 
 
+var myarray=[];
+<%if(projectOfferInfos != null){
+for(BuilderProjectOfferInfo projectOfferInfo :projectOfferInfos) {%>
+myarray.push("<%out.print(projectOfferInfo.getTitle());%>");
+<%}}%>
+function checkDuplicateEntry(id){
+	var offers = $("#offer_title"+id).val();
+		if($.inArray(offers,myarray) !== -1){
+			if(myarray.indexOf(offers) != -1){
+				alert("Duplicate Entery of offer");
+				$("#offer_title"+id).val('');
+			}else{
+				myarray.push(offers);
+			}
+		}
+}
+
 function validPerAmount(id){
 	if($("#offer_type"+id).val()==1){
 			 isNumber(event, this);
@@ -1293,6 +1310,10 @@ function onlyNumber(id){
 	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
 }
 
+function onlyPropertyNumbers(id){
+	var $th = $("#property_type"+id);
+    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
+}
 
 $('#schedule').keyup(function() {
     var $th = $(this);
@@ -1940,7 +1961,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control errorMsg notEmpty" required id="offer_title" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg notEmpty" required id="offer_title'+offers+'"   onfocusout="javascript:checkDuplicateEntry('+offers+')" name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'

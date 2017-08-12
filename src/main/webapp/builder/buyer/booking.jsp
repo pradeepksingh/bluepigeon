@@ -40,6 +40,7 @@
 	BuilderProject projectList = null;
 	List<BuilderBuilding> buildingList = null;
 	List<FlatListData> flatListDatas = null;
+	BookingFlatList bookingFlatList2 = null;
 	int flat_size = 0;
 	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>();
 	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList();
@@ -64,6 +65,7 @@
 			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
 			flatListDatas = new ProjectDAO().getFlatDetails(project_id,0,0,0);
+			bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,0,0,0);
 			flat_size = flatListDatas.size();
 		
 			//building_id = builderBuildingList.get(0).getId();
@@ -169,10 +171,9 @@
                     <!-- row -->
                     
                 <div class="white-box">
-                 <div class="row">
+                 <div class="row" id="flatdetails">
                     <div class="col-md-8 col-sm-6 col-xs-12  bg1">
                         <div class="white-box" >
-                        	<div id="flatlist">
 	                        <% if(flatListDatas !=null){
 	                        for(int i=0;i<flatListDatas.size();i++){ %>
 	                           <!-- floor 1 -->
@@ -191,48 +192,48 @@
 	                        <%}} %>
 						    <!-- floor 1 -->
 						     <!-- floor 2 -->
-                        	</div>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
                      <div class="bg1">
                        <div class="tab-content">
 					     <div id="home" class="tab-pane fade in active">
-						     <img src="plugins/images/Untitled-1.png" alt="Project image" class="custom-img">
+					     	<% if(bookingFlatList2.getImage()!="" && bookingFlatList2.getImage() != null){ %>
+						     <img src="${baseUrl}/builder/<%out.print(bookingFlatList2.getImage()); %>" alt="Project image" class="custom-img">
+						     <%} %>
 						      <hr><br>
 						      <div class="row custom-row">
 						        <div class="col-md-6 col-sm-6 col-xs-6">
 						          <p class="p-custom">Flat Type</p>
-						          <span><b><%//out.print(bookingFlatList.get(0).getFlatType()); %></b></span>
+						          <span><b><%out.print(bookingFlatList2.getFlatType()); %></b></span>
 						        </div>
 						        <div class="col-md-6 col-sm-6 col-xs-6">
 						          <p class="p-custom">Carpet Area</p>
-						          <span><b><%//out.print(bookingFlatList.get(0).getCarpetArea()); %> SQ/FT</b></span>
+						          <span><b><%out.print(bookingFlatList2.getCarpetArea()); %> SQ/FT</b></span>
 						        </div>
 						      </div>
 						      <div class="row custom-row">
 						        <div class="col-md-6 col-sm-6 col-xs-6">
 						          <p class="p-custom">Bedrooms</p>
-						          <span><b><%//out.print(bookingFlatList.get(0).getBedroom()); %></b></span>
+						          <span><b><%out.print(bookingFlatList2.getBedroom()); %></b></span>
 						        </div>
 						        <div class="col-md-6 col-sm-6 col-xs-6">
 						          <p class="p-custom">Bathroom</p>
-						          <span><b><%//out.print(bookingFlatList.get(0).getBathroom()); %></b></span>
+						          <span><b><%out.print(bookingFlatList2.getBathroom()); %></b></span>
 						        </div>
 						      </div>
 						      <div class="row custom-row">
 						        <div class="col-md-6 col-sm-6 col-xs-6">
 						          <p class="p-custom">Balcony</p>
-						          <span><b><%//out.print(bookingFlatList.get(0).getBalcony()); %></b></span>
+						          <span><b><%out.print(bookingFlatList2.getBalcony()); %></b></span>
 						        </div>
 						        <div class="col-md-6 col-sm-6 col-xs-6">
-						          <p class="p-custom">Bedroom Size</p>
-						          <span><b>4.2 M * 3.2 M</b></span>
+						          <p class="p-custom"><%if(bookingFlatList2.getRoomName() != null){out.print(bookingFlatList2.getRoomName()); }%> Size</p>
+						          <span><b><%out.print(bookingFlatList2.getLength()+" x "+bookingFlatList2.getBreadth()+" "+bookingFlatList2.getAreaUint()); %></b></span>
 						        </div>
 						      </div>
-						      <button type="button" class="button">Book Now</button>
+						      <button type="button" onclick="javascript:showFlat(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button">Book Now</button>
 					     </div>
-					   
 					  </div>
                     </div>
                   </div>
@@ -248,7 +249,9 @@
   </body>
 </html>
 <script>
-
+function showFlat(id){
+	alert(id);
+}
 $select_building = $("#filter_building_id").selectize({
 	persist: false,
 	 onChange: function(value) {
@@ -340,6 +343,7 @@ $select_floor = $("#filter_floor_id").selectize({
 <%}%>
 
 function getFlatDetails(){
+
 	var no = $("#filter_building_id").val();
 // 	alert("Hello "+$("#filter_building_id").val()+" Floor No. "+$("#filter_floor_id").val());
 // 	 $("#home").empty();
@@ -381,7 +385,11 @@ function getFlatDetails(){
 // 	 $("#home").append(html);
 	
 		$.get("${baseUrl}/builder/buyer/flatlist.jsp?project_id="+<%out.print(project_id);%>+"&building_id="+no+"&floor_id="+$("#filter_floor_id").val(),{ }, function(data){
-			$("#flatlist").html(data);
+			if(data != " " && data != null){
+				$("#flatdetails").html(data);
+			}else{
+				$("#flatdetails").html("Sorry No data found.");
+			}
 			//$("#editCountry").modal('show');
 		},'html');
 	

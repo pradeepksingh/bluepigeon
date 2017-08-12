@@ -491,13 +491,40 @@ public class ProjectController extends ResourceConfig {
 			) {
 		ResponseMessage responseMessage = new ResponseMessage();
 		BuilderProject builderProject = new BuilderProject();
+		List<BuilderProjectOfferInfo> builderProjectOfferInfos = null;
+		
 		ProjectDAO projectDAO = new ProjectDAO();
+		
 		if(project_id > 0){
 			builderProject.setId(project_id);
 		}if(offer_titles != null){
 			if(offer_titles.size() > 0){
 				List<BuilderProjectOfferInfo> updateProjectOfferInfos = new ArrayList<BuilderProjectOfferInfo>();
 				int i=0;
+				
+				// offer vaildation
+				String validateName = "";
+				builderProjectOfferInfos = projectDAO.getProjectOffersByProjectId(project_id);
+				if(builderProjectOfferInfos != null){
+					 int offerCount = 0;
+					 boolean flag = false;
+					 if(offer_titles.size() == builderProjectOfferInfos.size()){
+					for(FormDataBodyPart samename : offer_titles){
+							if(samename.getValueAs(String.class) != null || samename.getValueAs(String.class).trim().length() > 0){
+								validateName = samename.getValueAs(String.class).toString();
+								if(validateName == builderProjectOfferInfos.get(offerCount).getTitle()){
+									flag =true;
+									break;
+								}
+							}
+							offerCount++;
+						}
+					}
+					if(offer_titles.size() < builderProjectOfferInfos.size()){
+						
+					}
+					 
+				}else{
 				for(FormDataBodyPart names : offer_titles)
 				{
 					//if(offer_ids.get(i).getValueAs(Integer.class) != 0 && offer_ids.get(i).getValueAs(Integer.class) != null){
@@ -542,6 +569,7 @@ public class ProjectController extends ResourceConfig {
 		}else{
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("Please click on Add offer button and add offer, then try again");
+		}
 		}
 		return responseMessage;
 	}
