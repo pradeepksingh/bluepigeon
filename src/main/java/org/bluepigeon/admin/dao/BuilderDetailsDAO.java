@@ -658,7 +658,7 @@ public class BuilderDetailsDAO {
 	 * @return
 	 */
 	
-	public List<BuilderProjectList> getProjectFilters(int empId,int countryId,int stateId,int cityId, String localityName){
+	public List<BuilderProjectList> getProjectFilters(int projectId,int empId,int countryId,int stateId,int cityId, String localityName){
 		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
 		String hqlnew = "from BuilderEmployee where id = "+empId;
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -683,6 +683,13 @@ public class BuilderDetailsDAO {
 			+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
 			+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id WHERE ";
 			where +="build.id = "+builderEmployee.getBuilder().getId();
+		}
+		if(projectId > 0){
+			if(where!=""){
+				where += " AND project.id = :project_id";
+			}else{
+				where +=" project.id = :project_id";
+			}
 		}
 		if(countryId > 0){
 			if(where!="")
