@@ -804,7 +804,7 @@
 																					<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 																					<div class="col-sm-8">
 																						<div>
-																							<input type="text" class="form-control" id="offer_title"  name="offer_title[]" value="<% out.print(flatOfferInfo.getTitle()); %>">
+																							<input type="text" class="form-control" id="offer_title<%out.print(k); %>" onfocusout="checkDuplicateEntry(<%out.print(k);%>);"  name="offer_title[]" value="<% out.print(flatOfferInfo.getTitle()); %>">
 																						</div>
 																						<div class="messageContainer"></div>
 																					</div>
@@ -914,6 +914,33 @@ function calculateAmount(id){
 	}else{
 	var amount = $("#payable"+id).val()*$("#h_sale_value").val()/100;
 		$("#amount"+id).val(amount.toFixed(0));
+	}
+}
+
+var myarray = [];
+<%
+if(flatOfferInfos != null){
+for(FlatOfferInfo flatOfferInfo :flatOfferInfos) { %>
+myarray.push("<%out.print(flatOfferInfo.getTitle());%>");
+<%}}%>
+
+function checkDuplicateEntry(id){
+	
+	var offers = $("#offer_title"+id).val();
+	if($.inArray(offers,myarray) !== -1){
+		if(myarray.indexOf(offers) != -1){
+			alert("Duplicate Entery of offer");
+			$("#offer_title"+id).val('');
+		}else{
+			myarray.push(offers);
+		}
+	}else{
+		if(myarray.indexOf(offers) != -1){
+			alert("Duplicate Entery of offer");
+			$("#offer_title"+id).val('');
+		}else{
+			myarray.push(offers);
+		}
 	}
 }
 
@@ -1692,7 +1719,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title'+offers+'" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control" id="offer_title'+offers+'" onfocusout="checkDuplicateEntry('+offers+');"  name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'

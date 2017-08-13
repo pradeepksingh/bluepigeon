@@ -161,13 +161,14 @@ public class ProjectController extends ResourceConfig {
 	@Path("/data/newlist")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuilderProjectList> getProjects(
+			@FormParam("project_id") int projectId,
 			@FormParam("emp_id") int empId,
 			@FormParam("country_id") int countryId,
 			@FormParam("state_id") int stateId,
 			@FormParam("city_id") int cityId,
 			@FormParam("locality_name") String localityName){
 		
-		return new BuilderDetailsDAO().getProjectFilters(empId,countryId, stateId, cityId, localityName);
+		return new BuilderDetailsDAO().getProjectFilters(projectId,empId,countryId, stateId, cityId, localityName);
 	}
 	
 	@POST
@@ -186,19 +187,34 @@ public class ProjectController extends ResourceConfig {
 		return new BuilderDetailsDAO().getProjectFilterListByBuilderId(builderId);
 	}
 	
+//	@POST
+//	@Path("/filter/builderemp")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public List<BuilderProjectList> getProjectsByBuilderEmployee(
+//			@FormParam("project_id") int projectId,
+//			@FormParam("emp_id") int empId,
+//			@FormParam("country_id") int countryId,
+//			@FormParam("state_id") int stateId,
+//			@FormParam("city_id") int cityId,
+//			@FormParam("locality_id") int localityId
+//			){
+//		
+//		return new BuilderDetailsDAO().getProjectFilter(projectId,empId,countryId,stateId,cityId,localityId);
+//	}
+	
 	@POST
 	@Path("/filter/builderemp")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuilderProjectList> getProjectsByBuilderEmployee(
 			@FormParam("project_id") int projectId,
-			@FormParam("emp_id") int emp_id,
-			@FormParam("country_id") int country_id,
-			@FormParam("state_id") int state_id,
-			@FormParam("city_id") int city_id,
-			@FormParam("locality_id") int locality_id
+			@FormParam("emp_id") int empId,
+			@FormParam("country_id") int countryId,
+			@FormParam("state_id") int stateId,
+			@FormParam("city_id") int cityId,
+			@FormParam("locality_name") String localityName
 			){
 		
-		return new BuilderDetailsDAO().getProjectFilter(projectId,emp_id,country_id,state_id,city_id,locality_id);
+		return new BuilderDetailsDAO().getProjectFilters(projectId,empId,countryId,stateId,cityId,localityName);
 	}
 	
 	@POST
@@ -476,13 +492,40 @@ public class ProjectController extends ResourceConfig {
 			) {
 		ResponseMessage responseMessage = new ResponseMessage();
 		BuilderProject builderProject = new BuilderProject();
+		List<BuilderProjectOfferInfo> builderProjectOfferInfos = null;
+		
 		ProjectDAO projectDAO = new ProjectDAO();
+		
 		if(project_id > 0){
 			builderProject.setId(project_id);
 		}if(offer_titles != null){
 			if(offer_titles.size() > 0){
 				List<BuilderProjectOfferInfo> updateProjectOfferInfos = new ArrayList<BuilderProjectOfferInfo>();
 				int i=0;
+				
+				// offer vaildation
+				String validateName = "";
+				builderProjectOfferInfos = projectDAO.getProjectOffersByProjectId(project_id);
+				if(builderProjectOfferInfos != null){
+					 int offerCount = 0;
+					 boolean flag = false;
+					 if(offer_titles.size() == builderProjectOfferInfos.size()){
+					for(FormDataBodyPart samename : offer_titles){
+							if(samename.getValueAs(String.class) != null || samename.getValueAs(String.class).trim().length() > 0){
+								validateName = samename.getValueAs(String.class).toString();
+								if(validateName == builderProjectOfferInfos.get(offerCount).getTitle()){
+									flag =true;
+									break;
+								}
+							}
+							offerCount++;
+						}
+					}
+					if(offer_titles.size() < builderProjectOfferInfos.size()){
+						
+					}
+					 
+				}else{
 				for(FormDataBodyPart names : offer_titles)
 				{
 					//if(offer_ids.get(i).getValueAs(Integer.class) != 0 && offer_ids.get(i).getValueAs(Integer.class) != null){
@@ -527,6 +570,7 @@ public class ProjectController extends ResourceConfig {
 		}else{
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("Please click on Add offer button and add offer, then try again");
+		}
 		}
 		return responseMessage;
 	}

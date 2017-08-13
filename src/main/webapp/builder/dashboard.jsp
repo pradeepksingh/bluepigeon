@@ -306,7 +306,18 @@
                           		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
 						 	 </div>
 						  </div>
-						  <%}else{ %>
+						  <%}
+	                        else if(access_id == 7){%>
+	                      <div class="row">
+                           	<div class="col-md-6 left"> 
+                           		<a href="${baseUrl}/builder/buyer/booking.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
+                           	</div>
+                         	<div class="col-md-6 center">
+                          		 <a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
+						 	</div>
+						 </div>
+	                      <%  }
+	                        else{ %>
 						  <div class="row">
                          	<div class="col-md-6 center">
                           		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
@@ -832,7 +843,7 @@ $("#locality_name").attr('disabled',true);
   		var projectId = "";
   		
   		$("#project_list").empty();
-  	   $.post("${baseUrl}/webapi/project/filter/builderemp",{project_id:$("#project_id").val(),emp_id:$("#emp_id").val(),country_id: 1,state_id:1, city_id: $("#city_id").val(),locality_id : $("#locality_id").val()},function(data){
+  	   $.post("${baseUrl}/webapi/project/filter/builderemp",{project_id:$("#project_id").val(),emp_id:$("#emp_id").val(),country_id: 1,state_id:1, city_id: $("#city_id").val(),locality_name : $("#locality_name").val()},function(data){
   		   if(data == ""){
   			   $("#project_list").empty();
   			   $("#project_list").append("<h2><center>No Records Found</center></h2>");

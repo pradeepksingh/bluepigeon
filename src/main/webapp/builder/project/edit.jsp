@@ -863,7 +863,7 @@
 																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 																			<div class="col-sm-8">
 																				<div>
-																					<input type="text" class="form-control" id="offer_title" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
+																					<input type="text" class="form-control" id="offer_title<%out.print(j); %>" onfocusout="checkDuplicateEntry(<%out.print(j);%>);" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
 																				</div>
 																				<div class="messageContainer"></div>
 																			</div>
@@ -1129,6 +1129,31 @@ $('#launch_date').datepicker({
 }).on('change',function(e){
 	 $('#detailfrm').data('bootstrapValidator').revalidateField('launch_date');
 });
+
+var myarray=[];
+<%if(projectOfferInfos != null){
+for(BuilderProjectOfferInfo projectOfferInfo :projectOfferInfos) {%>
+myarray.push("<%out.print(projectOfferInfo.getTitle());%>");
+<%}}%>
+function checkDuplicateEntry(id){
+	var offers = $("#offer_title"+id).val();
+	if($.inArray(offers,myarray) !== -1){
+		if(myarray.indexOf(offers) != -1){
+			alert("Duplicate Entery of offer");
+			$("#offer_title"+id).val('');
+		}else{
+			myarray.push(offers);
+		}
+	}else{
+		if(myarray.indexOf(offers) != -1){
+			alert("Duplicate Entery of offer");
+			$("#offer_title"+id).val('');
+		}else{
+			myarray.push(offers);
+		}
+	}
+}
+
 
 $('#possession_date').datepicker({
 	autoclose:true,
@@ -1821,7 +1846,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title'+offers+'" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control" id="offer_title'+offers+'"   onfocusout="checkDuplicateEntry('+offers+')" name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
