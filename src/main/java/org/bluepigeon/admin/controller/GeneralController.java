@@ -25,6 +25,7 @@ import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.StateImp;
 import org.bluepigeon.admin.data.CityData;
 import org.bluepigeon.admin.data.LocalityData;
+import org.bluepigeon.admin.data.TaxLabels;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AreaUnit;
 import org.bluepigeon.admin.model.BankLogo;
@@ -467,6 +468,20 @@ public class GeneralController {
 		}
 		return responseMessage;
 		
+	}
+	
+	@POST
+	@Path("/changeLabel")
+	@Produces(MediaType.APPLICATION_JSON)
+	public TaxLabels changeTaxLabel(@FormParam("country_id") int countryId) {
+		return new CountryDAOImp().getTaxLabels(countryId);
+	}
+	
+	@POST
+	@Path("/uchangeLabel")
+	@Produces(MediaType.APPLICATION_JSON)
+	public TaxLabels updatechangeTaxLabel(@FormParam("country_id") int countryId) {
+		return new CountryDAOImp().getTaxLabels(countryId);
 	}
 	
 }
