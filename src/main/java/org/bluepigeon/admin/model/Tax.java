@@ -3,9 +3,12 @@ package org.bluepigeon.admin.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -20,15 +23,17 @@ public class Tax implements java.io.Serializable {
 	private Double tax;
 	private Double stampDuty;
 	private Double vat;
+	private Country country;
 
 	public Tax() {
 	}
 
-	public Tax(String pincode, Double tax, Double stampDuty, Double vat) {
+	public Tax(String pincode, Double tax, Double stampDuty, Double vat, Country country) {
 		this.pincode = pincode;
 		this.tax = tax;
 		this.stampDuty = stampDuty;
 		this.vat = vat;
+		this.country = country;
 	}
 
 	@Id
@@ -77,6 +82,15 @@ public class Tax implements java.io.Serializable {
 
 	public void setVat(Double vat) {
 		this.vat = vat;
+	}
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "country_id")
+	public Country getCountry() {
+		return country;
+	}
+
+	public void setCountry(Country country) {
+		this.country = country;
 	}
 
 }

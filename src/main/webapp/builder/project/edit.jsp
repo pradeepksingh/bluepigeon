@@ -68,6 +68,9 @@
 	Set<State> states = null;
 	Set<City> cities = null;
 	String name = null;
+	String taxLabel1 = "";
+	String taxLabel2 = "";
+	String taxLabel3 = "";
 	List<BuilderProjectType> projectTypes =null;
 	List<BuilderPropertyType> propertyTypes =null;
 	List<BuilderProjectPropertyConfiguration> projectConfigurations = null;
@@ -120,6 +123,9 @@
 				if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
 					taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
 				}
+				taxLabel1 = builderProject.getCountry().getTaxLabel1();
+				taxLabel2 = builderProject.getCountry().getTaxLabel2();
+				taxLabel3 = builderProject.getCountry().getTaxLabel3();
 			}
 		}
    	}
@@ -725,9 +731,10 @@
 			                                	</div>
 			                                </div>
 			                                <div class="row">
+			                                <%if(taxLabel1.trim().length() != 0 && taxLabel1 != null){ %>
 			                                	<div class="col-sm-6">
 					                                <div class="form-group row">
-			        		                            <label for="example-text-input" class="col-sm-4 col-form-label">Stamp Duty<span class='text-danger'>*</span></label>
+			        		                            <label for="example-text-input" class="col-sm-4 col-form-label"><%out.print(taxLabel1); %><span class='text-danger'>*</span></label>
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 				                		                    	<div>
@@ -738,9 +745,13 @@
 			                                		    </div>
 			                                		</div>
 			                                   </div>
+			                                   <%}else{ %>
+													<input type="hidden"  id="stamp_duty" name="stamp_duty" value="0"/>
+												<%} %>
+												<%if(taxLabel2.trim().length() != 0 && taxLabel2 != null){ %>
 			                                   <div class="col-sm-6">
 			                                		<div class="form-group row">
-			                                   			<label for="example-text-input" class="col-sm-4 col-form-label">Tax<span class='text-danger'>*</span></label>
+			                                   			<label for="example-text-input" class="col-sm-4 col-form-label"><%out.print(taxLabel2); %><span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
@@ -751,11 +762,15 @@
 			                                    		</div>
 			                                    	</div>
 			                                   </div>
+			                                   <%}else{ %>
+													<input type="hidden"  id="tax" name="tax" value="0"/>
+												<%} %>	
 			                                </div>
 			                                <div class="row">
+			                                	<%if(taxLabel3.trim().length() != 0 && taxLabel3 != null){ %>
 			                                	 <div class="col-sm-6">
 			                                		<div class="form-group row">
-			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">VAT<span class='text-danger'>*</span></label>
+			                                    		<label for="example-search-input" class="col-sm-4 col-form-label"><%out.print(taxLabel3); %><span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
@@ -766,6 +781,9 @@
 			                                    		</div>
 			                                    	</div>
 			                                    </div>
+			                                    <%} else{%>
+													<input type="hidden"  id="vat" name="vat" value="0"/>
+												<%} %>
 			                                    <div class="col-sm-6">
 			                                    	<div class="form-group row">	
 			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Tech Fees<span class='text-danger'>*</span></label>

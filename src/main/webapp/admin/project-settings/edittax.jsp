@@ -24,24 +24,24 @@
               	<div class="row">
               		<div class="col-xs-12">
                   		<div class="form-group">
-                       		<label for="password" class="control-label">tax</label>
-                       		<input type="text" name="tax" id="utax" value="<%out.print(tax.getTax()); %>" class="form-control" placeholder="Enter tax"/>
+                       		<label for="password" class="control-label"><%out.print(tax.getCountry().getTaxLabel1()); %></label>
+                       		<input type="text" name="tax" id="utax" value="<%out.print(tax.getTax()); %>" class="form-control" placeholder="Enter <%out.print(tax.getCountry().getTaxLabel1()); %>"/>
                   		</div>
               		</div>
               	</div>
               	<div class="row">
               		<div class="col-xs-12">
                   		<div class="form-group">
-                       		<label for="password" class="control-label">Stamp Duty</label>
-                       		<input type="text" name="sduty" id="usduty" value="<%out.print(tax.getStampDuty()); %>" class="form-control" placeholder="Enter stamp Duty"/>
+                       		<label for="password" class="control-label"><%out.print(tax.getCountry().getTaxLabel2()); %></label>
+                       		<input type="text" name="sduty" id="usduty" value="<%out.print(tax.getStampDuty()); %>" class="form-control" placeholder="Enter <%out.print(tax.getCountry().getTaxLabel2()); %>"/>
                   		</div>
               		</div>
               	</div>
               	<div class="row">
               		<div class="col-xs-12">
                   		<div class="form-group">
-                       		<label for="password" class="control-label">Vat</label>
-                       		<input type="text" name="vat" id="uvat" value="<%out.print(tax.getVat()); %>" class="form-control" placeholder="Enter Vat"/>
+                       		<label for="password" class="control-label"><%out.print(tax.getCountry().getTaxLabel3()); %></label>
+                       		<input type="text" name="vat" id="uvat" value="<%out.print(tax.getVat()); %>" class="form-control" placeholder="Enter <%out.print(tax.getCountry().getTaxLabel3()); %>"/>
                   		</div>
               		</div>
               	</div>

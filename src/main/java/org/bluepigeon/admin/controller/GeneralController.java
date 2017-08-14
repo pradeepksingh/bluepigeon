@@ -97,11 +97,19 @@ public class GeneralController {
 	@POST
 	@Path("/country/save")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage save(@FormParam("name") String name, @FormParam("status") byte status,
+	public ResponseMessage save(
+			@FormParam("name") String name,
+			@FormParam("tax1") String taxLabel1,
+			@FormParam("tax2") String taxLabel2,
+			@FormParam("tax3") String taxLabel3,
+			@FormParam("status") byte status,
 			@FormParam("sortOrder") int sortOrder) {
 
 		Country country = new Country();
 		country.setName(name);
+		country.setTaxLabel1(taxLabel1);
+		country.setTaxLabel2(taxLabel2);
+		country.setTaxLabel3(taxLabel3);
 		country.setStatus(status);
 		country.setSortOrder(sortOrder);
 		CountryDAOImp countryService = new CountryDAOImp();
@@ -111,12 +119,21 @@ public class GeneralController {
 	@POST
 	@Path("/country/update")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage updateCountry(@FormParam("id") int id, @FormParam("name") String name,
-			@FormParam("sortOrder") int sortOrder, @FormParam("status") byte status) {
+	public ResponseMessage updateCountry(
+			@FormParam("id") int id, 
+			@FormParam("name") String name,
+			@FormParam("tax1") String taxLabel1,
+			@FormParam("tax2") String taxLabel2,
+			@FormParam("tax3") String taxLabel3,
+			@FormParam("sortOrder") int sortOrder,
+			@FormParam("status") byte status) {
 
 		Country country = new Country();
 		country.setId(id);
 		country.setName(name);
+		country.setTaxLabel1(taxLabel1);
+		country.setTaxLabel2(taxLabel2);
+		country.setTaxLabel3(taxLabel3);
 		country.setSortOrder(sortOrder);
 		country.setStatus(status);
 

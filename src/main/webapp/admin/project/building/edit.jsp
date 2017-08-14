@@ -41,6 +41,9 @@
 	int building_id = 0;
 	int project_id = 0;
 	int p_user_id = 0;
+	String taxLabel1 = "";
+	String taxLabel2 = "";
+	String taxLabel3 = "";
 	List<BuilderProjectOfferInfo> builderProjectOfferInfos = null;
 	building_id = Integer.parseInt(request.getParameter("building_id"));
 	session = request.getSession(false);
@@ -83,6 +86,9 @@
 		if(builderProject.getPincode() != "" && builderProject.getPincode() != null) {
 			taxes = new ProjectDAO().getProjectTaxByPincode(builderProject.getPincode());
 		}
+		taxLabel1 = builderProject.getCountry().getTaxLabel1();
+		taxLabel2 = builderProject.getCountry().getTaxLabel2();
+		taxLabel3 = builderProject.getCountry().getTaxLabel3();
 	}
 %>
 <div class="main-content">
@@ -466,9 +472,10 @@
 														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
+												<%if(taxLabel1.trim().length() != 0 && taxLabel1 != null){ %>
 												<div class="col-lg-6 margin-bottom-5">
 													<div class="form-group" id="error-landmark">
-														<label class="control-label col-sm-4">Stamp Duty </label>
+														<label class="control-label col-sm-4"><%out.print(taxLabel1); %>  </label>
 														<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
 															<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(priceInfoData.getStampDuty() > 0 && priceInfoData.getStampDuty() != 0){ out.print(priceInfoData.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
 															<span class="input-group-addon">%</span>
@@ -476,11 +483,15 @@
 														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
+												<%}else{ %>
+													<input type="hidden"  id="stamp_duty" name="stamp_duty" value="0"/>
+												<%} %>
 											</div>
 											<div class="row">
+											<%if(taxLabel2.trim().length() != 0 && taxLabel2 != null){ %>
 												<div class="col-lg-6 margin-bottom-5">
 													<div class="form-group" id="error-tax">
-														<label class="control-label col-sm-4">Tax</label>
+														<label class="control-label col-sm-4"><%out.print(taxLabel2); %> </label>
 														<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
 															<input type="text" class="form-control" id="tax" name="tax" value="<% if(priceInfoData.getTax() > 0 && priceInfoData.getTax() != 0){ out.print(priceInfoData.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
 															<span class="input-group-addon">%</span>
@@ -488,9 +499,13 @@
 														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
+												<%}else{ %>
+													<input type="hidden"  id="tax" name="tax" value="0"/>
+												<%} %>
+												<%if(taxLabel3.trim().length() != 0 && taxLabel3 != null){ %>
 												<div class="col-lg-6 margin-bottom-5">
 													<div class="form-group" id="error-vat">
-														<label class="control-label col-sm-4">VAT </label>
+														<label class="control-label col-sm-4"><%out.print(taxLabel3); %>  </label>
 														<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
 															<input type="text" class="form-control" id="vat" name="vat" value="<% if(priceInfoData.getVat() > 0 && priceInfoData.getVat() != 0){ out.print(priceInfoData.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
 															<span class="input-group-addon">%</span>
@@ -498,6 +513,9 @@
 														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
 												</div>
+												<%}else{ %>
+													<input type="hidden"  id="vat" name="vat" value="0"/>
+												<%} %>
 											</div>
 											<div class="row">
 												<div class="col-lg-6 margin-bottom-5">

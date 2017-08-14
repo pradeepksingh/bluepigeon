@@ -4,11 +4,21 @@
 
 <%@page import="org.bluepigeon.admin.dao.TaxDAO"%>
 <%@page import="org.bluepigeon.admin.model.Tax" %>
+<%@page import="org.bluepigeon.admin.model.AdminUser"%>
 <%@page import="java.util.List"%>
 <%@include file="../../head.jsp"%>
 <%@include file="../../leftnav.jsp"%>
 <%
-
+session = request.getSession(false);
+AdminUser taxmainadmin = null;
+if(session!=null)
+{
+	if(session.getAttribute("uname") != null)
+	{
+		taxmainadmin  = (AdminUser)session.getAttribute("uname");
+		session_uid = mainadmin.getId();
+	}
+}
 List<Tax> tax_list = new TaxDAO().getTaxList();
 int tax_size=tax_list.size();
 %>
@@ -101,7 +111,7 @@ int tax_size=tax_list.size();
               	<div class="row">
               		<div class="col-xs-12">
                   		<div class="form-group">
-                       		<label for="password" class="control-label">Stamp Duty</label>
+                       		<label for="password" class="control-label">stamp Duty</label>
                        		<input type="text" name="sduty" id="sduty" class="form-control" placeholder="Enter stamp Duty"/>
                   		</div>
               		</div>
@@ -165,7 +175,7 @@ function isNumber(evt, element) {
     var charCode = (evt.which) ? evt.which : event.keyCode
 
     if (
-        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // CHECK DOT, AND ONLY ONE.
         (charCode < 48 || charCode > 57))
         return false;
 

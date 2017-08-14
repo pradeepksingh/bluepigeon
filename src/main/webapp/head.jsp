@@ -6,7 +6,7 @@
 <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <%@page import="org.bluepigeon.admin.model.AdminUser"%>
 <%
-session = request.getSession(false);
+	session = request.getSession(false);
 	AdminUser mainadmin = new AdminUser();
 	int session_uid = 0;
 	if(session!=null)
