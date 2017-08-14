@@ -757,6 +757,11 @@ $("#locality_name").attr('disabled',true);
             		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
             		+'</div>'
             		<%}%>
+            		<%if(access_id == 7){%>
+             		+'<div class="col-md-6 left">' 
+             		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'</div>'
+             		<%}%>
           		+'<div class="col-md-6 center">'
            		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
@@ -824,6 +829,11 @@ $("#locality_name").attr('disabled',true);
                		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                		+'</div>'
                		<%}%>
+               		<% if(access_id == 7){%>
+             		+'<div class="col-md-6 left">' 
+             		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'</div>'
+             		<%}%>
              		+'<div class="col-md-6 center">'
               		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
@@ -889,6 +899,11 @@ $("#locality_name").attr('disabled',true);
                  		<%if(access_id ==1 || access_id == 2){%>
                  		+'<div class="col-md-6 left">' 
                  		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+                 		+'</div>'
+                 		<%}%>
+                 		<% if(access_id == 7){%>
+                 		+'<div class="col-md-6 left">' 
+                 		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
                  		<%}%>
                		+'<div class="col-md-6 center">'
