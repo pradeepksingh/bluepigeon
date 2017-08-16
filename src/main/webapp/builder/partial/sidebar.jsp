@@ -84,7 +84,7 @@
 <!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
 <!--                         </ul> -->
 <!--                     </li> -->
-					<% if(emp_access_id == 1 || emp_access_id ==2){ %>
+					<% if(emp_access_id == 1 || emp_access_id ==2 || emp_access_id == 7){ %>
                      <li class="nav-small-cap m-t-10">--Professional--</li>
                      <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Sales<span class="fa arrow"></span></span></a>
                       

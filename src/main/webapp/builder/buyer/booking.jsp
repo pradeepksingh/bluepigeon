@@ -106,9 +106,9 @@
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
-<!--     <link href="../css/custom.css" rel="stylesheet"> -->
-    <link rel="stylesheet" type="text/css" href="../css/custom2.css">
-<!--     <link rel="stylesheet" type="text/css" href="../css/topbutton.css"> -->
+    <link href="../css/custom.css" rel="stylesheet">
+<!--     <link rel="stylesheet" type="text/css" href="../css/custom2.css"> -->
+    <link rel="stylesheet" type="text/css" href="../css/topbutton.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
@@ -186,24 +186,24 @@
                         <div class="white-box" >
 	                        <% if(flatListDatas !=null){
 	                        	String active = "";
-	                        for(int i=0;i<flatListDatas.size();i++){ %>
+	                        	for(int i=0;i<flatListDatas.size();i++){ %>
 	                           <!-- floor 1 -->
+	                           <%  for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){ %>
 	                           <ul class="nav nav-pills">
-	                           <% for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().size();floor_size++){ %>
-		                          <% for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
-		                        	  if(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
-		                        		  active = "active";
-		                        	  }
-		                        	  if(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus() == "available"){
+	                           <% for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().size();floor_size++){ %>
+		                          <% for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
+		                        	  if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus() == "available"){
 		                        	  %>
-								     <li class=""><a data-toggle="pill" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+								     <li class=""><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 								   <%}else{%>
-									   <li ><a style="color:#4dcfcf;" data-toggle="pill" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
-								   <%}}}%>
+									   <li ><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+								   <%}%>
+		                         <% }}%>
 								   
 								   </ul>
 								   <hr>
-	                        <%}} %>
+								   
+	                        <%}}} %>
 						    <!-- floor 1 -->
 						     <!-- floor 2 -->
                         </div>
@@ -266,6 +266,28 @@
   </body>
 </html>
 <script>
+
+$(document).ready(function () {
+	 <% if(flatListDatas !=null){
+		 for(int i=0;i<flatListDatas.size();i++){
+			 for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){
+				 for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().size();floor_size++){
+				 	for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
+               	  		if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
+	 %>
+    $("#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>").click(function (e) {
+        e.preventDefault();
+    });
+    $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click');
+    
+    <%					}
+               	  	}
+				 }
+			}
+		}
+	} %>
+});
+
 function showFlat(id){
 	alert(id);
 }

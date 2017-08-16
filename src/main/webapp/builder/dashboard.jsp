@@ -287,54 +287,52 @@
 						                       </div>
 				                       </div>
 				                        <div class="col-md-6 right">
-					                         <div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="<%out.print(Math.round(projectList.getCompletionStatus())); %>">
-					                         </div>
-						                        <div class="bottom">
+					                         <div class="chart" id="graph<%out.print(projectList.getId()); %>" data-percent="<%out.print(Math.round(projectList.getCompletionStatus())); %>"></div>
+						                     <div class="bottom">
 						                        <h4><% out.print(projectList.getTotalLeads()) ;%> NEW LEADS</h4>
-						                        </div>
+						                     </div>
 				                       </div>
 			                       </div>
 	                           </div>
 	                       </div>
 	                        <%if(access_id == 1 || access_id==2){ %>
 	                       <div class="row">
-	                      
-                           	<div class="col-md-6 left"> 
-                           		<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
-                           	</div>
-                         	<div class="col-md-6 center">
-                          		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
-						 	 </div>
+                           		<div class="col-md-6 left"> 
+                           			<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
+                           		</div>
+                         		<div class="col-md-6 center">
+                          		 	<a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
+						 	 	</div>
 						  </div>
 						  <%}
 	                        else if(access_id == 7){%>
 	                      <div class="row">
-                           	<div class="col-md-6 left"> 
-                           		<a href="${baseUrl}/builder/buyer/booking.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
-                           	</div>
-                         	<div class="col-md-6 center">
-                          		 <a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
-						 	</div>
+                           	  <div class="col-md-6 left"> 
+                           		   <a href="${baseUrl}/builder/buyer/booking.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
+                           	  </div>
+                         	  <div class="col-md-6 center">
+                          		   <a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
+						 	  </div>
 						 </div>
 	                      <%  }else if(access_id == 3){%>
-	                    <div class="row">
-                           	<div class="col-md-6 left"> 
-                           		<a href="${baseUrl}/builder/campaign/list.jsp" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
-                           	</div>
-                           	<div class="col-md-6 center">
+	                     <div class="row">
+                           	 <div class="col-md-6 left"> 
+                           	   	 <a href="${baseUrl}/builder/campaign/list.jsp" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
+                           	 </div>
+                           	 <div class="col-md-6 center">
                           		 <a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
 						 	 </div>
                         </div>
 	                    <%  }
 	                        else{ %>
-						  <div class="row">
+						<div class="row">
                          	<div class="col-md-6 center">
                           		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
 						 	 </div>
-						  </div>
-						  <%} %>
-	                       </div>
-	                       <%  
+						</div>
+						<%} %>
+	                 </div>
+	                 	<%  
                        		}
                        		else{
                         		out.print("<h2><center>No Records Found</center></h2>");
@@ -631,78 +629,7 @@
  	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
     }
     
-//     $("#project_id").change(function(){
-//     	getProjectFilterList($("#project_id").val());
-//     });
-    
-//  function getProjectList(){
-    	
-//     	var html = "";
-// 		var image = "";
-// 		var projectName = "";
-// 		var cityName = "";
-// 		var projectId = "";
-// 		$("#project_list").empty();
-		
-// 	   $.post("${baseUrl}/webapi/project/data/list",{emp_id: $("#emp_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_id : $("#locality_id").val() },function(data){
-// 		   if(data == ""){
-// 			   $("#project_list").empty();
-// 			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
-// 		   }
-// 			$(data).each(function(index){
-// 				if(data[index].image != "")
-// 					image = "${baseUrl}/"+data[index].image;
-//  				else
-// // 					image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
-// 					image = "";
-					
-// 				if(data[index].name != ""){
-// 					projectName = data[index].name;
-// 				}
-// 				if(data[index].city != ""){
-// 					cityName = data[index].city;
-// 				}
-// 				if(data[index].id != ""){
-// 					projectId = data[index].id;
-// 				}
-// 				html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
-// 		    		+'<div class="image">'
-//                    	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
-//                    	+'<div class="overlay">'
-//                     +'<div class="row">'
-// 	                +'<div class="col-md-6 left">'
-// 		            +'<h3>'+projectName+'</h3>'
-// 		            +'<h4>'+cityName+'</h4>'
-// 		            +'<br>'
-//                		+'<div class="bottom">'
-//                 	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
-//                 	+'</div>'
-// 	                +'</div>'
-// 	                +'<div class="col-md-6 right">'
-// 		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+data[index].completionStatus+'"></div>'
-// 		            +'<div class="bottom">'
-//                     +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
-//                     +'</div>'
-// 	                +'</div>'
-//                     +'</div>'
-//                     +'</div>'
-//                		+'</div>'
-//                		+'<div class="row">'
-<%--                		<%if(access_id == 1 || access_id==2){%> --%>
-//                		+'<div class="col-md-6 left">' 
-//                		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-info waves-effect waves-light m-t-1">Manage</a>'
-//                		+'</div>'
-<%--                		<%}%> --%>
-//              		+'<div class="col-md-6 center">'
-//               		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
-// 			 	 	+'</div>'
-// 			 		+'</div>'
-// 	            	+'</div>';
-// 	            		$("#project_list").append(html);
-// 	            		createGraph("graph"+projectId);
-// 			});
-// 		    },'json');
-// 	   }
+
 $("#locality_name").attr('disabled',true);
  function getProjectList(){
  	
@@ -775,7 +702,7 @@ $("#locality_name").attr('disabled',true);
              		+'</div>'
              		<%}%>
           		+'<div class="col-md-6 center">'
-           		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
+           		+'<a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
 			 		+'</div>'
 	            	+'</div>';
@@ -852,7 +779,7 @@ $("#locality_name").attr('disabled',true);
              		+'</div>'
              		<%}%>
              		+'<div class="col-md-6 center">'
-              		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
+              		+'<a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
 			 		+'</div>'
 	            	+'</div>';
@@ -929,7 +856,7 @@ $("#locality_name").attr('disabled',true);
                  		+'</div>'
                  		<%}%>
                		+'<div class="col-md-6 center">'
-                		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
+                		+'<a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
   			 	 	+'</div>'
   			 		+'</div>'
   	            	+'</div>';

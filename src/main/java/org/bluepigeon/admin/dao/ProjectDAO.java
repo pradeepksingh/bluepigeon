@@ -1698,9 +1698,9 @@ public class ProjectDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		String flatHql = "from BuilderFlat where builderFloor.id = :floor_id AND builderFloor.status=1 AND status=1";
-		Session flatSession = hibernateUtil.openSession();
-		Query flatQuery = flatSession.createQuery(flatHql);
+		//String flatHql = "from BuilderFlat where builderFloor.id = :floor_id AND builderFloor.status=1 AND status=1";
+		//Session flatSession = hibernateUtil.openSession();
+		//Query flatQuery = flatSession.createQuery(flatHql);
 		if(projectId > 0)
 			query.setParameter("project_id", projectId);
 		if(buildingId > 0)
@@ -1712,15 +1712,16 @@ public class ProjectDAO {
 		List<BuilderFlat> builderFlatList = query.list();
 		List<FlatListData> newFlatList = new ArrayList<FlatListData>();
 		System.err.println("No of flats :::: "+builderFlatList.size());
-		int buildingid = 0;
+		System.out.print("<script>alert('No of Flats :: '"+builderFlatList.size()+"');</script>");
+		//int buildingid = 0;
 		int floorid = 0;
 		try{
-		for(  int i=0;i<builderFlatList.size();i++){
+		for(int i=0;i<builderFlatList.size();i++){
 			FlatListData flatListData = new FlatListData();
 			List<BuildingListData> buildingListDatas = new ArrayList<BuildingListData>();
-			if(buildingid != builderFlatList.get(i).getBuilderFloor().getBuilderBuilding().getId()){
+			//if(buildingid != builderFlatList.get(i).getBuilderFloor().getBuilderBuilding().getId()){
 				List<FloorListData> floorListDatas = new ArrayList<FloorListData>();
-				//if(floorid != builderFlatList.get(i).getBuilderFloor().getId()){
+				if(floorid != builderFlatList.get(i).getBuilderFloor().getId()){
 					
 //					BuilderFloor builderFloor = new BuilderFloor();
 //					builderFloor.setId(floorid);
@@ -1733,46 +1734,52 @@ public class ProjectDAO {
 					
 					floorListData.setFlatStatusDatas(flatDatas);
 					floorListDatas.add(floorListData);
-			//	}
+					BuildingListData buildingListData = new BuildingListData();
+					try{
+					buildingListData.setBuildingId( builderFlatList.get(i).getBuilderFloor().getBuilderBuilding().getId());
+					buildingListData.setBuildingName(builderFlatList.get(i).getBuilderFloor().getBuilderBuilding().getName());
+					buildingListData.setFloorListDatas(floorListDatas);
+					buildingListDatas.add(buildingListData);
+					}catch(Exception ee){
+						buildingListData.setBuildingImage("");
+						System.err.println("Inner error "+ee);
+					}
+					
+				}
 //				BuilderFlat builderFlat2 = new BuilderFlat();
 //				builderFlat2.setId(builderFlat.getId());
 //				builderFlat2.setFlatNo(builderFlat.getFlatNo());
 //				builderFlatList.add(builderFlat2);
 				floorid = builderFlatList.get(i).getBuilderFloor().getId();
 //				floorName = builderFlat.getBuilderFloor().getName();
-				BuildingListData buildingListData = new BuildingListData();
+			
 			//	List<BuildingImageGallery> buildingImageGalleries =  getBuilderBuildingImagesById(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
-				buildingListData.setBuildingId( builderFlatList.get(i).getBuilderFloor().getBuilderBuilding().getId());
-				try{
+				
+				
 //				if(buildingImageGalleries.get(0) != null){	
 //					buildingListData.setBuildingImage(buildingImageGalleries.get(0).getImage());
 //				}
 //				else{
 //					buildingListData.setBuildingImage("");
 //				}
-				buildingListData.setBuildingName(builderFlatList.get(i).getBuilderFloor().getBuilderBuilding().getName());
-				buildingListData.setFloorListDatas(floorListDatas);
-				buildingListDatas.add(buildingListData);
-			}catch(Exception ee){
-				buildingListData.setBuildingImage("");
-				System.err.println("Inner error "+ee);
-			}
+				
+			
 //			BuildingData buildingData = new BuildingData();
 //			buildingData.setId(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
 //			buildingData.setName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
-			buildingid = builderFlatList.get(i).getBuilderFloor().getBuilderBuilding().getId();
+			//buildingid = builderFlatList.get(i).getBuilderFloor().getBuilderBuilding().getId();
 //			buildingName = builderFlat.getBuilderFloor().getBuilderBuilding().getName();
 			flatListData.setBuildingListDatas(buildingListDatas);
 			flatListData.setProjectid(projectId);
 			newFlatList.add(flatListData);
-		}
+		//}
 		}
 		}catch(Exception e){
 			e.printStackTrace();
 			System.err.println("outer error :: "+e.getMessage());
 		}
 		
-		//session.close();
+		session.close();
 		return newFlatList;
 	}
 	/**
