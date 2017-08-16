@@ -316,7 +316,16 @@
                           		 <a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
 						 	</div>
 						 </div>
-	                      <%  }
+	                      <%  }else if(access_id == 3){%>
+	                    <div class="row">
+                           	<div class="col-md-6 left"> 
+                           		<a href="${baseUrl}/builder/campaign/list.jsp" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
+                           	</div>
+                           	<div class="col-md-6 center">
+                          		 <a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
+						 	 </div>
+                        </div>
+	                    <%  }
 	                        else{ %>
 						  <div class="row">
                          	<div class="col-md-6 center">
@@ -325,7 +334,6 @@
 						  </div>
 						  <%} %>
 	                       </div>
-	                       
 	                       <%  
                        		}
                        		else{
@@ -374,7 +382,8 @@
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
                                             <h1 class="text-info-new sales-income">Rs <%out.print(Math.round(totalPropertySold)); %></h1>
-                                            <p class="text-muted"></p> <b>(<%out.print(totalInventorySold); %> Sales)</b> </div>
+                                            <p class="text-muted"></p> <b>(<%out.print(totalInventorySold); %> Sales)</b> 
+                                        </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sparkline2dash" class="text-center"></div>
                                         </div>
@@ -387,7 +396,8 @@
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
                                             <h1 class="text-white sales-income">Rs  <%out.print(Math.round(totalPropertySold)); %></h1>
-                                            <p class="light_op_text"><br></p> <b class="text-white">(<%out.print(totalInventorySold); %> Sales)</b> </div>
+                                            <p class="light_op_text"><br></p> <b class="text-white">(<%out.print(totalInventorySold); %> Sales)</b>
+                                        </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <div id="sales1" class="text-center"></div>
                                         </div>
@@ -754,6 +764,11 @@ $("#locality_name").attr('disabled',true);
             		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
             		+'</div>'
             		<%}%>
+            		<%if(access_id == 3){%>
+             		+'<div class="col-md-6 left">' 
+             		+'<a href="${baseUrl}/builder/campaign/list.jsp" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'</div>'
+             		<%}%>
             		<%if(access_id == 7){%>
              		+'<div class="col-md-6 left">' 
              		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
@@ -826,6 +841,11 @@ $("#locality_name").attr('disabled',true);
                		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                		+'</div>'
                		<%}%>
+               		<%if(access_id == 3){%>
+             		+'<div class="col-md-6 left">' 
+             		+'<a href="${baseUrl}/builder/campaign/list.jsp" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'</div>'
+             		<%}%>
                		<% if(access_id == 7){%>
              		+'<div class="col-md-6 left">' 
              		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
@@ -896,6 +916,11 @@ $("#locality_name").attr('disabled',true);
                  		<%if(access_id ==1 || access_id == 2){%>
                  		+'<div class="col-md-6 left">' 
                  		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+                 		+'</div>'
+                 		<%}%>
+                 		<%if(access_id == 3){%>
+                 		+'<div class="col-md-6 left">' 
+                 		+'<a href="${baseUrl}/builder/campaign/list.jsp" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
                  		<%}%>
                  		<% if(access_id == 7){%>

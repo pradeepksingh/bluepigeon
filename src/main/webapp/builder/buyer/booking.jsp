@@ -106,13 +106,11 @@
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
-    <link href="../css/custom.css" rel="stylesheet">
-<!--     <link rel="stylesheet" type="text/css" href="../css/custom2.css"> -->
-    <link rel="stylesheet" type="text/css" href="../css/topbutton.css">
+<!--     <link href="../css/custom.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="../css/custom2.css">
+<!--     <link rel="stylesheet" type="text/css" href="../css/topbutton.css"> -->
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
-     
-    
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
      <script type="text/javascript" src="../js/selectize.min.js"></script>
@@ -198,7 +196,7 @@
 		                        	  }
 		                        	  if(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus() == "available"){
 		                        	  %>
-								     <li class="<%out.print(active);%>"><a data-toggle="pill" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+								     <li class=""><a data-toggle="pill" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 								   <%}else{%>
 									   <li ><a style="color:#4dcfcf;" data-toggle="pill" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 								   <%}}}%>
