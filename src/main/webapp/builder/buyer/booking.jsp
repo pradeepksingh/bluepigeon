@@ -42,6 +42,7 @@
 	List<FlatListData> flatListDatas = null;
 	BookingFlatList bookingFlatList2 = null;
 	int flat_size = 0;
+	String image  = "";
 	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>();
 	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList();
 	project_id = Integer.parseInt(request.getParameter("project_id"));
@@ -64,8 +65,10 @@
 			access_id = builder.getBuilderEmployeeAccessType().getId();
 			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
-			flatListDatas = new ProjectDAO().getFlatDetails(project_id,0,0,0);
-			bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,0,0,0);
+			building_id = builderBuildingList.get(0).getId();
+			flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,0);
+			bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,building_id,0,0);
+			image = bookingFlatList2.getImage();
 			flat_size = flatListDatas.size();
 		
 			//building_id = builderBuildingList.get(0).getId();
@@ -103,7 +106,8 @@
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
-    <link rel="stylesheet" type="text/css" href="../css/custom2.css">
+    <link href="../css/custom.css" rel="stylesheet">
+<!--     <link rel="stylesheet" type="text/css" href="../css/custom2.css"> -->
     <link rel="stylesheet" type="text/css" href="../css/topbutton.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
@@ -130,18 +134,18 @@
         <div id="page-wrapper" style="min-height: 2038px;">
            <div class="container-fluid">
                <!-- /.row -->
-	                <div class="row bspace">
+	                <div class="row">
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-submit waves-effect waves-light m-t-10">Booking</button>
+		                    <button type="submit" class="btn11 btn-submit waves-effect waves-light  m-t-10">Booking</button>
 		                </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-submit waves-effect waves-light m-t-10">Cancellation</button>
+		                    <button type="submit" class="btn11 top-white-box  waves-effect waves-light m-t-10">Cancellation</button>
 		                 </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-submit waves-effect waves-light m-t-10">Leads</button>
+		                    <button type="submit" class="btn11 top-white-box waves-effect waves-light m-t-10">Leads</button>
 		                </div>
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-submit waves-effect waves-light m-t-10">Campain</button>
+		                    <button type="submit" class="btn11 top-white-box  waves-effect waves-light m-t-10">Campain</button>
 		                </div>
 	                </div>
                <!-- row -->
@@ -167,6 +171,14 @@
                 			<%}}%>
                 		</select>
                 	</div>
+                	<div class="col-md-4 col-sm-6 col-xs-12">
+                
+                		<select id="evenOrodd" name="evenOrodd">
+                			<option value="0">Even & Odd</option>
+                			<option value="1">EVEN</option>
+                			<option value="2">ODD</option>
+                		</select>
+                	</div>
            		</div>
                     <!-- row -->
                     
@@ -175,16 +187,20 @@
                     <div class="col-md-8 col-sm-6 col-xs-12  bg1">
                         <div class="white-box" >
 	                        <% if(flatListDatas !=null){
+	                        	String active = "";
 	                        for(int i=0;i<flatListDatas.size();i++){ %>
 	                           <!-- floor 1 -->
 	                           <ul class="nav nav-pills">
 	                           <% for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().size();floor_size++){ %>
 		                          <% for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
-		                        	    if(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus() == "available"){
+		                        	  if(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
+		                        		  active = "active";
+		                        	  }
+		                        	  if(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus() == "available"){
 		                        	  %>
-								     <li class=""><a data-toggle="pill" href="#home"><% out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+								     <li class="<%out.print(active);%>"><a data-toggle="pill" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 								   <%}else{%>
-									   <li style="color:#4dcfcf;"><a data-toggle="pill" href="#home"><% out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+									   <li ><a style="color:#4dcfcf;" data-toggle="pill" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 								   <%}}}%>
 								   
 								   </ul>
@@ -198,8 +214,10 @@
                      <div class="bg1">
                        <div class="tab-content">
 					     <div id="home" class="tab-pane fade in active">
-					     	<% if(bookingFlatList2.getImage()!="" && bookingFlatList2.getImage() != null){ %>
-						     <img src="${baseUrl}/builder/<%out.print(bookingFlatList2.getImage()); %>" alt="Project image" class="custom-img">
+					        
+					     	<% if(bookingFlatList2 != null){
+					     	if(bookingFlatList2.getImage()!="" && bookingFlatList2.getImage() != null){ %>
+						     <img src="${baseUrl}/<%out.print(bookingFlatList2.getImage()); %>" alt="Flat image" class="custom-img">
 						     <%} %>
 						      <hr><br>
 						      <div class="row custom-row">
@@ -233,6 +251,7 @@
 						        </div>
 						      </div>
 						      <button type="button" onclick="javascript:showFlat(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button">Book Now</button>
+						      <%} %>
 					     </div>
 					  </div>
                     </div>
@@ -244,13 +263,61 @@
         </div>
     <!-- /.container-fluid -->
     <div id="sidebar1"> 
-	      		<%@include file="../partial/footer.jsp"%>
-			</div> 
+	     <%@include file="../partial/footer.jsp"%>
+	</div> 
   </body>
 </html>
 <script>
 function showFlat(id){
 	alert(id);
+}
+
+function showFlatwithImage(id){
+	$("#home").empty();
+	var htmlFlat ="";
+	if(id > 0 && id != ''){
+		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id},function(data){
+			var image = '';
+			if(data.image != ''){
+				image = '${baseUrl}/'+data.image;
+			}
+			htmlFlat ='<img src="'+image+'" alt="Project image" class="custom-img">'
+	 	      +'<hr>'
+	 	      +'<div class="row custom-row">'
+	 	        +'<div class="col-md-6 col-sm-6 col-xs-6">'
+	 	          +'<p class="p-custom">Flat Type</p>'
+	 	          +'<span><b>'+data.flatType+'</b></span>'
+	 	        +'</div>'
+	 	       +' <div class="col-md-6 col-sm-6 col-xs-6">'
+	 	          +'<p class="p-custom">Carpet Area</p>'
+	 	          +'<span><b>'+data.carpetArea+' SQ/FT</b></span>'
+	 	        +'</div>'
+	 	      +'</div>'
+	 	      +'<div class="row custom-row">'
+	 	       +' <div class="col-md-6 col-sm-6 col-xs-6">'
+	 	          +'<p class="p-custom">Bedrooms</p>'
+	 	          +'<span><b>'+data.bedroom+'</b></span>'
+	 	        +'</div>'
+	 	       +' <div class="col-md-6 col-sm-6 col-xs-6">'
+	 	          +'<p class="p-custom">Bathroom</p>'
+	 	         +' <span><b>'+data.bathroom+'</b></span>'
+	 	        +'</div>'
+	 	      +'</div>'
+	 	      +'<div class="row custom-row">'
+	 	       +' <div class="col-md-6 col-sm-6 col-xs-6">'
+	 	         +' <p class="p-custom">Balcony</p>'
+	 	         +' <span><b>'+data.balcony+'</b></span>'
+	 	        +'</div>'
+	 	        +'<div class="col-md-6 col-sm-6 col-xs-6">'
+	 	         +' <p class="p-custom">Bedroom Size</p>'
+	 	          +'<span><b>'+data.length+' '+data.areaUint+' * '+data.breadth+' '+data.areaUint+' </b></span>'
+	 	        +'</div>'
+	 	      +'</div>'
+	 	      +'<button type="button" onclick="showFlat('+data.flatId+');" class="button">Book Now</button>';
+	    
+	 	 $("#home").append(htmlFlat);
+		},'json');
+	}
 }
 $select_building = $("#filter_building_id").selectize({
 	persist: false,
@@ -286,7 +353,7 @@ $select_building = $("#filter_building_id").selectize({
 					$select_floor[0].selectize.destroy();
 					$("#filter_floor_id").html("");
 					$("#floorDetailsTab").hide();
-					$("#floorDetailsTab1").html("Sorry No floor found..");
+					$("#floorDetailsTab1").html("<span class='text-danger'>Sorry No floor found..</span>");
 					$("#floorDetailstab1").show();
 					$select_floor = $("#filter_floor_id").selectize({
 						persist: false,
@@ -342,8 +409,24 @@ $select_floor = $("#filter_floor_id").selectize({
   select_floor = $select_floor[0].selectize;
 <%}%>
 
-function getFlatDetails(){
+$select_eveOrodd = $("#evenOrodd").selectize({
+	persist: false,
+	onChange: function(value){
+		if(value > 0 && value != ''){
+			getFlatDetails();
+		}
+	},
+	onDropdownOpen: function(value){
+		var obj = $(this);
+		var textClear = $("#evenOrodd:selected").text();
+		if(textClear.trim() == "Even & Odd"){
+			obj[0].setValue("0");
+		}
+	}
+});
 
+function getFlatDetails(){
+ // alert($("#evenOrodd").val());
 	var no = $("#filter_building_id").val();
 // 	alert("Hello "+$("#filter_building_id").val()+" Floor No. "+$("#filter_floor_id").val());
 // 	 $("#home").empty();
@@ -384,11 +467,12 @@ function getFlatDetails(){
 //    +'</div>';
 // 	 $("#home").append(html);
 	
-		$.get("${baseUrl}/builder/buyer/flatlist.jsp?project_id="+<%out.print(project_id);%>+"&building_id="+no+"&floor_id="+$("#filter_floor_id").val(),{ }, function(data){
-			if(data != " " && data != null){
+	
+		$.get("${baseUrl}/builder/buyer/flatlist.jsp?project_id="+<%out.print(project_id);%>+"&building_id="+no+"&floor_id="+$("#filter_floor_id").val()+"&evenOrodd="+$("#evenOrodd").val(),{ }, function(data){
+			if($.trim(data)){
 				$("#flatdetails").html(data);
 			}else{
-				$("#flatdetails").html("Sorry No data found.");
+				$("#flatdetails").html("<span class='text-danger'>Sorry No Flat found.</span>");
 			}
 			//$("#editCountry").modal('show');
 		},'html');

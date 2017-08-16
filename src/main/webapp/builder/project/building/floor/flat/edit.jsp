@@ -1082,7 +1082,7 @@ $select_building = $("#filter_building_id").selectize({
 											$select_flat[0].selectize.destroy();
 											$("#filter_flat_id").html("");
 											$("#flatDetailsTab").hide();
-											$("#flatDetailsTab1").html("Sorry No flat found..");
+											$("#flatDetailsTab1").html("<span class='text-danger'>Sorry No flat found..</span>");
 											$("#flatDetailstab1").show();
 											$select_flat = $("#filter_flat_id").selectize({
 												persist: false,
@@ -1116,7 +1116,7 @@ $select_building = $("#filter_building_id").selectize({
 					$("#filter_floor_id").html("");
 					$("#filter_flat_id").html("");
 					$("#flatDetailsTab").hide();
-					$("#flatDetailsTab1").html("Sorry No floor and flat found..");
+					$("#flatDetailsTab1").html("<span class='text-danger'>Sorry No floor and flat found..</span>");
 					$("#flatDetailstab1").show();
 					$select_floor = $("#filter_floor_id").selectize({
 						persist: false,
@@ -1195,7 +1195,7 @@ $select_floor = $("#filter_floor_id").selectize({
 			$select_flat[0].selectize.destroy();
 			$("#filter_flat_id").html("");
 			$("#flatDetailsTab").hide();
-			$("#flatDetailsTab1").html("Sorry No flat found..");
+			$("#flatDetailsTab1").html("<span class='text-danger'>Sorry No flat found..</span>");
 			$("#flatDetailstab1").show();
 			$select_flat = $("#filter_flat_id").selectize({
 				persist: false,

@@ -27,6 +27,7 @@ import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.CampaignDAO;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
+import org.bluepigeon.admin.data.BookingFlatList;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.BuildingWeightageData;
@@ -4271,5 +4272,14 @@ public class ProjectController extends ResourceConfig {
 		ProjectDAO projectDAO = new ProjectDAO();
 		msg = projectDAO.deleteFlatOfferInfo(id);
 		return msg;
+	}
+	
+	@GET
+	@Path("/building/floor/flat/detail")
+	@Produces(MediaType.APPLICATION_JSON)
+	public BookingFlatList getActiveFlatDetail(@QueryParam("flat_id") int flat_id) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		BookingFlatList floorList = projectDAO.getFlatdetails(flat_id);
+		return floorList;
 	}
 }
