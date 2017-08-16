@@ -395,7 +395,7 @@ $select_building = $("#filter_building_id").selectize({
 					$select_floor[0].selectize.destroy();
 					$("#filter_floor_id").html("");
 					$("#floorDetailsTab").hide();
-					$("#floorDetailsTab1").html("Sorry No floor found..");
+					$("#floorDetailsTab1").html("<span class='text-danger'>Sorry No floor found..</span>");
 					$("#floorDetailstab1").show();
 					$select_floor = $("#filter_floor_id").selectize({
 						persist: false,

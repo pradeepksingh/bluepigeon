@@ -37,6 +37,9 @@
 	int building_size_list =0;
 	int floor_size_list = 0;
 	int flat_size_list = 0;
+	String taxLabel1 = "";
+	String taxLabel2 = "";
+	String taxLabel3 = "";
 	List<BuilderFloor> floorList = null;
 	List<FlatData> flatList = null;
 	List<BuilderBuilding> builderBuildingList = null;
@@ -98,6 +101,9 @@
 							flatAmenityWeightages = new ProjectDAO().getActiveFlatAmenityWeightageByFlatId(flat_id);
 							priceInfoData = new ProjectDAO().getFlatPriceData(flat_id);
 							flat_type_id = builderFlat.getBuilderFlatType().getId();
+							taxLabel1 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel1();
+							taxLabel2 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel2();
+							taxLabel3 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel3();
 						}
 					}
 				}
@@ -518,9 +524,10 @@
 			                                    		</div>
 			                                		</div>
 			                                	</div>
+			                                	<%if(taxLabel1.trim().length() != 0 && taxLabel1 != null){ %>
 			                                	<div class="col-sm-6">
 					                                <div class="form-group row">
-			        		                            <label for="example-text-input" class="col-sm-4 col-form-label">Stamp Duty<span class='text-danger'>*</span></label>
+			        		                            <label for="example-text-input" class="col-sm-4 col-form-label"><%out.print(taxLabel1); %><span class='text-danger'>*</span></label>
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 				                		                    	<div>
@@ -531,11 +538,15 @@
 			                                		    </div>
 			                                		</div>
 			                                   </div>
+			                                   <%}else{ %>
+													<input type="hidden"  id="stamp_duty" name="stamp_duty" value="0"/>
+												<%} %>
 			                              </div>
 			                              <div class="row">
+			                              		<%if(taxLabel2.trim().length() != 0 && taxLabel2 != null){ %>
 			                                	<div class="col-sm-6">
 			                                		<div class="form-group row">
-			                                   			<label for="example-text-input" class="col-sm-4 col-form-label">Tax<span class='text-danger'>*</span></label>
+			                                   			<label for="example-text-input" class="col-sm-4 col-form-label"><%out.print(taxLabel2); %><span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
@@ -546,9 +557,13 @@
 			                                    		</div>
 			                                    	</div>
 			                                     </div>
+			                                     <%}else{ %>
+													<input type="hidden"  id="tax" name="tax" value="0"/>
+												 <%} %>	
+												 <%if(taxLabel3.trim().length() != 0 && taxLabel3 != null){ %>
 			                                	 <div class="col-sm-6">
 			                                		<div class="form-group row">
-			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">VAT<span class='text-danger'>*</span></label>
+			                                    		<label for="example-search-input" class="col-sm-4 col-form-label"><%out.print(taxLabel3); %><span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
@@ -559,6 +574,9 @@
 			                                    		</div>
 			                                    	</div>
 			                                    </div>
+			                                    <%} else{%>
+													<input type="hidden"  id="vat" name="vat" value="0"/>
+												<%} %>
 			                              </div>
 			                              <div class="row">
 			                                	<div class="col-sm-6">
@@ -1064,7 +1082,7 @@ $select_building = $("#filter_building_id").selectize({
 											$select_flat[0].selectize.destroy();
 											$("#filter_flat_id").html("");
 											$("#flatDetailsTab").hide();
-											$("#flatDetailsTab1").html("Sorry No flat found..");
+											$("#flatDetailsTab1").html("<span class='text-danger'>Sorry No flat found..</span>");
 											$("#flatDetailstab1").show();
 											$select_flat = $("#filter_flat_id").selectize({
 												persist: false,
@@ -1098,7 +1116,7 @@ $select_building = $("#filter_building_id").selectize({
 					$("#filter_floor_id").html("");
 					$("#filter_flat_id").html("");
 					$("#flatDetailsTab").hide();
-					$("#flatDetailsTab1").html("Sorry No floor and flat found..");
+					$("#flatDetailsTab1").html("<span class='text-danger'>Sorry No floor and flat found..</span>");
 					$("#flatDetailstab1").show();
 					$select_floor = $("#filter_floor_id").selectize({
 						persist: false,
@@ -1177,7 +1195,7 @@ $select_floor = $("#filter_floor_id").selectize({
 			$select_flat[0].selectize.destroy();
 			$("#filter_flat_id").html("");
 			$("#flatDetailsTab").hide();
-			$("#flatDetailsTab1").html("Sorry No flat found..");
+			$("#flatDetailsTab1").html("<span class='text-danger'>Sorry No flat found..</span>");
 			$("#flatDetailstab1").show();
 			$select_flat = $("#filter_flat_id").selectize({
 				persist: false,

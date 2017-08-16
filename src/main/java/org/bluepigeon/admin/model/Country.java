@@ -21,10 +21,14 @@ public class Country implements java.io.Serializable {
 
 	private Integer id;
 	private String name;
+	private String taxLabel1;
+	private String taxLabel2;
+	private String taxLabel3;
 	private Byte status;
 	private Integer sortOrder;
 	private Set<State> states = new HashSet<State>(0);
 	private Set<BuilderProject> builderProjects = new HashSet<BuilderProject>(0);
+	private Set<Tax> tax = new HashSet<Tax>(0);
 
 	public Country() {
 	}
@@ -36,6 +40,7 @@ public class Country implements java.io.Serializable {
 		this.sortOrder = sortOrder;
 		this.states = states;
 		this.builderProjects = builderProjects;
+		
 	}
 
 	@Id
@@ -57,6 +62,32 @@ public class Country implements java.io.Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	
+	@Column(name = "tax_label_1", length = 128)
+	public String getTaxLabel1() {
+		return taxLabel1;
+	}
+
+	public void setTaxLabel1(String taxLabel1) {
+		this.taxLabel1 = taxLabel1;
+	}
+	@Column(name = "tax_label_2", length = 128)
+	public String getTaxLabel2() {
+		return taxLabel2;
+	}
+
+	public void setTaxLabel2(String taxLabel2) {
+		this.taxLabel2 = taxLabel2;
+	}
+	@Column(name = "tax_label_3", length = 128)
+	public String getTaxLabel3() {
+		return taxLabel3;
+	}
+
+	public void setTaxLabel3(String taxLabel3) {
+		this.taxLabel3 = taxLabel3;
 	}
 
 	@Column(name = "status")
@@ -94,5 +125,15 @@ public class Country implements java.io.Serializable {
 	public void setBuilderProjects(Set<BuilderProject> builderProjects) {
 		this.builderProjects = builderProjects;
 	}
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
+	public Set<Tax> getTax() {
+		return tax;
+	}
+
+	public void setTax(Set<Tax> tax) {
+		this.tax = tax;
+	}
+	
+	
 
 }

@@ -1,8 +1,13 @@
+
+<%@include file="../../head.jsp"%>
+<%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
+<%@page import="org.bluepigeon.admin.model.Country"%>
 <%@page import="org.bluepigeon.admin.dao.TaxDAO"%>
 <%@page import="org.bluepigeon.admin.model.Tax" %>
 <%@page import="java.util.List"%>
 <%
-	
+	List<Country> country_list = new CountryDAOImp().getCountryList();
+	int country_size=country_list.size();
 	List<Tax> tax_list = null;
 	TaxDAO taxDAO = new TaxDAO();
 	
@@ -21,27 +26,40 @@
                   		</div>
               		</div>
               	</div>
-              	<div class="row">
+              	<div class="row" style=padding:20px">
               		<div class="col-xs-12">
                   		<div class="form-group">
-                       		<label for="password" class="control-label">tax</label>
-                       		<input type="text" name="tax" id="utax" value="<%out.print(tax.getTax()); %>" class="form-control" placeholder="Enter tax"/>
+                       		<label for="password" class="control-label">Select Country</label>
+                       		<select name="ucountry_id" id="ucountry_id" class="form-control">
+								<option value=""> Select Country </option>
+								<% for(int i=0; i < country_size ; i++){ %>
+								<option value="<% out.print(country_list.get(i).getId());%>" <%if(country_list.get(i).getId() == tax.getCountry().getId()){ %>selected<%} %>><% out.print(country_list.get(i).getName());%></option>
+								<% } %>
+							</select>
                   		</div>
               		</div>
               	</div>
-              	<div class="row">
+              	<div class="row" id="uhtax1">
               		<div class="col-xs-12">
                   		<div class="form-group">
-                       		<label for="password" class="control-label">Stamp Duty</label>
-                       		<input type="text" name="sduty" id="usduty" value="<%out.print(tax.getStampDuty()); %>" class="form-control" placeholder="Enter stamp Duty"/>
+                       		<label  for="utax"  class="control-label"><%out.print(tax.getCountry().getTaxLabel1()); %></label>
+                       		<input type="text" name="utax" id="utax" value="<%out.print(tax.getTax()); %>" class="form-control" placeholder="Enter <%out.print(tax.getCountry().getTaxLabel1()); %>"/>
                   		</div>
               		</div>
               	</div>
-              	<div class="row">
+              	<div class="row" id="uhtax2">
               		<div class="col-xs-12">
                   		<div class="form-group">
-                       		<label for="password" class="control-label">Vat</label>
-                       		<input type="text" name="vat" id="uvat" value="<%out.print(tax.getVat()); %>" class="form-control" placeholder="Enter Vat"/>
+                       		<label for="usduty" class="control-label"><%out.print(tax.getCountry().getTaxLabel2()); %></label>
+                       		<input type="text" name="usduty" id="usduty" value="<%out.print(tax.getStampDuty()); %>" class="form-control" placeholder="Enter <%out.print(tax.getCountry().getTaxLabel2()); %>"/>
+                  		</div>
+              		</div>
+              	</div>
+              	<div class="row" id="uhtax3">
+              		<div class="col-xs-12">
+                  		<div class="form-group">
+                       		<label for="uvat"  class="control-label"><%out.print(tax.getCountry().getTaxLabel3()); %></label>
+                       		<input type="text" name="uvat" id="uvat" value="<%out.print(tax.getVat()); %>" class="form-control" placeholder="Enter <%out.print(tax.getCountry().getTaxLabel3()); %>"/>
                   		</div>
               		</div>
               	</div>
@@ -70,11 +88,61 @@ function isNumber(evt, element) {
     var charCode = (evt.which) ? evt.which : event.keyCode
 
     if (
-        (charCode != 45 || $(element).val().indexOf('-') != -1) &&      // “-” CHECK MINUS, AND ONLY ONE.
-        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode != 45 || $(element).val().indexOf('-') != -1) &&      //  CHECK MINUS, AND ONLY ONE.
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // CHECK DOT, AND ONLY ONE.
         (charCode < 48 || charCode > 57))
         return false;
-
     return true;
 }    
+
+$("#ucountry_id").change(function(){
+	//get the current placeholder
+	var ptax1 = $("#utax").attr('placeholder');
+	var ptax2 = $("#usduty").attr('placeholder');
+	var ptax3 = $("#uvat").attr('placeholder');
+	if($("#ucountry_id").val() > 0){
+		$.post("${baseUrl}/webapi/general/uchangeLabel",{country_id : $("#ucountry_id").val()}, function(data){
+			if(data != "" && data != null){
+				if(data.taxLabel1 != "" && data.taxLabel1 != "undefined"){
+					$("#utax").show();
+				//chnage the label according to selected country
+				 $("label[for='utax']").text(data.taxLabel1);
+				//change the old placeholder with new placeholder
+				 document.getElementById("utax").placeholder = "Enter "+data.taxLabel1;
+				 //$("#tax").placeholder("Enter "+data.taxLabel1);
+				 $("#uhtax1").show();
+				}else{
+					$("#utax").hide();
+					$("#utax").val('0');
+					$("#uhtax1").hide();
+				}
+				if(data.taxLabel2 != "" && data.taxLabel2 != "undefined"){
+					$("#usduty").show();
+					 $("label[for='usduty']").text(data.taxLabel2);
+					  document.getElementById("usduty").placeholder = "Enter "+data.taxLabel2;
+					 $("#uhtax2").show();
+				}else{
+					$("#usduty").hide();
+					$("#usduty").val('0');
+					$("#uhtax2").hide();
+				}
+				if(data.taxLabel3 != "" && data.taxLabel3 != "undefined"){
+					$("#uvat").show();
+					 $("label[for='uvat']").text(data.taxLabel3);
+					  document.getElementById("uvat").placeholder = "Enter "+data.taxLabel3;
+					 $("#uhtax3").show();
+				}else{
+						
+						$("#uvat").hide();
+						$("#uvat").val('0');
+						$("#uhtax3").hide();
+					
+				}}else{
+				$("#uhtax1").hide();
+				$("#uhtax2").hide();
+				$("#uhtax3").hide();
+			}
+		});
+	}
+});
 </script>

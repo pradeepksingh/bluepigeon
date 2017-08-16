@@ -438,7 +438,7 @@ public class BuilderController {
 			@FormParam("building_id") int buildingId,
 			@FormParam("floor_id") int floorId,
 			@FormParam("evenOrodd") int evenorodd){
-		List<FlatListData>  flatList =  new ProjectDAO().getBuildingFloorsFilter(projectId, buildingId, floorId, evenorodd);
+		List<FlatListData>  flatList =  new ProjectDAO().getFlatDetails(projectId, buildingId, floorId, evenorodd);
 		return flatList;
 	}
 	

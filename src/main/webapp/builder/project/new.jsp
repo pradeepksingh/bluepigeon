@@ -191,7 +191,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/builder/project/list.jsp";
+        window.location.href = "${baseUrl}/builder/dashboard.jsp";
   	}
 }
 

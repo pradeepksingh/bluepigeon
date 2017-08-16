@@ -1,14 +1,28 @@
 
+<%@page import="org.bluepigeon.admin.dao.CountryDAOImp"%>
+<%@page import="org.bluepigeon.admin.model.Country"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
 <%@page import="org.bluepigeon.admin.dao.TaxDAO"%>
 <%@page import="org.bluepigeon.admin.model.Tax" %>
+<%@page import="org.bluepigeon.admin.model.AdminUser"%>
 <%@page import="java.util.List"%>
 <%@include file="../../head.jsp"%>
 <%@include file="../../leftnav.jsp"%>
 <%
-
+session = request.getSession(false);
+AdminUser taxmainadmin = null;
+if(session!=null)
+{
+	if(session.getAttribute("uname") != null)
+	{
+		taxmainadmin  = (AdminUser)session.getAttribute("uname");
+		session_uid = mainadmin.getId();
+	}
+}
+List<Country> country_list = new CountryDAOImp().getCountryList();
+int country_size=country_list.size();
 List<Tax> tax_list = new TaxDAO().getTaxList();
 int tax_size=tax_list.size();
 %>
@@ -82,6 +96,19 @@ int tax_size=tax_list.size();
               	<h4 class="modal-title" id="myModalLabel">Add New Tax</h4>
           	</div>
           	<div class="modal-body" style="background-color:#f5f5f5;">
+          		<div class="row" style=padding:20px">
+              		<div class="col-xs-12">
+                  		<div class="form-group">
+                       		<label for="password" class="control-label">Select Country</label>
+                       		<select name="country_id" id="country_id" class="form-control">
+								<option value=""> Select Country </option>
+								<% for(int i=0; i < country_size ; i++){ %>
+								<option value="<% out.print(country_list.get(i).getId());%>"><% out.print(country_list.get(i).getName());%></option>
+								<% } %>
+							</select>
+                  		</div>
+              		</div>
+              	</div>
               	<div class="row">
               		<div class="col-xs-12">
                   		<div class="form-group">
@@ -90,26 +117,26 @@ int tax_size=tax_list.size();
                   		</div>
               		</div>
               	</div>
-              	<div class="row">
+              	<div class="row" id="htax1">
               		<div class="col-xs-12">
                   		<div class="form-group">
-                       		<label for="password" class="control-label">Tax</label>
+                       		<label for="tax"  class="control-label">Tax</label>
                        		<input type="text" name="tax" id="tax" class="form-control" placeholder="Enter tax"/>
                   		</div>
               		</div>
               	</div>
-              	<div class="row">
+              	<div class="row" id="htax2">
               		<div class="col-xs-12">
                   		<div class="form-group">
-                       		<label for="password" class="control-label">Stamp Duty</label>
+                       		<label for="sduty"  class="control-label">stamp Duty</label>
                        		<input type="text" name="sduty" id="sduty" class="form-control" placeholder="Enter stamp Duty"/>
                   		</div>
               		</div>
               	</div>
-              	<div class="row">
+              	<div class="row" id="htax3">
               		<div class="col-xs-12">
                   		<div class="form-group">
-                       		<label for="password" class="control-label">Vat</label>
+                       		<label for="cvat"  class="control-label">Vat</label>
                        		<input type="text" name="vat" id="vat" class="form-control" placeholder="Enter Vat"/>
                   		</div>
               		</div>
@@ -165,14 +192,14 @@ function isNumber(evt, element) {
     var charCode = (evt.which) ? evt.which : event.keyCode
 
     if (
-        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+        (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // CHECK DOT, AND ONLY ONE.
         (charCode < 48 || charCode > 57))
         return false;
 
     return true;
 }    
 function addTax() {
-	$.post("${baseUrl}/webapi/create/tax/save/",{ pincode: $("#pincode").val(), tax: $("#tax").val(),sduty: $("#sduty").val(),vat: $("#vat").val()}, function(data){
+	$.post("${baseUrl}/webapi/create/tax/save/",{ pincode: $("#pincode").val(),country_id : $("#country_id").val(), tax: $("#tax").val(),sduty: $("#sduty").val(),vat: $("#vat").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
 	},'json');
@@ -186,9 +213,58 @@ function editTax(taxid) {
 }
 
 function updateTax() {
-	$.post("${baseUrl}/webapi/create/tax/update/",{ id: $("#utax_id").val(), pincode: $("#upincode").val(), tax: $("#utax").val(),sduty: $("#usduty").val(),vat: $("#uvat").val()}, function(data){
+	$.post("${baseUrl}/webapi/create/tax/update/",{ id: $("#utax_id").val(), country_id : $("#country_id").val(), pincode: $("#upincode").val(), tax: $("#utax").val(),sduty: $("#usduty").val(),vat: $("#uvat").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
 	},'json');
 }
+
+$("#country_id").change(function(){
+	//get the current placeholder
+	var ptax1 = $("#tax").attr('placeholder');
+	var ptax2 = $("#sduty").attr('placeholder');
+	var ptax3 = $("#vat").attr('placeholder');
+	if($("#country_id").val() > 0){
+		$.post("${baseUrl}/webapi/general/changeLabel",{country_id : $("#country_id").val()}, function(data){
+			if(data != "" && data != null){
+				if(data.taxLabel1 != "" && data.taxLabel1 != "undefined"){
+					$("#tax").show();
+				//chnage the label according to selected country
+				 $("label[for='tax']").text(data.taxLabel1);
+				//change the old placeholder with new placeholder
+				 document.getElementById("tax").placeholder = "Enter "+data.taxLabel1;
+				 $("#htax1").show();
+				}else{
+					$("#tax").hide();
+					$("#tax").val('0');
+					$("#htax1").hide();
+				}
+				if(data.taxLabel2 != "" && data.taxLabel2 != "undefined"){
+					$("#sduty").show();
+					 $("label[for='sduty']").text(data.taxLabel2);
+					  document.getElementById("sduty").placeholder = "Enter "+data.taxLabel2;
+					 $("#htax2").show();
+				}else{
+					$("#sduty").hide();
+					$("#sduty").val('0');
+					$("#htax2").hide();
+				}
+				if(data.taxLabel3 != "" && data.taxLabel3 != "undefined"){
+					$("#vat").show();
+					 $("label[for='cvat']").text(data.taxLabel3);
+					  document.getElementById("vat").placeholder = "Enter "+data.taxLabel3;
+					 $("#htax3").show();
+				}else{
+						$("#vat").hide();
+						$("#vat").val('0');
+						$("#htax3").hide();
+					}
+			}else{
+				$("#htax1").hide();
+				$("#htax2").hide();
+				$("#htax3").hide();
+			}
+		});
+	}
+});
 </script>

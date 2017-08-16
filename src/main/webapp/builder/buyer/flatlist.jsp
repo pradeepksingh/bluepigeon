@@ -9,11 +9,12 @@
 	int building_id = 0;
 	int floor_id =	0;
 	int evenOrodd = 0;
+	String image  = "";
 	List<FlatListData> flatListDatas = null;
 	BookingFlatList bookingFlatList2 = null;
 	project_id = Integer.parseInt(request.getParameter("project_id"));
 	building_id = Integer.parseInt(request.getParameter("building_id"));
-	//evenOrodd = Integer.parseInt(request.getParameter("evenOrodd"));
+	evenOrodd = Integer.parseInt(request.getParameter("evenOrodd"));
 	if(request.getParameter("floor_id") != null && request.getParameter("floor_id") != ""){
 		if(Integer.parseInt(request.getParameter("floor_id")) > 0){
 			floor_id = Integer.parseInt(request.getParameter("floor_id"));
@@ -21,11 +22,13 @@
 	}
 	try{
 		if(project_id > 0 || building_id > 0 || floor_id > 0 || evenOrodd > 0){
-			flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,evenOrodd);
+			flatListDatas = new ProjectDAO().getBuildingFloorsFilter(project_id,building_id,floor_id,evenOrodd);
 			bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,building_id,floor_id,evenOrodd);
+			image = bookingFlatList2.getImage();
+			
 		}
 	}catch(Exception e){
-		
+		e.printStackTrace();
 	}
 %>
  <% if(flatListDatas !=null && bookingFlatList2 !=null){ %>
@@ -39,9 +42,9 @@
               <% for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
             	    if(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus() == "available"){
             	  %>
-<li class=""><a data-toggle="pill" href="#home"><% out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+<li class=""><a data-toggle="pill" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 <%}else{%>
-<li style="color:#4dcfcf;"><a data-toggle="pill" href="#home"><% out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+<li style="color:#4dcfcf;"><a data-toggle="pill" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(i).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 <%}}}%>
 
 </ul>
@@ -54,10 +57,11 @@
                     <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
                      <div class="bg1">
                        <div class="tab-content">
-                       
+                     
 					     <div id="home" class="tab-pane fade in active">
+					     	<% if(bookingFlatList2 != null){ %>
 					     	<% if(bookingFlatList2.getImage()!="" && bookingFlatList2.getImage() != null){ %>
-						     <img src="${baseUrl}/builder/<%out.print(bookingFlatList2.getImage()); %>" alt="Project image" class="custom-img">
+						     <img src="${baseUrl}/<%out.print( bookingFlatList2.getImage() ); %>" alt="flat image" class="custom-img">
 						     <%} %>
 						      <hr><br>
 						      <div class="row custom-row">
@@ -91,8 +95,11 @@
 						        </div>
 						      </div>
 						      <button type="button" onclick="javascript:showFlat(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button">Book Now</button>
+						      <%} %>
 					     </div>
 					  </div>
                     </div>
                   </div>
       				<%} %>
+
+      				

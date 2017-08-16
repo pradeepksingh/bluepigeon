@@ -338,11 +338,8 @@
 	                    <div class="offset-sm-5 col-sm-7" id="showMore">
 	                        <button type="button" onclick="getAllProjectsByBuiderId();" class="btn btn11 btn-default waves-effect waves-light m-t-10">More...</button>
 	                     </div>
-	                     
                     </div>
                 </div>
-                
-                
                 <!-- /.row -->
                 <!-- .row -->
                 <div class="row">
@@ -427,13 +424,13 @@
 <!-- 		                </div> -->
 	                </div>
                 </div>
-                </div>
-                </div>
-                </div>
+              </div>
+           </div>
+      </div>
         <!-- /.container-fluid -->
-   			<div id="footer"> 
-	      		<%@include file="partial/footer.jsp"%>
-			</div> 
+   	<div id="footer"> 
+		<%@include file="partial/footer.jsp"%>
+    </div> 
        
     <script src="plugins/bower_components/switchery/dist/switchery.min.js"></script>
     <script src="plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
@@ -757,6 +754,11 @@ $("#locality_name").attr('disabled',true);
             		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
             		+'</div>'
             		<%}%>
+            		<%if(access_id == 7){%>
+             		+'<div class="col-md-6 left">' 
+             		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'</div>'
+             		<%}%>
           		+'<div class="col-md-6 center">'
            		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
@@ -824,6 +826,11 @@ $("#locality_name").attr('disabled',true);
                		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                		+'</div>'
                		<%}%>
+               		<% if(access_id == 7){%>
+             		+'<div class="col-md-6 left">' 
+             		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'</div>'
+             		<%}%>
              		+'<div class="col-md-6 center">'
               		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
@@ -891,6 +898,11 @@ $("#locality_name").attr('disabled',true);
                  		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
                  		<%}%>
+                 		<% if(access_id == 7){%>
+                 		+'<div class="col-md-6 left">' 
+                 		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+                 		+'</div>'
+                 		<%}%>
                		+'<div class="col-md-6 center">'
                 		+'<a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id='+projectId+'" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
   			 	 	+'</div>'
@@ -918,7 +930,6 @@ $("#locality_name").attr('disabled',true);
     	    	
     	    	
    		      y: '<%
-
      	    	    if(barGraphData.getBuiltYear() != 0){
     		      out.print(barGraphData.getBuiltYear());}%>', 
     	        Flat: <%out.print(barGraphData.getTotalFlats());%>,

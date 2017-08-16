@@ -90,6 +90,33 @@ int country_size=country_list.size();
               	<div class="row">
               		<div class="col-xs-12">
                   		<div class="form-group">
+                       		<label for="password" class="control-label">Tax Label 1</label>
+                       		<p id="error" class="bg-danger nopadding" ></p>
+                       		<input type="text" name="tax1" id="tax1" class="form-control" placeholder="Enter 1st tax label"/>
+                  		</div>
+              		</div>
+              	</div>
+              	<div class="row">
+              		<div class="col-xs-12">
+                  		<div class="form-group">
+                       		<label for="password" class="control-label">Tax Label 2</label>
+                       		<p id="error" class="bg-danger nopadding" ></p>
+                       		<input type="text" name="tax2" id="tax2" class="form-control" placeholder="Enter 2nd tax label"/>
+                  		</div>
+              		</div>
+              	</div>
+              	<div class="row">
+              		<div class="col-xs-12">
+                  		<div class="form-group">
+                       		<label for="password" class="control-label">Tax Label 3</label>
+                       		<p id="error" class="bg-danger nopadding" ></p>
+                       		<input type="text" name="tax3" id="tax3" class="form-control" placeholder="Enter 3rd tax label"/>
+                  		</div>
+              		</div>
+              	</div>
+              	<div class="row">
+              		<div class="col-xs-12">
+                  		<div class="form-group">
                        		<label for="password" class="control-label">Status</label>
                        		<select name="status" id="status" class="form-control">
 								<option value="1"> Active </option>
@@ -136,7 +163,7 @@ $('input').keyup(function() {
 });
 
 function addCountry() {
-		$.post("${baseUrl}/webapi/general/country/save",{ name: $("#name").val(), status: $("#status").val()}, function(data){
+		$.post("${baseUrl}/webapi/general/country/save",{ name: $("#name").val(), tax1:$("#tax1").val(), tax2:$("#tax2").val(),tax3 : $("#tax3").val(),status: $("#status").val()}, function(data){
 			if(data.status == 1){
 				$('#error').empty();
 				alert(data.message);
@@ -157,7 +184,7 @@ function editCountry(countryid) {
 }
 
 function updateCountry() {
-	$.post("${baseUrl}/webapi/general/country/update/",{ id: $("#ucountry_id").val(), name: $("#uname").val(), status: $("#ustatus").val(), sortOrder:1}, function(data){
+	$.post("${baseUrl}/webapi/general/country/update/",{ id: $("#ucountry_id").val(), name: $("#uname").val(), tax1: $("#utax1").val(), tax2 : $("#utax2").val(), tax3 : $("#utax3").val(),  status: $("#ustatus").val(), sortOrder:1}, function(data){
 		alert(data.message);
 		window.location.reload();
 	},'json');

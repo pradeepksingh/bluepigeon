@@ -1600,7 +1600,7 @@ public class ProjectDAO {
 			List<BuildingListData> buildingListDatas = new ArrayList<BuildingListData>();
 			if(buildingid != builderFlat.getBuilderFloor().getBuilderBuilding().getId()){
 				List<FloorListData> floorListDatas = new ArrayList<FloorListData>();
-				if(floorid != builderFlat.getBuilderFloor().getId()){
+				//if(floorid != builderFlat.getBuilderFloor().getId()){
 					
 //					BuilderFloor builderFloor = new BuilderFloor();
 //					builderFloor.setId(floorid);
@@ -1613,7 +1613,7 @@ public class ProjectDAO {
 					
 					floorListData.setFlatStatusDatas(flatDatas);
 					floorListDatas.add(floorListData);
-				}
+				//}
 //				BuilderFlat builderFlat2 = new BuilderFlat();
 //				builderFlat2.setId(builderFlat.getId());
 //				builderFlat2.setFlatNo(builderFlat.getFlatNo());
@@ -1621,15 +1621,15 @@ public class ProjectDAO {
 				floorid = builderFlat.getBuilderFloor().getId();
 //				floorName = builderFlat.getBuilderFloor().getName();
 				BuildingListData buildingListData = new BuildingListData();
-				List<BuildingImageGallery> buildingImageGalleries =  getBuilderBuildingImagesById(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
+			//	List<BuildingImageGallery> buildingImageGalleries =  getBuilderBuildingImagesById(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
 				buildingListData.setBuildingId( builderFlat.getBuilderFloor().getBuilderBuilding().getId());
 				try{
-				if(buildingImageGalleries.get(0) != null){	
-					buildingListData.setBuildingImage(buildingImageGalleries.get(0).getImage());
-				}
-				else{
-					buildingListData.setBuildingImage("");
-				}
+//				if(buildingImageGalleries.get(0) != null){	
+//					buildingListData.setBuildingImage(buildingImageGalleries.get(0).getImage());
+//				}
+//				else{
+//					buildingListData.setBuildingImage("");
+//				}
 				buildingListData.setBuildingName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
 				buildingListData.setFloorListDatas(floorListDatas);
 				buildingListDatas.add(buildingListData);
@@ -1660,20 +1660,20 @@ public class ProjectDAO {
 		String hql = "from BuilderFlat where ";
 		String where = "";
 		if(projectId > 0){
-		    where += " builderFloor.builderBuilding.builderProject.id = :project_id AND builderFloor.builderBuilding.builderProject.status=1";	
+		    where += " builderFloor.builderBuilding.builderProject.id = :project_id AND builderFloor.builderBuilding.builderProject.status = 1";	
 		}
 		if(buildingId > 0){
 			if(where != ""){
-				where +=" AND builderFloor.builderBuilding.id = :building_id AND builderFloor.builderBuilding.status=1";
+				where +=" AND builderFloor.builderBuilding.id = :building_id AND builderFloor.builderBuilding.status = 1";
 			}else{
-				where +=" builderFloor.builderBuilding.id = :building_id AND builderFloor.builderBuilding.status=1";
+				where +=" builderFloor.builderBuilding.id = :building_id AND builderFloor.builderBuilding.status = 1";
 			}
 		}
 		if(floorId > 0){
 			if(where != ""){
-				where +=" AND builderFloor.id = :floor_id AND builderFloor.status=1";
+				where +=" AND builderFloor.id = :floor_id AND  builderFloor.status = 1";
 			}else{
-				where +=" builderFloor.id = :floor_id AND builderFloor.status=1";
+				where +=" builderFloor.id = :floor_id AND  builderFloor.status = 1";
 			}
 		}
 	
@@ -1681,15 +1681,15 @@ public class ProjectDAO {
 			//for even floors
 			if(evenOrodd % 2 == 0){
 				if(where != null){
-					where += " AND builderFloor.floorNo % 2 = 0 AND builderFloor.status=1";
+					where += " AND builderFloor.floorNo % 2 = 0 AND  builderFloor.status = 1";
 				}else{
-					where +=" builderFloor.floorNo % 2 = 0 AND builderFloor.status=1";
+					where +=" builderFloor.floorNo % 2 = 0 AND  builderFloor.status = 1";
 				}
 			}else{
 				if(where != null){
-					where +=" AND builderFloor.floorNo %2 <> 0 AND builderFloor.status=1";
+					where +=" AND builderFloor.floorNo %2 <> 0 AND  builderFloor.status = 1";
 				}else{
-					where +=" builderFloor.floorNo %2 <> 0 AND builderFloor.status=1";
+					where +=" builderFloor.floorNo %2 <> 0 AND  builderFloor.status = 1";
 				}
 			}
 		}
@@ -1698,7 +1698,7 @@ public class ProjectDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		String flatHql = "from BuilderFlat where builderFloor.id = :floor_id AND builderFloor.status=1 AND status=1" ;
+		String flatHql = "from BuilderFlat where builderFloor.id = :floor_id AND builderFloor.status=1 AND status=1";
 		Session flatSession = hibernateUtil.openSession();
 		Query flatQuery = flatSession.createQuery(flatHql);
 		if(projectId > 0)
@@ -1714,48 +1714,43 @@ public class ProjectDAO {
 		System.err.println("No of flats :::: "+builderFlatList.size());
 		int buildingid = 0;
 		int floorid = 0;
-		//int floorCount = 0;
 		try{
-		for(BuilderFlat builderFlat : builderFlatList){
+		for(  int i=0;i<builderFlatList.size();i++){
 			FlatListData flatListData = new FlatListData();
 			List<BuildingListData> buildingListDatas = new ArrayList<BuildingListData>();
-			if(buildingid != builderFlat.getBuilderFloor().getBuilderBuilding().getId()){
-				//floorCount = getFloorCountByBuildingId(buildingid);
+			if(buildingid != builderFlatList.get(i).getBuilderFloor().getBuilderBuilding().getId()){
 				List<FloorListData> floorListDatas = new ArrayList<FloorListData>();
-				//floorCount = getFloorCountByBuildingId(buildingid);
-				//if(floorCount > 0){
-					//for(int i=0;i<floorCount;i++){
-						if(floorid != builderFlat.getBuilderFloor().getId()){
-		//					BuilderFloor builderFloor = new BuilderFloor();
-		//					builderFloor.setId(floorid);
-		//					builderFloor.setName(floorName);
-							//builderFloor.setBuilderFlats(builder);
-							List<FlatStatusData> flatDatas = getFlatsByFloorId(builderFlat.getBuilderFloor().getId());
-							FloorListData floorListData = new FloorListData();
-							floorListData.setFloorId(builderFlat.getBuilderFloor().getId());
-							floorListData.setFloorName(builderFlat.getBuilderFloor().getName());
-							floorListData.setFlatStatusDatas(flatDatas);
-							floorListDatas.add(floorListData);
-						}
-				//	}
+				//if(floorid != builderFlatList.get(i).getBuilderFloor().getId()){
+					
+//					BuilderFloor builderFloor = new BuilderFloor();
+//					builderFloor.setId(floorid);
+//					builderFloor.setName(floorName);
+					//builderFloor.setBuilderFlats(builder);
+					List<FlatStatusData> flatDatas = getFlatsByFloorId(builderFlatList.get(i).getBuilderFloor().getId());
+					FloorListData floorListData = new FloorListData();
+					floorListData.setFloorId(builderFlatList.get(i).getBuilderFloor().getId());
+					floorListData.setFloorName(builderFlatList.get(i).getBuilderFloor().getName());
+					
+					floorListData.setFlatStatusDatas(flatDatas);
+					floorListDatas.add(floorListData);
 			//	}
 //				BuilderFlat builderFlat2 = new BuilderFlat();
 //				builderFlat2.setId(builderFlat.getId());
 //				builderFlat2.setFlatNo(builderFlat.getFlatNo());
 //				builderFlatList.add(builderFlat2);
-				floorid = builderFlat.getBuilderFloor().getId();
+				floorid = builderFlatList.get(i).getBuilderFloor().getId();
 //				floorName = builderFlat.getBuilderFloor().getName();
 				BuildingListData buildingListData = new BuildingListData();
-				List<BuildingImageGallery> buildingImageGalleries =  getBuilderBuildingImagesById(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
-				buildingListData.setBuildingId( builderFlat.getBuilderFloor().getBuilderBuilding().getId());
+			//	List<BuildingImageGallery> buildingImageGalleries =  getBuilderBuildingImagesById(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
+				buildingListData.setBuildingId( builderFlatList.get(i).getBuilderFloor().getBuilderBuilding().getId());
 				try{
-				if(buildingImageGalleries.get(0) != null){	
-					buildingListData.setBuildingImage(buildingImageGalleries.get(0).getImage());
-				}
-				else{
-					buildingListData.setBuildingImage("");
-				}
-				buildingListData.setBuildingName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
+//				if(buildingImageGalleries.get(0) != null){	
+//					buildingListData.setBuildingImage(buildingImageGalleries.get(0).getImage());
+//				}
+//				else{
+//					buildingListData.setBuildingImage("");
+//				}
+				buildingListData.setBuildingName(builderFlatList.get(i).getBuilderFloor().getBuilderBuilding().getName());
 				buildingListData.setFloorListDatas(floorListDatas);
 				buildingListDatas.add(buildingListData);
 			}catch(Exception ee){
@@ -1765,7 +1760,7 @@ public class ProjectDAO {
 //			BuildingData buildingData = new BuildingData();
 //			buildingData.setId(builderFlat.getBuilderFloor().getBuilderBuilding().getId());
 //			buildingData.setName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
-			buildingid = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
+			buildingid = builderFlatList.get(i).getBuilderFloor().getBuilderBuilding().getId();
 //			buildingName = builderFlat.getBuilderFloor().getBuilderBuilding().getName();
 			flatListData.setBuildingListDatas(buildingListDatas);
 			flatListData.setProjectid(projectId);
@@ -5246,7 +5241,7 @@ public class ProjectDAO {
     	return result;
     }
     
-    
+    //on load call
     public BookingFlatList getFlatdetails(int projectId, int buildingId, int floorId,int evenOrodd){
     	BookingFlatList booking = new BookingFlatList();
     	String hql =" from BuilderFlat where ";
@@ -5263,9 +5258,9 @@ public class ProjectDAO {
     	}
     	if(floorId > 0){
     		if(where != ""){
-    			where +=" AND builderFloor.id = :builderFloor_id AND builderFloor.status = 1 ";
+    			where +=" AND builderFloor.id = :floor_id AND builderFloor.status = 1 ";
     		}else{
-    			where +=" builderFloor.id = :builderFloor AND builderFloor.status = 1 ";
+    			where +=" builderFloor.id = :floor_id AND builderFloor.status = 1 ";
     		}
     	}
     	if(evenOrodd > 0){
@@ -5283,7 +5278,7 @@ public class ProjectDAO {
 				}
 			}
     	}
-    	hql += where+" AND status = 1 ORDER BY builderFloor.builderBuilding.builderProject.id DESC, builderFloor.builderBuilding.id DESC, builderFloor.floorNo DESC, flatNo DESC";
+    	hql += where+" AND status = 1 ORDER BY builderFloor.builderBuilding.builderProject.id ASC, builderFloor.builderBuilding.id ASC, builderFloor.floorNo ASC, flatNo ASC";
     	HibernateUtil hibernateUtil = new HibernateUtil();
     	Session session = hibernateUtil.openSession();
     	Query query = session.createQuery(hql);
@@ -5327,6 +5322,7 @@ public class ProjectDAO {
     	}catch(Exception e){
     		booking = null;
     	}
+    	//System.err.println(hql);
     	return booking;
     }
     
@@ -5364,5 +5360,50 @@ public class ProjectDAO {
     	query.setParameter("project_id", projectId);
     	List<BuilderProjectOfferInfo> result = query.list();
     	return result;
+    }
+    
+    public BookingFlatList getFlatdetails(int flatId){
+    	BookingFlatList booking = new BookingFlatList();
+    	String hql =" from BuilderFlat where id = :flat_id AND builderFloor.builderBuilding.builderProject.status = 1 AND "
+    			+ " builderFloor.builderBuilding.status = 1 AND builderFloor.status = 1 ";
+    	hql += " AND status = 1 ORDER BY builderFloor.builderBuilding.builderProject.id DESC, builderFloor.builderBuilding.id DESC, builderFloor.floorNo DESC, flatNo DESC";
+    	HibernateUtil hibernateUtil = new HibernateUtil();
+    	Session session = hibernateUtil.openSession();
+    	Query query = session.createQuery(hql);
+    	query.setParameter("flat_id", flatId);
+    	try{
+	    	BuilderFlat builderFlat = (BuilderFlat) query.list().get(0);
+	    	if(builderFlat != null){
+	    		booking.setFlatId(builderFlat.getId());
+	    		booking.setFlatNo(builderFlat.getFlatNo());
+	    		booking.setBalcony(builderFlat.getBalcony());
+	    		booking.setBathroom(builderFlat.getBathroom());
+	    		booking.setBedroom(builderFlat.getBedroom());
+	    		booking.setCarpetArea(builderFlat.getBuilderFlatType().getCarpetArea());
+	    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
+	    		if(builderFlat.getImage() != null && builderFlat.getImage() != "")
+	    			booking.setImage(builderFlat.getImage());
+	    		else
+	    			booking.setImage("");
+	    		booking.setFlatType(builderFlat.getBuilderFlatType().getBuilderProjectPropertyConfiguration().getName());
+	    		BuilderBuildingFlatTypeRoom room = getFlatTypeRoom(builderFlat.getBuilderFlatType().getId());
+	    		booking.setBreadth(room.getBreadth());
+	    		booking.setLength(room.getLength());
+	    		if(room.getLengthUnit() == 1)
+	    			booking.setAreaUint("Feet");
+	    		if(room.getLengthUnit() == 2)
+	    			booking.setAreaUint("Meter");
+	    		if(room.getLengthUnit() == 3)
+	    			booking.setAreaUint("Inch");
+	    		if(room.getLengthUnit() == 4)
+	    			booking.setRoomName("Yard");
+	    	//	booking.setCarpetAreaunit(builderFlat.getBuilderFlatType().);
+	    	}
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		booking = null;
+    	}
+    	//System.err.println(hql);
+    	return booking;
     }
 }

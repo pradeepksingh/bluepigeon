@@ -17,7 +17,31 @@
               		<div class="col-xs-12">
                   		<div class="form-group">
                        		<label for="password" class="control-label">Country Name</label>
-                       		<input type="text" name="name" id="uname" value="<% out.print(country.getName()); %>" class="form-control" placeholder="Enter country Name"/>
+                       		<input type="text" name="uname" id="uname" value="<% out.print(country.getName()); %>" class="form-control" placeholder="Enter country Name"/>
+                  		</div>
+              		</div>
+              	</div>
+              	<div class="row">
+              		<div class="col-xs-12">
+                  		<div class="form-group">
+                       		<label for="password" class="control-label">Tax Label 1</label>
+                       		<input type="text" name="utax1" id="utax1" value="<% if(country.getTaxLabel1() != null){out.print(country.getTaxLabel1());} %>" class="form-control" placeholder="Enter country Name"/>
+                  		</div>
+              		</div>
+              	</div>
+              	<div class="row">
+              		<div class="col-xs-12">
+                  		<div class="form-group">
+                       		<label for="password" class="control-label">Tax Label 2</label>
+                       		<input type="text" name="utax2" id="utax2" value="<% if(country.getTaxLabel2() != null){out.print(country.getTaxLabel2());} %>" class="form-control" placeholder="Enter country Name"/>
+                  		</div>
+              		</div>
+              	</div>
+              	<div class="row">
+              		<div class="col-xs-12">
+                  		<div class="form-group">
+                       		<label for="password" class="control-label">Tax label 3</label>
+                       		<input type="text" name="utax3" id="utax3" value="<% if(country.getTaxLabel3() != null){out.print(country.getTaxLabel3());} %>" class="form-control" placeholder="Enter country Name"/>
                   		</div>
               		</div>
               	</div>
@@ -25,7 +49,7 @@
               		<div class="col-xs-12">
                   		<div class="form-group">
                        		<label for="password" class="control-label">Status</label>
-                       		<select name="status" id="ustatus" class="form-control">
+                       		<select name="ustatus" id="ustatus" class="form-control">
 								<option value="1" <% if(country.getStatus() == 1) { %>selected<% } %>> Active </option>
 								<option value="0" <% if(country.getStatus() == 0) { %>selected<% } %>> Inactive </option>
 							</select>

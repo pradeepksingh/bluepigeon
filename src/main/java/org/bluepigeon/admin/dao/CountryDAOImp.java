@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
+import org.bluepigeon.admin.data.BuildingPojo;
+import org.bluepigeon.admin.data.TaxLabels;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.State;
@@ -114,5 +117,13 @@ public class CountryDAOImp {
 		session.close();
 		return result;
 	}
-
+	public TaxLabels getTaxLabels(int countryId){
+		String hql = "select c.tax_label_1 as taxLabel1, c.tax_label_2 as taxLabel2,c.tax_label_3 as taxLabel3 from country as c where c.id = "+countryId+" and c.status = 1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(TaxLabels.class));
+		TaxLabels result = (TaxLabels)query.list().get(0);
+		session.close();
+		return result;
+	}
 }
