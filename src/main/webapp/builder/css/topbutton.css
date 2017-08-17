@@ -10,14 +10,15 @@ textarea{
     transition: all 300ms linear 0s;
 }
 .full{
-	    width: 100%;
+/* 	    width: 100%; */
+  width: 96% !important;
 }
 
 @media (min-width: 768px)
 {
 .tab-content button{
 	
-/*     background: #00bfd6; */
+/*     background: #24bcd3; */
     color: #f2f2f2;
     border: none;
 /*     margin: 2% 10% 1%; */
@@ -33,13 +34,21 @@ textarea{
 }
 .selectize-input {
     border: 1px solid #24bcd3 !important;
-    padding: 14px 8px !important;
+    padding: 14px 8px 3%!important;
+}
+/* .selectize-dropdown, .selectize-input, .selectize-input input{ */
+/* 	font-size: 18px !important; */
+/* } */
+.nav-pills > li {
+    float: left;
+    width: 16%;
 }
 .nav-pills > li + li {
        width: 16%;
     margin-left: 2%;
     
-   margin-bottom: 4%;
+/*    margin-bottom: 4%; */
+ margin-bottom: 1%;
 }
 
 @media (max-width: 768px){
@@ -66,9 +75,9 @@ textarea{
 }
 	.button {
     -webkit-appearance: none;
-    border: 1px solid #00bfd6;
+    border: 1px solid #24bcd3;
     color: #ffffff;
-    background: #00bfd6;
+    background: #24bcd3;
     border-radius: 10px;
     
     padding: 5px 14px;
@@ -109,7 +118,7 @@ textarea{
      select{
     font-family: inherit;
     font-size: 20px;
-    border: 1px solid #00bfd6;
+    border: 1px solid #24bcd3;
     border-radius: 0px;
     width: 95%;
     background: #fff;
@@ -123,7 +132,7 @@ textarea{
 	 select{
     font-family: inherit;
     font-size: 17px;
-    border: 1px solid #00bfd6;
+    border: 1px solid #24bcd3;
     border-radius: 0px;
     width: 95%;
     background: #fff;
@@ -136,7 +145,7 @@ textarea{
 	    width: 55px;
     text-align: center;
     color: #ffffff;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
 	
@@ -144,7 +153,7 @@ textarea{
 .nav-pills>li>a {
 	    width: 55px;
     color: #2b2b2b;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
     padding: 5px 35px;
@@ -173,7 +182,7 @@ textarea{
 	    width: 100px;
     text-align: center;
     color: #ffffff;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
 	
@@ -181,7 +190,7 @@ textarea{
 .nav-pills>li>a {
 	    width: 100px;
     color: #2b2b2b;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
     padding: 5px 25px;
@@ -212,7 +221,7 @@ textarea{
 	    width: 100px !important;
     text-align: center;
     color: #ffffff;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
 	
@@ -220,7 +229,7 @@ textarea{
 .nav-pills>li>a {
 	    width: 100px !important;;
     color: #2b2b2b;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
     text-align: center;
@@ -236,7 +245,7 @@ textarea{
      select{
     font-family: inherit;
 /*     font-size: 20px !important; */
-    border: 1px solid #00bfd6;
+    border: 1px solid #24bcd3;
     border-radius: 0px;
     width: 95%;
     background: #fff;
@@ -267,7 +276,7 @@ textarea{
 	    width: 75px;
     text-align: center;
     color: #ffffff;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
 	
@@ -275,7 +284,7 @@ textarea{
 .nav-pills>li>a {
 	    width: 75px;
     color: #2b2b2b;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
     text-align: center;
@@ -302,8 +311,8 @@ hr {
 /*    .nav > li > a:focus{ */
 /*     text-decoration: none; */
 /*     color:  #ffffff;; */
-/*     border: 1px solid #00bfd6; */
-/*     background-color: #00bfd6; */
+/*     border: 1px solid #24bcd3; */
+/*     background-color: #24bcd3; */
 
 /* } */
 .p-custom{
@@ -317,19 +326,19 @@ hr {
 }
 .bg1{
 	
-    border-top: 2px solid #00bfd6;
-    border-left: 1px solid #00bfd6;
-    border-right: 1px solid #00bfd6;
+    border-top: 2px solid #24bcd3;
+    border-left: 1px solid #24bcd3;
+    border-right: 1px solid #24bcd3;
 }
 
  .btn-info:active, .show>.btn-info.dropdown-toggle {
     color: #fff;
-    background-color: #00bfd6;;
+    background-color: #24bcd3;;
     background-image: none;
-    border-color:#00bfd6;;
+    border-color:#24bcd3;;
 }
 .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
-    background: #00bfd6;
+    background: #24bcd3;
     color: #fff;
 }
  @media (min-width: 1440px){
@@ -472,7 +481,7 @@ font-size: 17px
 }
 .tab-content button{
 	
-/*     background: #00bfd6; */
+/*     background: #24bcd3; */
     color: #f2f2f2;
     border: none;
 /*     margin: 2% 28% 1%; */
@@ -496,7 +505,7 @@ font-size: 17px
 }
 .white-box{
 	
-    margin-top: 1%;
+    margin-top: 0.5%;
 	
 }
 
@@ -505,7 +514,7 @@ font-size: 17px
     z-index: 1;
     
     padding-right: 38px !important;
-    border: 1px solid #00bfd6;
+    border: 1px solid #24bcd3;
     }
     .bootstrap-select>.dropdown-toggle {
     width: 100%;
@@ -518,10 +527,10 @@ font-size: 17px
     font-weight: 300 !important;
     }
     .bs-caret span{
-    color: #00bfd6 !important;
+    color: #24bcd3 !important;
     }
 .bspace{
-	    margin-bottom: 1%;
+	    margin-bottom: -0.5% !important;
 }
 .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
     width:96%!important;

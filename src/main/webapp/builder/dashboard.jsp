@@ -103,6 +103,8 @@
      .selectize-input{
 	border: 1px solid #24bcd3 !important;
 	padding : 10px 8px !important;
+}.selectize-control.single .selectize-input:after {
+	border-color: #24bcd3 transparent transparent transparent !important;
 }
      </style>
     <!-- jQuery -->
@@ -317,7 +319,7 @@
 	                      <%  }else if(access_id == 3){%>
 	                     <div class="row">
                            	 <div class="col-md-6 left"> 
-                           	   	 <a href="${baseUrl}/builder/campaign/list.jsp" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
+                           	   	 <a href="" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
                            	 </div>
                            	 <div class="col-md-6 center">
                           		 <a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
@@ -693,7 +695,7 @@ $("#locality_name").attr('disabled',true);
             		<%}%>
             		<%if(access_id == 3){%>
              		+'<div class="col-md-6 left">' 
-             		+'<a href="${baseUrl}/builder/campaign/list.jsp" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'<a href="" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
             		<%if(access_id == 7){%>
@@ -847,7 +849,7 @@ $("#locality_name").attr('disabled',true);
                  		<%}%>
                  		<%if(access_id == 3){%>
                  		+'<div class="col-md-6 left">' 
-                 		+'<a href="${baseUrl}/builder/campaign/list.jsp" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+                 		+'<a href="" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
                  		<%}%>
                  		<% if(access_id == 7){%>

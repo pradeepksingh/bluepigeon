@@ -17,7 +17,7 @@ textarea{
 {
 .tab-content button{
 	
-    background: #00bfd6;
+    background: #24bcd3;
     color: #f2f2f2;
     border: none;
     margin: 2% 10% 1%;
@@ -59,9 +59,9 @@ textarea{
 }
 	.button {
     -webkit-appearance: none;
-    border: 1px solid #00bfd6;
+    border: 1px solid #24bcd3;
     color: #ffffff;
-    background: #00bfd6;
+    background: #24bcd3;
     border-radius: 10px;
     
     padding: 5px 14px;
@@ -102,7 +102,7 @@ textarea{
      select{
     font-family: inherit;
     font-size: 20px;
-    border: 1px solid #00bfd6;
+    border: 1px solid #24bcd3;
     border-radius: 0px;
     width: 95%;
     background: #fff;
@@ -116,7 +116,7 @@ textarea{
 	 select{
     font-family: inherit;
     font-size: 17px;
-    border: 1px solid #00bfd6;
+    border: 1px solid #24bcd3;
     border-radius: 0px;
     width: 95%;
     background: #fff;
@@ -129,7 +129,7 @@ textarea{
 	    width: 55px;
     text-align: center;
     color: #ffffff;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
 	
@@ -137,7 +137,7 @@ textarea{
 .nav-pills>li>a {
 	    width: 55px;
     color: #2b2b2b;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
     padding: 5px 35px;
@@ -166,7 +166,7 @@ textarea{
 	    width: 100px;
     text-align: center;
     color: #ffffff;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
 	
@@ -174,7 +174,7 @@ textarea{
 .nav-pills>li>a {
 	    width: 100px;
     color: #2b2b2b;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
     padding: 5px 25px;
@@ -205,7 +205,7 @@ textarea{
 	    width: 100px !important;
     text-align: center;
     color: #ffffff;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
 	
@@ -213,7 +213,7 @@ textarea{
 .nav-pills>li>a {
 	    width: 100px !important;;
     color: #2b2b2b;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
     text-align: center;
@@ -229,7 +229,7 @@ textarea{
      select{
     font-family: inherit;
     font-size: 20px !important;
-    border: 1px solid #00bfd6;
+    border: 1px solid #24bcd3;
     border-radius: 0px;
     width: 95%;
     background: #fff;
@@ -260,7 +260,7 @@ textarea{
 	    width: 75px;
     text-align: center;
     color: #ffffff;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
 	
@@ -268,7 +268,7 @@ textarea{
 .nav-pills>li>a {
 	    width: 75px;
     color: #2b2b2b;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #24bcd3;
     border-radius: 10px;
     font-size: 15px;
     text-align: center;
@@ -295,8 +295,8 @@ hr {
    .nav > li > a:focus{
     text-decoration: none;
     color:  #ffffff;;
-    border: 1px solid #00bfd6;
-    background-color: #00bfd6;
+    border: 1px solid #24bcd3;
+    background-color: #24bcd3;
 
 }
 .p-custom{
@@ -310,19 +310,19 @@ hr {
 }
 .bg1{
 	
-    border-top: 2px solid #00bfd6;
-    border-left: 1px solid #00bfd6;
-    border-right: 1px solid #00bfd6;
+    border-top: 2px solid #24bcd3;
+    border-left: 1px solid #24bcd3;
+    border-right: 1px solid #24bcd3;
 }
 
  .btn-info:active, .show>.btn-info.dropdown-toggle {
     color: #fff;
-    background-color: #00bfd6;;
+    background-color: #24bcd3;;
     background-image: none;
-    border-color:#00bfd6;;
+    border-color:#24bcd3;;
 }
 .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
-    background: #00bfd6;
+    background: #24bcd3;
     color: #fff;
 }
  @media (min-width: 1440px){
@@ -465,7 +465,7 @@ font-size: 17px
 }
 .tab-content button{
 	
-    background: #00bfd6;
+    background: #24bcd3;
     color: #f2f2f2;
     border: none;
     margin: 2% 28% 1%;
@@ -498,7 +498,7 @@ font-size: 17px
     z-index: 1;
     
     padding-right: 38px !important;
-    border: 1px solid #00bfd6;
+    border: 1px solid #24bcd3;
     }
     .bootstrap-select>.dropdown-toggle {
     width: 100%;
@@ -511,7 +511,7 @@ font-size: 17px
     font-weight: 300 !important;
     }
     .bs-caret span{
-    color: #00bfd6 !important;
+    color: #24bcd3 !important;
     }
 .bspace{
 	    margin-bottom: 1%;
