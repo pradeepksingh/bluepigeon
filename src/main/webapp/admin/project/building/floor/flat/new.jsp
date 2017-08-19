@@ -99,7 +99,7 @@
 			  	<li><a data-toggle="tab" href="#flatimages">Flat Image</a></li>
 			  	<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
-			  	<li><a data-toggle="tab" href="#offer">Offers</a></li>
+<!-- 			  	<li><a data-toggle="tab" href="#offer">Offers</a></li> -->
 			</ul>
 			<form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 				<div class="tab-content">

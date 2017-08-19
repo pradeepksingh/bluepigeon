@@ -346,7 +346,7 @@ function showFlatwithImage(id){
 	 	          +'<span><b>'+data.length+' '+data.areaUint+' * '+data.breadth+' '+data.areaUint+' </b></span>'
 	 	        +'</div>'
 	 	      +'</div>'
-	 	      +'<button type="button" onclick="showFlat('+data.flatId+');" class="button">Book Now</button>';
+	 	      +'<button type="button" onclick="showFlat('+data.flatId+');" class="btn-change">Book Now</button>';
 	    
 	 	 $("#home").append(htmlFlat);
 		},'json');
