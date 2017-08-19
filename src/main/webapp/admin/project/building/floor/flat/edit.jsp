@@ -121,7 +121,6 @@
 			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
 			  	<li><a data-toggle="tab" href="#productsubstage">Flat Weightage</a></li>
 			</ul>
-			
 				<div class="tab-content">
 					<div id="basic" class="tab-pane fade in active">
 					<form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
@@ -638,15 +637,17 @@
 						</div>
 						</form>
 					</div>
-					 <div id="flatoffer" class="tab-pane" aria-expanded="true">
-                          <div id="offer" class="tab-pane fade active in">
-								<form id="updateoffer" name="updateoffer" method="post" action=""  enctype="multipart/form-data">
+					 <div id="flatoffer" class="tab-pane fade">
+					 	 <form id="updateoffer" name="updateoffer" method="post" action=""  enctype="multipart/form-data">
 						 	<input type="hidden" id="flat_id" name="flat_id" value="<% out.print(flat_id);%>"/>
 						 	<input type="hidden" id="flat_type_id" name="flat_type_id" value="<%out.print(flat_type_id); %>" />
 						 	<input type="hidden" name="base_sale_value" id="base_sale_value" value="<% if(priceInfoData.getTotalCost() > 0 && priceInfoData.getTotalCost() != 0){ out.print(priceInfoData.getTotalCost());}%>"/>
 							<input type="hidden" name="offer_count" id="offer_count" value="<%out.print(builderProjectOfferInfos.size()+10000); %>"/>
 			 				<div class="row">
+			 					<div id="offerresponse"></div>
 								<div class="col-lg-12">
+									<div class="panel panel-default">
+									<div class="panel-body">
 										<div id="project_offer_area">
 											<% int jj = 1;
 													for(BuilderProjectOfferInfo projectOfferInfo :builderProjectOfferInfos) { 
@@ -656,7 +657,7 @@
 											<hr>
 											<%} %>
 											<div class="row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
-												<div class="col-lg-4 margin-bottom-5">
+												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-offer_title">
 														<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 														<div class="col-sm-8">
@@ -667,7 +668,7 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-lg-4 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-applicable_on">
 														<label class="control-label col-sm-6">Offer Type </label>
 														<div class="col-sm-6">
@@ -689,7 +690,7 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-4 margin-bottom-5">
+												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-applicable_on">
 														<label class="control-label col-sm-4">Description </label>
 														<div class="col-sm-8">
@@ -698,7 +699,7 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-4 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-apply">
 														<label class="control-label col-sm-6">Status </label>
 														<div class="col-sm-6">
@@ -722,7 +723,7 @@
 											<%} %>
 											<div class="row" id="building_offer-<% out.print(buildingOfferInfo.getId()); %>">
 												<input type="hidden" name="building_offer_id[]" value="<% out.print(buildingOfferInfo.getId()); %>" />
-												<div class="col-lg-4 margin-bottom-5">
+												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-offer_title">
 														<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 														<div class="col-sm-8">
@@ -733,7 +734,7 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-lg-4 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-applicable_on">
 														<label class="control-label col-sm-6">Offer Type </label>
 														<div class="col-sm-6">
@@ -755,7 +756,7 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-4 margin-bottom-5">
+												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-applicable_on">
 														<label class="control-label col-sm-4">Description </label>
 														<div class="col-sm-8">
@@ -764,7 +765,7 @@
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-4 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-apply">
 														<label class="control-label col-sm-6">Status </label>
 														<div class="col-sm-6">
@@ -784,27 +785,28 @@
 													for(FlatOfferInfo flatOfferInfo :flatOfferInfos) { 
 											%>
 											<%if(k >1){ %>
-											<hr>
+												<hr>
 											<%} %>
 											<div class="row" id="offer-<% out.print(flatOfferInfo.getId()); %>">
+											<hr>
 												<input type="hidden" name="offer_id[]" value="<% out.print(flatOfferInfo.getId()); %>" />
-												<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:deleteOffer(<% out.print(flatOfferInfo.getId()); %>);" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>
-												<div class="col-lg-4 margin-bottom-5">
+												<div class="col-lg-12" style="padding-bottom:5px;">
+													<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(flatOfferInfo.getId()); %>);" class="btn btn-danger btn-xs">x</a></span>
+												</div>
+												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-offer_title">
-														<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
+														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
-															<div>
-																<input type="text" class="form-control" id="offer_title"  name="offer_title[]" value="<% out.print(flatOfferInfo.getTitle()); %>">
-															</div>
-															<div class="messageContainer"></div>
+															<input type="text" class="form-control" id="offer_title<%out.print(k); %>" onfocusout="checkDuplicateEntry(<%out.print(k);%>);"  name="offer_title[]" value="<% out.print(flatOfferInfo.getTitle()); %>"/>
 														</div>
+														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-4 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-applicable_on">
 														<label class="control-label col-sm-6">Offer Type </label>
 														<div class="col-sm-6">
-															<select class="form-control" id="offer_type<%out.print(j); %>"   onchange="txtEnabaleDisable(<%out.print(k); %>);"  name="offer_type[]">
+															<select class="form-control" id="offer_type<%out.print(k); %>" onchange="txtEnabaleDisable(<%out.print(k); %>);" name="offer_type[]">
 																<option value="1" <% if(flatOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
 																<option value="2" <% if(flatOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
 																<option value="3" <% if(flatOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
@@ -815,23 +817,23 @@
 												</div>
 												<div class="col-lg-4 margin-bottom-5">
 													<div class="form-group" id="error-discount_amount">
-														<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
+														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control"  <%if(flatOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(k); %>"   onkeyup=" javascript:validPerAmount(<%out.print(k); %>);" name="discount_amount[]" value="<%if(flatOfferInfo.getAmount()!=null){ out.print(flatOfferInfo.getAmount());} %>"/>
+															<input type="text" class="form-control" <%if(flatOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(k); %>"   onkeyup=" javascript:validPerAmount(<%out.print(k); %>);" name="discount_amount[]" value="<%if(flatOfferInfo.getAmount()!=null){ out.print(flatOfferInfo.getAmount());} %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-4 margin-bottom-5">
+												<div class="col-lg-5 margin-bottom-5">
 													<div class="form-group" id="error-applicable_on">
 														<label class="control-label col-sm-4">Description </label>
 														<div class="col-sm-8">
-															<textarea class="form-control"  id="description" name="description[]"><% if(flatOfferInfo.getDescription() != null) { out.print(flatOfferInfo.getDescription());} %></textarea>
+															<textarea class="form-control" id="description" name="description[]" ><% if(flatOfferInfo.getDescription() != null) { out.print(flatOfferInfo.getDescription());} %></textarea>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
 												</div>
-												<div class="col-lg-4 margin-bottom-5">
+												<div class="col-lg-3 margin-bottom-5">
 													<div class="form-group" id="error-apply">
 														<label class="control-label col-sm-6">Status </label>
 														<div class="col-sm-6">
@@ -844,8 +846,9 @@
 													</div>
 												</div>
 											</div>
-											<% k++; } %>
+											<% j++; } %>
 										</div>
+									
 										<div>
 											<div class="col-lg-12">
 												<span class="pull-right">
@@ -857,11 +860,12 @@
 								</div>
 							<div class="row">
 								 <div class="offset-sm-5 col-sm-7">
-                                     		<button type="submit" id="offerbtn" class="btn btn-submit waves-effect waves-light m-t-10">SAVE</button>
+                                     <button type="submit" id="offerbtn" class="btn btn-submit waves-effect waves-light m-t-10">SAVE</button>
                                 </div>
+                            </div>
+                         </div>
                              </div>
 						</form>
-					</div>
                     </div>
 					<div id="payment" class="tab-pane fade">
 						<form id="updatePayment" name="updatePayment" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
@@ -1055,6 +1059,39 @@ function isNumber(evt, element) {
 
     return true;
 } 
+
+function validPerAmount(id){
+	if($("#offer_type"+id).val()==1){
+			 isNumber(event, this);
+			 validPercentage(id);
+	}
+	if($("#offer_type"+id).val()==2){
+		onlyNumber(id);
+	}
+}
+function validPercentage(id){
+	 var x = $("#discount_amount"+id).val();
+	 if(isNaN(x) || x<0 || x >100){
+		 alert("The percentage must be between 0 and 100");
+		 $("#discount_amount"+id).val('');
+	 }
+}
+function onlyNumber(id){
+	 var $th = $("#discount_amount"+id);
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
+}
+function deleteOffer(id){
+	var flag = confirm("Are you sure ? You want to delete offers ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/project/building/floor/flat/offer/delete/"+id, { }, function(data){
+			alert(data.message);
+			if(data.status == 1) {
+				$("#offer-"+id).remove();
+			}
+		},'json');
+	}
+}
+
 $('input[name="stage_weightage[]"]').keyup(function(){
 	//alert("Value :: "+$(this).val());
 // 	  var $th = $(this);
@@ -1626,6 +1663,142 @@ $("#flat_type_id").change(function(){
 		$("#rooms").empty();
 	}
 });
+
+function addMoreOffer() {
+	var offers = parseInt($("#offer_count").val());
+	offers++;
+	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="" />'
+		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs">x</a></span></div>'
+		+'<div class="col-lg-5 margin-bottom-5">'
+			+'<div class="form-group" id="error-offer_title">'
+			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
+				+'<div class="col-sm-8">'
+					+'<input type="text" class="form-control errorMsg notEmpty" required id="offer_title'+offers+'"   onfocusout="javascript:checkDuplicateEntry('+offers+')" name="offer_title[]" value=""/>'
+				+'</div>'
+				+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-3 margin-bottom-5">'
+		+'<div class="form-group" id="error-applicable_on">'
+		+'<label class="control-label col-sm-6">Offer Type </label>'
+		+'<div class="col-sm-6">'
+		+'<select class="form-control" id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');" name="offer_type[]">'
+		+'<option value="1">Percentage</option>'
+		+'<option value="2">Flat Amount</option>'
+		+'<option value="3">Other</option>'
+		+'</select>'
+		+'</div>'
+		+'<div class="messageContainer"></div>'
+		+'</div>'
+		+'</div>'
+		+'<div class="col-lg-4 margin-bottom-5">'
+			+'<div class="form-group" id="error-discount_amount">'
+				+'<label class="control-label col-sm-6">Discount Amount </label>'
+				+'<div class="col-sm-6">'
+					+'<input type="text" class="form-control  notEmpty" required id="discount_amount'+offers+'" name="discount_amount[]" value="" onkeyup=" javascript:validPerAmount('+offers+');"/>'
+				+'</div>'
+				+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'<div class="col-lg-5 margin-bottom-5">'
+			+'<div class="form-group" id="error-applicable_on">'
+			+'<label class="control-label col-sm-4">Description </label>'
+			+'<div class="col-sm-8">'
+			+'<textarea class="form-control" id="description" name="description[]" ></textarea>'
+			+'</div>'
+			+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		
+		+'<div class="col-lg-3 margin-bottom-5">'
+			+'<div class="form-group" id="error-apply">'
+			+'<label class="control-label col-sm-6">Status </label>'
+			+'<div class="col-sm-6">'
+			+'<select class="form-control" id="offer_status" name="offer_status[]">'
+			+'<option value="1">Active</option>'
+			+'<option value="0">Inactive</option>'
+			+'</select>'
+			+'</div>'
+			+'<div class="messageContainer"></div>'
+			+'</div>'
+		+'</div>'
+		+'</div>';
+	$("#offer_area").append(html);
+	$("#offer_count").val(offers);
+}
+function removeOffer(id) {
+	$("#offer-"+id).remove();
+}
+$('#updateoffer').bootstrapValidator({
+    feedbackIcons: {
+        invalid: 'glyphicon glyphicon-remove',
+    },
+    fields: {
+        'offer_title[]': {
+            validators: {
+                notEmpty: {
+                    message: 'The offer title required and cannot be empty'
+                }
+            },
+        },
+        'discount[]':{
+        	 validators: {
+        		 between: {
+                     min: 0,
+                     max: 100,
+                     message: 'The percentage must be between 0 and 100'
+ 	        	},
+                 notEmpty: {
+                     message: 'Discount required and cannot be empty'
+                 }
+             }
+        },
+        'discount_amount[]':{
+        	validators: {
+                notEmpty: {
+                    message: 'Discount amount required and cannot be empty'
+                }
+            }
+        }
+    }
+	}).on('success.form.bv', function(event,data) {
+		// Prevent form submission
+		event.preventDefault();
+		updateBuildingOffers();
+	});
+function updateBuildingOffers() {
+	var options = {
+	 		target : '#imageresponse', 
+	 		beforeSubmit : showAddOfferRequest,
+	 		success :  showAddOfferResponse,
+	 		url : '${baseUrl}/webapi/project/building/flat/offer/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#updateoffer').ajaxSubmit(options);
+}
+
+function showAddOfferRequest(formData, jqForm, options){
+	$("#offerresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddOfferResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#offerresponse").removeClass('alert-success');
+       	$("#offerresponse").addClass('alert-danger');
+		$("#offerresponse").html(resp.message);
+		$("#offerresponse").show();
+  	} else {
+  		$("#offerresponse").removeClass('alert-danger');
+        $("#offerresponse").addClass('alert-success');
+        $("#offerresponse").html(resp.message);
+        $("#offerresponse").show();
+        alert(resp.message);
+        window.location.reload();
+  	}
+}
 </script>
 </body>
 </html>

@@ -832,7 +832,7 @@
 																				<div class="form-group" id="error-applicable_on">
 																					<label class="control-label col-sm-6">Offer Type </label>
 																					<div class="col-sm-6">
-																						<select class="form-control" id="offer_type<%out.print(j); %>"   onchange="txtEnabaleDisable(<%out.print(k); %>);"  name="offer_type[]">
+																						<select class="form-control" id="offer_type<%out.print(k); %>"   onchange="txtEnabaleDisable(<%out.print(k); %>);"  name="offer_type[]">
 																							<option value="1" <% if(flatOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
 																							<option value="2" <% if(flatOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
 																							<option value="3" <% if(flatOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>

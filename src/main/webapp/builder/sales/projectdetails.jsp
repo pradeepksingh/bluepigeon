@@ -139,7 +139,7 @@
                           %>
                            			<img src="${baseUrl}/<% out.print(imageGaleries.get(0).getImage()); %>" alt="Second slide image" width="491" height="390" class="full">
                            <%}}catch(Exception e){ %>
-                           			<img src="../plugins/images/Untitled-1.png" alt="Second slide image" class="full">
+                           			<img src="" alt="Second slide image" class="full">
                             <%}} %>
                            </button>
                         <div class="modal fade" role="dialog" id="image_carousel">

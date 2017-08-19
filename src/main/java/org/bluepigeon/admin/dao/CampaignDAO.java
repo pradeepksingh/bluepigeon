@@ -7,6 +7,8 @@ import org.bluepigeon.admin.data.BuyerBuildingList;
 import org.bluepigeon.admin.data.BuyerFlatList;
 import org.bluepigeon.admin.data.BuyerProjectList;
 import org.bluepigeon.admin.data.CampaignList;
+import org.bluepigeon.admin.data.CampaignListNew;
+import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.BuilderBuilding;
@@ -239,6 +241,54 @@ public class CampaignDAO {
 		session.close();
 		return result;
 	}
+	
+	public List<CampaignListNew> getNewCampaignListByBuilderEmployee(int empId, int projectId){
+		BuilderEmployee builderEmployee = null;
+		String empHql = "from BuilderEmployee where id = :id";
+		String hql ="";
+		
+		HibernateUtil hibernateUtil = new  HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(empHql);
+		query.setParameter("id", empId);
+		List<BuilderEmployee> result = query.list();
+		if(result != null){
+			builderEmployee = result.get(0);
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2){
+				hql = "SELECT camp.id as id, camp.content as content, camp.set_date as startDate, camp.till_date as endDate, camp.image as image,"
+						+ " project.name as name, count(lead.id) as leads, count(b.id) as booking FROM campaign as camp "
+						+" inner join builder_project as project on project.id = camp.project_id "
+						+ " left join builder_lead as lead on project.id = lead.project_id "
+						+ " left join buyer as b on b.project_id = project.id "
+						+" left join builder as build ON project.group_id = build.id "
+						+ " where project.status = 1 AND build.id = "+builderEmployee.getBuilder().getId()+" group by project.id";
+			}
+			else if(builderEmployee.getBuilderEmployeeAccessType().getId() == 3){
+				hql = "SELECT camp.id as id, camp.content as content, camp.set_date as startDate, camp.till_date as endDate, camp.image as image,"
+						+ " project.name as name, count(lead.id) as leads, count(b.id) as booking FROM campaign as camp "
+						+ " inner join builder_project as project on project.id = camp.project_id "
+						+ " left join builder_lead as lead on project.id = lead.project_id "
+						+ " left join buyer as b on project.id = b.project_id  "
+						+" inner join allot_project as ap on project.id = ap.project_id "
+						+ " where project.status=1 AND ap.emp_id = "+builderEmployee.getId()+" group by project.id";
+			}else{
+				hql = "SELECT camp.id as id, camp.content as content, camp.set_date as startDate, camp.till_date as endDate, camp.imge as image, "
+						+ " project.name as name, 0 as leads, 0 as booking FROM  campaign as camp "
+						+ " inner join builder_project as project on camp.project_id = project.id "
+						+ " left join allot_project as ap on project_id = ap.project_id "
+						+ " where project.status = 1 AND ap.emp_id = "+builderEmployee.getId()+" group by project.id";
+			}
+			    Session sessionCampaign = hibernateUtil.getSessionFactory().openSession();
+			    Query queryCampaign = sessionCampaign.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(CampaignListNew.class));
+			    System.err.println(hql);
+			    List<CampaignListNew> campaignListNews = query.list();
+			    return campaignListNews;
+		}else{
+				
+		return null;
+		}
+	}
+	
 	
 	public ResponseMessage saveCampaign(Campaign campaign){
 		ResponseMessage response = new ResponseMessage();
