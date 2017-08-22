@@ -1155,7 +1155,7 @@ myarray.push("<%out.print(projectOfferInfo.getTitle());%>");
 <%}}%>
 function checkDuplicateEntry(id){
 	var offers = $("#offer_title"+id).val();
-	if($.inArray(offers,myarray) !== -1){
+	if($.inArray(offers,myarray) !== -1 && offers != ''){
 		if(myarray.indexOf(offers) != -1){
 			alert("Duplicate Entery of offer");
 			$("#offer_title"+id).val('');
@@ -1163,11 +1163,13 @@ function checkDuplicateEntry(id){
 			myarray.push(offers);
 		}
 	}else{
-		if(myarray.indexOf(offers) != -1){
+		if(myarray.indexOf(offers) != -1 && offers != ''){
 			alert("Duplicate Entery of offer");
 			$("#offer_title"+id).val('');
 		}else{
-			myarray.push(offers);
+			if(offers != ''){
+				myarray.push(offers);
+			}
 		}
 	}
 }

@@ -797,7 +797,7 @@
 													<div class="form-group" id="error-offer_title">
 														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="offer_title<%out.print(k); %>" onfocusout="checkDuplicateEntry(<%out.print(k);%>);"  name="offer_title[]" value="<% out.print(flatOfferInfo.getTitle()); %>"/>
+															<input type="text" class="form-control" autocomplete="off" id="offer_title<%out.print(k); %>" onfocusout="checkDuplicateEntry(<%out.print(k);%>);"  name="offer_title[]" value="<% out.print(flatOfferInfo.getTitle()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -819,7 +819,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" <%if(flatOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(k); %>"   onkeyup=" javascript:validPerAmount(<%out.print(k); %>);" name="discount_amount[]" value="<%if(flatOfferInfo.getAmount()!=null){ out.print(flatOfferInfo.getAmount());} %>"/>
+															<input type="text" class="form-control" autocomplete="off" <%if(flatOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(k); %>"   onkeyup=" javascript:validPerAmount(<%out.print(k); %>);" name="discount_amount[]" value="<%if(flatOfferInfo.getAmount()!=null){ out.print(flatOfferInfo.getAmount());} %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -1751,7 +1751,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title'+offers+'" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control" autocomplete="off" onfocusout="checkDuplicateEntry('+offers+');"  id="offer_title'+offers+'" name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1782,7 +1782,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup="javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" autocomplete="off" id="discount_amount'+offers+'" onkeyup="javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'

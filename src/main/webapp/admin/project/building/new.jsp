@@ -642,7 +642,7 @@ $(".errorMsg").keypress(function(event){
 var myarray=[];
 function checkDuplicateEntry(id){
 	var offers = $("#offer_title"+id).val();
-		if($.inArray(offers,myarray) !== -1){
+		if($.inArray(offers,myarray) !== -1 && offers != ''){
 			if(myarray.indexOf(offers) != -1){
 				alert("Duplicate Entery of offer");
 				$("#offer_title"+id).val('');
@@ -650,11 +650,13 @@ function checkDuplicateEntry(id){
 				myarray.push(offers);
 			}
 		}else{
-			if(myarray.indexOf(offers) != -1){
+			if(myarray.indexOf(offers) != -1 && offers != ''){
 				alert("Duplicate Entery of offer");
 				$("#offer_title"+id).val('');
 			}else{
-				myarray.push(offers);
+				if(offers != ''){
+					myarray.push(offers);
+				}
 			}
 		}
 }
@@ -1083,7 +1085,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title'+offers+'" onfocusout="checkDuplicateEntry('+offers+');" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control" autocomplete="off" id="offer_title'+offers+'" onfocusout="checkDuplicateEntry('+offers+');" name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1106,7 +1108,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup=" javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" autocomplete="off" id="discount_amount'+offers+'" onkeyup=" javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
