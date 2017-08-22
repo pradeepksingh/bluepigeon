@@ -99,7 +99,7 @@
 			  	<li><a data-toggle="tab" href="#flatimages">Flat Image</a></li>
 			  	<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
-<!-- 			  	<li><a data-toggle="tab" href="#offer">Offers</a></li> -->
+			  	<li><a data-toggle="tab" href="#offer">Offers</a></li>
 			</ul>
 			<form id="addfloor" name="addfloor" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
 				<div class="tab-content">
@@ -664,7 +664,7 @@
 											</div>
 											<% jjj++; } }%>
 										</div>
-									<div id="building_offer_area">
+										<div id="building_offer_area">
 											<% 	int jj = 1;
 											     if( buildingOfferInfos != null){
 											    	 for(BuildingOfferInfo buildingOfferInfo :buildingOfferInfos) { 
@@ -829,6 +829,21 @@ function validPer(id){
 		alert("The percentage must be between 0 and 100");
 		$("#payable"+id).val('');
 	}
+}
+
+function txtEnabaleDisable(id){
+	$th = $("#offer_type"+id).val();
+	 if($th == 3){
+	  	$('#discount_amount'+id).attr('disabled', true);
+	  	$("#discount_amount"+id).val('');
+	 }else{
+		$('#discount_amount'+id).attr('disabled', false); 
+		$("#discount_amount"+id).val('');
+	 }
+}
+function onlyNumber(id){
+	 var $th = $("#discount_amount"+id);
+	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
 }
 $('#flat_no').keyup(function() {
     var $th = $(this);
@@ -1241,6 +1256,22 @@ function show3(){
 	$('#buildingTabs a[href="#payment"]').tab('show');
 }
 
+function validPerAmount(id){
+	if($("#offer_type"+id).val()==1){
+			 isNumber(event, this);
+			 validPercentage(id);
+	}
+	if($("#offer_type"+id).val()==2){
+		onlyNumber(id);
+	}
+}
+function validPercentage(id){
+	 var x = $("#discount_amount"+id).val();
+	 if(isNaN(x) || x<0 || x >100){
+		 alert("The percentage must be between 0 and 100");
+		 $("#discount_amount"+id).val('');
+	 }
+}
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
@@ -1268,20 +1299,20 @@ function addMoreOffer() {
 		+'<div class="messageContainer"></div>'
 		+'</div>'
 		+'</div>'
-		+'<div class="col-lg-4 margin-bottom-5">'
-		+'<div class="form-group" id="error-discount_amount">'
-			+'<label class="control-label col-sm-6">Discount Percentage </label>'
-			+'<div class="col-sm-6">'
-				+'<input type="text" class="form-control errorMsg" id="discount'+offers+'" onkeyup="javascript:onlyNumber('+offers+');" name="discount_amount[]" value=""/>'
-			+'</div>'
-			+'<div class="messageContainer"></div>'
-		+'</div>'
-	+'</div>'
+// 		+'<div class="col-lg-4 margin-bottom-5">'
+// 		+'<div class="form-group" id="error-discount_amount">'
+// 			+'<label class="control-label col-sm-6">Discount Percentage </label>'
+// 			+'<div class="col-sm-6">'
+// 				+'<input type="text" class="form-control errorMsg" id="discount'+offers+'" onkeyup="javascript:onlyNumber('+offers+');" name="discount_amount[]" value=""/>'
+// 			+'</div>'
+// 			+'<div class="messageContainer"></div>'
+// 		+'</div>'
+// 	+'</div>'
 		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup="javascript:onlyNumber('+offers+');" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup="javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1315,15 +1346,15 @@ function addMoreOffer() {
 function removeOffer(id) {
 	$("#offer-"+id).remove();
 }
-function txtEnabaleDisable(id){
-	$th = $("#offer_type"+id).val();
-	alert
-	 if($th == 3){
-	  	$('#discount_amount'+id).attr('disabled', true);
-	 }else{
-		$('#discount_amount'+id).attr('disabled', false); 
-	 }
-}
+// function txtEnabaleDisable(id){
+// 	$th = $("#offer_type"+id).val();
+// 	alert
+// 	 if($th == 3){
+// 	  	$('#discount_amount'+id).attr('disabled', true);
+// 	 }else{
+// 		$('#discount_amount'+id).attr('disabled', false); 
+// 	 }
+// }
 </script>
 </body>
 </html>

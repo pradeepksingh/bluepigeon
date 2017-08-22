@@ -26,6 +26,7 @@
 		<property name="show_sql">false</property>
 	  	<mapping class="org.bluepigeon.admin.model.BuilderProjectAmenitySubstages" />
         <mapping class="org.bluepigeon.admin.model.FloorLayoutImage" />
+        <mapping class="org.bluepigeon.admin.model.UserCampaign" />
         <mapping class="org.bluepigeon.admin.model.Agreement" />
         <mapping class="org.bluepigeon.admin.model.BuilderBuilding" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloorAmenity" />

@@ -595,7 +595,7 @@
 			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Flat Sale value<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
-			                                        			<input type="text" class="form-control" id="sale_value" name="sale_value" value="<% if(priceInfoData.getTotalCost() > 0 && priceInfoData.getTotalCost() != 0){ out.print(priceInfoData.getTotalCost());}%>" readonly/>
+			                                        			<input type="text" class="form-control" id="sale_value" name="sale_value" value="<% if(priceInfoData.getTotalCost() > 0 && priceInfoData.getTotalCost() != 0){ out.print(Math.round(priceInfoData.getTotalCost()));}%>" readonly/>
 			                                    			</div>
 			                                    			<div class="messageContainer"></div>
 			                                    		</div>	
@@ -650,7 +650,7 @@
 				                                    			<label for="example-search-input" class="col-sm-4 control-label">Amount <span class='text-danger'>*</span></label>
 				                                    			<div class="col-sm-6">
 				                                    				<div>
-				                                        				<input type="text" class="form-control" id="amount<%out.print(ii); %>" onkeyup="calcultatePercentage(<%out.print(ii); %>);"   name="amount[]" value="<% out.print(flatPaymentSchedule.getAmount());%>"/>
+				                                        				<input type="text" class="form-control" id="amount<%out.print(ii); %>" onkeyup="calcultatePercentage(<%out.print(ii); %>);"   name="amount[]" value="<% out.print(Math.round(flatPaymentSchedule.getAmount()));%>"/>
 					                                    			</div>
 					                                    			<div class="messageContainer"></div>
 					                                  			</div>
@@ -689,7 +689,7 @@
 																					<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 																					<div class="col-sm-8">
 																						<div>
-																							<input type="text" class="form-control" readonly="true" id="project_offer_title" name="project_offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
+																							<input type="text" class="form-control checkdupilcate" readonly="true" id="project_offer_title" name="project_offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
 																						</div>
 																						<div class="messageContainer"></div>
 																					</div>
@@ -755,7 +755,7 @@
 																					<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 																					<div class="col-sm-8">
 																						<div>
-																							<input type="text" class="form-control" id="building_offer_title" readonly name="building_offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>">
+																							<input type="text" class="form-control checkdupilcate" id="building_offer_title" readonly name="building_offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>">
 																						</div>
 																						<div class="messageContainer"></div>
 																					</div>
@@ -822,7 +822,7 @@
 																					<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 																					<div class="col-sm-8">
 																						<div>
-																							<input type="text" class="form-control" id="offer_title<%out.print(k); %>" onfocusout="checkDuplicateEntry(<%out.print(k);%>);"  name="offer_title[]" value="<% out.print(flatOfferInfo.getTitle()); %>">
+																							<input type="text" class="form-control checkdupilcate" id="offer_title<%out.print(k); %>" onfocusout="checkDuplicateEntry(<%out.print(k);%>);"  name="offer_title[]" value="<% out.print(flatOfferInfo.getTitle()); %>">
 																						</div>
 																						<div class="messageContainer"></div>
 																					</div>
@@ -945,7 +945,7 @@ myarray.push("<%out.print(flatOfferInfo.getTitle());%>");
 function checkDuplicateEntry(id){
 	
 	var offers = $("#offer_title"+id).val();
-	if($.inArray(offers,myarray) !== -1){
+	if($.inArray(offers,myarray) !== -1 && offers != ''){
 		if(myarray.indexOf(offers) != -1){
 			alert("Duplicate Entery of offer");
 			$("#offer_title"+id).val('');
@@ -953,11 +953,13 @@ function checkDuplicateEntry(id){
 			myarray.push(offers);
 		}
 	}else{
-		if(myarray.indexOf(offers) != -1){
+		if(myarray.indexOf(offers) != -1 && offers != ''){
 			alert("Duplicate Entery of offer");
 			$("#offer_title"+id).val('');
 		}else{
-			myarray.push(offers);
+			if(offers != ''){
+				myarray.push(offers);
+			}
 		}
 	}
 }
@@ -1362,6 +1364,22 @@ function showAddResponse(resp, statusText, xhr, $form){
   	}
 }
 
+function checkNewDuplicateEntry(input){
+	$input = input;
+	
+	//alert($input.value);
+	$(".checkdupilcate").each(function(check){
+	//	alert(input.value);
+		if(check.value == input.value){
+			alert("Duplicate Entery of offer");
+		}
+		if(input.which == 9 && !input.shiftKey || input.keyCode == 9){
+			if(check.value == input.value){
+				alert("Duplicate Entery of offer");
+			}
+		}
+	});
+}
 function deletePayment(id) {
 	var flag = confirm("Are you sure ? You want to delete payment slab ?");
 	if(flag) {
@@ -1680,7 +1698,41 @@ function addMoreSchedule() {
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();
 }
+// $(".checkdupilcate").keydown(function(e) { 
+// 	alert("Tab Button Clicked");
+// 	  var keyCode = e.keyCode || e.which; 
+// 		$(".checkdupilcate").each(function(input){
+// 			alert(input);
+			
+// 				 if (keyCode == 9) { 
+// 					 var offers = $("#offer_title"+input).val();
+// 					 alert("You Press Tab button");
+// 					    e.preventDefault(); 
+// 					    // call custom function here
+// 					  } 
+			
+// 		});
+	 
+// 	});
+	
+	
+$(".checkdupilcate").keyup(function (e) {
+	alert("Hellooo");
+    var code = (e.keyCode ? e.keyCode : e.which);
+    if (code == 9) {
+      //  alert("value :: "+e.value);
+        alert('I was tabbed!');
+    }
+});
 
+$(".checkdupilcateActive").keyup(function (e) {
+	alert("Hellooo");
+    var code = (e.keyCode ? e.keyCode : e.which);
+    if (code == 9) {
+      //  alert("value :: "+e.value);
+        alert('I was tabbed!');
+    }
+});
 
 function showDetailTab() {
 	$('#buildingTabs a[href="#payment"]').tab('show');
@@ -1737,7 +1789,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title'+offers+'" onfocusout="checkDuplicateEntry('+offers+');"  name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control" id="offer_title'+offers+'" onchange="checkDuplicateEntry('+offers+');" onmouseleave="checkDuplicateEntry('+offers+');" onfocusout="checkDuplicateEntry('+offers+');" name="offer_title[]" value="" autocomplete="off"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1746,7 +1798,7 @@ function addMoreOffer() {
 		+'<div class="form-group" id="error-applicable_on">'
 		+'<label class="control-label col-sm-6">Offer Type </label>'
 		+'<div class="col-sm-6">'
-		+'<select class="form-control"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
+		+'<select class="form-control"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');" name="offer_type[]">'
 		+'<option value="1">Percentage</option>'
 		+'<option value="2">Flat Amount</option>'
 		+'<option value="3">Other</option>'
@@ -1759,7 +1811,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup=" javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup="javascript:validPerAmount('+offers+');" name="discount_amount[]" value="" autocomplete="off"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1794,15 +1846,29 @@ function removeOffer(id) {
 }
 
 function updateBuildingOffers() {
-	var options = {
-	 		target : '#imageresponse', 
-	 		beforeSubmit : showAddOfferRequest,
-	 		success :  showAddOfferResponse,
-	 		url : '${baseUrl}/webapi/project/building/flat/offer/update',
-	 		semantic : true,
-	 		dataType : 'json'
-	 	};
-   	$('#updateoffer').ajaxSubmit(options);
+	var count = $("#offer_count").val();
+	var check = false;
+	for(var i=0;i<count;i++){
+		if($("#offer_title"+i).val() == $("#offer_title"+(i+1)).val()){
+			check =true;
+			$("#offer_title"+(i+1)).val('');
+			break;
+		}
+	}
+	if(!check){
+		var options = {
+		 		target : '#imageresponse', 
+		 		beforeSubmit : showAddOfferRequest,
+		 		success :  showAddOfferResponse,
+		 		url : '${baseUrl}/webapi/project/building/flat/offer/update',
+		 		semantic : true,
+		 		dataType : 'json'
+		 	};
+	   	$('#updateoffer').ajaxSubmit(options);
+	}else{
+		alert("Duplicate Entry of Offer");
+		
+	}
 }
 
 function showAddOfferRequest(formData, jqForm, options){

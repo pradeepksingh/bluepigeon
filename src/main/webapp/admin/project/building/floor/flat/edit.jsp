@@ -117,7 +117,7 @@
 			  	<li class="active"><a data-toggle="tab" href="#basic">Flat Details</a></li>
 			  	<li><a data-toggle="tab" href="#flatimage">Flat Image</a></li>
 			  	<li><a data-toggle="tab" href="#pricing">Pricing Details</a></li>
-<!-- 			    <li><a data-toggle="tab" href="#flatoffer">Offer</a></li> -->
+			    <li><a data-toggle="tab" href="#flatoffer">Offer</a></li>
 			  	<li><a data-toggle="tab" href="#payment">Payment Schedules</a></li>
 			  	<li><a data-toggle="tab" href="#productsubstage">Flat Weightage</a></li>
 			</ul>
@@ -618,7 +618,7 @@
 													<div class="form-group" id="error-tech_fee">
 														<label class="control-label col-sm-4">Flat Sale value</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="sale_value" name="sale_value" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getTotalCost() != null){ out.print(buildingPriceInfo.get(0).getTotalCost());}%>" readonly/>
+															<input type="text" class="form-control" id="sale_value" name="sale_value" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getTotalCost() != null){ out.print(Math.round(buildingPriceInfo.get(0).getTotalCost()));}%>" readonly/>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
@@ -797,7 +797,7 @@
 													<div class="form-group" id="error-offer_title">
 														<label class="control-label col-sm-4">Offer Title <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="offer_title<%out.print(k); %>" onfocusout="checkDuplicateEntry(<%out.print(k);%>);"  name="offer_title[]" value="<% out.print(flatOfferInfo.getTitle()); %>"/>
+															<input type="text" class="form-control" autocomplete="off" id="offer_title<%out.print(k); %>" onfocusout="checkDuplicateEntry(<%out.print(k);%>);"  name="offer_title[]" value="<% out.print(flatOfferInfo.getTitle()); %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -819,7 +819,7 @@
 													<div class="form-group" id="error-discount_amount">
 														<label class="control-label col-sm-6">Discount Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" <%if(flatOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(k); %>"   onkeyup=" javascript:validPerAmount(<%out.print(k); %>);" name="discount_amount[]" value="<%if(flatOfferInfo.getAmount()!=null){ out.print(flatOfferInfo.getAmount());} %>"/>
+															<input type="text" class="form-control" autocomplete="off" <%if(flatOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(k); %>"   onkeyup=" javascript:validPerAmount(<%out.print(k); %>);" name="discount_amount[]" value="<%if(flatOfferInfo.getAmount()!=null){ out.print(flatOfferInfo.getAmount());} %>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -852,7 +852,7 @@
 										<div>
 											<div class="col-lg-12">
 												<span class="pull-right">
-													<a href="javascript:addMoreOffer();" id="addMoreOffers" class="btn btn-submit btn-sm">+ Add More Offers</a>
+													<a href="javascript:addMoreOffer();" id="addMoreOffers" class="btn btn-info btn-sm">+ Add More Offers</a>
 												</span>
 											</div>
 										</div>
@@ -860,7 +860,7 @@
 								</div>
 							<div class="row">
 								 <div class="offset-sm-5 col-sm-7">
-                                     <button type="submit" id="offerbtn" class="btn btn-submit waves-effect waves-light m-t-10">SAVE</button>
+                                     <button type="submit" id="offerbtn" class="btn btn-success waves-effect waves-light m-t-10">SAVE</button>
                                 </div>
                             </div>
                          </div>
@@ -905,7 +905,7 @@
 													<div class="form-group" id="error-amount">
 														<label class="control-label col-sm-6">Amount </label>
 														<div class="col-sm-6">
-															<input type="text" class="form-control" id="amount<%out.print(ii); %>" onkeyup="calcultatePercentage(<%out.print(ii); %>);"   name="amount[]" value="<% out.print(flatPaymentSchedule.getAmount());%>"/>
+															<input type="text" class="form-control" id="amount<%out.print(ii); %>" onkeyup="calcultatePercentage(<%out.print(ii); %>);"   name="amount[]" value="<% out.print(Math.round(flatPaymentSchedule.getAmount()));%>"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -1123,6 +1123,18 @@ $('#possession_date').datepicker({
 }).on('change',function(e){
 	 $('#addfloor').data('bootstrapValidator').revalidateField('possession_date');
 });
+
+function txtEnabaleDisable(id){
+	$th = $("#offer_type"+id).val();
+	 if($th == 3){
+	  	$('#discount_amount'+id).attr('disabled', true);
+	  	$("#discount_amount"+id).val('');
+	 }else{
+		$('#discount_amount'+id).attr('disabled', false); 
+		$("#discount_amount"+id).val('');
+	 }
+}
+
 $('#addfloor').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -1664,16 +1676,82 @@ $("#flat_type_id").change(function(){
 	}
 });
 
+// function addMoreOffer() {
+// 	var offers = parseInt($("#offer_count").val());
+// 	offers++;
+// 	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="" />'
+// 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs">x</a></span></div>'
+// 		+'<div class="col-lg-5 margin-bottom-5">'
+// 			+'<div class="form-group" id="error-offer_title">'
+// 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
+// 				+'<div class="col-sm-8">'
+// 					+'<input type="text" class="form-control errorMsg notEmpty" required id="offer_title'+offers+'"   onfocusout="javascript:checkDuplicateEntry('+offers+')" name="offer_title[]" value=""/>'
+// 				+'</div>'
+// 				+'<div class="messageContainer"></div>'
+// 			+'</div>'
+// 		+'</div>'
+// 		+'<div class="col-lg-3 margin-bottom-5">'
+// 		+'<div class="form-group" id="error-applicable_on">'
+// 		+'<label class="control-label col-sm-6">Offer Type </label>'
+// 		+'<div class="col-sm-6">'
+// 		+'<select class="form-control" id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');" name="offer_type[]">'
+// 		+'<option value="1">Percentage</option>'
+// 		+'<option value="2">Flat Amount</option>'
+// 		+'<option value="3">Other</option>'
+// 		+'</select>'
+// 		+'</div>'
+// 		+'<div class="messageContainer"></div>'
+// 		+'</div>'
+// 		+'</div>'
+// 		+'<div class="col-lg-4 margin-bottom-5">'
+// 			+'<div class="form-group" id="error-discount_amount">'
+// 				+'<label class="control-label col-sm-6">Discount Amount </label>'
+// 				+'<div class="col-sm-6">'
+// 					+'<input type="text" class="form-control  notEmpty" required id="discount_amount'+offers+'" name="discount_amount[]" value="" onkeyup=" javascript:validPerAmount('+offers+');"/>'
+// 				+'</div>'
+// 				+'<div class="messageContainer"></div>'
+// 			+'</div>'
+// 		+'</div>'
+// 		+'<div class="col-lg-5 margin-bottom-5">'
+// 			+'<div class="form-group" id="error-applicable_on">'
+// 			+'<label class="control-label col-sm-4">Description </label>'
+// 			+'<div class="col-sm-8">'
+// 			+'<textarea class="form-control" id="description" name="description[]" ></textarea>'
+// 			+'</div>'
+// 			+'<div class="messageContainer"></div>'
+// 			+'</div>'
+// 		+'</div>'
+		
+// 		+'<div class="col-lg-3 margin-bottom-5">'
+// 			+'<div class="form-group" id="error-apply">'
+// 			+'<label class="control-label col-sm-6">Status </label>'
+// 			+'<div class="col-sm-6">'
+// 			+'<select class="form-control" id="offer_status" name="offer_status[]">'
+// 			+'<option value="1">Active</option>'
+// 			+'<option value="0">Inactive</option>'
+// 			+'</select>'
+// 			+'</div>'
+// 			+'<div class="messageContainer"></div>'
+// 			+'</div>'
+// 		+'</div>'
+// 		+'</div>';
+// 	$("#offer_area").append(html);
+// 	$("#offer_count").val(offers);
+// }
+// function removeOffer(id) {
+// 	$("#offer-"+id).remove();
+// }
+
 function addMoreOffer() {
 	var offers = parseInt($("#offer_count").val());
 	offers++;
-	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="" />'
+	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="0" />'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs">x</a></span></div>'
 		+'<div class="col-lg-5 margin-bottom-5">'
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control errorMsg notEmpty" required id="offer_title'+offers+'"   onfocusout="javascript:checkDuplicateEntry('+offers+')" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control" autocomplete="off" onfocusout="checkDuplicateEntry('+offers+');"  id="offer_title'+offers+'" name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1682,7 +1760,7 @@ function addMoreOffer() {
 		+'<div class="form-group" id="error-applicable_on">'
 		+'<label class="control-label col-sm-6">Offer Type </label>'
 		+'<div class="col-sm-6">'
-		+'<select class="form-control" id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');" name="offer_type[]">'
+		+'<select class="form-control"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
 		+'<option value="1">Percentage</option>'
 		+'<option value="2">Flat Amount</option>'
 		+'<option value="3">Other</option>'
@@ -1691,11 +1769,20 @@ function addMoreOffer() {
 		+'<div class="messageContainer"></div>'
 		+'</div>'
 		+'</div>'
+// 		+'<div class="col-lg-4 margin-bottom-5">'
+// 		+'<div class="form-group" id="error-discount_amount">'
+// 			+'<label class="control-label col-sm-6">Discount Percentage </label>'
+// 			+'<div class="col-sm-6">'
+// 				+'<input type="text" class="form-control errorMsg" id="discount'+offers+'" onkeyup="javascript:onlyNumber('+offers+');" name="discount_amount[]" value=""/>'
+// 			+'</div>'
+// 			+'<div class="messageContainer"></div>'
+// 		+'</div>'
+// 	+'</div>'
 		+'<div class="col-lg-4 margin-bottom-5">'
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control  notEmpty" required id="discount_amount'+offers+'" name="discount_amount[]" value="" onkeyup=" javascript:validPerAmount('+offers+');"/>'
+					+'<input type="text" class="form-control errorMsg" autocomplete="off" id="discount_amount'+offers+'" onkeyup="javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1776,6 +1863,18 @@ function updateBuildingOffers() {
 	 		dataType : 'json'
 	 	};
    	$('#updateoffer').ajaxSubmit(options);
+}
+
+function deleteOffer(id){
+	var flag = confirm("Are you sure ? You want to delete offers ?");
+	if(flag) {
+		$.get("${baseUrl}/webapi/project/building/floor/flat/offer/delete/"+id, { }, function(data){
+			alert(data.message);
+			if(data.status == 1) {
+				$("#offer-"+id).remove();
+			}
+		},'json');
+	}
 }
 
 function showAddOfferRequest(formData, jqForm, options){

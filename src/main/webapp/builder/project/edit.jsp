@@ -640,7 +640,7 @@
 						                                    <div class="col-sm-6">
 						                                    	<div>
 						                                    		<div>
-						                                        		<input class="form-control" type="text" id="base_rate" name="base_rate" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
+						                                        		<input class="form-control" type="text" id="base_rate" name="base_rate" autocomplete="off" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
 						                                    		</div>
 						                                    		<div class="messageContainer"></div>
 						                                    	</div>
@@ -655,7 +655,7 @@
 				                		                    <div class="col-sm-6">
 				                		                    	<div>
 						                		                    <div>
-						                        		                <input class="form-control" type="text" id="rise_rate" name="rise_rate" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
+						                        		                <input class="form-control" type="text" id="rise_rate" name="rise_rate" autocomplete="off" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
 						                                	        </div>
 						                                   	 		<div class="messageContainer"></div>
 						                                   	 	</div>
@@ -667,7 +667,7 @@
 				                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Application Post<span class='text-danger'>*</span></label>
 						                                    <div class="col-sm-6">
 						                                    <div>
-						                                        <input class="form-control" type="text" id="post" name="post" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
+						                                        <input class="form-control" type="text" id="post" name="post" autocomplete="off" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
 						                                    </div>
 				                                    		<div class="messageContainer"></div>
 				                                    		</div>
@@ -681,7 +681,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 					                                    		<div>
-					                                        		<input class="form-control" type="text" id="maintenance" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
+					                                        		<input class="form-control" type="text" id="maintenance" autocomplete="off" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
 					                                    		</div>
 					                                    		<div class="messageContainer"></div>
 					                                    	</div>	
@@ -694,7 +694,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 					                                    		<div>
-					                                        		<input class="form-control" type="text" id="tenure" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>">
+					                                        		<input class="form-control" type="text" id="tenure" autocomplete="off" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>">
 					                                    		</div>
 					                                    		<div class="messageContainer"></div>
 					                                    	</div>
@@ -709,7 +709,7 @@
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 					                		                    <div>
-					                        		                <input class="form-control" type="text" id="amenity_rate" name="amenity_rate" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
+					                        		                <input class="form-control" type="text" id="amenity_rate" name="amenity_rate" autocomplete="off" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
 					                                		    </div>
 					                                		    <div class="messageContainer"></div>
 					                                		</div>
@@ -722,7 +722,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                         			<input class="form-control" type="text" id="parking" name="parking" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
+				                                         			<input class="form-control" type="text" id="parking" name="parking" autocomplete="off" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
 				                                         		</div>	
 			                                    				<div class="messageContainer"></div>
 			                                    			</div>
@@ -738,7 +738,7 @@
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 				                		                    	<div>
-				                        		               		<input class="form-control" type="text" id="stamp_duty" name="stamp_duty" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
+				                        		               		<input class="form-control" type="text" id="stamp_duty" name="stamp_duty" autocomplete="off" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
 				                                		    	</div>
 				                                		    	<div class="messageContainer"></div>
 				                                		    </div>
@@ -755,7 +755,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                        			<input class="form-control" type="text" id="tax" name="tax" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
+				                                        			<input class="form-control" type="text" id="tax" name="tax" autocomplete="off" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
 				                                    			</div>
 				                                    			<div class="messageContainer"></div>
 				                                    		</div>
@@ -774,7 +774,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                        			<input class="form-control" type="text" id="vat" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
+				                                        			<input class="form-control" type="text" id="vat" autocomplete="off" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
 				                                    			</div>
 				                                    			<div class="messageContainer"></div>
 				                                    		</div>
@@ -789,7 +789,7 @@
 			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Tech Fees<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
-			                                        			<input class="form-control" type="text" id="tech_fee" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
+			                                        			<input class="form-control" type="text" id="tech_fee" autocomplete="off" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
 			                                    			</div>
 			                                    			<div class="messageContainer"></div>
 			                                    		</div>	
@@ -824,7 +824,7 @@
 							                                    <label for="example-search-input" class="col-sm-4 control-label">Milestone<span class='text-danger'>*</span></label>
 				                                    			<div class="col-sm-6">
 				                                    				<div>
-				                                        				<input type="text" class="form-control" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
+				                                        				<input type="text" class="form-control" autocomplete="off" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
 					                                    			</div>
 					                                    			<div class="messageContainer"></div>
 					                                 			</div>
@@ -835,7 +835,7 @@
 				                                    			<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class='text-danger'>*</span></label>
 				                                    			<div class="col-sm-6">
 				                                    				<div>
-				                                        				<input class="form-control" type="text" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
+				                                        				<input class="form-control" type="text" autocomplete="off" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 					                                    			</div>
 					                                    			<div class="messageContainer"></div>
 					                                  			</div>
@@ -881,7 +881,7 @@
 																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 																			<div class="col-sm-8">
 																				<div>
-																					<input type="text" class="form-control" id="offer_title<%out.print(j); %>" onfocusout="checkDuplicateEntry(<%out.print(j);%>);" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
+																					<input type="text" class="form-control" autocomplete="off" id="offer_title<%out.print(j); %>" onfocusout="checkDuplicateEntry(<%out.print(j);%>);" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
 																				</div>
 																				<div class="messageContainer"></div>
 																			</div>
@@ -904,9 +904,9 @@
 																		<div class="form-group" id="error-discount_amount">
 																			<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
 																			<div class="col-sm-6">
-																				<input type="text" class="form-control" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
+																				<input type="text" autocomplete="off" class="form-control" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
 																			</div>
-																			<div class="messageContainer"></div>
+																			<div class="messageCon tainer"></div>
 																		</div>
 																	</div>
 																	<div class="col-lg-5 margin-bottom-5">
@@ -1155,7 +1155,7 @@ myarray.push("<%out.print(projectOfferInfo.getTitle());%>");
 <%}}%>
 function checkDuplicateEntry(id){
 	var offers = $("#offer_title"+id).val();
-	if($.inArray(offers,myarray) !== -1){
+	if($.inArray(offers,myarray) !== -1 && offers != ''){
 		if(myarray.indexOf(offers) != -1){
 			alert("Duplicate Entery of offer");
 			$("#offer_title"+id).val('');
@@ -1163,11 +1163,13 @@ function checkDuplicateEntry(id){
 			myarray.push(offers);
 		}
 	}else{
-		if(myarray.indexOf(offers) != -1){
+		if(myarray.indexOf(offers) != -1 && offers != ''){
 			alert("Duplicate Entery of offer");
 			$("#offer_title"+id).val('');
 		}else{
-			myarray.push(offers);
+			if(offers != ''){
+				myarray.push(offers);
+			}
 		}
 	}
 }
@@ -1864,7 +1866,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title'+offers+'"   onfocusout="checkDuplicateEntry('+offers+')" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control" id="offer_title'+offers+'" autocomplete="off"  onfocusout="checkDuplicateEntry('+offers+')" name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1886,7 +1888,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-discount_amount">'
 				+'<label class="control-label col-sm-6">Discount Amount </label>'
 				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" id="discount_amount'+offers+'" onkeyup=" javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
+					+'<input type="text" class="form-control errorMsg" autocomplete="off" id="discount_amount'+offers+'" onkeyup=" javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
