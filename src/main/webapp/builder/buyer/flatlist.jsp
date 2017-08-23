@@ -28,7 +28,7 @@
 		}
 	}
 	try{
-		if(project_id > 0 || building_id > 0 || floor_id > 0 || evenOrodd > 0){
+		if(project_id > 0 && building_id > 0){
 			flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,evenOrodd);
 			bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,building_id,floor_id,evenOrodd);
 			image = bookingFlatList2.getImage();
