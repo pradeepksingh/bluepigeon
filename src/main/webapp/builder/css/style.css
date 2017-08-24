@@ -1,7 +1,7 @@
 @charset "UTF-8";
-/* @import url(https://fonts.googleapis.com/css?family=Poppins:400,500,300,600,700); */
+@import url(https://fonts.googleapis.com/css?family=Poppins:400,500,300,600,700);
 /* @import "spinners.css"; */
-@import url(https://fonts.googleapis.com/css?family=Lato:300,400,900);
+/* @import url(https://fonts.googleapis.com/css?family=Lato:300,400,900); */
  .col-2 .fa{
 padding-left:20px;
 }

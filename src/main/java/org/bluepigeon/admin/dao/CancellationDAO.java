@@ -208,7 +208,7 @@ public class CancellationDAO {
 	}
 	public void updateCancelStatus(int flatId){
 		System.out.println("FlatId :: "+flatId);
-		String hql = "UPDATE Cancellation set cancelStatus = 2, isApproved = 1 WHERE builderFlat.id = :flat_id";
+		String hql = "UPDATE Cancellation set cancel_status = 2, isApproved = 1 WHERE builderFlat.id = :flat_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
@@ -220,7 +220,7 @@ public class CancellationDAO {
 	}
 	
 	public ResponseMessage cancelApproval(int flatId){
-		String hql = "UPDATE Cancellation set cancelStatus = 0 where builderFlat.id = :flat_id";
+		String hql = "UPDATE Cancellation set cancel_status = 0 where builderFlat.id = :flat_id";
 		ResponseMessage responseMessage = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();

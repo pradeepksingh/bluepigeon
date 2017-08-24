@@ -242,20 +242,23 @@ public class CampaignDAO {
 		return result;
 	}
 	
-	public List<CampaignListNew> getNewCampaignListByBuilderEmployee(int empId, int projectId){
-		BuilderEmployee builderEmployee = null;
-		String empHql = "from BuilderEmployee where id = :id";
-		String hql ="";
-		
+	public List<CampaignListNew> getNewCampaignListByBuilderEmployee(BuilderEmployee builderEmployee, int projectId){
+//		BuilderEmployee builderEmployee = null;
+//		String empHql = "from BuilderEmployee where id = :id";
+//		String hql ="";
+//		
 		HibernateUtil hibernateUtil = new  HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		Query query = session.createQuery(empHql);
-		query.setParameter("id", empId);
-		List<BuilderEmployee> result = query.list();
-		if(result != null){
-			builderEmployee = result.get(0);
+//		Session session = hibernateUtil.openSession();
+//		Query query = session.createQuery(empHql);
+//		if(empId > 0)
+//		query.setParameter("id", empId);
+//		 builderEmployee = (BuilderEmployee)query.uniqueResult();
+		String hql ="";
+		if(builderEmployee != null){
+			try{
+			//builderEmployee = result.get(0);
 			if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2){
-				hql = "SELECT camp.id as id, camp.content as content, camp.set_date as startDate, camp.till_date as endDate, camp.image as image,"
+				hql = "SELECT camp.id as id, camp.content as content, camp.set_date as startDate, camp.end_date as endDate, camp.image as image,"
 						+ " project.name as name, count(lead.id) as leads, count(b.id) as booking FROM campaign as camp "
 						+" inner join builder_project as project on project.id = camp.project_id "
 						+ " left join builder_lead as lead on project.id = lead.project_id "
@@ -272,19 +275,32 @@ public class CampaignDAO {
 						+" inner join allot_project as ap on project.id = ap.project_id "
 						+ " where project.status=1 AND ap.emp_id = "+builderEmployee.getId()+" group by project.id";
 			}else{
-				hql = "SELECT camp.id as id, camp.content as content, camp.set_date as startDate, camp.till_date as endDate, camp.imge as image, "
-						+ " project.name as name, 0 as leads, 0 as booking FROM  campaign as camp "
-						+ " inner join builder_project as project on camp.project_id = project.id "
-						+ " left join allot_project as ap on project_id = ap.project_id "
-						+ " where project.status = 1 AND ap.emp_id = "+builderEmployee.getId()+" group by project.id";
+//				hql = "SELECT camp.id as id, camp.content as content, camp.set_date as startDate, camp.end_date as endDate, camp.image as image, "
+//						+ " project.name as name, 0 as leads, 0 as booking FROM  campaign as camp "
+//						+ " inner join builder_project as project on camp.project_id = project.id "
+//						+ " where project.status = 1 AND camp.is_delete=0 AND project.id = "+projectId+" group by camp.id order by project.id DESC";
+				
+				hql = "SELECT camp.id as id, camp.content as content, camp.image as image, camp.set_date as startDate,camp.end_date as endDate, project.name as name "
+						+ "FROM campaign as camp "
+						+ "inner join builder_project as project on project.id = camp.project_id "
+						+ "WHERE project.id="+projectId+" and camp.is_deleted=0 GROUP by camp.id order by project.id";
 			}
 			    Session sessionCampaign = hibernateUtil.getSessionFactory().openSession();
 			    Query queryCampaign = sessionCampaign.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(CampaignListNew.class));
 			    System.err.println(hql);
-			    List<CampaignListNew> campaignListNews = query.list();
-			    return campaignListNews;
-		}else{
-				
+			    try{
+			    	List<CampaignListNew> campaignListNews = queryCampaign.list();
+			    	return campaignListNews;
+			    }catch(Exception e){
+			    	e.printStackTrace();
+			    	return null;
+			    }
+			}catch(Exception e){
+				e.printStackTrace();
+				return null;
+			}
+			}else{
+				System.err.println("hello from else");
 		return null;
 		}
 	}

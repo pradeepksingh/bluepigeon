@@ -18,6 +18,15 @@ public class BookingFlatList {
 	private String areaUint;
 	private String carpetAreaunit;
 	private String roomName;
+	private String buyerName;
+	private String buildingName;
+	private String projectName;
+	private String buyerEmail;
+	private String buyerMobile;
+	private String buyerPanNo;
+	private String buyerPermanentAddress;
+	private String buyerPhoto;
+	private Short isDeleted;
 	//private String bedroomSize;
 	
 	public int getFlatId() {
@@ -118,5 +127,60 @@ public class BookingFlatList {
 	public void setCarpetAreaunit(String carpetAreaunit) {
 		this.carpetAreaunit = carpetAreaunit;
 	}
+	public String getBuyerName() {
+		return buyerName;
+	}
+	public void setBuyerName(String buyerName) {
+		this.buyerName = buyerName;
+	}
+	public String getBuildingName() {
+		return buildingName;
+	}
+	public void setBuildingName(String buildingName) {
+		this.buildingName = buildingName;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	public String getBuyerEmail() {
+		return buyerEmail;
+	}
+	public void setBuyerEmail(String buyerEmail) {
+		this.buyerEmail = buyerEmail;
+	}
+	public String getBuyerMobile() {
+		return buyerMobile;
+	}
+	public void setBuyerMobile(String buyerMobile) {
+		this.buyerMobile = buyerMobile;
+	}
+	public String getBuyerPanNo() {
+		return buyerPanNo;
+	}
+	public void setBuyerPanNo(String buyerPanNo) {
+		this.buyerPanNo = buyerPanNo;
+	}
+	public String getBuyerPermanentAddress() {
+		return buyerPermanentAddress;
+	}
+	public void setBuyerPermanentAddress(String buyerPermanentAddress) {
+		this.buyerPermanentAddress = buyerPermanentAddress;
+	}
+	public String getBuyerPhoto() {
+		return buyerPhoto;
+	}
+	public void setBuyerPhoto(String buyerPhoto) {
+		this.buyerPhoto = buyerPhoto;
+	}
+	public Short getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(Short isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
 	
 }
