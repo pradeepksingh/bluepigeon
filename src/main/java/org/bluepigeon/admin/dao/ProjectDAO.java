@@ -5706,4 +5706,6 @@ public class ProjectDAO {
     	Buyer buyer = (Buyer) query.list().get(0);
     	return buyer;
     }
+    
+    
 }

@@ -267,6 +267,9 @@
 $("#booking").click(function(){
 	window.location.href="${baseUrl}/builder/buyer/booking.jsp?project_id="+<%out.print(project_id);%>;
 });
+$("#campaign").click(function(){
+	window.location.href="${baseUrl}/builder/campaign/Salesman_campaign.jsp?project_id="+<%out.print(project_id);%>;
+});
 <% if(flatListDatas !=null){%>
 $(document).ready(function () {
 		 <%for(int i=0;i<flatListDatas.size();i++){
@@ -291,7 +294,7 @@ $(document).ready(function () {
 <% } %>
 function showFlats(id){
 	//alert(id);
-	window.location.href="${baseUrl}/builder/cancellation/Salesman_cancelation_form_open2.jsp";
+	window.location.href="${baseUrl}/builder/cancellation/Salesman_cancelation_form_open3.jsp?flat_id="+id;
 }
 function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {

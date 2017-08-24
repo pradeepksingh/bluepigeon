@@ -272,6 +272,9 @@
 $("#cancellation").click(function(){
 	window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(project_id);%>
 });
+$("#campaign").click(function(){
+	window.location.href="${baseUrl}/builder/campaign/Salesman_campaign.jsp?project_id="+<%out.print(project_id);%>
+});
 function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
         $('.nav li.active').removeClass('active');
@@ -306,7 +309,7 @@ $(document).ready(function () {
 <% } %>
 function showFlat(id){
 	//alert(id);
-	window.location.href="${baseUrl}/builder/buyer/Salesman_booking_form2.jsp";
+	window.location.href="${baseUrl}/builder/buyer/Salesman_booking_form3.jsp?flat_id="+id;
 	
 }
 
