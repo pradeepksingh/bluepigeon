@@ -69,9 +69,13 @@
  			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
  			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
  			building_id = builderBuildingList.get(0).getId(); 
-			flatListDatas = new ProjectDAO().getBookedFlatDetails(project_id,building_id,floor_id,0); 
+			flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,0); 
  			bookingFlatList2 = new ProjectDAO().getFlatBookeddetails(project_id,building_id,floor_id,0); 
- 			image = bookingFlatList2.getImage(); 
+ 			if(bookingFlatList2 != null){
+ 				if( bookingFlatList2.getImage() != null){
+ 					image = bookingFlatList2.getImage(); 
+ 				}
+ 			}
  			flat_size = flatListDatas.size(); 
 		
 			//building_id = builderBuildingList.get(0).getId(); 
@@ -108,7 +112,8 @@
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
-    <link rel="stylesheet" type="text/css" href="../css/cancellation.css">
+<!--     <link rel="stylesheet" type="text/css" href="../css/cancellation.css"> -->
+	 <link rel="stylesheet" type="text/css" href="../css/custom7.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
@@ -140,16 +145,16 @@
                <!-- /.row -->
 	                <div class="row bspace">
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" id="booking" class="btn11 top-white-box waves-effect waves-light m-t-10">Booking</button>
+		                    <button type="submit" id="booking" class="btn11 btn-info waves-effect waves-light m-t-10">Booking</button>
 		                </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
 		                    <button type="submit" id="cancellation" class="btn11 btn-submit waves-effect waves-light m-t-10">Cancellation</button>
 		                 </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" id="leads" class="btn11 top-white-box waves-effect waves-light m-t-10">Leads</button>
+		                    <button type="submit" id="leads" class="btn11 btn-info waves-effect waves-light m-t-10">Leads</button>
 		                </div>
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" id="campaign" class="btn11 top-white-box waves-effect waves-light m-t-10">Campain</button>
+		                    <button type="submit" id="campaign" class="btn11 btn-info waves-effect waves-light m-t-10">Campain</button>
 		                </div>
 	                </div>
                <!-- row -->
@@ -199,10 +204,13 @@
                	 						<%for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){ 
  							     if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("booked")) {%>
  							     
- 							     <li class="grey item"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+ 							     <li class="grey"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
  							      
- 							     <%} 
- 		              						} 
+ 							     <%} else if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("available")) {%>
+ 		              					
+               	 					 <li class="" style="pointer-events:none;"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" disabled href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>	
+               	 						<%}
+               	 						} 
  		            		 			%> 
  										</ul> 
 					 					<hr> 
@@ -226,7 +234,7 @@
 						      <%if(bookingFlatList2.getBuyerPhoto()!="" && bookingFlatList2.getBuyerPhoto() != null){ %>
 							     <img src="${baseUrl}/<%out.print(bookingFlatList2.getBuyerPhoto()); %>" alt="Buyer image" class="custom-img">
 							   <%}%>	
-						          <img src="images/camera_icon.PNG" alt="camera " class="camera"/>
+						          <img src="../images/camera_icon.PNG" alt="camera " class="camera"/>
 						          <p><b><%out.print(bookingFlatList2.getBuyerName()); %></b></p>
 						          <p class="p-custom"><%out.print(bookingFlatList2.getBuildingName()); %>-<%out.print(bookingFlatList2.getFlatNo()); %>, <%out.print(bookingFlatList2.getProjectName()); %></p>
 						          <hr>
@@ -276,7 +284,8 @@ $(document).ready(function () {
 			 for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){
 				 for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().size();floor_size++){
 				 	for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
-               	  		if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
+				 		if(bookingFlatList2 != null){
+               	  			if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
 	 %>
     $("#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>").click(function (e) {
         e.preventDefault();
@@ -284,9 +293,10 @@ $(document).ready(function () {
     $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click');
     $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').addClass("red");
     
-    <%					}
-               	  	}
-				 }
+    <%						}
+               	  		}
+				 	}
+				}
 			}
 		}
 	 %>
@@ -299,13 +309,13 @@ function showFlats(id){
 function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
 		//alert("Hello12");
-        $('.nav .custom-button-nav li.active').removeClass('active');
+        $('.nav li.active').removeClass('active');
        // alert("Hello 123");
         var $parent = $(this).parent();
         if($parent.hasClass('.nav-pills')){
         	//alert("Hello1");
-        	$parent.removeClass('grey item');
-	        $parent.addClass('red active');
+        	$parent.removeClass('grey');
+	        $parent.addClass('red');
 	        e.preventDefault();
         }
     });
@@ -434,7 +444,7 @@ function showFlatwithImage(id){
 				image = '${baseUrl}/'+data.buyerPhoto;
 			}
       htmlFlat ='<div class="user-profile">'
-		          +'<img src="plugins/images/Untitled-1.png" alt="User Image" class="custom-img">'
+		          +'<img src="'+image+'" alt="User Image" class="custom-img">'
 		          +'<img src="images/camera_icon.PNG" alt="camera " class="camera"/>'
 		          +'<p><b>'+data.buyerName+'</b></p>'
 		          +'<p class="p-custom">'+data.buildingName+'-'+data.flatNo+', '+data.projectName+'</p>'

@@ -68,7 +68,12 @@
 			building_id = builderBuildingList.get(0).getId();
 			flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,0);
 			bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,building_id,0,0);
-			image = bookingFlatList2.getImage();
+			if(bookingFlatList2 != null){
+				if(bookingFlatList2.getImage() != null){
+					image = bookingFlatList2.getImage();
+				}
+			}
+			
 			flat_size = flatListDatas.size();
 		
 			//building_id = builderBuildingList.get(0).getId();
@@ -106,9 +111,9 @@
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
-    <link href="../css/custom.css" rel="stylesheet">
-<!--     <link rel="stylesheet" type="text/css" href="../css/custom2.css"> -->
-    <link rel="stylesheet" type="text/css" href="../css/topbutton.css">
+<!--     <link href="../css/custom.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="../css/custom7.css">
+<!--     <link rel="stylesheet" type="text/css" href="../css/topbutton.css"> -->
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
@@ -140,10 +145,10 @@
 		                    <button type="submit" id="cancellation" class="btn11 top-white-box  waves-effect waves-light m-t-10">Cancellation</button>
 		                 </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" id="leads" class="btn11 top-white-box waves-effect waves-light m-t-10">Leads</button>
+		                    <button type="submit" id="leads" class="btn11 btn-info waves-effect waves-light m-t-10">Leads</button>
 		                </div>
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" id="campaign" class="btn11 top-white-box  waves-effect waves-light m-t-10">Campain</button>
+		                    <button type="submit" id="campaign" class="btn11 btn-info waves-effect waves-light m-t-10">Campain</button>
 		                </div>
 	                </div>
                <!-- row -->
@@ -195,7 +200,7 @@
 		             					%>
 					 	 					<li class="item"><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 					 					<%}else{%>
-					     					<li class="grey"><a class="grey" data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+					     					<li class="grey"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 					 					<%
 					 			   				}
 		              						}
@@ -217,6 +222,7 @@
                        <div class="tab-content">
 					     <div id="home" class="tab-pane fade in active">
 					     	<% if(bookingFlatList2 != null){
+					     		if(bookingFlatList2.getFlatStatus() == 1){
 					     	if(bookingFlatList2.getImage()!="" && bookingFlatList2.getImage() != null){ %>
 						     <img src="${baseUrl}/<%out.print(bookingFlatList2.getImage()); %>" alt="Flat image" class="custom-img">
 						     <%} %>
@@ -252,7 +258,35 @@
 						        </div>
 						      </div>
 						      <button type="button" onclick="javascript:showFlat(<%out.print(bookingFlatList2.getFlatId()); %>)" class="btn-change">Book Now</button>
-						      <%} %>
+						      <%}
+						     	if(bookingFlatList2.getFlatStatus() == 2 &&  bookingFlatList2.getIsDeleted() != null && bookingFlatList2.getIsDeleted() == 0){
+					     	%>				   
+						       <div class="user-profile">
+						      <%if(bookingFlatList2.getBuyerPhoto()!="" && bookingFlatList2.getBuyerPhoto() != null){ %>
+							     <img src="${baseUrl}/<%out.print(bookingFlatList2.getBuyerPhoto()); %>" alt="Buyer image" class="custom-img">
+							   <%}%>	
+						          <img src="images/camera_icon.PNG" alt="camera " class="camera"/>
+						          <p><b><%out.print(bookingFlatList2.getBuyerName()); %></b></p>
+						          <p class="p-custom"><%out.print(bookingFlatList2.getBuildingName()); %>-<%out.print(bookingFlatList2.getFlatNo()); %>, <%out.print(bookingFlatList2.getProjectName()); %></p>
+						          <hr>
+						       </div>
+							   <div class="row custom-row user-row">
+							        <p class="p-custom">Mobile No.</p>
+							        <p><b><%out.print(bookingFlatList2.getBuyerMobile()); %></b></p>
+							        <p class="p-custom">Email</p>
+							        <p><b><%out.print(bookingFlatList2.getBuyerEmail()); %></b></p>
+							        <p class="p-custom">PAN</p>
+							        <p><b><%out.print(bookingFlatList2.getBuyerPanNo()); %></b></p>
+							        <p class="p-custom">Adhar card no.</p>
+							        <p><b></b></p>
+							        <p class="p-custom">Permanent Address</p>
+							        <p><b><%out.print(bookingFlatList2.getBuyerPermanentAddress()); %></b></p>
+							        <p class="p-custom">Current Address</p>
+							        <p><b></b></p>
+							        <hr>
+							   </div>
+						      <button type="button" onclick="showFlats(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button red">Cancel</button>
+						      <%}} %>
 					     </div>
 					  </div>
                     </div>
@@ -289,28 +323,30 @@ function activeInactiveFlats(){
 <% if(flatListDatas !=null){%>
 $(document).ready(function () {
 		 <%for(int i=0;i<flatListDatas.size();i++){
-			 for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){
-				 for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().size();floor_size++){
-				 	for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
-               	  		if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
+			 if(flatListDatas.get(i) != null){
+			 	for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){
+				 	for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().size();floor_size++){
+				 		for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
+				 			if(bookingFlatList2 != null){
+               	  			if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
 	 %>
     $("#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>").click(function (e) {
         e.preventDefault();
     });
     $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click');
     
-    <%					}
-               	  	}
-				 }
+    <%						}
+				 		}
+               	  		}
+				 	}
+				}
 			}
 		}
 	 %>
 });
 <% } %>
 function showFlat(id){
-	//alert(id);
 	window.location.href="${baseUrl}/builder/buyer/Salesman_booking_form3.jsp?flat_id="+id;
-	
 }
 
 function showFlatwithImage(id){
@@ -318,6 +354,7 @@ function showFlatwithImage(id){
 	var htmlFlat ="";
 	if(id > 0 && id != ''){
 		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id},function(data){
+			if(data.flatStatus == 1){
 			var image = '';
 			if(data.image != ''){
 				image = '${baseUrl}/'+data.image;
@@ -355,7 +392,36 @@ function showFlatwithImage(id){
 	 	        +'</div>'
 	 	      +'</div>'
 	 	      +'<button type="button" onclick="showFlat('+data.flatId+');" class="btn-change">Book Now</button>';
-	    
+			}
+			if(data.flatStatus == 2){
+				var image = '';
+				if(data.buyerPhoto != ''){
+					image = '${baseUrl}/'+data.buyerPhoto;
+				}
+	      htmlFlat ='<div class="user-profile">'
+			          +'<img src="'+image+'" alt="User Image" class="custom-img">'
+			          +'<img src="images/camera_icon.PNG" alt="camera" class="camera"/>'
+			          +'<p><b>'+data.buyerName+'</b></p>'
+			          +'<p class="p-custom">'+data.buildingName+'-'+data.flatNo+', '+data.projectName+'</p>'
+			          +'<hr>'
+			       	  +'</div>'
+				      +'<div class="row custom-row user-row">'
+				        +'<p class="p-custom">Mobile No.</p>'
+				        +'<p><b>'+data.buyerMobile+'</b></p>'
+				        +'<p class="p-custom">Email</p>'
+				        +'<p><b>'+data.buyerEmail+'</b></p>'
+				        +'<p class="p-custom">PAN</p>'
+				        +'<p><b>'+data.buyerPanNo+'</b></p>'
+				        +'<p class="p-custom">Adhar card no.</p>'
+				        +'<p><b></b></p>'
+				        +'<p class="p-custom">Permanent Address</p>'
+				        +'<p><b>'+data.buyerPermanentAddress+'</b></p>'
+				        +'<p class="p-custom">Current Address</p>'
+				        +'<p><b></b></p>'
+				        +'<hr>'
+				      +'</div>'
+				      +'<button type="button" onclick="showFlats('+data.flatId+')" class="button">Edit</button>';
+			}
 	 	 $("#home").append(htmlFlat);
 		},'json');
 		activeInactiveFlats();

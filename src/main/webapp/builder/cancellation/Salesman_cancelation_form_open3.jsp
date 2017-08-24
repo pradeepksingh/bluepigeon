@@ -112,7 +112,7 @@
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/custom5.css">
+    <link rel="stylesheet" type="text/css" href="../css/custom6.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
@@ -143,16 +143,16 @@
                <!-- /.row -->
 	                <div class="row bspace">
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" id="booking" class="btn11 top-white-box waves-effect waves-light m-t-10">Booking</button>
+		                    <button type="submit" id="booking" class="btn11 btn-info waves-effect waves-light m-t-10">Booking</button>
 		                </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
 		                    <button type="submit" id="cancellation" class="btn11 btn-submit waves-effect waves-light m-t-10">Cancellation</button>
 		                 </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" id="leads" class="btn11 top-white-box waves-effect waves-light m-t-10">Leads</button>
+		                    <button type="submit" id="leads" class="btn11 btn-info waves-effect waves-light m-t-10">Leads</button>
 		                </div>
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" id="campaign" class="btn11 top-white-box waves-effect waves-light m-t-10">Campain</button>
+		                    <button type="submit" id="campaign" class="btn11 btn-info waves-effect waves-light m-t-10">Campain</button>
 		                </div>
 	                </div>
                <!-- row -->

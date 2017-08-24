@@ -184,7 +184,7 @@
                                 		<div class="col-12" >
                                 			<input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
                                 			 <div class="row">
-			                               		<div class="col-sm -6"> 
+			                               		<div class="col-sm-6"> 
 		                                			<div class="form-group row">
 			                                   				<label for="example-text-input" class="col-sm-6 col-form-label">Buyer Name*</label>
 			                                   				<div class="col-sm-6">
