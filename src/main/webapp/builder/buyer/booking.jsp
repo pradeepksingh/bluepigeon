@@ -47,11 +47,6 @@
 	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList();
 	project_id = Integer.parseInt(request.getParameter("project_id"));
 	projectList = new ProjectDAO().getBuilderActiveProjectById(project_id);
-	List<BuilderProjectAmenityInfo> projectAmenityInfos = new BuilderProjectAmenityInfoDAO().getBuilderProjectAmenityInfo(project_id);
-	List<BuilderProjectProjectType> projectProjectTypes = new BuilderProjectProjectTypeDAO().getBuilderProjectProjectTypes(project_id);
-	List<BuilderProjectPropertyType> projectPropertyTypes = new BuilderProjectPropertyTypeDAO().getBuilderProjectPropertyTypes(project_id);
-	List<BuilderProjectPropertyConfigurationInfo> projectConfigurationInfos = new BuilderProjectPropertyConfigurationInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id);
-	List<BuilderProjectApprovalInfo> projectApprovalInfos = new BuilderProjectApprovalInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id);
 	
 	session = request.getSession(false);
 	
@@ -311,12 +306,19 @@ $("#campaign").click(function(){
 });
 function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
+		alert("Hello");
         $('.nav li.active').removeClass('active');
+        alert("Hello1");
         var $parent = $(this).parent();
-        if($parent.hasClass('.nav-pills')){
+        alert("Hello2"+$parent.val());
+        if($parent.hasClass('grey')){
+        	alert("Hello again");
+        	$parent.removeClass('grey');
 	        $parent.addClass('active');
+	        $parent.addClass('grey');
 	        e.preventDefault();
         }
+        alert("Hello3");
     });
 }
 

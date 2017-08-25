@@ -83,7 +83,7 @@
  				buyerMobile = buyer.getMobile();
  				buyerEmail = buyer.getEmail();
  				project_id = buyer.getBuilderProject().getId();
- 				building_id = buyer.getBuilderFlat().getId();
+ 				building_id = buyer.getBuilderBuilding().getId();
  				image = buyer.getPhoto();
  				if(buyer.getIsPrimary())
  					isPrimary = 1;

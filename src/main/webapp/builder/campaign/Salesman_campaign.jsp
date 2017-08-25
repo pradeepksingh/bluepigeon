@@ -121,7 +121,8 @@
                <!-- row -->
                <div class="white-box">
                    <div class="row">
-                   <% if(campaignListNews != null){ 
+                   <% try{
+                   if(campaignListNews != null){ 
                        		for(CampaignListNew campaignListNew : campaignListNews){
                        %>
                    		<div class="col-md-6 col-sm-6 col-xs-12 projectsection">
@@ -170,7 +171,10 @@
 	                       </div>
                        </div>
                        
-                   <% }}else{ %>
+                   <% }}else{
+                	   out.print("No Campaign is running..");
+                	   }}catch(Exception e){ %>
+                   }
 	                       No Campaign is running.
 	                       <%} %>
 	              </div>
