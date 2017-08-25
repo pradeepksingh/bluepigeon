@@ -39,8 +39,8 @@
 	}
 %>
  <% if(flatListDatas !=null && bookingFlatList2 !=null){ %>
- <link href="../css/custom.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="../css/topbutton.css">
+<!--  <link href="../css/custom7.css" rel="stylesheet"> -->
+<!--   <link rel="stylesheet" type="text/css" href="../css/topbutton.css"> -->
    <div class="col-md-8 col-sm-6 col-xs-12  bg1">
         <div class="white-box" >
 	     <% if(flatListDatas !=null){
@@ -74,6 +74,7 @@
               <div class="tab-content">
 				  <div id="home" class="tab-pane fade in active">
 				  <% if(bookingFlatList2 != null){ 
+					 	if(bookingFlatList2.getFlatStatus() == 1){
 				    	 if(bookingFlatList2.getImage()!="" && bookingFlatList2.getImage() != null){ %>
 					   <img src="${baseUrl}/<%out.print( bookingFlatList2.getImage() ); %>" alt="flat image" class="custom-img">
 			      <%} %>
@@ -109,7 +110,35 @@
 						     </div>
 					    </div>
 						      <button type="button" onclick="javascript:showFlat(<%out.print(bookingFlatList2.getFlatId()); %>)" class="btn-change">Book Now</button>
-						      <%} %>
+						      <%} 
+					 	if(bookingFlatList2.getFlatStatus() == 2 &&  bookingFlatList2.getIsDeleted() != null && bookingFlatList2.getIsDeleted() == 0){
+					     	%>				   
+						       <div class="user-profile">
+						      <%if(bookingFlatList2.getBuyerPhoto()!="" && bookingFlatList2.getBuyerPhoto() != null){ %>
+							     <img src="${baseUrl}/<%out.print(bookingFlatList2.getBuyerPhoto()); %>" alt="Buyer image" class="custom-img">
+							   <%}%>	
+						          <img src="images/camera_icon.PNG" alt="camera " class="camera"/>
+						          <p><b><%out.print(bookingFlatList2.getBuyerName()); %></b></p>
+						          <p class="p-custom"><%out.print(bookingFlatList2.getBuildingName()); %>-<%out.print(bookingFlatList2.getFlatNo()); %>, <%out.print(bookingFlatList2.getProjectName()); %></p>
+						          <hr>
+						       </div>
+							   <div class="row custom-row user-row">
+							        <p class="p-custom">Mobile No.</p>
+							        <p><b><%out.print(bookingFlatList2.getBuyerMobile()); %></b></p>
+							        <p class="p-custom">Email</p>
+							        <p><b><%out.print(bookingFlatList2.getBuyerEmail()); %></b></p>
+							        <p class="p-custom">PAN</p>
+							        <p><b><%out.print(bookingFlatList2.getBuyerPanNo()); %></b></p>
+							        <p class="p-custom">Adhar card no.</p>
+							        <p><b></b></p>
+							        <p class="p-custom">Permanent Address</p>
+							        <p><b><%out.print(bookingFlatList2.getBuyerPermanentAddress()); %></b></p>
+							        <p class="p-custom">Current Address</p>
+							        <p><b></b></p>
+							        <hr>
+							   </div>
+						      <button type="button" onclick="showFlats(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button red">Cancel</button>
+						      <%}} %>
 				  </div>
 			</div>
         </div>
@@ -122,7 +151,8 @@
 			 for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){
 				 for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().size();floor_size++){
 				 	for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
-              	  		if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
+				 		if(bookingFlatList2 != null){
+              	  			if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
 	 %>
 	 <script>
 
@@ -133,8 +163,9 @@ $(document).ready(function () {
    $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click');
 });
 </script>
-   <%					}
-              	  	}
+   <%						}
+              	  		}
+				 	}
 				 }
 			}
 		}

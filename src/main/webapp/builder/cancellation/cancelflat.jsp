@@ -74,10 +74,10 @@
  			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
  			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
  			try{
-			flatListDatas = new ProjectDAO().getBookedFlatDetails(project_id,building_id,floor_id,evenOrodd); 
- 			bookingFlatList2 = new ProjectDAO().getFlatBookeddetails(project_id,building_id,floor_id,evenOrodd); 
- 			image = bookingFlatList2.getBuyerPhoto(); 
- 			flat_size = flatListDatas.size(); 
+				flatListDatas = new ProjectDAO().getBookedFlatDetails(project_id,building_id,floor_id,evenOrodd); 
+	 			bookingFlatList2 = new ProjectDAO().getFlatBookeddetails(project_id,building_id,floor_id,evenOrodd); 
+	 			image = bookingFlatList2.getBuyerPhoto(); 
+	 			flat_size = flatListDatas.size(); 
  			}catch(Exception e){
  				e.printStackTrace();
  			}
