@@ -409,7 +409,9 @@ $("#booking").click(function(){
 $("#camcellation").click(function(){
 	window.location.href = "${baseUrl}/builder/cancellation/Saleman_booking_new2.jsp?project_id="+$("#project_id").val();
 });
-
+$("#leads").click(function(){
+	window.location.href="${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
+});
 $("#campaign").click(function(){
 	window.location.href = "${baseUrl}/builder/campaign/Salesman_campaign.jsp?project_id="+$("#project_id").val();
 });

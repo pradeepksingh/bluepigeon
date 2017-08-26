@@ -196,5 +196,8 @@
  $("#cancellation").click(function(){
 	 window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(projectId);%>
  });
+ $("#leads").click(function(){
+		window.location.href="${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+<%out.print(projectId);%>
+	});
 </script>
 
