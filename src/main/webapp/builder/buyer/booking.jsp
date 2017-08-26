@@ -304,6 +304,9 @@ $("#cancellation").click(function(){
 $("#campaign").click(function(){
 	window.location.href="${baseUrl}/builder/campaign/Salesman_campaign.jsp?project_id="+<%out.print(project_id);%>
 });
+$("#leads").click(function(){
+	window.location.href="${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
+});
 function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
 		alert("Hello");
@@ -402,7 +405,7 @@ function showFlatwithImage(id){
 				}
 	      htmlFlat ='<div class="user-profile">'
 			          +'<img src="'+image+'" alt="User Image" class="custom-img">'
-			          +'<img src="images/camera_icon.PNG" alt="camera" class="camera"/>'
+			          +'<img src="../images/camera_icon.PNG" alt="camera" class="camera"/>'
 			          +'<p><b>'+data.buyerName+'</b></p>'
 			          +'<p class="p-custom">'+data.buildingName+'-'+data.flatNo+', '+data.projectName+'</p>'
 			          +'<hr>'
