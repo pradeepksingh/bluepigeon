@@ -3343,7 +3343,10 @@ public class ProjectController extends ResourceConfig {
 		ResponseMessage msg = new ResponseMessage();
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderFlat builderFlat = projectDAO.getBuildingFlatById(flat_id).get(0);
-		BuilderFlatType builderFlatType = projectDAO.getBuilderFlatType(flat_type_id);
+		BuilderFlatType builderFlatType = new BuilderFlatType();
+		if(flat_type_id > 0){
+			 builderFlatType = projectDAO.getBuilderFlatType(flat_type_id);
+		}
 		List<PaymentInfoData> paymentInfoDatas = null;
 		Double totalCost = 0.0;
 		Double baseSaleValue = base_rate * builderFlatType.getSuperBuiltupArea()+rise_rate+amenity_rate;
@@ -3376,58 +3379,58 @@ public class ProjectController extends ResourceConfig {
 		} else {
 			msg = projectDAO.addFlatPriceInfo(flatPricingDetails);
 		}
-		List<FlatPaymentSchedule> flatPaymentSchedules = projectDAO.getFlatPaymentSchedule(flat_id);
-		List<FlatPaymentSchedule> updateFlatPayment = new ArrayList<FlatPaymentSchedule>();
-		if(flatPaymentSchedules == null){
-			paymentInfoDatas = projectDAO.getFlatPaymentSchedules(flat_id);
-		}
-		if(flatPaymentSchedules != null && flatPaymentSchedules.size() > 0){
-			for(int w=0;w<flatPaymentSchedules.size();w++){
-				FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
-				flatPaymentSchedule.setId(flatPaymentSchedules.get(w).getId());
-				flatPaymentSchedule.setMilestone(flatPaymentSchedules.get(w).getMilestone());
-				flatPaymentSchedule.setPayable(flatPaymentSchedules.get(w).getPayable());
-				flatPaymentSchedule.setAmount(totalCost*flatPaymentSchedules.get(w).getPayable()/100);
-				flatPaymentSchedule.setStatus(flatPaymentSchedules.get(w).getStatus());
-				flatPaymentSchedule.setBuilderFlat(builderFlat);
-				updateFlatPayment.add(flatPaymentSchedule);
-			}
-			if(updateFlatPayment.size() > 0){
-				projectDAO.updateFlatPaymentInfo(updateFlatPayment);
-			}
-		}else{
-			// if flat payment is not present child then call parent class of that child
-			byte milestone_status = 0;
-			List<FlatPaymentSchedule> newFlatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
-			if(paymentInfoDatas != null){
-				
-				for(int u = 0;u < paymentInfoDatas.size();u++){
-					FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
-					flatPaymentSchedule.setMilestone(paymentInfoDatas.get(u).getName());
-					flatPaymentSchedule.setPayable(paymentInfoDatas.get(u).getPayable());
-					flatPaymentSchedule.setAmount(totalCost*paymentInfoDatas.get(u).getPayable()/100);
-					flatPaymentSchedule.setStatus(milestone_status);
-					flatPaymentSchedule.setBuilderFlat(builderFlat);
-					newFlatPaymentSchedules.add(flatPaymentSchedule);
-				}
-				if(newFlatPaymentSchedules.size() > 0){
-					projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
-				}
-			}else{
-				for(int u = 0;u < paymentInfoDatas.size();u++){
-					FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
-					flatPaymentSchedule.setMilestone(paymentInfoDatas.get(u).getName());
-					flatPaymentSchedule.setPayable(paymentInfoDatas.get(u).getPayable());
-					flatPaymentSchedule.setAmount(totalCost*paymentInfoDatas.get(u).getPayable()/100);
-					flatPaymentSchedule.setStatus(milestone_status);
-					flatPaymentSchedule.setBuilderFlat(builderFlat);
-					newFlatPaymentSchedules.add(flatPaymentSchedule);
-				}
-				if(newFlatPaymentSchedules.size() > 0){
-					projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
-				}
-			}
-		}
+//		List<FlatPaymentSchedule> flatPaymentSchedules = projectDAO.getFlatPaymentSchedule(flat_id);
+//		List<FlatPaymentSchedule> updateFlatPayment = new ArrayList<FlatPaymentSchedule>();
+//		if(flatPaymentSchedules == null){
+//			paymentInfoDatas = projectDAO.getFlatPaymentSchedules(flat_id);
+//		}
+//		if(flatPaymentSchedules != null && flatPaymentSchedules.size() > 0){
+//			for(int w=0;w<flatPaymentSchedules.size();w++){
+//				FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+//				flatPaymentSchedule.setId(flatPaymentSchedules.get(w).getId());
+//				flatPaymentSchedule.setMilestone(flatPaymentSchedules.get(w).getMilestone());
+//				flatPaymentSchedule.setPayable(flatPaymentSchedules.get(w).getPayable());
+//				flatPaymentSchedule.setAmount(totalCost*flatPaymentSchedules.get(w).getPayable()/100);
+//				flatPaymentSchedule.setStatus(flatPaymentSchedules.get(w).getStatus());
+//				flatPaymentSchedule.setBuilderFlat(builderFlat);
+//				updateFlatPayment.add(flatPaymentSchedule);
+//			}
+//			if(updateFlatPayment.size() > 0){
+//				projectDAO.updateFlatPaymentInfo(updateFlatPayment);
+//			}
+//		}else{
+//			// if flat payment is not present child then call parent class of that child
+//			byte milestone_status = 0;
+//			List<FlatPaymentSchedule> newFlatPaymentSchedules = new ArrayList<FlatPaymentSchedule>();
+//			if(paymentInfoDatas != null){
+//				
+//				for(int u = 0;u < paymentInfoDatas.size();u++){
+//					FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+//					flatPaymentSchedule.setMilestone(paymentInfoDatas.get(u).getName());
+//					flatPaymentSchedule.setPayable(paymentInfoDatas.get(u).getPayable());
+//					flatPaymentSchedule.setAmount(totalCost*paymentInfoDatas.get(u).getPayable()/100);
+//					flatPaymentSchedule.setStatus(milestone_status);
+//					flatPaymentSchedule.setBuilderFlat(builderFlat);
+//					newFlatPaymentSchedules.add(flatPaymentSchedule);
+//				}
+//				if(newFlatPaymentSchedules.size() > 0){
+//					projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
+//				}
+//			}else{
+//				for(int u = 0;u < paymentInfoDatas.size();u++){
+//					FlatPaymentSchedule flatPaymentSchedule = new FlatPaymentSchedule();
+//					flatPaymentSchedule.setMilestone(paymentInfoDatas.get(u).getName());
+//					flatPaymentSchedule.setPayable(paymentInfoDatas.get(u).getPayable());
+//					flatPaymentSchedule.setAmount(totalCost*paymentInfoDatas.get(u).getPayable()/100);
+//					flatPaymentSchedule.setStatus(milestone_status);
+//					flatPaymentSchedule.setBuilderFlat(builderFlat);
+//					newFlatPaymentSchedules.add(flatPaymentSchedule);
+//				}
+//				if(newFlatPaymentSchedules.size() > 0){
+//					projectDAO.addFlatPaymentInfo(newFlatPaymentSchedules);
+//				}
+//			}
+//		}
 		return msg;
 	}
 	

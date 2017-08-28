@@ -309,19 +309,19 @@ $("#leads").click(function(){
 });
 function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
-		alert("Hello");
+		//alert("Hello");
         $('.nav li.active').removeClass('active');
-        alert("Hello1");
+       // alert("Hello1");
         var $parent = $(this).parent();
-        alert("Hello2"+$parent.val());
+     //   alert("Hello2"+$parent.val());
         if($parent.hasClass('grey')){
-        	alert("Hello again");
+        	//alert("Hello again");
         	$parent.removeClass('grey');
 	        $parent.addClass('active');
 	        $parent.addClass('grey');
 	        e.preventDefault();
         }
-        alert("Hello3");
+       // alert("Hello3");
     });
 }
 

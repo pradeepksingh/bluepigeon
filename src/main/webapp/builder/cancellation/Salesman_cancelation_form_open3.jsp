@@ -112,7 +112,7 @@
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/custom6.css">
+    <link rel="stylesheet" type="text/css" href="../css/custom10.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
@@ -238,7 +238,7 @@
 						        </div>
 						    </div>
 						    <div class="center">
-						      <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Cancel</button>
+						      <button type="submit" class="btn btn-submit waves-effect waves-light m-r-10">Cancel</button>
 						    </div>
 						</form>
                         </div>

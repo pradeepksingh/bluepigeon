@@ -34,6 +34,9 @@ public class Buyer implements java.io.Serializable {
 	private String pancard;
 	private String photo;
 	private String address;
+	private String currentAddress;
+	private String aadhaarNumber;
+	private String refferalId;
 	private Short agreement;
 	private Short possession;
 	private Short isDeleted;
@@ -203,6 +206,36 @@ public class Buyer implements java.io.Serializable {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	
+	@Column(name = "current_address", length = 65535)
+	public String getCurrentAddress() {
+		return currentAddress;
+	}
+
+	public void setCurrentAddress(String currentAddress) {
+		this.currentAddress = currentAddress;
+	}
+	@Column(name = "aadhaar_number", length = 16)
+	public String getAadhaarNumber() {
+		return aadhaarNumber;
+	}
+
+	public void setAadhaarNumber(String aadhaarNumber) {
+		this.aadhaarNumber = aadhaarNumber;
+	}
+    @Column(name = "refferal_id", length = 127)
+	public String getRefferalId() {
+		return refferalId;
+	}
+
+	public void setRefferalId(String refferalId) {
+		this.refferalId = refferalId;
+	}
+
+	public void setPrimary(boolean isPrimary) {
+		this.isPrimary = isPrimary;
 	}
 
 	@Column(name = "agreement")

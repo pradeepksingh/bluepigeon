@@ -33,14 +33,14 @@
 <!--                         input-group -->
                     </li>
                     <li class="user-pro">
-                        <a href="#" class="waves-effect"><img src="${baseUrl }/builder/plugins/images/users/d1.jpg" alt="user-img" class="img-circle"> <span class="hide-menu"><%out.print(builder_new.getName()); %><span class="fa arrow"></span></span>
+                        <a href="#" class="waves-effect"><img src="${baseUrl }/builder/plugins/images/users/d1.jpg" alt="user-img" class="img-circle"> <span class="hide-menu"><%out.print(builder_new.getName()); %></span>
                         </a>
-                        <ul class="nav nav-second-level">
-                            <li><a href="javascript:void(0)"><i class="ti-user"></i> My Profile</a></li>
-                            <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
-                            <li><a href="${baseUrl }/builder/accountsettings.jsp?emp_id=<%out.print(builder_new_id);%>"><i class="ti-settings"></i> Account Setting</a></li>
-                            <li><a href="${baseUrl }/webapi/validatebuilder/logoutbuilder"><i class="fa fa-power-off"></i> Logout</a></li>
-                        </ul>
+<!--                         <ul class="nav nav-second-level"> -->
+<!--                             <li><a href="javascript:void(0)"><i class="ti-user"></i> My Profile</a></li> -->
+<!--                             <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li> -->
+<%--                             <li><a href="${baseUrl }/builder/accountsettings.jsp?emp_id=<%out.print(builder_new_id);%>"><i class="ti-settings"></i> Account Setting</a></li> --%>
+<%--                             <li><a href="${baseUrl }/webapi/validatebuilder/logoutbuilder"><i class="fa fa-power-off"></i> Logout</a></li> --%>
+<!--                         </ul> -->
                     </li>
                     <li class="nav-small-cap m-t-10">--Main Menu--</li>
                     <li> <a href="${baseUrl }/builder/dashboard.jsp" class="waves-effect"><i class="ti-dashboard p-r-10"></i> <span class="hide-menu">Dashboard</span></a> </li>
@@ -84,7 +84,7 @@
 <!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
 <!--                         </ul> -->
 <!--                     </li> -->
-					<% if(emp_access_id == 1 || emp_access_id ==2 || emp_access_id == 7){ %>
+					<% if(emp_access_id == 1 || emp_access_id ==2){ %>
                      <li class="nav-small-cap m-t-10">--Professional--</li>
                      <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Sales<span class="fa arrow"></span></span></a>
                       
@@ -100,6 +100,18 @@
                    </li>
                        
                     <%}%>
+                    <% if(emp_access_id == 7){ %>
+                    <li> <a href="javascript:void(0);" class="waves-effect"><!-- <i class="ti-layout fa-fw"></i--><span class="hide-menu"> Salesman<span class="fa arrow"></span></span></a>
+					  <ul class="nav nav-second-level">
+							<li> <a href="javascript:void(0)">Inbox</a></li>
+                            <li> <a href="javascript:void(0)">Leads</a></li>
+                            <li> <a href="javascript:void(0)">Buyer List</a></li>
+                            <li> <a href="javascript:void(0)">Cancellation List</a></li>
+                            <li> <a href="javascript:void(0)">Add Lead</a></li>
+                            <li> <a href="javascript:void(0)">Data Analytics</a></li>
+                       </ul>
+                   </li>
+                    <%} %>
                     <%if(emp_access_id==4||emp_access_id==5){ %>
                         <li class="nav-small-cap m-t-10">--Professional--</li>
                          <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Sales<span class="fa arrow"></span></span></a>

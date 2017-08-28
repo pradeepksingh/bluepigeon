@@ -144,7 +144,7 @@
 					     </form>
                        </div>
                       <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 lead-button">
-                         <button type="submit" class="btn11 btn-info waves-effect waves-light m-t-10" data-toggle="modal" data-target="#myModal1">New Lead +</button>
+                         <button type="submit" class="btn11 btn-lead waves-effect waves-light m-t-10" data-toggle="modal" data-target="#myModal1">New Lead +</button>
                       </div>
                  </div>
                  <div class="white-box">
@@ -316,7 +316,7 @@
 							<h3>Add Lead</h3>
 						  </div>
 						  <div class="col-md-2 col-sm-2 col-xs-2">
-							<img src="images/error.png" alt="cancle" data-dismiss="modal">
+							<img src="../images/error.png" alt="cancle" data-dismiss="modal">
 						  </div>
 						</div>
 				  		<div class="row bg12">
