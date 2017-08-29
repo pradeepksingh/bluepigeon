@@ -69,14 +69,6 @@
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
      <script src="../js/bootstrap-multiselect.js"></script>
     <link rel="stylesheet" href="../css/bootstrap-multiselect.css">
-    <script>
-    $(function() {
-        $("#sidebar1").load("../partial/sidebar.jsp");
-        $("#header").load("../partial/header.jsp");
-   	    $("#footer").load("../partial/footer.jsp");
-    });
-    </script>
- 
 </head>
 
 <body class="fix-sidebar">
@@ -86,11 +78,12 @@
     </div>
     <div id="wrapper">
         <!-- Top Navigation -->
-        <div id="header">
-        </div>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
-        <div id="sidebar1"> </div>
+         <div id="header">
+	       <%@include file="../partial/header.jsp"%>
+      </div>
+      <div id="sidebar1"> 
+       	<%@include file="../partial/sidebar.jsp"%>
+      </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper" style="min-height: 2038px;">
@@ -161,7 +154,9 @@
        </div>
   </div>
     <!-- /.container-fluid -->
-    <footer id="footer"> </footer>
+   <div id="sidebar1"> 
+	     <%@include file="../partial/footer.jsp"%>
+	</div> 
   </body>
 </html>
 <script>
