@@ -106,7 +106,7 @@
 							<li> <a href="javascript:void(0)">Inbox</a></li>
                             <li> <a href="javascript:void(0)">Leads</a></li>
                             <li> <a href="${baseUrl }/builder/buyer/Salesman-Buyer-list.jsp">Buyer List</a></li>
-                            <li> <a href="javascript:void(0)">Cancellation List</a></li>
+                            <li> <a href="${baseUrl }/builder/cancellation/Salesman-Cancellation-list.jsp">Cancellation List</a></li>
                             <li> <a href="javascript:void(0)">Add Lead</a></li>
                             <li> <a href="javascript:void(0)">Data Analytics</a></li>
                        </ul>
