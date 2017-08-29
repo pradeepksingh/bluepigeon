@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.dao.CancellationDAO"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.data.BookedBuyerList"%>
 <%@page import="org.bluepigeon.admin.model.Buyer"%>
@@ -31,7 +32,7 @@
 <%@page import="java.util.List"%>
 <%
 	int p_user_id = 0;
-int emp_id = 0;
+	int emp_id = 0;
 	List<BookedBuyerList> buyerList = null;	
 	List<ProjectData> projectList = null;
 	session = request.getSession(false);
@@ -43,11 +44,12 @@ int emp_id = 0;
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			p_user_id = builder.getBuilder().getId();
 			emp_id = builder.getId();
-			buyerList = new BuilderDetailsDAO().getBookedBuyerList(builder);
+			buyerList = new CancellationDAO().getCancelledBuyerList(builder);
 			projectList = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 		}
 	}
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,10 +71,10 @@ int emp_id = 0;
     <link rel="stylesheet" type="text/css" href="../css/custom10.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
-      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
+     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-     <script type="text/javascript" src="../js/selectize.min.js"></script>
+    <script type="text/javascript" src="../js/selectize.min.js"></script>
 </head>
 
 <body class="fix-sidebar">
@@ -82,7 +84,7 @@ int emp_id = 0;
     </div>
     <div id="wrapper">
         <!-- Top Navigation -->
-         <div id="header">
+       <div id="header">
 	       <%@include file="../partial/header.jsp"%>
       </div>
       <div id="sidebar1"> 
@@ -93,11 +95,11 @@ int emp_id = 0;
         <div id="page-wrapper" style="min-height: 2038px;">
            <div class="container-fluid cancellation-lead">
                <!-- row -->
-                  <h1>BUYER LIST</h1>
+                  <h1>Cancellation</h1>
                    <div class="row">
                       <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                         <select id="filter_project_id" name="filter_project_id" data-style="form-control">
-                         <option value="0">Enter Project Name</option>
+                          <option value="0">Enter Project Name</option>
                         <% if(projectList != null){
                         	for(ProjectData projectData : projectList){
                         	%>
@@ -109,9 +111,9 @@ int emp_id = 0;
                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                          <form class="navbar-form lead-search" method="post" role="search">
 						    <div class="input-group add-on">
-						      <input class="form-control" placeholder="Search by Name or Number" autocomplete="off" name="srch-term" id="srch-term" type="text">
+						      <input class="form-control" placeholder="Search by Name or Number"  autocomplete="off" name="srch-term" id="srch-term" type="text">
 						      <div class="input-group-btn">
-						        <button class="btn btn-default" id="search_buyer" type="button"><img src="../images/search.png"/></button>
+						        <button class="btn btn-default" id="search_buyer"  type="button"><img src="../images/search.png"/></button>
 						      </div>
 						    </div>
 					     </form>
@@ -121,17 +123,17 @@ int emp_id = 0;
                    <div class="lead-bg">
                    <!-- buyer information end -->
 	                 <div class="row blue-border1">
-	                   <div class="col-md-3 col-sm-3 col-xs-3">
-	                      <h2>Flat No</h2>
+	                   <div class="col-md-2 col-sm-2 col-xs-2">
+	                     <h2>Flat No</h2>
 	                   </div>
-	                   <div class="col-md-3 col-sm-3 col-xs-3">
-	                      <h2>Buyer Name</h2>
+	                   <div class="col-md-4 col-sm-4 col-xs-4">
+	                     <h2>Buyer Name & Number</h2>
 	                   </div>
-	                   <div class="col-md-3 col-sm-3 col-xs-3">
-	                      <h2>Contact Number</h2>
+	                   <div class="col-md-4 col-sm-4 col-xs-4">
+	                     <h2>Reason Of Cancellation</h2>
 	                   </div>
-	                   <div class="col-md-3 col-sm-3 col-xs-3">
-	                      <h2>Email Id</h2>
+	                   <div class="col-md-2 col-sm-2 col-xs-2">
+	                     <h2>Amount</h2>
 	                   </div>
 	                 </div>
 	                 <div id="booked_buyers">
@@ -139,18 +141,19 @@ int emp_id = 0;
 	                 	for(BookedBuyerList bookedBuyerList : buyerList){
 	                 %>
 	                 <div class="border-lead1">
-	                   <div class="row">
-	                     <div class="col-md-3 col-sm-3 col-xs-3">
-	                       <h4><%out.print(bookedBuyerList.getBuildingName()); %>-<%out.print(bookedBuyerList.getFlatNo()); %> <%out.print(bookedBuyerList.getProjectName()); %>, <%out.print(bookedBuyerList.getLocalityName()); %>, <%out.print(bookedBuyerList.getCityName()); %></h4>
-	                     </div>
-	                     <div class="col-md-3 col-sm-3 col-xs-3">
-	                       <h4><%out.print(bookedBuyerList.getBuyerName()); %></h4>
-	                     </div>
-	                     <div class="col-md-3 col-sm-3 col-xs-3">
-	                       <h4><%out.print(bookedBuyerList.getBuyerContact()); %></h4>
-	                     </div>
-	                    <div class="col-md-3 col-sm-3 col-xs-3">
-	                       <h4><%out.print(bookedBuyerList.getBuyerEmail()); %></h4>
+	                  <div class="row">
+	                    <div class="col-md-2 col-sm-2 col-xs-2">
+	                     <h4><%out.print(bookedBuyerList.getBuildingName()); %>-<%out.print(bookedBuyerList.getFlatNo()); %> <%out.print(bookedBuyerList.getProjectName()); %>, <%out.print(bookedBuyerList.getLocalityName()); %>, <%out.print(bookedBuyerList.getCityName()); %></h4>
+	                    </div>
+	                     <div class="col-md-4 col-sm-4 col-xs-4">
+	                     <h4><%out.print(bookedBuyerList.getBuyerName()); %></h4>
+	                     <h4><%out.print(bookedBuyerList.getBuyerContact()); %></h4>
+	                    </div>
+	                     <div class="col-md-4 col-sm-4 col-xs-4">
+	                     <h4><%out.print(bookedBuyerList.getCancelReason());%></h4>
+	                    </div>
+	                   <div class="col-md-2 col-sm-2 col-xs-2">
+	                     <h4><%out.print(bookedBuyerList.getCharges()); %>/-</h4>
 	                    </div>
 	                 </div>
 	               </div>
@@ -163,7 +166,7 @@ int emp_id = 0;
        </div>
   </div>
     <!-- /.container-fluid -->
-   <div id="sidebar1"> 
+     <div id="sidebar1"> 
 	     <%@include file="../partial/footer.jsp"%>
 	</div> 
   </body>
@@ -186,34 +189,34 @@ $select_project = $("#filter_project_id").selectize({
 if(projectList.size() > 0){%>
 	select_project = $select_project[0].selectize;
 <%}}%>
-
 function getBookedBuyerFilterList(){
 	var emp_id = <%out.print(emp_id);%>;
 	var htmlBookedBuyers = "";
 	var project_id = $("#filter_project_id").val();
 	var nameorNumber = $("#srch-term").val();
 	$("#booked_buyers").empty();
-	$.post("${baseUrl}/webapi/builder/filter/booked/buyers",{emp_id: emp_id, project_id : project_id, nameOrNumber : nameorNumber },function(data){
+	$.post("${baseUrl}/webapi/cancellation/filter/cancel/buyers",{emp_id: emp_id, project_id : project_id, nameOrNumber : nameorNumber },function(data){
 		   if(data == ""){
 			   $("#booked_buyers").empty();
 			   $("#booked_buyers").append("<h2><center>No Records Found</center></h2>");
 		   }
 			$(data).each(function(index){
 				 htmlBookedBuyers ='<div class="border-lead1">'
-				 	+'<div class="row">'
-                   +'<div class="col-md-3 col-sm-3 col-xs-3">'
-                     +'<h4>'+data[index].buildingName+'-'+data[index].flatNo+' '+data[index].projectName+', '+data[index].localityName+', '+data[index].cityName+'</h4>'
-                   +'</div>'  
-                   +'<div class="col-md-3 col-sm-3 col-xs-3">'
-                    +'<h4>'+data[index].buyerName+'</h4>'
-                   +'</div>'
-                   +'<div class="col-md-3 col-sm-3 col-xs-3">'
-                    +'<h4>'+data[index].buyerContact+'</h4>'
-                   +'</div>'
-                  +'<div class="col-md-3 col-sm-3 col-xs-3">'
-                    +' <h4>'+data[index].buyerEmail+'</h4>'
-                  +'</div>'
-               +'</div>'
+	                  +'<div class="row">'
+                 +'<div class="col-md-2 col-sm-2 col-xs-2">'
+                 +'<h4>'+data[index].buildingName+'-'+data[index].flatNo+' '+data[index].projectName+', '+data[index].localityName+', '+data[index].cityName+'</h4>'
+                 +'</div>'
+                 +' <div class="col-md-4 col-sm-4 col-xs-4">'
+                  +'<h4>'+data[index].buyerName+'</h4>'
+                  +'<h4>'+data[index].buyerContact+'</h4>'
+                 +'</div>'
+                 +'<div class="col-md-4 col-sm-4 col-xs-4">'
+                  +'<h4>'+data[index].cancelReason+'</h4>'
+                 +'</div>'
+                +'<div class="col-md-2 col-sm-2 col-xs-2">'
+                  +'<h4>'+data[index].charges+'/-</h4>'
+                 +'</div>'
+              +'</div>'
             +'</div>';
             $("#booked_buyers").append(htmlBookedBuyers);
 			});

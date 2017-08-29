@@ -9,7 +9,7 @@ public class BookedBuyerList {
 	private String flatNo;
 	private String localityName;
 	private String cityName;
-	private String cancelReson;
+	private String cancelReason;
 	private Double charges;
 	public String getBuyerName() {
 		return buyerName;
@@ -59,11 +59,11 @@ public class BookedBuyerList {
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
 	}
-	public String getCancelReson() {
-		return cancelReson;
+	public String getCancelReason() {
+		return cancelReason;
 	}
-	public void setCancelReson(String cancelReson) {
-		this.cancelReson = cancelReson;
+	public void setCancelReason(String cancelReason) {
+		this.cancelReason = cancelReason;
 	}
 	public Double getCharges() {
 		return charges;

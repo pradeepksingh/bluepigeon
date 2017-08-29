@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.CampaignDAO;
 import org.bluepigeon.admin.dao.CancellationDAO;
+import org.bluepigeon.admin.data.BookedBuyerList;
 import org.bluepigeon.admin.data.CancellationList;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.Builder;
@@ -123,4 +124,29 @@ public class CancellationController {
 		return msg;
 	}
 	
+	@POST
+	@Path("/filter/cancel/buyers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BookedBuyerList> getCancelledBuyerList(@FormParam("emp_id") int empId,
+			@FormParam("project_id") int projectId,
+			@FormParam("nameOrNumber") String nameOrNumber
+		){
+		int contactNumber = 0;
+		String name = "";
+		try{
+			contactNumber = Integer.parseInt(nameOrNumber);
+			System.err.println("contact Number :: "+contactNumber);
+		}catch(NumberFormatException e){
+			name = nameOrNumber;
+			contactNumber = 0;
+			System.err.println("Name :: "+name);
+		}catch(NullPointerException e){
+			
+		}
+		catch(Exception e){
+			
+		}
+		return new CancellationDAO().getCancelledBuyerList(empId, projectId,  name,  contactNumber);
+		
+	}
 }
