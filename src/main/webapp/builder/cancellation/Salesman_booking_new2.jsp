@@ -113,7 +113,8 @@
     <!-- color CSS -->
      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
 <!--     <link rel="stylesheet" type="text/css" href="../css/cancellation.css"> -->
-	 <link rel="stylesheet" type="text/css" href="../css/custom7.css">
+<!-- 	 <link rel="stylesheet" type="text/css" href="../css/custom7.css"> -->
+	  <link rel="stylesheet" type="text/css" href="../css/custom10.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
@@ -204,7 +205,7 @@
                	 						<%for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){ 
  							     if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("booked")) {%>
  							     
- 							     <li class="grey"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+ 							     <li class="grey item"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
  							      
  							     <%} else if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("available")) {%>
  		              					
@@ -313,14 +314,17 @@ function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
 		//alert("Hello12");
         $('.nav li.active').removeClass('active');
-       // alert("Hello 123");
+        //alert("Hello 123");
         var $parent = $(this).parent();
-        if($parent.hasClass('.nav-pills')){
-        	//alert("Hello1");
+       // alert($parent.attr('class'));
+        if($parent.hasClass('grey')){
+        //	alert("Hello1");
         	$parent.removeClass('grey');
+	        $parent.addClass('active');
 	        $parent.addClass('red');
 	        e.preventDefault();
         }
+        
     });
 }
 $select_building = $("#filter_building_id").selectize({

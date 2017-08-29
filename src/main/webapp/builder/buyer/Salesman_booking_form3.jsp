@@ -159,7 +159,7 @@
 					 	       <div class="col-sm-12">
 								    <div class="form-group row">
 								        <label for="example-text-input" class="col-sm-5 col-form-label"> Buyers Name*</label>
-								        <div class="col-sm-7">
+								        <div class="col-sm-7 custom-col">
 								        	<div>
 								            	<input class="form-control" type="text" autocomplete="off" id="buyer_name" name="buyer_name[]" placeholder="owner name">
 								        	</div>
@@ -168,7 +168,7 @@
 								    </div>
 								    <div class="form-group row">
 								        <label for="example-search-input" class="col-sm-5 col-form-label">Email*</label>
-								        <div class="col-sm-7">
+								        <div class="col-sm-7 custom-col">
 								        	<div>
 								            	<input class="form-control" type="text" autocomplete="off" name="email[]" id="email" placeholder="owner emailid">
 								        	</div>
@@ -178,7 +178,7 @@
 								    <input type="hidden" name="is_primary[]" id="is_primary" value="1" class="form-control">
 								    <div class="form-group row">
 								        <label for="example-search-input" class="col-sm-5 col-form-label">Permanent Address*</label>
-								        <div class="col-sm-7">
+								        <div class="col-sm-7 custom-col">
 								        	<div>
 								            	<input class="form-control" type="text" autocomplete="off" id="address" name="address[]" placeholder="Permanent address">
 								        	</div>
@@ -187,7 +187,7 @@
 								    </div>
 								    <div class="form-group row">
 								        <label for="example-search-input" class="col-sm-5 col-form-label">Current Address*</label>
-								        <div class="col-sm-7">
+								        <div class="col-sm-7 custom-col">
 								        	<div>
 								            	<input class="form-control" type="text" autocomplete="off" id="current_address" name="current_address[]" placeholder="current address">
 								        	</div>
@@ -233,7 +233,7 @@
 					 	        </div>
 					 	        <div id="co-buyer"></div>
 					 	       	<div class="centerbutton">
-					 	        	<a href="javascript:addMoreBuyers();">   <button type="button">+ ADD Co-Buyer</button></a>
+					 	        	<a href="javascript:addMoreBuyers();">   <button type="button" class="add-co-buyer">+ Co-Buyer</button></a>
 					 	           	<button onclick="show();" type="button">Next</button>
 					 	       </div>
 					        </div>
@@ -534,7 +534,9 @@ $("#cancellation").click(function(){
 $("#campaign").click(function(){
 	window.location.href="${baseUrl}/builder/campaign/Salesman_campaign.jsp?project_id="+<% out.print(project_id);%>
 });
-
+$("#leads").click(function(){
+	window.location.href="${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
+});
 function addMoreBuyers(){
 	var buyers = parseInt($("#buyer_count").val());
 	buyers++;
