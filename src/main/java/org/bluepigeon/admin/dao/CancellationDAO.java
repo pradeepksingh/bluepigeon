@@ -3,14 +3,17 @@ package org.bluepigeon.admin.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bluepigeon.admin.data.BookingFlatList;
 import org.bluepigeon.admin.data.CancellationList;
 import org.bluepigeon.admin.data.LeadList;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.data.BookedBuyerList;
 import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Cancellation;
 import org.bluepigeon.admin.util.HibernateUtil;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
@@ -231,5 +234,97 @@ public class CancellationDAO {
 		session.getTransaction().commit();
 		session.close();
 		return responseMessage;
+	}
+	/**
+	 * Get all cancellation list on page load
+	 * @param builderEmployee
+	 * @return List<BookedBuyerList>
+	 */
+	public List<BookedBuyerList> getCancelledBuyerList(BuilderEmployee builderEmployee){
+		String hql = "";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() >0 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+			hql ="select project.name as projectName,project.locality_name as localityName, city.name as cityName, building.name as buildingName, flat.flat_no as flatNo,cancel.buyer_name as buyerName, cancel.buyer_contact as contactNumber, cancel.reason as cancelReason, cancel.charges as cancelCharges from cancellation as cancel inner join builder_flat as flat on flat.id = cancel.flat_id left join buyer as buy on buy.flat_id = flat.id left join builder_floor as floor on floor.id = flat.floor_no left join builder_building as building on building.id = floor.building_id left join builder_project as project on project.id = building.project_id left join city as city on city.id = project.city_id where buy.builder_id ="+builderEmployee.getBuilder().getId()+" and buy.is_primary=1 and buy.is_deleted=1 and project.status=1 GROUP by cancel.id order by project.id DESC";
+		}else{
+			hql= "select project.name as projectName,project.locality_name as localityName, city.name as cityName, building.name as buildingName, flat.flat_no as flatNo,cancel.buyer_name as buyerName, cancel.buyer_contact as contactNumber, cancel.reason as cancelReason, cancel.charges as cancelCharges from cancellation as cancel inner join builder_flat as flat on flat.id = cancel.flat_id left join buyer as buy on buy.flat_id = flat.id left join builder_floor as floor on floor.id = flat.floor_no left join builder_building as building on building.id = floor.building_id left join builder_project as project on project.id = building.project_id inner join allot_project as ap on ap.project_id = project.id left join city as city on city.id = project.city_id where ap.emp_id ="+builderEmployee.getId()+" and buy.is_primary=1 and buy.is_deleted=1 and project.status=1 GROUP by cancel.id order by project.id DESC";
+		}
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BookedBuyerList.class));
+		
+		List<BookedBuyerList> result = query.list();
+		return result;
+	}
+	/**
+	 * Filter cancel buyer's list by project name with buyer's contact number or project name with buyer name
+	 * @param empId
+	 * @param projectId
+	 * @param name
+	 * @param contactNumber
+	 * @return List<BookedBuyerList>
+	 */
+	
+	public List<BookedBuyerList> getCancelledBuyerList(int empId, int projectId, String name, int contactNumber){
+		List<BookedBuyerList> result = null;
+		String hql = "select project.name as projectName,project.locality_name as localityName, city.name as cityName, building.name as buildingName, flat.flat_no as flatNo,cancel.buyer_name as buyerName, cancel.buyer_contact as contactNumber, cancel.reason as cancelReason, cancel.charges as cancelCharges ";
+		String where = "";
+		String hqlnew = "from BuilderEmployee where id = "+empId;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session sessionnew = hibernateUtil.openSession();
+		Query querynew = sessionnew.createQuery(hqlnew);
+		List<BuilderEmployee> employees = querynew.list();
+		BuilderEmployee builderEmployee = employees.get(0);
+		sessionnew.close();
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
+			hql += " from cancellation as cancel inner join builder_flat as flat on flat.id = cancel.flat_id left join buyer as buy on buy.flat_id = flat.id left join builder_floor as floor on floor.id = flat.floor_no left join builder_building as building on building.id = floor.building_id left join builder_project as project on project.id = building.project_id inner join allot_project as ap on ap.project_id = project.id left join city as city on city.id = project.city_id "
+					+ "WHERE ";
+					where+= "ap.emp_id="+builderEmployee.getId();
+		}else{
+			hql = hql+" from cancellation as cancel inner join builder_flat as flat on flat.id = cancel.flat_id left join buyer as buy on buy.flat_id = flat.id left join builder_floor as floor on floor.id = flat.floor_no left join builder_building as building on building.id = floor.building_id left join builder_project as project on project.id = building.project_id left join city as city on city.id = project.city_id "
+					+ "WHERE ";
+					where+= "buy.builder_id="+builderEmployee.getBuilder().getId();
+		}
+		if(projectId > 0){
+			if(where != ""){
+				where += " AND project.id = :project_id";
+			}else{
+				where +=" project.id = :project_id";
+			}
+		}
+		if(name != ""){
+			if(where != ""){
+				where += " AND b.name LIKE :name";
+			}else{
+				where +=" b.name LIKE :name";
+			}
+		}
+		if(contactNumber > 0){
+			if(where != ""){
+				where += " AND b.mobile LIKE :contact_number";
+			}else{
+				where +=" b.mobile LIKE :contact_number";
+			}
+		}
+		hql += where + " AND project.status=1 AND b.is_primary=1 AND b.is_deleted=1 GROUP by cancel.id ORDER BY project.id desc";
+		try {
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BookedBuyerList.class));
+		System.err.println(hql);
+		if(projectId > 0){
+			query.setParameter("project_id", projectId);
+		}
+		if(name != ""){
+			query.setParameter("name", "%"+name+"%");
+		}
+		if(contactNumber > 0){
+			query.setParameter("contact_number", "%"+contactNumber+"%");
+		}
+		
+		 result = query.list();
+		
+		} catch(Exception e) {
+			//
+		}
+		
+		return result;
 	}
 }

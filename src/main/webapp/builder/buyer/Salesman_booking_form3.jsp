@@ -670,6 +670,8 @@ function showPrev2(){
      $("#menu3").addClass('active');
      $("#menu3").show();
 }
+
+
 $('#addnewbuyer').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -864,6 +866,15 @@ $('#addnewbuyer').bootstrapValidator({
 	//alert("hello");
 	event.preventDefault();
 	addBuyer1();
+}).on('error.form.bv', function(event,data) {
+	// Prevent form submission
+	//alert("hello");
+	event.preventDefault();
+	//addBuyer1();
+	 $('.active').removeClass('active').prev('li').prev('li').prev('li').prev('li').addClass('active');
+	//$("#home").addClass('active');
+	$("#home").show();
+	
 });
 
 function addBuyer1() {

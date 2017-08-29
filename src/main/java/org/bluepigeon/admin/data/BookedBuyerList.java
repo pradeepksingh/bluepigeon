@@ -1,4 +1,4 @@
-package org.bluepigeon.admin.model;
+package org.bluepigeon.admin.data;
 
 public class BookedBuyerList {
 	private String buyerName;
@@ -10,6 +10,7 @@ public class BookedBuyerList {
 	private String localityName;
 	private String cityName;
 	private String cancelReson;
+	private Double charges;
 	public String getBuyerName() {
 		return buyerName;
 	}
@@ -64,5 +65,10 @@ public class BookedBuyerList {
 	public void setCancelReson(String cancelReson) {
 		this.cancelReson = cancelReson;
 	}
-	
+	public Double getCharges() {
+		return charges;
+	}
+	public void setCharges(Double charges) {
+		this.charges = charges;
+	}
 }

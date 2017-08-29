@@ -1,4 +1,5 @@
-<%@page import="org.bluepigeon.admin.model.BookedBuyerList"%>
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
+<%@page import="org.bluepigeon.admin.data.BookedBuyerList"%>
 <%@page import="org.bluepigeon.admin.model.Buyer"%>
 <%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
 <%@page import="org.bluepigeon.admin.data.FlatListData"%>
@@ -30,8 +31,9 @@
 <%@page import="java.util.List"%>
 <%
 	int p_user_id = 0;
+int emp_id = 0;
 	List<BookedBuyerList> buyerList = null;	
-	
+	List<ProjectData> projectList = null;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
 	if(session!=null)
@@ -40,7 +42,9 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			p_user_id = builder.getBuilder().getId();
+			emp_id = builder.getId();
 			buyerList = new BuilderDetailsDAO().getBookedBuyerList(builder);
+			projectList = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 		}
 	}
 %>
@@ -65,9 +69,11 @@
     <link rel="stylesheet" type="text/css" href="../css/custom10.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
      <script src="../js/bootstrap-multiselect.js"></script>
+     <script type="text/javascript" src="../js/selectize.min.js"></script>
     <link rel="stylesheet" href="../css/bootstrap-multiselect.css">
 </head>
 
@@ -92,19 +98,22 @@
                   <h1>BUYER LIST</h1>
                    <div class="row">
                       <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                        <select class="selectpicker" data-style="form-control">
-                          <option>Project Name</option>
-                          <option>Kumar</option>
-                          <option>ganga</option>
+                        <select id="filter_project_id" name="filter_project_id" data-style="form-control">
+                         <option value="0">Enter Project Name</option>
+                        <% if(projectList != null){
+                        	for(ProjectData projectData : projectList){
+                        	%>
+                          <option value="<%out.print(projectData.getId());%>"><%out.print(projectData.getName()); %></option>
+                          <%}} %>
                         </select>
                         <img src="../images/filter.png" alt="flter" class="filter-img"/>
                       </div>
                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                         <form class="navbar-form lead-search" role="search">
+                         <form class="navbar-form lead-search" method="post" role="search">
 						    <div class="input-group add-on">
 						      <input class="form-control" placeholder="" name="srch-term" id="srch-term" type="text">
 						      <div class="input-group-btn">
-						        <button class="btn btn-default" id="search_buyer" type="submit"><img src="../images/search.png"/></button>
+						        <button class="btn btn-default" id="search_buyer" type="button"><img src="../images/search.png"/></button>
 						      </div>
 						    </div>
 					     </form>
@@ -127,6 +136,7 @@
 	                      <h2>Email Id</h2>
 	                   </div>
 	                 </div>
+	                 <div id="booked_buyers">
 	                 <%if(buyerList != null){ 
 	                 	for(BookedBuyerList bookedBuyerList : buyerList){
 	                 %>
@@ -148,6 +158,7 @@
 	               </div>
 	               <%}} %>
 	               <!-- buyer information end -->
+	               </div>
                   </div>
                </div>
             </div>
@@ -160,7 +171,58 @@
   </body>
 </html>
 <script>
+$select_project = $("#filter_project_id").selectize({
+	persist: false,
+	 onChange: function(value) {
+		 getBookedBuyerFilterList();
+	 },
+	 onDropdownOpen: function(value){
+    	 var obj = $(this);
+		var textClear =	 $("#filter_project_id :selected").text();
+    	 if(textClear.trim() == "Enter Project Name"){
+    		 obj[0].setValue("");
+    	 }
+     }
+});
+<% if(projectList != null){
+if(projectList.size() > 0){%>
+	select_project = $select_project[0].selectize;
+<%}}%>
+
+function getBookedBuyerFilterList(){
+	var emp_id = <%out.print(emp_id);%>;
+	var htmlBookedBuyers = "";
+	var project_id = $("#filter_project_id").val();
+	var nameorNumber = $("#srch-term").val();
+	$("#booked_buyers").empty();
+	$.post("${baseUrl}/webapi/builder/filter/booked/buyers",{emp_id: emp_id, project_id : project_id, nameOrNumber : nameorNumber },function(data){
+		   if(data == ""){
+			   $("#booked_buyers").empty();
+			   $("#booked_buyers").append("<h2><center>No Records Found</center></h2>");
+		   }
+			$(data).each(function(index){
+				 htmlBookedBuyers ='<div class="border-lead1">'
+				 	+'<div class="row">'
+                   +'<div class="col-md-3 col-sm-3 col-xs-3">'
+                     +'<h4>'+data[index].buildingName+'-'+data[index].flatNo+' '+data[index].projectName+', '+data[index].localityName+', '+data[index].cityName+'</h4>'
+                   +'</div>'  
+                   +'<div class="col-md-3 col-sm-3 col-xs-3">'
+                    +'<h4>'+data[index].buyerName+'</h4>'
+                   +'</div>'
+                   +'<div class="col-md-3 col-sm-3 col-xs-3">'
+                    +'<h4>'+data[index].buyerContact+'</h4>'
+                   +'</div>'
+                  +'<div class="col-md-3 col-sm-3 col-xs-3">'
+                    +' <h4>'+data[index].buyerEmail+'</h4>'
+                  +'</div>'
+               +'</div>'
+            +'</div>';
+            $("#booked_buyers").append(htmlBookedBuyers);
+			});
+	});
+}
+
 $("#search_buyer").click(function(){
-	
+	getBookedBuyerFilterList();
 });
 </script>

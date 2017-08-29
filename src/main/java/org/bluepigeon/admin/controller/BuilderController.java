@@ -34,6 +34,7 @@ import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
 import org.bluepigeon.admin.model.AreaUnit;
+import org.bluepigeon.admin.data.BookedBuyerList;
 import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuildingAmenity;
@@ -463,4 +464,29 @@ public class BuilderController {
 		return new BuilderDetailsDAO().getBarGraphByProjectId(projectId);
 	}
 	
+	@POST
+	@Path("/filter/booked/buyers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BookedBuyerList> getBookedBuyerList(
+			@FormParam("emp_id") int empId,
+			@FormParam("project_id") int projectId,
+			@FormParam("nameOrNumber") String nameOrNumber
+		){
+		int contactNumber = 0;
+		String name = "";
+		try{
+			contactNumber = Integer.parseInt(nameOrNumber);
+			System.err.println("contact Number :: "+contactNumber);
+		}catch(NumberFormatException e){
+			name = nameOrNumber;
+			contactNumber = 0;
+			System.err.println("Name :: "+name);
+		}catch(NullPointerException e){
+			
+		}
+		catch(Exception e){
+			
+		}
+		return new BuilderDetailsDAO().getBookedBuyerList(empId,projectId,name,contactNumber);
+	}
 }
