@@ -459,14 +459,15 @@
 											<div class="row">
 												<div class="col-lg-6">
 													<input type="hidden" name="flat_id" value="<% out.print(flat_id);%>"/>
-												   	<input type="hidden" name="price_id" value="<% if(buildingPriceInfo.size() > 0){ out.print(buildingPriceInfo.get(0).getId()); } else {%>0<% }%>"/>
+													<input type="hidden" name="flat_type_id" name="flat_type_id" value="<%out.print(flat_type_id);%>"/>
+												   	<input type="hidden" name="price_id" value="<% if(priceInfoData != null){ out.print(priceInfoData.getId()); } else {%>0<% }%>"/>
 													<div class="form-group" id="error-base_unit">
 														<label class="control-label col-sm-4">Pricing Unit <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
 															<select name="base_unit" id="base_unit" class="form-control">
 																<% if(areaUnits.size() > 0){ 
 																for(AreaUnit areaUnit :areaUnits) { %>
-																<option value="<% out.print(areaUnit.getId()); %>" <% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getAreaUnit().getId() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
+																<option value="<% out.print(areaUnit.getId()); %>" <% if(priceInfoData.getAreaUnits() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
 																<% }} %>
 															</select>
 														</div>
@@ -477,7 +478,7 @@
 													<div class="form-group" id="error-base_rate">
 														<label class="control-label col-sm-4">Base Rate <span class='text-danger'>*</span></label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="base_rate" name="base_rate" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getBasePrice() != null){ out.print(buildingPriceInfo.get(0).getBasePrice());}%>"/>
+															<input type="text" class="form-control" id="base_rate" name="base_rate" value="<% if(priceInfoData.getBaseRate() != 0 && priceInfoData.getBaseRate() > 0){ out.print(priceInfoData.getBaseRate());}%>"/>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
@@ -488,7 +489,7 @@
 													<div class="form-group" id="error-rise_rate">
 														<label class="control-label col-sm-4">Floor Rise Rate</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getRiseRate() != null){ out.print(buildingPriceInfo.get(0).getRiseRate());}%>"/>
+															<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<% if(priceInfoData.getRiseRate() > 0 && priceInfoData.getRiseRate() != 0){ out.print(priceInfoData.getRiseRate());}%>"/>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
@@ -497,7 +498,7 @@
 													<div class="form-group" id="error-post">
 														<label class="control-label col-sm-4">Applicable Post </label>
 														<div class="col-sm-8 input-group" style="padding: 0px 12px;">
-															<input type="text" class="form-control" id="post" name="post" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getPost() != 0){ out.print(buildingPriceInfo.get(0).getPost());}%>"/>
+															<input type="text" class="form-control" id="post" name="post" value="<% if(priceInfoData.getPost() > 0 && priceInfoData.getPost() != 0){ out.print(priceInfoData.getPost());}%>"/>
 															<span class="input-group-addon">floor</span>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
@@ -509,7 +510,7 @@
 													<div class="form-group" id="error-maintenance">
 														<label class="control-label col-sm-4">Maintenance Charge </label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="maintenance" name="maintenance" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getMaintenance() != null){ out.print(buildingPriceInfo.get(0).getMaintenance());}%>"/>
+															<input type="text" class="form-control" id="maintenance" name="maintenance" value="<% if(priceInfoData.getMaintainance() > 0 && priceInfoData.getMaintainance() != 0){ out.print(priceInfoData.getMaintainance());}%>"/>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
@@ -518,7 +519,7 @@
 													<div class="form-group" id="error-tenure">
 														<label class="control-label col-sm-4">Tenure </label>
 														<div class="col-sm-8 input-group" style="padding: 0px 12px;">
-															<input type="text" class="form-control" id="tenure" name="tenure" value="<%if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getTenure() != 0){ out.print(buildingPriceInfo.get(0).getTenure()); } %>"/>
+															<input type="text" class="form-control" id="tenure" name="tenure" value="<%if(priceInfoData.getTenure() > 0 && priceInfoData.getTenure() != 0){ out.print(priceInfoData.getTenure()); } %>"/>
 															<span class="input-group-addon">Months</span>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
@@ -530,7 +531,7 @@
 													<div class="form-group" id="error-amenity_rate">
 														<label class="control-label col-sm-4">Amenities Facing Rate</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getAmenityRate() != null){ out.print(buildingPriceInfo.get(0).getAmenityRate());}%>"/>
+															<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<% if(priceInfoData.getAmenityRate() > 0 && priceInfoData.getAmenityRate() != 0){ out.print(priceInfoData.getAmenityRate());}%>"/>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
@@ -541,8 +542,8 @@
 														<div class="col-sm-8">
 															<select id="parking_id" name="parking_id" class="form-control">
 																<option value="0">Select Parking Type</option>
-																<option value="1" <% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getParkingId() == 1){ %>selected<%} %>>Open Parking</option>
-																<option value="2" <% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getParkingId() == 2){ %>selected<%} %>>Shed Parking</option>
+																<option value="1" <% if(priceInfoData.getParkingId() > 0 && priceInfoData.getParkingId() == 1){ %>selected<%} %>>Open Parking</option>
+																<option value="2" <% if(priceInfoData.getParkingId() > 0 && priceInfoData.getParkingId() == 2){ %>selected<%} %>>Shed Parking</option>
 															</select>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
@@ -554,7 +555,7 @@
 													<div class="form-group" id="error-landmark">
 														<label class="control-label col-sm-4">Parking</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="parking" name="parking" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getParking() != null){ out.print(buildingPriceInfo.get(0).getParking());}%>"/>
+															<input type="text" class="form-control" id="parking" name="parking" value="<% if(priceInfoData.getParking() > 0 && priceInfoData.getParking() != 0){ out.print(priceInfoData.getParking());}%>"/>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
@@ -564,7 +565,7 @@
 													<div class="form-group" id="error-landmark">
 														<label class="control-label col-sm-4"><%out.print(taxLabel1); %> </label>
 														<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
-															<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getStampDuty() != null){ out.print(buildingPriceInfo.get(0).getStampDuty());} else {%>0<% } %>"/>
+															<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(priceInfoData.getStampDuty() > 0 && priceInfoData.getStampDuty() != 0){ out.print(priceInfoData.getStampDuty());} else {%>0<% } %>"/>
 															<span class="input-group-addon">%</span>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
@@ -580,7 +581,7 @@
 													<div class="form-group" id="error-tax">
 														<label class="control-label col-sm-4"><%out.print(taxLabel2); %></label>
 														<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
-															<input type="text" class="form-control" id="tax" name="tax" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getTax() != null){ out.print(buildingPriceInfo.get(0).getTax());} else { %>0<% } %>"/>
+															<input type="text" class="form-control" id="tax" name="tax" value="<% if(priceInfoData.getTax() > 0 && priceInfoData.getTax() != 0){ out.print(priceInfoData.getTax());} else { %>0<% } %>"/>
 															<span class="input-group-addon">%</span>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
@@ -594,7 +595,7 @@
 													<div class="form-group" id="error-vat">
 														<label class="control-label col-sm-4"><%out.print(taxLabel3); %> </label>
 														<div class="col-sm-8 input-group"  style="padding: 0px 12px;">
-															<input type="text" class="form-control" id="vat" name="vat" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getVat() != null){ out.print(buildingPriceInfo.get(0).getVat());} else { %>0<% } %>"/>
+															<input type="text" class="form-control" id="vat" name="vat" value="<% if(priceInfoData.getVat() > 0 && priceInfoData.getVat() != 0){ out.print(priceInfoData.getVat());} else { %>0<% } %>"/>
 															<span class="input-group-addon">%</span>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
@@ -609,7 +610,7 @@
 													<div class="form-group" id="error-tech_fee">
 														<label class="control-label col-sm-4">Tech Fees</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="tech_fee" name="tech_fee" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getFee() != null){ out.print(buildingPriceInfo.get(0).getFee());}%>"/>
+															<input type="text" class="form-control" id="tech_fee" name="tech_fee" value="<% if(priceInfoData.getFee() > 0 && priceInfoData.getFee() != 0){ out.print(priceInfoData.getFee());}%>"/>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
@@ -618,7 +619,7 @@
 													<div class="form-group" id="error-tech_fee">
 														<label class="control-label col-sm-4">Flat Sale value</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="sale_value" name="sale_value" value="<% if(buildingPriceInfo.size() > 0 && buildingPriceInfo.get(0).getTotalCost() != null){ out.print(Math.round(buildingPriceInfo.get(0).getTotalCost()));}%>" readonly/>
+															<input type="text" class="form-control" id="sale_value" name="sale_value" value="<% if(priceInfoData.getTotalCost() > 0 && priceInfoData.getTotalCost() != 0){ out.print(Math.round(priceInfoData.getTotalCost()));}%>" readonly/>
 														</div>
 														<div class="messageContainer col-sm-offset-4"></div>
 													</div>
@@ -918,7 +919,7 @@
 							</div>
 							<div class="col-sm-12">
 								<span class="pull-right">
-									<button type="button" name="updatePaymentbtn" id="updatePaymentbtn" class="btn btn-success btn-sm" >Update</button>
+									<button type="submit" name="updatePaymentbtn" id="updatePaymentbtn" class="btn btn-success btn-sm" >Update</button>
 								</span>
 							</div>
 						</div>
@@ -1392,12 +1393,12 @@ $("#updateprice").bootstrapValidator({
                  },
          		numeric: {
          			message: 'Stamp duty is invalid'
-         		},
-         		 between:{
-                  	min:0,
-                  	max:100,
-                  	message: 'The percentage must be between 0 and 100'
-                  }
+         		}
+//          		 between:{
+//                   	min:0,
+//                   	max:100,
+//                   	message: 'The percentage must be between 0 and 100'
+//                   }
              }
          },
          tax: {
@@ -1407,12 +1408,12 @@ $("#updateprice").bootstrapValidator({
                  },
          		numeric: {
          			message: 'Tax is invalid'
-         		},
-         		 between:{
-                  	min:0,
-                  	max:100,
-                  	message: 'The percentage must be between 0 and 100'
-                  }
+         		}//,
+//          		 between:{
+//                   	min:0,
+//                   	max:100,
+//                   	message: 'The percentage must be between 0 and 100'
+//                   }
              }
          },
          vat: {
@@ -1422,12 +1423,12 @@ $("#updateprice").bootstrapValidator({
                  },
          		numeric: {
          			message: 'Vat is invalid'
-         		},
-         		 between:{
-                  	min:0,
-                  	max:100,
-                  	message: 'The percentage must be between 0 and 100'
-                  }
+         		}//,
+//          		 between:{
+//                   	min:0,
+//                   	max:100,
+//                   	message: 'The percentage must be between 0 and 100'
+//                   }
              }
          }
      }

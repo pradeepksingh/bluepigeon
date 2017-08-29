@@ -107,7 +107,7 @@
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
 <!--     <link href="../css/custom.css" rel="stylesheet"> -->
-    <link rel="stylesheet" type="text/css" href="../css/custom7.css">
+    <link rel="stylesheet" type="text/css" href="../css/custom10.css">
 <!--     <link rel="stylesheet" type="text/css" href="../css/topbutton.css"> -->
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
@@ -309,19 +309,19 @@ $("#leads").click(function(){
 });
 function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
-		alert("Hello");
+		//alert("Hello");
         $('.nav li.active').removeClass('active');
-        alert("Hello1");
+       // alert("Hello1");
         var $parent = $(this).parent();
-        alert("Hello2"+$parent.val());
+     //   alert("Hello2"+$parent.val());
         if($parent.hasClass('grey')){
-        	alert("Hello again");
+        	//alert("Hello again");
         	$parent.removeClass('grey');
 	        $parent.addClass('active');
 	        $parent.addClass('grey');
 	        e.preventDefault();
         }
-        alert("Hello3");
+       // alert("Hello3");
     });
 }
 

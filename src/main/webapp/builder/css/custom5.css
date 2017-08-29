@@ -65,7 +65,7 @@ textarea:focus {outline:0;}
 }
 @media (min-width: 1440px){
    .tabcontent button{
-       width: 180px;
+       width: 255px;
        padding: 13px 40px !important;;
     margin: 2% 3% 5% !important;
     border-radius: 12px !important;;
