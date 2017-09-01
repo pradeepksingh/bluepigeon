@@ -1,6 +1,9 @@
 package org.bluepigeon.admin.data;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom;
 
 public class BookingFlatList {
 	private int flatId;
@@ -27,6 +30,7 @@ public class BookingFlatList {
 	private String buyerPermanentAddress;
 	private String buyerPhoto;
 	private Short isDeleted;
+	private List<BuilderBuildingFlatTypeRoom> builderBuildingFlatTypeRooms = new ArrayList<BuilderBuildingFlatTypeRoom>();
 	//private String bedroomSize;
 	
 	public int getFlatId() {
@@ -180,6 +184,12 @@ public class BookingFlatList {
 	}
 	public void setIsDeleted(Short isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+	public List<BuilderBuildingFlatTypeRoom> getBuilderBuildingFlatTypeRooms() {
+		return builderBuildingFlatTypeRooms;
+	}
+	public void setBuilderBuildingFlatTypeRooms(List<BuilderBuildingFlatTypeRoom> builderBuildingFlatTypeRooms) {
+		this.builderBuildingFlatTypeRooms = builderBuildingFlatTypeRooms;
 	}
 	
 	

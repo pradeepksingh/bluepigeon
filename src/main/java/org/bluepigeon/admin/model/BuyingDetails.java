@@ -30,13 +30,15 @@ public class BuyingDetails implements java.io.Serializable {
 	private Double registration;
 	private Double taxes;
 	private Double vat;
+	private Double totalCost=0.0;
+	private Integer post = 0;
 
 	public BuyingDetails() {
 	}
 
 	public BuyingDetails(Buyer buyer, Date bookingDate, Double baseRate, Double floorRiseRate, Double amenityFacingRate,
 			Double parkingRate, Double maintenance, Integer tenure, Double stampDuty, Double registration, Double taxes,
-			Double vat) {
+			Double vat, Integer post, Double totalCost) {
 		this.buyer = buyer;
 		this.bookingDate = bookingDate;
 		this.baseRate = baseRate;
@@ -49,6 +51,8 @@ public class BuyingDetails implements java.io.Serializable {
 		this.registration = registration;
 		this.taxes = taxes;
 		this.vat = vat;
+		this.post = post;
+		this.totalCost = totalCost;
 	}
 
 	@Id
@@ -172,5 +176,22 @@ public class BuyingDetails implements java.io.Serializable {
 	public void setVat(Double vat) {
 		this.vat = vat;
 	}
+	
+	@Column(name = "total_cost", precision = 22, scale = 0)
+	public Double getTotalCost() {
+		return totalCost;
+	}
 
+	public void setTotalCost(Double totalCost) {
+		this.totalCost = totalCost;
+	}
+
+	@Column(name = "post")
+	public Integer getPost() {
+		return post;
+	}
+
+	public void setPost(Integer post) {
+		this.post = post;
+	}
 }
