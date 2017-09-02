@@ -11,7 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AllotProject;
-import org.bluepigeon.admin.model.BookedBuyerList;
+import org.bluepigeon.admin.data.BookedBuyerList;
 import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderEmployee;
@@ -1416,18 +1416,18 @@ public class BuilderDetailsDAO {
 				where +=" project.id = :project_id";
 			}
 		}
-		if(name != null && !name.isEmpty()){
+		if(name != ""){
 			if(where != ""){
-				where += " AND b.name like :name";
+				where += " AND b.name LIKE :name";
 			}else{
-				where +=" b.name like :name";
+				where +=" b.name LIKE :name";
 			}
 		}
 		if(contactNumber > 0){
 			if(where != ""){
-				where += " AND b.mobile like :contact_number";
+				where += " AND b.mobile LIKE :contact_number";
 			}else{
-				where +=" b.mobile like :contact_number";
+				where +=" b.mobile LIKE :contact_number";
 			}
 		}
 		hql += where + " AND project.status=1 AND b.is_primary=1 AND b.is_deleted=0 GROUP by b.id ORDER BY project.id desc";
@@ -1438,10 +1438,12 @@ public class BuilderDetailsDAO {
 		if(projectId > 0){
 			query.setParameter("project_id", projectId);
 		}
-		if(name != null && !name.isEmpty())
-			query.setParameter("name", name);
-		if(contactNumber > 0)
-			query.setParameter("contact_number", contactNumber);
+		if(name != ""){
+			query.setParameter("name", "%"+name+"%");
+		}
+		if(contactNumber > 0){
+			query.setParameter("contact_number", "%"+contactNumber+"%");
+		}
 		
 		 result = query.list();
 		

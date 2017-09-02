@@ -335,8 +335,7 @@
 											<div class="form-group row">
 												<label for="example-text-input" class="col-3 col-form-label">Building</label>
 												<div class="col-6">
-													<select name="building_id" id="building_id"
-														class="form-control">
+													<select name="building_id" id="building_id"	class="form-control">
 														<option value="">Select Building</option>
 														<% for(BuilderBuilding builderBuilding :builderBuildings) { %>
 														<option value="<% out.print(builderBuilding.getId()); %>" <% if(builderBuilding.getId() == buyers.get(0).getBuilderBuilding().getId()) { %>selected<% } %> ><% out.print(builderBuilding.getName()); %></option>
@@ -1086,33 +1085,26 @@ function calculateAmount(id){
 				+ '<div class="col-3">'
 				+ ' <input class="form-control" type="text" id="buyer_name" name="buyer_name[]" value="">'
 				+ '</div>'
-
 				+ '<label for="example-text-input" class="col-3 col-form-label">Contact</label>'
 				+ '<div class="col-3">'
 				+ '<input class="form-control" type="text" id="contact" name="contact[]" value="" maxlength="10">'
 				+ '</div>'
 				+ '</div>'
-
 				+ '<div class="form-group row">'
-
 				+ '<label for="example-text-input" class="col-3 col-form-label">Email</label>'
 				+ '<div class="col-3">'
 				+ ' <input class="form-control" type="text" id="email" name="email[]" value="">'
 				+ '</div>'
-
 				+ '<label for="example-text-input" class="col-3 col-form-label">PAN</label>'
 				+ '<div class="col-3">'
 				+ '<input class="form-control" type="text" id="pan" name="pan[]" value="">'
 				+ '</div>'
 				+ '</div>'
-
 				+ '<div class="form-group row">'
-
 				+ '<label for="example-text-input" class="col-3 col-form-label"> Perm. Address</label>'
 				+ '<div class="col-3">'
 				+ ' <input class="form-control" type="text" id="address" name="address[]" value="">'
 				+ '</div>'
-
 				+ '<label for="example-text-input" class="col-3 col-form-label">Owner *</label>'
 				+ '<div class="col-3">'
 				+ '<select name="is_primary[]" id="is_primary" class="form-control">'
@@ -1122,7 +1114,6 @@ function calculateAmount(id){
 				+ '</select>'
 				+ '</div>'
 				+ '</div>'
-
 				+ '<div class="form-group row" id="error-project_type">'
 				+ '<label class="col-12 col-form-label">Documents <span class="text-danger">*</span></label>'
 				+ '<div class="col-3">'
@@ -1140,10 +1131,9 @@ function calculateAmount(id){
 				+ '<div class="col-3">'
 				+ '<input type="checkbox" name="document_voterid[]" value="5" /> Vote ID'
 				+ '</div>'
-
 				+ '<div class="messageContainer"></div>' + '</div>'
-
-				+ '</div>' + '</div>';
+				+ '</div>'
+				+ '</div>';
 
 		$("#more_buyer_area").append(html);
 		$("#buyer_count").val(buyers);

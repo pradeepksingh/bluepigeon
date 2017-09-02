@@ -769,17 +769,17 @@ label {
 .nav-tabs>li>a:focus, .nav-tabs>li>a:hover {
 	background: #fff
 }
-.modal-content {
-	border-radius: 0;
-	box-shadow: 0 5px 15px rgba(0, 0, 0, .1)
-}
-.modal-content-new {
-	border-radius: 0;
-	margin-right :-95%;
-	margin-left: -45%;
-	background-color: #fff;
-	box-shadow: 0 5px 15px rgba(0, 0, 0, .1)
-}
+/* .modal-content { */
+/* 	border-radius: 0; */
+/* 	box-shadow: 0 5px 15px rgba(0, 0, 0, .1) */
+/* } */
+/* .modal-content-new { */
+/* 	border-radius: 0; */
+/* 	margin-right :-95%; */
+/* 	margin-left: -45%; */
+/* 	background-color: #fff; */
+/* 	box-shadow: 0 5px 15px rgba(0, 0, 0, .1) */
+/* } */
 .alert {
 	border-radius: 0
 }
