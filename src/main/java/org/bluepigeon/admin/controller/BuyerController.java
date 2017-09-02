@@ -512,6 +512,15 @@ public class BuyerController {
 				if(address.get(i).getValueAs(String.class).toString()!=null && !address.get(i).getValueAs(String.class).isEmpty()){
 					buyer.setAddress(address.get(i).getValueAs(String.class).toString());
 				}
+				if(currentAddress.get(i).getValueAs(String.class).toString() != null && !currentAddress.get(i).getValueAs(String.class).isEmpty()){
+					buyer.setCurrentAddress(currentAddress.get(i).getValueAs(String.class).toString());
+				}
+				if(refferalIds.get(i).getValueAs(String.class).toString() != null && ! refferalIds.get(i).getValueAs(String.class).isEmpty()){
+					buyer.setRefferalId(refferalIds.get(i).getValueAs(String.class).toString());
+				}
+				if(aadhaarNumber.get(i).getValueAs(String.class).toString() != null && !aadhaarNumber.get(i).getValueAs(String.class).isEmpty()){
+					buyer.setAadhaarNumber(aadhaarNumber.get(i).getValueAs(String.class).toString());
+				}
 				if(pan.get(i).getValueAs(String.class).toString()!=null && !pan.get(i).getValueAs(String.class).isEmpty()){
 					buyer.setPancard(pan.get(i).getValueAs(String.class).toString());
 				}

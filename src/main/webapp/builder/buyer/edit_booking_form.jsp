@@ -229,7 +229,7 @@
 								        <label for="example-search-input" class="col-sm-5 col-form-label">Current Address*</label>
 								        <div class="col-sm-7 custom-col">
 								        	<div>
-								            	<input class="form-control" type="text" autocomplete="off" id="current_address" name="current_address[]"  value="<% out.print(buyer.getCurrentAddress());%>" placeholder="current address">
+								            	<input class="form-control" type="text" autocomplete="off" id="current_address" name="current_address[]"  value="<% if(buyer.getCurrentAddress() != null) out.print(buyer.getCurrentAddress());%>" placeholder="current address">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -502,6 +502,7 @@
 					 	           <button onclick="showPrev1();" type="button">Previous</button>
 					 	           <button type="button" onclick="showNext2();">Next</button>
 					 	       	 </div>
+					 	       	 </form>
 						    </div>
 						    <div id="menu4" class="tab-pane">
 						     	<div class="col-sm-12">
@@ -608,13 +609,13 @@
 </html>
 <script>
 $("#cancellation").click(function(){
-	window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="$("#project_id").val();
+	window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+$("#project_id").val();
 });
 $("#campaign").click(function(){
-	window.location.href="${baseUrl}/builder/campaign/Salesman_campaign.jsp?project_id="$("#project_id").val();
+	window.location.href="${baseUrl}/builder/campaign/Salesman_campaign.jsp?project_id="+$("#project_id").val();
 });
 $("#leads").click(function(){
-	window.location.href="${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="$("#project_id").val();
+	window.location.href="${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+$("#project_id").val();
 });
 function addMoreBuyers(){
 	var buyers = parseInt($("#buyer_count").val());
@@ -626,56 +627,55 @@ function addMoreBuyers(){
 		+'<div class="col-sm-12">'
 	    +'<div class="form-group row">'
 	    +'<label for="example-text-input" class="col-5 col-form-label"> Buyers Name*</label>'
-	    +'<div class="col-7">'
+	    +'<div class="col-7 custom-col">'
         +'<input class="form-control" type="text" value=""id="buyer_name" name="buyer_name[]" autocomplete="off" placeholder="Co-owner name">'
     	+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-search-input" class="col-5 col-form-label">Email*</label>'
-	    +'<div class="col-7">'
+	    +'<div class="col-7 custom-col">'
         +'<input class="form-control" type="text" value="" name="email[]" id="email" autocomplete="off" placeholder="co-owner email id">'
     	+'</div>'
 		+'</div>'
 		+' <input type="hidden" name="is_primary[]" id="is_primary" value="0" class="form-control">'
 		+'<div class="form-group row">'
 	    +'<label for="example-search-input" class="col-5 col-form-label">Permanent Address*</label>'
-	    +'<div class="col-7">'
+	    +'<div class="col-7 custom-col">'
         +'<input class="form-control" type="text" value="" placeholder="permanent address" autocomplete="off" id="address" name="address[]">'
     	+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-search-input" class="col-5 col-form-label">Current Address*</label>'
-	    +'<div class="col-7">'
+	    +'<div class="col-7 custom-col">'
         +'<input class="form-control" type="text" value="" placeholder="current address" autocomplete="off" id="current_address" name="current_address[]">'
     	+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Contact*</label>'
-	    +'<div class="col-7">'
+	    +'<div class="col-7 custom-col">'
         +'<input class="form-control" type="text"  autocomplete="off" value="" id="contact" name="contact[]" placeholder="contact number">'
     	+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Pan*</label>'
-	    +'<div class="col-7">'
+	    +'<div class="col-7 custom-col">'
         +'<input class="form-control" type="text" autocomplete="off" value="" id="pan" name="pan[]" placeholder="Pan card number">'
     	+'</div>'
 		+'</div>'
  		+'<div class="form-group row">'
     	+'<label for="example-tel-input" class="col-5 col-form-label">Aadhaar No.*</label>'
-    	+'<div class="col-7">'
+    	+'<div class="col-7 custom-col">'
         +'<input class="form-control" type="text" autocomplete="off" value="" id="aadhaar_no" name="aadhaar_no[]" placeholder="Aadhaar number">'
     	+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Refferal Id*</label>'
-	    +'<div class="col-7">'
+	    +'<div class="col-7 custom-col">'
         +'<input class="form-control" type="text" autocomplete="off" value="" placeholder="" id="refferal_id" name="refferal_id[]">'
     	+'</div>'
 		+'</div>'
 		+'</div>'
 		+'</div>';
-
 	$("#co-buyer").append(html);
 	$("#buyer_count").val(buyers);
 }
@@ -683,7 +683,7 @@ function removeBuyer(id) {
 	$("#buyer-"+id).remove();
 }
 
-function addMoreBuyers(){
+function addMoreOffers(){
 	var offers = parseInt($("#offer_count").val());
 	offers++;
 	var html ="";

@@ -575,7 +575,7 @@ function addMoreBuyers(){
         +'<input class="form-control" type="text" value="" name="email[]" id="email" autocomplete="off" placeholder="co-owner email id">'
     	+'</div>'
 		+'</div>'
-		+' <input type="hidden" name="is_primary[]" id="is_primary" value="0" class="form-control">'
+		+'<input type="hidden" name="is_primary[]" id="is_primary" value="0" class="form-control">'
 		+'<div class="form-group row">'
 	    +'<label for="example-search-input" class="col-5 col-form-label">Permanent Address*</label>'
 	    +'<div class="col-7 custom-col">'

@@ -210,9 +210,6 @@
 	         					}
 	     					 }
 	     					%>
-						    <!-- floor 1 -->
-						     <!-- floor 2 -->
-						     
 						 </div>
                     </div>
                     <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
@@ -367,7 +364,6 @@
 				  	  </div>
 				  	  <%}} %>
 				   </div>
-				   
 			  	</div>
 		 	  </div>
             </div>
@@ -436,7 +432,7 @@ function showFlat(id){
 }
 
 function showFlatwithImage(id){
-	alert(id);
+//	alert(id);
 	var flatdetails = "";
 	$("#home").empty();
 	var htmlFlat ="";
@@ -456,7 +452,7 @@ function showFlatwithImage(id){
 		 	          	+'<p class="p-custom">Flat Type</p>'
 		 	          	+'<span><b>'+data.flatType+'</b></span>'
 		 	        	+'</div>'
-		 	       		+' <div class="col-md-6 col-sm-6 col-xs-6">'
+		 	       		+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		 	          	+'<p class="p-custom">Carpet Area</p>'
 		 	          	+'<span><b>'+data.carpetArea+' SQ/FT</b></span>'
 		 	       	 	+'</div>'
@@ -546,7 +542,7 @@ function showImagewithDetails(id){
 		  	+'</div>'
 		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		  	+'<p class="p-custom">Carpet Area</p>'
-		  	+' <p><b>'+data.carpetArea+' '+data.carpetAreaUnit+'</b></p>'
+		  	+'<p><b>'+data.carpetArea+' '+data.carpetAreaUnit+'</b></p>'
 		  	+'</div>'
 		  	+'</div>'
 		  	+'<div class="row custom-row">'
@@ -585,7 +581,7 @@ function showImagewithDetails(id){
 	  	$('#zoomimg').modal('show');
 			}
 		},'json');
-}
+	}
 }
 $select_building = $("#filter_building_id").selectize({
 	persist: false,
@@ -636,7 +632,6 @@ $select_building = $("#filter_building_id").selectize({
 					    }
 					});
 				}
-				
 			},'json');
 		}
 	 },
@@ -655,7 +650,6 @@ $select_building = $("#filter_building_id").selectize({
 $select_floor = $("#filter_floor_id").selectize({
 	persist: false,
 	 onChange: function(value) {
-
 		if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '') && ($("#filter_floor_id").val() > 0 && $("#filter_floor_id").val() != '' )){
 			//window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
 			getFlatDetails();
@@ -700,5 +694,4 @@ function getFlatDetails(){
 			}
 		},'html');
 }
-
 </script>

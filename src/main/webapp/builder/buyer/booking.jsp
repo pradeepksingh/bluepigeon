@@ -280,7 +280,7 @@
 							        <p><b></b></p>
 							        <hr>
 							   </div>
-						      <button type="button" onclick="showFlats(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button red">Cancel</button>
+						      <button type="button" onclick="showBuyerDetails(<%out.print(bookingFlatList2.getFlatId()); %>);" class="button red">Cancel</button>
 						      <%}} %>
 					     </div>
 					  </div>
@@ -425,7 +425,7 @@ function showFlatwithImage(id){
 				        +'<p><b></b></p>'
 				        +'<hr>'
 				      +'</div>'
-				      +'<button type="button" onclick="showFlats('+data.flatId+')" class="button">Edit</button>';
+				      +'<button type="button" onclick="showBuyerDetails('+data.flatId+')" class="button">Edit</button>';
 			}
 	 	 $("#home").append(htmlFlat);
 		},'json');
@@ -546,4 +546,7 @@ function getFlatDetails(){
 		},'html');
 }
 
+function showBuyerDetails(flatId){
+	window.location.href="${baseUrl}/builder/buyer/edit_booking_form.jsp?flat_id="+flatId;
+}
 </script>
