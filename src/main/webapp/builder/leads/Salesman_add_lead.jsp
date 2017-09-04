@@ -24,13 +24,7 @@
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../js/bootstrap-multiselect.js"></script>
     <link rel="stylesheet" href="../css/bootstrap-multiselect.css">
-    <script>
-    $(function() {
-        $("#sidebar1").load("../partial/sidebar.jsp");
-        $("#header").load("../partial/header.jsp");
-   	    $("#footer").load("../partial/footer.jsp");
-    });
-    </script>
+  
         
 		<script type="text/javascript">
 		    $(document).ready(function() {

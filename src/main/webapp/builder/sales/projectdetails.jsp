@@ -410,9 +410,11 @@
 			              	<div class="col-sm-2">
 			              		<select name="building_id" id="building_id" class="form-control">
 									<option value="0"> Building </option>
-									<%for(BuilderBuilding builderBuilding : buildingList){ %>
+									<%
+									if(buildingList != null){
+									for(BuilderBuilding builderBuilding : buildingList){ %>
 									<option value="<%out.print(builderBuilding.getId());%>"> <%out.print(builderBuilding.getName()); %> </option>
-									<%} %>
+									<%}} %>
 								</select>
 							</div>
 							<div class="col-sm-2">

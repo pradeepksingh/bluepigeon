@@ -5424,7 +5424,7 @@ public class ProjectDAO {
 				}
 			}
     	}
-    	hql += where+" AND status = 1 ORDER BY builderFloor.builderBuilding.builderProject.id ASC, builderFloor.builderBuilding.id ASC, builderFloor.floorNo ASC, flatNo ASC";
+    	hql += where+" AND status = 1 ORDER BY builderFloor.builderBuilding.builderProject.id ASC, builderFloor.builderBuilding.id DESC, builderFloor.floorNo DESC, flatNo DESC";
     	HibernateUtil hibernateUtil = new HibernateUtil();
     	Session session = hibernateUtil.openSession();
     	Query query = session.createQuery(hql);
@@ -5483,6 +5483,8 @@ public class ProjectDAO {
 	    		booking.setBuyerEmail(buyer.getEmail());
 	    		booking.setBuyerMobile(buyer.getMobile());
 	    		booking.setBuyerPanNo(buyer.getPancard());
+	    		booking.setBuyerAadhaarNumber(buyer.getAadhaarNumber());
+	    		booking.setBuyerCurrentAddress(buyer.getCurrentAddress());
 	    		booking.setBuyerPermanentAddress(buyer.getAddress());
 	    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
 	    		if(buyer.getPhoto() != null){
@@ -5594,6 +5596,8 @@ public class ProjectDAO {
 	    		booking.setBuyerEmail(buyer.getEmail());
 	    		booking.setBuyerMobile(buyer.getMobile());
 	    		booking.setBuyerPanNo(buyer.getPancard());
+	    		booking.setBuyerAadhaarNumber(buyer.getAadhaarNumber());
+	    		booking.setBuyerCurrentAddress(buyer.getCurrentAddress());
 	    		booking.setBuyerPermanentAddress(buyer.getAddress());
 	    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
 	    		if(buyer.getPhoto() != null){
@@ -5703,6 +5707,14 @@ public class ProjectDAO {
 	    		booking.setBuyerEmail(buyer.getEmail());
 	    		booking.setBuyerMobile(buyer.getMobile());
 	    		booking.setBuyerPanNo(buyer.getPancard());
+	    		if(buyer.getAadhaarNumber() != null)
+	    			booking.setBuyerAadhaarNumber(buyer.getAadhaarNumber());
+	    		else
+	    			booking.setBuyerAadhaarNumber("");
+	    		if(buyer.getCurrentAddress()!=null)
+	    			booking.setBuyerCurrentAddress(buyer.getCurrentAddress());
+	    		else
+	    			booking.setBuyerCurrentAddress("");
 	    		booking.setBuyerPermanentAddress(buyer.getAddress());
 	    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
 	    		if(buyer.getIsDeleted() != null){

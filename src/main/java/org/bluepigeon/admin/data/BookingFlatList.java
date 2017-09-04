@@ -28,6 +28,8 @@ public class BookingFlatList {
 	private String buyerMobile;
 	private String buyerPanNo;
 	private String buyerPermanentAddress;
+	private String buyerAadhaarNumber;
+	private String buyerCurrentAddress;
 	private String buyerPhoto;
 	private Short isDeleted;
 	private List<BuilderBuildingFlatTypeRoom> builderBuildingFlatTypeRooms = new ArrayList<BuilderBuildingFlatTypeRoom>();
@@ -191,6 +193,16 @@ public class BookingFlatList {
 	public void setBuilderBuildingFlatTypeRooms(List<BuilderBuildingFlatTypeRoom> builderBuildingFlatTypeRooms) {
 		this.builderBuildingFlatTypeRooms = builderBuildingFlatTypeRooms;
 	}
-	
-	
+	public String getBuyerAadhaarNumber() {
+		return buyerAadhaarNumber;
+	}
+	public void setBuyerAadhaarNumber(String buyerAadhaarNumber) {
+		this.buyerAadhaarNumber = buyerAadhaarNumber;
+	}
+	public String getBuyerCurrentAddress() {
+		return buyerCurrentAddress;
+	}
+	public void setBuyerCurrentAddress(String buyerCurrentAddress) {
+		this.buyerCurrentAddress = buyerCurrentAddress;
+	}
 }

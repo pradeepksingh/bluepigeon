@@ -248,7 +248,7 @@
                             <div>
 					           <div class="user-profile">
 					           <%if(image != null && image != ""){ %>
-						          <img src="${baseUrl }/bluepigeon/"+<%out.print(image); %> alt="User Image" class="custom-img">
+						          <img src="${baseUrl}/<% out.print(buyer.getPhoto()); %>" alt="User Image" class="custom-img">
 						          <%}else{ %>
 						          <img src="" alt="User Image" class="custom-img">
 						           <%} %>
@@ -264,12 +264,12 @@
 							        <p><b><%out.print(buyerEmail); %></b></p>
 							        <p class="p-custom">PAN</p>
 							        <p><b><%out.print(buyerPan); %></b></p>
-							        <p class="p-custom">Adhar card no.</p>
-							        <p><b></b></p>
+							        <p class="p-custom">Aadhaar card no.</p>
+							        <p><b><%if(buyer.getAadhaarNumber() != null){out.print(buyer.getAadhaarNumber());} %></b></p>
 							        <p class="p-custom">Permanent Address</p>
 							        <p><b><%out.print(buyer.getAddress()); %></b></p>
 							        <p class="p-custom">Current Address</p>
-							        <p><b></b></p>
+							        <p><b><%if(buyer.getCurrentAddress() != null){out.print(buyer.getCurrentAddress());} %></b></p>
 							        <hr>
 						        </div>
 					      </div>

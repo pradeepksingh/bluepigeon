@@ -2259,3 +2259,23 @@ padding:7%;
     padding: 25px;
     margin-bottom: 15px;
 }
+.selectize-input{
+	border:2px solid #00bfd6 !important;
+	padding:20px 8px 25px !important;
+	margin-top:7px !important;
+	font-size:18px !important;
+	background-color: #fafafa !important;
+}
+
+    #filter_project_id select{
+    width: 268px;
+    padding: 5px;
+    font-size: 16px;
+    line-height: 1;
+    border: 0;
+    border-radius: 5px;
+    height: 34px;
+    background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png) no-repeat right #ddd;
+    -webkit-appearance: none;
+    background-position-x: 244px;
+}

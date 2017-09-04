@@ -165,20 +165,13 @@
 						 </ul>
 						  
 						 <div class="tab-content tabcontent">
-						 	<input type="hidden" name="buyer_count" id="buyer_count" value="1"/>
 					 	    <div id="home" class="tab-pane active" aria-expanded="false">
-					 	    <form id="addbuyer" name="addbuyer" action="" method="post" enctype="multipart/form-data">
+					 	    <form id="addnewbuyer" name="addnewbuyer" action="" method="post" enctype="multipart/form-data">
 					 	    <input type="hidden" name="employee_id" id="employee_id" value="<%out.print(buyers.get(0).getBuilderEmployee().getId());%>" />
 							<input type="hidden" name="builder_id" id="builder_id" value="<%out.print(builder_id);%>" />
 							<input type="hidden" name="project_id" id="project_id" value="<%out.print(buyers.get(0).getBuilderProject().getId());%>" />
 							<input type="hidden" name="building_id" id="building_id" value="<%out.print(buyers.get(0).getBuilderBuilding().getId());%>" />
 							<input type="hidden" name="flat_id" id="flat_id" value="<%out.print(buyers.get(0).getBuilderFlat().getId());%>" />
-							<input type="file" name="photo[]" value="" style="display:block;" />
-							<input type="hidden" name="doc_pan" id="doc_pan" value="" />
-							<input type="hidden" name="doc_aadhar" id="doc_aadhar" value="" />
-							<input type="hidden" name="doc_passport" id="doc_passport" value="" />
-							<input type="hidden" name="doc_rra" id="doc_rra" value="" />
-							<input type="hidden" name="doc_voterid" id="doc_voterid" value="" />
 							<% if(buyers.size() > 0) { %>
 							<input type="hidden" name="buyer_count" id="buyer_count" value="<% out.print(buyers.size()); %>" />
 							<% } else { %>
@@ -197,6 +190,20 @@
 								        	<div>
 								            	<input class="form-control" type="text" autocomplete="off" id="buyer_name" name="buyer_name[]" value="<% out.print(buyer.getName());%>" placeholder="owner name">
 								        	</div>
+								        	<div class="messageContainer"></div>
+								        </div>
+								    </div>
+								     <div class="form-group row">
+								        <label for="example-text-input" class="col-sm-5 col-form-label"> Buyers Photo*</label>
+								        <div class="col-sm-7 custom-col">
+								        	<div>
+								            	<input class="form-control"  autocomplete="off" id="photo"  type="file" name="photo[]"  placeholder="owner photo">
+								        	</div>
+								        	<% if(buyer.getPhoto() != null){%>
+								        	<div>
+								        		<img alt="Buyer Images" src="${baseUrl}/<% out.print(buyer.getPhoto()); %>" width="200px;">
+								        	</div>
+								        	<%} %>
 								        	<div class="messageContainer"></div>
 								        </div>
 								    </div>
@@ -276,7 +283,7 @@
 					 	        <div id="co-buyer"></div>
 					 	       	<div class="centerbutton">
 					 	        	<a href="javascript:addMoreBuyers();">   <button type="button" class="add-co-buyer">+ Co-Buyer</button></a>
-					 	           	<button onclick="show();" type="submit">UPDATE</button>
+					 	           	<button  type="submit">UPDATE</button>
 					 	       </div>
 					 	       </form>
 					        </div>
@@ -286,7 +293,7 @@
 									    <div class="form-group row">
 									        <label for="example-text-input" class="col-5 col-form-label"> Project</label>
 									        <div class="col-7">
-									           <select name="project_id" id="project_id" class="form-control">
+									           <select name="search_project_id" id="search_project_id" class="form-control">
 													<option value="">Select Project</option>
 													<% for(BuilderProject builderProject : project_list){ %>
 													<option value="<% out.print(builderProject.getId()); %>" <% if(buyers.get(0).getBuilderProject().getId() == builderProject.getId()) { %> selected <% } %>><% out.print(builderProject.getName()); %></option>
@@ -297,7 +304,7 @@
 									    <div class="form-group row">
 									        <label for="example-search-input" class="col-5 col-form-label">Building</label>
 									        <div class="col-7">
-									            <select name="building_id" id="building_id"	class="form-control">
+									            <select name="search_building_id" id="search_building_id"	class="form-control">
 													<option value="">Select Building</option>
 													<% for(BuilderBuilding builderBuilding :builderBuildings) { %>
 													<option value="<% out.print(builderBuilding.getId()); %>" <% if(builderBuilding.getId() == buyers.get(0).getBuilderBuilding().getId()) { %>selected<% } %> ><% out.print(builderBuilding.getName()); %></option>
@@ -308,7 +315,7 @@
 									    <div class="form-group row">
 									        <label for="example-search-input" class="col-5 col-form-label">Flat</label>
 									        <div class="col-7">
-									           <select name="flat_id" id="flat_id" class="form-control">
+									           <select name="search_flat_id" id="search_flat_id" class="form-control">
 													<option value="">Select Flat</option>
 													<% for(BuilderFlat builderFlatList :builderFlats) { %>
 													<option value="<% out.print(builderFlatList.getId()); %>" <% if(builderFlatList.getId() == buyers.get(0).getBuilderFlat().getId()) { %>selected<% } %>><% out.print(builderFlatList.getFlatNo()); %></option>
@@ -331,6 +338,7 @@
 					 	       </form>
 						    </div>
 						    <div id="menu2" class="tab-pane">
+						    <form id="addbuyingdetail" name="addbuyingdetail" action="" method="post" enctype="multipart/form-data">
 						    	<%
 									SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
 								%>
@@ -338,8 +346,7 @@
     								if(buyingDetails != null){
     							%>  
     							<input type="hidden" name="id" id="id" value="<%out.print(buyingDetails.getId());%>" />
-											<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
-    							<input type="hidden" id="project_id" name="project_id" value="<%out.print(project_list.get(0).getId());%>"/>  
+								<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
 						    	<div class="col-sm-12">
 								    <div class="form-group row">
 								        <label for="example-text-input" class="col-5 col-form-label">Booking Date *</label>
@@ -369,7 +376,7 @@
 								        </div>
 								    </div>
 								    <div class="form-group row">
-								        <label for="example-search-input" class="col-5 col-form-label">Aminities Facing Rise Rates *</label>
+								        <label for="example-search-input" class="col-5 col-form-label">Amenities Facing Rise Rates *</label>
 								        <div class="col-7 custom-col">
 								        	<div>
 								            	<input type="text" autocomplete="off" class="form-control" value="<% out.print(buyingDetails.getAmenityFacingRate()); %>" id="amenity_rate" name="amenity_rate">
@@ -400,7 +407,7 @@
 								        <label for="example-tel-input" class="col-5 col-form-label"><%out.print(taxLabel1); %> *</label>
 								        <div class="col-7 custom-col">
 								        	<div>
-								            	<input type="text" autocomplete="off" class="form-control"value="<%if(buyingDetails.getStampDuty() > 0 && buyingDetails.getStampDuty() != 0){ out.print(buyingDetails.getStampDuty());}else{ %>0<%} %> %>" id="stamp_duty" name="stamp_duty" >
+								            	<input type="text" autocomplete="off" class="form-control" value="<%if(buyingDetails.getStampDuty() > 0 && buyingDetails.getStampDuty() != 0){ out.print(buyingDetails.getStampDuty());}else{ %>0<%} %>" id="stamp_duty" name="stamp_duty" >
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -418,6 +425,8 @@
 								        	<div class="messageContainer"></div>
 								        </div>
 								    </div>
+								   <%}else{ %>
+								    <input type="hidden"  id="tax" name="tax" value="0"/>
 								    <%} %>
 								    <%if(taxLabel3.trim().length() != 0 && taxLabel3 != null){ %>
 								    <div class="form-group row">
@@ -457,16 +466,18 @@
 								        </div>
 								    </div>
 								 </div>
-								 <input type="hidden" id="h_sale_vale" name="h_sale_value" value="<%out.print(buyingDetails.getTotalCost());%>"/>
+								 <input type="hidden" id="h_sale_value" name="h_sale_value" value="<%out.print(buyingDetails.getTotalCost());%>"/>
 								 <%} %>
 								  <div class="centerbutton">
-					 	           <button onclick="showPrev();" type="button">Previous</button>
-					 	           <button type="button" onclick="showNext1();">Next</button>
-					 	       </div>
+						 	           <button onclick="showPrev();" type="button">Previous</button>
+						 	           <button type="submit" onclick="showNext1();">UPDATE</button>
+					 	       	  </div>
+					 	       </form>
 						    </div>
 						    <div id="menu3" class="tab-pane">
-						    <form id="addbuyerpayment" name="addbuyerpayment" action="" method="post" enctype="multipart/form-data">
+						    <form id="updatebuyerpayment" name="updatebuyerpayment" action="" method="post" enctype="multipart/form-data">
 								 <input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
+								  <input type="hidden" id="h_sale_value" name="h_sale_value" value="<%if(buyingDetails.getTotalCost() != 0 && buyingDetails.getTotalCost() >0){out.print(buyingDetails.getTotalCost());}%>"/>
 								<% if(buyerPayments.size() > 0) { %>
 								<% int ii=0; for(BuyerPayment buyerPayment :buyerPayments) { %>
 								<input type="hidden" name="payment_id[]" id="payment_id" value="<%out.print(buyerPayment.getId());%>" />
@@ -490,7 +501,7 @@
 								        <label for="example-search-input" class="col-5 col-form-label">Amount</label>
 								        <div class="col-7 custom-col">
 								        	<div>
-								            	<input type="text" autocomplete="off" class="form-control" id="amount<%out.print(ii); %>" onkeyup="calculateAmount(<%out.print(ii); %>);" onkeypress=" return isNumber(event, this);" name="amount[]" value="<% out.print(buyerPayment.getAmount());%>"/>
+								            	<input type="text" autocomplete="off" class="form-control" id="amount<%out.print(ii); %>" onkeyup="calcultatePercentage(<%out.print(ii); %>);"  name="amount[]" value="<% out.print(buyerPayment.getAmount());%>"/>
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -500,60 +511,41 @@
 								 } %>
                                  <div class="centerbutton">
 					 	           <button onclick="showPrev1();" type="button">Previous</button>
-					 	           <button type="button" onclick="showNext2();">Next</button>
+					 	           <button type="submit" onclick="showNext2();">UPDATE</button>
 					 	       	 </div>
-					 	       	 </form>
+					 	       </form>
 						    </div>
 						    <div id="menu4" class="tab-pane">
-						     	<div class="col-sm-12">
-								    <div class="form-group row">
-								    	 <input type="hidden" name="doc_name[]" value="Agreement" />
-								        <label for="example-text-input" class="col-5 col-form-label"> Agreement*</label>
-								        <div class="col-7 custom-col">
-								           <input type="file" class="form-control" name="doc_url[]" />
-								        </div>
-								    </div>
-								    <div class="form-group row">
-								      <input type="hidden" name="doc_name[]" value="Index 2" />
-								        <label for="example-text-input" class="col-5 col-form-label"> Index 2*</label>
-								        <div class="col-7 custom-col">
-								            <input type="file" class="form-control" name="doc_url[]" />
-								        </div>
-								    </div>
-								    <div class="form-group row">
-								     <input type="hidden" name="doc_name[]" value="Receipts with Date and time and Name" />
-								        <label for="example-text-input" class="col-5 col-form-label"> Receipts with Date & Time & Name</label>
-								        <div class="col-7 custom-col">
-								            <input type="file" class="form-control" name="doc_url[]" />
-								        </div>
-								    </div>
-								    <div class="form-group row">
-								     <input type="hidden" name="doc_name[]" value="Electrical and Plumbing lines map" />
-								        <label for="example-text-input" class="col-5 col-form-label"> Electricals & Plumbing lines map</label>
-								        <div class="col-7 custom-col">
-								           <input type="file" class="form-control" name="doc_url[]" />
-								        </div>
-								    </div>
-								    <div class="form-group row">
-								        <label for="example-text-input" class="col-5 col-form-label"> Possession grant letter</label>
-								        <div class="col-7 custom-col">
-								            <input type="file" class="form-control" name="doc_url[]" />
-								        </div>
-								    </div>
-								    <div class="form-group row">
-								        <label for="example-text-input" class="col-5 col-form-label"> Other Documents</label>
-								        <div class="col-7">
-								            <input type="file" class="form-control" name="doc_url[]" />
-								        </div>
-								    </div>
-								    <div class="centerbutton">
-						 	           <button onclick="showPrev2();" type="button">Previous</button>
-						 	           <button type="submit" name="addbuyers">SAVE</button>
-					 	       	 	</div>
-								 </div>
+							    <form id="addbuyerdocs" name="addbuyerdocs" action="" method="post" enctype="multipart/form-data">
+							    	<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
+							    	<% for(BuyerUploadDocuments buyerUploadDocument :buyerUploadDocuments) { %>
+							    	
+							     	<div class="col-sm-12">
+									    <div class="form-group row">
+									    	<input type="hidden" name="doc_id[]" value="<% out.print(buyerUploadDocument.getId()); %>" />
+											<input type="hidden" name="doc_name[]" value="<% out.print(buyerUploadDocument.getName()); %>" />
+											<label for="example-text-input" class="col-5 col-form-label"><% out.print(buyerUploadDocument.getName()); %></label>
+									        <div class="col-2">
+													<a href="${baseUrl}/<% out.print(buyerUploadDocument.getDocUrl().toString()); %>" target="_blank">View / Download</a>
+											</div>
+									    </div>
+									    <% } %>
+									    <div class="form-group row">
+									        <label for="example-text-input" class="col-5 col-form-label"> Other Documents</label>
+									        <div class="col-7">
+										        <input type="hidden" name="doc_id[]" value="0" />
+												<input type="text" name="doc_name[]" class="form-control" value="" placeholder="Enter Document Name" />
+										        <input type="file" class="form-control" name="doc_url[]" />
+									        </div>
+									    </div>
+									    <div class="centerbutton">
+							 	           <button onclick="showPrev2();" type="button">Previous</button>
+							 	           <button type="button" onclick="uploadDocuments();" name="addbuyers">SAVE</button>
+						 	       	 	</div>
+									 </div>
+								</form>
 						    </div>
 					 	 </div>
-					 	 
 					  </div>
                     <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 tabcontent">
                     <%if(bookingFlatList != null){ %>
@@ -595,7 +587,6 @@
 					 </div>
 					 <%} %>
                   </div>
-                
                 </div>
               </div>
            </div>
@@ -617,6 +608,60 @@ $("#campaign").click(function(){
 $("#leads").click(function(){
 	window.location.href="${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+$("#project_id").val();
 });
+function calculateAmount(id){
+	alert($("#h_sale_value").val());
+	if($("#payable"+id).val() <0 || $("#payable"+id).val() >100){
+		alert("The percentage must be between 0 and 100");
+		$("#payable"+id).val('');
+	}else{
+	var amount = $("#payable"+id).val()*$("#h_sale_value").val()/100;
+		$("#amount"+id).val(amount.toFixed(0));
+	}
+}
+
+$("#search_project_id").change(
+		function() {
+			$.get("${baseUrl}/webapi/buyer/buildings/names/"
+					+ $("#search_project_id").val(), {}, function(data) {
+				var html = '<option value="0">Select Building</option>';
+				$(data).each(
+						function(index) {
+							html = html
+									+ '<option value="'+data[index].id+'">'
+									+ data[index].name + '</option>';
+						});
+				$("#search_building_id").html(html);
+			}, 'json');
+		});
+$("#search_building_id").change(
+		function() {
+			$.get("${baseUrl}/webapi/buyer/building/available/flat/names/"
+					+ $("#search_building_id").val(), {}, function(data) {
+				var html = '<option value="0">Select Flat</option>';
+				$(data).each(
+						function(index) {
+
+							html = html
+									+ '<option value="'+data[index].id+'">'
+									+ data[index].name + '</option>';
+						});
+				$("#search_flat_id").html(html);
+			}, 'json');
+		});
+
+function calcultatePercentage(id){
+	var $th = $("#amount"+id);
+	alert($("#h_sale_value").val());
+	$th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
+	if($("#amount"+id).val() <= $("#h_sale_value").val() ){
+		var percentage = $("#amount"+id).val()/$("#h_sale_value").val()*100;
+		$("#payable"+id).val(percentage.toFixed(1));
+	}else{
+		alert("Please Enter correct flat sale amount");
+		$("#payable"+id).val("");
+		$("#amount"+id).val("");
+	}
+}
 function addMoreBuyers(){
 	var buyers = parseInt($("#buyer_count").val());
 	buyers++;
@@ -628,13 +673,28 @@ function addMoreBuyers(){
 	    +'<div class="form-group row">'
 	    +'<label for="example-text-input" class="col-5 col-form-label"> Buyers Name*</label>'
 	    +'<div class="col-7 custom-col">'
+	    +'<div>'
         +'<input class="form-control" type="text" value=""id="buyer_name" name="buyer_name[]" autocomplete="off" placeholder="Co-owner name">'
     	+'</div>'
+    	+'<div class="messageContainer"></div>'
+		+'</div>'
+		+'</div>'
+		+'<div class="form-group row">'
+		+'<label for="example-text-input" class="col-5 col-form-label"> Buyers Photo*</label>'
+		+'<div class="col-7 custom-col">'
+		+'<div>'
+	    +'<input class="form-control" type="file" value="" id="photo" name="photo[]" autocomplete="off" placeholder="Co-owner name">'
+	    +'</div>'
+	    +'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-search-input" class="col-5 col-form-label">Email*</label>'
 	    +'<div class="col-7 custom-col">'
+	    +'<div>'
         +'<input class="form-control" type="text" value="" name="email[]" id="email" autocomplete="off" placeholder="co-owner email id">'
+    	+'</div>'
+    	+'<div class="messageContainer"></div>'
     	+'</div>'
 		+'</div>'
 		+' <input type="hidden" name="is_primary[]" id="is_primary" value="0" class="form-control">'
@@ -647,26 +707,38 @@ function addMoreBuyers(){
 		+'<div class="form-group row">'
 	    +'<label for="example-search-input" class="col-5 col-form-label">Current Address*</label>'
 	    +'<div class="col-7 custom-col">'
+	    +'<div>'
         +'<input class="form-control" type="text" value="" placeholder="current address" autocomplete="off" id="current_address" name="current_address[]">'
     	+'</div>'
+    	+'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Contact*</label>'
 	    +'<div class="col-7 custom-col">'
+	    +'<div>'
         +'<input class="form-control" type="text"  autocomplete="off" value="" id="contact" name="contact[]" placeholder="contact number">'
     	+'</div>'
+    	+'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Pan*</label>'
 	    +'<div class="col-7 custom-col">'
+	    +'<div>'
         +'<input class="form-control" type="text" autocomplete="off" value="" id="pan" name="pan[]" placeholder="Pan card number">'
     	+'</div>'
+    	+'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
  		+'<div class="form-group row">'
     	+'<label for="example-tel-input" class="col-5 col-form-label">Aadhaar No.*</label>'
     	+'<div class="col-7 custom-col">'
+    	+'<div>'
         +'<input class="form-control" type="text" autocomplete="off" value="" id="aadhaar_no" name="aadhaar_no[]" placeholder="Aadhaar number">'
     	+'</div>'
+    	+'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Refferal Id*</label>'
@@ -782,27 +854,6 @@ $('#addnewbuyer').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-//     	project_id: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Please select project'
-//                 }
-//             }
-//         },
-//         building_id: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Please select building'
-//                 }
-//             }
-//         },
-//         flat_id: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Please select flat'
-//                 }
-//             }
-//         },
         'buyer_name[]': {
             validators: {
                 notEmpty: {
@@ -854,20 +905,14 @@ $('#addnewbuyer').bootstrapValidator({
                  }
              }
         },
-        'photo[]': {
-            validators: {
-                notEmpty: {
-                    message: 'Buyer photo is required and cannot be empty'
-                }
-            }
-        },
-//         flat_id: {
+//         'photo[]': {
 //             validators: {
 //                 notEmpty: {
-//                     message: 'Please select flat'
+//                     message: 'Buyer photo is required and cannot be empty'
 //                 }
 //             }
 //         },
+
         'aadhaar_no[]':{
         	validators: {
                 notEmpty: {
@@ -881,95 +926,16 @@ $('#addnewbuyer').bootstrapValidator({
                     message: 'Refferal id is required and cannot be empty'
                 }
             }
-        },
-        	
-        booking_date: {
-            validators: {
-                notEmpty: {
-                    message: 'Please select booking date'
-                }
-            }
-        },
-        base_rate: {
-            validators: {
-                notEmpty: {
-                    message: 'Base rate required and can not be empty'
-                }
-            }
-        },
-        rise_rate: {
-            validators: {
-                notEmpty: {
-                    message: 'Floor rise rate required and can not be empty'
-                }
-            }
-        },
-        amenity_rate: {
-            validators: {
-                notEmpty: {
-                    message: 'Amenity facing rate required and can not be empty'
-                }
-            }
-        },
-        maintenance: {
-            validators: {
-                notEmpty: {
-                    message: 'Maintenance charge required and can not be empty'
-                }
-            }
-        },
-        tenure: {
-            validators: {
-                notEmpty: {
-                    message: 'Tennure required and can not be empty'
-                }
-            }
-        },
-        registration: {
-            validators: {
-                notEmpty: {
-                    message: 'Registration fee required and can not be empty'
-                }
-            }
-        },
-        parking: {
-            validators: {
-                notEmpty: {
-                    message: 'Parking rate required and can not be empty'
-                }
-            }
-        },
-        stamp_duty: {
-            validators: {
-                notEmpty: {
-                    message: 'Stamp duty charges required and can not be empty'
-                }
-            }
-        },
-        tax: {
-            validators: {
-                notEmpty: {
-                    message: 'Tax required and can not be empty'
-                }
-            }
-        },
-        vat: {
-            validators: {
-                notEmpty: {
-                    message: 'Vat required and can not be empty'
-                }
-            }
-        },
-        
+        }
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	//alert("hello");
 	event.preventDefault();
-	addBuyer1();
+	updateBuyer();
 }).on('error.form.bv', function(event,data) {
 	// Prevent form submission
-	//alert("hello");
+	alert("hello You got an js error");
 	event.preventDefault();
 	//addBuyer1();
 	 $('.active').removeClass('active').prev('li').prev('li').prev('li').prev('li').addClass('active');
@@ -977,19 +943,19 @@ $('#addnewbuyer').bootstrapValidator({
 	$("#home").show();
 	
 });
-
-function addBuyer1() {
-	//alert("inside add");
+function updateBuyer(){
 	var options = {
-	 		target : '#response', 
+	 		target : '#basicresponse', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/buyer/save/new',
+	 		url : '${baseUrl}/webapi/buyer/update/basic/new',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
-   	$('#addnewbuyer').ajaxSubmit(options);
+	$('#addnewbuyer').ajaxSubmit(options);
+	//show();
 }
+
 
 function showAddRequest(formData, jqForm, options){
 	$("#response").hide();
@@ -1009,8 +975,314 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id="+$("project_id").val();
+       // window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id="+$("project_id").val();
   	}
 }
 
+$('#addbuyingdetail').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+        booking_date: {
+            validators: {
+                notEmpty: {
+                    message: 'Please select booking date'
+                }
+            }
+        },
+        base_rate: {
+            validators: {
+                notEmpty: {
+                    message: 'Base rate required and can not be empty'
+                },
+                numeric: {
+                 	message: 'Base Rate is invalid',
+                    thousandsSeparator: '',
+                    decimalSeparator: '.'
+              	}
+            }
+        },
+        rise_rate: {
+            validators: {
+                notEmpty: {
+                    message: 'Floor rise rate required and can not be empty'
+                },
+                numeric: {
+                 	message: 'Floor rise rate  is invalid',
+                    thousandsSeparator: '',
+                    decimalSeparator: '.'
+              	}
+            }
+        },
+        amenity_rate: {
+            validators: {
+                notEmpty: {
+                    message: 'Amenity facing rate required and can not be empty'
+                },
+                numeric: {
+                 	message: 'Amenity facing rate  is invalid',
+                    thousandsSeparator: '',
+                    decimalSeparator: '.'
+              	}
+            }
+        },
+        maintenance: {
+            validators: {
+                notEmpty: {
+                    message: 'Maintenance charge required and can not be empty'
+                },
+                numeric: {
+                 	message: 'Maintenance  is invalid',
+                    thousandsSeparator: '',
+                    decimalSeparator: '.'
+              	}
+            }
+        },
+        tenure: {
+            validators: {
+                notEmpty: {
+                    message: 'Tennure required and can not be empty'
+                },
+                numeric: {
+                 	message: 'Tennure  is invalid',
+                    thousandsSeparator: '',
+                    decimalSeparator: '.'
+              	}
+            }
+        },
+        registration: {
+            validators: {
+                notEmpty: {
+                    message: 'Registration fee required and can not be empty'
+                },
+                numeric: {
+                 	message: 'Registration fee is invalid',
+                    thousandsSeparator: '',
+                    decimalSeparator: '.'
+              	}
+            }
+        },
+        parking: {
+            validators: {
+                notEmpty: {
+                    message: 'Parking rate required and can not be empty'
+                },
+                numeric: {
+                 	message: 'Parking rate  is invalid',
+                    thousandsSeparator: '',
+                    decimalSeparator: '.'
+              	}
+            }
+        },
+        stamp_duty: {
+            validators: {
+                notEmpty: {
+                    message: 'Stamp duty charges required and can not be empty'
+                },
+                numeric: {
+                 	message: 'Stamp duty charges is invalid',
+                    thousandsSeparator: '',
+                    decimalSeparator: '.'
+              	}
+            }
+        },
+        tax: {
+            validators: {
+                notEmpty: {
+                    message: 'Tax required and can not be empty'
+                },
+                numeric: {
+                 	message: 'Tax is invalid',
+                    thousandsSeparator: '',
+                    decimalSeparator: '.'
+              	}
+            }
+        },
+        vat: {
+            validators: {
+                notEmpty: {
+                    message: 'Vat required and can not be empty'
+                },
+                numeric: {
+                 	message: 'Vat is invalid',
+                    thousandsSeparator: '',
+                    decimalSeparator: '.'
+              	}
+            }
+        }
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	updateProjectPrice();
+	
+});
+
+function updateProjectPrice() {
+	var options = {
+	 		target : '#pricingresponse', 
+	 		beforeSubmit : showPriceRequest,
+	 		success :  showPriceResponse,
+	 		url : '${baseUrl}/webapi/buyer/update/pricenoffer',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#addbuyingdetail').ajaxSubmit(options);
+}
+
+function showPriceRequest(formData, jqForm, options){
+	$("#pricingresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+
+
+
+function showPriceResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#pricingresponse").removeClass('alert-success');
+       	$("#pricingresponse").addClass('alert-danger');
+		$("#pricingresponse").html(resp.message);
+		$("#pricingresponse").show();
+  	} else {
+  		$("#pricingresponse").removeClass('alert-danger');
+        $("#pricingresponse").addClass('alert-success');
+        $("#pricingresponse").html(resp.message);
+        $("#pricingresponse").show();
+        alert(resp.message);
+  	}
+}
+$('#updatebuyerpayment').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	'schedule[]': {
+            validators: {
+		    	notEmpty: {
+		    		message: 'Schedule is required and cannot be empty'
+		        },
+            }
+        },
+        'payable[]': {
+            validators: {
+            	between: {
+                    min: 0,
+                    max: 100,
+                    message: 'The percentage must be between 0 and 100'
+	        	},
+	        	 callback: {
+                     message: 'The sum of percentages must be 100',
+                     callback: function(value, validator, $field) {
+                         var percentage = validator.getFieldElements('payable[]'),
+                             length     = percentage.length,
+                             sum        = 0;
+
+                         for (var i = 0; i < length; i++) {
+                             sum += parseFloat($(percentage[i]).val());
+                         }
+                         if (sum === 100) {
+                             validator.updateStatus('payable[]', 'VALID', 'callback');
+                             return true;
+                         }
+
+                         return false;
+                     }
+                 },
+		        notEmpty: {
+		    		message: 'Payable is required and cannot be empty'
+		        },
+            }
+        },
+        'amount[]':{
+        	validators:{
+        		notEmpty :{
+        			message: 'amount is required and cannot be empty'
+        		}
+        	}
+        }
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	
+	updateBuyerPayments();
+}).on('error.form.bv', function(e,data){
+	
+});
+
+function updateBuyerPayments() {
+	var options = {
+	 		target : '#imageresponse', 
+	 		beforeSubmit : showAddPaymentRequest,
+	 		success :  showAddPaymentResponse,
+	 		url : '${baseUrl}/webapi/buyer/payment/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#updatebuyerpayment').ajaxSubmit(options);
+}
+function showAddPaymentRequest(formData, jqForm, options){
+	$("#paymentresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddPaymentResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#paymentresponse").removeClass('alert-success');
+       	$("#paymentresponse").addClass('alert-danger');
+		$("#paymentresponse").html(resp.message);
+		$("#paymentresponse").show();
+  	} else {
+  		$("#paymentresponse").removeClass('alert-danger');
+        $("#paymentresponse").addClass('alert-success');
+        $("#paymentresponse").html(resp.message);
+        $("#paymentresponse").show();
+        alert(resp.message);
+  	}
+}
+
+function uploadDocuments(){
+	var options = {
+	 		target : '#imageresponse', 
+	 		beforeSubmit : showAddDocumentRequest,
+	 		success :  showAddDocumentResponse,
+	 		url : '${baseUrl}/webapi/buyer/update/doc',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#addbuyerdocs').ajaxSubmit(options);
+}
+
+function showAddDocumentRequest(formData, jqForm, options){
+	$("#paymentresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddDocumentResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#paymentresponse").removeClass('alert-success');
+       	$("#paymentresponse").addClass('alert-danger');
+		$("#paymentresponse").html(resp.message);
+		$("#paymentresponse").show();
+  	} else {
+  		$("#paymentresponse").removeClass('alert-danger');
+        $("#paymentresponse").addClass('alert-success');
+        $("#paymentresponse").html(resp.message);
+        $("#paymentresponse").show();
+        alert(resp.message);
+        window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id="+$("project_id").val();
+  	}
+}
 </script>

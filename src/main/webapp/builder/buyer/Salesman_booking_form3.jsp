@@ -172,6 +172,15 @@
 								        	<div class="messageContainer"></div>
 								        </div>
 								    </div>
+								     <div class="form-group row">
+								        <label for="example-text-input" class="col-sm-5 col-form-label"> Buyers Photo*</label>
+								        <div class="col-sm-7 custom-col">
+								        	<div>
+								            	<input class="form-control" type="file" autocomplete="off" id="photo" name="photo[]" placeholder="owner picture">
+								        	</div>
+								        	<div class="messageContainer"></div>
+								        </div>
+								    </div>
 								    <div class="form-group row">
 								        <label for="example-search-input" class="col-sm-5 col-form-label">Email*</label>
 								        <div class="col-sm-7 custom-col">
@@ -566,55 +575,87 @@ function addMoreBuyers(){
 	    +'<div class="form-group row">'
 	    +'<label for="example-text-input" class="col-5 col-form-label"> Buyers Name*</label>'
 	    +'<div class="col-7 custom-col">'
+	    +'<div>'
         +'<input class="form-control" type="text" value="" id="buyer_name" name="buyer_name[]" autocomplete="off" placeholder="Co-owner name">'
     	+'</div>'
+    	+'<div class="messageContainer"></div>'
 		+'</div>'
+		+'</div>'
+		 +'<div class="form-group row">'
+		    +'<label for="example-text-input" class="col-5 col-form-label"> Buyers Photo*</label>'
+		    +'<div class="col-7 custom-col">'
+		    +'<div>'
+	        +'<input class="form-control" type="file" value="" id="photo" name="photo[]" autocomplete="off" placeholder="Co-owner name">'
+	    	+'</div>'
+	    	+'<div class="messageContainer"></div>'
+			+'</div>'
+			+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-search-input" class="col-5 col-form-label">Email*</label>'
 	    +'<div class="col-7 custom-col">'
+	    +'<div>'
         +'<input class="form-control" type="text" value="" name="email[]" id="email" autocomplete="off" placeholder="co-owner email id">'
     	+'</div>'
+    	+'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
 		+'<input type="hidden" name="is_primary[]" id="is_primary" value="0" class="form-control">'
 		+'<div class="form-group row">'
 	    +'<label for="example-search-input" class="col-5 col-form-label">Permanent Address*</label>'
 	    +'<div class="col-7 custom-col">'
+	    +'<div>'
         +'<input class="form-control" type="text" value="" placeholder="" autocomplete="off" id="address" name="address[]">'
+    	+'</div>'
+    	+'<div class="messageContainer"></div>'
     	+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-search-input" class="col-5 col-form-label">Current Address*</label>'
 	    +'<div class="col-7">'
+	    +'<div>'
         +'<input class="form-control" type="text" value="" id="current_address" name="current_address[]" autocomplete="off" >'
     	+'</div>'
+    	+'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Contact*</label>'
 	    +'<div class="col-7 custom-col">'
+	    +'<div>'
         +'<input class="form-control" type="text"  autocomplete="off" value="" id="" placeholder="contact number">'
+    	+'</div>'
+    	+'<div class="messageContainer"></div>'
     	+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Pan*</label>'
 	    +'<div class="col-7 custom-col">'
+	    +'<div>'
         +'<input class="form-control" type="text" autocomplete="off" value="" id="pan" name="pan[]"  placeholder="Pan card number">'
+    	+'</div>'
+    	+'<div class="messageContainer"></div>'
     	+'</div>'
 		+'</div>'
  		+'<div class="form-group row">'
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Aadhaar No.*</label>'
 	    +'<div class="col-7 custom-col">'
+	    +'<div>'
         +'<input class="form-control" type="text" autocomplete="off" value="" id="aadhaar_no" name="aadhaar_no[]" placeholder="Aadhaar card number">'
     	+'</div>'
+    	+'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Refferal Id*</label>'
 	    +'<div class="col-7 custom-col">'
+	    +'<div>'
         +'<input class="form-control" type="text" autocomplete="off" value="" id="refferal_id" name="refferal_id[]">'
+    	+'</div>'
+    	+'<div class="messageContainer"></div>'
     	+'</div>'
 		+'</div>'
 		+'</div>'
 		+'</div>';
-
 	$("#co-buyer").append(html);
 	$("#buyer_count").val(buyers);
 }
@@ -771,13 +812,13 @@ $('#addnewbuyer').bootstrapValidator({
                  }
              }
         },
-//         'photo[]': {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Buyer photo is required and cannot be empty'
-//                 }
-//             }
-//         },
+        'photo[]': {
+            validators: {
+                notEmpty: {
+                    message: 'Buyer photo is required and cannot be empty'
+                }
+            }
+        },
 //         flat_id: {
 //             validators: {
 //                 notEmpty: {
@@ -926,7 +967,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id="+$("project_id").val();
+        window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id="+<%out.print(project_id);%>
   	}
 }
 

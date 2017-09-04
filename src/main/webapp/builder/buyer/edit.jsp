@@ -408,7 +408,7 @@
 														<input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<% out.print(buyingDetails.getFloorRiseRate()); %>"/>
 													</div>
 													<label for="example-search-input"
-														class="col-3 col-form-label">Aminities Facing Rise Rates</label>
+														class="col-3 col-form-label">Amenities Facing Rise Rates</label>
 													<div class="col-3">
 														<input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<% out.print(buyingDetails.getAmenityFacingRate()); %>"/>
 													</div>
