@@ -272,15 +272,15 @@
 							        <p><b><%out.print(bookingFlatList2.getBuyerEmail()); %></b></p>
 							        <p class="p-custom">PAN</p>
 							        <p><b><%out.print(bookingFlatList2.getBuyerPanNo()); %></b></p>
-							        <p class="p-custom">Adhar card no.</p>
-							        <p><b></b></p>
+							        <p class="p-custom">Aadhaar card no.</p>
+							        <p><b><% if(bookingFlatList2.getBuyerAadhaarNumber()!=null){out.print(bookingFlatList2.getBuyerAadhaarNumber());} %></b></p>
 							        <p class="p-custom">Permanent Address</p>
 							        <p><b><%out.print(bookingFlatList2.getBuyerPermanentAddress()); %></b></p>
 							        <p class="p-custom">Current Address</p>
-							        <p><b></b></p>
+							        <p><b><%if(bookingFlatList2.getBuyerCurrentAddress()!=null){out.print(bookingFlatList2.getBuyerCurrentAddress());} %></b></p>
 							        <hr>
 							   </div>
-						      <button type="button" onclick="showFlats(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button red">Cancel</button>
+						      <button type="button" onclick="showBuyerDetails(<%out.print(bookingFlatList2.getFlatId()); %>);" class="button red">Cancel</button>
 						      <%}} %>
 					     </div>
 					  </div>
@@ -411,21 +411,21 @@ function showFlatwithImage(id){
 			          +'<hr>'
 			       	  +'</div>'
 				      +'<div class="row custom-row user-row">'
-				        +'<p class="p-custom">Mobile No.</p>'
-				        +'<p><b>'+data.buyerMobile+'</b></p>'
-				        +'<p class="p-custom">Email</p>'
-				        +'<p><b>'+data.buyerEmail+'</b></p>'
-				        +'<p class="p-custom">PAN</p>'
-				        +'<p><b>'+data.buyerPanNo+'</b></p>'
-				        +'<p class="p-custom">Adhar card no.</p>'
-				        +'<p><b></b></p>'
-				        +'<p class="p-custom">Permanent Address</p>'
-				        +'<p><b>'+data.buyerPermanentAddress+'</b></p>'
-				        +'<p class="p-custom">Current Address</p>'
-				        +'<p><b></b></p>'
-				        +'<hr>'
+				      +'<p class="p-custom">Mobile No.</p>'
+				      +'<p><b>'+data.buyerMobile+'</b></p>'
+				      +'<p class="p-custom">Email</p>'
+				      +'<p><b>'+data.buyerEmail+'</b></p>'
+				      +'<p class="p-custom">PAN</p>'
+				      +'<p><b>'+data.buyerPanNo+'</b></p>'
+				      +'<p class="p-custom">Adhar card no.</p>'
+				      +'<p><b>'+data.buyerAadhaarNumber+'</b></p>'
+				      +'<p class="p-custom">Permanent Address</p>'
+				      +'<p><b>'+data.buyerPermanentAddress+'</b></p>'
+				      +'<p class="p-custom">Current Address</p>'
+				      +'<p><b>'+data.buyerCurrentAddress+'</b></p>'
+				      +'<hr>'
 				      +'</div>'
-				      +'<button type="button" onclick="showFlats('+data.flatId+')" class="button">Edit</button>';
+				      +'<button type="button" onclick="showBuyerDetails('+data.flatId+')" class="button">Edit</button>';
 			}
 	 	 $("#home").append(htmlFlat);
 		},'json');
@@ -546,4 +546,7 @@ function getFlatDetails(){
 		},'html');
 }
 
+function showBuyerDetails(flatId){
+	window.location.href="${baseUrl}/builder/buyer/edit_booking_form.jsp?flat_id="+flatId;
+}
 </script>

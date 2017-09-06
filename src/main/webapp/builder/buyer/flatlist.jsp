@@ -39,8 +39,7 @@
 	}
 %>
  <% if(flatListDatas !=null && bookingFlatList2 !=null){ %>
-<!--  <link href="../css/custom7.css" rel="stylesheet"> -->
-<!--   <link rel="stylesheet" type="text/css" href="../css/topbutton.css"> -->
+ <link rel="stylesheet" type="text/css" href="../css/custom10.css">
    <div class="col-md-8 col-sm-6 col-xs-12  bg1">
         <div class="white-box" >
 	     <% if(flatListDatas !=null){
@@ -52,9 +51,9 @@
 		               	 for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
 		                      if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("available")){
 		             %>
-					 	 <li class="item"><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" href="showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" ><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+					 	 <li class="item"><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" ><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 					 <%}else{%>
-					     <li class="grey"><a class="grey" data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" href="showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" ><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+					     <li class="grey"><a class="grey" data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" ><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 					 <%
 					 		}
 		              	}
@@ -109,7 +108,7 @@
 						          <span><b><%out.print(bookingFlatList2.getLength()+" * "+bookingFlatList2.getBreadth()+" "+bookingFlatList2.getAreaUint()); %></b></span>
 						     </div>
 					    </div>
-						      <button type="button" onclick="javascript:showFlat(<%out.print(bookingFlatList2.getFlatId()); %>)" class="btn-change">Book Now</button>
+						      <button type="button" onclick="showFlat(<%out.print(bookingFlatList2.getFlatId()); %>)" class="btn-change">Book Now</button>
 						      <%} 
 					 	if(bookingFlatList2.getFlatStatus() == 2 &&  bookingFlatList2.getIsDeleted() != null && bookingFlatList2.getIsDeleted() == 0){
 					     	%>				   
@@ -117,7 +116,7 @@
 						      <%if(bookingFlatList2.getBuyerPhoto()!="" && bookingFlatList2.getBuyerPhoto() != null){ %>
 							     <img src="${baseUrl}/<%out.print(bookingFlatList2.getBuyerPhoto()); %>" alt="Buyer image" class="custom-img">
 							   <%}%>	
-						          <img src="images/camera_icon.PNG" alt="camera " class="camera"/>
+						          <img src="../images/camera_icon.PNG" alt="camera " class="camera"/>
 						          <p><b><%out.print(bookingFlatList2.getBuyerName()); %></b></p>
 						          <p class="p-custom"><%out.print(bookingFlatList2.getBuildingName()); %>-<%out.print(bookingFlatList2.getFlatNo()); %>, <%out.print(bookingFlatList2.getProjectName()); %></p>
 						          <hr>

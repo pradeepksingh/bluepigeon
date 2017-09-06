@@ -35,15 +35,21 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
+			if(builder_id > 0){
+				builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
+				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
+				if(builderProjects != null){
+					if(builderProjects.size()>0)
+				    	project_size = builderProjects.size();
+				}
+			}
+			if(builderPropertyTypes != null){
+			 	if(builderPropertyTypes.size()>0)
+			 		type_size = builderPropertyTypes.size();
+			}
 		}
-		if(builder_id > 0){
-			builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
-			sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
-		}
-		if(builderProjects.size()>0)
-	    	project_size = builderProjects.size();
-	 	if(builderPropertyTypes.size()>0)
-	 		type_size = builderPropertyTypes.size();
+		
+		
    }
    
 %>

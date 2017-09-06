@@ -512,6 +512,15 @@ public class BuyerController {
 				if(address.get(i).getValueAs(String.class).toString()!=null && !address.get(i).getValueAs(String.class).isEmpty()){
 					buyer.setAddress(address.get(i).getValueAs(String.class).toString());
 				}
+				if(currentAddress.get(i).getValueAs(String.class).toString() != null && !currentAddress.get(i).getValueAs(String.class).isEmpty()){
+					buyer.setCurrentAddress(currentAddress.get(i).getValueAs(String.class).toString());
+				}
+				if(refferalIds.get(i).getValueAs(String.class).toString() != null && ! refferalIds.get(i).getValueAs(String.class).isEmpty()){
+					buyer.setRefferalId(refferalIds.get(i).getValueAs(String.class).toString());
+				}
+				if(aadhaarNumber.get(i).getValueAs(String.class).toString() != null && !aadhaarNumber.get(i).getValueAs(String.class).isEmpty()){
+					buyer.setAadhaarNumber(aadhaarNumber.get(i).getValueAs(String.class).toString());
+				}
 				if(pan.get(i).getValueAs(String.class).toString()!=null && !pan.get(i).getValueAs(String.class).isEmpty()){
 					buyer.setPancard(pan.get(i).getValueAs(String.class).toString());
 				}
@@ -845,6 +854,154 @@ public class BuyerController {
 					primaryBuyer = buyer;
 				}
 				
+				i++;	
+			}
+		}
+		return msg;
+	}
+	/*****************************New code for buyer update*****************************************/
+/**
+ * 	
+ * @param buyer_id
+ * @param name
+ * @param contact
+ * @param email
+ * @param pan
+ * @param address
+ * @param is_primary
+ * @param photos
+ * @param builder_id
+ * @param project_id
+ * @param building_id
+ * @param flat_id
+ * @param employee_id
+ * @return
+ */
+	
+	@POST
+	@Path("/update/basic/new")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateBuyerBasicInfoNew (
+			@FormDataParam("buyer_id[]") List<FormDataBodyPart> buyer_id,
+			@FormDataParam("buyer_name[]") List<FormDataBodyPart>  name,
+			@FormDataParam("contact[]") List<FormDataBodyPart>  contact,
+			@FormDataParam("email[]") List<FormDataBodyPart>  email,
+			@FormDataParam("pan[]") List<FormDataBodyPart>  pan,
+			@FormDataParam("current_address[]") List<FormDataBodyPart> currentAddress,
+			@FormDataParam("refferal_id[]") List<FormDataBodyPart> refferalIds,
+			@FormDataParam("aadhaar_no[]") List<FormDataBodyPart> aadhaarNumber,
+			@FormDataParam("address[]") List<FormDataBodyPart>  address,
+			@FormDataParam("is_primary[]") List<FormDataBodyPart>  is_primary,
+			@FormDataParam("photo[]") List<FormDataBodyPart>  photos,
+			@FormDataParam("builder_id") int builder_id,
+			@FormDataParam("project_id") int project_id,
+			@FormDataParam("building_id") int building_id,
+			@FormDataParam("flat_id") int flat_id,
+			@FormDataParam("employee_id") int employee_id
+	){
+		ResponseMessage msg = new ResponseMessage();
+		BuyerDAO buyerDAO = new BuyerDAO();
+		BuilderEmployee builderEmployee = new BuilderEmployee();
+		builderEmployee.setId(employee_id);
+		Short agreement=0;
+		Short possession=0;
+		Buyer buyer = null;
+		//GlobalBuyer globalBuyer = new GlobalBuyer();
+		Buyer primaryBuyer = new Buyer();
+		if(name.size()>0){
+			int i=0;
+			
+			for(FormDataBodyPart buyers : name){
+				buyer = new Buyer();
+				buyer.setBuilderEmployee(builderEmployee);
+				buyer.setAgreement(agreement);
+				buyer.setPossession(possession);
+				if(buyer_id != null){
+					if(buyer_id.get(i).getValueAs(Integer.class).intValue() != 0) {
+						buyer.setId(buyer_id.get(i).getValueAs(Integer.class).intValue());
+					}
+				}
+				if(builder_id > 0){
+					Builder builder = new Builder();
+					builder.setId(builder_id);
+					buyer.setBuilder(builder);
+				}
+				
+				if(project_id > 0){
+					BuilderProject builderProject = new BuilderProject();
+					builderProject.setId(project_id);
+					buyer.setBuilderProject(builderProject);
+				}
+				
+				if(building_id > 0){
+					BuilderBuilding builderBuilding = new BuilderBuilding();
+					builderBuilding.setId(building_id);
+					buyer.setBuilderBuilding(builderBuilding);
+				}
+				
+				if(flat_id > 0){
+					BuilderFlat builderFlat = new BuilderFlat();
+					builderFlat.setId(flat_id);
+					buyer.setBuilderFlat(builderFlat);
+				}
+				if(buyers.getValueAs(String.class).toString()!=null && !buyers.getValueAs(String.class).isEmpty()){
+					System.out.println("Buyer name :: "+name.get(i).getValueAs(String.class).toString());
+					buyer.setName(name.get(i).getValueAs(String.class).toString());
+				}
+				if(contact.get(i).getValueAs(String.class).toString()!=null && !contact.get(i).getValueAs(String.class).isEmpty()) {
+					System.out.println("Buyer contact :: "+contact.get(i).getValueAs(String.class).toString());
+					buyer.setMobile(contact.get(i).getValueAs(String.class).toString());
+				}
+				buyer.setEmail(email.get(i).getValueAs(String.class).toString());
+				if(address.get(i).getValueAs(String.class).toString()!=null && !address.get(i).getValueAs(String.class).isEmpty()){
+					System.out.println("Buyer email :: "+email.get(i).getValueAs(String.class).toString());
+					buyer.setAddress(address.get(i).getValueAs(String.class).toString());
+				}
+				if(currentAddress.get(i).getValueAs(String.class).toString() != null && !currentAddress.get(i).getValueAs(String.class).isEmpty()){
+					buyer.setCurrentAddress(currentAddress.get(i).getValueAs(String.class).toString());
+				}
+				if(refferalIds.get(i).getValueAs(String.class).toString() != null && ! refferalIds.get(i).getValueAs(String.class).isEmpty()){
+					buyer.setRefferalId(refferalIds.get(i).getValueAs(String.class).toString());
+				}
+				if(aadhaarNumber.get(i).getValueAs(String.class).toString() != null && !aadhaarNumber.get(i).getValueAs(String.class).isEmpty()){
+					buyer.setAadhaarNumber(aadhaarNumber.get(i).getValueAs(String.class).toString());
+				}
+				if(pan.get(i).getValueAs(String.class).toString()!=null && !pan.get(i).getValueAs(String.class).isEmpty()){
+					System.out.println("Buyer pan :: "+pan.get(i).getValueAs(String.class).toString());
+					buyer.setPancard(pan.get(i).getValueAs(String.class).toString());
+				}
+				if(is_primary.get(i).getValueAs(Integer.class).intValue() == 1) {
+					buyer.setIsPrimary(true);
+				} else {
+					buyer.setIsPrimary(false);
+				}
+				buyer.setStatus(agreement);
+				try {
+					if(photos.get(i).getFormDataContentDisposition().getFileName() != null && !photos.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = photos.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/buyer/images/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(photos.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						buyer.setPhoto(gallery_name);
+					} else {
+						if(buyer_id.get(i).getValueAs(Integer.class).intValue() != 0) {
+							buyer.setPhoto(new BuyerDAO().getBuyerById(buyer_id.get(i).getValueAs(Integer.class).intValue()).getPhoto());
+						}
+						
+					}
+				} catch(Exception e) {
+					e.printStackTrace();
+					buyer.setPhoto("");
+				}
+				msg = buyerDAO.updateBuyer(buyer);
+				buyer.setId(msg.getId());
+				System.out.println("Primary ID:"+buyer.getIsPrimary());
+				if(buyer.getIsPrimary()) {
+					primaryBuyer = buyer;
+				}
 				i++;	
 			}
 		}
@@ -1209,6 +1366,7 @@ public class BuyerController {
 				buyingDetails.setVat(vat);
 				msg = buyerDAO.updateBuyingDetails(buyingDetails);
 			}
+			if(offer_title !=null){
 			if (offer_title.size() > 0) {
 				List<BuyerOffer> updateBuyerOffers = new ArrayList<BuyerOffer>();
 				List<BuyerOffer> addBuyerOffers = new ArrayList<BuyerOffer>();
@@ -1251,6 +1409,7 @@ public class BuyerController {
 				}
 				msg.setStatus(1);
 				msg.setMessage("Buyer pricing updated successfully");
+			}
 			}
 		return msg;
 	}
