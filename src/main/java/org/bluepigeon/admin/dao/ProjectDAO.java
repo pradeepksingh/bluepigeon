@@ -2626,7 +2626,25 @@ public class ProjectDAO {
 	 * @return List<BuilderFlat>
 	 */
 	public List<BuilderFlat> getBuildingActiveFlatById(int flat_id) {
-		String hql = "from BuilderFlat where id = :flat_id and status=1";
+		String hql = "from BuilderFlat where id = :flat_id and builderFloor.status=1 and builderFloor.builderBuilding.status=1 and builderFloor.builderBuilding.builderProject.status=1 and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flat_id);
+		List<BuilderFlat> result = query.list();
+		for(BuilderFlat builderFlat : result){
+			System.out.println("Flat number :: "+builderFlat.getFlatNo());
+		}
+		session.close();
+		return result;
+	}
+	
+	public List<BuilderFlat> getActiveBookedUnbookedFlatById(int flat_id) {
+		String hql = "from BuilderFlat where id = :flat_id and builderFloor.status=1 "
+				+ "and builderFloor.builderBuilding.status=1 "
+				+ "and builderFloor.builderBuilding.builderProject.status=1"
+				+ " and status=1 "
+				+ "and builderFlatStatus.id =1 OR builderFlatStatus.id =2 OR builderFlatStatus.id =4";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);

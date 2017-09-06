@@ -108,7 +108,7 @@
                             <li> <a href="${baseUrl }/builder/buyer/Salesman-Buyer-list.jsp">Buyer List</a></li>
                             <li> <a href="${baseUrl }/builder/cancellation/Salesman-Cancellation-list.jsp">Cancellation List</a></li>
                             <li> <a href="javascript:void(0)">Add Lead</a></li>
-                            <li> <a href="javascript:void(0)">Data Analytics</a></li>
+                            <li> <a href="${baseUrl }/builder/datanalytics/data_analytics.jsp">Data Analytics</a></li>
                        </ul>
                    </li>
                     <%} %>

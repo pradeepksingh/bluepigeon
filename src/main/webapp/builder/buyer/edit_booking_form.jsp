@@ -50,6 +50,8 @@
 	List<BuyerUploadDocuments> buyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
 	int buyeroffersize = 0;
 	int primary_buyer_id = 0;
+	int project_id = 0;
+	int building_id = 0;
 	String projectName = "";
 	String buildingName = "";
 	String flatNo = "";
@@ -77,6 +79,8 @@
 			 buildingName = builderFlat.getBuilderFloor().getBuilderBuilding().getName();
 			 flatNo = builderFlat.getFlatNo();
 			 localityName = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getLocalityName();
+			 project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
+			 building_id = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
 			 taxLabel1 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel1();
 			 taxLabel2 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel2();
 			 taxLabel3 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel3();
@@ -105,11 +109,13 @@
     <link rel="stylesheet" type="text/css" href="../css/custom10.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
      <script src="../js/bootstrap-datepicker.min.js"></script>
       <script src="../js/jquery.form.js"></script>
     <script src="../js/bootstrapValidator.min.js"></script>
+     <script type="text/javascript" src="../js/selectize.min.js"></script>
 </head>
 
 <body class="fix-sidebar">
@@ -169,8 +175,8 @@
 					 	    <form id="addnewbuyer" name="addnewbuyer" action="" method="post" enctype="multipart/form-data">
 					 	    <input type="hidden" name="employee_id" id="employee_id" value="<%out.print(buyers.get(0).getBuilderEmployee().getId());%>" />
 							<input type="hidden" name="builder_id" id="builder_id" value="<%out.print(builder_id);%>" />
-							<input type="hidden" name="project_id" id="project_id" value="<%out.print(buyers.get(0).getBuilderProject().getId());%>" />
-							<input type="hidden" name="building_id" id="building_id" value="<%out.print(buyers.get(0).getBuilderBuilding().getId());%>" />
+							<input type="hidden" name="project_id" id="project_id" value="<%out.print(project_id);%>" />
+							<input type="hidden" name="building_id" id="building_id" value="<%out.print(building_id);%>" />
 							<input type="hidden" name="flat_id" id="flat_id" value="<%out.print(buyers.get(0).getBuilderFlat().getId());%>" />
 							<% if(buyers.size() > 0) { %>
 							<input type="hidden" name="buyer_count" id="buyer_count" value="<% out.print(buyers.size()); %>" />
@@ -273,7 +279,6 @@
 								        <div class="col-sm-7 custom-col">
 								        	<div>
 								            	<input class="form-control" type="text" autocomplete="off"  id="refferal_id" name="refferal_id[]" value="<%if(buyer.getRefferalId() != null){out.print(buyer.getRefferalId());}%>">
-								            	
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -318,7 +323,7 @@
 									           <select name="search_flat_id" id="search_flat_id" class="form-control">
 													<option value="">Select Flat</option>
 													<% for(BuilderFlat builderFlatList :builderFlats) { %>
-													<option value="<% out.print(builderFlatList.getId()); %>" <% if(builderFlatList.getId() == buyers.get(0).getBuilderFlat().getId()) { %>selected<% } %>><% out.print(builderFlatList.getFlatNo()); %></option>
+															<option value="<% out.print(builderFlatList.getId()); %>" <% if(builderFlatList.getId() == buyers.get(0).getBuilderFlat().getId()) { %>selected<% } %>><% out.print(builderFlatList.getFlatNo()); %></option>
 													<% } %>
 												</select>
 									        </div>
@@ -519,7 +524,6 @@
 							    <form id="addbuyerdocs" name="addbuyerdocs" action="" method="post" enctype="multipart/form-data">
 							    	<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
 							    	<% for(BuyerUploadDocuments buyerUploadDocument :buyerUploadDocuments) { %>
-							    	
 							     	<div class="col-sm-12">
 									    <div class="form-group row">
 									    	<input type="hidden" name="doc_id[]" value="<% out.print(buyerUploadDocument.getId()); %>" />
@@ -550,40 +554,30 @@
                     <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 tabcontent">
                     <%if(bookingFlatList != null){ %>
                      <div class="bg1">
-                     <% if(bookingFlatList.getImage()!="" && bookingFlatList.getImage() != null){ %>
-						     <img src="${baseUrl}/<%out.print(bookingFlatList.getImage()); %>" alt="Flat image" class="custom-img">
-						     <%} %>
-						      <hr>
-						      <div class="row custom-row">
-						        <div class="col-md-6 col-sm-6 col-xs-6">
-						          <p class="p-custom">Flat Type</p>
-						          <span><b><%out.print(bookingFlatList.getFlatType()); %></b></span>
-						        </div>
-						        <div class="col-md-6 col-sm-6 col-xs-6">
-						          <p class="p-custom">Carpet Area</p>
-						          <span><b><%out.print(bookingFlatList.getCarpetArea()+" "+bookingFlatList.getAreaUint()); %> </b></span>
-						        </div>
-						      </div>
-						      <div class="row custom-row">
-						        <div class="col-md-6 col-sm-6 col-xs-6">
-						          <p class="p-custom">Bedrooms</p>
-						          <span><b><%out.print(bookingFlatList.getBedroom()); %></b></span>
-						        </div>
-						        <div class="col-md-6 col-sm-6 col-xs-6">
-						          <p class="p-custom">Bathroom</p>
-						          <span><b><%out.print(bookingFlatList.getBathroom()); %></b></span>
-						        </div>
-						      </div>
-						      <div class="row custom-row">
-						        <div class="col-md-6 col-sm-6 col-xs-6">
-						          <p class="p-custom">Balcony</p>
-						          <span><b><%out.print(bookingFlatList.getBalcony()); %></b></span>
-						        </div>
-						        <div class="col-md-6 col-sm-6 col-xs-6">
-						          <p class="p-custom">Bedroom Size</p>
-						          <span><b><%out.print(bookingFlatList.getLength()+" "+bookingFlatList.getAreaUint()+" * "+bookingFlatList.getBreadth()+" "+bookingFlatList.getAreaUint()); %></b></span>
-						        </div>
-						    </div>
+                     	<div class="user-profile">
+				      	<%if(bookingFlatList.getBuyerPhoto()!="" && bookingFlatList.getBuyerPhoto() != null){ %>
+					     	<img src="${baseUrl}/<%out.print(bookingFlatList.getBuyerPhoto()); %>" alt="Buyer image" class="custom-img">
+					   	<%}%>	
+				        	<img src="../images/camera_icon.PNG" alt="camera " class="camera"/>
+				          	<p><b><%out.print(bookingFlatList.getBuyerName()); %></b></p>
+				          	<p class="p-custom"><%out.print(bookingFlatList.getBuildingName()); %>-<%out.print(bookingFlatList.getFlatNo()); %>, <%out.print(bookingFlatList.getProjectName()); %></p>
+				          	<hr>
+				       	</div>
+					   	<div class="row custom-row user-row">
+					        <p class="p-custom">Mobile No.</p>
+					        <p><b><%out.print(bookingFlatList.getBuyerMobile()); %></b></p>
+					        <p class="p-custom">Email</p>
+					        <p><b><%out.print(bookingFlatList.getBuyerEmail()); %></b></p>
+					        <p class="p-custom">PAN</p>
+					        <p><b><%out.print(bookingFlatList.getBuyerPanNo()); %></b></p>
+					        <p class="p-custom">Aadhaar card no.</p>
+					        <p><b><% if(bookingFlatList.getBuyerAadhaarNumber()!=null){out.print(bookingFlatList.getBuyerAadhaarNumber());} %></b></p>
+					        <p class="p-custom">Permanent Address</p>
+					        <p><b><%out.print(bookingFlatList.getBuyerPermanentAddress()); %></b></p>
+					        <p class="p-custom">Current Address</p>
+					        <p><b><%if(bookingFlatList.getBuyerCurrentAddress()!=null){out.print(bookingFlatList.getBuyerCurrentAddress());} %></b></p>
+					        <hr>
+					   	</div>
 					 </div>
 					 <%} %>
                   </div>
@@ -844,15 +838,15 @@ function showPrev2(){
      $("#menu3").show();
 }
 
-
+$(document).ready(function() {
 $('#addnewbuyer').bootstrapValidator({
-	container: function($field, validator) {
-		return $field.parent().next('.messageContainer');
-   	},
+// 	container: function($field, validator) {
+// 		return $field.parent().next('.messageContainer');
+//    	},
     feedbackIcons: {
         validating: 'glyphicon glyphicon-refresh'
     },
-    excluded: ':disabled',
+   // excluded: ':disabled',
     fields: {
         'buyer_name[]': {
             validators: {
@@ -935,7 +929,7 @@ $('#addnewbuyer').bootstrapValidator({
 	updateBuyer();
 }).on('error.form.bv', function(event,data) {
 	// Prevent form submission
-	alert("hello You got an js error");
+	//alert("hello You got an js error");
 	event.preventDefault();
 	//addBuyer1();
 	 $('.active').removeClass('active').prev('li').prev('li').prev('li').prev('li').addClass('active');
@@ -978,11 +972,11 @@ function showAddResponse(resp, statusText, xhr, $form){
        // window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id="+$("project_id").val();
   	}
 }
-
+});
 $('#addbuyingdetail').bootstrapValidator({
-	container: function($field, validator) {
-		return $field.parent().next('.messageContainer');
-   	},
+// 	container: function($field, validator) {
+// 		return $field.parent().next('.messageContainer');
+//    	},
     feedbackIcons: {
         validating: 'glyphicon glyphicon-refresh'
     },
@@ -1251,7 +1245,37 @@ function showAddPaymentResponse(resp, statusText, xhr, $form){
         alert(resp.message);
   	}
 }
-
+function updateBuyerFlat() {
+	var options = {
+	 		target : '#flatresponse', 
+	 		beforeSubmit : showAddFlatRequest,
+	 		success :  showAddFlatResponse,
+	 		url : '${baseUrl}/webapi/buyer/update/flat',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#addbuyerdetail').ajaxSubmit(options);
+}
+function showAddFlatRequest(formData, jqForm, options){
+	$("#flatresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddFlatResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#flatresponse").removeClass('alert-success');
+       	$("#flatresponse").addClass('alert-danger');
+		$("#flatresponse").html(resp.message);
+		$("#flatresponse").show();
+  	} else {
+  		$("#flatresponse").removeClass('alert-danger');
+        $("#flatresponse").addClass('alert-success');
+        $("#flatresponse").html(resp.message);
+        $("#flatresponse").show();
+        alert(resp.message);
+  	}
+}
 function uploadDocuments(){
 	var options = {
 	 		target : '#imageresponse', 
@@ -1282,7 +1306,7 @@ function showAddDocumentResponse(resp, statusText, xhr, $form){
         $("#paymentresponse").html(resp.message);
         $("#paymentresponse").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id="+$("project_id").val();
+        window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id=<%out.print(project_id);%>";
   	}
 }
 </script>
