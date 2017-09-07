@@ -499,7 +499,7 @@ public class ProjectController extends ResourceConfig {
 		
 		if(project_id > 0){
 			builderProject.setId(project_id);
-		}if(offer_titles != null){
+		}try{
 			if(offer_titles.size() > 0){
 				List<BuilderProjectOfferInfo> updateProjectOfferInfos = new ArrayList<BuilderProjectOfferInfo>();
 				int i=0;
@@ -507,26 +507,7 @@ public class ProjectController extends ResourceConfig {
 				// offer vaildation
 				String validateName = "";
 				builderProjectOfferInfos = projectDAO.getProjectOffersByProjectId(project_id);
-				if(builderProjectOfferInfos != null){
-					 int offerCount = 0;
-					 boolean flag = false;
-					 if(offer_titles.size() == builderProjectOfferInfos.size()){
-					for(FormDataBodyPart samename : offer_titles){
-							if(samename.getValueAs(String.class) != null || samename.getValueAs(String.class).trim().length() > 0){
-								validateName = samename.getValueAs(String.class).toString();
-								if(validateName == builderProjectOfferInfos.get(offerCount).getTitle()){
-									flag =true;
-									break;
-								}
-							}
-							offerCount++;
-						}
-					}
-					if(offer_titles.size() < builderProjectOfferInfos.size()){
-						
-					}
-					 
-				}else{
+				
 				for(FormDataBodyPart names : offer_titles)
 				{
 					//if(offer_ids.get(i).getValueAs(Integer.class) != 0 && offer_ids.get(i).getValueAs(Integer.class) != null){
@@ -568,10 +549,12 @@ public class ProjectController extends ResourceConfig {
 				responseMessage.setStatus(1);
 				responseMessage.setMessage("Project offer Info updated successfully");
 			}
-		}else{
+		else{
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("Please click on Add offer button and add offer, then try again");
 		}
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		return responseMessage;
 	}
@@ -1192,35 +1175,36 @@ public class ProjectController extends ResourceConfig {
 					projectDAO.addBuildingPaymentInfo(buildingPaymentInfos);
 				}
 			}
-			
-			if (offer_title.size() > 0) {
-				List<BuildingOfferInfo> buildingOfferInfos = new ArrayList<BuildingOfferInfo>();
-				int i = 0;
-				for(FormDataBodyPart title : offer_title)
-				{
-					if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
-						BuildingOfferInfo buildingOfferInfo = new BuildingOfferInfo();
-						buildingOfferInfo.setTitle(title.getValueAs(String.class).toString());
-						try{
-							buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
-						}catch(Exception e){
-							buildingOfferInfo.setAmount(0.0);
+			if(offer_title != null){
+				if (offer_title.size() > 0) {
+					List<BuildingOfferInfo> buildingOfferInfos = new ArrayList<BuildingOfferInfo>();
+					int i = 0;
+					for(FormDataBodyPart title : offer_title)
+					{
+						if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
+							BuildingOfferInfo buildingOfferInfo = new BuildingOfferInfo();
+							buildingOfferInfo.setTitle(title.getValueAs(String.class).toString());
+							try{
+								buildingOfferInfo.setAmount(discount_amount.get(i).getValueAs(Double.class));
+							}catch(Exception e){
+								buildingOfferInfo.setAmount(0.0);
+							}
+							//buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
+							buildingOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
+							buildingOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
+							buildingOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
+							buildingOfferInfo.setBuilderBuilding(builderBuilding);
+							buildingOfferInfos.add(buildingOfferInfo);
 						}
-						//buildingOfferInfo.setDiscount(discount.get(i).getValueAs(Double.class));
-						buildingOfferInfo.setDescription(description.get(i).getValueAs(String.class).toString());
-						buildingOfferInfo.setType(offer_type.get(i).getValueAs(Integer.class));
-						buildingOfferInfo.setStatus(offer_status.get(i).getValueAs(Byte.class));
-						buildingOfferInfo.setBuilderBuilding(builderBuilding);
-						buildingOfferInfos.add(buildingOfferInfo);
+						i++;
 					}
-					i++;
-				}
-				if(buildingOfferInfos.size() > 0) {
-					projectDAO.addBuildingOfferInfo(buildingOfferInfos);
+					if(buildingOfferInfos.size() > 0) {
+						projectDAO.addBuildingOfferInfo(buildingOfferInfos);
+					}
 				}
 			}
 		} else {
-			msg.setMessage("Failed to add building.");
+			msg.setMessage("Please click on Add offer button if you want to add offer.");
 			msg.setStatus(0);
 		}
 		return msg;
