@@ -73,12 +73,14 @@
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../css/custom8.css">
+      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
      <script src="../js/bootstrap-multiselect.js"></script>
     <link rel="stylesheet" href="../css/bootstrap-multiselect.css">
+    <script type="text/javascript" src="../js/selectize.min.js"></script>
     <script>
     $(function() {
         $("#sidebar1").load("../partial/sidebar.jsp");
@@ -357,7 +359,7 @@
 		                            <div class="form-group row">
 							           <label for="example-tel-input" class="col-5 col-form-label">Source</label>
 								         <div class="col-7">
-									        <select class="selectpicker" data-style="form-control">
+									        <select id="select_scorce" class="selectpicker" data-style="form-control">
 					                          <option>All Floor</option>
 					                          <option>Floor No-1</option>
 					                          <option>Floor No-2</option>
@@ -422,4 +424,22 @@ $("#booking").click(function(){
 $("#cancellation").click(function(){
 	 window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(projectId);%>
 });
+$select_scorce = $("#select_scorce").selectize({
+	persist: false,
+	 onChange: function(value) {
+		if($("#select_scorce").val() > 0 || $("#select_scorce").val() != '' ){
+			
+		}
+	 },
+	 onDropdownOpen: function(value){
+    	 var obj = $(this);
+		var textClear =	 $("#select_scorce :selected").text();
+    	 if(textClear.trim() == "Enter Source Name"){
+    		 obj[0].setValue("0");
+    	 }
+     }
+});
+
+select_scorce = $select_scorce[0].selectize;
+
 </script>

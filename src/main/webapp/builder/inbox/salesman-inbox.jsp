@@ -1,5 +1,58 @@
-
-
+<%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
+<%@page import="org.bluepigeon.admin.model.Source"%>
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri" value="${req.requestURI}" />
+<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
+<%@page import="org.bluepigeon.admin.model.Builder"%>
+<%@page import="org.bluepigeon.admin.model.City"%>
+<%@page import="org.bluepigeon.admin.dao.BuilderPropertyTypeDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderPropertyType"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProject"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectLeadDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@page import="java.util.List"%>
+<%
+ 	int project_size = 0;
+	int type_size = 0;
+	int city_size = 0;
+	int projectId = 0;
+ 	List<ProjectData> builderProjects =null;
+ 	List<Source> sourceList = null;
+ 	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
+ 	projectId = Integer.parseInt(request.getParameter("project_id"));
+   	session = request.getSession(false);
+   	BuilderEmployee builder = new BuilderEmployee();
+   	int builder_id = 0;
+   	
+   	if(session!=null)
+	{
+		if(session.getAttribute("ubname") != null)
+		{
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			builder_id = builder.getBuilder().getId();
+			if(builder_id > 0){
+				builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
+				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
+				if(builderProjects != null){
+					if(builderProjects.size()>0)
+				    	project_size = builderProjects.size();
+				}
+			}
+			if(builderPropertyTypes != null){
+			 	if(builderPropertyTypes.size()>0)
+			 		type_size = builderPropertyTypes.size();
+			}
+		}
+		
+		
+   }
+   
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,7 +122,7 @@
 					     </form>
                        </div>
                       <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 lead-button">
-                         <button type="submit" class="btn11 btn-info waves-effect waves-light m-t-10" data-toggle="modal" data-target="#myModal2">Compose</button>
+                         <button type="submit" class="btn11 btn-compose waves-effect waves-light m-t-10" data-toggle="modal" data-target="#myModal2">Compose</button>
                       </div>
                  </div>
                  <div class="white-box">
@@ -154,8 +207,14 @@
 				  	<div class="row">
 				  	   <form class="addlead1 addlead">
 		                     <div class="">
+		                       <div class="form-group row">
+									<label for="example-text-input" class="col-5 col-form-label"> To</label>
+									  <div class="col-7">
+										 <input class="form-control" type="text" value="" id="" placeholder="">
+									  </div>
+								  </div>
 		                         <div class="form-group row">
-									<label for="example-text-input" class="col-5 col-form-label"> Name</label>
+									<label for="example-text-input" class="col-5 col-form-label"> Subject</label>
 									  <div class="col-7">
 										 <input class="form-control" type="text" value="" id="" placeholder="">
 									  </div>
