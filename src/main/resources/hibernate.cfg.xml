@@ -30,6 +30,7 @@
         <mapping class="org.bluepigeon.admin.model.Agreement" />
         <mapping class="org.bluepigeon.admin.model.BuilderBuilding" />
         <mapping class="org.bluepigeon.admin.model.BuilderFloorAmenity" />
+        <mapping class="org.bluepigeon.admin.model.InboxMessage" />
         <mapping class="org.bluepigeon.admin.model.BuyerProjectUpdate" />
         <mapping class="org.bluepigeon.admin.model.FloorPanoramicImage" />
         <mapping class="org.bluepigeon.admin.model.ProjectAmenityIcon" />

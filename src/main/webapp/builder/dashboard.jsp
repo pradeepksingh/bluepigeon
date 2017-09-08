@@ -240,12 +240,12 @@
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                       <select  id="city_id" name="city_id">
-                                   		<option value="0">Enter City Name</option>
-                                        <%
-                                        if(cityDataList != null){
-                                        for(City city : cityDataList){ %>
-                                        <option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
-                                        <%}} %>
+                       		<option value="0">Enter City Name</option>
+                            <%
+                            if(cityDataList != null){
+                            for(City city : cityDataList){ %>
+                            <option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
+                            <%}} %>
                           </select>
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -254,9 +254,9 @@
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                        <select class="selectpicker" data-style="form-control">
-                                        <option value="0">Project Status</option>
-                                        <option value="1">Pending Projects</option>
-                                        <option value="2">Complete Projects</option>
+                            <option value="0">Project Status</option>
+                            <option value="1">Pending Projects</option>
+                            <option value="2">Complete Projects</option>
                          </select>
                     </div>
                     <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_id);%>"/>

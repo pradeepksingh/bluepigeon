@@ -140,16 +140,16 @@
                <!-- /.row -->
 	                <div class="row bspace">
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-submit waves-effect waves-light m-t-10">Booking</button>
+		                    <button type="submit" class="btn11 btn-submit waves-effect waves-light m-t-10">BOOKING</button>
 		                </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" id="cancellation" class="btn11 btn-info waves-effect waves-light m-t-10">Cancellation</button>
+		                    <button type="submit" id="cancellation" class="btn11 btn-info waves-effect waves-light m-t-10">CANCELLATION</button>
 		                 </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit"  id="leads" class="btn11 btn-info waves-effect waves-light m-t-10">Leads</button>
+		                    <button type="submit"  id="leads" class="btn11 btn-info waves-effect waves-light m-t-10">LEADS</button>
 		                </div>
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" id="campaign" class="btn11 btn-info waves-effect waves-light m-t-10">Campain</button>
+		                    <button type="submit" id="campaign" class="btn11 btn-info waves-effect waves-light m-t-10">CAMPAIGN</button>
 		                </div>
 	                </div>
                <!-- row -->

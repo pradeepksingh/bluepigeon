@@ -96,7 +96,7 @@ int emp_id = 0;
                   <h1>BUYER LIST</h1>
                    <div class="row">
                       <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-	                        <select id="filter_project_id" name="filter_project_id" data-style="form-control">
+	                        <select id="filter_project_id" name="filter_project_id"  data-style="form-control">
 	                         <option value="0">Enter Project Name</option>
 	                        <% if(projectList != null){
 	                        	for(ProjectData projectData : projectList){

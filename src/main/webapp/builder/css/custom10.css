@@ -25,6 +25,15 @@ textarea:focus {outline:0;}
     background: #fafafa;
     height: 36px;
 }
+.btn-lead {
+    color: #fff;
+    background-color: #00bfd6;
+}
+
+.btn-compose {
+    color: #fff;
+    background-color: #00bfd6;
+}
 
 .file-button {
      background: #00bfd6;
@@ -250,6 +259,9 @@ label {
     font-size: 17px;
     background: #fafafa;
     width: 100% !important;
+    padding-left:10px !important;
+    left:-131px !important;
+    border-top-color: #00bfd6 !importtant;
     }
 .addlead1 {
 	    width: 100%;
@@ -1046,7 +1058,7 @@ text-align: -webkit-center;
 }
 .modal-content{
 padding: 3% 5%;
-padding-top:9%;
+padding-top:14%;
 }
 
   .recipients.bg12 label {
@@ -2279,3 +2291,8 @@ padding:7%;
     -webkit-appearance: none;
     background-position-x: 244px;
 }
+.selectize-control.single .selectize-input:after{
+	border-color: #00bfd6 transparent transparent transparent !important;
+	background-image:url(../images/down-arrow.png);
+}
+
