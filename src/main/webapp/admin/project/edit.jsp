@@ -936,7 +936,7 @@
 													</div>
 												</div-->
 												<div class="col-lg-1">
-													<span><a href="javascript:removeSchedule(<% out.print(i); %>);" class="btn btn-danger btn-xs">x</a></span>
+													<span><a href="javascript:deleteSchudle(<% out.print(projectPaymentInfo.getId()); %>);" class="btn btn-danger btn-xs">x</a></span>
 												</div>
 											</div>
 											<% i++; } %>
@@ -1817,24 +1817,24 @@ $('#paymentfrm').bootstrapValidator({
                     max: 100,
                     message: 'The percentage must be between 0 and 100'
 	        	},
-// 	        	 callback: {
-//                      message: 'The sum of percentages must be 100',
-//                      callback: function(value, validator, $field) {
-//                          var percentage = validator.getFieldElements('payable[]'),
-//                              length     = percentage.length,
-//                              sum        = 0;
+	        	 callback: {
+                     message: 'The sum of percentages must be 100',
+                     callback: function(value, validator, $field) {
+                         var percentage = validator.getFieldElements('payable[]'),
+                             length     = percentage.length,
+                             sum        = 0;
 
-//                          for (var i = 0; i < length; i++) {
-//                              sum += parseFloat($(percentage[i]).val());
-//                          }
-//                          if (sum === 100) {
-//                              validator.updateStatus('payable[]', 'VALID', 'callback');
-//                              return true;
-//                          }
+                         for (var i = 0; i < length; i++) {
+                             sum += parseFloat($(percentage[i]).val());
+                         }
+                         if (sum === 100) {
+                             validator.updateStatus('payable[]', 'VALID', 'callback');
+                             return true;
+                         }
 
-//                          return false;
-//                      }
-//                  },
+                         return false;
+                     }
+                 },
 		        notEmpty: {
 		    		message: 'Payable is required and cannot be empty'
 		        },
@@ -2104,7 +2104,18 @@ function addMoreSchedule() {
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();
 }
-
+function deleteSchudle(id){
+	
+	var flag = confirm("Are you sure ? You want to delete schedule ?");
+	if(flag){
+		$.get("${baseUrl}/webapi/project/payment/delete/"+id,{}, function(data){
+			alert(data.message);
+			if(data.status == 1){
+				$("#schedule-"+id).remove();
+			}
+		})
+	}
+}
 
 $("#subpbtn").click(function(){
 // 	var amenityWeightage = [];

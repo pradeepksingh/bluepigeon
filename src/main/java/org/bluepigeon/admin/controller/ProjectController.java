@@ -554,6 +554,8 @@ public class ProjectController extends ResourceConfig {
 			responseMessage.setMessage("Please click on Add offer button and add offer, then try again");
 		}
 		}catch(Exception e){
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Please click on Add offer button and add offer, then try again(if any offer on project).");
 			e.printStackTrace();
 		}
 		return responseMessage;
@@ -1576,6 +1578,7 @@ public class ProjectController extends ResourceConfig {
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderBuilding builderBuilding = new BuilderBuilding();
 		builderBuilding.setId(building_id);
+		try{
 		if (offer_title.size() > 0) {
 			List<BuildingOfferInfo> newBuildingOfferInfos = new ArrayList<BuildingOfferInfo>();
 			List<BuildingOfferInfo> buildingOfferInfos = new ArrayList<BuildingOfferInfo>();
@@ -1628,6 +1631,11 @@ public class ProjectController extends ResourceConfig {
 			msg.setMessage("Failed to update building offers.");
 			msg.setStatus(0);
 		}
+		}catch(Exception e){
+			msg.setStatus(0);
+			msg.setMessage("Please click on Add offer button and add offer, then try again(if any offer on building).");
+		}
+		
 		return msg;
 	}
 	
@@ -4126,7 +4134,7 @@ public class ProjectController extends ResourceConfig {
 		Double baseSaleValue = flatPricingDetails.getBasePrice() * builderFlatType.getSuperBuiltupArea()+flatPricingDetails.getRiseRate()+flatPricingDetails.getAmenityRate();
 		Double discount = baseSaleValue;
 	
-		if(offer_title != null){
+		try{
 			if (offer_title.size() > 0) {
 				
 				List<FlatOfferInfo> newFlatOfferInfos = new ArrayList<FlatOfferInfo>();
@@ -4241,10 +4249,12 @@ public class ProjectController extends ResourceConfig {
 				msg.setStatus(0);
 			}
 			
-		}else{
+		}catch(Exception e){
 			builderFlat.setBaseSaleValue(baseSaleValue);
 			builderFlat.setDiscount(0.0);
 			builderFlat.setId(flat_id);
+			msg.setStatus(0);
+			msg.setMessage("Please click on Add offer button and add offer, then try again(if any offer on flat).");
 		}
 		projectDAO.updateFlatPriceInfo(flatPricingDetails);
 		projectDAO.updateBuildingFlat(builderFlat);
