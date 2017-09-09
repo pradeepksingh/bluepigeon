@@ -1,5 +1,6 @@
 package org.bluepigeon.admin.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -93,14 +94,28 @@ public class TaxDAO {
 	}
 
 	public List<Tax> getTaxById(int id) {
+		List<Tax> newTaxList = new ArrayList<Tax>();
 		String hql = "from Tax where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("id", id);
 		List<Tax> result = query.list();
+		for(Tax tax: result){
+			Tax newTax = new Tax();
+			newTax.setCountry(tax.getCountry());
+			newTax.setPincode(tax.getPincode());
+			newTax.setId(tax.getId());
+			if(tax.getCountry().getTaxLabel1() != null && tax.getCountry().getTaxLabel1() != "")
+			newTax.setStampDuty(tax.getStampDuty());
+			if(tax.getCountry().getTaxLabel2() != null && tax.getCountry().getTaxLabel2() != "")
+				newTax.setTax(tax.getTax());
+			if(tax.getCountry().getTaxLabel3() != null && tax.getCountry().getTaxLabel3() != "")
+				newTax.setVat(tax.getVat());
+			newTaxList.add(newTax);
+		}
 		session.close();
-		return result;
+		return newTaxList;
 	}
 
 }

@@ -1250,13 +1250,13 @@ $('#amenity_rate').keypress(function (event) {
 $('#parking').keypress(function (event) {
     return isNumber(event, this)
 });
-$('#stamp_duty').keyup(function(){
-	var x = $(this).val();
-	if( x<0 || x >100){
-		alert("The percentage must be between 0 and 100");
-		$("#stamp_duty").val('');
-	}
-});
+// $('#stamp_duty').keyup(function(){
+// 	var x = $(this).val();
+// 	if( x<0 || x >100){
+// 		alert("The percentage must be between 0 and 100");
+// 		$("#stamp_duty").val('');
+// 	}
+// });
 $('#stamp_duty').keypress(function (event) {
     return isNumber(event, this)
 });
@@ -1646,11 +1646,14 @@ $('#pricingfrm').bootstrapValidator({
                 notEmpty: {
                     message: 'Stamp duty is required and cannot be empty'
                 },
-                between:{
-                	min:0,
-                	max:100,
-                	message: 'The percentage must be between 0 and 100'
-                }
+                numeric: {
+        			message: 'Stamp duty is invalid'
+         		}
+//                 between:{
+//                 	min:0,
+//                 	max:100,
+//                 	message: 'The percentage must be between 0 and 100'
+//                 }
             }
         },
         tax:{
@@ -1658,11 +1661,14 @@ $('#pricingfrm').bootstrapValidator({
                 notEmpty: {
                     message: 'Tax is required and cannot be empty'
                 },
-                between:{
-                	min:0,
-                	max:100,
-                	message: 'The percentage must be between 0 and 100'
-                }
+                numeric: {
+        			message: 'Tax is invalid'
+        		},
+//                 between:{
+//                 	min:0,
+//                 	max:100,
+//                 	message: 'The percentage must be between 0 and 100'
+//                 }
             }
         },
         vat:{
@@ -1670,11 +1676,14 @@ $('#pricingfrm').bootstrapValidator({
                 notEmpty: {
                     message: 'Vat is required and cannot be empty'
                 },
-                between:{
-                	min:0,
-                	max:100,
-                	message: 'The percentage must be between 0 and 100'
-                }
+                numeric: {
+        			message: 'Vat is invalid'
+        		}
+//                 between:{
+//                 	min:0,
+//                 	max:100,
+//                 	message: 'The percentage must be between 0 and 100'
+//                 }
             }
         },
         tech_fee:{
@@ -1817,24 +1826,24 @@ $('#paymentfrm').bootstrapValidator({
                     max: 100,
                     message: 'The percentage must be between 0 and 100'
 	        	},
-	        	 callback: {
-                     message: 'The sum of percentages must be 100',
-                     callback: function(value, validator, $field) {
-                         var percentage = validator.getFieldElements('payable[]'),
-                             length     = percentage.length,
-                             sum        = 0;
+// 	        	 callback: {
+//                      message: 'The sum of percentages must be 100',
+//                      callback: function(value, validator, $field) {
+//                          var percentage = validator.getFieldElements('payable[]'),
+//                              length     = percentage.length,
+//                              sum        = 0;
 
-                         for (var i = 0; i < length; i++) {
-                             sum += parseFloat($(percentage[i]).val());
-                         }
-                         if (sum === 100) {
-                             validator.updateStatus('payable[]', 'VALID', 'callback');
-                             return true;
-                         }
+//                          for (var i = 0; i < length; i++) {
+//                              sum += parseFloat($(percentage[i]).val());
+//                          }
+//                          if (sum === 100) {
+//                              validator.updateStatus('payable[]', 'VALID', 'callback');
+//                              return true;
+//                          }
 
-                         return false;
-                     }
-                 },
+//                          return false;
+//                      }
+//                  },
 		        notEmpty: {
 		    		message: 'Payable is required and cannot be empty'
 		        },

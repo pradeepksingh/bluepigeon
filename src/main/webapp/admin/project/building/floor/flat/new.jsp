@@ -1063,12 +1063,12 @@ $('#addfloor').bootstrapValidator({
                 },
         		numeric: {
         			message: 'Stamp duty is invalid'
-        		},
-        		 between:{
-                 	min:0,
-                 	max:100,
-                 	message: 'The percentage must be between 0 and 100'
-                 }
+        		}
+//         		 between:{
+//                  	min:0,
+//                  	max:100,
+//                  	message: 'The percentage must be between 0 and 100'
+//                  }
             }
         },
         tax: {
@@ -1078,12 +1078,12 @@ $('#addfloor').bootstrapValidator({
                 },
         		numeric: {
         			message: 'Tax is invalid'
-        		},
-        		 between:{
-                 	min:0,
-                 	max:100,
-                 	message: 'The percentage must be between 0 and 100'
-                 }
+        		}
+//         		 between:{
+//                  	min:0,
+//                  	max:100,
+//                  	message: 'The percentage must be between 0 and 100'
+//                  }
             }
         },
         vat: {
@@ -1093,12 +1093,12 @@ $('#addfloor').bootstrapValidator({
                 },
         		numeric: {
         			message: 'Vat is invalid'
-        		},
-        		 between:{
-                 	min:0,
-                 	max:100,
-                 	message: 'The percentage must be between 0 and 100'
-                 }
+        		}
+//         		 between:{
+//                  	min:0,
+//                  	max:100,
+//                  	message: 'The percentage must be between 0 and 100'
+//                  }
             }
         }
     }

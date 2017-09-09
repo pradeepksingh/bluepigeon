@@ -39,6 +39,7 @@
                   		</div>
               		</div>
               	</div>
+              	<%if(tax.getCountry().getTaxLabel1() != null && tax.getCountry().getTaxLabel1() != ""){ %>
               	<div class="row" id="uhtax1">
               		<div class="col-xs-12">
                   		<div class="form-group">
@@ -47,6 +48,10 @@
                   		</div>
               		</div>
               	</div>
+              	<%}else{ %>
+              	<input type="hidden" id="utax" name="utax" value="0">
+              	<%} %>
+              	<%if(tax.getCountry().getTaxLabel2() != null && tax.getCountry().getTaxLabel2() != ""){ %>
               	<div class="row" id="uhtax2">
               		<div class="col-xs-12">
                   		<div class="form-group">
@@ -55,6 +60,10 @@
                   		</div>
               		</div>
               	</div>
+              	<%}else{ %>
+              	<input type="hidden" id= "usduty" name="usduty" value="0" />
+              	<%} %>
+              	<%if(tax.getCountry().getTaxLabel3() != null && tax.getCountry().getTaxLabel3() != ""){ %>
               	<div class="row" id="uhtax3">
               		<div class="col-xs-12">
                   		<div class="form-group">
@@ -63,6 +72,9 @@
                   		</div>
               		</div>
               	</div>
+              	<%}else{ %>
+              	<input type="hidden" id="uvat" name="uvat" value="0"/>
+              	<%} %>
               	<div class="row">
               		<div class="col-xs-12">
              			<button type="submit" class="btn btn-primary" onclick="updateTax();">UPDATE</button>

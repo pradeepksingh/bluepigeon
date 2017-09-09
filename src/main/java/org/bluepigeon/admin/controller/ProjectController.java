@@ -230,8 +230,8 @@ public class ProjectController extends ResourceConfig {
 			@FormParam("country_id") int country_id,
 			@FormParam("state_id") int state_id,
 			@FormParam("city_id") int city_id,
-			//@FormParam("locality_id") int locality_id,
-			@FormParam("locality_name") String localityName,
+			@FormParam("locality_id") int locality_id,
+			//@FormParam("locality_name") String localityName,
 			@FormParam("pincode") String pincode,
 			@FormParam("latitude") String latitude,
 			@FormParam("longitude") String longitude,
@@ -267,7 +267,8 @@ public class ProjectController extends ResourceConfig {
 		builderProject.setState(state);
 		builderProject.setCity(city);
 		builderProject.setAreaId(0);
-		builderProject.setLocalityName(localityName);
+		builderProject.setAreaId(locality_id);
+		builderProject.setLocalityName(new LocalityNamesImp().getLocality(locality_id).getName());
 		builderProject.setPincode(pincode);
 		builderProject.setLatitude(latitude);
 		builderProject.setLongitude(longitude);

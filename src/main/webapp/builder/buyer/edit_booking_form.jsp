@@ -187,6 +187,7 @@
 							for(Buyer buyer :buyers) { %>
 					 	       <div class="col-sm-12" id="deleteb-<% out.print(buyer.getId()); %>">
 					 	       <% if(i > 1) { %>
+					 	       	<hr>
 					 	       		<span class="pull-right">	<a href="javascript:deleteBuyer(<% out.print(buyer.getId()); %>);" class="btn btn-danger btn-xs">x</a></span>
 					 	       		<% } %>
 					 	       		<input type="hidden" name="buyer_id[]" id="buyer_id" value="<% out.print(buyer.getId());%>" />
@@ -284,7 +285,7 @@
 								        </div>
 								    </div>
 					 	        </div>
-					 	        <%} %>
+					 	        <%i++;} %>
 					 	        <div id="co-buyer"></div>
 					 	       	<div class="centerbutton">
 					 	        	<a href="javascript:addMoreBuyers();">   <button type="button" class="add-co-buyer">+ Co-Buyer</button></a>
@@ -550,36 +551,36 @@
 								</form>
 						    </div>
 					 	 </div>
-					  </div>
-                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 tabcontent">
-                    <%if(bookingFlatList != null){ %>
-                     <div class="bg1">
-                     	<div class="user-profile">
-				      	<%if(bookingFlatList.getBuyerPhoto()!="" && bookingFlatList.getBuyerPhoto() != null){ %>
-					     	<img src="${baseUrl}/<%out.print(bookingFlatList.getBuyerPhoto()); %>" alt="Buyer image" class="custom-img">
-					   	<%}%>	
-				        	<img src="../images/camera_icon.PNG" alt="camera " class="camera"/>
-				          	<p><b><%out.print(bookingFlatList.getBuyerName()); %></b></p>
-				          	<p class="p-custom"><%out.print(bookingFlatList.getBuildingName()); %>-<%out.print(bookingFlatList.getFlatNo()); %>, <%out.print(bookingFlatList.getProjectName()); %></p>
-				          	<hr>
-				       	</div>
-					   	<div class="row custom-row user-row">
-					        <p class="p-custom">Mobile No.</p>
-					        <p><b><%out.print(bookingFlatList.getBuyerMobile()); %></b></p>
-					        <p class="p-custom">Email</p>
-					        <p><b><%out.print(bookingFlatList.getBuyerEmail()); %></b></p>
-					        <p class="p-custom">PAN</p>
-					        <p><b><%out.print(bookingFlatList.getBuyerPanNo()); %></b></p>
-					        <p class="p-custom">Aadhaar card no.</p>
-					        <p><b><% if(bookingFlatList.getBuyerAadhaarNumber()!=null){out.print(bookingFlatList.getBuyerAadhaarNumber());} %></b></p>
-					        <p class="p-custom">Permanent Address</p>
-					        <p><b><%out.print(bookingFlatList.getBuyerPermanentAddress()); %></b></p>
-					        <p class="p-custom">Current Address</p>
-					        <p><b><%if(bookingFlatList.getBuyerCurrentAddress()!=null){out.print(bookingFlatList.getBuyerCurrentAddress());} %></b></p>
-					        <hr>
-					   	</div>
-					 </div>
-					 <%} %>
+	                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 tabcontent">
+	                    <%if(bookingFlatList != null){ %>
+	                     <div class="bg1">
+	                     	<div class="user-profile">
+					      	<%if(bookingFlatList.getBuyerPhoto()!="" && bookingFlatList.getBuyerPhoto() != null){ %>
+						     	<img src="${baseUrl}/<%out.print(bookingFlatList.getBuyerPhoto()); %>" alt="Buyer image" class="custom-img">
+						   	<%}%>	
+					        	<img src="../images/camera_icon.PNG" alt="camera " class="camera"/>
+					          	<p><b><%out.print(bookingFlatList.getBuyerName()); %></b></p>
+					          	<p class="p-custom"><%out.print(bookingFlatList.getBuildingName()); %>-<%out.print(bookingFlatList.getFlatNo()); %>, <%out.print(bookingFlatList.getProjectName()); %></p>
+					          	<hr>
+					       	</div>
+						   	<div class="row custom-row user-row">
+						        <p class="p-custom">Mobile No.</p>
+						        <p><b><%out.print(bookingFlatList.getBuyerMobile()); %></b></p>
+						        <p class="p-custom">Email</p>
+						        <p><b><%out.print(bookingFlatList.getBuyerEmail()); %></b></p>
+						        <p class="p-custom">PAN</p>
+						        <p><b><%out.print(bookingFlatList.getBuyerPanNo()); %></b></p>
+						        <p class="p-custom">Aadhaar card no.</p>
+						        <p><b><% if(bookingFlatList.getBuyerAadhaarNumber()!=null){out.print(bookingFlatList.getBuyerAadhaarNumber());} %></b></p>
+						        <p class="p-custom">Permanent Address</p>
+						        <p><b><%out.print(bookingFlatList.getBuyerPermanentAddress()); %></b></p>
+						        <p class="p-custom">Current Address</p>
+						        <p><b><%if(bookingFlatList.getBuyerCurrentAddress()!=null){out.print(bookingFlatList.getBuyerCurrentAddress());} %></b></p>
+						        <hr>
+						   	</div>
+						 </div>
+						 <%} %>
+	                  </div>
                   </div>
                 </div>
               </div>
@@ -1308,5 +1309,14 @@ function showAddDocumentResponse(resp, statusText, xhr, $form){
         alert(resp.message);
         window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id=<%out.print(project_id);%>";
   	}
+}
+function deleteBuyer(id) {
+	$.get("${baseUrl}/webapi/buyer/delete/coowner/"+id,{},function(data){
+		if(data.status == 0 ){
+			alert(data.message);
+		} else {
+			window.location.reload();
+		}
+	});
 }
 </script>
