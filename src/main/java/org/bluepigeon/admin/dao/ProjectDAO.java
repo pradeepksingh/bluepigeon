@@ -5767,5 +5767,19 @@ public class ProjectDAO {
     	return buyer;
     }
     
+    /**
+     * 
+     * @param builderId
+     * @return List<Source>
+     */
+    public List<Source> getSourceListByBuilderId(int builderId){
+    	String hql = " from Source where builder.id = :builder_id";
+    	HibernateUtil hibernateUtil = new HibernateUtil();
+    	Session session = hibernateUtil.openSession();
+    	Query query = session.createQuery(hql);
+    	query.setParameter("builder_id", builderId);
+    	List<Source> sourceList =  query.list();
+    	return sourceList;
+    }
     
 }

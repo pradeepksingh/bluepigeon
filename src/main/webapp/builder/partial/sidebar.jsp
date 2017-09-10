@@ -62,7 +62,7 @@
 <!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
 <!--                         </ul> -->
 <!--                     </li> -->
-					<%if(emp_access_id== 1|| emp_access_id ==2 || emp_access_id== 4 ||emp_access_id == 5 || emp_access_id == 6){ %>
+					<%if(emp_access_id== 1|| emp_access_id ==2 || emp_access_id== 4  || emp_access_id == 6){ %>
                      <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="ti-layout fa-fw"></i><span class="hide-menu"> Buyer<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="javascript:void(0)">Manage</a></li>
@@ -70,7 +70,7 @@
                         </ul>
                     </li>
                     <% }%>
-                    <%if(emp_access_id == 1|| emp_access_id ==2 || emp_access_id == 4 || emp_access_id == 5){ %>
+                    <%if(emp_access_id == 1|| emp_access_id ==2){ %>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu"> Employee<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/employee/new.jsp">Add</a></li>
@@ -116,6 +116,11 @@
                         <li class="nav-small-cap m-t-10">--Professional--</li>
                          <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Sales<span class="fa arrow"></span></span></a>
                          <ul class="nav nav-second-level">
+                           	  <li> <a href="javascript:void(0)">Inbox</a></li>
+                              <li> <a href="${baseUrl }/builder/leads/leadlist.jsp">Leads</a></li>
+                              <li> <a href="${baseUrl }/builder/buyer/Salesman-Buyer-list.jsp">Buyer List</a></li>
+                              <li> <a href="${baseUrl }/builder/cancellation/Salesman-Cancellation-list.jsp">Cancellation List</a></li>
+                              <li> <a href="${baseUrl }/builder/leads/Salesman_add_lead.jsp">Add Lead</a></li>
                               <li> <a href="${baseUrl }/builder/sales/source.jsp">Add Source</a></li>
                               <li> <a href="${baseUrl }/builder/sales/source-list.jsp">Manage Source</a></li>
                           </ul>
