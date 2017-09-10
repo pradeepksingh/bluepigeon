@@ -3960,18 +3960,13 @@ public class ProjectController extends ResourceConfig {
 			
 	){
 		ResponseMessage responseMessage = new ResponseMessage();
-		
 		Builder builder = new Builder();
-		if(!name.equalsIgnoreCase("") && !name.equalsIgnoreCase(null) && !name.isEmpty()){
-			builder.setId(builderId);
-			Source source = new Source();
-			source.setBuilder(builder);
-			source.setName(name);
-			responseMessage = new ProjectDAO().saveSource(source);
-		}else{
-			responseMessage.setStatus(0);
-			responseMessage.setMessage("Please Enter source name");
-		}
+		builder.setId(builderId);
+		Source source = new Source();
+		source.setBuilder(builder);
+		source.setName(name);
+		responseMessage = new ProjectDAO().saveSource(source);
+		
 		return responseMessage;
 	}
 	
