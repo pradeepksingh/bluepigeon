@@ -936,7 +936,7 @@
 													</div>
 												</div-->
 												<div class="col-lg-1">
-													<span><a href="javascript:removeSchedule(<% out.print(i); %>);" class="btn btn-danger btn-xs">x</a></span>
+													<span><a href="javascript:deleteSchudle(<% out.print(projectPaymentInfo.getId()); %>);" class="btn btn-danger btn-xs">x</a></span>
 												</div>
 											</div>
 											<% i++; } %>
@@ -1250,13 +1250,13 @@ $('#amenity_rate').keypress(function (event) {
 $('#parking').keypress(function (event) {
     return isNumber(event, this)
 });
-$('#stamp_duty').keyup(function(){
-	var x = $(this).val();
-	if( x<0 || x >100){
-		alert("The percentage must be between 0 and 100");
-		$("#stamp_duty").val('');
-	}
-});
+// $('#stamp_duty').keyup(function(){
+// 	var x = $(this).val();
+// 	if( x<0 || x >100){
+// 		alert("The percentage must be between 0 and 100");
+// 		$("#stamp_duty").val('');
+// 	}
+// });
 $('#stamp_duty').keypress(function (event) {
     return isNumber(event, this)
 });
@@ -1646,11 +1646,14 @@ $('#pricingfrm').bootstrapValidator({
                 notEmpty: {
                     message: 'Stamp duty is required and cannot be empty'
                 },
-                between:{
-                	min:0,
-                	max:100,
-                	message: 'The percentage must be between 0 and 100'
-                }
+                numeric: {
+        			message: 'Stamp duty is invalid'
+         		}
+//                 between:{
+//                 	min:0,
+//                 	max:100,
+//                 	message: 'The percentage must be between 0 and 100'
+//                 }
             }
         },
         tax:{
@@ -1658,11 +1661,14 @@ $('#pricingfrm').bootstrapValidator({
                 notEmpty: {
                     message: 'Tax is required and cannot be empty'
                 },
-                between:{
-                	min:0,
-                	max:100,
-                	message: 'The percentage must be between 0 and 100'
-                }
+                numeric: {
+        			message: 'Tax is invalid'
+        		},
+//                 between:{
+//                 	min:0,
+//                 	max:100,
+//                 	message: 'The percentage must be between 0 and 100'
+//                 }
             }
         },
         vat:{
@@ -1670,11 +1676,14 @@ $('#pricingfrm').bootstrapValidator({
                 notEmpty: {
                     message: 'Vat is required and cannot be empty'
                 },
-                between:{
-                	min:0,
-                	max:100,
-                	message: 'The percentage must be between 0 and 100'
-                }
+                numeric: {
+        			message: 'Vat is invalid'
+        		}
+//                 between:{
+//                 	min:0,
+//                 	max:100,
+//                 	message: 'The percentage must be between 0 and 100'
+//                 }
             }
         },
         tech_fee:{
@@ -2104,7 +2113,18 @@ function addMoreSchedule() {
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();
 }
-
+function deleteSchudle(id){
+	
+	var flag = confirm("Are you sure ? You want to delete schedule ?");
+	if(flag){
+		$.get("${baseUrl}/webapi/project/payment/delete/"+id,{}, function(data){
+			alert(data.message);
+			if(data.status == 1){
+				$("#schedule-"+id).remove();
+			}
+		})
+	}
+}
 
 $("#subpbtn").click(function(){
 // 	var amenityWeightage = [];

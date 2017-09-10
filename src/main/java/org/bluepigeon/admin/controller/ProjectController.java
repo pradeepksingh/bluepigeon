@@ -230,8 +230,8 @@ public class ProjectController extends ResourceConfig {
 			@FormParam("country_id") int country_id,
 			@FormParam("state_id") int state_id,
 			@FormParam("city_id") int city_id,
-			//@FormParam("locality_id") int locality_id,
-			@FormParam("locality_name") String localityName,
+			@FormParam("locality_id") int locality_id,
+			//@FormParam("locality_name") String localityName,
 			@FormParam("pincode") String pincode,
 			@FormParam("latitude") String latitude,
 			@FormParam("longitude") String longitude,
@@ -267,7 +267,8 @@ public class ProjectController extends ResourceConfig {
 		builderProject.setState(state);
 		builderProject.setCity(city);
 		builderProject.setAreaId(0);
-		builderProject.setLocalityName(localityName);
+		builderProject.setAreaId(locality_id);
+		builderProject.setLocalityName(new LocalityNamesImp().getLocality(locality_id).getName());
 		builderProject.setPincode(pincode);
 		builderProject.setLatitude(latitude);
 		builderProject.setLongitude(longitude);
@@ -554,6 +555,8 @@ public class ProjectController extends ResourceConfig {
 			responseMessage.setMessage("Please click on Add offer button and add offer, then try again");
 		}
 		}catch(Exception e){
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Please click on Add offer button and add offer, then try again(if any offer on project).");
 			e.printStackTrace();
 		}
 		return responseMessage;
@@ -1576,6 +1579,7 @@ public class ProjectController extends ResourceConfig {
 		ProjectDAO projectDAO = new ProjectDAO();
 		BuilderBuilding builderBuilding = new BuilderBuilding();
 		builderBuilding.setId(building_id);
+		try{
 		if (offer_title.size() > 0) {
 			List<BuildingOfferInfo> newBuildingOfferInfos = new ArrayList<BuildingOfferInfo>();
 			List<BuildingOfferInfo> buildingOfferInfos = new ArrayList<BuildingOfferInfo>();
@@ -1628,6 +1632,11 @@ public class ProjectController extends ResourceConfig {
 			msg.setMessage("Failed to update building offers.");
 			msg.setStatus(0);
 		}
+		}catch(Exception e){
+			msg.setStatus(0);
+			msg.setMessage("Please click on Add offer button and add offer, then try again(if any offer on building).");
+		}
+		
 		return msg;
 	}
 	
@@ -4126,7 +4135,7 @@ public class ProjectController extends ResourceConfig {
 		Double baseSaleValue = flatPricingDetails.getBasePrice() * builderFlatType.getSuperBuiltupArea()+flatPricingDetails.getRiseRate()+flatPricingDetails.getAmenityRate();
 		Double discount = baseSaleValue;
 	
-		if(offer_title != null){
+		try{
 			if (offer_title.size() > 0) {
 				
 				List<FlatOfferInfo> newFlatOfferInfos = new ArrayList<FlatOfferInfo>();
@@ -4241,10 +4250,12 @@ public class ProjectController extends ResourceConfig {
 				msg.setStatus(0);
 			}
 			
-		}else{
+		}catch(Exception e){
 			builderFlat.setBaseSaleValue(baseSaleValue);
 			builderFlat.setDiscount(0.0);
 			builderFlat.setId(flat_id);
+			msg.setStatus(0);
+			msg.setMessage("Please click on Add offer button and add offer, then try again(if any offer on flat).");
 		}
 		projectDAO.updateFlatPriceInfo(flatPricingDetails);
 		projectDAO.updateBuildingFlat(builderFlat);

@@ -921,12 +921,12 @@ $('#addbuilding').bootstrapValidator({
                 },
         		numeric: {
         			message: 'Stamp duty is invalid'
-        		},
-        		 between:{
-                 	min:0,
-                 	max:100,
-                 	message: 'The percentage must be between 0 and 100'
-                 }
+         		}//,
+//         		 between:{
+//                  	min:0,
+//                  	max:100,
+//                  	message: 'The percentage must be between 0 and 100'
+//                  }
             }
         },
         tax: {
@@ -951,12 +951,12 @@ $('#addbuilding').bootstrapValidator({
                 },
         		numeric: {
         			message: 'Vat is invalid'
-        		},
-        		 between:{
-                 	min:0,
-                 	max:100,
-                 	message: 'The percentage must be between 0 and 100'
-                 }
+        		}
+//         		 between:{
+//                  	min:0,
+//                  	max:100,
+//                  	message: 'The percentage must be between 0 and 100'
+//                  }
             }
         },
         'payable[]': {

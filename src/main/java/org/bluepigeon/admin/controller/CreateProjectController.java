@@ -99,6 +99,7 @@ import org.bluepigeon.admin.model.BuildingAmenityIcon;
 import org.bluepigeon.admin.model.BuildingStage;
 import org.bluepigeon.admin.model.BuildingSubstage;
 import org.bluepigeon.admin.model.City;
+import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.FlatAmenityIcon;
 import org.bluepigeon.admin.model.FlatStage;
 import org.bluepigeon.admin.model.FlatSubstage;
@@ -1950,13 +1951,16 @@ public class CreateProjectController {
 	@POST
 	@Path("/tax/save")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage addTax(@FormParam("pincode") String pincode,@FormParam("tax") double tax,@FormParam("sduty") double stampDuty,@FormParam("vat") double vat) {
+	public ResponseMessage addTax(@FormParam("country_id") int countryId,@FormParam("pincode") String pincode,@FormParam("tax") double tax,@FormParam("sduty") double stampDuty,@FormParam("vat") double vat) {
+		Country country = new Country();
+		country.setId(countryId);
 		TaxDAO taxDAO = new TaxDAO();
 		 Tax tax2 = new Tax();
 		 tax2.setPincode(pincode);
 		 tax2.setStampDuty(stampDuty);
 		 tax2.setTax(tax);
 		 tax2.setVat(vat);
+		 tax2.setCountry(country);
 		 return  taxDAO.save(tax2);
 	
 	}
@@ -1964,11 +1968,14 @@ public class CreateProjectController {
 	@POST
 	@Path("/tax/update")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage updateTax(@FormParam("id") int id,@FormParam("pincode") String pincode,@FormParam("tax") double tax,@FormParam("sduty") double stampDuty,@FormParam("vat") double vat) {
+	public ResponseMessage updateTax(@FormParam("country_id") int countryId,@FormParam("id") int id,@FormParam("pincode") String pincode,@FormParam("tax") double tax,@FormParam("sduty") double stampDuty,@FormParam("vat") double vat) {
 		
 		TaxDAO taxDAO = new TaxDAO();
+		Country country = new Country();
+		country.setId(countryId);
 		 Tax tax2 = new Tax();
 		 tax2.setId(id);
+		 tax2.setCountry(country);
 		 tax2.setPincode(pincode);
 		 tax2.setStampDuty(stampDuty);
 		 tax2.setTax(tax);

@@ -91,7 +91,7 @@
 									<div class="row">
 										<div class="col-lg-12 margin-bottom-5">
 											<div class="form-group" id="error-landmark">
-												<label class="control-label col-sm-3">Landmark </label>
+												<label class="control-label col-sm-3">Landmark <span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
 													<input type="text" class="form-control" id="landmark" name="landmark" />
 												</div>
@@ -102,7 +102,7 @@
 									<div class="row">
 										<div class="col-lg-12 margin-bottom-5">
 											<div class="form-group" id="error-sublocation">
-												<label class="control-label col-sm-3">Sub Location </label>
+												<label class="control-label col-sm-3">Sub Location <span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
 													<input type="text" class="form-control" id="sublocation" name="sublocation" />
 												</div>
@@ -168,7 +168,7 @@
 									<div class="row">
 										<div class="col-lg-12 margin-bottom-5">
 											<div class="form-group" id="error-pincode">
-												<label class="control-label col-sm-3">Pincode </label>
+												<label class="control-label col-sm-3">Pincode <span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
 													<input type="text" class="form-control" id="pincode" name="pincode" autocomplete="off"/>
 												</div>
@@ -179,7 +179,7 @@
 									<div class="row">
 										<div class="col-lg-12 margin-bottom-5">
 											<div class="form-group" id="error-latitude">
-												<label class="control-label col-sm-3">Latitude </label>
+												<label class="control-label col-sm-3">Latitude <span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
 													<input type="text" class="form-control" id="latitude" name="latitude" autocomplete="off"/>
 												</div>
@@ -190,7 +190,7 @@
 									<div class="row">
 										<div class="col-lg-12 margin-bottom-5">
 											<div class="form-group" id="error-longitude">
-												<label class="control-label col-sm-3">Longitude </label>
+												<label class="control-label col-sm-3">Longitude <span class='text-danger'>*</span></label>
 												<div class="col-sm-5">
 													<input type="text" class="form-control" id="longitude" name="longitude" autocomplete="off"/>
 												</div>
@@ -392,6 +392,34 @@ $('#addproject').bootstrapValidator({
            		}
             }
         },
+        latitude: {
+            validators: {
+                notEmpty: {
+                    message: 'Latitude is required and cannot be empty'
+                }
+            }
+        },
+        longitude: {
+            validators: {
+                notEmpty: {
+                    message: 'Longitude is required and cannot be empty'
+                }
+            }
+        },
+        sublocation:{
+       	 validators: {
+                notEmpty: {
+                         message: 'Sub location is required and cannot be empty'
+                }
+            }
+       },
+       landmark:{
+       	 validators: {
+                notEmpty: {
+                         message: 'landmark is required and cannot be empty'
+                }
+            }
+       }
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission

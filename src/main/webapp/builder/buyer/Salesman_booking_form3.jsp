@@ -622,7 +622,7 @@ function addMoreBuyers(){
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Contact*</label>'
 	    +'<div class="col-7 custom-col">'
 	    +'<div>'
-        +'<input class="form-control" type="text"  autocomplete="off" value="" id="" placeholder="contact number">'
+        +'<input class="form-control" type="text"  autocomplete="off" value="" id="contact" name="contact[]" placeholder="contact number">'
     	+'</div>'
     	+'<div class="messageContainer"></div>'
     	+'</div>'

@@ -213,7 +213,7 @@ function editTax(taxid) {
 }
 
 function updateTax() {
-	$.post("${baseUrl}/webapi/create/tax/update/",{ id: $("#utax_id").val(), country_id : $("#country_id").val(), pincode: $("#upincode").val(), tax: $("#utax").val(),sduty: $("#usduty").val(),vat: $("#uvat").val()}, function(data){
+	$.post("${baseUrl}/webapi/create/tax/update/",{ id: $("#utax_id").val(), country_id : $("#ucountry_id").val(), pincode: $("#upincode").val(), tax: $("#utax").val(),sduty: $("#usduty").val(),vat: $("#uvat").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
 	},'json');

@@ -1,0 +1,98 @@
+ .button12 {
+    background: #00bfd6;
+    color: #fafafa;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 50px;
+    font-size: 17px;
+    text-align: -webkit-center !important;
+}
+.bg1 {
+    text-align: -webkit-center;
+    border-bottom: 2px solid #00bfd6;
+    border-top: 2px solid #00bfd6;
+    border-left: 1px solid #00bfd6;
+    border-right: 1px solid #00bfd6;
+}
+.logo img{
+	
+    margin-top: -10px;
+    width: 200px;
+	
+}
+h1{
+	font-size: 28px;
+    padding-bottom: 5px;
+    padding-top: 15px;
+    margin-top: 0px;
+}
+.fright{
+	float: right;
+}
+ @media (max-width: 767px){
+.input1{
+	    outline: 0;
+    background: #edf1f5;
+    border: none;
+    margin: 11% 0%;
+    width: 100%;
+    font-size: 20px;
+    padding: 1%;
+}
+.style1{
+	    text-align: center;
+}
+.imgsmall{
+	    margin: 10px 0;
+	    width: 17px;
+}
+.button12{
+	    padding: 6px 30px;
+    font-size: 16px;
+}
+ }
+  @media (min-width: 768px){
+.input1{
+	 outline:0;
+    background: #edf1f5;
+    border: none;
+    width:65%;
+   font-size: 20px;
+    padding: 1%;
+}
+ }
+.sales-lead-bg {
+    padding: 2% 2%;
+    border-bottom: 2px solid #00bfd6;
+    border-top: 2px solid #00bfd6;
+    border-left: 1px solid #00bfd6;
+    border-right: 1px solid #00bfd6;
+}
+.white-box {
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+.style1{
+	    border-bottom: 1px solid #00bfd6;
+    padding: 1% 0% 3%;
+}
+.font1{
+	
+    padding-bottom: 20px;
+    padding-top: 20px;
+    font-size: 20px;
+    text-transform: uppercase;
+    color: #00bfd6;
+}
+hr {
+    border-color: rgb(206, 203, 203);
+}
+.navbar-header {
+    width: 100%;
+    background: #00bfd6 !important;
+    border: 0;
+}
+.fix-sidebar .top-left-part {
+    background: #00bfd6 !important;
+}

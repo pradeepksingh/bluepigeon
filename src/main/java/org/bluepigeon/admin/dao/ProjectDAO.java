@@ -4868,13 +4868,30 @@ public class ProjectDAO {
 	public ResponseMessage saveSource(Source source){
 		ResponseMessage responseMessage = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		Session session = hibernateUtil.openSession();
-		session.beginTransaction();
-		session.save(source);
-		session.getTransaction().commit();
-		session.close();
-		responseMessage.setStatus(1);
-		responseMessage.setMessage("Source added successfully");
+		if(source.getName().equals(null) && source.getName().isEmpty() || source.getName().trim().length() == 0){
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Please Enter source name");
+		}else{
+			String hql = "from Source where name=:name and builder.id = :builder_id";
+			Session  sourceSession = hibernateUtil.openSession();
+			Query sourceQuery = sourceSession.createQuery(hql);
+			sourceQuery.setParameter("name", source.getName());
+			sourceQuery.setParameter("builder_id", source.getBuilder().getId());
+			List<Source> result = sourceQuery.list();
+			sourceSession.close();
+			if(result.size() > 0){
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("Source name already exists");
+			}else{
+				Session session = hibernateUtil.openSession();
+				session.beginTransaction();
+				session.save(source);
+				session.getTransaction().commit();
+				session.close();
+				responseMessage.setStatus(1);
+				responseMessage.setMessage("Source added successfully");
+			}
+		}
 		return responseMessage;
 	}
 	/**
@@ -5767,5 +5784,19 @@ public class ProjectDAO {
     	return buyer;
     }
     
+    /**
+     * 
+     * @param builderId
+     * @return List<Source>
+     */
+    public List<Source> getSourceListByBuilderId(int builderId){
+    	String hql = " from Source where builder.id = :builder_id";
+    	HibernateUtil hibernateUtil = new HibernateUtil();
+    	Session session = hibernateUtil.openSession();
+    	Query query = session.createQuery(hql);
+    	query.setParameter("builder_id", builderId);
+    	List<Source> sourceList =  query.list();
+    	return sourceList;
+    }
     
 }
