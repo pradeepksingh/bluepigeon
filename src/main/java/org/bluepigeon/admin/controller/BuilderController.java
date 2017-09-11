@@ -1,5 +1,6 @@
 package org.bluepigeon.admin.controller;
 
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatListData;
+import org.bluepigeon.admin.data.InboxBuyerData;
 //import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
@@ -53,12 +55,15 @@ import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.BuildingAmenityInfo;
 import org.bluepigeon.admin.model.BuildingAmenityWeightage;
 import org.bluepigeon.admin.model.BuildingOfferInfo;
+import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
 import org.bluepigeon.admin.model.FlatAmenityWeightage;
 import org.bluepigeon.admin.model.FlatPaymentSchedule;
+import org.bluepigeon.admin.model.InboxMessage;
 import org.bluepigeon.admin.model.Locality;
+import org.bluepigeon.admin.model.ProjectImageGallery;
 import org.bluepigeon.admin.model.State;
 import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -488,5 +493,70 @@ public class BuilderController {
 			
 		}
 		return new BuilderDetailsDAO().getBookedBuyerList(empId,projectId,name,contactNumber);
+	}
+	
+	@POST
+	@Path("/inbox/new")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage saveNewInbox(
+			@FormDataParam("filter_buyer_id[]") List<FormDataBodyPart> filter_buyer_id,
+			@FormDataParam("subject") String subject,
+			@FormDataParam("emp_id") int empId,
+			
+			@FormDataParam("message") String message, 
+			@FormDataParam("attachment[]") List<FormDataBodyPart> attachment
+			
+	) {
+		ResponseMessage msg = new ResponseMessage();
+		 List<InboxMessage> inboxMessageList = new ArrayList<InboxMessage>();
+		
+		if(filter_buyer_id.size() > 0){
+			
+		     for(FormDataBodyPart buyers : filter_buyer_id){
+		    	 if(buyers.getValueAs(Integer.class) != null && buyers.getValueAs(Integer.class) != 0){
+		    		 Date now = new Date();
+		    		 Buyer buyer = new ProjectDAO().getBuyerById(buyers.getValueAs(Integer.class));
+		    		 InboxMessage inboxMessage = new InboxMessage();
+		    		 inboxMessage.setSubject(subject);
+		 			 inboxMessage.setEmpId(empId);
+		 			 inboxMessage.setMessage(message);
+		    		 inboxMessage.setBuyer(buyer);
+		    		 inboxMessage.setBuilderProject(buyer.getBuilderProject());
+		    		 inboxMessage.setImDate(now);
+		    		 try {
+		 				//for inserting attachment.
+		 				if (attachment.size() > 0) {
+		 					for(int i=0 ;i < attachment.size();i++)
+		 					{
+		 						if(attachment.get(i).getFormDataContentDisposition().getFileName() != null && !attachment.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+		 							String gallery_name = attachment.get(i).getFormDataContentDisposition().getFileName();
+		 							long millis = System.currentTimeMillis() % 1000;
+		 							gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+		 							gallery_name = "images/project/images/"+gallery_name;
+		 							String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+		 							//System.out.println("for loop image path: "+uploadGalleryLocation);
+		 							this.imageUploader.writeToFile(attachment.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+		 							inboxMessage.setAttachment(gallery_name);
+		 						}
+		 					}
+		 				}
+		 			} catch(NullPointerException e){
+		 				inboxMessage.setAttachment("");
+		 			}
+		 			catch(Exception e) {
+		 				msg.setStatus(0);
+		 				msg.setMessage("Unable to save message");
+		 				return msg;
+		 			}
+		    		 inboxMessageList.add(inboxMessage);
+		    	 }
+		    	 msg = new BuilderDetailsDAO().saveInboxMessages(inboxMessageList);
+		     }
+		} else {
+			msg.setMessage("Failed to save message.");
+			msg.setStatus(0);
+		}
+		return msg;
 	}
 }

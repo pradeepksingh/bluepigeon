@@ -1,3 +1,6 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="org.bluepigeon.admin.model.InboxMessage"%>
+<%@page import="org.bluepigeon.admin.data.InboxBuyerData"%>
 <%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
 <%@page import="org.bluepigeon.admin.model.Source"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
@@ -21,10 +24,9 @@
 	int type_size = 0;
 	int city_size = 0;
 	int projectId = 0;
- 	List<ProjectData> builderProjects =null;
- 	List<Source> sourceList = null;
- 	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
- 	projectId = Integer.parseInt(request.getParameter("project_id"));
+ 	List<InboxBuyerData> buyerData = null;
+ 	List<InboxMessage> inboxMessageList = null;
+ 	int empId = 0;
    	session = request.getSession(false);
    	BuilderEmployee builder = new BuilderEmployee();
    	int builder_id = 0;
@@ -35,21 +37,12 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
-			if(builder_id > 0){
-				builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
-				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
-				if(builderProjects != null){
-					if(builderProjects.size()>0)
-				    	project_size = builderProjects.size();
-				}
-			}
-			if(builderPropertyTypes != null){
-			 	if(builderPropertyTypes.size()>0)
-			 		type_size = builderPropertyTypes.size();
+			empId = builder.getId();
+			if(empId > 0){
+				buyerData = new ProjectDAO().getAllBuyersByBuilderEmployee(builder);
+				inboxMessageList = new ProjectDAO().getInboxMessagesByEmpId(empId);
 			}
 		}
-		
-		
    }
    
 %>
@@ -74,17 +67,20 @@
     <link rel="stylesheet" type="text/css" href="../css/custom10.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-     <script src="../js/bootstrap-multiselect.js"></script>
-    <link rel="stylesheet" href="../css/bootstrap-multiselect.css">
-    <script>
-    $(function() {
-        $("#sidebar1").load("../partial/sidebar.jsp");
-        $("#header").load("../partial/header.jsp");
-   	    $("#footer").load("../partial/footer.jsp");
-    });
-    </script>
+      <script src="../js/jquery.form.js"></script>
+ <script type="text/javascript" src="../js/selectize.min.js"></script>
+    <style>
+    .selectize-input{
+	
+	padding:4px 8px 7px !important;
+	margin-top:3px !important;
+	font-size:18px !important;
+	background-color: #fafafa !important;
+}
+    </style>
     <script>
     function uploadFile(target) {
     	document.getElementById("file-name").innerHTML = target.files[0].name;
@@ -100,10 +96,13 @@
     <div id="wrapper">
         <!-- Top Navigation -->
         <div id="header">
+        <%@include file="../partial/header.jsp"%>
         </div>
         <!-- End Top Navigation -->
         <!-- Left navbar-header -->
-        <div id="sidebar1"> </div>
+        <div id="sidebar1"> 
+        <%@include file="../partial/sidebar.jsp"%>
+        </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper" style="min-height: 2038px;">
@@ -128,65 +127,36 @@
                  <div class="white-box">
 	               <div class="bg11">
 	                 <!-- inbox -->
+	                 <%
+						SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
+	                   SimpleDateFormat dt2 = new SimpleDateFormat("h:m a");
+					 %>
+	                 <%if(inboxMessageList != null){
+	                	 for(InboxMessage inboxMessage : inboxMessageList){
+	                	 %>
 	                  <div class="border-lead1">
 		                  <div class="row">
 		                    <div class="col-md-2 col-sm-2 col-xs-2 user">
-		                      <img src="../images/user.png" alt="user profile"  class="img-responsive"/>
+		                    <%if(inboxMessage.getBuyer().getPhoto()!= null){ %>
+		                      <img src="${baseUrl}/<%out.print(inboxMessage.getBuyer().getPhoto());%>" alt="user profile"  class="img-responsive"/>
+		                      <%}else{ %>
+		                       <img src="../images/user.png" alt="user profile"  class="img-responsive"/>
+		                      <%} %>
 		                    </div>
 		                    <div class="col-md-9 col-sm-9 col-xs-9 left1">
-		                      <h3>Builder Name</h3>
+		                      <h3><%out.print(inboxMessage.getBuyer().getName()); %></h3>
 		                      <div class="inline">
-		                          <h6>25th July 2017</h6>
-		                          <h6>11:20 pm</h6>
+		                          <h6><% if(inboxMessage.getImDate() != null) { out.print(dt1.format(inboxMessage.getImDate()));} %></h6>
+		                          <h6><% if(inboxMessage.getImDate() != null) { out.print(dt2.format(inboxMessage.getImDate()));} %></h6>
 		                      </div>
-		                      <p>Open spaces to breath Pure, Unique</p>
+		                      <p><%out.print(inboxMessage.getSubject()); %></p>
 		                    </div>
 		                    <div class="col-md-1 col-sm-1 col-xs-1 arrow">
 		                       <img src="../images/status-green.png" alt="status"  class="img-responsive"/>
 		                    </div>
 		                  </div>
 	                  </div>
-	                 <!-- inbox ends -->
-	                  <!-- inbox -->
-	                  <div class="border-lead1">
-		                  <div class="row">
-		                    <div class="col-md-2 col-sm-2 col-xs-2 user">
-		                      <img src="../images/user.png" alt="user profile"  class="img-responsive"/>
-		                    </div>
-		                    <div class="col-md-9 col-sm-9 col-xs-9 left1">
-		                      <h3>Builder Name</h3>
-		                      <div class="inline">
-		                          <h6>25th July 2017</h6>
-		                          <h6>11:20 pm</h6>
-		                      </div>
-		                      <p>Open spaces to breath Pure, Unique</p>
-		                    </div>
-		                    <div class="col-md-1 col-sm-1 col-xs-1 arrow">
-		                       <img src="../images/status-green.png" alt="status"  class="img-responsive"/>
-		                    </div>
-		                  </div>
-	                  </div>
-	                 <!-- inbox ends -->
-	                  <!-- inbox -->
-	                  <div class="border-lead1">
-		                  <div class="row">
-		                    <div class="col-md-2 col-sm-2 col-xs-2 user">
-		                      <img src="../images/user.png" alt="user profile"  class="img-responsive"/>
-		                    </div>
-		                    <div class="col-md-9 col-sm-9 col-xs-9 left1">
-		                      <h3>Builder Name</h3>
-		                      <div class="inline">
-		                          <h6>25th July 2017</h6>
-		                          <h6>11:20 pm</h6>
-		                      </div>
-		                      <p>Open spaces to breath Pure, Unique</p>
-		                    </div>
-		                    <div class="col-md-1 col-sm-1 col-xs-1 arrow">
-		                       <img src="../images/status-red.png" alt="status"  class="img-responsive"/>
-		                    </div>
-		                  </div>
-	                  </div>
-	                 <!-- inbox ends -->
+	                  <%}} %>
 	              </div>
                </div>
             </div>
@@ -205,33 +175,45 @@
 					   </div>
 				    </div>
 				  	<div class="row">
-				  	   <form class="addlead1 addlead">
+				  	   <form class="addlead1 addlead" action="" method="post" id="addinbox" name="addinbox"  enctype="multipart/form-data">
+				  	   		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(empId); %>" />
 		                     <div class="">
 		                       <div class="form-group row">
 									<label for="example-text-input" class="col-5 col-form-label"> To</label>
 									  <div class="col-7">
-										 <input class="form-control" type="text" value="" id="" placeholder="">
+										<select id="filter_buyer_id" name="filter_buyer_id[]" multiple  data-style="form-control">
+	                        			<% if(buyerData != null){ 
+	                        				for(InboxBuyerData inboxBuyerData : buyerData){
+	                        			%>
+	                       					<option value="<%out.print(inboxBuyerData.getId());%>"><%out.print(inboxBuyerData.getName()); %></option>
+	                       					<%} }%>
+	                       	 			</select>
 									  </div>
 								  </div>
 		                         <div class="form-group row">
 									<label for="example-text-input" class="col-5 col-form-label"> Subject</label>
 									  <div class="col-7">
-										 <input class="form-control" type="text" value="" id="" placeholder="">
+									  	<div>
+											<input class="form-control" type="text"  id="subject" name="subject" placeholder="">
+									  	</div>
+									  	<div class="messageContainer"></div>
 									  </div>
 								  </div>
 								  <div class="form-group row">
 									 <label for="example-search-input" class="col-5 col-form-label">Message</label>
 										<div class="col-7">
-										  <textarea>
-										  
-										  </textarea>
-										 </div>
+											<div>
+												  <textarea id="message" name="message">
+												  </textarea>
+											 	  <div class="messageContainer"></div>
+										 	  </div>
+										</div>
 								    </div>
 									<div class="form-group row">
 									   <label for="example-search-input" class="col-5 col-form-label">Attachment</label>
 										  <div class="col-7">
 										     <div class="inputfile-box">
-											   <input type="file" id="file" class="inputfile" onchange='uploadFile(this)'>
+											   <input type="file" id="file" name="attachment[]" class="inputfile" onchange='uploadFile(this)'>
 											   <label for="file">
 											     <span id="file-name" class="file-box"></span>
 											     <span class="file-button">
@@ -244,8 +226,8 @@
 									 </div>
 		                         </div>
 		                     <div class="center">
-		                        <br>
-							  	<button type="button" class="button1">Save</button>
+		                        <br/>
+							  	<button type="submit" class="button1">Save</button>
 							 </div>
 		                </form>	
 				   </div>
@@ -256,6 +238,97 @@
        <!--  modal pop up ends -->
     </div>
     <!-- /.container-fluid -->
-    <footer id="footer"> </footer>
+    <div id="sidebar1"> 
+	     <%@include file="../partial/footer.jsp"%>
+	</div> 
   </body>
 </html>
+
+<script>
+$select_project = $("#filter_buyer_id").selectize({
+	persist: false,
+	 onChange: function(value) {
+		 //getBookedBuyerFilterList();
+	 },
+	 onDropdownOpen: function(value){
+    	 var obj = $(this);
+		var textClear =	 $("#filter_buyer_id :selected").text();
+    	 if(textClear.trim() == "Enter buyer Name"){
+    		 obj[0].setValue("");
+    	 }
+     }
+});
+
+$('#addinbox').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	'filter_buyer_id[]': {
+            validators: {
+                notEmpty: {
+                    message: 'Please select buyer'
+                }
+            }
+        },
+        
+        subject: {
+            validators: {
+                notEmpty: {
+                    message: 'Please enter subject'
+                }
+            }
+        },
+        message: {
+            validators: {
+                notEmpty: {
+                    message: 'Please enter message'
+                }
+            }
+        }
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	updateProjectPrice();
+	
+});
+
+function updateProjectPrice() {
+	var options = {
+	 		target : '#pricingresponse', 
+	 		beforeSubmit : showPriceRequest,
+	 		success :  showPriceResponse,
+	 		url : '${baseUrl}/webapi/builder/inbox/new',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#addinbox').ajaxSubmit(options);
+}
+
+function showPriceRequest(formData, jqForm, options){
+	$("#pricingresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+
+function showPriceResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#pricingresponse").removeClass('alert-success');
+       	$("#pricingresponse").addClass('alert-danger');
+		$("#pricingresponse").html(resp.message);
+		$("#pricingresponse").show();
+  	} else {
+  		$("#pricingresponse").removeClass('alert-danger');
+        $("#pricingresponse").addClass('alert-success');
+        $("#pricingresponse").html(resp.message);
+        $("#pricingresponse").show();
+        alert(resp.message);
+        window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
+  	}
+}
+</script>

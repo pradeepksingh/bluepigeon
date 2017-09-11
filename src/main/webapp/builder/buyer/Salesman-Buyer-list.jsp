@@ -73,6 +73,15 @@ int emp_id = 0;
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
      <script type="text/javascript" src="../js/selectize.min.js"></script>
+     <style>
+     .selectize-input{
+	border:2px solid #00bfd6;
+	padding:20px 8px 25px;
+	margin-top:7px;
+	font-size:18px;
+	background-color: #fafafa !important;
+}
+     </style>
 </head>
 
 <body class="fix-sidebar">

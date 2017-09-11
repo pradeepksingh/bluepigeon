@@ -21,6 +21,7 @@ import org.bluepigeon.admin.model.BuilderLogo;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Country;
+import org.bluepigeon.admin.model.InboxMessage;
 import org.bluepigeon.admin.model.ProjectImageGallery;
 import org.bluepigeon.admin.data.BarGraphData;
 import org.bluepigeon.admin.data.BookingFlatList;
@@ -1452,5 +1453,19 @@ public class BuilderDetailsDAO {
 		}
 		
 		return result;
+	}
+	
+	public ResponseMessage saveInboxMessages(List<InboxMessage> inboxMessageList){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(InboxMessage inboxMessage : inboxMessageList)
+			session.save(inboxMessage);
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Message saved succefully");
+		return responseMessage;
 	}
 }

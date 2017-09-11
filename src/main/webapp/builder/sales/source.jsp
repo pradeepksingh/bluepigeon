@@ -118,8 +118,8 @@ if(session!=null)
   </div>
     <!-- /.container-fluid -->
    <div id="sidebar1"> 
-	       <%@include file="../partial/footer.jsp"%>
-		</div> 
+	     <%@include file="../partial/footer.jsp"%>
+	</div> 
   </body>
 </html>
 <script>
@@ -151,12 +151,13 @@ function showAddResponse(resp, statusText, xhr, $form){
 	if(resp.status == '0') {
 		$("#response").removeClass('alert-success');
        	$("#response").addClass('alert-danger');
-		$("#response").html(resp.message);
+		//$("#response").html(resp.message);
 		$("#response").show();
+		alert(resp.message);
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
-        $("#response").html(resp.message);
+        //$("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
         window.location.href = "${baseUrl}/builder/sales/source.jsp";

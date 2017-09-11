@@ -103,7 +103,7 @@
                     <% if(emp_access_id == 7){ %>
                     <li> <a href="javascript:void(0);" class="waves-effect"><!-- <i class="ti-layout fa-fw"></i--><span class="hide-menu"> Salesman<span class="fa arrow"></span></span></a>
 					  <ul class="nav nav-second-level">
-							<li> <a href="javascript:void(0)">Inbox</a></li>
+							<li> <a href="${baseUrl }/builder/inbox/inbox.jsp">Inbox</a></li>
                             <li> <a href="${baseUrl }/builder/leads/leadlist.jsp">Leads</a></li>
                             <li> <a href="${baseUrl }/builder/buyer/Salesman-Buyer-list.jsp">Buyer List</a></li>
                             <li> <a href="${baseUrl }/builder/cancellation/Salesman-Cancellation-list.jsp">Cancellation List</a></li>
@@ -116,13 +116,13 @@
                         <li class="nav-small-cap m-t-10">--Professional--</li>
                          <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Sales<span class="fa arrow"></span></span></a>
                          <ul class="nav nav-second-level">
-                           	  <li> <a href="javascript:void(0)">Inbox</a></li>
+                           	  <li> <a href="${baseUrl }/builder/inbox/inbox.jsp">Inbox</a></li>
                               <li> <a href="${baseUrl }/builder/leads/leadlist.jsp">Leads</a></li>
                               <li> <a href="${baseUrl }/builder/buyer/Salesman-Buyer-list.jsp">Buyer List</a></li>
                               <li> <a href="${baseUrl }/builder/cancellation/Salesman-Cancellation-list.jsp">Cancellation List</a></li>
                               <li> <a href="${baseUrl }/builder/leads/Salesman_add_lead.jsp">Add Lead</a></li>
                               <li> <a href="${baseUrl }/builder/sales/source.jsp">Add Source</a></li>
-                              <li> <a href="${baseUrl }/builder/sales/source-list.jsp">Manage Source</a></li>
+<%--                               <li> <a href="${baseUrl }/builder/sales/source-list.jsp">Manage Source</a></li> --%>
                           </ul>
                    </li>
                     <% }%>

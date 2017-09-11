@@ -2271,13 +2271,7 @@ padding:7%;
     padding: 25px;
     margin-bottom: 15px;
 }
-.selectize-input{
-	border:2px solid #00bfd6 !important;
-	padding:20px 8px 25px !important;
-	margin-top:7px !important;
-	font-size:18px !important;
-	background-color: #fafafa !important;
-}
+
 
     #filter_project_id select{
     width: 268px;
@@ -2295,4 +2289,4 @@ padding:7%;
 	border-color: #00bfd6 transparent transparent transparent !important;
 	background-image:url(../images/down-arrow.png);
 }
-
+ 

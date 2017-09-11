@@ -307,7 +307,7 @@
 						 	 	</div>
 						  </div>
 						  <%}
-	                        else if(access_id == 7){%>
+	                        else if(access_id == 5 || access_id == 7){%>
 	                      <div class="row">
                            	  <div class="col-md-6 left"> 
                            		   <a href="${baseUrl}/builder/buyer/booking.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
