@@ -524,8 +524,8 @@
 						    <div id="menu4" class="tab-pane">
 							    <form id="addbuyerdocs" name="addbuyerdocs" action="" method="post" enctype="multipart/form-data">
 							    	<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
+							    	<div class="col-sm-12">
 							    	<% for(BuyerUploadDocuments buyerUploadDocument :buyerUploadDocuments) { %>
-							     	<div class="col-sm-12">
 									    <div class="form-group row">
 									    	<input type="hidden" name="doc_id[]" value="<% out.print(buyerUploadDocument.getId()); %>" />
 											<input type="hidden" name="doc_name[]" value="<% out.print(buyerUploadDocument.getName()); %>" />
@@ -551,14 +551,15 @@
 								</form>
 						    </div>
 					 	 </div>
-	                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 tabcontent">
+                  </div>
+                  <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 tabcontent">
 	                    <%if(bookingFlatList != null){ %>
 	                     <div class="bg1">
 	                     	<div class="user-profile">
 					      	<%if(bookingFlatList.getBuyerPhoto()!="" && bookingFlatList.getBuyerPhoto() != null){ %>
 						     	<img src="${baseUrl}/<%out.print(bookingFlatList.getBuyerPhoto()); %>" alt="Buyer image" class="custom-img">
+						     	<img src="../images/camera_icon.PNG" alt="camera " class="camera"/>
 						   	<%}%>	
-					        	<img src="../images/camera_icon.PNG" alt="camera " class="camera"/>
 					          	<p><b><%out.print(bookingFlatList.getBuyerName()); %></b></p>
 					          	<p class="p-custom"><%out.print(bookingFlatList.getBuildingName()); %>-<%out.print(bookingFlatList.getFlatNo()); %>, <%out.print(bookingFlatList.getProjectName()); %></p>
 					          	<hr>
@@ -581,7 +582,6 @@
 						 </div>
 						 <%} %>
 	                  </div>
-                  </div>
                 </div>
               </div>
            </div>
