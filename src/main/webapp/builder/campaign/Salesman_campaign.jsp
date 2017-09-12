@@ -122,6 +122,7 @@
                <div class="white-box">
                    <div class="row">
                    <% try{
+                	   int count=1;
                    if(campaignListNews != null){ 
                        		for(CampaignListNew campaignListNew : campaignListNews){
                        %>
@@ -129,9 +130,12 @@
 	                       <div class="image">
 		                        <% if(campaignListNew.getImage() != ""  && campaignListNew.getImage() !=null){ %>
 		                       <img src="${baseUrl}/builder/<%out.print(campaignListNew.getImage()); %>" alt="Campaign image" />
-		                       <%}else{ %>
-		                        <img src="" alt="Campaign image" />
-		                       <%} %>
+		                       <%}else{ if(count%2 ==0){%>
+		                        <img src="../images/images.jpg" alt="Campaign image" />
+		                       <%} else{
+		                       %>
+		                        <img src="../images/images1.jpg" alt="Campaign image" />
+		                        <%}} %>
 		                       <div class="overlay">
 			                       <div class="row">
 				                       <div class="col-md-6 col-sm-9 col-xs-9 left">
@@ -171,7 +175,7 @@
 	                       </div>
                        </div>
                        
-                   <% }}else{
+                   <% count++;}}else{
                 	   out.print("No Campaign is running..");
                 	   }}catch(Exception e){ %>
                    }
