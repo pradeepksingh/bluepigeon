@@ -70,18 +70,10 @@ int emp_id = 0;
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
       <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
+       <link rel="stylesheet" type="text/css" href="../css/buyerlist.css" />
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
      <script type="text/javascript" src="../js/selectize.min.js"></script>
-     <style>
-     .selectize-input{
-	border:2px solid #00bfd6;
-	padding:20px 8px 25px;
-	margin-top:7px;
-	font-size:18px;
-	background-color: #fafafa !important;
-}
-     </style>
 </head>
 
 <body class="fix-sidebar">

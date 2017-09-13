@@ -2284,9 +2284,4 @@ padding:7%;
     background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png) no-repeat right #ddd;
     -webkit-appearance: none;
     background-position-x: 244px;
-}
-.selectize-control.single .selectize-input:after{
-	border-color: #00bfd6 transparent transparent transparent !important;
-	background-image:url(../images/down-arrow.png);
-}
- 
+} 

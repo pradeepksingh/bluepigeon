@@ -31,6 +31,7 @@ import org.bluepigeon.admin.data.FloorPanoData;
 import org.bluepigeon.admin.data.FloorPojo;
 import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.InboxBuyerData;
+import org.bluepigeon.admin.data.InboxMessageData;
 import org.bluepigeon.admin.data.LeadList;
 import org.bluepigeon.admin.data.NewProjectList;
 import org.bluepigeon.admin.data.PaymentInfoData;
@@ -5852,6 +5853,44 @@ public List<InboxMessage> getInboxMessagesByEmpId(int empId){
 	Query query = session.createQuery(hql);
 	query.setParameter("emp_id",empId);
 	List<InboxMessage> result = query.list();
+	return result;
+}
+
+public List<InboxMessageData> getBookedBuyerList(int empId){
+	List<InboxMessageData> result = null;
+	String hql = "SELECT b.name as name, b.photo as image, im.subject as subject, im.im_date as date  ";
+	String where = "";
+	String hqlnew = "from BuilderEmployee where id = "+empId;
+	HibernateUtil hibernateUtil = new HibernateUtil();
+	Session sessionnew = hibernateUtil.openSession();
+	Query querynew = sessionnew.createQuery(hqlnew);
+	List<BuilderEmployee> employees = querynew.list();
+	BuilderEmployee builderEmployee = employees.get(0);
+	sessionnew.close();
+	if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
+		hql += " FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
+				+ "left join builder_project as bproject on bproject.id = b.project_id "
+				+ "left join allot_project as project on project.id = b.project_id  "
+				+ "WHERE ";
+				where+= "im.emp_id="+builderEmployee.getId();
+	}else{
+		hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
+				+ "left join builder as build on build.id = b.builder_id  "
+				+ "WHERE ";
+				where+= "b.builder_id="+builderEmployee.getBuilder().getId();
+	}
+	hql += where + " AND bproject.status=1 AND b.is_primary=1 AND b.is_deleted=0 ORDER BY im.id desc";
+	try {
+	Session session = hibernateUtil.getSessionFactory().openSession();
+	Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(InboxMessageData.class));
+	System.err.println(hql);
+	
+	 result = query.list();
+	
+	} catch(Exception e) {
+		//
+	}
+	
 	return result;
 }
 }

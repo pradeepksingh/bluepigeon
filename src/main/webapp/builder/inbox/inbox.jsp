@@ -1,3 +1,5 @@
+<%@page import="java.util.Date"%>
+<%@page import="org.bluepigeon.admin.data.InboxMessageData"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="org.bluepigeon.admin.model.InboxMessage"%>
 <%@page import="org.bluepigeon.admin.data.InboxBuyerData"%>
@@ -25,12 +27,12 @@
 	int city_size = 0;
 	int projectId = 0;
  	List<InboxBuyerData> buyerData = null;
- 	List<InboxMessage> inboxMessageList = null;
+ 	List<InboxMessageData> inboxMessageList = null;
  	int empId = 0;
    	session = request.getSession(false);
    	BuilderEmployee builder = new BuilderEmployee();
    	int builder_id = 0;
-   	
+   	Date date = new Date();
    	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -40,7 +42,7 @@
 			empId = builder.getId();
 			if(empId > 0){
 				buyerData = new ProjectDAO().getAllBuyersByBuilderEmployee(builder);
-				inboxMessageList = new ProjectDAO().getInboxMessagesByEmpId(empId);
+				inboxMessageList = new ProjectDAO().getBookedBuyerList(empId);
 			}
 		}
    }
@@ -111,11 +113,11 @@
                 <h1>Inbox</h1>
                    <div class="row">
                       <div class="col-md-8 col-sm-6 col-xs-12">
-                         <form class="navbar-form lead-search" role="search">
+                         <form class="navbar-form lead-search" role="search" method="post">
 						    <div class="input-group add-on">
 						      <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
 						      <div class="input-group-btn">
-						        <button class="btn btn-default" type="submit"><img src="../images/search.png"/></button>
+						        <button class="btn btn-default" id="leadSearch" type="button"><img src="../images/search.png"/></button>
 						      </div>
 						    </div>
 					     </form>
@@ -131,23 +133,24 @@
 						SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
 	                   SimpleDateFormat dt2 = new SimpleDateFormat("h:m a");
 					 %>
+					 <div id="inboxList">
 	                 <%if(inboxMessageList != null){
-	                	 for(InboxMessage inboxMessage : inboxMessageList){
+	                	 for(InboxMessageData inboxMessage : inboxMessageList){
 	                	 %>
-	                  <div class="border-lead1">
+	                  	<div class="border-lead1">
 		                  <div class="row">
 		                    <div class="col-md-2 col-sm-2 col-xs-2 user">
-		                    <%if(inboxMessage.getBuyer().getPhoto()!= null){ %>
-		                      <img src="${baseUrl}/<%out.print(inboxMessage.getBuyer().getPhoto());%>" alt="user profile"  class="img-responsive"/>
+		                    <%if(inboxMessage.getImage()!= null){ %>
+		                      <img src="${baseUrl}/<%out.print(inboxMessage.getImage());%>" alt="user profile"  class="img-responsive"/>
 		                      <%}else{ %>
 		                       <img src="../images/user.png" alt="user profile"  class="img-responsive"/>
 		                      <%} %>
 		                    </div>
 		                    <div class="col-md-9 col-sm-9 col-xs-9 left1">
-		                      <h3><%out.print(inboxMessage.getBuyer().getName()); %></h3>
+		                      <h3><%out.print(inboxMessage.getName()); %></h3>
 		                      <div class="inline">
-		                          <h6><% if(inboxMessage.getImDate() != null) { out.print(dt1.format(inboxMessage.getImDate()));} %></h6>
-		                          <h6><% if(inboxMessage.getImDate() != null) { out.print(dt2.format(inboxMessage.getImDate()));} %></h6>
+		                          <h6><% if(inboxMessage.getDate() != null) { out.print(dt1.format(inboxMessage.getDate()));} %></h6>
+		                          <h6><% if(inboxMessage.getDate() != null) { out.print(dt2.format(inboxMessage.getDate()));} %></h6>
 		                      </div>
 		                      <p><%out.print(inboxMessage.getSubject()); %></p>
 		                    </div>
@@ -155,12 +158,14 @@
 		                       <img src="../images/status-green.png" alt="status"  class="img-responsive"/>
 		                    </div>
 		                  </div>
-	                  </div>
+	                  	</div>
 	                  <%}} %>
+	                  </div>
 	              </div>
                </div>
             </div>
        </div>
+       <input type="hidden" id="cdate" name="cdate" value=""/>
        <!-- modal pop up -->
         <div class="modal fade" id="myModal2" role="dialog">
 		   <div class="modal-dialog inbox">
@@ -203,10 +208,10 @@
 									 <label for="example-search-input" class="col-5 col-form-label">Message</label>
 										<div class="col-7">
 											<div>
-												  <textarea id="message" name="message">
-												  </textarea>
-											 	  <div class="messageContainer"></div>
+											  <textarea id="message" name="message">
+											  </textarea>
 										 	  </div>
+										 	  <div class="messageContainer"></div>
 										</div>
 								    </div>
 									<div class="form-group row">
@@ -245,6 +250,9 @@
 </html>
 
 <script>
+
+
+
 $select_project = $("#filter_buyer_id").selectize({
 	persist: false,
 	 onChange: function(value) {
@@ -330,5 +338,71 @@ function showPriceResponse(resp, statusText, xhr, $form){
         alert(resp.message);
         window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
   	}
+}
+
+$("#leadSearch").click(function(){
+	getBuyerNames();
+});
+
+function getBuyerNames(){
+	var emp_id = <%out.print(empId);%>
+	var nameorNumber = $("#srch-term").val();
+	$("#inboxList").empty();
+	$.post("${baseUrl}/webapi/builder/filter/inbox",{emp_id: emp_id, nameOrNumber : nameorNumber },function(data){
+		   if(data == ""){
+			   $("#inboxList").empty();
+			   $("#inboxList").append("<h2><center>No Records Found</center></h2>");
+		   }
+			$(data).each(function(index){
+				var image = '';
+				var thour = '';
+				var tmin ='';
+				var amp ='';
+				var month ='';
+				var ndate ='';
+				var nyear = '';
+				var nmonth = '';
+				var  locale = "en-us";
+				if(data[index].image != ''){
+					image = '${baseUrl}/'+data.image;
+				}
+				if(data[index].date != ' '){
+					var strDate = data[index].date;
+					var newdate = new Date(strDate);
+					var adate = new Date(strDate);
+					thour = newdate.getHours();
+					tmin = newdate.getMinutes();
+					amp = (thour >=12)?"PM":"AM";
+					if(thour >=12){
+						thour = thour-12;
+					}
+					//get only year in number
+					nyear = newdate.getFullYear();
+					//get only date in number
+			        ndate = newdate.getDate();
+					//get month name 
+			       nmonth = newdate.toLocaleString(locale, { month: "short" });
+				}
+				 htmlBookedBuyers ='<div class="border-lead1">'
+	                  	+'<div class="row">'
+                 		+'<div class="col-md-2 col-sm-2 col-xs-2 user">'
+                   		+'<img src="'+image+'" alt="user profile"  class="img-responsive"/>'
+                 		+'</div>'
+                 		+'<div class="col-md-9 col-sm-9 col-xs-9 left1">'
+                   		+'<h3>'+data[index].name+'</h3>'
+                   		+'<div class="inline">'
+                        +'<h6>'+ndate+' '+nmonth+' '+nyear+'</h6>'
+                        +'<h6>'+thour+':'+tmin+' '+amp+'</h6>'
+                   		+'</div>'
+                   		+'<p>'+data[index].subject+'</p>'
+                 		+'</div>'
+                 		+'<div class="col-md-1 col-sm-1 col-xs-1 arrow">'
+                    	+'<img src="../images/status-green.png" alt="status"  class="img-responsive"/>'
+                 		+'</div>'
+               			+'</div>'
+           				+'</div>';
+         		$("#inboxList").append(htmlBookedBuyers);
+			});
+	});
 }
 </script>

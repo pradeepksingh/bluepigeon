@@ -32,6 +32,7 @@ import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.data.InboxBuyerData;
+import org.bluepigeon.admin.data.InboxMessageData;
 //import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
@@ -494,7 +495,16 @@ public class BuilderController {
 		}
 		return new BuilderDetailsDAO().getBookedBuyerList(empId,projectId,name,contactNumber);
 	}
-	
+	/**
+	 * save message
+	 * @author pankaj
+	 * @param filter_buyer_id
+	 * @param subject
+	 * @param empId
+	 * @param message
+	 * @param attachment
+	 * @return ResponseMessage
+	 */
 	@POST
 	@Path("/inbox/new")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -558,5 +568,31 @@ public class BuilderController {
 			msg.setStatus(0);
 		}
 		return msg;
+	}
+	
+	@POST
+	@Path("/filter/inbox")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<InboxMessageData> getBookedBuyerList(
+			@FormParam("emp_id") int empId,
+			@FormParam("nameOrNumber") String nameOrNumber
+		){
+		System.err.println("Emp ID :: "+empId);
+		int contactNumber = 0;
+		String name = "";
+		try{
+			contactNumber = Integer.parseInt(nameOrNumber);
+			System.err.println("contact Number :: "+contactNumber);
+		}catch(NumberFormatException e){
+			name = nameOrNumber;
+			contactNumber = 0;
+			System.err.println("Name :: "+name);
+		}catch(NullPointerException e){
+			
+		}
+		catch(Exception e){
+			
+		}
+		return new BuilderDetailsDAO().getBookedBuyerList(empId,name,contactNumber);
 	}
 }

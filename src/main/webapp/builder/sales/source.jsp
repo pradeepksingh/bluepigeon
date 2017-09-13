@@ -96,12 +96,12 @@ if(session!=null)
 	                    <%
 	                    if(sourceList != null){
 	                    for(Source source : sourceList){ %>
-		                    <div class="row">
+		                    <div class="row new">
 			                    <div class="col-md-10 col-sm-10 col-xs-8">
-			                       <h4><%out.print(source.getName()); %></h4>
+			                       <h4 contenteditable="false" class="h4name"><%out.print(source.getName()); %></h4>
 			                    </div>
-			                     <div class="col-md-1 col-sm-1 col-xs-2">
-			                       <img src="../images/glyphicons-31-pencil.png" class="imgsmall"/>
+			                     <div class="col-md-1 col-sm-1 col-xs-2" id="editsource_"<%out.print(source.getId()); %>>
+			                       <button onclick="updateSource(this);" class="glyphicon glyphicon-pencil" style="font-size:30px;font-weight:bold"></button>
 			                    </div>
 			                     <div class="col-md-1 col-sm-1 col-xs-2">
 			                       <img src="../images/glyphicons-17-bin.png" class="imgsmall"/>
@@ -123,6 +123,42 @@ if(session!=null)
   </body>
 </html>
 <script>
+
+function updateSource(d){
+	//var data = $(this).closest('h4').find('.h4name').html;
+	var data = $(d).closest('.new').find('.h4name');
+	 $(data).attr("contenteditable", "true").focus();
+	 $('#editsource_'+(d).valure).emp('#editsource').empty();
+	var html ='<button onclick="saveASource(this);" class="glyphicon glyphicon-refresh" style="font-size:30px;font-weight:bold"></button>';
+	//$(this).html(html);
+	$(d).html(html);
+}
+function saveASource(d){
+	//var data = $(this).closest('h4').find('.h4name').html;
+	
+	var dataf = $(d).val();
+	alert(dataf);
+	
+}
+
+function qtyChanged(a){
+	var qty = $(a).val();
+	var unit_price = $(a).closest('tr').find('.unit-price').val();
+	var tax_percent = $(a).closest('tr').find('.row-tax').val();
+	var or_tax =  tax_percent/100;
+	var orTax = or_tax +1;
+	var rate = unit_price/orTax;
+	var row_total = qty*unit_price;
+	var row_rate = qty*rate;
+	var row_tax = row_total - row_rate;
+	$(a).closest('tr').find('.tax-amt').val(row_tax);
+	$(a).closest('tr').find('.rowTotalPrice').val(row_rate);
+	updateTotals();
+}
+
+function update(id){
+	alert("Hello");
+}
 function addSource() {
 	
 	if($("#name").val() != ""){
