@@ -30,6 +30,8 @@ import org.bluepigeon.admin.data.FloorListData;
 import org.bluepigeon.admin.data.FloorPanoData;
 import org.bluepigeon.admin.data.FloorPojo;
 import org.bluepigeon.admin.data.FloorWeightageData;
+import org.bluepigeon.admin.data.InboxBuyerData;
+import org.bluepigeon.admin.data.InboxMessageData;
 import org.bluepigeon.admin.data.LeadList;
 import org.bluepigeon.admin.data.NewProjectList;
 import org.bluepigeon.admin.data.PaymentInfoData;
@@ -91,6 +93,7 @@ import org.bluepigeon.admin.model.FloorLayoutImage;
 import org.bluepigeon.admin.model.FloorImageGallery;
 import org.bluepigeon.admin.model.FloorPanoramicImage;
 import org.bluepigeon.admin.model.FloorWeightage;
+import org.bluepigeon.admin.model.InboxMessage;
 import org.bluepigeon.admin.model.NewProject;
 import org.bluepigeon.admin.model.ProjectAmenityWeightage;
 import org.bluepigeon.admin.model.ProjectImageGallery;
@@ -4872,7 +4875,7 @@ public class ProjectDAO {
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("Please Enter source name");
 		}else{
-			String hql = "from Source where name=:name and builder.id = :builder_id";
+			String hql = "from Source where name=:name and builder.id = :builder_id and isDeleted=0";
 			Session  sourceSession = hibernateUtil.openSession();
 			Query sourceQuery = sourceSession.createQuery(hql);
 			sourceQuery.setParameter("name", source.getName());
@@ -4900,7 +4903,7 @@ public class ProjectDAO {
 	 * @return List<Source>
 	 */
 	public List<Source> getAllSourcesByBuilderId(int builderId){
-		String hql = "from Source where builder.id = :builder_id";
+		String hql = "from Source where builder.id = :builder_id and isDeleted=0";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -4910,7 +4913,7 @@ public class ProjectDAO {
 	}
 	
 	public List<Source> getSourceById(int id){
-		String hql = "from Source where id = :id";
+		String hql = "from Source where id = :id and isDeleted=0";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -5785,12 +5788,13 @@ public class ProjectDAO {
     }
     
     /**
-     * 
+     * Get source name by builder id
+     * @author pankaj
      * @param builderId
      * @return List<Source>
      */
     public List<Source> getSourceListByBuilderId(int builderId){
-    	String hql = " from Source where builder.id = :builder_id";
+    	String hql = " from Source as s where builder.id = :builder_id and s.isDeleted=0 order by s.id DESC";
     	HibernateUtil hibernateUtil = new HibernateUtil();
     	Session session = hibernateUtil.openSession();
     	Query query = session.createQuery(hql);
@@ -5799,4 +5803,110 @@ public class ProjectDAO {
     	return sourceList;
     }
     
+public List<InboxBuyerData> getAllBuyersByBuilderEmployee(BuilderEmployee builderEmployee){
+	    
+	    String hql = "";
+	    if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
+	      hql = "SELECT buy.id as id, buy.name as name "
+	        +"FROM  buyer as buy "
+	        +"WHERE buy.builder_id = "+builderEmployee.getBuilder().getId()+" and buy.is_deleted=0 and buy.is_primary=1 and project.status=1 group by project.id";
+	    } else {
+	      hql = "SELECT buy.id as id, buy.name as name "
+	          +"FROM  buyer as buy inner join allot_project ap ON buy.project_id = ap.project_id "
+	          +"WHERE ap.emp_id = "+builderEmployee.getId()+" and buy.is_deleted=0 and buy.is_primary=1 group by buy.id";
+	    }
+	    HibernateUtil hibernateUtil = new HibernateUtil();
+	    Session session = hibernateUtil.getSessionFactory().openSession();
+	    Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(InboxBuyerData.class));
+	    System.err.println(hql);
+	   // query.setMaxResults(4);
+	    List<InboxBuyerData> result = query.list();
+	    session.close();
+	    return result;
+	  }
+/**
+ * Get buyer by id
+ * @author pankaj
+ * @param id
+ * @return buyer 
+ */
+public Buyer getBuyerById(int id){
+	String hql = "from Buyer where id = :id and isPrimary = 1 and isDeleted=0";
+	HibernateUtil hibernateUtil = new HibernateUtil();
+	Session session = hibernateUtil.openSession();
+	Query query = session.createQuery(hql);
+	query.setParameter("id",id);
+	Buyer buyer = (Buyer) query.list().get(0);
+	return buyer;
+}
+
+/**
+ * Get inbox message by emp id
+ * @author pankaj
+ * @param empId
+ * @return List<InboxMessage>
+ */
+public List<InboxMessage> getInboxMessagesByEmpId(int empId){
+	String hql = "from InboxMessage as ib where emp_id = :emp_id order by ib.id DESC";
+	HibernateUtil hibernateUtil = new HibernateUtil();
+	Session session = hibernateUtil.openSession();
+	Query query = session.createQuery(hql);
+	query.setParameter("emp_id",empId);
+	List<InboxMessage> result = query.list();
+	return result;
+}
+
+public List<InboxMessageData> getBookedBuyerList(int empId){
+	List<InboxMessageData> result = null;
+	String hql = "SELECT b.name as name, b.photo as image, im.subject as subject, im.im_date as date  ";
+	String where = "";
+	String hqlnew = "from BuilderEmployee where id = "+empId;
+	HibernateUtil hibernateUtil = new HibernateUtil();
+	Session sessionnew = hibernateUtil.openSession();
+	Query querynew = sessionnew.createQuery(hqlnew);
+	List<BuilderEmployee> employees = querynew.list();
+	BuilderEmployee builderEmployee = employees.get(0);
+	sessionnew.close();
+	if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
+		hql += " FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
+				+ "left join builder_project as bproject on bproject.id = b.project_id "
+				+ "left join allot_project as project on project.id = b.project_id  "
+				+ "WHERE ";
+				where+= "im.emp_id="+builderEmployee.getId();
+	}else{
+		hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
+				+ "left join builder as build on build.id = b.builder_id  "
+				+ "WHERE ";
+				where+= "b.builder_id="+builderEmployee.getBuilder().getId();
+	}
+	hql += where + " AND bproject.status=1 AND b.is_primary=1 AND b.is_deleted=0 ORDER BY im.id desc";
+	try {
+	Session session = hibernateUtil.getSessionFactory().openSession();
+	Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(InboxMessageData.class));
+	System.err.println(hql);
+	
+	 result = query.list();
+	
+	} catch(Exception e) {
+		//
+	}
+	
+	return result;
+}
+public ResponseMessage deleteSource(int id){
+	ResponseMessage responseMessage = new ResponseMessage();
+	String hql = "UPDATE Source set is_deleted=1 where id=:id";
+	HibernateUtil hibernateUtil = new HibernateUtil();
+	Session session = hibernateUtil.openSession();
+	session.beginTransaction();
+	Query query = session.createQuery(hql);
+	query.setParameter("id",id);
+	query.executeUpdate();
+	session.getTransaction().commit();
+	session.close();
+	responseMessage.setStatus(1);
+	responseMessage.setMessage("Source is deleted successfully.");
+	return responseMessage;
+	
+}
 }

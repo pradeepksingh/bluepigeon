@@ -2,38 +2,47 @@ package org.bluepigeon.admin.model;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "home_loan_banks", catalog = "blue_pigeon")
+@Table(name = "inbox_message", catalog = "blue_pigeon")
 public class InboxMessage {
 	private Integer id;
-	private Integer buyerId;
+	private Buyer buyer;
 	private Integer empId;
-	private Integer projectId;
+	private BuilderProject builderProject;
 	private String message;
 	private String attachment;
 	private String subject;
+	private Date imDate;
 	
 	
 	public InboxMessage() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public InboxMessage(Integer id, Integer buyerId, Integer empId, Integer projectId, String message,
-			String attachment, String subject) {
+	public InboxMessage(Integer id, Buyer buyer, Integer empId, BuilderProject builderProject, String message,
+			String attachment, String subject, Date imDate) {
 		super();
 		this.id = id;
-		this.buyerId = buyerId;
+		this.buyer = buyer;
 		this.empId = empId;
-		this.projectId = projectId;
+		this.builderProject = builderProject;
 		this.message = message;
 		this.attachment = attachment;
 		this.subject = subject;
+		this.imDate = imDate;
 	}
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -45,12 +54,13 @@ public class InboxMessage {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@Column(name="buyer_id")
-	public Integer getBuyerId() {
-		return buyerId;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="buyer_id")
+	public Buyer getBuyer() {
+		return buyer;
 	}
-	public void setBuyerId(Integer buyerId) {
-		this.buyerId = buyerId;
+	public void setBuyer(Buyer buyer) {
+		this.buyer = buyer;
 	}
 	@Column(name = "emp_id")
 	public Integer getEmpId() {
@@ -59,12 +69,13 @@ public class InboxMessage {
 	public void setEmpId(Integer empId) {
 		this.empId = empId;
 	}
-	@Column(name = "project_id")
-	public Integer getProjectId() {
-		return projectId;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "project_id")
+	public BuilderProject getBuilderProject() {
+		return builderProject;
 	}
-	public void setProjectId(Integer projectId) {
-		this.projectId = projectId;
+	public void setBuilderProject(BuilderProject builderProject) {
+		this.builderProject = builderProject;
 	}
 	@Column(name = "message")
 	public String getMessage() {
@@ -87,5 +98,12 @@ public class InboxMessage {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	
+	@Column(name = "im_date")
+	 @Temporal(TemporalType.TIMESTAMP)
+	public Date getImDate() {
+		return imDate;
+	}
+	public void setImDate(Date imDate) {
+		this.imDate = imDate;
+	}
 }

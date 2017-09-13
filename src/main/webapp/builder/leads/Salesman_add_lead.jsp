@@ -1,4 +1,49 @@
-
+<%@page import="org.bluepigeon.admin.model.Source"%>
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri" value="${req.requestURI}" />
+<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
+<%@page import="org.bluepigeon.admin.model.Builder"%>
+<%@page import="org.bluepigeon.admin.model.City"%>
+<%@page import="org.bluepigeon.admin.dao.BuilderPropertyTypeDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderPropertyType"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProject"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectLeadDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@page import="java.util.List"%>
+<%
+ 	int project_size = 0;
+	int type_size = 0;
+	int city_size = 0;
+ 	List<ProjectData> builderProjects =null;
+ 	List<Source> sourceList = null;
+ 	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
+   	session = request.getSession(false);
+   	BuilderEmployee builder = new BuilderEmployee();
+   	int builder_id = 0;
+   	if(session!=null)
+	{
+		if(session.getAttribute("ubname") != null)
+		{
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			builder_id = builder.getBuilder().getId();
+			if(builder_id > 0){
+				builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
+				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
+			}
+			if(builderProjects.size()>0)
+		    	project_size = builderProjects.size();
+		 	if(builderPropertyTypes.size()>0)
+		 		type_size = builderPropertyTypes.size();
+		}
+		
+   }
+   
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,93 +131,44 @@
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper" style="min-height: 2038px;">
-           <div class="container-fluid addlead">
-               <!-- /.row -->
-	            <h1>Add Lead</h1>
-               <!-- row -->
-               <div class="white-box">
-                 <div class="row bg11">
-                   <form class="addlead1">
-                  
-                     <div class="col-md-6 col-sm-6 col-xs-12">
-                         <div class="form-group row">
-							<label for="example-text-input" class="col-5 col-form-label"> Name</label>
-							  <div class="col-7">
-								 <input class="form-control" type="text" value="" id=""  placeholder="">
-							  </div>
-						  </div>
-						  <div class="form-group row">
-							 <label for="example-search-input" class="col-5 col-form-label">Email ID</label>
-								<div class="col-7">
-								   <input class="form-control" type="text" value="" id="" placeholder="">
-								 </div>
-						    </div>
-							<div class="form-group row">
-							   <label for="example-search-input" class="col-5 col-form-label">Configuration</label>
-								  <div class="col-7">
-								      <select id="multiple-checkboxes-3" name="multiple-checkboxes-3" multiple>
-								        <option value="php">PHP</option>
-								        <option value="javascript">JavaScript</option>
-								        <option value="java">Java</option>
-								        <option value="sql" >SQL</option>
-								        <option value="jquery" >Jquery</option>
-								        <option value=".net">.Net</option>
-								     </select>
-								  </div>
-							 </div>
-                            <div class="form-group row">
-					           <label for="example-tel-input" class="col-5 col-form-label">Source</label>
-						         <div class="col-7">
-							        <select class="selectpicker" data-style="form-control">
-			                          <option>All Floor</option>
-			                          <option>Floor No-1</option>
-			                          <option>Floor No-2</option>
-			                          <option>Floor No-3</option>
-			                          <option>Floor No-4</option>
-			                        </select>
-							     </div>
-						    </div>
-				       </div>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                       <div class="form-group row">
-							<label for="example-text-input" class="col-5 col-form-label"> Phone No.</label>
-							  <div class="col-7">
-								 <input class="form-control" type="text" value="" id=""  placeholder="">
-							  </div>
-						  </div>
-						  <div class="form-group row">
-							 <label for="example-search-input" class="col-5 col-form-label">Interested Project</label>
-								<div class="col-7">
-								   <select id="multiple-checkboxes-2"  name="multipule-checkboxes-2" multiple>
-								        <option value="php">PHP</option>
-								        <option value="javascript">JavaScript</option>
-								        <option value="java">Java</option>
-								        <option value="sql">SQL</option>
-								        <option value="jquery">Jquery</option>
-								        <option value=".net">.Net</option>
-								     </select>
-								 </div>
-						    </div>
-							<div class="form-group row">
-							   <label for="example-search-input" class="col-5 col-form-label">Budget</label>
-								  <div class="col-7">
-								    <select class="selectpicker" data-style="form-control">
-			                          <option>All Floor</option>
-			                          <option>Floor No-1</option>
-			                          <option>Floor No-2</option>
-			                          <option>Floor No-3</option>
-			                          <option>Floor No-4</option>
-			                        </select>
-								   </div>
-							 </div>
-						</div>
-						<div class="center bcenter">
-					  	   <button type="button" id="save" class="button1">Save</button>
-					  	</div>
-                     </form>
-                  </div>
-               </div>
-            </div>
+       <div class="container">
+    <div class="dropdown">
+        <button id="min-max-price-range" class="dropdown-toggle" href="#" data-toggle="dropdown">Budget<strong class="caret"></strong>
+        </button>
+        <div class="dropdown-menu col-sm-2" style="padding:10px;">
+            <form class="row">
+                <div class="col-xs-5">
+ 
+                    <input class="form-control price-label" placeholder="Min" data-dropdown-id="price-min"/>
+                </div>
+                <div class="col-xs-2"> - </div>
+                <div class="col-xs-5">
+                    <input class="form-control price-label" placeholder="Max" data-dropdown-id="price-max"/>
+                </div>
+<div class="clearfix"></div>
+                <ul id="price-min" class="col-sm-12 price-range list-unstyled">
+                    <li data-value="0">0</li>
+                    <li data-value="10">10</li>
+                    <li data-value="20">20</li>
+                    <li data-value="30">30</li>
+                    <li data-value="40">40</li>
+                    <li data-value="50">50</li>
+                    <li data-value="60">60</li>
+                </ul>
+                <ul id="price-max" class="col-sm-12 price-range text-right list-unstyled hide">
+                    <li data-value="0">0</li>
+                    <li data-value="10">10</li>
+                    <li data-value="20">20</li>
+                    <li data-value="30">30</li>
+                    <li data-value="40">40</li>
+                    <li data-value="50">50</li>
+                    <li data-value="60">60</li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>
+
           </div>
         </div>
     <!-- /.container-fluid -->
@@ -227,6 +223,28 @@ $("#save").click(function(){
 	  alert($(this).val());
   })
 })
+
+$('#min-max-price-range').click(function (event) {
+    setTimeout(function(){ $('.price-label').first().focus();	},0);    
+});
+var priceLabelObj;
+$('.price-label').focus(function (event) {
+    priceLabelObj=$(this);
+    $('.price-range').addClass('hide');
+    $('#'+$(this).data('dropdownId')).removeClass('hide');
+});
+
+$(".price-range li").click(function(){    
+    priceLabelObj.attr('value', $(this).attr('data-value'));
+    var curElmIndex=$( ".price-label" ).index( priceLabelObj );
+    var nextElm=$( ".price-label" ).eq(curElmIndex+1);
+
+    if(nextElm.length){
+        $( ".price-label" ).eq(curElmIndex+1).focus();
+    }else{
+        $('#min-max-price-range').dropdown('toggle');
+    }
+});
 
 </script>
 

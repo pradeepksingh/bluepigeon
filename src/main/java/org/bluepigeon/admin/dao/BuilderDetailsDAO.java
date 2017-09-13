@@ -21,12 +21,14 @@ import org.bluepigeon.admin.model.BuilderLogo;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Country;
+import org.bluepigeon.admin.model.InboxMessage;
 import org.bluepigeon.admin.model.ProjectImageGallery;
 import org.bluepigeon.admin.data.BarGraphData;
 import org.bluepigeon.admin.data.BookingFlatList;
 import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.EmployeeList;
+import org.bluepigeon.admin.data.InboxMessageData;
 import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.util.HibernateUtil;
 
@@ -1453,4 +1455,79 @@ public class BuilderDetailsDAO {
 		
 		return result;
 	}
+	
+	public ResponseMessage saveInboxMessages(List<InboxMessage> inboxMessageList){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(InboxMessage inboxMessage : inboxMessageList)
+			session.save(inboxMessage);
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Message saved succefully");
+		return responseMessage;
+	}
+	
+	public List<InboxMessageData> getBookedBuyerList(int empId, String name,int contactNumber){
+		List<InboxMessageData> result = null;
+		String hql = "SELECT b.name as name, b.photo as image, im.subject as subject, im.im_date as date  ";
+		String where = "";
+		String hqlnew = "from BuilderEmployee where id = "+empId;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session sessionnew = hibernateUtil.openSession();
+		Query querynew = sessionnew.createQuery(hqlnew);
+		List<BuilderEmployee> employees = querynew.list();
+		BuilderEmployee builderEmployee = employees.get(0);
+		sessionnew.close();
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
+			hql += " FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
+					+ "left join builder_project as bproject on bproject.id = b.project_id "
+					+ "left join allot_project as project on project.id = b.project_id  "
+					+ "WHERE ";
+					where+= "im.emp_id="+builderEmployee.getId();
+		}else{
+			hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
+					+ "left join builder as build on build.id = b.builder_id  "
+					+ "WHERE ";
+					where+= "b.builder_id="+builderEmployee.getBuilder().getId();
+		}
+		
+		if(name != ""){
+			if(where != ""){
+				where += " AND b.name LIKE :name";
+			}else{
+				where +=" b.name LIKE :name";
+			}
+		}
+		if(contactNumber > 0){
+			if(where != ""){
+				where += " AND b.mobile LIKE :contact_number";
+			}else{
+				where +=" b.mobile LIKE :contact_number";
+			}
+		}
+		hql += where + " AND bproject.status=1 AND b.is_primary=1 AND b.is_deleted=0 ORDER BY im.id desc";
+		try {
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(InboxMessageData.class));
+		System.err.println(hql);
+		
+		if(name != ""){
+			query.setParameter("name", "%"+name+"%");
+		}
+		if(contactNumber > 0){
+			query.setParameter("contact_number", "%"+contactNumber+"%");
+		}
+		
+		 result = query.list();
+		
+		} catch(Exception e) {
+			//
+		}
+		
+		return result;
+	}
+	
 }

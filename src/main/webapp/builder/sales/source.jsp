@@ -75,7 +75,6 @@ if(session!=null)
                    <!-- buyer information end -->
                    <form id="addsource" name="addsource" method="post"  action="" enctype="multipart/form-data">
 	                 <div class="row style1">
-	                 	
 	                 		<input type="hidden" value="<%out.print(p_user_id); %>" name="builder_id" id="builder_id" />
 		                   	<div class="col-md-10 col-sm-9 col-xs-12 row">
 		                      <div class="col-md-3 col-sm-3 col-xs-4">
@@ -96,15 +95,17 @@ if(session!=null)
 	                    <%
 	                    if(sourceList != null){
 	                    for(Source source : sourceList){ %>
-		                    <div class="row">
+		                    <div class="row new">
 			                    <div class="col-md-10 col-sm-10 col-xs-8">
-			                       <h4><%out.print(source.getName()); %></h4>
+			                       <h4 contenteditable="false" class="h4name"><%out.print(source.getName()); %></h4>
+			                    </div>
+			                     <div class="col-md-1 col-sm-1 col-xs-2" id="editsource_"<%out.print(source.getId()); %>>
+<!-- 			                       <button onclick="updateSource(this);" class="glyphicon glyphicon-pencil" style="font-size:30px;font-weight:bold"></button> -->
+			                       <button onclick="updateSource(<%out.print(source.getId()); %>);" class="glyphicon glyphicon-pencil" style="font-size:30px;font-weight:bold"></button>
 			                    </div>
 			                     <div class="col-md-1 col-sm-1 col-xs-2">
-			                       <img src="../images/glyphicons-31-pencil.png" class="imgsmall"/>
-			                    </div>
-			                     <div class="col-md-1 col-sm-1 col-xs-2">
-			                       <img src="../images/glyphicons-17-bin.png" class="imgsmall"/>
+<!-- 			                       <img src="../images/glyphicons-17-bin.png" class="imgsmall"/> -->
+			                        <button onclick="deleteSource(<%out.print(source.getId()); %>);" class="glyphicon glyphicon-trash" style="font-size:30px;font-weight:bold"></button>
 			                    </div>
 			                </div>
 		                  <hr>
@@ -118,11 +119,52 @@ if(session!=null)
   </div>
     <!-- /.container-fluid -->
    <div id="sidebar1"> 
-	       <%@include file="../partial/footer.jsp"%>
-		</div> 
+	     <%@include file="../partial/footer.jsp"%>
+	</div> 
   </body>
 </html>
 <script>
+
+// function updateSource(d){
+// 	//var data = $(this).closest('h4').find('.h4name').html;
+// 	var data = $(d).closest('.new').find('.h4name');
+// 	 $(data).attr("contenteditable", "true").focus();
+// 	 $('#editsource_'+(d).valure).emp('#editsource').empty();
+// 	var html ='<button onclick="saveASource(this);" class="glyphicon glyphicon-refresh" style="font-size:30px;font-weight:bold"></button>';
+// 	//$(this).html(html);
+// 	$(d).html(html);
+// }
+ 
+ function updateSource(id){
+	 window.location.href="${baseUrl}/builder/sales/edit-source.jsp?source_id="+id;
+ }
+
+// function saveASource(d){
+// 	//var data = $(this).closest('h4').find('.h4name').html;
+	
+// 	var dataf = $(d).val();
+// 	alert(dataf);
+	
+// }
+
+function qtyChanged(a){
+	var qty = $(a).val();
+	var unit_price = $(a).closest('tr').find('.unit-price').val();
+	var tax_percent = $(a).closest('tr').find('.row-tax').val();
+	var or_tax =  tax_percent/100;
+	var orTax = or_tax +1;
+	var rate = unit_price/orTax;
+	var row_total = qty*unit_price;
+	var row_rate = qty*rate;
+	var row_tax = row_total - row_rate;
+	$(a).closest('tr').find('.tax-amt').val(row_tax);
+	$(a).closest('tr').find('.rowTotalPrice').val(row_rate);
+	updateTotals();
+}
+
+// function update(id){
+// 	alert("Hello");
+//}
 function addSource() {
 	
 	if($("#name").val() != ""){
@@ -151,15 +193,29 @@ function showAddResponse(resp, statusText, xhr, $form){
 	if(resp.status == '0') {
 		$("#response").removeClass('alert-success');
        	$("#response").addClass('alert-danger');
-		$("#response").html(resp.message);
+		//$("#response").html(resp.message);
 		$("#response").show();
+		alert(resp.message);
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
-        $("#response").html(resp.message);
+        //$("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
         window.location.href = "${baseUrl}/builder/sales/source.jsp";
   	}
 }
+function deleteSource(id){
+	alert(id);
+	var flag = confirm("Are you sure ? You want to Delete source ?");
+	if(flag){
+		$.get("${baseUrl}/webapi/project/source/remove/"+id, { }, function(data){
+ 			alert(data.message);
+ 			if(data.status == 1) {
+ 				window.location.reload();
+ 			}
+		});
+	}
+}
+
 </script>

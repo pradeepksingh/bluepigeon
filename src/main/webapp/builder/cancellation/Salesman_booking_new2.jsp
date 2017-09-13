@@ -114,7 +114,8 @@
      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
 <!--     <link rel="stylesheet" type="text/css" href="../css/cancellation.css"> -->
 <!-- 	 <link rel="stylesheet" type="text/css" href="../css/custom7.css"> -->
-	  <link rel="stylesheet" type="text/css" href="../css/custom10.css">
+	  <link rel="stylesheet" type="text/css" href="../css/cancellation-top.css">
+	   <link rel="stylesheet" type="text/css" href="../css/newcancellationlist.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
@@ -307,24 +308,19 @@ $(document).ready(function () {
 });
 <% } %>
 function showFlats(id){
-	//alert(id);
 	window.location.href="${baseUrl}/builder/cancellation/Salesman_cancelation_form_open3.jsp?flat_id="+id;
 }
 function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
-		//alert("Hello12");
         $('.nav li.active').removeClass('active');
-        //alert("Hello 123");
+        $('.nav li.red').removeClass('red').addClass('grey');
         var $parent = $(this).parent();
-       // alert($parent.attr('class'));
         if($parent.hasClass('grey')){
-        //	alert("Hello1");
         	$parent.removeClass('grey');
 	        $parent.addClass('active');
 	        $parent.addClass('red');
 	        e.preventDefault();
         }
-        
     });
 }
 $select_building = $("#filter_building_id").selectize({

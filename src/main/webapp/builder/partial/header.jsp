@@ -85,7 +85,7 @@ session = request.getSession(false);
                         
                     </li>
                    
-                  <%if(access_uid == 1 || access_uid == 2 || access_uid ==4 || access_uid ==5 || access_uid == 6) {%>
+                 
                     <li class="dropdown">
                         <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#"><i class="fa fa-bell-o"></i>
                     <div class="notify"><span class="heartbit"></span><span class="point"></span></div>
@@ -141,7 +141,7 @@ session = request.getSession(false);
                         </ul>
 <!--                         /.dropdown-tasks -->
                     </li>
-                    <%} %>
+                   
                     <!-- /.dropdown -->
                     <li class="dropdown">
                         <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="${baseUrl}/builder/plugins/images/users/1.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs"><%out.print(mainadmin.getName()); %></b> </a>

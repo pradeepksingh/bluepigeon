@@ -230,13 +230,13 @@
                    <div class="row">
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         <select id="project_id" name="project_id">
-                                       <option value="0">Enter Project Name</option>
-                                       <%
-                                       if(project_list != null){
-                                       for(ProjectList projectList : project_list){%>
-                                       <option value="<%out.print(projectList.getId());%>"><%out.print(projectList.getName()); %></option>
-                                       <% }}%>
-                           </select>
+                             <option value="0">Enter Project Name</option>
+                             <%
+                             if(project_list != null){
+                             for(ProjectList projectList : project_list){%>
+                             <option value="<%out.print(projectList.getId());%>"><%out.print(projectList.getName()); %></option>
+                             <% }}%>
+                        </select>
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                       <select  id="city_id" name="city_id">
@@ -250,7 +250,6 @@
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                       <input class="form-control" type="text" id="locality_name" name="locality_name" placeholder="Enter locality name" title="Please select City First and then enter locality name">
-                              
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                        <select class="selectpicker" data-style="form-control">
@@ -282,7 +281,7 @@
 			                       <div class="row">
 				                       <div class="col-md-6 left">
 					                       <h3><%out.print(projectList.getName()); %></h3>
-					                       <h4><%out.print(projectList.getCityName()); %></h4>
+					                       <h4><%out.print(projectList.getLocalityName()); %></h4>
 					                       <br>
 						                       <div class="bottom">
 						                       <h4><%if(projectList != null){out.print(Math.round(projectList.getSold()));} %>/<% if(projectList != null){out.print(Math.round(projectList.getTotalSold()));} %> SOLD</h4>
@@ -307,7 +306,7 @@
 						 	 	</div>
 						  </div>
 						  <%}
-	                        else if(access_id == 7){%>
+	                        else if(access_id == 5 || access_id == 7){%>
 	                      <div class="row">
                            	  <div class="col-md-6 left"> 
                            		   <a href="${baseUrl}/builder/buyer/booking.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
@@ -410,7 +409,7 @@
                 <!-- /.row -->
                 <div class="white-box">
 	                <div class="row">
-	                <%if((access_id >=1 && access_id <=2) || (access_id>=4 && access_id <= 5)) {%>
+	                <%if((access_id >=1 && access_id <=2)) {%>
 		                <div class="col-md-4">
 		                    <button type="button" onclick="addEmployee();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add New Employee</button>
 		                </div>
@@ -419,7 +418,7 @@
 		                    <button type="button" onclick="addLead();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add New Lead</button>
 		                 </div>
 		                  <%} %>
-		                  <%if(access_id == 7){ %>
+		                  <%if(access_id == 5 || access_id == 7){ %>
 		                   <div class="col-md-4">
 		                    <button type="button" onclick="addLead();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add New Lead</button>
 		                 </div>
@@ -698,7 +697,7 @@ $("#locality_name").attr('disabled',true);
              		+'<a href="" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
-            		<%if(access_id == 7){%>
+            		<%if(access_id==5 ||access_id == 7){%>
              		+'<div class="col-md-6 left">' 
              		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
@@ -775,7 +774,7 @@ $("#locality_name").attr('disabled',true);
              		+'<a href="${baseUrl}/builder/campaign/list.jsp" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
-               		<% if(access_id == 7){%>
+               		<% if(access_id == 5 || access_id == 7){%>
              		+'<div class="col-md-6 left">' 
              		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
@@ -852,7 +851,7 @@ $("#locality_name").attr('disabled',true);
                  		+'<a href="" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
                  		<%}%>
-                 		<% if(access_id == 7){%>
+                 		<% if(access_id==5 || access_id == 7){%>
                  		+'<div class="col-md-6 left">' 
                  		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
@@ -901,8 +900,6 @@ $("#locality_name").attr('disabled',true);
      	    gridLineColor: '#eef0f2',
      	    resize: true
      	});
-     
-     	
      <%	} %>
  	
  	$("#graph_project_id").change(function(){
@@ -936,14 +933,8 @@ $("#locality_name").attr('disabled',true);
  				var purchases = data[index].totalSold;
  	 			chart.setData([{"y":year,"Flat":flats,"Buyers":buyers,"Purchases":purchases}]);
  			 });
- 			
- 			
- 			
- 			
  		 });
-    	
     }
     </script>
 </body>
-
 </html>

@@ -72,6 +72,7 @@
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
+      <link rel="stylesheet" type="text/css" href="../css/cancellationlist.css">
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../js/selectize.min.js"></script>
@@ -172,6 +173,7 @@
   </body>
 </html>
 <script>
+
 $select_project = $("#filter_project_id").selectize({
 	persist: false,
 	 onChange: function(value) {

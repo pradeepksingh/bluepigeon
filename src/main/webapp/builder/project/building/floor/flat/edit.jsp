@@ -620,9 +620,6 @@
 											for(PaymentInfoData flatPaymentSchedule : flatPaymentSchedules) { %>
 												<input type="hidden" name="payment_id[]" value="<% out.print(flatPaymentSchedule.getId()); %>" />
 												 <div class="row" id="schedule-<% out.print(flatPaymentSchedule.getId());%>">
-												<% if(ii > 1) { %>
-													<hr/>
-													<% } %>
 														<div class="col-sm-4">
 				                                			<div class="form-group row">
 							                                    <label for="example-search-input" class="col-sm-4 control-label">Milestone<span class='text-danger'>*</span></label>
@@ -950,6 +947,7 @@ function checkDuplicateEntry(id){
 			alert("Duplicate Entery of offer");
 			$("#offer_title"+id).val('');
 		}else{
+			if(offers != '')
 			myarray.push(offers);
 		}
 	}else{
@@ -1560,7 +1558,9 @@ function showPriceAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.reload();
+        //window.location.reload();
+        $('.active').removeClass('active').next('li').addClass('active');
+        $("#vimessages3").addClass('active');
   	}
 }
 
@@ -1846,16 +1846,6 @@ function removeOffer(id) {
 }
 
 function updateBuildingOffers() {
-	var count = $("#offer_count").val();
-	var check = false;
-	for(var i=0;i<count;i++){
-		if($("#offer_title"+i).val() == $("#offer_title"+(i+1)).val()){
-			check =true;
-			$("#offer_title"+(i+1)).val('');
-			break;
-		}
-	}
-	if(!check){
 		var options = {
 		 		target : '#imageresponse', 
 		 		beforeSubmit : showAddOfferRequest,
@@ -1865,10 +1855,6 @@ function updateBuildingOffers() {
 		 		dataType : 'json'
 		 	};
 	   	$('#updateoffer').ajaxSubmit(options);
-	}else{
-		alert("Duplicate Entry of Offer");
-		
-	}
 }
 
 function showAddOfferRequest(formData, jqForm, options){
@@ -1883,13 +1869,16 @@ function showAddOfferResponse(resp, statusText, xhr, $form){
        	$("#offerresponse").addClass('alert-danger');
 		$("#offerresponse").html(resp.message);
 		$("#offerresponse").show();
+		  alert(resp.message);
   	} else {
   		$("#offerresponse").removeClass('alert-danger');
         $("#offerresponse").addClass('alert-success');
         $("#offerresponse").html(resp.message);
         $("#offerresponse").show();
         alert(resp.message);
-        window.location.reload();
+       // window.location.reload();
+        $('.active').removeClass('active').next('li').addClass('active');
+        $("#vimessages2").addClass('active');
   	}
 }
 
