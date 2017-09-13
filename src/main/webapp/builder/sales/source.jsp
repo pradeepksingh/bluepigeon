@@ -75,7 +75,6 @@ if(session!=null)
                    <!-- buyer information end -->
                    <form id="addsource" name="addsource" method="post"  action="" enctype="multipart/form-data">
 	                 <div class="row style1">
-	                 	
 	                 		<input type="hidden" value="<%out.print(p_user_id); %>" name="builder_id" id="builder_id" />
 		                   	<div class="col-md-10 col-sm-9 col-xs-12 row">
 		                      <div class="col-md-3 col-sm-3 col-xs-4">
@@ -101,10 +100,12 @@ if(session!=null)
 			                       <h4 contenteditable="false" class="h4name"><%out.print(source.getName()); %></h4>
 			                    </div>
 			                     <div class="col-md-1 col-sm-1 col-xs-2" id="editsource_"<%out.print(source.getId()); %>>
-			                       <button onclick="updateSource(this);" class="glyphicon glyphicon-pencil" style="font-size:30px;font-weight:bold"></button>
+<!-- 			                       <button onclick="updateSource(this);" class="glyphicon glyphicon-pencil" style="font-size:30px;font-weight:bold"></button> -->
+			                       <button onclick="updateSource(<%out.print(source.getId()); %>);" class="glyphicon glyphicon-pencil" style="font-size:30px;font-weight:bold"></button>
 			                    </div>
 			                     <div class="col-md-1 col-sm-1 col-xs-2">
-			                       <img src="../images/glyphicons-17-bin.png" class="imgsmall"/>
+<!-- 			                       <img src="../images/glyphicons-17-bin.png" class="imgsmall"/> -->
+			                        <button onclick="deleteSource(<%out.print(source.getId()); %>);" class="glyphicon glyphicon-trash" style="font-size:30px;font-weight:bold"></button>
 			                    </div>
 			                </div>
 		                  <hr>
@@ -124,22 +125,27 @@ if(session!=null)
 </html>
 <script>
 
-function updateSource(d){
-	//var data = $(this).closest('h4').find('.h4name').html;
-	var data = $(d).closest('.new').find('.h4name');
-	 $(data).attr("contenteditable", "true").focus();
-	 $('#editsource_'+(d).valure).emp('#editsource').empty();
-	var html ='<button onclick="saveASource(this);" class="glyphicon glyphicon-refresh" style="font-size:30px;font-weight:bold"></button>';
-	//$(this).html(html);
-	$(d).html(html);
-}
-function saveASource(d){
-	//var data = $(this).closest('h4').find('.h4name').html;
+// function updateSource(d){
+// 	//var data = $(this).closest('h4').find('.h4name').html;
+// 	var data = $(d).closest('.new').find('.h4name');
+// 	 $(data).attr("contenteditable", "true").focus();
+// 	 $('#editsource_'+(d).valure).emp('#editsource').empty();
+// 	var html ='<button onclick="saveASource(this);" class="glyphicon glyphicon-refresh" style="font-size:30px;font-weight:bold"></button>';
+// 	//$(this).html(html);
+// 	$(d).html(html);
+// }
+ 
+ function updateSource(id){
+	 window.location.href="${baseUrl}/builder/sales/edit-source.jsp?source_id="+id;
+ }
+
+// function saveASource(d){
+// 	//var data = $(this).closest('h4').find('.h4name').html;
 	
-	var dataf = $(d).val();
-	alert(dataf);
+// 	var dataf = $(d).val();
+// 	alert(dataf);
 	
-}
+// }
 
 function qtyChanged(a){
 	var qty = $(a).val();
@@ -156,9 +162,9 @@ function qtyChanged(a){
 	updateTotals();
 }
 
-function update(id){
-	alert("Hello");
-}
+// function update(id){
+// 	alert("Hello");
+//}
 function addSource() {
 	
 	if($("#name").val() != ""){
@@ -199,4 +205,17 @@ function showAddResponse(resp, statusText, xhr, $form){
         window.location.href = "${baseUrl}/builder/sales/source.jsp";
   	}
 }
+function deleteSource(id){
+	alert(id);
+	var flag = confirm("Are you sure ? You want to Delete source ?");
+	if(flag){
+		$.get("${baseUrl}/webapi/project/source/remove/"+id, { }, function(data){
+ 			alert(data.message);
+ 			if(data.status == 1) {
+ 				window.location.reload();
+ 			}
+		});
+	}
+}
+
 </script>

@@ -25,6 +25,7 @@ import org.bluepigeon.admin.dao.BuilderProjectAmenityDAO;
 import org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.CampaignDAO;
+import org.bluepigeon.admin.dao.CancellationDAO;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.data.BookingFlatList;
@@ -3965,6 +3966,7 @@ public class ProjectController extends ResourceConfig {
 		Source source = new Source();
 		source.setBuilder(builder);
 		source.setName(name);
+		source.setIsDeleted(false);
 		responseMessage = new ProjectDAO().saveSource(source);
 		
 		return responseMessage;
@@ -4037,9 +4039,11 @@ public class ProjectController extends ResourceConfig {
 		Builder builder = new Builder();
 		builder.setId(builderId);
 		Source source = new Source();
+		boolean isDeteled = new ProjectDAO().getSourceById(id).get(0).getIsDeleted();
 		source.setId(id);
 		source.setName(name);
 		source.setBuilder(builder);
+		source.setIsDeleted(isDeteled);
 		responseMessage = new ProjectDAO().updateSource(source);
 		
 		return responseMessage;
@@ -4431,5 +4435,15 @@ public class ProjectController extends ResourceConfig {
 		ProjectDAO projectDAO = new ProjectDAO();
 		BookingFlatList floorList = projectDAO.getFlatdetails(flat_id);
 		return floorList;
+	}
+	
+	@GET
+	@Path("/source/remove/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage notApproveCancelation(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		ProjectDAO cancellationDAO = new ProjectDAO();
+		msg = cancellationDAO.deleteSource(id);
+		return msg;
 	}
 }

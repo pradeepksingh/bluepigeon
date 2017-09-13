@@ -697,7 +697,7 @@ $("#locality_name").attr('disabled',true);
              		+'<a href="" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
-            		<%if(access_id == 7){%>
+            		<%if(access_id==5 ||access_id == 7){%>
              		+'<div class="col-md-6 left">' 
              		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
@@ -774,7 +774,7 @@ $("#locality_name").attr('disabled',true);
              		+'<a href="${baseUrl}/builder/campaign/list.jsp" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
-               		<% if(access_id == 7){%>
+               		<% if(access_id == 5 || access_id == 7){%>
              		+'<div class="col-md-6 left">' 
              		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
@@ -851,7 +851,7 @@ $("#locality_name").attr('disabled',true);
                  		+'<a href="" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
                  		<%}%>
-                 		<% if(access_id == 7){%>
+                 		<% if(access_id==5 || access_id == 7){%>
                  		+'<div class="col-md-6 left">' 
                  		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
@@ -900,8 +900,6 @@ $("#locality_name").attr('disabled',true);
      	    gridLineColor: '#eef0f2',
      	    resize: true
      	});
-     
-     	
      <%	} %>
  	
  	$("#graph_project_id").change(function(){
@@ -939,5 +937,4 @@ $("#locality_name").attr('disabled',true);
     }
     </script>
 </body>
-
 </html>

@@ -4875,7 +4875,7 @@ public class ProjectDAO {
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("Please Enter source name");
 		}else{
-			String hql = "from Source where name=:name and builder.id = :builder_id";
+			String hql = "from Source where name=:name and builder.id = :builder_id and isDeleted=0";
 			Session  sourceSession = hibernateUtil.openSession();
 			Query sourceQuery = sourceSession.createQuery(hql);
 			sourceQuery.setParameter("name", source.getName());
@@ -4903,7 +4903,7 @@ public class ProjectDAO {
 	 * @return List<Source>
 	 */
 	public List<Source> getAllSourcesByBuilderId(int builderId){
-		String hql = "from Source where builder.id = :builder_id";
+		String hql = "from Source where builder.id = :builder_id and isDeleted=0";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -4913,7 +4913,7 @@ public class ProjectDAO {
 	}
 	
 	public List<Source> getSourceById(int id){
-		String hql = "from Source where id = :id";
+		String hql = "from Source where id = :id and isDeleted=0";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -5794,7 +5794,7 @@ public class ProjectDAO {
      * @return List<Source>
      */
     public List<Source> getSourceListByBuilderId(int builderId){
-    	String hql = " from Source as s where builder.id = :builder_id order by s.id DESC";
+    	String hql = " from Source as s where builder.id = :builder_id and s.isDeleted=0 order by s.id DESC";
     	HibernateUtil hibernateUtil = new HibernateUtil();
     	Session session = hibernateUtil.openSession();
     	Query query = session.createQuery(hql);
@@ -5892,5 +5892,21 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	}
 	
 	return result;
+}
+public ResponseMessage deleteSource(int id){
+	ResponseMessage responseMessage = new ResponseMessage();
+	String hql = "UPDATE Source set is_deleted=1 where id=:id";
+	HibernateUtil hibernateUtil = new HibernateUtil();
+	Session session = hibernateUtil.openSession();
+	session.beginTransaction();
+	Query query = session.createQuery(hql);
+	query.setParameter("id",id);
+	query.executeUpdate();
+	session.getTransaction().commit();
+	session.close();
+	responseMessage.setStatus(1);
+	responseMessage.setMessage("Source is deleted successfully.");
+	return responseMessage;
+	
 }
 }

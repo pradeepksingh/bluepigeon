@@ -114,7 +114,7 @@
      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
 <!--     <link rel="stylesheet" type="text/css" href="../css/cancellation.css"> -->
 <!-- 	 <link rel="stylesheet" type="text/css" href="../css/custom7.css"> -->
-	  <link rel="stylesheet" type="text/css" href="../css/custom10.css">
+	  <link rel="stylesheet" type="text/css" href="../css/cancellation-top.css">
 	   <link rel="stylesheet" type="text/css" href="../css/newcancellationlist.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />

@@ -115,7 +115,7 @@
                       <div class="col-md-8 col-sm-6 col-xs-12">
                          <form class="navbar-form lead-search" role="search" method="post">
 						    <div class="input-group add-on">
-						      <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
+						      <input class="form-control" placeholder="Search by Name" name="srch-term" id="srch-term" type="text">
 						      <div class="input-group-btn">
 						        <button class="btn btn-default" id="leadSearch" type="button"><img src="../images/search.png"/></button>
 						      </div>

@@ -18,7 +18,18 @@ public class Source {
 	private Integer id;
 	private String name;
 	private Builder builder;
+	private boolean isDeleted = false;
 	
+	public Source() {
+		
+	}
+	public Source(Integer id, String name, Builder builder, boolean isDeleted) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.builder = builder;
+		this.isDeleted = isDeleted;
+	}
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
@@ -43,4 +54,12 @@ public class Source {
 	public void setBuilder(Builder builder) {
 		this.builder = builder;
 	}
+	@Column(name = "is_deleted")
+	public boolean getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
 }
