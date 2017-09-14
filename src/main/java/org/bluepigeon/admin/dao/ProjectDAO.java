@@ -5492,6 +5492,7 @@ public class ProjectDAO {
 	    		booking.setFlatType(builderFlat.getBuilderFlatType().getBuilderProjectPropertyConfiguration().getName());
 	    		List<BuilderBuildingFlatTypeRoom> room = getFlatTypeRoom(builderFlat.getBuilderFlatType().getId());
 	    		List<BuilderBuildingFlatTypeRoom>  roomList = new ArrayList<BuilderBuildingFlatTypeRoom>();
+	    		
 	    		for(BuilderBuildingFlatTypeRoom builderBuildingFlatTypeRoom: room){
 	    		BuilderBuildingFlatTypeRoom builderBuildingFlatTypeRoom2 = new BuilderBuildingFlatTypeRoom();
 	    			builderBuildingFlatTypeRoom2.setRoomName(builderBuildingFlatTypeRoom.getRoomName());
@@ -5501,17 +5502,17 @@ public class ProjectDAO {
 	    			roomList.add(builderBuildingFlatTypeRoom2);
 	    		}
 	    		booking.setBuilderBuildingFlatTypeRooms(roomList);
-//	    		booking.setBreadth(room.getBreadth());
-//	    		booking.setLength(room.getLength());
-//	    		if(room.getLengthUnit() == 1)
-//	    			booking.setAreaUint("Feet");
-//	    		if(room.getLengthUnit() == 2)
-//	    			booking.setAreaUint("Meter");
-//	    		if(room.getLengthUnit() == 3)
-//	    			booking.setAreaUint("Inch");
-//	    		if(room.getLengthUnit() == 4)
-//	    			booking.setRoomName("Yard");
-	    	//	booking.setCarpetAreaunit(builderFlat.getBuilderFlatType().);
+	    		booking.setBreadth(room.get(0).getBreadth());
+	    		booking.setLength(room.get(0).getLength());
+	    		if(room.get(0).getLengthUnit() == 1)
+	    			booking.setAreaUint("Feet");
+	    		if(room.get(0).getLengthUnit() == 2)
+	    			booking.setAreaUint("Meter");
+	    		if(room.get(0).getLengthUnit() == 3)
+	    			booking.setAreaUint("Inch");
+	    		if(room.get(0).getLengthUnit() == 4)
+	    			booking.setRoomName("Yard");
+	    	//	booking.setCarpetAreaunit(builderFlat.getBuilderFlatType().get);
 	    	}else if(builderFlat.getBuilderFlatStatus().getId() == 2){
 	    		Buyer buyer = getBuyerByFlatId(builderFlat.getId());
 	    		booking.setFlatNo(builderFlat.getFlatNo());
@@ -5723,16 +5724,16 @@ public class ProjectDAO {
 	    			roomList.add(builderBuildingFlatTypeRoom2);
 	    		}
 	    		booking.setBuilderBuildingFlatTypeRooms(roomList);
-//	    		booking.setBreadth(room.getBreadth());
-//	    		booking.setLength(room.getLength());
-//	    		if(room.getLengthUnit() == 1)
-//	    			booking.setAreaUint("Feet");
-//	    		if(room.getLengthUnit() == 2)
-//	    			booking.setAreaUint("Meter");
-//	    		if(room.getLengthUnit() == 3)
-//	    			booking.setAreaUint("Inch");
-//	    		if(room.getLengthUnit() == 4)
-//	    			booking.setRoomName("Yard");
+	    		booking.setBreadth(room.get(0).getBreadth());
+	    		booking.setLength(room.get(0).getLength());
+	    		if(room.get(0).getLengthUnit() == 1)
+	    			booking.setAreaUint("Feet");
+	    		if(room.get(0).getLengthUnit() == 2)
+	    			booking.setAreaUint("Meter");
+	    		if(room.get(0).getLengthUnit() == 3)
+	    			booking.setAreaUint("Inch");
+	    		if(room.get(0).getLengthUnit() == 4)
+	    			booking.setRoomName("Yard");
 	    	//	booking.setCarpetAreaunit(builderFlat.getBuilderFlatType().);
 	    	}
 	    	else if(builderFlat.getBuilderFlatStatus().getId() == 2){
