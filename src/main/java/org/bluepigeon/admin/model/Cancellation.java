@@ -148,7 +148,7 @@ public class Cancellation implements java.io.Serializable {
 		this.isApproved = isApproved;
 	}
 	@Column(name = "cancel_status")
-	public Integer setCancelStatus() {
+	public Integer getCancelStatus() {
 		return cancelStatus;
 	}
 

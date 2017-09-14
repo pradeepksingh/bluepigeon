@@ -129,11 +129,38 @@
                     <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
                      <div class="bg1">
                        <div class="tab-content">
-                       		<div id="home" class="tab-pane fade in active">
+                       		 		<div id="home" class="tab-pane fade in active">
 							<% if(bookingFlatList2 != null){
-								if(bookingFlatList2.getFlatStatus() == 2 &&  bookingFlatList2.getIsDeleted() != null && bookingFlatList2.getIsDeleted() == 0){
+								if((access_id==5 || access_id==7) && bookingFlatList2.getFlatStatus() == 2 &&  bookingFlatList2.getIsDeleted() != null && bookingFlatList2.getIsDeleted() == 0 && (bookingFlatList2.getIsApproved()==false) && (bookingFlatList2.getCancelStatus() == 0)){
 					     	%>				   
 						       <div class="user-profile">
+						      <%if(bookingFlatList2.getBuyerPhoto()!="" && bookingFlatList2.getBuyerPhoto() != null){ %>
+							     <img src="${baseUrl}/<%out.print(bookingFlatList2.getBuyerPhoto()); %>" alt="Buyer image" class="custom-img">
+							   <%}%>	
+						          <img src="../images/camera_icon.PNG" alt="camera " class="camera"/>
+						          <p><b><%out.print(bookingFlatList2.getBuyerName()); %></b></p>
+						          <p class="p-custom"><%out.print(bookingFlatList2.getBuildingName()); %>-<%out.print(bookingFlatList2.getFlatNo()); %>, <%out.print(bookingFlatList2.getProjectName()); %></p>
+						          <hr>
+						       </div>
+							   <div class="row custom-row user-row">
+							        <p class="p-custom">Mobile Nomm.</p>
+							        <p><b><%out.print(bookingFlatList2.getBuyerMobile()); %></b></p>
+							        <p class="p-custom">Email</p>
+							        <p><b><%out.print(bookingFlatList2.getBuyerEmail()); %></b></p>
+							        <p class="p-custom">PAN</p>
+							        <p><b><%out.print(bookingFlatList2.getBuyerPanNo()); %></b></p>
+							        <p class="p-custom">Adhar card no.</p>
+							        <p><b></b></p>
+							        <p class="p-custom">Permanent Address</p>
+							        <p><b><%out.print(bookingFlatList2.getBuyerPermanentAddress()); %></b></p>
+							        <p class="p-custom">Current Address</p>
+							        <p><b></b></p>
+							        <hr>
+							   </div>
+						      <button type="button" onclick="showFlats(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button red">Cancel</button>
+						      <%}
+								if(access_id == 5 &&  bookingFlatList2.getFlatStatus() == 2 &&  bookingFlatList2.getIsDeleted() != null && bookingFlatList2.getIsDeleted() == 0 && !bookingFlatList2.getIsApproved() && (bookingFlatList2.getCancelStatus() == 1) ){%>
+						     	 <div class="user-profile">
 						      <%if(bookingFlatList2.getBuyerPhoto()!="" && bookingFlatList2.getBuyerPhoto() != null){ %>
 							     <img src="${baseUrl}/<%out.print(bookingFlatList2.getBuyerPhoto()); %>" alt="Buyer image" class="custom-img">
 							   <%}%>	
@@ -149,24 +176,29 @@
 							        <p><b><%out.print(bookingFlatList2.getBuyerEmail()); %></b></p>
 							        <p class="p-custom">PAN</p>
 							        <p><b><%out.print(bookingFlatList2.getBuyerPanNo()); %></b></p>
-							        <p class="p-custom">Adhar card no.</p>
-							        <p><b></b></p>
+							        <p class="p-custom">Aadhaar card no.</p>
+							        <p><b><% if(bookingFlatList2.getBuyerAadhaarNumber()!=null){out.print(bookingFlatList2.getBuyerAadhaarNumber());} %></b></p>
 							        <p class="p-custom">Permanent Address</p>
 							        <p><b><%out.print(bookingFlatList2.getBuyerPermanentAddress()); %></b></p>
 							        <p class="p-custom">Current Address</p>
-							        <p><b></b></p>
+							        <p><b><%if(bookingFlatList2.getBuyerCurrentAddress()!=null){out.print(bookingFlatList2.getBuyerCurrentAddress());} %></b></p>
 							        <hr>
 							   </div>
-						      <button type="button" onclick="showFlats(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button red">Cancel</button>
-						      <%}} %>
+						     	
+						     	 <div class="row custom-row user-row red">
+						         <p>Reason of Cancellation</p>
+						         <p><b><%out.print(bookingFlatList2.getCancelReason()); %></b></p>
+						         <p>Amount <input type="text" id="cancelAmount" name="cancelAmount" placeholder="cncellation charges" value="<%out.print(bookingFlatList2.getCharges()); %>" /></p>
+						       </div>
+						      <button type="button" onclick="updateCancel(<%out.print(bookingFlatList2.getCancellationId()); %>);" class="button red">Approve</button>
+						     <%	}
+					     	} %>
 					    </div>
 					  </div>
                     </div>
                   </div>
                   <%} %>
                   <% if(flatListDatas !=null){%>
-
-	
 		<% for(int i=0;i<flatListDatas.size();i++){
 			 for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){
 				 for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().size();floor_size++){

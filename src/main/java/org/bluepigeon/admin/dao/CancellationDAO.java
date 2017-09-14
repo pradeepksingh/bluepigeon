@@ -9,6 +9,7 @@ import org.bluepigeon.admin.data.LeadList;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.data.BookedBuyerList;
+import org.bluepigeon.admin.model.AreaUnit;
 import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Cancellation;
@@ -23,11 +24,30 @@ public class CancellationDAO {
 	public ResponseMessage save(Cancellation cancellation, BuilderEmployee builderEmployee){
 		ResponseMessage responseMessage = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
+		if(cancellation.getReason() == null || cancellation.getReason().trim().length() ==0){
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Please enter reason of cancel");
+		}if(cancellation.getCharges() == null || cancellation.getCharges() == 0){
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Please enter cancellation amount");
+		}else{
+			String chql = "from Cancellation where builderFlat.id = :flat_id";
+			Session presession = hibernateUtil.openSession();
+			Query prequery = presession.createQuery(chql);
+			prequery.setParameter("flat_id", cancellation.getBuilderFlat().getId());
+			List<Cancellation> result = prequery.list();
+			presession.close();
+			if (result.size() > 0) {
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("Cancel request is already send");
+			}else{
+		
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
 		session.save(cancellation);
 		session.getTransaction().commit();
 		session.close();
+		
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 7)
 			updateBuyerStatus(cancellation.getBuilderFlat().getId());
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1 ||
@@ -38,8 +58,11 @@ public class CancellationDAO {
 			updateFlatStatus(cancellation.getBuilderFlat().getId());
 			updatePrimaryBuyer(cancellation.getBuilderFlat().getId());
 		}
+		
 		responseMessage.setId(cancellation.getId());
 		responseMessage.setStatus(1);
+		}
+		}
 		return responseMessage;
 	}
 	public void updateBuyerStatus(int flatId){
@@ -211,7 +234,7 @@ public class CancellationDAO {
 	}
 	public void updateCancelStatus(int flatId){
 		System.out.println("FlatId :: "+flatId);
-		String hql = "UPDATE Cancellation set cancel_status = 2, isApproved = 1 WHERE builderFlat.id = :flat_id";
+		String hql = "UPDATE Cancellation set cancel_status = 2, is_approved = 1 WHERE builderFlat.id = :flat_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
@@ -326,5 +349,57 @@ public class CancellationDAO {
 		}
 		
 		return result;
+	}
+	
+	public Cancellation getCancellationByFlatId(int flatId){
+		String hql = "from Cancellation where builderFlat.id = :flat_id";
+		Cancellation cancellation = null;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flatId);
+		try{
+			cancellation =(Cancellation) query.list().get(0);
+			return cancellation;
+		}catch(Exception e){
+			return cancellation;
+		}
+	}
+	
+	public Cancellation getCancellationById(int id){
+		String hql = "from Cancellation where id = :id";
+		Cancellation cancellation = null;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		try{
+			cancellation =(Cancellation) query.list().get(0);
+			return cancellation;
+		}catch(Exception e){
+			return cancellation;
+		}
+	}
+	
+	public ResponseMessage updateCancelStatus(Cancellation cancellation){
+		ResponseMessage responseMessage = new ResponseMessage();
+		String hql = "UPDATE Cancellation set charges=:cancel_amount where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Cancellation cancellation2 = null;
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("cancel_amount", cancellation.getCharges());
+		query.setParameter("id",cancellation.getId() );
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		cancellation2 = getCancellationById(cancellation.getId());
+		updateBuyerStatus(cancellation2.getBuilderFlat().getId());
+		updateCancelStatus(cancellation2.getBuilderFlat().getId());
+		updateFlatStatus(cancellation2.getBuilderFlat().getId());
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Buyer is Deleted Successfully");
+		return responseMessage;
 	}
 }

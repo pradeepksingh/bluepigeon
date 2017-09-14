@@ -32,6 +32,12 @@ public class BookingFlatList {
 	private String buyerCurrentAddress;
 	private String buyerPhoto;
 	private Short isDeleted;
+	private Integer cancelStatus = 0;
+	private boolean isApproved = false;
+	private String cancelReason = "";
+	private Double charges =0.0;
+	private Integer cancellationId = 0;
+	private Integer accessId =0 ;
 	private List<BuilderBuildingFlatTypeRoom> builderBuildingFlatTypeRooms = new ArrayList<BuilderBuildingFlatTypeRoom>();
 	//private String bedroomSize;
 	
@@ -204,5 +210,42 @@ public class BookingFlatList {
 	}
 	public void setBuyerCurrentAddress(String buyerCurrentAddress) {
 		this.buyerCurrentAddress = buyerCurrentAddress;
+	}
+	public Integer getCancelStatus() {
+		return cancelStatus;
+	}
+	public void setCancelStatus(Integer cancelStatus) {
+		this.cancelStatus = cancelStatus;
+	}
+	public boolean getIsApproved() {
+		return isApproved;
+	}
+	public void setIsApproved(boolean isApproved) {
+		this.isApproved = isApproved;
+	}
+	public String getCancelReason() {
+		return cancelReason;
+	}
+	public void setCancelReason(String cancelReason) {
+		this.cancelReason = cancelReason;
+	}
+	public Double getCharges() {
+		return charges;
+	}
+	public void setCharges(Double charges) {
+		this.charges = charges;
+	}
+	public Integer getCancellationId(){
+		return cancellationId;
+	}
+	public void setCancellationId(Integer cancellationId)
+	{
+		this.cancellationId = cancellationId;
+	}
+	public Integer getAccessId(){
+		return accessId;
+	}
+	public void setAccessId(Integer access_id){
+	  this.accessId = access_id;
 	}
 }

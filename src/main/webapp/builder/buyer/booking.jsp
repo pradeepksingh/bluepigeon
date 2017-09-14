@@ -29,11 +29,13 @@
 	int p_user_id = 0;
 	int project_id=0;
 	int access_id=0;
+	int emp_id = 0;
 	int building_size_list =0;
 	int floor_size_list = 0;
 	BuilderFloor builderFloor = null;
 	int building_id = 0;
 	int floor_id = 0;
+	boolean isPresent = false;
 	List<BookingFlatList> bookingFlatList = null;
 	List<BuilderFloor> floorList = null;
 	List<BuilderBuilding> builderBuildingList = null;
@@ -55,8 +57,11 @@
 	{
 		if(session.getAttribute("ubname") != null)
 		{
+			try{
+			
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			p_user_id = builder.getBuilder().getId();
+			emp_id = builder.getId();
 			access_id = builder.getBuilderEmployeeAccessType().getId();
 			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
@@ -83,6 +88,10 @@
 					floor_size_list = floorList.size();
 				}
 			}
+			isPresent = true;
+		}catch(Exception e){
+			isPresent = false;
+		}
 		}
 	}
 %>
@@ -130,7 +139,11 @@
       <div id="sidebar1"> 
        	<%@include file="../partial/sidebar.jsp"%>
       </div>
+      <div id="progress" style="display: none;">
+   	 	<img style="width:10%" src="../images/loading.gif"/>
+	</div>
         <div id="page-wrapper" style="min-height: 2038px;">
+			<%if(isPresent){ %>
            <div class="container-fluid">
                <!-- /.row -->
 	                <div class="row">
@@ -213,6 +226,7 @@
 						     <!-- floor 2 -->
                         </div>
                     </div>
+                    <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>"/>
                     <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
                      <div class="bg1">
                        <div class="tab-content">
@@ -282,7 +296,8 @@
 							        <hr>
 							   </div>
 						      <button type="button" onclick="showBuyerDetails(<%out.print(bookingFlatList2.getFlatId()); %>);" class="button red">Cancel</button>
-						      <%}} %>
+						      <%}
+					     	}%>
 					     </div>
 					  </div>
                     </div>
@@ -290,6 +305,19 @@
                 </div>
               </div>
            </div>
+           <%}else{ %>
+             <div class="container-fluid">
+              <div class="white-box">
+                 <div class="row" id="flatdetails">
+                    <div class="col-md-8 col-sm-6 col-xs-12  bg1">
+                        <div class="white-box" >
+                        <p class="text-danger"> Sorry No flats found.</p>
+                        </div>
+                     </div>
+                 </div>
+               </div>
+             </div>
+           <%} %>
           </div>
         </div>
     <!-- /.container-fluid -->
@@ -299,6 +327,7 @@
   </body>
 </html>
 <script>
+$("#progress").css("display","none");
 $("#cancellation").click(function(){
 	window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(project_id);%>
 });
@@ -358,13 +387,15 @@ function showFlat(id){
 function showFlatwithImage(id){
 	$("#home").empty();
 	var htmlFlat ="";
+	$('#progress').css("display","block");
 	if(id > 0 && id != ''){
-		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id},function(data){
+		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id,emp_id:$("#emp_id").val()},function(data){
 			if(data.flatStatus == 1){
 			var image = '';
 			if(data.image != ''){
 				image = '${baseUrl}/'+data.image;
 			}
+			$('#progress').css("display","none");
 			htmlFlat ='<img src="'+image+'" alt="Project image" class="custom-img">'
 	 	      +'<hr>'
 	 	      +'<div class="row custom-row">'
@@ -449,7 +480,7 @@ $select_building = $("#filter_building_id").selectize({
 					$select_floor = $("#filter_floor_id").selectize({
 						persist: false,
 						 onChange: function(value) {
-							 if(value > 0 || value != '' ){
+							 if(value != '' ){
 								 getFlatDetails();
 								}
 						 },
@@ -502,7 +533,7 @@ $select_floor = $("#filter_floor_id").selectize({
 	persist: false,
 	 onChange: function(value) {
 
-		if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '') && ($("#filter_floor_id").val() > 0 && $("#filter_floor_id").val() != '' )){
+		if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '') && $("#filter_floor_id").val() != '' ){
 			//window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
 			getFlatDetails();
 		}
@@ -523,7 +554,7 @@ $select_floor = $("#filter_floor_id").selectize({
 $select_eveOrodd = $("#evenOrodd").selectize({
 	persist: false,
 	onChange: function(value){
-		if(value > 0 && value != ''){
+		if(value != ''){
 			getFlatDetails();
 		}
 	},

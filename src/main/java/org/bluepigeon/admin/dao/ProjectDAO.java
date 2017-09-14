@@ -78,6 +78,7 @@ import org.bluepigeon.admin.model.BuildingPriceInfo;
 import org.bluepigeon.admin.model.BuildingWeightage;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Campaign;
+import org.bluepigeon.admin.model.Cancellation;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
 import org.bluepigeon.admin.model.FlatAmenityWeightage;
 import org.bluepigeon.admin.model.FlatImageGallery;
@@ -5627,22 +5628,55 @@ public class ProjectDAO {
 //	    			booking.setRoomName("Yard");
 	    	//	booking.setCarpetAreaunit(builderFlat.getBuilderFlatType().);
 	    	}else if(builderFlat.getBuilderFlatStatus().getId() == 2){
-	    		Buyer buyer = getBuyerByFlatId(builderFlat.getId());
-	    		booking.setFlatNo(builderFlat.getFlatNo());
-	    		booking.setBuildingName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
-	    		booking.setProjectName(builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName());
-	    		booking.setBuyerName(buyer.getName());
-	    		booking.setBuyerEmail(buyer.getEmail());
-	    		booking.setBuyerMobile(buyer.getMobile());
-	    		booking.setBuyerPanNo(buyer.getPancard());
-	    		booking.setBuyerAadhaarNumber(buyer.getAadhaarNumber());
-	    		booking.setBuyerCurrentAddress(buyer.getCurrentAddress());
-	    		booking.setBuyerPermanentAddress(buyer.getAddress());
-	    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
-	    		if(buyer.getPhoto() != null){
-	    		booking.setBuyerPhoto(buyer.getPhoto());
-	    		}else{
-	    			booking.setBuyerPhoto("");
+	    		try{
+		    		Buyer buyer = getBuyerByFlatId(builderFlat.getId());
+		    		Cancellation cancellation = new CancellationDAO().getCancellationByFlatId(builderFlat.getId());
+		    		booking.setFlatNo(builderFlat.getFlatNo());
+		    		booking.setBuildingName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
+		    		booking.setProjectName(builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName());
+		    		booking.setBuyerName(buyer.getName());
+		    		booking.setBuyerEmail(buyer.getEmail());
+		    		booking.setBuyerMobile(buyer.getMobile());
+		    		booking.setBuyerPanNo(buyer.getPancard());
+		    		booking.setBuyerAadhaarNumber(buyer.getAadhaarNumber());
+		    		booking.setBuyerCurrentAddress(buyer.getCurrentAddress());
+		    		booking.setBuyerPermanentAddress(buyer.getAddress());
+		    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
+		    		if(buyer.getPhoto() != null){
+		    		booking.setBuyerPhoto(buyer.getPhoto());
+		    		}else{
+		    			booking.setBuyerPhoto("");
+		    		}
+		    		if(cancellation != null){
+		    			booking.setIsApproved(cancellation.isApproved());
+		    			booking.setCancelStatus(cancellation.getCancelStatus());
+		    			booking.setCancelReason(cancellation.getReason());
+		    			booking.setCharges(cancellation.getCharges());
+		    		}else{
+		    			booking.setIsApproved(false);
+		    			booking.setCancelStatus(0);
+		    			booking.setCancelReason("");
+		    			booking.setCharges(0.0);
+		    		}
+	    		}catch(Exception e){
+	    			e.printStackTrace();
+	    			Buyer buyer = getBuyerByFlatId(builderFlat.getId());
+		    		booking.setFlatNo(builderFlat.getFlatNo());
+		    		booking.setBuildingName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
+		    		booking.setProjectName(builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName());
+		    		booking.setBuyerName(buyer.getName());
+		    		booking.setBuyerEmail(buyer.getEmail());
+		    		booking.setBuyerMobile(buyer.getMobile());
+		    		booking.setBuyerPanNo(buyer.getPancard());
+		    		booking.setBuyerAadhaarNumber(buyer.getAadhaarNumber());
+		    		booking.setBuyerCurrentAddress(buyer.getCurrentAddress());
+		    		booking.setBuyerPermanentAddress(buyer.getAddress());
+		    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
+		    		if(buyer.getPhoto() != null){
+		    		booking.setBuyerPhoto(buyer.getPhoto());
+		    		}else{
+		    			booking.setBuyerPhoto("");
+		    		}
 	    		}
 	    	}
     	}catch(Exception e){
@@ -5688,7 +5722,11 @@ public class ProjectDAO {
     	return result;
     }
     
-    public BookingFlatList getFlatdetails(int flatId){
+    public BookingFlatList getFlatdetails(int flatId,int empId){
+    	
+    	String emphql = " from BuilderEmployee where id=:id";
+    
+    	
     	BookingFlatList booking = new BookingFlatList();
     	String hql =" from BuilderFlat where id = :flat_id AND builderFloor.builderBuilding.builderProject.status = 1 AND "
     			+ " builderFloor.builderBuilding.status = 1 AND builderFloor.status = 1 ";
@@ -5697,6 +5735,13 @@ public class ProjectDAO {
     	Session session = hibernateUtil.openSession();
     	Query query = session.createQuery(hql);
     	query.setParameter("flat_id", flatId);
+    	
+    	Session empSession = hibernateUtil.openSession();
+    	Query empQuery = empSession.createQuery(emphql);
+    	empQuery.setParameter("id", empId);
+    	BuilderEmployee employee = (BuilderEmployee) empQuery.list().get(0);
+    	empSession.close();
+    	booking.setAccessId(employee.getBuilderEmployeeAccessType().getId());
     	try{
 	    	BuilderFlat builderFlat = (BuilderFlat) query.list().get(0);
 	    	if(builderFlat != null){
@@ -5737,7 +5782,10 @@ public class ProjectDAO {
 	    	//	booking.setCarpetAreaunit(builderFlat.getBuilderFlatType().);
 	    	}
 	    	else if(builderFlat.getBuilderFlatStatus().getId() == 2){
+	    		try{
 	    		Buyer buyer = getBuyerByFlatId(builderFlat.getId());
+	    		Cancellation cancellation = new CancellationDAO().getCancellationByFlatId(builderFlat.getId());
+	    		
 	    		booking.setFlatId(builderFlat.getId());
 	    		booking.setFlatNo(builderFlat.getFlatNo());
 	    		booking.setBuildingName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
@@ -5768,9 +5816,43 @@ public class ProjectDAO {
 	    		}else{
 	    			booking.setBuyerPhoto("");
 	    		}
-	    	}
+	    		if(cancellation != null && employee.getBuilderEmployeeAccessType().getId() == 5){
+	    			booking.setCancellationId(cancellation.getId());
+	    			booking.setIsApproved(cancellation.isApproved());
+	    			booking.setCancelStatus(cancellation.getCancelStatus());
+	    			booking.setCancelReason(cancellation.getReason());
+	    			booking.setCharges(cancellation.getCharges());
+	    			System.err.println("From cancellation if condtion");
+	    		}else{
+	    			booking.setIsApproved(false);
+	    			booking.setCancelStatus(0);
+	    			booking.setCancelReason("");
+	    			booking.setCharges(0.0);
+	    			System.err.println("From cancellation else");
+	    		}
+    		}catch(Exception e){
+    			e.printStackTrace();
+    			System.err.println("From exception of cancellation");
+    			Buyer buyer = getBuyerByFlatId(builderFlat.getId());
+	    		booking.setFlatNo(builderFlat.getFlatNo());
+	    		booking.setBuildingName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
+	    		booking.setProjectName(builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName());
+	    		booking.setBuyerName(buyer.getName());
+	    		booking.setBuyerEmail(buyer.getEmail());
+	    		booking.setBuyerMobile(buyer.getMobile());
+	    		booking.setBuyerPanNo(buyer.getPancard());
+	    		booking.setBuyerAadhaarNumber(buyer.getAadhaarNumber());
+	    		booking.setBuyerCurrentAddress(buyer.getCurrentAddress());
+	    		booking.setBuyerPermanentAddress(buyer.getAddress());
+	    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
+	    		if(buyer.getPhoto() != null){
+	    		booking.setBuyerPhoto(buyer.getPhoto());
+	    		}else{
+	    			booking.setBuyerPhoto("");
+	    		}
+    		}
 	    }
-    }catch(Exception e){
+    }}catch(Exception e){
     		e.printStackTrace();
     		booking = null;
     	}

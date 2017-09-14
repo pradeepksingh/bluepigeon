@@ -88,6 +88,7 @@ import org.bluepigeon.admin.model.BuildingPaymentInfo;
 import org.bluepigeon.admin.model.BuilderPropertyType;
 import org.bluepigeon.admin.model.BuildingPriceInfo;
 import org.bluepigeon.admin.model.BuildingWeightage;
+import org.bluepigeon.admin.model.Cancellation;
 import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
@@ -4431,9 +4432,9 @@ public class ProjectController extends ResourceConfig {
 	@GET
 	@Path("/building/floor/flat/detail")
 	@Produces(MediaType.APPLICATION_JSON)
-	public BookingFlatList getActiveFlatDetail(@QueryParam("flat_id") int flat_id) {
+	public BookingFlatList getActiveFlatDetail(@QueryParam("flat_id") int flat_id,@QueryParam("emp_id") int emp_id) {
 		ProjectDAO projectDAO = new ProjectDAO();
-		BookingFlatList floorList = projectDAO.getFlatdetails(flat_id);
+		BookingFlatList floorList = projectDAO.getFlatdetails(flat_id,emp_id);
 		return floorList;
 	}
 	
@@ -4445,5 +4446,22 @@ public class ProjectController extends ResourceConfig {
 		ProjectDAO cancellationDAO = new ProjectDAO();
 		msg = cancellationDAO.deleteSource(id);
 		return msg;
+	}
+	
+	@POST
+	@Path("cancel/primarybuyer/remove")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage removePrimaryBuyerByCancelId(
+			@FormParam("id") int id,
+		@FormParam("cancel_amount") Double cancelAmount
+			)
+	{
+		System.err.println("cancel amount :: "+cancelAmount);
+		ResponseMessage responseMessage = new ResponseMessage();
+		CancellationDAO cancellationDAO = new CancellationDAO();
+		Cancellation cancellation = cancellationDAO.getCancellationById(id);
+		cancellation.setCharges(cancelAmount);
+		responseMessage = cancellationDAO.updateCancelStatus(cancellation);
+		return responseMessage;
 	}
 }

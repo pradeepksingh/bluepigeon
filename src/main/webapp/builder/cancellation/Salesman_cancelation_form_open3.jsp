@@ -393,6 +393,7 @@ function showCancellationResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		alert(resp.message);
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
