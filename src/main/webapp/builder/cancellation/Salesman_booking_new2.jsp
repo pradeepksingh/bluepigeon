@@ -546,13 +546,14 @@ function showFlatwithImage(id){
 }
 
 function updateCancel(id){
-	if($("#cancelAmount").val() != '' && $("#cancelAmount").val() > 0){
+	alert("id "+id);
+	if($("#cancel_amount").val() != '' && $("#cancel_amount").val() > 0){
 		var flag = confirm("Are you sure ? You want to Delete Buyer ?");
 		if(flag){
 			$.post("${baseUrl}/webapi/project/cancel/primarybuyer/remove/", { id:id, cancel_amount:$("#cancel_amount").val()}, function(data){
 	 			alert(data.message);
 	 			if(data.status == 1) {
-	 				window.location.reload();
+	 				//window.location.reload();
 	 			}
 			});
 		}
