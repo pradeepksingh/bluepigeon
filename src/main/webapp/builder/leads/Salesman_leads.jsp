@@ -72,7 +72,7 @@
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/custom8.css">
+    <link rel="stylesheet" type="text/css" href="../css/custom10.css">
       <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
@@ -81,13 +81,7 @@
      <script src="../js/bootstrap-multiselect.js"></script>
     <link rel="stylesheet" href="../css/bootstrap-multiselect.css">
     <script type="text/javascript" src="../js/selectize.min.js"></script>
-    <script>
-    $(function() {
-        $("#sidebar1").load("../partial/sidebar.jsp");
-        $("#header").load("../partial/header.jsp");
-   	    $("#footer").load("../partial/footer.jsp");
-    });
-    </script>
+    
   	<script type="text/javascript">
 		    $(document).ready(function() {
 		        $('#multiple-checkboxes').multiselect();
@@ -115,10 +109,13 @@
     <div id="wrapper">
         <!-- Top Navigation -->
         <div id="header">
+         <%@include file="../partial/header.jsp"%>
         </div>
         <!-- End Top Navigation -->
         <!-- Left navbar-header -->
-        <div id="sidebar1"> </div>
+        <div id="sidebar1">
+        <%@include file="../partial/sidebar.jsp"%>
+         </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper" style="min-height: 2038px;">
@@ -414,7 +411,9 @@
 		  </div>
     </div>
     <!-- /.container-fluid -->
-    <footer id="footer"> </footer>
+   <div id="sidebar1"> 
+       	 <%@include file="../partial/footer.jsp"%>
+    </div>
   </body>
 </html>
 <script>

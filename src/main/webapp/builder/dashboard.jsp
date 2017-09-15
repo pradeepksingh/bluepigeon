@@ -90,7 +90,7 @@
     <link href="css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="css/style.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="${baseUrl}/builder/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="${baseUrl}/builder/css/dashboard.css">
      <link href="${baseUrl}/builder/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
     <link href="${baseUrl}/builder/plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="${baseUrl}/builder/plugins/bower_components/switchery/dist/switchery.min.css" rel="stylesheet" />
@@ -309,7 +309,7 @@
 	                        else if(access_id == 5 || access_id == 7){%>
 	                      <div class="row">
                            	  <div class="col-md-6 left"> 
-                           		   <a href="${baseUrl}/builder/buyer/booking.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
+                           		   <a href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
                            	  </div>
                          	  <div class="col-md-6 center">
                           		   <a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>

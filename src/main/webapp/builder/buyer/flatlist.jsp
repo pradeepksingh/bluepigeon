@@ -52,7 +52,7 @@
 	}
 %>
  <% if(flatListDatas !=null && bookingFlatList2 !=null){ %>
- <link rel="stylesheet" type="text/css" href="../css/custom10.css">
+<!--  <link rel="stylesheet" type="text/css" href="../css/custom10.css"> -->
    <div class="col-md-8 col-sm-6 col-xs-12  bg1">
         <div class="white-box" >
 	     <% if(flatListDatas !=null){

@@ -48,6 +48,7 @@
 	BookingFlatList bookingFlatList2 = null; 
  	int flat_size = 0;
  	int evenOrodd = 0;
+ 	int emp_id=0;
  	String image  = ""; 
  	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>(); 
  	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList(); 
@@ -71,6 +72,7 @@
  			builder  = (BuilderEmployee)session.getAttribute("ubname"); 
  			p_user_id = builder.getBuilder().getId(); 
  			access_id = builder.getBuilderEmployeeAccessType().getId(); 
+ 			emp_id=builder.getId();
  			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
  			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
  			try{
@@ -126,6 +128,7 @@
  	     					%> 
 						 </div>
                     </div>
+                    <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
                     <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
                      <div class="bg1">
                        <div class="tab-content">
@@ -143,18 +146,18 @@
 						          <hr>
 						       </div>
 							   <div class="row custom-row user-row">
-							        <p class="p-custom">Mobile Nomm.</p>
+							        <p class="p-custom">Mobile No.</p>
 							        <p><b><%out.print(bookingFlatList2.getBuyerMobile()); %></b></p>
 							        <p class="p-custom">Email</p>
 							        <p><b><%out.print(bookingFlatList2.getBuyerEmail()); %></b></p>
 							        <p class="p-custom">PAN</p>
 							        <p><b><%out.print(bookingFlatList2.getBuyerPanNo()); %></b></p>
-							        <p class="p-custom">Adhar card no.</p>
-							        <p><b></b></p>
+							        <p class="p-custom">Aadhaar card no.</p>
+							        <p><b><%if(bookingFlatList2.getBuyerAadhaarNumber() != null){out.print(bookingFlatList2.getBuyerAadhaarNumber()); }%></b></p>
 							        <p class="p-custom">Permanent Address</p>
 							        <p><b><%out.print(bookingFlatList2.getBuyerPermanentAddress()); %></b></p>
 							        <p class="p-custom">Current Address</p>
-							        <p><b></b></p>
+							        <p><b><%if(bookingFlatList2.getBuyerCurrentAddress() != null){ out.print(bookingFlatList2.getBuyerCurrentAddress()); }%></b></p>
 							        <hr>
 							   </div>
 						      <button type="button" onclick="showFlats(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button red">Cancel</button>

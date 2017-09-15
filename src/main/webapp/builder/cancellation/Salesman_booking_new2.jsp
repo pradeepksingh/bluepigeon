@@ -174,7 +174,7 @@
                      </div>
                      <div class="col-md-4 col-sm-4 col-xs-12">
                        <select id="filter_floor_id" name="filter_floor_id">
-                			<option value="0">All Floor</option>
+                			<option value="0"></option>
                 			<%
                 			if(floorList != null){
                 			for(BuilderFloor builderFloors : floorList){ %>
@@ -384,6 +384,7 @@ $select_building = $("#filter_building_id").selectize({
 							var textClear =	 $("#filter_floor_id :selected").text();
 					   	 if(textClear.trim() == "Enter Floor Name"){
 					   		 obj[0].setValue("0");
+					   		obj[0].setTest("All Floor");
 					   	 }
 					    }
 					});
@@ -404,6 +405,7 @@ $select_building = $("#filter_building_id").selectize({
 							var textClear =	 $("#filter_floor_id :selected").text();
 					   	 if(textClear.trim() == "Enter Floor Name"){
 					   		 obj[0].setValue("0");
+					   		obj[0].setTest("All Floor");
 					   	 }
 					    }
 					});
@@ -430,7 +432,7 @@ $select_floor = $("#filter_floor_id").selectize({
 	persist: false,
 	 onChange: function(value) {
 
-		if(($("#filter_building_id").val() != '') && ($("#filter_floor_id").val() != '' )){
+		if(($("#filter_building_id").val() != '') || ($("#filter_floor_id").val() != '' )){
 			getFlatDetails();
 		}
 	 },

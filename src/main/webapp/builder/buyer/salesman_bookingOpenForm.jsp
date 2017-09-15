@@ -100,23 +100,36 @@
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="../plugins/images/favicon.png">
     <title>Blue Pigeon</title>
-    <!-- Bootstrap Core CSS -->
+ <!-- Bootstrap Core CSS -->
+
     <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
-   <!-- Menu CSS -->
+
+    <link rel="stylesheet" href="../css/bootstrap-multiselect.css">
+
+    <!-- Menu CSS -->
+
     <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+
     <!-- Custom CSS -->
+
     <link href="../css/style.css" rel="stylesheet">
+
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/custom10.css">
-    <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
-    <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" type="text/css" href="../css/booking.css">
+     <link rel="stylesheet" type="text/css" href="../css/newbookinglist.css">
+
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+
     <!-- jQuery -->
+
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/selectize.min.js"></script>
-<!--      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script>
+ <script type="text/javascript" src="../js/selectize.min.js"></script>
+    <script src="../js/bootstrap-multiselect.js"></script>
 </head>
   
    
@@ -139,16 +152,16 @@
                <!-- /.row -->
 	                <div class="row bspace">
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-submit waves-effect waves-light m-t-10">Booking</button>
+		                    <button type="submit" id="booking"  class="btn11 btn-submit waves-effect waves-light m-t-10">Booking</button>
 		                </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-info waves-effect waves-light m-t-10">Cancellation</button>
+		                    <button type="submit" id="cancellation" class="btn11 btn-info waves-effect waves-light m-t-10">Cancellation</button>
 		                 </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-info waves-effect waves-light m-t-10">Leads</button>
+		                    <button type="submit" id="leads"  class="btn11 btn-info waves-effect waves-light m-t-10">Leads</button>
 		                </div>
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-info waves-effect waves-light m-t-10">Campain</button>
+		                    <button type="submit" id="campaign" class="btn11 btn-info waves-effect waves-light m-t-10">Campain</button>
 		                </div>
 	                </div>
                <!-- row -->
@@ -184,7 +197,7 @@
                     <!-- row -->
                     
                 <div class="white-box">
-                 <div class="row">
+                 <div class="row" id="flatdetails">
                     <div class="col-md-8 col-sm-6 col-xs-12  bg1">
                         <div class="white-box">
                          <% if(flatListDatas !=null){
@@ -418,8 +431,8 @@ $(document).ready(function () {
 	 %>
     $("#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>").click(function (e) {
         e.preventDefault();
-        showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>);
     });
+    $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click');
     
     <%						}
 				 		}
@@ -593,7 +606,7 @@ $select_building = $("#filter_building_id").selectize({
 		if($("#filter_building_id").val() != '' ){
 			$.get("${baseUrl}/webapi/project/building/floor/list/",{ building_id: value }, function(data){
 				getFlatDetails();
-				var html = '<option value="">Enter Floor Name</option>';
+				var html = '<option value="0">All Floor</option>';
 				if(data != ""){
 					$(data).each(function(index){
 						html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
@@ -603,7 +616,7 @@ $select_building = $("#filter_building_id").selectize({
 					$select_floor = $("#filter_floor_id").selectize({
 						persist: false,
 						 onChange: function(value) {
-							 if(value > 0 || value != '' ){
+							 if( value != '' ){
 								 getFlatDetails();
 								}
 						 },
@@ -612,6 +625,7 @@ $select_building = $("#filter_building_id").selectize({
 							var textClear =	 $("#filter_floor_id :selected").text();
 					   	 if(textClear.trim() == "Enter Floor Name"){
 					   		 obj[0].setValue("0");
+					   		obj[0].setTest("All Floor");
 					   	 }
 					    }
 					});
@@ -632,6 +646,7 @@ $select_building = $("#filter_building_id").selectize({
 							var textClear =	 $("#filter_floor_id :selected").text();
 					   	 if(textClear.trim() == "Enter Floor Name"){
 					   		 obj[0].setValue("0");
+					   		obj[0].setTest("All Floor");
 					   	 }
 					    }
 					});
@@ -664,6 +679,7 @@ $select_floor = $("#filter_floor_id").selectize({
 		var textClear =	 $("#filter_floor_id :selected").text();
    	 if(textClear.trim() == "Enter Floor Name"){
    		 obj[0].setValue("0");
+   		 obj[0].setTest("All Floor");
    	 }
     }
 });
@@ -675,7 +691,7 @@ $select_floor = $("#filter_floor_id").selectize({
 $select_eveOrodd = $("#evenOrodd").selectize({
 	persist: false,
 	onChange: function(value){
-		if(value > 0 && value != ''){
+		if(value != ''){
 			getFlatDetails();
 		}
 	},
