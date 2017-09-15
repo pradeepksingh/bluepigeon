@@ -4828,7 +4828,7 @@ public class ProjectDAO {
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1 || builderEmployee.getBuilderEmployeeAccessType().getId() ==2){
 			totalRevenue = getRevenueOfsoldInventoryByBuilderId(builderEmployee.getBuilder().getId());
 		}
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 4 || builderEmployee.getBuilderEmployeeAccessType().getId() == 5 || builderEmployee.getBuilderEmployeeAccessType().getId() ==7){
+		else if(builderEmployee.getBuilderEmployeeAccessType().getId() == 4 || builderEmployee.getBuilderEmployeeAccessType().getId() == 5 || builderEmployee.getBuilderEmployeeAccessType().getId() ==7){
 			
 			totalRevenue = getTotalRevenueByEmpId(builderEmployee.getId());
 		}
@@ -4851,7 +4851,7 @@ public class ProjectDAO {
 	public Double getTotalRevenueByEmpId(int empId){
 		Double totalRevenue = 0.0;
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		String hql = "SELECT SUM(project.revenue) from builder_project as project left join allot_project as ap on ap.project_id = project.id where ap.emp_id = :emp_id ";
+		String hql = "SELECT SUM(project.revenue) from builder_project as project inner join allot_project as ap on ap.project_id = project.id where ap.emp_id = :emp_id ";
 		Session session = hibernateUtil.openSession();
 		Query query = session.createSQLQuery(hql);
 		query.setParameter("emp_id", empId);
@@ -5992,4 +5992,5 @@ public ResponseMessage deleteSource(int id){
 	return responseMessage;
 	
 }
+
 }

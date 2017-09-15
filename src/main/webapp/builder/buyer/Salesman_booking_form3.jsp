@@ -28,6 +28,7 @@
 	BuilderFlat builderFlat = null;
 	int builder_id1 = 0;
 	int flat_id = 0;
+	int emp_id = 0;
 	int building_id = 0;
 	int project_id = 0;
 	String projectName = "";
@@ -43,7 +44,7 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id1 = builder.getBuilder().getId();
-			
+			emp_id = builder.getId();
 			if(builder_id1> 0 ){
 				project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id1);
 			}
@@ -62,7 +63,7 @@
 		flatPricingDetails = new ProjectDAO().getFlatPriceInfos(flat_id);
 		building_id = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
 		project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
-		 bookingFlatList = new ProjectDAO().getFlatdetails(flat_id);
+		 bookingFlatList = new ProjectDAO().getFlatdetails(flat_id,emp_id);
 		 if(builderFlat != null){
 			 projectName = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName();
 			 buildingName = builderFlat.getBuilderFloor().getBuilderBuilding().getName();

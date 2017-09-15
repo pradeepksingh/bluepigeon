@@ -139,9 +139,9 @@
       <div id="sidebar1"> 
        	<%@include file="../partial/sidebar.jsp"%>
       </div>
-      <div id="progress" style="display: none;">
-   	 	<img style="width:10%" src="../images/loading.gif"/>
-	</div>
+<!--       <div id="progress" style="display: none;"> -->
+<!--    	 	<img style="width:10%" src="../images/loading.gif"/> -->
+<!-- 	</div> -->
         <div id="page-wrapper" style="min-height: 2038px;">
 			<%if(isPresent){ %>
            <div class="container-fluid">
@@ -327,7 +327,7 @@
   </body>
 </html>
 <script>
-$("#progress").css("display","none");
+//$("#progress").css("display","none");
 $("#cancellation").click(function(){
 	window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(project_id);%>
 });
@@ -387,7 +387,7 @@ function showFlat(id){
 function showFlatwithImage(id){
 	$("#home").empty();
 	var htmlFlat ="";
-	$('#progress').css("display","block");
+	//$('#progress').css("display","block");
 	if(id > 0 && id != ''){
 		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id,emp_id:$("#emp_id").val()},function(data){
 			if(data.flatStatus == 1){
@@ -395,7 +395,7 @@ function showFlatwithImage(id){
 			if(data.image != ''){
 				image = '${baseUrl}/'+data.image;
 			}
-			$('#progress').css("display","none");
+			//$('#progress').css("display","none");
 			htmlFlat ='<img src="'+image+'" alt="Project image" class="custom-img">'
 	 	      +'<hr>'
 	 	      +'<div class="row custom-row">'

@@ -31,23 +31,22 @@ public class CancellationDAO {
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("Please enter cancellation amount");
 		}else{
-			String chql = "from Cancellation where builderFlat.id = :flat_id";
+			String chql = "from Cancellation where builderFlat.id = :flat_id and panCard =:pan_card";
 			Session presession = hibernateUtil.openSession();
 			Query prequery = presession.createQuery(chql);
 			prequery.setParameter("flat_id", cancellation.getBuilderFlat().getId());
+			prequery.setParameter("pan_card", cancellation.getPanCard());
 			List<Cancellation> result = prequery.list();
 			presession.close();
 			if (result.size() > 0) {
 				responseMessage.setStatus(0);
 				responseMessage.setMessage("Cancel request is already send");
 			}else{
-		
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
 		session.save(cancellation);
 		session.getTransaction().commit();
 		session.close();
-		
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 7)
 			updateBuyerStatus(cancellation.getBuilderFlat().getId());
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1 ||

@@ -36,6 +36,7 @@
 	BuilderFloor builderFloor = null;
 	int building_id = 0;
 	int floor_id = 0;
+	int emp_id =0;
 	List<BookingFlatList> bookingFlatList = null;
 	List<BuilderFloor> floorList = null;
 	List<BuilderBuilding> builderBuildingList = null;
@@ -60,6 +61,7 @@
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			p_user_id = builder.getBuilder().getId();
 			access_id = builder.getBuilderEmployeeAccessType().getId();
+			emp_id = builder.getId();
 			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
 			building_id = builderBuildingList.get(0).getId();
@@ -212,6 +214,7 @@
 	     					%>
 						 </div>
                     </div>
+                    <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>" />
                     <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
                      <div class="bg1">
                        <div class="tab-content">
@@ -437,7 +440,7 @@ function showFlatwithImage(id){
 	$("#home").empty();
 	var htmlFlat ="";
 	if(id > 0 && id != ''){
-		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id},function(data){
+		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id,emp_id:$("#emp_id").val()},function(data){
 			if(data.flatStatus == 1){
 				var image = '';
 				if(data.image != ''){
@@ -516,7 +519,7 @@ function showFlatwithImage(id){
 
 function showImagewithDetails(id){
 	if(id > 0 && id != ''){
-		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id},function(data){
+		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id, emp_id:$("#emp_id").val()},function(data){
 			if(data.flatStatus == 1){
 				$("#flatList").empty();
 				var image = '';
