@@ -165,6 +165,7 @@
                   <div class="row">
           			<div class="col-md-4 col-sm-6 col-xs-12">
 	                     <select id="filter_building_id" name="filter_building_id">
+	                     		<option value="0"></option>
 	                             <%
 	                             if(builderBuildingList != null ){
 	                             for(BuilderBuilding builderBuilding2 : builderBuildingList){ %>
@@ -175,7 +176,7 @@
                 	<div class="col-md-4 col-sm-6 col-xs-12">
                 
                 		<select id="filter_floor_id" name="filter_floor_id">
-                			<option value="0"></option>
+                			<option value="0">All Floor</option>
                 			<%
                 			if(floorList != null){
                 			for(BuilderFloor builderFloors : floorList){ %>

@@ -122,6 +122,7 @@
                               <li> <a href="${baseUrl }/builder/cancellation/Salesman-Cancellation-list.jsp">Cancellation List</a></li>
                               <li> <a href="${baseUrl }/builder/leads/Salesman_add_lead.jsp">Add Lead</a></li>
                               <li> <a href="${baseUrl }/builder/sales/source.jsp">Add Source</a></li>
+                               <li> <a href="${baseUrl }/builder/datanalytics/data_analytics.jsp">Data Analytics</a></li>
 <%--                               <li> <a href="${baseUrl }/builder/sales/source-list.jsp">Manage Source</a></li> --%>
                           </ul>
                    </li>

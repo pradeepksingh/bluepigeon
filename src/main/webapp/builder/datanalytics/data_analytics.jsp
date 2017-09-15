@@ -136,22 +136,12 @@
                 <div class="row">
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         <div class="white-box">
-                            <h3 class="box-title">Project status</h3>
+                            <h3 class="box-title"></h3>
                             <div class="col-md-3 col-sm-6 col-xs-12">
-                        		<select class="selectpicker border-drop-down" data-style="form-control" id="graph_project_id" name="graph_project_id">
-                                        <option value="0">Project wise</option>
-                                       	<option value="1">Source Wise</option>
-                                       	<option value="2">Month Wise</option>
-                           		</select>
+                        		
                     		</div>
-<!--                             <ul class="list-inline text-right"> -->
-<!--                                 <li> -->
-<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #24bcd3;"></i>Flats</h5> </li> -->
-<!--                                 <li> -->
-<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #fb9678;"></i>Buyers</h5> </li> -->
-<!--                                 <li> -->
-<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #9675ce;"></i>Purchases</h5> </li> -->
-<!--                             </ul> -->
+                    		
+                           
                             <div id="morris-bar-chart" style="height:372px;"></div>
                         </div>
                     </div>
@@ -275,13 +265,9 @@
     	    	<% for(ProjectWiseData barGraphData : projectWiseDatas){ %>
     	    		 
     	    	{
-    	    	
-    	    	
    		      y: '<%out.print(barGraphData.getRevenue());%>'
      	    	    , 
     	        ProjectName: '<%out.print(barGraphData.getName());%>'
-            
-             
              },
              <% } %>],
              xkey: 'y',
@@ -289,7 +275,6 @@
      	    labels: ['ProjectName'],
      	    barColors:['#24bcd3'],
      	    hideHover: 'auto',
-     	   
      	    gridLineColor: '#eef0f2',
      	    resize: true
      	});

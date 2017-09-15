@@ -63,7 +63,7 @@
 					city_size_list = cityDataList.size();
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
-					//totalRevenue = totalPropertySold * totalInventorySold;
+					totalRevenue = totalPropertySold * totalInventorySold;
 					
 				}
 		}

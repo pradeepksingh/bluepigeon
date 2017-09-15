@@ -164,6 +164,7 @@
                   <div class="row re">
                     <div class="col-md-4 col-sm-4 col-xs-12">
                         <select id="filter_building_id" name="filter_building_id">
+                        		<option value="0"></option>
 	                             <%
 	                             if(builderBuildingList != null ){
 	                             for(BuilderBuilding builderBuilding2 : builderBuildingList){ %>
@@ -173,7 +174,7 @@
                      </div>
                      <div class="col-md-4 col-sm-4 col-xs-12">
                        <select id="filter_floor_id" name="filter_floor_id">
-                			<option value="0"></option>
+                			<option value="0">All Floor</option>
                 			<%
                 			if(floorList != null){
                 			for(BuilderFloor builderFloors : floorList){ %>
@@ -475,7 +476,7 @@ function getFlatDetails(){
 function showFlatwithImage(id){
 	$("#home").empty();
 	var htmlFlat ="";
-	if(id > 0 && id != ''){
+	if( id != ''){
 		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id,emp_id:$("#emp_id").val()},function(data){
 			var image = '';
 			if(data.buyerPhoto != ''){
@@ -501,7 +502,7 @@ function showFlatwithImage(id){
 			        +'<p class="p-custom">Permanent Address</p>'
 			        +'<p><b>'+data.buyerPermanentAddress+'</b></p>'
 			        +'<p class="p-custom">Current Address</p>'
-			        +'<p><b></b></p>'
+			        +'<p><b>'+data.buyerCurrentAddress+'</b></p>'
 			        +'<hr>'
 			      +'</div>'
 			      +'<button type="button" onclick="showFlats('+data.flatId+')" class="button red">Cancel</button>';
@@ -553,7 +554,7 @@ function updateCancel(id){
 			$.post("${baseUrl}/webapi/project/cancel/primarybuyer/remove/", { id:id, cancel_amount:$("#cancel_amount").val()}, function(data){
 	 			alert(data.message);
 	 			if(data.status == 1) {
-	 				//window.location.reload();
+	 				window.location.reload();
 	 			}
 			});
 		}

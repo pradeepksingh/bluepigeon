@@ -24,6 +24,7 @@
 	BuilderEmployee builder = new BuilderEmployee();
 	List<BuilderProject> project_list = null; 
 	int builder_id = 0;
+	int emp_id=0;
 	BuilderFlat builderFlat = null;
 	String taxLabel1 = "";
 	String taxLabel2 = "";
@@ -34,6 +35,7 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
+			emp_id = builder.getId();
 		}
    	}
 	if(builder_id > 0 ){
@@ -52,6 +54,7 @@
 	int primary_buyer_id = 0;
 	int project_id = 0;
 	int building_id = 0;
+	
 	String projectName = "";
 	String buildingName = "";
 	String flatNo = "";
@@ -65,7 +68,7 @@
 		buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyers.get(0).getId());
 		buyerOffers = new BuyerDAO().getBuyerOffersByBuyerId(buyers.get(0).getId());
 		builderFlat = new ProjectDAO().getBuilderFlatById(flat_id);
-		bookingFlatList = new ProjectDAO().getFlatdetails(flat_id);
+		bookingFlatList = new ProjectDAO().getFlatdetails(flat_id,emp_id);
 		buyeroffersize = buyerOffers.size();
 		buyerPayments = new BuyerDAO().getBuyerPaymentsByBuyerId(buyers.get(0).getId());
 		buyerUploadDocuments = new BuyerDAO().getBuyerUploadDocumentsByBuyerId(buyers.get(0).getId());

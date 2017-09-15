@@ -223,7 +223,7 @@
 											     <span id="file-name" class="file-box"></span>
 											     <span class="file-button">
 											      <i class="fa fa-upload" aria-hidden="true"></i>
-											      Select File
+											      Choose file
 											     </span>
 											  </label>
 											</div>

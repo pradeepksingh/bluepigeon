@@ -165,7 +165,7 @@
                      </div>
                      <div class="col-md-4 col-sm-4 col-xs-12">
                         <select id="filter_floor_id" name="filter_floor_id">
-                			<option value="0"></option>
+                			<option value="0">All Floor</option>
                 			<%
                 			if(floorList != null){
                 			for(BuilderFloor builderFloors : floorList){ %>
@@ -287,7 +287,7 @@
 						        <p class="p-custom">Permanent Address</p>
 						        <p><b><%out.print(bookingFlatList2.getBuyerPermanentAddress()); %></b></p>
 						        <p class="p-custom">Current Address</p>
-						        <p><b></b></p>
+						        <p><b><%out.print(bookingFlatList2.getBuyerCurrentAddress()); %></b></p>
 						        <hr>
 						      </div>
 						      <button type="button" onclick="showFlats(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button red">Cancel</button>
@@ -330,13 +330,13 @@
 						    </div>
 						   <div class="col-md-6 col-sm-6 col-xs-6">
 						      <p class="p-custom">Carpet Area</p>
-						      <p><b>500 SQ/FT</b></p>
+						      <p><b><%out.print(bookingFlatList2.getCarpetArea()); %> <%out.print(bookingFlatList2.getCarpetAreaunit()); %></b></p>
 						   </div>
 						</div>
 						 <div class="row custom-row">
 						   <div class="col-md-6 col-sm-6 col-xs-6">
 						      <p class="p-custom">Flat Type</p>
-						      <p><b>1BHK</b></p>
+						      <p><b><%out.print(bookingFlatList2.getFlatType()); %></b></p>
 						    </div>
 						   <div class="col-md-6 col-sm-6 col-xs-6">
 						      <p class="p-custom">Carpet Area</p>
@@ -391,6 +391,7 @@ function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
 		//alert("Hello");
         $('.nav li.active').removeClass('active');
+        
        // alert("Hello1");
         var $parent = $(this).parent();
      //   alert("Hello2"+$parent.val());
@@ -439,7 +440,7 @@ function showFlatwithImage(id){
 	var flatdetails = "";
 	$("#home").empty();
 	var htmlFlat ="";
-	if(id > 0 && id != ''){
+	if(id != ''){
 		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id,emp_id:$("#emp_id").val()},function(data){
 			if(data.flatStatus == 1){
 				var image = '';
@@ -518,7 +519,7 @@ function showFlatwithImage(id){
 }
 
 function showImagewithDetails(id){
-	if(id > 0 && id != ''){
+	if( id != ''){
 		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id, emp_id:$("#emp_id").val()},function(data){
 			if(data.flatStatus == 1){
 				$("#flatList").empty();
@@ -589,7 +590,7 @@ function showImagewithDetails(id){
 $select_building = $("#filter_building_id").selectize({
 	persist: false,
 	 onChange: function(value) {
-		if($("#filter_building_id").val() > 0 || $("#filter_building_id").val() != '' ){
+		if($("#filter_building_id").val() != '' ){
 			$.get("${baseUrl}/webapi/project/building/floor/list/",{ building_id: value }, function(data){
 				getFlatDetails();
 				var html = '<option value="">Enter Floor Name</option>';
@@ -653,7 +654,7 @@ $select_building = $("#filter_building_id").selectize({
 $select_floor = $("#filter_floor_id").selectize({
 	persist: false,
 	 onChange: function(value) {
-		if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '') && ($("#filter_floor_id").val() > 0 && $("#filter_floor_id").val() != '' )){
+		if(($( $("#filter_building_id").val() != '')  && $("#filter_floor_id").val() != '' )){
 			//window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
 			getFlatDetails();
 		}
