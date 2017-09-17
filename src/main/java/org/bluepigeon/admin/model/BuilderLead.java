@@ -6,6 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
+
+import java.util.Date;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,10 +22,10 @@ import javax.persistence.Table;
 public class BuilderLead implements java.io.Serializable {
 
 	private Integer id;
-	private BuilderBuilding builderBuilding;
-	private BuilderFlat builderFlat;
+	//private BuilderBuilding builderBuilding;
+	//private BuilderFlat builderFlat;
 	private BuilderProject builderProject;
-	private BuilderPropertyType builderPropertyType;
+	//private BuilderPropertyType builderPropertyType;
 	private String name;
 	private String mobile;
 	private String email;
@@ -33,7 +36,13 @@ public class BuilderLead implements java.io.Serializable {
 	private String discountOffered;
 	private Integer addedBy;
 	private Integer status;
-
+	private Integer flatId=0;
+	private Integer buildingId=0;
+	private Integer typeId = 0;
+	private Integer min=0;
+	private Integer max=0;
+	private Integer leadStatus = 0;
+	private Date lDate;
 	public BuilderLead() {
 	}
 
@@ -41,13 +50,36 @@ public class BuilderLead implements java.io.Serializable {
 		this.builderProject = builderProject;
 	}
 
-	public BuilderLead(BuilderBuilding builderBuilding, BuilderFlat builderFlat, BuilderProject builderProject,
-			BuilderPropertyType builderPropertyType, String name, String mobile, String email, String area, String city,
-			Source source, Integer intrestedIn, String discountOffered, Integer addedBy, Integer status) {
-		this.builderBuilding = builderBuilding;
-		this.builderFlat = builderFlat;
+	// public BuilderLead(BuilderBuilding builderBuilding, BuilderFlat
+	// builderFlat, BuilderProject builderProject,
+	// BuilderPropertyType builderPropertyType, String name, String mobile,
+	// String email, String area, String city,
+	// Source source, Integer intrestedIn, String discountOffered, Integer
+	// addedBy, Integer status) {
+	// this.builderBuilding = builderBuilding;
+	// this.builderFlat = builderFlat;
+	// this.builderProject = builderProject;
+	// this.builderPropertyType = builderPropertyType;
+	// this.name = name;
+	// this.mobile = mobile;
+	// this.email = email;
+	// this.area = area;
+	// this.city = city;
+	// this.source = source;
+	// this.intrestedIn = intrestedIn;
+	// this.discountOffered = discountOffered;
+	// this.addedBy = addedBy;
+	// this.status = status;
+	// }
+	
+	public BuilderLead( BuilderProject builderProject,
+			 String name, String mobile, String email, String area, String city,
+			Source source, Integer intrestedIn, String discountOffered, Integer addedBy,
+			Integer status,Integer min,Integer max, Integer leadStatus, Date ldate) {
+		//this.builderBuilding = builderBuilding;
+		//this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
-		this.builderPropertyType = builderPropertyType;
+		//this.builderPropertyType = builderPropertyType;
 		this.name = name;
 		this.mobile = mobile;
 		this.email = email;
@@ -58,6 +90,10 @@ public class BuilderLead implements java.io.Serializable {
 		this.discountOffered = discountOffered;
 		this.addedBy = addedBy;
 		this.status = status;
+		this.min = min;
+		this.max = max;
+		this.leadStatus = leadStatus;
+		this.lDate = lDate;
 	}
 
 	@Id
@@ -72,25 +108,25 @@ public class BuilderLead implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "building_id")
-	public BuilderBuilding getBuilderBuilding() {
-		return this.builderBuilding;
-	}
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name = "building_id")
+//	public BuilderBuilding getBuilderBuilding() {
+//		return this.builderBuilding;
+//	}
+//
+//	public void setBuilderBuilding(BuilderBuilding builderBuilding) {
+//		this.builderBuilding = builderBuilding;
+//	}
 
-	public void setBuilderBuilding(BuilderBuilding builderBuilding) {
-		this.builderBuilding = builderBuilding;
-	}
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "flat_id")
-	public BuilderFlat getBuilderFlat() {
-		return this.builderFlat;
-	}
-
-	public void setBuilderFlat(BuilderFlat builderFlat) {
-		this.builderFlat = builderFlat;
-	}
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name = "flat_id")
+//	public BuilderFlat getBuilderFlat() {
+//		return this.builderFlat;
+//	}
+//
+//	public void setBuilderFlat(BuilderFlat builderFlat) {
+//		this.builderFlat = builderFlat;
+//	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "project_id", nullable = false)
@@ -102,15 +138,15 @@ public class BuilderLead implements java.io.Serializable {
 		this.builderProject = builderProject;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "type_id")
-	public BuilderPropertyType getBuilderPropertyType() {
-		return this.builderPropertyType;
-	}
-
-	public void setBuilderPropertyType(BuilderPropertyType builderPropertyType) {
-		this.builderPropertyType = builderPropertyType;
-	}
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name = "type_id")
+//	public BuilderPropertyType getBuilderPropertyType() {
+//		return this.builderPropertyType;
+//	}
+//
+//	public void setBuilderPropertyType(BuilderPropertyType builderPropertyType) {
+//		this.builderPropertyType = builderPropertyType;
+//	}
 
 	@Column(name = "name", length = 128)
 	public String getName() {
@@ -202,5 +238,62 @@ public class BuilderLead implements java.io.Serializable {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
+	@Column(name="flat_id")
+	public Integer getFlatId() {
+		return flatId;
+	}
 
+	public void setFlatId(Integer flatId) {
+		this.flatId = flatId;
+	}
+	@Column(name="building_id")
+	public Integer getBuildingId() {
+		return buildingId;
+	}
+
+	public void setBuildingId(Integer buildingId) {
+		this.buildingId = buildingId;
+	}
+	@Column(name="type_id")
+	public Integer getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(Integer typeId) {
+		this.typeId = typeId;
+	}
+	@Column(name="min")
+	public Integer getMin() {
+		return min;
+	}
+
+	public void setMin(Integer min) {
+		this.min = min;
+	}
+	@Column(name="max")
+	public Integer getMax() {
+		return max;
+	}
+
+	public void setMax(Integer max) {
+		this.max = max;
+	}
+	@Column(name="lead_status")
+	public Integer getLeadStatus() {
+		return leadStatus;
+	}
+
+	public void setLeadStatus(Integer leadStatus) {
+		this.leadStatus = leadStatus;
+	}
+	@Column(name="l_date")
+	public Date getLdate() {
+		return lDate;
+	}
+
+	public void setLdate(Date lDate) {
+		this.lDate = lDate;
+	}
+
+	
 }

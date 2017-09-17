@@ -127,26 +127,13 @@
            <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Data Analytics</h4> </div>
+                        <h4 class="page-title">Data Analytic page</h4> </div>
                     
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
                 <!-- .row -->
-                <div class="row">
-                    <div class="col-md-8 col-sm-6 col-xs-12">
-                        <div class="white-box">
-                            <h3 class="box-title"></h3>
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                        		
-                    		</div>
-                    		
-                           
-                            <div id="morris-bar-chart" style="height:372px;"></div>
-                        </div>
-                    </div>
-                    
-                </div>
+               
                 <!-- /.row -->
               
               </div>
@@ -254,64 +241,7 @@
 
    
     	//Morris bar chart
-    	 <%
-      	if(projectWiseDatas != null){
-       		%> 
-  
-     	Morris.Bar({
-     		 
-    	    element: 'morris-bar-chart',
-    	    data: [
-    	    	<% for(ProjectWiseData barGraphData : projectWiseDatas){ %>
-    	    		 
-    	    	{
-   		      y: '<%out.print(barGraphData.getRevenue());%>'
-     	    	    , 
-    	        ProjectName: '<%out.print(barGraphData.getName());%>'
-             },
-             <% } %>],
-             xkey: 'y',
-     	    ykeys: ['ProjectName'],
-     	    labels: ['ProjectName'],
-     	    barColors:['#24bcd3'],
-     	    hideHover: 'auto',
-     	    gridLineColor: '#eef0f2',
-     	    resize: true
-     	});
-     <%	} %>
- 	
- 	$("#graph_project_id").change(function(){
- 		barGraph();
- 	});
- 	function barGraph(){
- 		//Morris bar chart
- 		$("#morris-bar-chart").empty();
- 		var chart = Morris.Bar({
- 	   	    element: 'morris-bar-chart',
- 	   	    data: [{
- 	  		      y: '',
- 	   	        Flat: 0,
- 	            Buyers: 0,
- 	            Purchases: 0
- 	            }],
- 	            xkey: 'y',
- 	    	    ykeys: ['Flat', 'Buyers', 'Purchases'],
- 	    	    labels: ['Flat', 'Buyers', 'Purchases'],
- 	    	    barColors:['#00bfc7', '#fb9678', '#9675ce'],
- 	    	    hideHover: 'auto',
- 	    	   
- 	    	    gridLineColor: '#eef0f2',
- 	    	    resize: true
- 	    	});
- 		 $.post("${baseUrl}/webapi/builder/filter/bargraph",{project_id:$("#graph_project_id").val()},function(data){
- 			 $(data).each(function(index){
- 				var year = parseInt(data[index].builtYear); 
- 				var buyers = data[index].totalBuyers;
- 				var flats = data[index].totalFlats;
- 				var purchases = data[index].totalSold;
- 	 			chart.setData([{"y":year,"Flat":flats,"Buyers":buyers,"Purchases":purchases}]);
- 			 });
- 		 });
+    	
     }
     </script>
 </body>

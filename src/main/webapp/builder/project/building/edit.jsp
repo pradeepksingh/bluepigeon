@@ -135,14 +135,14 @@
     <link href="../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
     <!-- animation CSS -->
-    <link href="../../css/animate.css" rel="stylesheet">
+   
     <!-- Menu CSS -->
     <link href="../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
-    <link href="../../css/animate.css" rel="stylesheet">
+   
     <!-- Custom CSS -->
     <link href="../../css/style.css" rel="stylesheet">
-    <link href="../../css/custom.css" rel="stylesheet">
+    <link href="../../css/updatebuilding.css" rel="stylesheet">
     <link href="../../css/topbutton.css" rel="stylesheet">
 <!--     <link href="../../css/custom1.css" rel="stylesheet"> -->
     <link rel="stylesheet" type="text/css" href="../../css/selectize.css" />

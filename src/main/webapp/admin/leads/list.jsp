@@ -55,8 +55,8 @@ builderLeads = new ProjectDAO().getBuilderProjectLeads();
                                         for(int i=0; i < builderLeads.size(); i++){
                                         	BuilderLead builderLead = builderLeads.get(i);
                                         	BuilderProject builderProject = builderLead.getBuilderProject();
-                                        	BuilderFlat builderFlat = builderLead.getBuilderFlat();
-                                        	BuilderBuilding builderBuilding = builderLead.getBuilderBuilding();
+                                        	//BuilderFlat builderFlat = builderLead.getBuilderFlat();
+                                        	//BuilderBuilding builderBuilding = builderLead.getBuilderBuilding();
                                         %>
                                         <tr>
                                             <td><% out.print(builderLead.getName()); %></td>

@@ -132,45 +132,101 @@
         <!-- Page Content -->
         <div id="page-wrapper" style="min-height: 2038px;">
        <div class="container">
-    <div class="dropdown">
-        <button id="min-max-price-range" class="dropdown-toggle" href="#" data-toggle="dropdown">Budget<strong class="caret"></strong>
-        </button>
-        <div class="dropdown-menu col-sm-2" style="padding:10px;">
-            <form class="row">
-                <div class="col-xs-5">
- 
-                    <input class="form-control price-label" placeholder="Min" data-dropdown-id="price-min"/>
-                </div>
-                <div class="col-xs-2"> - </div>
-                <div class="col-xs-5">
-                    <input class="form-control price-label" placeholder="Max" data-dropdown-id="price-max"/>
-                </div>
-<div class="clearfix"></div>
-                <ul id="price-min" class="col-sm-12 price-range list-unstyled">
-                    <li data-value="0">0</li>
-                    <li data-value="10">10</li>
-                    <li data-value="20">20</li>
-                    <li data-value="30">30</li>
-                    <li data-value="40">40</li>
-                    <li data-value="50">50</li>
-                    <li data-value="60">60</li>
-                </ul>
-                <ul id="price-max" class="col-sm-12 price-range text-right list-unstyled hide">
-                    <li data-value="0">0</li>
-                    <li data-value="10">10</li>
-                    <li data-value="20">20</li>
-                    <li data-value="30">30</li>
-                    <li data-value="40">40</li>
-                    <li data-value="50">50</li>
-                    <li data-value="60">60</li>
-                </ul>
-            </form>
-        </div>
-    </div>
-</div>
-
+               <div class="container-fluid addlead">
+               <!-- /.row -->
+	            <h1>Add Lead</h1>
+               <!-- row -->
+               <div class="white-box">
+                 <div class="row bg11">
+                   <form class="addlead1">
+                  
+                     <div class="col-md-6 col-sm-6 col-xs-12">
+                         <div class="form-group row">
+							<label for="example-text-input" class="col-5 col-form-label"> Name</label>
+							  <div class="col-7">
+								 <input class="form-control" type="text" value="" id=""  placeholder="">
+							  </div>
+						  </div>
+						  <div class="form-group row">
+							 <label for="example-search-input" class="col-5 col-form-label">Email ID</label>
+								<div class="col-7">
+								   <input class="form-control" type="text" value="" id="" placeholder="">
+								 </div>
+						    </div>
+							<div class="form-group row">
+							   <label for="example-search-input" class="col-5 col-form-label">Configuration</label>
+								  <div class="col-7">
+								      <select id="multiple-checkboxes-3" name="multiple-checkboxes-3" multiple>
+								        <option value="php">PHP</option>
+								        <option value="javascript">JavaScript</option>
+								        <option value="java">Java</option>
+								        <option value="sql" >SQL</option>
+								        <option value="jquery" >Jquery</option>
+								        <option value=".net">.Net</option>
+								     </select>
+								  </div>
+							 </div>
+                            <div class="form-group row">
+					           <label for="example-tel-input" class="col-5 col-form-label">Source</label>
+						         <div class="col-7">
+							        <select class="selectpicker" data-style="form-control">
+			                          <option>All Floor</option>
+			                          <option>Floor No-1</option>
+			                          <option>Floor No-2</option>
+			                          <option>Floor No-3</option>
+			                          <option>Floor No-4</option>
+			                        </select>
+							     </div>
+						    </div>
+				       </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                       <div class="form-group row">
+							<label for="example-text-input" class="col-5 col-form-label"> Phone No.</label>
+							  <div class="col-7">
+								 <input class="form-control" type="text"  id="mobile" name="mobile"  placeholder="Please enter mobile number">
+							  </div>
+						  </div>
+						  <div class="form-group row">
+							 <label for="example-search-input" class="col-5 col-form-label">Interested Project</label>
+								<div class="col-7">
+								   <select id="multiple-checkboxes-2"  name="multipule-checkboxes-2" multiple>
+								        <option value="php">PHP</option>
+								        <option value="javascript">JavaScript</option>
+								        <option value="java">Java</option>
+								        <option value="sql">SQL</option>
+								        <option value="jquery">Jquery</option>
+								        <option value=".net">.Net</option>
+								     </select>
+								 </div>
+						    </div>
+							<div class="form-group row">
+							   <label for="example-search-input" class="col-5 col-form-label">Budget</label>
+								  <div class="col-7">
+								    <select class="selectpicker" data-style="form-control">
+			                          <option>All Floor</option>
+			                          <option>Floor No-1</option>
+			                          <option>Floor No-2</option>
+			                          <option>Floor No-3</option>
+			                          <option>Floor No-4</option>
+			                        </select>
+								   </div>
+							 </div>
+						</div>
+						<div class="center bcenter">
+					  	   <button type="button" id="save" class="button1">Save</button>
+					  	</div>
+                     </form>
+                  </div>
+               </div>
+            </div>
           </div>
         </div>
+    <!-- /.container-fluid -->
+   <div id="sidebar1"> 
+       	   		<%@include file="../partial/footer.jsp"%>
+      		</div>
+  </body>
+</html>
     <!-- /.container-fluid -->
    <div id="sidebar1"> 
        	   		<%@include file="../partial/footer.jsp"%>
@@ -245,7 +301,6 @@ $(".price-range li").click(function(){
         $('#min-max-price-range').dropdown('toggle');
     }
 });
-
 </script>
 
 

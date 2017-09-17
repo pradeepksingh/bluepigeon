@@ -48,7 +48,7 @@ public class BuilderFlat implements java.io.Serializable {
 	private Double weightage = 0.0;
 	private Byte status;
 	private String image = "";
-	private Set<BuilderLead> builderLeads = new HashSet<BuilderLead>(0);
+	//private Set<BuilderLead> builderLeads = new HashSet<BuilderLead>(0);
 
 	public BuilderFlat() {
 	}
@@ -56,7 +56,7 @@ public class BuilderFlat implements java.io.Serializable {
 	public BuilderFlat(BuilderFlatType builderFlatType, AdminUser adminUser, BuilderFloor builderFloor,
 			BuilderFlatStatus builderFlatStatus, String flatNo, Integer bedroom, Integer bathroom, Integer balcony,
 			Double totalInventory, Double inventorySold, Double revenue, Date possessionDate, Byte status,
-			Set<BuilderLead> builderLeads, Double completionStatus, Double weightage, Double amenityWeightage, String image,
+			 Double completionStatus, Double weightage, Double amenityWeightage, String image,
 			Double discount, Double baseSaleValue) {
 		this.builderFlatType = builderFlatType;
 		this.adminUser = adminUser;
@@ -72,7 +72,6 @@ public class BuilderFlat implements java.io.Serializable {
 		this.completionStatus = completionStatus;
 		this.possessionDate = possessionDate;
 		this.status = status;
-		this.builderLeads = builderLeads;
 		this.weightage = weightage;
 		this.amenityWeightage = amenityWeightage;
 		this.image = image;
@@ -220,14 +219,14 @@ public class BuilderFlat implements java.io.Serializable {
 		this.status = status;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderFlat")
-	public Set<BuilderLead> getBuilderLeads() {
-		return this.builderLeads;
-	}
-
-	public void setBuilderLeads(Set<BuilderLead> builderLeads) {
-		this.builderLeads = builderLeads;
-	}
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderFlat")
+//	public Set<BuilderLead> getBuilderLeads() {
+//		return this.builderLeads;
+//	}
+//
+//	public void setBuilderLeads(Set<BuilderLead> builderLeads) {
+//		this.builderLeads = builderLeads;
+//	}
 
 	@Column(name = "completion_status", columnDefinition = "Decimal(10,2) default '100.00'")
 	public Double getCompletionStatus() {
