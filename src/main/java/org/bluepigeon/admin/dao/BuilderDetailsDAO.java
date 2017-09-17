@@ -30,6 +30,7 @@ import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.EmployeeList;
 import org.bluepigeon.admin.data.InboxMessageData;
 import org.bluepigeon.admin.data.ProjectList;
+import org.bluepigeon.admin.data.ProjectWiseData;
 import org.bluepigeon.admin.util.HibernateUtil;
 
 public class BuilderDetailsDAO {
@@ -1530,4 +1531,40 @@ public class BuilderDetailsDAO {
 		return result;
 	}
 	
+	public List<ProjectWiseData> getProjectWiseByEmployee(BuilderEmployee builderEmployee){
+		String hql = "";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+			
+		}else{
+			hql = "select project.name as name, project.revenue as revenue from builder_project as project INNER join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.project_id = project.id left join builder_floor as floor on floor.building_id = building.id left join builder_flat as flat on flat.floor_no = floor.id where project.status=1 and ap.emp_id="+builderEmployee.getId()+" and flat.status_id=2 GROUP by project.id order by project.id desc";
+		}
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		
+		List<ProjectWiseData> result = query.list();
+		return result;
+	}
+	
+	public List<ProjectWiseData> getProjectWiseByEmployee(int empid){
+		String emphql = "from BuilderEmployee where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session empSession = hibernateUtil.openSession();
+		Query empQuery = empSession.createQuery(emphql);
+		empQuery.setParameter("id", empid);
+		BuilderEmployee builderEmployee = (BuilderEmployee) empQuery.list().get(0);
+				
+		String hql = "";
+		
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+			
+		}else{
+			hql = "select project.name as name, project.revenue as revenue from builder_project as project INNER join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.project_id = project.id left join builder_floor as floor on floor.building_id = building.id left join builder_flat as flat on flat.floor_no = floor.id where project.status=1 and ap.emp_id="+builderEmployee.getId()+" and flat.status_id=2 GROUP by project.id order by project.id desc";
+		}
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		
+		List<ProjectWiseData> result = query.list();
+		return result;
+	}
 }

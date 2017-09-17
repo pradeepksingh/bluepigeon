@@ -206,7 +206,6 @@ function showAddResponse(resp, statusText, xhr, $form){
   	}
 }
 function deleteSource(id){
-	alert(id);
 	var flag = confirm("Are you sure ? You want to Delete source ?");
 	if(flag){
 		$.get("${baseUrl}/webapi/project/source/remove/"+id, { }, function(data){

@@ -66,7 +66,7 @@
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/custom10.css">
+    <link rel="stylesheet" type="text/css" href="../css/inbox.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
@@ -223,7 +223,7 @@
 											     <span id="file-name" class="file-box"></span>
 											     <span class="file-button">
 											      <i class="fa fa-upload" aria-hidden="true"></i>
-											      Select File
+											      Choose file
 											     </span>
 											  </label>
 											</div>

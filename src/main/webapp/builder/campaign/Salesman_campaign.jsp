@@ -74,7 +74,7 @@
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/custom7.css">
+    <link rel="stylesheet" type="text/css" href="../css/salemancampaign.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->

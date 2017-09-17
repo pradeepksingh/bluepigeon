@@ -79,6 +79,7 @@ import org.bluepigeon.admin.model.BuilderProjectPaymentInfo;
 import org.bluepigeon.admin.model.BuilderProjectPriceInfo;
 import org.bluepigeon.admin.model.BuilderProjectProjectType;
 import org.bluepigeon.admin.model.BuilderProjectPropertyConfiguration;
+import org.bluepigeon.admin.model.BuilderProjectPropertyConfigurationInfo;
 import org.bluepigeon.admin.model.BuildingAmenityInfo;
 import org.bluepigeon.admin.model.BuildingAmenityWeightage;
 import org.bluepigeon.admin.model.BuildingImageGallery;
@@ -88,6 +89,7 @@ import org.bluepigeon.admin.model.BuildingPaymentInfo;
 import org.bluepigeon.admin.model.BuilderPropertyType;
 import org.bluepigeon.admin.model.BuildingPriceInfo;
 import org.bluepigeon.admin.model.BuildingWeightage;
+import org.bluepigeon.admin.model.Cancellation;
 import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
@@ -105,6 +107,7 @@ import org.bluepigeon.admin.model.FloorImageGallery;
 import org.bluepigeon.admin.model.FloorLayoutImage;
 import org.bluepigeon.admin.model.FloorPanoramicImage;
 import org.bluepigeon.admin.model.FloorWeightage;
+import org.bluepigeon.admin.model.LeadConfig;
 import org.bluepigeon.admin.model.Locality;
 import org.bluepigeon.admin.model.NewProject;
 import org.bluepigeon.admin.model.ProjectAmenityWeightage;
@@ -3656,26 +3659,26 @@ public class ProjectController extends ResourceConfig {
 		
 		BuilderLead builderLead = new BuilderLead();
 		builderLead.setBuilderProject(builderProject);
-		if(building_id > 0) {
-			BuilderBuilding builderBuilding = new BuilderBuilding();
-			builderBuilding.setId(building_id);
-			builderLead.setBuilderBuilding(builderBuilding);
-		}
-		if(flat_id > 0) {
-			BuilderFlat builderFlat = new BuilderFlat();
-			builderFlat.setId(flat_id);
-			builderLead.setBuilderFlat(builderFlat);
-		}
-		if(type_id>0){
-			BuilderPropertyType builderPropertyType = new BuilderPropertyType();
-			builderPropertyType.setId(type_id);
-			builderLead.setBuilderPropertyType(builderPropertyType);
-		}
-		if(source_id > 0){
-			Source source = new Source();
-			source.setId(source_id);
-			builderLead.setSource(source);
-		}
+//		if(building_id > 0) {
+//			BuilderBuilding builderBuilding = new BuilderBuilding();
+//			builderBuilding.setId(building_id);
+//			//builderLead.setBuilderBuilding(builderBuilding);
+//		}
+//		if(flat_id > 0) {
+//			BuilderFlat builderFlat = new BuilderFlat();
+//			builderFlat.setId(flat_id);
+//			builderLead.setBuilderFlat(builderFlat);
+//		}
+//		if(type_id>0){
+//			BuilderPropertyType builderPropertyType = new BuilderPropertyType();
+//			builderPropertyType.setId(type_id);
+//			builderLead.setBuilderPropertyType(builderPropertyType);
+//		}
+//		if(source_id > 0){
+//			Source source = new Source();
+//			source.setId(source_id);
+//			builderLead.setSource(source);
+//		}
 		builderLead.setName(name);
 		builderLead.setMobile(mobile);
 		builderLead.setEmail(email);
@@ -3714,20 +3717,20 @@ public class ProjectController extends ResourceConfig {
 		builderProject.setId(project_id);
 		builderLead.setBuilderProject(builderProject);
 		}
-		if(building_id > 0) {
-			BuilderBuilding builderBuilding = new BuilderBuilding();
-			builderBuilding.setId(building_id);
-			builderLead.setBuilderBuilding(builderBuilding);
-		}
-		if(flat_id > 0) {
-			BuilderFlat builderFlat = new BuilderFlat();
-			builderFlat.setId(flat_id);
-			builderLead.setBuilderFlat(builderFlat);
-		}
-		
-			BuilderPropertyType builderPropertyType = new BuilderPropertyType();
-			builderPropertyType.setId(1);
-			builderLead.setBuilderPropertyType(builderPropertyType);
+//		if(building_id > 0) {
+//			BuilderBuilding builderBuilding = new BuilderBuilding();
+//			builderBuilding.setId(building_id);
+//			builderLead.setBuilderBuilding(builderBuilding);
+//		}
+//		if(flat_id > 0) {
+//			BuilderFlat builderFlat = new BuilderFlat();
+//			builderFlat.setId(flat_id);
+//			builderLead.setBuilderFlat(builderFlat);
+//		}
+//		
+//			BuilderPropertyType builderPropertyType = new BuilderPropertyType();
+//			builderPropertyType.setId(1);
+//			builderLead.setBuilderPropertyType(builderPropertyType);
 		if(source_id > 0){
 			Source source = new Source();
 			source.setId(source_id);
@@ -3742,6 +3745,91 @@ public class ProjectController extends ResourceConfig {
 			builderLead.setIntrestedIn(1);
 			builderLead.setStatus(1);
 		ResponseMessage resp = new ProjectDAO().addProjectLead(builderLead); 
+		return resp;
+	}
+	
+	/**
+	 * Add new lead from popup
+	 * @author pankaj
+	 * @param project_id
+	 * @param building_id
+	 * @param flat_id
+	 * @param name
+	 * @param mobile
+	 * @param email
+	 * @param city
+	 * @param area
+	 * @param source_id
+	 * @param discount_offered
+	 * @return
+	 */
+	@POST
+	@Path("/lead/new1")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addNewLead (
+			@FormDataParam("project_id") int project_id,
+			@FormDataParam("emp_id") int emp_id,
+			@FormDataParam("leadname") String name,
+			@FormDataParam("mobile") String mobile,
+			@FormDataParam("email") String email,
+			@FormDataParam("configuration[]") List<FormDataBodyPart> configs,
+			//@FormParam("city") String city,
+			//@FormParam("area") String area,
+			@FormDataParam("select_source") int source_id,
+			@FormDataParam("minprice") int min,
+			@FormDataParam("maxprice") int max
+			//@FormParam("discount_offered") String discount_offered
+	) {
+		
+		
+		BuilderLead builderLead = new BuilderLead();
+		if(project_id > 0){
+		BuilderProject builderProject = new BuilderProject();
+		builderProject.setId(project_id);
+		builderLead.setBuilderProject(builderProject);
+		}
+		
+		builderLead.setFlatId(0);
+		builderLead.setBuildingId(0);
+		builderLead.setTypeId(0);
+		if(source_id > 0){
+			Source source = new Source();
+			source.setId(source_id);
+			builderLead.setSource(source);
+		}
+		builderLead.setLdate(new Date());
+		builderLead.setAddedBy(emp_id);
+		builderLead.setMin(min);
+		builderLead.setMax(max);
+		builderLead.setName(name);
+		builderLead.setMobile(mobile);
+		builderLead.setEmail(email);
+		builderLead.setArea("");
+		builderLead.setCity("");
+		builderLead.setDiscountOffered("");
+		builderLead.setIntrestedIn(1);
+		builderLead.setStatus(1);
+		ResponseMessage resp = new ProjectDAO().addProjectLead(builderLead); 
+		
+		if(resp.getId() > 0){
+			if(configs.size() > 0){
+				List<LeadConfig> leadConfig = new ArrayList<LeadConfig>();
+				for(FormDataBodyPart config : configs){
+				    LeadConfig leadConfig2 =  new LeadConfig();
+					BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration = new BuilderProjectPropertyConfiguration();
+					if(config.getValueAs(Integer.class) != null && config.getValueAs(Integer.class) != 0){
+						builderProjectPropertyConfiguration.setId(config.getValueAs(Integer.class));
+						leadConfig2.setBuilderProjectPropertyConfiguration(builderProjectPropertyConfiguration);
+						leadConfig2.setBuilderLead(builderLead);
+						leadConfig.add(leadConfig2);
+					}
+				}
+				if(leadConfig.size()>0){
+					new ProjectDAO().addLeadConfig(leadConfig);
+				}
+			}
+		}
 		return resp;
 	}
 	
@@ -3770,21 +3858,21 @@ public class ProjectController extends ResourceConfig {
 		
 		BuilderLead builderLead = new BuilderLead();
 		builderLead.setBuilderProject(builderProject);
-		if(building_id > 0) {
-			BuilderBuilding builderBuilding = new BuilderBuilding();
-			builderBuilding.setId(building_id);
-			builderLead.setBuilderBuilding(builderBuilding);
-		}
-		if(flat_id > 0) {
-			BuilderFlat builderFlat = new BuilderFlat();
-			builderFlat.setId(flat_id);
-			builderLead.setBuilderFlat(builderFlat);
-		}
-		if(type_id>0){
-			BuilderPropertyType builderPropertyType = new BuilderPropertyType();
-			builderPropertyType.setId(type_id);
-			builderLead.setBuilderPropertyType(builderPropertyType);
-		}
+//		if(building_id > 0) {
+//			BuilderBuilding builderBuilding = new BuilderBuilding();
+//			builderBuilding.setId(building_id);
+//			builderLead.setBuilderBuilding(builderBuilding);
+//		}
+//		if(flat_id > 0) {
+//			BuilderFlat builderFlat = new BuilderFlat();
+//			builderFlat.setId(flat_id);
+//			builderLead.setBuilderFlat(builderFlat);
+//		}
+//		if(type_id>0){
+//			BuilderPropertyType builderPropertyType = new BuilderPropertyType();
+//			builderPropertyType.setId(type_id);
+//			builderLead.setBuilderPropertyType(builderPropertyType);
+//		}
 		if(source_id > 0){
 			Source source = new Source();
 			source.setId(source_id);
@@ -3826,16 +3914,16 @@ public class ProjectController extends ResourceConfig {
 			builderProject.setId(project_id);
 			builderLead.setBuilderProject(builderProject);
 		}
-		if(building_id > 0){
-			BuilderBuilding builderBuilding = new BuilderBuilding();
-			builderBuilding.setId(building_id);
-			builderLead.setBuilderBuilding(builderBuilding);
-		}
-		if(flat_id > 0){
-			BuilderFlat builderFlat = new BuilderFlat();
-			builderFlat.setId(flat_id);
-			builderLead.setBuilderFlat(builderFlat);
-		}
+//		if(building_id > 0){
+//			BuilderBuilding builderBuilding = new BuilderBuilding();
+//			builderBuilding.setId(building_id);
+//			builderLead.setBuilderBuilding(builderBuilding);
+//		}
+//		if(flat_id > 0){
+//			BuilderFlat builderFlat = new BuilderFlat();
+//			builderFlat.setId(flat_id);
+//			builderLead.setBuilderFlat(builderFlat);
+//		}
 		if(source_id > 0){
 			Source source = new Source();
 			source.setId(source_id);
@@ -4431,9 +4519,9 @@ public class ProjectController extends ResourceConfig {
 	@GET
 	@Path("/building/floor/flat/detail")
 	@Produces(MediaType.APPLICATION_JSON)
-	public BookingFlatList getActiveFlatDetail(@QueryParam("flat_id") int flat_id) {
+	public BookingFlatList getActiveFlatDetail(@QueryParam("flat_id") int flat_id,@QueryParam("emp_id") int emp_id) {
 		ProjectDAO projectDAO = new ProjectDAO();
-		BookingFlatList floorList = projectDAO.getFlatdetails(flat_id);
+		BookingFlatList floorList = projectDAO.getFlatdetails(flat_id,emp_id);
 		return floorList;
 	}
 	
@@ -4445,5 +4533,22 @@ public class ProjectController extends ResourceConfig {
 		ProjectDAO cancellationDAO = new ProjectDAO();
 		msg = cancellationDAO.deleteSource(id);
 		return msg;
+	}
+	
+	@POST
+	@Path("cancel/primarybuyer/remove")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage removePrimaryBuyerByCancelId(
+			@FormParam("id") int id,
+		@FormParam("cancel_amount") Double cancelAmount
+			)
+	{
+		System.err.println("cancel amount :: "+cancelAmount);
+		ResponseMessage responseMessage = new ResponseMessage();
+		CancellationDAO cancellationDAO = new CancellationDAO();
+		Cancellation cancellation = cancellationDAO.getCancellationById(id);
+		cancellation.setCharges(cancelAmount);
+		responseMessage = cancellationDAO.updateCancelStatus(cancellation);
+		return responseMessage;
 	}
 }

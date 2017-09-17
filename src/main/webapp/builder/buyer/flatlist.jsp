@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
 <%@page import="org.bluepigeon.admin.data.BookingFlatList"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.data.FlatListData"%>
@@ -16,9 +17,19 @@
 	int building_id = 0;
 	int floor_id =	0;
 	int evenOrodd = 0;
+	int emp_id=0;
 	String image  = "";
 	List<FlatListData> flatListDatas = null;
 	BookingFlatList bookingFlatList2 = null;
+	session = request.getSession(false);
+	BuilderEmployee builder = new BuilderEmployee();
+	if(session!=null)
+	{
+		if(session.getAttribute("ubname") != null)
+		{
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			emp_id = builder.getId();
+		
 	project_id = Integer.parseInt(request.getParameter("project_id"));
 	building_id = Integer.parseInt(request.getParameter("building_id"));
 	evenOrodd = Integer.parseInt(request.getParameter("evenOrodd"));
@@ -37,9 +48,11 @@
 	}catch(Exception e){
 		e.printStackTrace();
 	}
+	}
+	}
 %>
  <% if(flatListDatas !=null && bookingFlatList2 !=null){ %>
- <link rel="stylesheet" type="text/css" href="../css/custom10.css">
+<!--  <link rel="stylesheet" type="text/css" href="../css/custom10.css"> -->
    <div class="col-md-8 col-sm-6 col-xs-12  bg1">
         <div class="white-box" >
 	     <% if(flatListDatas !=null){
@@ -68,6 +81,7 @@
 	     %>
           </div>
     </div>
+    <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
     <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
          <div class="bg1">
               <div class="tab-content">

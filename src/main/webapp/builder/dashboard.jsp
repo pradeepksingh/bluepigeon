@@ -63,7 +63,7 @@
 					city_size_list = cityDataList.size();
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
-					//totalRevenue = totalPropertySold * totalInventorySold;
+					totalRevenue = totalPropertySold * totalInventorySold;
 					
 				}
 		}
@@ -90,7 +90,7 @@
     <link href="css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="css/style.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="${baseUrl}/builder/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="${baseUrl}/builder/css/dashboard.css">
      <link href="${baseUrl}/builder/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
     <link href="${baseUrl}/builder/plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="${baseUrl}/builder/plugins/bower_components/switchery/dist/switchery.min.css" rel="stylesheet" />
@@ -131,20 +131,20 @@
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                         <h4 class="page-title">Dashboard</h4> </div>
                         <%if(access_id == 1 || access_id == 2){ %>
-                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> 
-                    	<a href="${baseUrl}/builder/project/new.jsp"><span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add new Project</span></a>
-                    </div>
+<!--                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">  -->
+<%--                     	<a href="${baseUrl}/builder/project/new.jsp"><span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add new Project</span></a> --%>
+<!--                     </div> -->
                     <%} %>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> 
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
                 <!--.row -->
-                <%if(access_id == 1 || access_id == 2 || access_id == 4 || access_id == 5 || access_id == 7){ %>
+                <%//if(access_id == 1 || access_id == 2 || access_id == 4 || access_id == 5 || access_id == 7){ %>
                 <div class="row">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border">
-                            <h3 class="box-title">Total Projects</h3>
+                            <h3 class="box-title">Total Properties</h3>
                             <ul class="list-inline two-part">
                                 <li><i class="ti-home text-info-new"></i></li>
                                 <li class="text-right"><span class="counter dashboard-text"><%out.print(totalProjects); %></span></li>
@@ -153,50 +153,7 @@
                     </div>
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border">
-                            <h3 class="box-title">Total Unit Sold</h3>
-                            <ul class="list-inline two-part">
-<!--                                 <li><i class="icon-tag text-purple"></i></li> -->
-									 <li><i class="icon-tag text-info-new"></i></li>
-                                <li class="text-right"><span class="counter dashboard-text" ><%out.print(totalInventorySold); %></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box white-border">
-                            <h3 class="box-title">Total leads Received</h3>
-                            <ul class="list-inline two-part">
-<!--                                 <li><i class="icon-user text-danger"></i></li> -->
-                                 <li><i class="icon-user text-info-new"></i></li>
-                                <li class="text-right"><span class="counter dashboard-text"><%out.print(totalLeads); %></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box white-border">
-                            <h3 class="box-title">Total Revenue (in Rs)</h3>
-                            <ul class="list-inline two-part">
-<!--                                 <li><i class="ti-wallet text-success"></i></li> -->
-									 <li><i class="ti-wallet text-info-new"></i></li>
-                                <li class="text-right"><span class="counter dashboard-text"> <%out.print(Math.round(totalRevenue)); %></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <%} %>
-                    <%if(access_id == 3){ %>
-                <div class="row">
-                    <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box white-border" style="padding: 15px;">
-                            <h3 class="box-title">Total No. Of Campaigns</h3>
-                            <ul class="list-inline two-part">
-                                <li><i class="ti-home text-info-new"></i></li>
-                                <li class="text-right"><span class="counter dashboard-text"><%if(totalCampaign != null){out.print(totalCampaign);} %></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box white-border" style="padding: 15px;">
-                            <h3 class="box-title">Leads through Campaigns</h3>
+                            <h3 class="box-title">Total Buyers</h3>
                             <ul class="list-inline two-part">
 <!--                                 <li><i class="icon-tag text-purple"></i></li> -->
 									 <li><i class="icon-tag text-info-new"></i></li>
@@ -204,9 +161,9 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-sm-6" >
-                        <div class="white-box white-border" style="padding: 15px;">
-                            <h3 class="box-title">Buyers through Campaigns</h3>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box white-border">
+                            <h3 class="box-title">New leads</h3>
                             <ul class="list-inline two-part">
 <!--                                 <li><i class="icon-user text-danger"></i></li> -->
                                  <li><i class="icon-user text-info-new"></i></li>
@@ -215,8 +172,8 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="white-box white-border" style="padding: 15px;">
-                            <h3 class="box-title">Total Revenue (in Rs)</h3>
+                        <div class="white-box white-border">
+                            <h3 class="box-title">Total Revenue (Rs in cr)</h3>
                             <ul class="list-inline two-part">
 <!--                                 <li><i class="ti-wallet text-success"></i></li> -->
 									 <li><i class="ti-wallet text-info-new"></i></li>
@@ -225,7 +182,50 @@
                         </div>
                     </div>
                 </div>
-                <%} %>
+                <%//} %>
+                    <%//if(access_id == 3){ %>
+<!--                 <div class="row"> -->
+<!--                     <div class="col-lg-3 col-sm-6 col-xs-12"> -->
+<!--                         <div class="white-box white-border" style="padding: 15px;"> -->
+<!--                             <h3 class="box-title">Total No. Of Campaigns</h3> -->
+<!--                             <ul class="list-inline two-part"> -->
+<!--                                 <li><i class="ti-home text-info-new"></i></li> -->
+<%--                                 <li class="text-right"><span class="counter dashboard-text"><%if(totalCampaign != null){out.print(totalCampaign);} %></span></li> --%>
+<!--                             </ul> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                     <div class="col-lg-3 col-sm-6 col-xs-12"> -->
+<!--                         <div class="white-box white-border" style="padding: 15px;"> -->
+<!--                             <h3 class="box-title">Leads through Campaigns</h3> -->
+<!--                             <ul class="list-inline two-part"> -->
+<!-- <!--                                 <li><i class="icon-tag text-purple"></i></li> --> 
+<!-- 									 <li><i class="icon-tag text-info-new"></i></li> -->
+<%--                                 <li class="text-right"><span class="counter dashboard-text" ><%out.print(totalBuyers); %></span></li> --%>
+<!--                             </ul> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                     <div class="col-lg-3 col-sm-6" > -->
+<!--                         <div class="white-box white-border" style="padding: 15px;"> -->
+<!--                             <h3 class="box-title">Buyers through Campaigns</h3> -->
+<!--                             <ul class="list-inline two-part"> -->
+<!-- <!--                                 <li><i class="icon-user text-danger"></i></li> --> 
+<!--                                  <li><i class="icon-user text-info-new"></i></li> -->
+<%--                                 <li class="text-right"><span class="counter dashboard-text"><%out.print(totalLeads); %></span></li> --%>
+<!--                             </ul> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                     <div class="col-lg-3 col-sm-6 col-xs-12"> -->
+<!--                         <div class="white-box white-border" style="padding: 15px;"> -->
+<!--                             <h3 class="box-title">Total Revenue (in Rs)</h3> -->
+<!--                             <ul class="list-inline two-part"> -->
+<!-- <!--                                 <li><i class="ti-wallet text-success"></i></li> --> 
+<!-- 									 <li><i class="ti-wallet text-info-new"></i></li> -->
+<%--                                 <li class="text-right"><span class="counter dashboard-text"> <%out.print(Math.round(totalRevenue)); %></span></li> --%>
+<!--                             </ul> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                 </div> -->
+                <%//} %>
                 <div class="white-box">
                    <div class="row">
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -309,7 +309,7 @@
 	                        else if(access_id == 5 || access_id == 7){%>
 	                      <div class="row">
                            	  <div class="col-md-6 left"> 
-                           		   <a href="${baseUrl}/builder/buyer/booking.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
+                           		   <a href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
                            	  </div>
                          	  <div class="col-md-6 center">
                           		   <a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>

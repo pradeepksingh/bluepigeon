@@ -36,6 +36,7 @@
 	BuilderFloor builderFloor = null;
 	int building_id = 0;
 	int floor_id = 0;
+	int emp_id =0;
 	List<BookingFlatList> bookingFlatList = null;
 	List<BuilderFloor> floorList = null;
 	List<BuilderBuilding> builderBuildingList = null;
@@ -60,6 +61,7 @@
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			p_user_id = builder.getBuilder().getId();
 			access_id = builder.getBuilderEmployeeAccessType().getId();
+			emp_id = builder.getId();
 			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
 			building_id = builderBuildingList.get(0).getId();
@@ -98,23 +100,36 @@
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="../plugins/images/favicon.png">
     <title>Blue Pigeon</title>
-    <!-- Bootstrap Core CSS -->
+ <!-- Bootstrap Core CSS -->
+
     <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
-   <!-- Menu CSS -->
+
+    <link rel="stylesheet" href="../css/bootstrap-multiselect.css">
+
+    <!-- Menu CSS -->
+
     <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+
     <!-- Custom CSS -->
+
     <link href="../css/style.css" rel="stylesheet">
+
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/custom10.css">
-    <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
-    <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" type="text/css" href="../css/booking.css">
+     <link rel="stylesheet" type="text/css" href="../css/newbookinglist.css">
+
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+
     <!-- jQuery -->
+
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/selectize.min.js"></script>
-<!--      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script>
+ <script type="text/javascript" src="../js/selectize.min.js"></script>
+    <script src="../js/bootstrap-multiselect.js"></script>
 </head>
   
    
@@ -137,16 +152,16 @@
                <!-- /.row -->
 	                <div class="row bspace">
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-submit waves-effect waves-light m-t-10">Booking</button>
+		                    <button type="submit" id="booking"  class="btn11 btn-submit waves-effect waves-light m-t-10">Booking</button>
 		                </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-info waves-effect waves-light m-t-10">Cancellation</button>
+		                    <button type="submit" id="cancellation" class="btn11 btn-info waves-effect waves-light m-t-10">Cancellation</button>
 		                 </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-info waves-effect waves-light m-t-10">Leads</button>
+		                    <button type="submit" id="leads"  class="btn11 btn-info waves-effect waves-light m-t-10">Leads</button>
 		                </div>
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-info waves-effect waves-light m-t-10">Campain</button>
+		                    <button type="submit" id="campaign" class="btn11 btn-info waves-effect waves-light m-t-10">Campain</button>
 		                </div>
 	                </div>
                <!-- row -->
@@ -163,7 +178,7 @@
                      </div>
                      <div class="col-md-4 col-sm-4 col-xs-12">
                         <select id="filter_floor_id" name="filter_floor_id">
-                			<option value="0"></option>
+                			<option value="0">All Floor</option>
                 			<%
                 			if(floorList != null){
                 			for(BuilderFloor builderFloors : floorList){ %>
@@ -182,7 +197,7 @@
                     <!-- row -->
                     
                 <div class="white-box">
-                 <div class="row">
+                 <div class="row" id="flatdetails">
                     <div class="col-md-8 col-sm-6 col-xs-12  bg1">
                         <div class="white-box">
                          <% if(flatListDatas !=null){
@@ -212,6 +227,7 @@
 	     					%>
 						 </div>
                     </div>
+                    <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>" />
                     <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
                      <div class="bg1">
                        <div class="tab-content">
@@ -284,7 +300,7 @@
 						        <p class="p-custom">Permanent Address</p>
 						        <p><b><%out.print(bookingFlatList2.getBuyerPermanentAddress()); %></b></p>
 						        <p class="p-custom">Current Address</p>
-						        <p><b></b></p>
+						        <p><b><%out.print(bookingFlatList2.getBuyerCurrentAddress()); %></b></p>
 						        <hr>
 						      </div>
 						      <button type="button" onclick="showFlats(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button red">Cancel</button>
@@ -327,13 +343,13 @@
 						    </div>
 						   <div class="col-md-6 col-sm-6 col-xs-6">
 						      <p class="p-custom">Carpet Area</p>
-						      <p><b>500 SQ/FT</b></p>
+						      <p><b><%out.print(bookingFlatList2.getCarpetArea()); %> <%out.print(bookingFlatList2.getCarpetAreaunit()); %></b></p>
 						   </div>
 						</div>
 						 <div class="row custom-row">
 						   <div class="col-md-6 col-sm-6 col-xs-6">
 						      <p class="p-custom">Flat Type</p>
-						      <p><b>1BHK</b></p>
+						      <p><b><%out.print(bookingFlatList2.getFlatType()); %></b></p>
 						    </div>
 						   <div class="col-md-6 col-sm-6 col-xs-6">
 						      <p class="p-custom">Carpet Area</p>
@@ -388,6 +404,7 @@ function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
 		//alert("Hello");
         $('.nav li.active').removeClass('active');
+        
        // alert("Hello1");
         var $parent = $(this).parent();
      //   alert("Hello2"+$parent.val());
@@ -414,8 +431,8 @@ $(document).ready(function () {
 	 %>
     $("#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>").click(function (e) {
         e.preventDefault();
-        showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>);
     });
+    $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click');
     
     <%						}
 				 		}
@@ -436,8 +453,8 @@ function showFlatwithImage(id){
 	var flatdetails = "";
 	$("#home").empty();
 	var htmlFlat ="";
-	if(id > 0 && id != ''){
-		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id},function(data){
+	if(id != ''){
+		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id,emp_id:$("#emp_id").val()},function(data){
 			if(data.flatStatus == 1){
 				var image = '';
 				if(data.image != ''){
@@ -515,8 +532,8 @@ function showFlatwithImage(id){
 }
 
 function showImagewithDetails(id){
-	if(id > 0 && id != ''){
-		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id},function(data){
+	if( id != ''){
+		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id, emp_id:$("#emp_id").val()},function(data){
 			if(data.flatStatus == 1){
 				$("#flatList").empty();
 				var image = '';
@@ -586,10 +603,10 @@ function showImagewithDetails(id){
 $select_building = $("#filter_building_id").selectize({
 	persist: false,
 	 onChange: function(value) {
-		if($("#filter_building_id").val() > 0 || $("#filter_building_id").val() != '' ){
+		if($("#filter_building_id").val() != '' ){
 			$.get("${baseUrl}/webapi/project/building/floor/list/",{ building_id: value }, function(data){
 				getFlatDetails();
-				var html = '<option value="">Enter Floor Name</option>';
+				var html = '<option value="0">All Floor</option>';
 				if(data != ""){
 					$(data).each(function(index){
 						html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
@@ -599,7 +616,7 @@ $select_building = $("#filter_building_id").selectize({
 					$select_floor = $("#filter_floor_id").selectize({
 						persist: false,
 						 onChange: function(value) {
-							 if(value > 0 || value != '' ){
+							 if( value != '' ){
 								 getFlatDetails();
 								}
 						 },
@@ -608,6 +625,7 @@ $select_building = $("#filter_building_id").selectize({
 							var textClear =	 $("#filter_floor_id :selected").text();
 					   	 if(textClear.trim() == "Enter Floor Name"){
 					   		 obj[0].setValue("0");
+					   		obj[0].setTest("All Floor");
 					   	 }
 					    }
 					});
@@ -628,6 +646,7 @@ $select_building = $("#filter_building_id").selectize({
 							var textClear =	 $("#filter_floor_id :selected").text();
 					   	 if(textClear.trim() == "Enter Floor Name"){
 					   		 obj[0].setValue("0");
+					   		obj[0].setTest("All Floor");
 					   	 }
 					    }
 					});
@@ -650,7 +669,7 @@ $select_building = $("#filter_building_id").selectize({
 $select_floor = $("#filter_floor_id").selectize({
 	persist: false,
 	 onChange: function(value) {
-		if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '') && ($("#filter_floor_id").val() > 0 && $("#filter_floor_id").val() != '' )){
+		if(($( $("#filter_building_id").val() != '')  && $("#filter_floor_id").val() != '' )){
 			//window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
 			getFlatDetails();
 		}
@@ -660,6 +679,7 @@ $select_floor = $("#filter_floor_id").selectize({
 		var textClear =	 $("#filter_floor_id :selected").text();
    	 if(textClear.trim() == "Enter Floor Name"){
    		 obj[0].setValue("0");
+   		 obj[0].setTest("All Floor");
    	 }
     }
 });
@@ -671,7 +691,7 @@ $select_floor = $("#filter_floor_id").selectize({
 $select_eveOrodd = $("#evenOrodd").selectize({
 	persist: false,
 	onChange: function(value){
-		if(value > 0 && value != ''){
+		if(value != ''){
 			getFlatDetails();
 		}
 	},

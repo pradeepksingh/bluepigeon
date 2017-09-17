@@ -1058,7 +1058,7 @@ text-align: -webkit-center;
 }
 .modal-content{
 padding: 3% 5%;
-margin-top:20%;
+padding-top:14%;
 }
 
   .recipients.bg12 label {
@@ -1528,12 +1528,12 @@ width: 47% !important;
     width: 45px;
     text-align: center;
     color: #ffffff;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #ab1515;
     border-radius: 10px;
     font-size: 15px;
 }
 .bg1 .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
-    background: #00bfd6;
+    background: #ab1515;
     color: #fff;
 }
 .bg1 .nav-pills>li>a {
@@ -1644,7 +1644,7 @@ width: 47% !important;
 	    width: 55px;
     text-align: center;
     color: #ffffff;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #ab1515;
     border-radius: 10px;
     font-size: 15px;
 	
@@ -1652,7 +1652,7 @@ width: 47% !important;
  .bg1 .nav-pills>li>a {
 	    width: 55px;
     color: #2b2b2b;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #ab1515;
     border-radius: 10px;
     font-size: 15px;
     padding: 5px 35px;
@@ -1687,7 +1687,7 @@ width: 47% !important;
 	    width: 110px;
     text-align: center;
     color: #ffffff;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #ab1515;
     border-radius: 10px;
     font-size: 15px;
 	
@@ -1695,7 +1695,7 @@ width: 47% !important;
 .bg1 .nav-pills>li>a {
 	    width: 110px;
     color: #2b2b2b;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #ab1515;
     border-radius: 10px;
     font-size: 15px;
     padding: 10px 25px;
@@ -1731,7 +1731,7 @@ width: 47% !important;
 	    width: 110px !important;
     text-align: center;
     color: #ffffff;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #ab1515;
     border-radius: 10px;
     font-size: 15px;
 	
@@ -1739,7 +1739,7 @@ width: 47% !important;
 .bg1 .nav-pills>li>a {
 	    width: 110px !important;;
     color: #2b2b2b;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #ab1515;
     border-radius: 10px;
     font-size: 15px;
     text-align: center;
@@ -1796,7 +1796,7 @@ width: 47% !important;
 	    width: 95px;
     text-align: center;
     color: #ffffff;
-    border: 1.5px solid #00bfd6;
+    border: 1.5px solid #ab1515;
     border-radius: 10px;
     font-size: 18px;
 	
@@ -1872,7 +1872,7 @@ hr {
     border-color:#00bfd6;;
 }
 .bg1 .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
-    background: #00bfd6;
+    background: #ab1515;
     color: #fff;
 }
  @media (min-width: 1440px){

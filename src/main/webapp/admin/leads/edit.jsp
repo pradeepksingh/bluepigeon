@@ -87,11 +87,11 @@
 										<div class="col-sm-9">
 											<select name="building_id" id="building_id" class="form-control">
 						                 	   	<option value="0">Select Building</option>
-						                 	   	<%
-						                 	   	if(builderLead.getBuilderBuilding() != null){
-						                 	   	for(int i=0; i < building_size ; i++){ %>
-												<option value="<% out.print(builderBuildings.get(i).getId());%>"<%if(builderBuildings.get(i).getId() == builderLead.getBuilderBuilding().getId()) {%>selected<%} %> ><% out.print(builderBuildings.get(i).getName());%></option>
-											  	<% }} %>
+<%-- 						                 	   	<% --%>
+<!-- // 						                 	   	if(builderLead.getBuilderBuilding() != null){ -->
+<%-- 						                 	   	for(int i=0; i < building_size ; i++){ %> --%>
+<%-- 												<option value="<% out.print(builderBuildings.get(i).getId());%>"<%if(builderBuildings.get(i).getId() == builderLead.getBuilderBuilding().getId()) {%>selected<%} %> ><% out.print(builderBuildings.get(i).getName());%></option> --%>
+<%-- 											  	<% }} %> --%>
 								       	  	</select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
@@ -104,10 +104,10 @@
 											<select name="flat_id" id="flat_id" class="form-control">
 						                 	   	<option value="0">Select Flat</option>
 						                 	   	<%
-						                 	   	if(builderLead.getBuilderFlat() != null){
-						                 	   	for(int i=0; i < flat_size; i++){ %>
-												<option value="<% out.print(builderFlats.get(i).getId());%>"<%if(builderFlats.get(i).getId() == builderLead.getBuilderFlat().getId()) {%>selected<%} %> ><% out.print(builderFlats.get(i).getFlatNo());%></option>
-											  	<% }} %>
+						                 	  // 	if(builderLead.getBuilderFlat() != null){
+						                 	  // 	for(int i=0; i < flat_size; i++){ %>
+<%-- 												<option value="<% out.print(builderFlats.get(i).getId());%>"<%if(builderFlats.get(i).getId() == builderLead.getBuilderFlat().getId()) {%>selected<%} %> ><% out.print(builderFlats.get(i).getFlatNo());%></option> --%>
+											  	<%// }} %>
 								       	  	</select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>
@@ -193,13 +193,13 @@
 										<div class="col-sm-9">
 										 	<select name="type_id" id="type_id" class="form-control">
 							                    <option value="0">Select Type</option>
-							                   	<% if(builderLead.getBuilderPropertyType()!=null){ 
-							                   	for(int i=0; i < type_size ; i++){ %>
-												<option value="<% out.print(builderPropertyTypes.get(i).getId());%>" <%if(builderPropertyTypes.get(i).getId() == builderLead.getBuilderPropertyType().getId()){ %>selected<%} %> ><% out.print(builderPropertyTypes.get(i).getName());%></option>
-											  	<% } }else{
-											  	for(int i=0; i < type_size ; i++){%>
-											  	<option value="<% out.print(builderPropertyTypes.get(i).getId());%>"><% out.print(builderPropertyTypes.get(i).getName());%></option>
-											  	<% }}%>
+							                   	<%// if(builderLead.getBuilderPropertyType()!=null){ 
+							                   //	for(int i=0; i < type_size ; i++){ %>
+<%-- 												<option value="<% out.print(builderPropertyTypes.get(i).getId());%>" <%if(builderPropertyTypes.get(i).getId() == builderLead.getBuilderPropertyType().getId()){ %>selected<%} %> ><% out.print(builderPropertyTypes.get(i).getName());%></option> --%>
+											  	<% //} }else{
+											  	//for(int i=0; i < type_size ; i++){%>
+<%-- 											  	<option value="<% out.print(builderPropertyTypes.get(i).getId());%>"><% out.print(builderPropertyTypes.get(i).getName());%></option> --%>
+											  	<% //}}%>
 							                </select>
 										</div>
 										<div class="messageContainer col-sm-offset-3"></div>

@@ -1,148 +1,16 @@
 button:focus {outline:0;}
 input:focus {outline:0;}
 textarea:focus {outline:0;}
-.form-group {
-    margin-bottom: 0px !important;
-}
-.tabcontent form{
-	width:100%;
-	padding:1% 5%;
-}
-.centerbutton{
-	text-align: -webkit-center;
-}
-@media (max-width: 1320px){
-	.navpills.nav-pills > li {
-    height: 36px;
-    }
-    }
-@media (max-width: 768px){
-	.custom-row b {
-    color: #000000;
-    font-size: 15px !important;
-    font-weight: 400;
-}
-    .booking-form label {
-    font-weight: 500;
-    width: 35%;
-}
-.booking-form .bg11{
-	background: #fff;
-    min-width: 650px;
-    overflow-x: scroll;
-}
-
-}
-@media (min-width: 1440px){
-.navpills.nav-pills > li {
-    float: left;
-    padding: 0% 2% !important;
-}
-}
-.booking-form .custom-img {
-    width: 100%;
-    padding: 6% 5% 0%;
-    height: 320px;
-}
-.navpills.nav-pills > li {
-    float: left;
-    padding: 0% 1%;
-}
-.booking-form h2{
-    font-family: Poppins, sans-serif;
-    margin: 15px 0px;
-}
-.navpills.nav-pills>li>a {
-    padding: 5px 0px;
-    }
-.navpills.nav-pills>li>a:hover {
-    color: #2b2b2b !important;
-    border-radius: 0;
-    background: transparent !important;
-    border-bottom: 3px solid #00bfd6;
-    padding: 5px 0px;
-    font-size: 16px;
-}
-@media (min-width: 1440px){
-   .tabcontent button{
-       width: 255px;
-       padding: 13px 40px !important;;
-    margin: 2% 3% 5% !important;
-    border-radius: 12px !important;;
-    font-size: 22px !important;
-    }
-}
-.tabcontent textarea {
-	
-    background: #f2f2f2;
-    font-size: 18px;
-    width: 60%;
-    margin-bottom: 40px;
-}
-.tabcontent input {
-    font-size: 18px;
-    background: #f2f2f2;
-    width: 60%;
-    padding: 5px;
-    margin-bottom: 40px;
-    border: none;
-}
-.tabcontent .bg1{
-	    width: 320px;
-    background: #fff;
-    height: 100%;
-	    text-align: -webkit-left;
-}
-.navpills.nav-pills>li>a:active {
-    color: #2b2b2b !important;
-    border-radius: 0;
-    background: transparent !important;
-    border-bottom: 3px solid #00bfd6;
-    padding: 5px 0px;
-    font-size: 16px;
-}
-.navpills.nav-pills>li>a:active, .navpills.nav-pills>li>a:focus {
-    font-size: 16px;
-     padding: 5px 0px;
-    text-decoration: none;
-    font-weight: 300;
-    background-color:  transparent  !important;
-    border-bottom: 3px solid #00bfd6 !important;;
-}
-.lead form{
-    padding: 5% 0%;
-}
-.lead .modal-body {
-    padding: 0px 15px 15px !important;
-}
-.lead.modal-dialog.bg12 label {
+.lead.modal-dialog .bg12 label {
     width: 48% !important;
 }
-
- @media (max-width: 999px){
- .booking-form .tab-content {
-    text-align: -webkit-left;
-}
- .booking-form .nav-pills > li + li {
-    width: 19%;
-    margin-left: 0%;
-    margin-bottom: 4%;
-}
- .lead-bg {
-    margin: 0%;
-    min-width: 645px;
-    background: #fff;
-    overflow-x: scroll;
-}
- .lead-bg {
-    margin: 0%;
-    min-width: 645px;
-    overflow-x: scroll;
-}
-.blue-border h2 {
-    line-height: 36px;
+ @media (max-width: 850px){
+ .blue-border h2 {
     font-size: 18px !important;
     }
+    }
+ @media (max-width: 999px){
+
  .lead-search.navbar-form .input-group > .form-control {
    
     height: 38px;
@@ -200,12 +68,18 @@ textarea:focus {outline:0;}
 	
     padding: 0% 1%;
     border-bottom: 2px solid #00bfd6;
-
+    margin: -1.5%;
     border-top: 2px solid #00bfd6;
     border-left: 1px solid #00bfd6;
     border-right: 1px solid #00bfd6;
 }
-
+.blue-border .col-md-2 {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 16.666667%;
+    -ms-flex: 0 0 16.666667%;
+    flex: 0 0 20%;
+    max-width: 20.666667%;
+}
 .blue-border {    margin-right: 5px;
     margin-left: 4px;
     margin-bottom: 3%;  
@@ -233,14 +107,6 @@ textarea:focus {outline:0;}
     padding: 8px 25px;
     font-weight: 300;
     }
-    @media (min-width: 1020px){
-    .blue-border .col-md-2 {
-    -webkit-box-flex: 0;
-    -webkit-flex: 0 0 16.666667%;
-    -ms-flex: 0 0 16.666667%;
-    flex: 0 0 20%;
-    max-width: 20.666667%;
-}
 .border-lead .col-md-2 {
     -webkit-box-flex: 0;
     -webkit-flex: 0 0 16.666667%;
@@ -248,54 +114,6 @@ textarea:focus {outline:0;}
     flex: 0 0 20%;
         max-width: 20.666667%;
     }
-    .lead-bg{
-	
-    margin: -1.5%;
-    }
-    
-    
-    }
-    @media (max-width: 1019px)
-{
-	.row:nth-child(3)>.col-md-2:nth-child(5) {
-       flex: 0 0 21.666667%;
-}
-.row:nth-child(4)>.col-md-2:nth-child(5) {
-    
-       flex: 0 0 28.666667%;
-    max-width: 35.666667%;
-       
-}
-	.border-lead h6 {
-    color: #ccc8c8;
-    font-size: 15px !important;
-    margin-left: 19px;
-}
-	h5 {
-    font-size: 12px;
-}
-	.lead-bg {
-    margin: 0%;
-    }
-	h4 {
-    line-height: 22px;
-    font-size: 15px;
-}
-.blue-border .col-md-2 {
-    -webkit-box-flex: 0;
-    -webkit-flex: 0 0 16.666667%;
-    -ms-flex: 0 0 16.666667%;
-    flex: 0 0 20%;
-    max-width: 18%;
-}
-.col-md-2 {
-    -webkit-box-flex: 0;
-    -webkit-flex: 0 0 16.666667%;
-    -ms-flex: 0 0 16.666667%;
-    flex: 0 0 16.666667%;
-    max-width: 24.666667%;
-}
-}
 .border-lead h5{
 	
     color: #ccc8c8;
@@ -320,12 +138,6 @@ textarea:focus {outline:0;}
  .lead .input-group input {
      width: 85% !important;
  }
- .form-control {
-    font-size: 16px;
-}
- .form-control{
-  background: #f2f2f2 !important; 
- }
  .lead .input-group-btn{
  width:15% !important;
  }
@@ -337,7 +149,7 @@ textarea:focus {outline:0;}
         width: 48% !important;
     }
      .cancellation-page input{
-        width: 95%  !important;
+        width: 48% !important;
     }
     }
      @media (min-width: 768px){
@@ -361,11 +173,9 @@ textarea:focus {outline:0;}
     font-size: 18px;
     }
     .cancellation-page input
-       { 
-       height: 34px;
+       { height: 30px;
     background: #f2f2f2;
-    padding: 12px;
-        margin-top: 5%;
+    padding: 10px;
     border: none;
     }
      .cancellation-page button{
@@ -509,7 +319,7 @@ textarea:focus {outline:0;}
 .user-row{
 	display:block;
 }
-.custom-button-nav.nav-pills>li>a:active, .custom-button-nav.nav-pills>li>a:focus {
+.custom-button-nav.nav-pills>li>a:active, .nav-pills>li>a:focus {
     font-size: 16px;
     text-decoration: none;
     font-weight: 300;
@@ -582,17 +392,17 @@ textarea:focus {outline:0;}
     margin: 2% 5% 10% !important;
     }
    .navpills.nav-pills > li + li {
-    width: 21% !important;
+    width: 100% !important;
     text-align: center !important; 
-
+    margin-left: 2%;
     margin-bottom: 4%;
 }
 .navpills.nav-pills>li.active{
-	
+	 width: 100% !important;
     text-align: center !important;
 }
 .navpills.nav > li > a:focus{
-	
+	 width: 100% !important;
     text-align: center !important;
 }
     
@@ -694,7 +504,7 @@ textarea:focus {outline:0;}
 .modal-content{
 padding: 3% 5%;
 }
-  .recipients.bg12 label {
+  .modal-dialog  .bg12 label {
     width: 35% !important;
 }
   
@@ -904,7 +714,7 @@ textarea{
     margin-bottom: 18px;
 	}
 	    .bg11{
-	   min-height: 750px;
+	    height: 750px;
 	    }
 		.bspace1 .btn11 {
     text-transform: uppercase;
@@ -1107,11 +917,8 @@ width: 47% !important;
 	    margin-top: 10px;
 	}
 	}
-@media (max-width: 767px){
-		.custom-row .col-md-6{
-    text-align: -webkit-center;
-    padding: 5% 6%;
-}
+@media (max-width: 768px){
+	
 	.filter-option {
     font-size: 17px !important;
     font-weight: 300 !important;
@@ -1170,7 +977,10 @@ width: 47% !important;
     text-align: -webkit-center;
 	
 	}
-
+	.custom-row .col-md-6{
+    text-align: -webkit-center;
+    padding: 5% 6%;
+}
 	.bootstrap-select>.dropdown-toggle {
     width: 100%;
     padding: 9px !important;
@@ -1527,8 +1337,8 @@ h2 {
     font-size: 20px !important;
     font-weight: 300 !important;
     }
- .booking-form label{
-    width:245px;
+ .tab-content label{
+
     font-weight: 400;
     height: 60px;
     letter-spacing: 1px;
@@ -1536,14 +1346,14 @@ h2 {
     font-size: 18px;
 
  }
-  .booking-form input{
+  .tab-content input{
     font-size: 18px;
-    width:80%;
+    width:60%;
     margin-bottom: 40px;
 }
-  .booking-form textarea{
+  .tab-content textarea{
     font-size: 18px;
-    width:35%;
+    width:60%;
     margin-bottom: 40px;
 }
 .center-tag {

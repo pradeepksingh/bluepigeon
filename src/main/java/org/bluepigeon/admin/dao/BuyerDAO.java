@@ -118,8 +118,8 @@ public class BuyerDAO {
 		buyerSession.save(buyer);
 		buyerSession.getTransaction().commit();
 		updateFlatStatus(buyer.getBuilderFlat().getId());
-	//	updateProject(buyer);
-	//	new ProjectDAO().updateProjectInventory(buyer.getBuilderFlat().getId());
+		updateProject(buyer);
+		new ProjectDAO().updateProjectInventory(buyer.getBuilderFlat().getId());
 		buyerSession.close();
 		
 		response.setId(buyer.getId());
@@ -157,9 +157,12 @@ public class BuyerDAO {
 			FlatPricingDetails flatPricingDetails = (FlatPricingDetails)flatQuery.list().get(0);
 			double revenue = builderProject.getRevenue() + flatPricingDetails.getTotalCost();
 			builderProject.setRevenue(revenue);
-			flatSession.beginTransaction();
-			flatSession.update(builderProject);
-			flatSession.getTransaction().commit();
+			Session updateProject = hibernateUtil.openSession();
+			updateProject.beginTransaction();
+			updateProject.update(builderProject);
+			updateProject.getTransaction().commit();
+			updateProject.close();
+			
 		}
 		
 		flatSession.close();
