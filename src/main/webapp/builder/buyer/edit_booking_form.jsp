@@ -649,7 +649,7 @@ $("#search_building_id").change(
 
 function calcultatePercentage(id){
 	var $th = $("#amount"+id);
-	alert($("#h_sale_value").val());
+	//alert($("#h_sale_value").val());
 	$th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
 	if($("#amount"+id).val() <= $("#h_sale_value").val() ){
 		var percentage = $("#amount"+id).val()/$("#h_sale_value").val()*100;
@@ -844,9 +844,9 @@ function showPrev2(){
 
 $(document).ready(function() {
 $('#addnewbuyer').bootstrapValidator({
-// 	container: function($field, validator) {
-// 		return $field.parent().next('.messageContainer');
-//    	},
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
     feedbackIcons: {
         validating: 'glyphicon glyphicon-refresh'
     },
@@ -1219,6 +1219,7 @@ $('#updatebuyerpayment').bootstrapValidator({
 });
 
 function updateBuyerPayments() {
+	  ajaxindicatorstart("Loading...");	
 	var options = {
 	 		target : '#imageresponse', 
 	 		beforeSubmit : showAddPaymentRequest,
@@ -1247,9 +1248,11 @@ function showAddPaymentResponse(resp, statusText, xhr, $form){
         $("#paymentresponse").html(resp.message);
         $("#paymentresponse").show();
         alert(resp.message);
+        ajaxindicatorstop();
   	}
 }
 function updateBuyerFlat() {
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#flatresponse', 
 	 		beforeSubmit : showAddFlatRequest,
@@ -1278,9 +1281,11 @@ function showAddFlatResponse(resp, statusText, xhr, $form){
         $("#flatresponse").html(resp.message);
         $("#flatresponse").show();
         alert(resp.message);
+        ajaxindicatorstop();
   	}
 }
 function uploadDocuments(){
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#imageresponse', 
 	 		beforeSubmit : showAddDocumentRequest,
@@ -1310,14 +1315,17 @@ function showAddDocumentResponse(resp, statusText, xhr, $form){
         $("#paymentresponse").html(resp.message);
         $("#paymentresponse").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id=<%out.print(project_id);%>";
+        ajaxindicatorstop();
+        window.location.href = "${baseUrl}/builder/buyer/saleman_bookingOpenForm.jsp?project_id=<%out.print(project_id);%>";
   	}
 }
 function deleteBuyer(id) {
+	ajaxindicatorstart("Loading...");
 	$.get("${baseUrl}/webapi/buyer/delete/coowner/"+id,{},function(data){
 		if(data.status == 0 ){
 			alert(data.message);
 		} else {
+			ajaxindicatorstop();
 			window.location.reload();
 		}
 	});

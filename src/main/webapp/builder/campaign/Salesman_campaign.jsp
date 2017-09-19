@@ -195,7 +195,7 @@
 </html>
 <script>
  $("#booking").click(function(){
-	 window.location.href="${baseUrl}/builder/buyer/booking.jsp?project_id="+<%out.print(projectId);%>
+	 window.location.href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+<%out.print(projectId);%>
  });
  $("#cancellation").click(function(){
 	 window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(projectId);%>

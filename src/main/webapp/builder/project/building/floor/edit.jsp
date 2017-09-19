@@ -349,24 +349,32 @@
 <script>
 
 $("#project").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/edit.jsp?project_id=<%out.print(project_id);%>";
 });
 
 $("#floor").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>";
+	 ajaxindicatorstop();
 });
 
 $("#building").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>";
+	 ajaxindicatorstop();
 });
 $("#flat").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>&flat_id=<%out.print(flat_id); %>";
+	 ajaxindicatorstop();
 });
 
 $select_building = $("#filter_building_id").selectize({
 	persist: false,
 	 onChange: function(value) {
 		if($("#filter_building_id").val() > 0 || $("#filter_building_id").val() != '' ){
+			ajaxindicatorstart("Loading...");
 			$.get("${baseUrl}/webapi/project/building/floor/list/",{ building_id: value }, function(data){
 				var html = '<option value="">Enter Floor Name</option>';
 				if(data != ""){
@@ -411,7 +419,7 @@ $select_building = $("#filter_building_id").selectize({
 					    }
 					});
 				}
-				
+				 ajaxindicatorstop();
 			},'json');
 			//window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+value;
 		}
@@ -431,9 +439,10 @@ $select_building = $("#filter_building_id").selectize({
 $select_floor = $("#filter_floor_id").selectize({
 	persist: false,
 	 onChange: function(value) {
-
+		 ajaxindicatorstart("Loading...");
 		if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '') && ($("#filter_floor_id").val() > 0 && $("#filter_floor_id").val() != '' )){
 			window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
+			 ajaxindicatorstop();
 		}
 	 },
 	 onDropdownOpen: function(value){
@@ -504,6 +513,7 @@ function addFloor() {
 		});
 	});
 	$("#amenity_wt").val(amenityWeightage);
+	ajaxindicatorstart("Loading...");	
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -527,12 +537,15 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		alert(resp.message);
+		 ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
+        ajaxindicatorstop();
         window.location.href = "${baseUrl}/builder/project/building/floor/list.jsp?building_id="+$("#building_id").val();
   	}
 }

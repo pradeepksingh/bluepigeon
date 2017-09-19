@@ -232,7 +232,7 @@
 		                         </div>
 		                     <div class="center">
 		                        <br/>
-							  	<button type="submit" class="button1">Save</button>
+							  	<button type="submit" class="button1">Send</button>
 							 </div>
 		                </form>	
 				   </div>
@@ -307,6 +307,7 @@ $('#addinbox').bootstrapValidator({
 });
 
 function updateProjectPrice() {
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#pricingresponse', 
 	 		beforeSubmit : showPriceRequest,
@@ -330,12 +331,15 @@ function showPriceResponse(resp, statusText, xhr, $form){
        	$("#pricingresponse").addClass('alert-danger');
 		$("#pricingresponse").html(resp.message);
 		$("#pricingresponse").show();
+		alert(resp.message);
+		 ajaxindicatorstop();
   	} else {
   		$("#pricingresponse").removeClass('alert-danger');
         $("#pricingresponse").addClass('alert-success');
         $("#pricingresponse").html(resp.message);
         $("#pricingresponse").show();
         alert(resp.message);
+        ajaxindicatorstop();
         window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
   	}
 }
@@ -348,6 +352,7 @@ function getBuyerNames(){
 	var emp_id = <%out.print(empId);%>
 	var nameorNumber = $("#srch-term").val();
 	$("#inboxList").empty();
+	ajaxindicatorstart("Loading...");
 	$.post("${baseUrl}/webapi/builder/filter/inbox",{emp_id: emp_id, nameOrNumber : nameorNumber },function(data){
 		   if(data == ""){
 			   $("#inboxList").empty();
@@ -402,7 +407,9 @@ function getBuyerNames(){
                			+'</div>'
            				+'</div>';
          		$("#inboxList").append(htmlBookedBuyers);
+         		
 			});
+			 ajaxindicatorstop();
 	});
 }
 </script>

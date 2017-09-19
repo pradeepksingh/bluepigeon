@@ -92,10 +92,11 @@
     <!-- jQuery -->
 
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+     <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
      <script src="../js/jquery.form.js"></script>
 
-    <script src="../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script>
-     <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
+   
+    
       <script type="text/javascript" src="../js/selectize.min.js"></script>
   	<script type="text/javascript">
 // 		    $(document).ready(function() {
@@ -187,8 +188,9 @@
 	                     <h2>Status</h2>
 	                   </div>
 	                 </div>
+	                 <div id="newleads">
 	                 <%
-	                 //if(newLeadLists != null){
+	                 if(newLeadLists != null && newLeadLists.size() > 0){
 	                 for(NewLeadList newLeadList : newLeadLists){ %>
 	                 <div class="border-lead">
 	                  <div class="row">
@@ -209,14 +211,14 @@
 						    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Follow up
 						    <span class="caret"></span></button>
 						    <ul class="dropdown-menu">
-						      <li><a href="#">No Response</a></li>
-						      <li><a href="#">Call Again</a></li>
-						      <li><a href="#">Email Sent</a></li>
-						      <li><a href="#">Visit Again</a></li>
-						      <li><a href="#">Visit Complete</a></li>
-						      <li><a href="#">Follow up</a></li>
-						      <li><a href="#">Booked</a></li>
-						      <li><a href="#">Not interested</a></li>
+						      <li><a href="javascript:changeLeadStatus(1,<%out.print(newLeadList.getId());%>)">No Response</a></li>
+						      <li><a href="javascript:changeLeadStatus(2,<%out.print(newLeadList.getId());%>)">Call Again</a></li>
+						      <li><a href="javascript:changeLeadStatus(3,<%out.print(newLeadList.getId());%>)"">Email Sent</a></li>
+						      <li><a href="javascript:changeLeadStatus(4,<%out.print(newLeadList.getId());%>)"">Visit Again</a></li>
+						      <li><a href="javascript:changeLeadStatus(5,<%out.print(newLeadList.getId());%>)"">Visit Complete</a></li>
+						      <li><a href="javascript:changeLeadStatus(6,<%out.print(newLeadList.getId());%>)"">Follow up</a></li>
+						      <li><a href="javascript:changeLeadStatus(7,<%out.print(newLeadList.getId());%>)"">Booked</a></li>
+						      <li><a href="javascript:changeLeadStatus(8,<%out.print(newLeadList.getId());%>)"">Not interested</a></li>
 						    </ul>
 						  </div>
 	                    </div>
@@ -239,7 +241,7 @@
 	                      <h5>Source :</h5>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                      <h5>Last States: <b><%out.print(newLeadList.getLeadStatus()); %></b></h5>
+	                      <h5>Last States: <b><p id="leadstatus<%out.print(newLeadList.getId());%>"><%out.print(newLeadList.getLeadStatus()); %></p></b></h5>
 	                    </div>
 	                 </div>
 	                 <div class="row">
@@ -271,76 +273,9 @@
 	                    </div>
 	                 </div>
 	               </div>
-	               <%} //}%>
-	               <!-- buyer information end -->
-	                <!-- buyer information -->
-	               <div class="border-lead">
-	                  <div class="row">
-	                    <div class="col-md-2 col-sm-2 col-xs-6">
-	                     <h4>Satish Rajvade</h4>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6">
-	                     <h4>0000-000-000</h4>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6">
-	                     <h4>info@gmail.com</h4>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6">
-	                     <h4>Google Source</h4>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6">
-	                      <div class="dropdown">
-						    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Follow up
-						    <span class="caret"></span></button>
-						    <ul class="dropdown-menu">
-						      <li><a href="#">HTML</a></li>
-						      <li><a href="#">CSS</a></li>
-						      <li><a href="#">JavaScript</a></li>
-						      <li><a href="#">About Us</a></li>
-						    </ul>
-						  </div>
-	                    </div>
-	                 </div>
-	                 <hr>
-	                 <div class="row">
-	                    <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                     <img src="../images/Saleshead-added.PNG" />
-	                     <h5>Added By :</h5>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                      <img src="../images/Baget.PNG" />
-	                     <h5>Budget:</h5>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                      <img src="../images/Configuration.PNG" />
-	                      <h5>Configuration :</h5>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                      <h5>Source :</h5>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                      <h5>Last States: <b>Call</b></h5>
-	                    </div>
-	                 </div>
-	                 <div class="row">
-	                    <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                     <h6>Salesman name</h6>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                     <h6>Rs 50 -70 Lakh</h6>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                      <h6>2BHK, 3BHK</h6>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                      <h6>Google Source</h6>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                      <h6>Date: <b>23 July 2017</b></h6>
-	                    </div>
-	                 </div>
+	               <%} }%>
 	               </div>
-	                <!-- buyer information end -->
+	               <!-- buyer information end -->
                   </div>
                </div>
             </div>
@@ -376,10 +311,10 @@
 									 <label for="example-search-input" class="col-5 col-form-label">Email ID <span class="text-danger">*</span></label>
 										<div class="col-7">
 											<div>
-										   <input class="form-control" type="text" id="email" name="email" placeholder="Please enter email id">
-										 </div>
+										   		<input class="form-control" type="text" id="email" name="email" placeholder="Please enter email id">
+										 	</div>
 										   <div class="messageContainer"></div>
-										   </div>
+									   </div>
 								    </div>
 									<div class="form-group row">
 									   <label for="example-search-input" class="col-5 col-form-label">Configuration <span class="text-danger">*</span></label>
@@ -400,13 +335,12 @@
 							           <label for="example-tel-input" class="col-5 col-form-label">Source <span class="text-danger">*</span></label>
 								         <div class="col-7">
 								         	<div>
-									        <select id="select_source" name="select_source" data-style="form-control">
-									        <%if(sourceList != null){
-									        for(Source source: sourceList) {%>
-					                          <option value="<%out.print(source.getId());%>"><%out.print(source.getName()); %></option>
-					                        
-					                          <%}} %>
-					                        </select>
+										        <select id="select_source" name="select_source" data-style="form-control">
+										        <%if(sourceList != null){
+										        for(Source source: sourceList) {%>
+						                          <option value="<%out.print(source.getId());%>"><%out.print(source.getName()); %></option>
+						                          <%}} %>
+						                        </select>
 					                        </div>
 					                         <div class="messageContainer"></div>
 									     </div>
@@ -474,10 +408,10 @@
 							  	</div>
 		                     </form>
 				  		</div>
-			  	</div>
-		 	  </div>
-            </div>
-		  </div>
+			  		</div>
+		 	  	</div>
+          	</div>
+		</div>
     </div>
     <!-- /.container-fluid -->
    <div id="sidebar1"> 
@@ -487,7 +421,7 @@
 </html>
 <script>
 $("#booking").click(function(){
-	 window.location.href="${baseUrl}/builder/buyer/booking.jsp?project_id="+$("#project_id").val();
+	 window.location.href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+$("#project_id").val();
 });
 $("#cancellation").click(function(){
 	 window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(projectId);%>
@@ -623,11 +557,11 @@ $('#addnewlead').bootstrapValidator({
 	event.preventDefault();
 	addLead();
 }).on('error.form.bv',function(event,data){
-	alert("error...Find solution on google..");
+	//alert("error...Find solution on google..");
 });
 
 function addLead() {
-	alert("Hello from add new lead");
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -652,6 +586,7 @@ function showAddResponse(resp, statusText, xhr, $form){
 		$("#response").html(resp.message);
 		$("#response").show();
 		alert(resp.message);
+		 ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
@@ -659,7 +594,27 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").show();
         alert(resp.message);
         window.location.href = "${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+$("#project_id").val();
+        ajaxindicatorstop();
   	}
 }
-
+function changeLeadStatus(value,id){
+	
+	//alert(value,id);
+	
+	ajaxindicatorstart("Loading...");
+	$("#leadstatus"+id).val('');
+	$.post("${baseUrl}/webapi/builder/changeleadAuthority");
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}
 </script>

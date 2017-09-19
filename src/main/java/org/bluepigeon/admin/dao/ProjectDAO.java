@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.bluepigeon.admin.data.BookingFlatList;
 import org.bluepigeon.admin.data.BuilderCompletionStatus;
+import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.BuildingListData;
@@ -5895,8 +5896,9 @@ public List<InboxBuyerData> getAllBuyersByBuilderEmployee(BuilderEmployee builde
 	    String hql = "";
 	    if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
 	      hql = "SELECT buy.id as id, buy.name as name "
-	        +"FROM  buyer as buy "
-	        +"WHERE buy.builder_id = "+builderEmployee.getBuilder().getId()+" and buy.is_deleted=0 and buy.is_primary=1 and project.status=1 group by project.id";
+	      		+ "FROM buyer as buy left join builder_project as project on project.id=buy.project_id"
+	      		+ " left join builder as build on build.id=project.group_id"
+	      		+ " WHERE build.id = "+builderEmployee.getBuilder().getId()+" and buy.is_deleted=0 and buy.is_primary=1 and buy.status=0 and project.status=1 group by buy.id ";
 	    } else {
 	      hql = "SELECT buy.id as id, buy.name as name "
 	          +"FROM  buyer as buy inner join allot_project ap ON buy.project_id = ap.project_id "
@@ -5957,16 +5959,17 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
 		hql += " FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
 				+ "left join builder_project as bproject on bproject.id = b.project_id "
-				+ "left join allot_project as project on project.id = b.project_id  "
+				+ "left join allot_project as ap on ap.project_id = bproject.id   "
 				+ "WHERE ";
 				where+= "im.emp_id="+builderEmployee.getId();
 	}else{
 		hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
+				+ "left join builder_project as bproject on bproject.id = b.project_id "
 				+ "left join builder as build on build.id = b.builder_id  "
 				+ "WHERE ";
 				where+= "b.builder_id="+builderEmployee.getBuilder().getId();
 	}
-	hql += where + " AND bproject.status=1 AND b.is_primary=1 AND b.is_deleted=0 ORDER BY im.id desc";
+	hql += where + " AND bproject.status=1 AND b.is_primary=1 AND b.is_deleted=0 and b.status=0 ORDER BY im.id desc";
 	try {
 	Session session = hibernateUtil.getSessionFactory().openSession();
 	Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(InboxMessageData.class));
@@ -6034,6 +6037,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		if(builderLeads != null){
 			for(BuilderLead builderLead : builderLeads){
 				NewLeadList newLeadList =new NewLeadList();
+				newLeadList.setId(builderLead.getId());
 				newLeadList.setLeadName(builderLead.getName());
 				newLeadList.setPhoneNo(builderLead.getMobile());
 				newLeadList.setEmail(builderLead.getEmail());
@@ -6094,6 +6098,25 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		query.setParameter("id", id);
 		List<LeadConfig> leadConfig =  query.list();
 		return leadConfig;
+	}
+	
+	public List<ConfigData> getConfigData(String projectIds){
+		List<ConfigData> configDatas = new ArrayList<ConfigData>();
+		String  hql="select DISTINCT(a.property_config_id), b.name FROM builder_project_property_configuration_info "
+				+ "as a join builder_project_property_configuration as b on a.property_config_id= b.id "
+				+ "where "
+				+ "a.project_id IN("+projectIds+");";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		try {
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ConfigData.class));
+			System.err.println("hql : "+hql);
+			configDatas = query.list();
+			} catch(Exception e) {
+				//
+			}
+		return configDatas;
+	
 	}
 }
 

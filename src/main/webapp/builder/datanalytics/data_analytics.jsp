@@ -127,13 +127,51 @@
            <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Data Analytic page</h4> </div>
+                        <h4 class="page-title">Data Analytics</h4> </div>
                     
                     <!-- /.col-lg-12 -->
                 </div>
+                <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>"/>
                 <!-- /.row -->
                 <!-- .row -->
-               
+                <div class="row">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="white-box">
+                            <h3 class="box-title">Project status</h3>
+                            <%if(access_id==7){ %>
+                            
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                        		<select class="selectpicker border-drop-down" data-style="form-control" id="graph_project_id" name="graph_project_id">
+                                        <option value="0">Project wise</option>
+                                       	<option value="1">Source Wise</option>
+                                       	<option value="2">Month Wise</option>
+                           		</select>
+                    		</div>
+                    		<%} %>
+                    		<%if(access_id == 5){ %>
+                    		<div class="col-md-3 col-sm-6 col-xs-12">
+                        		<select class="selectpicker border-drop-down" data-style="form-control" id="graph_project_id" name="graph_project_id">
+                                        <option value="0">Project wise</option>
+                                       	<option value="1">Source Wise</option>
+                                       	<option value="2">Month Wise</option>
+                                       	<option value="3">Salesman Wise </option>
+                           		</select>
+                    		</div>
+                    		<%} %>
+                    		
+<!--                             <ul class="list-inline text-right"> -->
+<!--                                 <li> -->
+<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #24bcd3;"></i>Flats</h5> </li> -->
+<!--                                 <li> -->
+<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #fb9678;"></i>Buyers</h5> </li> -->
+<!--                                 <li> -->
+<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #9675ce;"></i>Purchases</h5> </li> -->
+<!--                             </ul> -->
+                            <div id="morris-bar-chart" style="height:372px;"></div>
+                        </div>
+                    </div>
+                    
+                </div>
                 <!-- /.row -->
               
               </div>
@@ -152,6 +190,7 @@
     <script type="text/javascript" src="../plugins/bower_components/multiselect/js/jquery.multi-select.js"></script>
     <script src="../plugins/bower_components/morrisjs/morris.js"></script>
     <script src="../js/real-estate.js"></script>
+      <script src="${baseUrl}/builder/plugins/bower_components/raphael/raphael-min.js"></script>
 <%--     <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.charts-sparkline.js"></script> --%>
 <%--     <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script> --%>
 
@@ -236,13 +275,127 @@
     });
     </script>
     <script>
-    
+    	var mychart = null; 
  
 
    
     	//Morris bar chart
-    	
-    }
+    	 <%
+      	if(projectWiseDatas != null){
+       		%> 
+  
+       	mychart = Morris.Bar({
+     		 
+    	    element: 'morris-bar-chart',
+    	    data: [
+    	    	<% for(ProjectWiseData barGraphData : projectWiseDatas){ %>
+    	    	{ y: '<%out.print(barGraphData.getName());%>', a: <%out.print(barGraphData.getRevenue());%> },
+             	<% } %>
+             ],
+             xkey: 'y',
+     	     ykeys: ['a'],
+     	     labels: ['Revenue'],
+     	     barColors:['#24bcd3'],
+     	     hideHover: 'auto',
+     	     gridLineColor: '#eef0f2',
+     	     resize: true
+     	});
+     <%	} %>
+ 	
+ 	
+ 	
+ 	$("#graph_project_id").change(function(){
+ 		if($(this).val() == '1') {
+ 			ajaxindicatorstart("Loading...");
+ 			$.post("${baseUrl}/webapi/builder/filter/bargraph/source",{emp_id:$("#emp_id").val()},function(data){
+				plotSourceGraph(data);
+				ajaxindicatorstop();
+		 	},'json');
+ 		} else if($(this).val() == '2') {
+ 			ajaxindicatorstart("Loading...");
+ 			$.post("${baseUrl}/webapi/builder/filter/bargraph/month",{emp_id:$("#emp_id").val()},function(data){
+				plotMonthGraph(data);
+				ajaxindicatorstop();
+		 	},'json');
+ 		}
+ 		else if($(this).val()==3){
+ 			ajaxindicatorstart("Loading...");
+ 			$.post("${baseUrl}/webapi/builder/filter/bargraph/saleman",{emp_id:$("#emp_id").val()},function(data){
+				plotMonthGraph(data);
+				ajaxindicatorstop();
+		 	},'json');
+ 		}
+ 		else {
+ 			ajaxindicatorstart("Loading...");
+ 			$.post("${baseUrl}/webapi/builder/filter/bargraph/project",{emp_id:$("#emp_id").val()},function(data){
+ 				plotProjectGraph(data);
+ 				ajaxindicatorstop();
+		 	},'json');
+ 		}
+ 	});
+ 	
+ 	function plotProjectGraph(records) {
+ 		var data = [];
+ 		$(records).each(function(index){
+			data.push({"y":records[index].name, "a":records[index].revenue});
+		});
+ 		mychart.destroy();
+ 		mychart = Morris.Bar({
+    		 
+    	    element: 'morris-bar-chart',
+    	    data: data,
+             xkey: 'y',
+     	     ykeys: ['a'],
+     	     labels: ['Revenue'],
+     	     barColors:['#24bcd3'],
+     	     hideHover: 'auto',
+     	     gridLineColor: '#eef0f2',
+     	     resize: true
+     	});
+ 		
+ 	}
+ 	
+ 	function plotSourceGraph(records) {
+ 		var data = [];
+ 		$(records).each(function(index){
+			data.push({"y":records[index].name, "a":records[index].dataCount});
+		});
+ 		mychart.destroy();
+ 		mychart = Morris.Bar({
+    		 
+    	    element: 'morris-bar-chart',
+    	    data: data,
+             xkey: 'y',
+     	     ykeys: ['a'],
+     	     labels: ['Responses'],
+     	     barColors:['#24bcd3'],
+     	     hideHover: 'auto',
+     	     gridLineColor: '#eef0f2',
+     	     resize: true
+     	});
+ 		
+ 	}
+ 	
+ 	function plotMonthGraph(records) {
+ 		var data = [];
+ 		$(records).each(function(index){
+			data.push({"y":records[index].name, "a":records[index].revenue});
+		});
+ 		mychart.destroy();
+ 		mychart = Morris.Bar({
+    		 
+    	    element: 'morris-bar-chart',
+    	    data: data,
+             xkey: 'y',
+     	     ykeys: ['a'],
+     	     labels: ['Revenue'],
+     	     barColors:['#24bcd3'],
+     	     hideHover: 'auto',
+     	     gridLineColor: '#eef0f2',
+     	     resize: true
+     	});
+ 		
+ 	}
     </script>
 </body>
 </html>

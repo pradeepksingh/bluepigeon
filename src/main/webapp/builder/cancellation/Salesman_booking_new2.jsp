@@ -311,7 +311,7 @@
 </html>
 <script>
 $("#booking").click(function(){
-	window.location.href="${baseUrl}/builder/buyer/booking.jsp?project_id="+<%out.print(project_id);%>;
+	window.location.href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
 });
 $("#campaign").click(function(){
 	window.location.href="${baseUrl}/builder/campaign/Salesman_campaign.jsp?project_id="+<%out.print(project_id);%>;
