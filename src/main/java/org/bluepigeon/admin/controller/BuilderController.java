@@ -33,6 +33,7 @@ import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.data.InboxBuyerData;
 import org.bluepigeon.admin.data.InboxMessageData;
+import org.bluepigeon.admin.data.ProjectWiseData;
 //import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
@@ -471,6 +472,38 @@ public class BuilderController {
 	}
 	
 	@POST
+	@Path("/filter/bargraph/source")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectWiseData> getBarGraphDataBySource(@FormParam("emp_id") int empId){
+		
+		return new BuilderDetailsDAO().getEmployeeBarGraphBySource(empId);
+	}
+	
+	@POST
+	@Path("/filter/bargraph/project")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectWiseData> getBarGraphDataByProject(@FormParam("emp_id") int empId){
+		
+		return new BuilderDetailsDAO().getEmployeeBarGraphByProject(empId);
+	}
+	
+	@POST
+	@Path("/filter/bargraph/month")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectWiseData> getBarGraphDataByMonth(@FormParam("emp_id") int empId){
+		
+		return new BuilderDetailsDAO().getEmployeeBarGraphByMonth(empId);
+	}
+	
+	@POST
+	@Path("/filter/bargraph/saleman")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectWiseData> getBarGraphDataBySalesman(@FormParam("emp_id") int empId){
+		
+		return new BuilderDetailsDAO().getEmployeeBarGraphBySalesman(empId);
+	}
+	
+	@POST
 	@Path("/filter/booked/buyers")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BookedBuyerList> getBookedBuyerList(
@@ -561,6 +594,8 @@ public class BuilderController {
 		 			}
 		    		 inboxMessageList.add(inboxMessage);
 		    	 }
+		     }
+		     if(inboxMessageList.size() > 0){
 		    	 msg = new BuilderDetailsDAO().saveInboxMessages(inboxMessageList);
 		     }
 		} else {
@@ -594,5 +629,16 @@ public class BuilderController {
 			
 		}
 		return new BuilderDetailsDAO().getBookedBuyerList(empId,name,contactNumber);
+	}
+	
+	@POST
+	@Path("/changeleadAuthority/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateLeadStatus(
+			@FormParam("id") int leadId,
+			@FormParam("value") int value
+			){
+		ResponseMessage responseMessage =  new BuilderDetailsDAO().updateLeadStatus(value, leadId);
+		return responseMessage;
 	}
 }

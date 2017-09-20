@@ -817,18 +817,26 @@ function checkDuplicateEntry(id){
 }
 
 $("#project").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/edit.jsp?project_id=<%out.print(project_id);%>";
+	ajaxindicatorstop();
 });
 
 $("#floor").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>";
+	ajaxindicatorstop();
 });
 
 $("#building").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>";
+	ajaxindicatorstop();
 });
 $("#flat").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>&flat_id=<%out.print(flat_id); %>";
+	ajaxindicatorstop();
 });
 
 $('#launch_date').datepicker({
@@ -924,13 +932,13 @@ function addMoreOffer() {
 	var html = '<div class="row" id="offer-'+offers+'"><hr/><input type="hidden" name="offer_id[]" value="0" />'
 		+'<div class="col-lg-12" style="padding-bottom:5px;"><span class="pull-right"><a href="javascript:removeOffer('+offers+');" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span></div>'
 		+'<div class="col-lg-5 margin-bottom-5">'
-			+'<div class="form-group" id="error-offer_title">'
-			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
-				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" autocomplete="off" id="offer_title'+offers+'" onchange="checkDuplicateEntry('+offers+');" onfocusout="checkDuplicateEntry('+offers+');" name="offer_title[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
+		+'<div class="form-group" id="error-offer_title">'
+		+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
+		+'<div class="col-sm-8">'
+		+'<input type="text" class="form-control" autocomplete="off" id="offer_title'+offers+'" onchange="checkDuplicateEntry('+offers+');" onfocusout="checkDuplicateEntry('+offers+');" name="offer_title[]" value=""/>'
+		+'</div>'
+		+'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
 		+'<div class="col-lg-3 margin-bottom-5">'
 		+'<div class="form-group" id="error-applicable_on">'
@@ -947,35 +955,35 @@ function addMoreOffer() {
 		+'</div>'
 		
 		+'<div class="col-lg-4 margin-bottom-5">'
-			+'<div class="form-group" id="error-discount_amount">'
-				+'<label class="control-label col-sm-6">Discount Amount </label>'
-				+'<div class="col-sm-6">'
-					+'<input type="text" class="form-control errorMsg" autocomplete="off" id="discount_amount'+offers+'" onkeyup=" javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
-				+'</div>'
-				+'<div class="messageContainer"></div>'
-			+'</div>'
+		+'<div class="form-group" id="error-discount_amount">'
+		+'<label class="control-label col-sm-6">Discount Amount </label>'
+		+'<div class="col-sm-6">'
+		+'<input type="text" class="form-control errorMsg" autocomplete="off" id="discount_amount'+offers+'" onkeyup=" javascript:validPerAmount('+offers+');" name="discount_amount[]" value=""/>'
+		+'</div>'
+		+'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
 		+'<div class="col-lg-5 margin-bottom-5">'
-			+'<div class="form-group" id="error-applicable_on">'
-			+'<label class="control-label col-sm-4">Description </label>'
-			+'<div class="col-sm-8">'
-			+'<textarea class="form-control" id="description" name="description[]" ></textarea>'
-			+'</div>'
-			+'<div class="messageContainer"></div>'
-			+'</div>'
+		+'<div class="form-group" id="error-applicable_on">'
+		+'<label class="control-label col-sm-4">Description </label>'
+		+'<div class="col-sm-8">'
+		+'<textarea class="form-control" id="description" name="description[]" ></textarea>'
+		+'</div>'
+		+'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
 		
 		+'<div class="col-lg-3 margin-bottom-5">'
-			+'<div class="form-group" id="error-apply">'
-			+'<label class="control-label col-sm-6">Status </label>'
-			+'<div class="col-sm-6">'
-			+'<select class="form-control" id="offer_status" name="offer_status[]">'
-			+'<option value="1">Active</option>'
-			+'<option value="0">Inactive</option>'
-			+'</select>'
-			+'</div>'
-			+'<div class="messageContainer"></div>'
-			+'</div>'
+		+'<div class="form-group" id="error-apply">'
+		+'<label class="control-label col-sm-6">Status </label>'
+		+'<div class="col-sm-6">'
+		+'<select class="form-control" id="offer_status" name="offer_status[]">'
+		+'<option value="1">Active</option>'
+		+'<option value="0">Inactive</option>'
+		+'</select>'
+		+'</div>'
+		+'<div class="messageContainer"></div>'
+		+'</div>'
 		+'</div>'
 		+'</div>';
 	$("#offer_area").append(html);
@@ -986,6 +994,7 @@ function removeOffer(id) {
 }
 
 function updateBuildingImages() {
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#imageresponse', 
 	 		beforeSubmit : showAddImageRequest,
@@ -1014,6 +1023,7 @@ function showAddImageResponse(resp, statusText, xhr, $form){
         $("#imageresponse").html(resp.message);
         $("#imageresponse").show();
         alert(resp.message);
+        ajaxindicatorstop();
   	}
 }
 function validPerAmount(id){
@@ -1221,6 +1231,7 @@ function validPercentage(id){
 	 }
 }
 function updateBuildingPricing() {
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#priceresponse', 
 	 		beforeSubmit : showAddPriceRequest,
@@ -1244,12 +1255,15 @@ function showAddPriceResponse(resp, statusText, xhr, $form){
        	$("#priceresponse").addClass('alert-danger');
 		$("#priceresponse").html(resp.message);
 		$("#priceresponse").show();
+		alert(resp.message);
+		 ajaxindicatorstop();
   	} else {
   		$("#priceresponse").removeClass('alert-danger');
         $("#priceresponse").addClass('alert-success');
         $("#priceresponse").html(resp.message);
         $("#priceresponse").show();
         alert(resp.message);
+        ajaxindicatorstop();
         $('.active').removeClass('active').next('li').addClass('active');
         $("#vimessages2").addClass('active');
   	}
@@ -1284,15 +1298,18 @@ $('#updatepayment').bootstrapValidator({
 function deleteOffer(id){
 	var flag = confirm("Are you sure ? You want to delete offers ?");
 	if(flag) {
+		ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/building/offer/delete/"+id, { }, function(data){
 			alert(data.message);
 			if(data.status == 1) {
 				$("#offer-"+id).remove();
 			}
+			 ajaxindicatorstop();
 		},'json');
 	}
 }
 function updateBuildingPayments() {
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#imageresponse', 
 	 		beforeSubmit : showAddPaymentRequest,
@@ -1316,12 +1333,15 @@ function showAddPaymentResponse(resp, statusText, xhr, $form){
        	$("#paymentresponse").addClass('alert-danger');
 		$("#paymentresponse").html(resp.message);
 		$("#paymentresponse").show();
+		alert(resp.message);
+		 ajaxindicatorstop();
   	} else {
   		$("#paymentresponse").removeClass('alert-danger');
         $("#paymentresponse").addClass('alert-success');
         $("#paymentresponse").html(resp.message);
         $("#paymentresponse").show();
         alert(resp.message);
+        ajaxindicatorstop();
         $('.active').removeClass('active').next('li').addClass('active');
         $("#vimessages3").addClass('active');
   	}
@@ -1356,6 +1376,7 @@ function showAddPaymentResponse(resp, statusText, xhr, $form){
 // }
 
 function updateBuildingOffers() {
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#imageresponse', 
 	 		beforeSubmit : showAddOfferRequest,
@@ -1379,12 +1400,15 @@ function showAddOfferResponse(resp, statusText, xhr, $form){
        	$("#offerresponse").addClass('alert-danger');
 		$("#offerresponse").html(resp.message);
 		$("#offerresponse").show();
+		alert(resp.message);
+		 ajaxindicatorstop();
   	} else {
   		$("#offerresponse").removeClass('alert-danger');
         $("#offerresponse").addClass('alert-success');
         $("#offerresponse").html(resp.message);
         $("#offerresponse").show();
         alert(resp.message);
+        ajaxindicatorstop();
   	}
 }
 

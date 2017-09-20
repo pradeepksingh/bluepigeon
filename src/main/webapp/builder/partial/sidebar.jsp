@@ -43,7 +43,8 @@
 <!--                         </ul> -->
                     </li>
                     <li class="nav-small-cap m-t-10">--Main Menu--</li>
-                    <li> <a href="${baseUrl }/builder/dashboard.jsp" class="waves-effect"><i class="ti-dashboard p-r-10"></i> <span class="hide-menu">Dashboard</span></a> </li>
+                    <li> <a href="${baseUrl }/builder/dashboard.jsp" class="waves-effect"><i class="ti-dashboard p-r-10">
+                    </i> <span class="hide-menu">Dashboard</span></a> </li>
                     <%
                     
                   //   if(emp_access_id ==1 ||emp_access_id==2){%>
@@ -62,19 +63,34 @@
 <!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
 <!--                         </ul> -->
 <!--                     </li> -->
-					<%if(emp_access_id== 1|| emp_access_id ==2 || emp_access_id== 4  || emp_access_id == 6){ %>
-                     <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="ti-layout fa-fw"></i><span class="hide-menu"> Buyer<span class="fa arrow"></span></span></a>
+					<%if(emp_access_id== 1|| emp_access_id== 4  || emp_access_id == 6){ %>
+                     <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="ti-layout fa-fw"></i>
+                     <span class="hide-menu"> Buyer<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="javascript:void(0)">Manage</a></li>
                             <li> <a href="javascript:void(0)">Cancellation</a></li>
                         </ul>
                     </li>
                     <% }%>
-                    <%if(emp_access_id == 1|| emp_access_id ==2){ %>
-                    <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu"> Employee<span class="fa arrow"></span></span></a>
+                    <%if(emp_access_id == 1){ %>
+                    <li> <a href="javascript:void(0);" class="waves-effect">
+                    <i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu"> Employee<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="${baseUrl }/builder/employee/new.jsp">Add</a></li>
                             <li> <a href="${baseUrl }/builder/employee/list.jsp">Manage</a></li>
+                        </ul>
+                    </li>
+                    <%} %>
+                     <%if(emp_access_id ==2){ %>
+                    <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class=""></i>
+                    <span class="hide-menu"> ADMIN<span class=""></span></span></a>
+                        <ul class="nav nav-second-level">
+                         
+                            <li> <a href="${baseUrl }/builder/employee/new.jsp">Add Employee</a></li>
+                             <li> <a href="${baseUrl }/builder/documents/documents.jsp">Add Document</a></li>
+                             <li> <a href="${baseUrl }/builder/inbox/inbox.jsp">Inbox</a></li>
+                              <li> <a href="${baseUrl }/builder/project/newproject.jsp">Project Start Request</a></li>
+<%--                             <li> <a href="${baseUrl }/builder/employee/list.jsp">Manage</a></li> --%>
                         </ul>
                     </li>
                     <%} %>
@@ -84,7 +100,7 @@
 <!--                             <li> <a href="inbox-detail.html">Manage</a></li> -->
 <!--                         </ul> -->
 <!--                     </li> -->
-					<% if(emp_access_id == 1 || emp_access_id ==2){ %>
+					<% if(emp_access_id == 1 ){ %>
                      <li class="nav-small-cap m-t-10">--Professional--</li>
                      <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Sales<span class="fa arrow"></span></span></a>
                       
@@ -129,7 +145,7 @@
                     <% }%>
                    
                    
-                    <%if(emp_access_id==1 || emp_access_id == 2){ %>
+                    <%if(emp_access_id==1 ){ %>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Marketing<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
 <!--                             <li> <a href="inbox.html">Manage Updates</a></li> -->
@@ -137,7 +153,7 @@
                              </ul>
                     </li>
                     <%} %>
-                    <% if(emp_access_id ==1 || emp_access_id ==2 || emp_access_id==6){%>
+                    <% if(emp_access_id ==1 || emp_access_id==6){%>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="F" class="linea-icon linea-software fa-fw"></i><span class="hide-menu"> Inventory<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                          <li> <a href="${baseUrl }/builder/agreement/list.jsp">Agreement</a></li>

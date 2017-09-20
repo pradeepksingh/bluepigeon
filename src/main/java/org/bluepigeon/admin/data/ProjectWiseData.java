@@ -1,9 +1,12 @@
 package org.bluepigeon.admin.data;
 
+import java.math.BigInteger;
+
 public class ProjectWiseData {
 	private int id;
+	private BigInteger dataCount;
 	private String name;
-	private Double revenue;
+	private Double revenue=0.0;
 	public int getId() {
 		return id;
 	}
@@ -21,5 +24,11 @@ public class ProjectWiseData {
 	}
 	public void setRevenue(Double revenue) {
 		this.revenue = revenue;
+	}
+	public BigInteger getDataCount() {
+		return dataCount;
+	}
+	public void setDataCount(BigInteger dataCount) {
+		this.dataCount = dataCount;
 	}
 }

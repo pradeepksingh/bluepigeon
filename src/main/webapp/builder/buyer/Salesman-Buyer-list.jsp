@@ -193,6 +193,7 @@ function getBookedBuyerFilterList(){
 	var htmlBookedBuyers = "";
 	var project_id = $("#filter_project_id").val();
 	var nameorNumber = $("#srch-term").val();
+	ajaxindicatorstart("Loading...");
 	$("#booked_buyers").empty();
 	$.post("${baseUrl}/webapi/builder/filter/booked/buyers",{emp_id: emp_id, project_id : project_id, nameOrNumber : nameorNumber },function(data){
 		   if(data == ""){
@@ -217,12 +218,23 @@ function getBookedBuyerFilterList(){
                +'</div>'
             +'</div>';
             $("#booked_buyers").append(htmlBookedBuyers);
+           
 			});
+			ajaxindicatorstop();
 	});
+	 
 }
 
 $("#search_buyer").click(function(){
 	getBookedBuyerFilterList();
+});
+
+$("#srch-term").keydown(function (e) {
+	//alert($("#srch-term").val());
+	if (e.keyCode == 13) {
+		getBookedBuyerFilterList();
+		return false;
+	}
 });
 </script>
  

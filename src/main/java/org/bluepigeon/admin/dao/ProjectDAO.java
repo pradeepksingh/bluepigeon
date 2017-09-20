@@ -2,12 +2,14 @@ package org.bluepigeon.admin.dao;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.bluepigeon.admin.data.BookingFlatList;
 import org.bluepigeon.admin.data.BuilderCompletionStatus;
+import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.BuildingListData;
@@ -4434,7 +4436,8 @@ public class ProjectDAO {
 		newquery.setParameter("flat_id", flat_id);
 		List<BuilderFlat> resultnew = newquery.list();
 		newsession.close();
-		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from flat_weightage as a where a.flat_id = "+flat_id+" group by a.stage_id";
+		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from flat_weightage as a where a.flat_id = "+flat_id+" group by a.id";
+		System.err.println(hql);
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql)
 				.setResultTransformer(Transformers.aliasToBean(FlatTotal.class));
@@ -4445,7 +4448,7 @@ public class ProjectDAO {
 		for(FlatTotal flatTotal :resultRaw) {
 			finalWeightage += (flatTotal.getTotalSubstageWeight()/percent*flatTotal.getStageWeight());
 		}
-		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from flat_amenity_weightage as a where a.flat_id = "+flat_id+" group by a.amenity_id";
+		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from flat_amenity_weightage as a where a.flat_id = "+flat_id+" group by a.id";
 		Session session2 = hibernateUtil.getSessionFactory().openSession();
 		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
 		List<FlatAmenityTotal> resultRaw2 = query2.list();
@@ -4482,7 +4485,7 @@ public class ProjectDAO {
 		flatquery.setParameter("floor_id", floor_id);
 		List<BuilderCompletionStatus> flatresult = flatquery.list();
 		flatsession.close();
-		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from floor_weightage as a where a.floor_id = "+floor_id+" group by a.stage_id";
+		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from floor_weightage as a where a.floor_id = "+floor_id+" group by a.id";
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql)
 				.setResultTransformer(Transformers.aliasToBean(FlatTotal.class));
@@ -4494,7 +4497,7 @@ public class ProjectDAO {
 		for(FlatTotal flatTotal :resultRaw) {
 			finalWeightage += (flatTotal.getTotalSubstageWeight()*flatTotal.getStageWeight()/percent);
 		}
-		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from floor_amenity_weightage as a where a.floor_id = "+floor_id+" group by a.amenity_id";
+		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from floor_amenity_weightage as a where a.floor_id = "+floor_id+" group by a.id";
 		Session session2 = hibernateUtil.getSessionFactory().openSession();
 		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
 		List<FlatAmenityTotal> resultRaw2 = query2.list();
@@ -5895,12 +5898,13 @@ public List<InboxBuyerData> getAllBuyersByBuilderEmployee(BuilderEmployee builde
 	    String hql = "";
 	    if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
 	      hql = "SELECT buy.id as id, buy.name as name "
-	        +"FROM  buyer as buy "
-	        +"WHERE buy.builder_id = "+builderEmployee.getBuilder().getId()+" and buy.is_deleted=0 and buy.is_primary=1 and project.status=1 group by project.id";
+	      		+ "FROM buyer as buy left join builder_project as project on project.id=buy.project_id"
+	      		+ " left join builder as build on build.id=project.group_id"
+	      		+ " WHERE build.id = "+builderEmployee.getBuilder().getId()+" and buy.is_deleted=0 and buy.is_primary=1 and buy.status=0 and project.status=1 group by buy.id ";
 	    } else {
 	      hql = "SELECT buy.id as id, buy.name as name "
 	          +"FROM  buyer as buy inner join allot_project ap ON buy.project_id = ap.project_id "
-	          +"WHERE ap.emp_id = "+builderEmployee.getId()+" and buy.is_deleted=0 and buy.is_primary=1 group by buy.id";
+	          +"WHERE ap.emp_id = "+builderEmployee.getId()+" and buy.is_deleted=0 and buy.is_primary=1 and buy.status=0 group by buy.id";
 	    }
 	    HibernateUtil hibernateUtil = new HibernateUtil();
 	    Session session = hibernateUtil.getSessionFactory().openSession();
@@ -5918,7 +5922,7 @@ public List<InboxBuyerData> getAllBuyersByBuilderEmployee(BuilderEmployee builde
  * @return buyer 
  */
 public Buyer getBuyerById(int id){
-	String hql = "from Buyer where id = :id and isPrimary = 1 and isDeleted=0";
+	String hql = "from Buyer where id = :id and isPrimary = 1 and isDeleted=0 and status=0";
 	HibernateUtil hibernateUtil = new HibernateUtil();
 	Session session = hibernateUtil.openSession();
 	Query query = session.createQuery(hql);
@@ -5957,16 +5961,17 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
 		hql += " FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
 				+ "left join builder_project as bproject on bproject.id = b.project_id "
-				+ "left join allot_project as project on project.id = b.project_id  "
+				+ "inner join allot_project as ap on ap.project_id = bproject.id   "
 				+ "WHERE ";
-				where+= "im.emp_id="+builderEmployee.getId();
+				where+= "ap.emp_id="+builderEmployee.getId();
 	}else{
 		hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
+				+ "left join builder_project as bproject on bproject.id = b.project_id "
 				+ "left join builder as build on build.id = b.builder_id  "
 				+ "WHERE ";
 				where+= "b.builder_id="+builderEmployee.getBuilder().getId();
 	}
-	hql += where + " AND bproject.status=1 AND b.is_primary=1 AND b.is_deleted=0 ORDER BY im.id desc";
+	hql += where + " AND bproject.status=1 AND b.is_primary=1 AND b.is_deleted=0 and b.status=0 ORDER BY im.id desc";
 	try {
 	Session session = hibernateUtil.getSessionFactory().openSession();
 	Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(InboxMessageData.class));
@@ -6034,6 +6039,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		if(builderLeads != null){
 			for(BuilderLead builderLead : builderLeads){
 				NewLeadList newLeadList =new NewLeadList();
+				newLeadList.setId(builderLead.getId());
 				newLeadList.setLeadName(builderLead.getName());
 				newLeadList.setPhoneNo(builderLead.getMobile());
 				newLeadList.setEmail(builderLead.getEmail());
@@ -6043,29 +6049,32 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 				newLeadList.setMax(builderLead.getMax());
 				newLeadList.setMin(builderLead.getMin());
 				newLeadList.setSalemanName(builderEmployee.getName());
+				if(builderLead.getLeadStatus() == 0){
+					newLeadList.setLeadName("");
+				} 
 				if(builderLead.getLeadStatus() == 1){
 					newLeadList.setLeadName("No Response");
 				}
 				if(builderLead.getLeadStatus() == 2){
-					newLeadList.setLeadName("Call Again");
+					newLeadList.setLeadStatusName("Call Again");
 				}
 				if(builderLead.getLeadStatus() == 3){
-					newLeadList.setLeadName("Email Sent");
+					newLeadList.setLeadStatusName("Email Sent");
 				}
 				if(builderLead.getLeadStatus() == 4){
-					newLeadList.setLeadName("Visit Schedule");
+					newLeadList.setLeadStatusName("Visit Again");
 				}
 				if(builderLead.getLeadStatus() == 5){
-					newLeadList.setLeadName("Visit Complete");
+					newLeadList.setLeadStatusName("Visit Complete");
 				}
 				if(builderLead.getLeadStatus() == 6){
-					newLeadList.setLeadName("Follow up");
+					newLeadList.setLeadStatusName("Follow up");
 				}
 				if(builderLead.getLeadStatus() == 7){
-					newLeadList.setLeadName("Booked");
+					newLeadList.setLeadStatusName("Booked");
 				}
 				if(builderLead.getLeadStatus() == 8){
-					newLeadList.setLeadName("Not Interested");
+					newLeadList.setLeadStatusName("Not Interested");
 				}
 				Source source = getSourceById(builderLead.getSource().getId()).get(0);
 				newLeadList.setSource(source.getName());
@@ -6094,6 +6103,29 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		query.setParameter("id", id);
 		List<LeadConfig> leadConfig =  query.list();
 		return leadConfig;
+	}
+	
+	public List<ConfigData> getConfigData(List<String> projectIds){
+		List<ConfigData> configDatas = new ArrayList<ConfigData>();
+		String projectIdList = Arrays.toString(projectIds.toArray());
+		String strSeparator = "";
+		projectIdList = projectIdList.replace("[", strSeparator).replace("]", strSeparator);
+		
+		String  hql="select DISTINCT(a.property_config_id) as id, b.name as name FROM builder_project_property_configuration_info "
+				+ "as a join builder_project_property_configuration as b on a.property_config_id= b.id "
+				+ "where "
+				+ "a.project_id IN("+projectIdList+");";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		try {
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ConfigData.class));
+			System.err.println("hql : "+hql);
+			configDatas = query.list();
+			} catch(Exception e) {
+				//
+			}
+		return configDatas;
+	
 	}
 }
 

@@ -18,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.bluepigeon.admin.dao.AreaUnitDAO;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
@@ -32,6 +33,7 @@ import org.bluepigeon.admin.data.BookingFlatList;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.BuildingWeightageData;
+import org.bluepigeon.admin.data.ConfigData;
 import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatTypeData;
 import org.bluepigeon.admin.data.FlatWeightageData;
@@ -4549,6 +4551,25 @@ public class ProjectController extends ResourceConfig {
 		Cancellation cancellation = cancellationDAO.getCancellationById(id);
 		cancellation.setCharges(cancelAmount);
 		responseMessage = cancellationDAO.updateCancelStatus(cancellation);
-		return responseMessage;
+		return responseMessage; 
+	}
+	
+	@GET
+	@Path("/configdata")
+	@Produces(MediaType.APPLICATION_JSON)
+	//@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public List<ConfigData> getConfigData(
+			//@FormParam("project_ids[]") List<FormDataBodyPart> flat_id
+			@Context UriInfo uriInfo
+			//@FormDataParam("project_ids[]") List<FormP> schedule
+			) {
+		ProjectDAO projectDAO = new ProjectDAO();
+		List<String> projectIds = uriInfo.getQueryParameters().get("project_ids[]");
+		System.err.println("Received List :: "+projectIds);
+		//System.err.println(flat_id);
+	//	List<int> projectIds = new ArrayList<int>();
+		List<ConfigData> floorList = projectDAO.getConfigData(projectIds);
+		return floorList;
+		//return null;
 	}
 }

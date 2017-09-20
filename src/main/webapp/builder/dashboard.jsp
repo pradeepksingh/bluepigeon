@@ -45,7 +45,6 @@
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
-			
 				builder_id = builder.getBuilder().getId();
 				emp_id = builder.getId();
 				access_id = builder.getBuilderEmployeeAccessType().getId();
@@ -343,7 +342,7 @@
                        	}%>
                         </div>
 	                    <div class="offset-sm-5 col-sm-7" id="showMore">
-	                        <button type="button" onclick="getAllProjectsByBuiderId();" class="btn btn11 btn-default waves-effect waves-light m-t-10">More...</button>
+	                        <button type="button" onclick="getAllProjectsByBuiderId();" class="btn btn11 btn-submit waves-effect waves-light m-t-10">More...</button>
 	                     </div>
                     </div>
                 </div>
@@ -449,6 +448,7 @@
     <script type="text/javascript" src="plugins/bower_components/multiselect/js/jquery.multi-select.js"></script>
     <script src="${baseUrl}/builder/plugins/bower_components/morrisjs/morris.js"></script>
     <script src="${baseUrl}/builder/js/real-estate.js"></script>
+    <script src="${baseUrl}/builder/plugins/bower_components/raphael/raphael-min.js"></script>
 <%--     <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.charts-sparkline.js"></script> --%>
 <%--     <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script> --%>
 
@@ -872,16 +872,11 @@ $("#locality_name").attr('disabled',true);
     	 <%
       	if(barGraphDatas != null){
        		%> 
-  
      	Morris.Bar({
-     		 
     	    element: 'morris-bar-chart',
     	    data: [
     	    	<% for(BarGraphData barGraphData : barGraphDatas){ %>
-    	    		 
     	    	{
-    	    	
-    	    	
    		      y: '<%
      	    	    if(barGraphData.getBuiltYear() != 0){
     		      out.print(barGraphData.getBuiltYear());}%>', 

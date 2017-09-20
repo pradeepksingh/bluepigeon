@@ -1223,6 +1223,7 @@ $("#city_id").change(function(){
 				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 			});
 			$("#locality_id").html(html);
+			
 		},'json');
 	}
 });
@@ -1238,14 +1239,20 @@ function txtEnabaleDisable(id){
 }
 
 $("#floor").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>";
+	ajaxindicatorstop();
 });
 
 $("#building").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>";
+	ajaxindicatorstop();
 });
 $("#flat").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>&flat_id=<%out.print(flat_id); %>";
+	ajaxindicatorstop();
 });
 //needed to change color of div on click event.
 // $("#project").click(function(){
@@ -1447,6 +1454,7 @@ $('#basicfrm').bootstrapValidator({
 });
 
 function updateProject() {
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#basicresponse', 
 	 		beforeSubmit : showAddRequest,
@@ -1476,6 +1484,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#basicresponse").html(resp.message);
         $("#basicresponse").show();
         alert(resp.message);
+        ajaxindicatorstop();
         $('.active').removeClass('active').next('li').addClass('active');
         $("#vimessages1").addClass('active');
   	}
@@ -1588,6 +1597,7 @@ $('#pricingfrm').bootstrapValidator({
 });
 
 function updateProjectPrice() {
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#pricingresponse', 
 	 		beforeSubmit : showPriceRequest,
@@ -1617,6 +1627,7 @@ function showPriceResponse(resp, statusText, xhr, $form){
         $("#pricingresponse").html(resp.message);
         $("#pricingresponse").show();
         alert(resp.message);
+        ajaxindicatorstop();
         $('.active').removeClass('active').next('li').addClass('active');
         $("#vimessages3").addClass('active');
   	}
@@ -1670,6 +1681,7 @@ function saveProjectDetails(){
 		homeLoanInfo.push({homeLoanBanks:{id:$(this).val()},builderProject:{id:$("#id").val()}});
 	});
 	var final_data = {builderProject:project,builderProjectProjectTypes:projectType,builderProjectPropertyTypes:propertyType,builderProjectPropertyConfigurationInfos:configuration,builderProjectAmenityInfos:amenityType,builderProjectApprovalInfos:approvalType,builderProjectBankInfos:homeLoanInfo,projectAmenityWeightages:amenityWeightage}
+	ajaxindicatorstart("Loading...");
 	$.ajax({
 	    url: '${baseUrl}/webapi/project/detail/update',
 	    type: 'POST',
@@ -1681,14 +1693,17 @@ function saveProjectDetails(){
 			if (data.status == 0) {
 				
 				alert(data.message);
+				 ajaxindicatorstop();
 			} else {
 			
 				alert(data.message);
+				 ajaxindicatorstop();
 			}
 		},
 		error : function(data)
 		{
 			alert("Fail to save data");
+			 ajaxindicatorstop();
 		}
 		
 	});
@@ -1748,6 +1763,7 @@ $('#paymentfrm').bootstrapValidator({
 });
  
 function updatePaymentSchudle(){
+	ajaxindicatorstart("Loading...");
 		var options = {
 		 		target : '#paymentresponse', 
 		 		beforeSubmit : showPaymentRequest,
@@ -1770,12 +1786,15 @@ function showPaymentResponse(resp, statusText, xhr, $form){
        	$("#paymentresponse").addClass('alert-danger');
 		$("#paymentresponse").html(resp.message);
 		$("#paymentresponse").show();
+		alert(resp.message);
+		 ajaxindicatorstop();
   	} else {
   		$("#paymentresponse").removeClass('alert-danger');
         $("#paymentresponse").addClass('alert-success');
         $("#paymentresponse").html(resp.message);
         $("#paymentresponse").show();
         alert(resp.message);
+        ajaxindicatorstop();
         $('.active').removeClass('active').next('li').addClass('active');
         $("#vimessages4").addClass('active');
   	}
@@ -1825,6 +1844,7 @@ $('#offerfrm').bootstrapValidator({
 });
 function updateProjectOffers(){
 	//alert("Hello");
+	ajaxindicatorstart("Loading...");
 		var options = {
 		 		target : '#offerresponse', 
 		 		beforeSubmit : showOfferRequest,
@@ -1847,12 +1867,16 @@ function showOfferResponse(resp, statusText, xhr, $form){
        	$("#offerresponse").addClass('alert-danger');
 		$("#offerresponse").html(resp.message);
 		$("#offerresponse").show();
+		alert(resp.message);
+		 ajaxindicatorstop();
   	} else {
   		$("#offerresponse").removeClass('alert-danger');
         $("#offerresponse").addClass('alert-success');
         $("#offerresponse").html(resp.message);
         $("#offerresponse").show();
         alert(resp.message);
+        window.location.href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>";
+        ajaxindicatorstop();
   	}
 }
 
@@ -1926,7 +1950,6 @@ function removeOffer(id) {
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
 	schedule_count++;
-			   
 	 var html = '<div class="row" id="schedule-'+schedule_count+'">'
 	 			+'<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>'
 				+'<div class="col-lg-12" style="padding-bottom:5px;">'
@@ -1965,11 +1988,13 @@ function deleteOffer(id) {
 	
 	var flag = confirm("Are you sure ? You want to delete offer ?");
 	if(flag) {
+		ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/offer/delete/"+id, { }, function(data){
 			alert(data.message);
 			if(data.status == 1) {
 				$("#offer-"+id).remove();
 			}
+			ajaxindicatorstop();
 		});
 	}
 }
@@ -1978,11 +2003,14 @@ function deleteSchudle(id){
 	
 	var flag = confirm("Are you sure ? You want to delete schedule ?");
 	if(flag){
+		ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/payment/delete/"+id,{}, function(data){
 			alert(data.message);
 			if(data.status == 1){
 				$("#schedule-"+id).remove();
+				
 			}
+			ajaxindicatorstop();
 		})
 	}
 }

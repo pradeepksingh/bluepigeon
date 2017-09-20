@@ -72,7 +72,7 @@
  			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
  			building_id = builderBuildingList.get(0).getId(); 
 			flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,0); 
- 			bookingFlatList2 = new ProjectDAO().getFlatBookeddetails(project_id,building_id,floor_id,0); 
+ 			bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,building_id,floor_id,0); 
  			if(bookingFlatList2 != null){
  				if( bookingFlatList2.getImage() != null){
  					image = bookingFlatList2.getImage(); 
@@ -174,7 +174,7 @@
                      </div>
                      <div class="col-md-4 col-sm-4 col-xs-12">
                        <select id="filter_floor_id" name="filter_floor_id">
-                			<option value="0"></option>
+                			<option value="0">All Floor</option>
                 			<%
                 			if(floorList != null){
                 			for(BuilderFloor builderFloors : floorList){ %>
@@ -311,7 +311,7 @@
 </html>
 <script>
 $("#booking").click(function(){
-	window.location.href="${baseUrl}/builder/buyer/booking.jsp?project_id="+<%out.print(project_id);%>;
+	window.location.href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
 });
 $("#campaign").click(function(){
 	window.location.href="${baseUrl}/builder/campaign/Salesman_campaign.jsp?project_id="+<%out.print(project_id);%>;
@@ -365,7 +365,7 @@ $select_building = $("#filter_building_id").selectize({
 		if($("#filter_building_id").val() != '' ){
 			$.get("${baseUrl}/webapi/project/building/floor/list/",{ building_id: value }, function(data){
 				getFlatDetails();
-				var html = '<option value="">Enter Floor Name</option>';
+				var html = '<option value="0">All Floor</option>';
 				if(data != ""){
 					$(data).each(function(index){
 						html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
@@ -441,6 +441,7 @@ $select_floor = $("#filter_floor_id").selectize({
 		var textClear =	 $("#filter_floor_id :selected").text();
    	 if(textClear.trim() == "Enter Floor Name"){
    		 obj[0].setValue("0");
+   		obj[0].setTest("All Floor");
    	 }
     }
 });

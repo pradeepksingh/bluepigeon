@@ -939,6 +939,7 @@ $('#addnewbuyer').bootstrapValidator({
 
 function addBuyer1() {
 	//alert("inside add");
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -967,7 +968,9 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").addClass('alert-success');
         $("#response").html(resp.message);
         $("#response").show();
+        
         alert(resp.message);
+        ajaxindicatorstop();
         window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id="+<%out.print(project_id);%>
   	}
 }

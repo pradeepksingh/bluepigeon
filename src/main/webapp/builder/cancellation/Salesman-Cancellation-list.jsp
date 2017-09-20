@@ -68,7 +68,7 @@
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/custom10.css">
+       <link rel="stylesheet" type="text/css" href="../css/custom10.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
@@ -196,6 +196,8 @@ function getBookedBuyerFilterList(){
 	var htmlBookedBuyers = "";
 	var project_id = $("#filter_project_id").val();
 	var nameorNumber = $("#srch-term").val();
+	alert(nameorNumber);
+	ajaxindicatorstart("Loading...");
 	$("#booked_buyers").empty();
 	$.post("${baseUrl}/webapi/cancellation/filter/cancel/buyers",{emp_id: emp_id, project_id : project_id, nameOrNumber : nameorNumber },function(data){
 		   if(data == ""){
@@ -222,10 +224,18 @@ function getBookedBuyerFilterList(){
             +'</div>';
             $("#booked_buyers").append(htmlBookedBuyers);
 			});
+			 ajaxindicatorstop();
 	});
 }
 
 $("#search_buyer").click(function(){
 	getBookedBuyerFilterList();
+});
+
+$("#srch-term").keydown(function (e) {
+	if (e.keyCode == 13) {
+		getBookedBuyerFilterList();
+		return false;
+	}
 });
 </script>

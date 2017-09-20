@@ -59,16 +59,19 @@
     <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
    <!-- Menu CSS -->
     <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/custom10.css">
+    <link rel="stylesheet" type="text/css" href="../css/salemanaddlead.css">
    
       <link rel="stylesheet" type="text/css" href="../css/jquery.multiselect.css" />
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+     <script src="../js/jquery.form.js"></script>
+      <script type="text/javascript" src="../js/selectize.min.js"></script>
        <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
   
         
@@ -138,82 +141,112 @@
                <!-- row -->
                <div class="white-box">
                  <div class="row bg11">
-                   <form class="addlead1">
+                   <form class="addlead1" id="addnewlead" name="addnewlead" action="" method="post"  enctype="multipart/form-data">
                   
                      <div class="col-md-6 col-sm-6 col-xs-12">
                          <div class="form-group row">
-							<label for="example-text-input" class="col-5 col-form-label"> Name</label>
+							<label for="example-text-input" class="col-5 col-form-label">Name</label>
 							  <div class="col-7">
-								 <input class="form-control" type="text" value="" id=""  placeholder="">
+							  		<div>
+								 		<input class="form-control" type="text" id="leadname" name="leadname"  placeholder="Please enter name">
+								 	</div>
+								  	<div class="messageContainer"></div>
 							  </div>
 						  </div>
 						  <div class="form-group row">
 							 <label for="example-search-input" class="col-5 col-form-label">Email ID</label>
 								<div class="col-7">
-								   <input class="form-control" type="text" value="" id="" placeholder="">
-								 </div>
-						    </div>
+									<div>
+								   		<input class="form-control" type="text" id="email" name="email" placeholder="Please enter email id">
+								    </div>
+								    <div class="messageContainer"></div>
+							    </div>
+						 </div>
 							<div class="form-group row">
 							   <label for="example-search-input" class="col-5 col-form-label">Configuration</label>
 								  <div class="col-7">
-								      <select id="multiple-checkboxes-3" name="multiple-checkboxes-3" multiple>
-								        <option value="php">PHP</option>
-								        <option value="javascript">JavaScript</option>
-								        <option value="java">Java</option>
-								        <option value="sql" >SQL</option>
-								        <option value="jquery" >Jquery</option>
-								        <option value=".net">.Net</option>
-								     </select>
+								  		<div>
+								      		<select id="configuration" name="configuration[]" multiple>	</select>
+								     	</div>
+								      	<div class="messageContainer"></div>
 								  </div>
 							 </div>
                             <div class="form-group row">
 					           <label for="example-tel-input" class="col-5 col-form-label">Source</label>
-						         <div class="col-7">
-							        <select class="selectpicker" data-style="form-control">
-			                          <option>All Floor</option>
-			                          <option>Floor No-1</option>
-			                          <option>Floor No-2</option>
-			                          <option>Floor No-3</option>
-			                          <option>Floor No-4</option>
+						        <div class="col-7">
+						         	<div>
+							        <select id="source_id" name="source_id[]" >
+							        <%
+							        if(sourceList != null){
+							        	for(Source source: sourceList){ %>
+			                          	<option value="<%out.print(source.getId());%>"><%out.print(source.getName()); %></option>
+			                        <%}}%>
 			                        </select>
-							     </div>
+			                        </div>
+			                        <div class="messageContainer"></div>
+							    </div>
 						    </div>
 				       </div>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                        <div class="form-group row">
-							<label for="example-text-input" class="col-5 col-form-label"> Phone No.</label>
+							<label for="example-text-input" class="col-5 col-form-label">Phone No.</label>
 							  <div class="col-7">
-								 <input class="form-control" type="text"  id="mobile" name="mobile"  placeholder="Please enter mobile number">
-							  </div>
-						  </div>
-						  <div class="form-group row">
+							  	<div>
+								 	<input class="form-control" type="text" id="mobile" name="mobile" placeholder="Please enter mobile number">
+							  	</div>
+							  	<div class="messageContainer"></div>
+							 </div>
+					  </div>
+					 <div class="form-group row">
 							 <label for="example-search-input" class="col-5 col-form-label">Interested Project</label>
 								<div class="col-7">
-								   <select id="multiple-checkboxes-2"  name="multipule-checkboxes-2" multiple>
-								        <option value="php">PHP</option>
-								        <option value="javascript">JavaScript</option>
-								        <option value="java">Java</option>
-								        <option value="sql">SQL</option>
-								        <option value="jquery">Jquery</option>
-								        <option value=".net">.Net</option>
-								     </select>
+									<div>
+								   		<select id="multiple-checkboxes-2" name="multipule-checkboxes-2[]" multiple>
+									    <%if(builderProjects != null){
+								    	  for(ProjectData projectData : builderProjects){%>
+								      		<option value="<%out.print(projectData.getId());%>"><%out.print(projectData.getName()); %></option>
+								      	 <%}} %>
+									     </select>
+								     </div>
 								 </div>
 						    </div>
 							<div class="form-group row">
-							   <label for="example-search-input" class="col-5 col-form-label">Budget</label>
-								  <div class="col-7">
-								    <select class="selectpicker" data-style="form-control">
-			                          <option>All Floor</option>
-			                          <option>Floor No-1</option>
-			                          <option>Floor No-2</option>
-			                          <option>Floor No-3</option>
-			                          <option>Floor No-4</option>
-			                        </select>
-								   </div>
+							    <label for="example-search-input" class="col-sm-5 col-form-label">Budget</label>
+									 <button id="min-max-price-range" class="dropdown-toggle" href="#" data-toggle="dropdown">Budget<strong class="caret"></strong></button>
+								      <div class="dropdown-menu col-sm-7" style="padding:10px;">
+								            <div class="row">
+								                <div class="col-xs-3">
+								                    <input class="form-control price-label" placeholder="Min" id="minprice" name="minprice" data-dropdown-id="pricemin"/>
+								                </div>
+								                <div class="col-xs-2"> - </div>
+								                <div class="col-xs-3">
+								                    <input class="form-control price-label" placeholder="Max"id="maxprice" name="maxprice" data-dropdown-id="pricemax"/>
+								                </div>
+												<div class="clearfix"></div>
+								                <ul id="pricemin" class="col-sm-12 price-range list-unstyled">
+								                    <li  data-value="0">0</li>
+								                    <li data-value="10">10</li>
+								                    <li  data-value="20">20</li>
+								                    <li  data-value="30">30</li>
+								                    <li  data-value="40">40</li>
+								                    <li  data-value="50">50</li>
+								                    <li  data-value="60">60</li>
+								                </ul>
+								                <ul id="pricemax" class="col-sm-12 price-range text-right list-unstyled hide">
+								                    <li  data-value="0">0</li>
+								                    <li  data-value="10">10</li>
+								                    <li  data-value="20">20</li>
+								                    <li  data-value="30">30</li>
+								                    <li  data-value="40">40</li>
+								                    <li  data-value="50">50</li>
+								                    <li  data-value="60">60</li>
+								                </ul>
+								            </div>
+								     </div>
 							 </div>
 						</div>
 						<div class="center bcenter">
-					  	   <button type="button" id="save" class="button1">Save</button>
+					  	   <button type="submit" id="save" class="button1">Save</button>
 					  	</div>
                      </form>
                   </div>
@@ -221,12 +254,6 @@
             </div>
           </div>
         </div>
-    <!-- /.container-fluid -->
-   <div id="sidebar1"> 
-       	   		<%@include file="../partial/footer.jsp"%>
-      		</div>
-  </body>
-</html>
     <!-- /.container-fluid -->
    <div id="sidebar1"> 
        	   		<%@include file="../partial/footer.jsp"%>
@@ -249,12 +276,14 @@
 //      }
 // });
 
-$('#multiple-checkboxes-3').multiselect({
+$('#configuration').multiselect({
     columns: 1,
     placeholder: 'Select Configuration',
     search: true,
-    selectAll: true
-});
+    selectAll: true,
+    //noneSelectedText: "Select",
+    
+}); 
 //$('#multiple-checkboxes-3').style.margin-left="5px";
 //$('#multiple-checkboxes-3').css({"padding-left":"10px !important"});
 
@@ -264,7 +293,7 @@ $('#multiple-checkboxes-2').multiselect({
     search: true,
     selectAll: true
 });
-$("#save").click(function(){
+//$("#save").click(function(){
 // 	var projects = [];
 // 	var  projectList = document.getElementById("#multiple-checkboxes-2");
 	
@@ -274,11 +303,32 @@ $("#save").click(function(){
 // 			projects.push(projectList[i].options[i].value);
 // 		}
 // 	}
-  alert($("#multiple-checkboxes-2").val());
-  $("#multiple-checkboxes-2  option:selected").each(function(){
-	  alert($(this).val());
-  })
-})
+ // alert($("#multiple-checkboxes-2").val());
+//   $("#multiple-checkboxes-2  option:selected").each(function(){
+// 	  alert($(this).val());
+//   })
+//})
+
+// $('#min-max-price-range').click(function (event) {
+//     setTimeout(function(){ $('.price-label').first().focus();	},0);    
+// });
+// var priceLabelObj;
+// $('.price-label').focus(function (event) {
+//     priceLabelObj=$(this);
+//     $('.price-range').addClass('hide');
+//     $('#'+$(this).data('dropdownId')).removeClass('hide');
+// });
+// $(".price-range li").click(function(){    
+//     priceLabelObj.attr('value', $(this).attr('data-value'));
+//     var curElmIndex=$( ".price-label" ).index( priceLabelObj );
+//     var nextElm=$( ".price-label" ).eq(curElmIndex+1);
+
+//     if(nextElm.length){
+//         $( ".price-label" ).eq(curElmIndex+1).focus();
+//     }else{
+//         $('#min-max-price-range').dropdown('toggle');
+//     }
+// });
 
 $('#min-max-price-range').click(function (event) {
     setTimeout(function(){ $('.price-label').first().focus();	},0);    
@@ -301,6 +351,165 @@ $(".price-range li").click(function(){
         $('#min-max-price-range').dropdown('toggle');
     }
 });
+
+
+$select_scorce = $("#source_id").selectize({
+	persist: false,
+	 onChange: function(value) {
+		if($("#select_id").val() > 0 || $("#source_id").val() != '' ){
+			
+		}
+	 },
+	 onDropdownOpen: function(value){
+    	 var obj = $(this);
+		var textClear =	 $("#source_id :selected").text();
+    	 if(textClear.trim() == "Enter Source Name"){
+    		 obj[0].setValue("0");
+    	 }
+     }
+});
+select_scorce = $select_scorce[0].selectize;
+
+$('#addnewlead').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	leadname: {
+            validators: {
+                notEmpty: {
+                    message: 'Lead name is required and cannot be empty'
+                }
+            }
+        },
+        mobile: {
+        	validators: {
+            	notEmpty: {
+                    message: 'The Mobile is required and cannot be empty'
+                },
+                regexp: {
+                    regexp: '^[7-9][0-9]{9}$',
+                    message: 'Invalid Mobile Number'
+                }
+            }
+        },
+        email: {
+        	validators: {
+            	notEmpty: {
+                    message: 'The Email is required and cannot be empty'
+                },
+                regexp: {
+                    regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
+                    message: 'The value is not a valid email address'
+                }
+            }
+        },
+//         project_id: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Project is required and cannot be empty'
+//                 }
+//             }
+//         },
+//         city: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'City Name is required and cannot be empty'
+//                 }
+//             }
+//         },
+//         area: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Locality Name is required and cannot be empty'
+//                 }
+//             }
+//         },
+        pricemin:{
+            validators: {
+                notEmpty: {
+                    message: 'min price is required and cannot be empty'
+                }
+            }
+        } ,
+        pricemax:{
+            validators: {
+                notEmpty: {
+                    message: 'max price is required and cannot be empty'
+                }
+            }
+        } 
+    }
+    
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	//alert("success...Find solution on google..");
+	event.preventDefault();
+	addLead();
+}).on('error.form.bv',function(event,data){
+	//alert("error...Find solution on google..");
+});
+
+function addLead() {
+	ajaxindicatorstart("Loading...");
+	var options = {
+	 		target : '#response', 
+	 		beforeSubmit : showAddRequest,
+	 		success :  showAddResponse,
+	 		url : '${baseUrl}/webapi/project/lead/new1',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#addnewlead').ajaxSubmit(options);
+}
+
+function showAddRequest(formData, jqForm, options){
+	$("#response").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#response").removeClass('alert-success');
+       	$("#response").addClass('alert-danger');
+		$("#response").html(resp.message);
+		$("#response").show();
+		alert(resp.message);
+		 ajaxindicatorstop();
+  	} else {
+  		$("#response").removeClass('alert-danger');
+        $("#response").addClass('alert-success');
+        $("#response").html(resp.message);
+        $("#response").show();
+        alert(resp.message);
+      //  window.location.href = "${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+$("#project_id").val();
+        ajaxindicatorstop();
+  	}
+}
+
+$("#multiple-checkboxes-2").change(function(){
+	 // alert($(this).val());
+		var htmlconfig = "<option value='0'>Select Configuration</option>";
+	  var ids = []
+	  $("#multiple-checkboxes-2  option:selected").each(function(){
+			ids.push($(this).val());			
+	   });
+	  $.get("${baseUrl}/webapi/project/configdata",{project_ids:$(this).val()},function(data){
+		  
+		  $(data).each(function(index){
+			  alert(data[index].name);
+			  htmlconfig=htmlconfig+'<option value="'+data[index].id+'">'+data[index].name+'</option>';
+		  });
+		 
+		  $("#configuration").html(htmlconfig);
+		//  $("#configuration").multiselect('refresh');
+		 
+	  },'json');
+	 
+});
 </script>
-
-

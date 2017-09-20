@@ -6,16 +6,25 @@ import java.util.List;
 import org.bluepigeon.admin.model.BuilderProjectPropertyConfiguration;
 
 public class NewLeadList {
+	private int id;
 	private String leadName;
 	private String email;
 	private String phoneNo;
 	private String source;
 	private int leadStatus;
+	private String leadStatusName;
 	private String salemanName;
 	private Date lDate;
 	private int min;
 	private int max;
 	private List<ConfigData> configDatas;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getLeadName() {
 		return leadName;
 	}
@@ -75,6 +84,12 @@ public class NewLeadList {
 	}
 	public void setConfigDatas(List<ConfigData> configDatas) {
 		this.configDatas = configDatas;
+	}
+	public String getLeadStatusName() {
+		return leadStatusName;
+	}
+	public void setLeadStatusName(String leadStatusName) {
+		this.leadStatusName = leadStatusName;
 	}
 	
 }
