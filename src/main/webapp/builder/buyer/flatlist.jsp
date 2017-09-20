@@ -158,8 +158,6 @@
     </div>
       				<%} %>
       				<% if(flatListDatas !=null){%>
-
-	
 		<% for(int i=0;i<flatListDatas.size();i++){
 			 for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){
 				 for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().size();floor_size++){

@@ -45,7 +45,6 @@
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
-			
 				builder_id = builder.getBuilder().getId();
 				emp_id = builder.getId();
 				access_id = builder.getBuilderEmployeeAccessType().getId();
@@ -873,16 +872,11 @@ $("#locality_name").attr('disabled',true);
     	 <%
       	if(barGraphDatas != null){
        		%> 
-  
      	Morris.Bar({
-     		 
     	    element: 'morris-bar-chart',
     	    data: [
     	    	<% for(BarGraphData barGraphData : barGraphDatas){ %>
-    	    		 
     	    	{
-    	    	
-    	    	
    		      y: '<%
      	    	    if(barGraphData.getBuiltYear() != 0){
     		      out.print(barGraphData.getBuiltYear());}%>', 

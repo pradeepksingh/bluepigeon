@@ -594,6 +594,8 @@ public class BuilderController {
 		 			}
 		    		 inboxMessageList.add(inboxMessage);
 		    	 }
+		     }
+		     if(inboxMessageList.size() > 0){
 		    	 msg = new BuilderDetailsDAO().saveInboxMessages(inboxMessageList);
 		     }
 		} else {
@@ -627,5 +629,16 @@ public class BuilderController {
 			
 		}
 		return new BuilderDetailsDAO().getBookedBuyerList(empId,name,contactNumber);
+	}
+	
+	@POST
+	@Path("/changeleadAuthority/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateLeadStatus(
+			@FormParam("id") int leadId,
+			@FormParam("value") int value
+			){
+		ResponseMessage responseMessage =  new BuilderDetailsDAO().updateLeadStatus(value, leadId);
+		return responseMessage;
 	}
 }

@@ -12,6 +12,7 @@ public class NewLeadList {
 	private String phoneNo;
 	private String source;
 	private int leadStatus;
+	private String leadStatusName;
 	private String salemanName;
 	private Date lDate;
 	private int min;
@@ -83,6 +84,12 @@ public class NewLeadList {
 	}
 	public void setConfigDatas(List<ConfigData> configDatas) {
 		this.configDatas = configDatas;
+	}
+	public String getLeadStatusName() {
+		return leadStatusName;
+	}
+	public void setLeadStatusName(String leadStatusName) {
+		this.leadStatusName = leadStatusName;
 	}
 	
 }

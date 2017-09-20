@@ -94,9 +94,6 @@
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
      <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
      <script src="../js/jquery.form.js"></script>
-
-   
-    
       <script type="text/javascript" src="../js/selectize.min.js"></script>
   	<script type="text/javascript">
 // 		    $(document).ready(function() {
@@ -240,8 +237,8 @@
 	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
 	                      <h5>Source :</h5>
 	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                      <h5>Last States: <b><p id="leadstatus<%out.print(newLeadList.getId());%>"><%out.print(newLeadList.getLeadStatus()); %></p></b></h5>
+	                     <div class="col-md-2 col-sm-2 col-xs-6 inline laststatusnam">
+	                      <h5>Last States: <b id="laststatusname<%out.print(newLeadList.getId());%>"><%out.print(newLeadList.getLeadStatusName()); %></b></h5>
 	                    </div>
 	                 </div>
 	                 <div class="row">
@@ -599,11 +596,49 @@ function showAddResponse(resp, statusText, xhr, $form){
 }
 function changeLeadStatus(value,id){
 	
-	//alert(value,id);
-	
 	ajaxindicatorstart("Loading...");
-	$("#leadstatus"+id).val('');
-	$.post("${baseUrl}/webapi/builder/changeleadAuthority");
+	$("#laststatusname"+id).val('');
+	$.post("${baseUrl}/webapi/builder/changeleadAuthority",{value:value,id:id},function(data){
+		if(data != ""){
+			if(data.status==1){
+				alert(data.message);
+				if(data.data.value == 1){  
+					 $("#laststatusname"+data.id).html("No Response");
+				}
+				if(data.data.value == 2){ 
+					
+					$("#laststatusname"+data.id).html("Call Again");
+				}
+				if(data.data.value == 3){ 
+					$("#laststatusname"+data.id).html("Email Sent");
+				}
+				if(data.data.value == 4){
+					$("#laststatusname"+data.id).html("Visit Again");
+				}
+				if(data.data.value == 5){
+					$("#laststatusname"+data.id).html("Visit Complete");
+					
+				}
+				if(data.data.value == 6){ 
+					$("#laststatusname"+data.id).html("Follow up");
+				}
+				
+				if(data.data.value == 7){
+					$("#laststatusname"+data.id).html("Booked");
+				}
+				if(data.data.value == 8){
+					$("#laststatusname"+data.id).html("Not Interested");
+				}
+				else{ 
+					$("#leadstatusname"+data.id).html("");
+				}
+						
+			}
+		}
+		//}
+		 ajaxindicatorstop();
+		
+	});
 	
 	
 	

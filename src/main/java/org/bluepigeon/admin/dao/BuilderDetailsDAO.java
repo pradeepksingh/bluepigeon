@@ -17,6 +17,7 @@ import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
 import org.bluepigeon.admin.model.BuilderFloorAmenity;
+import org.bluepigeon.admin.model.BuilderLead;
 import org.bluepigeon.admin.model.BuilderLogo;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Buyer;
@@ -1564,9 +1565,9 @@ public class BuilderDetailsDAO {
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
 			hql += " FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
 					+ "left join builder_project as bproject on bproject.id = b.project_id "
-					+ "left join allot_project as project on project.id = b.project_id  "
+					+ "left join allot_project as ap on ap.id = b.project_id  "
 					+ "WHERE ";
-					where+= "im.emp_id="+builderEmployee.getId();
+					where+= "ap.emp_id="+builderEmployee.getId();
 		}else{
 			hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
 					+ "left join builder as build on build.id = b.builder_id  "
@@ -1588,7 +1589,7 @@ public class BuilderDetailsDAO {
 				where +=" b.mobile LIKE :contact_number";
 			}
 		}
-		hql += where + " AND bproject.status=1 AND b.is_primary=1 AND b.is_deleted=0 ORDER BY im.id desc";
+		hql += where + " AND bproject.status=1 AND b.is_primary=1 AND b.is_deleted=0 AND b.status=0 ORDER BY im.id desc";
 		try {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(InboxMessageData.class));
@@ -1645,5 +1646,37 @@ public class BuilderDetailsDAO {
 		
 		List<ProjectWiseData> result = query.list();
 		return result;
+	}
+	
+	public ResponseMessage updateLeadStatus(int value,int id){
+		ResponseMessage responseMessage =  new ResponseMessage();
+		BuilderLead builderLead = getBuilderLead(id);
+		builderLead.setLeadStatus(value);
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		try{
+			session.beginTransaction();
+			session.update(builderLead);
+			session.getTransaction().commit();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		responseMessage.setId(builderLead.getId());
+		responseMessage.setData(builderLead.getLeadStatus());
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Lead Status updated successfully");
+		return responseMessage;
+ 	}
+	
+	public BuilderLead getBuilderLead(int id){
+		String hql = "from BuilderLead where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id",id);
+		BuilderLead builderLead = (BuilderLead) query.list().get(0);
+		return builderLead;
+				
+				
 	}
 }

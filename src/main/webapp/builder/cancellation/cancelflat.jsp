@@ -76,8 +76,8 @@
  			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
  			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
  			try{
-				flatListDatas = new ProjectDAO().getBookedFlatDetails(project_id,building_id,floor_id,evenOrodd); 
-	 			bookingFlatList2 = new ProjectDAO().getFlatBookeddetails(project_id,building_id,floor_id,evenOrodd); 
+				flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,evenOrodd); 
+	 			bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,building_id,floor_id,evenOrodd); 
 	 			image = bookingFlatList2.getBuyerPhoto(); 
 	 			flat_size = flatListDatas.size(); 
  			}catch(Exception e){
@@ -100,9 +100,9 @@
  %>
   <% if(flatListDatas !=null && bookingFlatList2 != null){%>
      <div class="col-md-8 col-sm-6 col-xs-12  bg1">
-                         <div class="white-box">
+                        <div class="white-box">
                            <!-- floor 1 -->
-                           <%	if(flatListDatas !=null){
+                            <% if(flatListDatas !=null){
  	            					String active = ""; 
  	            					for(int i=0;i<flatListDatas.size();i++){  
 	              						for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){ %> 
@@ -114,8 +114,11 @@
  							     
  							     <li class="grey item"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
  							      
- 							     <%} 
- 		              						} 
+ 							     <%} else if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("available")) {%>
+ 		              					
+               	 					 <li class="" style="pointer-events:none;"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" disabled href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>	
+               	 						<%}
+               	 						} 
  		            		 			%> 
  										</ul> 
 					 					<hr> 
@@ -202,26 +205,29 @@
                   </div>
                   <%} %>
                   <% if(flatListDatas !=null){%>
-		<% for(int i=0;i<flatListDatas.size();i++){
+                 
+		 <%for(int i=0;i<flatListDatas.size();i++){
 			 for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){
 				 for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().size();floor_size++){
 				 	for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
-              	  		if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
+				 		if(bookingFlatList2 != null){
+               	  			if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
 	 %>
-	 <script>
-
+	  <script type="text/javascript">
 $(document).ready(function () {
-   $("#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>").click(function (e) {
-       e.preventDefault();
-   });
-   $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click');
+    $("#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>").click(function (e) {
+        e.preventDefault();
+    });
+    $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click');
+    $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').addClass("red");
 });
-</script>
-   <%					}
-              	  	}
-				 }
+    </script>
+    <%						}
+               	  		}
+				 	}
+				}
 			}
 		}
 	 %>
 
-   <% } %>  				
+<% } %>		

@@ -347,7 +347,12 @@ function showPriceResponse(resp, statusText, xhr, $form){
 $("#leadSearch").click(function(){
 	getBuyerNames();
 });
-
+$("#srch-term").keydown(function (e) {
+	if (e.keyCode == 13) {
+		getBuyerNames();
+		return false;
+	}
+});
 function getBuyerNames(){
 	var emp_id = <%out.print(empId);%>
 	var nameorNumber = $("#srch-term").val();
