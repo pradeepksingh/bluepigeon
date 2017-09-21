@@ -7,6 +7,7 @@ public class BuilderProjectList {
 	private String name;
 	private String image = "";// "builder/plugins/images/Untitled-1.png";
 	private String city;
+	private String locality;
 	private double sold;
 	private double totalSold;
 	private BigInteger totalLeads;
@@ -59,4 +60,11 @@ public class BuilderProjectList {
 	public void setCompletionStatus(Double completionStatus) {
 		this.completionStatus = completionStatus;
 	}
+	public String getLocality() {
+		return locality;
+	}
+	public void setLocality(String locality) {
+		this.locality = locality;
+	}
+	
 }

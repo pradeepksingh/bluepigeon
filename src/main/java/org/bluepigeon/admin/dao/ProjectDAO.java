@@ -36,6 +36,7 @@ import org.bluepigeon.admin.data.FloorWeightageData;
 import org.bluepigeon.admin.data.InboxBuyerData;
 import org.bluepigeon.admin.data.InboxMessageData;
 import org.bluepigeon.admin.data.LeadList;
+import org.bluepigeon.admin.data.LocalityData;
 import org.bluepigeon.admin.data.NewLeadList;
 import org.bluepigeon.admin.data.NewProjectList;
 import org.bluepigeon.admin.data.PaymentInfoData;
@@ -4436,7 +4437,7 @@ public class ProjectDAO {
 		newquery.setParameter("flat_id", flat_id);
 		List<BuilderFlat> resultnew = newquery.list();
 		newsession.close();
-		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from flat_weightage as a where a.flat_id = "+flat_id+" group by a.id";
+		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from flat_weightage as a where a.flat_id = "+flat_id+" group by a.stage_id";
 		System.err.println(hql);
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql)
@@ -4448,7 +4449,7 @@ public class ProjectDAO {
 		for(FlatTotal flatTotal :resultRaw) {
 			finalWeightage += (flatTotal.getTotalSubstageWeight()/percent*flatTotal.getStageWeight());
 		}
-		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from flat_amenity_weightage as a where a.flat_id = "+flat_id+" group by a.id";
+		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from flat_amenity_weightage as a where a.flat_id = "+flat_id+" group by a.flat_id";
 		Session session2 = hibernateUtil.getSessionFactory().openSession();
 		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
 		List<FlatAmenityTotal> resultRaw2 = query2.list();
@@ -6127,6 +6128,23 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		return configDatas;
 	
 	}
+	
+	public List<LocalityData> getLocalityNames(int cityId){
+		List<LocalityData> localityData = new ArrayList<LocalityData>();
+		String hql = "select project.id as id, project.locality_name as name from builder_project as project inner join city as city on city.id = project.city_id where city_id = "+cityId;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		try {
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(LocalityData.class));
+			System.err.println("hql : "+hql);
+			localityData = query.list();
+			} catch(Exception e) {
+				//
+			}
+		return localityData;
+	}
+	
+	
 }
 
 

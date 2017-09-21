@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.model.Source"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
@@ -18,9 +19,12 @@
 <%
  	int project_size = 0;
 	int type_size = 0;
+	int access_id =0;
 	int city_size = 0;
+	int emp_id =0 ;
  	List<ProjectData> builderProjects =null;
  	List<Source> sourceList = null;
+ 	List<BuilderEmployee> salesmanList = null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
    	session = request.getSession(false);
    	BuilderEmployee builder = new BuilderEmployee();
@@ -31,9 +35,14 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
+			access_id = builder.getBuilderEmployeeAccessType().getId();
+			emp_id = builder.getId();
 			if(builder_id > 0){
 				builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
+				if(access_id ==5){
+					salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
+				}
 			}
 			if(builderProjects.size()>0)
 		    	project_size = builderProjects.size();
@@ -142,7 +151,7 @@
                <div class="white-box">
                  <div class="row bg11">
                    <form class="addlead1" id="addnewlead" name="addnewlead" action="" method="post"  enctype="multipart/form-data">
-                  
+                  		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
                      <div class="col-md-6 col-sm-6 col-xs-12">
                          <div class="form-group row">
 							<label for="example-text-input" class="col-5 col-form-label">Name</label>
@@ -175,7 +184,7 @@
 					           <label for="example-tel-input" class="col-5 col-form-label">Source</label>
 						        <div class="col-7">
 						         	<div>
-							        <select id="source_id" name="source_id[]" >
+							        <select id="source_id" name="source_id" >
 							        <%
 							        if(sourceList != null){
 							        	for(Source source: sourceList){ %>
@@ -186,6 +195,7 @@
 			                        <div class="messageContainer"></div>
 							    </div>
 						    </div>
+						    
 				       </div>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                        <div class="form-group row">
@@ -201,7 +211,7 @@
 							 <label for="example-search-input" class="col-5 col-form-label">Interested Project</label>
 								<div class="col-7">
 									<div>
-								   		<select id="multiple-checkboxes-2" name="multipule-checkboxes-2[]" multiple>
+								   		<select id="project_ids" name="project_ids[]" multiple>
 									    <%if(builderProjects != null){
 								    	  for(ProjectData projectData : builderProjects){%>
 								      		<option value="<%out.print(projectData.getId());%>"><%out.print(projectData.getName()); %></option>
@@ -244,6 +254,22 @@
 								            </div>
 								     </div>
 							 </div>
+							 <%if(access_id ==5){ %>
+							 
+							 <div class="form-group row">
+							 <label for="example-search-input" class="col-5 col-form-label">Assign Salesman</label>
+								<div class="col-7">
+									<div>
+								   		<select id="assignsalemans" name="assignsalemans[]" multiple>
+									    <%if(salesmanList != null){
+								    	  for(BuilderEmployee  builderEmployee: salesmanList){%>
+								      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
+								      	 <%}} %>
+									     </select>
+								     </div>
+								 </div>
+						    </div>
+						    <%} %>
 						</div>
 						<div class="center bcenter">
 					  	   <button type="submit" id="save" class="button1">Save</button>
@@ -287,9 +313,17 @@ $('#configuration').multiselect({
 //$('#multiple-checkboxes-3').style.margin-left="5px";
 //$('#multiple-checkboxes-3').css({"padding-left":"10px !important"});
 
-$('#multiple-checkboxes-2').multiselect({
+$('#project_ids').multiselect({
     columns: 1,
     placeholder: 'Select Project',
+    search: true,
+    selectAll: true
+});
+
+
+$('#assignsalemans').multiselect({
+    columns: 1,
+    placeholder: 'Select salesman',
     search: true,
     selectAll: true
 });
@@ -460,7 +494,7 @@ function addLead() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/project/lead/new1',
+	 		url : '${baseUrl}/webapi/project/lead/addnew1',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -492,24 +526,20 @@ function showAddResponse(resp, statusText, xhr, $form){
   	}
 }
 
-$("#multiple-checkboxes-2").change(function(){
-	 // alert($(this).val());
-		var htmlconfig = "<option value='0'>Select Configuration</option>";
-	  var ids = []
-	  $("#multiple-checkboxes-2  option:selected").each(function(){
-			ids.push($(this).val());			
-	   });
+$("#project_ids").change(function(){
+		var htmlconfig = "";
 	  $.get("${baseUrl}/webapi/project/configdata",{project_ids:$(this).val()},function(data){
-		  
 		  $(data).each(function(index){
-			  alert(data[index].name);
 			  htmlconfig=htmlconfig+'<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		  });
-		 
+		  $("#configuration").multiselect({
+			    columns: 1,
+			    placeholder: 'Select Configuration',
+			    search: true,
+			    selectAll: true,
+			});
 		  $("#configuration").html(htmlconfig);
-		//  $("#configuration").multiselect('refresh');
-		 
+		  $("#configuration").multiselect('reload');
 	  },'json');
-	 
 });
 </script>

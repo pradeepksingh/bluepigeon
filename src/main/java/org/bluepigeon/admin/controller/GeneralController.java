@@ -22,6 +22,7 @@ import org.bluepigeon.admin.dao.CityNamesImp;
 import org.bluepigeon.admin.dao.CountryDAOImp;
 import org.bluepigeon.admin.dao.HomeLoanBanksDAO;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
+import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.dao.StateImp;
 import org.bluepigeon.admin.data.CityData;
 import org.bluepigeon.admin.data.LocalityData;
@@ -246,6 +247,16 @@ public class GeneralController {
 		LocalityNamesImp localityNamesImp= new LocalityNamesImp();
 		System.out.println("City id :: "+city_id);
 		return localityNamesImp.getLocalityByCityId(city_id);
+	}
+	
+	@GET
+	@Path("/locality/list/name")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<LocalityData> getLocalityNames(@QueryParam("city_id") int city_id) {
+		
+		ProjectDAO projectDAO = new ProjectDAO();
+		return projectDAO.getLocalityNames(city_id);
+		//return localityNamesImp.getLocalityByCityId(city_id);
 	}
 	@POST
 	@Path("/locality/save")
