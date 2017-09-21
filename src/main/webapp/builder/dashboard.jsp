@@ -250,7 +250,7 @@
                     <div class="col-md-3 col-sm-6 col-xs-12">
 <!--                       <input class="form-control" type="text" id="locality_name" name="locality_name" placeholder="Enter locality name" title="Please select City First and then enter locality name"> -->
 							<select id="locality_name" name="locality_name">
-                                        <option value="0">Locality</option>
+                                        <option value="">Locality</option>
                         	</select>
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -461,7 +461,9 @@
     $select_project = $("#project_id").selectize({
 		persist: false,
 		 onChange: function(value) {
-			 getProjectFilterList(value);
+			 if(value != "" && value >0)
+			 	getProjectFilterList(value);
+			 //getProjectList();
 		 },
 		 onDropdownOpen: function(value){
 	    	 var obj = $(this);
@@ -478,35 +480,40 @@
    $select_city = $("#city_id").selectize({
 	  persist:false,
 	  onChange:function(value){
-		  $.get("${baseUrl}/webapi/general/locality/list/name",{ city_id: $("#city_id").val() }, function(data){
-	    		var html = '<option value="">Select Locality</option>';
-	    		$(data).each(function(index){
-	    			html = html + '<option value="'+data[index].name+'">'+data[index].name+'</option>';
-	    		});
-	    	//	$("#locality_id").html(html);
-	    		$select_locality[0].selectize.destroy();
-	    		$("#locality_name").html(html);
-	    	//	$('.selectpicker').selectpicker('refresh');
-	    		$select_floor = $("#locality_name").selectize({
-					persist: false,
-					 onChange: function(value) {
-// 						 if(value > 0 || value != '' ){
-// 								window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
-// 							}
-						 getProjectList();
-					 },
-					 onDropdownOpen: function(value){
-				   	 var obj = $(this);
-						var textClear =	 $("#locality_name :selected").text();
-				   	 if(textClear.trim() == "Enter Locality Name"){
-				   		 obj[0].setValue("");
-				   	 }
-				    }
-				});
-			//}
-	    	
-	    	},'json');
-	    	getProjectList();
+		  
+	  	if(value !=''){
+			  $.get("${baseUrl}/webapi/general/locality/list/name",{ city_id: $("#city_id").val() }, function(data){
+		    		var html = '<option value="">Select Locality</option>';
+		    		$(data).each(function(index){
+		    			html = html + '<option value="'+data[index].name+'">'+data[index].name+'</option>';
+		    		});
+		    	//	$("#locality_id").html(html);
+		    		$select_locality[0].selectize.destroy();
+		    		$("#locality_name").html(html);
+		    	//	$('.selectpicker').selectpicker('refresh');
+		    		$select_floor = $("#locality_name").selectize({
+						persist: false,
+						 onChange: function(value) {
+	// 						 if(value > 0 || value != '' ){
+	// 								window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
+	// 							}
+							 if(value != ""){
+								 getProjectList();
+							 }
+						 },
+						 onDropdownOpen: function(value){
+					   	 var obj = $(this);
+							var textClear =	 $("#locality_name :selected").text();
+					   	 if(textClear.trim() == "Enter Locality Name"){
+					   		 obj[0].setValue("");
+					   	 }
+					    }
+					});
+				//}
+		    	
+		    	},'json');
+		    	getProjectList();
+		  }
 	  },
 	  onDropdownOpen: function(value){
 	    	 var obj = $(this);
@@ -534,7 +541,9 @@
     			// ajaxindicatorstop();
     		//}
     		//alert(value);
-    		 getProjectList();
+    		 if(value != ""){
+    		 	getProjectList();
+    		 }
     	 },
     	 onDropdownOpen: function(value){
        	 var obj = $(this);
@@ -549,7 +558,9 @@
     $select_project_status = $("#project_status").selectize({
     	persist: false,
    	 onChange: function(value) {
-   		getProjectList();
+   		 if(value != ""){
+   			getProjectList();
+   		 }
    	 },
    	onDropdownOpen: function(value){
       	 var obj = $(this);
@@ -709,7 +720,7 @@
 		$("#project_list").empty();
 		//if($("#city_id").val()>0)
 			//$("#locality_name").attr('disabled',false);
-	   $.post("${baseUrl}/webapi/project/data/newlist",{emp_id: $("#emp_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_name : $("#locality_name").val(),$project_status : $("#project_status").val() },function(data){
+	   $.post("${baseUrl}/webapi/project/data/newlist",{emp_id: $("#emp_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_name : $("#locality_name").val(),project_status : $("#project_status").val() },function(data){
 		   if(data == ""){
 			   $("#project_list").empty();
 			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
@@ -871,7 +882,7 @@
   		var projectId = "";
   		var localityname = "";
   		$("#project_list").empty();
-  	   $.post("${baseUrl}/webapi/project/filter/builderemp",{project_id:$("#project_id").val(),emp_id:$("#emp_id").val(),country_id: 1,state_id:1, city_id: $("#city_id").val(),locality_name : $("#locality_name").val(),project_status : $("#project_status").val()},function(data){
+  	   $.post("${baseUrl}/webapi/project/filter/builderemp",{emp_id:$("#emp_id").val(),country_id: 1,state_id:1, city_id: $("#city_id").val(),locality_name : $("#locality_name").val(),project_status : $("#project_status").val()},function(data){
   		   if(data == ""){
   			   $("#project_list").empty();
   			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
