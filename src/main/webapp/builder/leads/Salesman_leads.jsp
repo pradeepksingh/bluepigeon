@@ -764,7 +764,7 @@ function changeLeadStatus(value,id){
 	});
 }
 $("searchleads").click(function(){
-	
+	alert("hello");
 
 	var searchResult = "";
 	var i=1;
@@ -772,92 +772,7 @@ $("searchleads").click(function(){
 	ajaxindicatorstart("Loading...");
 $("#newleads").empty();
 <%if(access_id == 7){%>
-$.post("${baseUrl}/webapi/builder/filter/newlead",{emp_id : $("#emp_id").val(), project_id:$("#project_id").val(),name:$("#srch-term").val()},function(data){
-	$(data).each(function(index){
-		searchResult += '<div class="border-lead">'
-		    +'<div class="row">'
-		      +'<div class="col-md-2 col-sm-2 col-xs-6">'
-		       +'<h4>'+data[index].leadName+'</h4>'
-		      +'</div>'
-		       +'<div class="col-md-2 col-sm-2 col-xs-6">'
-		       +'<h4>'+data[index].phoneNo+'</h4>'
-		      +'</div>'
-		       +'<div class="col-md-2 col-sm-2 col-xs-6">'
-		       +'<h4>'+data[index].email+'</h4>'
-		      +'</div>'
-		       +'<div class="col-md-2 col-sm-2 col-xs-6">'
-		       +'<h4>'+data[index].source+'</h4>'
-		      +'</div>'
-		       +'<div class="col-md-2 col-sm-2 col-xs-6">'
-		       +' <div class="dropdown">'
-				    +'<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Follow up'
-				    +'<span class="caret"></span></button>'
-				    +'<ul class="dropdown-menu">'
-				      +'<li><a href="javascript:changeLeadStatus(1,'+data[index].id+')">No Response</a></li>'
-				      +'<li><a href="javascript:changeLeadStatus(2,'+data[index].id+')">Call Again</a></li>'
-				      +'<li><a href="javascript:changeLeadStatus(3,'+data[index].id+')">Email Sent</a></li>'
-				      +'<li><a href="javascript:changeLeadStatus(4,'+data[index].id+')">Visit Again</a></li>'
-				      +'<li><a href="javascript:changeLeadStatus(5,'+data[index].id+')">Visit Complete</a></li>'
-				      +'<li><a href="javascript:changeLeadStatus(6,'+data[index].id+')">Follow up</a></li>'
-				      +'<li><a href="javascript:changeLeadStatus(7,'+data[index].id+')">Booked</a></li>'
-				      +'<li><a href="javascript:changeLeadStatus(8,'+data[index].id+')">Not interested</a></li>'
-				    +'</ul>'
-				  +'</div>'
-		      +'</div>'
-		   +'</div>'
-		   +'<hr>'
-		   +'<div class="row">'
-		      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-		       +'<img src="../images/Saleshead-added.PNG" />'
-		       +'<h5>Added By :</h5>'
-		     +' </div>'
-		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-		        +'<img src="../images/Baget.PNG" />'
-		       +'<h5>Budget:</h5>'
-		      +'</div>'
-		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-		        +'<img src="../images/Configuration.PNG" />'
-		        +'<h5>Configuration :</h5>'
-		      +'</div>'
-		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-		        +'<h5>Source :</h5>'
-		      +'</div>'
-		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline laststatusnam">'
-		        +'<h5>Last States: <b id="laststatusname'+data[index].id+'">'+data[index].leadStatusName+'</b></h5>'
-		      +'</div>'
-		   +'</div>'
-		  +'<div class="row">'
-		      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-		       +'<h6>'+data[index].salemanName+'</h6>'
-		      +'</div>'
-		      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-		       +'<h6>Rs '+data[index].min+' - '+data[index].max+' Lakh</h6>'
-		      +'</div>'
-		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-		       +'<h6>';
-		       $(data[index].configDatas).each(function(index1){
-		    	   if(i>1){
-		    		   searchResult +=''+data[index].configDatas[index1].name+',';
-		    		   i--;
-		    	   }else{
-		    		   searchresult +=''+data[index].configDatas[index1].name+'';
-		    	   }
-		    	   i++;
-		       });
-		       searchresult +='</h6>'
-		      +'</div>'
-		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-		        +'<h6>'+data[index].source+'</h6>'
-		      +'</div>'
-		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-		        +'<h6>Date: <b>'+data[index].lDate+'</b></h6>'
-		      +'</div>'
-		   +'</div>'
-		 +'</div>';
-		});
-	 	$("#newleads").append(searchresult);
-	 	 ajaxindicatorstop();
-	},'json');
+getLeadsdetailList();
 	<%}%>
 	<%if(access_id == 5){%>
 	<%}%>
@@ -938,6 +853,95 @@ function validateDropDownInputs() {
   }
 }
 
+
+function getLeadsdetailList(){
+	$.post("${baseUrl}/webapi/builder/filter/newlead",{emp_id : $("#emp_id").val(), project_id:$("#project_id").val(),name:$("#srch-term").val()},function(data){
+		$(data).each(function(index){
+			searchResult += '<div class="border-lead">'
+			    +'<div class="row">'
+			      +'<div class="col-md-2 col-sm-2 col-xs-6">'
+			       +'<h4>'+data[index].leadName+'</h4>'
+			      +'</div>'
+			       +'<div class="col-md-2 col-sm-2 col-xs-6">'
+			       +'<h4>'+data[index].phoneNo+'</h4>'
+			      +'</div>'
+			       +'<div class="col-md-2 col-sm-2 col-xs-6">'
+			       +'<h4>'+data[index].email+'</h4>'
+			      +'</div>'
+			       +'<div class="col-md-2 col-sm-2 col-xs-6">'
+			       +'<h4>'+data[index].source+'</h4>'
+			      +'</div>'
+			       +'<div class="col-md-2 col-sm-2 col-xs-6">'
+			       +' <div class="dropdown">'
+					    +'<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Follow up'
+					    +'<span class="caret"></span></button>'
+					    +'<ul class="dropdown-menu">'
+					      +'<li><a href="javascript:changeLeadStatus(1,'+data[index].id+')">No Response</a></li>'
+					      +'<li><a href="javascript:changeLeadStatus(2,'+data[index].id+')">Call Again</a></li>'
+					      +'<li><a href="javascript:changeLeadStatus(3,'+data[index].id+')">Email Sent</a></li>'
+					      +'<li><a href="javascript:changeLeadStatus(4,'+data[index].id+')">Visit Again</a></li>'
+					      +'<li><a href="javascript:changeLeadStatus(5,'+data[index].id+')">Visit Complete</a></li>'
+					      +'<li><a href="javascript:changeLeadStatus(6,'+data[index].id+')">Follow up</a></li>'
+					      +'<li><a href="javascript:changeLeadStatus(7,'+data[index].id+')">Booked</a></li>'
+					      +'<li><a href="javascript:changeLeadStatus(8,'+data[index].id+')">Not interested</a></li>'
+					    +'</ul>'
+					  +'</div>'
+			      +'</div>'
+			   +'</div>'
+			   +'<hr>'
+			   +'<div class="row">'
+			      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+			       +'<img src="../images/Saleshead-added.PNG" />'
+			       +'<h5>Added By :</h5>'
+			     +' </div>'
+			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+			        +'<img src="../images/Baget.PNG" />'
+			       +'<h5>Budget:</h5>'
+			      +'</div>'
+			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+			        +'<img src="../images/Configuration.PNG" />'
+			        +'<h5>Configuration :</h5>'
+			      +'</div>'
+			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+			        +'<h5>Source :</h5>'
+			      +'</div>'
+			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline laststatusnam">'
+			        +'<h5>Last States: <b id="laststatusname'+data[index].id+'">'+data[index].leadStatusName+'</b></h5>'
+			      +'</div>'
+			   +'</div>'
+			  +'<div class="row">'
+			      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+			       +'<h6>'+data[index].salemanName+'</h6>'
+			      +'</div>'
+			      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+			       +'<h6>Rs '+data[index].min+' - '+data[index].max+' Lakh</h6>'
+			      +'</div>'
+			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+			       +'<h6>';
+			       $(data[index].configDatas).each(function(index1){
+			    	   if(i>1){
+			    		   searchResult +=''+data[index].configDatas[index1].name+',';
+			    		   i--;
+			    	   }else{
+			    		   searchresult +=''+data[index].configDatas[index1].name+'';
+			    	   }
+			    	   i++;
+			       });
+			       searchresult +='</h6>'
+			      +'</div>'
+			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+			        +'<h6>'+data[index].source+'</h6>'
+			      +'</div>'
+			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+			        +'<h6>Date: <b>'+data[index].lDate+'</b></h6>'
+			      +'</div>'
+			   +'</div>'
+			 +'</div>';
+			});
+		 	$("#newleads").append(searchresult);
+		 	 ajaxindicatorstop();
+		},'json');
+}
 function toggleDropDown() {
   if (validateDropDownInputs() &&
     parseInt(min_input.val()) > 0 &&
@@ -948,6 +952,13 @@ function toggleDropDown() {
   }
 }
 }
+$("#srch-term").keydown(function (e) {
+	if (e.keyCode == 13) {
+		alert("Hello");
+		//getLeadsdetailList();
+		//return false;
+	}
+});
 
 setuinvestRangeDropDownList(
 $('.investRange .min_value'),
