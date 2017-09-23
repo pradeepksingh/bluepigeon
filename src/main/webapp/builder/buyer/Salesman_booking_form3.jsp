@@ -565,6 +565,9 @@ $("#campaign").click(function(){
 $("#leads").click(function(){
 	window.location.href="${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
 });
+$("#booking").click(function(){
+	window.location.href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
+});
 function addMoreBuyers(){
 	var buyers = parseInt($("#buyer_count").val());
 	buyers++;
@@ -676,6 +679,7 @@ function isNumber(evt, element) {
     return true;
 } 
 $('#booking_date').datepicker({
+	autoclose:true,
 	format: "dd MM yyyy"
 });
 function previous1()
@@ -832,7 +836,12 @@ $('#addnewbuyer').bootstrapValidator({
                 notEmpty: {
                     message: 'Aadhaar Card number is required and cannot be empty'
                 }
-            }
+            },
+            numeric: {
+             	message: 'Aadhaar Card number is invalid',
+                thousandsSeparator: '',
+                decimalSeparator: '.'
+          	}
         },
         'refferal_id[]':{
         	validators: {
@@ -971,7 +980,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         
         alert(resp.message);
         ajaxindicatorstop();
-        window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id="+<%out.print(project_id);%>
+        window.location.href = "${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>
   	}
 }
 

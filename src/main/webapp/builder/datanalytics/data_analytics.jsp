@@ -41,6 +41,7 @@
 	int builder_id = 0;
 	int emp_id = 0;
 	int access_id = 0;
+	//Double totalRevenue =0.0;
 	int project_size_list = 0;
 	int city_size_list =0 ;
 	Double totalPropertySold = 0.0;
@@ -69,7 +70,12 @@
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
 					//totalRevenue = totalPropertySold * totalInventorySold;
-					
+				List<ProjectWiseData> projectWiseDatas2 = new BuilderDetailsDAO().getEmployeeBarGraphByProject(emp_id);
+					if(projectWiseDatas2 !=null){
+						for(ProjectWiseData projectWiseData : projectWiseDatas2){
+							totalRevenue +=projectWiseData.getRevenue();
+						}
+					}
 					
 				}
 		}
@@ -137,7 +143,9 @@
                 <div class="row">
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         <div class="white-box">
-                            <h3 class="box-title">Project status</h3>
+<!--                             <h3 class="box-title">Project status</h3> -->
+<%--                             <div id="projecttotal" class="col-md-3 col-sm-6 col-xs-12">Booked Revenue :<%out.print(totalRevenue); %> </div> --%>
+<!--                             <div id="sold" class="col-sm-3">Sold : </div> -->
                             <%if(access_id==7){ %>
                             
                             <div class="col-md-3 col-sm-6 col-xs-12">
@@ -149,6 +157,7 @@
                     		</div>
                     		<%} %>
                     		<%if(access_id == 5){ %>
+                    		
                     		<div class="col-md-3 col-sm-6 col-xs-12">
                         		<select class="selectpicker border-drop-down" data-style="form-control" id="graph_project_id" name="graph_project_id">
                                         <option value="0">Project wise</option>
@@ -157,9 +166,10 @@
                                        	<option value="3">Salesman Wise </option>
                            		</select>
                     		</div>
+                    		
                     		<%} %>
                     		
-<!--                             <ul class="list-inline text-right"> -->
+<!--                             <ul class="list-inline text-left"> -->
 <!--                                 <li> -->
 <!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #24bcd3;"></i>Flats</h5> </li> -->
 <!--                                 <li> -->
@@ -195,12 +205,6 @@
 <%--     <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script> --%>
 
     <script>
-   
-    
-    
-   
-
-      
     jQuery(document).ready(function() {
         // Switchery
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
@@ -321,7 +325,7 @@
  		else if($(this).val()==3){
  			ajaxindicatorstart("Loading...");
  			$.post("${baseUrl}/webapi/builder/filter/bargraph/saleman",{emp_id:$("#emp_id").val()},function(data){
-				plotMonthGraph(data);
+ 				plotSalesmanGraph(data);
 				ajaxindicatorstop();
 		 	},'json');
  		}
@@ -377,6 +381,27 @@
  	}
  	
  	function plotMonthGraph(records) {
+ 		var data = [];
+ 		$(records).each(function(index){
+			data.push({"y":records[index].name, "a":records[index].revenue});
+		});
+ 		mychart.destroy();
+ 		mychart = Morris.Bar({
+    		 
+    	    element: 'morris-bar-chart',
+    	    data: data,
+             xkey: 'y',
+     	     ykeys: ['a'],
+     	     labels: ['Revenue'],
+     	     barColors:['#24bcd3'],
+     	     hideHover: 'auto',
+     	     gridLineColor: '#eef0f2',
+     	     resize: true
+     	});
+ 		
+ 	}
+ 	
+ 	function plotSalesmanGraph(records) {
  		var data = [];
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].revenue});

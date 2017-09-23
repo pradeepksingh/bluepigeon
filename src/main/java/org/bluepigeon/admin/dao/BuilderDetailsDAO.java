@@ -1112,13 +1112,21 @@ public class BuilderDetailsDAO {
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
 			
 		}else{
-			hql = "select elt(m.mon,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue from(select MONTH(bd.booking_date) as mon,round(sum(project.revenue)) as revenue from builder_project as project INNER join allot_project as ap on ap.project_id = project.id inner join builder_building as building on building.project_id = project.id inner join builder_floor as floor on floor.building_id = building.id inner join builder_flat as flat on flat.floor_no = floor.id inner join buyer as buyer on flat.id=buyer.flat_id inner join buying_details as bd on buyer.id=bd.buyer_id where project.status=1 and ap.emp_id="+empId+" and flat.status_id=2 and buyer.is_primary=1 and buyer.status=0 and buyer.is_deleted=0 group by MONTH(bd.booking_date)) as m order by m.mon asc";
+			hql = "select emp.name as name, sum(bd.total_cost) as revenue from builder_employee as emp "
+					+ "join buyer as buyer on buyer.emp_id = emp.id "
+					+ "inner join buying_details as bd on bd.buyer_id = buyer.id "
+					+ "left join builder_project as project on project.id = buyer.project_id "
+					+ "where project.status=1 and buyer.is_primary=1 and buyer.is_deleted=0 and "
+					+ "buyer.status=0 and emp.reporting_id="+builderEmployee.getId()+" GROUP by emp.id";
+			
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
 		List<ProjectWiseData> result = query.list();
 		return result;
 	}
+	
+	
 	
 	/**
 	 * Get all project's flat count by builder id
@@ -1492,9 +1500,9 @@ public class BuilderDetailsDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() >0 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
-			hql ="SELECT b.name as buyerName, b.mobile as buyerContact, b.email as buyerEmail, project.name as projectName,project.locality_name as localityName, flat.flat_no as flatNo, building.name as buildingName, city.name as cityName FROM buyer as b inner join builder_project as project on project.id = b.project_id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id WHERE b.builder_id="+builderEmployee.getBuilder().getId()+" and b.is_primary=1 and b.is_deleted=0 and project.status=1 group by b.id order by project.id DESC ";
+			hql ="SELECT b.name as buyerName, b.mobile as buyerContact, b.email as buyerEmail, project.name as projectName,project.locality_name as localityName, flat.flat_no as flatNo, building.name as buildingName, city.name as cityName FROM buyer as b inner join builder_project as project on project.id = b.project_id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id WHERE b.builder_id="+builderEmployee.getBuilder().getId()+" and b.is_primary=1 and b.is_deleted=0 and project.status=1 group by b.id order by b.id DESC ";
 		}else{
-			hql= "SELECT b.name as buyerName, b.mobile as buyerContact, b.email as buyerEmail, project.name as projectName,project.locality_name as localityName, flat.flat_no as flatNo, building.name as buildingName, city.name as cityName FROM buyer as b left join builder_project as project on project.id = b.project_id inner join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id WHERE ap.emp_id="+builderEmployee.getId()+" and b.is_primary=1 and b.is_deleted=0 and project.status=1 group by b.id order by project.id DESC";
+			hql= "SELECT b.name as buyerName, b.mobile as buyerContact, b.email as buyerEmail, project.name as projectName,project.locality_name as localityName, flat.flat_no as flatNo, building.name as buildingName, city.name as cityName FROM buyer as b left join builder_project as project on project.id = b.project_id inner join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id WHERE ap.emp_id="+builderEmployee.getId()+" and b.is_primary=1 and b.is_deleted=0 and project.status=1 group by b.id order by b.id DESC";
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BookedBuyerList.class));

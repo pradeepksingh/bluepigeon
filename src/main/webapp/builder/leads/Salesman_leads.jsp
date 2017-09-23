@@ -24,6 +24,7 @@
 	int city_size = 0;
 	int projectId = 0;
 	int emp_id =0 ;
+	int access_id = 0;
  	//List<ProjectData> builderProjects =null;
  	List<Source> sourceList = null;
  	BuilderProject builderProject = null;
@@ -42,6 +43,7 @@
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
 			emp_id = builder.getId();
+			access_id = builder.getBuilderEmployeeAccessType().getId();
 			if(builder_id > 0){
 				//builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
@@ -112,6 +114,66 @@
 // 		        $('#multiple-checkboxes-5').multiselect();
 // 		    });
 		</script>
+		<style>
+		.arrow{
+color: #ccc;
+    background-color: #ccc;
+    display: inline-block;
+    height: 1px;
+    width: 12px;
+    position: relative;
+   
+}     
+.max_value{
+    padding: 6px 6px 6px 12px;
+}
+
+            .price_Ranges {
+                float: right;
+                width: 50%;
+            }
+            .price_Ranges a {
+                display: block;
+                text-align: left;
+                padding: 6px 0 6px 0;  
+                color: #6f6e6e;
+                font-weight: 500;
+            }
+            .price_Ranges a.max_value {
+                padding-right: 12px;
+                padding-left: 12px;
+               margin-left: 30px;
+            }
+            .price_Ranges a.min_value {
+                padding-right: 22px;
+                    padding-left: 12px;
+            }
+            .price_Ranges a.disabled {
+                pointer-events: none;
+                cursor: default;
+                color: #E5E4E2;
+            }
+            .price_Ranges a:hover {
+               background: #0074e4;
+               color: #fff;
+               cursor: pointer; 
+    text-decoration: none;
+            }
+            .btnClear {
+                clear: both;
+                border-top: 1px solid #dadada;
+                padding: 5px 0 0 0;
+                text-align: center;
+            }
+            input.inputError,
+            input.inputError:focus {
+                border-color: #e2231a;
+                background-color: white;
+                color: #e2231a;
+                box-shadow: inset 0 0 5px #F7BDBB;
+                border-radius: 0;
+            }
+		</style>
 </head>
 
 <body class="fix-sidebar">
@@ -156,7 +218,7 @@
 						    <div class="input-group add-on">
 						      <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
 						      <div class="input-group-btn">
-						        <button class="btn btn-default" type="submit"><img src="../images/search.png"/></button>
+						        <button id="searchleads" class="btn btn-default" type="button"><img src="../images/search.png"/></button>
 						      </div>
 						    </div>
 					     </form>
@@ -210,12 +272,12 @@
 						    <ul class="dropdown-menu">
 						      <li><a href="javascript:changeLeadStatus(1,<%out.print(newLeadList.getId());%>)">No Response</a></li>
 						      <li><a href="javascript:changeLeadStatus(2,<%out.print(newLeadList.getId());%>)">Call Again</a></li>
-						      <li><a href="javascript:changeLeadStatus(3,<%out.print(newLeadList.getId());%>)"">Email Sent</a></li>
-						      <li><a href="javascript:changeLeadStatus(4,<%out.print(newLeadList.getId());%>)"">Visit Again</a></li>
-						      <li><a href="javascript:changeLeadStatus(5,<%out.print(newLeadList.getId());%>)"">Visit Complete</a></li>
-						      <li><a href="javascript:changeLeadStatus(6,<%out.print(newLeadList.getId());%>)"">Follow up</a></li>
-						      <li><a href="javascript:changeLeadStatus(7,<%out.print(newLeadList.getId());%>)"">Booked</a></li>
-						      <li><a href="javascript:changeLeadStatus(8,<%out.print(newLeadList.getId());%>)"">Not interested</a></li>
+						      <li><a href="javascript:changeLeadStatus(3,<%out.print(newLeadList.getId());%>)">Email Sent</a></li>
+						      <li><a href="javascript:changeLeadStatus(4,<%out.print(newLeadList.getId());%>)">Visit Again</a></li>
+						      <li><a href="javascript:changeLeadStatus(5,<%out.print(newLeadList.getId());%>)">Visit Complete</a></li>
+						      <li><a href="javascript:changeLeadStatus(6,<%out.print(newLeadList.getId());%>)">Follow up</a></li>
+						      <li><a href="javascript:changeLeadStatus(7,<%out.print(newLeadList.getId());%>)">Booked</a></li>
+						      <li><a href="javascript:changeLeadStatus(8,<%out.print(newLeadList.getId());%>)">Not interested</a></li>
 						    </ul>
 						  </div>
 	                    </div>
@@ -266,7 +328,7 @@
 	                      <h6><%out.print(newLeadList.getSource()); %></h6>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                      <h6>Date: <b><% if(newLeadList.getlDate() != null){ out.print(newLeadList.getlDate());} %></b></h6>
+	                      <h6>Date: <b><% if(newLeadList.getlDate() != null){ out.print(newLeadList.getStrDate());} %></b></h6>
 	                    </div>
 	                 </div>
 	               </div>
@@ -357,48 +419,109 @@
  								  <div class="form-group row">
 									 <label for="example-search-input" class="col-5 col-form-label">Interested Project</label>
 										<div class="col-7">
-										   <select id="multiple-checkboxes-2" disabled>
+										   <select id="multiple-checkboxes-2" class="select-bg" disabled>
 									           <% if(builderProject != null){%>
 									           <option value="<%out.print(builderProject.getId());%>" selected><%out.print(builderProject.getName()); %></option>
 									           <%} %>
 										     </select>
 										 </div>
 								    </div>
-									<div class="form-group row">
-									   <label for="example-search-input" class="col-5 col-form-label">Budget</label>
-										    <button id="min-max-price-range" class="dropdown-toggle" href="#" data-toggle="dropdown">Budget<strong class="caret"></strong>
-        									</button>
-								        <div class="dropdown-menu col-sm-6" style="padding:10px;">
-								            <div class="row">
-								                <div class="col-xs-3">
-								                    <input class="form-control price-label" placeholder="Min" id="minprice" name="minprice" data-dropdown-id="pricemin"/>
-								                </div>
-								                <div class="col-xs-2"> - </div>
-								                <div class="col-xs-3">
-								                    <input class="form-control price-label" placeholder="Max"id="maxprice" name="maxprice" data-dropdown-id="pricemax"/>
-								                </div>
-												<div class="clearfix"></div>
-								                <ul id="pricemin" class="col-sm-12 price-range list-unstyled">
-								                    <li  data-value="0">0</li>
-								                    <li data-value="10">10</li>
-								                    <li  data-value="20">20</li>
-								                    <li  data-value="30">30</li>
-								                    <li  data-value="40">40</li>
-								                    <li  data-value="50">50</li>
-								                    <li  data-value="60">60</li>
-								                </ul>
-								                <ul id="pricemax" class="col-sm-12 price-range text-right list-unstyled hide">
-								                    <li  data-value="0">0</li>
-								                    <li  data-value="10">10</li>
-								                    <li  data-value="20">20</li>
-								                    <li  data-value="30">30</li>
-								                    <li  data-value="40">40</li>
-								                    <li  data-value="50">50</li>
-								                    <li  data-value="60">60</li>
-								                </ul>
-								            </div>
-								        </div>
-									 </div>
+<!-- 									<div class="form-group row"> -->
+<!-- 									   <label for="example-search-input" class="col-5 col-form-label">Budget</label> -->
+<!-- 									   <div class="col-7"> -->
+<!-- 										    <button id="min-max-price-range" class="dropdown-toggle custom-button" href="#" data-toggle="dropdown">Budget<strong class="caret"></strong> -->
+<!--         									</button> -->
+<!-- 								        <div class="dropdown-menu margin-p" style="padding:10px;"> -->
+<!-- 								            <div class="row"> -->
+<!-- 								                <div class="col-xs-3 width30button"> -->
+<!-- 								                    <input class="form-control price-label" placeholder="Min" id="minprice" name="minprice" data-dropdown-id="pricemin"/> -->
+<!-- 								                </div> -->
+<!-- 								                <div class="col-xs-2"> - </div> -->
+<!-- 								                <div class="col-xs-3 width30button"> -->
+<!-- 								                    <input class="form-control price-label" placeholder="Max"id="maxprice" name="maxprice" data-dropdown-id="pricemax"/> -->
+<!-- 								                </div> -->
+<!-- 												<div class="clearfix"></div> -->
+<!-- 								                <ul id="pricemin" class="col-sm-12 price-range list-unstyled"> -->
+<!-- 								                    <li  data-value="0">0</li> -->
+<!-- 								                    <li data-value="10">10</li> -->
+<!-- 								                    <li  data-value="20">20</li> -->
+<!-- 								                    <li  data-value="30">30</li> -->
+<!-- 								                    <li  data-value="40">40</li> -->
+<!-- 								                    <li  data-value="50">50</li> -->
+<!-- 								                    <li  data-value="60">60</li> -->
+<!-- 								                </ul> -->
+<!-- 								                <ul id="pricemax" class="col-sm-12 price-range text-right list-unstyled hide"> -->
+<!-- 								                    <li  data-value="0">0</li> -->
+<!-- 								                    <li  data-value="10">10</li> -->
+<!-- 								                    <li  data-value="20">20</li> -->
+<!-- 								                    <li  data-value="30">30</li> -->
+<!-- 								                    <li  data-value="40">40</li> -->
+<!-- 								                    <li  data-value="50">50</li> -->
+<!-- 								                    <li  data-value="60">60</li> -->
+<!-- 								                </ul> -->
+<!-- 								            </div> -->
+<!-- 								        </div> -->
+<!-- 									 </div> -->
+<!-- 									 </div> -->
+	<div class="span2 investRange">
+	<label for="example-search-input" class="col-5 col-form-label">Budget</label>
+    <div class="btn-group">
+
+      <button id="min-max-price-range" class="form-control selectpicker select-btn  dropdown-toggle searchParams" href="#" data-toggle="dropdown" tabindex="6">
+        <div class="filter-option pull-left span_price">
+          <span id="price_range1"> </span> - <span id="price_range2">Price Range</span> </div>
+        <span class="bs-caret" style="float: right;"><span class="caret"></span></span>
+      </button>
+
+      <div class="dropdown-menu ddRange" role="menu" style="width: 295px;padding-top: 12px;">
+        <div class="rangemenu">
+          <div class="freeformPrice">
+            <div class="col-md-5">
+              <input name="minprice" id="minprice" type="text" class="min_input form-control" placeholder="Min Price">
+            </div>
+            <div class="col-md-2 "><span class="arrow"></span></div>
+            <div class="col-md-5">
+              <input name="maxprice" id="maxprice" type="text" class="max_input form-control" placeholder="Max Price">
+            </div>
+          </div>
+
+          <div class="price_Ranges rangesMax col-md-5">
+            <a class="max_value" value="" href="javascript:void(0)">Any Max</a>
+            <a class="max_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
+            <a class="max_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
+            <a class="max_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
+            <a class="max_value" value="10000000" href="javascript:void(0)">1 cr</a>
+            <a class="max_value" value="50000000" href="javascript:void(0)">5 cr</a>
+            <a class="max_value" value="100000000" href="javascript:void(0)">10 cr</a>
+            <a class="max_value" value="500000000" href="javascript:void(0)">50 cr</a>
+            <a class="max_value" value="1000000000" href="javascript:void(0)">100 cr</a>
+            <a class="max_value" value="2000000000" href="javascript:void(0)">200 cr</a>
+            <a class="max_value" value="5000000000" href="javascript:void(0)">500 cr</a>
+          </div>
+          <div class="col-md-2"> </div>
+
+          <div class="price_Ranges rangesMin col-md-5">
+            <a class="min_value" value="" href="javascript:void(0)">Any Min</a>
+            <a class="min_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
+            <a class="min_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
+            <a class="min_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
+            <a class="min_value" value="10000000" href="javascript:void(0)">1 cr</a>
+            <a class="min_value" value="50000000" href="javascript:void(0)">5 cr</a>
+            <a class="min_value" value="100000000" href="javascript:void(0)">10 cr</a>
+            <a class="min_value" value="500000000" href="javascript:void(0)">50 cr</a>
+            <a class="min_value" value="1000000000" href="javascript:void(0)">100 cr</a>
+            <a class="min_value" value="2000000000" href="javascript:void(0)">200 cr</a>
+            <a class="min_value" value="5000000000" href="javascript:void(0)">500 cr</a>
+          </div>
+        </div>
+
+        <div class="btnClear">
+          <a href="javascript:void(0)" class="btn btn-link">Clear</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
 								</div>
 								<div class="center bcenter">
 							  	   <button type="submit" class="button1">Save</button>
@@ -639,17 +762,199 @@ function changeLeadStatus(value,id){
 		 ajaxindicatorstop();
 		
 	});
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
+$("searchleads").click(function(){
+	
+
+	var searchResult = "";
+	var i=1;
+	
+	ajaxindicatorstart("Loading...");
+$("#newleads").empty();
+<%if(access_id == 7){%>
+$.post("${baseUrl}/webapi/builder/filter/newlead",{emp_id : $("#emp_id").val(), project_id:$("#project_id").val(),name:$("#srch-term").val()},function(data){
+	$(data).each(function(index){
+		searchResult += '<div class="border-lead">'
+		    +'<div class="row">'
+		      +'<div class="col-md-2 col-sm-2 col-xs-6">'
+		       +'<h4>'+data[index].leadName+'</h4>'
+		      +'</div>'
+		       +'<div class="col-md-2 col-sm-2 col-xs-6">'
+		       +'<h4>'+data[index].phoneNo+'</h4>'
+		      +'</div>'
+		       +'<div class="col-md-2 col-sm-2 col-xs-6">'
+		       +'<h4>'+data[index].email+'</h4>'
+		      +'</div>'
+		       +'<div class="col-md-2 col-sm-2 col-xs-6">'
+		       +'<h4>'+data[index].source+'</h4>'
+		      +'</div>'
+		       +'<div class="col-md-2 col-sm-2 col-xs-6">'
+		       +' <div class="dropdown">'
+				    +'<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Follow up'
+				    +'<span class="caret"></span></button>'
+				    +'<ul class="dropdown-menu">'
+				      +'<li><a href="javascript:changeLeadStatus(1,'+data[index].id+')">No Response</a></li>'
+				      +'<li><a href="javascript:changeLeadStatus(2,'+data[index].id+')">Call Again</a></li>'
+				      +'<li><a href="javascript:changeLeadStatus(3,'+data[index].id+')">Email Sent</a></li>'
+				      +'<li><a href="javascript:changeLeadStatus(4,'+data[index].id+')">Visit Again</a></li>'
+				      +'<li><a href="javascript:changeLeadStatus(5,'+data[index].id+')">Visit Complete</a></li>'
+				      +'<li><a href="javascript:changeLeadStatus(6,'+data[index].id+')">Follow up</a></li>'
+				      +'<li><a href="javascript:changeLeadStatus(7,'+data[index].id+')">Booked</a></li>'
+				      +'<li><a href="javascript:changeLeadStatus(8,'+data[index].id+')">Not interested</a></li>'
+				    +'</ul>'
+				  +'</div>'
+		      +'</div>'
+		   +'</div>'
+		   +'<hr>'
+		   +'<div class="row">'
+		      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+		       +'<img src="../images/Saleshead-added.PNG" />'
+		       +'<h5>Added By :</h5>'
+		     +' </div>'
+		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+		        +'<img src="../images/Baget.PNG" />'
+		       +'<h5>Budget:</h5>'
+		      +'</div>'
+		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+		        +'<img src="../images/Configuration.PNG" />'
+		        +'<h5>Configuration :</h5>'
+		      +'</div>'
+		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+		        +'<h5>Source :</h5>'
+		      +'</div>'
+		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline laststatusnam">'
+		        +'<h5>Last States: <b id="laststatusname'+data[index].id+'">'+data[index].leadStatusName+'</b></h5>'
+		      +'</div>'
+		   +'</div>'
+		  +'<div class="row">'
+		      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+		       +'<h6>'+data[index].salemanName+'</h6>'
+		      +'</div>'
+		      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+		       +'<h6>Rs '+data[index].min+' - '+data[index].max+' Lakh</h6>'
+		      +'</div>'
+		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+		       +'<h6>';
+		       $(data[index].configDatas).each(function(index1){
+		    	   if(i>1){
+		    		   searchResult +=''+data[index].configDatas[index1].name+',';
+		    		   i--;
+		    	   }else{
+		    		   searchresult +=''+data[index].configDatas[index1].name+'';
+		    	   }
+		    	   i++;
+		       });
+		       searchresult +='</h6>'
+		      +'</div>'
+		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+		        +'<h6>'+data[index].source+'</h6>'
+		      +'</div>'
+		       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+		        +'<h6>Date: <b>'+data[index].lDate+'</b></h6>'
+		      +'</div>'
+		   +'</div>'
+		 +'</div>';
+		});
+	 	$("#newleads").append(searchresult);
+	 	 ajaxindicatorstop();
+	},'json');
+	<%}%>
+	<%if(access_id == 5){%>
+	<%}%>
+});
+
+
+function disableDropDownRangeOptions(max_values, minValue) {
+if (max_values) {
+  max_values.each(function() {
+    var maxValue = $(this).attr("value");
+
+    if (parseInt(maxValue) < parseInt(minValue)) {
+      $(this).addClass('disabled');
+    } else {
+      $(this).removeClass('disabled');
+    }
+  });
+}
+}
+
+function setuinvestRangeDropDownList(min_values, max_values, min_input, max_input, clearLink, dropDownControl) {
+min_values.click(function() {
+  var minValue = $(this).attr('value');
+  min_input.val(minValue);
+  document.getElementById('price_range1').innerHTML = minValue;
+
+  disableDropDownRangeOptions(max_values, minValue);
+
+  validateDropDownInputs();
+});
+
+max_values.click(function() {
+  var maxValue = $(this).attr('value');
+  max_input.val(maxValue);
+  document.getElementById('price_range2').innerHTML = maxValue;
+
+  toggleDropDown();
+});
+
+clearLink.click(function() {
+  min_input.val('');
+  max_input.val('');
+
+  disableDropDownRangeOptions(max_values);
+
+  validateDropDownInputs();
+});
+
+min_input.on('input',
+  function() {
+    var minValue = min_input.val();
+
+    disableDropDownRangeOptions(max_values, minValue);
+    validateDropDownInputs();
+  });
+
+max_input.on('input', validateDropDownInputs);
+
+max_input.blur('input',
+  function() {
+    toggleDropDown();
+  });
+
+function validateDropDownInputs() {
+  var minValue = parseInt(min_input.val());
+  var maxValue = parseInt(max_input.val());
+
+  if (maxValue > 0 && minValue > 0 && maxValue < minValue) {
+    min_input.addClass('inputError');
+    max_input.addClass('inputError');
+
+    return false;
+  } else {
+    min_input.removeClass('inputError');
+    max_input.removeClass('inputError');
+
+    return true;
+  }
+}
+
+function toggleDropDown() {
+  if (validateDropDownInputs() &&
+    parseInt(min_input.val()) > 0 &&
+    parseInt(max_input.val()) > 0) {
+
+    // auto close if two values are valid
+    dropDownControl.dropdown('toggle');
+  }
+}
+}
+
+setuinvestRangeDropDownList(
+$('.investRange .min_value'),
+$('.investRange .max_value'),
+$('.investRange .freeformPrice .min_input'),
+$('.investRange .freeformPrice .max_input'),
+$('.investRange .btnClear'),
+$('.investRange .dropdown-toggle'));
+
 </script>

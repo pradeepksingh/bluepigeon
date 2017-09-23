@@ -15,6 +15,7 @@ public class NewLeadList {
 	private String leadStatusName;
 	private String salemanName;
 	private Date lDate;
+	private String strDate;
 	private int min;
 	private int max;
 	private List<ConfigData> configDatas;
@@ -91,5 +92,10 @@ public class NewLeadList {
 	public void setLeadStatusName(String leadStatusName) {
 		this.leadStatusName = leadStatusName;
 	}
-	
+	public String getStrDate() {
+		return strDate;
+	}
+	public void setStrDate(String strDate) {
+		this.strDate = strDate;
+	}
 }

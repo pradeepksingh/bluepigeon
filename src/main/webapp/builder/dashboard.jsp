@@ -573,7 +573,7 @@
     select_project_status = $select_project_status[0].selectize;
     
     function addLead(){
-    	window.location.href="${baseUrl }/builder/leads/new.jsp"
+    	window.location.href="${baseUrl }/builder/leads/Salesman_add_lead.jsp"
     }
     function addEmployee(){
     	window.location.href="${baseUrl }/builder/employee/new.jsp";
