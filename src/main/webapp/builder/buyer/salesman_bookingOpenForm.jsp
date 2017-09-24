@@ -63,8 +63,10 @@
 			access_id = builder.getBuilderEmployeeAccessType().getId();
 			emp_id = builder.getId();
 			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
+			try{
 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
 			building_id = builderBuildingList.get(0).getId();
+			
 			flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,0);
 			bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,building_id,0,0);
 			if(bookingFlatList2 != null){
@@ -72,9 +74,16 @@
 					image = bookingFlatList2.getImage();
 				}
 			}
-			
 			flat_size = flatListDatas.size();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			
 		
+			
+			
+			
 			//building_id = builderBuildingList.get(0).getId();
 			//floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id);
 			//floor_size_list = floorList.size();
@@ -290,20 +299,20 @@
 					       </div>
 						      <div class="row custom-row user-row">
 						        <p class="p-custom">Mobile No.</p>
-						        <p><b><%out.print(bookingFlatList2.getBuyerMobile()); %></b></p>
+						        <p><b><%if(bookingFlatList2.getBuyerMobile()!=null){out.print(bookingFlatList2.getBuyerMobile());} %></b></p>
 						        <p class="p-custom">Email</p>
-						        <p><b><%out.print(bookingFlatList2.getBuyerEmail()); %></b></p>
+						        <p><b><%if(bookingFlatList2.getBuyerEmail()!=null){out.print(bookingFlatList2.getBuyerEmail()); }%></b></p>
 						        <p class="p-custom">PAN</p>
-						        <p><b><%out.print(bookingFlatList2.getBuyerPanNo()); %></b></p>
+						        <p><b><%if(bookingFlatList2.getBuyerPanNo()!=null){out.print(bookingFlatList2.getBuyerPanNo());} %></b></p>
 						        <p class="p-custom">Aadhaar card no.</p>
-						        <p><b></b></p>
+						        <p><b><%if(bookingFlatList2.getBuyerAadhaarNumber()!=null){out.print(bookingFlatList2.getBuyerAadhaarNumber());} %></b></p>
 						        <p class="p-custom">Permanent Address</p>
-						        <p><b><%out.print(bookingFlatList2.getBuyerPermanentAddress()); %></b></p>
+						        <p><b><%if(bookingFlatList2.getBuyerPermanentAddress()!= null){out.print(bookingFlatList2.getBuyerPermanentAddress()); }%></b></p>
 						        <p class="p-custom">Current Address</p>
-						        <p><b><%out.print(bookingFlatList2.getBuyerCurrentAddress()); %></b></p>
+						        <p><b><%if(bookingFlatList2.getBuyerCurrentAddress()!=null){out.print(bookingFlatList2.getBuyerCurrentAddress());} %></b></p>
 						        <hr>
 						      </div>
-						      <button type="button" onclick="showFlats(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button red">Cancel</button>
+						      <button type="button" onclick="showBuyerDetails(<%out.print(bookingFlatList2.getFlatId()); %>)" class="button red">Cancel</button>
 						      <%}} %>
 					    </div>
 					  </div>
@@ -447,7 +456,9 @@ $(document).ready(function () {
 function showFlat(id){
 	window.location.href="${baseUrl}/builder/buyer/Salesman_booking_form3.jsp?flat_id="+id;
 }
-
+function showBuyerDetails(flatId){
+	window.location.href="${baseUrl}/builder/buyer/edit_booking_form.jsp?flat_id="+flatId;
+}
 function showFlatwithImage(id){
 //	alert(id);
 	var flatdetails = "";
@@ -516,14 +527,14 @@ function showFlatwithImage(id){
 				      +'<p class="p-custom">PAN</p>'
 				      +'<p><b>'+data.buyerPanNo+'</b></p>'
 				      +'<p class="p-custom">Adhar card no.</p>'
-				      +'<p><b></b></p>'
+				      +'<p><b>'+data.buyerAadhaarNumber+'</b></p>'
 				      +'<p class="p-custom">Permanent Address</p>'
 				      +'<p><b>'+data.buyerPermanentAddress+'</b></p>'
 				      +'<p class="p-custom">Current Address</p>'
-				      +'<p><b></b></p>'
+				      +'<p><b>'+data.buyerCurrentAddress+'</b></p>'
 				      +'<hr>'
 				      +'</div>'
-				      +'<button type="button" onclick="showFlats('+data.flatId+')" class="button">Edit</button>';
+				      +'<button type="button" onclick="showBuyerDetails('+data.flatId+')" class="button">Edit</button>';
 			}
 	 	 $("#home").append(htmlFlat);
 		},'json');
@@ -703,6 +714,8 @@ $select_eveOrodd = $("#evenOrodd").selectize({
 		}
 	}
 });
+
+
 
 function getFlatDetails(){
 	var no = $("#filter_building_id").val();

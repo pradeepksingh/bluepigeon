@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 import org.bluepigeon.admin.exception.ResponseMessage;
+import org.bluepigeon.admin.model.AllotLeads;
 import org.bluepigeon.admin.model.AllotProject;
 import org.bluepigeon.admin.data.BookedBuyerList;
 import org.bluepigeon.admin.model.Builder;
@@ -664,7 +665,7 @@ public class BuilderDetailsDAO {
 	 * @return
 	 */
 	
-	public List<BuilderProjectList> getProjectFilters(int projectId,int empId,int countryId,int stateId,int cityId, String localityName){
+	public List<BuilderProjectList> getProjectFilters(int empId,int countryId,int cityId, String localityName, int projectStatus){
 		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
 		String hqlnew = "from BuilderEmployee where id = "+empId;
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -676,7 +677,7 @@ public class BuilderDetailsDAO {
 		String hql = "SELECT project.id as id, project.name as name, project.image as image, "
 				+"project.completion_status as completionStatus,project.inventory_sold as sold, "
 				+"project.total_inventory as totalSold, "
-				+"c.name as city, "
+				+"c.name as city, project.locality_name as locality, "
 				+"count(lead.id) as totalLeads ";
 		String where = "";
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
@@ -690,25 +691,19 @@ public class BuilderDetailsDAO {
 			+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id WHERE ";
 			where +="build.id = "+builderEmployee.getBuilder().getId();
 		}
-		if(projectId > 0){
-			if(where!=""){
-				where += " AND project.id = :project_id";
-			}else{
-				where +=" project.id = :project_id";
-			}
-		}
+	
 		if(countryId > 0){
 			if(where!="")
 				where += " AND project.country_id = :country_id";
 			else
 				where += "project.country_id = :country_id";
 		}
-		if(stateId > 0){
-			if(where !="")
-				where += " AND project.state_id = :state_id";
-			else
-				where += "project.state_id = :state_id";
-		}
+//		if(stateId > 0){
+//			if(where !="")
+//				where += " AND project.state_id = :state_id";
+//			else
+//				where += "project.state_id = :state_id";
+//		}
 		if(cityId > 0){
 			if(where != "")
 				where +=" AND project.city_id = :city_id";
@@ -721,6 +716,25 @@ public class BuilderDetailsDAO {
 			else
 				where +="project.locality_name like :locality_name";
 		}
+		if(projectStatus > 0){
+			if(projectStatus == 1){
+				if(where != ""){
+					where +=" AND project.completion_status BETWEEN 0 AND 100 ";
+				}
+				else{
+					where +=" project.completion_status BETWEEN 0 AND 100 ";
+				}
+			}
+			if(projectStatus == 2){
+				if(where != ""){
+					where +=" AND project.completion_status=100";
+				}
+				else{
+					where +=" project.completion_status=100";
+				}
+			}
+		}
+		
 		hql += where + " AND project.status=1 GROUP by project.id order by project.id desc";
 		try {
 		Session session = hibernateUtil.getSessionFactory().openSession();
@@ -728,10 +742,11 @@ public class BuilderDetailsDAO {
 		System.err.println("hql : "+hql);
 		if(countryId > 0)
 			query.setParameter("country_id", countryId);
-		if(stateId > 0)
-			query.setParameter("state_id", stateId);
+//		if(stateId > 0)
+//			query.setParameter("state_id", stateId);
 		if(cityId > 0)
 			query.setParameter("city_id",cityId);
+		
 		if(localityName != null)
 			query.setParameter("locality_name", localityName+"%");
 			builderProjectLists = query.list();
@@ -742,7 +757,7 @@ public class BuilderDetailsDAO {
 	}
 	
 	
-	public List<BuilderProjectList> getProjectFilter(int projectId,int empId,int countryId,int stateId,int cityId, String localityName){
+	public List<BuilderProjectList> getProjectFilter(int empId,int countryId,int cityId, String localityName, int projectStatus){
 		List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
 		String hqlnew = "from BuilderEmployee where id = "+empId;
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -777,21 +792,19 @@ public class BuilderDetailsDAO {
 			+ "WHERE ";
 			where +="build.id = "+builderEmployee.getBuilder().getId();
 		}
-		if(projectId > 0){
-			where +=" AND project.id = :project_id";
-		}else{
+		
 			if(countryId > 0){
 				if(where!="")
 					where += " AND project.country_id = :country_id";
 				else
 					where += "project.country_id = :country_id";
 			}
-			if(stateId > 0){
-				if(where !="")
-					where += " AND project.state_id = :state_id";
-				else
-					where += "project.state_id = :state_id";
-			}
+//			if(stateId > 0){
+//				if(where !="")
+//					where += " AND project.state_id = :state_id";
+//				else
+//					where += "project.state_id = :state_id";
+//			}
 			if(cityId > 0){
 				if(where != "")
 					where +=" AND project.city_id = :city_id";
@@ -804,19 +817,35 @@ public class BuilderDetailsDAO {
 				else
 					where +="project.locality_name like :locality_name";
 			}
-		}
+			if(projectStatus > 0){
+				if(projectStatus == 1){
+					if(where != ""){
+						where +=" AND project.completion_status BETWEEN 0 AND 100 ";
+					}
+					else{
+						where +=" project.completion_status BETWEEN 0 AND 100 ";
+					}
+				}
+				if(projectStatus == 2){
+					if(where != ""){
+						where +=" AND project.completion_status=100";
+					}
+					else{
+						where +=" project.completion_status=100";
+					}
+				}
+			}
+		
 		hql += where + " AND project.status=1 GROUP by project.id order by project.id desc";
 		try {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuilderProjectList.class));
 		System.err.println(hql);
-		if(projectId > 0){
-			query.setParameter("project_id", projectId);
-		}
+		
 		if(countryId > 0)
 			query.setParameter("country_id", countryId);
-		if(stateId > 0)
-			query.setParameter("state_id", stateId);
+//		if(stateId > 0)
+//			query.setParameter("state_id", stateId);
 		if(cityId > 0)
 			query.setParameter("city_id",cityId);
 		if(localityName != null)
@@ -847,6 +876,7 @@ public class BuilderDetailsDAO {
 			builderProjectList.setId(builderProject.getId());
 			builderProjectList.setName(builderProject.getName());
 			builderProjectList.setCity(builderProject.getCity().getName());
+			builderProjectList.setLocality(builderProject.getLocalityName());
 			if(builderProject.getTotalInventory()!=null)
 				builderProjectList.setTotalSold(builderProject.getTotalInventory());
 			if(builderProject.getInventorySold() != null)
@@ -879,6 +909,7 @@ public class BuilderDetailsDAO {
 			builderProjectList.setId(builderProject.getId());
 			builderProjectList.setName(builderProject.getName());
 			builderProjectList.setCity(builderProject.getCity().getName());
+			builderProjectList.setLocality(builderProject.getLocalityName());
 			if(builderProject.getTotalInventory()!=null)
 				builderProjectList.setTotalSold(builderProject.getTotalInventory());
 			if(builderProject.getInventorySold() != null)
@@ -1081,13 +1112,21 @@ public class BuilderDetailsDAO {
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
 			
 		}else{
-			hql = "select elt(m.mon,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue from(select MONTH(bd.booking_date) as mon,round(sum(project.revenue)) as revenue from builder_project as project INNER join allot_project as ap on ap.project_id = project.id inner join builder_building as building on building.project_id = project.id inner join builder_floor as floor on floor.building_id = building.id inner join builder_flat as flat on flat.floor_no = floor.id inner join buyer as buyer on flat.id=buyer.flat_id inner join buying_details as bd on buyer.id=bd.buyer_id where project.status=1 and ap.emp_id="+empId+" and flat.status_id=2 and buyer.is_primary=1 and buyer.status=0 and buyer.is_deleted=0 group by MONTH(bd.booking_date)) as m order by m.mon asc";
+			hql = "select emp.name as name, sum(bd.total_cost) as revenue from builder_employee as emp "
+					+ "join buyer as buyer on buyer.emp_id = emp.id "
+					+ "inner join buying_details as bd on bd.buyer_id = buyer.id "
+					+ "left join builder_project as project on project.id = buyer.project_id "
+					+ "where project.status=1 and buyer.is_primary=1 and buyer.is_deleted=0 and "
+					+ "buyer.status=0 and emp.reporting_id="+builderEmployee.getId()+" GROUP by emp.id";
+			
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
 		List<ProjectWiseData> result = query.list();
 		return result;
 	}
+	
+	
 	
 	/**
 	 * Get all project's flat count by builder id
@@ -1461,9 +1500,9 @@ public class BuilderDetailsDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() >0 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
-			hql ="SELECT b.name as buyerName, b.mobile as buyerContact, b.email as buyerEmail, project.name as projectName,project.locality_name as localityName, flat.flat_no as flatNo, building.name as buildingName, city.name as cityName FROM buyer as b inner join builder_project as project on project.id = b.project_id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id WHERE b.builder_id="+builderEmployee.getBuilder().getId()+" and b.is_primary=1 and b.is_deleted=0 and project.status=1 group by b.id order by project.id DESC ";
+			hql ="SELECT b.name as buyerName, b.mobile as buyerContact, b.email as buyerEmail, project.name as projectName,project.locality_name as localityName, flat.flat_no as flatNo, building.name as buildingName, city.name as cityName FROM buyer as b inner join builder_project as project on project.id = b.project_id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id WHERE b.builder_id="+builderEmployee.getBuilder().getId()+" and b.is_primary=1 and b.is_deleted=0 and project.status=1 group by b.id order by b.id DESC ";
 		}else{
-			hql= "SELECT b.name as buyerName, b.mobile as buyerContact, b.email as buyerEmail, project.name as projectName,project.locality_name as localityName, flat.flat_no as flatNo, building.name as buildingName, city.name as cityName FROM buyer as b left join builder_project as project on project.id = b.project_id inner join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id WHERE ap.emp_id="+builderEmployee.getId()+" and b.is_primary=1 and b.is_deleted=0 and project.status=1 group by b.id order by project.id DESC";
+			hql= "SELECT b.name as buyerName, b.mobile as buyerContact, b.email as buyerEmail, project.name as projectName,project.locality_name as localityName, flat.flat_no as flatNo, building.name as buildingName, city.name as cityName FROM buyer as b left join builder_project as project on project.id = b.project_id inner join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id WHERE ap.emp_id="+builderEmployee.getId()+" and b.is_primary=1 and b.is_deleted=0 and project.status=1 group by b.id order by b.id DESC";
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BookedBuyerList.class));
@@ -1676,7 +1715,26 @@ public class BuilderDetailsDAO {
 		query.setParameter("id",id);
 		BuilderLead builderLead = (BuilderLead) query.list().get(0);
 		return builderLead;
-				
-				
+	}
+	
+	public List<BuilderEmployee> getBuilderSalesman(BuilderEmployee builderEmployee){
+		String hql = "From BuilderEmployee where builder.id = :builder_id and builderEmployeeAccessType.id = 7";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
+		List<BuilderEmployee> result = query.list();
+		return result;
+	}
+	
+	public void addAllotLead(List<AllotLeads> allotLeads){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(AllotLeads allotLeads2 : allotLeads){
+			session.save(allotLeads2);
+		}
+		session.getTransaction().commit();
+		session.close();
 	}
 }

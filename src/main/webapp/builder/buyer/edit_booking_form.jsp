@@ -416,7 +416,7 @@
 								        <label for="example-tel-input" class="col-5 col-form-label"><%out.print(taxLabel1); %> *</label>
 								        <div class="col-7 custom-col">
 								        	<div>
-								            	<input type="text" autocomplete="off" class="form-control" value="<%if(buyingDetails.getStampDuty() > 0 && buyingDetails.getStampDuty() != 0){ out.print(buyingDetails.getStampDuty());}else{ %>0<%} %>" id="stamp_duty" name="stamp_duty" >
+								            	<input type="text" autocomplete="off" class="form-control" value="<%if(buyingDetails.getStampDuty()!=null){if(buyingDetails.getStampDuty() > 0 && buyingDetails.getStampDuty() != 0){ out.print(buyingDetails.getStampDuty());}else{ %>0<%}} %>" id="stamp_duty" name="stamp_duty" >
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -429,7 +429,7 @@
 								        <label for="example-tel-input" class="col-5 col-form-label"><%out.print(taxLabel2); %> *</label>
 								        <div class="col-7 custom-col">
 								        	<div>
-								            	<input type="text" class="form-control" value="<% if(buyingDetails.getTaxes() > 0 && buyingDetails.getTaxes() != 0){ out.print(buyingDetails.getTaxes());}else{ %>0<%} %>" id="tax" name="tax">
+								            	<input type="text" class="form-control" value="<%if(buyingDetails.getTaxes()!=null){ if(buyingDetails.getTaxes() > 0 && buyingDetails.getTaxes() != 0){ out.print(buyingDetails.getTaxes());}else{ %>0<%}} %>" id="tax" name="tax">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -442,7 +442,7 @@
 								        <label for="example-tel-input" class="col-5 col-form-label"><%out.print(taxLabel3); %> *</label>
 								        <div class="col-7 custom-col">
 								        	<div>
-								            	<input type="text" autocomplete="off" class="form-control" value="<%if(buyingDetails.getVat() > 0 && buyingDetails.getVat() != 0){ out.print(buyingDetails.getVat());}else{ %>0<%} %>" id="vat" name="vat" />
+								            	<input type="text" autocomplete="off" class="form-control" value="<%if(buyingDetails.getVat()!=null){if(buyingDetails.getVat() > 0 && buyingDetails.getVat() != 0){ out.print(buyingDetails.getVat());}else{ %>0<%}} %>" id="vat" name="vat" />
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -597,6 +597,9 @@
   </body>
 </html>
 <script>
+$("#booking").click(function(){
+	window.location.href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
+});
 $("#cancellation").click(function(){
 	window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+$("#project_id").val();
 });
@@ -787,6 +790,7 @@ function isNumber(evt, element) {
     return true;
 } 
 $('#booking_date').datepicker({
+	autoclose:true,
 	format: "dd MM yyyy"
 });
 function previous1()
@@ -916,7 +920,12 @@ $('#addnewbuyer').bootstrapValidator({
                 notEmpty: {
                     message: 'Aadhaar Card number is required and cannot be empty'
                 }
-            }
+            },
+            numeric: {
+             	message: 'Aadhaar Card number is invalid',
+                thousandsSeparator: '',
+                decimalSeparator: '.'
+          	}
         },
         'refferal_id[]':{
         	validators: {

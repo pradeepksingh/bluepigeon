@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.model.Source"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
@@ -18,9 +19,12 @@
 <%
  	int project_size = 0;
 	int type_size = 0;
+	int access_id =0;
 	int city_size = 0;
+	int emp_id =0 ;
  	List<ProjectData> builderProjects =null;
  	List<Source> sourceList = null;
+ 	List<BuilderEmployee> salesmanList = null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
    	session = request.getSession(false);
    	BuilderEmployee builder = new BuilderEmployee();
@@ -31,9 +35,14 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
+			access_id = builder.getBuilderEmployeeAccessType().getId();
+			emp_id = builder.getId();
 			if(builder_id > 0){
 				builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
+				if(access_id ==5){
+					salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
+				}
 			}
 			if(builderProjects.size()>0)
 		    	project_size = builderProjects.size();
@@ -114,6 +123,66 @@
 // 		    $("li").addClass("active");
 // 		});
 		</script>
+		<style>
+		.arrow{
+color: #ccc;
+    background-color: #ccc;
+    display: inline-block;
+    height: 1px;
+    width: 12px;
+    position: relative;
+   
+}     
+.max_value{
+    padding: 6px 6px 6px 12px;
+}
+
+            .price_Ranges {
+                float: right;
+                width: 50%;
+            }
+            .price_Ranges a {
+                display: block;
+                text-align: left;
+                padding: 6px 0 6px 0;  
+                color: #6f6e6e;
+                font-weight: 500;
+            }
+            .price_Ranges a.max_value {
+                padding-right: 12px;
+                padding-left: 12px;
+               margin-left: 30px;
+            }
+            .price_Ranges a.min_value {
+                padding-right: 22px;
+                    padding-left: 12px;
+            }
+            .price_Ranges a.disabled {
+                pointer-events: none;
+                cursor: default;
+                color: #E5E4E2;
+            }
+            .price_Ranges a:hover {
+               background: #0074e4;
+               color: #fff;
+               cursor: pointer; 
+    text-decoration: none;
+            }
+            .btnClear {
+                clear: both;
+                border-top: 1px solid #dadada;
+                padding: 5px 0 0 0;
+                text-align: center;
+            }
+            input.inputError,
+            input.inputError:focus {
+                border-color: #e2231a;
+                background-color: white;
+                color: #e2231a;
+                box-shadow: inset 0 0 5px #F7BDBB;
+                border-radius: 0;
+            }
+		</style>
 </head>
 
 <body class="fix-sidebar">
@@ -142,7 +211,7 @@
                <div class="white-box">
                  <div class="row bg11">
                    <form class="addlead1" id="addnewlead" name="addnewlead" action="" method="post"  enctype="multipart/form-data">
-                  
+                  		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
                      <div class="col-md-6 col-sm-6 col-xs-12">
                          <div class="form-group row">
 							<label for="example-text-input" class="col-5 col-form-label">Name</label>
@@ -175,7 +244,7 @@
 					           <label for="example-tel-input" class="col-5 col-form-label">Source</label>
 						        <div class="col-7">
 						         	<div>
-							        <select id="source_id" name="source_id[]" >
+							        <select id="source_id" name="source_id" >
 							        <%
 							        if(sourceList != null){
 							        	for(Source source: sourceList){ %>
@@ -186,6 +255,7 @@
 			                        <div class="messageContainer"></div>
 							    </div>
 						    </div>
+						    
 				       </div>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                        <div class="form-group row">
@@ -201,7 +271,7 @@
 							 <label for="example-search-input" class="col-5 col-form-label">Interested Project</label>
 								<div class="col-7">
 									<div>
-								   		<select id="multiple-checkboxes-2" name="multipule-checkboxes-2[]" multiple>
+								   		<select id="project_ids" name="project_ids[]" multiple>
 									    <%if(builderProjects != null){
 								    	  for(ProjectData projectData : builderProjects){%>
 								      		<option value="<%out.print(projectData.getId());%>"><%out.print(projectData.getName()); %></option>
@@ -210,40 +280,126 @@
 								     </div>
 								 </div>
 						    </div>
-							<div class="form-group row">
-							    <label for="example-search-input" class="col-sm-5 col-form-label">Budget</label>
-									 <button id="min-max-price-range" class="dropdown-toggle" href="#" data-toggle="dropdown">Budget<strong class="caret"></strong></button>
-								      <div class="dropdown-menu col-sm-7" style="padding:10px;">
-								            <div class="row">
-								                <div class="col-xs-3">
-								                    <input class="form-control price-label" placeholder="Min" id="minprice" name="minprice" data-dropdown-id="pricemin"/>
-								                </div>
-								                <div class="col-xs-2"> - </div>
-								                <div class="col-xs-3">
-								                    <input class="form-control price-label" placeholder="Max"id="maxprice" name="maxprice" data-dropdown-id="pricemax"/>
-								                </div>
-												<div class="clearfix"></div>
-								                <ul id="pricemin" class="col-sm-12 price-range list-unstyled">
-								                    <li  data-value="0">0</li>
-								                    <li data-value="10">10</li>
-								                    <li  data-value="20">20</li>
-								                    <li  data-value="30">30</li>
-								                    <li  data-value="40">40</li>
-								                    <li  data-value="50">50</li>
-								                    <li  data-value="60">60</li>
-								                </ul>
-								                <ul id="pricemax" class="col-sm-12 price-range text-right list-unstyled hide">
-								                    <li  data-value="0">0</li>
-								                    <li  data-value="10">10</li>
-								                    <li  data-value="20">20</li>
-								                    <li  data-value="30">30</li>
-								                    <li  data-value="40">40</li>
-								                    <li  data-value="50">50</li>
-								                    <li  data-value="60">60</li>
-								                </ul>
-								            </div>
+<!-- 							<div class="form-group row"> -->
+<!-- 							    <label for="example-search-input" class="col-5 col-form-label">Budget</label> -->
+<!-- 									<div class="col-7"> -->
+<!-- 									 <input type="text" id="min-max-price-range" class="dropdown-toggle custom-button" value="" data-toggle="dropdown"/> -->
+<!-- 								      <div class="dropdown-menu margin-p" style="padding:10px;"> -->
+<!-- 								            <div class="row"> -->
+<!-- 								                <div class="col-xs-3 width30button"> -->
+<!-- 								                    <input class="form-control price-label" value="" placeholder="Min" id="minprice" name="minprice" data-dropdown-id="pricemin"/> -->
+<!-- 								                </div> -->
+<!-- 								                <div class="col-xs-2"> - </div> -->
+<!-- 								                <div class="col-xs-3 width30button"> -->
+<!-- 								                    <input class="form-control price-label" value="" placeholder="Max"id="maxprice" name="maxprice" data-dropdown-id="pricemax"/> -->
+<!-- 								                </div> -->
+<!-- 												<div class="clearfix"></div> -->
+<!-- 								                <ul id="pricemin" class="col-sm-12 price-range list-unstyled"> -->
+<!-- 								                   <li class="fa fa-inr" data-value="500000">&nbsp;&nbsp; 5 Lac</li><br/> -->
+<!-- 								                    <li class="fa fa-inr" data-value="1000000">&nbsp;&nbsp; 10 Lac</li><br/> -->
+<!-- 								                    <li class="fa fa-inr" data-value="2000000">&nbsp;&nbsp; 20 Lac</li><br/> -->
+<!-- 								                    <li class="fa fa-inr" data-value="3000000">&nbsp;&nbsp; 30 Lac</li><br/> -->
+<!-- 								                    <li class="fa fa-inr" data-value="4000000">&nbsp;&nbsp; 40 Lac</li><br/> -->
+<!-- 								                    <li class="fa fa-inr" data-value="5000000">&nbsp;&nbsp; 50 Lac</li><br/> -->
+<!-- 								                    <li class="fa fa-inr" data-value="6000000">&nbsp;&nbsp; 60 Lac</li><br/> -->
+<!-- 								                </ul> -->
+<!-- 								                <ul id="pricemax" class="col-sm-12 price-range text-right list-unstyled hide"> -->
+<!-- 								                    <li class="fa fa-inr"  data-value="500000">&nbsp;&nbsp; 5 Lac</li><br/> -->
+<!-- 								                    <li class="fa fa-inr" data-value="1000000">&nbsp;&nbsp; 10 Lac</li><br/> -->
+<!-- 								                    <li class="fa fa-inr" data-value="2000000">&nbsp;&nbsp; 20 Lac</li><br/> -->
+<!-- 								                    <li class="fa fa-inr" data-value="3000000">&nbsp;&nbsp; 30 Lac</li><br/> -->
+<!-- 								                    <li class="fa fa-inr" data-value="4000000">&nbsp;&nbsp; 40 Lac</li><br/> -->
+<!-- 								                    <li class="fa fa-inr" data-value="5000000">&nbsp;&nbsp; 50 Lac</li><br/> -->
+<!-- 								                    <li class="fa fa-inr" data-value="6000000">&nbsp;&nbsp; 60 Lac</li><br/> -->
+<!-- 								                </ul> -->
+<!-- 								            </div> -->
+<!-- 								     </div> -->
+<!-- 								     </div> -->
+<!-- 							 </div> -->
+				<div class="span2 investRange">
+				<label for="example-search-input" class="col-5 col-form-label">Budget</label>
+    <div class="btn-group">
+
+      <button id="min-max-price-range" class="form-control selectpicker select-btn  dropdown-toggle searchParams" href="#" data-toggle="dropdown" tabindex="6">
+        <div class="filter-option pull-left span_price">
+          <span id="price_range1"> </span> - <span id="price_range2">Price Range</span> </div>
+        <span class="bs-caret" style="float: right;"><span class="caret"></span></span>
+      </button>
+
+      <div class="dropdown-menu ddRange" role="menu" style="width: 295px;padding-top: 12px;">
+        <div class="rangemenu">
+          <div class="freeformPrice">
+            <div class="col-md-5">
+              <input name="minprice" id="minprice" type="text" class="min_input form-control" placeholder="Min Price">
+            </div>
+            <div class="col-md-2 "><span class="arrow"></span></div>
+            <div class="col-md-5">
+              <input name="maxprice" id="maxprice" type="text" class="max_input form-control" placeholder="Max Price">
+            </div>
+          </div>
+
+          <div class="price_Ranges rangesMax col-md-5">
+            <a class="max_value" value="" href="javascript:void(0)">Any Max</a>
+            <a class="max_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
+            <a class="max_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
+            <a class="max_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
+            <a class="max_value" value="10000000" href="javascript:void(0)">1 cr</a>
+            <a class="max_value" value="50000000" href="javascript:void(0)">5 cr</a>
+            <a class="max_value" value="100000000" href="javascript:void(0)">10 cr</a>
+            <a class="max_value" value="500000000" href="javascript:void(0)">50 cr</a>
+            <a class="max_value" value="1000000000" href="javascript:void(0)">100 cr</a>
+            <a class="max_value" value="2000000000" href="javascript:void(0)">200 cr</a>
+            <a class="max_value" value="5000000000" href="javascript:void(0)">500 cr</a>
+          </div>
+          <div class="col-md-2"> </div>
+
+          <div class="price_Ranges rangesMin col-md-5">
+            <a class="min_value" value="" href="javascript:void(0)">Any Min</a>
+            <a class="min_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
+            <a class="min_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
+            <a class="min_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
+            <a class="min_value" value="10000000" href="javascript:void(0)">1 cr</a>
+            <a class="min_value" value="50000000" href="javascript:void(0)">5 cr</a>
+            <a class="min_value" value="100000000" href="javascript:void(0)">10 cr</a>
+            <a class="min_value" value="500000000" href="javascript:void(0)">50 cr</a>
+            <a class="min_value" value="1000000000" href="javascript:void(0)">100 cr</a>
+            <a class="min_value" value="2000000000" href="javascript:void(0)">200 cr</a>
+            <a class="min_value" value="5000000000" href="javascript:void(0)">500 cr</a>
+          </div>
+        </div>
+
+        <div class="btnClear">
+          <a href="javascript:void(0)" class="btn btn-link">Clear</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+</div>
+
+							 <%if(access_id ==5){ %>
+							 
+							 <div class="form-group row">
+							 <label for="example-search-input" class="col-5 col-form-label">Assign Salesman</label>
+								<div class="col-7">
+									<div>
+								   		<select id="assignsalemans" name="assignsalemans[]" multiple>
+									    <%if(salesmanList != null){
+								    	  for(BuilderEmployee  builderEmployee: salesmanList){%>
+								      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
+								      	 <%}} %>
+									     </select>
 								     </div>
-							 </div>
+								 </div>
+						    </div>
+						    <%} %>
 						</div>
 						<div class="center bcenter">
 					  	   <button type="submit" id="save" class="button1">Save</button>
@@ -287,9 +443,17 @@ $('#configuration').multiselect({
 //$('#multiple-checkboxes-3').style.margin-left="5px";
 //$('#multiple-checkboxes-3').css({"padding-left":"10px !important"});
 
-$('#multiple-checkboxes-2').multiselect({
+$('#project_ids').multiselect({
     columns: 1,
     placeholder: 'Select Project',
+    search: true,
+    selectAll: true
+});
+
+
+$('#assignsalemans').multiselect({
+    columns: 1,
+    placeholder: 'Select salesman',
     search: true,
     selectAll: true
 });
@@ -331,7 +495,7 @@ $('#multiple-checkboxes-2').multiselect({
 // });
 
 $('#min-max-price-range').click(function (event) {
-    setTimeout(function(){ $('.price-label').first().focus();	},0);    
+   // setTimeout(function(){ $('.price-label').first().focus();	},0);    
 });
 var priceLabelObj;
 $('.price-label').focus(function (event) {
@@ -351,6 +515,7 @@ $(".price-range li").click(function(){
         $('#min-max-price-range').dropdown('toggle');
     }
 });
+
 
 
 $select_scorce = $("#source_id").selectize({
@@ -460,7 +625,7 @@ function addLead() {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
 	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/project/lead/new1',
+	 		url : '${baseUrl}/webapi/project/lead/addnew1',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -487,29 +652,128 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-      //  window.location.href = "${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+$("#project_id").val();
+        window.location.href = "${baseUrl}/builder/leads/leadlist.jsp";
         ajaxindicatorstop();
   	}
 }
 
-$("#multiple-checkboxes-2").change(function(){
-	 // alert($(this).val());
-		var htmlconfig = "<option value='0'>Select Configuration</option>";
-	  var ids = []
-	  $("#multiple-checkboxes-2  option:selected").each(function(){
-			ids.push($(this).val());			
-	   });
+$("#project_ids").change(function(){
+	alert("Mouse down event");
+		var htmlconfig = "";
+		ajaxindicatorstart("Loading...");
 	  $.get("${baseUrl}/webapi/project/configdata",{project_ids:$(this).val()},function(data){
-		  
 		  $(data).each(function(index){
-			  alert(data[index].name);
 			  htmlconfig=htmlconfig+'<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		  });
-		 
+		  $("#configuration").multiselect({
+			    columns: 1,
+			    placeholder: 'Select Configuration',
+			    search: true,
+			    selectAll: true,
+			});
 		  $("#configuration").html(htmlconfig);
-		//  $("#configuration").multiselect('refresh');
-		 
-	  },'json');
-	 
+		  $("#configuration").multiselect('reload');
+		  ajaxindicatorstop();
+	  });
 });
+
+
+$('.dropdown-menu.ddRange')
+.click(function(e) {
+  e.stopPropagation();
+});
+
+function disableDropDownRangeOptions(max_values, minValue) {
+if (max_values) {
+  max_values.each(function() {
+    var maxValue = $(this).attr("value");
+
+    if (parseInt(maxValue) < parseInt(minValue)) {
+      $(this).addClass('disabled');
+    } else {
+      $(this).removeClass('disabled');
+    }
+  });
+}
+}
+
+function setuinvestRangeDropDownList(min_values, max_values, min_input, max_input, clearLink, dropDownControl) {
+min_values.click(function() {
+  var minValue = $(this).attr('value');
+  min_input.val(minValue);
+  document.getElementById('price_range1').innerHTML = minValue;
+
+  disableDropDownRangeOptions(max_values, minValue);
+
+  validateDropDownInputs();
+});
+
+max_values.click(function() {
+  var maxValue = $(this).attr('value');
+  max_input.val(maxValue);
+  document.getElementById('price_range2').innerHTML = maxValue;
+
+  toggleDropDown();
+});
+
+clearLink.click(function() {
+  min_input.val('');
+  max_input.val('');
+
+  disableDropDownRangeOptions(max_values);
+
+  validateDropDownInputs();
+});
+
+min_input.on('input',
+  function() {
+    var minValue = min_input.val();
+
+    disableDropDownRangeOptions(max_values, minValue);
+    validateDropDownInputs();
+  });
+
+max_input.on('input', validateDropDownInputs);
+
+max_input.blur('input',
+  function() {
+    toggleDropDown();
+  });
+
+function validateDropDownInputs() {
+  var minValue = parseInt(min_input.val());
+  var maxValue = parseInt(max_input.val());
+
+  if (maxValue > 0 && minValue > 0 && maxValue < minValue) {
+    min_input.addClass('inputError');
+    max_input.addClass('inputError');
+
+    return false;
+  } else {
+    min_input.removeClass('inputError');
+    max_input.removeClass('inputError');
+
+    return true;
+  }
+}
+
+function toggleDropDown() {
+  if (validateDropDownInputs() &&
+    parseInt(min_input.val()) > 0 &&
+    parseInt(max_input.val()) > 0) {
+
+    // auto close if two values are valid
+    dropDownControl.dropdown('toggle');
+  }
+}
+}
+
+setuinvestRangeDropDownList(
+$('.investRange .min_value'),
+$('.investRange .max_value'),
+$('.investRange .freeformPrice .min_input'),
+$('.investRange .freeformPrice .max_input'),
+$('.investRange .btnClear'),
+$('.investRange .dropdown-toggle'));
+
 </script>

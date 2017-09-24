@@ -405,10 +405,10 @@ function showCancellationResponse(resp, statusText, xhr, $form){
 }
 
 $("#booking").click(function(){
-	window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id="+$("#project_id").val();
+	window.location.href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
 });
-$("#camcellation").click(function(){
-	window.location.href = "${baseUrl}/builder/cancellation/Saleman_booking_new2.jsp?project_id="+$("#project_id").val();
+$("#cancellation").click(function(){
+	window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+$("#project_id").val();
 });
 $("#leads").click(function(){
 	window.location.href="${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>

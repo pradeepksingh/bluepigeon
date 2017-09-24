@@ -272,7 +272,7 @@ public class CancellationDAO {
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BookedBuyerList.class));
-		
+		System.err.println(hql);
 		List<BookedBuyerList> result = query.list();
 		return result;
 	}
@@ -285,7 +285,7 @@ public class CancellationDAO {
 	 * @return List<BookedBuyerList>
 	 */
 	
-	public List<BookedBuyerList> getCancelledBuyerList(int empId, int projectId, String name, int contactNumber){
+	public List<BookedBuyerList> getCancelledBuyerList(int empId, int projectId, String name, int contactNumber, long mobileNumber){
 		List<BookedBuyerList> result = null;
 		String hql = "select project.name as projectName,project.locality_name as localityName, city.name as cityName, building.name as buildingName, flat.flat_no as flatNo,cancel.buyer_name as buyerName, cancel.buyer_contact as buyerContact, cancel.reason as cancelReason, cancel.charges as charges ";
 		String where = "";
@@ -319,14 +319,28 @@ public class CancellationDAO {
 				where +=" cancel.buyer_name LIKE :name";
 			}
 		}
-		if(contactNumber > 0){
+		 if(contactNumber > 0 ){
+			 System.err.println("Hello from contact no. 1");
 			if(where != ""){
+				System.err.println("Hello from contact no. 2");
 				where += " AND cancel.buyer_contact LIKE :contact_number";
 			}else{
+				System.err.println("Hello from contact no. 3");
 				where +=" cancel.buyer_contact LIKE :contact_number";
 			}
 		}
-		hql += where + " AND project.status=1 AND buy.is_primary=1 AND buy.is_deleted=1 GROUP by cancel.id ORDER BY project.id desc";
+		if(mobileNumber >0){
+			System.err.println("Hello from mobile no. 1");
+			if(where != ""){
+				System.err.println("Hello from mobile no. 2");
+				where += " AND cancel.buyer_contact =:contact_number";
+			}else{
+				System.err.println("Hello from mobile no. 3");
+				where +=" cancel.buyer_contact =:contact_number";
+			}
+		}
+		
+		hql += where + " AND project.status=1 AND buy.is_primary=1 AND buy.is_deleted=1 GROUP by cancel.id ORDER BY cancel.id desc";
 		try {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BookedBuyerList.class));
@@ -340,11 +354,15 @@ public class CancellationDAO {
 		if(contactNumber > 0){
 			query.setParameter("contact_number", "%"+contactNumber+"%");
 		}
-		
+		if(mobileNumber>0){
+			query.setParameter("contact_number", mobileNumber);
+		}
+		System.err.println(hql);
 		 result = query.list();
 		
 		} catch(Exception e) {
 			//
+			e.printStackTrace();
 		}
 		
 		return result;

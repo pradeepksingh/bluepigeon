@@ -1,16 +1,21 @@
+.width30button{
+	
+width:45%;	
+}
+{
+	background-image:none !important;
+}
+.margin-p{
+    margin-top: -41px;
+}
+
 button:focus {outline:0;}
 input:focus {outline:0;}
 textarea:focus {outline:0;}
 .inputfile-box {
   position: relative;
 }
-.width30button{
-	
-width:46%;	
-}
-.margin-p{
-    margin-top: -41px;
-}
+
 .inputfile {
   display: none !important;
 }
@@ -221,7 +226,7 @@ label {
     border: 1px solid #e4e7ea;
     font-size: 17px;
     background: #fafafa;
-    width: 65% !important;
+    width: 56% !important;
 }
 .addlead .dropdown-toggle::after {
     display: inline-block;
@@ -266,7 +271,7 @@ label {
     background: #fafafa;
     width: 100% !important;
     padding-left:10px !important;
-    left:-131px !important;
+    left:-128px !important;
     border-top-color: #00bfd6 !importtant;
     }
 .addlead1 {
@@ -1087,8 +1092,6 @@ margin-top:20%;
     border: 1px solid #fafafa;
     border-radius: 0px;
     padding: 5px;
-    margin-top: -122px;
-    margin-left: 135px;
     font-size: 15px
     ;
     }
@@ -1722,7 +1725,7 @@ width: 47% !important;
     
     }
     select{
-/* 	background-image: url("../images/down-arrow.png")!important; */
+	background-image: url("../images/down-arrow.png")!important;
     background-repeat: no-repeat  !important;
     background-position:right   !important; 
     background-position: right 50px;
@@ -1768,7 +1771,7 @@ width: 47% !important;
      select{
     font-family: inherit;
     font-size: 20px !important;
-/*     border: 1px solid #00bfd6; */
+    border: 1px solid #00bfd6;
     border-radius: 0px;
     width: 95%;
     background: #fff;

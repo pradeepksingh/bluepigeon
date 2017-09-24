@@ -51,6 +51,7 @@ import org.bluepigeon.admin.data.ProjectPaymentSchedule;
 import org.bluepigeon.admin.data.ProjectWeightageData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
+import org.bluepigeon.admin.model.AllotLeads;
 import org.bluepigeon.admin.model.AreaUnit;
 import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderBuilding;
@@ -62,6 +63,7 @@ import org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom;
 import org.bluepigeon.admin.model.BuilderBuildingStatus;
 import org.bluepigeon.admin.model.BuilderCompany;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
+import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderFlatAmenity;
 import org.bluepigeon.admin.model.BuilderFlatAmenityStages;
@@ -168,14 +170,15 @@ public class ProjectController extends ResourceConfig {
 	@Path("/data/newlist")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuilderProjectList> getProjects(
-			@FormParam("project_id") int projectId,
+			//@FormParam("project_id") int projectId,
 			@FormParam("emp_id") int empId,
 			@FormParam("country_id") int countryId,
-			@FormParam("state_id") int stateId,
+			//@FormParam("state_id") int stateId,
 			@FormParam("city_id") int cityId,
-			@FormParam("locality_name") String localityName){
+			@FormParam("locality_name") String localityName,
+			@FormParam("project_status") int projectStatus){
 		
-		return new BuilderDetailsDAO().getProjectFilters(projectId,empId,countryId, stateId, cityId, localityName);
+		return new BuilderDetailsDAO().getProjectFilters(empId,countryId, cityId, localityName,projectStatus);
 	}
 	
 	@POST
@@ -213,15 +216,16 @@ public class ProjectController extends ResourceConfig {
 	@Path("/filter/builderemp")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BuilderProjectList> getProjectsByBuilderEmployee(
-			@FormParam("project_id") int projectId,
+			//@FormParam("project_id") int projectId,
 			@FormParam("emp_id") int empId,
 			@FormParam("country_id") int countryId,
-			@FormParam("state_id") int stateId,
+			//@FormParam("state_id") int stateId,
 			@FormParam("city_id") int cityId,
-			@FormParam("locality_name") String localityName
+			@FormParam("locality_name") String localityName,
+			@FormParam("project_status") int projectStatus
 			){
 		
-		return new BuilderDetailsDAO().getProjectFilters(projectId,empId,countryId,stateId,cityId,localityName);
+		return new BuilderDetailsDAO().getProjectFilters(empId,countryId,cityId,localityName, projectStatus);
 	}
 	
 	@POST
@@ -3783,9 +3787,10 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("maxprice") int max
 			//@FormParam("discount_offered") String discount_offered
 	) {
-		
-		
+		ResponseMessage resp = new ResponseMessage();
+		BuilderEmployee builderEmployee =  new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
 		BuilderLead builderLead = new BuilderLead();
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 7){
 		if(project_id > 0){
 		BuilderProject builderProject = new BuilderProject();
 		builderProject.setId(project_id);
@@ -3812,7 +3817,7 @@ public class ProjectController extends ResourceConfig {
 		builderLead.setDiscountOffered("");
 		builderLead.setIntrestedIn(1);
 		builderLead.setStatus(1);
-		ResponseMessage resp = new ProjectDAO().addProjectLead(builderLead); 
+		resp = new ProjectDAO().addProjectLead(builderLead); 
 		
 		if(resp.getId() > 0){
 			if(configs.size() > 0){
@@ -3832,8 +3837,218 @@ public class ProjectController extends ResourceConfig {
 				}
 			}
 		}
+		}
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
+			if(project_id > 0){
+				BuilderProject builderProject = new BuilderProject();
+				builderProject.setId(project_id);
+				builderLead.setBuilderProject(builderProject);
+				}
+				
+				builderLead.setFlatId(0);
+				builderLead.setBuildingId(0);
+				builderLead.setTypeId(0);
+				if(source_id > 0){
+					Source source = new Source();
+					source.setId(source_id);
+					builderLead.setSource(source);
+				}
+				builderLead.setLdate(new Date());
+				builderLead.setAddedBy(emp_id);
+				builderLead.setMin(min);
+				builderLead.setMax(max);
+				builderLead.setName(name);
+				builderLead.setMobile(mobile);
+				builderLead.setEmail(email);
+				builderLead.setArea("");
+				builderLead.setCity("");
+				builderLead.setDiscountOffered("");
+				builderLead.setIntrestedIn(1);
+				builderLead.setStatus(1);
+				 resp = new ProjectDAO().addProjectLead(builderLead); 
+				
+				if(resp.getId() > 0){
+					if(configs.size() > 0){
+						List<LeadConfig> leadConfig = new ArrayList<LeadConfig>();
+						for(FormDataBodyPart config : configs){
+						    LeadConfig leadConfig2 =  new LeadConfig();
+							BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration = new BuilderProjectPropertyConfiguration();
+							if(config.getValueAs(Integer.class) != null && config.getValueAs(Integer.class) != 0){
+								builderProjectPropertyConfiguration.setId(config.getValueAs(Integer.class));
+								leadConfig2.setBuilderProjectPropertyConfiguration(builderProjectPropertyConfiguration);
+								leadConfig2.setBuilderLead(builderLead);
+								leadConfig.add(leadConfig2);
+							}
+						}
+						if(leadConfig.size()>0){
+							new ProjectDAO().addLeadConfig(leadConfig);
+						}
+					}
+				}
+		}
 		return resp;
 	}
+	
+	
+	@POST
+	@Path("/lead/addnew1")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage newLead (
+			@FormDataParam("project_ids[]") List<FormDataBodyPart> project_ids,
+			@FormDataParam("emp_id") int emp_id,
+			@FormDataParam("leadname") String name,
+			@FormDataParam("mobile") String mobile,
+			@FormDataParam("email") String email,
+			@FormDataParam("configuration[]") List<FormDataBodyPart> configs,
+			@FormDataParam("source_id") int source_id,
+			@FormDataParam("minprice") int min,
+			@FormDataParam("maxprice") int max,
+			@FormDataParam("assignsalemans[]") List<FormDataBodyPart> salesmans
+	) {
+		ResponseMessage resp = new ResponseMessage();
+		BuilderLead builderLead = new BuilderLead();
+		try{
+			
+			BuilderEmployee builderEmployee =  new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() == 7){
+				if(project_ids.size() > 0){
+					for(FormDataBodyPart projectId : project_ids){
+						if(projectId.getValueAs(Integer.class) != null && projectId.getValueAs(Integer.class) != 0 ){
+					
+						BuilderProject builderProject = new BuilderProject();
+						builderProject.setId(projectId.getValueAs(Integer.class));
+						builderLead.setBuilderProject(builderProject);
+						}
+						builderLead.setFlatId(0);
+						builderLead.setBuildingId(0);
+						builderLead.setTypeId(0);
+						if(source_id > 0){
+							Source source = new Source();
+							source.setId(source_id);
+							builderLead.setSource(source);
+						}
+						builderLead.setLdate(new Date());
+						builderLead.setAddedBy(emp_id);
+						builderLead.setMin(min);
+						builderLead.setMax(max);
+						builderLead.setName(name);
+						builderLead.setMobile(mobile);
+						builderLead.setEmail(email);
+						builderLead.setArea("");
+						builderLead.setCity("");
+						builderLead.setDiscountOffered("");
+						builderLead.setIntrestedIn(1);
+						builderLead.setStatus(1);
+					
+					resp = new ProjectDAO().addProjectLead(builderLead); 
+					
+					if(resp.getId() > 0){
+						if(configs.size() > 0){
+							BuilderLead builderLead2 = new BuilderLead();
+							builderLead2.setId(resp.getId());
+							List<LeadConfig> leadConfig = new ArrayList<LeadConfig>();
+							for(FormDataBodyPart config : configs){
+							    LeadConfig leadConfig2 =  new LeadConfig();
+								BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration = new BuilderProjectPropertyConfiguration();
+								if(config.getValueAs(Integer.class) != null && config.getValueAs(Integer.class) != 0){
+									builderProjectPropertyConfiguration.setId(config.getValueAs(Integer.class));
+									leadConfig2.setBuilderProjectPropertyConfiguration(builderProjectPropertyConfiguration);
+									leadConfig2.setBuilderLead(builderLead2);
+									leadConfig.add(leadConfig2);
+								}
+							}
+							if(leadConfig.size()>0){
+								new ProjectDAO().addLeadConfig(leadConfig);
+							}
+						}
+					}
+				}
+			}
+			}
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
+				if(project_ids.size() > 0){
+					for(FormDataBodyPart projectId : project_ids){
+						if(projectId.getValueAs(Integer.class) != null && projectId.getValueAs(Integer.class) != 0){
+							BuilderProject builderProject = new BuilderProject();
+							builderProject.setId(projectId.getValueAs(Integer.class));
+							builderLead.setBuilderProject(builderProject);
+						}
+						builderLead.setFlatId(0);
+						builderLead.setBuildingId(0);
+						builderLead.setTypeId(0);
+						if(source_id > 0){
+							Source source = new Source();
+							source.setId(source_id);
+							builderLead.setSource(source);
+						}
+						builderLead.setLdate(new Date());
+						builderLead.setAddedBy(emp_id);
+						builderLead.setMin(min);
+						builderLead.setMax(max);
+						builderLead.setName(name);
+						builderLead.setMobile(mobile);
+						builderLead.setEmail(email);
+						builderLead.setArea("");
+						builderLead.setCity("");
+						builderLead.setDiscountOffered("");
+						builderLead.setIntrestedIn(1);
+						builderLead.setStatus(1);
+						resp = new ProjectDAO().addProjectLead(builderLead); 
+						if(resp.getId() > 0){
+							if(configs.size() > 0){
+								BuilderLead builderLead2 = new BuilderLead();
+								builderLead2.setId(resp.getId());
+								List<LeadConfig> leadConfig = new ArrayList<LeadConfig>();
+								for(FormDataBodyPart config : configs){
+								    LeadConfig leadConfig2 =  new LeadConfig();
+									BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration = new BuilderProjectPropertyConfiguration();
+									if(config.getValueAs(Integer.class) != null && config.getValueAs(Integer.class) != 0){
+										builderProjectPropertyConfiguration.setId(config.getValueAs(Integer.class));
+										leadConfig2.setBuilderProjectPropertyConfiguration(builderProjectPropertyConfiguration);
+										leadConfig2.setBuilderLead(builderLead2);
+										leadConfig.add(leadConfig2);
+									}
+								}
+								if(leadConfig.size()>0){
+									new ProjectDAO().addLeadConfig(leadConfig);
+								}
+							}
+						}
+						if(salesmans !=null){
+							if(salesmans.size() > 0){
+								List<AllotLeads> allotLeadList = new ArrayList<AllotLeads>();
+								for(FormDataBodyPart salesman : salesmans){
+									if(salesman.getValueAs(Integer.class) != 0 && salesman.getValueAs(Integer.class) != 0){
+										BuilderEmployee builderEmployee2 =  new BuilderEmployee();
+										builderEmployee2.setId(salesman.getValueAs(Integer.class));
+										BuilderLead builderLead2 = new BuilderLead();
+										builderLead2.setId(resp.getId());
+										AllotLeads allotLeads = new AllotLeads();
+										allotLeads.setBuilderEmployee(builderEmployee2);
+										allotLeads.setBuilderLead(builderLead);
+										allotLeadList.add(allotLeads);
+									}
+								}
+								if(allotLeadList.size() > 0){
+									new BuilderDetailsDAO().addAllotLead(allotLeadList);
+								}
+							}
+						}
+					}
+				}
+			
+			}
+			resp.setStatus(1);
+			resp.setMessage("Lead is saved succefully");
+		}catch(Exception e){
+			e.printStackTrace();
+			resp.setStatus(0);
+			resp.setMessage("Fail to save Leads");
+		}
+		return resp;
+	}
+	
 	
 	@POST
 	@Path("/lead/update")

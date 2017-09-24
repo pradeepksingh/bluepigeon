@@ -196,7 +196,7 @@ function getBookedBuyerFilterList(){
 	var htmlBookedBuyers = "";
 	var project_id = $("#filter_project_id").val();
 	var nameorNumber = $("#srch-term").val();
-	alert(nameorNumber);
+	
 	ajaxindicatorstart("Loading...");
 	$("#booked_buyers").empty();
 	$.post("${baseUrl}/webapi/cancellation/filter/cancel/buyers",{emp_id: emp_id, project_id : project_id, nameOrNumber : nameorNumber },function(data){

@@ -137,6 +137,7 @@
 	                 <%if(inboxMessageList != null){
 	                	 for(InboxMessageData inboxMessage : inboxMessageList){
 	                	 %>
+	                	 <a href="#inbox" onclick="javascript:getActiveProjectFlats();">
 	                  	<div class="border-lead1">
 		                  <div class="row">
 		                    <div class="col-md-2 col-sm-2 col-xs-2 user">
@@ -159,6 +160,7 @@
 		                    </div>
 		                  </div>
 	                  	</div>
+	                  	</a>
 	                  <%}} %>
 	                  </div>
 	              </div>
@@ -233,6 +235,81 @@
 		                     <div class="center">
 		                        <br/>
 							  	<button type="submit" class="button1">Send</button>
+							 </div>
+		                </form>	
+				   </div>
+			  	</div>
+		 	  </div>
+            </div>
+		  </div>
+       <!--  modal pop up ends -->
+         <!-- modal pop up -->
+        <div class="modal fade" id="myModal4" role="dialog">
+		   <div class="modal-dialog inbox">
+		      <div class="modal-content">
+		        <div class="modal-body">
+		           <div class="row">
+					  <div class="col-md-10 col-sm-10 col-xs-10">
+					    <h3>Compose</h3>
+				      </div>
+					  <div class="col-md-2 col-sm-2 col-xs-2">
+					     <img src="../images/error.png" alt="cancle" data-dismiss="modal">
+					   </div>
+				    </div>
+				  	<div class="row" id="inbox">
+				  	   <form class="addlead1 addlead" action="" method="post" id="addinbox" name="addinbox"  enctype="multipart/form-data">
+				  	   		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(empId); %>" />
+		                     <div class="">
+		                       <div class="form-group row">
+									<label for="example-text-input" class="col-5 col-form-label"> To</label>
+									  <div class="col-7">
+										<select id="filter_buyer_id" name="filter_buyer_id[]" multiple  data-style="form-control">
+	                        			<% if(buyerData != null){ 
+	                        				for(InboxBuyerData inboxBuyerData : buyerData){
+	                        			%>
+	                       					<option value="<%out.print(inboxBuyerData.getId());%>"><%out.print(inboxBuyerData.getName()); %></option>
+	                       					<%} }%>
+	                       	 			</select>
+									  </div>
+								  </div>
+		                         <div class="form-group row">
+									<label for="example-text-input" class="col-5 col-form-label"> Subject</label>
+									  <div class="col-7">
+									  	<div>
+											<input class="form-control" type="text"  id="subject" name="subject" placeholder="">
+									  	</div>
+									  	<div class="messageContainer"></div>
+									  </div>
+								  </div>
+								  <div class="form-group row">
+									 <label for="example-search-input" class="col-5 col-form-label">Message</label>
+										<div class="col-7">
+											<div>
+											  <textarea id="message" name="message">
+											  </textarea>
+										 	  </div>
+										 	  <div class="messageContainer"></div>
+										</div>
+								    </div>
+									<div class="form-group row">
+									   <label for="example-search-input" class="col-5 col-form-label">Attachment</label>
+										  <div class="col-7">
+										     <div class="inputfile-box">
+											   <input type="file" id="file" name="attachment[]" class="inputfile" onchange='uploadFile(this)'>
+											   <label for="file">
+											     <span id="file-name" class="file-box"></span>
+											     <span class="file-button">
+											      <i class="fa fa-upload" aria-hidden="true"></i>
+											      Choose file
+											     </span>
+											  </label>
+											</div>
+										  </div>
+									 </div>
+		                         </div>
+		                     <div class="center">
+		                        <br/>
+							  	<button type="submit" class="button1">Replay</button>
 							 </div>
 		                </form>	
 				   </div>
@@ -416,5 +493,9 @@ function getBuyerNames(){
 			});
 			 ajaxindicatorstop();
 	});
+}
+
+function getActiveProjectFlats(){
+$("#myModal4").modal('show');
 }
 </script>

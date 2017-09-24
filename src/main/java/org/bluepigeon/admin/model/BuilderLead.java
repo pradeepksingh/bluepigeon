@@ -75,7 +75,7 @@ public class BuilderLead implements java.io.Serializable {
 	public BuilderLead( BuilderProject builderProject,
 			 String name, String mobile, String email, String area, String city,
 			Source source, Integer intrestedIn, String discountOffered, Integer addedBy,
-			Integer status,Integer min,Integer max, Integer leadStatus, Date ldate) {
+			Integer status,Integer min,Integer max, Integer leadStatus, Date lDate) {
 		//this.builderBuilding = builderBuilding;
 		//this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
@@ -274,7 +274,6 @@ public class BuilderLead implements java.io.Serializable {
 	public Integer getMax() {
 		return max;
 	}
-
 	public void setMax(Integer max) {
 		this.max = max;
 	}
@@ -282,7 +281,6 @@ public class BuilderLead implements java.io.Serializable {
 	public Integer getLeadStatus() {
 		return leadStatus;
 	}
-
 	public void setLeadStatus(Integer leadStatus) {
 		this.leadStatus = leadStatus;
 	}
@@ -290,10 +288,7 @@ public class BuilderLead implements java.io.Serializable {
 	public Date getLdate() {
 		return lDate;
 	}
-
 	public void setLdate(Date lDate) {
 		this.lDate = lDate;
 	}
-
-	
 }

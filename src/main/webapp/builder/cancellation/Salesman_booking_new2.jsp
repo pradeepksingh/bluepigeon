@@ -319,6 +319,9 @@ $("#campaign").click(function(){
 $("#leads").click(function(){
 	window.location.href="${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
 });
+$("#cancellation").click(function(){
+	window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(project_id);%>
+});
 <% if(flatListDatas !=null){%>
 $(document).ready(function () {
 		 <%for(int i=0;i<flatListDatas.size();i++){
@@ -501,7 +504,7 @@ function showFlatwithImage(id){
 			        +'<p class="p-custom">PAN</p>'
 			        +'<p><b>'+data.buyerPanNo+'</b></p>'
 			        +'<p class="p-custom">Adhar card no.</p>'
-			        +'<p><b></b></p>'
+			        +'<p><b>'+data.buyerAadhaarNumber+'</b></p>'
 			        +'<p class="p-custom">Permanent Address</p>'
 			        +'<p><b>'+data.buyerPermanentAddress+'</b></p>'
 			        +'<p class="p-custom">Current Address</p>'

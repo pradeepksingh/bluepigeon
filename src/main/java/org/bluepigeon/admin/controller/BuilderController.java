@@ -33,6 +33,7 @@ import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.data.InboxBuyerData;
 import org.bluepigeon.admin.data.InboxMessageData;
+import org.bluepigeon.admin.data.NewLeadList;
 import org.bluepigeon.admin.data.ProjectWiseData;
 //import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -640,5 +641,31 @@ public class BuilderController {
 			){
 		ResponseMessage responseMessage =  new BuilderDetailsDAO().updateLeadStatus(value, leadId);
 		return responseMessage;
+	}
+	
+	@POST
+	@Path("/filter/newlead")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<NewLeadList> getLeadList(
+			@FormParam("emp_id") int empId,
+			@FormParam("project_id") int projectId,
+			@FormParam("name") String nameOrNumber
+		){
+		int contactNumber = 0;
+		String name = "";
+		try{
+			contactNumber = Integer.parseInt(nameOrNumber);
+			System.err.println("contact Number :: "+contactNumber);
+		}catch(NumberFormatException e){
+			name = nameOrNumber;
+			contactNumber = 0;
+			System.err.println("Name :: "+name);
+		}catch(NullPointerException e){
+			
+		}
+		catch(Exception e){
+			
+		}
+		return new ProjectDAO().getNewLeadListFilter(empId,projectId,name,contactNumber);
 	}
 }

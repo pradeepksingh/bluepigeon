@@ -441,6 +441,7 @@ public class BuyerController {
 			@FormDataParam("stamp_duty") Double stamp_duty,
 			@FormDataParam("tax") Double tax,
 			@FormDataParam("vat") Double vat,
+			@FormDataParam("total_sale_value") Double totalCost,
 			//@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_title,
 			//@FormDataParam("discount[]") List<FormDataBodyPart> discount,
 			//@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amount,
@@ -615,6 +616,7 @@ public class BuyerController {
 				buyingDetails.setTaxes(tax);
 				buyingDetails.setTenure(tenure);
 				buyingDetails.setVat(vat);
+				buyingDetails.setTotalCost(totalCost);
 				buyerDAO.saveBuyingDetails(buyingDetails);
 			}
 			if(schedule != null){

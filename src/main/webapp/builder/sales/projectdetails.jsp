@@ -469,12 +469,6 @@
 $(document).ready(function(){ 
 	$('.item').first().addClass('active');
 });
-// window.openNewModal = function() {
-// 	$('#saleFlat').modal('hide');
-// 	setTimeout(function() {
-//     	$('#saleFlat').modal('show');
-//     }, 500);
-// }
 $("#building_id").change(function(){
 	$.get("${baseUrl}/webapi/project/building/floor/names/"+$("#building_id").val(),{},function(data){
 		var html = '<option value="0">Select Floor</option>';
@@ -493,7 +487,6 @@ $("#even_odd_id").change(function(){
 });
 function getActiveProjectFlats(){
 	$("#flatList").empty();
-	// $("#next").empty();
 	var buildingImg = "";
 	var html = " ";
 	var i = 1;
@@ -502,7 +495,6 @@ function getActiveProjectFlats(){
 		 if(data == ""){
 			   $("#flatList").empty();
 			   $("#flatList").append("<h2><center>Sorry No Flats Found</center></h2>");
-			   //$("#next").empty();
 		 }else{
 			$(data).each(function(index){
 				if(i==1){
@@ -513,11 +505,8 @@ function getActiveProjectFlats(){
 				
 				$(data[index].buildingListDatas).each(function(index1){
 					i++;
-					//alert(i);
-					//alert(active);
 					html+="<div class='item "+active+"'><div class='row'><div class='col-md-9'><div class='col-sm-12'><label for='password' class='control-label bold'>Building "+data[index].buildingListDatas[index1].buildingName+"</label></div>";
 					buildingImg = data[index].buildingListDatas[index1].buildingImage;
-					
 					$(data[index].buildingListDatas[index1].floorListDatas).each(function(index2){
 						html+="<div class='row'><div class='col-sm-2'><label for='password' class='control-label'><b>"+data[index].buildingListDatas[index1].floorListDatas[index2].floorName+"</b></div>";
 						$(data[index].buildingListDatas[index1].floorListDatas[index2].flatStatusDatas).each(function(index3){
@@ -528,28 +517,19 @@ function getActiveProjectFlats(){
 							}
 						});
 						html+="</div></div><div class='col-md-3'>";
-						
 						html+="<image src='${baseUrl}/"+buildingImg+"' alt='Building Image' width='100%'>";
 						html+="</div></div></div>";
 					});
 				});
 			});
-			//alert(html);
 		   $("#flatList").append(html);
 		   $("#saleFlat").modal('show');
-		  
 		}
 	},'json');
 }
-// $("#myradiobuttonlist").click(function(){
-// 	var flatId = $("#myradiobuttonlist input[type='radio']:checked").val();
-// 	alert(flatId);
-// });
+
 function addBuyer(){
- // $flatId = $("#myradiobuttonlist input[type='radio']:checked").val();
 	var flatId =   $('input[name="addnewbuyer"]:checked').val();
-//  	alert($("#myradiobuttonlist").val());
- 	//alert(flatId);
  	window.location.href = "${baseUrl }/builder/buyer/new.jsp?flat_id="+flatId;
 }
 function showModal(id) {

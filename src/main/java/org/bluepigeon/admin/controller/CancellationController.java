@@ -132,21 +132,35 @@ public class CancellationController {
 			@FormParam("nameOrNumber") String nameOrNumber
 		){
 		int contactNumber = 0;
+		long mobileNumber = 0;
 		String name = "";
 		try{
-			contactNumber = Integer.parseInt(nameOrNumber);
+//			if(nameOrNumber.length() == 10)
+//				mobileNumber = Integer.parseInt(nameOrNumber);
+			if(nameOrNumber.length() >0 && nameOrNumber.length()<=10){
+				if(nameOrNumber.length() > 0 && nameOrNumber.length() <10){
+					contactNumber = Integer.parseInt(nameOrNumber);
+					mobileNumber = 0;
+				}
+				else{
+					mobileNumber = Integer.parseInt(nameOrNumber);
+					contactNumber = 0;
+				}
+			}
 			System.err.println("contact Number :: "+contactNumber);
+			System.err.println("Contact Number:: "+mobileNumber);
 		}catch(NumberFormatException e){
 			name = nameOrNumber;
 			contactNumber = 0;
+			mobileNumber = Long.parseLong(nameOrNumber);
 			System.err.println("Name :: "+name);
 		}catch(NullPointerException e){
-			
+			e.printStackTrace();
 		}
 		catch(Exception e){
-			
+			e.printStackTrace();
 		}
-		return new CancellationDAO().getCancelledBuyerList(empId, projectId,  name,  contactNumber);
+		return new CancellationDAO().getCancelledBuyerList(empId,projectId,name,contactNumber,mobileNumber);
 		
 	}
 }
