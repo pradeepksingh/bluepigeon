@@ -45,7 +45,6 @@ public class BuilderBuilding implements java.io.Serializable {
 	private Byte status;
 	private String image = "";
 	private Set<BuilderFloor> builderFloors = new HashSet<BuilderFloor>(0);
-
 	public BuilderBuilding() {
 	}
 

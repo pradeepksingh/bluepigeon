@@ -6203,15 +6203,19 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		System.err.println(builderLeads.size());
 		System.err.println("ProjectId :: "+projectId);
 		if(builderLeads != null){
+			if(builderLeads.size() > 0 && !builderLeads.isEmpty()){
 			for(BuilderLead builderLead : builderLeads){
 				NewLeadList newLeadList =new NewLeadList();
 				newLeadList.setId(builderLead.getId());
 				System.err.println(builderLead.getName());
+				if(builderLead.getName()!=null && builderLead.getName() != ""){
 				newLeadList.setLeadName(builderLead.getName());
+				}else{
+					newLeadList.setLeadName("No Name fond..");
+				}
 				newLeadList.setPhoneNo(builderLead.getMobile());
 				newLeadList.setEmail(builderLead.getEmail());
 				if(builderLead.getLdate() != null){
-					
 					strDate = simpleDateFormat.format(builderLead.getLdate());
 					newLeadList.setStrDate(strDate);
 				newLeadList.setlDate(builderLead.getLdate());
@@ -6261,6 +6265,9 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 				newLeadList.setConfigDatas(configDatas);
 				leadLists.add(newLeadList);
 			}
+		}else{
+			System.err.println("No Lead name found....");
+		}
 		}
 		}catch(Exception e){
 			e.printStackTrace();
