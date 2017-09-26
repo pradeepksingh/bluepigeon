@@ -232,7 +232,7 @@
 								        <label for="example-tel-input" class="col-sm-5 col-form-label">Aadhaar No.*</label>
 								        <div class="col-sm-7 custom-col">
 								        	<div>
-								            	<input class="form-control" type="text" autocomplete="off" id="aadhaar_no" name="aadhaar_no[]" placeholder="Aadhaar Card No.">
+								            	<input class="form-control" type="text" autocomplete="off" id="aadhaar_no" name="aadhaar_no[]" placeholder="enter aadhaar card no.">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -241,7 +241,7 @@
 								        <label for="example-tel-input" class="col-sm-5 col-form-label">Refferal Id*</label>
 								        <div class="col-sm-7 custom-col">
 								        	<div>
-								            	<input class="form-control" type="text" autocomplete="off"  id="refferal_id" name="refferal_id[]">
+								            	<input class="form-control" type="text" autocomplete="off"  id="refferal_id" name="refferal_id[]"  placeholder="enter refferal id.">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>

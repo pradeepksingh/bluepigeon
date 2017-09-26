@@ -3784,65 +3784,78 @@ public class ProjectController extends ResourceConfig {
 			//@FormParam("area") String area,
 			@FormDataParam("select_source") int source_id,
 			@FormDataParam("minprice") int min,
-			@FormDataParam("maxprice") int max
+			@FormDataParam("maxprice") int max,
+			@FormDataParam("assignsalemans[]") List<FormDataBodyPart> salesmans
 			//@FormParam("discount_offered") String discount_offered
 	) {
 		ResponseMessage resp = new ResponseMessage();
 		BuilderEmployee builderEmployee =  new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
 		BuilderLead builderLead = new BuilderLead();
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 7){
-		if(project_id > 0){
-		BuilderProject builderProject = new BuilderProject();
-		builderProject.setId(project_id);
-		builderLead.setBuilderProject(builderProject);
-		}
-		
-		builderLead.setFlatId(0);
-		builderLead.setBuildingId(0);
-		builderLead.setTypeId(0);
-		if(source_id > 0){
-			Source source = new Source();
-			source.setId(source_id);
-			builderLead.setSource(source);
-		}
-		builderLead.setLdate(new Date());
-		builderLead.setAddedBy(emp_id);
-		builderLead.setMin(min);
-		builderLead.setMax(max);
-		builderLead.setName(name);
-		builderLead.setMobile(mobile);
-		builderLead.setEmail(email);
-		builderLead.setArea("");
-		builderLead.setCity("");
-		builderLead.setDiscountOffered("");
-		builderLead.setIntrestedIn(1);
-		builderLead.setStatus(1);
-		resp = new ProjectDAO().addProjectLead(builderLead); 
-		
-		if(resp.getId() > 0){
-			if(configs.size() > 0){
-				List<LeadConfig> leadConfig = new ArrayList<LeadConfig>();
-				for(FormDataBodyPart config : configs){
-				    LeadConfig leadConfig2 =  new LeadConfig();
-					BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration = new BuilderProjectPropertyConfiguration();
-					if(config.getValueAs(Integer.class) != null && config.getValueAs(Integer.class) != 0){
-						builderProjectPropertyConfiguration.setId(config.getValueAs(Integer.class));
-						leadConfig2.setBuilderProjectPropertyConfiguration(builderProjectPropertyConfiguration);
-						leadConfig2.setBuilderLead(builderLead);
-						leadConfig.add(leadConfig2);
-					}
-				}
-				if(leadConfig.size()>0){
-					new ProjectDAO().addLeadConfig(leadConfig);
-				}
-			}
-		}
-		}
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
 			if(project_id > 0){
 				BuilderProject builderProject = new BuilderProject();
 				builderProject.setId(project_id);
 				builderLead.setBuilderProject(builderProject);
+			}
+			
+			builderLead.setFlatId(0);
+			builderLead.setBuildingId(0);
+			builderLead.setTypeId(0);
+			if(source_id > 0){
+				Source source = new Source();
+				source.setId(source_id);
+				builderLead.setSource(source);
+			}
+			builderLead.setLdate(new Date());
+			builderLead.setAddedBy(emp_id);
+			builderLead.setMin(min);
+			builderLead.setMax(max);
+			builderLead.setName(name);
+			builderLead.setMobile(mobile);
+			builderLead.setEmail(email);
+			builderLead.setLdate(new Date());
+			builderLead.setLeadStatus(1);
+			builderLead.setArea("");
+			builderLead.setCity("");
+			builderLead.setDiscountOffered("");
+			builderLead.setIntrestedIn(1);
+			builderLead.setStatus(1);
+			resp = new ProjectDAO().addProjectLead(builderLead); 
+			
+			if(resp.getId() > 0){
+				if(configs.size() > 0){
+					List<LeadConfig> leadConfig = new ArrayList<LeadConfig>();
+					for(FormDataBodyPart config : configs){
+					    LeadConfig leadConfig2 =  new LeadConfig();
+						BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration = new BuilderProjectPropertyConfiguration();
+						if(config.getValueAs(Integer.class) != null && config.getValueAs(Integer.class) != 0){
+							builderProjectPropertyConfiguration.setId(config.getValueAs(Integer.class));
+							leadConfig2.setBuilderProjectPropertyConfiguration(builderProjectPropertyConfiguration);
+							leadConfig2.setBuilderLead(builderLead);
+							leadConfig.add(leadConfig2);
+						}
+					}
+					if(leadConfig.size()>0){
+						new ProjectDAO().addLeadConfig(leadConfig);
+					}
+				}
+			}
+			if(resp.getId() > 0){
+				List<AllotLeads> allotLeadList = new ArrayList<AllotLeads>();
+				AllotLeads allotLeads = new AllotLeads();
+				allotLeads.setBuilderEmployee(builderEmployee);
+				allotLeads.setBuilderLead(builderLead);
+				allotLeadList.add(allotLeads);
+				if(allotLeadList.size() > 0){
+					new BuilderDetailsDAO().addAllotLead(allotLeadList);
+				}
+			}
+		}
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
+			if(project_id > 0){
+					BuilderProject builderProject = new BuilderProject();
+					builderProject.setId(project_id);
+					builderLead.setBuilderProject(builderProject);
 				}
 				
 				builderLead.setFlatId(0);
@@ -3860,6 +3873,8 @@ public class ProjectController extends ResourceConfig {
 				builderLead.setName(name);
 				builderLead.setMobile(mobile);
 				builderLead.setEmail(email);
+				builderLead.setLeadStatus(1);
+				builderLead.setLdate(new Date());
 				builderLead.setArea("");
 				builderLead.setCity("");
 				builderLead.setDiscountOffered("");
@@ -3882,6 +3897,26 @@ public class ProjectController extends ResourceConfig {
 						}
 						if(leadConfig.size()>0){
 							new ProjectDAO().addLeadConfig(leadConfig);
+						}
+					}
+				}
+				if(salesmans !=null){
+					if(salesmans.size() > 0){
+						List<AllotLeads> allotLeadList = new ArrayList<AllotLeads>();
+						for(FormDataBodyPart salesman : salesmans){
+							if(salesman.getValueAs(Integer.class) != 0 && salesman.getValueAs(Integer.class) != 0){
+								BuilderEmployee builderEmployee2 =  new BuilderEmployee();
+								builderEmployee2.setId(salesman.getValueAs(Integer.class));
+								BuilderLead builderLead2 = new BuilderLead();
+								builderLead2.setId(resp.getId());
+								AllotLeads allotLeads = new AllotLeads();
+								allotLeads.setBuilderEmployee(builderEmployee2);
+								allotLeads.setBuilderLead(builderLead);
+								allotLeadList.add(allotLeads);
+							}
+						}
+						if(allotLeadList.size() > 0){
+							new BuilderDetailsDAO().addAllotLead(allotLeadList);
 						}
 					}
 				}
@@ -3929,6 +3964,7 @@ public class ProjectController extends ResourceConfig {
 							builderLead.setSource(source);
 						}
 						builderLead.setLdate(new Date());
+						builderLead.setLeadStatus(1);
 						builderLead.setAddedBy(emp_id);
 						builderLead.setMin(min);
 						builderLead.setMax(max);
@@ -3963,6 +3999,16 @@ public class ProjectController extends ResourceConfig {
 							}
 						}
 					}
+					if(resp.getId() > 0){
+						List<AllotLeads> allotLeadList = new ArrayList<AllotLeads>();
+						AllotLeads allotLeads = new AllotLeads();
+						allotLeads.setBuilderEmployee(builderEmployee);
+						allotLeads.setBuilderLead(builderLead);
+						allotLeadList.add(allotLeads);
+						if(allotLeadList.size() > 0){
+							new BuilderDetailsDAO().addAllotLead(allotLeadList);
+						}
+					}
 				}
 			}
 			}
@@ -3983,6 +4029,7 @@ public class ProjectController extends ResourceConfig {
 							builderLead.setSource(source);
 						}
 						builderLead.setLdate(new Date());
+						builderLead.setLeadStatus(1);
 						builderLead.setAddedBy(emp_id);
 						builderLead.setMin(min);
 						builderLead.setMax(max);

@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.data.NewLeadList"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectPropertyConfigurationInfo"%>
 <%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
@@ -26,6 +27,7 @@
 	int emp_id =0 ;
 	int access_id = 0;
  	//List<ProjectData> builderProjects =null;
+ 	List<BuilderEmployee> salesmanList = null;
  	List<Source> sourceList = null;
  	BuilderProject builderProject = null;
  	List<NewLeadList> newLeadLists = null;
@@ -49,19 +51,18 @@
 				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
 					 builderProject = new ProjectDAO().getBuilderActiveProjectById(projectId);
 					 builderProjectPropertyConfigurationInfos = new ProjectDAO().getPropertyConfigByProjectId(projectId);
-					 newLeadLists = new ProjectDAO().getNewLeadList(projectId);
+					 newLeadLists = new ProjectDAO().getNewLeadList(projectId,builder);
 			}
 			if(builderPropertyTypes != null){
 			 	if(builderPropertyTypes.size()>0)
 			 		type_size = builderPropertyTypes.size();
 			}
+			if(access_id ==5){
+				salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
+			}
 		}
-		
-		
    }
-   
 %>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -154,7 +155,7 @@ color: #ccc;
                 color: #E5E4E2;
             }
             .price_Ranges a:hover {
-               background: #0074e4;
+               background: #00bfd6;
                color: #fff;
                cursor: pointer; 
     text-decoration: none;
@@ -173,6 +174,9 @@ color: #ccc;
                 box-shadow: inset 0 0 5px #F7BDBB;
                 border-radius: 0;
             }
+            .ms-options-wrap > .ms-options > ul li.selected label, .ms-options-wrap > .ms-options > ul label:hover {
+    background-color: #00bfd6;
+}
 		</style>
 </head>
 
@@ -308,27 +312,25 @@ color: #ccc;
 	                     <h6><%out.print(newLeadList.getSalemanName()); %></h6>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                     <h6>Rs <%out.print(newLeadList.getMin());%> -<%out.print(newLeadList.getMax()); %> Lakh</h6>
+	                     <h6> <% if(newLeadList.getMin()>0 && newLeadList.getMax()==0 ){
+	                    	 out.print("Greater than Rs"+newLeadList.getMin()+" Lakh");
+	                     }else if(newLeadList.getMin() == 0 && newLeadList.getMax() >0){
+	                    	 out.print("upto Rs"+newLeadList.getMax()+ "Lakh");
+	                     }else{                    
+		                     out.print("Rs "+newLeadList.getMin());%> -<%out.print(newLeadList.getMax()+" Lakh");
+	                     } %> </h6>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
 	                      <h6>
-	                      <%
-	                      int a=newLeadList.getConfigDatas().size();
-	                      for(int i=0;i<newLeadList.getConfigDatas().size();i++){ 
-	                      	if(a>1){
-	                      		out.print(newLeadList.getConfigDatas().get(i).getName()+", ");
-	                      		a--;
-	                      	}else{
-	                      		out.print(newLeadList.getConfigDatas().get(i).getName());
-	                      	}
-	                      } %>
+	                      <%out.print(newLeadList.getConfigName());
+	                      %>
 	                      </h6>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
 	                      <h6><%out.print(newLeadList.getSource()); %></h6>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                      <h6>Date: <b><% if(newLeadList.getlDate() != null){ out.print(newLeadList.getStrDate());} %></b></h6>
+	                      <h6>Date: <b><% if(newLeadList.getStrDate() != null){ out.print(newLeadList.getStrDate());} %></b></h6>
 	                    </div>
 	                 </div>
 	               </div>
@@ -522,7 +524,24 @@ color: #ccc;
 
     </div>
   </div>
-								</div>
+								
+								 <%if(access_id ==5){ %>
+							 
+							 <div class="form-group row">
+							 <label for="example-search-input" class="col-5 col-form-label">Assign Salesman</label>
+								<div class="col-7">
+									<div>
+								   		<select id="assignsalemans" name="assignsalemans[]" multiple>
+									    <%if(salesmanList != null){
+								    	  for(BuilderEmployee  builderEmployee: salesmanList){%>
+								      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
+								      	 <%}} %>
+									     </select>
+								     </div>
+								 </div>
+						    </div>
+						    <%} %>
+						    </div>
 								<div class="center bcenter">
 							  	   <button type="submit" class="button1">Save</button>
 							  	</div>
@@ -634,27 +653,21 @@ $('#addnewlead').bootstrapValidator({
                 }
             }
         },
-//         project_id: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Project is required and cannot be empty'
-//                 }
-//             }
-//         },
-//         city: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'City Name is required and cannot be empty'
-//                 }
-//             }
-//         },
-//         area: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Locality Name is required and cannot be empty'
-//                 }
-//             }
-//         },
+        select_source:{
+        	validators: {
+            	notEmpty: {
+                    message: 'The source is required and cannot be empty'
+                }
+        	}
+        },
+        'configuration[]':{
+        	validators: {
+            	notEmpty: {
+                    message: 'The configurations are required and cannot be empty'
+                }
+        	}
+        },
+
         pricemin:{
             validators: {
                 notEmpty: {
@@ -717,6 +730,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         ajaxindicatorstop();
   	}
 }
+<%if(access_id == 7){%>
 function changeLeadStatus(value,id){
 	
 	ajaxindicatorstart("Loading...");
@@ -763,6 +777,7 @@ function changeLeadStatus(value,id){
 		
 	});
 }
+<%}%>
 $("searchleads").click(function(){
 	alert("hello");
 

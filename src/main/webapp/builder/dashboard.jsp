@@ -228,16 +228,6 @@
                 <div class="white-box">
                    <div class="row">
                     <div class="col-md-3 col-sm-6 col-xs-12">
-                        <select id="project_id" name="project_id">
-                             <option value="0">Enter Project Name</option>
-                             <%
-                             if(project_list != null){
-                             for(ProjectList projectList : project_list){%>
-                             <option value="<%out.print(projectList.getId());%>"><%out.print(projectList.getName()); %></option>
-                             <% }}%>
-                        </select>
-                    </div>
-                    <div class="col-md-3 col-sm-6 col-xs-12">
                       <select  id="city_id" name="city_id">
                        		<option value="0">Enter City Name</option>
                             <%
@@ -252,6 +242,16 @@
 							<select id="locality_name" name="locality_name">
                                         <option value="">Locality</option>
                         	</select>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <select id="project_id" name="project_id">
+                             <option value="0">Enter Project Name</option>
+                             <%
+                             if(project_list != null){
+                             for(ProjectList projectList : project_list){%>
+                             <option value="<%out.print(projectList.getId());%>"><%out.print(projectList.getName()); %></option>
+                             <% }}%>
+                        </select>
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                        <select id="project_status" name="project_status">

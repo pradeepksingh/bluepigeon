@@ -15,7 +15,7 @@
 <!--Wave Effects -->
 <%-- <script src="${baseUrl}/builder/js/waves.js"></script> --%>
 <!-- Custom Theme JavaScript -->
-<script src="${baseUrl}/builder/js/custom.min.js"></script>
+<%-- <script src="${baseUrl}/builder/js/custom.min.js"></script> --%>
 <!--Morris JavaScript -->
 <%-- <script src="${baseUrl}/builder/plugins/bower_components/datatables/jquery.dataTables.min.js"></script> --%>
  <!-- Footable -->

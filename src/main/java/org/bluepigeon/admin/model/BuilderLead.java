@@ -41,14 +41,14 @@ public class BuilderLead implements java.io.Serializable {
 	private Integer typeId = 0;
 	private Integer min=0;
 	private Integer max=0;
-	private Integer leadStatus = 0;
+	private Integer leadStatus = 1;
 	private Date lDate;
 	public BuilderLead() {
 	}
 
-	public BuilderLead(BuilderProject builderProject) {
-		this.builderProject = builderProject;
-	}
+//	public BuilderLead(BuilderProject builderProject) {
+//		this.builderProject = builderProject;
+//	}
 
 //	 public BuilderLead(BuilderBuilding builderBuilding, BuilderFlat
 //	 builderFlat, BuilderProject builderProject,

@@ -48,7 +48,7 @@ public class BuilderFlat implements java.io.Serializable {
 	private Double weightage = 0.0;
 	private Byte status;
 	private String image = "";
-	private Set<BuilderLead> builderLeads = new HashSet<BuilderLead>(0);
+	//private Set<BuilderLead> builderLeads = new HashSet<BuilderLead>(0);
 
 	public BuilderFlat() {
 	}
@@ -219,14 +219,14 @@ public class BuilderFlat implements java.io.Serializable {
 		this.status = status;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderFlat")
-	public Set<BuilderLead> getBuilderLeads() {
-		return this.builderLeads;
-	}
-
-	public void setBuilderLeads(Set<BuilderLead> builderLeads) {
-		this.builderLeads = builderLeads;
-	}
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "builderFlat")
+//	public Set<BuilderLead> getBuilderLeads() {
+//		return this.builderLeads;
+//	}
+//
+//	public void setBuilderLeads(Set<BuilderLead> builderLeads) {
+//		this.builderLeads = builderLeads;
+//	}
 
 	@Column(name = "completion_status", columnDefinition = "Decimal(10,2) default '100.00'")
 	public Double getCompletionStatus() {

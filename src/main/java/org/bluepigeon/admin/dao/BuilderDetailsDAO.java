@@ -1592,7 +1592,8 @@ public class BuilderDetailsDAO {
 	
 	public List<InboxMessageData> getBookedBuyerList(int empId, String name,int contactNumber){
 		List<InboxMessageData> result = null;
-		String hql = "SELECT b.name as name, b.photo as image, im.subject as subject, im.im_date as date  ";
+		//String hql = "SELECT b.name as name, b.photo as image, im.subject as subject, im.im_date as date  ";
+		String hql =" SELECT a.name as name, a.photo as image, b.im_date as date, b.subject as subject";
 		String where = "";
 		String hqlnew = "from BuilderEmployee where id = "+empId;
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -1602,11 +1603,9 @@ public class BuilderDetailsDAO {
 		BuilderEmployee builderEmployee = employees.get(0);
 		sessionnew.close();
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
-			hql += " FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
-					+ "left join builder_project as bproject on bproject.id = b.project_id "
-					+ "left join allot_project as ap on ap.id = b.project_id  "
+			hql += " from buyer as a join inbox_message as b on b.buyer_id=a.id "
 					+ "WHERE ";
-					where+= "ap.emp_id="+builderEmployee.getId();
+					where+= "b.emp_id="+builderEmployee.getId();
 		}else{
 			hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
 					+ "left join builder as build on build.id = b.builder_id  "
@@ -1616,19 +1615,19 @@ public class BuilderDetailsDAO {
 		
 		if(name != ""){
 			if(where != ""){
-				where += " AND b.name LIKE :name";
+				where += " AND a.name LIKE :name";
 			}else{
-				where +=" b.name LIKE :name";
+				where +=" a.name LIKE :name";
 			}
 		}
-		if(contactNumber > 0){
-			if(where != ""){
-				where += " AND b.mobile LIKE :contact_number";
-			}else{
-				where +=" b.mobile LIKE :contact_number";
-			}
-		}
-		hql += where + " AND bproject.status=1 AND b.is_primary=1 AND b.is_deleted=0 AND b.status=0 ORDER BY im.id desc";
+//		if(contactNumber > 0){
+//			if(where != ""){
+//				where += " AND b.mobile LIKE :contact_number";
+//			}else{
+//				where +=" b.mobile LIKE :contact_number";
+//			}
+//		}
+		hql += where + " AND a.is_primary=1 and a.is_deleted=0 and a.status=0 GROUP by b.id ORDER by b.id DESC";
 		try {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(InboxMessageData.class));

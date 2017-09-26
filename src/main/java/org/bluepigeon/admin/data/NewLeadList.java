@@ -18,6 +18,7 @@ public class NewLeadList {
 	private String strDate;
 	private int min;
 	private int max;
+	private String ConfigName;
 	private List<ConfigData> configDatas;
 	
 	public int getId() {
@@ -98,4 +99,11 @@ public class NewLeadList {
 	public void setStrDate(String strDate) {
 		this.strDate = strDate;
 	}
+	public String getConfigName() {
+		return ConfigName;
+	}
+	public void setConfigName(String configName) {
+		ConfigName = configName;
+	}
+	
 }

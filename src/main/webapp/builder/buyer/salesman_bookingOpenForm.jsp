@@ -170,7 +170,7 @@
 		                    <button type="submit" id="leads"  class="btn11 btn-info waves-effect waves-light m-t-10">Leads</button>
 		                </div>
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" id="campaign" class="btn11 btn-info waves-effect waves-light m-t-10">Campain</button>
+		                    <button type="submit" id="campaign" class="btn11 btn-info waves-effect waves-light m-t-10">Campaign</button>
 		                </div>
 	                </div>
                <!-- row -->
