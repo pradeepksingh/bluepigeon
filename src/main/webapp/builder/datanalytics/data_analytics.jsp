@@ -141,7 +141,7 @@
                 <!-- /.row -->
                 <!-- .row -->
                 <div class="row">
-                    <div class="col-md-8 col-sm-6 col-xs-12">
+<!--                     <div class="col-md-8 col-sm-6 col-xs-12"> -->
                         <div class="white-box">
 <!--                             <h3 class="box-title">Project status</h3> -->
 <%--                             <div id="projecttotal" class="col-md-3 col-sm-6 col-xs-12">Booked Revenue :<%out.print(totalRevenue); %> </div> --%>
@@ -179,7 +179,7 @@
 <!--                             </ul> -->
                             <div id="morris-bar-chart" style="height:372px;"></div>
                         </div>
-                    </div>
+<!--                     </div> -->
                     
                 </div>
                 <!-- /.row -->
@@ -281,7 +281,6 @@
     <script>
     	var mychart = null; 
  
-
    
     	//Morris bar chart
     	 <%

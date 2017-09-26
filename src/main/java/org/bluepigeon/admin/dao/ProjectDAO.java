@@ -4128,10 +4128,15 @@ public class ProjectDAO {
 			Query query = session.createSQLQuery(sql);
 			query.setParameter("emp_id", empId);
 			BigInteger totalBuyer = (BigInteger) query.uniqueResult();
+			try{
 			if(totalBuyer != null){
 				totalBuyers = Long.parseLong(totalBuyer.toString());
 				return totalBuyers;
 			}else{
+				return (long)0;
+			}
+			}catch(Exception e){
+				e.printStackTrace();
 				return (long)0;
 			}
 		}
@@ -5634,7 +5639,7 @@ public class ProjectDAO {
     				}
     			}
         	}
-        	hql += where+" AND status = 1  AND ORDER BY builderFloor.builderBuilding.builderProject.id ASC, builderFloor.builderBuilding.id DESC, builderFloor.floorNo DESC, flatNo DESC";
+        	hql += where+" AND status = 1 ORDER BY builderFloor.builderBuilding.builderProject.id ASC, builderFloor.builderBuilding.id DESC, builderFloor.floorNo DESC, flatNo DESC";
         	
         	Query query = session.createQuery(hql);
         	if(projectId > 0){
@@ -6114,7 +6119,8 @@ public List<InboxMessage> getInboxMessagesByEmpId(int empId){
 
 public List<InboxMessageData> getBookedBuyerList(int empId){
 	List<InboxMessageData> result = null;
-	String hql = "SELECT b.name as name, b.photo as image, im.subject as subject, im.im_date as date  ";
+	//String hql = "SELECT b.name as name, b.photo as image, im.subject as subject, im.im_date as date  ";
+	String hql = " SELECT  a.name as name, a.photo as image, b.im_date as date, b.subject as subject  ";
 	String where = "";
 	String hqlnew = "from BuilderEmployee where id = "+empId;
 	HibernateUtil hibernateUtil = new HibernateUtil();
@@ -6124,19 +6130,24 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	BuilderEmployee builderEmployee = employees.get(0);
 	sessionnew.close();
 	if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
-		hql += " FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
-				+ "left join builder_project as bproject on bproject.id = b.project_id "
-				+ "inner join allot_project as ap on ap.project_id = bproject.id   "
-				+ "WHERE ";
-				where+= "ap.emp_id="+builderEmployee.getId();
+		
+		hql += "from buyer as a join inbox_message as b on b.buyer_id=a.id"
+				+ " where"
+				+ " b.emp_id="+builderEmployee.getId();
+		
+//		hql += " FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
+//				+ "left join builder_project as bproject on bproject.id = b.project_id "
+//				+ "inner join allot_project as ap on ap.project_id = bproject.id   "
+//				+ "WHERE ";
+//				where+= "ap.emp_id="+builderEmployee.getId();
 	}else{
-		hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
-				+ "left join builder_project as bproject on bproject.id = b.project_id "
-				+ "left join builder as build on build.id = b.builder_id  "
-				+ "WHERE ";
-				where+= "b.builder_id="+builderEmployee.getBuilder().getId();
+//		hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
+//				+ "left join builder_project as bproject on bproject.id = b.project_id "
+//				+ "left join builder as build on build.id = b.builder_id  "
+//				+ "WHERE ";
+//				where+= "b.builder_id="+builderEmployee.getBuilder().getId();
 	}
-	hql += where + " AND bproject.status=1 AND b.is_primary=1 AND b.is_deleted=0 and b.status=0 ORDER BY im.id desc";
+	hql += where + " AND a.is_primary=1 and a.is_deleted=0 and a.status=0 GROUP by b.id ORDER by b.id DESC";
 	try {
 	Session session = hibernateUtil.getSessionFactory().openSession();
 	Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(InboxMessageData.class));
@@ -6146,6 +6157,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	
 	} catch(Exception e) {
 		//
+		e.printStackTrace();
 	}
 	
 	return result;
@@ -6193,7 +6205,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		List<NewLeadList> leadLists = new ArrayList<>();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
 		String strDate = "";
-		String hql = "from BuilderLead where builderProject.id = :projectId";
+		String hql = "from BuilderLead as where builderProject.id = :projectId";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -6203,15 +6215,19 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		System.err.println(builderLeads.size());
 		System.err.println("ProjectId :: "+projectId);
 		if(builderLeads != null){
+			if(builderLeads.size() > 0 && !builderLeads.isEmpty()){
 			for(BuilderLead builderLead : builderLeads){
 				NewLeadList newLeadList =new NewLeadList();
 				newLeadList.setId(builderLead.getId());
 				System.err.println(builderLead.getName());
+				if(builderLead.getName()!=null && builderLead.getName() != ""){
 				newLeadList.setLeadName(builderLead.getName());
+				}else{
+					newLeadList.setLeadName("No Name fond..");
+				}
 				newLeadList.setPhoneNo(builderLead.getMobile());
 				newLeadList.setEmail(builderLead.getEmail());
 				if(builderLead.getLdate() != null){
-					
 					strDate = simpleDateFormat.format(builderLead.getLdate());
 					newLeadList.setStrDate(strDate);
 				newLeadList.setlDate(builderLead.getLdate());
@@ -6261,12 +6277,41 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 				newLeadList.setConfigDatas(configDatas);
 				leadLists.add(newLeadList);
 			}
+		}else{
+			System.err.println("No Lead name found....");
+		}
 		}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return leadLists;
 	}
+	
+	
+	public List<NewLeadList> getNewLeadList(int projectId,BuilderEmployee builderEmployee){
+	
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 7 || builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
+			hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
+					+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
+					+ "join source as d on d.id = b.source "
+					+ "join builder_employee as c on a.emp_id = c.id "
+					+ "inner join lead_config as e on e.lead_id=a.lead_id "
+					+ "join builder_project_property_configuration as f on f.id=e.config_id "
+					+ "where a.emp_id="+builderEmployee.getId()+" group by a.id order by b.id desc";
+		}
+		else{
+			
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(NewLeadList.class));
+		System.err.println(hql);
+		List<NewLeadList> result = query.list();
+		session.close();
+		return result;
+	}
+	
 	
 	public List<LeadConfig> getLeadConfig(int id){
 		String hql = "From LeadConfig where builderLead.id = :id";

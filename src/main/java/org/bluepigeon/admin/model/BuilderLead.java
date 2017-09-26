@@ -22,10 +22,10 @@ import javax.persistence.Table;
 public class BuilderLead implements java.io.Serializable {
 
 	private Integer id;
-	//private BuilderBuilding builderBuilding;
-	//private BuilderFlat builderFlat;
+//	private BuilderBuilding builderBuilding;
+//	private BuilderFlat builderFlat;
 	private BuilderProject builderProject;
-	//private BuilderPropertyType builderPropertyType;
+//	private BuilderPropertyType builderPropertyType;
 	private String name;
 	private String mobile;
 	private String email;
@@ -41,36 +41,36 @@ public class BuilderLead implements java.io.Serializable {
 	private Integer typeId = 0;
 	private Integer min=0;
 	private Integer max=0;
-	private Integer leadStatus = 0;
+	private Integer leadStatus = 1;
 	private Date lDate;
 	public BuilderLead() {
 	}
 
-	public BuilderLead(BuilderProject builderProject) {
-		this.builderProject = builderProject;
-	}
+//	public BuilderLead(BuilderProject builderProject) {
+//		this.builderProject = builderProject;
+//	}
 
-	// public BuilderLead(BuilderBuilding builderBuilding, BuilderFlat
-	// builderFlat, BuilderProject builderProject,
-	// BuilderPropertyType builderPropertyType, String name, String mobile,
-	// String email, String area, String city,
-	// Source source, Integer intrestedIn, String discountOffered, Integer
-	// addedBy, Integer status) {
-	// this.builderBuilding = builderBuilding;
-	// this.builderFlat = builderFlat;
-	// this.builderProject = builderProject;
-	// this.builderPropertyType = builderPropertyType;
-	// this.name = name;
-	// this.mobile = mobile;
-	// this.email = email;
-	// this.area = area;
-	// this.city = city;
-	// this.source = source;
-	// this.intrestedIn = intrestedIn;
-	// this.discountOffered = discountOffered;
-	// this.addedBy = addedBy;
-	// this.status = status;
-	// }
+//	 public BuilderLead(BuilderBuilding builderBuilding, BuilderFlat
+//	 builderFlat, BuilderProject builderProject,
+//	 BuilderPropertyType builderPropertyType, String name, String mobile,
+//	 String email, String area, String city,
+//	 Source source, Integer intrestedIn, String discountOffered, Integer
+//	 addedBy, Integer status) {
+//	 this.builderBuilding = builderBuilding;
+//	 this.builderFlat = builderFlat;
+//	 this.builderProject = builderProject;
+//	 this.builderPropertyType = builderPropertyType;
+//	 this.name = name;
+//	 this.mobile = mobile;
+//	 this.email = email;
+//	 this.area = area;
+//	 this.city = city;
+//	 this.source = source;
+//	 this.intrestedIn = intrestedIn;
+//	 this.discountOffered = discountOffered;
+//	 this.addedBy = addedBy;
+//	 this.status = status;
+//	 }
 	
 	public BuilderLead( BuilderProject builderProject,
 			 String name, String mobile, String email, String area, String city,

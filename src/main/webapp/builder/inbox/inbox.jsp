@@ -309,7 +309,7 @@
 		                         </div>
 		                     <div class="center">
 		                        <br/>
-							  	<button type="submit" class="button1">Replay</button>
+							  	<button type="submit" class="button1">Reply</button>
 							 </div>
 		                </form>	
 				   </div>
@@ -327,9 +327,6 @@
 </html>
 
 <script>
-
-
-
 $select_project = $("#filter_buyer_id").selectize({
 	persist: false,
 	 onChange: function(value) {

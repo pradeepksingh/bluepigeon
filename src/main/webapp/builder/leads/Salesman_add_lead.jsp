@@ -163,7 +163,7 @@ color: #ccc;
                 color: #E5E4E2;
             }
             .price_Ranges a:hover {
-               background: #0074e4;
+               background: #00bfd6;
                color: #fff;
                cursor: pointer; 
     text-decoration: none;
@@ -182,6 +182,9 @@ color: #ccc;
                 box-shadow: inset 0 0 5px #F7BDBB;
                 border-radius: 0;
             }
+            .ms-options-wrap > .ms-options > ul li.selected label, .ms-options-wrap > .ms-options > ul label:hover {
+    background-color: #00bfd6;
+}
 		</style>
 </head>
 
@@ -382,7 +385,7 @@ color: #ccc;
 
 
 
-</div>
+
 
 							 <%if(access_id ==5){ %>
 							 
@@ -400,11 +403,14 @@ color: #ccc;
 								 </div>
 						    </div>
 						    <%} %>
-						</div>
+						    </div>
+						   
+						
 						<div class="center bcenter">
 					  	   <button type="submit" id="save" class="button1">Save</button>
 					  	</div>
                      </form>
+                     </div>
                   </div>
                </div>
             </div>
