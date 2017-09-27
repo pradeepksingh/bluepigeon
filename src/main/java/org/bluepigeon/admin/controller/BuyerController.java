@@ -1098,7 +1098,9 @@ public class BuyerController {
 			}
 		} catch(Exception e) {
 			//exception
-			resp.setStatus(0);
+			//e.printStackTrace();
+		//	resp.setStatus(0);
+			//resp.setMessage("Fail to add buyer's documenmt. Please select at leat one document..");
 		}
 		return resp;
 	}

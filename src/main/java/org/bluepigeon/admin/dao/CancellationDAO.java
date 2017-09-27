@@ -367,7 +367,6 @@ public class CancellationDAO {
 		
 		return result;
 	}
-	
 	public Cancellation getCancellationByFlatId(int flatId){
 		String hql = "from Cancellation where builderFlat.id = :flat_id";
 		Cancellation cancellation = null;

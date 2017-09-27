@@ -16,6 +16,7 @@ public class BookingFlatList {
 	private int bathroom;
 	private int balcony;
 	private int flatStatus;
+	private String flatstatusName;
 	private double length;
 	private double breadth;
 	private String areaUint;
@@ -247,5 +248,11 @@ public class BookingFlatList {
 	}
 	public void setAccessId(Integer access_id){
 	  this.accessId = access_id;
+	}
+	public String getFlatstatusName() {
+		return flatstatusName;
+	}
+	public void setFlatstatusName(String flatstatusName) {
+		this.flatstatusName = flatstatusName;
 	}
 }

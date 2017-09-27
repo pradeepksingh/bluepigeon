@@ -5548,6 +5548,7 @@ public class ProjectDAO {
     	    		booking.setBedroom(builderFlat.getBedroom());
     	    		booking.setCarpetArea(builderFlat.getBuilderFlatType().getCarpetArea());
     	    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
+    	    		booking.setFlatstatusName(builderFlat.getBuilderFlatStatus().getName());
     	    		if(builderFlat.getImage() != null && builderFlat.getImage() != "")
     	    			booking.setImage(builderFlat.getImage());
     	    		else
@@ -5589,6 +5590,7 @@ public class ProjectDAO {
     	    		booking.setBuyerCurrentAddress(buyer.getCurrentAddress());
     	    		booking.setBuyerPermanentAddress(buyer.getAddress());
     	    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
+    	    		booking.setFlatstatusName(builderFlat.getBuilderFlatStatus().getName());
     	    		if(buyer.getPhoto() != null){
     	    		booking.setBuyerPhoto(buyer.getPhoto());
     	    		}else{
@@ -6291,7 +6293,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	public List<NewLeadList> getNewLeadList(int projectId,BuilderEmployee builderEmployee){
 	
 		String hql = "";
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 7 || builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 7){
 			hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
 					+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
 					+ "join source as d on d.id = b.source "
@@ -6301,7 +6303,15 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 					+ "where a.emp_id="+builderEmployee.getId()+" group by a.id order by b.id desc";
 		}
 		else{
-			
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
+				hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
+						+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
+						+ "join source as d on d.id = b.source "
+						+ "join builder_employee as c on a.emp_id = c.id "
+						+ "inner join lead_config as e on e.lead_id=a.lead_id "
+						+ "join builder_project_property_configuration as f on f.id=e.config_id "
+						+ "where b.added_by="+builderEmployee.getId()+" group by a.id order by b.id desc";
+			}
 		}
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();

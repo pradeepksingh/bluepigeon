@@ -1725,10 +1725,10 @@ width: 47% !important;
     
     }
     select{
-	background-image: url("../images/down-arrow.png")!important;
-    background-repeat: no-repeat  !important;
-    background-position:right   !important; 
-    background-position: right 50px;
+/* 	background-image: url("../images/down-arrow.png")!important; */
+/*     background-repeat: no-repeat  !important; */
+/*     background-position:right   !important;  */
+/*     background-position: right 50px; */
     /* text-align: -webkit-right; */
     background-size: 23px 24px !important;
      background-clip: content-box;

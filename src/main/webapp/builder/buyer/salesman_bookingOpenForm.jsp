@@ -219,9 +219,9 @@
 		               	 						for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
 		                      						if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("available")){
 		             			%>
-		             			<li class="item"><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" ><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+		             			<li class="item"><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 		             			<% }else{%>
-		     					<li class="grey"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);"><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+		     					<li class="grey"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 		 					<%
 		 			   				}
           						}
@@ -401,13 +401,19 @@
 </html>
 <script>
 $("#cancellation").click(function(){
+	//ajaxindicatorstart("Loading...");	
 	window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(project_id);%>
+	 //ajaxindicatorstop();
 });
 $("#campaign").click(function(){
+	//ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/campaign/Salesman_campaign.jsp?project_id="+<%out.print(project_id);%>
+	 //ajaxindicatorstop();
 });
 $("#leads").click(function(){
+	//ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
+	 //ajaxindicatorstop();
 });
 function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
@@ -454,10 +460,14 @@ $(document).ready(function () {
 });
 <% } %>
 function showFlat(id){
+	//ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/buyer/Salesman_booking_form3.jsp?flat_id="+id;
+	// ajaxindicatorstop();
 }
 function showBuyerDetails(flatId){
+	//ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/buyer/edit_booking_form.jsp?flat_id="+flatId;
+	//ajaxindicatorstop();
 }
 function showFlatwithImage(id){
 //	alert(id);
@@ -465,6 +475,7 @@ function showFlatwithImage(id){
 	$("#home").empty();
 	var htmlFlat ="";
 	if(id != ''){
+	//	ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id,emp_id:$("#emp_id").val()},function(data){
 			if(data.flatStatus == 1){
 				var image = '';
@@ -537,13 +548,16 @@ function showFlatwithImage(id){
 				      +'<button type="button" onclick="showBuyerDetails('+data.flatId+')" class="button">Edit</button>';
 			}
 	 	 $("#home").append(htmlFlat);
+	 	
 		},'json');
 		activeInactiveFlats();
+		//ajaxindicatorstop();
 	}
 }
 
 function showImagewithDetails(id){
 	if( id != ''){
+		//ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id, emp_id:$("#emp_id").val()},function(data){
 			if(data.flatStatus == 1){
 				$("#flatList").empty();
@@ -608,6 +622,7 @@ function showImagewithDetails(id){
 		$("#flatList").append(flatdetails);
 	  	$('#zoomimg').modal('show');
 			}
+			//ajaxindicatorstop();
 		},'json');
 	}
 }
@@ -615,6 +630,7 @@ $select_building = $("#filter_building_id").selectize({
 	persist: false,
 	 onChange: function(value) {
 		if($("#filter_building_id").val() != '' ){
+			//ajaxindicatorstart("Loading...");
 			$.get("${baseUrl}/webapi/project/building/floor/list/",{ building_id: value }, function(data){
 				getFlatDetails();
 				var html = '<option value="0">All Floor</option>';
@@ -662,6 +678,7 @@ $select_building = $("#filter_building_id").selectize({
 					    }
 					});
 				}
+				//ajaxindicatorstop();
 			},'json');
 		}
 	 },

@@ -72,7 +72,7 @@
  			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
  			building_id = builderBuildingList.get(0).getId(); 
 			flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,0); 
- 			bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,building_id,floor_id,0); 
+ 			bookingFlatList2 = new ProjectDAO().getFlatBookeddetails(project_id,building_id,floor_id,0); 
  			if(bookingFlatList2 != null){
  				if( bookingFlatList2.getImage() != null){
  					image = bookingFlatList2.getImage(); 

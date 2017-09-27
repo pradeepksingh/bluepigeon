@@ -143,7 +143,7 @@
                <!-- /.row -->
 	                <div class="row bspace">
 		                <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
-		                    <button type="submit" class="btn11 btn-submit waves-effect waves-light m-t-10">BOOKING</button>
+		                    <button type="submit" id="booking" class="btn11 btn-submit waves-effect waves-light m-t-10">BOOKING</button>
 		                </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
 		                    <button type="submit" id="cancellation" class="btn11 btn-info waves-effect waves-light m-t-10">CANCELLATION</button>
@@ -598,7 +598,7 @@
 </html>
 <script>
 $("#booking").click(function(){
-	window.location.href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
+	window.location.href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+$("#project_id").val();
 });
 $("#cancellation").click(function(){
 	window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+$("#project_id").val();
@@ -951,6 +951,7 @@ $('#addnewbuyer').bootstrapValidator({
 	
 });
 function updateBuyer(){
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#basicresponse', 
 	 		beforeSubmit : showAddRequest,
@@ -976,12 +977,17 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		alert(resp.message);
+        ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
+        ajaxindicatorstop();
+        $('.active').removeClass('active').next('li').addClass('active');
+        $("#menu1").addClass('active');
        // window.location.href = "${baseUrl}/builder/buyer/booking.jsp?project_id="+$("project_id").val();
   	}
 }
@@ -1131,6 +1137,7 @@ $('#addbuyingdetail').bootstrapValidator({
 });
 
 function updateProjectPrice() {
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#pricingresponse', 
 	 		beforeSubmit : showPriceRequest,
@@ -1156,12 +1163,15 @@ function showPriceResponse(resp, statusText, xhr, $form){
        	$("#pricingresponse").addClass('alert-danger');
 		$("#pricingresponse").html(resp.message);
 		$("#pricingresponse").show();
+		alert(resp.message);
+        ajaxindicatorstop();
   	} else {
   		$("#pricingresponse").removeClass('alert-danger');
         $("#pricingresponse").addClass('alert-success');
         $("#pricingresponse").html(resp.message);
         $("#pricingresponse").show();
         alert(resp.message);
+        ajaxindicatorstop();
   	}
 }
 $('#updatebuyerpayment').bootstrapValidator({
@@ -1251,6 +1261,8 @@ function showAddPaymentResponse(resp, statusText, xhr, $form){
        	$("#paymentresponse").addClass('alert-danger');
 		$("#paymentresponse").html(resp.message);
 		$("#paymentresponse").show();
+		alert(resp.message);
+        ajaxindicatorstop();
   	} else {
   		$("#paymentresponse").removeClass('alert-danger');
         $("#paymentresponse").addClass('alert-success');
@@ -1318,6 +1330,8 @@ function showAddDocumentResponse(resp, statusText, xhr, $form){
        	$("#paymentresponse").addClass('alert-danger');
 		$("#paymentresponse").html(resp.message);
 		$("#paymentresponse").show();
+		alert(resp.message);
+		ajaxindicatorstop();
   	} else {
   		$("#paymentresponse").removeClass('alert-danger');
         $("#paymentresponse").addClass('alert-success');
@@ -1325,7 +1339,7 @@ function showAddDocumentResponse(resp, statusText, xhr, $form){
         $("#paymentresponse").show();
         alert(resp.message);
         ajaxindicatorstop();
-        window.location.href = "${baseUrl}/builder/buyer/saleman_bookingOpenForm.jsp?project_id=<%out.print(project_id);%>";
+        window.location.href = "$${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
   	}
 }
 function deleteBuyer(id) {

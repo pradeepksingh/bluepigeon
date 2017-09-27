@@ -560,8 +560,8 @@ label {
     -webkit-box-flex: 0;
     -webkit-flex: 0 0 16.666667%;
     -ms-flex: 0 0 16.666667%;
-    flex: 0 0 20%;
-        max-width: 20.666667%;
+    flex: 0 0 19%;
+        max-width: 25.666667%;
     }
     .lead-bg{
 	
@@ -2293,3 +2293,6 @@ padding:7%;
     -webkit-appearance: none;
     background-position-x: 244px;
 } 
+.selectize-input {
+    border: 1px solid #00bfd6 !important;
+}
