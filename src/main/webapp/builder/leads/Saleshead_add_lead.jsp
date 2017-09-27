@@ -89,47 +89,6 @@
      <script src="../js/jquery.form.js"></script>
       <script type="text/javascript" src="../js/selectize.min.js"></script>
        <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
-  
-        
-		<script type="text/javascript">
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes').multiselect();
-// 		    });
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes-2').multiselect();
-// 		    });
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes-3').multiselect();
-// 		    });
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes-4').multiselect();
-// 		    });
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes-5').multiselect();
-// 		    });
-// 		    $select_project = $("#multiple-checkboxes-3").selectize({
-// 		    	persist: false,
-// 		    	 onChange: function(value) {
-// 		    		alert(value);
-// 		    	 },
-// 		    	 onDropdownOpen: function(value){
-// 		        	 var obj = $(this);
-// 		    		var textClear =	 $("#multiple-checkboxes-3 :selected").text();
-// 		        	 if(textClear.trim() == "Enter Project Name"){
-// 		        		 obj[0].setValue("");
-// 		        	 }
-// 		         }
-// 		    });
-
-		    //select_project = $select_project[0].selectize;
-		    
-		   
-		</script>
-		<script type="text/javascript">
-// 		$("#select").click(function(){
-// 		    $("li").addClass("active");
-// 		});
-		</script>
 		<style>
 		.arrow{
 color: #ccc;
@@ -222,6 +181,7 @@ color: #ccc;
                  <div class="row bg11">
                    <form class="addlead1" id="addnewlead" name="addnewlead" action="" method="post"  enctype="multipart/form-data">
                   		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
+                  		<input type="hidden" id="project_id" name="project_id" value="<%out.print(projectId);%>"/>
                      <div class="col-md-6 col-sm-6 col-xs-12">
                          <div class="form-group row">
 							<label for="example-text-input" class="col-5 col-form-label">Name</label>
@@ -271,7 +231,6 @@ color: #ccc;
 			                        <div class="messageContainer"></div>
 							    </div>
 						    </div>
-						    
 				       </div>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                        <div class="form-group row">
@@ -287,8 +246,8 @@ color: #ccc;
 							 <label for="example-search-input" class="col-5 col-form-label">Interested Project</label>
 								<div class="col-7">
 									<div>
-									    <input type="hidden" id="project_id" name="project_id" value="<%out.print(projectId);%>"/>
-								   		<select id="project_ids" name="project_ids[]" disabled>
+									    <input type="hidden" id="project_ids" name="project_ids[]" value="<%out.print(projectId);%>"/>
+								   		<select id="interested_project" name="interested_project[]" disabled>
 									    <% if(builderProject != null){%>
 									        <option value="<%out.print(builderProject.getId());%>" selected><%out.print(builderProject.getName()); %></option>
 									    <%} %>
@@ -304,7 +263,6 @@ color: #ccc;
 						          <span id="price_range1"> </span> - <span id="price_range2">Price Range</span> </div>
 						        <span class="bs-caret" style="float: right;"><span class="caret"></span></span>
 						      </button>
-						
 						      <div class="dropdown-menu ddRange" role="menu" style="width: 295px;padding-top: 12px;">
 						        <div class="rangemenu">
 						          <div class="freeformPrice">
@@ -316,7 +274,6 @@ color: #ccc;
 						              <input name="maxprice" id="maxprice" type="text" class="max_input form-control" placeholder="Max Price">
 						            </div>
 						          </div>
-						
 						          <div class="price_Ranges rangesMax col-md-5">
 						            <a class="max_value" value="" href="javascript:void(0)">Any Max</a>
 						            <a class="max_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
@@ -331,7 +288,6 @@ color: #ccc;
 						            <a class="max_value" value="5000000000" href="javascript:void(0)">500 cr</a>
 						          </div>
 						          <div class="col-md-2"> </div>
-						
 						          <div class="price_Ranges rangesMin col-md-5">
 						            <a class="min_value" value="" href="javascript:void(0)">Any Min</a>
 						            <a class="min_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
@@ -346,7 +302,6 @@ color: #ccc;
 						            <a class="min_value" value="5000000000" href="javascript:void(0)">500 cr</a>
 						          </div>
 						        </div>
-						
 						        <div class="btnClear">
 						          <a href="javascript:void(0)" class="btn btn-link">Clear</a>
 						        </div>
@@ -381,43 +336,17 @@ color: #ccc;
         </div>
     <!-- /.container-fluid -->
    <div id="sidebar1"> 
-       	   		<%@include file="../partial/footer.jsp"%>
-      		</div>
+       	 <%@include file="../partial/footer.jsp"%>
+    </div>
   </body>
 </html>
 <script>
-//$("#multiple-checkboxes-3").selectize();
-// $select_project = $("#multiple-checkboxes-3").selectize({
-// 	persist: false,
-// 	 onChange: function(value) {
-// 		alert(value);
-// 	 },
-// 	 onDropdownOpen: function(value){
-//     	 var obj = $(this);
-// 		var textClear =	 $("#multiple-checkboxes-3 :selected").text();
-//     	 if(textClear.trim() == "Enter Configuration Name"){
-//     		 obj[0].setValue("");
-//     	 }
-//      }
-// });
-
 $('#configuration').multiselect({
     columns: 1,
     placeholder: 'Select Configuration',
     search: true,
     selectAll: true,
-    //noneSelectedText: "Select",
-    
 }); 
-//$('#multiple-checkboxes-3').style.margin-left="5px";
-//$('#multiple-checkboxes-3').css({"padding-left":"10px !important"});
-
-// $('#project_ids').multiselect({
-//     columns: 1,
-//     placeholder: 'Select Project',
-//     search: true,
-//     selectAll: true
-// });
 
 
 $('#assignsalemans').multiselect({
@@ -426,42 +355,6 @@ $('#assignsalemans').multiselect({
     search: true,
     selectAll: true
 });
-//$("#save").click(function(){
-// 	var projects = [];
-// 	var  projectList = document.getElementById("#multiple-checkboxes-2");
-	
-// 	for(var i=0;i<projectList.options.length;i++){
-// 		if(projectList[i].options[i].selected){
-// 			alert("Value :: "+projectList[i].options[i].value);
-// 			projects.push(projectList[i].options[i].value);
-// 		}
-// 	}
- // alert($("#multiple-checkboxes-2").val());
-//   $("#multiple-checkboxes-2  option:selected").each(function(){
-// 	  alert($(this).val());
-//   })
-//})
-
-// $('#min-max-price-range').click(function (event) {
-//     setTimeout(function(){ $('.price-label').first().focus();	},0);    
-// });
-// var priceLabelObj;
-// $('.price-label').focus(function (event) {
-//     priceLabelObj=$(this);
-//     $('.price-range').addClass('hide');
-//     $('#'+$(this).data('dropdownId')).removeClass('hide');
-// });
-// $(".price-range li").click(function(){    
-//     priceLabelObj.attr('value', $(this).attr('data-value'));
-//     var curElmIndex=$( ".price-label" ).index( priceLabelObj );
-//     var nextElm=$( ".price-label" ).eq(curElmIndex+1);
-
-//     if(nextElm.length){
-//         $( ".price-label" ).eq(curElmIndex+1).focus();
-//     }else{
-//         $('#min-max-price-range').dropdown('toggle');
-//     }
-// });
 
 $('#min-max-price-range').click(function (event) {
    // setTimeout(function(){ $('.price-label').first().focus();	},0);    
@@ -542,27 +435,6 @@ $('#addnewlead').bootstrapValidator({
                 }
             }
         },
-//         project_id: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Project is required and cannot be empty'
-//                 }
-//             }
-//         },
-//         city: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'City Name is required and cannot be empty'
-//                 }
-//             }
-//         },
-//         area: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Locality Name is required and cannot be empty'
-//                 }
-//             }
-//         },
         pricemin:{
             validators: {
                 notEmpty: {
@@ -621,7 +493,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/builder/leads/leadlist.jsp";
+        window.location.href = "${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+$("#project_id").val();
         ajaxindicatorstop();
   	}
 }
@@ -653,28 +525,28 @@ $('.dropdown-menu.ddRange')
 });
 
 function disableDropDownRangeOptions(max_values, minValue) {
-if (max_values) {
-  max_values.each(function() {
-    var maxValue = $(this).attr("value");
-
-    if (parseInt(maxValue) < parseInt(minValue)) {
-      $(this).addClass('disabled');
-    } else {
-      $(this).removeClass('disabled');
-    }
-  });
-}
+	if (max_values) {
+	  max_values.each(function() {
+	    var maxValue = $(this).attr("value");
+	
+	    if (parseInt(maxValue) < parseInt(minValue)) {
+	      $(this).addClass('disabled');
+	    } else {
+	      $(this).removeClass('disabled');
+	    }
+	  });
+	}
 }
 
 function setuinvestRangeDropDownList(min_values, max_values, min_input, max_input, clearLink, dropDownControl) {
-min_values.click(function() {
-  var minValue = $(this).attr('value');
-  min_input.val(minValue);
-  document.getElementById('price_range1').innerHTML = minValue;
-
-  disableDropDownRangeOptions(max_values, minValue);
-
-  validateDropDownInputs();
+	min_values.click(function() {
+	  var minValue = $(this).attr('value');
+	  min_input.val(minValue);
+	  document.getElementById('price_range1').innerHTML = minValue;
+	
+	  disableDropDownRangeOptions(max_values, minValue);
+	
+	  validateDropDownInputs();
 });
 
 max_values.click(function() {
