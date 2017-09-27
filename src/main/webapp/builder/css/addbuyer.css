@@ -35,6 +35,7 @@ textarea:focus {outline:0;}
     background-color: #00bfd6;
 }
 
+
 .file-button {
      background: #00bfd6;
     padding: 5px;
@@ -761,17 +762,17 @@ text-align: -webkit-left;
 .custom-button-nav.nav > .grey > a:hover {
     color: #fff!important;
     border: 2px solid #d4d4d4 !important;
-    background-color: #d4d4d4 !important;
+    background-color: #00bfd6 !important;
 }
 .custom-button-nav.nav > .grey > a:active {
     color: #fff!important;
     border: 2px solid #d4d4d4 !important;
-    background-color: #d4d4d4 !important;
+    background-color: #00bfd6 !important;
 }
 .custom-button-nav.nav > .grey > a:focus {
     color: #fff!important;
     border: 2px solid #d4d4d4 !important;
-    background-color: #d4d4d4 !important;
+    background-color: #00bfd6 !important;
 }
 .custom-row p{
 	
@@ -2285,3 +2286,7 @@ padding:7%;
     -webkit-appearance: none;
     background-position-x: 244px;
 } 
+
+.nav > li > a:hover, .nav > li > a:focus {
+    background-color: #00bfd6;
+}

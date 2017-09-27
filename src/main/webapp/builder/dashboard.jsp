@@ -229,7 +229,7 @@
                    <div class="row">
                     <div class="col-md-3 col-sm-6 col-xs-12">
                       <select  id="city_id" name="city_id">
-                       		<option value="0">Enter City Name</option>
+                       		<option value="0">City</option>
                             <%
                             if(cityDataList != null){
                             for(City city : cityDataList){ %>
@@ -245,7 +245,7 @@
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         <select id="project_id" name="project_id">
-                             <option value="0">Enter Project Name</option>
+                             <option value="0">Project</option>
                              <%
                              if(project_list != null){
                              for(ProjectList projectList : project_list){%>
@@ -255,7 +255,7 @@
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                        <select id="project_status" name="project_status">
-                            <option value="0">Project Status</option>
+                            <option value="0">Status</option>
                             <option value="1">Pending Projects</option>
                             <option value="2">Complete Projects</option>
                          </select>
@@ -483,7 +483,7 @@
 		  
 	  	if(value !=''){
 			  $.get("${baseUrl}/webapi/general/locality/list/name",{ city_id: $("#city_id").val() }, function(data){
-		    		var html = '<option value="">Select Locality</option>';
+		    		var html = '<option value="">Locality</option>';
 		    		$(data).each(function(index){
 		    			html = html + '<option value="'+data[index].name+'">'+data[index].name+'</option>';
 		    		});
@@ -504,7 +504,7 @@
 						 onDropdownOpen: function(value){
 					   	 var obj = $(this);
 							var textClear =	 $("#locality_name :selected").text();
-					   	 if(textClear.trim() == "Enter Locality Name"){
+					   	 if(textClear.trim() == "Locality"){
 					   		 obj[0].setValue("");
 					   	 }
 					    }
@@ -518,7 +518,7 @@
 	  onDropdownOpen: function(value){
 	    	 var obj = $(this);
  			 var textClear =	 $("#city_id :selected").text();
-	    	 if(textClear.trim() == "Enter City Name"){
+	    	 if(textClear.trim() == "City"){
 	    		 obj[0].setValue("");
 	    	 }
 	     }
@@ -548,7 +548,7 @@
     	 onDropdownOpen: function(value){
        	 var obj = $(this);
     		var textClear =	 $("#locality_name :selected").text();
-       	 if(textClear.trim() == "Enter Locality Name"){
+       	 if(textClear.trim() == "Locality"){
        		 obj[0].setValue("");
        	 }
         }
@@ -565,7 +565,7 @@
    	onDropdownOpen: function(value){
       	 var obj = $(this);
    		var textClear =	 $("#project_status :selected").text();
-      	 if(textClear.trim() == "Enter Project Status"){
+      	 if(textClear.trim() == "Status"){
       		 obj[0].setValue("");
       	 }
    		}

@@ -32,7 +32,6 @@
  	BuilderProject builderProject = null;
  	List<NewLeadList> newLeadLists = null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
- 	projectId = Integer.parseInt(request.getParameter("project_id"));
    	session = request.getSession(false);
    	BuilderEmployee builder = new BuilderEmployee();
    	int builder_id = 0;
@@ -89,6 +88,8 @@
     <!-- color CSS -->
 
     <link rel="stylesheet" type="text/css" href="../css/salemanaddleadpopup.css">
+    
+<!--       <link rel="stylesheet" type="text/css" href="../css/Salesman_leads.css"> -->
 
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
 
@@ -227,9 +228,16 @@ color: #ccc;
 						    </div>
 					     </form>
                        </div>
+                       <%if(access_id == 7){ %>
                       <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 lead-button">
                          <button type="submit" class="btn11 btn-lead waves-effect waves-light m-t-10" data-toggle="modal" data-target="#myModal1">New Lead +</button>
                       </div>
+                      <%} %>
+                      <%if(access_id == 5){ %>
+                      <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 lead-button">
+                         <button type="button"  id="addnewleadbtn" class="btn11 btn-lead waves-effect waves-light m-t-10" >New Lead +</button>
+                      </div>
+                      <%} %>
                  </div>
                  <div class="white-box">
                    <div class="lead-bg">
@@ -247,9 +255,16 @@ color: #ccc;
 	                   <div class="col-md-2 col-sm-2 col-xs-6">
 	                     <h2>Source</h2>
 	                   </div>
+	                   <%if(access_id == 7){ %>
 	                   <div class="col-md-2 col-sm-2 col-xs-6">
 	                     <h2>Status</h2>
 	                   </div>
+	                   <%} %>
+	                   <%if(access_id == 5){ %>
+	                    <div class="col-md-2 col-sm-2 col-xs-6">
+	                     <h2>Assign Salesman</h2>
+	                   </div>
+	                   <%} %>
 	                 </div>
 	                 <div id="newleads">
 	                 <%
@@ -269,6 +284,7 @@ color: #ccc;
 	                     <div class="col-md-2 col-sm-2 col-xs-6">
 	                     <h4><%out.print(newLeadList.getSource()); %></h4>
 	                    </div>
+	                    <%if(access_id == 7){ %>
 	                     <div class="col-md-2 col-sm-2 col-xs-6">
 	                      <div class="dropdown">
 						    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Follow up
@@ -285,6 +301,21 @@ color: #ccc;
 						    </ul>
 						  </div>
 	                    </div>
+	                    <%} %>
+	                    <% if(access_id == 5){
+	                    	
+	                    		%>
+	                    <div class="col-md-2 col-sm-2 col-xs-6">
+	                      <div class="dropdown">
+						  		<select id="select_salesman" class="select_salesman" name="select_salesman" data-style="form-control">
+							   <% if(salesmanList != null){
+	                    		for(BuilderEmployee salesman : salesmanList){%>
+							        <option value="<%out.print(salesman.getId());%>"><%out.print(salesman.getName()); %></option>
+							    <% }}%>
+							  	</select>
+						  </div>
+	                    </div>
+	                    <%} %>
 	                 </div>
 	                 <hr>
 	                 <div class="row">
@@ -304,7 +335,24 @@ color: #ccc;
 	                      <h5>Source :</h5>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6 inline laststatusnam">
-	                      <h5>Last States: <b id="laststatusname<%out.print(newLeadList.getId());%>"><%out.print(newLeadList.getLeadStatusName()); %></b></h5>
+	                      <h5>Last States: <b id="laststatusname<%out.print(newLeadList.getId());%>"><%
+	                      if(newLeadList.getLeadStatus() == 1)
+	                      	out.print("No Response");
+	                      if(newLeadList.getLeadStatus() == 2)
+	                    	  out.print("Call Again");
+	                      if(newLeadList.getLeadStatus() == 3)
+	                    	  out.print("Email Sent");
+	                      if(newLeadList.getLeadStatus() == 4)
+	                    	  out.print("Visit Schedule");
+	                      if(newLeadList.getLeadStatus() == 5)
+	                    	  out.print("Visit Complete");
+	                      if(newLeadList.getLeadStatus() == 6)
+	                    	  out.print("Follow Up");
+	                      if(newLeadList.getLeadStatus() == 7)
+	                    	  out.print("Booked");
+	                      if(newLeadList.getLeadStatus() == 8)
+	                    	  out.print("Not Interested");
+	                      %></b></h5>
 	                    </div>
 	                 </div>
 	                 <div class="row">
@@ -428,120 +476,78 @@ color: #ccc;
 										     </select>
 										 </div>
 								    </div>
-<!-- 									<div class="form-group row"> -->
-<!-- 									   <label for="example-search-input" class="col-5 col-form-label">Budget</label> -->
-<!-- 									   <div class="col-7"> -->
-<!-- 										    <button id="min-max-price-range" class="dropdown-toggle custom-button" href="#" data-toggle="dropdown">Budget<strong class="caret"></strong> -->
-<!--         									</button> -->
-<!-- 								        <div class="dropdown-menu margin-p" style="padding:10px;"> -->
-<!-- 								            <div class="row"> -->
-<!-- 								                <div class="col-xs-3 width30button"> -->
-<!-- 								                    <input class="form-control price-label" placeholder="Min" id="minprice" name="minprice" data-dropdown-id="pricemin"/> -->
-<!-- 								                </div> -->
-<!-- 								                <div class="col-xs-2"> - </div> -->
-<!-- 								                <div class="col-xs-3 width30button"> -->
-<!-- 								                    <input class="form-control price-label" placeholder="Max"id="maxprice" name="maxprice" data-dropdown-id="pricemax"/> -->
-<!-- 								                </div> -->
-<!-- 												<div class="clearfix"></div> -->
-<!-- 								                <ul id="pricemin" class="col-sm-12 price-range list-unstyled"> -->
-<!-- 								                    <li  data-value="0">0</li> -->
-<!-- 								                    <li data-value="10">10</li> -->
-<!-- 								                    <li  data-value="20">20</li> -->
-<!-- 								                    <li  data-value="30">30</li> -->
-<!-- 								                    <li  data-value="40">40</li> -->
-<!-- 								                    <li  data-value="50">50</li> -->
-<!-- 								                    <li  data-value="60">60</li> -->
-<!-- 								                </ul> -->
-<!-- 								                <ul id="pricemax" class="col-sm-12 price-range text-right list-unstyled hide"> -->
-<!-- 								                    <li  data-value="0">0</li> -->
-<!-- 								                    <li  data-value="10">10</li> -->
-<!-- 								                    <li  data-value="20">20</li> -->
-<!-- 								                    <li  data-value="30">30</li> -->
-<!-- 								                    <li  data-value="40">40</li> -->
-<!-- 								                    <li  data-value="50">50</li> -->
-<!-- 								                    <li  data-value="60">60</li> -->
-<!-- 								                </ul> -->
-<!-- 								            </div> -->
-<!-- 								        </div> -->
-<!-- 									 </div> -->
-<!-- 									 </div> -->
-	<div class="span2 investRange">
-	<label for="example-search-input" class="col-5 col-form-label">Budget</label>
-    <div class="btn-group">
-
-      <button id="min-max-price-range" class="form-control selectpicker select-btn  dropdown-toggle searchParams" href="#" data-toggle="dropdown" tabindex="6">
-        <div class="filter-option pull-left span_price">
-          <span id="price_range1"> </span> - <span id="price_range2">Price Range</span> </div>
-        <span class="bs-caret" style="float: right;"><span class="caret"></span></span>
-      </button>
-
-      <div class="dropdown-menu ddRange" role="menu" style="width: 295px;padding-top: 12px;">
-        <div class="rangemenu">
-          <div class="freeformPrice">
-            <div class="col-md-5">
-              <input name="minprice" id="minprice" type="text" class="min_input form-control" placeholder="Min Price">
-            </div>
-            <div class="col-md-2 "><span class="arrow"></span></div>
-            <div class="col-md-5">
-              <input name="maxprice" id="maxprice" type="text" class="max_input form-control" placeholder="Max Price">
-            </div>
-          </div>
-
-          <div class="price_Ranges rangesMax col-md-5">
-            <a class="max_value" value="" href="javascript:void(0)">Any Max</a>
-            <a class="max_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
-            <a class="max_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
-            <a class="max_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
-            <a class="max_value" value="10000000" href="javascript:void(0)">1 cr</a>
-            <a class="max_value" value="50000000" href="javascript:void(0)">5 cr</a>
-            <a class="max_value" value="100000000" href="javascript:void(0)">10 cr</a>
-            <a class="max_value" value="500000000" href="javascript:void(0)">50 cr</a>
-            <a class="max_value" value="1000000000" href="javascript:void(0)">100 cr</a>
-            <a class="max_value" value="2000000000" href="javascript:void(0)">200 cr</a>
-            <a class="max_value" value="5000000000" href="javascript:void(0)">500 cr</a>
-          </div>
-          <div class="col-md-2"> </div>
-
-          <div class="price_Ranges rangesMin col-md-5">
-            <a class="min_value" value="" href="javascript:void(0)">Any Min</a>
-            <a class="min_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
-            <a class="min_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
-            <a class="min_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
-            <a class="min_value" value="10000000" href="javascript:void(0)">1 cr</a>
-            <a class="min_value" value="50000000" href="javascript:void(0)">5 cr</a>
-            <a class="min_value" value="100000000" href="javascript:void(0)">10 cr</a>
-            <a class="min_value" value="500000000" href="javascript:void(0)">50 cr</a>
-            <a class="min_value" value="1000000000" href="javascript:void(0)">100 cr</a>
-            <a class="min_value" value="2000000000" href="javascript:void(0)">200 cr</a>
-            <a class="min_value" value="5000000000" href="javascript:void(0)">500 cr</a>
-          </div>
-        </div>
-
-        <div class="btnClear">
-          <a href="javascript:void(0)" class="btn btn-link">Clear</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
+									<div class="span2 investRange">
+									<label for="example-search-input" class="col-5 col-form-label">Budget</label>
+						    			<div class="btn-group">
+						
+										      <button id="min-max-price-range" class="form-control selectpicker select-btn  dropdown-toggle searchParams" href="#" data-toggle="dropdown" tabindex="6">
+										        <div class="filter-option pull-left span_price">
+										          <span id="price_range1"> </span> - <span id="price_range2">Price Range</span> </div>
+										        <span class="bs-caret" style="float: right;"><span class="caret"></span></span>
+										      </button>
+										      <div class="dropdown-menu ddRange" role="menu" style="width: 295px;padding-top: 12px;">
+										        <div class="rangemenu">
+										          <div class="freeformPrice">
+										            <div class="col-md-5">
+										              <input name="minprice" id="minprice" type="text" class="min_input form-control" placeholder="Min Price">
+										            </div>
+										            <div class="col-md-2 "><span class="arrow"></span></div>
+										            <div class="col-md-5">
+										              <input name="maxprice" id="maxprice" type="text" class="max_input form-control" placeholder="Max Price">
+										            </div>
+										          </div>
+										          <div class="price_Ranges rangesMax col-md-5">
+										            <a class="max_value" value="" href="javascript:void(0)">Any Max</a>
+										            <a class="max_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
+										            <a class="max_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
+										            <a class="max_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
+										            <a class="max_value" value="10000000" href="javascript:void(0)">1 cr</a>
+										            <a class="max_value" value="50000000" href="javascript:void(0)">5 cr</a>
+										            <a class="max_value" value="100000000" href="javascript:void(0)">10 cr</a>
+										            <a class="max_value" value="500000000" href="javascript:void(0)">50 cr</a>
+										            <a class="max_value" value="1000000000" href="javascript:void(0)">100 cr</a>
+										            <a class="max_value" value="2000000000" href="javascript:void(0)">200 cr</a>
+										            <a class="max_value" value="5000000000" href="javascript:void(0)">500 cr</a>
+										          </div>
+										          <div class="col-md-2"> </div>
+										          <div class="price_Ranges rangesMin col-md-5">
+										            <a class="min_value" value="" href="javascript:void(0)">Any Min</a>
+										            <a class="min_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
+										            <a class="min_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
+										            <a class="min_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
+										            <a class="min_value" value="10000000" href="javascript:void(0)">1 cr</a>
+										            <a class="min_value" value="50000000" href="javascript:void(0)">5 cr</a>
+										            <a class="min_value" value="100000000" href="javascript:void(0)">10 cr</a>
+										            <a class="min_value" value="500000000" href="javascript:void(0)">50 cr</a>
+										            <a class="min_value" value="1000000000" href="javascript:void(0)">100 cr</a>
+										            <a class="min_value" value="2000000000" href="javascript:void(0)">200 cr</a>
+										            <a class="min_value" value="5000000000" href="javascript:void(0)">500 cr</a>
+										          </div>
+										        </div>
+										        <div class="btnClear">
+										          <a href="javascript:void(0)" class="btn btn-link">Clear</a>
+										        </div>
+										      </div>
+						    			</div>
+						  			</div>
 								
-								 <%if(access_id ==5){ %>
+						   			<%if(access_id ==5){ %>
 							 
-							 <div class="form-group row">
-							 <label for="example-search-input" class="col-5 col-form-label">Assign Salesman</label>
-								<div class="col-7">
-									<div>
-								   		<select id="assignsalemans" name="assignsalemans[]" multiple>
-									    <%if(salesmanList != null){
-								    	  for(BuilderEmployee  builderEmployee: salesmanList){%>
-								      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
-								      	 <%}} %>
-									     </select>
-								     </div>
-								 </div>
-						    </div>
-						    <%} %>
-						    </div>
+									 <div class="form-group row">
+									 <label for="example-search-input" class="col-5 col-form-label">Assign Salesman</label>
+										<div class="col-7">
+											<div>
+										   		<select id="assignsalemans" name="assignsalemans[]" multiple>
+											    <%if(salesmanList != null){
+										    	  for(BuilderEmployee  builderEmployee: salesmanList){%>
+										      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
+										      	 <%}} %>
+											     </select>
+										     </div>
+										 </div>
+								    </div>
+						    		<%} %>
+						    	</div>
 								<div class="center bcenter">
 							  	   <button type="submit" class="button1">Save</button>
 							  	</div>
@@ -568,7 +574,7 @@ $("#cancellation").click(function(){
 $("#campaign").click(function(){
 	window.location.href="${baseUrl}/builder/campaign/Salesman_campaign.jsp?project_id="+<%out.print(projectId);%>
 });
-$select_scorce = $("#select_source").selectize({
+$select_source = $("#select_source").selectize({
 	persist: false,
 	 onChange: function(value) {
 		if($("#select_source").val() > 0 || $("#select_source").val() != '' ){
@@ -584,7 +590,21 @@ $select_scorce = $("#select_source").selectize({
      }
 });
 
-select_scorce = $select_scorce[0].selectize;
+select_source = $select_source[0].selectize;
+
+<%
+	if(access_id == 5){
+%>
+$select_salesman = $(".select_salesman").selectize({
+	persist: false,
+	onChange: function(value){
+		if($(".select_salesman").val() > 0 || $(".select_salesman").val() != ''){
+			alert($(".select_salesman").val());
+		}
+	}
+});
+select_salesman = $select_salesman[0].selectize;
+<%}%>
 
 $('#configuration').multiselect({
     columns: 1,
@@ -732,7 +752,6 @@ function showAddResponse(resp, statusText, xhr, $form){
 }
 <%if(access_id == 7){%>
 function changeLeadStatus(value,id){
-	
 	ajaxindicatorstart("Loading...");
 	$("#laststatusname"+id).val('');
 	$.post("${baseUrl}/webapi/builder/changeleadAuthority",{value:value,id:id},function(data){
@@ -750,7 +769,7 @@ function changeLeadStatus(value,id){
 					$("#laststatusname"+data.id).html("Email Sent");
 				}
 				if(data.data.value == 4){
-					$("#laststatusname"+data.id).html("Visit Again");
+					$("#laststatusname"+data.id).html("Visit Schedule");
 				}
 				if(data.data.value == 5){
 					$("#laststatusname"+data.id).html("Visit Complete");
@@ -779,7 +798,7 @@ function changeLeadStatus(value,id){
 }
 <%}%>
 $("searchleads").click(function(){
-	alert("hello");
+	//alert("hello");
 
 	var searchResult = "";
 	var i=1;
@@ -790,6 +809,8 @@ $("#newleads").empty();
 getLeadsdetailList();
 	<%}%>
 	<%if(access_id == 5){%>
+	
+	
 	<%}%>
 });
 
@@ -868,7 +889,16 @@ function validateDropDownInputs() {
   }
 }
 
+<%if(access_id == 5){%>
+$("#addnewleadbtn").click(function(){
+//	alert("a");
+	openAddLead(<%out.print(projectId);%>);
+});
 
+function openAddLead(id){
+	window.location.href="${baseUrl}/builder/leads/Saleshead_add_lead.jsp?project_id="+<%out.print(projectId);%>
+}
+<%}%>
 function getLeadsdetailList(){
 	$.post("${baseUrl}/webapi/builder/filter/newlead",{emp_id : $("#emp_id").val(), project_id:$("#project_id").val(),name:$("#srch-term").val()},function(data){
 		$(data).each(function(index){

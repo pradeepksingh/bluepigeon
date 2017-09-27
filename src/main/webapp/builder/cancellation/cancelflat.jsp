@@ -211,6 +211,7 @@
 				 for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().size();floor_size++){
 				 	for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
 				 		if(bookingFlatList2 != null){
+               	  			if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("booked")){
                	  			if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
 	 %>
 	  <script type="text/javascript">
@@ -224,10 +225,11 @@ $(document).ready(function () {
     </script>
     <%						}
                	  		}
-				 	}
-				}
+               	  	}
+				 }
 			}
 		}
-	 %>
+	}
+	%>
 
 <% } %>		

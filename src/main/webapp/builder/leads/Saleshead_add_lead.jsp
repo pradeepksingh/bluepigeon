@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderProjectPropertyConfigurationInfo"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.model.Source"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
@@ -22,12 +23,16 @@
 	int access_id =0;
 	int city_size = 0;
 	int emp_id =0 ;
+	int projectId = 0;
+	BuilderProject builderProject = null;
  	List<ProjectData> builderProjects =null;
  	List<Source> sourceList = null;
  	List<BuilderEmployee> salesmanList = null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
    	session = request.getSession(false);
    	BuilderEmployee builder = new BuilderEmployee();
+   	List< BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos =null;
+   	projectId = Integer.parseInt(request.getParameter("project_id"));
    	int builder_id = 0;
    	if(session!=null)
 	{
@@ -42,6 +47,8 @@
 				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
 				if(access_id ==5){
 					salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
+					 builderProject = new ProjectDAO().getBuilderActiveProjectById(projectId);
+					 builderProjectPropertyConfigurationInfos = new ProjectDAO().getPropertyConfigByProjectId(projectId);
 				}
 			}
 			if(builderProjects.size()>0)
@@ -238,7 +245,13 @@ color: #ccc;
 							   <label for="example-search-input" class="col-5 col-form-label">Configuration</label>
 								  <div class="col-7">
 								  		<div>
-								      		<select id="configuration" name="configuration[]" multiple>	</select>
+								      		<select id="configuration" name="configuration[]"  multiple>
+									           <% if(builderProjectPropertyConfigurationInfos != null){ 
+									           	for(BuilderProjectPropertyConfigurationInfo builderProjectPropertyConfigurationInfo : builderProjectPropertyConfigurationInfos){
+									           %>
+									            <option value="<%out.print(builderProjectPropertyConfigurationInfo.getBuilderProjectPropertyConfiguration().getId());%>"><%out.print(builderProjectPropertyConfigurationInfo.getBuilderProjectPropertyConfiguration().getName()); %></option>
+									           <%}} %>
+										     </select>
 								     	</div>
 								      	<div class="messageContainer"></div>
 								  </div>
@@ -274,72 +287,72 @@ color: #ccc;
 							 <label for="example-search-input" class="col-5 col-form-label">Interested Project</label>
 								<div class="col-7">
 									<div>
-								   		<select id="project_ids" name="project_ids[]" multiple>
-									    <%if(builderProjects != null){
-								    	  for(ProjectData projectData : builderProjects){%>
-								      		<option value="<%out.print(projectData.getId());%>"><%out.print(projectData.getName()); %></option>
-								      	 <%}} %>
+									    <input type="hidden" id="project_id" name="project_id" value="<%out.print(projectId);%>"/>
+								   		<select id="project_ids" name="project_ids[]" disabled>
+									    <% if(builderProject != null){%>
+									        <option value="<%out.print(builderProject.getId());%>" selected><%out.print(builderProject.getName()); %></option>
+									    <%} %>
 									     </select>
 								     </div>
 								 </div>
 						    </div>
-
-							<div class="span2 investRange">
+								<div class="span2 investRange">
 								<label for="example-search-input" class="col-5 col-form-label">Budget</label>
-							    <div class="btn-group">
-							
-							      <button id="min-max-price-range" class="form-control selectpicker select-btn  dropdown-toggle searchParams" href="#" data-toggle="dropdown" tabindex="6">
-							        <div class="filter-option pull-left span_price">
-							          <span id="price_range1"> </span> - <span id="price_range2">Price Range</span> </div>
-							        <span class="bs-caret" style="float: right;"><span class="caret"></span></span>
-							      </button>
-							
-							      <div class="dropdown-menu ddRange" role="menu" style="width: 295px;padding-top: 12px;">
-							        <div class="rangemenu">
-							          <div class="freeformPrice">
-							            <div class="col-md-5">
-							              <input name="minprice" id="minprice" type="text" class="min_input form-control" placeholder="Min Price">
-							            </div>
-							            <div class="col-md-2 "><span class="arrow"></span></div>
-							            <div class="col-md-5">
-							              <input name="maxprice" id="maxprice" type="text" class="max_input form-control" placeholder="Max Price">
-							            </div>
-							          </div>
-							
-							          <div class="price_Ranges rangesMax col-md-5">
-							            <a class="max_value" value="" href="javascript:void(0)">Any Max</a>
-							            <a class="max_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
-							            <a class="max_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
-							            <a class="max_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
-							            <a class="max_value" value="10000000" href="javascript:void(0)">1 cr</a>
-							            <a class="max_value" value="50000000" href="javascript:void(0)">5 cr</a>
-							            <a class="max_value" value="100000000" href="javascript:void(0)">10 cr</a>
-							            <a class="max_value" value="500000000" href="javascript:void(0)">50 cr</a>
-							            <a class="max_value" value="1000000000" href="javascript:void(0)">100 cr</a>
-							            <a class="max_value" value="2000000000" href="javascript:void(0)">200 cr</a>
-							            <a class="max_value" value="5000000000" href="javascript:void(0)">500 cr</a>
-							          </div>
-							          <div class="col-md-2"> </div>
-							          <div class="price_Ranges rangesMin col-md-5">
-							            <a class="min_value" value="" href="javascript:void(0)">Any Min</a>
-							            <a class="min_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
-							            <a class="min_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
-							            <a class="min_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
-							            <a class="min_value" value="10000000" href="javascript:void(0)">1 cr</a>
-							            <a class="min_value" value="50000000" href="javascript:void(0)">5 cr</a>
-							            <a class="min_value" value="100000000" href="javascript:void(0)">10 cr</a>
-							            <a class="min_value" value="500000000" href="javascript:void(0)">50 cr</a>
-							            <a class="min_value" value="1000000000" href="javascript:void(0)">100 cr</a>
-							            <a class="min_value" value="2000000000" href="javascript:void(0)">200 cr</a>
-							            <a class="min_value" value="5000000000" href="javascript:void(0)">500 cr</a>
-							          </div>
-							        </div>
-							        <div class="btnClear">
-							          <a href="javascript:void(0)" class="btn btn-link">Clear</a>
-							        </div>
-							      </div>
-							    </div>
-							  </div>
+				    				<div class="btn-group">
+						      <button id="min-max-price-range" class="form-control selectpicker select-btn  dropdown-toggle searchParams" href="#" data-toggle="dropdown" tabindex="6">
+						        <div class="filter-option pull-left span_price">
+						          <span id="price_range1"> </span> - <span id="price_range2">Price Range</span> </div>
+						        <span class="bs-caret" style="float: right;"><span class="caret"></span></span>
+						      </button>
+						
+						      <div class="dropdown-menu ddRange" role="menu" style="width: 295px;padding-top: 12px;">
+						        <div class="rangemenu">
+						          <div class="freeformPrice">
+						            <div class="col-md-5">
+						              <input name="minprice" id="minprice" type="text" class="min_input form-control" placeholder="Min Price">
+						            </div>
+						            <div class="col-md-2 "><span class="arrow"></span></div>
+						            <div class="col-md-5">
+						              <input name="maxprice" id="maxprice" type="text" class="max_input form-control" placeholder="Max Price">
+						            </div>
+						          </div>
+						
+						          <div class="price_Ranges rangesMax col-md-5">
+						            <a class="max_value" value="" href="javascript:void(0)">Any Max</a>
+						            <a class="max_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
+						            <a class="max_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
+						            <a class="max_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
+						            <a class="max_value" value="10000000" href="javascript:void(0)">1 cr</a>
+						            <a class="max_value" value="50000000" href="javascript:void(0)">5 cr</a>
+						            <a class="max_value" value="100000000" href="javascript:void(0)">10 cr</a>
+						            <a class="max_value" value="500000000" href="javascript:void(0)">50 cr</a>
+						            <a class="max_value" value="1000000000" href="javascript:void(0)">100 cr</a>
+						            <a class="max_value" value="2000000000" href="javascript:void(0)">200 cr</a>
+						            <a class="max_value" value="5000000000" href="javascript:void(0)">500 cr</a>
+						          </div>
+						          <div class="col-md-2"> </div>
+						
+						          <div class="price_Ranges rangesMin col-md-5">
+						            <a class="min_value" value="" href="javascript:void(0)">Any Min</a>
+						            <a class="min_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
+						            <a class="min_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
+						            <a class="min_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
+						            <a class="min_value" value="10000000" href="javascript:void(0)">1 cr</a>
+						            <a class="min_value" value="50000000" href="javascript:void(0)">5 cr</a>
+						            <a class="min_value" value="100000000" href="javascript:void(0)">10 cr</a>
+						            <a class="min_value" value="500000000" href="javascript:void(0)">50 cr</a>
+						            <a class="min_value" value="1000000000" href="javascript:void(0)">100 cr</a>
+						            <a class="min_value" value="2000000000" href="javascript:void(0)">200 cr</a>
+						            <a class="min_value" value="5000000000" href="javascript:void(0)">500 cr</a>
+						          </div>
+						        </div>
+						
+						        <div class="btnClear">
+						          <a href="javascript:void(0)" class="btn btn-link">Clear</a>
+						        </div>
+						      </div>
+						    </div>
+						  </div>
 							 <%if(access_id ==5){ %>
 							 <div class="form-group row">
 							 <label for="example-search-input" class="col-5 col-form-label">Assign Salesman</label>
@@ -355,11 +368,11 @@ color: #ccc;
 								 </div>
 						    </div>
 						    <%} %>
-						    </div>
-							<div class="center bcenter">
-						  	   <button type="submit" id="save" class="button1">Save</button>
-						  	</div>
-                    	 </form>
+						</div>
+						<div class="center bcenter">
+					  	   <button type="submit" id="save" class="button1">Save</button>
+					  	</div>
+                     </form>
                      </div>
                   </div>
                </div>
@@ -399,12 +412,12 @@ $('#configuration').multiselect({
 //$('#multiple-checkboxes-3').style.margin-left="5px";
 //$('#multiple-checkboxes-3').css({"padding-left":"10px !important"});
 
-$('#project_ids').multiselect({
-    columns: 1,
-    placeholder: 'Select Project',
-    search: true,
-    selectAll: true
-});
+// $('#project_ids').multiselect({
+//     columns: 1,
+//     placeholder: 'Select Project',
+//     search: true,
+//     selectAll: true
+// });
 
 
 $('#assignsalemans').multiselect({
@@ -614,7 +627,7 @@ function showAddResponse(resp, statusText, xhr, $form){
 }
 
 $("#project_ids").change(function(){
-	alert("Mouse down event");
+	//alert("Mouse down event");
 		var htmlconfig = "";
 		ajaxindicatorstart("Loading...");
 	  $.get("${baseUrl}/webapi/project/configdata",{project_ids:$(this).val()},function(data){

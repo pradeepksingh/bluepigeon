@@ -143,7 +143,7 @@ public class CancellationController {
 					mobileNumber = 0;
 				}
 				else{
-					mobileNumber = Integer.parseInt(nameOrNumber);
+					mobileNumber =  Long.parseLong(nameOrNumber);
 					contactNumber = 0;
 				}
 			}
@@ -152,7 +152,7 @@ public class CancellationController {
 		}catch(NumberFormatException e){
 			name = nameOrNumber;
 			contactNumber = 0;
-			mobileNumber = Long.parseLong(nameOrNumber);
+			//mobileNumber = Long.parseLong(nameOrNumber);
 			System.err.println("Name :: "+name);
 		}catch(NullPointerException e){
 			e.printStackTrace();
