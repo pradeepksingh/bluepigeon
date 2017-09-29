@@ -29,6 +29,7 @@
  	List<ProjectData> assignProjects = null;
  	List<Source> sourceList = null;
  	List<BuilderEmployee> salesmanList = null;
+ 	List<BuilderEmployee> salesheadList = null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
    	session = request.getSession(false);
    	BuilderEmployee builder = new BuilderEmployee();
@@ -47,6 +48,11 @@
 				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
 				if(access_id ==5){
 					salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
+					projectLists = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
+					assignProjects = new ProjectDAO().getAssigProjects(builder);
+				}
+				if(access_id == 4){
+					salesheadList = new BuilderDetailsDAO().getBuilderSaleshead(builder);
 					projectLists = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 					assignProjects = new ProjectDAO().getAssigProjects(builder);
 				}
@@ -127,14 +133,26 @@
         <!-- Page Content -->
         <div id="page-wrapper" style="min-height: 2038px;">
            <div class="container-fluid">
+           <%if(access_id == 5){ %>
            <h1 class="uppercase">Assign Salesman</h1>
+           <%} %>
+            <%if(access_id == 4){ %>
+           <h1 class="uppercase">Assign Saleshead</h1>
+           <%} %>
               <div class="white-box">
                    <div class="lead-bg">
                    <!-- buyer information end -->
 	                 <div class="row blue-border">
+	                 <%if(access_id == 5){ %>
 	                   <div class="col-md-3 col-sm-2 col-xs-6">
 	                     <h2>Salesman name</h2>
 	                   </div>
+	                   <%} %>
+	                   <%if(access_id == 4){ %>
+	                   <div class="col-md-3 col-sm-2 col-xs-6">
+	                     <h2>Saleshead name</h2>
+	                   </div>
+	                   <%} %>
 	                   <div class="col-md-3 col-sm-2 col-xs-6">
 	                     <h2>Phone no.</h2>
 	                   </div>
@@ -196,7 +214,7 @@
     </div>
     <!-- /.container-fluid -->
     <div id="sidebar1"> 
-       	   		<%@include file="../partial/footer.jsp"%>
+       	  <%@include file="../partial/footer.jsp"%>
       </div>
   </body>
 </html>
@@ -204,7 +222,6 @@
 function updateSalesman(id){
 	//alert(id+" "+multival.value);
 	alert(id+ " "+$(this).val());
-	
 }
 
 $("#second").change(function(){

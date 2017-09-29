@@ -173,7 +173,7 @@ public class BuilderEmployee implements java.io.Serializable {
 		this.employeeId = employeeId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "project_id")
 	public BuilderProject getBuilderProject() {
 		return builderProject;

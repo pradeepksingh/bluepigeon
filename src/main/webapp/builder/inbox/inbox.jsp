@@ -250,7 +250,7 @@
 		        <div class="modal-body">
 		           <div class="row">
 					  <div class="col-md-10 col-sm-10 col-xs-10">
-					    <h3>Compose</h3>
+					    <h3>Response</h3>
 				      </div>
 					  <div class="col-md-2 col-sm-2 col-xs-2">
 					     <img src="../images/error.png" alt="cancle" data-dismiss="modal">
@@ -448,7 +448,7 @@ function getBuyerNames(){
 				var nmonth = '';
 				var  locale = "en-us";
 				if(data[index].image != ''){
-					image = '${baseUrl}/'+data.image;
+					image = '${baseUrl}/'+data[index].image;
 				}
 				if(data[index].date != ' '){
 					var strDate = data[index].date;

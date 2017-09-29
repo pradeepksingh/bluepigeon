@@ -3,10 +3,18 @@ package org.bluepigeon.admin.data;
 import java.util.Date;
 
 public class InboxMessageData {
+	private int id;
 	private String image;
 	private String name;
 	private String subject;
 	private Date date;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getImage() {
 		return image;
 	}

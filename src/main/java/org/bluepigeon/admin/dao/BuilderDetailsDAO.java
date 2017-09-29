@@ -31,6 +31,7 @@ import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.EmployeeList;
 import org.bluepigeon.admin.data.InboxMessageData;
+import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.data.ProjectWiseData;
 import org.bluepigeon.admin.util.HibernateUtil;
@@ -1735,5 +1736,39 @@ public class BuilderDetailsDAO {
 		}
 		session.getTransaction().commit();
 		session.close();
+	}
+	
+	public List<BuilderEmployee> getBuilderSaleshead(BuilderEmployee builderEmployee){
+		String hql = "From BuilderEmployee where builder.id = :builder_id and builderEmployeeAccessType.id = 5";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
+		List<BuilderEmployee> result = query.list();
+		return result;
+	}
+	
+	public List<ProjectData> getEmployeeByRoles(BuilderEmployee builderEmployee){
+		   String hql = "";
+		    if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
+		      hql = "SELECT project.id as id, project.name as name "
+		        +"FROM  builder_project as project "
+		        +"left join builder as build ON project.group_id = build.id "
+		        +"WHERE build.id = "+builderEmployee.getBuilder().getId()+" and project.status=1 group by project.id";
+		    } else {
+		      hql = "SELECT project.id as id, project.name as name "
+		          +"FROM  builder_project as project inner join allot_project ap ON project.id = ap.project_id "
+		          +"left join builder as build ON project.group_id = build.id "
+		          +"WHERE ap.emp_id = "+builderEmployee.getId()+" group by project.id";
+		    }
+		    HibernateUtil hibernateUtil = new HibernateUtil();
+		    Session session = hibernateUtil.getSessionFactory().openSession();
+		    Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectData.class));
+		    System.err.println(hql);
+		   // query.setMaxResults(4);
+		    List<ProjectData> result = query.list();
+		    session.close();
+		    return result;
+		
 	}
 }

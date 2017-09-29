@@ -129,7 +129,7 @@
          </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
-        <div id="page-wrapper" style="min-height: 2038px;">
+        <div id="page-wrapper">
            <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -156,7 +156,7 @@
                            		</select>
                     		</div>
                     		<%} %>
-                    		<%if(access_id == 5){ %>
+                    		<%if(access_id == 4||access_id == 5){ %>
                     		
                     		<div class="col-md-3 col-sm-6 col-xs-12">
                         		<select class="selectpicker border-drop-down" data-style="form-control" id="graph_project_id" name="graph_project_id">
@@ -288,7 +288,8 @@
        		%> 
   
        	mychart = Morris.Bar({
-     		 
+       		barGap:4,
+       	  barSizeRatio:0.55,
     	    element: 'morris-bar-chart',
     	    data: [
     	    	<% for(ProjectWiseData barGraphData : projectWiseDatas){ %>
@@ -344,7 +345,8 @@
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
-    		 
+ 			//barGap:4,
+ 			  //barSizeRatio:0.55,
     	    element: 'morris-bar-chart',
     	    data: data,
              xkey: 'y',
@@ -365,7 +367,8 @@
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
-    		 
+ 			//barGap:4,
+ 			 // barSizeRatio:0.55,
     	    element: 'morris-bar-chart',
     	    data: data,
              xkey: 'y',
@@ -386,7 +389,8 @@
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
-    		 
+ 			//barGap:4,
+ 			  //barSizeRatio:0.55,
     	    element: 'morris-bar-chart',
     	    data: data,
              xkey: 'y',
@@ -407,7 +411,8 @@
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
-    		 
+ 			//barGap:4,
+ 			  //barSizeRatio:0.55,
     	    element: 'morris-bar-chart',
     	    data: data,
              xkey: 'y',
