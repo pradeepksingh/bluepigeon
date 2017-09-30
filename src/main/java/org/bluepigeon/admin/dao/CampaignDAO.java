@@ -22,6 +22,11 @@ import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.DateType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StandardBasicTypes;
+import org.hibernate.type.StringType;
 
 public class CampaignDAO {
 
@@ -413,4 +418,56 @@ public class CampaignDAO {
 		}
 		return responseMessage;
 	}
+	
+	/* **************** GET CUSTOM CAMPAIGN LIST *************** */
+	public List<CampaignListNew> getMyAssignedProjectCampaigns(BuilderEmployee builderEmployee){
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1) {
+			hql = "SELECT a.id, a.title, a.content, a.set_date as startDate, a.end_date as endDate, a.terms, a.image, a.project_id as projectId, b.name,"
+					 +" COUNT( c.id ) AS leads, SUM( CASE c.lead_status WHEN 7 THEN 1 ELSE 0 END ) AS booking"
+					 +" FROM campaign AS a INNER JOIN builder_project AS b ON a.project_id = b.id"
+					 +" LEFT JOIN builder_lead AS c ON a.id = c.campaign_id"
+					 +" WHERE b.group_id = "+builderEmployee.getBuilder().getId()+" GROUP BY a.id order by a.id DESC";
+		} else {
+			hql = "SELECT a.id, a.title, a.content, a.set_date as startDate, a.end_date as endDate, a.terms, a.image, a.project_id as projectId, b.name,"
+				 +" COUNT( c.id ) AS leads, SUM( CASE c.lead_status WHEN 7 THEN 1 ELSE 0 END ) AS booking"
+				 +" FROM campaign AS a INNER JOIN builder_project AS b ON a.project_id = b.id"
+				 +" LEFT JOIN builder_lead AS c ON a.id = c.campaign_id INNER JOIN allot_project AS d ON a.project_id = d.project_id"
+				 +" WHERE d.emp_id = "+builderEmployee.getId()+" GROUP BY a.id order by a.id DESC";
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(CampaignListNew.class));
+		List<CampaignListNew> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<CampaignListNew> getMyCampaignsByProjectId(int project_id){
+		String hql = "SELECT a.id, a.title, a.content, a.set_date as startDate, a.end_date as endDate, a.terms, a.image, a.project_id as projectId, b.name,"
+					 +" count(c.id) AS leads, SUM( CASE c.lead_status WHEN 7 THEN 1 ELSE 0 END ) AS booking"
+					 +" FROM campaign AS a INNER JOIN builder_project AS b ON a.project_id = b.id"
+					 +" LEFT JOIN builder_lead AS c ON a.id = c.campaign_id"
+					 +" WHERE a.project_id = "+project_id+" GROUP BY a.id order by a.id DESC";
+		
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql)
+				.addScalar("id", IntegerType.INSTANCE)
+				.addScalar("projectId", IntegerType.INSTANCE)
+				.addScalar("leads", LongType.INSTANCE)
+				.addScalar("booking", LongType.INSTANCE)
+	            .addScalar("title", StringType.INSTANCE)
+	            .addScalar("content", StringType.INSTANCE)
+	            .addScalar("terms", StringType.INSTANCE)
+	            .addScalar("image", StringType.INSTANCE)
+	            .addScalar("name", StringType.INSTANCE)
+	            .addScalar("startDate", DateType.INSTANCE)
+	            .addScalar("endDate", DateType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(CampaignListNew.class));
+		List<CampaignListNew> result = query.list();
+		session.close();
+		return result;
+	}
+	
 }

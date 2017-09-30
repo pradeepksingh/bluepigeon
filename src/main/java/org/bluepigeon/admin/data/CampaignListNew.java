@@ -4,11 +4,14 @@ import java.util.Date;
 
 public class CampaignListNew {
 	private int id;
+	private int projectId;
 	private String name;
+	private String title;
 	private String image;
 	private Date startDate;
 	private Date endDate;
 	private String content;
+	private String terms;
 	private Long booking = (long)0;
 	private Long leads = (long)0;
 	public int getId() {
@@ -58,5 +61,23 @@ public class CampaignListNew {
 	}
 	public void setLeads(Long leads) {
 		this.leads = leads;
+	}
+	public int getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getTerms() {
+		return terms;
+	}
+	public void setTerms(String terms) {
+		this.terms = terms;
 	}
 }
