@@ -329,7 +329,7 @@
 	                    <%  } else if(access_id == 4){%>
 	                    <div class="row">
                            	 <div class="col-md-6 left"> 
-                           	   	 <a href="${baseUrl}/builder/sales/Project-head-Project-Status.html" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
+                           	   	 <a href="${baseUrl}/builder/campaign/mycampaigns.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
                            	 </div>
                            	 <div class="col-md-6 center">
                           		 <a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
