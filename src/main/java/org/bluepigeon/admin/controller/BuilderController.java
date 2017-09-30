@@ -47,6 +47,7 @@ import org.bluepigeon.admin.model.BuilderBuildingAmenityStages;
 import org.bluepigeon.admin.model.BuilderBuildingAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderBuildingStatus;
 import org.bluepigeon.admin.model.BuilderCompanyNames;
+import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderFlat;
 import org.bluepigeon.admin.model.BuilderFlatAmenity;
 import org.bluepigeon.admin.model.BuilderFlatAmenityStages;
@@ -65,6 +66,7 @@ import org.bluepigeon.admin.model.FlatAmenityInfo;
 import org.bluepigeon.admin.model.FlatAmenityWeightage;
 import org.bluepigeon.admin.model.FlatPaymentSchedule;
 import org.bluepigeon.admin.model.InboxMessage;
+import org.bluepigeon.admin.model.InboxMessageReply;
 import org.bluepigeon.admin.model.Locality;
 import org.bluepigeon.admin.model.ProjectImageGallery;
 import org.bluepigeon.admin.model.State;
@@ -693,5 +695,78 @@ public class BuilderController {
 			
 		}
 		return new ProjectDAO().getNewLeadLists(empId,projectId,name,contactNumber);
+	}
+	
+	@POST
+	@Path("/inbox/reply")
+	@Produces(MediaType.APPLICATION_JSON)
+	public InboxMessageData getInboxMessage(
+			@FormParam("id") int id
+		){
+		return new BuilderDetailsDAO().getInboxMessageData(id);
+	}
+	
+	@POST
+	@Path("/inbox/new/replay")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage saveReplyMessage(
+			@FormDataParam("subject") String subject,
+			@FormDataParam("emp_id") int empId,
+			@FormDataParam("inbox_id") int inboxId,
+			@FormDataParam("message") String message, 
+			@FormDataParam("attachment[]") List<FormDataBodyPart> attachment
+			
+	) {
+		ResponseMessage msg = new ResponseMessage();
+//		 List<InboxMessage> inboxMessageList = new ArrayList<InboxMessage>();
+		Byte isReply = 1;
+		InboxMessageReply inboxMessage =  new InboxMessageReply();
+		BuilderEmployee builderEmployee = new BuilderEmployee();
+		InboxMessage inboxMessage2 = new InboxMessage();
+		inboxMessage2.setId(inboxId);
+		builderEmployee.setId(empId);
+		inboxMessage.setBuilderEmployee(builderEmployee);
+		inboxMessage.setInboxMessage(inboxMessage2);
+		inboxMessage.setSubject(subject);
+		inboxMessage.setIsReply(isReply);
+		inboxMessage.setMessage(message);
+		    		 try {
+		 				//for inserting attachment.
+		    			 if(attachment != null){
+			 				if (attachment.size() > 0) {
+			 					for(int i=0 ;i < attachment.size();i++)
+			 					{
+			 						if(attachment.get(i).getFormDataContentDisposition().getFileName() != null && !attachment.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+			 							String gallery_name = attachment.get(i).getFormDataContentDisposition().getFileName();
+			 							long millis = System.currentTimeMillis() % 1000;
+			 							gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+			 							gallery_name = "images/project/images/"+gallery_name;
+			 							String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+			 							//System.out.println("for loop image path: "+uploadGalleryLocation);
+			 							this.imageUploader.writeToFile(attachment.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+			 							inboxMessage.setAttachment(gallery_name);
+			 						}
+			 					}
+			 				}
+			 			
+		    			 }else{
+		    				 inboxMessage.setAttachment("");
+		    			 }
+		    				msg = new BuilderDetailsDAO().saveInboxReply(inboxMessage);
+		    		 } catch(NullPointerException e){
+		 				inboxMessage.setAttachment("");
+		 			}
+		 			catch(Exception e) {
+		 				msg.setStatus(0);
+		 				msg.setMessage("Unable to save message");
+		 				return msg;
+		 			}
+		    		
+		    	 
+		     
+		    
+		
+		return msg;
 	}
 }

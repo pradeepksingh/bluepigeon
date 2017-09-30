@@ -50,13 +50,11 @@
     <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
     <!-- animation CSS -->
-    <link href="../css/animate.css" rel="stylesheet">
     <!-- Menu CSS -->
     <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
-    <link href="../css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/style-leadlist.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../css/custom.css">
      <link href="../plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
@@ -132,7 +130,6 @@
                        			for(ProjectList projectList : project_list ){
                        	%>
                        	<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">
-                       		 <a href="${baseUrl}/builder/sales/project_details.jsp?project_id=<% out.print(projectList.getId());%>" >
 	                       	<div class="image">
 	                       		 <%
 	                       		try{
@@ -161,7 +158,12 @@
 				                       </div>
 			                       </div>
 	                           </div>
-	                       </div></a>
+	                       </div>
+	                        <div class="row">
+                         		<div class="col-md-6 center">
+                          		 	<a href="${baseUrl}/builder/sales/project_details.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
+						 	 	</div>
+						  </div>
                         </div>
                         <%  
                        		}
@@ -357,7 +359,7 @@
                          +'</div></a>'
                          +'</div>';
  	            		$("#project_list").append(html);
- 	            		createGraph("graph"+projectId);
+ 	 //           		createGraph("graph"+projectId);
 			 
 			});
 			
