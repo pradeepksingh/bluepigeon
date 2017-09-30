@@ -35,7 +35,7 @@
    	session = request.getSession(false);
    	BuilderEmployee builder = new BuilderEmployee();
    	int builder_id = 0;
-   	List< BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos =null;
+   	List<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos =null;
    	projectId = Integer.parseInt(request.getParameter("project_id")); 
    	if(session!=null)
 	{
@@ -599,7 +599,7 @@ $select_salesman = $(".select_salesman").selectize({
 	persist: false,
 	onChange: function(value){
 		if($(".select_salesman").val() > 0 || $(".select_salesman").val() != ''){
-			alert($(".select_salesman").val());
+		//	alert($(".select_salesman").val());
 		}
 	}
 });

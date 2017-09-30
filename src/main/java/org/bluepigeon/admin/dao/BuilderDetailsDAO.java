@@ -24,6 +24,7 @@ import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.InboxMessage;
+import org.bluepigeon.admin.model.InboxMessageReply;
 import org.bluepigeon.admin.model.ProjectImageGallery;
 import org.bluepigeon.admin.data.BarGraphData;
 import org.bluepigeon.admin.data.BookingFlatList;
@@ -31,6 +32,7 @@ import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.EmployeeList;
 import org.bluepigeon.admin.data.InboxMessageData;
+import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.data.ProjectWiseData;
 import org.bluepigeon.admin.util.HibernateUtil;
@@ -1593,7 +1595,7 @@ public class BuilderDetailsDAO {
 	public List<InboxMessageData> getBookedBuyerList(int empId, String name,int contactNumber){
 		List<InboxMessageData> result = null;
 		//String hql = "SELECT b.name as name, b.photo as image, im.subject as subject, im.im_date as date  ";
-		String hql =" SELECT a.name as name, a.photo as image, b.im_date as date, b.subject as subject";
+		String hql =" SELECT b.id as id, a.name as name, a.photo as image, b.im_date as date, b.subject as subject";
 		String where = "";
 		String hqlnew = "from BuilderEmployee where id = "+empId;
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -1735,5 +1737,66 @@ public class BuilderDetailsDAO {
 		}
 		session.getTransaction().commit();
 		session.close();
+	}
+	
+	public List<BuilderEmployee> getBuilderSaleshead(BuilderEmployee builderEmployee){
+		String hql = "From BuilderEmployee where builder.id = :builder_id and builderEmployeeAccessType.id = 5";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("builder_id", builderEmployee.getBuilder().getId());
+		List<BuilderEmployee> result = query.list();
+		return result;
+	}
+	
+	public List<ProjectData> getEmployeeByRoles(BuilderEmployee builderEmployee){
+		   String hql = "";
+		    if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
+		      hql = "SELECT project.id as id, project.name as name "
+		        +"FROM  builder_project as project "
+		        +"left join builder as build ON project.group_id = build.id "
+		        +"WHERE build.id = "+builderEmployee.getBuilder().getId()+" and project.status=1 group by project.id";
+		    } else {
+		      hql = "SELECT project.id as id, project.name as name "
+		          +"FROM  builder_project as project inner join allot_project ap ON project.id = ap.project_id "
+		          +"left join builder as build ON project.group_id = build.id "
+		          +"WHERE ap.emp_id = "+builderEmployee.getId()+" group by project.id";
+		    }
+		    HibernateUtil hibernateUtil = new HibernateUtil();
+		    Session session = hibernateUtil.getSessionFactory().openSession();
+		    Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectData.class));
+		    System.err.println(hql);
+		   // query.setMaxResults(4);
+		    List<ProjectData> result = query.list();
+		    session.close();
+		    return result;
+		
+	}
+	
+	public InboxMessageData getInboxMessageData(int id){
+		String hql = "select buyer.id as buyerId, buyer.name as name, inbox.id as id, inbox.subject as subject, inbox.emp_id as empId, inbox.message as message, inbox.attachment as attachments "
+				+ " from buyer as buyer left join inbox_message as inbox on inbox.buyer_id=buyer.id"
+				+ " where inbox.id="+id+" and buyer.is_primary=1 and buyer.is_deleted=0 and buyer.status=0";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		  Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(InboxMessageData.class));
+		List<InboxMessageData> result = query.list();
+		session.close();
+		
+		return result.get(0);
+	}
+	
+	public ResponseMessage saveInboxReply(InboxMessageReply inboxMessageReply){
+		ResponseMessage responseMessage = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		session.save(inboxMessageReply);
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Reply is save Successfully");
+		return responseMessage;
+		
 	}
 }

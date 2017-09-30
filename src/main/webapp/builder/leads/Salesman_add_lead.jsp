@@ -25,6 +25,7 @@
  	List<ProjectData> builderProjects =null;
  	List<Source> sourceList = null;
  	List<BuilderEmployee> salesmanList = null;
+ 	List<BuilderEmployee> saleheadList = null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
    	session = request.getSession(false);
    	BuilderEmployee builder = new BuilderEmployee();
@@ -42,6 +43,9 @@
 				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
 				if(access_id ==5){
 					salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
+				}
+				if(access_id == 4){
+					saleheadList = new BuilderDetailsDAO().getBuilderSaleshead(builder);
 				}
 			}
 			if(builderProjects.size()>0)
@@ -82,47 +86,6 @@
      <script src="../js/jquery.form.js"></script>
       <script type="text/javascript" src="../js/selectize.min.js"></script>
        <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
-  
-        
-		<script type="text/javascript">
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes').multiselect();
-// 		    });
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes-2').multiselect();
-// 		    });
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes-3').multiselect();
-// 		    });
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes-4').multiselect();
-// 		    });
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes-5').multiselect();
-// 		    });
-// 		    $select_project = $("#multiple-checkboxes-3").selectize({
-// 		    	persist: false,
-// 		    	 onChange: function(value) {
-// 		    		alert(value);
-// 		    	 },
-// 		    	 onDropdownOpen: function(value){
-// 		        	 var obj = $(this);
-// 		    		var textClear =	 $("#multiple-checkboxes-3 :selected").text();
-// 		        	 if(textClear.trim() == "Enter Project Name"){
-// 		        		 obj[0].setValue("");
-// 		        	 }
-// 		         }
-// 		    });
-
-		    //select_project = $select_project[0].selectize;
-		    
-		   
-		</script>
-		<script type="text/javascript">
-// 		$("#select").click(function(){
-// 		    $("li").addClass("active");
-// 		});
-		</script>
 		<style>
 		.arrow{
 color: #ccc;
@@ -355,6 +318,21 @@ color: #ccc;
 								 </div>
 						    </div>
 						    <%} %>
+						     <%if(access_id ==4){ %>
+							 <div class="form-group row">
+							 <label for="example-search-input" class="col-5 col-form-label">Assign Saleshead</label>
+								<div class="col-7">
+									<div>
+								   		<select id="assignsalemans" name="assignsalemans[]" multiple>
+									    <%if(salesmanList != null){
+								    	  for(BuilderEmployee  builderEmployee: saleheadList){%>
+								      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
+								      	 <%}} %>
+									     </select>
+								     </div>
+								 </div>
+						    </div>
+						    <%} %>
 						    </div>
 							<div class="center bcenter">
 						  	   <button type="submit" id="save" class="button1">Save</button>
@@ -373,20 +351,7 @@ color: #ccc;
   </body>
 </html>
 <script>
-//$("#multiple-checkboxes-3").selectize();
-// $select_project = $("#multiple-checkboxes-3").selectize({
-// 	persist: false,
-// 	 onChange: function(value) {
-// 		alert(value);
-// 	 },
-// 	 onDropdownOpen: function(value){
-//     	 var obj = $(this);
-// 		var textClear =	 $("#multiple-checkboxes-3 :selected").text();
-//     	 if(textClear.trim() == "Enter Configuration Name"){
-//     		 obj[0].setValue("");
-//     	 }
-//      }
-// });
+
 
 $('#configuration').multiselect({
     columns: 1,
@@ -396,16 +361,13 @@ $('#configuration').multiselect({
     //noneSelectedText: "Select",
     
 }); 
-//$('#multiple-checkboxes-3').style.margin-left="5px";
-//$('#multiple-checkboxes-3').css({"padding-left":"10px !important"});
-
 $('#project_ids').multiselect({
     columns: 1,
     placeholder: 'Select Project',
     search: true,
     selectAll: true
 });
-
+<% if(access_id == 5){%>
 
 $('#assignsalemans').multiselect({
     columns: 1,
@@ -413,6 +375,16 @@ $('#assignsalemans').multiselect({
     search: true,
     selectAll: true
 });
+<%}%>
+<%if(access_id == 4){%>
+$('#assignsalemans').multiselect({
+    columns: 1,
+    placeholder: 'Select saleshead',
+    search: true,
+    selectAll: true
+});
+
+<%}%>
 //$("#save").click(function(){
 // 	var projects = [];
 // 	var  projectList = document.getElementById("#multiple-checkboxes-2");
@@ -614,7 +586,7 @@ function showAddResponse(resp, statusText, xhr, $form){
 }
 
 $("#project_ids").change(function(){
-	alert("Mouse down event");
+	//alert("Mouse down event");
 		var htmlconfig = "";
 		ajaxindicatorstart("Loading...");
 	  $.get("${baseUrl}/webapi/project/configdata",{project_ids:$(this).val()},function(data){

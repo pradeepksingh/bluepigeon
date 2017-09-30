@@ -59,7 +59,7 @@
 	int flat_id = 0;
 	int p_user_id = 0;
 	project_id = Integer.parseInt(request.getParameter("project_id"));
-	BuilderProject builderProject = new ProjectDAO().getBuilderActiveProjectById(project_id);
+	BuilderProject builderProject = null;
 	List<Builder> builders = new BuilderDetailsDAO().getActiveBuilderList();
 	CountryDAOImp countryService = new CountryDAOImp();
 	List<Country> listCountry = countryService.getActiveCountryList();
@@ -97,6 +97,8 @@
 			adminuserproject  = (BuilderEmployee)session.getAttribute("ubname");
 			if(adminuserproject != null){
 				p_user_id = adminuserproject.getBuilder().getId();
+			//	project_id = new BuilderDetailsDAO().getEmployeeByRoles(adminuserproject).get(0).getId();
+			    builderProject = new ProjectDAO().getBuilderActiveProjectById(project_id);
 				projectTypes = new BuilderProjectTypeDAO().getBuilderProjectTypes();
 				propertyTypes = new BuilderPropertyTypeDAO().getBuilderActivePropertyTypes();
 				projectConfigurations = new BuilderProjectPropertyConfigurationDAO().getBuilderActiveProjectConfigurations();
@@ -195,30 +197,9 @@
        </div>
         <div id="page-wrapper">
             <div class="container-fluid">
+            
                  <div class="row">
-                    <div class="col-lg-3 col-sm-3 col-xs-3">
-<!--                         <div id="project" class="top-blue-box ">PROJECT</div> -->
-				 			<button type="submit" id="project" class="btn11 btn-submit waves-effect waves-light m-t-15">PROJECT</button>
-                    </div>
-                    <%if(building_id > 0){ %>
-	                <div  class="col-lg-3 col-sm-3 col-xs-3">
-<!-- 	                        <div id="building" class="top-white-box ">BUILDING</div> -->
-	                         <button type="submit" id="building" class="btn11 top-white-box waves-effect waves-light m-t-15">BUILDING</button>
-	               </div>
-	               <%} %>
-	               <%if(building_id > 0 && floor_id > 0){ %>
-                    <div  class="col-lg-3 col-sm-3 col-xs-3">
-<!--                         	<div id="floor" class="top-white-box" >FLOOR</div> -->
-                        	 <button type="submit" id="floor"  class="btn11 top-white-box waves-effect waves-light m-t-15">FLOOR</button>
-                    </div>
-                    <%} %>
-                    <%if(building_id > 0 && floor_id > 0 && flat_id > 0){ %>
-                    <div  class="col-lg-3 col-sm-3 col-xs-3">
-	                    
-<!-- 	                        <div id="flat" class="top-white-box">FLAT</div> -->
-	                    <button type="submit" id="flat"  class="btn11 top-white-box waves-effect waves-light m-t-15">FLAT</button>
-                    </div>
-                    <%} %>
+                     <h1>Project Details</h1>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
@@ -234,9 +215,9 @@
                                  <li>
                                      <a  data-toggle="tab" href="#vimessages2"><span>Pricing Details</span></a>
                                  </li>
-                                     <li >
-                                        <a  data-toggle="tab" href="#vimessages3"><span>Payment Schedules</span></a>
-                                    </li>
+<!--                                      <li > -->
+<!--                                         <a  data-toggle="tab" href="#vimessages3"><span>Payment Schedules</span></a> -->
+<!--                                     </li> -->
                                  <li>
                                      <a  data-toggle="tab" href="#vimessages4"><span>Offers</span></a>
                                  </li>
@@ -436,18 +417,26 @@
 					                             </div>   
 			                                </div>
 			                                <div class="row">
-			                                	<div class="col-md-6">
+<!-- 			                                	<div class="col-md-6"> -->
+<!-- 					                                <div class="form-group row"> -->
+<!-- 					                                    <label for="example-search-input" class="col-sm-4 control-label">Latitude<span class='text-danger'>*</span></label> -->
+<!-- 					                                    <div class="col-sm-6"> -->
+<!-- 					                                    	<div> -->
+<!-- 						                                    	<div> -->
+<%-- 						                                        	<input class="form-control" type="text" readonly="true" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/> --%>
+<!-- 						                                   		</div> -->
+<!-- 						                                    	<div class="messageContainer"></div> -->
+<!-- 					                                    	</div> -->
+<!-- 					                                    </div> -->
+<!-- 					                                </div> -->
+<!-- 					                            </div> -->
+												<div class="col-sm -6">   
 					                                <div class="form-group row">
-					                                    <label for="example-search-input" class="col-sm-4 control-label">Latitude<span class='text-danger'>*</span></label>
+					                                    <label for="example-tel-input" class="col-sm-4 control-label">Description</label>
 					                                    <div class="col-sm-6">
-					                                    	<div>
-						                                    	<div>
-						                                        	<input class="form-control" type="text" readonly="true" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
-						                                   		</div>
-						                                    	<div class="messageContainer"></div>
-					                                    	</div>
+					                                        <input class="form-control" id="description" readonly name="description" value="<% out.print(builderProject.getDescription());%>"/>
 					                                    </div>
-					                                </div>
+					                                 </div>
 					                            </div>
 					                            <div class="col-md-6">
 					                                <div class="form-group row">  
@@ -466,17 +455,19 @@
 			                               <div class="row">
 			                               		<div class="col-sm -6">   
 					                                <div class="form-group row">
-					                                    <label for="example-tel-input" class="col-sm-4 control-label">Description</label>
+					                                    <label for="example-tel-input" class="col-sm-4 control-label">Status</label>
 					                                    <div class="col-sm-6">
-					                                        <textarea class="form-control" id="description"  name="description"><% out.print(builderProject.getDescription());%></textarea>
+					                                        <select name="" id="" class="form-control" disabled>
+																	<option value="<% out.print(builderProject.getStatus());%>" <% if(builderProject.getStatus() == 1) { %>selected<% } %>><% out.print("Active");%></option>
+													          	</select>
 					                                    </div>
 					                                 </div>
 					                              </div>
 					                              <div class="col-sm -6">   
 					                                <div class="form-group row">  
-					                                    <label for="example-tel-input" class="col-sm-4 control-label">Highlight(USP)</label>
+					                                    <label for="example-tel-input" class="col-sm-4 control-label">Highlight</label>
 					                                    <div class="col-sm-6">
-					                                    	<textarea class="form-control" id="highlight"  name="highlight"><% out.print(builderProject.getHighlights());%></textarea>
+					                                    	<input class="form-control" id="highlight" readonly name="highlight" value="<% out.print(builderProject.getHighlights());%>" />
 					                                    </div>
 <!-- 					                                    <div class="messageContainer"></div> -->
 					                                </div>
@@ -484,9 +475,9 @@
 			                                </div>
 			                                <input type="hidden" id="status" name="status" value="<%out.print(builderProject.getStatus());%>"/>
 			                            
-		                                	<div class="offset-sm-5 col-sm-7">
-		                                        <button type="submit" name="basicbtn" class="btn btn-submit waves-effect waves-light m-t-10">Submit</button>
-		                                 	</div>
+<!-- 		                                	<div class="offset-sm-5 col-sm-7"> -->
+<!-- 		                                        <button type="submit" name="basicbtn" class="btn btn-submit waves-effect waves-light m-t-10">Submit</button> -->
+<!-- 		                                 	</div> -->
 		                               </form>
 	                               </div>
                              </div>
@@ -599,10 +590,10 @@
 	                                   			<% if(builderProject.getPossessionDate() != null) { out.print(dt1.format(builderProject.getPossessionDate()));} %>
 	                                   		</div>
 	                                   </div>
-	                                 </div><hr>
-	                                <div class="offset-sm-5 col-sm-7">
-	                                        <button type="button" id="detailbtn" class="btn btn-submit waves-effect waves-light m-t-10">NEXT</button>
 	                                 </div>
+<!-- 	                                <div class="offset-sm-5 col-sm-7"> -->
+<!-- 	                                        <button type="button" id="detailbtn" class="btn btn-submit waves-effect waves-light m-t-10">NEXT</button> -->
+<!-- 	                                 </div> -->
 	                                </form>   
 	                            </div>
 		                		<div id="vimessages2" class="tab-pane" aria-expanded="false">
@@ -616,7 +607,7 @@
 			                                    		<label for="example-text-input" class="col-sm-4 col-form-label">Pricing Unit<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6"> 
 			                                    			<div>
-				                                        		<select name="base_unit" id="base_unit" class="form-control">
+				                                        		<select name="base_unit" id="base_unit" class="form-control" disabled>
 																	<% for(AreaUnit areaUnit :areaUnits) {
 																		if(projectPriceInfo.getAreaUnit() !=null){
 																		%>
@@ -640,7 +631,7 @@
 						                                    <div class="col-sm-6">
 						                                    	<div>
 						                                    		<div>
-						                                        		<input class="form-control" type="text" id="base_rate" name="base_rate" autocomplete="off" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
+						                                        		<input class="form-control" type="text" readonly id="base_rate" name="base_rate" autocomplete="off" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
 						                                    		</div>
 						                                    		<div class="messageContainer"></div>
 						                                    	</div>
@@ -655,7 +646,7 @@
 				                		                    <div class="col-sm-6">
 				                		                    	<div>
 						                		                    <div>
-						                        		                <input class="form-control" type="text" id="rise_rate" name="rise_rate" autocomplete="off" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
+						                        		                <input class="form-control" type="text" readonly id="rise_rate" name="rise_rate" autocomplete="off" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
 						                                	        </div>
 						                                   	 		<div class="messageContainer"></div>
 						                                   	 	</div>
@@ -667,7 +658,7 @@
 				                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Application Post<span class='text-danger'>*</span></label>
 						                                    <div class="col-sm-6">
 						                                    <div>
-						                                        <input class="form-control" type="text" id="post" name="post" autocomplete="off" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
+						                                        <input class="form-control" type="text" readonly id="post" name="post" autocomplete="off" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
 						                                    </div>
 				                                    		<div class="messageContainer"></div>
 				                                    		</div>
@@ -681,7 +672,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 					                                    		<div>
-					                                        		<input class="form-control" type="text" id="maintenance" autocomplete="off" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
+					                                        		<input class="form-control" type="text" readonly id="maintenance" autocomplete="off" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
 					                                    		</div>
 					                                    		<div class="messageContainer"></div>
 					                                    	</div>	
@@ -694,7 +685,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 					                                    		<div>
-					                                        		<input class="form-control" type="text" id="tenure" autocomplete="off" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>">
+					                                        		<input class="form-control" type="text" readonly id="tenure" autocomplete="off" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>">
 					                                    		</div>
 					                                    		<div class="messageContainer"></div>
 					                                    	</div>
@@ -709,7 +700,7 @@
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 					                		                    <div>
-					                        		                <input class="form-control" type="text" id="amenity_rate" name="amenity_rate" autocomplete="off" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
+					                        		                <input class="form-control" type="text" readonly id="amenity_rate" name="amenity_rate" autocomplete="off" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
 					                                		    </div>
 					                                		    <div class="messageContainer"></div>
 					                                		</div>
@@ -722,7 +713,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                         			<input class="form-control" type="text" id="parking" name="parking" autocomplete="off" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
+				                                         			<input class="form-control" type="text" readonly id="parking" name="parking" autocomplete="off" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
 				                                         		</div>	
 			                                    				<div class="messageContainer"></div>
 			                                    			</div>
@@ -738,7 +729,7 @@
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 				                		                    	<div>
-				                        		               		<input class="form-control" type="text" id="stamp_duty" name="stamp_duty" autocomplete="off" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
+				                        		               		<input class="form-control" type="text" readonly id="stamp_duty" name="stamp_duty" autocomplete="off" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
 				                                		    	</div>
 				                                		    	<div class="messageContainer"></div>
 				                                		    </div>
@@ -755,7 +746,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                        			<input class="form-control" type="text" id="tax" name="tax" autocomplete="off" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
+				                                        			<input class="form-control" type="text" readonly id="tax" name="tax" autocomplete="off" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
 				                                    			</div>
 				                                    			<div class="messageContainer"></div>
 				                                    		</div>
@@ -774,7 +765,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                        			<input class="form-control" type="text" id="vat" autocomplete="off" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
+				                                        			<input class="form-control" type="text" readonly id="vat" autocomplete="off" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
 				                                    			</div>
 				                                    			<div class="messageContainer"></div>
 				                                    		</div>
@@ -789,16 +780,16 @@
 			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Tech Fees<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
-			                                        			<input class="form-control" type="text" id="tech_fee" autocomplete="off" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
+			                                        			<input class="form-control" readonly type="text" id="tech_fee" autocomplete="off" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
 			                                    			</div>
 			                                    			<div class="messageContainer"></div>
 			                                    		</div>	
 			                                		</div>
 			                                	</div>
 			                                </div>
-			                                <div class="offset-sm-5 col-sm-7">
-	        	                               	<button type="submit" id="pricebtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
-	            		                     </div>
+<!-- 			                                <div class="offset-sm-5 col-sm-7"> -->
+<!-- 	        	                               	<button type="submit" id="pricebtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button> -->
+<!-- 	            		                     </div> -->
 	                    	            </form>
                                 	</div>
              					</div>
@@ -845,18 +836,18 @@
 	                               				</div>
 	                               <%i++;}}%>
 	                               		</div>
-	                               		<div>
-											<div class="col-sm-12">
-												<span class="pull-right">
-													<a href="javascript:addMoreSchedule();" class="btn btn-submit btn-sm">+ Add More Schedule</a>
-												</span>
-											</div>
-										</div>
-										<div class="row">
-			                                <div class="offset-sm-5 col-sm-7">
-		                                        <button type="submit" id="paymentbtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button>
-		                                    </div>
-	                                 	</div>
+<!-- 	                               		<div> -->
+<!-- 											<div class="col-sm-12"> -->
+<!-- 												<span class="pull-right"> -->
+<!-- 													<a href="javascript:addMoreSchedule();" class="btn btn-submit btn-sm">+ Add More Schedule</a> -->
+<!-- 												</span> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 										<div class="row"> -->
+<!-- 			                                <div class="offset-sm-5 col-sm-7"> -->
+<!-- 		                                        <button type="submit" id="paymentbtn" class="btn btn-submit waves-effect waves-light m-t-10">UPDATE</button> -->
+<!-- 		                                    </div> -->
+<!-- 	                                 	</div> -->
 	                                </form>
 	                           </div>
                          
@@ -873,15 +864,15 @@
 																%>
 																<div class="row" id="offer-<% out.print(projectOfferInfo.getId()); %>">
 																	<input type="hidden" name="offer_id[]" value="<% out.print(projectOfferInfo.getId()); %>" />
-																	<div class="col-lg-12" style="padding-bottom:5px;">
-																		<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(projectOfferInfo.getId()); %>);" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span>
-																	</div>
+<!-- 																	<div class="col-lg-12" style="padding-bottom:5px;"> -->
+<%-- 																		<span class="pull-right"><a href="javascript:deleteOffer(<% out.print(projectOfferInfo.getId()); %>);" class="btn btn-danger btn-xs" style="background-color: #000000;border-color: #000000;">x</a></span> --%>
+<!-- 																	</div> -->
 																	<div class="col-lg-5 margin-bottom-5">
 																		<div class="form-group" id="error-offer_title">
 																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 																			<div class="col-sm-8">
 																				<div>
-																					<input type="text" class="form-control" autocomplete="off" id="offer_title<%out.print(j); %>" onfocusout="checkDuplicateEntry(<%out.print(j);%>);" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
+																					<input type="text" readonly class="form-control" autocomplete="off" id="offer_title<%out.print(j); %>" onfocusout="checkDuplicateEntry(<%out.print(j);%>);" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
 																				</div>
 																				<div class="messageContainer"></div>
 																			</div>
@@ -891,7 +882,7 @@
 																		<div class="form-group" id="error-applicable_on">
 																			<label class="control-label col-sm-6">Offer Type </label>
 																			<div class="col-sm-6">
-																				<select class="form-control" id="offer_type<%out.print(j); %>"  onchange="txtEnabaleDisable(<%out.print(j); %>);" name="offer_type[]">
+																				<select disabled class="form-control" id="offer_type<%out.print(j); %>"  onchange="txtEnabaleDisable(<%out.print(j); %>);" name="offer_type[]">
 																					<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
 																					<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
 																					<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
@@ -904,7 +895,7 @@
 																		<div class="form-group" id="error-discount_amount">
 																			<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
 																			<div class="col-sm-6">
-																				<input type="text" autocomplete="off" class="form-control" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
+																				<input type="text" readonly autocomplete="off" class="form-control" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
 																			</div>
 																			<div class="messageCon tainer"></div>
 																		</div>
@@ -913,7 +904,7 @@
 																		<div class="form-group" id="error-applicable_on">
 																			<label class="control-label col-sm-4">Description </label>
 																			<div class="col-sm-8">
-																				<textarea class="form-control" id="description" name="description[]"><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
+																				<textarea disabled="disabled" class="form-control" id="description" name="description[]"><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
 																			</div>
 																			<div class="messageContainer"></div>
 																		</div>
@@ -923,7 +914,7 @@
 																		<div class="form-group" id="error-apply">
 																			<label class="control-label col-sm-6">Status </label>
 																			<div class="col-sm-6">
-																				<select class="form-control" id="offer_status" name="offer_status[]">
+																				<select class="form-control" id="offer_status" name="offer_status[]" disabled>
 																					<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
 																					<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
 																				</select>
@@ -935,20 +926,20 @@
 																<% j++; } %>
 
 															</div>
-															<div>
-																<div class="col-lg-12">
-																	<span class="pull-right">
-																		<a href="javascript:addMoreOffer();" id="addMoreOffers" class="btn btn-submit btn-sm">+ Add More Offers</a>
-																	</span>
-																</div>
-															</div>
+<!-- 															<div> -->
+<!-- 																<div class="col-lg-12"> -->
+<!-- 																	<span class="pull-right"> -->
+<!-- 																		<a href="javascript:addMoreOffer();" id="addMoreOffers" class="btn btn-submit btn-sm">+ Add More Offers</a> -->
+<!-- 																	</span> -->
+<!-- 																</div> -->
+<!-- 															</div> -->
 														</div>
 													</div>
-												<div class="row">
-													 <div class="offset-sm-5 col-sm-7">
-		                                        		<button type="submit" id="offerbtn" class="btn btn-submit waves-effect waves-light m-t-10">SAVE</button>
-		                                   			</div>
-		                                   		</div>
+<!-- 												<div class="row"> -->
+<!-- 													 <div class="offset-sm-5 col-sm-7"> -->
+<!-- 		                                        		<button type="submit" id="offerbtn" class="btn btn-submit waves-effect waves-light m-t-10">SAVE</button> -->
+<!-- 		                                   			</div> -->
+<!-- 		                                   		</div> -->
 											</form>
 										</div>
                                 	</div>

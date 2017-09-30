@@ -137,7 +137,7 @@
 	                 <%if(inboxMessageList != null){
 	                	 for(InboxMessageData inboxMessage : inboxMessageList){
 	                	 %>
-	                	 <a href="#inbox" onclick="javascript:getActiveProjectFlats();">
+	                	 <a href="#inbox" onclick="javascript:getActiveProjectFlats(<%out.print(inboxMessage.getId());%>);">
 	                  	<div class="border-lead1">
 		                  <div class="row">
 		                    <div class="col-md-2 col-sm-2 col-xs-2 user">
@@ -250,69 +250,13 @@
 		        <div class="modal-body">
 		           <div class="row">
 					  <div class="col-md-10 col-sm-10 col-xs-10">
-					    <h3>Compose</h3>
+					    <h3>Response</h3>
 				      </div>
 					  <div class="col-md-2 col-sm-2 col-xs-2">
 					     <img src="../images/error.png" alt="cancle" data-dismiss="modal">
 					   </div>
 				    </div>
-				  	<div class="row" id="inbox">
-				  	   <form class="addlead1 addlead" action="" method="post" id="addinbox" name="addinbox"  enctype="multipart/form-data">
-				  	   		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(empId); %>" />
-		                     <div class="">
-		                       <div class="form-group row">
-									<label for="example-text-input" class="col-5 col-form-label"> To</label>
-									  <div class="col-7">
-										<select id="filter_buyer_id" name="filter_buyer_id[]" multiple  data-style="form-control">
-	                        			<% if(buyerData != null){ 
-	                        				for(InboxBuyerData inboxBuyerData : buyerData){
-	                        			%>
-	                       					<option value="<%out.print(inboxBuyerData.getId());%>"><%out.print(inboxBuyerData.getName()); %></option>
-	                       					<%} }%>
-	                       	 			</select>
-									  </div>
-								  </div>
-		                         <div class="form-group row">
-									<label for="example-text-input" class="col-5 col-form-label"> Subject</label>
-									  <div class="col-7">
-									  	<div>
-											<input class="form-control" type="text"  id="subject" name="subject" placeholder="">
-									  	</div>
-									  	<div class="messageContainer"></div>
-									  </div>
-								  </div>
-								  <div class="form-group row">
-									 <label for="example-search-input" class="col-5 col-form-label">Message</label>
-										<div class="col-7">
-											<div>
-											  <textarea id="message" name="message">
-											  </textarea>
-										 	  </div>
-										 	  <div class="messageContainer"></div>
-										</div>
-								    </div>
-									<div class="form-group row">
-									   <label for="example-search-input" class="col-5 col-form-label">Attachment</label>
-										  <div class="col-7">
-										     <div class="inputfile-box">
-											   <input type="file" id="file" name="attachment[]" class="inputfile" onchange='uploadFile(this)'>
-											   <label for="file">
-											     <span id="file-name" class="file-box"></span>
-											     <span class="file-button">
-											      <i class="fa fa-upload" aria-hidden="true"></i>
-											      Choose file
-											     </span>
-											  </label>
-											</div>
-										  </div>
-									 </div>
-		                         </div>
-		                     <div class="center">
-		                        <br/>
-							  	<button type="submit" class="button1">Reply</button>
-							 </div>
-		                </form>	
-				   </div>
+				  	<div class="row" id="inbox"></div>
 			  	</div>
 		 	  </div>
             </div>
@@ -376,11 +320,11 @@ $('#addinbox').bootstrapValidator({
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
-	updateProjectPrice();
+	addInboxMessage();
 	
 });
 
-function updateProjectPrice() {
+function addInboxMessage() {
 	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#pricingresponse', 
@@ -414,10 +358,97 @@ function showPriceResponse(resp, statusText, xhr, $form){
         $("#pricingresponse").show();
         alert(resp.message);
         ajaxindicatorstop();
-        window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
+    //    window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
   	}
 }
 
+
+$('#addnewreply').bootstrapValidator({
+	container: function($field, validator) {
+		return $field.parent().next('.messageContainer');
+   	},
+    feedbackIcons: {
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    excluded: ':disabled',
+    fields: {
+    	buyer_name: {
+            validators: {
+                notEmpty: {
+                    message: 'Please select buyer'
+                }
+            }
+        },
+        subject: {
+            validators: {
+                notEmpty: {
+                    message: 'Please enter subject'
+                }
+            }
+        },
+        message: {
+            validators: {
+                notEmpty: {
+                    message: 'Please enter message'
+                }
+            }
+        }
+    }
+}).on('success.form.bv', function(event,data) {
+	// Prevent form submission
+	event.preventDefault();
+	addReply();
+	
+}).on('error.form.bv',function(event,data){
+	event.preventDefault();
+	alert("Error during submit data");
+});
+$("#saveReply").click(function(e){
+	e..preventDefault();
+	alert("AA");
+});
+function addReply() {
+	alert("a");
+	ajaxindicatorstart("Loading...");
+	var options = {
+	 		target : '#replyresponse', 
+	 		beforeSubmit : showPriceRequest,
+	 		success :  showPriceResponse,
+	 		url : '${baseUrl}/webapi/builder/inbox/new/reply',
+	 		semantic : true,
+	 		dataType : 'json'
+	 		//return false;
+	 	};
+   	$('#addnewreply').ajaxSubmit(options);
+   	//return false;
+}
+
+function showPriceRequest(formData, jqForm, options){
+	$("#replyresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+
+function showPriceResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#replyresponse").removeClass('alert-success');
+       	$("#replyresponse").addClass('alert-danger');
+		$("#replyresponse").html(resp.message);
+		$("#replyresponse").show();
+		alert(resp.message);
+		//return false;
+		 ajaxindicatorstop();
+  	} else {
+  		$("#replyresponse").removeClass('alert-danger');
+        $("#replyresponse").addClass('alert-success');
+        $("#replyresponse").html(resp.message);
+        $("#replyresponse").show();
+        alert(resp.message);
+        //return false;
+        ajaxindicatorstop();
+       // window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
+  	}
+}
 $("#leadSearch").click(function(){
 	getBuyerNames();
 });
@@ -448,7 +479,7 @@ function getBuyerNames(){
 				var nmonth = '';
 				var  locale = "en-us";
 				if(data[index].image != ''){
-					image = '${baseUrl}/'+data.image;
+					image = '${baseUrl}/'+data[index].image;
 				}
 				if(data[index].date != ' '){
 					var strDate = data[index].date;
@@ -468,7 +499,9 @@ function getBuyerNames(){
 			       nmonth = newdate.toLocaleString(locale, { month: "short" });
 				}
 				 htmlBookedBuyers ='<div class="border-lead1">'
+				 		+'<a href="#inbox" onclick="javascript:getActiveProjectFlats('+data[index].id+');">'
 	                  	+'<div class="row">'
+	                  	+'<input type="hidden" id="inbox_id" name="inbox_id" value="'+data[index].id+'"/>'
                  		+'<div class="col-md-2 col-sm-2 col-xs-2 user">'
                    		+'<img src="'+image+'" alt="user profile"  class="img-responsive"/>'
                  		+'</div>'
@@ -492,7 +525,67 @@ function getBuyerNames(){
 	});
 }
 
-function getActiveProjectFlats(){
+function getActiveProjectFlats(id){
+	//alert(id);
+	$("#inbox").empty();
+	var replymsg = "";
+	ajaxindicatorstart("Loading...");
+	$.post("${baseUrl}/webapi/builder/inbox/reply",{id: id},function(data){
+		replymsg ='<form class="addlead1 addlead" action="" method="post" id="addnewreply" name="addnewreply"  enctype="multipart/form-data">'
+			+'<input type="hidden" id="emp_id" name="emp_id" value="'+data.empId+'" />'
+	   		//+'<input type="hidden" id="buyer_id" name="buyer_id" value="'+data.buyerId+'" />'
+	   		+'<input type="hidden" id="inbox_id" name="inbox_id" value="'+id+'" />'
+         	+'<div class="">'
+           	+'<div class="form-group row">'
+			+'<label for="example-text-input" class="col-5 col-form-label"> To</label>'
+			+'<div class="col-7">'
+			+'<input class="form-control" type="text" id="buyer_name" name="buyer_name" value="'+data.name+'" />'
+			+'</div>'
+			+'</div>'
+            +'<div class="form-group row">'
+			+'<label for="example-text-input" class="col-5 col-form-label"> Subject</label>'
+			+'<div class="col-7">'
+			+'<div>'
+			+'<input class="form-control" type="text"  id="subject" name="subject" placeholder="" value="Re : '+data.subject+'">'
+			+'</div>'
+			+'<div class="messageContainer"></div>'
+			+'</div>'
+			+'</div>'
+			+'<div class="form-group row">'
+			+'<label for="example-search-input" class="col-5 col-form-label">Message</label>'
+			+'<div class="col-7">'
+			+'<div>'
+			+'<textarea id="message" name="message">'
+			+'\n\n\n\n'+data.message+''
+			+'</textarea>'
+			+'</div>'
+			+'<div class="messageContainer"></div>'
+			+'</div>'
+			+'</div>'
+			+'<div class="form-group row">'
+			+'<label for="example-search-input" class="col-5 col-form-label">Attachment</label>'
+			+'<div class="col-7">'
+			+'<div class="inputfile-box">'
+			+'<input type="file" id="file" name="attachment[]" class="inputfile" onchange="uploadFile(this)">'
+			+'<label for="file">'
+			+'<span id="file-name" class="file-box"></span>'
+			+'<span class="file-button">'
+			+'<i class="fa fa-upload" aria-hidden="true"></i>'
+			+'Choose file'
+			+'</span>'
+			+'</label>'
+			+'</div>'
+			+'</div>'
+			+'</div>'
+            +'</div>'
+         	+'<div class="center">'
+            +'<br/>'
+		  	+'<button type="submit" id="saveReply" class="button1">Reply</button>'
+		 	+'</div>'
+		 	+'</form>';
+    		$("#inbox").append(replymsg);
+			 ajaxindicatorstop();
+	});
 $("#myModal4").modal('show');
 }
 </script>
