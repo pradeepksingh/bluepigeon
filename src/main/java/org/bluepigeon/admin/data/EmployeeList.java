@@ -9,6 +9,7 @@ public class EmployeeList {
 	private String mobileNo;
 	private String email;
 	private String projectName;
+	private String image;
 	public int getId() {
 		return id;
 	}
@@ -56,5 +57,11 @@ public class EmployeeList {
 	}
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
 	}
 }
