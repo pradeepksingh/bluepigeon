@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.EmployeeList"%>
 <%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.model.Source"%>
@@ -29,6 +30,7 @@
  	List<ProjectData> assignProjects = null;
  	List<Source> sourceList = null;
  	List<BuilderEmployee> salesmanList = null;
+ 	List<EmployeeList> employeeLists = null;
  	List<BuilderEmployee> salesheadList = null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
    	session = request.getSession(false);
@@ -52,6 +54,7 @@
 					assignProjects = new ProjectDAO().getAssigProjects(builder);
 				}
 				if(access_id == 4){
+ 					employeeLists = new BuilderDetailsDAO().getSalesHeadByBuilderId(builder_id);
 					salesheadList = new BuilderDetailsDAO().getBuilderSaleshead(builder);
 					projectLists = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 					assignProjects = new ProjectDAO().getAssigProjects(builder);
@@ -131,17 +134,18 @@
         </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
-        <div id="page-wrapper" style="min-height: 2038px;">
+        <div id="page-wrapper" >
            <div class="container-fluid">
+           <div class="row">
            <%if(access_id == 5){ %>
            <h1 class="uppercase">Assign Salesman</h1>
            <%} %>
             <%if(access_id == 4){ %>
            <h1 class="uppercase">Assign Saleshead</h1>
            <%} %>
+           </div>
               <div class="white-box">
                    <div class="lead-bg">
-                   <!-- buyer information end -->
 	                 <div class="row blue-border">
 	                 <%if(access_id == 5){ %>
 	                   <div class="col-md-3 col-sm-2 col-xs-6">
@@ -163,6 +167,7 @@
 	                     <h2>Assign project</h2>
 	                   </div>
 	                 </div>
+	                 <%if(access_id == 5){ %>
 	                 <%if(salesmanList != null){
 	                	 for(BuilderEmployee builderEmployee : salesmanList){
 	                	 %>
@@ -179,7 +184,7 @@
 	                     <h4><%out.print(builderEmployee.getEmail()); %></h4>
 	                    </div>
 	                    <div class="col-md-3 col-sm-2 col-xs-6">
-	                     	<select id="second" data-placeholder="Choose a Country..."  class="chosen-select" multiple style="width:350px;" tabindex="4">
+	                     	<select id="second" data-placeholder="Choose projects"  class="chosen-select" multiple style="width:350px;" tabindex="4">
          						<%if(projectLists != null){ 
          							for(ProjectData projectData : projectLists){
          						%>
@@ -203,9 +208,50 @@
 	                 </div>
 	                
 	               </div>
-	               <%} }%>
-	               <!-- buyer information end -->
-	            
+	               <%} }}%>
+	               <%
+	               	if(access_id==4){
+						if(salesheadList != null){
+	                	 for(BuilderEmployee builderEmployee : salesheadList){
+	                	 %>
+	                 <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(builderEmployee.getId()); %>"/>
+	                 <div class="border-lead">
+	                  <div class="row">
+	                    <div class="col-md-3 col-sm-2 col-xs-6">
+	                     <h4><%out.print(builderEmployee.getName()); %></h4>
+	                    </div>
+	                     <div class="col-md-3 col-sm-2 col-xs-6">
+	                     <h4><%out.print(builderEmployee.getMobile()); %></h4>
+	                    </div>
+	                     <div class="col-md-3 col-sm-2 col-xs-6">
+	                     <h4><%out.print(builderEmployee.getEmail()); %></h4>
+	                    </div>
+	                    <div class="col-md-3 col-sm-2 col-xs-6">
+	                     	<select id="second" data-placeholder="Choose projects"  class="chosen-select" multiple style="width:350px;" tabindex="4">
+         						<%if(projectLists != null){ 
+         							for(ProjectData projectData : projectLists){
+         						%>
+         						<option value="<%out.print(projectData.getId());%>"><%out.print(projectData.getName()); %></option>
+         						<%}} %>
+        					</select>
+	                    </div>
+	                 </div>
+	                 <div class="row">
+	                  <h3 class="assign"><span class="assign1">Assign Projects : </span>
+	                  <%if(assignProjects != null){
+	                	  int i=1;
+	                	  for(ProjectData assignProject : assignProjects){
+	                		  if(i>1){
+	                	  		out.print(" "+assignProject.getName()+" |");
+	                	  		i--;
+	                		  }else{
+	                			  out.print(assignProject.getName()+" |");
+	                		  }
+ 	                	i++;}}  %></h3> 
+	                 </div>
+	                
+	               </div>
+	               <%} }}%>
                   </div>
                </div>
             </div>
@@ -225,7 +271,20 @@ function updateSalesman(id){
 }
 
 $("#second").change(function(){
-	alert($("#emp_id").val()+" "+$(this).val());
+	//alert($("#emp_id").val()+" "+$(this).val());
+	var projectId = $(this).val();
+	ajaxindicatorstart("Loading...");
+	$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:$(this).val(),emp_id : $("#emp_id").val()},function(data){
+			if(data.status==1){
+				alert(data.message);
+				window.location.reload();
+				ajaxindicatorstop();
+			}else{
+				alert(data.message);
+				ajaxindicatorstop();
+			}
+			
+ 	},'json');
 	
 });
 

@@ -15,12 +15,6 @@
 <%@page import="org.bluepigeon.admin.data.ProjectList"%>
 <%@page import="java.util.List"%>
 <%@page import="org.bluepigeon.admin.dao.BuyerDAO"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:set var="req" value="${pageContext.request}" />
-<c:set var="url">${req.requestURL}</c:set>
-<c:set var="uri" value="${req.requestURI}" />
-<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <%
 	List<ProjectList> project_list = null;
 	List<City> cityDataList = null;
@@ -30,6 +24,7 @@
 	Long totalBuyers = (long)0;
 	Long totalInventorySold = (long) 0;
 	Long totalLeads = (long)0;
+	int projectId = 0;
 	Double totalRevenue = 0.0;
 	//Double totalSaleValue = 0.0;
 	Long totalCampaign = (long)0;
@@ -44,13 +39,13 @@
 	//Double totalRevenue =0.0;
 	int project_size_list = 0;
 	int city_size_list =0 ;
+	
 	Double totalPropertySold = 0.0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
-			
 				builder_id = builder.getBuilder().getId();
 				emp_id = builder.getId();
 				access_id = builder.getBuilderEmployeeAccessType().getId();
@@ -62,7 +57,10 @@
 					totalLeads = new ProjectDAO().getTotalLeads(builder);
 					totalProjects = new ProjectDAO().getTotalNumberOfProjects(builder);
 					barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder);
-					projectWiseDatas = new BuilderDetailsDAO().getProjectWiseByEmployee(builder);
+					if (request.getParameterMap().containsKey("project_id")) {
+						projectId = Integer.parseInt(request.getParameter("project_id"));
+					}
+					projectWiseDatas = new BuilderDetailsDAO().getBuildingWiseByEmployeeId(builder, projectId);
 					//totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder);
 					//totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
 					project_size_list = project_list.size();
@@ -70,7 +68,7 @@
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
 					//totalRevenue = totalPropertySold * totalInventorySold;
-				List<ProjectWiseData> projectWiseDatas2 = new BuilderDetailsDAO().getEmployeeBarGraphByProject(emp_id);
+					List<ProjectWiseData> projectWiseDatas2 = new BuilderDetailsDAO().getEmployeeBarGraphByProject(emp_id);
 					if(projectWiseDatas2 !=null){
 						for(ProjectWiseData projectWiseData : projectWiseDatas2){
 							totalRevenue +=projectWiseData.getRevenue();
@@ -95,16 +93,14 @@
     <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
     <link href="../plugins/bower_components/morrisjs/morris.css" rel="stylesheet">
-   <!-- Menu CSS -->
+   	<!-- Menu CSS -->
     <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
-<!--     <link rel="stylesheet" type="text/css" href="../css/cancellation.css"> -->
-<!-- 	 <link rel="stylesheet" type="text/css" href="../css/custom7.css"> -->
-	  <link rel="stylesheet" type="text/css" href="../css/cancellation-top.css">
-	   <link rel="stylesheet" type="text/css" href="../css/newcancellationlist.css">
+    <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
+	<link rel="stylesheet" type="text/css" href="../css/cancellation-top.css">
+	<link rel="stylesheet" type="text/css" href="../css/newcancellationlist.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
@@ -124,20 +120,29 @@
         </div>
         <!-- End Top Navigation -->
         <!-- Left navbar-header -->
-        <div id="sidebar1">
-         <%@include file="../partial/sidebar.jsp"%>
-         </div>
+        <div id="sidebar1"> 
+        <%@include file="../partial/sidebar.jsp"%>
+        </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper">
            <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Data Analytics</h4> </div>
-                    
-                    <!-- /.col-lg-12 -->
+                  <div class="row bspace">
+	                <div class="col-md-3 col-sm-3 col-lg-3">
+	                    <button type="button" class="btn11 btn-info waves-effect waves-light m-t-10" id="project_status_btn">Project Status</button>
+	                </div>
+	                 <div class="col-md-3 col-sm-3 col-lg-3">
+	                    <button type="button" class="btn11 btn-info waves-effect waves-light m-t-10" id="inventory_btn">Inventory</button>
+	                 </div>
+	                 <div class="col-md-3 col-sm-3 col-lg-3">
+	                    <button type="button" class="btn11 btn-submit waves-effect waves-light m-t-10" id="revenue_btn">Revenue</button>
+	                </div>
+	                <div class="col-md-3 col-sm-3 col-lg-3">
+	                    <button type="button" class="btn11 btn-info waves-effect waves-light m-t-10" id="campaign_btn">Campaign</button>
+	                </div>
                 </div>
                 <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>"/>
+                <input type="hidden" id="project_id" name="project_id" value="<%out.print(projectId);%>"/>
                 <!-- /.row -->
                 <!-- .row -->
                 <div class="row">
@@ -160,7 +165,7 @@
                     		
                     		<div class="col-md-3 col-sm-6 col-xs-12">
                         		<select class="selectpicker border-drop-down" data-style="form-control" id="graph_project_id" name="graph_project_id">
-                                        <option value="0">Project wise</option>
+                                        <option value="0">Building wise</option>
                                        	<option value="1">Source Wise</option>
                                        	<option value="2">Month Wise</option>
                                        	<option value="3">Salesman Wise </option>
@@ -202,7 +207,7 @@
 <script src="../plugins/bower_components/morrisjs/morris.js"></script>
 <script src="../js/real-estate.js"></script>
 <script src="${baseUrl}/builder/plugins/bower_components/raphael/raphael-min.js"></script>
-    <script>
+<script>
     jQuery(document).ready(function() {
         // Switchery
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
@@ -275,7 +280,7 @@
             return false;
         });
     });
-   
+ 
     	var mychart = null; 
  
    
@@ -285,7 +290,8 @@
        		%> 
   
        	mychart = Morris.Bar({
-       		barSize:50,
+       		barGap:4,
+       	  barSizeRatio:0.55,
     	    element: 'morris-bar-chart',
     	    data: [
     	    	<% for(ProjectWiseData barGraphData : projectWiseDatas){ %>
@@ -327,7 +333,7 @@
  		}
  		else {
  			ajaxindicatorstart("Loading...");
- 			$.post("${baseUrl}/webapi/builder/filter/bargraph/project",{emp_id:$("#emp_id").val()},function(data){
+ 			$.post("${baseUrl}/webapi/builder/filter/bargraph/building",{project_id:$("#project_id").val()},function(data){
  				plotProjectGraph(data);
  				ajaxindicatorstop();
 		 	},'json');
@@ -335,6 +341,27 @@
  	});
  	
  	function plotProjectGraph(records) {
+ 		var data = [];
+ 		$(records).each(function(index){
+			data.push({"y":records[index].name, "a":records[index].revenue});
+		});
+ 		mychart.destroy();
+ 		mychart = Morris.Bar({
+ 			//barGap:4,
+ 			barSize:50,
+			element: 'morris-bar-chart',
+    	    data: data,
+            xkey: 'y',
+     	    ykeys: ['a'],
+     	    labels: ['Revenue'],
+     	    barColors:['#24bcd3'],
+     	    hideHover: 'auto',
+     	    gridLineColor: '#eef0f2',
+     	    resize: true
+     	});
+ 		
+ 	}
+ 	function plotBuildingGraph(records) {
  		var data = [];
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].revenue});
@@ -354,7 +381,6 @@
      	});
  		
  	}
- 	
  	function plotSourceGraph(records) {
  		var data = [];
  		$(records).each(function(index){
@@ -365,10 +391,11 @@
  			barSize:50,
     	    element: 'morris-bar-chart',
     	    data: data,
-            xkey: 'y',
-     	    ykeys: ['a'],
-     	    labels: ['Responses'],
+          	xkey: 'y',
+     	   	ykeys: ['a'],
+     	   	labels: ['Responses'],
      	    barColors:['#24bcd3'],
+     	   	barSize:50,
      	    hideHover: 'auto',
      	    gridLineColor: '#eef0f2',
      	    resize: true
@@ -384,15 +411,16 @@
  		mychart.destroy();
  		mychart = Morris.Bar({
  			barSize:50,
-    	    element: 'morris-bar-chart',
+    	 	element: 'morris-bar-chart',
     	    data: data,
-            xkey: 'y',
-     	    ykeys: ['a'],
-     	    labels: ['Revenue'],
-     	    barColors:['#24bcd3'],
-     	    hideHover: 'auto',
-     	    gridLineColor: '#eef0f2',
-     	    resize: true
+           	xkey: 'y',
+     	   	ykeys: ['a'],
+     	  	labels: ['Revenue'],
+     	   	barColors:['#24bcd3'],
+     	   	hideHover: 'auto',
+     	   	gridLineColor: '#eef0f2',
+     	   	barSize:50,
+     	   	resize: true
      	});
  		
  	}
@@ -405,16 +433,26 @@
  		mychart.destroy();
  		mychart = Morris.Bar({
  			barSize:50,
-    	    element: 'morris-bar-chart',
-    	    data: data,
-            xkey: 'y',
-     	    ykeys: ['a'],
-     	    labels: ['Revenue'],
-     	    barColors:['#24bcd3'],
-     	    hideHover: 'auto',
-     	    gridLineColor: '#eef0f2',
-     	    resize: true
+    	  	element: 'morris-bar-chart',
+    	  	data: data,
+           	xkey: 'y',
+     	   	ykeys: ['a'],
+     	   	labels: ['Revenue'],
+     	   	barColors:['#24bcd3'],
+     	   	hideHover: 'auto',
+     	   	gridLineColor: '#eef0f2',
+     	   	resize: true
      	});
  		
  	}
+ 	
+	$("#project_status_btn").click(function(){
+		window.location.href="${baseUrl}/builder/sales/projectstatus.jsp?project_id=<% out.print(projectId);%>";
+	});
+	$("#campaign_btn").click(function(){
+		window.location.href="${baseUrl}/builder/campaign/mycampaigns.jsp?project_id=<% out.print(projectId);%>";
+	});
+	$("#inventory_btn").click(function(){
+		window.location.href="${baseUrl}/builder/inventory/inventory.jsp?project_id=<% out.print(projectId);%>";
+	});
 </script>

@@ -1799,4 +1799,55 @@ public class BuilderDetailsDAO {
 		return responseMessage;
 		
 	}
+	
+	public List<ProjectWiseData> getBuildingWiseByEmployeeId(BuilderEmployee builderEmployee, int projectId){
+		String hql = "";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+			
+		}else{
+			hql = "select a.id as id,a.name as name, round(a.revenue) as revenue from builder_building as a "
+					+ "join builder_floor as b on b.building_id=a.id "
+					+ "join builder_flat as c on c.floor_no=b.id "
+					+ "join builder_project as d on d.id=a.project_id "
+					//+ "inner join allot_project as e on e.project_id=d.id "
+					+ "where "
+					+ "c.status_id=2 and d.status=1 and d.id="+projectId
+					+ " GROUP by a.id order by a.id DESC";
+		}
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		
+		List<ProjectWiseData> result = query.list();
+		return result;
+	}
+	
+	public List<ProjectWiseData> getEmployeeBarGraphByBuilding(int projectId) {
+		String hql = "";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+			hql = "select a.id as id,a.name as name, round(a.revenue) as revenue from builder_building as a "
+					+ "join builder_floor as b on b.building_id=a.id "
+					+ "join builder_flat as c on c.floor_no=b.id "
+					+ "join builder_project as d on d.id=a.project_id "
+					//+ "inner join allot_project as e on e.project_id=d.id "
+					+ "where "
+					+ "c.status_id=2 and d.status=1 and d.id="+projectId
+					+ " GROUP by a.id order by a.id DESC";
+		
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		
+		List<ProjectWiseData> result = query.list();
+		return result;
+	}
+	
+	public List<EmployeeList> getSalesHeadByBuilderId(int builderId){
+		String hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email, GROUP_CONCAT(project.name) as projectName from builder_employee as emp join builder_project as project on project.group_id=emp.builder_id inner join allot_project as ap on ap.project_id = project.id where emp.access_type_id=5 and emp.builder_id="+builderId+" GROUP by emp.id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
+		
+		List<EmployeeList> result = query.list();
+		return result;
+	}
 }
