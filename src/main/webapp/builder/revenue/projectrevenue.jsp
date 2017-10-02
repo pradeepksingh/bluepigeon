@@ -447,12 +447,15 @@
  	}
  	
 	$("#project_status_btn").click(function(){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		window.location.href="${baseUrl}/builder/sales/projectstatus.jsp?project_id=<% out.print(projectId);%>";
 	});
 	$("#campaign_btn").click(function(){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		window.location.href="${baseUrl}/builder/campaign/mycampaigns.jsp?project_id=<% out.print(projectId);%>";
 	});
 	$("#inventory_btn").click(function(){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		window.location.href="${baseUrl}/builder/inventory/inventory.jsp?project_id=<% out.print(projectId);%>";
 	});
 </script>

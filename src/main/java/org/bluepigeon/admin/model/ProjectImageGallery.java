@@ -1,11 +1,17 @@
 package org.bluepigeon.admin.model;
 // Generated 27 Mar, 2017 5:55:47 PM by Hibernate Tools 4.0.0
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,6 +28,9 @@ public class ProjectImageGallery implements java.io.Serializable {
 	private BuilderProject builderProject;
 	private String image;
 	private String title;
+	private String description;
+	private float completion;
+	private Date createdDate;
 
 	public ProjectImageGallery() {
 	}
@@ -70,6 +79,34 @@ public class ProjectImageGallery implements java.io.Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	@Column(name = "description")
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@Column(name = "completion")
+	public float getCompletion() {
+		return completion;
+	}
+
+	public void setCompletion(float completion) {
+		this.completion = completion;
+	}
+
+	@Column(name = "created_date", nullable = false, updatable=false)
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
 
 }

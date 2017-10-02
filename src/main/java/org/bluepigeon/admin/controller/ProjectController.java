@@ -639,7 +639,9 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("project_id") int project_id,
 			@FormDataParam("substagewt_id[]") List<FormDataBodyPart> substagewt_id,
 			@FormDataParam("ssubstagewt_id[]") List<FormDataBodyPart> ssubstagewt_id,
-			@FormDataParam("project_image[]") List<FormDataBodyPart> project_images,
+			@FormDataParam("project_image") FormDataBodyPart project_image,
+			@FormDataParam("image_title") String project_title,
+			@FormDataParam("image_description") String project_description,
 			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
 			@FormDataParam("admin_id") int admin_id
 	) {
@@ -673,30 +675,29 @@ public class ProjectController extends ResourceConfig {
 			}
 		}
 		try {
-			projectDAO.updateProjectCompletion(project_id);
+			msg = projectDAO.updateProjectCompletion(project_id);
 			List<ProjectImageGallery> projectImageGalleries = new ArrayList<ProjectImageGallery>();
-			//for multiple inserting images.
-			if (project_images.size() > 0) {
-				for(int i=0 ;i < project_images.size();i++)
-				{
-					if(project_images.get(i).getFormDataContentDisposition().getFileName() != null && !project_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-						ProjectImageGallery projectImageGallery = new ProjectImageGallery();
-						String gallery_name = project_images.get(i).getFormDataContentDisposition().getFileName();
-						long millis = System.currentTimeMillis() % 1000;
-						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-						gallery_name = "images/project/images/"+gallery_name;
-						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-						//System.out.println("for loop image path: "+uploadGalleryLocation);
-						this.imageUploader.writeToFile(project_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-						projectImageGallery.setImage(gallery_name);
-						projectImageGallery.setTitle("New Image");
-						projectImageGallery.setBuilderProject(builderProject);
-						projectImageGalleries.add(projectImageGallery);
-					}
-				}
-				if(projectImageGalleries.size() > 0) {
-					projectDAO.addProjectImageGallery(projectImageGalleries);
-				}
+			ProjectImageGallery projectImageGallery = new ProjectImageGallery();
+			String gallery_name = project_image.getFormDataContentDisposition().getFileName();
+			long millis = System.currentTimeMillis() % 1000;
+			gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+			gallery_name = "images/project/images/"+gallery_name;
+			String uploadGalleryLocation = this.context.getInitParameter("building_elevation_url")+gallery_name;
+			//System.out.println("for loop image path: "+uploadGalleryLocation);
+			this.imageUploader.writeToFile(project_image.getValueAs(InputStream.class), uploadGalleryLocation);
+			float completion = 0;
+			if(!msg.getMessage().isEmpty()) {
+				completion = Float.parseFloat(msg.getMessage());
+			}
+			projectImageGallery.setImage(gallery_name);
+			projectImageGallery.setTitle(project_title);
+			projectImageGallery.setDescription(project_description);
+			projectImageGallery.setCompletion(completion);
+			projectImageGallery.setCreatedDate(new Date());
+			projectImageGallery.setBuilderProject(builderProject);
+			projectImageGalleries.add(projectImageGallery);
+			if(projectImageGalleries.size() > 0) {
+				projectDAO.addProjectImageGallery(projectImageGalleries);
 			}
 		} catch(Exception e) {
 			msg.setStatus(0);
