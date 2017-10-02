@@ -61,6 +61,7 @@ import org.bluepigeon.admin.model.BuilderBuildingFlatType;
 import org.bluepigeon.admin.model.BuilderBuildingFlatTypeRoom;
 import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderFlat;
+import org.bluepigeon.admin.model.BuilderFlatStatus;
 import org.bluepigeon.admin.model.BuilderFlatType;
 import org.bluepigeon.admin.model.BuilderFloor;
 import org.bluepigeon.admin.model.BuilderFloorAmenity;
@@ -6739,20 +6740,77 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	public List<BuilderFlatList> getProjectFlatListByBuilder(int project_id,int building_id, String keyword){
 		String hql = "";
 		if(keyword == "") {
-			hql = "SELECT a.id,a.flat_no as flatNo,d.name as flatStatus,(select e.name from buyer as e where e.flat_id=a.id and e.is_primary=1 and e.is_deleted = 0 limit 1) as buyerName from builder_flat as a inner join builder_floor as b on a.floor_no=b.id inner join builder_building as c on b.building_id=c.id inner join builder_flat_status as d on a.status_id=d.id where c.project_id = "+project_id+" and c.status = 1 and b.status = 1 and a.status = 1";
+			hql = "SELECT a.id,a.flat_no as flatNo,b.floor_no as floorNo,d.name as flatStatus,(select e.name from buyer as e where e.flat_id=a.id and e.is_primary=1 and e.is_deleted = 0 limit 1) as buyerName from builder_flat as a inner join builder_floor as b on a.floor_no=b.id inner join builder_building as c on b.building_id=c.id inner join builder_flat_status as d on a.status_id=d.id where c.project_id = "+project_id+" and c.status = 1 and b.status = 1 and a.status = 1";
 		    if(building_id > 0) {
 		    	hql = hql + " AND c.id = "+building_id;
 		    }
+		    hql = hql + " order by b.floor_no ASC";
 		} else {
-			hql = "SELECT a.id,a.flat_no as flatNo,d.name as flatStatus,e.name as buyerName from builder_flat as a inner join builder_floor as b on a.floor_no=b.id inner join builder_building as c on b.building_id=c.id inner join builder_flat_status as d on a.status_id=d.id inner join buyer as e on a.id=e.flat_id where c.project_id = "+project_id+" and c.status = 1 and b.status = 1 and a.status = 1 and e.is_primary = 1 and e.is_deleted = 0 and (e.name like'%"+keyword+"%' OR e.mobile = '%"+keyword+"%'";
+			hql = "SELECT a.id,a.flat_no as flatNo,b.floor_no as floorNo,d.name as flatStatus,e.name as buyerName from builder_flat as a inner join builder_floor as b on a.floor_no=b.id inner join builder_building as c on b.building_id=c.id inner join builder_flat_status as d on a.status_id=d.id inner join buyer as e on a.id=e.flat_id where c.project_id = "+project_id+" and c.status = 1 and b.status = 1 and a.status = 1 and e.is_primary = 1 and e.is_deleted = 0 and (e.name like '%"+keyword+"%' OR e.mobile like '%"+keyword+"%')";
+			if(building_id > 0) {
+		    	hql = hql + " AND c.id = "+building_id;
+		    }
 		}
+		System.out.println(hql);
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuilderFlatList.class));
-		System.err.println(hql);
 		List<BuilderFlatList> result = query.list();
 		session.close();
+		System.out.println(hql);
 		return result;
+	}
+	
+	public ResponseMessage putFlatsOnHold(String flatIds) {
+		
+		String[] myids = flatIds.split(",");
+		List<Integer> ids = new ArrayList<Integer>();
+		for(String myid:myids) {
+			ids.add(Integer.parseInt(myid));
+		}
+		ResponseMessage responseMessage = new ResponseMessage();
+		BuilderFlatStatus flatStatus = new BuilderFlatStatus();
+		flatStatus.setId(3);
+		String hql = "UPDATE BuilderFlat set builderFlatStatus = :flatStatus where id IN(:list)";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("flatStatus",flatStatus);
+		query.setParameterList("list",ids);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Flats put on hold.");
+		return responseMessage;
+		
+	}
+	
+	public ResponseMessage putFlatsOnUnHold(String flatIds) {
+		
+		String[] myids = flatIds.split(",");
+		List<Integer> ids = new ArrayList<Integer>();
+		for(String myid:myids) {
+			ids.add(Integer.parseInt(myid));
+		}
+		ResponseMessage responseMessage = new ResponseMessage();
+		BuilderFlatStatus flatStatus = new BuilderFlatStatus();
+		flatStatus.setId(1);
+		String hql = "UPDATE BuilderFlat set builderFlatStatus = :flatStatus where id IN(:list)";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("flatStatus",flatStatus);
+		query.setParameterList("list",ids);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Flats put on unhold.");
+		return responseMessage;
+		
 	}
 
 

@@ -806,4 +806,19 @@ public class BuilderController {
 		}
 		return responseMessage;
 	}
+	
+	@GET
+	@Path("/flat/markhold/{flat_ids}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage putFlatOnHold(@PathParam("flat_ids") String flatIds) {
+		return new ProjectDAO().putFlatsOnHold(flatIds);
+	}
+	
+	@GET
+	@Path("/flat/markunhold/{flat_ids}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage putFlatOnUnHold(@PathParam("flat_ids") String flatIds) {
+		return new ProjectDAO().putFlatsOnUnHold(flatIds);
+	}
+	
 }

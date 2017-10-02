@@ -558,7 +558,19 @@ font-size: 17px
 .btn-info {
     color: #312f2f;
     background-color: #fff;
-    }
+    border: 1px solid #03a9f3;
+    min-width: 100px;
+}
+.btn-info:focus {
+    color: #312f2f;
+    background-color: #fff;
+    border: 1px solid #03a9f3;
+}
+.btn-info:active {
+    color: #312f2f;
+    background-color: #fff;
+    border: 1px solid #03a9f3;
+}
 
 canvas {
     display: block;
@@ -725,4 +737,8 @@ padding:7%;
 .selectize-input {
     border: 1px solid #24bcd3 !important;
     padding: 17px 10px !important;
+}
+.hold {
+	background: #03a9f3;
+    border: 1px solid #03a9f3;
 }

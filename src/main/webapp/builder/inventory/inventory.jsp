@@ -35,8 +35,6 @@ if(session!=null)
 				if(projectId != 0) {
 					builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(projectId);
 					building_id = builderBuildingList.get(0).getId(); 
-					flatListDatas = new ProjectDAO().getFlatDetails(projectId,building_id,0,0); 
-		 			bookingFlatList2 = new ProjectDAO().getFlatBookeddetails(projectId,building_id,0,0);  
 		 			flats = new ProjectDAO().getProjectFlatListByBuilder(projectId, building_id, "");
 				}
 			}
@@ -133,59 +131,41 @@ Date date = new Date();
                        </div>
                   </div>
                <!-- row -->
-               <div class="white-box">
-                <div class="blue-bg">
-                   <div class="floor1">
-                   
-                    <% if(flatListDatas !=null){
- 	            					String active = ""; 
- 	            					for(int i=0;i<flatListDatas.size();i++){  
-	              						for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){ %> 
-	                          
-							      <% for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().size();floor_size++){  %>
-                   
-                   <%for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){ 
- 							     if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("booked")) {%>
-                         <a href="#"><button style="pointer-events:none;" class="book-flat-button" onclick="toggle(this);"><%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName()); %> <br> <%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></button></a>
-                        <%} else if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("available")) {%>
-                       <a href="#"> <button class="flat-button btn-info" onclick="toggle(this);">101 <br> FullName FullSernameOFOwner</button></a>
-                       <%}
-               	 						} 
- 		            		 			%> 
- 		            		 			<% }
- 	    							} %>
- 	    							
- 	         					<%} 
- 	     					 } 
-                          
- 	     					%> 
-                   </div>
-                    <div class="floor2">
-                       <a href="#"> <button class="flat-button btn-info"  onclick="toggle(this);">201 <br> FullName FullSernameOFOwner</button></a>
-                       <a href="#"><button class="book-flat-button"  onclick="toggle(this);">202 <br> name of flat</button></a>
-                       <a href="#"><button class="flat-button btn-info"  onclick="toggle(this);">203 <br> name of flat</button> </a>
-                       <a href="#"><button class="book-flat-button"  onclick="toggle(this);">204 <br> name of flat</button></a>
-                       <a href="#"> <button class="flat-button btn-info"  onclick="toggle(this);">205 <br> name of flat</button> </a>
-                       <a href="#"> <button class="flat-button btn-info"  onclick="toggle(this);">206 <br> name of flat</button> </a>
-                   </div>
-                   <div class="unholdsection center">
-                     <button class="un-hold " onclick="toggle(this);" id="unhold">Unhold</button>
-                   </div>
-                   <div class="holdsection center">
-                     <button class="hold" onclick="toggle(this);" id="hold">Hold</button>
-                   </div>
-                </div>
-               
-               </div>
+           		<div class="white-box">
+               	 	<div class="blue-bg">
+               	 		<div id="flat_landing_area">
+	               	 		<% if(flats !=null){ %>
+	                   		<div class="floor1">
+	                   		<% int floor_no = -100; %>
+	                    	<% for(BuilderFlatList flat :flats) { %>
+	                    	<% if(floor_no != -100 && flat.getFloorNo() != floor_no) { %>
+	                         </div>
+	                         <div class="floor2">
+	                         <% } %>
+	                         	<a href="javascript:return false;"><button <% if(flat.getFlatStatus().equalsIgnoreCase("booked")) { %>style="pointer-events:none;"<% } %> class="book-flat-button <% if(flat.getFlatStatus().equalsIgnoreCase("available")) { %>btn-info<% } %> <% if(flat.getFlatStatus().equalsIgnoreCase("hold")) { %> yellowcolor yell<% } %>" onclick="toggleFlat(this);" data-value="<% out.print(flat.getId()); %>"><% out.print(flat.getFlatNo()); %><br><% if(flat.getBuyerName() != null) { out.print(flat.getBuyerName());} else { %>&nbsp;<% } %></button></a>
+	                   		<% floor_no = flat.getFloorNo(); %>
+	                   		<% } %>
+	                   		</div>
+	                   		<% } %>
+                   		</div>
+                   		<div class="unholdsection center">
+                     		<button class="un-hold" id="unhold">Unhold</button>
+                   		</div>
+                   		<div class="holdsection center">
+                     		<button class="hold" id="hold">Hold</button>
+                   		</div>
+                	</div>
+               	</div>
             </div>
-          </div>
-        </div>
+       	</div>
+   	</div>
     <!-- /.container-fluid -->
     <div id="sidebar1"> 
 	     <%@include file="../partial/footer.jsp"%>
 	  </div> 
   </body>
-     <script>
+</html>
+ <script>
      $select_building = $("#filter_building_id").selectize({
     		persist: false,
     		 onChange: function(value) {
@@ -202,49 +182,76 @@ Date date = new Date();
     		select_building = $select_building[0].selectize;
     	<%}%>
      
-     $('#unhold').click(function(){
-       $('.btn-info1').addClass("btn-info");
-       $('.btn-info1').addClass("flat-button");
- 	   $('.btn-info1').removeClass("holdcolor");
-       $('.btn-info1').removeClass("btn-info1");
-       $('.btn-info1').removeClass("yellowcolor");
-       $(".holdsection").hide(".holdsection");
-	   $(".unholdsection").hide(".unholdsection");
-  		});
-     $('#hold').click(function(){
- 	   $('.holdcolor').addClass("yellowcolor");
- 	   $('.holdcolor').addClass("btn-info1");
-       $('.holdcolor').removeClass("holdcolor");
-	   $(".holdsection").hide(".holdsection");
-      });
-  </script>
-  <script>
-    $('.yellowcolor').click(function() {
-      $('.yellowcolor').addClass("holdcolor");
-      $('.yellowcolor').addClass("btn-info");
-      $('.yellowcolor').removeClass("yellowcolor");
-		});
-  </script>
-   <script>
-	    $('.flat-button').click(function() {
-          $(this).removeClass("flat-button");
-          $(this).removeClass("btn-info");
-		  $(this).addClass("holdcolor");
-		});
-	 </script>
-	 <script>
-    function toggle(a){
-	   if($(a).hasClass("yellowcolor")){
-           $('.yellowcolor').removeClass("yellowcolor");
-           $('.yellowcolor').addClass("holdcolor");
-		   $(".unholdsection").show(".unholdsection");
-		   $(".holdsection").hide(".holdsection");
-		}
-	   else{
-		   $(".holdsection").show(".holdsection");
- 		   $(".unholdsection").hide(".unholdsection");
-	   }
-	}
+   	$('#unhold').click(function(){
+   		var ids = "";
+   		$(".holdcolor").each(function(){
+   			if(ids == "") {
+   				ids = $(this).attr('data-value');
+   			} else {
+   				ids = ids+","+$(this).attr('data-value');
+   			}
+   		});
+   		ajaxindicatorstart("Please wait while, we update status ...");
+   		$.get("${baseUrl}/webapi/builder/flat/markunhold/"+ids,{},function(data){
+   			ajaxindicatorstop();
+   			$(".holdcolor").each(function(){
+   				$(this).removeClass("holdcolor");
+   	    		$(this).removeClass("yellowcolor yell");
+   	    		$(this).addClass("btn-info");
+   	   		});
+   		},'json');
+       	$(".holdsection").hide(".holdsection");
+	   	$(".unholdsection").hide(".unholdsection");
+ 	});
+    $('#hold').click(function(){
+    	var ids = "";
+   		$(".holdcolor").each(function(){
+   			if(ids == "") {
+   				ids = $(this).attr('data-value');
+   			} else {
+   				ids = ids+","+$(this).attr('data-value');
+   			}
+   		});
+   		ajaxindicatorstart("Please wait while, we update status ...");
+   		$.get("${baseUrl}/webapi/builder/flat/markhold/"+ids,{},function(data){
+   			ajaxindicatorstop();
+   			$(".holdcolor").each(function(){
+   				$(this).removeClass("holdcolor");
+   				$(this).removeClass("btn-info");
+   				if($(this).hasClass("yell")) {
+   	    			$(this).addClass("yellowcolor");
+   	    		} else {
+   	    			$(this).addClass("yellowcolor yell");
+   	    		}
+   	   		});
+   		},'json');
+	   	$(".holdsection").hide(".holdsection");
+   	});
+  
+    function toggleFlat(input) {
+    	if($(input).hasClass("yellowcolor")){
+    		$(input).removeClass("yellowcolor");
+            $(input).addClass("holdcolor");
+ 		   	$(".unholdsection").show();
+ 		   	$(".holdsection").hide();
+    	} else if($(input).hasClass("holdcolor")){
+    		$(input).removeClass("holdcolor");
+    		if($(input).hasClass("yell")) {
+    			$(input).addClass("yellowcolor");
+    		}
+    		$(".holdsection").hide();
+  		   	$(".unholdsection").hide();
+    	} else {
+    		$(input).addClass("holdcolor");
+    		$(".holdsection").show();
+  		   	$(".unholdsection").hide();
+    	}
+    }
+    $("#search_buyer").click(function(){
+	    $.get("${baseUrl}/builder/inventory/partialinventory.jsp?project_id=<% out.print(projectId);%>&building_id="+$('#filter_building_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
+	    	$("#flat_landing_area").html(data);
+	    },'html');
+    });
     
     $("#project_status_btn").click(function(){
     	window.location.href="${baseUrl}/builder/sales/projectstatus.jsp?project_id=<% out.print(projectId);%>";
@@ -255,5 +262,4 @@ Date date = new Date();
     $("#revenue_btn").click(function(){
     	window.location.href="${baseUrl}/builder/revenue/projectrevenue.jsp?project_id=<% out.print(projectId);%>";
     });
-	</script>
-</html>
+</script>

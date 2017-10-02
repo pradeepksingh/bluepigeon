@@ -4,6 +4,7 @@ public class BuilderFlatList {
 	
 	private int id;
 	private String flatNo;
+	private int floorNo;
 	private String buyerName;
 	private String flatStatus;
 	public int getId() {
@@ -30,7 +31,11 @@ public class BuilderFlatList {
 	public void setFlatStatus(String flatStatus) {
 		this.flatStatus = flatStatus;
 	}
-	
-	
+	public int getFloorNo() {
+		return floorNo;
+	}
+	public void setFloorNo(int floorNo) {
+		this.floorNo = floorNo;
+	}
 
 }
