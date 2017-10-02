@@ -4651,6 +4651,7 @@ public class ProjectDAO {
 		query1.executeUpdate();
 		session1.getTransaction().commit();
 		session1.close();
+		resp.setMessage(finalWeightage.toString());
 		return resp;
 	}
 	
@@ -6811,6 +6812,16 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		responseMessage.setMessage("Flats put on unhold.");
 		return responseMessage;
 		
+	}
+	
+	public List<ProjectImageGallery> getProjectStatusImages(int project_id) {
+		String hql = "from ProjectImageGallery where builderProject.id = :projectId";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("projectId", project_id);
+		List<ProjectImageGallery> result = query.list();
+		return result;
 	}
 
 

@@ -152,44 +152,48 @@
 											</div>
 										
 									</div>
+									<br>
 									<hr/>
-									<h3>Upload Project Images</h3>
+									<h3>Upload Project Status/Image</h3>
 									<br>
 									<div class="row" id="project_images">
-										<% for (ProjectImageGallery projectImageGallery :imageGaleries) { %>
-										<div class="col-lg-6 margin-bottom-5" id="b_image<% out.print(projectImageGallery.getId()); %>">
+										<% //for (ProjectImageGallery projectImageGallery :imageGaleries) { %>
+										<!-- div class="col-lg-6 margin-bottom-5" id="b_image<% //out.print(projectImageGallery.getId()); %>">
 											<div class="form-group" id="error-landmark">
 												<div class="col-sm-12">
-													<img alt="Building Images" src="${baseUrl}/<% out.print(projectImageGallery.getImage()); %>" width="200px;">
+													<img alt="Building Images" src="${baseUrl}/<% //out.print(projectImageGallery.getImage()); %>" width="200px;">
 												</div>
-												<label class="col-sm-12 text-left"><a href="javascript:deleteImage(<% out.print(projectImageGallery.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
+												<label class="col-sm-12 text-left"><a href="javascript:deleteImage(<% //out.print(projectImageGallery.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
 												<div class="messageContainer col-sm-offset-4"></div>
 											</div>
-										</div>
-										<% } %>
+										</div-->
+										<% //} %>
 										<div class="col-lg-6 margin-bottom-5" id="imgdiv-n2333">
 											<div class="form-group" id="error-landmark">
 												<label class="control-label col-sm-4">Select Image </label>
-												<div class="col-sm-8 input-group" style="padding:0px 12px;">
-													<input type="file" class="form-control" id="project_image" name="project_image[]" />
-													<a href="javascript:removeImage('n2333');" class="input-group-addon btn-danger">x</a>
+												<div class="col-sm-8" style="padding:0px 12px;">
+													<input type="file" class="form-control" id="project_image" name="project_image" />
 												</div>
-												<div class="messageContainer col-sm-offset-3"></div>
+												<div class="messageContainer col-sm-offset-4"></div>
 											</div>
-										</div>
-										<div class="col-lg-6 margin-bottom-5" id="imgdiv-n2334">
+											<br><br>
 											<div class="form-group" id="error-landmark">
-												<label class="control-label col-sm-4">Select Image </label>
-												<div class="col-sm-8 input-group" style="padding:0px 12px;">
-													<input type="file" class="form-control" id="project_image" name="project_image[]" />
-													<a href="javascript:removeImage('n2334');" class="input-group-addon btn-danger">x</a>
+												<label class="control-label col-sm-4">Status / Title </label>
+												<div class="col-sm-8" style="padding:0px 12px;">
+													<input type="text" class="form-control" id="image_title" name="image_title" maxlength="50"/>
 												</div>
-												<div class="messageContainer col-sm-offset-3"></div>
+												<div class="messageContainer col-sm-offset-4"></div>
 											</div>
 										</div>
-									</div>
-									<div class="row">
-										<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-xs"> + Add More</a></span>
+										<div class="col-lg-6 margin-bottom-5" id="imgdiv-n2333">
+											<div class="form-group" id="error-landmark">
+												<label class="control-label col-sm-4">Update Description </label>
+												<div class="col-sm-8" style="padding:0px 12px;">
+													<textarea class="form-control" id="image_description" name="image_description" rows="5"></textarea>
+												</div>
+												<div class="messageContainer col-sm-offset-4"></div>
+											</div>
+										</div>
 									</div>
 									<hr/>
 									<h3>Upload Elevation Images</h3>
@@ -242,9 +246,12 @@
 <%@include file="../../footer.jsp"%>
 <!-- inline scripts related to this page -->
 <style>
-	.row {
-		margin-bottom:5px;
-	}
+.row {
+	margin-bottom:5px;
+}
+.messageContainer {
+	padding-left:15px;
+}
 </style>
 <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
 <script src="${baseUrl}/js/jquery.form.js"></script>
@@ -265,6 +272,33 @@ $('#addproject').bootstrapValidator({
                 }
             }
         },
+        project_image: {
+            validators: {
+                notEmpty: {
+                    message: 'Image is required and cannot be empty'
+                },
+                file: {
+                    extension: 'jpeg,jpg,png,gif,pdf',
+                    type: 'image/jpeg,image/png,image/gif,image/jpg,application/pdf',
+                    maxSize: 2097152,   // 2048 * 1024
+                    message: 'The selected file is not valid'
+                }
+            }
+        },
+        image_title: {
+            validators: {
+                notEmpty: {
+                    message: 'Status/Title is required and cannot be empty'
+                }
+            }
+        },
+        image_description: {
+            validators: {
+                notEmpty: {
+                    message: 'Description is required and cannot be empty'
+                }
+            }
+        },
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
@@ -273,6 +307,7 @@ $('#addproject').bootstrapValidator({
 });
 
 function updateProject() {
+	ajaxindicatorstart("Please wait ... while we update status...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -291,6 +326,7 @@ function showAddRequest(formData, jqForm, options){
 }
    	
 function showAddResponse(resp, statusText, xhr, $form){
+	ajaxindicatorstop();
 	if(resp.status == '0') {
 		$("#response").removeClass('alert-success');
        	$("#response").addClass('alert-danger');

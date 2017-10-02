@@ -70,7 +70,6 @@ Date date = new Date();
      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-     <script src="../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script>
     <script type="text/javascript" src="../js/selectize.min.js"></script>
 </head>
 
@@ -248,18 +247,23 @@ Date date = new Date();
     	}
     }
     $("#search_buyer").click(function(){
+    	ajaxindicatorstart("Please wait while.. we search ...");
 	    $.get("${baseUrl}/builder/inventory/partialinventory.jsp?project_id=<% out.print(projectId);%>&building_id="+$('#filter_building_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
 	    	$("#flat_landing_area").html(data);
+	    	ajaxindicatorstop();
 	    },'html');
     });
     
     $("#project_status_btn").click(function(){
+    	ajaxindicatorstart("Please wait while.. we load ...");
     	window.location.href="${baseUrl}/builder/sales/projectstatus.jsp?project_id=<% out.print(projectId);%>";
     });
     $("#inventory_btn").click(function(){
+    	ajaxindicatorstart("Please wait while.. we load ...");
     	window.location.href="${baseUrl}/builder/inventory/inventory.jsp?project_id=<% out.print(projectId);%>";
     });
     $("#revenue_btn").click(function(){
+    	ajaxindicatorstart("Please wait while.. we load ...");
     	window.location.href="${baseUrl}/builder/revenue/projectrevenue.jsp?project_id=<% out.print(projectId);%>";
     });
 </script>

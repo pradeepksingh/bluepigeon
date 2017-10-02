@@ -180,12 +180,15 @@ function openTermsModal(tc) {
 	$("#myCampainTermsModal").modal('show');
 }
 $("#project_status_btn").click(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href="${baseUrl}/builder/sales/projectstatus.jsp?project_id=<% out.print(projectId);%>";
 });
 $("#inventory_btn").click(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href="${baseUrl}/builder/inventory/inventory.jsp?project_id=<% out.print(projectId);%>";
 });
 $("#revenue_btn").click(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href="${baseUrl}/builder/revenue/projectrevenue.jsp?project_id=<% out.print(projectId);%>";
 });
 </script>
