@@ -6,6 +6,9 @@ public class EmployeeList {
 	private String name;
 	private String desgnation;
 	private String access;
+	private String mobileNo;
+	private String email;
+	private String projectName;
 	public int getId() {
 		return id;
 	}
@@ -36,7 +39,22 @@ public class EmployeeList {
 	public void setAccess(String access) {
 		this.access = access;
 	}
-	
-	
-	
+	public String getMobileNo() {
+		return mobileNo;
+	}
+	public void setMobileNo(String mobileNo) {
+		this.mobileNo = mobileNo;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
 }

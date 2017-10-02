@@ -18,7 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
+import javax.ws.rs.core.UriInfo;
 
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.CityNamesImp;
@@ -38,6 +38,8 @@ import org.bluepigeon.admin.data.ProjectWiseData;
 //import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
+import org.bluepigeon.admin.model.AllotLeads;
+import org.bluepigeon.admin.model.AllotProject;
 import org.bluepigeon.admin.model.AreaUnit;
 import org.bluepigeon.admin.data.BookedBuyerList;
 import org.bluepigeon.admin.model.Builder;
@@ -762,11 +764,46 @@ public class BuilderController {
 		 				msg.setMessage("Unable to save message");
 		 				return msg;
 		 			}
-		    		
-		    	 
-		     
-		    
-		
 		return msg;
+	}
+	
+	@POST
+	@Path("/filter/bargraph/building")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectWiseData> getBarGraphDataByBuilding(@FormParam("project_id") int projectId){
+		
+		return new BuilderDetailsDAO().getEmployeeBarGraphByBuilding(projectId);
+	}
+	
+	@POST
+	@Path("/allot/projects")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage saveAllotedProjets(	@Context UriInfo uriInfo, @FormParam("emp_id") int empId){
+		ResponseMessage responseMessage = new ResponseMessage();
+	//	String strProject [] = projectId.split(",");
+		List<String> projectIds = uriInfo.getQueryParameters().get("project_ids[]");
+		System.err.println(projectIds);
+		BuilderEmployee builderEmployee = new BuilderEmployee();
+		builderEmployee.setId(empId);
+		List<AllotProject> allotProjectList = new ArrayList<>();
+		if(projectIds != null){
+			for(int i=0;i<projectIds.size();i++){
+				int project_id = Integer.parseInt(projectIds.get(i));
+				AllotProject allotProject = new AllotProject();
+				allotProject.setBuilderEmployee(builderEmployee);
+				BuilderProject builderProject = new BuilderProject();
+				builderProject.setId(project_id);
+				allotProject.setBuilderProject(builderProject);
+				allotProjectList.add(allotProject);
+			}
+			
+			if(allotProjectList.size() > 0){
+				responseMessage =  new BuilderDetailsDAO().saveAllotProjects(allotProjectList);
+			}
+		}else{
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Flai to allot project");
+		}
+		return responseMessage;
 	}
 }

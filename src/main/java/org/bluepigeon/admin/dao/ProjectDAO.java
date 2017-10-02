@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.bluepigeon.admin.data.BookingFlatList;
 import org.bluepigeon.admin.data.BuilderCompletionStatus;
+import org.bluepigeon.admin.data.BuilderFlatList;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuildingList;
@@ -6595,7 +6596,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		return result;
 	}
 	
-public List<NewLeadList> getNewLeadLists(int emp_id,int projectId, String name, int contactNumber){
+	public List<NewLeadList> getNewLeadLists(int emp_id,int projectId, String name, int contactNumber){
 		List<NewLeadList> result =null;
 		String hqlnew = "from BuilderEmployee where id = "+emp_id;
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -6680,61 +6681,81 @@ public List<NewLeadList> getNewLeadLists(int emp_id,int projectId, String name, 
 		return result;
 	}
 
-public List<ProjectList> getActiveProjectListByBuilder(BuilderEmployee builderEmployee) {
-	String hql = "";
-	//code by Pradeep sir
-//	if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
-//		hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
-//			+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
-//			+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
-//			+"c.name as cityName, l.id as localityId, l.name as localityName, "
-//			+"count(lead.id) as totalLeads "
-//			+"FROM  builder_project as project "
-//			+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
-//			+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
-//			+"WHERE project.group_id = "+builderEmployee.getBuilder().getId()+" group by project.id order by project.id desc";
-//	} else {
-//		hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
-//				+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
-//				+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
-//				+"c.name as cityName, l.id as localityId, l.name as localityName, "
-//				+"count(lead.id) as totalLeads "
-//				+"FROM  builder_project as project inner join allot_project ap ON project.id = ap.project_id "
-//				+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
-//				+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
-//				+"WHERE ap.emp_id = "+builderEmployee.getId()+" group by project.id order by project.id desc";
-//	}
-	//code changes done by pankaj
-	if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
-		hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
-			+"project.completion_status as completionStatus,project.inventory_sold as sold, project.locality_name as localityName, build.id as builderId, "
-			+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
-			+"c.name as cityName, "
-			+"count(lead.id) as totalLeads "
-			+"FROM  builder_project as project "
-			+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
-			+"left join builder_lead as lead ON project.id = lead.project_id "
-			+"WHERE project.status=1 and project.group_id = "+builderEmployee.getBuilder().getId()+" group by project.id order by project.id desc";
-	} else {
-		hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
+	public List<ProjectList> getActiveProjectListByBuilder(BuilderEmployee builderEmployee) {
+		String hql = "";
+		//code by Pradeep sir
+		//	if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
+		//		hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
+		//			+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
+		//			+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
+		//			+"c.name as cityName, l.id as localityId, l.name as localityName, "
+		//			+"count(lead.id) as totalLeads "
+		//			+"FROM  builder_project as project "
+		//			+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+		//			+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
+		//			+"WHERE project.group_id = "+builderEmployee.getBuilder().getId()+" group by project.id order by project.id desc";
+		//	} else {
+		//		hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
+		//				+"project.completion_status as completionStatus,project.inventory_sold as sold, build.id as builderId, "
+		//				+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
+		//				+"c.name as cityName, l.id as localityId, l.name as localityName, "
+		//				+"count(lead.id) as totalLeads "
+		//				+"FROM  builder_project as project inner join allot_project ap ON project.id = ap.project_id "
+		//				+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+		//				+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id "
+		//				+"WHERE ap.emp_id = "+builderEmployee.getId()+" group by project.id order by project.id desc";
+		//	}
+		//code changes done by pankaj
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2) {
+			hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
 				+"project.completion_status as completionStatus,project.inventory_sold as sold, project.locality_name as localityName, build.id as builderId, "
 				+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
 				+"c.name as cityName, "
 				+"count(lead.id) as totalLeads "
-				+"FROM  builder_project as project inner join allot_project ap ON project.id = ap.project_id "
+				+"FROM  builder_project as project "
 				+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
 				+"left join builder_lead as lead ON project.id = lead.project_id "
-				+"WHERE project.status=1 and ap.emp_id = "+builderEmployee.getId()+" group by project.id order by project.id desc";
+				+"WHERE project.status=1 and project.group_id = "+builderEmployee.getBuilder().getId()+" group by project.id order by project.id desc";
+		} else {
+			hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
+					+"project.completion_status as completionStatus,project.inventory_sold as sold, project.locality_name as localityName, build.id as builderId, "
+					+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
+					+"c.name as cityName, "
+					+"count(lead.id) as totalLeads "
+					+"FROM  builder_project as project inner join allot_project ap ON project.id = ap.project_id "
+					+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+					+"left join builder_lead as lead ON project.id = lead.project_id "
+					+"WHERE project.status=1 and ap.emp_id = "+builderEmployee.getId()+" group by project.id order by project.id desc";
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectList.class));
+		System.err.println(hql);
+		List<ProjectList> result = query.list();
+		session.close();
+		return result;
 	}
-	HibernateUtil hibernateUtil = new HibernateUtil();
-	Session session = hibernateUtil.getSessionFactory().openSession();
-	Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectList.class));
-	System.err.println(hql);
-	List<ProjectList> result = query.list();
-	session.close();
-	return result;
-}
 	
+	public List<BuilderFlatList> getProjectFlatListByBuilder(int project_id,int building_id, String keyword){
+		String hql = "";
+		if(keyword == "") {
+			hql = "SELECT a.id,a.flat_no as flatNo,d.name as flatStatus,(select e.name from buyer as e where e.flat_id=a.id and e.is_primary=1 and e.is_deleted = 0 limit 1) as buyerName from builder_flat as a inner join builder_floor as b on a.floor_no=b.id inner join builder_building as c on b.building_id=c.id inner join builder_flat_status as d on a.status_id=d.id where c.project_id = "+project_id+" and c.status = 1 and b.status = 1 and a.status = 1";
+		    if(building_id > 0) {
+		    	hql = hql + " AND c.id = "+building_id;
+		    }
+		} else {
+			hql = "SELECT a.id,a.flat_no as flatNo,d.name as flatStatus,e.name as buyerName from builder_flat as a inner join builder_floor as b on a.floor_no=b.id inner join builder_building as c on b.building_id=c.id inner join builder_flat_status as d on a.status_id=d.id inner join buyer as e on a.id=e.flat_id where c.project_id = "+project_id+" and c.status = 1 and b.status = 1 and a.status = 1 and e.is_primary = 1 and e.is_deleted = 0 and (e.name like'%"+keyword+"%' OR e.mobile = '%"+keyword+"%'";
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuilderFlatList.class));
+		System.err.println(hql);
+		List<BuilderFlatList> result = query.list();
+		session.close();
+		return result;
+	}
+
+
 }
 
 

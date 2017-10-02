@@ -1,9 +1,3 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:set var="req" value="${pageContext.request}" />
-<c:set var="url">${req.requestURL}</c:set>
-<c:set var="uri" value="${req.requestURI}" />
-<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <%@page import="java.util.Date"%> 
 <%@page import="java.text.SimpleDateFormat"%> 
 <%@page import="java.text.DateFormat"%> 
@@ -186,13 +180,13 @@ function openTermsModal(tc) {
 	$("#myCampainTermsModal").modal('show');
 }
 $("#project_status_btn").click(function(){
-	window.location.href="${baseURL}/builder/sales/projectstatus.jsp";
+	window.location.href="${baseUrl}/builder/sales/projectstatus.jsp?project_id=<% out.print(projectId);%>";
 });
 $("#inventory_btn").click(function(){
-	window.location.href="${baseURL}/builder/inventory/inventorystatus.jsp";
+	window.location.href="${baseUrl}/builder/inventory/inventory.jsp?project_id=<% out.print(projectId);%>";
 });
 $("#revenue_btn").click(function(){
-	window.location.href="${baseURL}/builder/sales/projectrevenue.jsp";
+	window.location.href="${baseUrl}/builder/revenue/projectrevenue.jsp?project_id=<% out.print(projectId);%>";
 });
 </script>
 
