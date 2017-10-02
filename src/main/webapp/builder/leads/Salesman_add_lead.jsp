@@ -324,7 +324,7 @@ color: #ccc;
 								<div class="col-7">
 									<div>
 								   		<select id="assignsalemans" name="assignsalemans[]" multiple>
-									    <%if(salesmanList != null){
+									    <%if(saleheadList != null){
 								    	  for(BuilderEmployee  builderEmployee: saleheadList){%>
 								      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
 								      	 <%}} %>
@@ -501,27 +501,6 @@ $('#addnewlead').bootstrapValidator({
                 }
             }
         },
-//         project_id: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Project is required and cannot be empty'
-//                 }
-//             }
-//         },
-//         city: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'City Name is required and cannot be empty'
-//                 }
-//             }
-//         },
-//         area: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Locality Name is required and cannot be empty'
-//                 }
-//             }
-//         },
         pricemin:{
             validators: {
                 notEmpty: {
@@ -540,11 +519,7 @@ $('#addnewlead').bootstrapValidator({
     
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
-	//alert("success...Find solution on google..");
-	event.preventDefault();
 	addLead();
-}).on('error.form.bv',function(event,data){
-	//alert("error...Find solution on google..");
 });
 
 function addLead() {

@@ -46,7 +46,7 @@
 				builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
 				if(access_id ==5){
-					salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
+					salesmanList = new BuilderDetailsDAO().getBuilderSaleshead(builder);
 					 builderProject = new ProjectDAO().getBuilderActiveProjectById(projectId);
 					 builderProjectPropertyConfigurationInfos = new ProjectDAO().getPropertyConfigByProjectId(projectId);
 				}

@@ -4012,7 +4012,7 @@ public class ProjectController extends ResourceConfig {
 				}
 			}
 			}
-			if(builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() == 5 || builderEmployee.getBuilderEmployeeAccessType().getId() == 4){
 				if(project_ids.size() > 0){
 					for(FormDataBodyPart projectId : project_ids){
 						if(projectId.getValueAs(Integer.class) != null && projectId.getValueAs(Integer.class) != 0){

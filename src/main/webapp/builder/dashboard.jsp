@@ -124,12 +124,12 @@
       <div id="sidebar1"> 
        	<%@include file="partial/sidebar.jsp"%>
       </div>
-        <div id="page-wrapper" style="min-height: 2038px;">
+        <div id="page-wrapper">
            <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                         <h4 class="page-title">Dashboard</h4> </div>
-                        <%if(access_id == 1 || access_id == 2){ %>
+                        <%if( access_id == 2){ %>
 <!--                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">  -->
 <%--                     	<a href="${baseUrl}/builder/project/new.jsp"><span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add new Project</span></a> --%>
 <!--                     </div> -->
@@ -353,13 +353,13 @@
                        	}%>
                         </div>
 	                    <div class="offset-sm-5 col-sm-7" id="showMore">
-	                        <button type="button" onclick="getAllProjectsByBuiderId();" class="btn btn11 btn-submit waves-effect waves-light m-t-10">More...</button>
+	                        <button type="button" onclick="getAllProjectsByBuiderId();" class="btn btn11 btn-submit waves-effect waves-light m-t-10">MORE</button>
 	                     </div>
                     </div>
                 </div>
                 <!-- /.row -->
                 <!-- .row -->
-                <div class="row">
+                <div class="row" id="notvisible">
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         <div class="white-box">
                             <h3 class="box-title">Project status</h3>
@@ -417,8 +417,8 @@
                     </div>
                 </div>
                 <!-- /.row -->
-                <div class="white-box">
-	                <div class="row">
+                <div class="white-box" id="bottomhide">
+	                <div class="row" >
 	                <%if((access_id >=1 && access_id <=2)) {%>
 		                <div class="col-md-4">
 		                    <button type="button" onclick="addEmployee();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add New Employee</button>
@@ -465,7 +465,8 @@
 
     	<script type="text/javascript" src="${baseUrl}/builder/js/selectize.min.js"></script>
     <script>
-   
+   $("#notvisible").hide();
+   $("#bottomhide").hide();
     $select_project = $("#project_id").selectize({
 		persist: false,
 		 onChange: function(value) {
