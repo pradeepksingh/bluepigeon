@@ -46,7 +46,7 @@
 				builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
 				if(access_id ==5){
-					salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
+					salesmanList = new BuilderDetailsDAO().getBuilderSaleshead(builder);
 					 builderProject = new ProjectDAO().getBuilderActiveProjectById(projectId);
 					 builderProjectPropertyConfigurationInfos = new ProjectDAO().getPropertyConfigByProjectId(projectId);
 				}
@@ -102,7 +102,6 @@ color: #ccc;
 .max_value{
     padding: 6px 6px 6px 12px;
 }
-
             .price_Ranges {
                 float: right;
                 width: 50%;
@@ -347,15 +346,12 @@ $('#configuration').multiselect({
     search: true,
     selectAll: true,
 }); 
-
-
 $('#assignsalemans').multiselect({
     columns: 1,
     placeholder: 'Select salesman',
     search: true,
     selectAll: true
 });
-
 $('#min-max-price-range').click(function (event) {
    // setTimeout(function(){ $('.price-label').first().focus();	},0);    
 });
@@ -365,21 +361,16 @@ $('.price-label').focus(function (event) {
     $('.price-range').addClass('hide');
     $('#'+$(this).data('dropdownId')).removeClass('hide');
 });
-
 $(".price-range li").click(function(){    
     priceLabelObj.attr('value', $(this).attr('data-value'));
     var curElmIndex=$( ".price-label" ).index( priceLabelObj );
     var nextElm=$( ".price-label" ).eq(curElmIndex+1);
-
     if(nextElm.length){
         $( ".price-label" ).eq(curElmIndex+1).focus();
     }else{
         $('#min-max-price-range').dropdown('toggle');
     }
 });
-
-
-
 $select_scorce = $("#source_id").selectize({
 	persist: false,
 	 onChange: function(value) {
@@ -396,7 +387,6 @@ $select_scorce = $("#source_id").selectize({
      }
 });
 select_scorce = $select_scorce[0].selectize;
-
 $('#addnewlead').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -459,7 +449,6 @@ $('#addnewlead').bootstrapValidator({
 }).on('error.form.bv',function(event,data){
 	//alert("error...Find solution on google..");
 });
-
 function addLead() {
 	ajaxindicatorstart("Loading...");
 	var options = {
@@ -472,7 +461,6 @@ function addLead() {
 	 	};
    	$('#addnewlead').ajaxSubmit(options);
 }
-
 function showAddRequest(formData, jqForm, options){
 	$("#response").hide();
    	var queryString = $.param(formData);
@@ -497,7 +485,6 @@ function showAddResponse(resp, statusText, xhr, $form){
         ajaxindicatorstop();
   	}
 }
-
 $("#project_ids").change(function(){
 	//alert("Mouse down event");
 		var htmlconfig = "";
@@ -517,13 +504,10 @@ $("#project_ids").change(function(){
 		  ajaxindicatorstop();
 	  });
 });
-
-
 $('.dropdown-menu.ddRange')
 .click(function(e) {
   e.stopPropagation();
 });
-
 function disableDropDownRangeOptions(max_values, minValue) {
 	if (max_values) {
 	  max_values.each(function() {
@@ -537,7 +521,6 @@ function disableDropDownRangeOptions(max_values, minValue) {
 	  });
 	}
 }
-
 function setuinvestRangeDropDownList(min_values, max_values, min_input, max_input, clearLink, dropDownControl) {
 	min_values.click(function() {
 	  var minValue = $(this).attr('value');
@@ -548,67 +531,51 @@ function setuinvestRangeDropDownList(min_values, max_values, min_input, max_inpu
 	
 	  validateDropDownInputs();
 });
-
 max_values.click(function() {
   var maxValue = $(this).attr('value');
   max_input.val(maxValue);
   document.getElementById('price_range2').innerHTML = maxValue;
-
   toggleDropDown();
 });
-
 clearLink.click(function() {
   min_input.val('');
   max_input.val('');
-
   disableDropDownRangeOptions(max_values);
-
   validateDropDownInputs();
 });
-
 min_input.on('input',
   function() {
     var minValue = min_input.val();
-
     disableDropDownRangeOptions(max_values, minValue);
     validateDropDownInputs();
   });
-
 max_input.on('input', validateDropDownInputs);
-
 max_input.blur('input',
   function() {
     toggleDropDown();
   });
-
 function validateDropDownInputs() {
   var minValue = parseInt(min_input.val());
   var maxValue = parseInt(max_input.val());
-
   if (maxValue > 0 && minValue > 0 && maxValue < minValue) {
     min_input.addClass('inputError');
     max_input.addClass('inputError');
-
     return false;
   } else {
     min_input.removeClass('inputError');
     max_input.removeClass('inputError');
-
     return true;
   }
 }
-
 function toggleDropDown() {
   if (validateDropDownInputs() &&
     parseInt(min_input.val()) > 0 &&
     parseInt(max_input.val()) > 0) {
-
     // auto close if two values are valid
     dropDownControl.dropdown('toggle');
   }
 }
 }
-
 setuinvestRangeDropDownList(
 $('.investRange .min_value'),
 $('.investRange .max_value'),
@@ -616,5 +583,4 @@ $('.investRange .freeformPrice .min_input'),
 $('.investRange .freeformPrice .max_input'),
 $('.investRange .btnClear'),
 $('.investRange .dropdown-toggle'));
-
 </script>

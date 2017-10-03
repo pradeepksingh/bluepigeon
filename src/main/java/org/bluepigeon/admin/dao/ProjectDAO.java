@@ -19,6 +19,7 @@ import org.bluepigeon.admin.data.BuildingPojo;
 import org.bluepigeon.admin.data.BuildingPriceInfoData;
 import org.bluepigeon.admin.data.BuildingWeightageData;
 import org.bluepigeon.admin.data.ConfigData;
+import org.bluepigeon.admin.data.EmployeeList;
 import org.bluepigeon.admin.data.FlatAmenityTotal;
 import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatListData;
@@ -6821,6 +6822,21 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		Query query = session.createQuery(hql);
 		query.setParameter("projectId", project_id);
 		List<ProjectImageGallery> result = query.list();
+		return result;
+	}
+	/**
+	 * @author pankaj
+	 * @param builderEmployee
+	 * @return
+	 */
+	public List<EmployeeList> getBuilderEmployeeList(BuilderEmployee builderEmployee){
+		String hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email, access.name as access from builder_employee as emp join builder_employee_access_type as access on access.id=emp.access_type_id where emp.builder_id="+builderEmployee.getBuilder().getId()+" GROUP by emp.id order by emp.id desc";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
+		System.err.println(hql);
+		List<EmployeeList> result = query.list();
+		session.close();
 		return result;
 	}
 

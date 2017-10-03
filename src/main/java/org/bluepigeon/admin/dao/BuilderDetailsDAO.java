@@ -1053,7 +1053,7 @@ public class BuilderDetailsDAO {
 		empQuery.setParameter("id", empId);
 		BuilderEmployee builderEmployee=(BuilderEmployee)empQuery.list().get(0);
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
-		
+			hql = "select source.name as name, count(lead.id) as dataCount from builder_lead as lead inner join builder_project as project on lead.project_id = project.id INNER JOIN source as source on lead.source=source.id where project.status=1 and project.group_id="+builderEmployee.getBuilder().getId()+" GROUP by source.id order by source.name asc";
 		}else{
 			hql = "select source.name as name, count(lead.id) as dataCount from builder_lead as lead inner join builder_project as project on lead.project_id = project.id INNER JOIN source as source on lead.source=source.id INNER join allot_project as ap on ap.project_id = lead.project_id  where project.status=1 and ap.emp_id="+builderEmployee.getId()+" GROUP by source.id order by source.name asc";
 		}
@@ -1073,7 +1073,7 @@ public class BuilderDetailsDAO {
 		empQuery.setParameter("id", empId);
 		BuilderEmployee builderEmployee=(BuilderEmployee)empQuery.list().get(0);
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
-			
+			hql = "select project.name as name, round(project.revenue) as revenue from builder_project as project left join builder_building as building on building.project_id = project.id left join builder_floor as floor on floor.building_id = building.id left join builder_flat as flat on flat.floor_no = floor.id where project.status=1 and project.group_id="+builderEmployee.getBuilder().getId()+" and flat.status_id=2 GROUP by project.id order by project.id desc";
 		}else{
 			hql = "select project.name as name, round(project.revenue) as revenue from builder_project as project INNER join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.project_id = project.id left join builder_floor as floor on floor.building_id = building.id left join builder_flat as flat on flat.floor_no = floor.id where project.status=1 and ap.emp_id="+builderEmployee.getId()+" and flat.status_id=2 GROUP by project.id order by project.id desc";
 		}
@@ -1093,7 +1093,7 @@ public class BuilderDetailsDAO {
 		empQuery.setParameter("id", empId);
 		BuilderEmployee builderEmployee=(BuilderEmployee)empQuery.list().get(0);
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
-			
+			hql = "select elt(m.mon,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue from(select MONTH(bd.booking_date) as mon,round(sum(project.revenue)) as revenue from builder_project as project inner join builder_building as building on building.project_id = project.id inner join builder_floor as floor on floor.building_id = building.id inner join builder_flat as flat on flat.floor_no = floor.id inner join buyer as buyer on flat.id=buyer.flat_id inner join buying_details as bd on buyer.id=bd.buyer_id where project.status=1 and project.group_id="+builderEmployee.getBuilder().getId()+" and flat.status_id=2 and buyer.is_primary=1 and buyer.status=0 and buyer.is_deleted=0 group by MONTH(bd.booking_date)) as m order by m.mon asc";
 		}else{
 			hql = "select elt(m.mon,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue from(select MONTH(bd.booking_date) as mon,round(sum(project.revenue)) as revenue from builder_project as project INNER join allot_project as ap on ap.project_id = project.id inner join builder_building as building on building.project_id = project.id inner join builder_floor as floor on floor.building_id = building.id inner join builder_flat as flat on flat.floor_no = floor.id inner join buyer as buyer on flat.id=buyer.flat_id inner join buying_details as bd on buyer.id=bd.buyer_id where project.status=1 and ap.emp_id="+empId+" and flat.status_id=2 and buyer.is_primary=1 and buyer.status=0 and buyer.is_deleted=0 group by MONTH(bd.booking_date)) as m order by m.mon asc";
 		}
@@ -1112,7 +1112,12 @@ public class BuilderDetailsDAO {
 		empQuery.setParameter("id", empId);
 		BuilderEmployee builderEmployee=(BuilderEmployee)empQuery.list().get(0);
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
-			
+			hql = "select emp.name as name, sum(bd.total_cost) as revenue from builder_employee as emp "
+					+ "join buyer as buyer on buyer.emp_id = emp.id "
+					+ "inner join buying_details as bd on bd.buyer_id = buyer.id "
+					+ "left join builder_project as project on project.id = buyer.project_id "
+					+ "where project.status=1 and buyer.is_primary=1 and buyer.is_deleted=0 and "
+					+ "buyer.status=0 and buyer.builder_id="+builderEmployee.getBuilder().getId()+" GROUP by emp.id";
 		}else{
 			hql = "select emp.name as name, sum(bd.total_cost) as revenue from builder_employee as emp "
 					+ "join buyer as buyer on buyer.emp_id = emp.id "
@@ -1655,7 +1660,7 @@ public class BuilderDetailsDAO {
 		String hql = "";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
-			
+			hql = "select project.name as name, round(project.revenue) as revenue from builder_project as project left join builder_building as building on building.project_id = project.id left join builder_floor as floor on floor.building_id = building.id left join builder_flat as flat on flat.floor_no = floor.id where project.status=1 and project.group_id="+builderEmployee.getBuilder().getId()+" and flat.status_id=2 GROUP by project.id order by project.id desc";
 		}else{
 			hql = "select project.name as name, round(project.revenue) as revenue from builder_project as project INNER join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.project_id = project.id left join builder_floor as floor on floor.building_id = building.id left join builder_flat as flat on flat.floor_no = floor.id where project.status=1 and ap.emp_id="+builderEmployee.getId()+" and flat.status_id=2 GROUP by project.id order by project.id desc";
 		}
@@ -1677,7 +1682,7 @@ public class BuilderDetailsDAO {
 		String hql = "";
 		
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
-			
+			hql = "select project.name as name, project.revenue as revenue from builder_project as project left join builder_building as building on building.project_id = project.id left join builder_floor as floor on floor.building_id = building.id left join builder_flat as flat on flat.floor_no = floor.id where project.status=1 and project.group_id="+builderEmployee.getBuilder().getId()+" and flat.status_id=2 GROUP by project.id order by project.id desc";
 		}else{
 			hql = "select project.name as name, project.revenue as revenue from builder_project as project INNER join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.project_id = project.id left join builder_floor as floor on floor.building_id = building.id left join builder_flat as flat on flat.floor_no = floor.id where project.status=1 and ap.emp_id="+builderEmployee.getId()+" and flat.status_id=2 GROUP by project.id order by project.id desc";
 		}
@@ -1849,5 +1854,15 @@ public class BuilderDetailsDAO {
 		
 		List<EmployeeList> result = query.list();
 		return result;
+	}
+	
+	public List<BuilderEmployeeAccessType> getBuilderAccessType(){
+		String hql = "from BuilderEmployeeAccessType";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderEmployeeAccessType> result = query.list();
+		return result;
+		
 	}
 }
