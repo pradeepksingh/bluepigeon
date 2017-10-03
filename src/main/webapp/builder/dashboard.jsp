@@ -124,22 +124,16 @@
       <div id="sidebar1"> 
        	<%@include file="partial/sidebar.jsp"%>
       </div>
-        <div id="page-wrapper" style="min-height: 2038px;">
+        <div id="page-wrapper">
            <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                         <h4 class="page-title">Dashboard</h4> </div>
-                        <%if(access_id == 1 || access_id == 2){ %>
-<!--                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">  -->
-<%--                     	<a href="${baseUrl}/builder/project/new.jsp"><span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add new Project</span></a> --%>
-<!--                     </div> -->
-                    <%} %>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> 
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
                 <!--.row -->
-                <%//if(access_id == 1 || access_id == 2 || access_id == 4 || access_id == 5 || access_id == 7){ %>
                 <div class="row">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
                         <div class="white-box white-border">
@@ -154,7 +148,6 @@
                         <div class="white-box white-border">
                             <h3 class="box-title">Total Buyers</h3>
                             <ul class="list-inline two-part">
-<!--                                 <li><i class="icon-tag text-purple"></i></li> -->
 									 <li><i class="icon-tag text-info-new"></i></li>
                                 <li class="text-right"><span class="counter dashboard-text" ><%out.print(totalBuyers); %></span></li>
                             </ul>
@@ -164,7 +157,6 @@
                         <div class="white-box white-border">
                             <h3 class="box-title">New leads</h3>
                             <ul class="list-inline two-part">
-<!--                                 <li><i class="icon-user text-danger"></i></li> -->
                                  <li><i class="icon-user text-info-new"></i></li>
                                 <li class="text-right"><span class="counter dashboard-text"><%out.print(totalLeads); %></span></li>
                             </ul>
@@ -174,57 +166,12 @@
                         <div class="white-box white-border">
                             <h3 class="box-title">Total Revenue (Rs in cr)</h3>
                             <ul class="list-inline two-part">
-<!--                                 <li><i class="ti-wallet text-success"></i></li> -->
 									 <li><i class="ti-wallet text-info-new"></i></li>
                                 <li class="text-right"><span class="counter dashboard-text"> <%out.print(Math.round(totalRevenue)); %></span></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <%//} %>
-                    <%//if(access_id == 3){ %>
-<!--                 <div class="row"> -->
-<!--                     <div class="col-lg-3 col-sm-6 col-xs-12"> -->
-<!--                         <div class="white-box white-border" style="padding: 15px;"> -->
-<!--                             <h3 class="box-title">Total No. Of Campaigns</h3> -->
-<!--                             <ul class="list-inline two-part"> -->
-<!--                                 <li><i class="ti-home text-info-new"></i></li> -->
-<%--                                 <li class="text-right"><span class="counter dashboard-text"><%if(totalCampaign != null){out.print(totalCampaign);} %></span></li> --%>
-<!--                             </ul> -->
-<!--                         </div> -->
-<!--                     </div> -->
-<!--                     <div class="col-lg-3 col-sm-6 col-xs-12"> -->
-<!--                         <div class="white-box white-border" style="padding: 15px;"> -->
-<!--                             <h3 class="box-title">Leads through Campaigns</h3> -->
-<!--                             <ul class="list-inline two-part"> -->
-<!-- <!--                                 <li><i class="icon-tag text-purple"></i></li> --> 
-<!-- 									 <li><i class="icon-tag text-info-new"></i></li> -->
-<%--                                 <li class="text-right"><span class="counter dashboard-text" ><%out.print(totalBuyers); %></span></li> --%>
-<!--                             </ul> -->
-<!--                         </div> -->
-<!--                     </div> -->
-<!--                     <div class="col-lg-3 col-sm-6" > -->
-<!--                         <div class="white-box white-border" style="padding: 15px;"> -->
-<!--                             <h3 class="box-title">Buyers through Campaigns</h3> -->
-<!--                             <ul class="list-inline two-part"> -->
-<!-- <!--                                 <li><i class="icon-user text-danger"></i></li> --> 
-<!--                                  <li><i class="icon-user text-info-new"></i></li> -->
-<%--                                 <li class="text-right"><span class="counter dashboard-text"><%out.print(totalLeads); %></span></li> --%>
-<!--                             </ul> -->
-<!--                         </div> -->
-<!--                     </div> -->
-<!--                     <div class="col-lg-3 col-sm-6 col-xs-12"> -->
-<!--                         <div class="white-box white-border" style="padding: 15px;"> -->
-<!--                             <h3 class="box-title">Total Revenue (in Rs)</h3> -->
-<!--                             <ul class="list-inline two-part"> -->
-<!-- <!--                                 <li><i class="ti-wallet text-success"></i></li> --> 
-<!-- 									 <li><i class="ti-wallet text-info-new"></i></li> -->
-<%--                                 <li class="text-right"><span class="counter dashboard-text"> <%out.print(Math.round(totalRevenue)); %></span></li> --%>
-<!--                             </ul> -->
-<!--                         </div> -->
-<!--                     </div> -->
-<!--                 </div> -->
-                <%//} %>
                 <div class="white-box">
                    <div class="row">
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -238,7 +185,6 @@
                           </select>
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
-<!--                       <input class="form-control" type="text" id="locality_name" name="locality_name" placeholder="Enter locality name" title="Please select City First and then enter locality name"> -->
 							<select id="locality_name" name="locality_name">
                                         <option value="">Locality</option>
                         	</select>
@@ -272,7 +218,6 @@
 	                       <div class="image">
 		                      <%
 	                       		try{
-	                       	//	imageGaleries = new ProjectDAO().getProjectImagesByProjectId(projectList.getId()).get(0);
 	                       	     if(projectList.getImage() != null){
 	                       	%>
 		                       	<img  src="${baseUrl}/<% out.print(projectList.getImage()); %>" height="348" width="438" alt="Project image"/>
@@ -353,13 +298,13 @@
                        	}%>
                         </div>
 	                    <div class="offset-sm-5 col-sm-7" id="showMore">
-	                        <button type="button" onclick="getAllProjectsByBuiderId();" class="btn btn11 btn-submit waves-effect waves-light m-t-10">More...</button>
+	                        <button type="button" onclick="getAllProjectsByBuiderId();" class="btn btn11 btn-submit waves-effect waves-light m-t-10">MORE</button>
 	                     </div>
                     </div>
                 </div>
                 <!-- /.row -->
                 <!-- .row -->
-                <div class="row">
+                <div class="row" id="notvisible">
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         <div class="white-box">
                             <h3 class="box-title">Project status</h3>
@@ -417,13 +362,12 @@
                     </div>
                 </div>
                 <!-- /.row -->
-                <div class="white-box">
-	                <div class="row">
+                <div class="white-box" id="bottomhide">
+	                <div class="row" >
 	                <%if((access_id >=1 && access_id <=2)) {%>
 		                <div class="col-md-4">
 		                    <button type="button" onclick="addEmployee();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add New Employee</button>
 		                </div>
-		               
 		                 <div class="col-md-4">
 		                    <button type="button" onclick="addLead();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add New Lead</button>
 		                 </div>
@@ -438,40 +382,35 @@
 		                    <button type="button" onclick="addCampaign();" class="btn11 btn-submit waves-effect waves-light m-t-10">Add Campaign</button>
 		                 </div>
 		                  <%} %>
-<!-- 		                 <div class="col-md-4"> -->
-<!-- 		                    <button type="button" onclick="addBuyer();" class="btn11 btn-info waves-effect waves-light m-t-10">Add New Buyer</button> -->
-<!-- 		                </div> -->
 	                </div>
                 </div>
               </div>
            </div>
       </div>
         <!-- /.container-fluid -->
-   	<div id="footer"> 
+  	<div id="footer"> 
 		<%@include file="partial/footer.jsp"%>
     </div> 
-       
-    <script src="plugins/bower_components/switchery/dist/switchery.min.js"></script>
-    <script src="plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
-    <script src="plugins/bower_components/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
-    <script src="plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
-    <script src="plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="plugins/bower_components/multiselect/js/jquery.multi-select.js"></script>
-    <script src="${baseUrl}/builder/plugins/bower_components/morrisjs/morris.js"></script>
-    <script src="${baseUrl}/builder/js/real-estate.js"></script>
-    <script src="${baseUrl}/builder/plugins/bower_components/raphael/raphael-min.js"></script>
-<%--     <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.charts-sparkline.js"></script> --%>
-<%--     <script src="${baseUrl}/builder/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script> --%>
-
-    	<script type="text/javascript" src="${baseUrl}/builder/js/selectize.min.js"></script>
-    <script>
-   
+</body>
+</html>
+<script src="plugins/bower_components/switchery/dist/switchery.min.js"></script>
+<script src="plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
+<script src="plugins/bower_components/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
+<script src="plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+<script src="plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="plugins/bower_components/multiselect/js/jquery.multi-select.js"></script>
+<script src="${baseUrl}/builder/plugins/bower_components/morrisjs/morris.js"></script>
+<script src="${baseUrl}/builder/js/real-estate.js"></script>
+<script src="${baseUrl}/builder/plugins/bower_components/raphael/raphael-min.js"></script>
+<script type="text/javascript" src="${baseUrl}/builder/js/selectize.min.js"></script>
+<script>
+   $("#notvisible").hide();
+   $("#bottomhide").hide();
     $select_project = $("#project_id").selectize({
 		persist: false,
 		 onChange: function(value) {
 			 if(value != "" && value >0)
 			 	getProjectFilterList(value);
-			 //getProjectList();
 		 },
 		 onDropdownOpen: function(value){
 	    	 var obj = $(this);
@@ -484,7 +423,6 @@
     <%if(project_size_list > 0){%>
     	select_project = $select_project[0].selectize;
     <%}%>
-
    $select_city = $("#city_id").selectize({
 	  persist:false,
 	  onChange:function(value){
@@ -502,9 +440,6 @@
 		    		$select_floor = $("#locality_name").selectize({
 						persist: false,
 						 onChange: function(value) {
-	// 						 if(value > 0 || value != '' ){
-	// 								window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
-	// 							}
 							 if(value != ""){
 								 getProjectList();
 							 }
@@ -535,20 +470,9 @@
     	select_city = $select_city[0].selectize;
     	
     <%}%>
-    
-//     $("#locality_name").keyup(function(){
-//     	getProjectList();
-//     });
-
     $select_locality = $("#locality_name").selectize({
     	persist: false,
     	 onChange: function(value) {
-    		// ajaxindicatorstart("Loading...");
-    		//if(( $("#filter_building_id").val() != '') && ( $("#locality_id").val() != '' )){
-    			//window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
-    			// ajaxindicatorstop();
-    		//}
-    		//alert(value);
     		 if(value != ""){
     		 	getProjectList();
     		 }
@@ -562,7 +486,6 @@
         }
     });
     select_locality = $select_locality[0].selectize;
-
     $select_project_status = $("#project_status").selectize({
     	persist: false,
    	 onChange: function(value) {
@@ -592,7 +515,6 @@
     function addCampaign(){
     	window.location.href="${baseUrl}/builder/campaign/new.jsp";
     }
-
       
     jQuery(document).ready(function() {
         // Switchery
@@ -666,14 +588,11 @@
             return false;
         });
     });
-    </script>
-    <script>
-    
     <%
 	if(project_list !=null){
 		int i=1;
 		for(ProjectList projectList : project_list ){
-%>
+	%>
 	createGraph("graph<%out.print(projectList.getId());%>");
 	<%}}%>
     
@@ -715,7 +634,6 @@
  	    drawCircle('#03a9f3', options.lineWidth, options.percent / 100);
     }
     
-
 //$("#locality_name").attr('disabled',true);
  function getProjectList(){
  	
@@ -1040,6 +958,4 @@
  			 });
  		 });
     }
-    </script>
-</body>
-</html>
+</script>
