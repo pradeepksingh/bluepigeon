@@ -4483,7 +4483,7 @@ public class ProjectDAO {
 		for(FlatTotal flatTotal :resultRaw) {
 			finalWeightage += (flatTotal.getTotalSubstageWeight()/percent*flatTotal.getStageWeight());
 		}
-		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from flat_amenity_weightage as a where a.flat_id = "+flat_id+" group by a.flat_id";
+		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from flat_amenity_weightage as a where a.flat_id = "+flat_id+" group by a.amenity_id";
 		Session session2 = hibernateUtil.getSessionFactory().openSession();
 		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
 		List<FlatAmenityTotal> resultRaw2 = query2.list();
@@ -4520,7 +4520,7 @@ public class ProjectDAO {
 		flatquery.setParameter("floor_id", floor_id);
 		List<BuilderCompletionStatus> flatresult = flatquery.list();
 		flatsession.close();
-		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from floor_weightage as a where a.floor_id = "+floor_id+" group by a.id";
+		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from floor_weightage as a where a.floor_id = "+floor_id+" group by a.stage_id";
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql)
 				.setResultTransformer(Transformers.aliasToBean(FlatTotal.class));
@@ -4532,7 +4532,7 @@ public class ProjectDAO {
 		for(FlatTotal flatTotal :resultRaw) {
 			finalWeightage += (flatTotal.getTotalSubstageWeight()*flatTotal.getStageWeight()/percent);
 		}
-		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from floor_amenity_weightage as a where a.floor_id = "+floor_id+" group by a.id";
+		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from floor_amenity_weightage as a where a.floor_id = "+floor_id+" group by a.amenity_id";
 		Session session2 = hibernateUtil.getSessionFactory().openSession();
 		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
 		List<FlatAmenityTotal> resultRaw2 = query2.list();
@@ -6560,7 +6560,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		String strSeparator = "";
 		projectIdList = projectIdList.replace("[", strSeparator).replace("]", strSeparator);
 		hql = "SELECT a.name as leadName, a.mobile as phoneNo, a.email as email, a.min as min, a.max as max, b.name as salemanName , GROUP_CONCAT(d.name) as configName , e.name as source ";
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 4){
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 4 || builderEmployee.getBuilderEmployeeAccessType().getId() == 1){
 			
 				hql+= "from builder_lead as a join builder_project as b on b.id= a.project_id "
 					+ "join lead_config as c on c.lead_id = a.id "
@@ -6612,7 +6612,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		String where = "";
 		hql = "SELECT a.name as leadName, a.mobile as phoneNo, a.email as email, a.min as min, a.max as max,"
 				+ " b.name as salemanName , GROUP_CONCAT(d.name) as configName , e.name as source ";
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==4){
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==4 || builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
 			
 				hql	=hql+"from builder_lead as a join builder_project as b on b.id= a.project_id "
 					+ "join lead_config as c on c.lead_id = a.id "
@@ -6839,7 +6839,22 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		session.close();
 		return result;
 	}
-
+	/**
+	 * @author pankaj
+	 * @param builderEmployee
+	 * @param projectId
+	 * @return
+	 */
+	public List<EmployeeList> getBuilderEmployeeList(BuilderEmployee builderEmployee,int projectId){
+		String hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email, access.name as access from builder_employee as emp join builder_employee_access_type as access on access.id= emp.access_type_id join builder_project as project on project.group_id=emp.builder_id where emp.access_type_id in(3,4,6) and emp.builder_id="+builderEmployee.getBuilder().getId()+" and project.id="+projectId+" group by emp.id order by emp.id DESC";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
+		System.err.println(hql);
+		List<EmployeeList> result = query.list();
+		session.close();
+		return result;
+	}
 
 }
 

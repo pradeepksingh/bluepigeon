@@ -243,7 +243,16 @@
 			                       </div>
 	                           </div>
 	                       </div>
-	                        <%if(access_id == 1 || access_id==2){ %>
+	                       <%if(access_id == 1){ %>
+	                       <div class="row">
+                           		<div class="col-md-6 left"> 
+                           			<a href="${baseUrl}/builder/ceo/projectstatus/projectstatus.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
+                           		</div>
+                         		<div class="col-md-6 center">
+                          		 	<a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
+						 	 	</div>
+						  </div>
+	                        <%}else if(access_id==2){ %>
 	                       <div class="row">
                            		<div class="col-md-6 left"> 
                            			<a href="${baseUrl}/builder/project/edit.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
@@ -274,7 +283,7 @@
 	                    <%  } else if(access_id == 4){%>
 	                    <div class="row">
                            	 <div class="col-md-6 left"> 
-                           	   	 <a href="${baseUrl}/builder/campaign/mycampaigns.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
+                           	   	 <a href="${baseUrl}/builder/sales/projectstatus.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
                            	 </div>
                            	 <div class="col-md-6 center">
                           		 <a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
@@ -693,7 +702,12 @@
                  +'</div>'
             		+'</div>'
             		+'<div class="row">'
-            		<%if(access_id == 1 || access_id==2){%>
+            		<%if(access_id == 1){%>
+            		+'<div class="col-md-6 left">' 
+            		+'<a href="${baseUrl}/builder/ceo/projectstatus/projectstatus.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+            		+'</div>'
+            		<%}%>
+            		<%if(access_id==2){%>
             		+'<div class="col-md-6 left">' 
             		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
             		+'</div>'
@@ -705,7 +719,7 @@
              		<%}%>
              		<%if(access_id == 4){%>
              		+'<div class="col-md-6 left">' 
-             		+'<a href="" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'<a href="${baseUrl}/builder/sales/projectstatus.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
             		<%if(access_id==5 ||access_id == 7){%>
@@ -778,7 +792,12 @@
                     +'</div>'
                     +'</div>'
                		+'</div>'
-               		<%if(access_id ==1 || access_id == 2){%>
+               		<%if(access_id == 1){%>
+            		+'<div class="col-md-6 left">' 
+            		+'<a href="${baseUrl}/builder/ceo/projectstatus/projectstatus.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+            		+'</div>'
+            		<%}%>
+               		<%if(access_id == 2){%>
                		+'<div class="row">'
                		+'<div class="col-md-6 left">' 
                		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
@@ -791,7 +810,7 @@
              		<%}%>
              		<%if(access_id == 4){%>
              		+'<div class="col-md-6 left">' 
-             		+'<a href="${baseUrl}/builder/campaign/list.jsp" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'<a href="${baseUrl}/builder/sales/projectstatus.jsp?project_id='+projectId+'"  class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
                		<% if(access_id == 5 || access_id == 7){%>
@@ -864,7 +883,12 @@
                       +'</div>'
                  		+'</div>'
                  		+'<div class="row">'
-                 		<%if(access_id ==1 || access_id == 2){%>
+                 		<%if(access_id == 1){%>
+                		+'<div class="col-md-6 left">' 
+                		+'<a href="${baseUrl}/builder/ceo/projectstatus/projectstatus.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+                		+'</div>'
+                		<%}%>
+                 		<%if(access_id == 2){%>
                  		+'<div class="col-md-6 left">' 
                  		+'<a href="${baseUrl}/builder/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
@@ -876,7 +900,7 @@
                  		<%}%>
                  		<%if(access_id == 4){%>
                  		+'<div class="col-md-6 left">' 
-                 		+'<a href="" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+                 		+'<a href="${baseUrl}/builder/sales/projectstatus.jsp?project_id='+projectId+'"  class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
                  		<%}%>
                  		<% if(access_id==5 || access_id == 7){%>

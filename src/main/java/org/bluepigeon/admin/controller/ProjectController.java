@@ -3941,6 +3941,8 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("minprice") int min,
 			@FormDataParam("maxprice") int max,
 			@FormDataParam("assignsalemans[]") List<FormDataBodyPart> salesmans
+			//@FormDataParam("assignsalehead[]") List<FormDataBodyPart> saleshead
+			
 	) {
 		ResponseMessage resp = new ResponseMessage();
 		BuilderLead builderLead = new BuilderLead();
@@ -3978,42 +3980,44 @@ public class ProjectController extends ResourceConfig {
 						builderLead.setIntrestedIn(1);
 						builderLead.setStatus(1);
 					
-					resp = new ProjectDAO().addProjectLead(builderLead); 
+						resp = new ProjectDAO().addProjectLead(builderLead); 
 					
-					if(resp.getId() > 0){
-						if(configs.size() > 0){
-							BuilderLead builderLead2 = new BuilderLead();
-							builderLead2.setId(resp.getId());
-							List<LeadConfig> leadConfig = new ArrayList<LeadConfig>();
-							for(FormDataBodyPart config : configs){
-							    LeadConfig leadConfig2 =  new LeadConfig();
-								BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration = new BuilderProjectPropertyConfiguration();
-								if(config.getValueAs(Integer.class) != null && config.getValueAs(Integer.class) != 0){
-									builderProjectPropertyConfiguration.setId(config.getValueAs(Integer.class));
-									leadConfig2.setBuilderProjectPropertyConfiguration(builderProjectPropertyConfiguration);
-									leadConfig2.setBuilderLead(builderLead2);
-									leadConfig.add(leadConfig2);
+						if(resp.getId() > 0){
+							if(configs.size() > 0){
+								BuilderLead builderLead2 = new BuilderLead();
+								builderLead2.setId(resp.getId());
+								List<LeadConfig> leadConfig = new ArrayList<LeadConfig>();
+								for(FormDataBodyPart config : configs){
+								    LeadConfig leadConfig2 =  new LeadConfig();
+									BuilderProjectPropertyConfiguration builderProjectPropertyConfiguration = new BuilderProjectPropertyConfiguration();
+									if(config.getValueAs(Integer.class) != null && config.getValueAs(Integer.class) != 0){
+										builderProjectPropertyConfiguration.setId(config.getValueAs(Integer.class));
+										leadConfig2.setBuilderProjectPropertyConfiguration(builderProjectPropertyConfiguration);
+										leadConfig2.setBuilderLead(builderLead2);
+										leadConfig.add(leadConfig2);
+									}
+								}
+								if(leadConfig.size()>0){
+									new ProjectDAO().addLeadConfig(leadConfig);
 								}
 							}
-							if(leadConfig.size()>0){
-								new ProjectDAO().addLeadConfig(leadConfig);
-							}
 						}
-					}
-					if(resp.getId() > 0){
-						List<AllotLeads> allotLeadList = new ArrayList<AllotLeads>();
-						AllotLeads allotLeads = new AllotLeads();
-						allotLeads.setBuilderEmployee(builderEmployee);
-						allotLeads.setBuilderLead(builderLead);
-						allotLeadList.add(allotLeads);
-						if(allotLeadList.size() > 0){
-							new BuilderDetailsDAO().addAllotLead(allotLeadList);
+						if(resp.getId() > 0){
+							List<AllotLeads> allotLeadList = new ArrayList<AllotLeads>();
+							AllotLeads allotLeads = new AllotLeads();
+							allotLeads.setBuilderEmployee(builderEmployee);
+							allotLeads.setBuilderLead(builderLead);
+							allotLeadList.add(allotLeads);
+							if(allotLeadList.size() > 0){
+								new BuilderDetailsDAO().addAllotLead(allotLeadList);
+							}
 						}
 					}
 				}
+				resp.setStatus(1);
+				resp.setMessage("Lead is saved succefully");
 			}
-			}
-			if(builderEmployee.getBuilderEmployeeAccessType().getId() == 5 || builderEmployee.getBuilderEmployeeAccessType().getId() == 4){
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1 || builderEmployee.getBuilderEmployeeAccessType().getId() == 5 || builderEmployee.getBuilderEmployeeAccessType().getId() == 4){
 				if(project_ids.size() > 0){
 					for(FormDataBodyPart projectId : project_ids){
 						if(projectId.getValueAs(Integer.class) != null && projectId.getValueAs(Integer.class) != 0){
@@ -4085,10 +4089,10 @@ public class ProjectController extends ResourceConfig {
 						}
 					}
 				}
-			
+				resp.setStatus(1);
+				resp.setMessage("Lead is saved succefully");
 			}
-			resp.setStatus(1);
-			resp.setMessage("Lead is saved succefully");
+			
 		}catch(Exception e){
 			e.printStackTrace();
 			resp.setStatus(0);
