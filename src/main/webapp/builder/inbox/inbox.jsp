@@ -358,57 +358,12 @@ function showPriceResponse(resp, statusText, xhr, $form){
         $("#pricingresponse").show();
         alert(resp.message);
         ajaxindicatorstop();
-    //    window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
+        window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
   	}
 }
 
 
-$('#addnewreply').bootstrapValidator({
-	container: function($field, validator) {
-		return $field.parent().next('.messageContainer');
-   	},
-    feedbackIcons: {
-        validating: 'glyphicon glyphicon-refresh'
-    },
-    excluded: ':disabled',
-    fields: {
-    	buyer_name: {
-            validators: {
-                notEmpty: {
-                    message: 'Please select buyer'
-                }
-            }
-        },
-        subject: {
-            validators: {
-                notEmpty: {
-                    message: 'Please enter subject'
-                }
-            }
-        },
-        message: {
-            validators: {
-                notEmpty: {
-                    message: 'Please enter message'
-                }
-            }
-        }
-    }
-}).on('success.form.bv', function(event,data) {
-	// Prevent form submission
-	event.preventDefault();
-	addReply();
-	
-}).on('error.form.bv',function(event,data){
-	event.preventDefault();
-	alert("Error during submit data");
-});
-$("#saveReply").click(function(e){
-	e..preventDefault();
-	alert("AA");
-});
 function addReply() {
-	alert("a");
 	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#replyresponse', 
@@ -446,7 +401,7 @@ function showPriceResponse(resp, statusText, xhr, $form){
         alert(resp.message);
         //return false;
         ajaxindicatorstop();
-       // window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
+        window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
   	}
 }
 $("#leadSearch").click(function(){
@@ -585,6 +540,47 @@ function getActiveProjectFlats(id){
 		 	+'</form>';
     		$("#inbox").append(replymsg);
 			 ajaxindicatorstop();
+			 $('#addnewreply').bootstrapValidator({
+					container: function($field, validator) {
+						return $field.parent().next('.messageContainer');
+				   	},
+				    feedbackIcons: {
+				        validating: 'glyphicon glyphicon-refresh'
+				    },
+				    excluded: ':disabled',
+				    fields: {
+				    	buyer_name: {
+				            validators: {
+				                notEmpty: {
+				                    message: 'Please select buyer'
+				                }
+				            }
+				        },
+				        subject: {
+				            validators: {
+				                notEmpty: {
+				                    message: 'Please enter subject'
+				                }
+				            }
+				        },
+				        message: {
+				            validators: {
+				                notEmpty: {
+				                    message: 'Please enter message'
+				                }
+				            }
+				        }
+				    }
+				}).on('success.form.bv', function(event,data) {
+					// Prevent form submission
+					event.preventDefault();
+					
+					addReply();
+					
+				}).on('error.form.bv',function(event,data){
+					event.preventDefault();
+					alert("Error during submit data");
+				});
 	});
 $("#myModal4").modal('show');
 }

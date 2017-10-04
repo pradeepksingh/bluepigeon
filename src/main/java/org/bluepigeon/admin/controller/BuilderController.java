@@ -709,7 +709,7 @@ public class BuilderController {
 	}
 	
 	@POST
-	@Path("/inbox/new/replay")
+	@Path("/inbox/new/reply")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage saveReplyMessage(
@@ -760,6 +760,7 @@ public class BuilderController {
 		 				inboxMessage.setAttachment("");
 		 			}
 		 			catch(Exception e) {
+		 				e.printStackTrace();
 		 				msg.setStatus(0);
 		 				msg.setMessage("Unable to save message");
 		 				return msg;

@@ -15191,3 +15191,8 @@ a.fc-event:not([href]):not([tabindex]) {
 		float: left
 	}
 }
+
+.btn-submit{
+	color: #fff;
+    background: #00bfd6;
+}

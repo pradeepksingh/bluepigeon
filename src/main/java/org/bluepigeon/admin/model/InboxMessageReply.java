@@ -31,7 +31,7 @@ public class InboxMessageReply {
 		// TODO Auto-generated constructor stub
 	}
 	public InboxMessageReply(Integer id, BuilderEmployee builderEmployee, InboxMessage inboxMessage, String message,
-			String attachment, String subject) {
+			String attachment, String subject, byte isReply) {
 		super();
 		this.id = id;
 		this.builderEmployee = builderEmployee;
@@ -41,6 +41,7 @@ public class InboxMessageReply {
 		this.subject = subject;
 		this.builderEmployee = builderEmployee;
 		this.inboxMessage = inboxMessage;
+		this.isReply = isReply;
 	}
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -92,6 +93,7 @@ public class InboxMessageReply {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
+	@Column(name = "is_reply")
 	public byte getIsReply() {
 		return isReply;
 	}
