@@ -5929,7 +5929,7 @@ public class ProjectDAO {
     	try{
 	    	BuilderFlat builderFlat = (BuilderFlat) query.list().get(0);
 	    	if(builderFlat != null){
-	    		if(builderFlat.getBuilderFlatStatus().getId() == 1){
+	    		if(builderFlat.getBuilderFlatStatus().getId() == 1 || builderFlat.getBuilderFlatStatus().getId() == 3){
 	    		booking.setFlatId(builderFlat.getId());
 	    		booking.setFlatNo(builderFlat.getFlatNo());
 	    		booking.setBalcony(builderFlat.getBalcony());
