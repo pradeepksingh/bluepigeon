@@ -2161,84 +2161,95 @@ public class ProjectController extends ResourceConfig {
 			try {	
 				List<FloorLayoutImage> floorLayoutImages = new ArrayList<FloorLayoutImage>();
 				//for multiple inserting images.
-				if (building_images.size() > 0) {
-					for(int i=0 ;i < building_images.size();i++)
-					{
-						if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-							FloorLayoutImage floorLayoutImage = new FloorLayoutImage();
-							String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
-							long millis = System.currentTimeMillis() % 1000;
-							gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-							gallery_name = "images/project/floor/"+gallery_name;
-							String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-							//System.out.println("for loop image path: "+uploadGalleryLocation);
-							this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-							floorLayoutImage.setLayout(gallery_name);
-							floorLayoutImage.setTitle("New Plan");
-							floorLayoutImage.setBuilderFloor(builderFloor);
-							floorLayoutImages.add(floorLayoutImage);
+				if(building_images != null){
+					if (building_images.size() > 0) {
+						for(int i=0 ;i < building_images.size();i++)
+						{
+							if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+								FloorLayoutImage floorLayoutImage = new FloorLayoutImage();
+								String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
+								long millis = System.currentTimeMillis() % 1000;
+								gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+								gallery_name = "images/project/floor/"+gallery_name;
+								String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+								//System.out.println("for loop image path: "+uploadGalleryLocation);
+								this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+								floorLayoutImage.setLayout(gallery_name);
+								floorLayoutImage.setTitle("New Plan");
+								floorLayoutImage.setBuilderFloor(builderFloor);
+								floorLayoutImages.add(floorLayoutImage);
+							}
 						}
-					}
-					if(floorLayoutImages.size() > 0) {
-						projectDAO.addBuildingFloorPlan(floorLayoutImages);
+						if(floorLayoutImages.size() > 0) {
+							projectDAO.addBuildingFloorPlan(floorLayoutImages);
+						}
 					}
 				}
 			} catch(Exception e) {
+				e.printStackTrace();
 				msg.setStatus(0);
 				msg.setMessage("Unable to save floor plan");
 			}
-			if (amenity_type.size() > 0) {
-				List<FloorAmenityInfo> floorAmenityInfos = new ArrayList<FloorAmenityInfo>();
-				int i = 0;
-				for(FormDataBodyPart amenity : amenity_type)
-				{
-					if(amenity.getValueAs(Integer.class) != null && amenity.getValueAs(Integer.class) != 0) {
-						Byte milestone_status = 0;
-						BuilderFloorAmenity builderFloorAmenity = new BuilderFloorAmenity();
-						builderFloorAmenity.setId(amenity.getValueAs(Integer.class));
-						FloorAmenityInfo amenityInfo = new FloorAmenityInfo();
-						amenityInfo.setBuilderFloorAmenity(builderFloorAmenity);
-						amenityInfo.setBuilderFloor(builderFloor);
-						floorAmenityInfos.add(amenityInfo);
+			if(amenity_type != null){
+				if (amenity_type.size() > 0) {
+					List<FloorAmenityInfo> floorAmenityInfos = new ArrayList<FloorAmenityInfo>();
+					int i = 0;
+					for(FormDataBodyPart amenity : amenity_type)
+					{
+						if(amenity.getValueAs(Integer.class) != null && amenity.getValueAs(Integer.class) != 0) {
+							Byte milestone_status = 0;
+							BuilderFloorAmenity builderFloorAmenity = new BuilderFloorAmenity();
+							builderFloorAmenity.setId(amenity.getValueAs(Integer.class));
+							FloorAmenityInfo amenityInfo = new FloorAmenityInfo();
+							amenityInfo.setBuilderFloorAmenity(builderFloorAmenity);
+							amenityInfo.setBuilderFloor(builderFloor);
+							floorAmenityInfos.add(amenityInfo);
+						}
+						i++;
 					}
-					i++;
-				}
-				if(floorAmenityInfos.size() > 0) {
-					projectDAO.deleteFloorAmenityInfo(floor_id);
-					projectDAO.addBuildingFloorAmenityInfo(floorAmenityInfos);
+					if(floorAmenityInfos.size() > 0) {
+						projectDAO.deleteFloorAmenityInfo(floor_id);
+						projectDAO.addBuildingFloorAmenityInfo(floorAmenityInfos);
+					}
 				}
 			}
-			if(amenity_wts != "") {
-				for(String aw :amenityWeightages) {
-					FloorAmenityWeightage baw = new FloorAmenityWeightage();
-					String [] amenityWeightage = aw.split("#");
-					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
-					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
-					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
-					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
-					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
-					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
-					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
-					BuilderFloorAmenity builderFloorAmenity = new BuilderFloorAmenity();
-					builderFloorAmenity.setId(amenity_id);
-					BuilderFloorAmenityStages builderFloorAmenityStages = new BuilderFloorAmenityStages();
-					builderFloorAmenityStages.setId(stage_id);
-					BuilderFloorAmenitySubstages builderFloorAmenitySubstages = new BuilderFloorAmenitySubstages();
-					builderFloorAmenitySubstages.setId(substage_id);
-					baw.setBuilderFloorAmenity(builderFloorAmenity);
-					baw.setAmenityWeightage(amenity_weightage);
-					baw.setBuilderFloorAmenityStages(builderFloorAmenityStages);
-					baw.setStageWeightage(stage_weightage);
-					baw.setBuilderFloorAmenitySubstages(builderFloorAmenitySubstages);
-					baw.setSubstageWeightage(substage_weightage);
-					baw.setStatus(wstatus);
-					baw.setBuilderFloor(builderFloor);
-					baws.add(baw);
+			if(amenity_wts != null){
+				if(amenity_wts != "") {
+					try{
+					for(String aw :amenityWeightages) {
+						FloorAmenityWeightage baw = new FloorAmenityWeightage();
+						String [] amenityWeightage = aw.split("#");
+						Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
+						Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
+						Integer stage_id = Integer.parseInt(amenityWeightage[2]);
+						Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
+						Integer substage_id = Integer.parseInt(amenityWeightage[4]);
+						Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
+						Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+						BuilderFloorAmenity builderFloorAmenity = new BuilderFloorAmenity();
+						builderFloorAmenity.setId(amenity_id);
+						BuilderFloorAmenityStages builderFloorAmenityStages = new BuilderFloorAmenityStages();
+						builderFloorAmenityStages.setId(stage_id);
+						BuilderFloorAmenitySubstages builderFloorAmenitySubstages = new BuilderFloorAmenitySubstages();
+						builderFloorAmenitySubstages.setId(substage_id);
+						baw.setBuilderFloorAmenity(builderFloorAmenity);
+						baw.setAmenityWeightage(amenity_weightage);
+						baw.setBuilderFloorAmenityStages(builderFloorAmenityStages);
+						baw.setStageWeightage(stage_weightage);
+						baw.setBuilderFloorAmenitySubstages(builderFloorAmenitySubstages);
+						baw.setSubstageWeightage(substage_weightage);
+						baw.setStatus(wstatus);
+						baw.setBuilderFloor(builderFloor);
+						baws.add(baw);
+					}
+					projectDAO.deleteFloorAmenityWeightage(floor_id);
+					projectDAO.addFloorAmenityWeightage(baws);
+				}catch(Exception e){
+					
 				}
-				projectDAO.deleteFloorAmenityWeightage(floor_id);
-				projectDAO.addFloorAmenityWeightage(baws);
-			}
-		} else {
+				}
+			} 
+		}else {
 			msg.setMessage("Failed to update floor.");
 			msg.setStatus(0);
 		}
@@ -2262,7 +2273,9 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("admin_id") int admin_id,
 			@FormDataParam("amenity_wt") String amenity_wts
 	) {
-		String [] amenityWeightages = amenity_wts.split(",");
+		String [] amenityWeightages = null;
+		if(amenity_wts != null ||amenity_wts != "")
+		amenityWeightages = amenity_wts.split(",");
 		List<FloorAmenityWeightage> baws = new ArrayList<FloorAmenityWeightage>();
 		//byte floor_status = 1;
 		ResponseMessage msg = new ResponseMessage();

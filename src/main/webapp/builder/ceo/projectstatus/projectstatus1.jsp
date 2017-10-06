@@ -1,4 +1,3 @@
-<%@page import="org.bluepigeon.admin.data.EmployeeList"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.text.DateFormat"%>
@@ -45,7 +44,6 @@
 	int city_size_list =0 ;
 	Double totalPropertySold = 0.0;
 	List<ProjectImageGallery> projectImages = null; 
-	List<EmployeeList> employeeLists = null;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -73,7 +71,6 @@
 						projectId = Integer.parseInt(request.getParameter("project_id"));
 						if(projectId != 0) {
 							projectImages = new ProjectDAO().getProjectStatusImages(projectId);
-							employeeLists = new ProjectDAO().getBuilderEmployeeList(builder,projectId);
 						}
 					}
 				}
@@ -82,7 +79,6 @@
 		SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
 		Date date = new Date();
 %>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,21 +90,21 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../../plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
-    <link href="../../bootstrap/dist/css/newbootstrap.min.css" rel="stylesheet">
+    <link href="../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
      <link href="../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet"> 
+      <link href="../../plugins/bower_components/morrisjs/morris.css" rel="stylesheet">
     <!-- Menu CSS -->
     <link href="../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../../css/newstyle.css" rel="stylesheet">
-    <link href="../../css/common.css" rel="stylesheet">
-     <link href="../../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/style.css" rel="stylesheet">
+<!--     <link href="../../css/common.css" rel="stylesheet"> -->
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../../css/ceoprojectstatus1.css">
+<!--     <link rel="stylesheet" type="text/css" href="../../css/ceoprojectstatus.css"> -->
+     <link rel="stylesheet" type="text/css" href="../../css/projectheadstatus.css">
     <!-- jQuery -->
     <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
 <!--     <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script> -->
 </head>
-
 <body class="fix-sidebar">
     <!-- Preloader -->
     <div class="preloader" style="display: none;">
@@ -116,14 +112,12 @@
     </div>
     <div id="wrapper">
         <!-- Top Navigation -->
-        <div id="header">
-        	<%@include file="../../partial/header.jsp"%>
-        </div>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
-        <div id="sidebar1">
-        	<%@include file="../../partial/sidebar.jsp"%>
-         </div>
+       <div id="header">
+	       <%@include file="../../partial/header.jsp"%>
+      </div>
+      <div id="sidebar1"> 
+       	<%@include file="../../partial/sidebar.jsp"%>
+      </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper" style="min-height: 2038px;">
@@ -187,97 +181,69 @@
                <!-- row -->
                <div class="white-box">
                    <div class="row">
-                   <div class="col-md-8">
-                   <div class="row blue-bg">
                     <%
                     	if(projectImages != null){
                     		for(ProjectImageGallery projectImage :projectImages) { %>
                        <div class="col-md-6 col-sm-6 col-xs-12 projectsection">
 	                       <div class="image">
-		                      <img src="${baseUrl}/<% out.print(projectImage.getImage()); %>" alt="Project image" class="img2">
+		                       <img src="${baseUrl}/<% out.print(projectImage.getImage()); %>" alt="Project image" class="img2">
 		                       <div class="overlay">
-		                        <a href="javascript:openImageModal(<%out.print(projectImage.getId());%>);">
-			                       <div class="row margin-bottom1"  data-toggle="modal" data-target="#myModal">
-				                       <div class="col-md-9 col-sm-8 col-xs-8 left">
-					                       <h3><% out.print(projectImage.getTitle()); %></h3>
-				                        </div>
-				                        <div class="col-md-3 col-sm-4 col-xs-4 right">
-					                       <div class="right">
-					                          <div class="chart" id="graph<%out.print(projectImage.getId());%>" data-percent="<%out.print(projectImage.getCompletion());%>">
-					                            <canvas height="100" width="100"></canvas>
-					                          </div>
+		                       	   <a href="javascript:openImageModal(<%out.print(projectImage.getId());%>);">
+				                       <div class="row margin-bottom1"  data-toggle="modal" data-target="#myModal">
+					                       <div class="col-md-9 col-sm-8 col-xs-8 left">
+						                       <h3><% out.print(projectImage.getTitle()); %></h3>
 					                        </div>
+					                        <div class="col-md-3 col-sm-4 col-xs-4 right">
+						                       <div class="right">
+						                          <div class="chart" id="graph<%out.print(projectImage.getId());%>" data-percent="<%out.print(projectImage.getCompletion());%>">
+						                            <canvas height="100" width="100"></canvas>
+						                          </div>
+						                        </div>
+					                       </div>
 				                       </div>
-			                       </div>
-			                      </a>
 			                       <div class="row bottom-layer">
-			                         <div class="col-sm-8 col-xs-8">
-			                           <h3>Date- <% out.print(dt1.format(projectImage.getCreatedDate())); %></h3>
+			                         <div class="col-sm-12 col-xs-12">
+			                           <h3>Date :<% out.print(dt1.format(projectImage.getCreatedDate())); %></h3>
 			                         </div>
 			                         <div class="col-sm-4 col-xs-4">
 			                            <div class="row">
 			                              <div class="col-sm-6 col-xs-6">
-			                  				<a href="${baseUrl}/<% out.print(projectImage.getImage()); %>" download>
+			                              	<a href="${baseUrl}/<% out.print(projectImage.getImage()); %>" download>
 			                  				   <img src="../../images/download.png" alt="Project image" class="img26">
 			                  				</a>
 			                              </div>
 			                              <div class="col-sm-6 col-xs-6">
 			                   				 <a href="mailto:xyz@gmail.com;"><img src="../../images/share.png" alt="Project image" class="img26"></a>
-			                        		 </div>
+			                        	  </div>
 			                            </div>
 			                         </div>
-			                       </div>
+			                      </div>
 	                           </div>
 	                       </div>
                        </div>
-                        <%}} %>
-                      </div>
-                     </div>
-                     <div class="col-md-4">
-                        <div class="blue-bg tab-content">
-                          <div id="home" class="tab-pane fade in active">
-                          <%if(employeeLists != null){
-                        	for(EmployeeList employeeList: employeeLists){
-                        	%>
-                              <div>
-						          <div class="user-profile center">
-						            <img src="../../plugins/images/Untitled-1.png" alt="User Image" class="custom-img">
-						            <p><b><%out.print(employeeList.getName()); %></b></p>
-						            <p class="p-custom"><%out.print(employeeList.getAccess()); %></p>
-						            <br>
-						          </div>
-						             <div class="row custom-row user-row">
-								        <p class="p-custom">Mobile No.</p>
-								        <p><b><%out.print(employeeList.getMobileNo()); %></b></p>
-								        <p class="p-custom">Email</p>
-								        <p><b><%out.print(employeeList.getEmail()); %></b></p>
-								     </div>
-						          <hr>
-						      </div>
-						      <%}} %>
-					       </div>  
-					 	</div>
+                       <%}} %>
 	                </div>
-	             </div>
-	          </div>
-            </div>
+	              </div>
+                <!-- row -->
+           </div>
          </div>
       </div>
       <!-- Modal -->
 		<div id="myModal" class="modal fade" role="dialog" style="top:10%;">
 		  <div class="modal-dialog modal-dialog1">
+		
 		    <!-- Modal content-->
 		    <div class="modal-content modal-lg">
 		       <div class="modal-body modal-body1">
 		       	  <div id="myCarousel" class="carousel slide" data-ride="carousel" style="position: absolute;">
   					 <!-- Wrapper for slides -->
 					    <div class="carousel-inner">
-					    <% 
+					     <% 
 					     	if(projectImages != null){
 					     		for(ProjectImageGallery projectImage :projectImages) { %>
 					      <div class="item" id="modal-img-<% out.print(projectImage.getId()); %>">
 					        <div class="image">
-		                      <img src="${baseUrl}/<% out.print(projectImage.getImage()); %>" alt="Project image" class="img1" style="height:auto;">
+		                    	<img src="${baseUrl}/<% out.print(projectImage.getImage()); %>" alt="Project image" class="img1" style="height:auto;">
 		                        <div class="overlay">
 				                       <div class="row margin-bottom1"  data-toggle="modal" data-target="#myModal">  
 					                       <div class="col-md-9 col-sm-8 col-xs-8 left">
@@ -311,7 +277,7 @@
 		                           </div>
                             </div> 
 					      </div>
-						<%} } %>
+							<%} } %>
 					    </div>
 					     <!-- Left and right controls -->
 					    <a class="left carousel-control left-arrow" href="#myCarousel" data-slide="prev">
@@ -322,23 +288,22 @@
 					      <img src="../../images/right-arrow.png" alt="Project image">
 					      <span class="sr-only">Next</span>
 					    </a>
-				  </div>
-		       </div>
-		    </div>
+					</div>
+				</div>
+			</div>
 		
-		  </div>
 		</div>
+	</div>
     <!-- /.container-fluid -->
-    <div id="sidebar1"> 
+<div id="sidebar1"> 
   	<%@include file="../../partial/footer.jsp"%>
 </div>
   </body>
- </html>
+</html>
 <script src="${baseUrl}/builder/plugins/bower_components/morrisjs/morris.js"></script>
 <script src="${baseUrl}/builder/js/real-estate.js"></script>
 <script src="${baseUrl}/builder/plugins/bower_components/raphael/raphael-min.js"></script>
 <script>
-   
 function openImageModal(id) {
 	$(".item").removeClass("active");
 	$("#modal-img-"+id).addClass("active");
@@ -408,7 +373,5 @@ $("#ceo_revenue_btn").click(function(){
 	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href="${baseUrl}/builder/ceo/revenue/projectrevenue.jsp?project_id=<% out.print(projectId);%>";
 });
-</script>
 
- 
-    
+ </script>

@@ -1,3 +1,7 @@
+<%@page import="org.bluepigeon.admin.model.FlatSubstage"%>
+<%@page import="org.bluepigeon.admin.model.FlatWeightage"%>
+<%@page import="org.bluepigeon.admin.model.FlatStage"%>
+<%@page import="org.bluepigeon.admin.dao.FlatStageDAO"%>
 <%@page import="org.bluepigeon.admin.model.FlatOfferInfo"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectOfferInfoDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectOfferInfo"%>
@@ -58,6 +62,8 @@
 	BuilderFlat builderFlat = null;
 	List<AreaUnit> areaUnits = null;
 	int flat_type_id = 0;
+	List<FlatStage> flatStages = null;
+	List<FlatWeightage> flatWeightages = null;
 	PriceInfoData priceInfoData = null;
 	project_id = Integer.parseInt(request.getParameter("project_id"));
 	building_id = Integer.parseInt(request.getParameter("building_id"));
@@ -100,6 +106,8 @@
 							buildingOfferInfos = new ProjectDAO().getBuilderBuildingOfferInfoById(building_id);
 							flatAmenityWeightages = new ProjectDAO().getActiveFlatAmenityWeightageByFlatId(flat_id);
 							priceInfoData = new ProjectDAO().getFlatPriceData(flat_id);
+							flatStages = new FlatStageDAO().getActiveFlatStages();
+							flatWeightages = new ProjectDAO().getFlatWeightage(flat_id);
 							flat_type_id = builderFlat.getBuilderFlatType().getId();
 							taxLabel1 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel1();
 							taxLabel2 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel2();
@@ -165,7 +173,7 @@
        <div id="sidebar1"> 
        	<%@include file="../../../../partial/sidebar.jsp"%>
        </div>
-        <div id="page-wrapper" style="min-height: 2038px;">
+        <div id="page-wrapper">
             <div class="container-fluid">
                   <div class="row">
                    		<div class="col-lg-3 col-sm-6 col-xs-12">
@@ -239,6 +247,9 @@
 	                               <li>
 	                                   <a  data-toggle="tab" href="#vimessages2"><span>Payment Schedule</span></a>
 	                               </li>
+	                               <li>
+	                                   <a  data-toggle="tab" href="#vimessages4"><span>Flat Weightage</span></a>
+	                               </li>
 	                           </ul>
 	                           <div class="tab-content"> 
                              	<div id="vimessages" class="tab-pane active" aria-expanded="false">
@@ -254,50 +265,27 @@
 	                                         		<div class="form-group row">
 	                                             		<label for="example-text-input" class="col-sm-4 col-form-label">Flat No.</label>
 	                                             		<div class="col-sm-6">
-	                                                 		<input class="form-control" type="text" disabled id="flat_no" name="flat_no" value="<%if(builderFlat != null){ out.print(builderFlat.getFlatNo());} %>" >
+	                                                 		<input class="form-control flat" type="text" disabled id="flat_no" name="flat_no" value="<%if(builderFlat != null){ out.print(builderFlat.getFlatNo());} %>" >
 	                                             		</div>
 	                                             		<div class="messageContainer col-sm-offset-3"></div>
 	                                         		</div>
 	                                         	</div>
-	                                          	<div class="col-sm-6">
-	                                         		<div class="form-group row">
-	                                             		<label for="example-search-input" class="col-sm-4 col-form-label">Project Name</label>
-	                                             		<div class="col-sm-6">
-			                                                <select id="project_id" name="project_id" class="form-control" disabled>
-																<option value="0">Select Project</option>
-																<% if(builderProjects != null){
-																for(ProjectData builderProject :builderProjects) { %>
-																<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
-																<% }} %>
-															</select>
-			                                             </div>
-	                                             		<div class="messageContainer col-sm-offset-3"></div>
-	                                             	</div>
-	                                         	</div>
-                                       	 	</div>
-	                                       	<div class="row">
-		                                       	 <div class="col-sm-6">
-			                                    	 <div class="form-group row">
-			                                             <label for="example-search-input" class="col-sm-4 col-form-label">Building Name</label>
+	                                         	  <div class="col-sm-6">
+			                                         <div class="form-group row">
+			                                             <label for="example-text-input" class="col-sm-4 col-form-label">Balcony</label>
 			                                             <div class="col-sm-6">
-			                                                <select id="building_id" name="building_id" class="form-control" disabled>
-																<% if(buildings != null) { %>
-																<% for(BuilderBuilding builderBuilding2 :buildings) { %>
-																<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName());%></option>
-																<% } %>
-																<% } else { %>
-																<option value="0">Select Building</option>
-																<% } %>
-															</select>
+			                                                 <input class="form-control flat" disabled type="text" id="balcony" name="balcony" value="<% out.print(builderFlat.getBalcony()); %>" >
 			                                             </div>
 			                                             <div class="messageContainer col-sm-offset-3"></div>
 			                                         </div>
-		                                         </div>
-		                                         <div class="col-sm-6">
+			                                    </div>
+                                       	 	</div>
+	                                       	<div class="row">
+	                                       		<div class="col-sm-6">
 			                                          <div class="form-group row">
 			                                             <label for="example-search-input" class="col-sm-4 col-form-label">Floor No.</label>
 			                                             <div class="col-sm-6">
-			                                                <select id="floor_id" name="floor_id" class="form-control" disabled>
+			                                                <select id="floor_id" name="floor_id" class="form-control flat" disabled>
 																<% if(floors != null) { %>
 																<% for(BuilderFloor builderFloor2 :floors) { %>
 																<option value="<% out.print(builderFloor2.getId());%>" <% if(builderFloor2.getId() == floor_id) { %>selected<% } %>><% out.print(builderFloor2.getName());%></option>
@@ -310,13 +298,104 @@
 			                                             <div class="messageContainer col-sm-offset-3"></div>
 			                                         </div>
 			                                      </div>
+			                                      <div class="col-sm-6">
+			                                          <div class="form-group row">
+			                                             <label for="example-search-input" class="col-sm-4 col-form-label">Status</label>
+			                                             <div class="col-sm-6">
+			                                                <select id="status_id" name="status_id" class="form-control flat" disabled>
+																
+																<option value="<% out.print(builderFlat.getStatus());%>" <% if(builderFlat.getStatus() == 1) { %>selected<% } %>><% out.print("Active");%></option>
+																
+															</select>
+			                                             </div>
+			                                             <div class="messageContainer col-sm-offset-3"></div>
+			                                         </div>
+			                                      </div>
 			                                  </div>
 			                                  <div class="row">
-			                                   		<div class="col-sm-6">
+				                                  <div class="col-sm-6">
+				                                         <div class="form-group row">
+				                                             <label for="example-text-input" class="col-sm-4 col-form-label">Bathrooms</label>
+				                                             <div class="col-sm-6">
+				                                                 <input class="form-control flat" type="text" disabled id="bathroom" name="bathroom" value="<% out.print(builderFlat.getBathroom()); %>" >
+				                                             </div>
+				                                             <div class="messageContainer col-sm-offset-3"></div>
+				                                         </div>
+				                                    </div>
+				                                    <div class="col-sm-6">
+			                                    	 	<div class="form-group row">
+			                                             <label for="example-search-input" class="col-sm-4 col-form-label">Building Name</label>
+				                                             <div class="col-sm-6">
+				                                                <select id="building_id" name="building_id" class="form-control flat" disabled>
+																	<% if(buildings != null) { %>
+																	<% for(BuilderBuilding builderBuilding2 :buildings) { %>
+																	<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName());%></option>
+																	<% } %>
+																	<% } else { %>
+																	<option value="0">Select Building</option>
+																	<% } %>
+																</select>
+				                                             </div>
+				                                             <div class="messageContainer col-sm-offset-3"></div>
+			                                         	</div>
+		                                         	</div>
+				                             </div>
+				                             <% SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy"); %>
+				                             <div class="row">
+				                                  <div class="col-sm-6">
+			                                         <div class="form-group row">
+			                                             <label for="example-text-input" class="col-sm-4 col-form-label">Flat Status</label>
+			                                             <div class="col-sm-6">
+			                                                <select id="status" name="status" class="form-control flat" disabled>
+																<% for(BuilderFlatStatus builderFlatStatus :builderFlatStatuses) { %>
+																<option value="<% out.print(builderFlatStatus.getId());%>" <% if(builderFlat.getBuilderFlatStatus().getId() ==  builderFlatStatus.getId()) { %>selected<% } %>><% out.print(builderFlatStatus.getName()); %></option>
+																<% } %>
+															</select>
+			                                             </div>
+			                                         </div>
+			                                   	</div>
+			                                    <div class="col-sm-6">
+				                                        <div class="form-group row">
+				                                             <label for="example-text-input" class="col-sm-4 col-form-label">Bedrooms</label>
+				                                             <div class="col-sm-6">
+				                                                 <input class="form-control flat" disabled type="text" id="bedroom" name="bedroom" value="<% out.print(builderFlat.getBedroom()); %>" >
+				                                             </div>
+				                                             <div class="messageContainer col-sm-offset-3"></div>
+				                                       </div>
+				                                  </div>
+				                              </div>
+				                              <div class="row">
+				                                  	<div class="col-sm-6">
+		                                         		<div class="form-group row">
+		                                             		<label for="example-search-input" class="col-sm-4 col-form-label">Project Name</label>
+		                                             		<div class="col-sm-6">
+				                                                <select id="project_id" name="project_id" class="form-control flat" disabled>
+																	<option value="0">Select Project</option>
+																	<% if(builderProjects != null){
+																	for(ProjectData builderProject :builderProjects) { %>
+																	<option value="<% out.print(builderProject.getId()); %>" <% if(builderProject.getId() == project_id) { %>selected<% } %>><% out.print(builderProject.getName()); %></option>
+																	<% }} %>
+																</select>
+				                                             </div>
+		                                             		<div class="messageContainer col-sm-offset-3"></div>
+		                                             	</div>
+	                                         		</div>
+					                                 <div class="col-sm-6">
+				                                         <div class="form-group row">
+				                                             <label for="example-text-input" class="col-sm-4 col-form-label">Possession Date </label>
+				                                             <div class="col-sm-6">
+				                                                 <input class="form-control flat" type="text" disabled id="possession_date" name="possession_date" value="<% if(builderFlat.getPossessionDate() != null) { out.print(dt1.format(builderFlat.getPossessionDate()));}%>" >
+				                                             </div>
+				                                             <div class="messageContainer col-sm-offset-3"></div>
+				                                         </div>
+				                                    </div>
+			                                 </div>
+	                                         <div class="row">
+			                                    <div class="col-sm-6">
 				                                         <div class="form-group row">
 				                                             <label for="example-search-input" class="col-sm-4 col-form-label">Flat Type</label>
 				                                             <div class="col-sm-6">
-				                                               <select id="flat_type_id" name="flat_type_id" class="form-control" disabled>
+				                                               <select id="flat_type_id" name="flat_type_id" class="form-control flat" disabled>
 																	<% if(builderFlatTypes != null) { %>
 																	<% for(BuilderBuildingFlatType builderFlatType :builderFlatTypes) { %>
 																	<option value="<% out.print(builderFlatType.getBuilderFlatType().getId());%>" <% if(builderFlat.getBuilderFlatType().getId() == builderFlatType.getBuilderFlatType().getId()) { %>selected<% } %>><% out.print(builderFlatType.getBuilderFlatType().getName());%></option>
@@ -329,59 +408,6 @@
 				                                             <div class="messageContainer col-sm-offset-3"></div>
 				                                        </div>
 				                                   </div>
-				                                   <div class="col-sm-6">
-				                                        <div class="form-group row">
-				                                             <label for="example-text-input" class="col-sm-4 col-form-label">Bedrooms</label>
-				                                             <div class="col-sm-6">
-				                                                 <input class="form-control" disabled type="text" id="bedroom" name="bedroom" value="<% out.print(builderFlat.getBedroom()); %>" >
-				                                             </div>
-				                                             <div class="messageContainer col-sm-offset-3"></div>
-				                                       </div>
-				                                  </div>
-				                             </div>
-				                             <div class="row">
-				                             	<div class="col-sm-6">
-			                                         <div class="form-group row">
-			                                             <label for="example-text-input" class="col-sm-4 col-form-label">Bathrooms</label>
-			                                             <div class="col-sm-6">
-			                                                 <input class="form-control" type="text" disabled id="bathroom" name="bathroom" value="<% out.print(builderFlat.getBathroom()); %>" >
-			                                             </div>
-			                                             <div class="messageContainer col-sm-offset-3"></div>
-			                                         </div>
-			                                    </div>
-			                                    <div class="col-sm-6">
-			                                         <div class="form-group row">
-			                                             <label for="example-text-input" class="col-sm-4 col-form-label">Balcony</label>
-			                                             <div class="col-sm-6">
-			                                                 <input class="form-control" disabled type="text" id="balcony" name="balcony" value="<% out.print(builderFlat.getBalcony()); %>" >
-			                                             </div>
-			                                             <div class="messageContainer col-sm-offset-3"></div>
-			                                         </div>
-			                                    </div>
-			                                 </div>
-                                         	<% SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy"); %>
-	                                         <div class="row">
-	                                         	<div class="col-sm-6">
-			                                         <div class="form-group row">
-			                                             <label for="example-text-input" class="col-sm-4 col-form-label">Possession Date </label>
-			                                             <div class="col-sm-6">
-			                                                 <input class="form-control" type="text" disabled id="possession_date" name="possession_date" value="<% if(builderFlat.getPossessionDate() != null) { out.print(dt1.format(builderFlat.getPossessionDate()));}%>" >
-			                                             </div>
-			                                             <div class="messageContainer col-sm-offset-3"></div>
-			                                         </div>
-			                                    </div>
-			                                    <div class="col-sm-6">
-			                                         <div class="form-group row">
-			                                             <label for="example-text-input" class="col-sm-4 col-form-label">Status</label>
-			                                             <div class="col-sm-6">
-			                                                <select id="status" name="status" class="form-control" disabled>
-																<% for(BuilderFlatStatus builderFlatStatus :builderFlatStatuses) { %>
-																<option value="<% out.print(builderFlatStatus.getId());%>" <% if(builderFlat.getBuilderFlatStatus().getId() ==  builderFlatStatus.getId()) { %>selected<% } %>><% out.print(builderFlatStatus.getName()); %></option>
-																<% } %>
-															</select>
-			                                             </div>
-			                                         </div>
-			                                   </div>
 			                                </div>
 			                                <div class="row">
 			                                	<div class="offset-sm-5 col-sm-7">
@@ -391,7 +417,7 @@
                               	   	 	</form>
                               	  	</div>
                               	 </div>
-                              	   	<div id="vimessages1" class="tab-pane" aria-expanded="false">
+                              	 <div id="vimessages1" class="tab-pane" aria-expanded="false">
 	                                 <div class="col-12">
 	                                 	<form id="updateprice" name="updateprice" method="post"  class="form-horizontal" enctype="multipart/form-data">
 		                                	 <input type="hidden" name="price_id" value="<% if(priceInfoData != null){ out.print(priceInfoData.getId()); } else {%>0<% }%>"/>
@@ -403,7 +429,7 @@
 			                                    		<label for="example-text-input" class="col-sm-4 col-form-label">Pricing Unit<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6"> 
 			                                    			<div>
-				                                        		<select name="base_unit" id="base_unit" class="form-control">
+				                                        		<select name="base_unit" id="base_unit" class="form-control flat">
 																	<% for(AreaUnit areaUnit :areaUnits) {
 																		%>
 																		<option value="<% out.print(areaUnit.getId()); %>" <% if(priceInfoData.getAreaUnits() > 0 && priceInfoData.getAreaUnits() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
@@ -421,7 +447,7 @@
 					                                    <div class="col-sm-6">
 					                                    	<div>
 					                                    		<div>
-					                                        		<input type="text" class="form-control" id="base_rate" name="base_rate" value="<% if(priceInfoData.getBaseRate() > 0 && priceInfoData.getBaseRate() != 0){ out.print(priceInfoData.getBaseRate());}%>"/>
+					                                        		<input type="text" class="form-control flat" id="base_rate" name="base_rate" value="<% if(priceInfoData.getBaseRate() > 0 && priceInfoData.getBaseRate() != 0){ out.print(priceInfoData.getBaseRate());}%>"/>
 					                                    		</div>
 					                                    		<div class="messageContainer"></div>
 					                                    	</div>
@@ -436,7 +462,7 @@
 		                		                    <div class="col-sm-6">
 		                		                    	<div>
 				                		                    <div>
-				                        		                <input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<% if(priceInfoData.getRiseRate() > 0){ out.print(priceInfoData.getRiseRate());}%>"/>
+				                        		                <input type="text" class="form-control flat" id="rise_rate" name="rise_rate" value="<% if(priceInfoData.getRiseRate() > 0){ out.print(priceInfoData.getRiseRate());}%>"/>
 				                                	        </div>
 				                                   	 		<div class="messageContainer"></div>
 				                                   	 	</div>
@@ -448,7 +474,7 @@
 			                                    	<label for="example-search-input" class="col-sm-4 col-form-label">Application Post<span class='text-danger'>*</span></label>
 					                                <div class="col-sm-6">
 					                                    <div>
-					                                        <input type="text" class="form-control" id="post" name="post" value="<% if(priceInfoData !=null && priceInfoData.getPost() != 0){ out.print(priceInfoData.getPost());}%>"/>
+					                                        <input type="text" class="form-control flat" id="post" name="post" value="<% if(priceInfoData !=null && priceInfoData.getPost() != 0){ out.print(priceInfoData.getPost());}%>"/>
 					                                    </div>
 			                                    		<div class="messageContainer"></div>
 			                                    	</div>
@@ -462,7 +488,7 @@
 		                                    		<div class="col-sm-6">
 		                                    			<div>
 				                                    		<div>
-				                                        		<input type="text" class="form-control" id="maintenance" name="maintenance" value="<% if(priceInfoData.getMaintainance() > 0 && priceInfoData.getMaintainance() != 0){ out.print(priceInfoData.getMaintainance());}%>"/>
+				                                        		<input type="text" class="form-control flat" id="maintenance" name="maintenance" value="<% if(priceInfoData.getMaintainance() > 0 && priceInfoData.getMaintainance() != 0){ out.print(priceInfoData.getMaintainance());}%>"/>
 				                                    		</div>
 				                                    		<div class="messageContainer"></div>
 				                                    	</div>	
@@ -475,7 +501,7 @@
 		                                    		<div class="col-sm-6">
 		                                    			<div>
 				                                    		<div>
-				                                        		<input type="text" class="form-control" id="tenure" name="tenure" value="<%if(priceInfoData.getTenure() > 0 && priceInfoData.getTenure() != 0){ out.print(priceInfoData.getTenure()); } %>"/>
+				                                        		<input type="text" class="form-control flat" id="tenure" name="tenure" value="<%if(priceInfoData.getTenure() > 0 && priceInfoData.getTenure() != 0){ out.print(priceInfoData.getTenure()); } %>"/>
 				                                    		</div>
 				                                    		<div class="messageContainer"></div>
 				                                    	</div>
@@ -490,7 +516,7 @@
 		                		                    <div class="col-sm-6">
 		                		                    	<div>
 				                		                    <div>
-				                        		                <input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<% if(priceInfoData.getAmenityRate() > 0 && priceInfoData.getAmenityRate() != 0){ out.print(priceInfoData.getAmenityRate());}%>"/>
+				                        		                <input type="text" class="form-control flat" id="amenity_rate" name="amenity_rate" value="<% if(priceInfoData.getAmenityRate() > 0 && priceInfoData.getAmenityRate() != 0){ out.print(priceInfoData.getAmenityRate());}%>"/>
 				                                		    </div>
 				                                		    <div class="messageContainer"></div>
 				                                		</div>
@@ -501,7 +527,7 @@
 		                                		<div class="form-group row">
 		                                			<label for="example-tel-input" class="col-sm-4 col-form-label">Parking<span class='text-danger'>*</span></label>
 		                                    		<div class="col-sm-6">
-		                                    			<select id="parking_id" name="parking_id" class="form-control">
+		                                    			<select id="parking_id" name="parking_id" class="form-control flat">
 															<option value="0"<%if(priceInfoData.getParkingId() == 0){ %>selected<%} %>>Select Parking Type</option>
 															<option value="1" <%if(priceInfoData.getParkingId() == 1){ %>selected<%} %>>Open Parking</option>
 															<option value="2" <%if(priceInfoData.getParkingId() == 2){ %>selected<%} %>>Shed Parking</option>
@@ -517,7 +543,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                         			<input type="text" class="form-control" id="parking" name="parking" value="<% if(priceInfoData.getParking() > 0 && priceInfoData.getParking() != 0){ out.print(priceInfoData.getParking());}%>"/>
+				                                         			<input type="text" class="form-control flat" id="parking" name="parking" value="<% if(priceInfoData.getParking() > 0 && priceInfoData.getParking() != 0){ out.print(priceInfoData.getParking());}%>"/>
 				                                         		</div>	
 			                                    				<div class="messageContainer"></div>
 			                                    			</div>
@@ -531,7 +557,7 @@
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 				                		                    	<div>
-				                        		               		<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(priceInfoData.getStampDuty() > 0 && priceInfoData.getStampDuty() != 0){ out.print(priceInfoData.getStampDuty());} else {%>0<%}%>"/>
+				                        		               		<input type="text" class="form-control flat" id="stamp_duty" name="stamp_duty" value="<% if(priceInfoData.getStampDuty() > 0 && priceInfoData.getStampDuty() != 0){ out.print(priceInfoData.getStampDuty());} else {%>0<%}%>"/>
 				                                		    	</div>
 				                                		    	<div class="messageContainer"></div>
 				                                		    </div>
@@ -550,7 +576,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                        			<input type="text" class="form-control" id="tax" name="tax" value="<% if(priceInfoData.getTax() > 0 && priceInfoData.getTax() != 0){ out.print(priceInfoData.getTax());} else {%>0<%}%>"/>
+				                                        			<input type="text" class="form-control flat" id="tax" name="tax" value="<% if(priceInfoData.getTax() > 0 && priceInfoData.getTax() != 0){ out.print(priceInfoData.getTax());} else {%>0<%}%>"/>
 				                                    			</div>
 				                                    			<div class="messageContainer"></div>
 				                                    		</div>
@@ -567,7 +593,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                        			<input type="text" class="form-control" id="vat" name="vat" value="<% if(priceInfoData.getVat() > 0 && priceInfoData.getVat() != 0){ out.print(priceInfoData.getVat());} else {%>0<%}%>"/>
+				                                        			<input type="text" class="form-control flat" id="vat" name="vat" value="<% if(priceInfoData.getVat() > 0 && priceInfoData.getVat() != 0){ out.print(priceInfoData.getVat());} else {%>0<%}%>"/>
 				                                    			</div>
 				                                    			<div class="messageContainer"></div>
 				                                    		</div>
@@ -584,7 +610,7 @@
 			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Tech Fees<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
-			                                        			<input type="text" class="form-control" id="tech_fee" name="tech_fee" value="<% if(priceInfoData.getFee() > 0 && priceInfoData.getFee() != 0){ out.print(priceInfoData.getFee());}%>"/>
+			                                        			<input type="text" class="form-control flat" id="tech_fee" name="tech_fee" value="<% if(priceInfoData.getFee() > 0 && priceInfoData.getFee() != 0){ out.print(priceInfoData.getFee());}%>"/>
 			                                    			</div>
 			                                    			<div class="messageContainer"></div>
 			                                    		</div>	
@@ -595,7 +621,7 @@
 			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Flat Sale value<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
-			                                        			<input type="text" class="form-control" id="sale_value" name="sale_value" value="<% if(priceInfoData.getTotalCost() > 0 && priceInfoData.getTotalCost() != 0){ out.print(Math.round(priceInfoData.getTotalCost()));}%>" readonly/>
+			                                        			<input type="text" class="form-control flat" id="sale_value" name="sale_value" value="<% if(priceInfoData.getTotalCost() > 0 && priceInfoData.getTotalCost() != 0){ out.print(Math.round(priceInfoData.getTotalCost()));}%>" readonly/>
 			                                    			</div>
 			                                    			<div class="messageContainer"></div>
 			                                    		</div>	
@@ -625,7 +651,7 @@
 							                                    <label for="example-search-input" class="col-sm-4 control-label">Milestone<span class='text-danger'>*</span></label>
 				                                    			<div class="col-sm-6">
 				                                    				<div>
-				                                        				<input type="text" class="form-control" readonly id="schedule" name="schedule[]" value="<% out.print(flatPaymentSchedule.getName());%>"/>
+				                                        				<input type="text" class="form-control flat" readonly id="schedule" name="schedule[]" value="<% out.print(flatPaymentSchedule.getName());%>"/>
 					                                    			</div>
 					                                    			<div class="messageContainer"></div>
 					                                 			</div>
@@ -636,7 +662,7 @@
 				                                    			<label for="example-search-input" class="col-sm-6 control-label">% of net payable<span class='text-danger'>*</span></label>
 				                                    			<div class="col-sm-4">
 				                                    				<div>
-				                                        				<input type="text" class="form-control" id="payable<%out.print(ii); %>" onkeyup="calculateAmount(<%out.print(ii); %>);" onkeypress=" return isNumber(event, this);" name="payable[]" value="<% out.print(flatPaymentSchedule.getPayable());%>"/>
+				                                        				<input type="text" class="form-control flat" id="payable<%out.print(ii); %>" onkeyup="calculateAmount(<%out.print(ii); %>);" onkeypress=" return isNumber(event, this);" name="payable[]" value="<% out.print(flatPaymentSchedule.getPayable());%>"/>
 					                                    			</div>
 					                                    			<div class="messageContainer"></div>
 					                                  			</div>
@@ -647,7 +673,7 @@
 				                                    			<label for="example-search-input" class="col-sm-4 control-label">Amount <span class='text-danger'>*</span></label>
 				                                    			<div class="col-sm-6">
 				                                    				<div>
-				                                        				<input type="text" class="form-control" id="amount<%out.print(ii); %>" onkeyup="calcultatePercentage(<%out.print(ii); %>);"   name="amount[]" value="<% out.print(Math.round(flatPaymentSchedule.getAmount()));%>"/>
+				                                        				<input type="text" class="form-control flat" id="amount<%out.print(ii); %>" onkeyup="calcultatePercentage(<%out.print(ii); %>);"   name="amount[]" value="<% out.print(Math.round(flatPaymentSchedule.getAmount()));%>"/>
 					                                    			</div>
 					                                    			<div class="messageContainer"></div>
 					                                  			</div>
@@ -696,7 +722,7 @@
 																				<div class="form-group" id="error-applicable_on">
 																					<label class="control-label col-sm-6">Offer Type </label>
 																					<div class="col-sm-6">
-																						<select class="form-control" id="project_offer_type<%out.print(jj); %>"  onchange="txtEnabaleDisable(<%out.print(jj); %>);" disabled name="project_offer_type[]">
+																						<select class="form-control flat" id="project_offer_type<%out.print(jj); %>"  onchange="txtEnabaleDisable(<%out.print(jj); %>);" disabled name="project_offer_type[]">
 																							<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
 																							<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
 																							<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
@@ -709,7 +735,7 @@
 																				<div class="form-group" id="error-discount_amount">
 																					<label class="control-label col-sm-6">Discount <span class='text-danger'>*</span></label>
 																					<div class="col-sm-6">
-																						<input type="text" class="form-control" readonly id="project_discount_amount<%out.print(jj); %>"   onkeyup=" javascript:validPerAmount(<%out.print(jj); %>);" name="project_discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
+																						<input type="text" class="form-control flat" readonly id="project_discount_amount<%out.print(jj); %>"   onkeyup=" javascript:validPerAmount(<%out.print(jj); %>);" name="project_discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
 																					</div>
 																					<div class="messageContainer"></div>
 																				</div>
@@ -718,7 +744,7 @@
 																				<div class="form-group" id="error-applicable_on">
 																					<label class="control-label col-sm-4">Description </label>
 																					<div class="col-sm-8">
-																						<textarea class="form-control" disabled id="project_description" name="project_description[]"><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
+																						<textarea class="form-control flat" disabled id="project_description" name="project_description[]"><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
 																					</div>
 																					<div class="messageContainer"></div>
 																				</div>
@@ -727,7 +753,7 @@
 																				<div class="form-group" id="error-apply">
 																					<label class="control-label col-sm-6">Status </label>
 																					<div class="col-sm-6">
-																						<select class="form-control" id="project_offer_status" name="project_offer_status[]" disabled>
+																						<select class="form-control flat" id="project_offer_status" name="project_offer_status[]" disabled>
 																							<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
 																							<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
 																						</select>
@@ -762,7 +788,7 @@
 																				<div class="form-group" id="error-applicable_on">
 																					<label class="control-label col-sm-6">Offer Type </label>
 																					<div class="col-sm-6">
-																						<select class="form-control" id="building_offer_type<%out.print(j); %>" disabled  onchange="txtEnabaleDisable(<%out.print(j); %>);"  name="building_offer_type[]">
+																						<select class="form-control flat" id="building_offer_type<%out.print(j); %>" disabled  onchange="txtEnabaleDisable(<%out.print(j); %>);"  name="building_offer_type[]">
 																							<option value="1" <% if(buildingOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
 																							<option value="2" <% if(buildingOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
 																							<option value="3" <% if(buildingOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
@@ -775,7 +801,7 @@
 																				<div class="form-group" id="error-discount_amount">
 																					<label class="control-label col-sm-6">Discount <span class='text-danger'>*</span></label>
 																					<div class="col-sm-6">
-																						<input type="text" class="form-control" readonly <%if(buildingOfferInfo.getType() == 3){ %>disabled<%} %> id="building_discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(buildingOfferInfo.getAmount()!=null){ out.print(buildingOfferInfo.getAmount());} %>"/>
+																						<input type="text" class="form-control flat" readonly <%if(buildingOfferInfo.getType() == 3){ %>disabled<%} %> id="building_discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(buildingOfferInfo.getAmount()!=null){ out.print(buildingOfferInfo.getAmount());} %>"/>
 																					</div>
 																					<div class="messageContainer"></div>
 																				</div>
@@ -784,7 +810,7 @@
 																				<div class="form-group" id="error-applicable_on">
 																					<label class="control-label col-sm-4">Description </label>
 																					<div class="col-sm-8">
-																						<textarea class="form-control" disabled id="building_description" name="building_description[]"><% if(buildingOfferInfo.getDescription() != null) { out.print(buildingOfferInfo.getDescription());} %></textarea>
+																						<textarea class="form-control flat" disabled id="building_description" name="building_description[]"><% if(buildingOfferInfo.getDescription() != null) { out.print(buildingOfferInfo.getDescription());} %></textarea>
 																					</div>
 																					<div class="messageContainer"></div>
 																				</div>
@@ -793,7 +819,7 @@
 																				<div class="form-group" id="error-apply">
 																					<label class="control-label col-sm-6">Status </label>
 																					<div class="col-sm-6">
-																						<select class="form-control" id="building_offer_status" name="offer_status[]" disabled>
+																						<select class="form-control flat" id="building_offer_status" name="offer_status[]" disabled>
 																							<option value="1" <% if(buildingOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
 																							<option value="0" <% if(buildingOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
 																						</select>
@@ -819,7 +845,7 @@
 																					<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 																					<div class="col-sm-8">
 																						<div>
-																							<input type="text" class="form-control checkdupilcate" id="offer_title<%out.print(k); %>" onfocusout="checkDuplicateEntry(<%out.print(k);%>);"  name="offer_title[]" value="<% out.print(flatOfferInfo.getTitle()); %>">
+																							<input type="text" class="form-control flat checkdupilcate" id="offer_title<%out.print(k); %>" onfocusout="checkDuplicateEntry(<%out.print(k);%>);"  name="offer_title[]" value="<% out.print(flatOfferInfo.getTitle()); %>">
 																						</div>
 																						<div class="messageContainer"></div>
 																					</div>
@@ -829,7 +855,7 @@
 																				<div class="form-group" id="error-applicable_on">
 																					<label class="control-label col-sm-6">Offer Type </label>
 																					<div class="col-sm-6">
-																						<select class="form-control" id="offer_type<%out.print(k); %>"   onchange="txtEnabaleDisable(<%out.print(k); %>);"  name="offer_type[]">
+																						<select class="form-control flat" id="offer_type<%out.print(k); %>"   onchange="txtEnabaleDisable(<%out.print(k); %>);"  name="offer_type[]">
 																							<option value="1" <% if(flatOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
 																							<option value="2" <% if(flatOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
 																							<option value="3" <% if(flatOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
@@ -842,7 +868,7 @@
 																				<div class="form-group" id="error-discount_amount">
 																					<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
 																					<div class="col-sm-6">
-																						<input type="text" class="form-control"  <%if(flatOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(k); %>"   onkeyup=" javascript:validPerAmount(<%out.print(k); %>);" name="discount_amount[]" value="<%if(flatOfferInfo.getAmount()!=null){ out.print(flatOfferInfo.getAmount());} %>"/>
+																						<input type="text" class="form-control flat"  <%if(flatOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(k); %>"   onkeyup=" javascript:validPerAmount(<%out.print(k); %>);" name="discount_amount[]" value="<%if(flatOfferInfo.getAmount()!=null){ out.print(flatOfferInfo.getAmount());} %>"/>
 																					</div>
 																					<div class="messageContainer"></div>
 																				</div>
@@ -851,7 +877,7 @@
 																				<div class="form-group" id="error-applicable_on">
 																					<label class="control-label col-sm-4">Description </label>
 																					<div class="col-sm-8">
-																						<textarea class="form-control"  id="description" name="description[]"><% if(flatOfferInfo.getDescription() != null) { out.print(flatOfferInfo.getDescription());} %></textarea>
+																						<textarea class="form-control flat"  id="description" name="description[]"><% if(flatOfferInfo.getDescription() != null) { out.print(flatOfferInfo.getDescription());} %></textarea>
 																					</div>
 																					<div class="messageContainer"></div>
 																				</div>
@@ -860,7 +886,7 @@
 																				<div class="form-group" id="error-apply">
 																					<label class="control-label col-sm-6">Status </label>
 																					<div class="col-sm-6">
-																						<select class="form-control" id="offer_status" name="offer_status[]">
+																						<select class="form-control flat" id="offer_status" name="offer_status[]">
 																							<option value="1" <% if(flatOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
 																							<option value="0" <% if(flatOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
 																						</select>
@@ -888,18 +914,86 @@
 														</form>
 													</div>
 		                                		</div>
-                              				</div>
-                           				</div>
+		                                		<div id="vimessages4" class="tab-pane fade">
+													<form id="subpfrm" name="subpfrm" method="post">
+											 			<div class="row">
+															<div class="col-lg-12">
+																<div class="panel panel-default">
+																	<div class="panel-body">
+																		<div id="offer_area">
+																			<div class="row">
+																				<div class="col-lg-12 margin-bottom-5">
+																					<div class="col-sm-6">
+																						<div class="form-group" id="error-amenity_weightage">
+																							<label class="control-label col-sm-6">Amenity Weightage </label>
+																							<div class="col-sm-6">
+																								<input type="text" class="form-control flat" id="flat_amenity_weightage" name="flat_amenity_weightage" value="<%out.print(builderFlat.getAmenityWeightage());%>" onkeypress=" return isNumber(event, this);" placeholder="amenity weightage in %"/>
+																							</div>
+																							<div class="messageContainer"></div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="col-sm-12">
+																					<% 	for(FlatStage flatStage :flatStages) { 
+																						Double stage_wt = 0.0;
+																						for(FlatWeightage flatWeightage :flatWeightages) {
+																							if(flatStage.getId() == flatWeightage.getFlatStage().getId()) {
+																								stage_wt = flatWeightage.getStageWeightage();
+																							}
+																						}
+																					%>
+																					<fieldset class="scheduler-border">
+																						<legend class="scheduler-border">Stages</legend>
+																						<div class="col-sm-12">
+																							<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(flatStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input onkeypress=" return isNumber(event, this);" name="stage_weightage[]" id="<% out.print(flatStage.getId());%>" type="text" class="form-control flat errorMsg" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																							<fieldset class="scheduler-border" style="margin-bottom:0px !important">
+																								<legend class="scheduler-border">Sub Stages</legend>
+																							<% 	for(FlatSubstage flatSubstage :flatStage.getFlatSubstages()) { 
+																								Double substage_wt = 0.0;
+																								for(FlatWeightage flatWeightage :flatWeightages) {
+																									if(flatSubstage.getId() == flatWeightage.getFlatSubstage().getId()) {
+																										substage_wt = flatWeightage.getSubstageWeightage();
+																									}
+																								}
+																							%>
+																								<div class="col-sm-3">
+																									<% out.print(flatSubstage.getName()); %> (%)<br>
+																									<input type="text" onkeypress=" return isNumber(event, this);" name="substage_weightage<% out.print(flatStage.getId());%>[]" id="<% out.print(flatSubstage.getId()); %>" class="form-control flat errorMsg" placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																								</div>
+																							<% } %>
+																							</fieldset>
+																						</div>
+																					</fieldset>
+																					<% } %>
+																				</div>
+																				<div class="messageContainer"></div>
+																			</div>
+																		</div>
+																	</div>
+																<div>
+																	<div class="row">
+														 				<div class="offset-sm-5 col-sm-7">
+																			<button type="button" id="subpbtn" class="btn btn-submit waves-effect waves-light m-t-10" >UPDATE</button>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</form>
+											</div>
+                              			</div>
                            			</div>
-                           		</div>
-                       		</div>
-                    	</div>
-                	</div>
-            	</div>
-        	</div>
-	 	<div id="sidebar1"> 
-	   	  <%@include file="../../../../partial/footer.jsp"%>
-	 	</div> 
+                        		</div>
+                    		</div>
+                		</div>
+            		</div>
+        		</div>
+    		</div>
+    	</div>
+	<div id="sidebar1"> 
+		<%@include file="../../../../partial/footer.jsp"%>
+	</div> 
 </body>
 </html>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
@@ -1672,7 +1766,7 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-schedule">'
 				+'<label class="control-label col-sm-4">Milestone <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-				+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
+				+'<input type="text" class="form-control flat" id="schedule" name="schedule[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 				+'</div>'
@@ -1681,7 +1775,7 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-payable">'
 				+'<label class="control-label col-sm-8">% of Net Payable </label>'
 				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control" id="payable" name="payable[]" value=""/>'
+				+'<input type="text" class="form-control flat" id="payable" name="payable[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 				+'</div>'
@@ -1690,7 +1784,7 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-amount">'
 				+'<label class="control-label col-sm-6">Amount </label>'
 				+'<div class="col-sm-6">'
-				+'<input type="text" class="form-control" id="amount" name="amount[]" value=""/>'
+				+'<input type="text" class="form-control flat" id="amount" name="amount[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 				+'</div>'
@@ -1796,7 +1890,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title'+offers+'" onchange="checkDuplicateEntry('+offers+');" onmouseleave="checkDuplicateEntry('+offers+');" onfocusout="checkDuplicateEntry('+offers+');" name="offer_title[]" value="" autocomplete="off"/>'
+					+'<input type="text" class="form-control flat" id="offer_title'+offers+'" onchange="checkDuplicateEntry('+offers+');" onmouseleave="checkDuplicateEntry('+offers+');" onfocusout="checkDuplicateEntry('+offers+');" name="offer_title[]" value="" autocomplete="off"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1805,7 +1899,7 @@ function addMoreOffer() {
 		+'<div class="form-group" id="error-applicable_on">'
 		+'<label class="control-label col-sm-6">Offer Type </label>'
 		+'<div class="col-sm-6">'
-		+'<select class="form-control"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');" name="offer_type[]">'
+		+'<select class="form-control flat"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');" name="offer_type[]">'
 		+'<option value="1">Percentage</option>'
 		+'<option value="2">Flat Amount</option>'
 		+'<option value="3">Other</option>'
@@ -1827,7 +1921,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-applicable_on">'
 			+'<label class="control-label col-sm-4">Description </label>'
 			+'<div class="col-sm-8">'
-			+'<textarea class="form-control" id="description" name="description[]" ></textarea>'
+			+'<textarea class="form-control flat" id="description" name="description[]" ></textarea>'
 			+'</div>'
 			+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1836,7 +1930,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-apply">'
 			+'<label class="control-label col-sm-6">Status </label>'
 			+'<div class="col-sm-6">'
-			+'<select class="form-control" id="offer_status" name="offer_status[]">'
+			+'<select class="form-control flat" id="offer_status" name="offer_status[]">'
 			+'<option value="1">Active</option>'
 			+'<option value="0">Inactive</option>'
 			+'</select>'
@@ -1926,4 +2020,39 @@ $('#updateoffer').bootstrapValidator({
 		event.preventDefault();
 		updateBuildingOffers();
 	});
+	
+$("#subpbtn").click(function(){
+	var amenityWeightage = [];
+	var flatAmenityWeightage = [];
+	$('input[name="stage_weightage[]"]').each(function() {
+		stage_id = $(this).attr("id");
+		stage_weightage = $(this).val();
+		$('input[name="substage_weightage'+stage_id+'[]"]').each(function() {
+			amenityWeightage.push({builderFlat:{id:$("#flat_id").val()},flatStage:{id:stage_id},stageWeightage:stage_weightage,flatSubstage:{id:$(this).attr("id")},substageWeightage:$(this).val(),status:false});
+		});
+	});
+	
+	var final_data = {flatId: $("#flat_id").val(),amenityWeightage : $("#flat_amenity_weightage").val(),flatWeightages:amenityWeightage}
+	$.ajax({
+	    url: '${baseUrl}/webapi/project/flat/substage/update',
+	    type: 'POST',
+	    data: JSON.stringify(final_data),
+	    contentType: 'application/json; charset=utf-8',
+	    dataType: 'json',
+	    async: false,
+	    success: function(data) {
+			if (data.status == 0) {
+				alert(data.message);
+			} else {
+				alert(data.message);
+			}
+		},
+		error : function(data)
+		{
+			alert("Fail to save data");
+		}
+		
+	});
+});
+
 </script>

@@ -143,12 +143,8 @@
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
-    <!-- animation CSS -->
-    <link href="../css/animate.css" rel="stylesheet">
     <!-- Menu CSS -->
     <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
-    <!-- animation CSS -->
-    <link href="../css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/updateproject.css" rel="stylesheet">
@@ -255,9 +251,9 @@
 				                                  	  <label  class="col-sm-4 control-label">Builder Group<span class='text-danger'>*</span></label>
 				                                    <div class="col-sm-6">
 				                                    <div>
-				                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
+				                                        <!-- <input class="form-control project" type="text" value="Artisanal kale" id="example-text-input">-->
 				                                        <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builderProject.getBuilder().getId());%>">
-				                                        <select id="builder_id" name="builder_id" class="form-control" disabled>
+				                                        <select id="builder_id" name="builder_id" class="form-control project" disabled>
 															<option value="">Select Builder Group</option>
 			<%-- 												<% for (Builder builder : builders) { %> --%>
 			<%-- 												<option value="<%out.print(builder.getId());%>" <% if(builderProject.getBuilder().getId() ==  builder.getId()) { %>selected<% } %>> <% out.print(builder.getName()); %> </option> --%>
@@ -276,7 +272,7 @@
 					                                    <div class="col-sm-6">
 					                                    <input type="hidden"id="company_id" name="company_id" value="<%out.print(builderProject.getBuilderCompanyNames().getId());%>"/>
 						                                    <div>
-						                                       <select id="company_id" name="company_id" class="form-control" disabled>
+						                                       <select id="company_id" name="company_id" class="form-control project" disabled>
 																	<option value="">Select Builder Company</option>
 																	<% for (Builder builder : builders) { %>
 																	<% for (BuilderCompanyNames builderCompanyNames : builder.getBuilderCompanyNameses()) { %>
@@ -298,7 +294,7 @@
 					                                    <label for="example-search-input" class="col-sm-4 control-label">Project Name<span class='text-danger'>*</span></label>
 					                                    <div class="col-sm-6">
 					                                    	<div>
-					                                        	<input class="form-control" type="text" readonly="true" id="name" name="name" value="<% out.print(builderProject.getName());%>">
+					                                        	<input class="form-control project" type="text" readonly="true" id="name" name="name" value="<% out.print(builderProject.getName());%>">
 					                                    	</div>
 					                                    	<div class="messageContainer"></div>
 					                                    </div>
@@ -309,7 +305,7 @@
 					                                    	<label for="example-search-input" class="col-sm-4 control-label">Landmark<span class='text-danger'>*</span></label>
 					                                    	<div class="col-sm-6">
 					                                    		<div>
-					                                        		<input class="form-control" type="text" readonly="true" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>">
+					                                        		<input class="form-control project" type="text" readonly="true" id="landmark" name="landmark" value="<% out.print(builderProject.getAddr1());%>">
 					                                    		</div>
 					                                   		 	<div class="messageContainer"></div>
 					                                   		 </div>
@@ -323,7 +319,7 @@
 					                                      <div class="col-sm-6">
 						                                      <div>
 							                                     <div>
-							                                        <input class="form-control" type="text" readonly="true" id="sublocation" name="sublocation" value="<% out.print(builderProject.getAddr2());%>">
+							                                        <input class="form-control project" type="text" readonly="true" id="sublocation" name="sublocation" value="<% out.print(builderProject.getAddr2());%>">
 							                                    </div>
 							                                    <div class="messageContainer"></div>
 						                                    </div>
@@ -337,7 +333,7 @@
 							                               <input type="hidden" name="country_id" id="country_id" value="<%out.print(builderProject.getCountry().getId());%>">
 						                                       <div>
 							                                    	<div>
-								                                        <select name="country_id" id="country_id" class="form-control" disabled>
+								                                        <select name="country_id" id="country_id" class="form-control project" disabled>
 																		    <option value="">Select Country</option>
 														                    <% for(Country country : listCountry){ %>
 														                    <% 	if(builderProject.getCountry().getId() == country.getId()) { 
@@ -362,7 +358,7 @@
 			                                    		<div class="col-sm-6">
 			                                    		<input type="hidden" name="state_id" id="state_id" value="<%out.print(builderProject.getState().getId());%>"/>			                                    			<div>
 				                                    			<div>
-							                                         <select name="state_id" id="state_id" class="form-control" disabled>
+							                                         <select name="state_id" id="state_id" class="form-control project" disabled>
 													                    <option value="">Select State</option>
 													                    <%
 													                    if(states != null){
@@ -387,7 +383,7 @@
 					                                    <div class="col-sm-6">
 						                                     <div>
 						                                     	<input type="hidden" id="city_id" name="city_id" value="<%out.print(builderProject.getCity().getId());%>"/>
-						                                         <select name="city_id" id="city_id" class="form-control" disabled>
+						                                         <select name="city_id" id="city_id" class="form-control project" disabled>
 												                	<option value="">Select City</option>
 												                    <%
 												                    if(cities != null){
@@ -398,6 +394,7 @@
 												                    %>
 																	<option value="<% out.print(city.getId());%>" <% if(builderProject.getCity().getId() == city.getId()) { %>selected<% } %>><% out.print(city.getName());%></option>
 																	<% } }%>
+																	
 													          	</select>
 						                                    </div>
 					                                        <div class="messageContainer"></div>
@@ -412,8 +409,8 @@
 					                                    <div class="col-sm-6">
 					                                    	<div>
 							                                    <div>
-							                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">-->
-							                                        <input class="form-control" type="text" readonly="true" name="locality_name" id="locality_name" value="<%out.print(builderProject.getLocalityName());%>"/>
+							                                        <!-- <input class="form-control project" type="text" value="Artisanal kale" id="example-text-input">-->
+							                                        <input class="form-control project" type="text" readonly="true" name="locality_name" id="locality_name" value="<%out.print(builderProject.getLocalityName());%>"/>
 							                                        
 																</div>
 																<div class="messageContainer"></div>
@@ -427,7 +424,7 @@
 					                                    <div class="col-sm-6">
 					                                    	<div>
 							                                    <div>
-							                                        <input class="form-control" type="text"  readonly="true" id="pincode" name="pincode" autocomplete="off" value="<% out.print(builderProject.getPincode());%>"/>
+							                                        <input class="form-control project" type="text"  readonly="true" id="pincode" name="pincode" autocomplete="off" value="<% out.print(builderProject.getPincode());%>"/>
 							                                    </div>
 							                                    <div class="messageContainer"></div>
 							                                    </div>
@@ -442,7 +439,7 @@
 					                                    <div class="col-sm-6">
 					                                    	<div>
 						                                    	<div>
-						                                        	<input class="form-control" type="text" readonly="true" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
+						                                        	<input class="form-control project" type="text" readonly="true" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
 						                                   		</div>
 						                                    	<div class="messageContainer"></div>
 					                                    	</div>
@@ -455,7 +452,7 @@
 					                                    <div class="col-sm-6">
 					                                    	<div>
 							                                    <div>
-							                                        <input class="form-control" type="text" id="longitude" name="longitude" readonly="true" autocomplete="off" value="<% out.print(builderProject.getLongitude());%>"/>
+							                                        <input class="form-control project" type="text" id="longitude" name="longitude" readonly="true" autocomplete="off" value="<% out.print(builderProject.getLongitude());%>"/>
 							                                    </div>
 <!-- 							                                    <div class="messageContainer"></div> -->
 							                                </div>
@@ -468,19 +465,41 @@
 					                                <div class="form-group row">
 					                                    <label for="example-tel-input" class="col-sm-4 control-label">Description</label>
 					                                    <div class="col-sm-6">
-					                                        <textarea class="form-control" id="description"  name="description"><% out.print(builderProject.getDescription());%></textarea>
+					                                    
+					                                        <textarea class="form-control project" id="description"  name="description"><% out.print(builderProject.getDescription());%></textarea>
 					                                    </div>
 					                                 </div>
 					                              </div>
 					                              <div class="col-sm -6">   
 					                                <div class="form-group row">  
-					                                    <label for="example-tel-input" class="col-sm-4 control-label">Highlight(USP)</label>
+					                                    <label for="example-tel-input" class="col-sm-4 control-label">Status</label>
 					                                    <div class="col-sm-6">
-					                                    	<textarea class="form-control" id="highlight"  name="highlight"><% out.print(builderProject.getHighlights());%></textarea>
+					                                    	 <div>
+						                                         <select name="status_id" id="status_id" class="form-control project" disabled>
+												                	<option value="">Status</option>
+												                    <%
+												                    if(builderProject.getStatus() != null){%>
+												                    
+																	<option value="<% out.print(builderProject.getStatus());%>" <% if(builderProject.getStatus() == 1) { %>selected<% } %>><% out.print("Active");%></option>
+																	<% } %>
+													          	</select>
+						                                    </div>
 					                                    </div>
 <!-- 					                                    <div class="messageContainer"></div> -->
 					                                </div>
 					                            </div> 
+			                                </div>
+			                                 <div class="row">
+					                              <div class="col-sm -6">   
+					                                <div class="form-group row">  
+					                                    <label for="example-tel-input" class="col-sm-4 control-label">Highlight(USP</label>
+					                                    <div class="col-sm-6">
+					                                    	<textarea class="form-control project" id="highlight"  name="highlight"><% out.print(builderProject.getHighlights());%></textarea>
+					                                    </div>
+<!-- 					                                    <div class="messageContainer"></div> -->
+					                                </div>
+					                            </div> 
+					                            <div class="col-sm -6"></div> 
 			                                </div>
 			                                <input type="hidden" id="status" name="status" value="<%out.print(builderProject.getStatus());%>"/>
 			                            
@@ -616,7 +635,7 @@
 			                                    		<label for="example-text-input" class="col-sm-4 col-form-label">Pricing Unit<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6"> 
 			                                    			<div>
-				                                        		<select name="base_unit" id="base_unit" class="form-control">
+				                                        		<select name="base_unit" id="base_unit" class="form-control project">
 																	<% for(AreaUnit areaUnit :areaUnits) {
 																		if(projectPriceInfo.getAreaUnit() !=null){
 																		%>
@@ -640,7 +659,7 @@
 						                                    <div class="col-sm-6">
 						                                    	<div>
 						                                    		<div>
-						                                        		<input class="form-control" type="text" id="base_rate" name="base_rate" autocomplete="off" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
+						                                        		<input class="form-control project" type="text" id="base_rate" name="base_rate" autocomplete="off" value="<% if(projectPriceInfo.getBasePrice() != null){ out.print(projectPriceInfo.getBasePrice());}%>"/>
 						                                    		</div>
 						                                    		<div class="messageContainer"></div>
 						                                    	</div>
@@ -655,7 +674,7 @@
 				                		                    <div class="col-sm-6">
 				                		                    	<div>
 						                		                    <div>
-						                        		                <input class="form-control" type="text" id="rise_rate" name="rise_rate" autocomplete="off" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
+						                        		                <input class="form-control project" type="text" id="rise_rate" name="rise_rate" autocomplete="off" value="<% if(projectPriceInfo.getRiseRate() != null){ out.print(projectPriceInfo.getRiseRate());}%>"/>
 						                                	        </div>
 						                                   	 		<div class="messageContainer"></div>
 						                                   	 	</div>
@@ -667,7 +686,7 @@
 				                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Application Post<span class='text-danger'>*</span></label>
 						                                    <div class="col-sm-6">
 						                                    <div>
-						                                        <input class="form-control" type="text" id="post" name="post" autocomplete="off" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
+						                                        <input class="form-control project" type="text" id="post" name="post" autocomplete="off" value="<% if(projectPriceInfo.getPost() != null){ out.print(projectPriceInfo.getPost());}%>"/>
 						                                    </div>
 				                                    		<div class="messageContainer"></div>
 				                                    		</div>
@@ -681,7 +700,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 					                                    		<div>
-					                                        		<input class="form-control" type="text" id="maintenance" autocomplete="off" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
+					                                        		<input class="form-control project" type="text" id="maintenance" autocomplete="off" name="maintenance" value="<% if(projectPriceInfo.getMaintenance() != null){ out.print(projectPriceInfo.getMaintenance());}%>"/>
 					                                    		</div>
 					                                    		<div class="messageContainer"></div>
 					                                    	</div>	
@@ -694,7 +713,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 					                                    		<div>
-					                                        		<input class="form-control" type="text" id="tenure" autocomplete="off" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>">
+					                                        		<input class="form-control project" type="text" id="tenure" autocomplete="off" name="tenure" value="<% out.print(projectPriceInfo.getTenure());%>">
 					                                    		</div>
 					                                    		<div class="messageContainer"></div>
 					                                    	</div>
@@ -709,7 +728,7 @@
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 					                		                    <div>
-					                        		                <input class="form-control" type="text" id="amenity_rate" name="amenity_rate" autocomplete="off" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
+					                        		                <input class="form-control project" type="text" id="amenity_rate" name="amenity_rate" autocomplete="off" value="<% if(projectPriceInfo.getAmenityRate() != null){ out.print(projectPriceInfo.getAmenityRate());}%>"/>
 					                                		    </div>
 					                                		    <div class="messageContainer"></div>
 					                                		</div>
@@ -722,7 +741,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                         			<input class="form-control" type="text" id="parking" name="parking" autocomplete="off" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
+				                                         			<input class="form-control project" type="text" id="parking" name="parking" autocomplete="off" value="<% if(projectPriceInfo.getParking() != null){ out.print(projectPriceInfo.getParking());}%>"/>
 				                                         		</div>	
 			                                    				<div class="messageContainer"></div>
 			                                    			</div>
@@ -738,7 +757,7 @@
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 				                		                    	<div>
-				                        		               		<input class="form-control" type="text" id="stamp_duty" name="stamp_duty" autocomplete="off" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
+				                        		               		<input class="form-control project" type="text" id="stamp_duty" name="stamp_duty" autocomplete="off" value="<% if(projectPriceInfo.getStampDuty() != null){ out.print(projectPriceInfo.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
 				                                		    	</div>
 				                                		    	<div class="messageContainer"></div>
 				                                		    </div>
@@ -755,7 +774,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                        			<input class="form-control" type="text" id="tax" name="tax" autocomplete="off" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
+				                                        			<input class="form-control project" type="text" id="tax" name="tax" autocomplete="off" value="<% if(projectPriceInfo.getTax() != null){ out.print(projectPriceInfo.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
 				                                    			</div>
 				                                    			<div class="messageContainer"></div>
 				                                    		</div>
@@ -774,7 +793,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                        			<input class="form-control" type="text" id="vat" autocomplete="off" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
+				                                        			<input class="form-control project" type="text" id="vat" autocomplete="off" name="vat" value="<% if(projectPriceInfo.getVat() != null){ out.print(projectPriceInfo.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
 				                                    			</div>
 				                                    			<div class="messageContainer"></div>
 				                                    		</div>
@@ -789,7 +808,7 @@
 			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Tech Fees<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
-			                                        			<input class="form-control" type="text" id="tech_fee" autocomplete="off" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
+			                                        			<input class="form-control project" type="text" id="tech_fee" autocomplete="off" name="tech_fee" value="<% if(projectPriceInfo.getFee() != null){ out.print(projectPriceInfo.getFee());}%>"/>
 			                                    			</div>
 			                                    			<div class="messageContainer"></div>
 			                                    		</div>	
@@ -824,7 +843,7 @@
 							                                    <label for="example-search-input" class="col-sm-4 control-label">Milestone<span class='text-danger'>*</span></label>
 				                                    			<div class="col-sm-6">
 				                                    				<div>
-				                                        				<input type="text" class="form-control" autocomplete="off" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
+				                                        				<input type="text" class="form-control project" autocomplete="off" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getSchedule() != null) { out.print(projectPaymentInfo.getSchedule());}%>"/>
 					                                    			</div>
 					                                    			<div class="messageContainer"></div>
 					                                 			</div>
@@ -835,7 +854,7 @@
 				                                    			<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class='text-danger'>*</span></label>
 				                                    			<div class="col-sm-6">
 				                                    				<div>
-				                                        				<input class="form-control" type="text" autocomplete="off" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
+				                                        				<input class="form-control project" type="text" autocomplete="off" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 					                                    			</div>
 					                                    			<div class="messageContainer"></div>
 					                                  			</div>
@@ -881,7 +900,7 @@
 																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 																			<div class="col-sm-8">
 																				<div>
-																					<input type="text" class="form-control" autocomplete="off" id="offer_title<%out.print(j); %>" onfocusout="checkDuplicateEntry(<%out.print(j);%>);" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
+																					<input type="text" class="form-control project" autocomplete="off" id="offer_title<%out.print(j); %>" onfocusout="checkDuplicateEntry(<%out.print(j);%>);" name="offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
 																				</div>
 																				<div class="messageContainer"></div>
 																			</div>
@@ -891,7 +910,7 @@
 																		<div class="form-group" id="error-applicable_on">
 																			<label class="control-label col-sm-6">Offer Type </label>
 																			<div class="col-sm-6">
-																				<select class="form-control" id="offer_type<%out.print(j); %>"  onchange="txtEnabaleDisable(<%out.print(j); %>);" name="offer_type[]">
+																				<select class="form-control project" id="offer_type<%out.print(j); %>"  onchange="txtEnabaleDisable(<%out.print(j); %>);" name="offer_type[]">
 																					<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
 																					<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
 																					<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
@@ -904,7 +923,7 @@
 																		<div class="form-group" id="error-discount_amount">
 																			<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
 																			<div class="col-sm-6">
-																				<input type="text" autocomplete="off" class="form-control" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
+																				<input type="text" autocomplete="off" class="form-control project" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
 																			</div>
 																			<div class="messageCon tainer"></div>
 																		</div>
@@ -913,7 +932,7 @@
 																		<div class="form-group" id="error-applicable_on">
 																			<label class="control-label col-sm-4">Description </label>
 																			<div class="col-sm-8">
-																				<textarea class="form-control" id="description" name="description[]"><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
+																				<textarea class="form-control project" id="description" name="description[]"><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
 																			</div>
 																			<div class="messageContainer"></div>
 																		</div>
@@ -923,7 +942,7 @@
 																		<div class="form-group" id="error-apply">
 																			<label class="control-label col-sm-6">Status </label>
 																			<div class="col-sm-6">
-																				<select class="form-control" id="offer_status" name="offer_status[]">
+																				<select class="form-control project" id="offer_status" name="offer_status[]">
 																					<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
 																					<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
 																				</select>
@@ -1241,18 +1260,15 @@ function txtEnabaleDisable(id){
 $("#floor").click(function(){
 	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>";
-	ajaxindicatorstop();
 });
 
 $("#building").click(function(){
 	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>";
-	ajaxindicatorstop();
 });
 $("#flat").click(function(){
 	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>&flat_id=<%out.print(flat_id); %>";
-	ajaxindicatorstop();
 });
 //needed to change color of div on click event.
 // $("#project").click(function(){
@@ -1357,95 +1373,95 @@ $('#basicfrm').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-    	builder_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Builder Group is required and cannot be empty'
-                }
-            }
-        },
-    	company_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Company Name is required and cannot be empty'
-                }
-            }
-        },
-        name: {
-            validators: {
-                notEmpty: {
-                    message: 'Project Name is required and cannot be empty'
-                }
-            }
-        },
-        sublocation:{
-       	 validators: {
-                notEmpty: {
-                     message: 'Sub location is required and cannot be empty'
-                }
-            }
-       },
-       landmark:{
-       	 validators: {
-                notEmpty: {
-                         message: 'landmark is required and cannot be empty'
-                }
-            }
-       },
-        country_id: {
-            validators: {
-                notEmpty: {
-                    message: 'Country Name is required and cannot be empty'
-                }
-            }
-        },
-        state_id: {
-            validators: {
-                notEmpty: {
-                    message: 'State Name is required and cannot be empty'
-                }
-            }
-        },
-        city_id: {
-            validators: {
-                notEmpty: {
-                    message: 'City Name is required and cannot be empty'
-                }
-            }
-        },
-        locality_name: {
-            validators: {
-                notEmpty: {
-                    message: 'Locality Name is required and cannot be empty'
-                }
-            }
-        },
-        pincode: {
-            validators: {
-                notEmpty: {
-                    message: 'The Pincode is required and cannot be empty'
-                },
-                stringLength: {
-                    max: 6,
-                    min: 6,
-                    message: 'Invalid pin code.'
-                }
-            }
-        },
-        latitude: {
-            validators: {
-                notEmpty: {
-                    message: 'Latitude is required and cannot be empty'
-                }
-            }
-        },
-        longitude: {
-            validators: {
-                notEmpty: {
-                    message: 'Longitude is required and cannot be empty'
-                }
-            }
-        }
+//     	builder_id: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Builder Group is required and cannot be empty'
+//                 }
+//             }
+//         },
+//     	company_id: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Company Name is required and cannot be empty'
+//                 }
+//             }
+//         },
+//         name: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Project Name is required and cannot be empty'
+//                 }
+//             }
+//         },
+//         sublocation:{
+//        	 validators: {
+//                 notEmpty: {
+//                      message: 'Sub location is required and cannot be empty'
+//                 }
+//             }
+//        },
+//        landmark:{
+//        	 validators: {
+//                 notEmpty: {
+//                          message: 'landmark is required and cannot be empty'
+//                 }
+//             }
+//        },
+//         country_id: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Country Name is required and cannot be empty'
+//                 }
+//             }
+//         },
+//         state_id: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'State Name is required and cannot be empty'
+//                 }
+//             }
+//         },
+//         city_id: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'City Name is required and cannot be empty'
+//                 }
+//             }
+//         },
+//         locality_name: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Locality Name is required and cannot be empty'
+//                 }
+//             }
+//         },
+//         pincode: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'The Pincode is required and cannot be empty'
+//                 },
+//                 stringLength: {
+//                     max: 6,
+//                     min: 6,
+//                     message: 'Invalid pin code.'
+//                 }
+//             }
+//         },
+//         latitude: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Latitude is required and cannot be empty'
+//                 }
+//             }
+//         },
+//         longitude: {
+//             validators: {
+//                 notEmpty: {
+//                     message: 'Longitude is required and cannot be empty'
+//                 }
+//             }
+//         }
     }
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
@@ -1890,7 +1906,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-offer_title">'
 			+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-8">'
-					+'<input type="text" class="form-control" id="offer_title'+offers+'" autocomplete="off"  onfocusout="checkDuplicateEntry('+offers+')" name="offer_title[]" value=""/>'
+					+'<input type="text" class="form-control project" id="offer_title'+offers+'" autocomplete="off"  onfocusout="checkDuplicateEntry('+offers+')" name="offer_title[]" value=""/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1899,7 +1915,7 @@ function addMoreOffer() {
 		+'<div class="form-group" id="error-applicable_on">'
 		+'<label class="control-label col-sm-6">Offer Type </label>'
 		+'<div class="col-sm-6">'
-		+'<select class="form-control"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
+		+'<select class="form-control project"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
 		+'<option value="1">Percentage</option>'
 		+'<option value="2">Flat Amount</option>'
 		+'<option value="3">Other</option>'
@@ -1921,7 +1937,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-applicable_on">'
 			+'<label class="control-label col-sm-4">Description </label>'
 			+'<div class="col-sm-8">'
-			+'<textarea class="form-control" id="description" name="description[]" ></textarea>'
+			+'<textarea class="form-control project" id="description" name="description[]" ></textarea>'
 			+'</div>'
 			+'<div class="messageContainer"></div>'
 			+'</div>'
@@ -1931,7 +1947,7 @@ function addMoreOffer() {
 			+'<div class="form-group" id="error-apply">'
 			+'<label class="control-label col-sm-6">Status </label>'
 			+'<div class="col-sm-6">'
-			+'<select class="form-control" id="offer_status" name="offer_status[]">'
+			+'<select class="form-control project" id="offer_status" name="offer_status[]">'
 			+'<option value="1">Active</option>'
 			+'<option value="0">Inactive</option>'
 			+'</select>'
@@ -1960,7 +1976,7 @@ function addMoreSchedule() {
                 +'<label for="example-search-input" class="col-sm-4 control-label">Milestone<span class="text-danger">*</span></label>'
            		+'<div class="col-sm-6">'
            		+'<div>'
-               	+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
+               	+'<input type="text" class="form-control project" id="schedule" name="schedule[]" value=""/>'
                	+'</div>'
                	+'<div class="messageContainer"></div>'
             	+'</div>'
@@ -1971,7 +1987,7 @@ function addMoreSchedule() {
 	   			+'<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class="text-danger">*</span></label>'
 	   			+'<div class="col-sm-6">'
 	   			+'<div>'
-	       		+'<input class="form-control" type="text" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value=""/>'
+	       		+'<input class="form-control project" type="text" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value=""/>'
        			+'</div>'
        			+'<div class="messageContainer"></div>'
      			+'</div>'

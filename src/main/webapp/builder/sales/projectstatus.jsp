@@ -125,7 +125,7 @@ Date date = new Date();
 			                            	<div class="row">
 			                              		<div class="col-sm-6 col-xs-6">
 			                  						<a href="${baseUrl}/<% out.print(projectImage.getImage()); %>" download>
-			                  				   			<img src="../images/download.jpg" alt="Project image" class="img26">
+			                  				   			<img src="../images/download.png" alt="Project image" class="img26">
 			                  						</a>
 			                              		</div>
 			                              		<div class="col-sm-6 col-xs-6">
@@ -180,7 +180,7 @@ Date date = new Date();
 				                          	<div class="row">
 				                              	<div class="col-sm-6 col-xs-6">
 				                  					<a href="${baseUrl}/<% out.print(projectImage.getImage()); %>" download>
-				                  				   		<img src="../images/download.jpg" alt="Project image" class="img26">
+				                  				   		<img src="../images/download.png" alt="Project image" class="img26">
 				                  					</a>
 				                              	</div>
 				                              	<div class="col-sm-6 col-xs-6">

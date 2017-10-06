@@ -53,6 +53,7 @@ Date date = new Date();
     <link href="../css/common.css" rel="stylesheet">
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../css/projectheadcampaign.css">
+    <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script>
