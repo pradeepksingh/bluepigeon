@@ -233,11 +233,11 @@ if(session!=null)
 								<i class="menu-icon fa fa-caret-right"></i> Building Status
 							</a> <b class="arrow"></b>
 						</li>
-						<li class="">
-							<a href="${baseUrl}/admin/project-settings/builder-flat-status.jsp"> 
-								<i class="menu-icon fa fa-caret-right"></i> Flat Status
-							</a> <b class="arrow"></b>
-						</li>
+<!-- 						<li class=""> -->
+<%-- 							<a href="${baseUrl}/admin/project-settings/builder-flat-status.jsp">  --%>
+<!-- 								<i class="menu-icon fa fa-caret-right"></i> Flat Status -->
+<!-- 							</a> <b class="arrow"></b> -->
+<!-- 						</li> -->
 						<li class="">
 							<a href="${baseUrl}/admin/project-settings/builder-project-approval-type.jsp"> 
 								<i class="menu-icon fa fa-caret-right"></i> Project Approval Type

@@ -812,6 +812,7 @@ public class BuilderController {
 	@Path("/flat/markhold/{flat_ids}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage putFlatOnHold(@PathParam("flat_ids") String flatIds) {
+		System.err.println("FlatIds :: "+flatIds);
 		return new ProjectDAO().putFlatsOnHold(flatIds);
 	}
 	

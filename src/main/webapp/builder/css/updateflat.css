@@ -344,3 +344,6 @@ text-align: center;
 	min-width : 100%;
 	height : 500px;
 }
+.flat{
+	background: #f2f2f2 !important;
+}

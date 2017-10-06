@@ -74,7 +74,7 @@ Date date = new Date();
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
     <link href="../../bootstrap/dist/css/newbootstrap.min.css" rel="stylesheet">
-     <link href="plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet"> 
+     <link href="../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet"> 
     <!-- Menu CSS -->
     <link href="../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -83,9 +83,10 @@ Date date = new Date();
        <link rel="stylesheet" type="text/css" href="../../css/selectize.css" />
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../../css/ceoinventory.css">
+    <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
     <script src="../../plugins/bower_components/jquery/dist/newjquery.min.js"></script>
-    <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script>
+<!--     <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script> -->
       <script type="text/javascript" src="../../js/selectize.min.js"></script>
     
 </head>
@@ -194,19 +195,23 @@ Date date = new Date();
                    <div class="row">
                       <div class="col-md-8">
                         <div class="blue-bg">
-                        <% if(flats !=null){ %>
-                             <ul class="nav nav-pills">
-                             <% int floor_no = -100; %>
+	                        <div id="flat_landing_area">
+		               	 		<% if(flats !=null){ %>
+	                   		<div class="floor1">
+	                   		<% int floor_no = -100; %>
 	                    	<% for(BuilderFlatList flat :flats) { %>
 	                    	<% if(floor_no != -100 && flat.getFloorNo() != floor_no) { %>
-	                    	
-							    <li class="active"><a <% if(flat.getFlatStatus().equalsIgnoreCase("booked")) { %>style="pointer-events:none;"<% } %> data-toggle="pill" href="#home" class="book-flat-button <% if(flat.getFlatStatus().equalsIgnoreCase("available")) { %>flat-button<% } %> <% if(flat.getFlatStatus().equalsIgnoreCase("hold")) { %> yellowcolor yell<% } %>"><% out.print(flat.getFlatNo()); %></a></li>
-							     <% } %>
-							     <% floor_no = flat.getFloorNo(); %>
+	                         </div>
+	                         <div class="floor2">
+	                         <% } %>
+	                         	<a href="javascript:return false;"><button <% if(flat.getFlatStatus().equalsIgnoreCase("booked") || flat.getFlatStatus().equalsIgnoreCase("hold") || flat.getFlatStatus().equalsIgnoreCase("available")) { %>style="pointer-events:none;"<% } %> class="<% if(flat.getFlatStatus().equalsIgnoreCase("booked")) { %>book-flat-button <%} if(flat.getFlatStatus().equalsIgnoreCase("available")) { %>flat-button<% } %> <% if(flat.getFlatStatus().equalsIgnoreCase("hold")) { %> yellowcolor yell<% } %>" data-value="<% out.print(flat.getId()); %>"><% out.print(flat.getFlatNo()); %></button></a>
+	                   		<% floor_no = flat.getFloorNo(); %>
 	                   		<% } %>
+	                   		</div>
 	                   		<% } %>
-							  </ul>
+	                   		</div>
                         </div>
+                       
                       </div>
                       <div class="col-md-4">
                         <div class="blue-bg tab-content">
@@ -262,7 +267,13 @@ $select_building = $("#filter_building_id").selectize({
 <%if(builderBuildingList.size() > 0){%>
 	select_building = $select_building[0].selectize;
 <%}%>
-
+$("#search_buyer").click(function(){
+	ajaxindicatorstart("Please wait while.. we search ...");
+    $.get("${baseUrl}/builder/ceo/inventory/partialinventory.jsp?project_id=<% out.print(projectId);%>&building_id="+$('#filter_building_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
+    	$("#flat_landing_area").html(data);
+    	ajaxindicatorstop();
+    },'html');
+});
 $("#ceo_project_status_btn").click(function(){
 	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href="${baseUrl}/builder/ceo/projectstatus/projectstatus.jsp?project_id=<% out.print(projectId);%>";

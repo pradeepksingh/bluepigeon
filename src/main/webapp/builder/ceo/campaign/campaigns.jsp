@@ -75,7 +75,7 @@ Date date = new Date();
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
     <link href="../../bootstrap/dist/css/newbootstrap.min.css" rel="stylesheet">
-    <!--  <link href="plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">  -->
+     <link href="../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet"> 
     <!-- Menu CSS -->
     <link href="../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -83,6 +83,7 @@ Date date = new Date();
     <link href="../../css/common.css" rel="stylesheet">
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../../css/ceocampaigns.css">
+     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
     <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script>
@@ -270,6 +271,20 @@ Date date = new Date();
   </body>
 
 </html>
+<div class="modal fade" id="myCampainTermsModal" role="dialog">
+  	<div class="modal-dialog inbox">
+     	<div class="modal-content">
+       		<div class="modal-body">
+          		<div class="row">
+		  			<div class="col-md-12 col-sm-12 col-xs-12">
+		    			<h3>Terms & Conditions</h3>
+	      			</div>
+	    		</div>
+	  			<div class="row" id="myterms_popup"></div>
+  			</div>
+	  	</div>
+ 	</div>
+</div>
 <script>
 
 

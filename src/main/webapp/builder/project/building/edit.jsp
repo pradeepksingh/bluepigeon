@@ -1,3 +1,8 @@
+<%@page import="org.bluepigeon.admin.model.BuildingSubstage"%>
+<%@page import="org.bluepigeon.admin.model.BuildingStage"%>
+<%@page import="org.bluepigeon.admin.dao.BuildingStageDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderFloor"%>
+<%@page import="org.bluepigeon.admin.model.BuildingWeightage"%>
 <%@page import="org.bluepigeon.admin.data.PaymentInfoData"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderProjectOfferInfoDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectOfferInfo"%>
@@ -53,8 +58,11 @@
 	List<BuilderProjectOfferInfo> builderProjectOfferInfos = null;
 	PriceInfoData priceInfoData = null;
 	List<AreaUnit> areaUnits = null;
+	List<BuildingStage> buildingStages = null;
+	List<BuilderFloor> builderFloors = null;
 	List<BuildingAmenityWeightage> buildingAmenityWeightages = null;
 	List<Tax> taxes = null;
+	List<BuildingWeightage> buildingWeightages = null;
 	project_id = Integer.parseInt(request.getParameter("project_id"));
 	String sbuilding_id =  request.getParameter("building_id");
 	if(sbuilding_id != "" || sbuilding_id != null)
@@ -89,6 +97,9 @@
 					builderProjectOfferInfos = new BuilderProjectOfferInfoDAO().getBuilderProjectOfferInfo(project_id);
 					areaUnits = new AreaUnitDAO().getActiveAreaUnitList();
 					buildingPaymentInfos = new ProjectDAO().getBuildingPaymentInfoById(building_id);
+					buildingStages = new BuildingStageDAO().getActiveBuildingStages();
+					buildingWeightages = new ProjectDAO().getBuildingWeightage(building_id);
+					builderFloors = new ProjectDAO().getBuildingFloors(builderBuilding.getId());
 					try{
 						floor_id = new ProjectDAO().getActiveFloorsByBuildingId(building_id).get(0).getId();
 						flat_id = new ProjectDAO().getBuilderActiveFloorFlats(floor_id).get(0).getId();
@@ -184,7 +195,7 @@
        	<%@include file="../../partial/sidebar.jsp"%>
        </div>
     </div>
-    <div id="page-wrapper" style="min-height: 2038px;">
+    <div id="page-wrapper">
         <div class="container-fluid">
           <div class="row">
                 <div class="col-lg-3 col-sm-6 col-xs-12">
@@ -207,9 +218,10 @@
            <div class="row">
           		<div class="col-md-4 col-sm-6 col-xs-12">
                      <select id="filter_building_id" name="filter_building_id">
-                             <% for(BuilderBuilding builderBuilding2 : builderBuildingList){ %>
+                             <% if(builderBuildingList != null){
+                             for(BuilderBuilding builderBuilding2 : builderBuildingList){ %>
                      		<option value="<% out.print(builderBuilding2.getId());%>" <% if(builderBuilding2.getId() == building_id) { %>selected<% } %>><% out.print(builderBuilding2.getName()); %></option>
-                     		<%} %>
+                     		<%} }%>
                      </select>
                 </div>
            </div>
@@ -222,6 +234,9 @@
                                    <a data-toggle="tab"  href="#vimessages" > <span>Basic Details</span></a>
                                </li>
                                 <li>
+                                   <a  data-toggle="tab" href="#vimeimg"><span>Building image</span></a>
+                               </li>
+                                <li>
                                    <a  data-toggle="tab" href="#vimessages1"><span>Pricing Details</span></a>
                                </li>
                                <li>
@@ -230,11 +245,14 @@
                                <li>
                                    <a  data-toggle="tab" href="#vimessages3"><span>Offers</span></a>
                                </li>
+                                <li>
+                                   <a  data-toggle="tab" href="#vimessages4"><span>Building Weightage</span></a>
+                               </li>
                            </ul>
                            <div class="tab-content"> 
                              <div id="vimessages" class="tab-pane active" aria-expanded="false">
                                <div id="basicresponse" class="col-sm-12"></div><br>
-                           <div class="col-12">
+                           		<div class="col-12">
                            		<form id="updatebuilding" name="updatebuilding" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
                            		<input type="hidden" name="admin_id" id="admin_id" value="1"/>
 								<input type="hidden" name="building_id" id="building_id" value="<% out.print(building_id);%>"/>
@@ -244,8 +262,8 @@
                              		  	<label for="example-search-input" class="col-sm-4 col-form-label">Project Name*</label>
                               		  		<div class="col-sm-6">
                               		 	 		<div>
-                                	   <!-- <input class="form-control" type="text" value="project" id="example-search-input">-->
-                                		  			<select id="project_id" name="project_id" class="form-control" disabled>
+                                	   <!-- <input class="form-control building" type="text" value="project" id="example-search-input">-->
+                                		  			<select id="project_id" name="project_id" class="form-control building" disabled>
 													  <% 
 													  if(builderProjects !=null){
 													  
@@ -263,7 +281,7 @@
                                 		<label for="example-search-input" class="col-sm-4 col-form-label">Building Name</label>
                                 		<div class="col-sm-6">
                                 			<div>
-												<input class="form-control" type="text" readonly="true" id="name" name="name" value="<% out.print(builderBuilding.getName()); %>">
+												<input class="form-control building" type="text" readonly="true" id="name" name="name" value="<% out.print(builderBuilding.getName()); %>">
                                 			</div>
                                 		</div>
                                		</div>
@@ -276,7 +294,7 @@
 	                                    <label for="example-search-input" class="col-sm-4 col-form-label">Total Floors</label>
 	                                    <div class="col-sm-6">
 		                                    <div>
-		                                        <input class="form-control" readonly="true" type="text" id="total_floor" name="total_floor" value="<% out.print(builderBuilding.getTotalFloor());%>"/>
+		                                        <input class="form-control building" readonly="true" type="text" id="total_floor" name="total_floor" value="<% out.print(builderBuilding.getTotalFloor());%>"/>
 		                                    </div>
 	                                    </div>
 	                               </div>
@@ -285,7 +303,7 @@
                                		<div class="form-group row">
                                			<label for="example-search-input" class="col-sm-4 col-form-label">Launch Date*</label>
                                			<div class="col-sm-6">
-                               				<input class="form-control" type="text" disabled id="launch_date" name="launch_date" value="<% if(builderBuilding.getLaunchDate() != null) { out.print(dt1.format(builderBuilding.getLaunchDate()));}%>">
+                               				<input class="form-control building" type="text" disabled id="launch_date" name="launch_date" value="<% if(builderBuilding.getLaunchDate() != null) { out.print(dt1.format(builderBuilding.getLaunchDate()));}%>">
                                			</div>
                                		</div>
                                </div>
@@ -295,7 +313,7 @@
                            			<div class="form-group row">
                            			<label for="example-search-input" class="col-sm-4 col-form-label">Possession Date</label>
                            				<div class="col-sm-6">
-                           					<input class="form-control" type="text" disabled id="possession_date" name="possession_date" value="<% if(builderBuilding.getPossessionDate() != null) { out.print(dt1.format(builderBuilding.getPossessionDate()));}%>"/>
+                           					<input class="form-control building" type="text" disabled id="possession_date" name="possession_date" value="<% if(builderBuilding.getPossessionDate() != null) { out.print(dt1.format(builderBuilding.getPossessionDate()));}%>"/>
                            				</div>
                            			</div>
                            		</div>
@@ -303,7 +321,7 @@
                            			<div class="form-group row">
                            				<label for="example-search-input" class="col-sm-4 col-form-label">Building Status *</label>
                            				<div class="col-sm-6">
-                           					<select id="status" name="status" class="form-control" disabled>
+                           					<select id="status" name="status" class="form-control building" disabled>
 												<% 	for(BuilderBuildingStatus builderBuildingStatus :builderBuildingStatusList) { %>
 												<option value="<% out.print(builderBuildingStatus.getId());%>" <% if(builderBuildingStatus.getId() == builderBuilding.getBuilderBuildingStatus().getId()) { %>selected<% } %>><% out.print(builderBuildingStatus.getName()); %></option>
 												<% } %>
@@ -335,6 +353,56 @@
                           </form>
                       </div>
                    </div>
+                   <div id="vimeimg" class="tab-pane" aria-expanded="false">
+                        <div class="col-12">
+                        	<form id="updateimage" name="updateimage" action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+                           		<input type="hidden" name="building_id" id="building_id" value="<% out.print(builderBuilding.getId());%>"/>
+                           		<div class="form-group row">
+                           			<div id="imageresponse"></div>
+                               		<label for="example-text-input" class="col-3 col-form-label">Upload Project Images</label>
+                               			<div class="row" id="project_images">
+											<% for (BuildingImageGallery buildingImageGallery :buildingImageGalleries) { %>
+											<div class="col-lg-4 margin-bottom-5" id="b_image<% out.print(buildingImageGallery.getId()); %>">
+												<div class="form-group" id="error-landmark">
+													<div class="col-sm-12">
+														<img class="img-fix" alt="Building Images" src="${baseUrl}/<% out.print(buildingImageGallery.getImage()); %>" width="200px;">
+													</div>
+													<label class="col-sm-12 text-left"><a href="javascript:deleteImage(<% out.print(buildingImageGallery.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
+													<div class="messageContainer col-sm-offset-4"></div>
+												</div>
+											</div>
+											<% } %>
+										</div>
+										<div class="row">
+											<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-submit btn-sm"> + Add More</a></span>
+										</div>
+										<hr/>
+                           		</div> 
+                            	<div class="form-group row">
+                           			<label for="example-text-input" class="col-3 col-form-label">Upload Elavation Images</label>
+                              			<div class="row" id="elevation_images">
+										<% for (BuildingPanoramicImage buildingPanoramicImage :buildingPanoramicImages) { %>
+											<div class="col-lg-4 margin-bottom-5" id="b_elv_image<% out.print(buildingPanoramicImage.getId()); %>">
+												<div class="form-group" id="error-landmark">
+													<div class="col-sm-12">
+														<img alt="Building Images" src="${baseUrl}/<% out.print(buildingPanoramicImage.getPanoImage()); %>" width="100%;">
+													</div>
+													<label class="col-sm-12 text-left"><a href="javascript:deleteElvImage(<% out.print(buildingPanoramicImage.getId()); %>);" class="btn btn-danger btn-sm">x Delete Image</a> </label>
+													<div class="messageContainer col-sm-offset-3"></div>
+												</div>
+											</div>
+										<% } %>
+										</div>
+										<div class="row">
+											<span class="pull-right"><a href="javascript:addMoreElvImages();" class="btn btn-submit btn-sm"> + Add More</a></span>
+										</div>
+                             	</div>  
+                           		<div class="offset-sm-5 col-sm-7">
+                                	<button type="button" name="imagebtn" class="btn btn-submit waves-effect waves-light m-t-10"  onclick="updateBuildingImages();">Update</button>
+                            	</div>
+                           </form>
+                         </div>
+                    </div>
                    	<div id="vimessages1" class="tab-pane" aria-expanded="false">
 	                                 <div class="col-12">
 	                                 	<form id="updatepricing" name="updatepricing" method="post">
@@ -346,7 +414,7 @@
 			                                    		<label for="example-text-input" class="col-sm-4 col-form-label">Pricing Unit<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6"> 
 			                                    			<div>
-				                                        		<select name="base_unit" id="base_unit" class="form-control">
+				                                        		<select name="base_unit" id="base_unit" class="form-control building">
 																	<% for(AreaUnit areaUnit :areaUnits) {
 																		%>
 																		<option value="<% out.print(areaUnit.getId()); %>" <% if(priceInfoData.getAreaUnits() > 0 && priceInfoData.getAreaUnits() == areaUnit.getId()) { %>selected<% } %>><% out.print(areaUnit.getName()); %></option>
@@ -364,7 +432,7 @@
 						                                    <div class="col-sm-6">
 						                                    	<div>
 						                                    		<div>
-						                                        		<input type="text" class="form-control" id="base_rate" name="base_rate" value="<% if(priceInfoData.getBaseRate() > 0 && priceInfoData.getBaseRate() != 0){ out.print(priceInfoData.getBaseRate());}%>"/>
+						                                        		<input type="text" class="form-control building" id="base_rate" name="base_rate" value="<% if(priceInfoData.getBaseRate() > 0 && priceInfoData.getBaseRate() != 0){ out.print(priceInfoData.getBaseRate());}%>"/>
 						                                    		</div>
 						                                    		<div class="messageContainer"></div>
 						                                    	</div>
@@ -379,7 +447,7 @@
 				                		                    <div class="col-sm-6">
 				                		                    	<div>
 						                		                    <div>
-						                        		                <input type="text" class="form-control" id="rise_rate" name="rise_rate" value="<% if(priceInfoData.getRiseRate() > 0){ out.print(priceInfoData.getRiseRate());}%>"/>
+						                        		                <input type="text" class="form-control building" id="rise_rate" name="rise_rate" value="<% if(priceInfoData.getRiseRate() > 0){ out.print(priceInfoData.getRiseRate());}%>"/>
 						                                	        </div>
 						                                   	 		<div class="messageContainer"></div>
 						                                   	 	</div>
@@ -391,7 +459,7 @@
 				                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Application Post<span class='text-danger'>*</span></label>
 						                                    <div class="col-sm-6">
 						                                    <div>
-						                                        <input type="text" class="form-control" id="post" name="post" value="<% if(priceInfoData !=null && priceInfoData.getPost() != 0){ out.print(priceInfoData.getPost());}%>"/>
+						                                        <input type="text" class="form-control building" id="post" name="post" value="<% if(priceInfoData !=null && priceInfoData.getPost() != 0){ out.print(priceInfoData.getPost());}%>"/>
 						                                    </div>
 				                                    		<div class="messageContainer"></div>
 				                                    		</div>
@@ -405,7 +473,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 					                                    		<div>
-					                                        		<input type="text" class="form-control" id="maintenance" name="maintenance" value="<% if(priceInfoData.getMaintainance() > 0 && priceInfoData.getMaintainance() != 0){ out.print(priceInfoData.getMaintainance());}%>"/>
+					                                        		<input type="text" class="form-control building" id="maintenance" name="maintenance" value="<% if(priceInfoData.getMaintainance() > 0 && priceInfoData.getMaintainance() != 0){ out.print(priceInfoData.getMaintainance());}%>"/>
 					                                    		</div>
 					                                    		<div class="messageContainer"></div>
 					                                    	</div>	
@@ -418,7 +486,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 					                                    		<div>
-					                                        		<input type="text" class="form-control" id="tenure" name="tenure" value="<%if(priceInfoData.getTenure() > 0 && priceInfoData.getTenure() != 0){ out.print(priceInfoData.getTenure()); } %>"/>
+					                                        		<input type="text" class="form-control building" id="tenure" name="tenure" value="<%if(priceInfoData.getTenure() > 0 && priceInfoData.getTenure() != 0){ out.print(priceInfoData.getTenure()); } %>"/>
 					                                    		</div>
 					                                    		<div class="messageContainer"></div>
 					                                    	</div>
@@ -433,7 +501,7 @@
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 					                		                    <div>
-					                        		                <input type="text" class="form-control" id="amenity_rate" name="amenity_rate" value="<% if(priceInfoData.getAmenityRate() > 0 && priceInfoData.getAmenityRate() != 0){ out.print(priceInfoData.getAmenityRate());}%>"/>
+					                        		                <input type="text" class="form-control building" id="amenity_rate" name="amenity_rate" value="<% if(priceInfoData.getAmenityRate() > 0 && priceInfoData.getAmenityRate() != 0){ out.print(priceInfoData.getAmenityRate());}%>"/>
 					                                		    </div>
 					                                		    <div class="messageContainer"></div>
 					                                		</div>
@@ -444,7 +512,7 @@
 			                                		<div class="form-group row">
 			                                			<label for="example-tel-input" class="col-sm-4 col-form-label">Parking<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
-			                                    			<select id="parking_id" name="parking_id" class="form-control">
+			                                    			<select id="parking_id" name="parking_id" class="form-control building">
 																<option value="0"<%if(priceInfoData.getParkingId() == 0){ %>selected<%} %>>Select Parking Type</option>
 																<option value="1" <%if(priceInfoData.getParkingId() == 1){ %>selected<%} %>>Open Parking</option>
 																<option value="2" <%if(priceInfoData.getParkingId() == 2){ %>selected<%} %>>Shed Parking</option>
@@ -461,7 +529,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                         			<input type="text" class="form-control" id="parking" name="parking" value="<% if(priceInfoData.getParking() > 0 && priceInfoData.getParking() != 0){ out.print(priceInfoData.getParking());}%>"/>
+				                                         			<input type="text" class="form-control building" id="parking" name="parking" value="<% if(priceInfoData.getParking() > 0 && priceInfoData.getParking() != 0){ out.print(priceInfoData.getParking());}%>"/>
 				                                         		</div>	
 			                                    				<div class="messageContainer"></div>
 			                                    			</div>
@@ -475,7 +543,7 @@
 			                		                    <div class="col-sm-6">
 			                		                    	<div>
 				                		                    	<div>
-				                        		               		<input type="text" class="form-control" id="stamp_duty" name="stamp_duty" value="<% if(priceInfoData.getStampDuty() > 0 && priceInfoData.getStampDuty() != 0){ out.print(priceInfoData.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
+				                        		               		<input type="text" class="form-control building" id="stamp_duty" name="stamp_duty" value="<% if(priceInfoData.getStampDuty() > 0 && priceInfoData.getStampDuty() != 0){ out.print(priceInfoData.getStampDuty());} else {if(taxes.size() > 0){out.print(taxes.get(0).getStampDuty());}}%>"/>
 				                                		    	</div>
 				                                		    	<div class="messageContainer"></div>
 				                                		    </div>
@@ -494,7 +562,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                        			<input type="text" class="form-control" id="tax" name="tax" value="<% if(priceInfoData.getTax() > 0 && priceInfoData.getTax() != 0){ out.print(priceInfoData.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
+				                                        			<input type="text" class="form-control building" id="tax" name="tax" value="<% if(priceInfoData.getTax() > 0 && priceInfoData.getTax() != 0){ out.print(priceInfoData.getTax());} else {if(taxes.size() > 0){out.print(taxes.get(0).getTax());}}%>"/>
 				                                    			</div>
 				                                    			<div class="messageContainer"></div>
 				                                    		</div>
@@ -511,7 +579,7 @@
 			                                    		<div class="col-sm-6">
 			                                    			<div>
 				                                    			<div>
-				                                        			<input type="text" class="form-control" id="vat" name="vat" value="<% if(priceInfoData.getVat() > 0 && priceInfoData.getVat() != 0){ out.print(priceInfoData.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
+				                                        			<input type="text" class="form-control building" id="vat" name="vat" value="<% if(priceInfoData.getVat() > 0 && priceInfoData.getVat() != 0){ out.print(priceInfoData.getVat());} else {if(taxes.size() > 0){out.print(taxes.get(0).getVat());}}%>"/>
 				                                    			</div>
 				                                    			<div class="messageContainer"></div>
 				                                    		</div>
@@ -528,7 +596,7 @@
 			                                    		<label for="example-search-input" class="col-sm-4 col-form-label">Tech Fees<span class='text-danger'>*</span></label>
 			                                    		<div class="col-sm-6">
 			                                    			<div>
-			                                        			<input type="text" class="form-control" id="tech_fee" name="tech_fee" value="<% if(priceInfoData.getFee() > 0 && priceInfoData.getFee() != 0){ out.print(priceInfoData.getFee());}%>"/>
+			                                        			<input type="text" class="form-control building" id="tech_fee" name="tech_fee" value="<% if(priceInfoData.getFee() > 0 && priceInfoData.getFee() != 0){ out.print(priceInfoData.getFee());}%>"/>
 			                                    			</div>
 			                                    			<div class="messageContainer"></div>
 			                                    		</div>	
@@ -560,7 +628,7 @@
 							                                    <label for="example-search-input" class="col-sm-4 control-label">Milestone<span class='text-danger'>*</span></label>
 				                                    			<div class="col-sm-6">
 				                                    				<div>
-				                                        				<input type="text" class="form-control" readonly="true" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getName() != null) { out.print(projectPaymentInfo.getName());}%>" autocomplete="off"/>
+				                                        				<input type="text" class="form-control building" readonly="true" id="schedule" name="schedule[]" value="<% if(projectPaymentInfo.getName() != null) { out.print(projectPaymentInfo.getName());}%>" autocomplete="off"/>
 					                                    			</div>
 					                                    			<div class="messageContainer"></div>
 					                                 			</div>
@@ -571,7 +639,7 @@
 				                                    			<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class='text-danger'>*</span></label>
 				                                    			<div class="col-sm-6">
 				                                    				<div>
-				                                        				<input class="form-control" autocomplete="off" type="text" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
+				                                        				<input class="form-control building" autocomplete="off" type="text" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 					                                    			</div>
 					                                    			<div class="messageContainer"></div>
 					                                  			</div>
@@ -609,7 +677,7 @@
 																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 																			<div class="col-sm-8">
 																				<div>
-																					<input type="text" class="form-control" readonly="true" id="project_offer_title" name="project_offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
+																					<input type="text" class="form-control building" readonly="true" id="project_offer_title" name="project_offer_title[]" value="<% out.print(projectOfferInfo.getTitle()); %>">
 																				</div>
 																				<div class="messageContainer"></div>
 																			</div>
@@ -619,7 +687,7 @@
 																		<div class="form-group" id="error-applicable_on">
 																			<label class="control-label col-sm-6">Offer Type </label>
 																			<div class="col-sm-6">
-																				<select class="form-control" id="project_offer_type<%out.print(jj); %>"  onchange="txtEnabaleDisable(<%out.print(jj); %>);" disabled name="project_offer_type[]">
+																				<select class="form-control building" id="project_offer_type<%out.print(jj); %>"  onchange="txtEnabaleDisable(<%out.print(jj); %>);" disabled name="project_offer_type[]">
 																					<option value="1" <% if(projectOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
 																					<option value="2" <% if(projectOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
 																					<option value="3" <% if(projectOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
@@ -632,7 +700,7 @@
 																		<div class="form-group" id="error-discount_amount">
 																			<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
 																			<div class="col-sm-6">
-																				<input type="text" class="form-control" readonly="true" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="project_discount_amount<%out.print(jj); %>"   onkeyup=" javascript:validPerAmount(<%out.print(jj); %>);" name="project_discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
+																				<input type="text" class="form-control building" readonly="true" <%if(projectOfferInfo.getType() == 3){ %>disabled<%} %> id="project_discount_amount<%out.print(jj); %>"   onkeyup=" javascript:validPerAmount(<%out.print(jj); %>);" name="project_discount_amount[]" value="<%if(projectOfferInfo.getAmount()!=null){ out.print(projectOfferInfo.getAmount());} %>"/>
 																			</div>
 																			<div class="messageContainer"></div>
 																		</div>
@@ -641,7 +709,7 @@
 																		<div class="form-group" id="error-applicable_on">
 																			<label class="control-label col-sm-4">Description </label>
 																			<div class="col-sm-8">
-																				<textarea class="form-control" disabled id="project_description" name="project_description[]"><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
+																				<textarea class="form-control building" disabled id="project_description" name="project_description[]"><% if(projectOfferInfo.getDescription() != null) { out.print(projectOfferInfo.getDescription());} %></textarea>
 																			</div>
 																			<div class="messageContainer"></div>
 																		</div>
@@ -651,7 +719,7 @@
 																		<div class="form-group" id="error-apply">
 																			<label class="control-label col-sm-6">Status </label>
 																			<div class="col-sm-6">
-																				<select class="form-control" id="project_offer_status" name="project_offer_status[]" disabled>
+																				<select class="form-control building" id="project_offer_status" name="project_offer_status[]" disabled>
 																					<option value="1" <% if(projectOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
 																					<option value="0" <% if(projectOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
 																				</select>
@@ -677,7 +745,7 @@
 																			<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>
 																			<div class="col-sm-8">
 																				<div>
-																					<input type="text" class="form-control" autocomplete="off" id="offer_title<%out.print(j); %>" onchange="checkDuplicateEntry(<%out.print(j);%>);" onfocusout="checkDuplicateEntry(<%out.print(j);%>);" name="offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>">
+																					<input type="text" class="form-control building" autocomplete="off" id="offer_title<%out.print(j); %>" onchange="checkDuplicateEntry(<%out.print(j);%>);" onfocusout="checkDuplicateEntry(<%out.print(j);%>);" name="offer_title[]" value="<% out.print(buildingOfferInfo.getTitle()); %>">
 																				</div>
 																				<div class="messageContainer"></div>
 																			</div>
@@ -687,7 +755,7 @@
 																		<div class="form-group" id="error-applicable_on">
 																			<label class="control-label col-sm-6">Offer Type </label>
 																			<div class="col-sm-6">
-																				<select class="form-control" id="offer_type<%out.print(j); %>"  onchange="txtEnabaleDisable(<%out.print(j); %>);"  name="offer_type[]">
+																				<select class="form-control building" id="offer_type<%out.print(j); %>"  onchange="txtEnabaleDisable(<%out.print(j); %>);"  name="offer_type[]">
 																					<option value="1" <% if(buildingOfferInfo.getType() == 1) { %>selected<% } %>>Percentage</option>
 																					<option value="2" <% if(buildingOfferInfo.getType() == 2) { %>selected<% } %>>Flat Amount</option>
 																					<option value="3" <% if(buildingOfferInfo.getType() == 3) { %>selected<% } %>>Other</option>
@@ -700,7 +768,7 @@
 																		<div class="form-group" id="error-discount_amount">
 																			<label class="control-label col-sm-6">Discount Amount <span class='text-danger'>*</span></label>
 																			<div class="col-sm-6">
-																				<input type="text" class="form-control"  autocomplete="off" <%if(buildingOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(buildingOfferInfo.getAmount()!=null){ out.print(buildingOfferInfo.getAmount());} %>"/>
+																				<input type="text" class="form-control building"  autocomplete="off" <%if(buildingOfferInfo.getType() == 3){ %>disabled<%} %> id="discount_amount<%out.print(j); %>"   onkeyup=" javascript:validPerAmount(<%out.print(j); %>);" name="discount_amount[]" value="<%if(buildingOfferInfo.getAmount()!=null){ out.print(buildingOfferInfo.getAmount());} %>"/>
 																			</div>
 																			<div class="messageContainer"></div>
 																		</div>
@@ -709,7 +777,7 @@
 																		<div class="form-group" id="error-applicable_on">
 																			<label class="control-label col-sm-4">Description </label>
 																			<div class="col-sm-8">
-																				<textarea class="form-control"  id="description" name="description[]"><% if(buildingOfferInfo.getDescription() != null) { out.print(buildingOfferInfo.getDescription());} %></textarea>
+																				<textarea class="form-control building"  id="description" name="description[]"><% if(buildingOfferInfo.getDescription() != null) { out.print(buildingOfferInfo.getDescription());} %></textarea>
 																			</div>
 																			<div class="messageContainer"></div>
 																		</div>
@@ -719,7 +787,7 @@
 																		<div class="form-group" id="error-apply">
 																			<label class="control-label col-sm-6">Status </label>
 																			<div class="col-sm-6">
-																				<select class="form-control" id="offer_status" name="offer_status[]">
+																				<select class="form-control building" id="offer_status" name="offer_status[]">
 																					<option value="1" <% if(buildingOfferInfo.getStatus().toString() == "1") { %>selected<% } %>>Active</option>
 																					<option value="0" <% if(buildingOfferInfo.getStatus().toString() == "0") { %>selected<% } %>>Inactive</option>
 																				</select>
@@ -747,6 +815,108 @@
 												</form>
 											</div>
                                 		</div>
+                                		<div id="vimessages4" class="tab-pane fade">
+											<form id="subpfrm" name="subpfrm" method="post">
+									 			<div class="row">
+													<div class="col-lg-12">
+														<div class="panel panel-default">
+															<div class="panel-body">
+																<div id="offer_area">
+																	<div class="row">
+<!-- 																		<div class="col-lg-12 margin-bottom-5"> -->
+<!-- 																			<div class="row" id="error-amenity_type"> -->
+																					<div class="col-sm-6">
+																						<div class="form-group" id="error-amenity_weightage">
+																							<label class="control-label col-sm-6">Amenity Weightage </label>
+																							<div class="col-sm-6">
+																								<input type="text" class="form-control building" id="amenity_weightage" name="amenity_weightage" value="<%out.print(builderBuilding.getAmenityWeightage());%>" placeholder="amenity weightage in %"/>
+																							</div>
+																							<div class="messageContainer"></div>
+																						</div>
+																					</div>
+<!-- 																				</div> -->
+<!-- 																				<div class="row" id="error-amenity_type"> -->
+																					<div class="col-sm-6">
+																						<div class="form-group" id="error-discount_amount">
+																							<label class="control-label col-sm-6">Floor Weightage</label>
+																							<div class="col-sm-6">
+																								<input type="text" class="form-control building"  id="floor_weightage" name="floor_weightage" value="<%out.print(builderBuilding.getFloorWeightage());%>"/>
+																							</div>
+																							<div class="messageContainer"></div>
+																						</div>
+																					</div>
+<!-- 																				</div> -->
+																				<div class="col-sm-12">
+																					<label class="control-label col-sm-6">Floors</label>
+																				</div>
+																				<%
+																				  if(builderFloors != null){
+																					  for(BuilderFloor builderFloorList : builderFloors){
+																				%>
+																				<input type="hidden" id="floor_ids" name="floor_ids[]" value="<%out.print(builderFloorList.getId());%>">
+																				<div class="col-sm-4 margin-bottom-5">
+																					<div class="form-group" id="error-discount_amount">
+																						<label class="control-label col-sm-6"><%out.print(builderFloorList.getName()); %></label>
+																						<div class="col-sm-6">
+																							<input type="text"  onkeypress=" return isNumber(event, this);" class="form-control errorMsg building" id="weightage[]" name="weightage[]" value="<%out.print(builderFloorList.getWeightage());%>"/>
+																						</div>
+																						<div class="messageContainer"></div>
+																					</div>
+																				</div>	  
+																				<%	  }
+																				  }
+																				%>
+<!-- 																			</div> -->
+																		
+<!-- 																			<div class="form-group" id="error-amenity_type"> -->
+																				<div class="col-sm-12">
+																					<% 	for(BuildingStage buildingStage :buildingStages) { 
+																						Double stage_wt = 0.0;
+																						for(BuildingWeightage buildingWeightage :buildingWeightages) {
+																							if(buildingStage.getId() == buildingWeightage.getBuildingStage().getId()) {
+																								stage_wt = buildingWeightage.getStageWeightage();
+																							}
+																						}
+																					%>
+																					<fieldset class="scheduler-border">
+																						<legend class="scheduler-border">Stages</legend>
+																						<div class="col-sm-12">
+																							<div class="row"><label class="col-sm-3" style="padding-top:5px;"><b><% out.print(buildingStage.getName()); %> (%)</b> - </label><div class="col-sm-4"><input  onkeypress=" return isNumber(event, this);" name="stage_weightage[]" id="<% out.print(buildingStage.getId());%>" type="text" class="form-control building" placeholder="Project Stage weightage" style="width:200px;display: inline;" value="<% out.print(stage_wt);%>"/></div></div>
+																							<fieldset class="scheduler-border" style="margin-bottom:0px !important">
+																								<legend class="scheduler-border">Sub Stages</legend>
+																							<% 	for(BuildingSubstage buildingSubstage :buildingStage.getBuildingSubstages()) { 
+																								Double substage_wt = 0.0;
+																								for(BuildingWeightage buildingWeightage :buildingWeightages) {
+																									if(buildingSubstage.getId() == buildingWeightage.getBuildingSubstage().getId()) {
+																										substage_wt = buildingWeightage.getSubstageWeightage();
+																									}
+																								}
+																							%>
+																								<div class="col-sm-3">
+																									<% out.print(buildingSubstage.getName()); %> (%)<br>
+																									<input type="text" onkeypress=" return isNumber(event, this);"  name="substage_weightage<% out.print(buildingStage.getId());%>[]" id="<% out.print(buildingSubstage.getId()); %>" onkeyup="javascript:validPer(<% out.print(buildingSubstage.getId());%>);" class="form-control building"  placeholder="Substage weightage" value="<% out.print(substage_wt);%>"/>
+																								</div>
+																							<% } %>
+																							</fieldset>
+																						</div>
+																					</fieldset>
+																					<% } %>
+																				</div>
+																				<div class="messageContainer"></div>
+<!-- 																			</div> -->
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+														<div class="row">
+													 		<div class="offset-sm-5 col-sm-7">
+																	<button type="button" class="btn btn-submit waves-effect waves-light m-t-10" id="subpbtn">SAVE</button>
+															</div>
+													</div>
+											</form>
+										</div>
                         			</div>
                    				</div>
                		 		</div>
@@ -901,7 +1071,7 @@ function addMoreSchedule() {
                 +'<label for="example-search-input" class="col-sm-4 control-label">Milestone<span class="text-danger">*</span></label>'
            		+'<div class="col-sm-6">'
            		+'<div>'
-               	+'<input type="text" class="form-control" id="schedule" name="schedule[]" value=""/>'
+               	+'<input type="text" class="form-control building" id="schedule" name="schedule[]" value=""/>'
                	+'</div>'
                	+'<div class="messageContainer"></div>'
             	+'</div>'
@@ -912,7 +1082,7 @@ function addMoreSchedule() {
 	   			+'<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class="text-danger">*</span></label>'
 	   			+'<div class="col-sm-6">'
 	   			+'<div>'
-	       		+'<input class="form-control" type="text" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value=""/>'
+	       		+'<input class="form-control building" type="text" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value=""/>'
        			+'</div>'
        			+'<div class="messageContainer"></div>'
      			+'</div>'
@@ -935,7 +1105,7 @@ function addMoreOffer() {
 		+'<div class="form-group" id="error-offer_title">'
 		+'<label class="control-label col-sm-4">Offer Title <span class="text-danger">*</span></label>'
 		+'<div class="col-sm-8">'
-		+'<input type="text" class="form-control" autocomplete="off" id="offer_title'+offers+'" onchange="checkDuplicateEntry('+offers+');" onfocusout="checkDuplicateEntry('+offers+');" name="offer_title[]" value=""/>'
+		+'<input type="text" class="form-control building" autocomplete="off" id="offer_title'+offers+'" onchange="checkDuplicateEntry('+offers+');" onfocusout="checkDuplicateEntry('+offers+');" name="offer_title[]" value=""/>'
 		+'</div>'
 		+'<div class="messageContainer"></div>'
 		+'</div>'
@@ -944,7 +1114,7 @@ function addMoreOffer() {
 		+'<div class="form-group" id="error-applicable_on">'
 		+'<label class="control-label col-sm-6">Offer Type </label>'
 		+'<div class="col-sm-6">'
-		+'<select class="form-control"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
+		+'<select class="form-control building"  id="offer_type'+offers+'" onchange="txtEnabaleDisable('+offers+');"  name="offer_type[]">'
 		+'<option value="1">Percentage</option>'
 		+'<option value="2">Flat Amount</option>'
 		+'<option value="3">Other</option>'
@@ -967,7 +1137,7 @@ function addMoreOffer() {
 		+'<div class="form-group" id="error-applicable_on">'
 		+'<label class="control-label col-sm-4">Description </label>'
 		+'<div class="col-sm-8">'
-		+'<textarea class="form-control" id="description" name="description[]" ></textarea>'
+		+'<textarea class="form-control building" id="description" name="description[]" ></textarea>'
 		+'</div>'
 		+'<div class="messageContainer"></div>'
 		+'</div>'
@@ -977,7 +1147,7 @@ function addMoreOffer() {
 		+'<div class="form-group" id="error-apply">'
 		+'<label class="control-label col-sm-6">Status </label>'
 		+'<div class="col-sm-6">'
-		+'<select class="form-control" id="offer_status" name="offer_status[]">'
+		+'<select class="form-control building" id="offer_status" name="offer_status[]">'
 		+'<option value="1">Active</option>'
 		+'<option value="0">Inactive</option>'
 		+'</select>'
@@ -1213,6 +1383,81 @@ $("#updatepricing").bootstrapValidator({
 	event.preventDefault();
 	updateBuildingPricing();
 });
+
+function updateBuildingImages() {
+	var options = {
+	 		target : '#imageresponse', 
+	 		beforeSubmit : showAddImageRequest,
+	 		success :  showAddImageResponse,
+	 		url : '${baseUrl}/webapi/project/building/images/update',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#updateimage').ajaxSubmit(options);
+}
+function showAddImageRequest(formData, jqForm, options){
+	$("#imageresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddImageResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#imageresponse").removeClass('alert-success');
+       	$("#imageresponse").addClass('alert-danger');
+		$("#imageresponse").html(resp.message);
+		$("#imageresponse").show();
+  	} else {
+  		$("#imageresponse").removeClass('alert-danger');
+        $("#imageresponse").addClass('alert-success');
+        $("#imageresponse").html(resp.message);
+        $("#imageresponse").show();
+        alert(resp.message);
+  	}
+}
+
+$("#subpbtn").click(function(){
+	var amenityWeightage = [];
+	$('input[name="stage_weightage[]"]').each(function() {
+		stage_id = $(this).attr("id");
+		stage_weightage = $(this).val();
+		$('input[name="substage_weightage'+stage_id+'[]"]').each(function() {
+			amenityWeightage.push({builderBuilding:{id:$("#building_id").val()},buildingStage:{id:stage_id},stageWeightage:stage_weightage,buildingSubstage:{id:$(this).attr("id")},substageWeightage:$(this).val(),status:false});
+		});
+	});
+	var floors = [];
+	var floor_id = [];
+	$('input[name="floor_ids[]"]').each(function(index){
+		floor_id.push($(this).val());
+	});
+	$('input[name="weightage[]"]').each(function(index){
+		floors.push({id:floor_id[index],weightage:$(this).val()});
+	});
+	var buildings = {id:$("#building_id").val(), amenityWeightage : $("#amenity_weightage").val(),floorWeightage:$("#floor_weightage").val()};
+	var final_data = {buildingId: $("#building_id").val(),buildingWeightages:amenityWeightage, builderBuilding : buildings, builderFloors : floors}
+	$.ajax({
+	    url: '${baseUrl}/webapi/project/building/substage/update',
+	    type: 'POST',
+	    data: JSON.stringify(final_data),
+	    contentType: 'application/json; charset=utf-8',
+	    dataType: 'json',
+	    async: false,
+	    success: function(data) {
+			if (data.status == 0) {
+				alert(data.message);
+			} else {
+				alert(data.message);
+				ajaxindicatorstart("Loading...");
+				window.location.href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id);%>";
+			}
+		},
+		error : function(data)
+		{
+			alert("Fail to save data");
+		}
+		
+	});
+});
 function isNumber(evt, element) {
 
     var charCode = (evt.which) ? evt.which : event.keyCode
@@ -1347,34 +1592,6 @@ function showAddPaymentResponse(resp, statusText, xhr, $form){
   	}
 }
 
-// function updateBuildingOffers() {
-// 	var amenityWeightage = "";
-// 	$('input[name="amenity_type[]"]:checked').each(function() {
-// 		amenity_id = $(this).val();
-// 		$('input[name="stage_weightage'+amenity_id+'[]"]').each(function() {
-// 			stage_id = $(this).attr("id");
-// 			stage_weightage = $(this).val();
-// 			$('input[name="substage'+stage_id+'[]"]').each(function() {
-// 				if(amenityWeightage != "") {
-// 					amenityWeightage = amenityWeightage + "," + amenity_id + "#" + $("#amenity_weightage"+amenity_id).val() + "#" + stage_id + "#" + stage_weightage + "#" + $(this).attr("id") + "#" + $(this).val() + "#" + false;
-// 				} else {
-// 					amenityWeightage = amenity_id + "#" + $("#amenity_weightage"+amenity_id).val() + "#" + stage_id + "#" + stage_weightage + "#" + $(this).attr("id") + "#" + $(this).val() + "#" + false;
-// 				}
-// 			});
-// 		});
-// 	});
-// 	$("#amenity_wt").val(amenityWeightage);
-// 	var options = {
-// 	 		target : '#offerresponse', 
-// 	 		beforeSubmit : showAddOfferRequest,
-// 	 		success :  showAddOfferResponse,
-// 	 		url : '${baseUrl}/webapi/builder/building/offer/update',
-// 	 		semantic : true,
-// 	 		dataType : 'json'
-// 	 	};
-//    	$('#updateoffer').ajaxSubmit(options);
-// }
-
 function updateBuildingOffers() {
 	ajaxindicatorstart("Loading...");
 	var options = {
@@ -1507,7 +1724,7 @@ function addMoreImages() {
 					+'<div class="form-group" id="error-landmark">'
 					+'<label class="control-label col-sm-4">Select Image </label>'
 					+'<div class="col-sm-8 input-group" style="padding:0px 12px;">'
-					+'<input type="file" class="form-control" id="building_image" name="building_image[]" />'
+					+'<input type="file" class="form-control building" id="building_image" name="building_image[]" />'
 					+'<a href="javascript:removeImage('+img_count+');" class="input-group-addon btn-danger">x</a></span>'
 					+'</div>'
 					+'<div class="messageContainer col-sm-offset-3"></div>'
@@ -1528,7 +1745,7 @@ function addMoreElvImages() {
 					+'<div class="form-group" id="error-landmark">'
 					+'<label class="control-label col-sm-4">Select Image </label>'
 					+'<div class="col-sm-8 input-group" style="padding:0px 12px;">'
-					+'<input type="file" class="form-control" id="elevation_image" name="elevation_image[]" />'
+					+'<input type="file" class="form-control building" id="elevation_image" name="elevation_image[]" />'
 					+'<a href="javascript:removeElvImage('+elvimg_count+');" class="input-group-addon btn-danger">x</a></span>'
 					+'</div>'
 					+'<div class="messageContainer col-sm-offset-3"></div>'

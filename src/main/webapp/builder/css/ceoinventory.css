@@ -729,7 +729,7 @@ h4 span{
     margin-bottom: 11px;
 }
 .two-part li span {
-    font-size: 36px !important;;
+    font-size: 26px !important;;
     }
 
 .display{
@@ -776,9 +776,33 @@ padding:7%;
 .assign1{
 	 color: #0dc2d8;
 }
-
+.yellowcolor{
+	margin: 20px 8px 0px ;
+    font-size: 15px;
+    padding: 5px 17px;
+    font-weight: 400;
+    color: #000000;
+	background:#ffeb3b !important;;
+	border:none;
+	border:2px solid #ffeb3b;;;
+	border-radius :10px;
+}
+.yellowcolor:hover{
+	
+	background:#ffeb3b !important;;
+	border:none;
+	border:2px solid #ffeb3b;;;
+	
+}
 .uppercase{
 	
     font-size: 27px;
     text-transform: uppercase;
+}
+.selectize-control.single .selectize-input:after {
+	border-color: #24bcd3 transparent transparent transparent !important;
+}
+.selectize-input {
+    border: 1px solid #24bcd3 !important;
+    padding: 17px 10px !important;
 }
