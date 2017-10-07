@@ -7,6 +7,8 @@ public class ProjectWiseData {
 	private BigInteger dataCount;
 	private String name;
 	private Double revenue=0.0;
+	private Long avaliable;
+	private Long sold;
 	public int getId() {
 		return id;
 	}
@@ -30,5 +32,17 @@ public class ProjectWiseData {
 	}
 	public void setDataCount(BigInteger dataCount) {
 		this.dataCount = dataCount;
+	}
+	public Long getAvaliable() {
+		return avaliable;
+	}
+	public void setAvaliable(Long avaliable) {
+		this.avaliable = avaliable;
+	}
+	public Long getSold() {
+		return sold;
+	}
+	public void setSold(Long sold) {
+		this.sold = sold;
 	}
 }

@@ -5909,7 +5909,7 @@ public class ProjectDAO {
     public BookingFlatList getFlatdetails(int flatId,int empId){
     	
     	String emphql = " from BuilderEmployee where id=:id";
-    
+      //  System.err.println("flat id "+flatId);
     	
     	BookingFlatList booking = new BookingFlatList();
     	String hql =" from BuilderFlat where id = :flat_id AND builderFloor.builderBuilding.builderProject.status = 1 AND "
@@ -5929,7 +5929,8 @@ public class ProjectDAO {
     	try{
 	    	BuilderFlat builderFlat = (BuilderFlat) query.list().get(0);
 	    	if(builderFlat != null){
-	    		if(builderFlat.getBuilderFlatStatus().getId() == 1 || builderFlat.getBuilderFlatStatus().getId() == 3){
+	    		if(builderFlat.getBuilderFlatStatus().getId() == 1){
+	    			System.err.println("FlatStatus :: "+builderFlat.getBuilderFlatStatus().getName());
 	    		booking.setFlatId(builderFlat.getId());
 	    		booking.setFlatNo(builderFlat.getFlatNo());
 	    		booking.setBalcony(builderFlat.getBalcony());
@@ -6035,6 +6036,42 @@ public class ProjectDAO {
 	    			booking.setBuyerPhoto("");
 	    		}
     		}
+	    }else if( builderFlat.getBuilderFlatStatus().getId() == 3){
+			System.err.println("FlatStatus :: "+builderFlat.getBuilderFlatStatus().getName());
+    		booking.setFlatId(builderFlat.getId());
+    		booking.setFlatNo(builderFlat.getFlatNo());
+    		booking.setBalcony(builderFlat.getBalcony());
+    		booking.setBathroom(builderFlat.getBathroom());
+    		booking.setBedroom(builderFlat.getBedroom());
+    		booking.setCarpetArea(builderFlat.getBuilderFlatType().getCarpetArea());
+    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
+    		if(builderFlat.getImage() != null && builderFlat.getImage() != "")
+    			booking.setImage(builderFlat.getImage());
+    		else
+    			booking.setImage("");
+    		booking.setFlatType(builderFlat.getBuilderFlatType().getBuilderProjectPropertyConfiguration().getName());
+    		List<BuilderBuildingFlatTypeRoom> room = getFlatTypeRoom(builderFlat.getBuilderFlatType().getId());
+    		List<BuilderBuildingFlatTypeRoom>  roomList = new ArrayList<BuilderBuildingFlatTypeRoom>();
+    		for(BuilderBuildingFlatTypeRoom builderBuildingFlatTypeRoom: room){
+    		BuilderBuildingFlatTypeRoom builderBuildingFlatTypeRoom2 = new BuilderBuildingFlatTypeRoom();
+    			builderBuildingFlatTypeRoom2.setRoomName(builderBuildingFlatTypeRoom.getRoomName());
+    			builderBuildingFlatTypeRoom2.setLength(builderBuildingFlatTypeRoom.getLength());
+    			builderBuildingFlatTypeRoom2.setBreadth(builderBuildingFlatTypeRoom.getBreadth());
+    			builderBuildingFlatTypeRoom2.setLengthUnit(builderBuildingFlatTypeRoom.getLengthUnit());
+    			roomList.add(builderBuildingFlatTypeRoom2);
+    		}
+    		booking.setBuilderBuildingFlatTypeRooms(roomList);
+    		booking.setBreadth(room.get(0).getBreadth());
+    		booking.setLength(room.get(0).getLength());
+    		if(room.get(0).getLengthUnit() == 1)
+    			booking.setAreaUint("Feet");
+    		if(room.get(0).getLengthUnit() == 2)
+    			booking.setAreaUint("Meter");
+    		if(room.get(0).getLengthUnit() == 3)
+    			booking.setAreaUint("Inch");
+    		if(room.get(0).getLengthUnit() == 4)
+    			booking.setRoomName("Yard");
+	    	
 	    }
     }}catch(Exception e){
     		e.printStackTrace();

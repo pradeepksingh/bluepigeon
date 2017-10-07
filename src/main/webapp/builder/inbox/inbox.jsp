@@ -178,7 +178,7 @@
 					    <h3>Compose</h3>
 				      </div>
 					  <div class="col-md-2 col-sm-2 col-xs-2">
-					     <img src="../images/error.png" alt="cancle" data-dismiss="modal">
+					     <a href=""><img src="../images/error.png" alt="cancle" data-dismiss="modal"></a>
 					   </div>
 				    </div>
 				  	<div class="row">
@@ -210,8 +210,7 @@
 									 <label for="example-search-input" class="col-5 col-form-label">Message</label>
 										<div class="col-7">
 											<div>
-											  <textarea id="message" name="message">
-											  </textarea>
+											  <textarea id="message"  name="message" placeholder="Enter your message here."></textarea>
 										 	  </div>
 										 	  <div class="messageContainer"></div>
 										</div>
@@ -253,7 +252,7 @@
 					    <h3>Response</h3>
 				      </div>
 					  <div class="col-md-2 col-sm-2 col-xs-2">
-					     <img src="../images/error.png" alt="cancle" data-dismiss="modal">
+					    <a href=""> <img src="../images/error.png" alt="cancle" data-dismiss="modal"></a>
 					   </div>
 				    </div>
 				  	<div class="row" id="inbox"></div>
@@ -481,14 +480,12 @@ function getBuyerNames(){
 }
 
 function getActiveProjectFlats(id){
-	//alert(id);
 	$("#inbox").empty();
 	var replymsg = "";
 	ajaxindicatorstart("Loading...");
 	$.post("${baseUrl}/webapi/builder/inbox/reply",{id: id},function(data){
 		replymsg ='<form class="addlead1 addlead" action="" method="post" id="addnewreply" name="addnewreply"  enctype="multipart/form-data">'
 			+'<input type="hidden" id="emp_id" name="emp_id" value="'+data.empId+'" />'
-	   		//+'<input type="hidden" id="buyer_id" name="buyer_id" value="'+data.buyerId+'" />'
 	   		+'<input type="hidden" id="inbox_id" name="inbox_id" value="'+id+'" />'
          	+'<div class="">'
            	+'<div class="form-group row">'

@@ -178,7 +178,7 @@
 					    <h3>Compose</h3>
 				      </div>
 					  <div class="col-md-2 col-sm-2 col-xs-2">
-					     <img src="../../images/error.png" alt="cancle" data-dismiss="modal">
+					    <a href=""> <img src="../../images/error.png" alt="cancle" data-dismiss="modal"></a>
 					   </div>
 				    </div>
 				  	<div class="row">
@@ -210,8 +210,7 @@
 									 <label for="example-search-input" class="col-5 col-form-label">Message</label>
 										<div class="col-7">
 											<div>
-											  <textarea id="message" name="message">
-											  </textarea>
+											  <textarea id="message" name="message" placeholder="Enter your message here."></textarea>
 										 	  </div>
 										 	  <div class="messageContainer"></div>
 										</div>
@@ -253,7 +252,7 @@
 					    <h3>Response</h3>
 				      </div>
 					  <div class="col-md-2 col-sm-2 col-xs-2">
-					     <img src="../../images/error.png" alt="cancle" data-dismiss="modal">
+					     <a href=""><img src="../../images/error.png" alt="cancle" data-dismiss="modal"></a>
 					   </div>
 				    </div>
 				  	<div class="row" id="inbox"></div>

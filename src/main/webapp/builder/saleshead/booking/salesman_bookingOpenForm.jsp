@@ -78,15 +78,6 @@
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			
-			
-		
-			
-			
-			
-			//building_id = builderBuildingList.get(0).getId();
-			//floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id);
-			//floor_size_list = floorList.size();
 			if(builderBuildingList != null && builderBuildingList.size() > 0){
 				building_id = builderBuildingList.get(0).getId(); 
 				building_size_list = builderBuildingList.size();
@@ -110,35 +101,24 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../../plugins/images/favicon.png">
     <title>Blue Pigeon</title>
  <!-- Bootstrap Core CSS -->
-
     <link href="../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
- <link rel="stylesheet" type="text/css" href="../../css/selectize.css" />
     <link href="../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="../../css/bootstrap-multiselect.css">
-
+<!--     <link rel="stylesheet" href="../../css/bootstrap-multiselect.css"> -->
     <!-- Menu CSS -->
-
     <link href="../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
-
     <!-- Custom CSS -->
-
     <link href="../../css/style.css" rel="stylesheet">
-
+ <link href="../../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <!-- color CSS -->
-
+<link rel="stylesheet" type="text/css" href="../../css/selectize.css" />
     <link rel="stylesheet" type="text/css" href="../../css/booking.css">
      <link rel="stylesheet" type="text/css" href="../../css/newbookinglist.css">
-
     <link href="../../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
-
     <!-- jQuery -->
-
     <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-
-    <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script>
+<!--     <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script> -->
  <script type="text/javascript" src="../../js/selectize.min.js"></script>
-    <script src="../../js/bootstrap-multiselect.js"></script>
+<!--     <script src="../../js/bootstrap-multiselect.js"></script> -->
 </head>
   
    
@@ -219,10 +199,10 @@
 		               	 						for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
 		                      						if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("available")){
 		             			%>
-		             			<li class="item"><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="toggleFlat(this);" data-value="<% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+		             			<li class="item"><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="toggleFlat(this); showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" data-value="<% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 		             			<% }else if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("hold")){
 			             		%>
-			             		<li class=""><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="toggleFlat(this);" data-value="<% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" class="yellowcolor yell" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+			             		<li class=""><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="toggleFlat(this);showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" data-value="<% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" class="yellowcolor yell" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 			             		<% }else{%>
 		     					<li class="grey"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 		 					<%
@@ -271,10 +251,6 @@
 						          	if(bookingFlatList3.getLengthUnit() == 4) out.print("Yard");
 						          %></b></p>
 						        </div>
-<!-- 						        <div class="col-md-6 col-sm-6 col-xs-6"> -->
-<!-- 						          <p class="p-custom">Bathroom</p> -->
-<%-- 						          <p><b><%out.print(bookingFlatList2.getBathroom()); %></b></p> --%>
-<!-- 						        </div> -->
 						      </div>
 						      <%} %>
 						      <div class="row custom-row">
@@ -464,31 +440,22 @@ $('#hold').click(function(){
 
 
 function toggleFlat(input) {
-// 	if($(input).hasClass('yellowcolor')){
-// 		$("#unhold").show();
-// 		$("#hold").hide();
-// 	}else if($(input).hasClass('item')){
-// 		alert("Hello");
-// 		$("#hold").show();
-// 		$("#unhold").hide();
-// 	}
-
 	if($(input).hasClass("yellowcolor")){
 		$(input).removeClass("yellowcolor");
         $(input).addClass("holdcolor");
-		   	$("#unhold").show();
-		   	$("#hold").hide();
+		   	$(".unholdsection").show();
+		   	$(".holdsection").hide();
 	} else if($(input).hasClass("holdcolor")){
 		$(input).removeClass("holdcolor");
 		if($(input).hasClass("yell")) {
 			$(input).addClass("yellowcolor");
 		}
-		$("#hold").hide();
-		   	$("#unhold").hide();
+		$(".holdsection").hide();
+		   	$(".unholdsection").hide();
 	} else {
 		$(input).addClass("holdcolor");
-		$("#hold").show();
-		   	$("#unhold").hide();
+		$(".holdsection").show();
+		   	$(".unholdsection").hide();
 	}
 }
 
@@ -516,6 +483,9 @@ function activeInactiveFlats(){
 	        $parent.addClass('grey');
 	        e.preventDefault();
         }
+//         else if($parent.hasClass('yellowcolor')){
+//         	$parent.removeClass('active');
+//         }
     });
 }
 
@@ -561,13 +531,12 @@ function showFlatwithImage(id){
 	if(id != ''){
 		ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id,emp_id:$("#emp_id").val()},function(data){
+			alert("Data"+data.flatStatus);
 			if(data.flatStatus == 1){
 				var image = '';
 				if(data.image != ''){
 					image = '${baseUrl}/'+data.image;
 				}
-				console.log("flat status :: "+data.flatStatus);
-				console.log("image :: "+image);
 				htmlFlat ='<button class="full white" onclick="showImagewithDetails('+data.flatId+');"><img src="'+image+'" alt="Project image" class="flat-img"></button>'
 		 	      		+'<hr>'
 		 	      		+'<div class="row custom-row">'
@@ -601,6 +570,8 @@ function showFlatwithImage(id){
 		 	        	+'</div>'
 		 	      		+'</div>'
 		 	      		+'<button type="button" onclick="showFlat('+data.flatId+');" class="btn-change">Book Now</button>';
+				$(".holdsection").show();
+			   	$(".unholdsection").hide();
 				}
 			else if(data.flatStatus == 2){
 				var image = '';
@@ -630,6 +601,8 @@ function showFlatwithImage(id){
 					      +'<hr>'
 					      +'</div>'
 					      +'<button type="button" onclick="showBuyerDetails('+data.flatId+')" class="button">Edit</button>';
+	      			$(".holdsection").hide();
+	    		   	$(".unholdsection").hide();
 			}
 			else if(data.flatStatus == 3){
 				var image = '';
@@ -638,7 +611,7 @@ function showFlatwithImage(id){
 				}
 				console.log("flat status :: "+data.flatStatus);
 				console.log("image :: "+image);
-				htmlFlat ='<button class="full white" onclick="showImagewithDetails('+data.flatId+');"><img src="'+image+'" alt="Project image" class="flat-img"></button>'
+				htmlFlat ='<button class="full white" onclick="showImagewithDetails('+data.flatId+');"><a href=""><img src="'+image+'" alt="Project image" class="flat-img"></a></button>'
 		 	      		+'<hr>'
 		 	      		+'<div class="row custom-row">'
 		 	        	+'<div class="col-md-6 col-sm-6 col-xs-6">'
@@ -670,13 +643,15 @@ function showFlatwithImage(id){
 		 	          	+'<span><b>'+data.length+' '+data.areaUint+' * '+data.breadth+' '+data.areaUint+' </b></span>'
 		 	        	+'</div>'
 		 	      		+'</div>'
-		 	      		+'<p class="text-center">Flats put on hold</p>';
+		 	      		+'<p class="text-center" style="font-size:15px;"><b>Flat is on hold</b></p>';
+				$(".holdsection").hide();
+			   	$(".unholdsection").show();
 				}
 	 	 $("#home").append(htmlFlat);
 	 	ajaxindicatorstop();
 		},'json');
-		activeInactiveFlats();
 		//ajaxindicatorstop();
+		activeInactiveFlats();
 	}
 }
 
@@ -684,8 +659,10 @@ function showImagewithDetails(id){
 	if( id != ''){
 		ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id, emp_id:$("#emp_id").val()},function(data){
+			alert("Data :: "+data.flatStatus+" Flat type :: "+data.flatType);
 			if(data.flatStatus == 1){
 				$("#flatList").empty();
+				console.log("Data :: flat status :: "+data.flatStatus)
 				var image = '';
 				if(data.image != ''){
 					image = '${baseUrl}/'+data.image;
@@ -694,7 +671,71 @@ function showImagewithDetails(id){
 			+'<div class="col-md-10 col-sm-10 col-xs-10">'
 			+'</div>'
 			+'<div class="col-md-2 col-sm-2 col-xs-2">'
-			+'<img src="../../images/error.png" alt="cancle" data-dismiss="modal">'
+			+'<a href=""><img src="../../images/error.png" alt="cancle" data-dismiss="modal"></a>'
+			+'</div>'
+		    +'</div>'
+		  	+'<div class="row">'
+		  	+'<div class="col-sm-7 col-md-7 col-xs-7">'
+			+'<img src="'+image+'" alt="Flat image" class="custom-img" >'
+		  	+'</div>'
+		  	+'<div class="col-sm-5 col-md-5 col-xs-5">'
+		  	+'<div class="row custom-row">'
+		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		  	+'<p class="p-custom">Flat Type</p>'
+		  	+'<p><b>'+data.flatType+'</b></p>'
+		  	+'</div>'
+		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		  	+'<p class="p-custom">Carpet Area</p>'
+		  	+'<p><b>'+data.carpetArea+' '+data.carpetAreaUnit+'</b></p>'
+		  	+'</div>'
+		  	+'</div>'
+		  	+'<div class="row custom-row">'
+		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		  	+'<p class="p-custom">Flat Type</p>'
+		  	+'<p><b>1BHK</b></p>'
+		  	+'</div>'
+		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		  	+'<p class="p-custom">Carpet Area</p>'
+		  	+'<p><b>500 SQ/FT</b></p>'
+		  	+'</div>'
+		  	+'</div>'
+		  	+'<div class="row custom-row">'
+		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		  	+'<p class="p-custom">Flat Type</p>'
+		  	+'<p><b>1BHK</b></p>'
+		  	+'</div>'
+		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		  	+'<p class="p-custom">Carpet Area</p>'
+		  	+'<p><b>500 SQ/FT</b></p>'
+		  	+'</div>'
+		  	+'</div>'
+		  	+'<div class="row custom-row">'
+		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		  	+'<p class="p-custom">Flat Type</p>'
+		  	+'<p><b>1BHK</b></p>'
+		  	+'</div>'
+		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		  	+'<p class="p-custom">Carpet Area</p>'
+		  	+'<p><b>500 SQ/FT</b></p>'
+		  	+'</div>'
+		  	+'</div>'
+		  	+'</div>'
+		  	+'</div>';
+		$("#flatList").append(flatdetails);
+	  	$('#zoomimg').modal('show');
+			}
+			if( data.flatStatus == 3){
+				$("#flatList").empty();
+				console.log("Data :: flat status :: "+data.flatStatus)
+				var image = '';
+				if(data.image != ''){
+					image = '${baseUrl}/'+data.image;
+				}
+	 		flatdetails = '<div class="row">'
+			+'<div class="col-md-10 col-sm-10 col-xs-10">'
+			+'</div>'
+			+'<div class="col-md-2 col-sm-2 col-xs-2">'
+			+'<a href=""><img src="../../images/error.png" alt="cancle" data-dismiss="modal"></a>'
 			+'</div>'
 		    +'</div>'
 		  	+'<div class="row">'
@@ -755,7 +796,7 @@ $select_building = $("#filter_building_id").selectize({
 	persist: false,
 	 onChange: function(value) {
 		if($("#filter_building_id").val() != '' ){
-			//ajaxindicatorstart("Loading...");
+			ajaxindicatorstart("Loading...");
 			$.get("${baseUrl}/webapi/project/building/floor/list/",{ building_id: value }, function(data){
 				getFlatDetails();
 				var html = '<option value="0">All Floor</option>';
@@ -803,7 +844,7 @@ $select_building = $("#filter_building_id").selectize({
 					    }
 					});
 				}
-				//ajaxindicatorstop();
+				ajaxindicatorstop();
 			},'json');
 		}
 	 },
@@ -869,11 +910,5 @@ function getFlatDetails(){
 			}
 		},'html');
 }
-// $(document).ready(function() {
-// 	//alert("A");
-// 	$("#hold").hide();
-// 	$("#unhold").hide();
-// }
-// );
 
 </script>
