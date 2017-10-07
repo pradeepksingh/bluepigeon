@@ -115,7 +115,7 @@
  <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/bootstrap-multiselect.css">
+<!--     <link rel="stylesheet" href="../css/bootstrap-multiselect.css"> -->
 
     <!-- Menu CSS -->
 
@@ -136,9 +136,9 @@
 
     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
 
-    <script src="../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script>
+<!--     <script src="../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script> -->
  <script type="text/javascript" src="../js/selectize.min.js"></script>
-    <script src="../js/bootstrap-multiselect.js"></script>
+<!--     <script src="../js/bootstrap-multiselect.js"></script> -->
 </head>
   
    
@@ -220,7 +220,7 @@
 		                      						if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("available")){
 		             			%>
 		             			<li class="item"><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
-		             			<% }else{%>
+		             			<% }else if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("booked") || flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("hold")){%>
 		     					<li class="grey"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 		 					<%
 		 			   				}
@@ -396,41 +396,35 @@
        <!--  modal pop up ends -->
         </div>
     <!-- /.container-fluid -->
-    <footer id="footer"> </footer>
+      <div id="sidebar1"> 
+	     <%@include file="../partial/footer.jsp"%>
+	  </div> 
   </body>
 </html>
 <script>
 $("#cancellation").click(function(){
-	//ajaxindicatorstart("Loading...");	
+	ajaxindicatorstart("Loading...");	
 	window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(project_id);%>
-	 //ajaxindicatorstop();
 });
 $("#campaign").click(function(){
-	//ajaxindicatorstart("Loading...");
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/campaign/Salesman_campaign.jsp?project_id="+<%out.print(project_id);%>
-	 //ajaxindicatorstop();
 });
 $("#leads").click(function(){
-	//ajaxindicatorstart("Loading...");
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
-	 //ajaxindicatorstop();
 });
 function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
-		//alert("Hello");
         $('.nav li.active').removeClass('active');
         
-       // alert("Hello1");
         var $parent = $(this).parent();
-     //   alert("Hello2"+$parent.val());
         if($parent.hasClass('grey')){
-        	//alert("Hello again");
         	$parent.removeClass('grey');
 	        $parent.addClass('active');
 	        $parent.addClass('grey');
 	        e.preventDefault();
         }
-       // alert("Hello3");
     });
 }
 
@@ -448,7 +442,7 @@ $(document).ready(function () {
         e.preventDefault();
     });
     $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click');
-    
+    ajaxindicatorstop();
     <%						}
 				 		}
                	  		}
@@ -459,31 +453,27 @@ $(document).ready(function () {
 	 %>
 });
 <% } %>
+
 function showFlat(id){
-	//ajaxindicatorstart("Loading...");
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/buyer/Salesman_booking_form3.jsp?flat_id="+id;
-	// ajaxindicatorstop();
 }
 function showBuyerDetails(flatId){
-	//ajaxindicatorstart("Loading...");
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/buyer/edit_booking_form.jsp?flat_id="+flatId;
-	//ajaxindicatorstop();
 }
 function showFlatwithImage(id){
-//	alert(id);
 	var flatdetails = "";
 	$("#home").empty();
 	var htmlFlat ="";
 	if(id != ''){
-	//	ajaxindicatorstart("Loading...");
+		ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id,emp_id:$("#emp_id").val()},function(data){
 			if(data.flatStatus == 1){
 				var image = '';
 				if(data.image != ''){
 					image = '${baseUrl}/'+data.image;
 				}
-				console.log("flat status :: "+data.flatStatus);
-				console.log("image :: "+image);
 				htmlFlat ='<button class="full white" onclick="showImagewithDetails('+data.flatId+');"><img src="'+image+'" alt="Project image" class="flat-img"></button>'
 		 	      		+'<hr>'
 		 	      		+'<div class="row custom-row">'
@@ -547,17 +537,59 @@ function showFlatwithImage(id){
 				      +'</div>'
 				      +'<button type="button" onclick="showBuyerDetails('+data.flatId+')" class="button">Edit</button>';
 			}
+			else if(data.flatStatus == 3){
+				var image = '';
+				if(data.image != ''){
+					image = '${baseUrl}/'+data.image;
+				}
+				console.log("flat status :: "+data.flatStatus);
+				console.log("image :: "+image);
+				htmlFlat ='<button class="full white" onclick="showImagewithDetails('+data.flatId+');"><a href=""><img src="'+image+'" alt="Project image" class="flat-img"></a></button>'
+		 	      		+'<hr>'
+		 	      		+'<div class="row custom-row">'
+		 	        	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		 	          	+'<p class="p-custom">Flat Type</p>'
+		 	          	+'<span><b>'+data.flatType+'</b></span>'
+		 	        	+'</div>'
+		 	       		+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		 	          	+'<p class="p-custom">Carpet Area</p>'
+		 	          	+'<span><b>'+data.carpetArea+' SQ/FT</b></span>'
+		 	       	 	+'</div>'
+		 	      		+'</div>'
+		 	      		+'<div class="row custom-row">'
+		 	       		+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		 	          	+'<p class="p-custom">Bedrooms</p>'
+		 	          	+'<span><b>'+data.bedroom+'</b></span>'
+		 	        	+'</div>'
+		 	       		+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		 	          	+'<p class="p-custom">Bathroom</p>'
+		 	         	+'<span><b>'+data.bathroom+'</b></span>'
+		 	        	+'</div>'
+		 	      		+'</div>'
+		 	      		+'<div class="row custom-row">'
+		 	       		+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		 	         	+'<p class="p-custom">Balcony</p>'
+		 	         	+'<span><b>'+data.balcony+'</b></span>'
+		 	        	+'</div>'
+		 	        	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		 	         	+'<p class="p-custom">Bedroom Size</p>'
+		 	          	+'<span><b>'+data.length+' '+data.areaUint+' * '+data.breadth+' '+data.areaUint+' </b></span>'
+		 	        	+'</div>'
+		 	      		+'</div>'
+		 	      		+'<p class="text-center" style="font-size:15px;"><b>Flat is on hold</b></p>';
+			
+				}
 	 	 $("#home").append(htmlFlat);
 	 	
 		},'json');
+		ajaxindicatorstop();
 		activeInactiveFlats();
-		//ajaxindicatorstop();
+		
 	}
 }
-
 function showImagewithDetails(id){
 	if( id != ''){
-		//ajaxindicatorstart("Loading...");
+		ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id, emp_id:$("#emp_id").val()},function(data){
 			if(data.flatStatus == 1){
 				$("#flatList").empty();
@@ -622,7 +654,7 @@ function showImagewithDetails(id){
 		$("#flatList").append(flatdetails);
 	  	$('#zoomimg').modal('show');
 			}
-			//ajaxindicatorstop();
+			ajaxindicatorstop();
 		},'json');
 	}
 }
@@ -630,7 +662,7 @@ $select_building = $("#filter_building_id").selectize({
 	persist: false,
 	 onChange: function(value) {
 		if($("#filter_building_id").val() != '' ){
-			//ajaxindicatorstart("Loading...");
+			ajaxindicatorstart("Loading...");
 			$.get("${baseUrl}/webapi/project/building/floor/list/",{ building_id: value }, function(data){
 				getFlatDetails();
 				var html = '<option value="0">All Floor</option>';
@@ -678,7 +710,7 @@ $select_building = $("#filter_building_id").selectize({
 					    }
 					});
 				}
-				//ajaxindicatorstop();
+				ajaxindicatorstop();
 			},'json');
 		}
 	 },
@@ -731,8 +763,6 @@ $select_eveOrodd = $("#evenOrodd").selectize({
 		}
 	}
 });
-
-
 
 function getFlatDetails(){
 	var no = $("#filter_building_id").val();

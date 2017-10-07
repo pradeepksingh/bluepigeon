@@ -989,24 +989,20 @@ function checkDuplicateEntry(id){
 $("#project").click(function(){
 	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/edit.jsp?project_id=<%out.print(project_id);%>";
-	ajaxindicatorstop();
 });
 
 $("#floor").click(function(){
 	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>";
-	ajaxindicatorstop();
 });
 
 $("#building").click(function(){
 	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>";
-	ajaxindicatorstop();
 });
 $("#flat").click(function(){
 	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>&flat_id=<%out.print(flat_id); %>";
-	ajaxindicatorstop();
 });
 
 $('#launch_date').datepicker({

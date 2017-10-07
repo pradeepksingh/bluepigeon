@@ -4803,6 +4803,7 @@ public class ProjectController extends ResourceConfig {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BookingFlatList getActiveFlatDetail(@QueryParam("flat_id") int flat_id,@QueryParam("emp_id") int emp_id) {
 		ProjectDAO projectDAO = new ProjectDAO();
+		//System.err.println("Controller :: flat id is :: "+flat_id);
 		BookingFlatList floorList = projectDAO.getFlatdetails(flat_id,emp_id);
 		return floorList;
 	}

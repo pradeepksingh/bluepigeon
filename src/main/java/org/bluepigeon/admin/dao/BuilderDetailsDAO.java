@@ -1863,6 +1863,20 @@ public class BuilderDetailsDAO {
 		Query query = session.createQuery(hql);
 		List<BuilderEmployeeAccessType> result = query.list();
 		return result;
+	}
+	
+	public ProjectWiseData getTotalRevenueByEmployee(BuilderEmployee builderEmployee){
+		String hql = "";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+			hql = "select round(sum(a.total_cost)) as revenue,(SELECT count(flat.id) from builder_flat as flat JOIN builder_floor as floor on floor.id = flat.floor_no join builder_building as building on building.id=floor.building_id join builder_project as project on project.id=building.project_id where project.status=1 and building.status=1 and floor.status=1 and flat.status=1 and flat.status_id=1) as avaliable, count(buyer.id) as sold from buying_details as a join buyer as buyer on buyer.id = a.buyer_id join builder_flat as bookedflat on bookedflat.id = buyer.flat_id join builder_project as project on project.id= buyer.project_id join builder as emp on emp.id = buyer.builder_id where emp.id="+builderEmployee.getBuilder().getId()+" and buyer.is_primary=1 and buyer.is_deleted=0";
+		}else{
+			hql = "select round(sum(a.total_cost)) as revenue,(SELECT count(flat.id) from builder_flat as flat JOIN builder_floor as floor on floor.id = flat.floor_no join builder_building as building on building.id=floor.building_id join builder_project as project on project.id=building.project_id where project.status=1 and building.status=1 and floor.status=1 and flat.status=1 and flat.status_id=1) as avaliable, count(buyer.id) as sold from buying_details as a join buyer as buyer on buyer.id = a.buyer_id join builder_flat as bookedflat on bookedflat.id = buyer.flat_id join builder_project as project on project.id= buyer.project_id join builder_employee as emp on emp.id = buyer.emp_id where emp.id="+builderEmployee.getId()+" and buyer.is_primary=1 and buyer.is_deleted=0";
+		}
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
 		
+		List<ProjectWiseData> result = query.list();
+		return result.get(0);
 	}
 }

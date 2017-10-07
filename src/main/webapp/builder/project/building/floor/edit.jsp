@@ -241,7 +241,7 @@
 		                                 <div class="row">
 		                                 	<div class="col-sm-6">
 		                                 		<div class="form-group row">
-                                            		<label for="example-text-input" class="col-4 col-form-label">Building Name</label>
+                                            		<label for="example-text-input" class="col-sm-4 col-form-label">Building Name</label>
                                             		<div class="col-sm-6">
 														<input disabled type="text"  class="form-control floor"  id="building_name" name="building_name" value="<% out.print(builderFloor.getBuilderBuilding().getName()); %>" >
                                             		</div>
@@ -267,6 +267,16 @@
 		                                            <label for="example-text-input" class="col-sm-4 col-form-label">Floor Name</label>
 		                                            <div class="col-sm-6">
 		                                                <input  class="form-control floor"  type="text" readonly="true" id="name" name="name" value="<% out.print(builderFloor.getName()); %>">
+		                                            </div>
+		                                      	</div>
+		                                   	</div>
+		                                   	<div class="col-sm-6">
+		                                        <div class="form-group row">
+		                                            <label for="example-text-input" class="col-sm-4 col-form-label">Status</label>
+		                                            <div class="col-sm-6">
+		                                                 <select id="status_id" name="status_id" class="form-control floor" disabled>
+															<option value="<% out.print(builderFloor.getStatus());%>" <% if(builderFloor.getStatus() ==1) { %>selected<% } %>><% out.print("Active"); %></option>
+														</select>
 		                                            </div>
 		                                      	</div>
 		                                   	</div>
@@ -365,7 +375,7 @@
 												</div>
 											</div>
 										</div>
-                                </div>
+                               	 	</div>
                                 </div>
                                 <div id="vimessages1" class="tab-pane fade" aria-expanded="false">
                                 	<div class="row">
@@ -551,18 +561,15 @@ $("#project").click(function(){
 $("#floor").click(function(){
 	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>";
-	 ajaxindicatorstop();
 });
 
 $("#building").click(function(){
 	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>";
-	 ajaxindicatorstop();
 });
 $("#flat").click(function(){
 	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>&flat_id=<%out.print(flat_id); %>";
-	 ajaxindicatorstop();
 });
 
 $select_building = $("#filter_building_id").selectize({

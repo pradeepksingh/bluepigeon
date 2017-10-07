@@ -83,7 +83,7 @@ Date date = new Date();
        <link rel="stylesheet" type="text/css" href="../../css/selectize.css" />
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../../css/ceoinventory.css">
-    <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
+    <link href="../../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
     <script src="../../plugins/bower_components/jquery/dist/newjquery.min.js"></script>
 <!--     <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script> -->
