@@ -73,7 +73,6 @@
      <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/newjquery.min.js"></script>
-    <script src="../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script>
 </head>
 
 <body class="fix-sidebar">
@@ -93,7 +92,7 @@
         </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
-        <div id="page-wrapper" style="min-height: 2038px;">
+        <div id="page-wrapper" style="min-height: 1038px;">
            <div class="container-fluid">
                <!-- row -->
                   <div class="row">
@@ -109,7 +108,7 @@
 					     </form>
                        </div>
                        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
-	                        <select id="filter_project_id" name="filter_project_id" data-style="form-control" class="custom-selectize">
+	                        <select id="filter_role_id" name="filter_role_id" data-style="form-control" class="custom-selectize">
 	                         <option value="0">All Roles</option>
 	                        <% if(builderEmployeeAccessTypes != null){
 	                        	for(BuilderEmployeeAccessType builderEmployeeAccessType : builderEmployeeAccessTypes){%>
@@ -124,30 +123,31 @@
                  <!-- row -->
                 
                    <div class="row">
-                    <%if(employeeLists != null){
-                	 
-                	 for(EmployeeList employeeList : employeeLists){
-                	 %>
-                       <div class="col-md-4">
-                         <div class="white-box1">
-                           <div class="user-profile center">
-					            <img src="../plugins/images/Untitled-1.png" alt="User Image" class="custom-img">
-					            <p><b><%out.print(employeeList.getName()); %></b></p>
-					            <p class="p-custom"><%out.print(employeeList.getAccess()); %></p>
-					            <br>
-					          </div>
-					             <div class="row custom-row user-row">
-							        <p class="p-custom">Mobile No.</p>
-							        <p><b><%out.print(employeeList.getMobileNo()); %></b></p>
-							        <p class="p-custom">Email</p>
-							        <p><b><%out.print(employeeList.getEmail()); %></b></p>
-							    </div>
-					       </div>
-					  </div>
-					   <%}} %>
-				
-	              </div>
-	             
+	                   <div id ="emplist">
+	                    <%if(employeeLists != null){
+	                	 
+	                	 for(EmployeeList employeeList : employeeLists){
+	                	 %>
+	                       <div class="col-md-4">
+	                         <div class="white-box1">
+	                           <div class="user-profile center">
+						            <img src="../plugins/images/Untitled-1.png" alt="User Image" class="custom-img">
+						            <p><b><%out.print(employeeList.getName()); %></b></p>
+						            <p class="p-custom"><%out.print(employeeList.getAccess()); %></p>
+						            <br>
+						          </div>
+						             <div class="row custom-row user-row">
+								        <p class="p-custom">Mobile No.</p>
+								        <p><b><%out.print(employeeList.getMobileNo()); %></b></p>
+								        <p class="p-custom">Email</p>
+								        <p><b><%out.print(employeeList.getEmail()); %></b></p>
+								    </div>
+						       </div>
+						  </div>
+						   <%}} %>
+					
+		              </div>
+	             </div>
                 <!-- row -->
             </div>
           </div>
@@ -158,5 +158,15 @@
 	     <%@include file="../partial/footer.jsp"%>
 	</div> 
   </body>
-
 </html>
+<script>
+$("#search_buyer").click(function(){
+	ajaxindicatorstart("Please wait while.. we search ...");
+    $.get("${baseUrl}/builder/ceo/partialemployeeslist.jsp?builder_id=<%out.print(builder_id);%>&role_id="+$('#filter_role_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
+    	$("#emplist").html(data);
+    	ajaxindicatorstop();
+    },'html');
+});
+
+
+</script>

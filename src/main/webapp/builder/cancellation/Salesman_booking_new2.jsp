@@ -142,7 +142,7 @@
          </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
-        <div id="page-wrapper" style="min-height: 2038px;">
+        <div id="page-wrapper">
            <div class="container-fluid">
                <!-- /.row -->
 	                <div class="row bspace">

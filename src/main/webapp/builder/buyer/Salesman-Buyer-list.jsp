@@ -192,10 +192,9 @@ function getBookedBuyerFilterList(){
 	var emp_id = <%out.print(emp_id);%>;
 	var htmlBookedBuyers = "";
 	var project_id = $("#filter_project_id").val();
-	var nameorNumber = $("#srch-term").val();
 	ajaxindicatorstart("Loading...");
 	$("#booked_buyers").empty();
-	$.post("${baseUrl}/webapi/builder/filter/booked/buyers",{emp_id: emp_id, project_id : project_id, nameOrNumber : nameorNumber },function(data){
+	$.post("${baseUrl}/webapi/builder/filter/booked/buyers",{emp_id: emp_id, project_id : project_id, keyword :  $("#srch-term").val() },function(data){
 		   if(data == ""){
 			   $("#booked_buyers").empty();
 			   $("#booked_buyers").append("<h2><center>No Records Found</center></h2>");

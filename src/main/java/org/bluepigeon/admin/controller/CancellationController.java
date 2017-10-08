@@ -129,38 +129,10 @@ public class CancellationController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BookedBuyerList> getCancelledBuyerList(@FormParam("emp_id") int empId,
 			@FormParam("project_id") int projectId,
-			@FormParam("nameOrNumber") String nameOrNumber
+			@FormParam("nameOrNumber") String keyword
 		){
-		int contactNumber = 0;
-		long mobileNumber = 0;
-		String name = "";
-		try{
-//			if(nameOrNumber.length() == 10)
-//				mobileNumber = Integer.parseInt(nameOrNumber);
-			if(nameOrNumber.length() >0 && nameOrNumber.length()<=10){
-				if(nameOrNumber.length() > 0 && nameOrNumber.length() <10){
-					contactNumber = Integer.parseInt(nameOrNumber);
-					mobileNumber = 0;
-				}
-				else{
-					mobileNumber =  Long.parseLong(nameOrNumber);
-					contactNumber = 0;
-				}
-			}
-			System.err.println("contact Number :: "+contactNumber);
-			System.err.println("Contact Number:: "+mobileNumber);
-		}catch(NumberFormatException e){
-			name = nameOrNumber;
-			contactNumber = 0;
-			//mobileNumber = Long.parseLong(nameOrNumber);
-			System.err.println("Name :: "+name);
-		}catch(NullPointerException e){
-			e.printStackTrace();
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		return new CancellationDAO().getCancelledBuyerList(empId,projectId,name,contactNumber,mobileNumber);
+	
+		return new CancellationDAO().getCancelledBuyerList(empId,projectId,keyword);
 		
 	}
 }

@@ -168,7 +168,7 @@ Date date = new Date();
                <!-- row -->
                <!-- row -->
                   <div class="row">
-                       <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
+                       <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12" style="padding-top:8px;">
 	                       <select id="filter_building_id" name="filter_building_id"  data-style="form-control" >
 	                         	<option value="0">Enter Building Name</option>
 	                        <% if(builderBuildingList != null){ 
@@ -178,7 +178,7 @@ Date date = new Date();
 	                        <%} }%>
 	                        </select>
                        </div>
-                       <div class="col-md-8 col-lg-8 col-sm-8 col-xs-12">
+                       <div class="col-md-8 col-lg-8 col-sm-8 col-xs-12" >
                          <form class="navbar-form lead-search" method="post" role="search">
 						    <div class="input-group add-on wdth100">
 						      <input class="form-control textinput" placeholder="Search by Name or Number" autocomplete="off" name="srch-term" id="srch-term" type="text">

@@ -6636,7 +6636,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		return result;
 	}
 	
-	public List<NewLeadList> getNewLeadLists(int emp_id,int projectId, String name, int contactNumber){
+	public List<NewLeadList> getNewLeadLists(int emp_id,int projectId, String keyword){
 		List<NewLeadList> result =null;
 		String hqlnew = "from BuilderEmployee where id = "+emp_id;
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -6647,70 +6647,116 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		sessionnew.close();
 		String hql = "";
 		String where = "";
-		hql = "SELECT a.name as leadName, a.mobile as phoneNo, a.email as email, a.min as min, a.max as max,"
-				+ " b.name as salemanName , GROUP_CONCAT(d.name) as configName , e.name as source ";
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==4 || builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
-			
+			if(keyword == ""){
+				hql = "SELECT a.name as leadName, a.mobile as phoneNo, a.email as email, a.min as min, a.max as max,"
+					+ " b.name as salemanName , GROUP_CONCAT(d.name) as configName , e.name as source ";
 				hql	=hql+"from builder_lead as a join builder_project as b on b.id= a.project_id "
 					+ "join lead_config as c on c.lead_id = a.id "
 					+ "join builder_project_property_configuration as d on d.id = c.config_id "
 					+ "join source as e on e.id=a.source ";
-					//+ " inner join allot_project as ap on ap.project_id = b.id ";
-					where+= "where b.group_id="+builderEmployee.getBuilder().getId();
+				where+= "where b.group_id="+builderEmployee.getBuilder().getId();
+				if(projectId > 0){
+					if(where != ""){
+						where += " AND b.id="+projectId;
+					}else{
+						where +=" AND b.id="+projectId;
+					}
+				}
+			}else{
+				hql = "SELECT a.name as leadName, a.mobile as phoneNo, a.email as email, a.min as min, a.max as max,"
+					+ " a.name as salemanName , GROUP_CONCAT(d.name) as configName , e.name as source ";
+				hql	=hql+"from builder_lead as a join builder_project as b on b.id= a.project_id "
+					+ "join lead_config as c on c.lead_id = a.id "
+					+ "join builder_project_property_configuration as d on d.id = c.config_id "
+					+ "join source as e on e.id=a.source ";
+				where+= "where  b.group_id="+builderEmployee.getBuilder().getId();
+				hql += " AND (a.name like '%"+keyword+"%' OR a.mobile like '%"+keyword+"%')";
+				if(projectId > 0){
+					if(where!=""){
+						where +=" AND b.id="+projectId;
+					}else{
+						where +=" AND b.id="+projectId;
+					}
+				}
+			}
+			hql += where + " group by a.id order by a.id desc";
 		}
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 7){
-			//hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
-					hql+= "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
+			if(keyword == ""){
+				hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
+					+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
 					+ "join source as d on d.id = b.source "
 					+ "join builder_employee as c on a.emp_id = c.id "
 					+ "inner join lead_config as e on e.lead_id=a.lead_id "
 					+ "join builder_project_property_configuration as f on f.id=e.config_id "
 					+ "where a.emp_id="+builderEmployee.getId()+" ";
+				if(projectId > 0){
+					if(where != ""){
+						hql += " AND b.project_id="+projectId;
+					}else{
+						hql +=" AND b.project_id = "+projectId;
+					}
+				}
+			}else{
+				hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
+					+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
+					+ "join source as d on d.id = b.source "
+					+ "join builder_employee as c on a.emp_id = c.id "
+					+ "inner join lead_config as e on e.lead_id=a.lead_id "
+					+ "join builder_project_property_configuration as f on f.id=e.config_id "
+					+ "where a.emp_id="+builderEmployee.getId()+" ";
+				hql +=" AND (b.name like '%"+keyword+"%' OR b.mobile like '%"+keyword+"%')";
+				if(projectId > 0){
+					if(where != ""){
+						hql +=" AND b.project_id="+projectId;
+					}else{
+						hql +=" AND b.project_id="+projectId;
+					}
+				}
+			}
+			hql += where + " group by b.id order by b.id desc";
 		}
 		else{
 			if(builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
-				//hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
-						hql+= "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
+				if(keyword == ""){
+					hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
+						+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
 						+ "join source as d on d.id = b.source "
 						+ "join builder_employee as c on a.emp_id = c.id "
 						+ "inner join lead_config as e on e.lead_id=a.lead_id "
 						+ "join builder_project_property_configuration as f on f.id=e.config_id "
 						+ "where b.added_by="+builderEmployee.getId()+" ";
+					if(projectId > 0){
+						if(where!= ""){
+							hql+=" AND b.project_id="+projectId;
+						}else{
+							hql+=" AND b.project_id="+projectId;
+						}
+					}
+				}else{
+					hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
+						+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
+						+ "join source as d on d.id = b.source "
+						+ "join builder_employee as c on a.emp_id = c.id "
+						+ "inner join lead_config as e on e.lead_id=a.lead_id "
+						+ "join builder_project_property_configuration as f on f.id=e.config_id "
+						+ "where b.added_by="+builderEmployee.getId()+" ";
+					hql +=" AND (b.name like '%"+keyword+"%' OR b.mobile like '%"+keyword+"%')";
+					if(projectId > 0){
+						if(where != ""){
+							hql +=" AND b.project_id="+projectId;
+						}else{
+							hql +=" b.project_id="+projectId;
+						}
+					}
+				}
+				hql += where + " group by b.id order by b.id desc";
 			}
 		}
-		if(projectId > 0){
-			if(where!="")
-				where += " AND a.project_id = :project_id";
-			else
-				where += " a.project_id = :project_id";
-		}
-		if(name != ""){
-			if(where !="")
-				where += " AND a.name like :name";
-			else
-				where += " a.name like :name";
-		}
-		if(contactNumber > 0){
-			if(where != "")
-				where +=" AND a.mobile like :mobile";
-			else
-				where +=" a.mobile like :mobile";
-		}
-		
-		hql += where + " group by a.id order by a.id desc";
 		try{
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(NewLeadList.class));
-		if(projectId > 0){
-			query.setParameter("project_id", projectId);
-		}
-		if(name!=""){
-			query.setParameter("name", "%"+name+"%");
-		}
-		if(contactNumber >0){
-			query.setParameter("mobile", "%"+contactNumber+"%");
-		}
-		
 		System.err.println(hql);
 		result = query.list();
 		session.close();
@@ -6883,7 +6929,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	 * @return
 	 */
 	public List<EmployeeList> getBuilderEmployeeList(BuilderEmployee builderEmployee,int projectId){
-		String hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email, access.name as access from builder_employee as emp join builder_employee_access_type as access on access.id= emp.access_type_id join builder_project as project on project.group_id=emp.builder_id where emp.access_type_id in(3,4,6) and emp.builder_id="+builderEmployee.getBuilder().getId()+" and project.id="+projectId+" group by emp.id order by emp.id DESC";
+		String hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email, access.name as access from builder_employee as emp join builder_employee_access_type as access on access.id= emp.access_type_id join builder_project as project on project.group_id=emp.builder_id where emp.access_type_id in(3,4,5) and emp.builder_id="+builderEmployee.getBuilder().getId()+" and project.id="+projectId+" group by emp.id order by emp.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
@@ -6892,7 +6938,34 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		session.close();
 		return result;
 	}
-
+	/**
+	 * 
+	 * @param builderEmployee
+	 * @param projectId
+	 * @return
+	 */
+	public List<EmployeeList> getBuilderEmployeeList(int builderId, int roleId, String keyword){
+		String hql = "";
+		if(keyword == "") {
+			 hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email, access.name as access from builder_employee as emp join builder_employee_access_type as access on access.id= emp.access_type_id join builder_project as project on project.group_id=emp.builder_id where emp.builder_id="+builderId;
+			 if(roleId > 0){		
+				 hql=hql+" and access.id="+roleId;
+			 }
+			 hql=hql+ " group by emp.id order by emp.id DESC";
+		}else{
+			 hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email, access.name as access from builder_employee as emp join builder_employee_access_type as access on access.id= emp.access_type_id join builder_project as project on project.group_id=emp.builder_id where emp.builder_id="+builderId+"  and (emp.name like '%"+keyword+"%' OR emp.mobile like '%"+keyword+"%')";
+			 if(roleId > 0){
+				 hql=hql+" and access.id="+roleId;
+			 }
+			 hql=hql+" group by emp.id order by emp.id DESC";
+		}
+		
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
+		System.err.println(hql);
+		List<EmployeeList> result = query.list();
+		session.close();
+		return result;
+	}
 }
-
-

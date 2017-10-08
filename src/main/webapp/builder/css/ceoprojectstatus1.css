@@ -7,118 +7,34 @@ textarea{outline:0 !important;}
 select{
 	outline:0 !important;
 }
-.btn231:hover,.btn231:focus, .btn231:active{
-	background:#10aec1;
-}
 @media screen and (max-width: 1290px){
 .white-box .box-title {
 font-size: 14px !important;
 }
 }
-.nav-pills>li+li {
-  margin-left:0px !important;;
-}
-.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
-    background: #56bfd7;
-    color: #fff;
-    padding: 10px 60px;
-    border-radius: 10px;
-}
 .tab-content {
-   margin-top: 0px; 
+    margin-top: 0px;
 }
-.blue-bg ul{
-	    margin-top: 10px;
-	    display: inline-block;
-	    list-style-type:none;
-} 
-.flat-button:hover{
-	
-}
-.flat-button{
-	 width: 155px;
-	  margin: 20px 10px 0px;
-     font-size: 20px;
-    padding: 10px 60px !important;
-    font-weight: 400;
-    color: #616060;
-    background: #ffffff;
-    border: none;
-    border: 2px solid #00bfd6 !important;
-    border-radius: 10px !important;
-}
-.flat-button:hover{
-	 background: #00bfd6;
-	 color: #000 !important;
-	 border: 2px solid #00bfd6;
-}
-.book-flat-button{
-	 width: 155px;
-	
-    margin: 20px 10px 0px;
-    font-size: 20px;
-    padding: 10px 60px !important;
-    font-weight: 400;
-    color: #616060;
-    background: #c1bebe !important;
-    border: none;
-    border: 2px solid #c1bebe !important;
-    border-radius: 10px !important; 
-}
-.user-profile {
-    padding: 3%;
-}
-
-.user-row p:nth-child(even){
-   margin-bottom: 30px;
+.p-custom {
+	    margin-top: 20px;
+    margin-bottom: 12px;
+    line-height: 0;
+    font-size: 17px;
 }
 .user-profile img:first-child {
     width: 150px !important;
     height: 150px !important;
     margin-bottom: 12px;
+    margin-top:30px;
     border-radius: 100%;
     padding: 0% 0% 0% !important;
 }
 .blue-bg {
-    padding: 2% 1%;
+    padding: 0% 1% 8%;
     border-bottom: 2px solid #00bfd6;
     border-top: 2px solid #00bfd6;
     border-left: 1px solid #00bfd6;
     border-right: 1px solid #00bfd6;
-}
-.btn {
-    margin-top: 0px !important;
-}
-.custom-selectize {
-    background: #ffffff;
-    border: 1px solid #00bfd6;
-    border-radius: 0px !important;
-    padding: 15px !important;
-    font-size: 18px;
-    width: 98%;
-    margin: 2% 0%;
-}
-.wdth100 {
-    width: 100% !important;
-}
-.textinput {
-    border: 1px solid #00bfd6;
-    background: white;
-    font-size: 19px;
-    color: #312f2f;
-    padding: 28px 10px;
-}
-.wdth10 {
-    width: 10% !important;
-}
-.btn231 {
-    background: #00bfd6;
-}
-.btn {
-    display: inline-block;
-    padding: 10px 10px;
-    margin-bottom: 0;
-    font-size: 14px;
 }
 @media not all, (-webkit-transform-3d)
 .carousel-inner > .item.next.left, .carousel-inner > .item.prev.right, .carousel-inner > .item.active {
@@ -179,7 +95,7 @@ font-size: 14px !important;
 h3{
 	
     line-height: 5px;
-    font-size: 19px;
+    font-size: 17px;
     text-align: left;
     color: #ffffff;
 }
@@ -319,8 +235,8 @@ hr {
     margin-right: auto;
     border-style: inset;
     
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 25px;
+    margin-bottom: 25px;
     background: #ababab;
 }
 
@@ -340,7 +256,6 @@ hr {
 }
 .p-custom{
 	
-    margin-bottom: 12px;
     line-height: 0;
     font-size: 17px;
 }
@@ -350,10 +265,10 @@ hr {
 }
 
 
- @media (min-width: 1300px){
+ @media (min-width: 1270px){
  .margin-bottom1{
  cursor: pointer;
-	    padding-bottom: 33%;
+  padding-bottom: 57%;
 	}
  .bottom-layer{
      background: #00bfd6;
@@ -632,7 +547,7 @@ h4 span{
     font-weight: 300;
 }
 .projectsection{
-	    padding: 30px;
+	    padding: 15px;
 }
 .logo img{
 	margin-top:-10px;
@@ -704,9 +619,8 @@ h4 span{
 	display: block;
 }
 .white-box .box-title {
-    line-height: 5px;
-    text-transform: capitalize;
-    font-size: 15px ;
+	    line-height: normal;
+    font-size: 14px;
     font-weight: 400;
     text-align: left;
     color: #4c4a4a !important;
@@ -776,33 +690,9 @@ padding:7%;
 .assign1{
 	 color: #0dc2d8;
 }
-.yellowcolor{
-	margin: 22px 13px 0px ;
-    font-size: 15px;
-    padding: 12px 60px;
-    font-weight: 400;
-    color: #000000;
-	background:#ffeb3b !important;;
-	border:none;
-	border:2px solid #ffeb3b;;;
-	border-radius :10px;
-}
-.yellowcolor:hover{
-	
-	background:#ffeb3b !important;;
-	border:none;
-	border:2px solid #ffeb3b;;;
-	
-}
+
 .uppercase{
 	
     font-size: 27px;
     text-transform: uppercase;
-}
-.selectize-control.single .selectize-input:after {
-	border-color: #24bcd3 transparent transparent transparent !important;
-}
-.selectize-input {
-    border: 1px solid #24bcd3 !important;
-    padding: 19px 10px !important;
 }
