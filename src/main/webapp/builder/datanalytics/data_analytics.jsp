@@ -44,6 +44,7 @@
 	//Double totalRevenue =0.0;
 	int project_size_list = 0;
 	int city_size_list =0 ;
+	ProjectWiseData totalProjectRevenue = null;
 	Double totalPropertySold = 0.0;
 	if(session!=null)
 	{
@@ -71,6 +72,7 @@
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
 					//totalRevenue = totalPropertySold * totalInventorySold;
 				List<ProjectWiseData> projectWiseDatas2 = new BuilderDetailsDAO().getEmployeeBarGraphByProject(emp_id);
+				//totalProjectRevenue=	new BuilderDetailsDAO().getTotalRevenueByEmployee(builder);
 					if(projectWiseDatas2 !=null){
 						for(ProjectWiseData projectWiseData : projectWiseDatas2){
 							totalRevenue +=projectWiseData.getRevenue();
@@ -171,11 +173,9 @@
                     		
 <!--                             <ul class="list-inline text-left"> -->
 <!--                                 <li> -->
-<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #24bcd3;"></i>Flats</h5> </li> -->
+<%--                                     <h5><i class="fa fa-circle m-r-5"></i>Total Revenue :<%out.print(totalProjectRevenue.getRevenue()); %> </h5> </li> --%>
 <!--                                 <li> -->
-<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #fb9678;"></i>Buyers</h5> </li> -->
-<!--                                 <li> -->
-<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #9675ce;"></i>Purchases</h5> </li> -->
+<%--                                     <h5><i class="fa fa-circle m-r-5"></i>Sold : <%out.print(totalProjectRevenue.getSold()); %>/<%out.print(totalProjectRevenue.getAvaliable()); %></h5> </li> --%>
 <!--                             </ul> -->
                             <div id="morris-bar-chart" style="height:372px;"></div>
                         </div>
