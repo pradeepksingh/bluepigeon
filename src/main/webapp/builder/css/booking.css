@@ -1176,7 +1176,16 @@ textarea{
     text-decoration: none;
     color: #2b2b2b;
 /*     background-color: #d4cfcf !important; */
- background-color: #d4cfcf;
+	 background-color: #d4cfcf;
+}
+.yellow a{
+	 border: 1.5px solid #d4cfcf !important;
+    text-decoration: none;
+/*     color: #2b2b2b; */
+    color: #ffffff;
+/*     background-color: #d4cfcf !important; */
+/*  	background-color: #d4cfcf; */
+ 	background:#ffeb3b !important;;
 }
 .fileUpload {
     position: relative;

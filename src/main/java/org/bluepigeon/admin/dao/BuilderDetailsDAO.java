@@ -1518,7 +1518,7 @@ public class BuilderDetailsDAO {
 		return result;
 	}
 	
-	public List<BookedBuyerList> getBookedBuyerList(int empId, int projectId, String name, int contactNumber){
+	public List<BookedBuyerList> getBookedBuyerList(int empId, int projectId, String keyword){
 		List<BookedBuyerList> result = null;
 		String hql = "SELECT b.name as buyerName, b.mobile as buyerContact, b.email as buyerEmail, project.name as projectName,project.locality_name as localityName, flat.flat_no as flatNo, building.name as buildingName, city.name as cityName ";
 		String where = "";
@@ -1530,56 +1530,67 @@ public class BuilderDetailsDAO {
 		BuilderEmployee builderEmployee = employees.get(0);
 		sessionnew.close();
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
-			hql += " FROM buyer as b left join builder_project as project on project.id = b.project_id inner join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id "
+			if(keyword == ""){
+				hql += " FROM buyer as b left join builder_project as project on project.id = b.project_id inner join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id "
 					+ "WHERE ";
 					where+= "ap.emp_id="+builderEmployee.getId();
-		}else{
-			hql = hql+" FROM buyer as b inner join builder_project as project on project.id = b.project_id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id "
+				if(projectId > 0){
+					if(where != ""){
+						hql = hql+" AND project.id = "+projectId;
+					}else{
+						hql = hql+" project.id = "+projectId;
+					}
+				}
+			}else{
+				hql += " FROM buyer as b left join builder_project as project on project.id = b.project_id inner join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id "
 					+ "WHERE ";
-					where+= "b.builder_id="+builderEmployee.getBuilder().getId();
-		}
-		if(projectId > 0){
-			if(where != ""){
-				where += " AND project.id = :project_id";
+					where+= " and ap.emp_id="+builderEmployee.getId();
+				hql = hql+" (b.name like '%"+keyword+"%' OR b.mobile like '%"+keyword+"%') ";
+				if(projectId > 0){
+					if(where != ""){
+						hql +=" AND project.id ="+projectId;
+					}else{
+						hql +=" project.id = "+projectId;
+					}
+				}
+			}
+		}else{
+			if(keyword == ""){
+				hql = hql+" FROM buyer as b inner join builder_project as project on project.id = b.project_id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id "
+						+ "WHERE ";
+						where+= "b.builder_id="+builderEmployee.getBuilder().getId();
+				if(projectId > 0){
+					if(where != ""){
+						hql = hql+" AND project.id = "+projectId;
+					}else{
+						hql += " project.id="+projectId;
+					}
+				}
 			}else{
-				where +=" project.id = :project_id";
+				hql = hql+" FROM buyer as b inner join builder_project as project on project.id = b.project_id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id "
+						+ "WHERE ";
+						where+= " and b.builder_id="+builderEmployee.getBuilder().getId();
+				hql = hql+" (b.name like '%"+keyword+"' OR b.mobile like '%"+keyword+"%')";
+				if(projectId > 0){
+					if(where != ""){
+						hql +=" AND project.id="+projectId;
+					}else{
+						hql +=" project.id="+projectId;
+					}
+				}
 			}
 		}
-		if(name != ""){
-			if(where != ""){
-				where += " AND b.name LIKE :name";
-			}else{
-				where +=" b.name LIKE :name";
-			}
-		}
-		if(contactNumber > 0){
-			if(where != ""){
-				where += " AND b.mobile LIKE :contact_number";
-			}else{
-				where +=" b.mobile LIKE :contact_number";
-			}
-		}
+		
 		hql += where + " AND project.status=1 AND b.is_primary=1 AND b.is_deleted=0 GROUP by b.id ORDER BY project.id desc";
 		try {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BookedBuyerList.class));
 		System.err.println(hql);
-		if(projectId > 0){
-			query.setParameter("project_id", projectId);
-		}
-		if(name != ""){
-			query.setParameter("name", "%"+name+"%");
-		}
-		if(contactNumber > 0){
-			query.setParameter("contact_number", "%"+contactNumber+"%");
-		}
-		
 		 result = query.list();
 		
 		} catch(Exception e) {
 			//
 		}
-		
 		return result;
 	}
 	
@@ -1597,7 +1608,7 @@ public class BuilderDetailsDAO {
 		return responseMessage;
 	}
 	
-	public List<InboxMessageData> getBookedBuyerList(int empId, String name,int contactNumber){
+	public List<InboxMessageData> getnameOrNumberList(int empId, String keyword){
 		List<InboxMessageData> result = null;
 		//String hql = "SELECT b.name as name, b.photo as image, im.subject as subject, im.im_date as date  ";
 		String hql =" SELECT b.id as id, a.name as name, a.photo as image, b.im_date as date, b.subject as subject";
@@ -1610,43 +1621,37 @@ public class BuilderDetailsDAO {
 		BuilderEmployee builderEmployee = employees.get(0);
 		sessionnew.close();
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
-			hql += " from buyer as a join inbox_message as b on b.buyer_id=a.id "
-					+ "WHERE ";
-					where+= "b.emp_id="+builderEmployee.getId();
+				if(keyword == ""){
+					hql += " from buyer as a join inbox_message as b on b.buyer_id=a.id "
+							+ "WHERE ";
+							where+= "b.emp_id="+builderEmployee.getId();
+				}else{
+					hql += " from buyer as a join inbox_message as b on b.buyer_id=a.id "
+							+ "WHERE ";
+							where+= "b.emp_id="+builderEmployee.getId();
+					hql = hql+" and (b.name like '%"+keyword+"%' OR b.mobile like '%"+keyword+"%')";
+					
+				}
 		}else{
-			hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
-					+ "left join builder as build on build.id = b.builder_id  "
-					+ "WHERE ";
-					where+= "b.builder_id="+builderEmployee.getBuilder().getId();
+				if(keyword == ""){
+					hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
+							+ "left join builder as build on build.id = b.builder_id  "
+							+ "WHERE ";
+							where+= "b.builder_id="+builderEmployee.getBuilder().getId();
+				}else{
+					hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
+							+ "left join builder as build on build.id = b.builder_id  "
+							+ "WHERE ";
+							where+= "b.builder_id="+builderEmployee.getBuilder().getId();
+					hql = hql+" and (b.name like '%"+keyword+"' OR b.mobile like '%"+keyword+"%')";
+				}
 		}
 		
-		if(name != ""){
-			if(where != ""){
-				where += " AND a.name LIKE :name";
-			}else{
-				where +=" a.name LIKE :name";
-			}
-		}
-//		if(contactNumber > 0){
-//			if(where != ""){
-//				where += " AND b.mobile LIKE :contact_number";
-//			}else{
-//				where +=" b.mobile LIKE :contact_number";
-//			}
-//		}
 		hql += where + " AND a.is_primary=1 and a.is_deleted=0 and a.status=0 GROUP by b.id ORDER by b.id DESC";
 		try {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(InboxMessageData.class));
 		System.err.println(hql);
-		
-		if(name != ""){
-			query.setParameter("name", "%"+name+"%");
-		}
-		if(contactNumber > 0){
-			query.setParameter("contact_number", "%"+contactNumber+"%");
-		}
-		
 		 result = query.list();
 		
 		} catch(Exception e) {

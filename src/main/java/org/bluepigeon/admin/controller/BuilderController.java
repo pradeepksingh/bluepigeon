@@ -514,24 +514,10 @@ public class BuilderController {
 	public List<BookedBuyerList> getBookedBuyerList(
 			@FormParam("emp_id") int empId,
 			@FormParam("project_id") int projectId,
-			@FormParam("nameOrNumber") String nameOrNumber
+			@FormParam("keyword") String keyword
 		){
-		int contactNumber = 0;
-		String name = "";
-		try{
-			contactNumber = Integer.parseInt(nameOrNumber);
-			System.err.println("contact Number :: "+contactNumber);
-		}catch(NumberFormatException e){
-			name = nameOrNumber;
-			contactNumber = 0;
-			System.err.println("Name :: "+name);
-		}catch(NullPointerException e){
-			
-		}
-		catch(Exception e){
-			
-		}
-		return new BuilderDetailsDAO().getBookedBuyerList(empId,projectId,name,contactNumber);
+		
+		return new BuilderDetailsDAO().getBookedBuyerList(empId,projectId,keyword);
 	}
 	/**
 	 * save message
@@ -633,7 +619,7 @@ public class BuilderController {
 		catch(Exception e){
 			
 		}
-		return new BuilderDetailsDAO().getBookedBuyerList(empId,name,contactNumber);
+		return new BuilderDetailsDAO().getnameOrNumberList(empId,nameOrNumber);
 	}
 	
 	@POST
@@ -679,24 +665,10 @@ public class BuilderController {
 	public List<NewLeadList> getLeadListsts(
 			@FormParam("emp_id") int empId,
 			@FormParam("project_id") int projectId,
-			@FormParam("nameOrNumber") String nameOrNumber
+			@FormParam("nameOrNumber") String keyword
 		){
-		int contactNumber = 0;
-		String name = "";
-		try{
-			contactNumber = Integer.parseInt(nameOrNumber);
-			System.err.println("contact Number :: "+contactNumber);
-		}catch(NumberFormatException e){
-			name = nameOrNumber;
-			contactNumber = 0;
-			System.err.println("Name :: "+name);
-		}catch(NullPointerException e){
-			
-		}
-		catch(Exception e){
-			
-		}
-		return new ProjectDAO().getNewLeadLists(empId,projectId,name,contactNumber);
+	
+		return new ProjectDAO().getNewLeadLists(empId,projectId,keyword);
 	}
 	
 	@POST
