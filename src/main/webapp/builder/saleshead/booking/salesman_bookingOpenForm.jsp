@@ -27,6 +27,13 @@
 <%@page import="org.bluepigeon.admin.dao.LocalityNamesImp"%>
 <%@page import="org.bluepigeon.admin.model.Locality"%>
 <%@page import="java.util.List"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri" value="${req.requestURI}" />
+<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
+
 <%
 	int p_user_id = 0;
 	int project_id=0;
@@ -48,9 +55,8 @@
 	String image  = "";
 	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>();
 	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList();
-	project_id = Integer.parseInt(request.getParameter("project_id"));
-	projectList = new ProjectDAO().getBuilderActiveProjectById(project_id);
 	
+	java.net.URI location1 = null;
 	session = request.getSession(false);
 	
 	BuilderEmployee builder = new BuilderEmployee();
@@ -62,30 +68,37 @@
 			p_user_id = builder.getBuilder().getId();
 			access_id = builder.getBuilderEmployeeAccessType().getId();
 			emp_id = builder.getId();
-			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
-			try{
-			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
-			building_id = builderBuildingList.get(0).getId();
-			
-			flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,0);
-			bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,building_id,0,0);
-			if(bookingFlatList2 != null){
-				if(bookingFlatList2.getImage() != null){
-					image = bookingFlatList2.getImage();
+			if(access_id == 5){
+				try{
+					if (request.getParameterMap().containsKey("project_id")) {
+						project_id = Integer.parseInt(request.getParameter("project_id"));
+						projectList = new ProjectDAO().getBuilderActiveProjectById(project_id);
+						builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id);
+						building_id = builderBuildingList.get(0).getId();
+						
+						flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,0);
+						bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,building_id,0,0);
+						if(bookingFlatList2 != null){
+							if(bookingFlatList2.getImage() != null){
+								image = bookingFlatList2.getImage();
+							}
+						}
+					flat_size = flatListDatas.size();
+					}
+				}catch(Exception e){
+					e.printStackTrace();
 				}
-			}
-			flat_size = flatListDatas.size();
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-			if(builderBuildingList != null && builderBuildingList.size() > 0){
-				building_id = builderBuildingList.get(0).getId(); 
-				building_size_list = builderBuildingList.size();
-				floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id);
-				if(floorList != null && floorList.size() > 0){
-					floor_id = floorList.get(0).getId();
-					floor_size_list = floorList.size();
+				if(builderBuildingList != null && builderBuildingList.size() > 0){
+					building_id = builderBuildingList.get(0).getId(); 
+					building_size_list = builderBuildingList.size();
+					floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id);
+					if(floorList != null && floorList.size() > 0){
+						floor_id = floorList.get(0).getId();
+						floor_size_list = floorList.size();
+					}
 				}
+			}else{
+					response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 			}
 		}
 	}
@@ -199,12 +212,12 @@
 		               	 						for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
 		                      						if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("available")){
 		             			%>
-		             			<li class="item"><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="toggleFlat(this); showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" data-value="<% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+		             			<li class=""><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" data-value="<% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" class="book-flat-button btn-info" href="" onclick="toggleFlat(this,1);"><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 		             			<% }else if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("hold")){
 			             		%>
-			             		<li class="yellow"><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="toggleFlat(this);showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" data-value="<% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" class="yellowcolor yell" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+			             		<li class=""><a data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" data-value="<% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" class="book-flat-button yellowcolor yell" href="" onclick="toggleFlat(this,2);"><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 			             		<% }else{%>
-		     					<li class="grey"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
+		     					<li class=""><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>);" href="" class="book-flat-button"><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
 		 					<%
 		 			   				}
           						}
@@ -220,6 +233,7 @@
 						 </div>
                     </div>
                     <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>" />
+                    <input type="hidden" id="sel-flat-id" value="0"/>
                     <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
                      <div class="bg1">
                        <div class="tab-content">
@@ -389,73 +403,55 @@
 <script>
 
 $('#unhold').click(function(){
-		var ids = "";
-		$(".holdcolor").each(function(){
-			if(ids == "") {
-				ids = $(this).attr('data-value');
-			} else {
-				ids = ids+","+$(this).attr('data-value');
-			}
-		});
+	var ids = $("#sel-flat-id").val();
 		ajaxindicatorstart("Please wait while, we update status ...");
 		$.get("${baseUrl}/webapi/builder/flat/markunhold/"+ids,{},function(data){
 			ajaxindicatorstop();
-			$(".holdcolor").each(function(){
-				$(this).removeClass("holdcolor");
-	    		$(this).removeClass("yellowcolor yell");
-	    		$(this).addClass("btn-info");
-	   		});
+			$("#"+ids).removeClass("holdcolor");
+			$("#"+ids).removeClass("yellowcolor yell");
+			$("#"+ids).addClass("btn-info");
 		},'json');
    	$(".holdsection").hide(".holdsection");
    	$(".unholdsection").hide(".unholdsection");
-   	var id = parseInt(ids);
+   	var id = $("#sel-flat-id").val();
 	showFlatwithImage(id,$("#emp_id").val());
 	});
 $('#hold').click(function(){
-	var ids = "";
-		$(".holdcolor").each(function(){
-			if(ids == "") {
-				ids = $(this).attr('data-value');
-			} else {
-				ids = ids+","+$(this).attr('data-value');
-			}
-		});
+	var ids = $("#sel-flat-id").val();
 		ajaxindicatorstart("Please wait while, we update status ...");
 		$.get("${baseUrl}/webapi/builder/flat/markhold/"+ids,{},function(data){
 			ajaxindicatorstop();
-			$(".holdcolor").each(function(){
-				$(this).removeClass("holdcolor");
-				$(this).removeClass("btn-info");
-				if($(this).hasClass("yell")) {
-	    			$(this).addClass("yellowcolor");
-	    		} else {
-	    			$(this).addClass("yellowcolor yell");
-	    		}
-	   		});
+			$("#"+ids).removeClass("holdcolor");
+			$("#"+ids).removeClass("btn-info");
+			if($("#"+ids).hasClass("yell")) {
+				$("#"+ids).addClass("yellowcolor");
+    		} else {
+    			$("#"+ids).addClass("yellowcolor yell");
+    		}
 		},'json');
    	$(".holdsection").hide(".holdsection");
-   	var id = parseInt(ids);
+   	var id = $("#sel-flat-id").val();
    	showFlatwithImage(id,$("#emp_id").val());
 	});
 
 
-function toggleFlat(input) {
+function toggleFlat(input,status) {
 	if($(input).hasClass("yellowcolor")){
-		$(input).removeClass("yellowcolor");
-        $(input).addClass("holdcolor");
-		   	$(".unholdsection").show();
-		   	$(".holdsection").hide();
-	} else if($(input).hasClass("holdcolor")){
-		$(input).removeClass("holdcolor");
-		if($(input).hasClass("yell")) {
-			$(input).addClass("yellowcolor");
-		}
+		$(".unholdsection").show();
 		$(".holdsection").hide();
-		   	$(".unholdsection").hide();
+	} else if($(input).hasClass("holdcolor")){
+		$(".holdsection").hide();
+		$(".unholdsection").hide();
 	} else {
-		$(input).addClass("holdcolor");
 		$(".holdsection").show();
-		   	$(".unholdsection").hide();
+		$(".unholdsection").hide();
+	}
+	var flatid = $(input).attr('data-value');
+	$("#sel-flat-id").val(flatid);
+	if(status == 1) {
+		showFlatwithImage(flatid);
+	} else if(status == 2) {
+		showFlatwithImage(flatid);
 	}
 }
 
@@ -483,14 +479,12 @@ function activeInactiveFlats(){
 	        $parent.addClass('grey');
 	        e.preventDefault();
         }
-//         else if($parent.hasClass('yellowcolor')){
-//         	$parent.removeClass('active');
-//         }
+        
     });
 }
 
 <% if(flatListDatas !=null){%>
-$(document).ready(function () {
+$(window).load(function () {
 		 <%for(int i=0;i<flatListDatas.size();i++){
 			 if(flatListDatas.get(i) != null){
 			 	for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){
@@ -499,12 +493,14 @@ $(document).ready(function () {
 				 			if(bookingFlatList2 != null){
                	  			if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
 	 %>
-    $("#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>").click(function (e) {
+    /*$("#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>").click(function (e) {
         e.preventDefault();
-    });
+    });*/
     $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click');
   //  $("#hold").hide();
     //$("#unhold").hide();
+    //showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>);
+    $("#sel-flat-id").val(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>);
     
     <%							}
 				 			}
@@ -525,6 +521,10 @@ function showBuyerDetails(flatId){
 	window.location.href="${baseUrl}/builder/saleshead/booking/edit_booking_form.jsp?flat_id="+flatId;
 }
 function showFlatwithImage(id){
+	$(".holdcolor").each(function(){
+		$(this).removeClass("holdcolor");
+	});
+	$("#"+id).addClass("holdcolor");
 	var flatdetails = "";
 	$("#home").empty();
 	var htmlFlat ="";
@@ -541,27 +541,27 @@ function showFlatwithImage(id){
 		 	      		+'<div class="row custom-row">'
 		 	        	+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		 	          	+'<p class="p-custom">Flat Type</p>'
-		 	          	+'<span><b>'+data.flatType+'</b></span>'
+		 	          	+'<p><b>'+data.flatType+'</b></p>'
 		 	        	+'</div>'
 		 	       		+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		 	          	+'<p class="p-custom">Carpet Area</p>'
-		 	          	+'<span><b>'+data.carpetArea+' SQ/FT</b></span>'
+		 	          	+'<p><b>'+data.carpetArea+' SQ/FT</b></p>'
 		 	       	 	+'</div>'
 		 	      		+'</div>'
 		 	      		+'<div class="row custom-row">'
 		 	       		+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		 	          	+'<p class="p-custom">Bedrooms</p>'
-		 	          	+'<span><b>'+data.bedroom+'</b></span>'
+		 	          	+'<p><b>'+data.bedroom+'</b></p>'
 		 	        	+'</div>'
 		 	       		+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		 	          	+'<p class="p-custom">Bathroom</p>'
-		 	         	+'<span><b>'+data.bathroom+'</b></span>'
+		 	         	+'<p><b>'+data.bathroom+'</b></p>'
 		 	        	+'</div>'
 		 	      		+'</div>'
 		 	      		+'<div class="row custom-row">'
 		 	       		+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		 	         	+'<p class="p-custom">Balcony</p>'
-		 	         	+'<span><b>'+data.balcony+'</b></span>'
+		 	         	+'<p><b>'+data.balcony+'</b></p>'
 		 	        	+'</div>'
 		 	        	+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		 	         	+'<p class="p-custom">Bedroom Size</p>'
@@ -610,36 +610,36 @@ function showFlatwithImage(id){
 				}
 				console.log("flat status :: "+data.flatStatus);
 				console.log("image :: "+image);
-				htmlFlat ='<button class="full white" onclick="showImagewithDetails('+data.flatId+');"><a href=""><img src="'+image+'" alt="Project image" class="flat-img"></a></button>'
+				htmlFlat ='<button class="full white" onclick="showImagewithDetails('+data.flatId+');"><img src="'+image+'" alt="Project image" class="flat-img"></button>'
 		 	      		+'<hr>'
 		 	      		+'<div class="row custom-row">'
 		 	        	+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		 	          	+'<p class="p-custom">Flat Type</p>'
-		 	          	+'<span><b>'+data.flatType+'</b></span>'
+		 	          	+'<p><b>'+data.flatType+'</b></p>'
 		 	        	+'</div>'
 		 	       		+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		 	          	+'<p class="p-custom">Carpet Area</p>'
-		 	          	+'<span><b>'+data.carpetArea+' SQ/FT</b></span>'
+		 	          	+'<p><b>'+data.carpetArea+' SQ/FT</b></p>'
 		 	       	 	+'</div>'
 		 	      		+'</div>'
 		 	      		+'<div class="row custom-row">'
 		 	       		+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		 	          	+'<p class="p-custom">Bedrooms</p>'
-		 	          	+'<span><b>'+data.bedroom+'</b></span>'
+		 	          	+'<p><b>'+data.bedroom+'</b></p>'
 		 	        	+'</div>'
 		 	       		+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		 	          	+'<p class="p-custom">Bathroom</p>'
-		 	         	+'<span><b>'+data.bathroom+'</b></span>'
+		 	         	+'<p><b>'+data.bathroom+'</b></p>'
 		 	        	+'</div>'
 		 	      		+'</div>'
 		 	      		+'<div class="row custom-row">'
 		 	       		+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		 	         	+'<p class="p-custom">Balcony</p>'
-		 	         	+'<span><b>'+data.balcony+'</b></span>'
+		 	         	+'<p><b>'+data.balcony+'</b></p>'
 		 	        	+'</div>'
 		 	        	+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		 	         	+'<p class="p-custom">Bedroom Size</p>'
-		 	          	+'<span><b>'+data.length+' '+data.areaUint+' * '+data.breadth+' '+data.areaUint+' </b></span>'
+		 	          	+'<p><b>'+data.length+' '+data.areaUint+' * '+data.breadth+' '+data.areaUint+' </b></p>'
 		 	        	+'</div>'
 		 	      		+'</div>'
 		 	      		+'<p class="text-center" style="font-size:15px;"><b>Flat is on hold</b></p>';

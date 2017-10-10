@@ -68,30 +68,29 @@
  			p_user_id = builder.getBuilder().getId(); 
  			emp_id = builder.getId();
  			access_id = builder.getBuilderEmployeeAccessType().getId(); 
- 			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
- 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
- 			building_id = builderBuildingList.get(0).getId(); 
-			flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,0); 
- 			bookingFlatList2 = new ProjectDAO().getFlatBookeddetails(project_id,building_id,floor_id,0); 
- 			if(bookingFlatList2 != null){
- 				if( bookingFlatList2.getImage() != null){
- 					image = bookingFlatList2.getImage(); 
- 				}
+ 			if(access_id == 5){
+	 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
+	 			building_id = builderBuildingList.get(0).getId(); 
+				flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,0); 
+	 			bookingFlatList2 = new ProjectDAO().getFlatBookeddetails(project_id,building_id,floor_id,0); 
+	 			if(bookingFlatList2 != null){
+	 				if( bookingFlatList2.getImage() != null){
+	 					image = bookingFlatList2.getImage(); 
+	 				}
+	 			}
+	 			flat_size = flatListDatas.size(); 
+	 			if(builderBuildingList != null && builderBuildingList.size() > 0){ 
+					building_id = builderBuildingList.get(0).getId();  
+					building_size_list = builderBuildingList.size(); 
+	 				floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id); 
+	 				if(floorList != null && floorList.size() > 0){ 
+						floor_id = floorList.get(0).getId();
+						floor_size_list = floorList.size(); 
+	 				} 
+	 			} 
+ 			}else{
+ 				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
  			}
- 			flat_size = flatListDatas.size(); 
-		
-			//building_id = builderBuildingList.get(0).getId(); 
-			//floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id); 
- 			//floor_size_list = floorList.size(); -->
- 			if(builderBuildingList != null && builderBuildingList.size() > 0){ 
-				building_id = builderBuildingList.get(0).getId();  
-				building_size_list = builderBuildingList.size(); 
- 				floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id); 
- 				if(floorList != null && floorList.size() > 0){ 
-					floor_id = floorList.get(0).getId();
-					floor_size_list = floorList.size(); 
- 				} 
- 			} 
  		} 
  	} 
  %>

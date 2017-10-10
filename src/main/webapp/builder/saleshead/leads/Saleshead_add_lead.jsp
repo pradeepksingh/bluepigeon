@@ -42,23 +42,23 @@
 			builder_id = builder.getBuilder().getId();
 			access_id = builder.getBuilderEmployeeAccessType().getId();
 			emp_id = builder.getId();
-			if(builder_id > 0){
+			if(builder_id > 0 && access_id ==5){
 				builderProjects = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
-				if(access_id ==5){
+				if (request.getParameterMap().containsKey("project_id")) {
 					salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
 					 builderProject = new ProjectDAO().getBuilderActiveProjectById(projectId);
 					 builderProjectPropertyConfigurationInfos = new ProjectDAO().getPropertyConfigByProjectId(projectId);
 				}
+				if(builderProjects.size()>0)
+		    		project_size = builderProjects.size();
+			 	if(builderPropertyTypes.size()>0)
+			 		type_size = builderPropertyTypes.size();
+			}else{
+				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 			}
-			if(builderProjects.size()>0)
-		    	project_size = builderProjects.size();
-		 	if(builderPropertyTypes.size()>0)
-		 		type_size = builderPropertyTypes.size();
 		}
-		
    }
-   
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -516,6 +516,18 @@ $("#project_ids").change(function(){
 		  $("#configuration").multiselect('reload');
 		  ajaxindicatorstop();
 	  });
+});
+
+$("project_ids").on('blur', function(){
+		var selected=[];
+
+$(this).find('option:selected').each(function(i,e){
+        selected.push(e.value);
+});
+alert('You selected: ' +selected.join(','));
+
+
+
 });
 
 

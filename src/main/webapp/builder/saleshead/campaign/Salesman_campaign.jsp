@@ -46,8 +46,11 @@
  			emp_id = builder.getId(); 
  			access_id = builder.getBuilderEmployeeAccessType().getId(); 
  			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
- 			campaignListNews = new CampaignDAO().getNewCampaignListByBuilderEmployee(builder, projectId);
- 			
+ 			if(access_id == 5){
+ 				campaignListNews = new CampaignDAO().getNewCampaignListByBuilderEmployee(builder, projectId);
+ 			}else{
+ 				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
+ 			}
  		} 
  		 
  	} 

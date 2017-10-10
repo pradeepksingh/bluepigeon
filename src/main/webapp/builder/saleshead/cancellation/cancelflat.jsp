@@ -51,19 +51,8 @@
  	int emp_id=0;
  	String image  = ""; 
  	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>(); 
- 	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList(); 
- 	project_id = Integer.parseInt(request.getParameter("project_id")); 
- 	building_id = Integer.parseInt(request.getParameter("building_id"));
-	evenOrodd = Integer.parseInt(request.getParameter("evenOrodd"));
-	if(request.getParameter("floor_id") != null && request.getParameter("floor_id") != ""){
-		if(Integer.parseInt(request.getParameter("floor_id")) > 0){
-			floor_id = Integer.parseInt(request.getParameter("floor_id"));
-		}
-	}
- 	projectList = new ProjectDAO().getBuilderActiveProjectById(project_id);
-	
+ 	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList();
  	session = request.getSession(false); 
-	
  	BuilderEmployee builder = new BuilderEmployee(); 
  	if(session!=null) 
  	{ 
@@ -73,28 +62,37 @@
  			p_user_id = builder.getBuilder().getId(); 
  			access_id = builder.getBuilderEmployeeAccessType().getId(); 
  			emp_id=builder.getId();
- 			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
- 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
- 			try{
-				flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,evenOrodd); 
-	 			bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,building_id,floor_id,evenOrodd); 
-	 			image = bookingFlatList2.getBuyerPhoto(); 
-	 			flat_size = flatListDatas.size(); 
- 			}catch(Exception e){
- 				e.printStackTrace();
- 			}
-			//building_id = builderBuildingList.get(0).getId(); 
-			//floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id); 
- 			//floor_size_list = floorList.size(); -->
- 			if(builderBuildingList != null && builderBuildingList.size() > 0){ 
-				building_id = builderBuildingList.get(0).getId();  
-				building_size_list = builderBuildingList.size(); 
- 				floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id); 
- 				if(floorList != null && floorList.size() > 0){ 
-					floor_id = floorList.get(0).getId();
-					floor_size_list = floorList.size(); 
- 				} 
- 			} 
+ 		
+	 			if (request.getParameterMap().containsKey("project_id")) {
+				 	project_id = Integer.parseInt(request.getParameter("project_id")); 
+				 	building_id = Integer.parseInt(request.getParameter("building_id"));
+					evenOrodd = Integer.parseInt(request.getParameter("evenOrodd"));
+					if(request.getParameter("floor_id") != null && request.getParameter("floor_id") != ""){
+						if(Integer.parseInt(request.getParameter("floor_id")) > 0){
+							floor_id = Integer.parseInt(request.getParameter("floor_id"));
+						}
+					}
+			 	}
+	 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
+	 			projectList = new ProjectDAO().getBuilderActiveProjectById(project_id);
+	 			try{
+					flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,evenOrodd); 
+		 			bookingFlatList2 = new ProjectDAO().getFlatdetails(project_id,building_id,floor_id,evenOrodd); 
+		 			image = bookingFlatList2.getBuyerPhoto(); 
+		 			flat_size = flatListDatas.size(); 
+	 			}catch(Exception e){
+	 				e.printStackTrace();
+	 			}
+	 			if(builderBuildingList != null && builderBuildingList.size() > 0){ 
+					building_id = builderBuildingList.get(0).getId();  
+					building_size_list = builderBuildingList.size(); 
+	 				floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id); 
+	 				if(floorList != null && floorList.size() > 0){ 
+						floor_id = floorList.get(0).getId();
+						floor_size_list = floorList.size(); 
+	 				} 
+	 			} 
+ 			
  		} 
  	} 
  %>

@@ -39,7 +39,7 @@ if(session!=null)
 		builder  = (BuilderEmployee)session.getAttribute("ubname");
 		session_id = builder.getBuilder().getId();
 		access_id = builder.getBuilderEmployeeAccessType().getId();
-		if(session_id > 0){
+		if(session_id > 0 && access_id == 1){
 			if (request.getParameterMap().containsKey("project_id")) {
 				projectId = Integer.parseInt(request.getParameter("project_id"));
 				if(projectId != 0) {
@@ -55,6 +55,8 @@ if(session!=null)
 					employeeLists = new ProjectDAO().getBuilderEmployeeList(builder,projectId);
 				}
 			}
+		}else{
+			response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 		}
 	}
 

@@ -6255,75 +6255,75 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		Query query = session.createQuery(hql);
 		query.setParameter("projectId", projectId);
 		try{
-		List<BuilderLead> builderLeads =  query.list();
-		System.err.println(builderLeads.size());
-		System.err.println("ProjectId :: "+projectId);
-		if(builderLeads != null){
-			if(builderLeads.size() > 0 && !builderLeads.isEmpty()){
-			for(BuilderLead builderLead : builderLeads){
-				NewLeadList newLeadList =new NewLeadList();
-				newLeadList.setId(builderLead.getId());
-				System.err.println(builderLead.getName());
-				if(builderLead.getName()!=null && builderLead.getName() != ""){
-				newLeadList.setLeadName(builderLead.getName());
-				}else{
-					newLeadList.setLeadName("No Name fond..");
+			List<BuilderLead> builderLeads =  query.list();
+			System.err.println(builderLeads.size());
+			System.err.println("ProjectId :: "+projectId);
+			if(builderLeads != null){
+				if(builderLeads.size() > 0 && !builderLeads.isEmpty()){
+				for(BuilderLead builderLead : builderLeads){
+					NewLeadList newLeadList =new NewLeadList();
+					newLeadList.setId(builderLead.getId());
+					System.err.println(builderLead.getName());
+					if(builderLead.getName()!=null && builderLead.getName() != ""){
+					newLeadList.setLeadName(builderLead.getName());
+					}else{
+						newLeadList.setLeadName("No Name fond..");
+					}
+					newLeadList.setPhoneNo(builderLead.getMobile());
+					newLeadList.setEmail(builderLead.getEmail());
+					if(builderLead.getLdate() != null){
+						strDate = simpleDateFormat.format(builderLead.getLdate());
+						newLeadList.setStrDate(strDate);
+					newLeadList.setlDate(builderLead.getLdate());
+					}
+					System.err.println("Employee Id :: "+builderLead.getAddedBy());
+					BuilderEmployee builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(builderLead.getAddedBy());
+					newLeadList.setMax(builderLead.getMax());
+					newLeadList.setMin(builderLead.getMin());
+					System.err.println(builderEmployee.getName());
+					newLeadList.setSalemanName(builderEmployee.getName());
+					if(builderLead.getLeadStatus() == 0){
+						newLeadList.setLeadName("");
+					} 
+					if(builderLead.getLeadStatus() == 1){
+						newLeadList.setLeadName("No Response");
+					}
+					if(builderLead.getLeadStatus() == 2){
+						newLeadList.setLeadStatusName("Call Again");
+					}
+					if(builderLead.getLeadStatus() == 3){
+						newLeadList.setLeadStatusName("Email Sent");
+					}
+					if(builderLead.getLeadStatus() == 4){
+						newLeadList.setLeadStatusName("Visit Again");
+					}
+					if(builderLead.getLeadStatus() == 5){
+						newLeadList.setLeadStatusName("Visit Complete");
+					}
+					if(builderLead.getLeadStatus() == 6){
+						newLeadList.setLeadStatusName("Follow up");
+					}
+					if(builderLead.getLeadStatus() == 7){
+						newLeadList.setLeadStatusName("Booked");
+					}
+					if(builderLead.getLeadStatus() == 8){
+						newLeadList.setLeadStatusName("Not Interested");
+					}
+					Source source = getSourceById(builderLead.getSource().getId()).get(0);
+					newLeadList.setSource(source.getName());
+					List<LeadConfig> leadConfig  =  getLeadConfig(builderLead.getId());
+					List<ConfigData> configDatas = new ArrayList<ConfigData>();
+					for(LeadConfig leadConfig2: leadConfig){
+						ConfigData configData = new ConfigData();
+						configData.setName(leadConfig2.getBuilderProjectPropertyConfiguration().getName());
+						configDatas.add(configData);
+					}
+					newLeadList.setConfigDatas(configDatas);
+					leadLists.add(newLeadList);
 				}
-				newLeadList.setPhoneNo(builderLead.getMobile());
-				newLeadList.setEmail(builderLead.getEmail());
-				if(builderLead.getLdate() != null){
-					strDate = simpleDateFormat.format(builderLead.getLdate());
-					newLeadList.setStrDate(strDate);
-				newLeadList.setlDate(builderLead.getLdate());
-				}
-				System.err.println("Employee Id :: "+builderLead.getAddedBy());
-				BuilderEmployee builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(builderLead.getAddedBy());
-				newLeadList.setMax(builderLead.getMax());
-				newLeadList.setMin(builderLead.getMin());
-				System.err.println(builderEmployee.getName());
-				newLeadList.setSalemanName(builderEmployee.getName());
-				if(builderLead.getLeadStatus() == 0){
-					newLeadList.setLeadName("");
-				} 
-				if(builderLead.getLeadStatus() == 1){
-					newLeadList.setLeadName("No Response");
-				}
-				if(builderLead.getLeadStatus() == 2){
-					newLeadList.setLeadStatusName("Call Again");
-				}
-				if(builderLead.getLeadStatus() == 3){
-					newLeadList.setLeadStatusName("Email Sent");
-				}
-				if(builderLead.getLeadStatus() == 4){
-					newLeadList.setLeadStatusName("Visit Again");
-				}
-				if(builderLead.getLeadStatus() == 5){
-					newLeadList.setLeadStatusName("Visit Complete");
-				}
-				if(builderLead.getLeadStatus() == 6){
-					newLeadList.setLeadStatusName("Follow up");
-				}
-				if(builderLead.getLeadStatus() == 7){
-					newLeadList.setLeadStatusName("Booked");
-				}
-				if(builderLead.getLeadStatus() == 8){
-					newLeadList.setLeadStatusName("Not Interested");
-				}
-				Source source = getSourceById(builderLead.getSource().getId()).get(0);
-				newLeadList.setSource(source.getName());
-				List<LeadConfig> leadConfig  =  getLeadConfig(builderLead.getId());
-				List<ConfigData> configDatas = new ArrayList<ConfigData>();
-				for(LeadConfig leadConfig2: leadConfig){
-					ConfigData configData = new ConfigData();
-					configData.setName(leadConfig2.getBuilderProjectPropertyConfiguration().getName());
-					configDatas.add(configData);
-				}
-				newLeadList.setConfigDatas(configDatas);
-				leadLists.add(newLeadList);
+			}else{
+				System.err.println("No Lead name found....");
 			}
-		}else{
-			System.err.println("No Lead name found....");
-		}
 		}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -6336,23 +6336,24 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	
 		String hql = "";
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 7){
-			hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
+			hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.id as salesmanId, c.name as salemanName "
+				+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
+				+ "join source as d on d.id = b.source "
+				+ "join builder_employee as c on a.emp_id = c.id "
+				+ "inner join lead_config as e on e.lead_id=a.lead_id "
+				+ "join builder_project_property_configuration as f on f.id=e.config_id "
+				+ "where a.emp_id="+builderEmployee.getId()+" group by a.id order by b.id desc";
+		}
+		else{
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
+				hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.id as salesmanId, c.name as salemanName,"
+						+ "(select name from builder_employee where id="+builderEmployee.getId()+") as salesheadName "
 					+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
 					+ "join source as d on d.id = b.source "
 					+ "join builder_employee as c on a.emp_id = c.id "
 					+ "inner join lead_config as e on e.lead_id=a.lead_id "
 					+ "join builder_project_property_configuration as f on f.id=e.config_id "
-					+ "where a.emp_id="+builderEmployee.getId()+" group by a.id order by b.id desc";
-		}
-		else{
-			if(builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
-				hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
-						+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
-						+ "join source as d on d.id = b.source "
-						+ "join builder_employee as c on a.emp_id = c.id "
-						+ "inner join lead_config as e on e.lead_id=a.lead_id "
-						+ "join builder_project_property_configuration as f on f.id=e.config_id "
-						+ "where b.added_by="+builderEmployee.getId()+" group by a.id order by b.id desc";
+					+ "where b.added_by="+builderEmployee.getId()+" group by a.id order by b.id desc";
 			}
 		}
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -6965,6 +6966,61 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
 		System.err.println(hql);
 		List<EmployeeList> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<NewLeadList> getNewLeadList(int projectId,BuilderEmployee builderEmployee,String keyword){
+		
+		String hql = "";
+		String where = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 7){
+			if(keyword == ""){
+			hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
+					+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
+					+ "join source as d on d.id = b.source "
+					+ "join builder_employee as c on a.emp_id = c.id "
+					+ "inner join lead_config as e on e.lead_id=a.lead_id "
+					+ "join builder_project_property_configuration as f on f.id=e.config_id "
+					+ "where a.emp_id="+builderEmployee.getId()+" group by a.id order by b.id desc";
+			}else{
+				hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
+						+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
+						+ "join source as d on d.id = b.source "
+						+ "join builder_employee as c on a.emp_id = c.id "
+						+ "inner join lead_config as e on e.lead_id=a.lead_id "
+						+ "join builder_project_property_configuration as f on f.id=e.config_id "
+						+ "where a.emp_id="+builderEmployee.getId();
+				hql +=" AND (b.name like '%"+keyword+"%' OR b.mobile like '%"+keyword+"%') group by a.id order by b.id desc";
+			}
+		}
+		else{
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
+				if(keyword == ""){
+					hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
+							+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
+							+ "join source as d on d.id = b.source "
+							+ "join builder_employee as c on a.emp_id = c.id "
+							+ "inner join lead_config as e on e.lead_id=a.lead_id "
+							+ "join builder_project_property_configuration as f on f.id=e.config_id "
+							+ "where b.added_by="+builderEmployee.getId()+" group by a.id order by b.id desc";
+				}else{
+					hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
+							+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
+							+ "join source as d on d.id = b.source "
+							+ "join builder_employee as c on a.emp_id = c.id "
+							+ "inner join lead_config as e on e.lead_id=a.lead_id "
+							+ "join builder_project_property_configuration as f on f.id=e.config_id "
+							+ "where b.added_by="+builderEmployee.getId()
+							+" AND (b.name like '%"+keyword+"%' OR b.mobile like '%"+keyword+"%' OR c.name like '%"+keyword+"%') group by a.id order by b.id desc";
+				}
+			}
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(NewLeadList.class));
+		System.err.println(hql);
+		List<NewLeadList> result = query.list();
 		session.close();
 		return result;
 	}
