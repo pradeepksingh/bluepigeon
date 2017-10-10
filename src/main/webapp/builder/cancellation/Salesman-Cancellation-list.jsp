@@ -33,6 +33,7 @@
 <%
 	int p_user_id = 0;
 	int emp_id = 0;
+	int access_id = 0;
 	List<BookedBuyerList> buyerList = null;	
 	List<ProjectData> projectList = null;
 	session = request.getSession(false);
@@ -44,8 +45,13 @@
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			p_user_id = builder.getBuilder().getId();
 			emp_id = builder.getId();
-			buyerList = new CancellationDAO().getCancelledBuyerList(builder);
-			projectList = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
+			access_id = builder.getBuilderEmployeeAccessType().getId();
+			if(access_id == 5 || access_id == 7 || access_id == 4){
+				buyerList = new CancellationDAO().getCancelledBuyerList(builder);
+				projectList = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
+			}else{
+				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
+			}
 		}
 	}
 %>

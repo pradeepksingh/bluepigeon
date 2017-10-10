@@ -72,7 +72,7 @@
     <link rel="stylesheet" type="text/css" href="../css/CEO-Employees.css">
      <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
-    <script src="../plugins/bower_components/jquery/dist/newjquery.min.js"></script>
+    <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
 </head>
 
 <body class="fix-sidebar">

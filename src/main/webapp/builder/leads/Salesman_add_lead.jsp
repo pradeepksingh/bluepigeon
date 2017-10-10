@@ -86,6 +86,7 @@
      <script src="../js/jquery.form.js"></script>
       <script type="text/javascript" src="../js/selectize.min.js"></script>
        <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
+       
 		<style>
 		.arrow{
 color: #ccc;
@@ -362,11 +363,19 @@ $('#configuration').multiselect({
     
 }); 
 $('#project_ids').multiselect({
+	
     columns: 1,
     placeholder: 'Select Project',
     search: true,
-    selectAll: true
+    selectAll: true,
+	     onDropdownHide: function(event) {
+        alert('Dropdown closed.');
+        // to reload the page
+        location.reload();
+    }
 });
+
+
 <% if(access_id == 5){%>
 
 $('#assignsalemans').multiselect({
@@ -385,45 +394,9 @@ $('#assignsalemans').multiselect({
 });
 
 <%}%>
-//$("#save").click(function(){
-// 	var projects = [];
-// 	var  projectList = document.getElementById("#multiple-checkboxes-2");
-	
-// 	for(var i=0;i<projectList.options.length;i++){
-// 		if(projectList[i].options[i].selected){
-// 			alert("Value :: "+projectList[i].options[i].value);
-// 			projects.push(projectList[i].options[i].value);
-// 		}
-// 	}
- // alert($("#multiple-checkboxes-2").val());
-//   $("#multiple-checkboxes-2  option:selected").each(function(){
-// 	  alert($(this).val());
-//   })
-//})
 
-// $('#min-max-price-range').click(function (event) {
-//     setTimeout(function(){ $('.price-label').first().focus();	},0);    
-// });
-// var priceLabelObj;
-// $('.price-label').focus(function (event) {
-//     priceLabelObj=$(this);
-//     $('.price-range').addClass('hide');
-//     $('#'+$(this).data('dropdownId')).removeClass('hide');
-// });
-// $(".price-range li").click(function(){    
-//     priceLabelObj.attr('value', $(this).attr('data-value'));
-//     var curElmIndex=$( ".price-label" ).index( priceLabelObj );
-//     var nextElm=$( ".price-label" ).eq(curElmIndex+1);
-
-//     if(nextElm.length){
-//         $( ".price-label" ).eq(curElmIndex+1).focus();
-//     }else{
-//         $('#min-max-price-range').dropdown('toggle');
-//     }
-// });
 
 $('#min-max-price-range').click(function (event) {
-   // setTimeout(function(){ $('.price-label').first().focus();	},0);    
 });
 var priceLabelObj;
 $('.price-label').focus(function (event) {
@@ -501,27 +474,6 @@ $('#addnewlead').bootstrapValidator({
                 }
             }
         },
-//         project_id: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Project is required and cannot be empty'
-//                 }
-//             }
-//         },
-//         city: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'City Name is required and cannot be empty'
-//                 }
-//             }
-//         },
-//         area: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Locality Name is required and cannot be empty'
-//                 }
-//             }
-//         },
         pricemin:{
             validators: {
                 notEmpty: {
@@ -540,11 +492,9 @@ $('#addnewlead').bootstrapValidator({
     
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
-	//alert("success...Find solution on google..");
 	event.preventDefault();
 	addLead();
 }).on('error.form.bv',function(event,data){
-	//alert("error...Find solution on google..");
 });
 
 function addLead() {
@@ -586,7 +536,6 @@ function showAddResponse(resp, statusText, xhr, $form){
 }
 
 $("#project_ids").change(function(){
-	//alert("Mouse down event");
 		var htmlconfig = "";
 		ajaxindicatorstart("Loading...");
 	  $.get("${baseUrl}/webapi/project/configdata",{project_ids:$(this).val()},function(data){
@@ -604,7 +553,6 @@ $("#project_ids").change(function(){
 		  ajaxindicatorstop();
 	  });
 });
-
 
 $('.dropdown-menu.ddRange')
 .click(function(e) {

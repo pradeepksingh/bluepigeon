@@ -36,6 +36,9 @@
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
 			emp_id = builder.getId();
+			if(builder.getBuilderEmployeeAccessType().getId() != 5){
+				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
+			}
 		}
    	}
 	if(builder_id > 0 ){

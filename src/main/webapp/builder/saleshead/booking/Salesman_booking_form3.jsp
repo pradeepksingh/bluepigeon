@@ -44,14 +44,18 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id1 = builder.getBuilder().getId();
-			emp_id = builder.getId();
-			if(builder_id1> 0 ){
-				project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id1);
-			}
-			if(project_list != null){
-			 	builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
-			 		
-			 	}
+			if(builder.getBuilderEmployeeAccessType().getId()==5){
+				emp_id = builder.getId();
+				if(builder_id1> 0 ){
+					project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id1);
+				}
+				if(project_list != null){
+				 	builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
+				 		
+				 	}
+				}
+			}else{
+				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 			}
 			 
 		}
@@ -144,11 +148,6 @@
                     <div class="col-md-8 col-sm-6 col-xs-12  bg11">
                         <h2><%out.print(buildingName); %>, <% out.print(flatNo); %>, <%out.print(projectName); %>, <%out.print(localityName); %></h2>
                           <ul class="nav nav-tabs">
-<!-- 							 <li class="active"><a data-toggle="pill" href="#home">Add New Buyer</a></li> -->
-<!-- 							 <li><a data-toggle="pill" href="#menu1">Project Details</a></li> -->
-<!-- 							 <li><a data-toggle="pill" href="#menu2">Buying Details</a></li> -->
-<!-- 							 <li><a data-toggle="pill" href="#menu3">Payment Schedule</a></li> -->
-<!-- 							 <li><a data-toggle="pill" href="#menu4">Document</a></li> -->
 							  <li class="active"><a data-toggle="tab" href="#home">Add New Buyer</a></li>
 							  <li><a data-toggle="tab" href="#menu1">Project Details</a></li>
 							  <li><a data-toggle="tab" href="#menu2">Buying Details</a></li>

@@ -31,7 +31,8 @@
 <%@page import="java.util.List"%>
 <%
 	int p_user_id = 0;
-int emp_id = 0;
+	int emp_id = 0;
+	int access_id = 0;
 	List<BookedBuyerList> buyerList = null;	
 	List<ProjectData> projectList = null;
 	session = request.getSession(false);
@@ -43,8 +44,13 @@ int emp_id = 0;
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			p_user_id = builder.getBuilder().getId();
 			emp_id = builder.getId();
-			buyerList = new BuilderDetailsDAO().getBookedBuyerList(builder);
-			projectList = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
+			access_id = builder.getBuilderEmployeeAccessType().getId();
+			if(access_id == 5 || access_id == 7 || access_id == 4){
+				buyerList = new BuilderDetailsDAO().getBookedBuyerList(builder);
+				projectList = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
+			}else{
+				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
+			}
 		}
 	}
 %>
@@ -105,7 +111,6 @@ int emp_id = 0;
 	                          <option value="<%out.print(projectData.getId());%>"><%out.print(projectData.getName()); %></option>
 	                          <%}} %>
 	                        </select>
-                        
                       </div>
                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                          <form class="navbar-form lead-search" method="post" role="search">
@@ -229,7 +234,6 @@ $("#search_buyer").click(function(){
 });
 
 $("#srch-term").keydown(function (e) {
-	//alert($("#srch-term").val());
 	if (e.keyCode == 13) {
 		getBookedBuyerFilterList();
 		return false;

@@ -72,21 +72,24 @@
  			emp_id = builder.getId(); 
  			builder_id = builder.getBuilder().getId();
  			access_id = builder.getBuilderEmployeeAccessType().getId(); 
- 			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
- 			if(buyer != null){
- 				buyerName = buyer.getName();
- 				projectName = buyer.getBuilderProject().getName();
- 				buildingName = buyer.getBuilderBuilding().getName();
- 				flatNo = buyer.getBuilderFlat().getFlatNo();
- 				locality = buyer.getBuilderProject().getLocalityName();
- 				buyerPan = buyer.getPancard();
- 				buyerMobile = buyer.getMobile();
- 				buyerEmail = buyer.getEmail();
- 				project_id = buyer.getBuilderProject().getId();
- 				building_id = buyer.getBuilderBuilding().getId();
- 				image = buyer.getPhoto();
- 				if(buyer.getIsPrimary())
- 					isPrimary = 1;
+ 			if(access_id == 5){
+	 			if(buyer != null){
+	 				buyerName = buyer.getName();
+	 				projectName = buyer.getBuilderProject().getName();
+	 				buildingName = buyer.getBuilderBuilding().getName();
+	 				flatNo = buyer.getBuilderFlat().getFlatNo();
+	 				locality = buyer.getBuilderProject().getLocalityName();
+	 				buyerPan = buyer.getPancard();
+	 				buyerMobile = buyer.getMobile();
+	 				buyerEmail = buyer.getEmail();
+	 				project_id = buyer.getBuilderProject().getId();
+	 				building_id = buyer.getBuilderBuilding().getId();
+	 				image = buyer.getPhoto();
+	 				if(buyer.getIsPrimary())
+	 					isPrimary = 1;
+	 			}
+ 			}else{
+ 				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
  			}
  			
  		} 

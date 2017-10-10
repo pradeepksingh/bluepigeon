@@ -20,6 +20,10 @@ public class NewLeadList {
 	private int max;
 	private String ConfigName;
 	private List<ConfigData> configDatas;
+	private String salesheadName;
+	private int currentLeadStatus;
+	private int salesmanId;
+	private int salesHeadId;
 	
 	public int getId() {
 		return id;
@@ -105,5 +109,28 @@ public class NewLeadList {
 	public void setConfigName(String configName) {
 		ConfigName = configName;
 	}
-	
+	public String getSalesheadName() {
+		return salesheadName;
+	}
+	public void setSalesheadName(String salesheadName) {
+		this.salesheadName = salesheadName;
+	}
+	public int getCurrentLeadStatus() {
+		return currentLeadStatus;
+	}
+	public void setCurrentLeadStatus(int currentLeadStatus) {
+		this.currentLeadStatus = currentLeadStatus;
+	}
+	public int getSalesmanId() {
+		return salesmanId;
+	}
+	public void setSalesmanId(int salesmanId) {
+		this.salesmanId = salesmanId;
+	}
+	public int getSalesHeadId() {
+		return salesHeadId;
+	}
+	public void setSalesHeadId(int salesHeadId) {
+		this.salesHeadId = salesHeadId;
+	}
 }
