@@ -36,9 +36,6 @@
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
 			emp_id = builder.getId();
-			if(builder.getBuilderEmployeeAccessType().getId() != 5){
-				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
-			}
 		}
    	}
 	if(builder_id > 0 ){
@@ -601,16 +598,16 @@
 </html>
 <script>
 $("#booking").click(function(){
-	window.location.href="${baseUrl}/builder/saleshead/booking/salesman_bookingOpenForm.jsp?project_id="+$("#project_id").val();
+	window.location.href="${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id="+$("#project_id").val();
 });
 $("#cancellation").click(function(){
-	window.location.href="${baseUrl}/builder/saleshead/cancellation/Salesman_booking_new2.jsp?project_id="+$("#project_id").val();
+	window.location.href="${baseUrl}/builder/salesman/cancellation/Salesman_booking_new2.jsp?project_id="+$("#project_id").val();
 });
 $("#campaign").click(function(){
-	window.location.href="${baseUrl}/builder/saleshead/campaign/Salesman_campaign.jsp?project_id="+$("#project_id").val();
+	window.location.href="${baseUrl}/builder/salesman/campaign/Salesman_campaign.jsp?project_id="+$("#project_id").val();
 });
 $("#leads").click(function(){
-	window.location.href="${baseUrl}/builder/saleshead/leads/Salesman_leads.jsp?project_id="+$("#project_id").val();
+	window.location.href="${baseUrl}/builder/salesman/leads/Salesman_leads.jsp?project_id="+$("#project_id").val();
 });
 function calculateAmount(id){
 	alert($("#h_sale_value").val());
@@ -1342,7 +1339,7 @@ function showAddDocumentResponse(resp, statusText, xhr, $form){
         $("#paymentresponse").show();
         alert(resp.message);
         ajaxindicatorstop();
-        window.location.href = "${baseUrl}/builder/saleshead/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
+        window.location.href = "${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
   	}
 }
 function deleteBuyer(id) {

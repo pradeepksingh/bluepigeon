@@ -263,7 +263,7 @@ public class CampaignDAO {
 			try{
 			//builderEmployee = result.get(0);
 			if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2){
-				hql = "SELECT camp.id as id, camp.content as content, camp.set_date as startDate, camp.end_date as endDate, camp.image as image,"
+				hql = "SELECT camp.id as id, camp.content as content, camp.term as terms, camp.set_date as startDate, camp.end_date as endDate, camp.image as image,"
 						+ " project.name as name, count(lead.id) as leads, count(b.id) as booking FROM campaign as camp "
 						+" inner join builder_project as project on project.id = camp.project_id "
 						+ " left join builder_lead as lead on project.id = lead.project_id "
@@ -272,7 +272,7 @@ public class CampaignDAO {
 						+ " where project.status = 1 AND build.id = "+builderEmployee.getBuilder().getId()+" group by project.id";
 			}
 			else if(builderEmployee.getBuilderEmployeeAccessType().getId() == 3){
-				hql = "SELECT camp.id as id, camp.content as content, camp.set_date as startDate, camp.till_date as endDate, camp.image as image,"
+				hql = "SELECT camp.id as id, camp.content as content, camp.terms as terms, camp.set_date as startDate, camp.till_date as endDate, camp.image as image,"
 						+ " project.name as name, count(lead.id) as leads, count(b.id) as booking FROM campaign as camp "
 						+ " inner join builder_project as project on project.id = camp.project_id "
 						+ " left join builder_lead as lead on project.id = lead.project_id "
@@ -285,7 +285,7 @@ public class CampaignDAO {
 //						+ " inner join builder_project as project on camp.project_id = project.id "
 //						+ " where project.status = 1 AND camp.is_delete=0 AND project.id = "+projectId+" group by camp.id order by project.id DESC";
 				
-				hql = "SELECT camp.id as id, camp.content as content, camp.image as image, camp.set_date as startDate,camp.end_date as endDate, project.name as name "
+				hql = "SELECT camp.id as id, camp.content as content, camp.terms as terms, camp.image as image, camp.set_date as startDate,camp.end_date as endDate, project.name as name "
 						+ "FROM campaign as camp "
 						+ "inner join builder_project as project on project.id = camp.project_id "
 						+ "WHERE project.id="+projectId+" and camp.is_deleted=0 GROUP by camp.id order by project.id";

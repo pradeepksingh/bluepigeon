@@ -289,7 +289,10 @@ Date date = new Date();
 </div>
 <script>
 
-
+function openTermsModal(tc) {
+	$("#myterms_popup").html(tc);
+	$("#myCampainTermsModal").modal('show');
+}
 $("#ceo_project_status_btn").click(function(){
 	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href="${baseUrl}/builder/ceo/projectstatus/projectstatus.jsp?project_id=<% out.print(projectId);%>";

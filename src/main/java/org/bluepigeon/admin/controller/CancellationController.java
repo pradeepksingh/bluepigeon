@@ -82,8 +82,6 @@ public class CancellationController {
 				cancellation.setCancelStatus(1);
 			}
 		}
-		
-		
 		return new CancellationDAO().save(cancellation, builderEmployee);
 	}
 	
