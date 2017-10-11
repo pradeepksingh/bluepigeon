@@ -649,9 +649,14 @@
              		+'<a href="${baseUrl}/builder/sales/projectstatus.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
-            		<%if(access_id==5 ||access_id == 7){%>
+            		<% if(access_id == 5){%>
              		+'<div class="col-md-6 left">' 
-             		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'<a href="${baseUrl}/builder/salehead/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'</div>'
+             		<%}%>
+             		<% if( access_id == 7){%>
+             		+'<div class="col-md-6 left">' 
+             		+'<a href="${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
           		+'<div class="col-md-6 center">'
@@ -747,7 +752,7 @@
              		<%}%>
              		<% if( access_id == 7){%>
              		+'<div class="col-md-6 left">' 
-             		+'<a href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'<a href="${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
              		+'<div class="col-md-6 center">'
@@ -841,10 +846,10 @@
 	             		+'</div>'
 	             		<%}%>
 	             		<% if( access_id == 7){%>
-	             		+'<div class="col-md-6 left">' 
-	             		+'<a href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
-	             		+'</div>'
-	             		<%}%>
+             			+'<div class="col-md-6 left">' 
+             			+'<a href="${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             			+'</div>'
+             			<%}%>
                			+'<div class="col-md-6 center">'
                 		+'<a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 	  			 	 	+'</div>'
