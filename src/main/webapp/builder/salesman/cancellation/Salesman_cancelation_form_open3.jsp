@@ -72,24 +72,21 @@
  			emp_id = builder.getId(); 
  			builder_id = builder.getBuilder().getId();
  			access_id = builder.getBuilderEmployeeAccessType().getId(); 
- 			if(access_id == 5){
-	 			if(buyer != null){
-	 				buyerName = buyer.getName();
-	 				projectName = buyer.getBuilderProject().getName();
-	 				buildingName = buyer.getBuilderBuilding().getName();
-	 				flatNo = buyer.getBuilderFlat().getFlatNo();
-	 				locality = buyer.getBuilderProject().getLocalityName();
-	 				buyerPan = buyer.getPancard();
-	 				buyerMobile = buyer.getMobile();
-	 				buyerEmail = buyer.getEmail();
-	 				project_id = buyer.getBuilderProject().getId();
-	 				building_id = buyer.getBuilderBuilding().getId();
-	 				image = buyer.getPhoto();
-	 				if(buyer.getIsPrimary())
-	 					isPrimary = 1;
-	 			}
- 			}else{
- 				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
+ 			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
+ 			if(buyer != null){
+ 				buyerName = buyer.getName();
+ 				projectName = buyer.getBuilderProject().getName();
+ 				buildingName = buyer.getBuilderBuilding().getName();
+ 				flatNo = buyer.getBuilderFlat().getFlatNo();
+ 				locality = buyer.getBuilderProject().getLocalityName();
+ 				buyerPan = buyer.getPancard();
+ 				buyerMobile = buyer.getMobile();
+ 				buyerEmail = buyer.getEmail();
+ 				project_id = buyer.getBuilderProject().getId();
+ 				building_id = buyer.getBuilderBuilding().getId();
+ 				image = buyer.getPhoto();
+ 				if(buyer.getIsPrimary())
+ 					isPrimary = 1;
  			}
  			
  		} 
@@ -141,7 +138,7 @@
          </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
-        <div id="page-wrapper" style="min-height: 2038px;">
+        <div id="page-wrapper">
            <div class="container-fluid">
                <!-- /.row -->
 	                <div class="row bspace">
@@ -189,6 +186,7 @@
 						            </div>
 						             <div class="messageContainer"></div>
 						        </div>
+						        
 						    </div>
 						    <div class="form-group row">
 						        <label for="example-search-input" class="col-5 col-form-label">Buyer Contact</label>
@@ -198,7 +196,9 @@
 						           </div>
 						            <div class="messageContainer"></div>
 						        </div>
+						         
 						    </div>
+						   
 						    <div class="form-group row">
 						        <label for="example-tel-input" class="col-5 col-form-label">Reason of Cancellation</label>
 						        <div class="col-7">
@@ -366,10 +366,13 @@ $('#newcancellation').bootstrapValidator({
 }).on('success.form.bv', function(event,data) {
 	// Prevent form submission
 	event.preventDefault();
+	console.log("Hi you are in cancellation");
+	//alert("Hello");
 	addCancellation();
 });
 
 function addCancellation() {
+	//alert("Hello again");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showCancellationRequest,
@@ -400,20 +403,20 @@ function showCancellationResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
        // alert(resp.message);
-        window.location.href = "${baseUrl}/builder/saleshead/cancellation/Salesman_booking_new2.jsp?project_id="+$("#project_id").val();
+        window.location.href = "${baseUrl}/builder/salesman/cancellation/Salesman_booking_new2.jsp?project_id="+$("#project_id").val();
   	}
 }
 
 $("#booking").click(function(){
-	window.location.href="${baseUrl}/builder/saleshead/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
+	window.location.href="${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
 });
 $("#cancellation").click(function(){
-	window.location.href="${baseUrl}/builder/saleshead/cancellation/Salesman_booking_new2.jsp?project_id="+$("#project_id").val();
+	window.location.href="${baseUrl}/builder/salesman/cancellation/Salesman_booking_new2.jsp?project_id="+$("#project_id").val();
 });
 $("#leads").click(function(){
-	window.location.href="${baseUrl}/builder/saleshead/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
+	window.location.href="${baseUrl}/builder/salesman/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
 });
 $("#campaign").click(function(){
-	window.location.href = "${baseUrl}/builder/salehead/campaign/Salesman_campaign.jsp?project_id="+$("#project_id").val();
+	window.location.href = "${baseUrl}/builder/salesman/campaign/Salesman_campaign.jsp?project_id="+$("#project_id").val();
 });
 </script>

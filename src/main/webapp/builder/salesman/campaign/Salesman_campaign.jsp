@@ -46,11 +46,8 @@
  			emp_id = builder.getId(); 
  			access_id = builder.getBuilderEmployeeAccessType().getId(); 
  			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
- 			if(access_id == 5){
- 				campaignListNews = new CampaignDAO().getNewCampaignListByBuilderEmployee(builder,projectId);
- 			}else{
- 				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
- 			}
+ 			campaignListNews = new CampaignDAO().getNewCampaignListByBuilderEmployee(builder, projectId);
+ 			
  		} 
  		 
  	} 
@@ -77,7 +74,7 @@
     <!-- Custom CSS -->
     <link href="../../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../../css/salesheadcampaign.css">
+    <link rel="stylesheet" type="text/css" href="../../css/salemancampaign.css">
     <link href="../../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
@@ -170,7 +167,7 @@
 					                        </div>
 					                        <%} %>
 						                    <div class="bottom">
-						                        <h4><span><a href="javascript:openTermsModal(`<% out.print(campaignListNew.getTerms()); %>`);" class="tcanchor">T&C</a></span></h4>
+						                         <h4><span><a href="javascript:openTermsModal(`<% out.print(campaignListNew.getTerms()); %>`);" class="tcanchor">T&C</a></span></h4>
 						                    </div>
 				                       </div>
 			                       </div>
@@ -216,13 +213,13 @@ function openTermsModal(tc) {
 	$("#myCampainTermsModal").modal('show');
 }
  $("#booking").click(function(){
-	 window.location.href="${baseUrl}/builder/saleshead/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(projectId);%>
+	 window.location.href="${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(projectId);%>
  });
  $("#cancellation").click(function(){
-	 window.location.href="${baseUrl}/builder/saleshead/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(projectId);%>
+	 window.location.href="${baseUrl}/builder/salesman/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(projectId);%>
  });
  $("#leads").click(function(){
-		window.location.href="${baseUrl}/builder/saleshead/leads/Salesman_leads.jsp?project_id="+<%out.print(projectId);%>
+		window.location.href="${baseUrl}/builder/salesman/leads/Salesman_leads.jsp?project_id="+<%out.print(projectId);%>
 	});
 </script>
 

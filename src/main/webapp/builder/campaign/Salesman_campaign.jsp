@@ -167,7 +167,7 @@
 					                        </div>
 					                        <%} %>
 						                    <div class="bottom">
-						                        <h4><span>T&C</span></h4>
+						                         <h4><span><a href="javascript:openTermsModal(`<% out.print(campaignListNew.getTerms()); %>`);" class="tcanchor">T&C</a></span></h4>
 						                    </div>
 				                       </div>
 			                       </div>
@@ -193,7 +193,25 @@
 	</div> 
   </body>
 </html>
+<div class="modal fade" id="myCampainTermsModal" role="dialog">
+  	<div class="modal-dialog inbox">
+     	<div class="modal-content">
+       		<div class="modal-body">
+          		<div class="row">
+		  			<div class="col-md-12 col-sm-12 col-xs-12">
+		    			<h3>Terms & Conditions</h3>
+	      			</div>
+	    		</div>
+	  			<div class="row" id="myterms_popup"></div>
+  			</div>
+	  	</div>
+ 	</div>
+</div>
 <script>
+function openTermsModal(tc) {
+	$("#myterms_popup").html(tc);
+	$("#myCampainTermsModal").modal('show');
+}
  $("#booking").click(function(){
 	 window.location.href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+<%out.print(projectId);%>
  });

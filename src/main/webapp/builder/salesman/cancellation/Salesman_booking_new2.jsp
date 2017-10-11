@@ -68,29 +68,30 @@
  			p_user_id = builder.getBuilder().getId(); 
  			emp_id = builder.getId();
  			access_id = builder.getBuilderEmployeeAccessType().getId(); 
- 			if(access_id == 5){
-	 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
-	 			building_id = builderBuildingList.get(0).getId(); 
-				flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,0); 
-	 			bookingFlatList2 = new ProjectDAO().getFlatBookeddetails(project_id,building_id,floor_id,0); 
-	 			if(bookingFlatList2 != null){
-	 				if( bookingFlatList2.getImage() != null){
-	 					image = bookingFlatList2.getImage(); 
-	 				}
-	 			}
-	 			flat_size = flatListDatas.size(); 
-	 			if(builderBuildingList != null && builderBuildingList.size() > 0){ 
-					building_id = builderBuildingList.get(0).getId();  
-					building_size_list = builderBuildingList.size(); 
-	 				floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id); 
-	 				if(floorList != null && floorList.size() > 0){ 
-						floor_id = floorList.get(0).getId();
-						floor_size_list = floorList.size(); 
-	 				} 
-	 			} 
- 			}else{
- 				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
+ 			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
+ 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
+ 			building_id = builderBuildingList.get(0).getId(); 
+			flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,0); 
+ 			bookingFlatList2 = new ProjectDAO().getFlatBookeddetails(project_id,building_id,floor_id,0); 
+ 			if(bookingFlatList2 != null){
+ 				if( bookingFlatList2.getImage() != null){
+ 					image = bookingFlatList2.getImage(); 
+ 				}
  			}
+ 			flat_size = flatListDatas.size(); 
+		
+			//building_id = builderBuildingList.get(0).getId(); 
+			//floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id); 
+ 			//floor_size_list = floorList.size(); -->
+ 			if(builderBuildingList != null && builderBuildingList.size() > 0){ 
+				building_id = builderBuildingList.get(0).getId();  
+				building_size_list = builderBuildingList.size(); 
+ 				floorList = new ProjectDAO().getActiveFloorsByBuildingId(building_id); 
+ 				if(floorList != null && floorList.size() > 0){ 
+					floor_id = floorList.get(0).getId();
+					floor_size_list = floorList.size(); 
+ 				} 
+ 			} 
  		} 
  	} 
  %>
@@ -113,6 +114,8 @@
     <link href="../../css/style.css" rel="stylesheet">
     <!-- color CSS -->
      <link rel="stylesheet" type="text/css" href="../../css/selectize.css" />
+<!--     <link rel="stylesheet" type="text/css" href="../../css/cancellation.css"> -->
+<!-- 	 <link rel="stylesheet" type="text/css" href="../css/custom7.css"> -->
 	  <link rel="stylesheet" type="text/css" href="../../css/cancellation-top.css">
 	   <link rel="stylesheet" type="text/css" href="../../css/newcancellationlist.css">
     <link href="../../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
@@ -139,7 +142,7 @@
          </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
-        <div id="page-wrapper" style="min-height: 2038px;">
+        <div id="page-wrapper">
            <div class="container-fluid">
                <!-- /.row -->
 	                <div class="row bspace">
@@ -308,16 +311,16 @@
 </html>
 <script>
 $("#booking").click(function(){
-	window.location.href="${baseUrl}/builder/saleshead/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
+	window.location.href="${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
 });
 $("#campaign").click(function(){
-	window.location.href="${baseUrl}/builder/saleshead/campaign/Salesman_campaign.jsp?project_id="+<%out.print(project_id);%>;
+	window.location.href="${baseUrl}/builder/salesman/campaign/Salesman_campaign.jsp?project_id="+<%out.print(project_id);%>;
 });
 $("#leads").click(function(){
-	window.location.href="${baseUrl}/builder/saleshead/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
+	window.location.href="${baseUrl}/builder/salesman/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
 });
 $("#cancellation").click(function(){
-	window.location.href="${baseUrl}/builder/saleshead/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(project_id);%>
+	window.location.href="${baseUrl}/builder/salesman/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(project_id);%>
 });
 <% if(flatListDatas !=null){%>
 $(document).ready(function () {
@@ -344,7 +347,7 @@ $(document).ready(function () {
 });
 <% } %>
 function showFlats(id){
-	window.location.href="${baseUrl}/builder/saleshead/cancellation/Salesman_cancelation_form_open3.jsp?flat_id="+id;
+	window.location.href="${baseUrl}/builder/cancellation/Salesman_cancelation_form_open3.jsp?flat_id="+id;
 }
 function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
@@ -389,6 +392,7 @@ $select_building = $("#filter_building_id").selectize({
 					    }
 					});
 				}else{
+					
 					$select_floor[0].selectize.destroy();
 					$("#filter_floor_id").html("");
 					$("#floorDetailsTab").hide();
@@ -411,6 +415,8 @@ $select_building = $("#filter_building_id").selectize({
 				}
 				
 			},'json');
+			//window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+value;
+			
 		}
 	 },
 	 onDropdownOpen: function(value){
@@ -444,7 +450,7 @@ $select_floor = $("#filter_floor_id").selectize({
 });
 
 <% if(floor_size_list > 0){%>
-		select_floor = $select_floor[0].selectize;
+  select_floor = $select_floor[0].selectize;
 <%}%>
 
 $select_eveOrodd = $("#evenOrodd").selectize({
@@ -464,7 +470,7 @@ $select_eveOrodd = $("#evenOrodd").selectize({
 });
 function getFlatDetails(){
 	var no = $("#filter_building_id").val();
-		$.get("${baseUrl}/builder/saleshead/cancellation/cancelflat.jsp?project_id="+<%out.print(project_id);%>+"&building_id="+no+"&floor_id="+$("#filter_floor_id").val()+"&evenOrodd="+$("#evenOrodd").val(),{ }, function(data){
+		$.get("${baseUrl}/builder/cancellation/cancelflat.jsp?project_id="+<%out.print(project_id);%>+"&building_id="+no+"&floor_id="+$("#filter_floor_id").val()+"&evenOrodd="+$("#evenOrodd").val(),{ }, function(data){
 			if($.trim(data)){
 				$("#cancalflat").html(data);
 			}else{
@@ -484,32 +490,6 @@ function showFlatwithImage(id){
 			}
 			if(data.flatStatus == 2 &&  data.isDeleted  == 0 && (data.isApproved==false) && (data.cancelStatus == 0) ){
       htmlFlat ='<div class="user-profile">'
-				+'<img src="'+image+'" alt="User Image" class="custom-img">'
-		        +'<img src="../../images/camera_icon.PNG" alt="camera " class="camera"/>'
-				+'<p><b>'+data.buyerName+'</b></p>'
-				+'<p class="p-custom">'+data.buildingName+'-'+data.flatNo+', '+data.projectName+'</p>'
-				+'<hr>'
-				+'</div>'
-				+'<div class="row custom-row user-row">'
-				+'<p class="p-custom">Mobile No.</p>'
-				+'<p><b>'+data.buyerMobile+'</b></p>'
-				+'<p class="p-custom">Email</p>'
-				+'<p><b>'+data.buyerEmail+'</b></p>'
-				+'<p class="p-custom">PAN</p>'
-				+'<p><b>'+data.buyerPanNo+'</b></p>'
-				+'<p class="p-custom">Adhar card no.</p>'
-				+'<p><b>'+data.buyerAadhaarNumber+'</b></p>'
-				+'<p class="p-custom">Permanent Address</p>'
-				+'<p><b>'+data.buyerPermanentAddress+'</b></p>'
-				+'<p class="p-custom">Current Address</p>'
-				+'<p><b>'+data.buyerCurrentAddress+'</b></p>'
-				+'<hr>'
-				+'</div>'
-				+'<button type="button" onclick="showFlats('+data.flatId+')" class="button red">Cancel</button>';
-			     
-		}
-  	if(data.flatStatus == 2 &&  data.isDeleted  == 0 && (data.isApproved==false) && (data.cancelStatus == 1) ){
-        htmlFlat ='<div class="user-profile">'
 		          +'<img src="'+image+'" alt="User Image" class="custom-img">'
 		          +'<img src="../../images/camera_icon.PNG" alt="camera " class="camera"/>'
 		          +'<p><b>'+data.buyerName+'</b></p>'
@@ -517,32 +497,61 @@ function showFlatwithImage(id){
 		          +'<hr>'
 		       	  +'</div>'
 			      +'<div class="row custom-row user-row">'
-			      +'<p class="p-custom">Mobile No Ajax.</p>'
-			      +'<p><b>'+data.buyerMobile+'</b></p>'
-			      +'<p class="p-custom">Email</p>'
-			      +'<p><b>'+data.buyerEmail+'</b></p>'
-			      +'<p class="p-custom">PAN</p>'
-			      +'<p><b>'+data.buyerPanNo+'</b></p>'
-			      +'<p class="p-custom">Adhar card no.</p>'
-			      +'<p><b></b></p>'
-			      +'<p class="p-custom">Permanent Address</p>'
-		          +'<p><b>'+data.buyerPermanentAddress+'</b></p>'
-		          +'<p class="p-custom">Current Address</p>'
-		          +'<p><b>'+data.buyerCurrentAddress+'</b></p>'
-		          +'<hr>'
-		      	  +'</div>'
-				  +'<div class="row custom-row user-row red">'
-			      +'<p>Reason of Cancellation</p>'
-			      +'<p><b>'+data.cancelReason+'</b></p>'
-			      +'<p>Amount <input type="text" id="cancel_amount" name="cancel_amount" placeholder="cncellation charges" value="'+data.charges+'" /></p>'
-			  	  +'</div>'
-			 	  +'<button type="button" onclick="updateCancel('+data.cancellationId+');" class="button red">Approve</button>';
-  			}
-      		$("#home").append(htmlFlat);
+			        +'<p class="p-custom">Mobile No.</p>'
+			        +'<p><b>'+data.buyerMobile+'</b></p>'
+			        +'<p class="p-custom">Email</p>'
+			        +'<p><b>'+data.buyerEmail+'</b></p>'
+			        +'<p class="p-custom">PAN</p>'
+			        +'<p><b>'+data.buyerPanNo+'</b></p>'
+			        +'<p class="p-custom">Adhar card no.</p>'
+			        +'<p><b>'+data.buyerAadhaarNumber+'</b></p>'
+			        +'<p class="p-custom">Permanent Address</p>'
+			        +'<p><b>'+data.buyerPermanentAddress+'</b></p>'
+			        +'<p class="p-custom">Current Address</p>'
+			        +'<p><b>'+data.buyerCurrentAddress+'</b></p>'
+			        +'<hr>'
+			      +'</div>'
+			      +'<button type="button" onclick="showFlats('+data.flatId+')" class="button red">Cancel</button>';
+			     
+		}
+  	if(data.flatStatus == 2 &&  data.isDeleted  == 0 && (data.isApproved==false) && (data.cancelStatus == 1) ){
+        htmlFlat ='<div class="user-profile">'
+	          +'<img src="'+image+'" alt="User Image" class="custom-img">'
+	          +'<img src="../../images/camera_icon.PNG" alt="camera " class="camera"/>'
+	          +'<p><b>'+data.buyerName+'</b></p>'
+	          +'<p class="p-custom">'+data.buildingName+'-'+data.flatNo+', '+data.projectName+'</p>'
+	          +'<hr>'
+	       	  +'</div>'
+		      +'<div class="row custom-row user-row">'
+		      +'<p class="p-custom">Mobile No Ajax.</p>'
+		      +'<p><b>'+data.buyerMobile+'</b></p>'
+		      +'<p class="p-custom">Email</p>'
+		      +'<p><b>'+data.buyerEmail+'</b></p>'
+		      +'<p class="p-custom">PAN</p>'
+		      +'<p><b>'+data.buyerPanNo+'</b></p>'
+		      +'<p class="p-custom">Adhar card no.</p>'
+		      +'<p><b></b></p>'
+		      +'<p class="p-custom">Permanent Address</p>'
+	          +'<p><b>'+data.buyerPermanentAddress+'</b></p>'
+	          +'<p class="p-custom">Current Address</p>'
+	          +'<p><b>'+data.buyerCurrentAddress+'</b></p>'
+	          +'<hr>'
+	      	  +'</div>'
+			  +'<div class="row custom-row user-row red">'
+		      +'<p>Reason of Cancellation</p>'
+		      +'<p><b>'+data.cancelReason+'</b></p>'
+		      +'<p>Amount <input type="text" id="cancel_amount" name="cancel_amount" placeholder="cncellation charges" value="'+data.charges+'" /></p>'
+		  	  +'</div>'
+		 	  +'<button type="button" onclick="updateCancel('+data.cancellationId+');" class="button red">Approve</button>';
+  	}
+      			$("#home").append(htmlFlat);
+		   
 		},'json');
 		activeInactiveFlats();
 	}
+	
 }
+
 function updateCancel(id){
 	alert("id "+id);
 	if($("#cancel_amount").val() != '' && $("#cancel_amount").val() > 0){

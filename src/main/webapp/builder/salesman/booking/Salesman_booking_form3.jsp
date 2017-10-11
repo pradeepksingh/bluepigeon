@@ -84,24 +84,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="../plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
-    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+    <link href="../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
    <!-- Menu CSS -->
-    <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+    <link href="../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/addbuyer.css">
-    <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
-    <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../../css/addbuyer.css">
+    <link href="../../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
+    <link href="../../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
-    <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-     <script src="../js/bootstrap-datepicker.min.js"></script>
-      <script src="../js/jquery.form.js"></script>
-    <script src="../js/bootstrapValidator.min.js"></script>
+    <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+     <script src="../../js/bootstrap-datepicker.min.js"></script>
+      <script src="../../js/jquery.form.js"></script>
+    <script src="../../js/bootstrapValidator.min.js"></script>
 </head>
 
 <body class="fix-sidebar">
@@ -112,12 +112,12 @@
     <div id="wrapper">
         <!-- Top Navigation -->
         <div id="header">
-         <%@include file="../partial/header.jsp"%>
+         <%@include file="../../partial/header.jsp"%>
         </div>
         <!-- End Top Navigation -->
         <!-- Left navbar-header -->
         <div id="sidebar1">
-        <%@include file="../partial/sidebar.jsp"%>
+        <%@include file="../../partial/sidebar.jsp"%>
          </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
@@ -551,22 +551,22 @@
         </div>
     <!-- /.container-fluid -->
     <div id="sidebar1"> 
-	     <%@include file="../partial/footer.jsp"%>
+	     <%@include file="../../partial/footer.jsp"%>
 	</div> 
   </body>
 </html>
 <script>
 $("#cancellation").click(function(){
-	window.location.href="${baseUrl}/builder/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(project_id);%>
+	window.location.href="${baseUrl}/builder/salesman/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(project_id);%>
 });
 $("#campaign").click(function(){
-	window.location.href="${baseUrl}/builder/campaign/Salesman_campaign.jsp?project_id="+<% out.print(project_id);%>
+	window.location.href="${baseUrl}/builder/salesman/campaign/Salesman_campaign.jsp?project_id="+<% out.print(project_id);%>
 });
 $("#leads").click(function(){
-	window.location.href="${baseUrl}/builder/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
+	window.location.href="${baseUrl}/builder/salesman/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
 });
 $("#booking").click(function(){
-	window.location.href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
+	window.location.href="${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
 });
 function addMoreBuyers(){
 	var buyers = parseInt($("#buyer_count").val());

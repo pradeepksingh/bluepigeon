@@ -455,21 +455,21 @@
 						     	<div class="col-sm-12">
 								    <div class="form-group row">
 								    	 <input type="hidden" name="doc_name[]" value="Agreement" />
-								        <label for="example-text-input" class="col-5 col-form-label"> Agreement*</label>
+								        <label for="example-text-input" class="col-5 col-form-label"> Aadhaar card*</label>
 								        <div class="col-7">
 								           <input type="file" class="form-control" name="doc_url[]" />
 								        </div>
 								    </div>
 								    <div class="form-group row">
 								      <input type="hidden" name="doc_name[]" value="Index 2" />
-								        <label for="example-text-input" class="col-5 col-form-label"> Index 2*</label>
+								        <label for="example-text-input" class="col-5 col-form-label"> Pan card *</label>
 								        <div class="col-7">
 								            <input type="file" class="form-control" name="doc_url[]" />
 								        </div>
 								    </div>
 								    <div class="form-group row">
 								     <input type="hidden" name="doc_name[]" value="Receipts with Date and time and Name" />
-								        <label for="example-text-input" class="col-5 col-form-label"> Receipts with Date & Time & Name</label>
+								        <label for="example-text-input" class="col-5 col-form-label"> Voter Id card </label>
 								        <div class="col-7">
 								            <input type="file" class="form-control" name="doc_url[]" />
 								        </div>
@@ -744,27 +744,6 @@ $('#addnewbuyer').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-//     	project_id: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Please select project'
-//                 }
-//             }
-//         },
-//         building_id: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Please select building'
-//                 }
-//             }
-//         },
-//         flat_id: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Please select flat'
-//                 }
-//             }
-//         },
         'buyer_name[]': {
             validators: {
                 notEmpty: {
@@ -823,24 +802,17 @@ $('#addnewbuyer').bootstrapValidator({
                 }
             }
         },
-//         flat_id: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Please select flat'
-//                 }
-//             }
-//         },
         'aadhaar_no[]':{
         	validators: {
                 notEmpty: {
                     message: 'Aadhaar Card number is required and cannot be empty'
-                }
+                },
+                numeric: {
+                 	message: 'Aadhaar Card number is invalid',
+                    thousandsSeparator: '',
+                    decimalSeparator: '.'
+              	}
             },
-            numeric: {
-             	message: 'Aadhaar Card number is invalid',
-                thousandsSeparator: '',
-                decimalSeparator: '.'
-          	}
         },
         'refferal_id[]':{
         	validators: {
@@ -979,7 +951,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         
         alert(resp.message);
         ajaxindicatorstop();
-        window.location.href = "${baseUrl}/builder/saleshead/booing/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>
+        window.location.href = "${baseUrl}/builder/saleshead/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>
   	}
 }
 
