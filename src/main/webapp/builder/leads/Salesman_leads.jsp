@@ -302,9 +302,7 @@ color: #ccc;
 						  </div>
 	                    </div>
 	                    <%} %>
-	                    <% if(access_id == 5){
-	                    	
-	                    		%>
+	                    <% if(access_id == 5){%>
 	                    <div class="col-md-2 col-sm-2 col-xs-6">
 	                      <div class="dropdown">
 						  		<select id="select_salesman" class="select_salesman" name="select_salesman" data-style="form-control">
@@ -399,7 +397,7 @@ color: #ccc;
 							<h3>Add Lead</h3>
 						  </div>
 						  <div class="col-md-2 col-sm-2 col-xs-2">
-							<img src="../images/error.png" alt="cancle" data-dismiss="modal">
+							<a href=""><img src="../images/error.png" alt="cancle" data-dismiss="modal"></a>
 						  </div>
 						</div>
 						

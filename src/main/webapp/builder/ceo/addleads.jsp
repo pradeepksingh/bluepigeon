@@ -303,36 +303,6 @@ color: #ccc;
 							      </div>
 							    </div>
 							  </div>
-							 <%if(access_id ==5){ %>
-							 <div class="form-group row">
-							 <label for="example-search-input" class="col-5 col-form-label">Assign Salesman</label>
-								<div class="col-7">
-									<div>
-								   		<select id="assignsalemans" name="assignsalemans[]" multiple>
-									    <%if(salesmanList != null){
-								    	  for(BuilderEmployee  builderEmployee: salesmanList){%>
-								      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
-								      	 <%}} %>
-									     </select>
-								     </div>
-								 </div>
-						    </div>
-						    <%} %>
-						     <%if(access_id ==4 || access_id == 1){ %>
-							 <div class="form-group row">
-							 <label for="example-search-input" class="col-5 col-form-label">Assign Saleshead</label>
-								<div class="col-7">
-									<div>
-								   		<select id="assignsalemans" name="assignsalemans[]" multiple>
-									    <%if(saleheadList != null){
-								    	  for(BuilderEmployee  builderEmployee: saleheadList){%>
-								      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
-								      	 <%}} %>
-									     </select>
-								     </div>
-								 </div>
-						    </div>
-						    <%} %>
 						    </div>
 							<div class="center bcenter">
 						  	   <button type="submit" id="save" class="button1">Save</button>
@@ -367,25 +337,6 @@ $('#project_ids').multiselect({
     search: true,
     selectAll: true
 });
-<% if(access_id == 5){%>
-
-$('#assignsalemans').multiselect({
-    columns: 1,
-    placeholder: 'Select salesman',
-    search: true,
-    selectAll: true
-});
-<%}%>
-<%if(access_id == 4 || access_id == 1){%>
-$('#assignsalemans').multiselect({
-    columns: 1,
-    placeholder: 'Select saleshead',
-    search: true,
-    selectAll: true
-});
-
-<%}%>
-
 
 $('#min-max-price-range').click(function (event) {
    // setTimeout(function(){ $('.price-label').first().focus();	},0);    

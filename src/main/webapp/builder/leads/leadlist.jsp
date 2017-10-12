@@ -47,12 +47,11 @@
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			p_user_id = builder.getBuilder().getId();
 			emp_id = builder.getId();
-			buyerList = new CancellationDAO().getCancelledBuyerList(builder);
 			projectList = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 			for(ProjectData projectData2: projectList){
 				projectIds.add(projectData2.getId());
 			}
-			 newLeadLists = new ProjectDAO().getNewLeadLists(projectIds,builder);
+			 newLeadLists = new ProjectDAO().getNewLeadListsByEmp(projectIds,builder);
 		}
 	}
 %>

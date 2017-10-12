@@ -85,7 +85,7 @@ Date date = new Date();
     <link rel="stylesheet" type="text/css" href="../../css/ceocampaigns.css">
     <!-- jQuery -->
     <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script>
+<!--     <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script> -->
   
 </head>
 

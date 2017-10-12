@@ -178,7 +178,7 @@ color: #ccc;
                <div class="white-box">
                  <div class="row bg11">
                    <form class="addlead1" id="addnewlead" name="addnewlead" action="" method="post"  enctype="multipart/form-data">
-                  		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
+					 <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
                      <div class="col-md-6 col-sm-6 col-xs-12">
                          <div class="form-group row">
 							<label for="example-text-input" class="col-5 col-form-label">Name</label>
@@ -222,7 +222,6 @@ color: #ccc;
 			                        <div class="messageContainer"></div>
 							    </div>
 						    </div>
-						    
 				       </div>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                        <div class="form-group row">
@@ -304,36 +303,6 @@ color: #ccc;
 							      </div>
 							    </div>
 							  </div>
-							 <%if(access_id ==5){ %>
-							 <div class="form-group row">
-							 <label for="example-search-input" class="col-5 col-form-label">Assign Salesman</label>
-								<div class="col-7">
-									<div>
-								   		<select id="assignsalemans" name="assignsalemans[]" multiple>
-									    <%if(salesmanList != null){
-								    	  for(BuilderEmployee  builderEmployee: salesmanList){%>
-								      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
-								      	 <%}} %>
-									     </select>
-								     </div>
-								 </div>
-						    </div>
-						    <%} %>
-						     <%if(access_id ==4){ %>
-							 <div class="form-group row">
-							 <label for="example-search-input" class="col-5 col-form-label">Assign Saleshead</label>
-								<div class="col-7">
-									<div>
-								   		<select id="assignsalemans" name="assignsalemans[]" multiple>
-									    <%if(saleheadList != null){
-								    	  for(BuilderEmployee  builderEmployee: saleheadList){%>
-								      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
-								      	 <%}} %>
-									     </select>
-								     </div>
-								 </div>
-						    </div>
-						    <%} %>
 						    </div>
 							<div class="center bcenter">
 						  	   <button type="submit" id="save" class="button1">Save</button>
@@ -352,18 +321,14 @@ color: #ccc;
   </body>
 </html>
 <script>
-
-
 $('#configuration').multiselect({
     columns: 1,
     placeholder: 'Select Configuration',
     search: true,
     selectAll: true,
     //noneSelectedText: "Select",
-    
 }); 
 $('#project_ids').multiselect({
-	
     columns: 1,
     placeholder: 'Select Project',
     search: true,
@@ -374,27 +339,6 @@ $('#project_ids').multiselect({
         location.reload();
     }
 });
-
-
-<% if(access_id == 5){%>
-
-$('#assignsalemans').multiselect({
-    columns: 1,
-    placeholder: 'Select salesman',
-    search: true,
-    selectAll: true
-});
-<%}%>
-<%if(access_id == 4){%>
-$('#assignsalemans').multiselect({
-    columns: 1,
-    placeholder: 'Select saleshead',
-    search: true,
-    selectAll: true
-});
-
-<%}%>
-
 
 $('#min-max-price-range').click(function (event) {
 });
