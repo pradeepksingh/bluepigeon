@@ -30,7 +30,6 @@ BookingFlatList bookingFlatList2 = null;
 List<BuilderFlatList> flats = null;
 List<EmployeeList> employeeLists = null;
 Double totalPropertySold = 0.0;
-
 if(session!=null)
 {
 	if(session.getAttribute("ubname") != null)
@@ -56,7 +55,6 @@ if(session!=null)
 			}
 		}
 	}
-
 }
 SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
 Date date = new Date();
@@ -85,7 +83,7 @@ Date date = new Date();
     <link rel="stylesheet" type="text/css" href="../../css/ceoinventory.css">
     <link href="../../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
-    <script src="../../plugins/bower_components/jquery/dist/newjquery.min.js"></script>
+    <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
 <!--     <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script> -->
       <script type="text/javascript" src="../../js/selectize.min.js"></script>
     
@@ -287,5 +285,3 @@ $("#ceo_revenue_btn").click(function(){
 	window.location.href="${baseUrl}/builder/ceo/revenue/projectrevenue.jsp?project_id=<% out.print(projectId);%>";
 });
 </script>
- 
-    
