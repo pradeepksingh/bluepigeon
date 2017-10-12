@@ -161,12 +161,21 @@
 </html>
 <script>
 $("#search_buyer").click(function(){
+	searchEmployees();
+});
+$('#filter_role_id').change(function(){
+	searchEmployees();
+});
+function searchEmployees(){
 	ajaxindicatorstart("Please wait while.. we search ...");
     $.get("${baseUrl}/builder/ceo/partialemployeeslist.jsp?builder_id=<%out.print(builder_id);%>&role_id="+$('#filter_role_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
     	$("#emplist").html(data);
     	ajaxindicatorstop();
     },'html');
+}
+$("#srch-term").keydown(function(e){
+	if(e.ketCode == 13){
+		searchEmployees();
+	}
 });
-
-
 </script>

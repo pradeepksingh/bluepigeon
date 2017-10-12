@@ -80,7 +80,7 @@
     <!-- Menu CSS -->
 
     <link href="../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
- <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
+ <link rel="stylesheet" type="text/css" href="../../css/selectize.css" />
     <!-- Custom CSS -->
 
     <link href="../../css/style.css" rel="stylesheet">
@@ -91,7 +91,7 @@
     
 <!--       <link rel="stylesheet" type="text/css" href="../css/Salesman_leads.css"> -->
 
-    <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="../../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
 
     <!-- jQuery -->
 
@@ -129,7 +129,6 @@ color: #ccc;
 .max_value{
     padding: 6px 6px 6px 12px;
 }
-
             .price_Ranges {
                 float: right;
                 width: 50%;
@@ -223,7 +222,7 @@ color: #ccc;
 						    <div class="input-group add-on">
 						      <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
 						      <div class="input-group-btn">
-						        <button id="searchleads" class="btn btn-default" type="button"><img src="../images/search.png"/></button>
+						        <button id="searchleads" class="btn btn-default" type="button"><img src="../../images/search.png"/></button>
 						      </div>
 						    </div>
 					     </form>
@@ -320,15 +319,15 @@ color: #ccc;
 	                 <hr>
 	                 <div class="row">
 	                    <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                     <img src="../images/Saleshead-added.PNG" />
+	                     <img src="../../images/Saleshead-added.PNG" />
 	                     <h5>Added By :</h5>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                      <img src="../images/Baget.PNG" />
+	                      <img src="../../images/Baget.PNG" />
 	                     <h5>Budget:</h5>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
-	                      <img src="../images/Configuration.PNG" />
+	                      <img src="../../images/Configuration.PNG" />
 	                      <h5>Configuration :</h5>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
@@ -399,7 +398,7 @@ color: #ccc;
 							<h3>Add Lead</h3>
 						  </div>
 						  <div class="col-md-2 col-sm-2 col-xs-2">
-							<img src="../images/error.png" alt="cancle" data-dismiss="modal">
+							<img src="../../images/error.png" alt="cancle" data-dismiss="modal">
 						  </div>
 						</div>
 						
@@ -589,9 +588,7 @@ $select_source = $("#select_source").selectize({
     	 }
      }
 });
-
 select_source = $select_source[0].selectize;
-
 <%
 	if(access_id == 5){
 %>
@@ -605,14 +602,12 @@ $select_salesman = $(".select_salesman").selectize({
 });
 select_salesman = $select_salesman[0].selectize;
 <%}%>
-
 $('#configuration').multiselect({
     columns: 1,
     placeholder: 'Select Configuration',
     search: true,
     selectAll: true
 });
-
 $('#min-max-price-range').click(function (event) {
     setTimeout(function(){ $('.price-label').first().focus();	},0);    
 });
@@ -622,19 +617,16 @@ $('.price-label').focus(function (event) {
     $('.price-range').addClass('hide');
     $('#'+$(this).data('dropdownId')).removeClass('hide');
 });
-
 $(".price-range li").click(function(){    
     priceLabelObj.attr('value', $(this).attr('data-value'));
     var curElmIndex=$( ".price-label" ).index( priceLabelObj );
     var nextElm=$( ".price-label" ).eq(curElmIndex+1);
-
     if(nextElm.length){
         $( ".price-label" ).eq(curElmIndex+1).focus();
     }else{
         $('#min-max-price-range').dropdown('toggle');
     }
 });
-
 $('#addnewlead').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
@@ -687,7 +679,6 @@ $('#addnewlead').bootstrapValidator({
                 }
         	}
         },
-
         pricemin:{
             validators: {
                 notEmpty: {
@@ -712,7 +703,6 @@ $('#addnewlead').bootstrapValidator({
 }).on('error.form.bv',function(event,data){
 	//alert("error...Find solution on google..");
 });
-
 function addLead() {
 	ajaxindicatorstart("Loading...");
 	var options = {
@@ -725,7 +715,6 @@ function addLead() {
 	 	};
    	$('#addnewlead').ajaxSubmit(options);
 }
-
 function showAddRequest(formData, jqForm, options){
 	$("#response").hide();
    	var queryString = $.param(formData);
@@ -791,7 +780,7 @@ function changeLeadStatus(value,id){
 						
 			}
 		}
-		//}
+	//	}
 		 ajaxindicatorstop();
 		
 	});
@@ -799,7 +788,6 @@ function changeLeadStatus(value,id){
 <%}%>
 $("searchleads").click(function(){
 	//alert("hello");
-
 	var searchResult = "";
 	var i=1;
 	
@@ -808,18 +796,12 @@ $("#newleads").empty();
 <%if(access_id == 7){%>
 getLeadsdetailList();
 	<%}%>
-	<%if(access_id == 5){%>
 	
-	
-	<%}%>
 });
-
-
 function disableDropDownRangeOptions(max_values, minValue) {
 if (max_values) {
   max_values.each(function() {
     var maxValue = $(this).attr("value");
-
     if (parseInt(maxValue) < parseInt(minValue)) {
       $(this).addClass('disabled');
     } else {
@@ -828,73 +810,55 @@ if (max_values) {
   });
 }
 }
-
 function setuinvestRangeDropDownList(min_values, max_values, min_input, max_input, clearLink, dropDownControl) {
 min_values.click(function() {
   var minValue = $(this).attr('value');
   min_input.val(minValue);
   document.getElementById('price_range1').innerHTML = minValue;
-
   disableDropDownRangeOptions(max_values, minValue);
-
   validateDropDownInputs();
 });
-
 max_values.click(function() {
   var maxValue = $(this).attr('value');
   max_input.val(maxValue);
   document.getElementById('price_range2').innerHTML = maxValue;
-
   toggleDropDown();
 });
-
 clearLink.click(function() {
   min_input.val('');
   max_input.val('');
-
   disableDropDownRangeOptions(max_values);
-
   validateDropDownInputs();
 });
-
 min_input.on('input',
   function() {
     var minValue = min_input.val();
-
     disableDropDownRangeOptions(max_values, minValue);
     validateDropDownInputs();
   });
-
 max_input.on('input', validateDropDownInputs);
-
 max_input.blur('input',
   function() {
     toggleDropDown();
   });
-
 function validateDropDownInputs() {
   var minValue = parseInt(min_input.val());
   var maxValue = parseInt(max_input.val());
-
   if (maxValue > 0 && minValue > 0 && maxValue < minValue) {
     min_input.addClass('inputError');
     max_input.addClass('inputError');
-
     return false;
   } else {
     min_input.removeClass('inputError');
     max_input.removeClass('inputError');
-
     return true;
   }
 }
-
 <%if(access_id == 5){%>
 $("#addnewleadbtn").click(function(){
 //	alert("a");
 	openAddLead(<%out.print(projectId);%>);
 });
-
 function openAddLead(id){
 	window.location.href="${baseUrl}/builder/leads/Saleshead_add_lead.jsp?project_id="+<%out.print(projectId);%>
 }
@@ -903,85 +867,85 @@ function getLeadsdetailList(){
 	$.post("${baseUrl}/webapi/builder/filter/newlead",{emp_id : $("#emp_id").val(), project_id:$("#project_id").val(),name:$("#srch-term").val()},function(data){
 		$(data).each(function(index){
 			searchResult += '<div class="border-lead">'
-			    +'<div class="row">'
-			      +'<div class="col-md-2 col-sm-2 col-xs-6">'
-			       +'<h4>'+data[index].leadName+'</h4>'
-			      +'</div>'
-			       +'<div class="col-md-2 col-sm-2 col-xs-6">'
-			       +'<h4>'+data[index].phoneNo+'</h4>'
-			      +'</div>'
-			       +'<div class="col-md-2 col-sm-2 col-xs-6">'
-			       +'<h4>'+data[index].email+'</h4>'
-			      +'</div>'
-			       +'<div class="col-md-2 col-sm-2 col-xs-6">'
-			       +'<h4>'+data[index].source+'</h4>'
-			      +'</div>'
-			       +'<div class="col-md-2 col-sm-2 col-xs-6">'
-			       +' <div class="dropdown">'
+						+'<div class="row">'
+			     		+'<div class="col-md-2 col-sm-2 col-xs-6">'
+			       		+'<h4>'+data[index].leadName+'</h4>'
+		      			+'</div>'
+						+'<div class="col-md-2 col-sm-2 col-xs-6">'
+						+'<h4>'+data[index].phoneNo+'</h4>'
+		      			+'</div>'
+		       			+'<div class="col-md-2 col-sm-2 col-xs-6">'
+		       			+'<h4>'+data[index].email+'</h4>'
+		      			+'</div>'
+		       			+'<div class="col-md-2 col-sm-2 col-xs-6">'
+		       			+'<h4>'+data[index].source+'</h4>'
+		      			+'</div>'
+		       			+'<div class="col-md-2 col-sm-2 col-xs-6">'
+		       			+' <div class="dropdown">'
 					    +'<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Follow up'
 					    +'<span class="caret"></span></button>'
 					    +'<ul class="dropdown-menu">'
-					      +'<li><a href="javascript:changeLeadStatus(1,'+data[index].id+')">No Response</a></li>'
-					      +'<li><a href="javascript:changeLeadStatus(2,'+data[index].id+')">Call Again</a></li>'
-					      +'<li><a href="javascript:changeLeadStatus(3,'+data[index].id+')">Email Sent</a></li>'
-					      +'<li><a href="javascript:changeLeadStatus(4,'+data[index].id+')">Visit Again</a></li>'
-					      +'<li><a href="javascript:changeLeadStatus(5,'+data[index].id+')">Visit Complete</a></li>'
-					      +'<li><a href="javascript:changeLeadStatus(6,'+data[index].id+')">Follow up</a></li>'
-					      +'<li><a href="javascript:changeLeadStatus(7,'+data[index].id+')">Booked</a></li>'
-					      +'<li><a href="javascript:changeLeadStatus(8,'+data[index].id+')">Not interested</a></li>'
-					    +'</ul>'
-					  +'</div>'
-			      +'</div>'
-			   +'</div>'
-			   +'<hr>'
-			   +'<div class="row">'
-			      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-			       +'<img src="../images/Saleshead-added.PNG" />'
-			       +'<h5>Added By :</h5>'
-			     +' </div>'
-			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-			        +'<img src="../images/Baget.PNG" />'
-			       +'<h5>Budget:</h5>'
-			      +'</div>'
-			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-			        +'<img src="../images/Configuration.PNG" />'
-			        +'<h5>Configuration :</h5>'
-			      +'</div>'
-			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-			        +'<h5>Source :</h5>'
-			      +'</div>'
-			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline laststatusnam">'
-			        +'<h5>Last States: <b id="laststatusname'+data[index].id+'">'+data[index].leadStatusName+'</b></h5>'
-			      +'</div>'
-			   +'</div>'
-			  +'<div class="row">'
-			      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-			       +'<h6>'+data[index].salemanName+'</h6>'
-			      +'</div>'
-			      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-			       +'<h6>Rs '+data[index].min+' - '+data[index].max+' Lakh</h6>'
-			      +'</div>'
-			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-			       +'<h6>';
-			       $(data[index].configDatas).each(function(index1){
-			    	   if(i>1){
-			    		   searchResult +=''+data[index].configDatas[index1].name+',';
-			    		   i--;
-			    	   }else{
-			    		   searchresult +=''+data[index].configDatas[index1].name+'';
-			    	   }
-			    	   i++;
-			       });
-			       searchresult +='</h6>'
-			      +'</div>'
-			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-			        +'<h6>'+data[index].source+'</h6>'
-			      +'</div>'
-			       +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
-			        +'<h6>Date: <b>'+data[index].lDate+'</b></h6>'
-			      +'</div>'
-			   +'</div>'
-			 +'</div>';
+						+'<li><a href="javascript:changeLeadStatus(1,'+data[index].id+')">No Response</a></li>'
+						+'<li><a href="javascript:changeLeadStatus(2,'+data[index].id+')">Call Again</a></li>'
+						+'<li><a href="javascript:changeLeadStatus(3,'+data[index].id+')">Email Sent</a></li>'
+						+'<li><a href="javascript:changeLeadStatus(4,'+data[index].id+')">Visit Again</a></li>'
+						+'<li><a href="javascript:changeLeadStatus(5,'+data[index].id+')">Visit Complete</a></li>'
+						+'<li><a href="javascript:changeLeadStatus(6,'+data[index].id+')">Follow up</a></li>'
+						+'<li><a href="javascript:changeLeadStatus(7,'+data[index].id+')">Booked</a></li>'
+						+'<li><a href="javascript:changeLeadStatus(8,'+data[index].id+')">Not interested</a></li>'
+				    	+'</ul>'
+				  		+'</div>'
+		      			+'</div>'
+					    +'</div>'
+					    +'<hr>'
+					    +'<div class="row">'
+		      		    +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+						+'<img src="../images/Saleshead-added.PNG" />'
+						+'<h5>Added By :</h5>'
+		     			+' </div>'
+		       			+'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+		        		+'<img src="../images/Baget.PNG" />'
+		       			+'<h5>Budget:</h5>'
+		      			+'</div>'
+		       			+'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+				        +'<img src="../images/Configuration.PNG" />'
+				        +'<h5>Configuration :</h5>'
+		     			+'</div>'
+						+'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+						+'<h5>Source :</h5>'
+		      			+'</div>'
+		       			+'<div class="col-md-2 col-sm-2 col-xs-6 inline laststatusnam">'
+		        		+'<h5>Last States: <b id="laststatusname'+data[index].id+'">'+data[index].leadStatusName+'</b></h5>'
+		      			+'</div>'
+		   				+'</div>'
+		  				+'<div class="row">'
+		      			+'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+		       			+'<h6>'+data[index].salemanName+'</h6>'
+		      			+'</div>'
+		      			+'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+		       			+'<h6>Rs '+data[index].min+' - '+data[index].max+' Lakh</h6>'
+		      			+'</div>'
+		       			+'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+		       			+'<h6>';
+				       $(data[index].configDatas).each(function(index1){
+				    	   if(i>1){
+				    		   searchResult +=''+data[index].configDatas[index1].name+',';
+				    		   i--;
+				    	   }else{
+				    		   searchresult +=''+data[index].configDatas[index1].name+'';
+				    	   }
+				    	   i++;
+				       });
+					searchresult +='</h6>'
+				      +'</div>'
+				      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+				      +'<h6>'+data[index].source+'</h6>'
+				      +'</div>'
+				      +'<div class="col-md-2 col-sm-2 col-xs-6 inline">'
+				      +'<h6>Date: <b>'+data[index].lDate+'</b></h6>'
+				      +'</div>'
+				   	  +'</div>'
+				 	  +'</div>';
 			});
 		 	$("#newleads").append(searchresult);
 		 	 ajaxindicatorstop();
@@ -991,11 +955,9 @@ function toggleDropDown() {
   if (validateDropDownInputs() &&
     parseInt(min_input.val()) > 0 &&
     parseInt(max_input.val()) > 0) {
-
     // auto close if two values are valid
     dropDownControl.dropdown('toggle');
   }
-}
 }
 $("#srch-term").keydown(function (e) {
 	if (e.keyCode == 13) {
@@ -1004,7 +966,6 @@ $("#srch-term").keydown(function (e) {
 		//return false;
 	}
 });
-
 setuinvestRangeDropDownList(
 $('.investRange .min_value'),
 $('.investRange .max_value'),
@@ -1012,5 +973,4 @@ $('.investRange .freeformPrice .min_input'),
 $('.investRange .freeformPrice .max_input'),
 $('.investRange .btnClear'),
 $('.investRange .dropdown-toggle'));
-
 </script>
