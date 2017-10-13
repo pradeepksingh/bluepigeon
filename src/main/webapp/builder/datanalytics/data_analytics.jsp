@@ -428,7 +428,7 @@
  		var sold=0;
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].revenue});
-			sold +=record[index].sold;
+			sold +=records[index].sold;
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({

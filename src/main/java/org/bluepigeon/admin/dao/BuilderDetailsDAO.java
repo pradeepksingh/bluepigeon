@@ -1136,7 +1136,11 @@ public class BuilderDetailsDAO {
 			
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
-		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		Query query = session.createSQLQuery(hql)
+				.addScalar("sold", LongType.INSTANCE).
+				addScalar("revenue", DoubleType.INSTANCE).
+				addScalar("name", StringType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
 		List<ProjectWiseData> result = query.list();
 		return result;
 	}
