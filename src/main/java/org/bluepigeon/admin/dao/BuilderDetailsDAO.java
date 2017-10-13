@@ -1102,14 +1102,15 @@ public class BuilderDetailsDAO {
 		empQuery.setParameter("id", empId);
 		BuilderEmployee builderEmployee=(BuilderEmployee)empQuery.list().get(0);
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
-			hql = "select elt(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue,m.bookingCount from(select COUNT(c.id) as bookingCount, MONTH(a.booking_date) as name,round(sum(a.total_cost)) as revenue FROM buying_details as a join buyer as b on b.id=a.buyer_id join builder_flat as c on c.id=b.flat_id join builder_floor as f on f.id=c.floor_no join builder_building as building on building.id=f.building_id join builder_project as project on project.id=building.project_id left join builder as builder on builder.id=project.group_id where project.group_id="+builderEmployee.getBuilder().getId()+" and b.is_primary=1 and b.is_deleted=0 and b.status=0 and c.status_id=2 group by MONTH(a.booking_date)) as m order by FIELD(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')";
+			hql = "select elt(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue,m.bookingCount,m.avaliable from(select COUNT(c.id) as bookingCount, project.total_inventory as avaliable, MONTH(a.booking_date) as name,round(sum(a.total_cost)) as revenue FROM buying_details as a join buyer as b on b.id=a.buyer_id join builder_flat as c on c.id=b.flat_id join builder_floor as f on f.id=c.floor_no join builder_building as building on building.id=f.building_id join builder_project as project on project.id=building.project_id left join builder as builder on builder.id=project.group_id where project.group_id="+builderEmployee.getBuilder().getId()+" and b.is_primary=1 and b.is_deleted=0 and b.status=0 and c.status_id=2 group by MONTH(a.booking_date)) as m order by FIELD(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')";
 		}else{
-			hql = "select elt(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue,m.bookingCount from(select COUNT(c.id) as bookingCount, MONTH(a.booking_date) as name,round(sum(a.total_cost)) as revenue FROM buying_details as a join buyer as b on b.id=a.buyer_id join builder_flat as c on c.id=b.flat_id join builder_floor as f on f.id=c.floor_no join builder_building as building on building.id=f.building_id join builder_project as project on project.id=building.project_id inner join allot_project as e on e.project_id=project.id where e.emp_id="+builderEmployee.getId()+" and b.is_primary=1 and b.is_deleted=0 and b.status=0 and c.status_id=2 group by MONTH(a.booking_date)) as m order by FIELD(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')";
+			hql = "select elt(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue,m.bookingCount,m.avaliable from(select COUNT(c.id) as bookingCount, project.total_inventory as avaliable, MONTH(a.booking_date) as name,round(sum(a.total_cost)) as revenue FROM buying_details as a join buyer as b on b.id=a.buyer_id join builder_flat as c on c.id=b.flat_id join builder_floor as f on f.id=c.floor_no join builder_building as building on building.id=f.building_id join builder_project as project on project.id=building.project_id inner join allot_project as e on e.project_id=project.id where e.emp_id="+builderEmployee.getId()+" and b.is_primary=1 and b.is_deleted=0 and b.status=0 and c.status_id=2 group by MONTH(a.booking_date)) as m order by FIELD(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')";
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql)
 				.addScalar("bookingCount", LongType.INSTANCE).
 				addScalar("revenue", DoubleType.INSTANCE).
+				addScalar("avaliable",  LongType.INSTANCE).
 				addScalar("name", StringType.INSTANCE).
 				setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
 		List<ProjectWiseData> result = query.list();
@@ -1832,22 +1833,27 @@ public class BuilderDetailsDAO {
 		String hql = "";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
-			
+			hql="select a.id as id,a.name as name, round(a.revenue) as revenue, count(c.id) as bookingCount, SUM(d.total_inventory) as avaliable from builder_building as a "
+				+ "join builder_floor as b on b.building_id=a.id "
+				+ "join builder_flat as c on c.floor_no=b.id "
+				+ "join builder_project as d on d.id=a.project_id "
+				+ "join builder as e on e.id=d.group_id "
+				+ "where e.id="+builderEmployee.getBuilder().getId()+" and c.status_id=2 and d.status=1 and d.id=5 "
+				+ "GROUP by a.id order by a.id DESC";
 		}else{
 			hql = "select a.id as id,a.name as name, round(a.revenue) as revenue, count(c.id) as bookingCount, SUM(d.total_inventory) as avaliable from builder_building as a "
-					+ "join builder_floor as b on b.building_id=a.id "
-					+ "join builder_flat as c on c.floor_no=b.id "
-					+ "join builder_project as d on d.id=a.project_id "
-					//+ "inner join allot_project as e on e.project_id=d.id "
-					+ "where "
-					+ "c.status_id=2 and d.status=1 and d.id="+projectId
-					+ " GROUP by a.id order by a.id DESC";
+				+ "join builder_floor as b on b.building_id=a.id "
+				+ "join builder_flat as c on c.floor_no=b.id "
+				+ "join builder_project as d on d.id=a.project_id "
+				+ "where "
+				+ "c.status_id=2 and d.status=1 and d.id="+projectId
+				+ " GROUP by a.id order by a.id DESC";
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
-		Query query = session.createSQLQuery(hql).
-				addScalar("avaliable", LongType.INSTANCE)
-				.addScalar("bookingCount", LongType.INSTANCE).
-				addScalar("revenue", DoubleType.INSTANCE)
+		Query query = session.createSQLQuery(hql)
+				.addScalar("avaliable", LongType.INSTANCE)
+			    .addScalar("bookingCount", LongType.INSTANCE)
+				.addScalar("revenue", DoubleType.INSTANCE)
 				.addScalar("name", StringType.INSTANCE)
 				.setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
 		
@@ -1962,5 +1968,86 @@ public class BuilderDetailsDAO {
 		response.setStatus(1);
 		response.setMessage("Project Assigned successfully");
 		return response;
+	}
+	
+	/**
+	 * Return data for CEO's revenue Source wise
+	 * @author pankaj
+	 * @param projectId
+	 * @return List<ProjectWiseData>
+	 */
+	public List<ProjectWiseData> getEmployeeBarGraphBySourceCEO(int projectId) {
+		String hql = "";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		hql = "select source.name as name, count(lead.id) as dataCount, SUM(CASE WHEN lead.lead_status=7 THEN 1 ELSE 0 END) as booked from builder_lead as lead inner join builder_project as project on lead.project_id = project.id left join builder as builder on builder.id=project.group_id INNER JOIN source as source on lead.source=source.id where project.status=1 and project.id="+projectId+" GROUP by source.id order by source.name asc";
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		List<ProjectWiseData> result = query.list();
+		session.close();
+		return result;
+	}
+	/**
+	 * @author pankaj
+	 * @param projectId
+	 * @return
+	 */
+	public List<ProjectWiseData> getEmployeeBarGraphByMonthCEO(int projectId) {
+		String hql = "";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		hql = "select elt(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue,m.bookingCount,m.avaliable from(select COUNT(c.id) as bookingCount, project.total_inventory as avaliable, MONTH(a.booking_date) as name,round(sum(a.total_cost)) as revenue FROM buying_details as a join buyer as b on b.id=a.buyer_id join builder_flat as c on c.id=b.flat_id join builder_floor as f on f.id=c.floor_no join builder_building as building on building.id=f.building_id join builder_project as project on project.id=building.project_id left join builder as builder on builder.id=project.group_id where project.id="+projectId+" and b.is_primary=1 and b.is_deleted=0 and b.status=0 and c.status_id=2 group by MONTH(a.booking_date)) as m order by FIELD(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')";
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).
+				addScalar("avaliable", LongType.INSTANCE)
+				.addScalar("bookingCount", LongType.INSTANCE).
+				addScalar("revenue", DoubleType.INSTANCE)
+				.addScalar("name", StringType.INSTANCE).
+				setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		List<ProjectWiseData> result = query.list();
+		session.close();
+		return result;
+	}
+	/**
+	 * @author pankaj
+	 * @param projectId
+	 * @return
+	 */
+	public List<ProjectWiseData> getEmployeeBarGraphBySalesmanCEO(int projectId) {
+		String hql = "";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		hql = "select emp.name as name, sum(bd.total_cost) as revenue, count(flat.id) as sold, project.total_inventory as avaliable from builder_employee as emp join buyer as buyer on buyer.emp_id = emp.id inner join buying_details as bd on bd.buyer_id = buyer.id left join builder_project as project on project.id = buyer.project_id left join builder as builder on builder.id=project.group_id left join builder_flat as flat on flat.id=buyer.flat_id where project.status=1 and buyer.is_primary=1 and buyer.is_deleted=0 and buyer.status=0 and project.id="+projectId+" GROUP by emp.id";
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql)
+				.addScalar("sold", LongType.INSTANCE).
+				addScalar("revenue", DoubleType.INSTANCE).
+				addScalar("name", StringType.INSTANCE).
+				addScalar("avaliable", LongType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		List<ProjectWiseData> result = query.list();
+		session.close();
+		return result;
+	}
+	
+	public List<ProjectWiseData> getBuildingWiseByEmployeeIdCEO(BuilderEmployee builderEmployee, int projectId){
+		String hql = "";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+			hql="select a.id as id,a.name as name, round(a.revenue) as revenue, count(c.id) as bookingCount, SUM(d.total_inventory) as avaliable from builder_building as a "
+				+ "join builder_floor as b on b.building_id=a.id "
+				+ "join builder_flat as c on c.floor_no=b.id "
+				+ "join builder_project as d on d.id=a.project_id "
+				+ "join builder as e on e.id=d.group_id "
+				+ "where c.status_id=2 and d.status=1 and d.id="+projectId
+				+ " GROUP by a.id order by a.id DESC";
+		}
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql)
+				.addScalar("avaliable", LongType.INSTANCE)
+			    .addScalar("bookingCount", LongType.INSTANCE)
+				.addScalar("revenue", DoubleType.INSTANCE)
+				.addScalar("name", StringType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		
+		List<ProjectWiseData> result = query.list();
+		return result;
 	}
 }

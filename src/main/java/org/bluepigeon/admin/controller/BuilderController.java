@@ -794,4 +794,27 @@ public class BuilderController {
 		return new ProjectDAO().putFlatsOnUnHold(flatIds);
 	}
 	
+	@POST
+	@Path("/filter/bargraph/ceo/source")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectWiseData> getBarGraphDataBySourceCEO(@FormParam("project_id") int projectId){
+		
+		return new BuilderDetailsDAO().getEmployeeBarGraphBySourceCEO(projectId);
+	}
+	
+	@POST
+	@Path("/filter/bargraph/ceo/month")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectWiseData> getBarGraphDataByMonthCEO(@FormParam("project_id") int projectId){
+		
+		return new BuilderDetailsDAO().getEmployeeBarGraphByMonthCEO(projectId);
+	}
+	
+	@POST
+	@Path("/filter/bargraph/ceo/saleman")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectWiseData> getBarGraphDataBySalesmanCEO(@FormParam("project_id") int projectId){
+		
+		return new BuilderDetailsDAO().getEmployeeBarGraphBySalesmanCEO(projectId);
+	}
 }

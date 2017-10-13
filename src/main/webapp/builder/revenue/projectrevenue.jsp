@@ -203,9 +203,7 @@
     </div> 
 </body>
 </html>
-<!-- <script src="../plugins/bower_components/switchery/dist/switchery.min.js"></script> -->
 <script src="../plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
-<!-- <script src="../plugins/bower_components/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script> -->
 <script src="../plugins/bower_components/morrisjs/morris.js"></script>
 <script src="../js/real-estate.js"></script>
 <script src="${baseUrl}/builder/plugins/bower_components/raphael/raphael-min.js"></script>
