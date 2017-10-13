@@ -290,8 +290,7 @@
        		%> 
   
        	mychart = Morris.Bar({
-       		barGap:4,
-       	  barSizeRatio:0.55,
+       	  barSize:50,
     	    element: 'morris-bar-chart',
     	    data: [
     	    	<% for(ProjectWiseData barGraphData : projectWiseDatas){ %>
