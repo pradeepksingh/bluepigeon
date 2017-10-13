@@ -1101,12 +1101,16 @@ public class BuilderDetailsDAO {
 		empQuery.setParameter("id", empId);
 		BuilderEmployee builderEmployee=(BuilderEmployee)empQuery.list().get(0);
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
-			hql = "select elt(m.mon,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue from(select MONTH(bd.booking_date) as mon,round(sum(project.revenue)) as revenue from builder_project as project inner join builder_building as building on building.project_id = project.id inner join builder_floor as floor on floor.building_id = building.id inner join builder_flat as flat on flat.floor_no = floor.id inner join buyer as buyer on flat.id=buyer.flat_id inner join buying_details as bd on buyer.id=bd.buyer_id where project.status=1 and project.group_id="+builderEmployee.getBuilder().getId()+" and flat.status_id=2 and buyer.is_primary=1 and buyer.status=0 and buyer.is_deleted=0 group by MONTH(bd.booking_date)) as m order by m.mon asc";
+			hql = "select elt(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue,m.bookingCount from(select COUNT(c.id) as bookingCount, MONTH(a.booking_date) as name,round(sum(a.total_cost)) as revenue FROM buying_details as a join buyer as b on b.id=a.buyer_id join builder_flat as c on c.id=b.flat_id join builder_floor as f on f.id=c.floor_no join builder_building as building on building.id=f.building_id join builder_project as project on project.id=building.project_id left join builder as builder on builder.id=project.group_id where project.group_id="+builderEmployee.getBuilder().getId()+" and b.is_primary=1 and b.is_deleted=0 and b.status=0 and c.status_id=2 group by MONTH(a.booking_date)) as m order by FIELD(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')";
 		}else{
-			hql = "select elt(m.mon,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue from(select MONTH(bd.booking_date) as mon,round(sum(project.revenue)) as revenue from builder_project as project INNER join allot_project as ap on ap.project_id = project.id inner join builder_building as building on building.project_id = project.id inner join builder_floor as floor on floor.building_id = building.id inner join builder_flat as flat on flat.floor_no = floor.id inner join buyer as buyer on flat.id=buyer.flat_id inner join buying_details as bd on buyer.id=bd.buyer_id where project.status=1 and ap.emp_id="+empId+" and flat.status_id=2 and buyer.is_primary=1 and buyer.status=0 and buyer.is_deleted=0 group by MONTH(bd.booking_date)) as m order by m.mon asc";
+			hql = "select elt(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue,m.bookingCount from(select COUNT(c.id) as bookingCount, MONTH(a.booking_date) as name,round(sum(a.total_cost)) as revenue FROM buying_details as a join buyer as b on b.id=a.buyer_id join builder_flat as c on c.id=b.flat_id join builder_floor as f on f.id=c.floor_no join builder_building as building on building.id=f.building_id join builder_project as project on project.id=building.project_id inner join allot_project as e on e.project_id=project.id where e.emp_id="+builderEmployee.getId()+" and b.is_primary=1 and b.is_deleted=0 and b.status=0 and c.status_id=2 group by MONTH(a.booking_date)) as m order by FIELD(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')";
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
-		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		Query query = session.createSQLQuery(hql)
+				.addScalar("bookingCount", LongType.INSTANCE).
+				addScalar("revenue", DoubleType.INSTANCE).
+				addScalar("name", StringType.INSTANCE).
+				setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
 		List<ProjectWiseData> result = query.list();
 		return result;
 	}
@@ -1120,10 +1124,11 @@ public class BuilderDetailsDAO {
 		empQuery.setParameter("id", empId);
 		BuilderEmployee builderEmployee=(BuilderEmployee)empQuery.list().get(0);
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
-			hql = "select emp.name as name, sum(bd.total_cost) as revenue from builder_employee as emp "
+			hql = "select emp.name as name, sum(bd.total_cost) as revenue, count(flat.id) as sold from builder_employee as emp "
 					+ "join buyer as buyer on buyer.emp_id = emp.id "
 					+ "inner join buying_details as bd on bd.buyer_id = buyer.id "
 					+ "left join builder_project as project on project.id = buyer.project_id "
+					+ "left join builder_flat as flat on flat.id=buyer.flat_id "
 					+ "where project.status=1 and buyer.is_primary=1 and buyer.is_deleted=0 and "
 					+ "buyer.status=0 and buyer.builder_id="+builderEmployee.getBuilder().getId()+" GROUP by emp.id";
 		}else{

@@ -85,7 +85,7 @@ Date date = new Date();
     <link rel="stylesheet" type="text/css" href="../../css/ceocampaigns.css">
     <!-- jQuery -->
     <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script>
+<!--     <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script> -->
   
 </head>
 
@@ -157,10 +157,10 @@ Date date = new Date();
 		                    <button type="button" id="ceo_inventory_btn" class="btn11 btn-info waves-effect waves-light m-t-10">Inventory</button>
 		                 </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3">
-		                    <button type="button" id="ceo_revenue_btn" class="btn11 btn-info waves-effect waves-light m-t-10">Revenue</button>
+		                    <button type="button" id="ceo_revenue_btn" class="btn11 btn-submit waves-effect waves-light m-t-10">Revenue</button>
 		                </div>
 		                <div class="col-md-3 col-sm-3 col-lg-3">
-		                    <button type="button" id="ceo_campaign_btn" class="btn11 btn-submit waves-effect waves-light m-t-10">Campaign</button>
+		                    <button type="button" id="ceo_campaign_btn" class="btn11  btn-info waves-effect waves-light m-t-10">Campaign</button>
 		                </div>
 	                </div>
                <!-- row -->
@@ -284,6 +284,10 @@ $("#ceo_inventory_btn").click(function(){
 $("#ceo_revenue_btn").click(function(){
 	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href="${baseUrl}/builder/ceo/revenue/projectrevenue.jsp?project_id=<% out.print(projectId);%>";
+});
+$("#ceo_campaign_btn").click(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
+	window.location.href="${baseUrl}/builder/ceo/campaign/campaigns.jsp?project_id=<% out.print(projectId);%>";
 });
 </script>
  

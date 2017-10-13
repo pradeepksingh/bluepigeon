@@ -148,7 +148,7 @@ Date date = new Date();
                <!-- /.row -->
 	                 <div class="row bspace">
 		                <div class="col-md-3 col-sm-3 col-lg-3">
-		                    <button type="button"  id="ceo_project_status_btn" class="btn11 btn-info waves-effect waves-light m-t-10">Project Status</button>
+		                    <button type="button"  id="ceo_project_status_btn" class="btn11 btn-submit waves-effect waves-light m-t-10">Project Status</button>
 		                </div>
 		                 <div class="col-md-3 col-sm-3 col-lg-3">
 		                    <button type="button" id="ceo_inventory_btn" class="btn11 btn-info waves-effect waves-light m-t-10">Inventory</button>
@@ -157,7 +157,7 @@ Date date = new Date();
 		                    <button type="button" id="ceo_revenue_btn" class="btn11 btn-info waves-effect waves-light m-t-10">Revenue</button>
 		                </div>
 		                <div class="col-md-3 col-sm-3 col-lg-3">
-		                    <button type="button" id="ceo_campaign_btn" class="btn11 btn-submit waves-effect waves-light m-t-10">Campaign</button>
+		                    <button type="button" id="ceo_campaign_btn" class="btn11 btn-info waves-effect waves-light m-t-10">Campaign</button>
 		                </div>
 	                </div>
                <!-- row -->
@@ -279,5 +279,9 @@ $("#ceo_inventory_btn").click(function(){
 $("#ceo_revenue_btn").click(function(){
 	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href="${baseUrl}/builder/ceo/revenue/projectrevenue.jsp?project_id=<% out.print(projectId);%>";
+});
+$("#ceo_campaign_btn").click(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
+	window.location.href="${baseUrl}/builder/ceo/campaign/campaigns.jsp?project_id=<% out.print(projectId);%>";
 });
 </script>
