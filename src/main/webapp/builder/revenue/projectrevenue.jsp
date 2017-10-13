@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.BookingFlatList"%>
 <%@page import="org.bluepigeon.admin.data.ProjectWiseData"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
@@ -41,6 +42,8 @@
 	int city_size_list =0 ;
 	
 	Double totalPropertySold = 0.0;
+	Long avaliable =0L;
+	Long booked = 0L;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -69,9 +72,11 @@
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
 					//totalRevenue = totalPropertySold * totalInventorySold;
 					List<ProjectWiseData> projectWiseDatas2 = new BuilderDetailsDAO().getEmployeeBarGraphByProject(emp_id);
-					if(projectWiseDatas2 !=null){
-						for(ProjectWiseData projectWiseData : projectWiseDatas2){
+					if(projectWiseDatas !=null){
+						for(ProjectWiseData projectWiseData : projectWiseDatas){
 							totalRevenue +=projectWiseData.getRevenue();
+							avaliable +=projectWiseData.getAvaliable();
+							booked += projectWiseData.getBookingCount();
 						}
 					}
 					
@@ -143,6 +148,8 @@
                 </div>
                 <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>"/>
                 <input type="hidden" id="project_id" name="project_id" value="<%out.print(projectId);%>"/>
+                <input type="hidden" id="totalrevenue" name="totalrevenue" value="<%out.print(totalRevenue);%>"/>
+                <input type="hidden" id="totalavaiable" name="totalavaiable" value="<%out.print(avaliable);%>"/>
                 <!-- /.row -->
                 <!-- .row -->
                 <div class="row">
@@ -174,14 +181,12 @@
                     		
                     		<%} %>
                     		
-<!--                             <ul class="list-inline text-left"> -->
-<!--                                 <li> -->
-<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #24bcd3;"></i>Flats</h5> </li> -->
-<!--                                 <li> -->
-<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #fb9678;"></i>Buyers</h5> </li> -->
-<!--                                 <li> -->
-<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #9675ce;"></i>Purchases</h5> </li> -->
-<!--                             </ul> -->
+                             <ul class="list-inline text-left" id="revenues">
+                                <li>
+                                    <h4><i class="m-r-5"></i>Booked Revenue :<%out.print(totalRevenue); %> </h4> </li>
+                                <li>
+                                    <h4><i class="m-r-5"></i>Sold : <%out.print(booked); %>/<%out.print(avaliable); %></h4> </li>
+                            </ul>
                             <div id="morris-bar-chart" style="height:372px;"></div>
                         </div>
 <!--                     </div> -->
@@ -258,7 +263,7 @@
  		else {
  			ajaxindicatorstart("Loading...");
  			$.post("${baseUrl}/webapi/builder/filter/bargraph/building",{project_id:$("#project_id").val()},function(data){
- 				plotProjectGraph(data);
+ 				plotBuildingGraph(data);
  				ajaxindicatorstop();
 		 	},'json');
  		}
@@ -287,8 +292,12 @@
  	}
  	function plotBuildingGraph(records) {
  		var data = [];
+ 		var avaliable = 0;
+ 		var booked = 0;
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].revenue});
+			avaliable += records[index].avaliable;
+			booked +=records[index].bookingCount;
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
@@ -303,12 +312,21 @@
      	    gridLineColor: '#eef0f2',
      	    resize: true
      	});
- 		
+ 		$("ul li h4").empty();
+ 		newrevenue='<li>'
+    		+'<h4><i class="m-r-5"></i>Booked Revenue : '+$("#totalrevenue").val()+' </h4> </li>'
+    		+'<li>'
+        	+'<h4><i class="m-r-5"></i>Sold : '+booked+'/'+avaliable+'</h4> </li>';
+	$("#revenues").html(newrevenue);
  	}
  	function plotSourceGraph(records) {
  		var data = [];
+ 		var totalLeads = 0;
+ 		var totalBooked = 0;
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].dataCount});
+			totalLeads +=records[index].dataCount;
+			totalBooked +=records[index].booked;
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
@@ -324,13 +342,20 @@
      	    gridLineColor: '#eef0f2',
      	    resize: true
      	});
- 		
+ 		$("ul li h4").empty();
+ 		newrevenue='<li>'
+            		+'<h4><i class="m-r-5"></i> </h4> </li>'
+            		+'<li>'
+                	+'<h4><i class="m-r-5"></i>Leads : '+totalBooked+'/'+totalLeads+'</h4> </li>';
+ 		$("#revenues").html(newrevenue);
  	}
  	
  	function plotMonthGraph(records) {
  		var data = [];
+ 		var sold = 0;
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].revenue});
+			sold +=records[index].bookingCount;
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
@@ -346,13 +371,21 @@
      	   	barSize:50,
      	   	resize: true
      	});
+ 		$("ul li h4").empty();
+ 		newrevenue='<li>'
+            		+'<h4><i class="m-r-5"></i>Booked Revenue : '+$("#totalrevenue").val()+' </h4> </li>'
+            		+'<li>'
+                	+'<h4><i class="m-r-5"></i>Sold : '+sold+'/'+$("#totalavaiable").val()+'</h4> </li>';
+ 		$("#revenues").html(newrevenue);
  		
  	}
  	
  	function plotSalesmanGraph(records) {
  		var data = [];
+ 		var sold=0;
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].revenue});
+			sold +=records[index].sold;
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
@@ -367,7 +400,12 @@
      	   	gridLineColor: '#eef0f2',
      	   	resize: true
      	});
- 		
+ 		$("ul li h4").empty();
+ 		newrevenue='<li>'
+            		+'<h4><i class="m-r-5"></i>Booked Revenue : '+$("#totalrevenue").val()+' </h4> </li>'
+            		+'<li>'
+                	+'<h4><i class="m-r-5"></i>Sold : '+sold+'/'+$("#totalavaiable").val()+'</h4> </li>';
+ 		$("#revenues").html(newrevenue);
  	}
  	
 	$("#project_status_btn").click(function(){

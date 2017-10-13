@@ -751,17 +751,16 @@ public class BuilderController {
 	@POST
 	@Path("/allot/projects")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage saveAllotedProjets(	@Context UriInfo uriInfo, @FormParam("emp_id") int empId){
+	public ResponseMessage saveAllotedProjets(	@FormParam("project_ids[]") String projectId, @FormParam("emp_id") int empId){
 		ResponseMessage responseMessage = new ResponseMessage();
-	//	String strProject [] = projectId.split(",");
-		List<String> projectIds = uriInfo.getQueryParameters().get("project_ids[]");
-		System.err.println(projectIds);
+		String strProject [] = projectId.split(",");
+		System.err.println(projectId);
 		BuilderEmployee builderEmployee = new BuilderEmployee();
 		builderEmployee.setId(empId);
 		List<AllotProject> allotProjectList = new ArrayList<>();
-		if(projectIds != null){
-			for(int i=0;i<projectIds.size();i++){
-				int project_id = Integer.parseInt(projectIds.get(i));
+		if(strProject != null){
+			for(int i=0;i<strProject.length;i++){
+				int project_id = Integer.parseInt(strProject[i]);
 				AllotProject allotProject = new AllotProject();
 				allotProject.setBuilderEmployee(builderEmployee);
 				BuilderProject builderProject = new BuilderProject();
@@ -771,11 +770,11 @@ public class BuilderController {
 			}
 			
 			if(allotProjectList.size() > 0){
-				responseMessage =  new BuilderDetailsDAO().saveAllotProjects(allotProjectList);
+				responseMessage =  new BuilderDetailsDAO().saveAllotedProjects(allotProjectList);
 			}
 		}else{
 			responseMessage.setStatus(0);
-			responseMessage.setMessage("Flai to allot project");
+			responseMessage.setMessage("Fail to allot project");
 		}
 		return responseMessage;
 	}

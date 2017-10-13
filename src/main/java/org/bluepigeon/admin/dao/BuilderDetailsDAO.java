@@ -24,6 +24,7 @@ import org.bluepigeon.admin.model.BuilderFloorAmenity;
 import org.bluepigeon.admin.model.BuilderLead;
 import org.bluepigeon.admin.model.BuilderLogo;
 import org.bluepigeon.admin.model.BuilderProject;
+import org.bluepigeon.admin.model.BuildingWeightage;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.InboxMessage;
@@ -1833,7 +1834,7 @@ public class BuilderDetailsDAO {
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
 			
 		}else{
-			hql = "select a.id as id,a.name as name, round(a.revenue) as revenue from builder_building as a "
+			hql = "select a.id as id,a.name as name, round(a.revenue) as revenue, count(c.id) as bookingCount, SUM(d.total_inventory) as avaliable from builder_building as a "
 					+ "join builder_floor as b on b.building_id=a.id "
 					+ "join builder_flat as c on c.floor_no=b.id "
 					+ "join builder_project as d on d.id=a.project_id "
@@ -1843,7 +1844,12 @@ public class BuilderDetailsDAO {
 					+ " GROUP by a.id order by a.id DESC";
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
-		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		Query query = session.createSQLQuery(hql).
+				addScalar("avaliable", LongType.INSTANCE)
+				.addScalar("bookingCount", LongType.INSTANCE).
+				addScalar("revenue", DoubleType.INSTANCE)
+				.addScalar("name", StringType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
 		
 		List<ProjectWiseData> result = query.list();
 		return result;
@@ -1852,7 +1858,7 @@ public class BuilderDetailsDAO {
 	public List<ProjectWiseData> getEmployeeBarGraphByBuilding(int projectId) {
 		String hql = "";
 		HibernateUtil hibernateUtil = new HibernateUtil();
-			hql = "select a.id as id,a.name as name, round(a.revenue) as revenue from builder_building as a "
+			hql = "select a.id as id,a.name as name, round(a.revenue) as revenue, count(c.id) as bookingCount, SUM(d.total_inventory) as avaliable from builder_building as a "
 					+ "join builder_floor as b on b.building_id=a.id "
 					+ "join builder_flat as c on c.floor_no=b.id "
 					+ "join builder_project as d on d.id=a.project_id "
@@ -1862,7 +1868,12 @@ public class BuilderDetailsDAO {
 					+ " GROUP by a.id order by a.id DESC";
 		
 		Session session = hibernateUtil.getSessionFactory().openSession();
-		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		Query query = session.createSQLQuery(hql).
+				addScalar("avaliable", LongType.INSTANCE)
+				.addScalar("bookingCount", LongType.INSTANCE).
+				addScalar("revenue", DoubleType.INSTANCE)
+				.addScalar("name", StringType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
 		
 		List<ProjectWiseData> result = query.list();
 		return result;
@@ -1927,5 +1938,29 @@ public class BuilderDetailsDAO {
 				setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
 		List<ProjectWiseData> result = query.list();
 		return result.get(0);
+	}
+	
+	public ResponseMessage saveAllotedProjects(List<AllotProject> allotProjects){
+		ResponseMessage response = new ResponseMessage();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		String hql = "delete from AllotProject where builderEmployee.id = :id";
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", allotProjects.get(0).getBuilderEmployee().getId());
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
+		for(AllotProject allotProject:allotProjects) {
+			session1.save(allotProject);
+		}
+		session1.getTransaction().commit();
+		session1.close();
+		response.setStatus(1);
+		response.setMessage("Project Assigned successfully");
+		return response;
 	}
 }

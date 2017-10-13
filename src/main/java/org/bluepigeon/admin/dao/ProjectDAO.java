@@ -3661,14 +3661,14 @@ public class ProjectDAO {
 				+"WHERE project.status=1 and project.group_id = "+builderEmployee.getBuilder().getId()+" group by project.id order by project.id desc";
 		} else {
 			hql = "SELECT project.id as id, project.name as name, project.image as image, project.status as status,project.revenue as totalRevenu,"
-					+"project.completion_status as completionStatus,project.inventory_sold as sold, project.locality_name as localityName, build.id as builderId, "
-					+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
-					+"c.name as cityName, "
-					+"count(lead.id) as totalLeads "
-					+"FROM  builder_project as project inner join allot_project ap ON project.id = ap.project_id "
-					+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
-					+"left join builder_lead as lead ON project.id = lead.project_id "
-					+"WHERE project.status=1 and ap.emp_id = "+builderEmployee.getId()+" group by project.id order by project.id desc";
+				+"project.completion_status as completionStatus,project.inventory_sold as sold, project.locality_name as localityName, build.id as builderId, "
+				+"project.total_inventory as totalSold ,build.name as builderName, c.id as cityId,"
+				+"c.name as cityName, "
+				+"count(lead.id) as totalLeads "
+				+"FROM  builder_project as project inner join allot_project ap ON project.id = ap.project_id "
+				+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+				+"left join builder_lead as lead ON project.id = lead.project_id "
+				+"WHERE project.status=1 and ap.emp_id = "+builderEmployee.getId()+" group by project.id order by project.id desc";
 		}
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
