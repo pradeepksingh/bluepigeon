@@ -46,6 +46,7 @@
 					<li> <a href="${baseUrl }/builder/ceo/inbox/inbox.jsp">Inbox</a></li>
                     <li> <a href="${baseUrl }/builder/ceo/datanalytics/data_analytics.jsp">Data Analytics</a></li>
                     <li> <a href="${baseUrl }/builder/ceo/employeeslist.jsp">Employees</a></li>
+                     <li> <a href="${baseUrl }/builder/leads/leadlist.jsp">Leads</a></li>
                     <li> <a href="${baseUrl }/builder/ceo/addleads.jsp">Add Leads</a></li>
             	</ul>
             </li>

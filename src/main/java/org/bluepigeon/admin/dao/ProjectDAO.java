@@ -6600,7 +6600,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		String strSeparator = "";
 		projectIdList = projectIdList.replace("[", strSeparator).replace("]", strSeparator);
 		hql = "SELECT a.name as leadName, a.mobile as phoneNo, a.email as email, a.min as min, a.max as max, b.name as salemanName , GROUP_CONCAT(d.name) as configName , e.name as source ";
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 4 || builderEmployee.getBuilderEmployeeAccessType().getId() == 1){
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1){
 			
 				hql+= "from builder_lead as a join builder_project as b on b.id= a.project_id "
 					+ "join lead_config as c on c.lead_id = a.id "
@@ -6620,14 +6620,15 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 					+ "where a.emp_id="+builderEmployee.getId()+" group by a.id order by b.id desc";
 		}
 		else{
-			if(builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
-				hql = " SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(f.name) as configName, c.name as salemanName "
-						+ "FROM allot_leads as a join builder_lead as b on a.lead_id = b.id "
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() == 4 || builderEmployee.getBuilderEmployeeAccessType().getId() == 5){
+				hql = "SELECT b.id as id, b.name as leadName, b.mobile as phoneNo, b.email as email, b.lead_status as leadStatus, b.min as min, b.max as max, DATE_FORMAT(b.l_date,'%D %M %Y') as strDate,d.name as source, GROUP_CONCAT(DISTINCT(f.name)) as configName, c.name as salemanName "
+						+ "FROM builder_lead as b "
+						+ "join builder_project as c on c.id = b.project_id "
+						+" inner join allot_project as ap on ap.project_id = c.id "
 						+ "join source as d on d.id = b.source "
-						+ "join builder_employee as c on a.emp_id = c.id "
-						+ "inner join lead_config as e on e.lead_id=a.lead_id "
+						+ "inner join lead_config as e on e.lead_id=b.id "
 						+ "join builder_project_property_configuration as f on f.id=e.config_id "
-						+ "where b.added_by="+builderEmployee.getId()+" group by a.id order by b.id desc";
+						+ "where ap.emp_id="+builderEmployee.getId()+" group by b.id order by b.id desc";
 			}
 		}
 		HibernateUtil hibernateUtil = new HibernateUtil();

@@ -9,6 +9,9 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.DoubleType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AllotLeads;
 import org.bluepigeon.admin.model.AllotProject;
@@ -1053,9 +1056,9 @@ public class BuilderDetailsDAO {
 		empQuery.setParameter("id", empId);
 		BuilderEmployee builderEmployee=(BuilderEmployee)empQuery.list().get(0);
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
-			hql = "select source.name as name, count(lead.id) as dataCount from builder_lead as lead inner join builder_project as project on lead.project_id = project.id INNER JOIN source as source on lead.source=source.id where project.status=1 and project.group_id="+builderEmployee.getBuilder().getId()+" GROUP by source.id order by source.name asc";
+			hql = "select source.name as name, count(lead.id) as dataCount, SUM(CASE WHEN lead.lead_status=7 THEN 1 ELSE 0 END) as booked from builder_lead as lead inner join builder_project as project on lead.project_id = project.id INNER JOIN source as source on lead.source=source.id where project.status=1 and project.group_id="+builderEmployee.getBuilder().getId()+" GROUP by source.id order by source.name asc";
 		}else{
-			hql = "select source.name as name, count(lead.id) as dataCount from builder_lead as lead inner join builder_project as project on lead.project_id = project.id INNER JOIN source as source on lead.source=source.id INNER join allot_project as ap on ap.project_id = lead.project_id  where project.status=1 and ap.emp_id="+builderEmployee.getId()+" GROUP by source.id order by source.name asc";
+			hql = "select source.name as name, count(lead.id) as dataCount, SUM(CASE WHEN lead.lead_status=7 THEN 1 ELSE 0 END) as booked from builder_lead as lead inner join builder_project as project on lead.project_id = project.id INNER JOIN source as source on lead.source=source.id INNER join allot_project as ap on ap.project_id = lead.project_id  where project.status=1 and ap.emp_id="+builderEmployee.getId()+" GROUP by source.id order by source.name asc";
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
@@ -1073,12 +1076,17 @@ public class BuilderDetailsDAO {
 		empQuery.setParameter("id", empId);
 		BuilderEmployee builderEmployee=(BuilderEmployee)empQuery.list().get(0);
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
-			hql = "select project.name as name, round(project.revenue) as revenue from builder_project as project left join builder_building as building on building.project_id = project.id left join builder_floor as floor on floor.building_id = building.id left join builder_flat as flat on flat.floor_no = floor.id where project.status=1 and project.group_id="+builderEmployee.getBuilder().getId()+" and flat.status_id=2 GROUP by project.id order by project.id desc";
+			hql = "select project.name as name, round(project.revenue) as revenue, project.total_inventory as avaliable, project.inventory_sold as sold from builder_project as project left join builder_building as building on building.project_id = project.id left join builder_floor as floor on floor.building_id = building.id left join builder_flat as flat on flat.floor_no = floor.id where project.status=1 and project.group_id="+builderEmployee.getBuilder().getId()+" and flat.status_id=2 GROUP by project.id order by project.id desc";
 		}else{
-			hql = "select project.name as name, round(project.revenue) as revenue from builder_project as project INNER join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.project_id = project.id left join builder_floor as floor on floor.building_id = building.id left join builder_flat as flat on flat.floor_no = floor.id where project.status=1 and ap.emp_id="+builderEmployee.getId()+" and flat.status_id=2 GROUP by project.id order by project.id desc";
+			hql = "select project.name as name, round(project.revenue) as revenue, project.total_inventory as avaliable, project.inventory_sold as sold from builder_project as project INNER join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.project_id = project.id left join builder_floor as floor on floor.building_id = building.id left join builder_flat as flat on flat.floor_no = floor.id where project.status=1 and ap.emp_id="+builderEmployee.getId()+" and flat.status_id=2 GROUP by project.id order by project.id desc";
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
-		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		Query query = session.createSQLQuery(hql)
+				.addScalar("avaliable", LongType.INSTANCE)
+				.addScalar("sold", LongType.INSTANCE).
+				addScalar("revenue", DoubleType.INSTANCE).
+				addScalar("name", StringType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
 		
 		List<ProjectWiseData> result = query.list();
 		return result;
@@ -1119,12 +1127,12 @@ public class BuilderDetailsDAO {
 					+ "where project.status=1 and buyer.is_primary=1 and buyer.is_deleted=0 and "
 					+ "buyer.status=0 and buyer.builder_id="+builderEmployee.getBuilder().getId()+" GROUP by emp.id";
 		}else{
-			hql = "select emp.name as name, sum(bd.total_cost) as revenue from builder_employee as emp "
-					+ "join buyer as buyer on buyer.emp_id = emp.id "
+			hql = "select emp.name as name, sum(bd.total_cost) as revenue, count(flat.id) as sold from builder_employee as emp"
+					+ " join buyer as buyer on buyer.emp_id = emp.id "
 					+ "inner join buying_details as bd on bd.buyer_id = buyer.id "
 					+ "left join builder_project as project on project.id = buyer.project_id "
-					+ "where project.status=1 and buyer.is_primary=1 and buyer.is_deleted=0 and "
-					+ "buyer.status=0 and emp.reporting_id="+builderEmployee.getId()+" GROUP by emp.id";
+					+ "left join builder_flat as flat on flat.id=buyer.flat_id "
+					+ "where project.status=1 and buyer.is_primary=1 and buyer.is_deleted=0 and flat.status_id=2 and buyer.status=0 and emp.reporting_id="+builderEmployee.getId()+" GROUP by emp.id";
 			
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
@@ -1874,13 +1882,40 @@ public class BuilderDetailsDAO {
 		String hql = "";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
-			hql = "select round(sum(a.total_cost)) as revenue,(SELECT count(flat.id) from builder_flat as flat JOIN builder_floor as floor on floor.id = flat.floor_no join builder_building as building on building.id=floor.building_id join builder_project as project on project.id=building.project_id where project.status=1 and building.status=1 and floor.status=1 and flat.status=1 and flat.status_id=1) as avaliable, count(buyer.id) as sold from buying_details as a join buyer as buyer on buyer.id = a.buyer_id join builder_flat as bookedflat on bookedflat.id = buyer.flat_id join builder_project as project on project.id= buyer.project_id join builder as emp on emp.id = buyer.builder_id where emp.id="+builderEmployee.getBuilder().getId()+" and buyer.is_primary=1 and buyer.is_deleted=0";
+			hql = "Select sum(ROUND(a.revenue)) as revenue, sum(a.total_inventory) as avaliable, sum(a.inventory_sold) as sold from builder_project as a join builder as b on b.id=a.group_id where a.group_id="+builderEmployee.getBuilder().getId();
 		}else{
-			hql = "select round(sum(a.total_cost)) as revenue,(SELECT count(flat.id) from builder_flat as flat JOIN builder_floor as floor on floor.id = flat.floor_no join builder_building as building on building.id=floor.building_id join builder_project as project on project.id=building.project_id where project.status=1 and building.status=1 and floor.status=1 and flat.status=1 and flat.status_id=1) as avaliable, count(buyer.id) as sold from buying_details as a join buyer as buyer on buyer.id = a.buyer_id join builder_flat as bookedflat on bookedflat.id = buyer.flat_id join builder_project as project on project.id= buyer.project_id join builder_employee as emp on emp.id = buyer.emp_id where emp.id="+builderEmployee.getId()+" and buyer.is_primary=1 and buyer.is_deleted=0";
+			hql = "Select sum(ROUND(a.revenue)) as revenue, sum(a.total_inventory) as avaliable, sum(a.inventory_sold) as sold from builder_project as a inner join allot_project as b on b.project_id=a.id where a.group_id="+builderEmployee.getBuilder().getId()+" and b.emp_id="+builderEmployee.getId();
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
-		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
-		
+		Query query = session.createSQLQuery(hql).
+				addScalar("avaliable", LongType.INSTANCE)
+				.addScalar("sold", LongType.INSTANCE).
+				addScalar("revenue", DoubleType.INSTANCE).
+				setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+		List<ProjectWiseData> result = query.list();
+		return result.get(0);
+	}
+	
+	public ProjectWiseData getTotalRevenueByEmployee(int empid){
+		String emphql = "from BuilderEmployee where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session empSession = hibernateUtil.openSession();
+		Query empQuery = empSession.createQuery(emphql);
+		empQuery.setParameter("id", empid);
+		BuilderEmployee builderEmployee = (BuilderEmployee) empQuery.list().get(0);
+				
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+			hql = "Select sum(ROUND(a.revenue)) as revenue, sum(a.total_inventory) as avaliable, sum(a.inventory_sold) as sold from builder_project as a join builder as b on b.id=a.group_id where a.group_id="+builderEmployee.getBuilder().getId();
+		}else{
+			hql = "Select sum(ROUND(a.revenue)) as revenue, sum(a.total_inventory) as avaliable, sum(a.inventory_sold) as sold from builder_project as a inner join allot_project as b on b.project_id=a.id where a.group_id="+builderEmployee.getBuilder().getId()+" and b.emp_id="+builderEmployee.getId();
+		}
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).
+				addScalar("avaliable", LongType.INSTANCE)
+				.addScalar("sold", LongType.INSTANCE).
+				addScalar("revenue", DoubleType.INSTANCE).
+				setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
 		List<ProjectWiseData> result = query.list();
 		return result.get(0);
 	}

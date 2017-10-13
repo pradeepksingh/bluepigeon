@@ -251,7 +251,7 @@ function getBookedBuyerFilterList(){
                   +'<h5>'+data[index].source+'</h5>'
                  +'</div>'
                  +'<div class="col-md-2 col-sm-2 col-xs-2">'
-                  +'<h5>'+data[index].min+' - '+data[index].max+'Lac</h5>'
+                  +'<h5>'+data[index].min+' - '+data[index].max+' Lac</h5>'
                  +'</div>'
               +'</div>'
             '</div>';

@@ -1,5 +1,6 @@
 package org.bluepigeon.admin.data;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class ProjectWiseData {
@@ -9,6 +10,7 @@ public class ProjectWiseData {
 	private Double revenue=0.0;
 	private Long avaliable;
 	private Long sold;
+	private BigDecimal booked;
 	public int getId() {
 		return id;
 	}
@@ -44,5 +46,11 @@ public class ProjectWiseData {
 	}
 	public void setSold(Long sold) {
 		this.sold = sold;
+	}
+	public BigDecimal getBooked() {
+		return booked;
+	}
+	public void setBooked(BigDecimal booked) {
+		this.booked = booked;
 	}
 }

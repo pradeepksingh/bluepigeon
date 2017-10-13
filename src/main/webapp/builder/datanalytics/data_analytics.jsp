@@ -41,11 +41,12 @@
 	int builder_id = 0;
 	int emp_id = 0;
 	int access_id = 0;
-	//Double totalRevenue =0.0;
 	int project_size_list = 0;
 	int city_size_list =0 ;
-	ProjectWiseData totalProjectRevenue = null;
+//	ProjectWiseData totalProjectRevenue = null;
 	Double totalPropertySold = 0.0;
+	Long avaiable=0L;
+	Long sold=0L;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -64,21 +65,25 @@
 					totalProjects = new ProjectDAO().getTotalNumberOfProjects(builder);
 					barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder);
 					projectWiseDatas = new BuilderDetailsDAO().getProjectWiseByEmployee(builder);
-					//totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder);
-					//totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
 					project_size_list = project_list.size();
 					city_size_list = cityDataList.size();
-				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
-					//totalRevenue = totalPropertySold * totalInventorySold;
-				List<ProjectWiseData> projectWiseDatas2 = new BuilderDetailsDAO().getEmployeeBarGraphByProject(emp_id);
-				//totalProjectRevenue=	new BuilderDetailsDAO().getTotalRevenueByEmployee(builder);
-					if(projectWiseDatas2 !=null){
+					List<ProjectWiseData> projectWiseDatas2 = new BuilderDetailsDAO().getEmployeeBarGraphByProject(emp_id);
+				//	totalProjectRevenue=	new BuilderDetailsDAO().getTotalRevenueByEmployee(builder);
+// 					if(projectWiseDatas2 !=null){
+// 						for(ProjectWiseData projectWiseData : projectWiseDatas2){
+// 							totalRevenue +=projectWiseData.getRevenue();
+// 						}
+// 					}
+
+					if(projectWiseDatas2 != null){
 						for(ProjectWiseData projectWiseData : projectWiseDatas2){
-							totalRevenue +=projectWiseData.getRevenue();
+							totalRevenue += projectWiseData.getRevenue();
+							avaiable = (long)avaiable+(long)projectWiseData.getAvaliable();
+							sold = (long)sold+(long)projectWiseData.getSold();
 						}
+						
 					}
-					
 				}
 		}
 	}
@@ -140,6 +145,8 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>"/>
+                <input type="hidden" id="totalrevenue" name="totalrevenue" value="<%out.print(totalRevenue);%>"/>
+                <input type="hidden" id="totalavaiable" name="totalavaiable" value="<%out.print(avaiable);%>"/>
                 <!-- /.row -->
                 <!-- .row -->
                 <div class="row">
@@ -171,12 +178,12 @@
                     		
                     		<%} %>
                     		
-<!--                             <ul class="list-inline text-left"> -->
-<!--                                 <li> -->
-<%--                                     <h5><i class="fa fa-circle m-r-5"></i>Total Revenue :<%out.print(totalProjectRevenue.getRevenue()); %> </h5> </li> --%>
-<!--                                 <li> -->
-<%--                                     <h5><i class="fa fa-circle m-r-5"></i>Sold : <%out.print(totalProjectRevenue.getSold()); %>/<%out.print(totalProjectRevenue.getAvaliable()); %></h5> </li> --%>
-<!--                             </ul> -->
+                            <ul class="list-inline text-left" id="revenues">
+                                <li>
+                                    <h4><i class="m-r-5"></i>Booked Revenue :<%out.print(totalRevenue); %> </h4> </li>
+                                <li>
+                                    <h4><i class="m-r-5"></i>Sold : <%out.print(sold); %>/<%out.print(avaiable); %></h4> </li>
+                            </ul>
                             <div id="morris-bar-chart" style="height:372px;"></div>
                         </div>
 <!--                     </div> -->
@@ -204,6 +211,8 @@
 <script src="${baseUrl}/builder/plugins/bower_components/raphael/raphael-min.js"></script>
     <script>
     jQuery(document).ready(function() {
+    	var avaiable=0;
+    	var sold=0;
         // Switchery
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
         $('.js-switch').each(function() {
@@ -336,8 +345,11 @@
  	
  	function plotProjectGraph(records) {
  		var data = [];
+ 		var sold =0;
+ 		var newrevenue="";
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].revenue});
+			sold +=records[index].sold;
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
@@ -352,13 +364,22 @@
      	    gridLineColor: '#eef0f2',
      	    resize: true
      	});
- 		
+ 		$("ul li h4").empty();
+ 		newrevenue='<li>'
+            		+'<h4><i class="m-r-5"></i>Booked Revenue : '+$("#totalrevenue").val()+' </h4> </li>'
+            		+'<li>'
+                	+'<h4><i class="m-r-5"></i>Sold : '+sold+'/'+$("#totalavaiable").val()+'</h4> </li>';
+ 		$("#revenues").html(newrevenue);
  	}
  	
  	function plotSourceGraph(records) {
  		var data = [];
+ 		var totalLeads = 0;
+ 		var totalBooked = 0;
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].dataCount});
+			totalLeads +=records[index].dataCount;
+			totalBooked +=records[index].booked;
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
@@ -373,7 +394,12 @@
      	    gridLineColor: '#eef0f2',
      	    resize: true
      	});
- 		
+ 		$("ul li h4").empty();
+ 		newrevenue='<li>'
+            		+'<h4><i class="m-r-5"></i> </h4> </li>'
+            		+'<li>'
+                	+'<h4><i class="m-r-5"></i>Leads : '+totalBooked+'/'+totalLeads+'</h4> </li>';
+ 		$("#revenues").html(newrevenue);
  	}
  	
  	function plotMonthGraph(records) {
@@ -399,8 +425,10 @@
  	
  	function plotSalesmanGraph(records) {
  		var data = [];
+ 		var sold=0;
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].revenue});
+			sold +=record[index].sold;
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
@@ -415,6 +443,11 @@
      	    gridLineColor: '#eef0f2',
      	    resize: true
      	});
- 		
+ 		$("ul li h4").empty();
+ 		newrevenue='<li>'
+            		+'<h4><i class="m-r-5"></i>Booked Revenue : '+$("#totalrevenue").val()+' </h4> </li>'
+            		+'<li>'
+                	+'<h4><i class="m-r-5"></i>Sold : '+sold+'/'+$("#totalavaiable").val()+'</h4> </li>';
+ 		$("#revenues").html(newrevenue);
  	}
 </script>
