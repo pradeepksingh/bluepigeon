@@ -10,7 +10,8 @@ public class ProjectWiseData {
 	private Double revenue=0.0;
 	private Long avaliable;
 	private Long sold;
-	private BigDecimal booked;
+	private BigDecimal booked; 
+	private Long bookingCount;
 	public int getId() {
 		return id;
 	}
@@ -53,4 +54,11 @@ public class ProjectWiseData {
 	public void setBooked(BigDecimal booked) {
 		this.booked = booked;
 	}
+	public Long getBookingCount() {
+		return bookingCount;
+	}
+	public void setBookingCount(Long bookingCount) {
+		this.bookingCount = bookingCount;
+	}
+	
 }

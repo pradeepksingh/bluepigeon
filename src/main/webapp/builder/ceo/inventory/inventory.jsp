@@ -253,6 +253,9 @@ Date date = new Date();
 $select_building = $("#filter_building_id").selectize({
 	persist: false,
 	 onChange: function(value) {
+		 if(value !=""){
+			 showBookedBuyers();
+		 }
 	 },
 	 onDropdownOpen: function(value){
     	 var obj = $(this);
@@ -266,12 +269,22 @@ $select_building = $("#filter_building_id").selectize({
 	select_building = $select_building[0].selectize;
 <%}%>
 $("#search_buyer").click(function(){
+	showBookedBuyers();
+});
+$("#srch-term").keydown(function(e){
+	if(e.keyCode == 13){
+		e.preventDefault();
+		showBookedBuyers();
+	}
+});
+function showBookedBuyers(){
 	ajaxindicatorstart("Please wait while.. we search ...");
     $.get("${baseUrl}/builder/ceo/inventory/partialinventory.jsp?project_id=<% out.print(projectId);%>&building_id="+$('#filter_building_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
     	$("#flat_landing_area").html(data);
     	ajaxindicatorstop();
     },'html');
-});
+}
+
 $("#ceo_project_status_btn").click(function(){
 	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href="${baseUrl}/builder/ceo/projectstatus/projectstatus.jsp?project_id=<% out.print(projectId);%>";

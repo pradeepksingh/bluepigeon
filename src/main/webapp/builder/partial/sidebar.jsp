@@ -44,7 +44,7 @@
             <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> CEO<span class="fa arrow"></span></span></a>
 				<ul class="nav nav-second-level">
 					<li> <a href="${baseUrl }/builder/ceo/inbox/inbox.jsp">Inbox</a></li>
-                    <li> <a href="${baseUrl }/builder/ceo/datanalytics/data_analytics.jsp">Data Analytics</a></li>
+                    <li> <a href="${baseUrl }/builder/datanalytics/data_analytics.jsp">Data Analytics</a></li>
                     <li> <a href="${baseUrl }/builder/ceo/employeeslist.jsp">Employees</a></li>
                      <li> <a href="${baseUrl }/builder/leads/leadlist.jsp">Leads</a></li>
                     <li> <a href="${baseUrl }/builder/ceo/addleads.jsp">Add Leads</a></li>

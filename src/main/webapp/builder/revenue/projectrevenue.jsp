@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.BookingFlatList"%>
 <%@page import="org.bluepigeon.admin.data.ProjectWiseData"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
@@ -41,6 +42,8 @@
 	int city_size_list =0 ;
 	
 	Double totalPropertySold = 0.0;
+	Long avaliable =0L;
+	Long booked = 0L;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -69,9 +72,11 @@
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
 					//totalRevenue = totalPropertySold * totalInventorySold;
 					List<ProjectWiseData> projectWiseDatas2 = new BuilderDetailsDAO().getEmployeeBarGraphByProject(emp_id);
-					if(projectWiseDatas2 !=null){
-						for(ProjectWiseData projectWiseData : projectWiseDatas2){
+					if(projectWiseDatas !=null){
+						for(ProjectWiseData projectWiseData : projectWiseDatas){
 							totalRevenue +=projectWiseData.getRevenue();
+							avaliable +=projectWiseData.getAvaliable();
+							booked += projectWiseData.getBookingCount();
 						}
 					}
 					
@@ -143,6 +148,8 @@
                 </div>
                 <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>"/>
                 <input type="hidden" id="project_id" name="project_id" value="<%out.print(projectId);%>"/>
+                <input type="hidden" id="totalrevenue" name="totalrevenue" value="<%out.print(totalRevenue);%>"/>
+                <input type="hidden" id="totalavaiable" name="totalavaiable" value="<%out.print(avaliable);%>"/>
                 <!-- /.row -->
                 <!-- .row -->
                 <div class="row">
@@ -174,14 +181,12 @@
                     		
                     		<%} %>
                     		
-<!--                             <ul class="list-inline text-left"> -->
-<!--                                 <li> -->
-<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #24bcd3;"></i>Flats</h5> </li> -->
-<!--                                 <li> -->
-<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #fb9678;"></i>Buyers</h5> </li> -->
-<!--                                 <li> -->
-<!--                                     <h5><i class="fa fa-circle m-r-5" style="color: #9675ce;"></i>Purchases</h5> </li> -->
-<!--                             </ul> -->
+                             <ul class="list-inline text-left" id="revenues">
+                                <li>
+                                    <h4><i class="m-r-5"></i>Booked Revenue :<%out.print(totalRevenue); %> </h4> </li>
+                                <li>
+                                    <h4><i class="m-r-5"></i>Sold : <%out.print(booked); %>/<%out.print(avaliable); %></h4> </li>
+                            </ul>
                             <div id="morris-bar-chart" style="height:372px;"></div>
                         </div>
 <!--                     </div> -->
@@ -198,89 +203,12 @@
     </div> 
 </body>
 </html>
-<script src="../plugins/bower_components/switchery/dist/switchery.min.js"></script>
 <script src="../plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
-<script src="../plugins/bower_components/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
-<script src="../plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
-<script src="../plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="../plugins/bower_components/multiselect/js/jquery.multi-select.js"></script>
 <script src="../plugins/bower_components/morrisjs/morris.js"></script>
 <script src="../js/real-estate.js"></script>
 <script src="${baseUrl}/builder/plugins/bower_components/raphael/raphael-min.js"></script>
 <script>
-    jQuery(document).ready(function() {
-        // Switchery
-        var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
-        $('.js-switch').each(function() {
-            new Switchery($(this)[0], $(this).data());
-        });
-        // For select 2
-        $(".select2").select2();
-        $('.selectpicker').selectpicker();
-        //Bootstrap-TouchSpin
-        $(".vertical-spin").TouchSpin({
-            verticalbuttons: true,
-            verticalupclass: 'ti-plus',
-            verticaldownclass: 'ti-minus'
-        });
-        var vspinTrue = $(".vertical-spin").TouchSpin({
-            verticalbuttons: true
-        });
-        if (vspinTrue) {
-            $('.vertical-spin').prev('.bootstrap-touchspin-prefix').remove();
-        }
-        $("input[name='tch1']").TouchSpin({
-            min: 0,
-            max: 100,
-            step: 0.1,
-            decimals: 2,
-            boostat: 5,
-            maxboostedstep: 10,
-            postfix: '%'
-        });
-        $("input[name='tch2']").TouchSpin({
-            min: -1000000000,
-            max: 1000000000,
-            stepinterval: 50,
-            maxboostedstep: 10000000,
-            prefix: '$'
-        });
-        $("input[name='tch3']").TouchSpin();
-        $("input[name='tch3_22']").TouchSpin({
-            initval: 40
-        });
-        $("input[name='tch5']").TouchSpin({
-            prefix: "pre",
-            postfix: "post"
-        });
-        // For multiselect
-        $('#pre-selected-options').multiSelect();
-        $('#optgroup').multiSelect({
-            selectableOptgroup: true
-        });
-        $('#public-methods').multiSelect();
-        $('#select-all').click(function() {
-            $('#public-methods').multiSelect('select_all');
-            return false;
-        });
-        $('#deselect-all').click(function() {
-            $('#public-methods').multiSelect('deselect_all');
-            return false;
-        });
-        $('#refresh').on('click', function() {
-            $('#public-methods').multiSelect('refresh');
-            return false;
-        });
-        $('#add-option').on('click', function() {
-            $('#public-methods').multiSelect('addOption', {
-                value: 42,
-                text: 'test 42',
-                index: 0
-            });
-            return false;
-        });
-    });
- 
+   
     	var mychart = null; 
  
    
@@ -333,7 +261,7 @@
  		else {
  			ajaxindicatorstart("Loading...");
  			$.post("${baseUrl}/webapi/builder/filter/bargraph/building",{project_id:$("#project_id").val()},function(data){
- 				plotProjectGraph(data);
+ 				plotBuildingGraph(data);
  				ajaxindicatorstop();
 		 	},'json');
  		}
@@ -362,8 +290,12 @@
  	}
  	function plotBuildingGraph(records) {
  		var data = [];
+ 		var avaliable = 0;
+ 		var booked = 0;
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].revenue});
+			avaliable += records[index].avaliable;
+			booked +=records[index].bookingCount;
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
@@ -378,12 +310,21 @@
      	    gridLineColor: '#eef0f2',
      	    resize: true
      	});
- 		
+ 		$("ul li h4").empty();
+ 		newrevenue='<li>'
+    		+'<h4><i class="m-r-5"></i>Booked Revenue : '+$("#totalrevenue").val()+' </h4> </li>'
+    		+'<li>'
+        	+'<h4><i class="m-r-5"></i>Sold : '+booked+'/'+avaliable+'</h4> </li>';
+	$("#revenues").html(newrevenue);
  	}
  	function plotSourceGraph(records) {
  		var data = [];
+ 		var totalLeads = 0;
+ 		var totalBooked = 0;
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].dataCount});
+			totalLeads +=records[index].dataCount;
+			totalBooked +=records[index].booked;
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
@@ -399,13 +340,20 @@
      	    gridLineColor: '#eef0f2',
      	    resize: true
      	});
- 		
+ 		$("ul li h4").empty();
+ 		newrevenue='<li>'
+            		+'<h4><i class="m-r-5"></i> </h4> </li>'
+            		+'<li>'
+                	+'<h4><i class="m-r-5"></i>Leads : '+totalBooked+'/'+totalLeads+'</h4> </li>';
+ 		$("#revenues").html(newrevenue);
  	}
  	
  	function plotMonthGraph(records) {
  		var data = [];
+ 		var sold = 0;
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].revenue});
+			sold +=records[index].bookingCount;
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
@@ -421,13 +369,21 @@
      	   	barSize:50,
      	   	resize: true
      	});
+ 		$("ul li h4").empty();
+ 		newrevenue='<li>'
+            		+'<h4><i class="m-r-5"></i>Booked Revenue : '+$("#totalrevenue").val()+' </h4> </li>'
+            		+'<li>'
+                	+'<h4><i class="m-r-5"></i>Sold : '+sold+'/'+$("#totalavaiable").val()+'</h4> </li>';
+ 		$("#revenues").html(newrevenue);
  		
  	}
  	
  	function plotSalesmanGraph(records) {
  		var data = [];
+ 		var sold=0;
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].revenue});
+			sold +=records[index].sold;
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
@@ -442,7 +398,12 @@
      	   	gridLineColor: '#eef0f2',
      	   	resize: true
      	});
- 		
+ 		$("ul li h4").empty();
+ 		newrevenue='<li>'
+            		+'<h4><i class="m-r-5"></i>Booked Revenue : '+$("#totalrevenue").val()+' </h4> </li>'
+            		+'<li>'
+                	+'<h4><i class="m-r-5"></i>Sold : '+sold+'/'+$("#totalavaiable").val()+'</h4> </li>';
+ 		$("#revenues").html(newrevenue);
  	}
  	
 	$("#project_status_btn").click(function(){
