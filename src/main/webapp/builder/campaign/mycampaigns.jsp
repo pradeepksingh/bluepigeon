@@ -121,12 +121,12 @@ Date date = new Date();
 					                       <div class="right">
 					                       <% if(campaign.getEndDate() != null){
 				                       		   	if(date.after(campaign.getEndDate())){ %>
-					                          		<img src="../images/red.png" alt="cancle" class="icon"/>
+					                          		<img src="../images/red.png" alt="inactive" class="icon"/>
 					                          	<% } else { %>
-					                          		<img src="../images/green.png" alt="cancle" class="icon"/>
+					                          		<img src="../images/green.png" alt="active" class="icon"/>
 					                          	<% } %>
 					                       	<% } else { %>
-					                       		<img src="../images/green.png" alt="cancle" class="icon"/>
+					                       		<img src="../images/green.png" alt="active" class="icon"/>
 					                       	<% } %>
 					                        </div>
 						                    <div class="bottom">

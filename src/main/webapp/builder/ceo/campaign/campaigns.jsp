@@ -85,10 +85,10 @@ Date date = new Date();
     <link href="../../css/common.css" rel="stylesheet">
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../../css/ceocampaigns.css">
-     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
+     <link href="../../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
     <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script>
+<!--     <script src="../../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script> -->
   
 </head>
 
@@ -203,12 +203,12 @@ Date date = new Date();
 					                       <div class="right">
 					                        <% if(campaign.getEndDate() != null){
 				                       		   	if(date.after(campaign.getEndDate())){ %>
-					                          <img src="../../images/red.png" alt="cancle" class="icon">
+					                          <img src="../../images/red.png" alt="inactive" class="icon">
 					                          	<% } else { %>
-					                          	 <img src="../../images/green.png" alt="cancle" class="icon">
+					                          	 <img src="../../images/green.png" alt="active" class="icon">
 					                          	 <% } %>
 					                       	<% } else { %>
-					                          	  <img src="../../images/green.png" alt="cancle" class="icon">
+					                          	  <img src="../../images/green.png" alt="active" class="icon">
 					                        <% } %>
 					                        </div>
 						                    <div class="bottom">
@@ -287,9 +287,9 @@ Date date = new Date();
 	  	</div>
  	</div>
 </div>
-<script>
-
+<script type="text/javascript">
 function openTermsModal(tc) {
+	alert(tc);
 	$("#myterms_popup").html(tc);
 	$("#myCampainTermsModal").modal('show');
 }

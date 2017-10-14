@@ -20,6 +20,7 @@ select{
 	    margin-top: 10px;
 	    display: inline-block;
 	    list-style-type:none;
+	    margin-left:20%;
 } 
 .flat-button:hover{
 	
@@ -371,7 +372,7 @@ font-size: 23px !important;;
 	
     font-size: 26px !important;
     line-height: 1.5;
-    padding: 10% 20% !important;
+    padding: 18% 20% !important;
     
     font-weight: 100;
     text-align: -webkit-center;
@@ -804,20 +805,4 @@ padding:7%;
 	
     font-size: 27px;
     text-transform: uppercase;
-}
-.tcanchor {
-	color:#FFF;
-	text-decoration:none;
-}
-.tcanchor:hover {
-	color:#FFF;
-	text-decoration:none;
-}
-.tcanchor:active {
-	color:#FFF;
-	text-decoration:none;
-}
-.tcanchor:visited {
-	color:#FFF;
-	text-decoration:none;
 }
