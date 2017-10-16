@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
+import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.CityNamesImp;
 import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
@@ -28,12 +29,16 @@ import org.bluepigeon.admin.dao.StateImp;
 import org.bluepigeon.admin.data.BarGraphData;
 import org.bluepigeon.admin.data.BookingFlatList;
 import org.bluepigeon.admin.data.BuilderProjectList;
+import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuildingList;
+import org.bluepigeon.admin.data.BuyerList;
+import org.bluepigeon.admin.data.ConfigData;
 import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.data.InboxBuyerData;
 import org.bluepigeon.admin.data.InboxMessageData;
 import org.bluepigeon.admin.data.NewLeadList;
+import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectWiseData;
 //import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -62,6 +67,7 @@ import org.bluepigeon.admin.model.BuildingAmenityInfo;
 import org.bluepigeon.admin.model.BuildingAmenityWeightage;
 import org.bluepigeon.admin.model.BuildingOfferInfo;
 import org.bluepigeon.admin.model.Buyer;
+import org.bluepigeon.admin.model.BuyerUploadDocuments;
 import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.model.Country;
 import org.bluepigeon.admin.model.FlatAmenityInfo;
@@ -748,36 +754,36 @@ public class BuilderController {
 		return new BuilderDetailsDAO().getEmployeeBarGraphByBuilding(projectId);
 	}
 	
-	@POST
-	@Path("/allot/projects")
-	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage saveAllotedProjets(	@FormParam("project_ids[]") String projectId, @FormParam("emp_id") int empId){
-		ResponseMessage responseMessage = new ResponseMessage();
-		String strProject [] = projectId.split(",");
-		System.err.println(projectId);
-		BuilderEmployee builderEmployee = new BuilderEmployee();
-		builderEmployee.setId(empId);
-		List<AllotProject> allotProjectList = new ArrayList<>();
-		if(strProject != null){
-			for(int i=0;i<strProject.length;i++){
-				int project_id = Integer.parseInt(strProject[i]);
-				AllotProject allotProject = new AllotProject();
-				allotProject.setBuilderEmployee(builderEmployee);
-				BuilderProject builderProject = new BuilderProject();
-				builderProject.setId(project_id);
-				allotProject.setBuilderProject(builderProject);
-				allotProjectList.add(allotProject);
-			}
-			
-			if(allotProjectList.size() > 0){
-				responseMessage =  new BuilderDetailsDAO().saveAllotedProjects(allotProjectList);
-			}
-		}else{
-			responseMessage.setStatus(0);
-			responseMessage.setMessage("Fail to allot project");
-		}
-		return responseMessage;
-	}
+//	@POST
+//	@Path("/allot/projects")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public ResponseMessage saveAllotedProjets(	@FormParam("project_ids[]") String projectId, @FormParam("emp_id") int empId){
+//		ResponseMessage responseMessage = new ResponseMessage();
+//		String strProject [] = projectId.split(",");
+//		System.err.println(projectId);
+//		BuilderEmployee builderEmployee = new BuilderEmployee();
+//		builderEmployee.setId(empId);
+//		List<AllotProject> allotProjectList = new ArrayList<>();
+//		if(strProject != null){
+//			for(int i=0;i<strProject.length;i++){
+//				int project_id = Integer.parseInt(strProject[i]);
+//				AllotProject allotProject = new AllotProject();
+//				allotProject.setBuilderEmployee(builderEmployee);
+//				BuilderProject builderProject = new BuilderProject();
+//				builderProject.setId(project_id);
+//				allotProject.setBuilderProject(builderProject);
+//				allotProjectList.add(allotProject);
+//			}
+//			
+//			if(allotProjectList.size() > 0){
+//				responseMessage =  new BuilderDetailsDAO().saveAllotedProjects(allotProjectList);
+//			}
+//		}else{
+//			responseMessage.setStatus(0);
+//			responseMessage.setMessage("Fail to allot project");
+//		}
+//		return responseMessage;
+//	}
 	
 	@GET
 	@Path("/flat/markhold/{flat_ids}")
@@ -816,5 +822,111 @@ public class BuilderController {
 	public List<ProjectWiseData> getBarGraphDataBySalesmanCEO(@FormParam("project_id") int projectId){
 		
 		return new BuilderDetailsDAO().getEmployeeBarGraphBySalesmanCEO(projectId);
+	}
+	
+	@GET
+	@Path("/building/data")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuildingData> getBuildingData(
+			@Context UriInfo uriInfo
+			) {
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		List<String> projectIds = uriInfo.getQueryParameters().get("project_ids[]");
+		System.err.println("Received List :: "+projectIds);
+		List<BuildingData> buildingList = builderDetailsDAO.getBuildingData(projectIds);
+		return buildingList;
+	}
+	
+	@GET
+	@Path("/flatbuyer/data")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuyerList> getFlatBuyerData(
+			@Context UriInfo uriInfo
+			) {
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		List<String> projectIds = uriInfo.getQueryParameters().get("building_ids[]");
+		System.err.println("Received List :: "+projectIds);
+		List<BuyerList> buildingList = builderDetailsDAO.getFlatBuyerList(projectIds);
+		return buildingList;
+	}
+	
+	@POST
+	@Path("/save/newdoc")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addNewBuyerInfoNew (
+			@FormDataParam("flat_buyer_ids[]") List<FormDataBodyPart> buyerIds,
+	@FormDataParam("doc_name[]") List<FormDataBodyPart> doc_name,
+	@FormDataParam("doc_url[]") List<FormDataBodyPart> doc_url
+	){
+		ResponseMessage responseMessage = new ResponseMessage();
+		try {
+			if(buyerIds != null && buyerIds.size() >0){
+				int b=0;
+				int d=0;
+				List<Buyer> buyers = new ArrayList<Buyer>();
+				List<BuyerUploadDocuments> savebuyerDoc = new ArrayList<BuyerUploadDocuments>();
+				for(FormDataBodyPart buyernames : buyerIds){
+					Buyer buyer = new Buyer();
+					BuyerUploadDocuments buDocuments = new BuyerUploadDocuments();
+					if(buyernames.getValueAs(Integer.class) != 0 && buyernames.getValueAs(Integer.class) != null){
+						buyer.setId(buyernames.getValueAs(Integer.class));
+					}
+					if(doc_url.get(d).getFormDataContentDisposition().getFileName() != null && !doc_url.get(d).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = doc_url.get(d).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/buyer/docs/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(doc_url.get(d).getValueAs(InputStream.class), uploadGalleryLocation);
+						buDocuments.setDocUrl(gallery_name);
+						buDocuments.setBuyer(buyer);
+						buDocuments.setName(doc_name.get(d).getValueAs(String.class).toString());
+						buDocuments.setBuilderdoc(true);
+						buDocuments.setUploadedDate(new Date());
+					}
+					savebuyerDoc.add(buDocuments);
+					b++;
+				}
+				if(savebuyerDoc.size()>0){
+					responseMessage = new BuyerDAO().saveBuyerUploadDouments(savebuyerDoc);
+				}
+			}
+			return responseMessage;
+		}catch(Exception e) {
+			return null;
+		}
+	}
+	
+	@POST
+	@Path("/allot/projects")
+	@Produces(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_JSON)
+	public ResponseMessage saveAllotedProjets(	@FormParam("project_ids") String projectId, @FormParam("emp_id") int empId){
+		ResponseMessage responseMessage = new ResponseMessage();
+		String strProject [] = projectId.split(",");
+		System.err.println(projectId);
+		BuilderEmployee builderEmployee = new BuilderEmployee();
+		builderEmployee.setId(empId);
+		List<AllotProject> allotProjectList = new ArrayList<>();
+		if(strProject != null){
+			for(int i=0;i<strProject.length;i++){
+				int project_id = Integer.parseInt(strProject[i]);
+				AllotProject allotProject = new AllotProject();
+				allotProject.setBuilderEmployee(builderEmployee);
+				BuilderProject builderProject = new BuilderProject();
+				builderProject.setId(project_id);
+				allotProject.setBuilderProject(builderProject);
+				allotProjectList.add(allotProject);
+			}
+			
+			if(allotProjectList.size() > 0){
+				responseMessage =  new BuilderDetailsDAO().saveAllotedProjects(allotProjectList);
+			}
+		}else{
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Fail to allot project");
+		}
+		return responseMessage;
 	}
 }

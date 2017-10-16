@@ -2,6 +2,7 @@ package org.bluepigeon.admin.dao;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +35,9 @@ import org.bluepigeon.admin.data.BarGraphData;
 import org.bluepigeon.admin.data.BookingFlatList;
 import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.BuilderProjectList;
+import org.bluepigeon.admin.data.BuildingData;
+import org.bluepigeon.admin.data.BuyerList;
+import org.bluepigeon.admin.data.ConfigData;
 import org.bluepigeon.admin.data.EmployeeList;
 import org.bluepigeon.admin.data.InboxMessageData;
 import org.bluepigeon.admin.data.ProjectData;
@@ -1647,22 +1651,22 @@ public class BuilderDetailsDAO {
 				}else{
 					hql += " from buyer as a join inbox_message as b on b.buyer_id=a.id "
 							+ "WHERE ";
-							where+= "b.emp_id="+builderEmployee.getId();
-					hql = hql+" and (b.name like '%"+keyword+"%' OR b.mobile like '%"+keyword+"%')";
+							where+= " and b.emp_id="+builderEmployee.getId();
+					hql = hql+"  (a.name like '%"+keyword+"%' OR a.mobile like '%"+keyword+"%')";
 					
 				}
 		}else{
 				if(keyword == ""){
-					hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
-							+ "left join builder as build on build.id = b.builder_id  "
+					hql = hql+" FROM buyer as a  join inbox_message as b on b.buyer_id=a.id "
+							+ "left join builder as build on build.id = a.builder_id  "
 							+ "WHERE ";
-							where+= "b.builder_id="+builderEmployee.getBuilder().getId();
+							where+= " and a.builder_id="+builderEmployee.getBuilder().getId();
 				}else{
-					hql = hql+" FROM buyer as b inner join inbox_message as im on im.buyer_id=b.id "
-							+ "left join builder as build on build.id = b.builder_id  "
+					hql = hql+" FROM buyer as a join inbox_message as b on b.buyer_id=a.id "
+							+ "left join builder as build on build.id = a.builder_id  "
 							+ "WHERE ";
-							where+= "b.builder_id="+builderEmployee.getBuilder().getId();
-					hql = hql+" and (b.name like '%"+keyword+"' OR b.mobile like '%"+keyword+"%')";
+							where+= " and a.builder_id="+builderEmployee.getBuilder().getId();
+					hql = hql+"  (a.name like '%"+keyword+"' OR a.mobile like '%"+keyword+"%')";
 				}
 		}
 		
@@ -1734,6 +1738,7 @@ public class BuilderDetailsDAO {
 		responseMessage.setData(builderLead.getLeadStatus());
 		responseMessage.setStatus(1);
 		responseMessage.setMessage("Lead Status updated successfully");
+		
 		return responseMessage;
  	}
 	
@@ -1967,6 +1972,13 @@ public class BuilderDetailsDAO {
 		session1.close();
 		response.setStatus(1);
 		response.setMessage("Project Assigned successfully");
+		List<ProjectData> projectdata = new ProjectDAO().getAssigProjects(allotProjects.get(0).getBuilderEmployee().getId());
+		ArrayList<String> projectNames = new ArrayList<String>();
+		System.err.println(projectdata.size());
+		for(int a=0;a<projectdata.size();a++){
+			projectNames.add(projectdata.get(a).getName());
+		}
+		 response.setErrors(projectNames);
 		return response;
 	}
 	
@@ -2049,5 +2061,51 @@ public class BuilderDetailsDAO {
 		
 		List<ProjectWiseData> result = query.list();
 		return result;
+	}
+	public List<BuildingData> getBuildingData(List<String> projectIds){
+		List<BuildingData> buildingDatas = new ArrayList<BuildingData>();
+		if(projectIds != null && projectIds.size() > 0){
+			String projectIdList = Arrays.toString(projectIds.toArray());
+			String strSeparator = "";
+			projectIdList = projectIdList.replace("[", strSeparator).replace("]", strSeparator);
+			
+			String  hql="SELECT  b.id as id, b.name as name FROM builder_building as b WHERE b.project_id IN("+projectIdList+") and b.status=1";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			try {
+					Session session = hibernateUtil.getSessionFactory().openSession();
+					Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuildingData.class));
+					System.err.println("hql : "+hql);
+					buildingDatas = query.list();
+					return buildingDatas;
+				} catch(Exception e) {
+					//
+					return null;
+				}
+		}else{
+			return null;
+		}
+	}
+	public List<BuyerList> getFlatBuyerList(List<String> buildingIds){
+		List<BuyerList> buildingDatas = new ArrayList<BuyerList>();
+		if(buildingIds != null && buildingIds.size() > 0){
+			String buildingIdList = Arrays.toString(buildingIds.toArray());
+			String strSeparator = "";
+			buildingIdList = buildingIdList.replace("[", strSeparator).replace("]", strSeparator);
+			
+			String  hql="Select a.id as id,a.name as name, b.flat_no as flatNumber from buyer as a join builder_flat as b on b.id = a.flat_id join builder_floor as c on c.id=b.floor_no join builder_building as d on d.id = c.building_id where d.id in ("+buildingIdList+") and a.is_primary=1 and a.is_deleted=0 AND a.status=0";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			try {
+					Session session = hibernateUtil.getSessionFactory().openSession();
+					Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuyerList.class));
+					System.err.println("hql : "+hql);
+					buildingDatas = query.list();
+					return buildingDatas;
+				} catch(Exception e) {
+					//
+					return null;
+				}
+		}else{
+			return null;
+		}
 	}
 }

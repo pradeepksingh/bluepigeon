@@ -434,17 +434,12 @@
 			                                </div>
 			                                <div class="row">
 			                                	<div class="col-md-6">
-					                                <div class="form-group row">
-					                                    <label for="example-search-input" class="col-sm-4 control-label">Latitude<span class='text-danger'>*</span></label>
+					                               <div class="form-group row">
+					                                    <label for="example-tel-input" class="col-sm-4 control-label">Description</label>
 					                                    <div class="col-sm-6">
-					                                    	<div>
-						                                    	<div>
-						                                        	<input class="form-control project" type="text" readonly="true" id="latitude" name="latitude" autocomplete="off" value="<% out.print(builderProject.getLatitude());%>"/>
-						                                   		</div>
-						                                    	<div class="messageContainer"></div>
-					                                    	</div>
+					                                        <textarea class="form-control project" id="description"  name="description"><% out.print(builderProject.getDescription());%></textarea>
 					                                    </div>
-					                                </div>
+					                                 </div>
 					                            </div>
 					                            <div class="col-md-6">
 					                                <div class="form-group row">  
@@ -461,15 +456,6 @@
 					                           </div>  
 			                               </div>
 			                               <div class="row">
-			                               		<div class="col-sm -6">   
-					                                <div class="form-group row">
-					                                    <label for="example-tel-input" class="col-sm-4 control-label">Description</label>
-					                                    <div class="col-sm-6">
-					                                    
-					                                        <textarea class="form-control project" id="description"  name="description"><% out.print(builderProject.getDescription());%></textarea>
-					                                    </div>
-					                                 </div>
-					                              </div>
 					                              <div class="col-sm -6">   
 					                                <div class="form-group row">  
 					                                    <label for="example-tel-input" class="col-sm-4 control-label">Status</label>
@@ -488,9 +474,7 @@
 <!-- 					                                    <div class="messageContainer"></div> -->
 					                                </div>
 					                            </div> 
-			                                </div>
-			                                 <div class="row">
-					                              <div class="col-sm -6">   
+					                            <div class="col-sm -6">   
 					                                <div class="form-group row">  
 					                                    <label for="example-tel-input" class="col-sm-4 control-label">Highlight(USP</label>
 					                                    <div class="col-sm-6">
@@ -499,7 +483,6 @@
 <!-- 					                                    <div class="messageContainer"></div> -->
 					                                </div>
 					                            </div> 
-					                            <div class="col-sm -6"></div> 
 			                                </div>
 			                                <input type="hidden" id="status" name="status" value="<%out.print(builderProject.getStatus());%>"/>
 			                            

@@ -271,7 +271,7 @@ label {
     background: #fafafa;
     width: 100% !important;
     padding-left:10px !important;
-    left:-128px !important;
+    left:-110px !important;
     border-top-color: #00bfd6 !importtant;
     }
 .addlead1 {
@@ -2296,3 +2296,11 @@ padding:7%;
     -webkit-appearance: none;
     background-position-x: 244px;
 } 
+.ms-options-wrap > button:focus, .ms-options-wrap > button {
+	padding: 15px 20px 5px 5px;
+	}
+	
+	.ms-options-wrap > .ms-options{
+		margin-left:15px;
+		width:90% !important;
+	}
