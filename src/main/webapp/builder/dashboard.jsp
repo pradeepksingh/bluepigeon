@@ -582,6 +582,7 @@
 		$("#project_list").empty();
 		//if($("#city_id").val()>0)
 			//$("#locality_name").attr('disabled',false);
+		ajaxindicatorstart("Please wait while.. we search ...");
 	   $.post("${baseUrl}/webapi/project/data/newlist",{emp_id: $("#emp_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_name : $("#locality_name").val(),project_status : $("#project_status").val() },function(data){
 		   if(data == ""){
 			   $("#project_list").empty();
@@ -662,6 +663,7 @@
 	            		$("#project_list").append(html);
 	            		createGraph("graph"+projectId);
 			});
+			ajaxindicatorstop();
 		    },'json');
 	   }
  
@@ -674,6 +676,7 @@
 		var projectId = "";
 		var localtyNames= "";
 		$("#project_list").empty();
+		ajaxindicatorstart("Please wait while.. we search ...");
 	   $.post("${baseUrl}/webapi/project/filter",{project_id:project_id},function(data){
 		   if(data == ""){
 			   $("#project_list").empty();
@@ -758,6 +761,7 @@
 	            		$("#project_list").append(html);
 	            		createGraph("graph"+projectId);
 			});
+			ajaxindicatorstop();
 		    },'json');
 	   }
  
@@ -769,6 +773,7 @@
   		var projectId = "";
   		var localityname = "";
   		$("#project_list").empty();
+  		ajaxindicatorstart("Please wait while.. we search ...");
   	   $.post("${baseUrl}/webapi/project/filter/builderemp",{emp_id:$("#emp_id").val(),country_id: 1,state_id:1, city_id: $("#city_id").val(),locality_name : $("#locality_name").val(),project_status : $("#project_status").val()},function(data){
   		   if(data == ""){
   			   $("#project_list").empty();
@@ -853,6 +858,7 @@
   	            		$("#project_list").append(html);
   	            		createGraph("graph"+projectId);
   			});
+  			ajaxindicatorstop();
   		    },'json');
   	   $("#showMore").empty();
       }

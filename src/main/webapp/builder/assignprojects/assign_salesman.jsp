@@ -89,7 +89,7 @@
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../css/assignsalesman.css">
-    <link rel="stylesheet" href="../css/assignsaleman.multiselect.css">
+    <link rel="stylesheet" href="../css/jquery.multiselect.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
@@ -227,13 +227,15 @@
 	                     <h4><%out.print(builderEmployee.getEmail()); %></h4>
 	                    </div>
 	                    <div class="col-md-3 col-sm-2 col-xs-6">
-	                     	<select id="second" data-placeholder="Choose projects"  class="chosen-select" multiple style="width:350px;" tabindex="4">
-         						<%if(projectLists != null){ 
-         							for(ProjectData projectData : projectLists){
-         						%>
-         						<option value="<%out.print(projectData.getId());%>"><%out.print(projectData.getName()); %></option>
-         						<%}} %>
-        					</select>
+	                    	<div id="selectprojects">
+		                     	<select id="second" data-placeholder="Choose projects"  class="chosen-select" multiple style="width:350px;" tabindex="4">
+	         						<%if(projectLists != null){ 
+	         							for(ProjectData projectData : projectLists){
+	         						%>
+	         						<option value="<%out.print(projectData.getId());%>"><%out.print(projectData.getName()); %></option>
+	         						<%}} %>
+	        					</select>
+        					</div>
 	                    </div>
 	                 </div>
 	                 <div class="row">
@@ -265,26 +267,10 @@
   </body>
 </html>
 <script>
-function updateSalesman(id){
-	//alert(id+" "+multival.value);
-	alert(id+ " "+$(this).val());
-}
-
 $("#second").change(function(){
-	//alert($("#emp_id").val()+" "+$(this).val());
 	var projectId = $(this).val();
-	ajaxindicatorstart("Loading...");
-	$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:$(this).val(),emp_id : $("#emp_id").val()},function(data){
-			if(data.status==1){
-				alert(data.message);
-				window.location.reload();
-				ajaxindicatorstop();
-			}else{
-				alert(data.message);
-				ajaxindicatorstop();
-			}
-			
- 	},'json');
+	//ajaxindicatorstart("Loading...");
+	
 	
 });
 
@@ -292,10 +278,52 @@ $('#second').multiselect({
     columns: 1,
     placeholder: 'assign projects',
     search: true,
-    selectAll: true
+    selectAll: true,
+    onControlClose : function(element){getProjectList(element);}
 });
-// $(".chosen-select").chosen();
-// $('button').click(function(){
-//         $(".chosen-select").val('').trigger("chosen:updated");
-// });
+
+function getProjectList(element){
+	var ids = "";
+	 $("#selectprojects .ms-options li.selected input").each(function(index){
+		 if(ids == ""){
+			 ids = $(this).val();
+		 }else{
+			ids = ids +","+ $(this).val();
+		 }
+			
+	       
+	    });
+	 alert(ids);
+// 	ajaxindicatorstart("Please wait, we are Loading Project List...");
+// 	$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:$(this).val(),emp_id : $("#emp_id").val()},function(data){
+// 		if(data.status==1){
+// 			alert(data.message);
+// 			//window.location.reload();
+			
+// 		}else{
+// 			alert(data.message);
+// 		}
+// 		ajaxindicatorstop();
+// 	},'json');
+
+
+$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:ids,emp_id : $("#emp_id").val()},function(data){
+	var assign = "";
+	var a1="";
+		if(data.status==1){
+			alert(data.message);
+			//window.location.reload();
+			assign = '<span class="assign1">Assign Projects : </span>';
+				a1+=data.errors; 
+				assign+=a1.replace(",","|");
+			$(".assign").empty();
+			$(".assign").html(assign);
+		}else{
+			alert(data.message);
+		}
+// 		ajaxindicatorstop();
+	},'json');
+
+
+}
 </script>

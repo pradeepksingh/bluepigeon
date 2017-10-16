@@ -169,7 +169,7 @@ color: #ccc;
         </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
-        <div id="page-wrapper" style="min-height: 2038px;">
+        <div id="page-wrapper" style="min-height: 338px;">
        <div class="container">
                <div class="container-fluid addlead">
                <!-- /.row -->
@@ -201,7 +201,7 @@ color: #ccc;
 							<div class="form-group row">
 							   <label for="example-search-input" class="col-5 col-form-label">Configuration</label>
 								  <div class="col-7">
-								  		<div>
+								  		<div id="selectconfig">
 								      		<select id="configuration" name="configuration[]" multiple>	</select>
 								     	</div>
 								      	<div class="messageContainer"></div>
@@ -237,7 +237,7 @@ color: #ccc;
 					 <div class="form-group row">
 							 <label for="example-search-input" class="col-5 col-form-label">Interested Project</label>
 								<div class="col-7">
-									<div>
+									<div id="selectproject">
 								   		<select id="project_ids" name="project_ids[]" multiple>
 									    <%if(builderProjects != null){
 								    	  for(ProjectData projectData : builderProjects){%>
@@ -304,36 +304,6 @@ color: #ccc;
 							      </div>
 							    </div>
 							  </div>
-							 <%if(access_id ==5){ %>
-							 <div class="form-group row">
-							 <label for="example-search-input" class="col-5 col-form-label">Assign Salesman</label>
-								<div class="col-7">
-									<div>
-								   		<select id="assignsalemans" name="assignsalemans[]" multiple>
-									    <%if(salesmanList != null){
-								    	  for(BuilderEmployee  builderEmployee: salesmanList){%>
-								      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
-								      	 <%}} %>
-									     </select>
-								     </div>
-								 </div>
-						    </div>
-						    <%} %>
-						     <%if(access_id ==4){ %>
-							 <div class="form-group row">
-							 <label for="example-search-input" class="col-5 col-form-label">Assign Saleshead</label>
-								<div class="col-7">
-									<div>
-								   		<select id="assignsalemans" name="assignsalemans[]" multiple>
-									    <%if(saleheadList != null){
-								    	  for(BuilderEmployee  builderEmployee: saleheadList){%>
-								      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
-								      	 <%}} %>
-									     </select>
-								     </div>
-								 </div>
-						    </div>
-						    <%} %>
 						    </div>
 							<div class="center bcenter">
 						  	   <button type="submit" id="save" class="button1">Save</button>
@@ -353,28 +323,45 @@ color: #ccc;
 </html>
 <script>
 
-
 $('#configuration').multiselect({
     columns: 1,
     placeholder: 'Select Configuration',
     search: true,
     selectAll: true,
+    unselectAll:false,
     //noneSelectedText: "Select",
     
 }); 
+
+
 $('#project_ids').multiselect({
 	
     columns: 1,
     placeholder: 'Select Project',
     search: true,
     selectAll: true,
-	     onDropdownHide: function(event) {
-        alert('Dropdown closed.');
-        // to reload the page
-        location.reload();
-    }
+
+    onControlClose : function(element){getConfigData( element );}
+    
 });
 
+
+function getConfigData( element ){
+    var ids = "";
+    var htmlconfig = "";
+    $("#selectproject .ms-options li.selected input").each(function(index){
+		if(ids == ""){
+			ids = $(this).val();
+		}else{
+			ids = ids+","+$(this).val();
+		}	
+    });
+    ajaxindicatorstart("Please wait, while loading...");
+    $.get("${baseUrl}/webapi/project/configdata/"+ids,{},function(data){
+    	 $('#configuration').multiselect('loadOptions',data);
+		  ajaxindicatorstop();
+	  });
+}
 
 <% if(access_id == 5){%>
 
@@ -535,25 +522,6 @@ function showAddResponse(resp, statusText, xhr, $form){
   	}
 }
 
-$("#project_ids").change(function(){
-		var htmlconfig = "";
-		ajaxindicatorstart("Loading...");
-	  $.get("${baseUrl}/webapi/project/configdata",{project_ids:$(this).val()},function(data){
-		  $(data).each(function(index){
-			  htmlconfig=htmlconfig+'<option value="'+data[index].id+'">'+data[index].name+'</option>';
-		  });
-		  $("#configuration").multiselect({
-			    columns: 1,
-			    placeholder: 'Select Configuration',
-			    search: true,
-			    selectAll: true,
-			});
-		  $("#configuration").html(htmlconfig);
-		  $("#configuration").multiselect('reload');
-		  ajaxindicatorstop();
-	  });
-});
-
 $('.dropdown-menu.ddRange')
 .click(function(e) {
   e.stopPropagation();
@@ -651,5 +619,4 @@ $('.investRange .freeformPrice .min_input'),
 $('.investRange .freeformPrice .max_input'),
 $('.investRange .btnClear'),
 $('.investRange .dropdown-toggle'));
-
 </script>

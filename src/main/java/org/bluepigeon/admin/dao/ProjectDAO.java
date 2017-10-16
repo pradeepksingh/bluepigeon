@@ -7216,4 +7216,55 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		session.close();
 		return result;
 	}
+	
+	public List<ConfigData> getConfigDataByProject(String projectIds){
+		List<ConfigData> configDatas = new ArrayList<ConfigData>();
+		
+		String  hql="select DISTINCT(a.property_config_id) as value, b.name as name FROM builder_project_property_configuration_info "
+				+ "as a join builder_project_property_configuration as b on a.property_config_id= b.id "
+				+ "where "
+				+ "a.project_id IN("+projectIds+");";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		try {
+				Session session = hibernateUtil.getSessionFactory().openSession();
+				Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ConfigData.class));
+				System.err.println("hql : "+hql);
+				configDatas = query.list();
+			} catch(Exception e) {
+				//
+			}
+		return configDatas;
+	
+	}
+	
+	/**
+	 * Get assign projects by passing employee object.
+	 * @param builderEmployee
+	 * @return List<ProjectData>
+	 */
+	public List<ProjectData> getAssigProjects(int empId){
+		String hql = "";
+		String hqlnew = "from BuilderEmployee where id = "+empId;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session sessionnew = hibernateUtil.openSession();
+		Query querynew = sessionnew.createQuery(hqlnew);
+		List<BuilderEmployee> employees = querynew.list();
+		BuilderEmployee builderEmployee = employees.get(0);
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+			
+		}else{
+			hql="SELECT project.name as name, emp.id as id from builder_project as project "
+					+ "inner join allot_project as ap on ap.project_id = project.id "
+					+ "left join builder_employee as emp on emp.id = ap.emp_id"
+					+ " where "
+					+ "project.status=1 and ap.emp_id="+builderEmployee.getId();
+		}
+		    Session session = hibernateUtil.getSessionFactory().openSession();
+		    Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectData.class));
+		    System.err.println(hql);
+		   // query.setMaxResults(4);
+		    List<ProjectData> result = query.list();
+		    session.close();
+		    return result;
+	}
 }

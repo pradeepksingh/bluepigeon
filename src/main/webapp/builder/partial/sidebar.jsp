@@ -64,10 +64,10 @@
             <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class=""></i>
             <span class="hide-menu"> ADMIN<span class=""></span></span></a>
 				<ul class="nav nav-second-level">
-                	<li> <a href="${baseUrl }/builder/employee/new.jsp">Add Employee</a></li>
-                    <li> <a href="${baseUrl }/builder/employee/list.jsp">Manage Employee</a></li>
+                	<li> <a href="${baseUrl }/builder/employee/addemployee.jsp">Add Employee</a></li>
+                    <li> <a href="${baseUrl }/builder/employee/list.jsp">Employees</a></li>
                     <li> <a href="${baseUrl }/builder/documents/documents.jsp">Add Document</a></li>
-                    <li> <a href="${baseUrl }/builder/inbox/inbox.jsp">Inbox</a></li>
+<%--                     <li> <a href="${baseUrl }/builder/inbox/inbox.jsp">Inbox</a></li> --%>
                     <li> <a href="${baseUrl }/builder/project/newproject.jsp">Project Start Request</a></li>
                 </ul>
            </li>
