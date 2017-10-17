@@ -1164,7 +1164,7 @@ $select_building = $("#filter_building_id").selectize({
 												persist: false,
 												 onChange: function(value2) {
 													 if(value2 > 0 || value2 != '' ){
-															window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+$("#filter_floor_id").val()+"&flat_id="+value2;
+															window.location.href = "${baseUrl}/builder/admin/project/building/floor/flat/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+$("#filter_floor_id").val()+"&flat_id="+value2;
 														}
 												 },
 												 onDropdownOpen: function(value2){
@@ -1277,7 +1277,7 @@ $select_floor = $("#filter_floor_id").selectize({
 						persist: false,
 						 onChange: function(value2) {
 							 if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '' ) && ($("#filter_floor_id").val() > 0 && $("#filter_floor_id").val() != '') && (value2 > 0 && value2 != '')){
-									window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+$("#filter_floor_id").val()+"&flat_id="+value2;
+									window.location.href = "${baseUrl}/builder/admin/project/building/floor/flat/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+$("#filter_floor_id").val()+"&flat_id="+value2;
 									
 								}
 						 },
@@ -1330,7 +1330,7 @@ $select_flat = $("#filter_flat_id").selectize({
 	persist: false,
 	 onChange: function(value) {
 		 if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '' ) && ($("#filter_floor_id").val() > 0 && $("#filter_floor_id").val() != '') && (value > 0 && value != '')){
-			 window.location.href = "${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+$("#filter_floor_id").val()+"&flat_id="+value;
+			 window.location.href = "${baseUrl}/builder/admin/project/building/floor/flat/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+$("#filter_floor_id").val()+"&flat_id="+value;
 		 }
 	 },
 	 onDropdownOpen: function(value){
@@ -1462,10 +1462,7 @@ function showAddResponse(resp, statusText, xhr, $form){
 
 function checkNewDuplicateEntry(input){
 	$input = input;
-	
-	//alert($input.value);
 	$(".checkdupilcate").each(function(check){
-	//	alert(input.value);
 		if(check.value == input.value){
 			alert("Duplicate Entery of offer");
 		}
@@ -1796,23 +1793,6 @@ function addMoreSchedule() {
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();
 }
-// $(".checkdupilcate").keydown(function(e) { 
-// 	alert("Tab Button Clicked");
-// 	  var keyCode = e.keyCode || e.which; 
-// 		$(".checkdupilcate").each(function(input){
-// 			alert(input);
-			
-// 				 if (keyCode == 9) { 
-// 					 var offers = $("#offer_title"+input).val();
-// 					 alert("You Press Tab button");
-// 					    e.preventDefault(); 
-// 					    // call custom function here
-// 					  } 
-			
-// 		});
-	 
-// 	});
-	
 	
 $(".checkdupilcate").keyup(function (e) {
 	alert("Hellooo");

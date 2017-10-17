@@ -293,7 +293,6 @@ function getProjectList(element){
 			
 	       
 	    });
-	 alert(ids);
 // 	ajaxindicatorstart("Please wait, we are Loading Project List...");
 // 	$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:$(this).val(),emp_id : $("#emp_id").val()},function(data){
 // 		if(data.status==1){

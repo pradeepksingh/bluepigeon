@@ -1729,8 +1729,7 @@ function showOfferResponse(resp, statusText, xhr, $form){
         $("#offerresponse").html(resp.message);
         $("#offerresponse").show();
         alert(resp.message);
-        window.location.href="${baseUrl}/builder/project/building/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>";
-        ajaxindicatorstop();
+        window.location.href="${baseUrl}/builder/admin/project/building/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>";
   	}
 }
 
@@ -1780,7 +1779,6 @@ function addMoreOffer() {
 			+'<div class="messageContainer"></div>'
 			+'</div>'
 		+'</div>'
-		
 		+'<div class="col-lg-3 margin-bottom-5">'
 			+'<div class="form-group" id="error-apply">'
 			+'<label class="control-label col-sm-6">Status </label>'

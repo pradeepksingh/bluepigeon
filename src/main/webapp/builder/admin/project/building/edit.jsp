@@ -1315,12 +1315,7 @@ $("#updatepricing").bootstrapValidator({
                 },
         		numeric: {
         			message: 'Stamp duty is invalid'
-        		},
-        		 between:{
-                 	min:0,
-                 	max:100,
-                 	message: 'The percentage must be between 0 and 100'
-                 }
+        		}
             }
         },
         tax: {
@@ -1330,12 +1325,7 @@ $("#updatepricing").bootstrapValidator({
                 },
         		numeric: {
         			message: 'Tax is invalid'
-        		},
-        		 between:{
-                 	min:0,
-                 	max:100,
-                 	message: 'The percentage must be between 0 and 100'
-                 }
+        		}
             }
         },
         vat: {
@@ -1345,12 +1335,7 @@ $("#updatepricing").bootstrapValidator({
                 },
         		numeric: {
         			message: 'Vat is invalid'
-        		},
-        		 between:{
-                 	min:0,
-                 	max:100,
-                 	message: 'The percentage must be between 0 and 100'
-                 }
+        		}
             }
         },
         tech_fee : {
@@ -1434,7 +1419,7 @@ $("#subpbtn").click(function(){
 			} else {
 				alert(data.message);
 				ajaxindicatorstart("Loading...");
-				window.location.href="${baseUrl}/builder/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id);%>";
+				window.location.href="${baseUrl}/builder/admin/project/building/floor/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id);%>";
 			}
 		},
 		error : function(data)

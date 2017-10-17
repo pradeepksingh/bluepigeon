@@ -583,7 +583,7 @@ $select_building = $("#filter_building_id").selectize({
 						persist: false,
 						 onChange: function(value) {
 							 if(value > 0 || value != '' ){
-									window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
+									window.location.href = "${baseUrl}/builder/admin/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
 								}
 						 },
 						 onDropdownOpen: function(value){
@@ -637,8 +637,7 @@ $select_floor = $("#filter_floor_id").selectize({
 	 onChange: function(value) {
 		 ajaxindicatorstart("Loading...");
 		if(($("#filter_building_id").val() > 0 && $("#filter_building_id").val() != '') && ($("#filter_floor_id").val() > 0 && $("#filter_floor_id").val() != '' )){
-			window.location.href = "${baseUrl}/builder/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
-			 ajaxindicatorstop();
+			window.location.href = "${baseUrl}/builder/admin/project/building/floor/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+$("#filter_building_id").val()+"&floor_id="+value;
 		}
 	 },
 	 onDropdownOpen: function(value){
@@ -828,7 +827,7 @@ $("#subpbtn").click(function(){
 			} else {
 				alert(data.message);
 				ajaxindicatorstart("Loading...");
-				 window.location.href="${baseUrl}/builder/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id);%>&flat_id=<%out.print(flat_id);%>";
+				 window.location.href="${baseUrl}/builder/project/admin/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id);%>&flat_id=<%out.print(flat_id);%>";
 			}
 		},
 		error : function(data)
