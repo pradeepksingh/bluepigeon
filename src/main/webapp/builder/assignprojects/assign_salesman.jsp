@@ -184,13 +184,15 @@
 	                     <h4><%out.print(builderEmployee.getEmail()); %></h4>
 	                    </div>
 	                    <div class="col-md-3 col-sm-2 col-xs-6">
-	                     	<select id="second" data-placeholder="Choose projects"  class="chosen-select" multiple style="width:350px;" tabindex="4">
-         						<%if(projectLists != null){ 
-         							for(ProjectData projectData : projectLists){
-         						%>
-         						<option value="<%out.print(projectData.getId());%>"><%out.print(projectData.getName()); %></option>
-         						<%}} %>
-        					</select>
+	                    	<div id="selectprojects">
+		                     	<select id="second" data-placeholder="Choose projects"  class="chosen-select" multiple style="width:350px;" tabindex="4">
+	         						<%if(projectLists != null){ 
+	         							for(ProjectData projectData : projectLists){
+	         						%>
+	         						<option value="<%out.print(projectData.getId());%>"><%out.print(projectData.getName()); %></option>
+	         						<%}} %>
+	        					</select>
+        					</div>
 	                    </div>
 	                 </div>
 	                 <div class="row">
@@ -293,34 +295,21 @@ function getProjectList(element){
 			
 	       
 	    });
-// 	ajaxindicatorstart("Please wait, we are Loading Project List...");
-// 	$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:$(this).val(),emp_id : $("#emp_id").val()},function(data){
-// 		if(data.status==1){
-// 			alert(data.message);
-// 			//window.location.reload();
-			
-// 		}else{
-// 			alert(data.message);
-// 		}
-// 		ajaxindicatorstop();
-// 	},'json');
-
-
-$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:ids,emp_id : $("#emp_id").val()},function(data){
-	var assign = "";
-	var a1="";
-		if(data.status==1){
-			alert(data.message);
-			//window.location.reload();
-			assign = '<span class="assign1">Assign Projects : </span>';
-				a1+=data.errors; 
-				assign+=a1.replace(",","|");
-			$(".assign").empty();
-			$(".assign").html(assign);
-		}else{
-			alert(data.message);
-		}
-// 		ajaxindicatorstop();
+	$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:ids,emp_id : $("#emp_id").val()},function(data){
+		var assign = "";
+		var a1="";
+			if(data.status==1){
+				alert(data.message);
+				//window.location.reload();
+				assign = '<span class="assign1">Assign Projects : </span>';
+					a1+=data.errors; 
+					assign+=a1.replace(",","|");
+				$(".assign").empty();
+				$(".assign").html(assign);
+			}else{
+				alert(data.message);
+			}
+	// 		ajaxindicatorstop();
 	},'json');
 
 

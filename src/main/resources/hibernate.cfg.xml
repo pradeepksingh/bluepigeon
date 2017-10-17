@@ -167,5 +167,6 @@
         <mapping class="org.bluepigeon.admin.model.FlatPricingDetails" />
         <mapping class="org.bluepigeon.admin.model.FlatOfferInfo"/>
         <mapping class="org.bluepigeon.admin.model.LeadConfig"/>
+        <mapping class="org.bluepigeon.admin.model.EmployeeRole" />
 	</session-factory>
 </hibernate-configuration>

@@ -28,6 +28,7 @@ import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.BuildingWeightage;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Country;
+import org.bluepigeon.admin.model.EmployeeRole;
 import org.bluepigeon.admin.model.InboxMessage;
 import org.bluepigeon.admin.model.InboxMessageReply;
 import org.bluepigeon.admin.model.ProjectImageGallery;
@@ -2085,27 +2086,76 @@ public class BuilderDetailsDAO {
 			return null;
 		}
 	}
-	public List<BuyerList> getFlatBuyerList(List<String> buildingIds){
-		List<BuyerList> buildingDatas = new ArrayList<BuyerList>();
-		if(buildingIds != null && buildingIds.size() > 0){
-			String buildingIdList = Arrays.toString(buildingIds.toArray());
-			String strSeparator = "";
-			buildingIdList = buildingIdList.replace("[", strSeparator).replace("]", strSeparator);
-			
-			String  hql="Select a.id as id,a.name as name, b.flat_no as flatNumber from buyer as a join builder_flat as b on b.id = a.flat_id join builder_floor as c on c.id=b.floor_no join builder_building as d on d.id = c.building_id where d.id in ("+buildingIdList+") and a.is_primary=1 and a.is_deleted=0 AND a.status=0";
+//	public List<BuyerList> getFlatBuyerList(List<String> buildingIds){
+//		List<BuyerList> buildingDatas = new ArrayList<BuyerList>();
+//		if(buildingIds != null && buildingIds.size() > 0){
+//			String buildingIdList = Arrays.toString(buildingIds.toArray());
+//			String strSeparator = "";
+//			buildingIdList = buildingIdList.replace("[", strSeparator).replace("]", strSeparator);
+//			
+//			String  hql="Select a.id as id,a.name as name, b.flat_no as flatNumber from buyer as a join builder_flat as b on b.id = a.flat_id join builder_floor as c on c.id=b.floor_no join builder_building as d on d.id = c.building_id where d.id in ("+buildingIdList+") and a.is_primary=1 and a.is_deleted=0 AND a.status=0";
+//			HibernateUtil hibernateUtil = new HibernateUtil();
+//			try {
+//					Session session = hibernateUtil.getSessionFactory().openSession();
+//					Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuyerList.class));
+//					System.err.println("hql : "+hql);
+//					buildingDatas = query.list();
+//					return buildingDatas;
+//				} catch(Exception e) {
+//					//
+//					return null;
+//				}
+//		}else{
+//			return null;
+//		}
+//	}
+	
+		public List<BuildingData> getBuildingData(String projectIds){
+			List<BuildingData> buildingDatas = new ArrayList<BuildingData>();
+				
+			String  hql="SELECT  b.id as value, b.name as name FROM builder_building as b WHERE b.project_id IN("+projectIds+") and b.status=1";
 			HibernateUtil hibernateUtil = new HibernateUtil();
-			try {
-					Session session = hibernateUtil.getSessionFactory().openSession();
-					Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuyerList.class));
-					System.err.println("hql : "+hql);
-					buildingDatas = query.list();
-					return buildingDatas;
-				} catch(Exception e) {
+			try{
+				Session session = hibernateUtil.getSessionFactory().openSession();
+				Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuildingData.class));
+				System.err.println("hql : "+hql);
+				buildingDatas = query.list();
+				return buildingDatas;
+			}catch(Exception e) {
 					//
-					return null;
-				}
-		}else{
-			return null;
+				return null;
+			}
+		}
+		
+		public List<BuyerList> getFlatBuyerList(String buildingIds){
+			List<BuyerList> buildingDatas = new ArrayList<BuyerList>();
+			String  hql="Select a.id as value,CONCAT_WS(' & ',b.flat_no, a.name) as name from buyer as a join builder_flat as b on b.id = a.flat_id join builder_floor as c on c.id=b.floor_no join builder_building as d on d.id = c.building_id where d.id in ("+buildingIds+") and a.is_primary=1 and a.is_deleted=0 AND a.status=0";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			try{
+				Session session = hibernateUtil.getSessionFactory().openSession();
+				Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuyerList.class));
+				System.err.println("hql : "+hql);
+				buildingDatas = query.list();
+				return buildingDatas;
+			}catch(Exception e) {
+					//
+				return null;
+			}
+		}
+		
+		public ResponseMessage saveEmpRoles(List<EmployeeRole> empRoleList){
+			ResponseMessage responseMessage = new ResponseMessage();
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			session.beginTransaction();
+			for(EmployeeRole empRoles : empRoleList){
+				session.save(empRoles);
+			}
+			session.getTransaction().commit();
+			session.close();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Empolyee Roles added Successfully.");
+			return responseMessage;
+			
 		}
 	}
-}

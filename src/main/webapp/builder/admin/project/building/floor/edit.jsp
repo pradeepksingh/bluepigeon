@@ -107,20 +107,13 @@
     <!-- Custom CSS -->
     <link href="../../../../css/style.css" rel="stylesheet">
      <link rel="stylesheet" type="text/css" href="../../../../css/selectize.css" />
-    <link rel="stylesheet" type="text/css" href="../../../css/updatefloor.css">
-     <link rel="stylesheet" type="text/css" href="../../../css/topbutton.css">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-    <!-- jQuery -->
-    <script src="../../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-      <script src="../../../js/jquery.form.js"></script>
-    <script src="../../../js/bootstrap-datepicker.min.js"></script>
-  <script src="../../../js/bootstrapValidator.min.js"></script>
-  <script type="text/javascript" src="../../../js/selectize.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../css/updatefloor.css">
+     <link rel="stylesheet" type="text/css" href="../../../../css/topbutton.css">
+    <script src="../../../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+      <script src="../../../../js/jquery.form.js"></script>
+    <script src="../../../../js/bootstrap-datepicker.min.js"></script>
+  <script src="../../../../js/bootstrapValidator.min.js"></script>
+  <script type="text/javascript" src="../../../../js/selectize.min.js"></script>
     <script type="text/javascript">
     $('input[type=checkbox]').click(function() {
         if ($(this).is(':checked')) {
@@ -827,7 +820,7 @@ $("#subpbtn").click(function(){
 			} else {
 				alert(data.message);
 				ajaxindicatorstart("Loading...");
-				 window.location.href="${baseUrl}/builder/project/admin/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id);%>&flat_id=<%out.print(flat_id);%>";
+				 window.location.href="${baseUrl}/builder/admin/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id);%>&flat_id=<%out.print(flat_id);%>";
 			}
 		},
 		error : function(data)

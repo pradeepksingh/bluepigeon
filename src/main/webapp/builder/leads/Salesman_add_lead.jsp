@@ -352,15 +352,24 @@ function getConfigData( element ){
     $("#selectproject .ms-options li.selected input").each(function(index){
 		if(ids == ""){
 			ids = $(this).val();
-		}else{
+		}else {
 			ids = ids+","+$(this).val();
 		}	
     });
     ajaxindicatorstart("Please wait, while loading...");
-    $.get("${baseUrl}/webapi/project/configdata/"+ids,{},function(data){
-    	 $('#configuration').multiselect('loadOptions',data);
-		  ajaxindicatorstop();
-	  });
+    if(ids.length > 0){
+	    $.get("${baseUrl}/webapi/project/configdata/"+ids,{},function(data){
+	    	 $('#configuration').multiselect('loadOptions',data);
+	    	 $('#configuration').multiselect('reload');
+			 ajaxindicatorstop();
+		});
+   }else{
+	   $.get("${baseUrl}/webapi/project/configdata/"+ids.length,{},function(data){
+	    	 $('#configuration').multiselect('loadOptions',data);
+	    	 $('#configuration').multiselect('reload');
+			 ajaxindicatorstop();
+		});
+   }
 }
 
 <% if(access_id == 5){%>

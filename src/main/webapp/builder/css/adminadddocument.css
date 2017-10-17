@@ -44,7 +44,7 @@ input[type="file"] {
      font-family: Arial;
     color: #ffffff;
     font-size: 18px  !important;
-    background: #56bfd7;
+    background: #00bfd6;
     border-radius: 0px;
     padding: 8px 20px 8px 20px;
     
@@ -56,8 +56,8 @@ input[type="file"] {
 }
 .file-name{
 	
-	    overflow: hidden;
-	    width: 50%;
+	overflow: hidden;
+	width: 50%;
     height: 43px;
     font-size:18px;
     padding: 5px;
@@ -395,12 +395,12 @@ textarea{
     }
     @media (max-width:1200px){
 	.logo b {
-    height: 60px;
-    display: inline-block;
-    width: 53px;
-    
-    overflow: hidden;
-    line-height: 60px;
+	    height: 60px;
+	    display: inline-block;
+	    width: 53px;
+	    
+	    overflow: hidden;
+	    line-height: 60px;
     }
     }
 
@@ -415,14 +415,14 @@ textarea{
 	.bg12 input{
       font-size: 14px !important;
 	}
-#uploadFile {
-    margin-left: 4px;
-    width: 14%;
-}
-.icon1 {
-    margin-top: 0px; 
-     margin-left:0px; 
-}
+	#uploadFile {
+	    margin-left: 4px;
+	    width: 14%;
+	}
+	.icon1 {
+	    margin-top: 0px; 
+	     margin-left:0px; 
+	}
 }
 
 .logo img{
@@ -441,9 +441,15 @@ textarea{
 	padding: 8px 20px;
    /* margin: 1px -25px !important;*/
     margin-top: -5px !important;
-    margin-left: -25px !important;
+    margin-left: 11px !important;
+    padding-left:50px !important;
 }
 
 .ms-options-wrap > .ms-options > ul li.selected label, .ms-options-wrap > .ms-options > ul label:hover {
-			background-color: #00bfd6;	
+	background-color: #00bfd6;	
 }
+.ms-options-wrap > button:focus, .ms-options-wrap > button {
+	font-size: 19px;
+	color: #2a2b2b;
+	background-color: #fafafa;
+}	

@@ -8,7 +8,8 @@ public class BuyerList {
 	private String email;
 	private String buildingName;
 	private String flatNumber;
-
+	private int value;
+	private boolean checked = false;
 	public int getId() {
 		return id;
 	}
@@ -53,5 +54,16 @@ public class BuyerList {
 	public void setFlatNumber(String flatNumber) {
 		this.flatNumber = flatNumber;
 	}
-	
+	public int getValue() {
+		return value;
+	}
+	public void setValue(int value) {
+		this.value = value;
+	}
+	public boolean isChecked() {
+		return checked;
+	}
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
 }

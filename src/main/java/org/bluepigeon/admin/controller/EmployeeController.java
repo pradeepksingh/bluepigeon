@@ -33,6 +33,7 @@ import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderEmployeeAccessType;
 import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.City;
+import org.bluepigeon.admin.model.EmployeeRole;
 import org.bluepigeon.admin.model.Locality;
 import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -433,4 +434,142 @@ public class EmployeeController {
 		return responseMessage;
 	}
 	
+	@POST
+	@Path("/save2")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage saveNewEmployees(
+			@FormDataParam("name") String name,
+			@FormDataParam("contact") String mobile,
+			@FormDataParam("email") String email,
+			@FormDataParam("address") String currentAddress,
+			@FormDataParam("address1") String permanentAddress,
+			@FormDataParam("designation") String designation,
+			@FormDataParam("accessid[]") List<FormDataBodyPart> accessIds,
+			@FormDataParam("empid") String employeeId,
+			@FormDataParam("projects[]") List<FormDataBodyPart> projectId,
+			@FormDataParam("area_id") int areaId,
+			@FormDataParam("city_id") int cityId,
+			@FormDataParam("builder_id") int builderId,
+			@FormDataParam("reporting_id") int reporting_id,
+			@FormDataParam("aadhaar") String aadhaar,
+			@FormDataParam("pancard") String pancard,
+			@FormDataParam("empphoto[]") List<FormDataBodyPart> empPhoto
+			){
+		boolean isTrue = false;
+		BuilderEmployeeAccessType employeeAccessType = new BuilderEmployeeAccessType();
+		ResponseMessage responseMessage = new ResponseMessage();
+		Builder builder = new Builder();
+		BuilderEmployee builderEmployee = new BuilderEmployee();
+		BuilderEmployee reportingEmployee = new BuilderEmployee();
+		reportingEmployee.setId(reporting_id);
+		Locality locality = new Locality();
+		boolean status = false;
+		
+		if(builderId > 0){
+			builder.setId(builderId);
+			builderEmployee.setBuilder(builder); 
+		}
+		
+		if(cityId > 0){
+			City city = new City();
+			city.setId(cityId);
+			builderEmployee.setCity(city); 
+		}
+			
+			employeeAccessType.setId(1);
+			builderEmployee.setBuilderEmployeeAccessType(employeeAccessType);
+		if(areaId > 0){
+			locality.setId(areaId);
+			builderEmployee.setLocality(locality);
+		}
+	
+		Random random = new Random();
+		//random.doubles();
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
+		String pwd = RandomStringUtils.random( 15, characters );
+		//System.out.println( pwd );
+		builderEmployee.setName(name);
+		builderEmployee.setEmail(email);
+		builderEmployee.setPassword(pwd);
+		builderEmployee.setMobile(mobile);
+		builderEmployee.setCurrentAddress(currentAddress);
+		builderEmployee.setPermanentAddress(permanentAddress);
+		builderEmployee.setDesignation(designation);
+		builderEmployee.setEmployeeId(employeeId);
+		builderEmployee.setBuilderEmployee(reportingEmployee);
+		builderEmployee.setAadhaarNumber(aadhaar);
+		builderEmployee.setPancard(pancard);
+		builderEmployee.setStatus(status);
+		if(empPhoto != null){
+			//add gallery images
+			try{	
+				List<AdminUserPhotos> buildingImageGalleries = new ArrayList<AdminUserPhotos>();
+				//for multiple inserting images.
+					if (empPhoto.size() > 0) {
+						for(int i=0 ;i < empPhoto.size();i++)
+						{
+							if(empPhoto.get(i).getFormDataContentDisposition().getFileName() != null && !empPhoto.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+								String gallery_name = empPhoto.get(i).getFormDataContentDisposition().getFileName();
+								long millis = System.currentTimeMillis() % 1000;
+								gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+								gallery_name = "images/project/builder/employee/images/"+gallery_name;
+								String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+								System.out.println("for loop image path: "+uploadGalleryLocation);
+								this.imageUploader.writeToFile(empPhoto.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+								builderEmployee.setPhoto(gallery_name);
+							}
+						}
+					}
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+		}
+		responseMessage = new BuilderDetailsDAO().saveEmployee(builderEmployee);
+		if(accessIds != null && accessIds.size() >0){
+			for(FormDataBodyPart accessId : accessIds){
+				if(accessId.getValueAs(Integer.class) == 3 || accessId.getValueAs(Integer.class) == 4){
+					isTrue=true;
+					continue;
+				}
+			}
+		}
+		if(responseMessage.getId() > 0 && accessIds != null && accessIds.size() >0){
+			builderEmployee.setId(responseMessage.getId());
+			List<EmployeeRole> employeeRoles = new ArrayList<EmployeeRole>();
+			for(FormDataBodyPart accessId : accessIds){
+				if(accessId.getValueAs(Integer.class) != null ){
+					EmployeeRole empRole = new EmployeeRole();
+					empRole.setBuilderEmployee(builderEmployee);
+					BuilderEmployeeAccessType builderEmployeeAccessType = new BuilderEmployeeAccessType();
+					builderEmployeeAccessType.setId(accessId.getValueAs(Integer.class));
+					empRole.setBuilderEmployeeAccessType(builderEmployeeAccessType);
+					employeeRoles.add(empRole);
+				}
+			}
+			if(employeeRoles.size() > 0){
+				responseMessage =  new BuilderDetailsDAO().saveEmpRoles(employeeRoles);
+			}
+	}
+	if(isTrue){
+		if(responseMessage.getId() > 0 && projectId != null && projectId.size() >0){
+			builderEmployee.setId(responseMessage.getId());
+			List<AllotProject> allotProjectList = new ArrayList<>();
+			for(FormDataBodyPart projects : projectId){
+				if(projects.getValueAs(Integer.class) != null ){
+					AllotProject allotProject = new AllotProject();
+					allotProject.setBuilderEmployee(builderEmployee);
+					BuilderProject builderProject = new BuilderProject();
+					builderProject.setId(projects.getValueAs(Integer.class));
+					allotProject.setBuilderProject(builderProject);
+					allotProjectList.add(allotProject);
+				}
+			}
+			if(allotProjectList.size() > 0){
+				responseMessage =  new BuilderDetailsDAO().saveAllotProjects(allotProjectList);
+			}
+		}
+	}
+	return responseMessage;
+	}
 }

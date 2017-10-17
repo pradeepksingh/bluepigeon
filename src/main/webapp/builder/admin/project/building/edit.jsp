@@ -155,6 +155,7 @@
     <link href="../../../css/style.css" rel="stylesheet">
     <link href="../../../css/updatebuilding.css" rel="stylesheet">
     <link href="../../../css/topbutton.css" rel="stylesheet">
+     <link rel="stylesheet" type="text/css" href="../../../css/selectize.css" />
     <!-- jQuery -->
     <script src="../../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../../../js/jquery.form.js"></script>
