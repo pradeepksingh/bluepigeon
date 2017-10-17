@@ -128,11 +128,11 @@
 										<div class="col-sm-7">
 											<div id="accessrole">
 												 <select  id="accessid" name="accessid[]" multiple>
-							                         <%if(access_list != null){
-			                        		for(BuilderEmployeeAccessType builderEmployeeAccessType : access_list){
-			                        		%>
-			                        	<option value="<%out.print(builderEmployeeAccessType.getId()); %>"><%out.print(builderEmployeeAccessType.getName()); %></option>
-			                        	<%} }%>
+							                     <%if(access_list != null){
+			                        					for(BuilderEmployeeAccessType builderEmployeeAccessType : access_list){
+			                        			 %>
+			                        				<option value="<%out.print(builderEmployeeAccessType.getId()); %>"><%out.print(builderEmployeeAccessType.getName()); %></option>
+			                        			<%} }%>
 						                        </select>
 											</div>
 										</div>
