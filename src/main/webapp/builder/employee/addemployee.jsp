@@ -393,6 +393,24 @@
 	                }
 	            }
 	        },
+	        aadhaar:{
+	        	validators:{
+	        		notEmpty:{
+	        			message: 'Aadhaar Number is required and cannot be empty'
+	        		},
+	        		 numeric: {
+	                  	message: 'Aadhaar Number is invalid',
+	                     thousandsSeparator: '',
+	                     decimalSeparator: '.'
+	               	},
+	               	stringLength:{
+	               		max:12,
+	               		min:12,
+	               		message:'Aadhaar Number is invalid'
+	               	}
+	        	}
+	        	
+	        },
 	        city_id:{
 	        	validators: {
 	                notEmpty: {

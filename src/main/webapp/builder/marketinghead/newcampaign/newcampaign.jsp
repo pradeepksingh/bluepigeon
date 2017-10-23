@@ -1,3 +1,39 @@
+<%@page import="java.util.Date"%> 
+<%@page import="java.text.SimpleDateFormat"%> 
+<%@page import="java.text.DateFormat"%> 
+<%@page import="org.bluepigeon.admin.model.Builder"%>
+<%@page import="java.util.List"%>
+<%@page import="org.bluepigeon.admin.dao.CampaignDAO"%>
+<%@page import="org.bluepigeon.admin.data.CampaignListNew"%>
+<%
+List<CampaignListNew> campaignLists = null;
+session = request.getSession(false);
+BuilderEmployee builder = new BuilderEmployee();
+int session_id = 0;
+int access_id = 0;
+int projectId = 0;
+if(session!=null)
+{
+	if(session.getAttribute("ubname") != null)
+	{
+		builder  = (BuilderEmployee)session.getAttribute("ubname");
+		session_id = builder.getBuilder().getId();
+		access_id = builder.getBuilderEmployeeAccessType().getId();
+		if(session_id > 0){
+			if (request.getParameterMap().containsKey("project_id")) {
+				projectId = Integer.parseInt(request.getParameter("project_id"));
+				if(projectId != 0) {
+					campaignLists = new CampaignDAO().getMyCampaignsByProjectId(projectId);
+				}
+			}
+		}
+	}
+
+}
+SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
+Date date = new Date();
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,42 +42,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="../plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
-    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
-   <!-- Menu CSS -->
-    <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+    <link href="../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+    <!-- Menu CSS -->
+    <link href="../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../../css/style.css" rel="stylesheet">
+    <link href="../../css/common.css" rel="stylesheet">
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/addcampaign.css">
-    <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
-    <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+     <link rel="stylesheet" type="text/css" href="../../css/addcampaign.css">
+    <link href="../../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
-    <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-     <script src="../js/jquery.form.js"></script>
-  	<script src="../js/bootstrapValidator.min.js"></script>
-    <script src="../js/bootstrap-multiselect.js"></script>
-    <link rel="stylesheet" href="../css/bootstrap-multiselect.css">
-    
-    
-    <script>
-    $(function() {
-        $("#sidebar1").load("../partial/sidebar.jsp");
-        $("#header").load("../partial/header.jsp");
-   	    $("#footer").load("../partial/footer.jsp");
-    });
-    </script>
-    <script>
-//     document.getElementById("uploadBtn").change = function () {
-//         document.getElementById("uploadFile").value = this.value;
-//     };
-
-    </script>
-     
+    <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+     <script src="../../js/jquery.form.js"></script>
+    <script src="../../js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" href="../../css/bootstrap-multiselect.css">
 </head>
+   
+   
 
 <body class="fix-sidebar">
     <!-- Preloader -->
@@ -52,19 +73,23 @@
     <div id="wrapper">
         <!-- Top Navigation -->
         <div id="header">
+         <%@include file="../../partial/header.jsp"%>
         </div>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
-        <div id="sidebar1"> </div>
-        <!-- Left navbar-header end -->
+        <div id="sidebar1"> 
+         <%@include file="../../partial/sidebar.jsp"%>
+        </div>
         <!-- Page Content -->
-        <div id="page-wrapper" style="min-height: 2038px;">
+        <div id="page-wrapper">
            <div class="container-fluid">
                <!-- /.row -->
-	            <div class="row bspace bspace1">
-		           <button type="button" class="btn11 btn-info waves-effect waves-light m-t-10">Campaign</button>
-		           <button type="button" class="btn11 btn-info waves-effect waves-light m-t-10">New Campaign +</button>
-		         </div>
+	          <div class="row bspace">
+		                <div class="col-md-3 col-sm-3 col-lg-3">
+		                    <button type="button" id="marketing_campaign" class="btn11 btn-info waves-effect waves-light m-t-10" >Campaign</button>
+		                </div>
+		                 <div class="col-md-3 col-sm-3 col-lg-3">
+		                    <button type="button" id="marketing_newcampaign" class="btn11 btn-submit waves-effect waves-light m-t-10">New Campaign +</button>
+		                 </div>
+	                </div>
                <!-- row -->
                   <div class="white-box">
                      <div class="bg11 bg12">
@@ -103,14 +128,14 @@
 					 	           <div id="demo" class="collapse">
 					 	             <div class="projectsection">
 	                                    <div class="image">
-		                                   <img src="../plugins/images/Untitled-1.png" alt="Project image">
+		                                   <img src="../../plugins/images/Untitled-1.png" alt="Project image">
 		                                   <div class="overlay">
 					                          <div class="row">
 						                          <div class="col-md-10 col-sm-10 col-xs-10">
 						                              <h3>Park Royale, Pimple Saudagar, Pune</h3>
 							                       </div>
 							                        <div class="col-md-2 col-sm-2 col-xs-2">
-							                          <img src="../images/error.png" alt="cancle" class="icon1 close1">
+							                          <img src="../../images/error.png" alt="cancle" class="icon1 close1">
 							                        </div>
 						                        </div>
 						                        <h3 class="center-tag"><br>
@@ -140,7 +165,7 @@
 				<h3>Add Recipients</h3>
 			  </div>
 			  <div class="col-md-2 col-sm-2 col-xs-2">
-				<img src="images/error.png" alt="cancle" data-dismiss="modal">
+				<a href=""><img src="../../images/error.png" alt="cancle" data-dismiss="modal"></a>
 			  </div>
 			</div>
 	  		<div class="row bg12">
@@ -207,7 +232,9 @@
   </div>
  </form>
     <!-- /.container-fluid -->
-    <footer id="footer"> </footer>
+     <div id="sidebar1"> 
+	     <%@include file="../../partial/footer.jsp"%>
+	  </div> 
   </body>
 </html>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
@@ -418,6 +445,11 @@ $("#select").click(function(){
     	event.preventDefault();
     	alert("Hello");
     	//addCampaign();
+    });
+    
+    $("#marketing_campaign").click(function(){
+    	ajaxindicatorstart("Please wait while.. we load ...");
+    	window.location.href="${baseUrl}/builder/marketinghead/campaign/mycampaigns.jsp?project_id=<% out.print(projectId);%>";
     });
 </Script>
 

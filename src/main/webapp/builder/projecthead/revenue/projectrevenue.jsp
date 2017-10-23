@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.BookingFlatList"%>
 <%@page import="org.bluepigeon.admin.data.ProjectWiseData"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
@@ -15,12 +16,6 @@
 <%@page import="org.bluepigeon.admin.data.ProjectList"%>
 <%@page import="java.util.List"%>
 <%@page import="org.bluepigeon.admin.dao.BuyerDAO"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:set var="req" value="${pageContext.request}" />
-<c:set var="url">${req.requestURL}</c:set>
-<c:set var="uri" value="${req.requestURI}" />
-<c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <%
 	List<ProjectList> project_list = null;
 	List<City> cityDataList = null;
@@ -30,6 +25,7 @@
 	Long totalBuyers = (long)0;
 	Long totalInventorySold = (long) 0;
 	Long totalLeads = (long)0;
+	int projectId = 0;
 	Double totalRevenue = 0.0;
 	//Double totalSaleValue = 0.0;
 	Long totalCampaign = (long)0;
@@ -41,18 +37,18 @@
 	int builder_id = 0;
 	int emp_id = 0;
 	int access_id = 0;
+	//Double totalRevenue =0.0;
 	int project_size_list = 0;
 	int city_size_list =0 ;
-//	ProjectWiseData totalProjectRevenue = null;
+	
 	Double totalPropertySold = 0.0;
-	Long avaiable=0L;
-	Long sold=0L;
+	Long avaliable =0L;
+	Long booked = 0L;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
-			
 				builder_id = builder.getBuilder().getId();
 				emp_id = builder.getId();
 				access_id = builder.getBuilderEmployeeAccessType().getId();
@@ -64,26 +60,26 @@
 					totalLeads = new ProjectDAO().getTotalLeads(builder);
 					totalProjects = new ProjectDAO().getTotalNumberOfProjects(builder);
 					barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder);
-					projectWiseDatas = new BuilderDetailsDAO().getProjectWiseByEmployee(builder);
+					if (request.getParameterMap().containsKey("project_id")) {
+						projectId = Integer.parseInt(request.getParameter("project_id"));
+					}
+					projectWiseDatas = new BuilderDetailsDAO().getBuildingWiseByEmployeeId(builder, projectId);
+					//totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder);
+					//totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
 					project_size_list = project_list.size();
 					city_size_list = cityDataList.size();
+				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
+					//totalRevenue = totalPropertySold * totalInventorySold;
 					List<ProjectWiseData> projectWiseDatas2 = new BuilderDetailsDAO().getEmployeeBarGraphByProject(emp_id);
-				//	totalProjectRevenue=	new BuilderDetailsDAO().getTotalRevenueByEmployee(builder);
-// 					if(projectWiseDatas2 !=null){
-// 						for(ProjectWiseData projectWiseData : projectWiseDatas2){
-// 							totalRevenue +=projectWiseData.getRevenue();
-// 						}
-// 					}
-
-					if(projectWiseDatas2 != null){
-						for(ProjectWiseData projectWiseData : projectWiseDatas2){
-							totalRevenue += projectWiseData.getRevenue();
-							avaiable = (long)avaiable+(long)projectWiseData.getAvaliable();
-							sold = (long)sold+(long)projectWiseData.getSold();
+					if(projectWiseDatas !=null){
+						for(ProjectWiseData projectWiseData : projectWiseDatas){
+							totalRevenue +=projectWiseData.getRevenue();
+							avaliable +=projectWiseData.getAvaliable();
+							booked += projectWiseData.getBookingCount();
 						}
-						
 					}
+					
 				}
 		}
 	}
@@ -96,27 +92,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="../plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
-    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
-    <link href="../plugins/bower_components/morrisjs/morris.css" rel="stylesheet">
-   <!-- Menu CSS -->
-    <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+    <link href="../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+    <link href="../../plugins/bower_components/morrisjs/morris.css" rel="stylesheet">
+   	<!-- Menu CSS -->
+    <link href="../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../../css/style.css" rel="stylesheet">
     <!-- color CSS -->
-     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
-<!--     <link rel="stylesheet" type="text/css" href="../css/cancellation.css"> -->
-<!-- 	 <link rel="stylesheet" type="text/css" href="../css/custom7.css"> -->
-	  <link rel="stylesheet" type="text/css" href="../css/cancellation-top.css">
-	   <link rel="stylesheet" type="text/css" href="../css/newcancellationlist.css">
-    <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
-    <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../../css/selectize.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/cancellation-top.css">
+	<link rel="stylesheet" type="text/css" href="../../css/newcancellationlist.css">
+    <link href="../../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
+    <link href="../../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- jQuery -->
-    <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
-     <script type="text/javascript" src="../js/selectize.min.js"></script>
+    <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+     <script type="text/javascript" src="../../js/selectize.min.js"></script>
 </head>
 
 <body class="fix-sidebar">
@@ -127,26 +121,35 @@
     <div id="wrapper">
         <!-- Top Navigation -->
         <div id="header">
-        <%@include file="../partial/header.jsp"%>
+        <%@include file="../../partial/header.jsp"%>
         </div>
         <!-- End Top Navigation -->
         <!-- Left navbar-header -->
-        <div id="sidebar1">
-         <%@include file="../partial/sidebar.jsp"%>
-         </div>
+        <div id="sidebar1"> 
+        <%@include file="../../partial/sidebar.jsp"%>
+        </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper">
            <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Data Analytics</h4> </div>
-                    
-                    <!-- /.col-lg-12 -->
+                  <div class="row bspace">
+	                <div class="col-md-3 col-sm-3 col-lg-3">
+	                    <button type="button" class="btn11 btn-info waves-effect waves-light m-t-10" id="project_status_btn">Project Status</button>
+	                </div>
+	                 <div class="col-md-3 col-sm-3 col-lg-3">
+	                    <button type="button" class="btn11 btn-info waves-effect waves-light m-t-10" id="inventory_btn">Inventory</button>
+	                 </div>
+	                 <div class="col-md-3 col-sm-3 col-lg-3">
+	                    <button type="button" class="btn11 btn-submit waves-effect waves-light m-t-10" id="revenue_btn">Revenue</button>
+	                </div>
+	                <div class="col-md-3 col-sm-3 col-lg-3">
+	                    <button type="button" class="btn11 btn-info waves-effect waves-light m-t-10" id="campaign_btn">Campaign</button>
+	                </div>
                 </div>
                 <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>"/>
+                <input type="hidden" id="project_id" name="project_id" value="<%out.print(projectId);%>"/>
                 <input type="hidden" id="totalrevenue" name="totalrevenue" value="<%out.print(totalRevenue);%>"/>
-                <input type="hidden" id="totalavaiable" name="totalavaiable" value="<%out.print(avaiable);%>"/>
+                <input type="hidden" id="totalavaiable" name="totalavaiable" value="<%out.print(avaliable);%>"/>
                 <!-- /.row -->
                 <!-- .row -->
                 <div class="row">
@@ -165,11 +168,11 @@
                            		</select>
                     		</div>
                     		<%} %>
-                    		<%if(access_id == 4||access_id == 5 || access_id == 1){ %>
+                    		<%if(access_id == 4||access_id == 5){ %>
                     		
                     		<div class="col-md-3 col-sm-6 col-xs-12">
                         		<select class="selectpicker border-drop-down" data-style="form-control" id="graph_project_id" name="graph_project_id">
-                                        <option value="0">Project wise</option>
+                                        <option value="0">Building wise</option>
                                        	<option value="1">Source Wise</option>
                                        	<option value="2">Month Wise</option>
                                        	<option value="3">Salesman Wise </option>
@@ -177,24 +180,12 @@
                     		</div>
                     		
                     		<%} %>
-                    		<%if(access_id == 3){ %>
                     		
-                    		<div class="col-md-3 col-sm-6 col-xs-12">
-                        		<select class="selectpicker border-drop-down" data-style="form-control" id="graph_project_id" name="graph_project_id">
-                                        <option value="0">Project wise</option>
-                                       	<option value="1">Source Wise</option>
-                                       	<option value="2">Month Wise</option>
-                                       	<option value="4">Campaign Wise </option>
-                           		</select>
-                    		</div>
-                    		
-                    		<%} %>
-                    		
-                            <ul class="list-inline text-left" id="revenues">
+                             <ul class="list-inline text-left" id="revenues">
                                 <li>
                                     <h4><i class="m-r-5"></i>Booked Revenue :<%out.print(totalRevenue); %> </h4> </li>
                                 <li>
-                                    <h4><i class="m-r-5"></i>Sold : <%out.print(sold); %>/<%out.print(avaiable); %></h4> </li>
+                                    <h4><i class="m-r-5"></i>Sold : <%out.print(booked); %>/<%out.print(avaliable); %></h4> </li>
                             </ul>
                             <div id="morris-bar-chart" style="height:372px;"></div>
                         </div>
@@ -208,20 +199,16 @@
       </div>
         <!-- /.container-fluid -->
    	<div id="footer"> 
-		<%@include file="../partial/footer.jsp"%>
+		<%@include file="../../partial/footer.jsp"%>
     </div> 
 </body>
 </html>
-<!-- <script src="../plugins/bower_components/switchery/dist/switchery.min.js"></script> -->
-<script src="../plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
-<script src="../plugins/bower_components/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
-<!-- <script src="../plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script> -->
-<!-- <script src="../plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script> -->
-<!-- <script type="text/javascript" src="../plugins/bower_components/multiselect/js/jquery.multi-select.js"></script> -->
-<script src="../plugins/bower_components/morrisjs/morris.js"></script>
-<script src="../js/real-estate.js"></script>
+<script src="../../plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
+<script src="../../plugins/bower_components/morrisjs/morris.js"></script>
+<script src="../../js/real-estate.js"></script>
 <script src="${baseUrl}/builder/plugins/bower_components/raphael/raphael-min.js"></script>
-    <script>
+<script>
+   
     	var mychart = null; 
  
    
@@ -231,7 +218,7 @@
        		%> 
   
        	mychart = Morris.Bar({
-       		barSize:50,
+       	  barSize:50,
     	    element: 'morris-bar-chart',
     	    data: [
     	    	<% for(ProjectWiseData barGraphData : projectWiseDatas){ %>
@@ -271,17 +258,10 @@
 				ajaxindicatorstop();
 		 	},'json');
  		}
- 		else if($(this).val()==4){
- 			ajaxindicatorstart("Loading...");
- 			$.post("${baseUrl}/webapi/builder/filter/bargraph/campaign",{emp_id:$("#emp_id").val()},function(data){
- 				plotCampaignGraph(data);
-				ajaxindicatorstop();
-		 	},'json');
- 		}
  		else {
  			ajaxindicatorstart("Loading...");
- 			$.post("${baseUrl}/webapi/builder/filter/bargraph/project",{emp_id:$("#emp_id").val()},function(data){
- 				plotProjectGraph(data);
+ 			$.post("${baseUrl}/webapi/builder/filter/bargraph/building",{project_id:$("#project_id").val()},function(data){
+ 				plotBuildingGraph(data);
  				ajaxindicatorstop();
 		 	},'json');
  		}
@@ -289,11 +269,33 @@
  	
  	function plotProjectGraph(records) {
  		var data = [];
- 		var sold =0;
- 		var newrevenue="";
  		$(records).each(function(index){
 			data.push({"y":records[index].name, "a":records[index].revenue});
-			sold +=records[index].sold;
+		});
+ 		mychart.destroy();
+ 		mychart = Morris.Bar({
+ 			//barGap:4,
+ 			barSize:50,
+			element: 'morris-bar-chart',
+    	    data: data,
+            xkey: 'y',
+     	    ykeys: ['a'],
+     	    labels: ['Revenue'],
+     	    barColors:['#24bcd3'],
+     	    hideHover: 'auto',
+     	    gridLineColor: '#eef0f2',
+     	    resize: true
+     	});
+ 		
+ 	}
+ 	function plotBuildingGraph(records) {
+ 		var data = [];
+ 		var avaliable = 0;
+ 		var booked = 0;
+ 		$(records).each(function(index){
+			data.push({"y":records[index].name, "a":records[index].revenue});
+			avaliable += records[index].avaliable;
+			booked +=records[index].bookingCount;
 		});
  		mychart.destroy();
  		mychart = Morris.Bar({
@@ -310,12 +312,11 @@
      	});
  		$("ul li h4").empty();
  		newrevenue='<li>'
-            		+'<h4><i class="m-r-5"></i>Booked Revenue : '+$("#totalrevenue").val()+' </h4> </li>'
-            		+'<li>'
-                	+'<h4><i class="m-r-5"></i>Sold : '+sold+'/'+$("#totalavaiable").val()+'</h4> </li>';
- 		$("#revenues").html(newrevenue);
+    		+'<h4><i class="m-r-5"></i>Booked Revenue : '+$("#totalrevenue").val()+' </h4> </li>'
+    		+'<li>'
+        	+'<h4><i class="m-r-5"></i>Sold : '+booked+'/'+avaliable+'</h4> </li>';
+	$("#revenues").html(newrevenue);
  	}
- 	
  	function plotSourceGraph(records) {
  		var data = [];
  		var totalLeads = 0;
@@ -330,10 +331,11 @@
  			barSize:50,
     	    element: 'morris-bar-chart',
     	    data: data,
-            xkey: 'y',
-     	    ykeys: ['a'],
-     	    labels: ['Responses'],
+          	xkey: 'y',
+     	   	ykeys: ['a'],
+     	   	labels: ['Responses'],
      	    barColors:['#24bcd3'],
+     	   	barSize:50,
      	    hideHover: 'auto',
      	    gridLineColor: '#eef0f2',
      	    resize: true
@@ -356,15 +358,16 @@
  		mychart.destroy();
  		mychart = Morris.Bar({
  			barSize:50,
-    	    element: 'morris-bar-chart',
+    	 	element: 'morris-bar-chart',
     	    data: data,
-            xkey: 'y',
-     	    ykeys: ['a'],
-     	    labels: ['Revenue'],
-     	    barColors:['#24bcd3'],
-     	    hideHover: 'auto',
-     	    gridLineColor: '#eef0f2',
-     	    resize: true
+           	xkey: 'y',
+     	   	ykeys: ['a'],
+     	  	labels: ['Revenue'],
+     	   	barColors:['#24bcd3'],
+     	   	hideHover: 'auto',
+     	   	gridLineColor: '#eef0f2',
+     	   	barSize:50,
+     	   	resize: true
      	});
  		$("ul li h4").empty();
  		newrevenue='<li>'
@@ -385,15 +388,15 @@
  		mychart.destroy();
  		mychart = Morris.Bar({
  			barSize:50,
-    	    element: 'morris-bar-chart',
-    	    data: data,
-            xkey: 'y',
-     	    ykeys: ['a'],
-     	    labels: ['Revenue'],
-     	    barColors:['#24bcd3'],
-     	    hideHover: 'auto',
-     	    gridLineColor: '#eef0f2',
-     	    resize: true
+    	  	element: 'morris-bar-chart',
+    	  	data: data,
+           	xkey: 'y',
+     	   	ykeys: ['a'],
+     	   	labels: ['Revenue'],
+     	   	barColors:['#24bcd3'],
+     	   	hideHover: 'auto',
+     	   	gridLineColor: '#eef0f2',
+     	   	resize: true
      	});
  		$("ul li h4").empty();
  		newrevenue='<li>'
@@ -403,32 +406,16 @@
  		$("#revenues").html(newrevenue);
  	}
  	
- 	function plotCampaignGraph(records) {
- 		var data = [];
- 		var totalCampaigns = 0;
- 		$(records).each(function(index){
-			data.push({"y":records[index].name, "a":records[index].bookingCount});
-			totalCampaigns +=records[index].bookingCount;
-		});
- 		mychart.destroy();
- 		mychart = Morris.Bar({
- 			barSize:50,
-    	    element: 'morris-bar-chart',
-    	    data: data,
-            xkey: 'y',
-     	    ykeys: ['a'],
-     	    labels: ['Responses'],
-     	    barColors:['#24bcd3'],
-     	    hideHover: 'auto',
-     	    gridLineColor: '#eef0f2',
-     	    resize: true
-     	});
- 		$("ul li h4").empty();
- 		newrevenue='<li>'
-            		+'<h4><i class="m-r-5"></i> </h4> </li>'
-            		+'<li>'
-                	+'<h4><i class="m-r-5"></i>Total Campaigns : '+totalCampaigns+'</h4> </li>';
- 		$("#revenues").html(newrevenue);
- 	}
- 	
+	$("#project_status_btn").click(function(){
+		ajaxindicatorstart("Please wait while.. we load ...");
+		window.location.href="${baseUrl}/builder/projecthead/projectstatus/projectstatus.jsp?project_id=<% out.print(projectId);%>";
+	});
+	$("#campaign_btn").click(function(){
+		ajaxindicatorstart("Please wait while.. we load ...");
+		window.location.href="${baseUrl}/builder/projecthead/campaign/mycampaigns.jsp?project_id=<% out.print(projectId);%>";
+	});
+	$("#inventory_btn").click(function(){
+		ajaxindicatorstart("Please wait while.. we load ...");
+		window.location.href="${baseUrl}/builder/projecthead/inventory/inventory.jsp?project_id=<% out.print(projectId);%>";
+	});
 </script>

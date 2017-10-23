@@ -862,4 +862,12 @@ public class BuilderController {
 		List<BuyerList> buildingList = builderDetailsDAO.getFlatBuyerList(buildingIds);
 		return buildingList;
 	}
+	
+	@POST
+	@Path("/filter/bargraph/campaign")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectWiseData> getCampaignBarGraphData(@FormParam("emp_id") int empId){
+		
+		return new BuilderDetailsDAO().getCampaignWiseData(empId);
+	}
 }

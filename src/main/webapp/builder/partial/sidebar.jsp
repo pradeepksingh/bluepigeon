@@ -115,7 +115,10 @@
            <%if(emp_access_id==3 ){ %>
            <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout fa-fw"></i><span class="hide-menu"> Marketing<span class="fa arrow"></span></span></a>
                 <ul class="nav nav-second-level">
-                    <li> <a href="javascript:void(0)">New Campaign</a></li>
+                    <li> <a href="${baseUrl }/builder/inbox/inbox.jsp">Inbox</a></li>
+                      <li> <a href="${baseUrl }/builder/datanalytics/data_analytics.jsp">Data Analytics</a></li>
+                     <li> <a href="${baseUrl }/builder/sales/source.jsp">Add Source</a></li>
+                     
                 </ul>
            </li>
            <%} %>

@@ -2158,4 +2158,26 @@ public class BuilderDetailsDAO {
 			return responseMessage;
 			
 		}
+		
+		public List<ProjectWiseData> getCampaignWiseData(int empId){
+			String emphql = "from BuilderEmployee where id = :id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session empSession = hibernateUtil.openSession();
+			Query empQuery = empSession.createQuery(emphql);
+			empQuery.setParameter("id", empId);
+			BuilderEmployee builderEmployee = (BuilderEmployee) empQuery.list().get(0);
+					
+			String hql = "";
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() ==3){
+				hql = "SELECT COUNT(a.id) as bookingCount,b.name as name FROM campaign as a JOIN builder_project as b on b.id = a.project_id inner join allot_project as ap on ap.project_id=b.id where ap.emp_id="+builderEmployee.getId()+" GROUP by b.id";
+			}else{
+			}
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).
+					addScalar("bookingCount", LongType.INSTANCE)
+					.addScalar("name", StringType.INSTANCE).
+					setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+			List<ProjectWiseData> result = query.list();
+			return result;
+		}
 	}
