@@ -235,8 +235,8 @@ color: #ccc;
 					 <div class="form-group row">
 							 <label for="example-search-input" class="col-5 col-form-label">Interested Project</label>
 								<div class="col-7">
-									<div>
-								   		<select id="project_ids" name="project_ids[]" multiple>
+									<div id="selectproject">
+								   		<select id="project_ids" name="project_ids[]" multiple class="form-control">
 									    <%if(builderProjects != null){
 								    	  for(ProjectData projectData : builderProjects){%>
 								      		<option value="<%out.print(projectData.getId());%>"><%out.print(projectData.getName()); %></option>
@@ -328,12 +328,43 @@ $('#configuration').multiselect({
     //noneSelectedText: "Select",
     
 }); 
+
+
 $('#project_ids').multiselect({
     columns: 1,
     placeholder: 'Select Project',
     search: true,
-    selectAll: true
+    selectAll: true,
+    onControlClose : function(element){getConfigData( element );}
 });
+
+function getConfigData( element ){
+    var ids = "";
+    var htmlconfig = "";
+    $("#selectproject .ms-options li.selected input").each(function(index){
+		if(ids == ""){
+			ids = $(this).val();
+		}else {
+			ids = ids+","+$(this).val();
+		}	
+    });
+    alert(ids.length);
+   ajaxindicatorstart("Please wait, while loading...");
+   if(ids.length > 0){
+	    $.get("${baseUrl}/webapi/project/configdata/"+ids,{},function(data){
+	    	 $('#configuration').multiselect('loadOptions',data);
+	    	 $('#configuration').multiselect('reload');
+			 ajaxindicatorstop();
+		});
+   }else{
+	   $.get("${baseUrl}/webapi/project/configdata/"+ids.length,{},function(data){
+	    	 $('#configuration').multiselect('loadOptions',data);
+	    	 $('#configuration').multiselect('reload');
+			 ajaxindicatorstop();
+		});
+   }
+}
+
 $('#min-max-price-range').click(function (event) {
    // setTimeout(function(){ $('.price-label').first().focus();	},0);    
 });
@@ -464,24 +495,24 @@ function showAddResponse(resp, statusText, xhr, $form){
         ajaxindicatorstop();
   	}
 }
-$("#project_ids").change(function(){
-		var htmlconfig = "";
-		ajaxindicatorstart("Loading...");
-	  $.get("${baseUrl}/webapi/project/configdata",{project_ids:$(this).val()},function(data){
-		  $(data).each(function(index){
-			  htmlconfig=htmlconfig+'<option value="'+data[index].id+'">'+data[index].name+'</option>';
-		  });
-		  $("#configuration").multiselect({
-			    columns: 1,
-			    placeholder: 'Select Configuration',
-			    search: true,
-			    selectAll: true,
-			});
-		  $("#configuration").html(htmlconfig);
-		  $("#configuration").multiselect('reload');
-		  ajaxindicatorstop();
-	  });
-});
+// $("#project_ids").change(function(){
+// 		var htmlconfig = "";
+// 		ajaxindicatorstart("Loading...");
+// 	  $.get("${baseUrl}/webapi/project/configdata",{project_ids:$(this).val()},function(data){
+// 		  $(data).each(function(index){
+// 			  htmlconfig=htmlconfig+'<option value="'+data[index].id+'">'+data[index].name+'</option>';
+// 		  });
+// 		  $("#configuration").multiselect({
+// 			    columns: 1,
+// 			    placeholder: 'Select Configuration',
+// 			    search: true,
+// 			    selectAll: true,
+// 			});
+// 		  $("#configuration").html(htmlconfig);
+// 		  $("#configuration").multiselect('reload');
+// 		  ajaxindicatorstop();
+// 	  });
+// });
 $('.dropdown-menu.ddRange')
 .click(function(e) {
   e.stopPropagation();

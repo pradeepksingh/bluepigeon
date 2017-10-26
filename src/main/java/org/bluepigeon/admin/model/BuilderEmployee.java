@@ -35,13 +35,17 @@ public class BuilderEmployee implements java.io.Serializable {
 	private Locality locality;
 	private boolean status;
 	private int loginStatus;
+	private String photo;
+	private String pancard="0";
+	private String aadhaarNumber="0";
 
 	public BuilderEmployee() {
 	}
 
 	public BuilderEmployee(String name, String mobile, String email, String currentAddress, String permanentAddress,
 			String designation, BuilderEmployee builderEmployee, BuilderEmployeeAccessType builderEmployeeAccessType,
-			Builder builder, String employeeId, BuilderProject builderProject, City city, Locality locality, boolean status
+			Builder builder, String employeeId, BuilderProject builderProject, City city, Locality locality, boolean status,
+			String photo, String pancard, String aadhaarNumber
 	) {
 		this.name = name;
 		this.mobile = mobile;
@@ -56,6 +60,9 @@ public class BuilderEmployee implements java.io.Serializable {
 		this.city = city;
 		this.locality = locality;
 		this.status = status;
+		this.photo =photo;
+		this.pancard = pancard;
+		this.aadhaarNumber = aadhaarNumber;
 	}
 
 	@Id
@@ -218,6 +225,30 @@ public class BuilderEmployee implements java.io.Serializable {
 
 	public void setLoginStatus(int loginStatus) {
 		this.loginStatus = loginStatus;
+	}
+	@Column(name="photo")
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+	@Column(name = "pancard")
+	public String getPancard() {
+		return pancard;
+	}
+
+	public void setPancard(String pancard) {
+		this.pancard = pancard;
+	}
+	@Column(name = "aadhaar_number")
+	public String getAadhaarNumber() {
+		return aadhaarNumber;
+	}
+
+	public void setAadhaarNumber(String aadhaarNumber) {
+		this.aadhaarNumber = aadhaarNumber;
 	}
 	
 }

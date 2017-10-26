@@ -55,13 +55,14 @@
     <!-- Custom CSS -->
     <link href="../css/newstyle.css" rel="stylesheet">
     <link href="../css/common.css" rel="stylesheet">
+     <link href="../css/jquery.multiselect.css" rel="stylesheet">
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../css/adminaddemployee.css">
     <!-- jQuery -->
     <script src="../plugins/bower_components/jquery/dist/newjquery.min.js"></script>
-      <script src="../js/jquery.form.js"></script>
-  <script src="../js/bootstrapValidator.min.js"></script>
-   
+    <script src="../js/jquery.form.js"></script>
+    <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
+	<script src="../js/bootstrapValidator.min.js"></script>
 </head>
 
 <body class="fix-sidebar">
@@ -72,12 +73,11 @@
     <div id="wrapper">
         <!-- Top Navigation -->
          <div id="header">
-        <%@include file="../partial/header.jsp"%>
+        	<%@include file="../partial/header.jsp"%>
         </div>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
+       
        <div id="sidebar1"> 
-       <%@include file="../partial/sidebar.jsp"%>
+       		<%@include file="../partial/sidebar.jsp"%>
        </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
@@ -86,165 +86,206 @@
                <!-- /.row -->
 	            <h1>Add Employee</h1>
                <!-- row -->
-               <div class="white-box">
-               <div class="bg11">
-                 <div class="spacer">
-                   <h3>+ New Employee</h3>
-                 </div>
-                  <form class="addlead1">
-                    <div class="row">
-                     <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
-                         <div class="form-group row">
-							<label for="example-text-input" class="col-sm-5 col-form-label"> Name</label>
-							<div class="col-sm-7">
-								<div>
-								 	<input class="form-control  form-control1" type="text" id="name" name="name"  placeholder="">
-								</div>
-								<div class="messageContainer"></div>
-							  </div>
-						  </div>
-						   <div class="form-group row">
-							 <label for="example-search-input" class="col-sm-5 col-form-label">Email ID</label>
-							 <div class="col-sm-7">
-								<div>
-								   <input class="form-control  form-control1" type="text" id="email" name="email" placeholder="Enter Employee name">
-								</div>
-								<div class="messageContainer"></div>
-							 </div>
-						   </div>
-							<div class="form-group row">
-							   <label for="example-search-input" class="col-sm-5 col-form-label">Permanent Address</label>
-								  <div class="col-sm-7">
-								  	<div>
-								     	<textarea placeholder="Enter permanents address" id="address1" name="address1"></textarea>
-								  	</div>
-								  	<div class="messageContainer"></div>
-								</div>
-							 </div>
-							 <div class="form-group row">
-							  <label for="example-search-input" class="col-sm-5 col-form-label">Access Type</label>
-								<div class="col-sm-7">
-								  <select class="selectpicker selectpicker1">
-			                          <option>Access Type</option>
-			                          <option>Floor No-1</option>
-			                          <option>Floor No-2</option>
-			                          <option>Floor No-3</option>
-			                          <option>Floor No-4</option>
-			                        </select>
-								</div>
-						    </div>
-						    <div class="form-group row">
-							  <label for="example-search-input" class="col-sm-5 col-form-label">Project </label>
-								<div class="col-sm-7">
-								    <select class="selectpicker selectpicker1">
-			                          <% for (ProjectData project : project_list) { %>
-											<option value="<%out.print(project.getId());%>"> <% out.print(project.getName()); %> </option>
-									  <% } %>
-			                        </select>
-								 </div>
-						    </div>
-						    <div class="form-group row">
-							 <label for="example-search-input" class="col-sm-5 col-form-label">City</label>
-								<div class="col-sm-7">
-									<div>
-									    <select name="city_id" id="city_id" class="form-control">
-											<option value=""> Select City </option>
-											<% for(City city : cityList){ %>
-											<option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
-											<% } %>
-										</select>
-									</div>
-									<div class="messageContainer"></div>
-								 </div>
-						    </div>
-                            <div class="form-group row">
-					           <label for="example-tel-input" class="col-sm-5 col-form-label">Aadhaar Card No. </label>
-						         <div class="col-sm-7">
-							       <input class="form-control  form-control1" type="text" id="aadhaar" name="aadhaar" placeholder="">
-							     </div>
-						    </div>
-				       </div>
-                    <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
-                       <div class="form-group row">
-							<label for="example-text-input" class="col-sm-5 col-form-label"> Contact</label>
-							  <div class="col-sm-7">
-								 <input class="form-control form-control1" type="text" id="contact" name="contact"  placeholder="">
-							  </div>
-						  </div>
-						  <div class="form-group row">
-							 <label for="example-search-input" class="col-sm-5 col-form-label">Current Address</label>
-								  <div class="col-sm-7">
-								     <textarea placeholder="Enter current address" id="address" name="address"></textarea>
-								  </div>
-						    </div>
-							<div class="form-group row">
-							   <label for="example-text-input" class="col-sm-5 col-form-label">Designation</label>
-							      <div class="col-sm-7">
-								    <input class="form-control form-control1" type="text" name="designation" id="designation"  placeholder="">
-							      </div>
-							 </div>
-						   <div class="form-group row">
-							 <label for="example-search-input" class="col-sm-5 col-form-label">Employee ID</label>
-								<div class="col-sm-7">
-								   <input class="form-control  form-control1" type="text"  id="empid" name="empid" placeholder="">
-								 </div>
-						    </div>
-						    <div class="form-group row">
-							 <label for="example-search-input" class="col-sm-5 col-form-label">Area</label>
-								<div class="col-sm-7">
-								   <select class="selectpicker selectpicker1">
-			                          <option>Area</option>
-			                          <option>Pune</option>
-			                          <option>Mumbai</option>
-			                          <option>Nasik</option>
-			                          <option>Lonavala</option>
-			                        </select>
-								 </div>
-						    </div>
-						    <div class="form-group row">
-							  <label for="example-search-input" class="col-sm-5 col-form-label">Upload Photo</label>
-								<div class="col-sm-7">
-								 <div class="file-upload">
-								   <p class="file-name"></p>
-								    <label for="upload-1" class="btn">Choose File</label>
-								   <input type="file" id="upload-1">
-								</div>
-								 </div>
-						    </div>
-						    <div class="form-group row">
-							  <label for="example-search-input" class="col-sm-5 col-form-label">Pan Card No.</label>
-								<div class="col-sm-7">
-								   <input class="form-control  form-control1" type="text" value="" id="" placeholder="">
-								 </div>
-						    </div>
-						 </div>
+				<div class="white-box">
+					<div class="bg11">
+                 		<div class="spacer">
+                   			<h3>+ New Employee</h3>
 						</div>
+                  		<form class="addlead1" id="addemployee" name="addemployee" action="" method="post" enctype="multipart/form-data">
+                  			<input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_uid); %>" />
+                            <input type="hidden" id="reporting_id" name="reporting_id" value="<%out.print(builder.getId());%>"/>
+                    		<div class="row">
+                    			<div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
+                        			<div class="form-group row">
+										<label for="example-text-input" class="col-sm-5 col-form-label"> Name</label>
+										<div class="col-sm-7">
+											<div>
+								 				<input class="form-control  form-control1" type="text" id="name" name="name"  placeholder="employee name">
+											</div>
+											<div class="messageContainer"></div>
+							  			</div>
+						  			</div>
+						   			<div class="form-group row">
+							 			<label for="example-search-input" class="col-sm-5 col-form-label">Email ID</label>
+							 			<div class="col-sm-7">
+											<div>
+								   				<input class="form-control  form-control1" type="text" id="email" name="email" placeholder="employee email id">
+											</div>
+											<div class="messageContainer"></div>
+							 			</div>
+						   			</div>
+									<div class="form-group row">
+									   <label for="example-search-input" class="col-sm-5 col-form-label">Permanent Address</label>
+										  <div class="col-sm-7">
+										  	<div>
+										     	<textarea placeholder="Enter permanents address" id="address1" name="address1"></textarea>
+										  	</div>
+										  	<div class="messageContainer"></div>
+										</div>
+									 </div>
+									 <div class="form-group row">
+									  <label for="example-search-input" class="col-sm-5 col-form-label">Access Type</label>
+										<div class="col-sm-7">
+											<div id="accessrole">
+												 <select  id="accessid" name="accessid[]" multiple>
+							                     <%if(access_list != null){
+			                        					for(BuilderEmployeeAccessType builderEmployeeAccessType : access_list){
+			                        			 %>
+			                        				<option value="<%out.print(builderEmployeeAccessType.getId()); %>"><%out.print(builderEmployeeAccessType.getName()); %></option>
+			                        			<%} }%>
+						                        </select>
+											</div>
+										</div>
+								    </div>
+								    <div class="form-group row">
+									  <label for="example-search-input" class="col-sm-5 col-form-label">Project </label>
+										<div class="col-sm-7">
+											<div id="assignproject">
+											    <select  id="projects" name="projects[]" multiple>
+						                          <% 
+						                          if(project_list != null){
+						                          for (ProjectData project : project_list) { %>
+														<option value="<%out.print(project.getId());%>"> <% out.print(project.getName()); %> </option>
+												  <% }} %>
+						                        </select>
+						                     </div>
+										 </div>
+								    </div>
+								    <div class="form-group row">
+									 <label for="example-search-input" class="col-sm-5 col-form-label">City</label>
+										<div class="col-sm-7">
+											<div>
+											    <select name="city_id" id="city_id" class="form-control">
+													<option value=""> Select City </option>
+													<% 
+													if(cityList != null){
+													for(City city : cityList){ %>
+													<option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
+													<% }} %>
+												</select>
+											</div>
+											<div class="messageContainer"></div>
+										 </div>
+								    </div>
+		                            <div class="form-group row">
+							           <label for="example-tel-input" class="col-sm-5 col-form-label">Aadhaar Card No. </label>
+								         <div class="col-sm-7">
+								         	<div>
+									       		<input class="form-control  form-control1" type="text" id="aadhaar" name="aadhaar" placeholder="">
+									     	</div>
+									     	<div class="messageContainer"></div>
+									     </div>
+								    </div>
+						       </div>
+								<div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
+									<div class="form-group row">
+										<label for="example-text-input" class="col-sm-5 col-form-label"> Contact</label>
+										<div class="col-sm-7">
+									  		<div>
+											 	<input class="form-control form-control1" type="text" id="contact" name="contact"  placeholder="">
+											</div>
+											<div class="messageContainer"></div>
+										</div>
+							   		</div>
+							   		<div class="form-group row">
+										<label for="example-search-input" class="col-sm-5 col-form-label">Current Address</label>
+									 	<div class="col-sm-7">
+											<div>
+										     	<textarea placeholder="Enter current address" id="address" name="address"></textarea>
+										  	</div>
+										  	<div class="messageContainer"></div>
+									 	</div>
+							   		</div>
+							   		<div class="form-group row">
+		   					  			<label for="example-text-input" class="col-sm-5 col-form-label">Designation</label>
+		      							<div class="col-sm-7">
+		      								<div>
+			    								<input class="form-control form-control1" type="text" name="designation" id="designation"  placeholder="">
+		      								</div>
+		      								<div class="messageContainer"></div>
+		      							</div>
+		 							</div>
+		  							<div class="form-group row">
+										<label for="example-search-input" class="col-sm-5 col-form-label">Employee ID</label>
+										<div class="col-sm-7">
+											<div>
+		   										<input class="form-control  form-control1" type="text"  id="empid" name="empid" placeholder="">
+		 									</div>
+		 									<div class="messageContainer"></div>
+		 								</div>
+							   		</div>
+							   		<div class="form-group row">
+							   			<label for="example-search-input" class="col-sm-5 col-form-label">Area</label>
+										<div class="col-sm-7">
+											<div>
+										   		<select class="selectpicker selectpicker1" name="area_id" id="area_id"></select>
+					                     	</div>
+					                     	<div class="messageContainer"></div>
+										</div>
+							  		</div>
+							  		<div class="form-group row">
+										<label for="example-search-input" class="col-sm-5 col-form-label">Upload Photo</label>
+										<div class="col-sm-7">
+											<div>
+											 	<div class="file-upload">
+										   			<p class="file-name"></p>
+										    		<label for="empphoto" class="btn">Choose File</label>
+										   			<input type="file" id="empphoto" name="empphoto[]" >
+												</div>
+											</div>
+											<div class="messageContainer"></div>
+										</div>
+								 	</div>
+								  	<div class="form-group row">
+										<label for="example-search-input" class="col-sm-5 col-form-label">Pan Card No.</label>
+										<div class="col-sm-7">
+											<div>
+											 	<input class="form-control  form-control1" type="text" id="pancard" name="pancard" placeholder="">
+											 </div>
+											 <div class="messageContainer"></div>
+										</div>
+								  	</div>
+								</div>
+							</div>
 						<div class="row">
-						   <div class="center">
-					  	     <button type="button" class="btn11">Save</button>
-					  	  </div>
+							<div class="center">
+				    			<button type="submit" class="btn11">Save</button>
+							</div>
 						</div>
 					</form>
-                  </div>
-               </div>
-            </div>
-          </div>
-        </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
     <!-- /.container-fluid -->
      <div id="sidebar1"> 
 		 <%@include file="../partial/footer.jsp"%>
 	</div> 
   </body>
-  <script>
+</html>
+ <script>
+
+ $('#accessid').multiselect({
+     columns: 1,
+     placeholder: 'Select Access Role',
+     search: true,
+     selectAll: true
+ });
+ $('#projects').multiselect({
+     columns: 1,
+     placeholder: 'Select Projects',
+     search: true,
+     selectAll: true
+ });
+
+ 
   jQuery(function($) {
 	  $('input[type="file"]').change(function() {
 	    if ($(this).val()) {
 		    error = false;
-	    
 	      var filename = $(this).val();
-
 				$(this).closest('.file-upload').find('.file-name').html(filename);
-
 	      if (error) {
 	        parent.addClass('error').prepend.after('<div class="alert alert-error">' + error + '</div>');
 	      }
@@ -255,11 +296,11 @@
   $("#city_id").change(function(){
 		if($("#city_id").val() != "") {
 			$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
-				var html = '<option value="">Select Locality</optio>';
+				var html = '<option value="">Select Area</option>';
 				$(data).each(function(index){
-					html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
+					html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 				});
-				$("#area").html(html);
+				$("#area_id").html(html);
 			},'json');
 		}
 	});
@@ -352,23 +393,40 @@
 	                }
 	            }
 	        },
+	        aadhaar:{
+	        	validators:{
+	        		notEmpty:{
+	        			message: 'Aadhaar Number is required and cannot be empty'
+	        		},
+	        		 numeric: {
+	                  	message: 'Aadhaar Number is invalid',
+	                     thousandsSeparator: '',
+	                     decimalSeparator: '.'
+	               	},
+	               	stringLength:{
+	               		max:12,
+	               		min:12,
+	               		message:'Aadhaar Number is invalid'
+	               	}
+	        	}
+	        	
+	        },
 	        city_id:{
 	        	validators: {
 	                notEmpty: {
 	                    message: 'City is required and cannot be empty'
 	                }
 	            },
-	           area:{
-	            	validators: {
-	                    notEmpty: {
-	                        message: 'Area is required and cannot be empty'
-	                    }
-	                }
-	            }
-	        }
-	        
-	    }
-	}).on('success.form.bv', function(event,data) {
+           area_id:{
+            	validators: {
+                    notEmpty: {
+                        message: 'Area is required and cannot be empty'
+                    }
+                }
+            }
+		}
+	}
+}).on('success.form.bv', function(event,data) {
 		// Prevent form submission
 		event.preventDefault();
 		addEmployee();
@@ -385,7 +443,7 @@
 		 		target : '#response', 
 		 		beforeSubmit : showAddRequest,
 		 		success :  showAddResponse,
-		 		url : '${baseUrl}/webapi/employee/save1',
+		 		url : '${baseUrl}/webapi/employee/save2',
 		 		semantic : true,
 		 		dataType : 'json'
 		 	};
@@ -413,6 +471,5 @@
 	        window.location.href = "${baseUrl}/builder/employee/list.jsp";
 	  	}
 	}
-  
+	
   </script>
-</html>

@@ -6,11 +6,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.DoubleType;
+import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -28,6 +31,7 @@ import org.bluepigeon.admin.model.BuilderProject;
 import org.bluepigeon.admin.model.BuildingWeightage;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.Country;
+import org.bluepigeon.admin.model.EmployeeRole;
 import org.bluepigeon.admin.model.InboxMessage;
 import org.bluepigeon.admin.model.InboxMessageReply;
 import org.bluepigeon.admin.model.ProjectImageGallery;
@@ -36,6 +40,7 @@ import org.bluepigeon.admin.data.BookingFlatList;
 import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingData;
+import org.bluepigeon.admin.data.BuildingPojo;
 import org.bluepigeon.admin.data.BuyerList;
 import org.bluepigeon.admin.data.ConfigData;
 import org.bluepigeon.admin.data.EmployeeList;
@@ -2085,27 +2090,193 @@ public class BuilderDetailsDAO {
 			return null;
 		}
 	}
-	public List<BuyerList> getFlatBuyerList(List<String> buildingIds){
-		List<BuyerList> buildingDatas = new ArrayList<BuyerList>();
-		if(buildingIds != null && buildingIds.size() > 0){
-			String buildingIdList = Arrays.toString(buildingIds.toArray());
-			String strSeparator = "";
-			buildingIdList = buildingIdList.replace("[", strSeparator).replace("]", strSeparator);
-			
-			String  hql="Select a.id as id,a.name as name, b.flat_no as flatNumber from buyer as a join builder_flat as b on b.id = a.flat_id join builder_floor as c on c.id=b.floor_no join builder_building as d on d.id = c.building_id where d.id in ("+buildingIdList+") and a.is_primary=1 and a.is_deleted=0 AND a.status=0";
+//	public List<BuyerList> getFlatBuyerList(List<String> buildingIds){
+//		List<BuyerList> buildingDatas = new ArrayList<BuyerList>();
+//		if(buildingIds != null && buildingIds.size() > 0){
+//			String buildingIdList = Arrays.toString(buildingIds.toArray());
+//			String strSeparator = "";
+//			buildingIdList = buildingIdList.replace("[", strSeparator).replace("]", strSeparator);
+//			
+//			String  hql="Select a.id as id,a.name as name, b.flat_no as flatNumber from buyer as a join builder_flat as b on b.id = a.flat_id join builder_floor as c on c.id=b.floor_no join builder_building as d on d.id = c.building_id where d.id in ("+buildingIdList+") and a.is_primary=1 and a.is_deleted=0 AND a.status=0";
+//			HibernateUtil hibernateUtil = new HibernateUtil();
+//			try {
+//					Session session = hibernateUtil.getSessionFactory().openSession();
+//					Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuyerList.class));
+//					System.err.println("hql : "+hql);
+//					buildingDatas = query.list();
+//					return buildingDatas;
+//				} catch(Exception e) {
+//					//
+//					return null;
+//				}
+//		}else{
+//			return null;
+//		}
+//	}
+	
+		public List<BuildingData> getBuildingData(String projectIds){
+			List<BuildingData> buildingDatas = new ArrayList<BuildingData>();
+				
+			String  hql="SELECT  b.id as value, b.name as name FROM builder_building as b WHERE b.project_id IN("+projectIds+") and b.status=1";
 			HibernateUtil hibernateUtil = new HibernateUtil();
-			try {
-					Session session = hibernateUtil.getSessionFactory().openSession();
-					Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuyerList.class));
-					System.err.println("hql : "+hql);
-					buildingDatas = query.list();
-					return buildingDatas;
-				} catch(Exception e) {
+			try{
+				Session session = hibernateUtil.getSessionFactory().openSession();
+				Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuildingData.class));
+				System.err.println("hql : "+hql);
+				buildingDatas = query.list();
+				return buildingDatas;
+			}catch(Exception e) {
 					//
-					return null;
+				return null;
+			}
+		}
+		
+		public List<BuyerList> getFlatBuyerList(String buildingIds){
+			List<BuyerList> buildingDatas = new ArrayList<BuyerList>();
+			String  hql="Select a.id as value,CONCAT_WS(' & ',b.flat_no, a.name) as name from buyer as a join builder_flat as b on b.id = a.flat_id join builder_floor as c on c.id=b.floor_no join builder_building as d on d.id = c.building_id where d.id in ("+buildingIds+") and a.is_primary=1 and a.is_deleted=0 AND a.status=0";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			try{
+				Session session = hibernateUtil.getSessionFactory().openSession();
+				Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuyerList.class));
+				System.err.println("hql : "+hql);
+				buildingDatas = query.list();
+				return buildingDatas;
+			}catch(Exception e) {
+					//
+				return null;
+			}
+		}
+		
+		public ResponseMessage saveEmpRoles(List<EmployeeRole> empRoleList){
+			ResponseMessage responseMessage = new ResponseMessage();
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			session.beginTransaction();
+			for(EmployeeRole empRoles : empRoleList){
+				session.save(empRoles);
+			}
+			session.getTransaction().commit();
+			session.close();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Empolyee Roles added Successfully.");
+			return responseMessage;
+			
+		}
+		
+		public List<ProjectWiseData> getCampaignWiseData(int empId){
+			String emphql = "from BuilderEmployee where id = :id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session empSession = hibernateUtil.openSession();
+			Query empQuery = empSession.createQuery(emphql);
+			empQuery.setParameter("id", empId);
+			BuilderEmployee builderEmployee = (BuilderEmployee) empQuery.list().get(0);
+					
+			String hql = "";
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() ==3){
+				hql = "SELECT COUNT(a.id) as bookingCount,b.name as name FROM campaign as a JOIN builder_project as b on b.id = a.project_id inner join allot_project as ap on ap.project_id=b.id where ap.emp_id="+builderEmployee.getId()+" GROUP by b.id";
+			}else{
+			}
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).
+					addScalar("bookingCount", LongType.INSTANCE)
+					.addScalar("name", StringType.INSTANCE).
+					setResultTransformer(Transformers.aliasToBean(ProjectWiseData.class));
+			List<ProjectWiseData> result = query.list();
+			return result;
+		}
+		
+		public List<ProjectData> getProjectList(String cityIds, int empId){
+			String hql = "";
+			hql = "SELECT a.id as value, a.name as name FROM builder_project as a inner join allot_project as b on b.project_id=a.id WHERE a.city_id in ("+cityIds+") and a.status=1 and a.group_id=1 and b.emp_id="+empId;
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectData.class));
+			List<ProjectData> result = query.list();
+			session.close();
+			return result;
+		}
+		
+		public List<ProjectData> getBuyerOrBuilding(String projectIds,String userType, int empId){
+			String hql = "";
+			String hqlnew = "from BuilderEmployee where id = "+empId;
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session sessionnew = hibernateUtil.openSession();
+			Query querynew = sessionnew.createQuery(hqlnew);
+			List<BuilderEmployee> employees = querynew.list();
+			BuilderEmployee builderEmployee = employees.get(0);
+			int a=0,b=0,c=0;
+			if(userType.length() == 5){
+				hql="SELECT a.project_id as id, CONCAT(a.id,'',3) as value,a.name as name, 3 as typeId FROM builder_employee as a where  a.access_type_id>2 and a.builder_id ="+builderEmployee.getBuilder().getId()+" UNION select b.project_id as id, CONCAT(b.id,'',2) as value, b.name as name,2 as typeId from builder_lead as b where b.project_id in("+projectIds+") UNION select c.project_id as id, CONCAT(c.id,'',1) as value, c.name as name,1 as typeId from buyer as c where c.is_primary=1 and c.is_deleted=0 and c.project_id in ("+projectIds+");";
+			}
+			else if(userType.length() == 3){
+				try{
+					if(userType.contentEquals("1,2")){
+						a=1;
+						b=2;
+						c=0;
+					}else if(userType.contentEquals("1,3")){
+						a=1;
+						b=0;
+						c=3;
+					}else if(userType.contentEquals("2,3")){
+						a=0;
+						b=2;
+						c=3;
+					}
+					if(a==1 && b==2 && c == 0){
+						hql="Select b.project_id as id,  CONCAT(b.id,'',2) as value, b.name as name,2 as typeId from builder_lead as b where b.project_id in("+projectIds+") UNION select c.project_id as id, CONCAT(c.id,'',1) as value, c.name as name,1 as typeId from buyer as c where c.is_primary=1 and c.is_deleted=0 and c.project_id in ("+projectIds+");";
+					}
+					else if(a==1 && c==3 && b == 0){
+						hql="SELECT a.project_id as id, CONCAT(a.id,'',3) as value,a.name as name, 3 as typeId FROM builder_employee as a where  a.access_type_id>2 and a.builder_id ="+builderEmployee.getBuilder().getId()+" UNION select c.project_id as id, CONCAT(c.id,'',1) as value, c.name as name,1 as typeId from buyer as c where c.is_primary=1 and c.is_deleted=0 and c.project_id in ("+projectIds+");";
+					}
+					else if(b==2 && c==3 && a==0){
+						hql="SELECT a.project_id as id, CONCAT(a.id,'',3) as value,a.name as name, 3 as typeId FROM builder_employee as a where  a.access_type_id>2 and a.builder_id ="+builderEmployee.getBuilder().getId()+" UNION select b.project_id as id, CONCAT(b.id,'',2) as value, b.name as name,2 as typeId from builder_lead as b where b.project_id in("+projectIds+");";
+					}
+				}catch(Exception e){
+					
+					e.printStackTrace();
+					//return null;
 				}
-		}else{
-			return null;
+			}
+			else if(userType.length() == 1){
+				if(userType.equals("1")){
+					hql="select a.project_id as id,a.id as value, a.name as name, 4 as typeId from builder_building as a join builder_project as b on b.id = a.project_id inner join allot_project as c on c.project_id=b.id where c.emp_id="+builderEmployee.getId();
+				}
+				else if(userType.equals("2")){
+					hql="select a.project_id as id, CONCAT(b.id,'',2) as value, b.name as name,2 as typeId from builder_lead as b where b.project_id in("+projectIds+");";
+				}
+				else if(userType.equals("3")){
+					hql="SELECT a.project_id as id, CONCAT(a.id,'',3) as value,a.name as name, 3 as typeId FROM builder_employee as a where a.access_type_id>2 and a.builder_id ="+builderEmployee.getBuilder().getId()+";";
+				}else{
+					
+				}
+			}
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).
+					addScalar("value",IntegerType.INSTANCE).
+					addScalar("name", StringType.INSTANCE).
+					addScalar("typeId",IntegerType.INSTANCE).
+					addScalar("id",IntegerType.INSTANCE).
+					setResultTransformer(Transformers.aliasToBean(ProjectData.class));
+			List<ProjectData> result = query.list();
+			System.err.println(hql);
+			session.close();
+			sessionnew.close();
+			return result;
+		}
+		
+		public List<ProjectData> getBuyerLists(String buildingIds){		
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			String hql="SELECT CONCAT(a.id,',',1) as value,a.name as name, 1 as typeId FROM buyer as a WHERE a.building_id in("+buildingIds+") and a.is_primary=1 and a.is_deleted=0";
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).
+					addScalar("value",IntegerType.INSTANCE).
+					addScalar("name", StringType.INSTANCE).
+					addScalar("typeId",IntegerType.INSTANCE).
+					setResultTransformer(Transformers.aliasToBean(ProjectData.class));
+			List<ProjectData> result = query.list();
+			System.err.println(hql);
+			session.close();
+			return result;
 		}
 	}
-}

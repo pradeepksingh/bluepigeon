@@ -22,43 +22,26 @@ import javax.ws.rs.core.UriInfo;
 
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
-import org.bluepigeon.admin.dao.CityNamesImp;
-import org.bluepigeon.admin.dao.LocalityNamesImp;
 import org.bluepigeon.admin.dao.ProjectDAO;
-import org.bluepigeon.admin.dao.StateImp;
 import org.bluepigeon.admin.data.BarGraphData;
 import org.bluepigeon.admin.data.BookingFlatList;
-import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.BuyerList;
 import org.bluepigeon.admin.data.ConfigData;
-import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FlatListData;
-import org.bluepigeon.admin.data.InboxBuyerData;
 import org.bluepigeon.admin.data.InboxMessageData;
 import org.bluepigeon.admin.data.NewLeadList;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectWiseData;
-//import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.exception.ResponseMessage;
-import org.bluepigeon.admin.model.AdminUser;
-import org.bluepigeon.admin.model.AllotLeads;
 import org.bluepigeon.admin.model.AllotProject;
-import org.bluepigeon.admin.model.AreaUnit;
 import org.bluepigeon.admin.data.BookedBuyerList;
-import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderBuilding;
 import org.bluepigeon.admin.model.BuilderBuildingAmenity;
-import org.bluepigeon.admin.model.BuilderBuildingAmenityStages;
-import org.bluepigeon.admin.model.BuilderBuildingAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderBuildingStatus;
-import org.bluepigeon.admin.model.BuilderCompanyNames;
 import org.bluepigeon.admin.model.BuilderEmployee;
 import org.bluepigeon.admin.model.BuilderFlat;
-import org.bluepigeon.admin.model.BuilderFlatAmenity;
-import org.bluepigeon.admin.model.BuilderFlatAmenityStages;
-import org.bluepigeon.admin.model.BuilderFlatAmenitySubstages;
 import org.bluepigeon.admin.model.BuilderFlatStatus;
 import org.bluepigeon.admin.model.BuilderFlatType;
 import org.bluepigeon.admin.model.BuilderFloor;
@@ -68,16 +51,9 @@ import org.bluepigeon.admin.model.BuildingAmenityWeightage;
 import org.bluepigeon.admin.model.BuildingOfferInfo;
 import org.bluepigeon.admin.model.Buyer;
 import org.bluepigeon.admin.model.BuyerUploadDocuments;
-import org.bluepigeon.admin.model.City;
-import org.bluepigeon.admin.model.Country;
-import org.bluepigeon.admin.model.FlatAmenityInfo;
 import org.bluepigeon.admin.model.FlatAmenityWeightage;
-import org.bluepigeon.admin.model.FlatPaymentSchedule;
 import org.bluepigeon.admin.model.InboxMessage;
 import org.bluepigeon.admin.model.InboxMessageReply;
-import org.bluepigeon.admin.model.Locality;
-import org.bluepigeon.admin.model.ProjectImageGallery;
-import org.bluepigeon.admin.model.State;
 import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -181,40 +157,6 @@ public class BuilderController {
 				msg.setStatus(1);
 				msg.setMessage("Builing Details updated successfully.");
 			}
-//			if(amenity_wts != "") {
-//				for(String aw :amenityWeightages) {
-//					BuildingAmenityWeightage baw = new BuildingAmenityWeightage();
-//					String [] amenityWeightage = aw.split("#");
-//					for(int i=0;i<amenityWeightage.length;i++){
-//						System.out.println("AmenityWeightage "+amenityWeightage[i]);
-//					}
-//					Integer amenity_id = Integer.parseInt(amenityWeightage[0]);
-//					Double amenity_weightage = Double.parseDouble(amenityWeightage[1]);
-//					Integer stage_id = Integer.parseInt(amenityWeightage[2]);
-//					Double stage_weightage = Double.parseDouble(amenityWeightage[3]);
-//					Integer substage_id = Integer.parseInt(amenityWeightage[4]);
-//					Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
-//					Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
-//					BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
-//					builderBuildingAmenity.setId(amenity_id);
-//					BuilderBuildingAmenityStages builderBuildingAmenityStages = new BuilderBuildingAmenityStages();
-//					builderBuildingAmenityStages.setId(stage_id);
-//					BuilderBuildingAmenitySubstages builderBuildingAmenitySubstages = new BuilderBuildingAmenitySubstages();
-//					builderBuildingAmenitySubstages.setId(substage_id);
-//					baw.setBuilderBuildingAmenity(builderBuildingAmenity);
-//					baw.setAmenityWeightage(amenity_weightage);
-//					baw.setBuilderBuildingAmenityStages(builderBuildingAmenityStages);
-//					baw.setStageWeightage(stage_weightage);
-//					baw.setBuilderBuildingAmenitySubstages(builderBuildingAmenitySubstages);
-//					baw.setSubstageWeightage(substage_weightage);
-//					baw.setStatus(wstatus);
-//					baw.setBuilderBuilding(builderBuilding);
-//					baws.add(baw);
-//				}
-//				projectDAO.deleteBuildingAmenityWeightage(building_id);
-//				projectDAO.addBuildingAmenityWeightage(baws);
-//			}
-			
 		}
 		if(offer_title != null){
 			if (offer_title.size() > 0) {
@@ -754,37 +696,6 @@ public class BuilderController {
 		return new BuilderDetailsDAO().getEmployeeBarGraphByBuilding(projectId);
 	}
 	
-//	@POST
-//	@Path("/allot/projects")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public ResponseMessage saveAllotedProjets(	@FormParam("project_ids[]") String projectId, @FormParam("emp_id") int empId){
-//		ResponseMessage responseMessage = new ResponseMessage();
-//		String strProject [] = projectId.split(",");
-//		System.err.println(projectId);
-//		BuilderEmployee builderEmployee = new BuilderEmployee();
-//		builderEmployee.setId(empId);
-//		List<AllotProject> allotProjectList = new ArrayList<>();
-//		if(strProject != null){
-//			for(int i=0;i<strProject.length;i++){
-//				int project_id = Integer.parseInt(strProject[i]);
-//				AllotProject allotProject = new AllotProject();
-//				allotProject.setBuilderEmployee(builderEmployee);
-//				BuilderProject builderProject = new BuilderProject();
-//				builderProject.setId(project_id);
-//				allotProject.setBuilderProject(builderProject);
-//				allotProjectList.add(allotProject);
-//			}
-//			
-//			if(allotProjectList.size() > 0){
-//				responseMessage =  new BuilderDetailsDAO().saveAllotedProjects(allotProjectList);
-//			}
-//		}else{
-//			responseMessage.setStatus(0);
-//			responseMessage.setMessage("Fail to allot project");
-//		}
-//		return responseMessage;
-//	}
-	
 	@GET
 	@Path("/flat/markhold/{flat_ids}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -837,18 +748,18 @@ public class BuilderController {
 		return buildingList;
 	}
 	
-	@GET
-	@Path("/flatbuyer/data")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<BuyerList> getFlatBuyerData(
-			@Context UriInfo uriInfo
-			) {
-		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
-		List<String> projectIds = uriInfo.getQueryParameters().get("building_ids[]");
-		System.err.println("Received List :: "+projectIds);
-		List<BuyerList> buildingList = builderDetailsDAO.getFlatBuyerList(projectIds);
-		return buildingList;
-	}
+//	@GET
+//	@Path("/flatbuyer/data")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public List<BuyerList> getFlatBuyerData(
+//			@Context UriInfo uriInfo
+//			) {
+//		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+//		List<String> projectIds = uriInfo.getQueryParameters().get("building_ids[]");
+//		System.err.println("Received List :: "+projectIds);
+//		List<BuyerList> buildingList = builderDetailsDAO.getFlatBuyerList(projectIds);
+//		return buildingList;
+//	}
 	
 	@POST
 	@Path("/save/newdoc")
@@ -928,5 +839,73 @@ public class BuilderController {
 			responseMessage.setMessage("Fail to allot project");
 		}
 		return responseMessage;
+	}
+	
+	@GET
+	@Path("/building/data/{project_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuildingData> getBuildingData(
+			@PathParam("project_id") String projectIds
+			) {
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		System.err.println("Received List :: "+projectIds);
+		List<BuildingData> buildingList = builderDetailsDAO.getBuildingData(projectIds);
+		return buildingList;
+	}
+	
+	@GET
+	@Path("/flatbuyer/data/{building_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuyerList> getFlatBuyerData(
+			@PathParam("building_id") String buildingIds
+			) {
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		System.err.println("Received List :: "+buildingIds);
+		List<BuyerList> buildingList = builderDetailsDAO.getFlatBuyerList(buildingIds);
+		return buildingList;
+	}
+	
+	@POST
+	@Path("/filter/bargraph/campaign")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectWiseData> getCampaignBarGraphData(@FormParam("emp_id") int empId){
+		
+		return new BuilderDetailsDAO().getCampaignWiseData(empId);
+	}
+	
+	@GET
+	@Path("/projectdata/{city_ids}/{emp_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectData> getProjectData(
+			@PathParam("city_ids") String cityIds,
+			@PathParam("emp_id") int empId
+			) {
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		List<ProjectData> projectDatas = builderDetailsDAO.getProjectList(cityIds,empId);
+		return projectDatas;
+	}
+	
+	@GET
+	@Path("/buyerorbuilding/data/{project_ids}/{user_type}/{emp_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectData> getBuyerData(
+			@PathParam("project_ids") String projectIds,
+			@PathParam("user_type") String userType,
+			@PathParam("emp_id") int empId
+			) {
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		List<ProjectData> projectDatas = builderDetailsDAO.getBuyerOrBuilding(projectIds,userType,empId);
+		return projectDatas;
+	}
+	
+	@GET
+	@Path("/buyer/data/{building_ids}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectData> getBuyerData(
+			@PathParam("building_ids") String buildingIds
+			) {
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		List<ProjectData> projectDatas = builderDetailsDAO.getBuyerLists(buildingIds);
+		return projectDatas;
 	}
 }

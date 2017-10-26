@@ -30,7 +30,7 @@ public class Campaign implements java.io.Serializable {
 	private Builder builder;
 	private City city;
 	private String title;
-	private Integer type;
+	private String type;
 	private Date setDate;
 	private Date endDate;
 	private String content;
@@ -42,7 +42,7 @@ public class Campaign implements java.io.Serializable {
 	public Campaign() {
 	}
 
-	public Campaign(AdminUser adminUser,BuilderProject builderProject,Builder builder, City city, String title, Integer type, Date setDate, String content,
+	public Campaign(AdminUser adminUser,BuilderProject builderProject,Builder builder, City city, String title, String type, Date setDate, String content,
 			String terms, Integer recipientType, Byte isDeleted, String image, Date endDate) {
 		this.adminUser = adminUser;
 		this.builderProject = builderProject;
@@ -120,11 +120,11 @@ public class Campaign implements java.io.Serializable {
 	}
 
 	@Column(name = "type")
-	public Integer getType() {
+	public String getType() {
 		return this.type;
 	}
 
-	public void setType(Integer type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

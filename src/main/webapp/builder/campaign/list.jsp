@@ -8,7 +8,7 @@
 <%@page import="java.util.List"%>
 <%@page import="org.bluepigeon.admin.dao.CampaignDAO"%>
 <%@page import="org.bluepigeon.admin.data.CampaignList"%>
-<%
+<%/*
 List<CampaignList> campaignLists = null;
 session = request.getSession(false);
 BuilderEmployee builder = new BuilderEmployee();
@@ -26,9 +26,9 @@ if(session!=null)
 		}
 	}
 
-}
+}*/
 %>
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -59,34 +59,34 @@ if(session!=null)
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
   
-    <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+   <!--  <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
    
     </head>
 
 <body class="fix-sidebar">
     <!-- Preloader -->
    
-    <div id="wrapper">
+ <!--    <div id="wrapper">
          <div id="header">
-	       <%@include file="../partial/header.jsp"%>
+<%-- 	       <%@include file="../partial/header.jsp"%> --%>
       </div>
       <div id="sidebar1"> 
-       	<%@include file="../partial/sidebar.jsp"%>
+<%--        	<%@include file="../partial/sidebar.jsp"%> --%>
       </div>
      </div>
 <div id="page-wrapper">
             <div class="container-fluid">
               
                 <!-- /row -->
-                <div class="row">
+             <!--    <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box"><br>
                           <center><h1>Manage Campaign</h1></center> 
-                          <%if(access_id >= 1 && access_id <= 3){ %>
+                          <%//if(access_id >= 1 && access_id <= 3){ %>
                            <br>
                             <a href="${baseUrl}/builder/campaign/new.jsp"> <span class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Add Campaign</span></a>
                            <br><br><br>
-                           <%} %>
+                           <%//} %>
                             <div class="table-responsive">
                                 <table id="tblCampaign" class="table table-striped">
                                     <thead>
@@ -94,29 +94,29 @@ if(session!=null)
                                           	<td>Campaign Title</td>
                                            	<td>Start Date</td>
                                             <td>Campaign Type</td>
-                                             <%if(access_id >= 1 && access_id <= 3){ %>
+                                             <%//if(access_id >= 1 && access_id <= 3){ %>
                                             <td>Actions</td>
-                                            <%} %>
+                                            <%//} %>
                                         </tr>
                                         <tr>
                                           	<th>Campaign Title</th>
                                            	<th>Start Date</th>
                                             <th>Campaign Type</th>
-                                             <%if(access_id >= 1 && access_id <= 3){ %>
+                                             <%//if(access_id >= 1 && access_id <= 3){ %>
                                             <th>Actions</th>
-                                            <%} %>
+                                            <%//} %>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <%
-                                        if(campaignLists != null){
-                                       		for(CampaignList campaignList : campaignLists){
+                                       /* if(campaignLists != null){
+                                       		for(CampaignList campaignList : campaignLists){*/
                                         %>
                                         <tr>
-                                            <td><% out.print(campaignList.getTitle()); %></td>
-                                            <td><% out.print(campaignList.getSetDate()); %></td>
+                                            <td><% //out.print(campaignList.getTitle()); %></td>
+                                            <td><% //out.print(campaignList.getSetDate()); %></td>
                                             <td><% 
-					                 	   	    if(campaignList.getCampaignType() ==1)
+					                 	   	  /*  if(campaignList.getCampaignType() ==1)
                                             		out.print("New Project");
 					                 	   	    if(campaignList.getCampaignType() == 2)
 					                 	   	    	out.print("New Property");
@@ -125,18 +125,18 @@ if(session!=null)
 					                 	   	    if(campaignList.getCampaignType() == 4)
 					                 	   	    	out.print("Event");
 					                 	   	    if(campaignList.getCampaignType() == 5)
-					                 	   	    	out.print("Referral");
+					                 	   	    	out.print("Referral");*/
                                             %></td>
-                                            <% if(access_id >= 1 && access_id <= 3){%>
+                                            <% //if(access_id >= 1 && access_id <= 3){%>
                                             <td class="alignRight">
 <%--                                             	<a href="${baseUrl}/admin/leads/edit.jsp?lead_id=<% out.print(campaignList.getCampaignId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
-													<a href="javascript:deleteCampaign(<% out.print(campaignList.getCampaignId());%>)" class="btn btn-danger icon-btn btn-xs"><i class="fa fa-delete"></i>Delete</a>
+													<a href="javascript:deleteCampaign(<%// out.print(campaignList.getCampaignId());%>)" class="btn btn-danger icon-btn btn-xs"><i class="fa fa-delete"></i>Delete</a>
                                             </td>
-                                            <%} %>
+                                            <%//} %>
                                         </tr>
                                         <% 
-                                        	} 
-                                        }
+                                        	/*} 
+                                        }*/
                                         %>
                                     </tbody>
                                 </table>
@@ -146,8 +146,8 @@ if(session!=null)
                </div>
             </div>
             <!-- /.container-fluid -->
-          <div id="sidebar1"> 
-		       <%@include file="../partial/footer.jsp"%>
+        <!--   <div id="sidebar1"> 
+<%-- 		       <%@include file="../partial/footer.jsp"%> --%>
 			</div> 
         </div>
         <!-- /#page-wrapper -->

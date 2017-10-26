@@ -140,7 +140,7 @@
                          <div class="form-group row">
 							<label for="example-text-input" class="col-sm-5 col-form-label"> Project Name</label>
 							<div class="col-sm-7">
-								<div>
+								<div id="selectproject">
 									<select  id="filer_project_ids" name="filter_project_ids[]" multiple>
 			                        	<%if(project_list != null){
 			                        		for(ProjectData projectData : project_list){
@@ -155,7 +155,7 @@
 					</div>
                     <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
                       	<label for="example-text-input" class="col-sm-5 col-form-label"> Building Name</label>
-                      		<div>
+                      		<div id="selectbuilding">
 							  <div class="col-sm-7">
 								  <select id="filer_building_ids" name="filter_building_ids[]" multiple></select>
 							 </div>
@@ -198,11 +198,7 @@ $('#filer_project_ids').multiselect({
     placeholder: 'Select Project',
     search: true,
     selectAll: true,
-	     onDropdownHide: function(event) {
-        alert('Dropdown closed.');
-        // to reload the page
-        location.reload();
-    }
+    onControlClose : function(element){getBuildingList(element);}     
 });
 
 $('#filer_building_ids').multiselect({
@@ -210,12 +206,43 @@ $('#filer_building_ids').multiselect({
     placeholder: 'Select Building',
     search: true,
     selectAll: true,
-	     onDropdownHide: function(event) {
-        alert('Dropdown closed.');
-        // to reload the page
-        location.reload();
-    }
+    onControlClose : function(element){getFlatBuyerList(element);}  
 });
+
+
+function getBuildingList(element){
+	var ids = "";
+	 $("#selectproject .ms-options li.selected input").each(function(index){
+		 if(ids == ""){
+			 ids = $(this).val();
+		 }else{
+			ids = ids +","+ $(this).val();
+		 }
+	 });
+	 ajaxindicatorstart("Loading...");
+	$.get("${baseUrl}/webapi/builder/building/data/"+ids,{},function(data){
+		$("#filer_building_ids").multiselect('loadOptions',data);
+		  $("#filer_building_ids").multiselect('reload');
+		  ajaxindicatorstop();
+	});
+}
+function getFlatBuyerList(element){
+	var ids = "";
+	 $("#selectbuilding .ms-options li.selected input").each(function(index){
+		 if(ids == ""){
+			 ids = $(this).val();
+		 }else{
+			ids = ids +","+ $(this).val();
+		 }
+	 });
+	// alert(ids);
+	 ajaxindicatorstart("Loading...");
+		$.get("${baseUrl}/webapi/builder/flatbuyer/data/"+ids,{},function(data){
+			$("#flat_buyer_ids").multiselect('loadOptions',data);
+			  $("#flat_buyer_ids").multiselect('reload');
+			  ajaxindicatorstop();
+		});
+}
 
 $('#flat_buyer_ids').multiselect({
 
@@ -223,11 +250,7 @@ $('#flat_buyer_ids').multiselect({
     placeholder: 'Select Flat & Buyer',
     search: true,
     selectAll: true,
-	     onDropdownHide: function(event) {
-        alert('Dropdown closed.');
-        // to reload the page
-        location.reload();
-    }
+	    
 });
   jQuery(function($) {
 	  $('input[type="file"]').change(function() {
@@ -327,41 +350,41 @@ $('#flat_buyer_ids').multiselect({
 	  	}
 	}
 	
-	$("#filer_project_ids").change(function(){
-		var htmlconfig = "";
-		ajaxindicatorstart("Loading...");
-		$.get("${baseUrl}/webapi/builder/building/data",{project_ids:$(this).val()},function(data){
-			  $(data).each(function(index){
-				  htmlconfig=htmlconfig+'<option value="'+data[index].id+'">'+data[index].name+'</option>';
-			  });
-			  $("#filer_building_ids").multiselect({
-				    columns: 1,
-				    placeholder: 'Select Building',
-				    search: true,
-				    selectAll: true,
-				});
-			  $("#filer_building_ids").html(htmlconfig);
-			  $("#filer_building_ids").multiselect('reload');
-			  ajaxindicatorstop();
-		});
-	});
+// 	$("#filer_project_ids").change(function(){
+// 		var htmlconfig = "";
+// 		ajaxindicatorstart("Loading...");
+// 		$.get("${baseUrl}/webapi/builder/building/data",{project_ids:$(this).val()},function(data){
+// 			  $(data).each(function(index){
+// 				  htmlconfig=htmlconfig+'<option value="'+data[index].id+'">'+data[index].name+'</option>';
+// 			  });
+// 			  $("#filer_building_ids").multiselect({
+// 				    columns: 1,
+// 				    placeholder: 'Select Building',
+// 				    search: true,
+// 				    selectAll: true,
+// 				});
+// 			  $("#filer_building_ids").html(htmlconfig);
+// 			  $("#filer_building_ids").multiselect('reload');
+// 			  ajaxindicatorstop();
+// 		});
+// 	});
 	
-	$("#filer_building_ids").change(function(){
-		var htmlconfig = "";
-		ajaxindicatorstart("Loading...");
-		$.get("${baseUrl}/webapi/builder/flatbuyer/data",{building_ids:$(this).val()},function(data){
-			  $(data).each(function(index){
-				  htmlconfig=htmlconfig+'<option value="'+data[index].id+'">'+data[index].flatNumber+' & '+data[index].name+'</option>';
-			  });
-			  $("#flat_buyer_ids").multiselect({
-				    columns: 1,
-				    placeholder: 'Select Building',
-				    search: true,
-				    selectAll: true,
-				});
-			  $("#flat_buyer_ids").html(htmlconfig);
-			  $("#flat_buyer_ids").multiselect('reload');
-			  ajaxindicatorstop();
-		});
-	});
+// 	$("#filer_building_ids").change(function(){
+// 		var htmlconfig = "";
+// 		ajaxindicatorstart("Loading...");
+// 		$.get("${baseUrl}/webapi/builder/flatbuyer/data",{building_ids:$(this).val()},function(data){
+// 			  $(data).each(function(index){
+// 				  htmlconfig=htmlconfig+'<option value="'+data[index].id+'">'+data[index].flatNumber+' & '+data[index].name+'</option>';
+// 			  });
+// 			  $("#flat_buyer_ids").multiselect({
+// 				    columns: 1,
+// 				    placeholder: 'Select Building',
+// 				    search: true,
+// 				    selectAll: true,
+// 				});
+// 			  $("#flat_buyer_ids").html(htmlconfig);
+// 			  $("#flat_buyer_ids").multiselect('reload');
+// 			  ajaxindicatorstop();
+// 		});
+//	});
 </script>

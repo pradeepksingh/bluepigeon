@@ -5,13 +5,13 @@
 <%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject" %>
 <%@page import="java.util.List"%>
-<%@include file="../../head.jsp"%>
-<%@include file="../../leftnav.jsp"%>
+<%-- <%@include file="../../head.jsp"%> --%>
+<%-- <%@include file="../../leftnav.jsp"%> --%>
 <%
-List<CampaignList> campaignLists = null;
-campaignLists = new CampaignDAO().getCampaignList();
+// List<CampaignList> campaignLists = null;
+// campaignLists = new CampaignDAO().getCampaignList();
 %>
-			<div class="main-content">
+	<!-- 		<div class="main-content">
 	<div class="main-content-inner">
 		<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 			<ul class="breadcrumb">
@@ -34,7 +34,7 @@ campaignLists = new CampaignDAO().getCampaignList();
 					<form method="post" action="#" class="form-horizontal" id="submitForm" novalidate="novalidate">	
 					<div id="myTabContent" class="tab-content">
                         <!--Contacts tab starts-->
-                        <div class="tab-pane fade active in" id="contacts" aria-labelledby="contacts-tab">
+                      <!--   <div class="tab-pane fade active in" id="contacts" aria-labelledby="contacts-tab">
                             <div class="contacts-list">
                                 <table class="table table-striped table-bordered" id="campaigntable">
                                     <thead>
@@ -47,13 +47,13 @@ campaignLists = new CampaignDAO().getCampaignList();
                                     </thead>
                                     <tbody>
                                     	<%
-                                        for(CampaignList campaignList : campaignLists){
+                                     //   for(CampaignList campaignList : campaignLists){
                                         %>
                                         <tr>
-                                            <td><% out.print(campaignList.getTitle()); %></td>
-                                            <td><% out.print(campaignList.getSetDate()); %></td>
+                                            <td><%// out.print(campaignList.getTitle()); %></td>
+                                            <td><%// out.print(campaignList.getSetDate()); %></td>
                                             <td><% 
-					                 	   	    if(campaignList.getCampaignType() ==1)
+					                 	   	   /* if(campaignList.getCampaignType() ==1)
                                             		out.print("New Project");
 					                 	   	    if(campaignList.getCampaignType() == 2)
 					                 	   	    	out.print("New Property");
@@ -62,15 +62,15 @@ campaignLists = new CampaignDAO().getCampaignList();
 					                 	   	    if(campaignList.getCampaignType() == 4)
 					                 	   	    	out.print("Event");
 					                 	   	    if(campaignList.getCampaignType() == 5)
-					                 	   	    	out.print("Referral");
+					                 	   	    	out.print("Referral");*/
                                             %></td>
                                             <td class="alignRight">
 <%--                                             	<a href="${baseUrl}/admin/leads/edit.jsp?lead_id=<% out.print(campaignList.getCampaignId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a> --%>
-													<a href="javascript:deleteCampaign(<% out.print(campaignList.getCampaignId());%>)" class="btn btn-danger icon-btn btn-xs"><i class="fa fa-delete"></i> Delete</a>
+													<a href="javascript:deleteCampaign(<% //out.print(campaignList.getCampaignId());%>)" class="btn btn-danger icon-btn btn-xs"><i class="fa fa-delete"></i> Delete</a>
                                             </td>
                                             
                                         </tr>
-                                        <% } %>
+                                        <%// } %>
                                     </tbody>
                                 </table>
                             </div>
@@ -81,10 +81,10 @@ campaignLists = new CampaignDAO().getCampaignList();
 			</div>
 		</div>
 	</div>
-</div>
-<%@include file="../../footer.jsp"%>
+</div>-->
+<%-- <%@include file="../../footer.jsp"%> --%>
 <!-- inline scripts related to this page -->
-<link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+<!-- <link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function(
@@ -107,4 +107,4 @@ function deleteCampaign(id) {
 }
 </script>
 	</body>
-</html>
+</html>-->

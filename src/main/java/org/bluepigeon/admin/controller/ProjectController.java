@@ -4835,25 +4835,6 @@ public class ProjectController extends ResourceConfig {
 		return responseMessage; 
 	}
 	
-//	@GET
-//	@Path("/configdata")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	//@Consumes(MediaType.MULTIPART_FORM_DATA)
-//	public List<ConfigData> getConfigData(
-//			//@FormParam("project_ids[]") List<FormDataBodyPart> flat_id
-//			@Context UriInfo uriInfo
-//			//@FormDataParam("project_ids[]") List<FormP> schedule
-//			) {
-//		ProjectDAO projectDAO = new ProjectDAO();
-//		List<String> projectIds = uriInfo.getQueryParameters().get("project_ids[]");
-//		System.err.println("Received List :: "+projectIds);
-//		//System.err.println(flat_id);
-//	//	List<int> projectIds = new ArrayList<int>();
-//		List<ConfigData> floorList = projectDAO.getConfigData(projectIds);
-//		return floorList;
-//		//return null;
-//	}
-	
 	@GET
 	@Path("/configdata/{project_ids}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -4864,6 +4845,5 @@ public class ProjectController extends ResourceConfig {
 		System.err.println("Received List :: "+projectIds);
 		List<ConfigData> floorList = projectDAO.getConfigDataByProject(projectIds);
 		return floorList;
-		//return null;
 	}
 }
