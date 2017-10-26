@@ -303,7 +303,7 @@ function getProjectList(element){
 				//window.location.reload();
 				assign = '<span class="assign1">Assign Projects : </span>';
 					a1+=data.errors; 
-					assign+=a1.replace(",","|");
+					assign+=a1.replace(","," | ");
 				$(".assign").empty();
 				$(".assign").html(assign);
 			}else{

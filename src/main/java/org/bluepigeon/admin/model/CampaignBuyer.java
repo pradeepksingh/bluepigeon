@@ -20,14 +20,17 @@ public class CampaignBuyer implements java.io.Serializable {
 
 	private Integer id;
 	private Campaign campaign;
-	private Buyer buyer;
-
+	private Integer buyerId=0;
+	private Integer userType=0;
+	private Integer projectId=0;
 	public CampaignBuyer() {
 	}
 
-	public CampaignBuyer(Campaign campaign, Buyer buyer) {
+	public CampaignBuyer(Campaign campaign, Integer buyerId, Integer userType, Integer projectId) {
 		this.campaign = campaign;
-		this.buyer = buyer;
+		this.buyerId = buyerId;
+		this.userType = userType;
+		this.projectId = projectId;
 	}
 
 	@Id
@@ -52,14 +55,29 @@ public class CampaignBuyer implements java.io.Serializable {
 		this.campaign = campaign;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "buyer_id")
-	public Buyer getBuyer() {
-		return this.buyer;
+	@Column(name = "buyer_id")
+	public Integer getBuyerId() {
+		return this.buyerId;
 	}
 
-	public void setBuyer(Buyer buyer) {
-		this.buyer = buyer;
+	public void setBuyerId(Integer buyerId) {
+		this.buyerId = buyerId;
+	}
+	@Column(name= "user_type")
+	public Integer getUserType() {
+		return userType;
 	}
 
+	public void setUserType(Integer userType) {
+		this.userType = userType;
+	}
+	@Column(name= "project_id")
+	public Integer getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(Integer projectId) {
+		this.projectId = projectId;
+	}
+	
 }

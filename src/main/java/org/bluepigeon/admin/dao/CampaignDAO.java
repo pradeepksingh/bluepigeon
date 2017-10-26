@@ -369,11 +369,11 @@ public class CampaignDAO {
 		ResponseMessage responseMessage = new ResponseMessage();
 		
 		/***************** Delete entry from Campaign Buyer *************************/
-		String delete_buyer_documents = "DELETE from  CampaignBuyer where buyer.id = :buyer_id";
+		String delete_buyer_documents = "DELETE from  CampaignBuyer where buyer_id = :buyer_id";
 		Session newsession1 = hibernateUtil.openSession();
 		newsession1.beginTransaction();
 		Query smdelete = newsession1.createQuery(delete_buyer_documents);
-		smdelete.setParameter("buyer_id", campaignBuyers.get(0).getBuyer().getId());
+		smdelete.setParameter("buyer_id", campaignBuyers.get(0).getBuyerId());
 		smdelete.executeUpdate();
 		newsession1.getTransaction().commit();
 		newsession1.close();
@@ -468,6 +468,15 @@ public class CampaignDAO {
 		List<CampaignListNew> result = query.list();
 		session.close();
 		return result;
+	}
+	
+	public BuilderProject getProjectData(int projectId){
+		String hql = "from BuilderProject where id="+projectId;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		List<BuilderProject> builderProject = query.list();
+		return builderProject.get(0);
 	}
 	
 }

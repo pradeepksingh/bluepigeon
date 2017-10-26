@@ -1,3 +1,6 @@
+<%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
+<%@page import="org.bluepigeon.admin.model.City"%>
+<%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="java.util.Date"%> 
 <%@page import="java.text.SimpleDateFormat"%> 
 <%@page import="java.text.DateFormat"%> 
@@ -9,26 +12,42 @@
 List<CampaignListNew> campaignLists = null;
 session = request.getSession(false);
 BuilderEmployee builder = new BuilderEmployee();
-int session_id = 0;
+int builder_id = 0;
 int access_id = 0;
 int projectId = 0;
+int emp_id=0;
+List<City> city_list = null;
+BuilderProject builderProject = null;
+String projectName ="";
+String cityName = "";
+String localityName ="";
+int cityId = 0;
 if(session!=null)
 {
 	if(session.getAttribute("ubname") != null)
 	{
 		builder  = (BuilderEmployee)session.getAttribute("ubname");
-		session_id = builder.getBuilder().getId();
+		builder_id = builder.getBuilder().getId();
+		emp_id = builder.getId();
 		access_id = builder.getBuilderEmployeeAccessType().getId();
-		if(session_id > 0){
+		if(builder_id > 0){
 			if (request.getParameterMap().containsKey("project_id")) {
 				projectId = Integer.parseInt(request.getParameter("project_id"));
 				if(projectId != 0) {
 					campaignLists = new CampaignDAO().getMyCampaignsByProjectId(projectId);
+					builderProject = new CampaignDAO().getProjectData(projectId);
+					city_list = new CityNamesImp().getCityNames();
+					if(builderProject != null){
+						projectName = builderProject.getName();
+						cityName = builderProject.getCity().getName();
+						localityName = builderProject.getLocalityName();
+						cityId = builderProject.getCity().getId();
+					}		
 				}
 			}
 		}
+	
 	}
-
 }
 SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
 Date date = new Date();
@@ -45,31 +64,30 @@ Date date = new Date();
     <link rel="icon" type="image/png" sizes="16x16" href="../../plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
-    <link href="../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../bootstrap/dist/css/newbootstrap.min.css" rel="stylesheet">
     <link href="../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
     <!-- Menu CSS -->
     <link href="../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="../../css/style.css" rel="stylesheet">
     <link href="../../css/common.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/jquery.multiselect.css">
     <!-- color CSS -->
      <link rel="stylesheet" type="text/css" href="../../css/addcampaign.css">
     <link href="../../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
     <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
      <script src="../../js/jquery.form.js"></script>
-    <script src="../../js/bootstrap-multiselect.js"></script>
-    <link rel="stylesheet" href="../../css/bootstrap-multiselect.css">
+     <script src="../../js/jquery.multiselect.js"></script>
+<!--     <script src="../../js/bootstrap-multiselect.js"></script> -->
+<!--     <link rel="stylesheet" href="../../css/bootstrap-multiselect.css"> -->
 </head>
-   
-   
-
 <body class="fix-sidebar">
     <!-- Preloader -->
     <div class="preloader" style="display: none;">
         <div class="cssload-speeding-wheel"></div>
     </div>
-    <form id="addcampaign" name="addcampaign" class="form-horizontal" action="" method="post" enctype="multipart/form-data" >
+ 
     <div id="wrapper">
         <!-- Top Navigation -->
         <div id="header">
@@ -83,30 +101,43 @@ Date date = new Date();
            <div class="container-fluid">
                <!-- /.row -->
 	          <div class="row bspace">
-		                <div class="col-md-3 col-sm-3 col-lg-3">
-		                    <button type="button" id="marketing_campaign" class="btn11 btn-info waves-effect waves-light m-t-10" >Campaign</button>
-		                </div>
-		                 <div class="col-md-3 col-sm-3 col-lg-3">
-		                    <button type="button" id="marketing_newcampaign" class="btn11 btn-submit waves-effect waves-light m-t-10">New Campaign +</button>
-		                 </div>
+	                <div class="col-md-3 col-sm-3 col-lg-3">
+	                    <button type="button" id="marketing_campaign" class="btn11 btn-info waves-effect waves-light m-t-10" >Campaign</button>
 	                </div>
+	                 <div class="col-md-3 col-sm-3 col-lg-3">
+	                    <button type="button" id="marketing_newcampaign" class="btn11 btn-submit waves-effect waves-light m-t-10">New Campaign +</button>
+	                </div>
+	          </div>
                <!-- row -->
+                  <form id="addcampaign" name="addcampaign" class="form-horizontal" action="" method="post" enctype="multipart/form-data" >
                   <div class="white-box">
                      <div class="bg11 bg12">
-                     	
+                     	<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
+                     	<input type="hidden" id="project_id" name="project_id" value="<%out.print(projectId);%>"/>
+                     	<input type="hidden" id="city_id" name="city_id" value="<%out.print(cityId);%>"/>
+                     	<input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_id);%>"/>
                         <div class="row ">
 					 	   <div class="col-md-6 col-sm-6 col-xs-12 col-lg-6">
-						 	   <label> Project Name<span class="text-danger">*</span></label> <input type="text" id="project_name" name="prjecct_name" placeholder="Enter Project Name"/><br>
+						 	   <label> Project Name<span class="text-danger">*</span></label>
+						 	    <input type="text" id="project_name" name="prjecct_name" readonly value="<%if(projectName != "")out.print(projectName); %>" placeholder="Enter Project Name"/><br>
 						 	    <div class="messageContainer"></div>
-						 	   <label>City<span class="text-danger">*</span></label> <input type="text" id="city" name="city' placeholder="Enter City Name"/><br>
+						 	   <label>City<span class="text-danger">*</span></label> <input type="text" id="city" readonly value="<%if(cityName != "")out.print(cityName); %>" name="city' placeholder="Enter City Name"/><br>
 						 	    <div class="messageContainer"></div>
-						 	   <label> Campaign Title<span class="text-danger">*</span></label>  <input type="text" id="title" name="title" placeholder="New project/ referral"/><br>
+						 	    <div>
+						 	   <label> Campaign Title<span class="text-danger">*</span></label> 
+						 	  
+						 	    <input type="text" id="title" name="title"  placeholder="Enter Campaign title"/>
+						 	    </div>
 						 	    <div class="messageContainer"></div>
-						 	   <label>Content<span class="text-danger">*</span></label> <input type="text" id="content" name="content" placeholder="Enter content"/><br>
+						 	    <div>
+						 	   <label>T&#38;C<span class="text-danger">*</span></label>  <textarea id="tc" class="todolist" name="tc" rows="10" placeholder="Terms and conditions"></textarea>
+						 	   </div>
+						 	    <div class="messageContainer"></div>
+						 	      <label>Start Date<span class="text-danger">*</span></label> <input type="text" id="start_date" name="start_date"><br>
 						 	    <div class="messageContainer"></div>
 					 	    </div>
 					 	    <div class="col-md-6 col-sm-6 col-xs-12 col-lg-6">
-						 	    <label> Locality<span class="text-danger">*</span></label> <input type="text" id="locality" name="locality" placeholder="Pimple Saudagar"/><br>
+						 	    <label> Locality<span class="text-danger">*</span></label> <input type="text" id="locality" name="locality" value="<%if(localityName != "")out.print(localityName); %>" placeholder="Pimple Saudagar"/><br>
 						 	     <div class="messageContainer"></div>
 						 	    <label>Campaign Type<span class="text-danger">*</span></label> <textarea  id="campaign_type" name="campaign_type" placeholder="Get Maruti suzuki free on your next booking"/></textarea><br>
 						 	     <div class="messageContainer"></div>
@@ -115,9 +146,11 @@ Date date = new Date();
 						 	    <label>Upload Image<span class="text-danger">*</span></label><input id="uploadFile" placeholder="Choose File" />
 							    <div class="fileUpload btn newbutton">
 								  <span>Choose file</span>
-								  <input id="uploadBtn" type="file" class="upload" />
+								  <input id="uploadBtn" type="file" name="uploadimg[]" class="upload" />
 								</div><br>
 								 <div class="messageContainer"></div>
+								 <label>End Date<span class="text-danger">*</span></label> <input type="text" id="end_date" name="end_date"><br>
+						 	    <div class="messageContainer"></div>
 					 	     </div>
 					 	     <div class="inline1">
 					 	         <button type="button" href="#demo" data-toggle="collapse"> 
@@ -149,167 +182,308 @@ Date date = new Date();
  							    </div>
  							  </div>
 					      </div>
-					      
 					   </div>
-				  </div>
-              </div>
-           </div>
-        </div>
-  <!-- Modal of Recipients +-->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-body">
-           <div class="row">
-			  <div class="col-md-10 col-sm-10 col-xs-10">
-				<h3>Add Recipients</h3>
-			  </div>
-			  <div class="col-md-2 col-sm-2 col-xs-2">
-				<a href=""><img src="../../images/error.png" alt="cancle" data-dismiss="modal"></a>
-			  </div>
+				  	</div>
+				   <!-- Modal of Recipients +-->
+  					<div class="modal fade" id="myModal" role="dialog">
+    					<div class="modal-dialog">
+      						<div class="modal-content">
+        						<div class="modal-body">
+           							<div class="row">
+			  							<div class="col-md-10 col-sm-10 col-xs-10">
+											<h3>Add Recipients</h3>
+			  							</div>
+			  							<div class="col-md-2 col-sm-2 col-xs-2">
+											<a href=""><img src="../../images/error.png" alt="cancle" data-dismiss="modal"></a>
+			  							</div>
+									</div>
+	  								<div class="row">
+	  									<div class="col-sm-6">
+	  										<div class="form-group row">
+	  											<label class="col-sm-4"> User Type</label>
+		  										<div class="col-sm-8" id="selectbuyers">
+	  												<select  name="user_type[]" id="user_type" multiple="multiple">
+		          										<option  value="1">Buyers</option>
+		        										<option  value="2">Leads</option>
+		        										<option  value="3">Staffs</option>
+		 		  									</select>
+	  											</div>
+	  										</div>
+	  									</div>
+	   		 							<div class="col-sm-6">
+	   		 								<div class="form-group row">
+	   		 									<label class="col-sm-4">City</label> 
+	   		 									<div class="col-sm-8" id="selectcity">
+							   		 				<select id="city_names" name="city_names[]" multiple="multiple">
+								 		           <%if(city_list!=null){ 
+								 		           		for(City city : city_list){
+								 		           %>
+														<option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
+								 		           <%}} %>
+											    	</select>
+	   		 									</div>
+	   		 								</div>
+	   		 							</div>
+	       							</div>	
+	  								<div class="row">
+	  									<div class="col-sm-6">
+	  										<div class="form-group row">
+	  				 							<label class="col-sm-4">Project</label>
+  				 								<div class="col-sm-8" id="selectProjects">
+  				 	 								<select id="project_ids" name="project_ids[]" multiple="multiple"></select>
+  				 								</div>
+	  										</div>
+	  									</div>
+	  									<div class="col-sm-6">
+	  										<div class="form-group row">
+			     								<label class="col-sm-4">Building</label> 
+			     								<div class="col-sm-8" id="selectbuildings">
+			     									<select id="building_ids" name="building_ids[]" multiple="multiple"></select>
+			     								</div>
+			     							</div>
+	  									</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group row">
+			      								<label class="col-sm-4"> Name</label> 
+			      								<div class="col-sm-8">
+			       									<select id="buyer_ids"  name="buyer_ids[]" multiple="multiple"></select>
+			          							</div>
+				  							</div>
+	  									</div>
+	  									<input type="hidden" id="h_project_ids" name="h_project_ids[]" />
+	  								</div>
+	  								<div class="row">
+		  								<div class="center">
+		  		   							<button type="submit" id="publish" class="button1">Publish</button>
+		  								</div>
+	  								</div>
+        						 </div>
+ 	  						</div>
+						</div>
+					</div>
+				</form>
 			</div>
-	  		<div class="row bg12">
-	  		   <div class="col-md-6 col-sm-6 col-xs-12 col-lg-6">
-	  		     <label> User Type</label>
-	  		       <select id="multiple-checkboxes" name="user_type[]" multiple="multiple">
-	  		          <option  class="mycheckbox" value="0">Select All</option>
-			          <option  class="mycheckbox" value="1">admin</option>
-			          <option  class="mycheckbox" value="2">Builder</option>
-	    		   </select><br>
-			      <label>Project</label>
-			       <select id="multiple-checkboxes-2" name="project[]" multiple="multiple">
-				        <option value="php">Select All</option>
-				        <option value="javascript">JavaScript</option>
-				        <option value="java">Java</option>
-				        <option value="sql">SQL</option>
-				        <option value="jquery">Jquery</option>
-				        <option value=".net">.Net</option>
-				    </select>
-					<br>
-			      <label> Name</label> 
-			       <select id="multiple-checkboxes-3"  name="name[]" multiple="multiple">
-			            <option value="php">Select All</option>
-				        <option value="php">PHP</option>
-				        <option value="javascript">JavaScript</option>
-				        <option value="java">Java</option>
-				        <option value="sql">SQL</option>
-				        <option value="jquery">Jquery</option>
-				        <option value=".net">.Net</option>
-				    </select>
-				    <br>
-			   </div>
-	  		   <div class="col-md-6 col-sm-6 col-xs-12 col-lg-6">
-	  		      <label>City</label> 
-	  		       <select id="multiple-checkboxes-4" name="city_id[]" multiple="multiple">
-	  		            <option value="php">Select All</option>
-				        <option value="php">PHP</option>
-				        <option value="javascript">JavaScript</option>
-				        <option value="java">Java</option>
-				        <option value="sql">SQL</option>
-				        <option value="jquery">Jquery</option>
-				        <option value=".net">.Net</option>
-				    </select>
-	  		      <br>
-			      <label>Building</label> 
-			       <select id="multiple-checkboxes-5" name="building_id[]" multiple="multiple">
-			            <option value="php">Select All</option>
-				        <option value="php">PHP</option>
-				        <option value="javascript">JavaScript</option>
-				        <option value="java">Java</option>
-				        <option value="sql">SQL</option>
-				        <option value="jquery">Jquery</option>
-				        <option value=".net">.Net</option>
-				    </select>
-			      <br>
-	  		   </div>
-	  		</div>
-	  		<div class="center">
-	  		   <button type="submit" id="publish" class="button1">Publish</button>
-	  		</div>
-         </div>
- 	  </div>
-   </div>
-  </div>
- </form>
+		</div>
+	</div>
     <!-- /.container-fluid -->
-     <div id="sidebar1"> 
-	     <%@include file="../../partial/footer.jsp"%>
-	  </div> 
+<div id="sidebar1"> 
+   <%@include file="../../partial/footer.jsp"%>
+</div> 
   </body>
 </html>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
-<script>
-$("#publish").click(function(){
-	alert("Hello from Publish Button");
+<!--  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+   <script src="../../js/bootstrap-datepicker.min.js"></script>
+     <script>
+     $('#start_date').datepicker({
+    		autoclose:true,
+    		format: "dd M yyyy"
+    	}).on('change',function(e){
+    		 $('#addcampaign').data('bootstrapValidator').revalidateField('start_date');
+    	});
+     $('#end_date').datepicker({
+ 		autoclose:true,
+ 		format: "dd M yyyy"
+ 	}).on('change',function(e){
+ 		 $('#addcampaign').data('bootstrapValidator').revalidateField('end_date');
+ 	});
+  
+	  jQuery(function($) {
+		  $('input[type="file"]').change(function() {
+		    if ($(this).val()) {
+			    error = false;
+		    
+		      var filename = $(this).val();
+
+					$(this).closest('.file-upload').find('.file-name').html(filename);
+
+		      if (error) {
+		        parent.addClass('error').prepend.after('<div class="alert alert-error">' + error + '</div>');
+		      }
+		    }
+		  });
+		});
+
+ $('#user_type').multiselect({
+     columns: 1,
+     placeholder: 'Select User Type',
+     search: true,
+     selectAll: true,
+     onControlClose : function(element){getProjectList(element);}
+ });
+ 
+ function getProjectList(element){
+	 var ids = "";
+	 $("#selectprojects .ms-options li.selected input").each(function(index){
+		 if(ids == ""){
+			 ids = $(this).val();
+		 }else{
+			ids = ids +","+ $(this).val();
+		 }
+	  });
+ }
+ $('#buyer_ids').multiselect({
+     columns: 1,
+     placeholder: 'Select Name',
+     search: true,
+     selectAll: true
+ });
+ 
+ $('#project_ids').multiselect({
+     columns: 1,
+     placeholder: 'Select Project',
+     search: true,
+     selectAll: true,
+     onControlClose : function(element){getBuyerOrBuildingList(element);}
+ });
+ 
+ 
+ $('#building_ids').multiselect({
+     columns: 1,
+     placeholder: 'Select Building',
+     search: true,
+     selectAll: true,
+     onControlClose : function(element){getBuyerList(element);}
+ });
+ 
+ 
+$('#city_names').multiselect({
+    columns: 1,
+    placeholder: 'Select City',
+    search: true,
+    selectAll: true,
+    onControlClose : function(element){getProjectList(element);}
+    
 });
-    $(document).ready(function(){
-    
-    $(".close1").click(function(){
-        $(".collapse").collapse('hide');
-    });
-    });
-    
-    $(document).ready(function() {
-        $('#multiple-checkboxes').multiselect();
-    });
-    $(document).ready(function() {
-        $('#multiple-checkboxes-2').multiselect();
-    });
-    $(document).ready(function() {
-        $('#multiple-checkboxes-3').multiselect();
-    });
-    $(document).ready(function() {
-        $('#multiple-checkboxes-4').multiselect();
-    });
-    $(document).ready(function() {
-        $('#multiple-checkboxes-5').multiselect();
-    });
 
-$("#select").click(function(){
-    $("li").addClass("active");
-});
+function getProjectList(element){
+	var ids = "";
+	var emp_id = $("#emp_id").val();
+	 $("#selectcity .ms-options li.selected input").each(function(index){
+		 if(ids == ""){
+			 ids = $(this).val();
+		 }else{
+			ids = ids +","+ $(this).val();
+		 }
+	 });
+	  if(ids.length > 0){
+		  ajaxindicatorstart("Please wait, while loading...");
+		  $.get("${baseUrl}/webapi/builder/projectdata/"+ids+"/"+emp_id,{},function(data){
+		    	 $('#project_ids').multiselect('loadOptions',data);
+		    	 $('#project_ids').multiselect('reload');
+		    	 ajaxindicatorstop();
+			});
+	 }else {
+		 ajaxindicatorstart("Please wait, while loading...");
+		  $.get("${baseUrl}/webapi/builder/projectdata/"+ids.length+"/"+emp_id,{},function(data){
+		    	 $('#project_ids').multiselect('loadOptions',data);
+		    	 $('#project_ids').multiselect('reload');
+		    	 ajaxindicatorstop();
+			});
+	 }
+}
 
 
-    $('#multiple-checkboxes').change(function(){
-//         if(this.checked){
-        	alert("hello");
-        	if($(this).val() == 0){
-           		 $('.mycheckbox').each(function(){
-            		alert("Hello Again if all selected");
-//                		this.checked = true;
-               		$(".mycheckbox").prop('checked', $(this).prop("checked"));
-            	});
-//         	}
-        }else{
-        	alert("Hello Again from else")
-             $('.mycheckbox').each(function(){
-                this.checked = false;
-            });
-        }
-    });
-    
-    $('.mycheckbox').on('click',function(){
-        if($('.mycheckbox:checked').length == $('.mycheckbox').length){
-        	alert("Hello again from if part");
-            $('#multiple-checkboxes').prop('checked',true);
-        }else{
-        	alert("Hello again from else part");
-            $('#multiple-checkboxes').prop('checked',false);
-        }
-    });
+function getBuyerOrBuildingList(element){
+	var ids = "";
+	var name_id = "";
+	var building_ids = "";
+	var val="";
+	var name_ids = "";
+	var emp_id = $("#emp_id").val();
+	 $("#selectProjects .ms-options li.selected input").each(function(index){
+		 if(ids == ""){
+			 ids = $(this).val();
+		 }else{
+			ids = ids +","+ $(this).val();
+		 }
+	 });
+	 $("#selectbuyers .ms-options li.selected input").each(function(index){
+		 if(name_id == ""){
+			 name_id = $(this).val();
+		 }else{
+			 name_id = name_id +","+ $(this).val();
+		 }
+	 });
+	 
+	 $("#selectbuildings .ms-options li.selected input").each(function(index){
+		 if(building_ids == ""){
+			 building_ids = $(this).val();
+		 }else{
+			 building_ids = building_ids +","+ $(this).val();
+		 }
+	 });
+	 if(ids.length>0 && name_id.length >0){
+		 ajaxindicatorstart("Please wait, while loading...");
+		 $.get("${baseUrl}/webapi/builder/buyerorbuilding/data/"+ids+"/"+name_id+"/"+emp_id,{},function(data){
+				 if(data != ""){
+					 $(data).each(function(index){
+						 val=data[index].typeId;
+						 $('input[name="h_project_ids[]"]').val(data[index].id);
+					 });
+					if(val!=4){
+						 $('#building_ids').multiselect('loadOptions',"");
+				    	 $('#building_ids').multiselect('reload');
+						 $('#buyer_ids').multiselect('loadOptions',data);
+				    	 $('#buyer_ids').multiselect('reload');
+				    	
+					}else{
+						$('#buyer_ids').multiselect('loadOptions',"");
+				    	$('#buyer_ids').multiselect('reload');
+						$('#building_ids').multiselect('loadOptions',data);
+				    	$('#building_ids').multiselect('reload');
+					}
+			 }else{
+				 alert("Sorry No data found");
+			 }
+	    	 ajaxindicatorstop();
+		});
+	 }else{
+		 $('#buyer_ids').multiselect('loadOptions',"");
+	    	$('#buyer_ids').multiselect('reload');
+			$('#building_ids').multiselect('loadOptions',"");
+	    	$('#building_ids').multiselect('reload');
+	 }
+}
 
-    
-    function addCampaign() {
-    	alert("Hello Afer Publish");
-//     	var options = {
-//     	 		target : '#response', 
-//     	 		beforeSubmit : showAddRequest,
-//     	 		success :  showAddResponse,
-//     	 		url : '${baseUrl}/webapi/campaign/save1',
-//     	 		semantic : true,
-//     	 		dataType : 'json'
-//     	 	};
-//        	$('#addcampaign').ajaxSubmit(options);
+function getBuyerList(element){
+	var building_ids = "";
+	 $("#selectbuildings .ms-options li.selected input").each(function(index){
+		 if(building_ids == ""){
+			 building_ids = $(this).val();
+		 }else{
+			 building_ids = building_ids +","+ $(this).val();
+		 }
+	 });
+	 
+	 if(building_ids.length > 0){
+		 ajaxindicatorstart("Please wait, while loading...");
+		 $.get("${baseUrl}/webapi/builder/buyer/data/"+building_ids,{},function(data){
+			 if(data != ""){
+					 $('#buyer_ids').multiselect('loadOptions',data);
+			    	 $('#buyer_ids').multiselect('reload');
+		 	}else{
+			 alert("Sorry No data found");
+		 	}
+    	 	ajaxindicatorstop();
+		});
+	 }else{
+		$('#buyer_ids').multiselect('loadOptions',"");
+	    $('#buyer_ids').multiselect('reload');
+	 }
+}
+	function saveCampaign() {
+    	var options = {
+    	 		target : '#response', 
+    	 		beforeSubmit : showAddRequest,
+    	 		success :  showAddResponse,
+    	 		url : '${baseUrl}/webapi/campaign/new/save',
+    	 		semantic : true,
+    	 		dataType : 'json'
+    	 	};
+       	$('#addcampaign').ajaxSubmit(options);
     }
     function showAddRequest(formData, jqForm, options){
     	$("#response").hide();
@@ -331,7 +505,7 @@ $("#select").click(function(){
             $("#response").html(resp.message);
             $("#response").show();
             alert(resp.message);
-            window.location.href = "${baseUrl}/builder/campaign/list.jsp";
+            window.location.href = "${baseUrl}/builder/marketinghead/campaign/mycampaigns.jsp?project_id="+$("#project_id").val();
       	}
     }
     
@@ -344,7 +518,6 @@ $("#select").click(function(){
         },
         excluded: ':disabled',
         fields: {
-        	
         	project_name:{
         		validators:{
         			notEmpty:{
@@ -367,7 +540,7 @@ $("#select").click(function(){
             		}
             	}
             },
-            set_date: {
+            start_date: {
                 validators: {
                     callback: {
                         message: 'Wrong Campaign Date',
@@ -377,21 +550,26 @@ $("#select").click(function(){
                                 return false;
                             } else {
                             	return true;
-                            	var options = {
-//                             	 		target : '#response', 
-//                             	 		beforeSubmit : showAddRequest,
-//                             	 		success :  showAddResponse,
-//                             	 		url : '${baseUrl}/webapi/campaign/save1',
-//                             	 		semantic : true,
-//                             	 		dataType : 'json'
-//                             	 	};
-//                                	$('#a          }
+                            }
                         }
                     }
                 }
-            }
-        }
-    },
+            },
+            end_date: {
+                validators: {
+                    callback: {
+                        message: 'Wrong Campaign Date',
+                        callback: function (value, validator) {
+                            var m = new moment(value, 'DD MMM YYYY', true);
+                            if (!m.isValid()) {
+                                return false;
+                            } else {
+                            	return true;
+                            }
+                        }
+                    }
+                }
+            },
             content:{
             	validators:{
             		notEmpty:{
@@ -438,18 +616,31 @@ $("#select").click(function(){
     }).on('success.form.bv', function(event,data) {
     	// Prevent form submission
     	event.preventDefault();
-    	alert("Hello");
-    	addCampaign();
+    	saveCampaign();
     }).on('error.form.bv', function(event,data) {
     	// Prevent form submission
     	event.preventDefault();
-    	alert("Hello");
-    	//addCampaign();
     });
     
     $("#marketing_campaign").click(function(){
     	ajaxindicatorstart("Please wait while.. we load ...");
     	window.location.href="${baseUrl}/builder/marketinghead/campaign/mycampaigns.jsp?project_id=<% out.print(projectId);%>";
     });
+    
+    $(".todolist").focus(function() {
+        if(document.getElementById('tc').value == ''){
+            document.getElementById('tc').value +='\u25CF';
+            
+    	}
+    });
+    $(".todolist").keyup(function(event){
+    	var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            document.getElementById('tc').value +='\u25CF';
+    	}
+    	var txtval = document.getElementById('tc').value;
+    	if(txtval.substr(txtval.length - 1) == '\n'){
+    		document.getElementById('tc').value = txtval.substring(0,txtval.length - 1);
+    	}
+    });
 </Script>
-

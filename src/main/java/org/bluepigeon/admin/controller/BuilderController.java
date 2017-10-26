@@ -28,9 +28,11 @@ import org.bluepigeon.admin.data.BookingFlatList;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuildingList;
 import org.bluepigeon.admin.data.BuyerList;
+import org.bluepigeon.admin.data.ConfigData;
 import org.bluepigeon.admin.data.FlatListData;
 import org.bluepigeon.admin.data.InboxMessageData;
 import org.bluepigeon.admin.data.NewLeadList;
+import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectWiseData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AllotProject;
@@ -869,5 +871,41 @@ public class BuilderController {
 	public List<ProjectWiseData> getCampaignBarGraphData(@FormParam("emp_id") int empId){
 		
 		return new BuilderDetailsDAO().getCampaignWiseData(empId);
+	}
+	
+	@GET
+	@Path("/projectdata/{city_ids}/{emp_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectData> getProjectData(
+			@PathParam("city_ids") String cityIds,
+			@PathParam("emp_id") int empId
+			) {
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		List<ProjectData> projectDatas = builderDetailsDAO.getProjectList(cityIds,empId);
+		return projectDatas;
+	}
+	
+	@GET
+	@Path("/buyerorbuilding/data/{project_ids}/{user_type}/{emp_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectData> getBuyerData(
+			@PathParam("project_ids") String projectIds,
+			@PathParam("user_type") String userType,
+			@PathParam("emp_id") int empId
+			) {
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		List<ProjectData> projectDatas = builderDetailsDAO.getBuyerOrBuilding(projectIds,userType,empId);
+		return projectDatas;
+	}
+	
+	@GET
+	@Path("/buyer/data/{building_ids}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectData> getBuyerData(
+			@PathParam("building_ids") String buildingIds
+			) {
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		List<ProjectData> projectDatas = builderDetailsDAO.getBuyerLists(buildingIds);
+		return projectDatas;
 	}
 }

@@ -118,7 +118,7 @@
                     <li> <a href="${baseUrl }/builder/inbox/inbox.jsp">Inbox</a></li>
                       <li> <a href="${baseUrl }/builder/datanalytics/data_analytics.jsp">Data Analytics</a></li>
                      <li> <a href="${baseUrl }/builder/sales/source.jsp">Add Source</a></li>
-                     
+                      <li> <a href="${baseUrl }/builder/campaign/newcampaign.jsp">New Campaign</a></li>
                 </ul>
            </li>
            <%} %>

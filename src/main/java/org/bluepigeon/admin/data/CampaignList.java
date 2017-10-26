@@ -6,7 +6,7 @@ public class CampaignList {
 	private int campaignId;
 	private String title;
 	private Date setDate;
-	private int campaignType;
+	private String campaignType;
 	public int getCampaignId() {
 		return campaignId;
 	}
@@ -25,10 +25,10 @@ public class CampaignList {
 	public void setSetDate(Date setDate) {
 		this.setDate = setDate;
 	}
-	public int getCampaignType() {
+	public String getCampaignType() {
 		return campaignType;
 	}
-	public void setCampaignType(int campaignType) {
+	public void setCampaignType(String campaignType) {
 		this.campaignType = campaignType;
 	}
 	
