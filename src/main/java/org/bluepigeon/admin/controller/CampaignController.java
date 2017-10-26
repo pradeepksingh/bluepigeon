@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -17,12 +18,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.CampaignDAO;
 import org.bluepigeon.admin.dao.ProjectDAO;
+import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuyerBuildingList;
 import org.bluepigeon.admin.data.BuyerFlatList;
 import org.bluepigeon.admin.data.BuyerProjectList;
+import org.bluepigeon.admin.data.CityData;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AdminUser;
 import org.bluepigeon.admin.model.Builder;
@@ -365,5 +369,15 @@ public class CampaignController {
 					msg.setMessage("Please Select Recipients Name");
 				}
 				return msg;
+	}
+	
+	@POST
+	@Path("/filter/project")
+	@Produces(MediaType.APPLICATION_JSON)
+	public CityData getProjectsByBuilderEmployee(
+			@FormParam("project_id") int projectId
+			){
+		
+		return new CampaignDAO().getCityLocalityName(projectId);
 	}
 }

@@ -8,6 +8,7 @@ import org.bluepigeon.admin.data.BuyerFlatList;
 import org.bluepigeon.admin.data.BuyerProjectList;
 import org.bluepigeon.admin.data.CampaignList;
 import org.bluepigeon.admin.data.CampaignListNew;
+import org.bluepigeon.admin.data.CityData;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -437,7 +438,19 @@ public class CampaignDAO {
 		}
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
-		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(CampaignListNew.class));
+		Query query = session.createSQLQuery(hql)
+				.addScalar("id", IntegerType.INSTANCE)
+				.addScalar("projectId", IntegerType.INSTANCE)
+				.addScalar("leads", LongType.INSTANCE)
+				.addScalar("booking", LongType.INSTANCE)
+	            .addScalar("title", StringType.INSTANCE)
+	            .addScalar("content", StringType.INSTANCE)
+	            .addScalar("terms", StringType.INSTANCE)
+	            .addScalar("image", StringType.INSTANCE)
+	            .addScalar("name", StringType.INSTANCE)
+	            .addScalar("startDate", DateType.INSTANCE)
+	            .addScalar("endDate", DateType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(CampaignListNew.class));
 		List<CampaignListNew> result = query.list();
 		session.close();
 		return result;
@@ -477,6 +490,21 @@ public class CampaignDAO {
 		Query query = session.createQuery(hql);
 		List<BuilderProject> builderProject = query.list();
 		return builderProject.get(0);
+	}
+	
+	public CityData getCityLocalityName(int projectId){
+		String hql = "SELECT a.id as id, a.locality_name as localityName,b.name as name,b.id as cityId from builder_project as a join city as b on b.id=a.city_id where a.id="+projectId;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql)
+				.addScalar("id", IntegerType.INSTANCE)
+				.addScalar("cityId", IntegerType.INSTANCE)
+	            .addScalar("localityName", StringType.INSTANCE)
+	            .addScalar("name", StringType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(CityData.class));
+		List<CityData> result = query.list();
+		session.close();
+		return result.get(0);
 	}
 	
 }

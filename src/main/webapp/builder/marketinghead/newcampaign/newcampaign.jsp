@@ -271,40 +271,39 @@ Date date = new Date();
 <div id="sidebar1"> 
    <%@include file="../../partial/footer.jsp"%>
 </div> 
-  </body>
+</body>
 </html>
 <script src="//oss.maxcdn.com/momentjs/2.8.2/moment.min.js"></script>
 <!--  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
-   <script src="../../js/bootstrap-datepicker.min.js"></script>
-     <script>
-     $('#start_date').datepicker({
-    		autoclose:true,
-    		format: "dd M yyyy"
-    	}).on('change',function(e){
-    		 $('#addcampaign').data('bootstrapValidator').revalidateField('start_date');
-    	});
-     $('#end_date').datepicker({
- 		autoclose:true,
- 		format: "dd M yyyy"
- 	}).on('change',function(e){
- 		 $('#addcampaign').data('bootstrapValidator').revalidateField('end_date');
- 	});
-  
-	  jQuery(function($) {
-		  $('input[type="file"]').change(function() {
-		    if ($(this).val()) {
-			    error = false;
-		    
-		      var filename = $(this).val();
+<script src="../../js/bootstrap-datepicker.min.js"></script>
+<script>
+$('#start_date').datepicker({
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	$('#addcampaign').data('bootstrapValidator').revalidateField('start_date');
+});
+$('#end_date').datepicker({
+	autoclose:true,
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#addcampaign').data('bootstrapValidator').revalidateField('end_date');
+});
+jQuery(function($) {
+  $('input[type="file"]').change(function() {
+    if ($(this).val()) {
+	    error = false;
+    
+      var filename = $(this).val();
 
-					$(this).closest('.file-upload').find('.file-name').html(filename);
+			$(this).closest('.file-upload').find('.file-name').html(filename);
 
-		      if (error) {
-		        parent.addClass('error').prepend.after('<div class="alert alert-error">' + error + '</div>');
-		      }
-		    }
-		  });
-		});
+      if (error) {
+        parent.addClass('error').prepend.after('<div class="alert alert-error">' + error + '</div>');
+      }
+    }
+  });
+});
 
  $('#user_type').multiselect({
      columns: 1,

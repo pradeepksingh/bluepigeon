@@ -115,18 +115,17 @@ Date date = new Date();
 				                        </div>
 				                        <h3 class="center-tag">
 				                           <% if(campaign.getContent() != null && campaign.getContent() != "")out.print(campaign.getContent()); %> <BR>
-				                           <span>on your next booking</span>
 										</h3>
 				                        <div class="col-md-5 col-sm-5 col-xs-5 right">
 					                       <div class="right">
 					                       <% if(campaign.getEndDate() != null){
 				                       		   	if(date.after(campaign.getEndDate())){ %>
-					                          		<img src="../images/red.png" alt="inactive" class="icon"/>
+					                          		<img src="../images/red.png" alt="inactive" title="inactive" class="icon"/>
 					                          	<% } else { %>
-					                          		<img src="../images/green.png" alt="active" class="icon"/>
+					                          		<img src="../images/green.png" alt="active" title="active" class="icon"/>
 					                          	<% } %>
 					                       	<% } else { %>
-					                       		<img src="../images/green.png" alt="active" class="icon"/>
+					                       		<img src="../images/green.png" alt="active" title="active" class="icon"/>
 					                       	<% } %>
 					                        </div>
 						                    <div class="bottom">

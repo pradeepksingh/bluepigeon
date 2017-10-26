@@ -19,7 +19,7 @@
 			builder_new  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_new_id = builder_new.getId();
 			emp_access_id = builder_new.getBuilderEmployeeAccessType().getId();
-			 if(builder_new != null){
+				if(builder_new != null){
 %>
 <div class="navbar-default sidebar" role="navigation">
 	<div class="sidebar-nav navbar-collapse slimscrollsidebar">
@@ -118,6 +118,7 @@
                     <li> <a href="${baseUrl }/builder/inbox/inbox.jsp">Inbox</a></li>
                       <li> <a href="${baseUrl }/builder/datanalytics/data_analytics.jsp">Data Analytics</a></li>
                      <li> <a href="${baseUrl }/builder/sales/source.jsp">Add Source</a></li>
+                      <li> <a href="${baseUrl }/builder/campaign/campaignlist.jsp">Campaign List</a></li>
                       <li> <a href="${baseUrl }/builder/campaign/newcampaign.jsp">New Campaign</a></li>
                 </ul>
            </li>

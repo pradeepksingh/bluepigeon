@@ -2267,12 +2267,13 @@ public class BuilderDetailsDAO {
 		
 		public List<ProjectData> getBuyerLists(String buildingIds){		
 			HibernateUtil hibernateUtil = new HibernateUtil();
-			String hql="SELECT CONCAT(a.id,',',1) as value,a.name as name, 1 as typeId FROM buyer as a WHERE a.building_id in("+buildingIds+") and a.is_primary=1 and a.is_deleted=0";
+			String hql="SELECT a.project_id as id, CONCAT(a.id,'',1) as value,a.name as name, 1 as typeId FROM buyer as a WHERE a.building_id in("+buildingIds+") and a.is_primary=1 and a.is_deleted=0";
 			Session session = hibernateUtil.getSessionFactory().openSession();
 			Query query = session.createSQLQuery(hql).
 					addScalar("value",IntegerType.INSTANCE).
 					addScalar("name", StringType.INSTANCE).
 					addScalar("typeId",IntegerType.INSTANCE).
+					addScalar("id",IntegerType.INSTANCE).
 					setResultTransformer(Transformers.aliasToBean(ProjectData.class));
 			List<ProjectData> result = query.list();
 			System.err.println(hql);

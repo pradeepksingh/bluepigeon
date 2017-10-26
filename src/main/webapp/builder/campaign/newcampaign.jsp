@@ -96,7 +96,7 @@ Date date = new Date();
                <!-- row -->
                <div class="white-box">
                <div class="bg11">
-                   <form class="addlead1" id="addcampaign" name="addcampaign">
+                   <form class="addlead1" id="addcampaign" name="addcampaign" action="" method="post" enctype="multipart/form-data">
                    		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
                      	<input type="hidden" id="project_id" name="project_id" value=""/>
                      	<input type="hidden" id="city_id" name="city_id" value=""/>
@@ -120,7 +120,7 @@ Date date = new Date();
 								  <div class="form-group row">
 									 <label for="example-search-input" class="col-sm-5 col-form-label">City</label>
 										<div class="col-sm-7">
-										   <input class="form-control  form-control1" type="text" name="city_id" id="city_id" placeholder="Pune">
+										   <input class="form-control  form-control1" type="text" name="city_name" id="city_name" placeholder="Pune">
 										 </div>
 								    </div>
 		                            <div class="form-group row">
@@ -145,7 +145,7 @@ Date date = new Date();
 							           <label for="example-tel-input" class="col-sm-5 col-form-label">Start Date</label>
 								         <div class="col-sm-7">
 								         	<div>
-												<input type="text" id="start_camp_date" name="start_camp_date">
+												<input type="text" id="start_date" name="start_date">
 										    </div>
 											<div class="messageContainer"></div>
 		 								</div>
@@ -182,7 +182,7 @@ Date date = new Date();
 											<div class="file-upload">
 										   		<p class="file-name"> text.png </p>
 										    	<label for="uploadfile" class="btn">Choose File</label>
-										   		<input type="file" id="uploadfile" name="uploadfile[]">
+										   		<input type="file" id="uploadfile" name="uploadimg[]">
 											</div>
 									  	</div>
 								    </div>
@@ -190,7 +190,7 @@ Date date = new Date();
 										<label for="example-text-input" class="col-sm-5 col-form-label"> End Date</label>
 									 	<div class="col-sm-7">
 									  		<div>
-												<input type="text" id="end_camp_date" name="end_camp_date">
+												<input type="text" id="end_date" name="end_date">
 											</div>
 											<div class="messageContainer"></div>
 										</div>
@@ -205,8 +205,9 @@ Date date = new Date();
 							</div>
 								<!-- collapse starts-->
 						    <div id="demo" class="collapse preview">
-						      <div class="image">
-			                       <img src="../plugins/images/Untitled-1.png" alt="Project image">
+						      <div class="image" id="campimg">
+<!-- 			                       <img id="blah" src="../plugins/images/Untitled-1.png" alt="Project image"> -->
+			                        <img id="blah" src="#" alt="Project image">
 			                       <div class="overlay">
 				                       <div class="row">
 					                       <div class="col-md-6 col-sm-9 col-xs-9 left">
@@ -225,7 +226,7 @@ Date date = new Date();
 					                        <div class="col-md-6 col-sm-3 col-xs-3 right">
 						                       <div class="right">
 						                            <button type="button" class="close" data-dismiss="modal">
-			                                           <img src="../images/error.png" alt="close" class="close-img">
+			                                           <img id="closeimg" src="../images/error.png" alt="close" class="close-img">
 			                                         </button>
 						                        </div>
 					                       </div>
@@ -332,10 +333,16 @@ Date date = new Date();
 $select_project = $("#filter_project_id").selectize({
 	persist: false,
 	 onChange: function(value) {
-			ajaxindicatorstart("Loading...");
-		 $.post("${baseUrl}/webapi/campaign/filter/project",{project_id: value},function(data){
-				 ajaxindicatorstop();
-		});
+		if(value != "" && value > 0){
+			ajaxindicatorstart("Please wait, while Loading...");
+			 $.post("${baseUrl}/webapi/campaign/filter/project",{project_id: value},function(data){
+				 	$("#city_name").val(data.name);
+				 	$("#locality_name").val(data.localityName);
+				 	$("#project_id").val(data.id);
+				 	$("#city_id").val(data.cityId);
+					 ajaxindicatorstop();
+			});
+		}
 	 },
 	 onDropdownOpen: function(value){
     	 var obj = $(this);
@@ -345,17 +352,17 @@ $select_project = $("#filter_project_id").selectize({
     	 }
      }
 });
-$('#start_camp_date').datepicker({
+$('#start_date').datepicker({
 	autoclose:true,
 	format: "dd M yyyy"
 }).on('change',function(e){
-	 $('#addcampaign').data('bootstrapValidator').revalidateField('start_camp_date');
+	 $('#addcampaign').data('bootstrapValidator').revalidateField('start_date');
 });
-$('#end_camp_date').datepicker({
+$('#end_date').datepicker({
 	autoclose:true,
 	format: "dd M yyyy"
 }).on('change',function(e){
-	 $('#addcampaign').data('bootstrapValidator').revalidateField('end_camp_date');
+	 $('#addcampaign').data('bootstrapValidator').revalidateField('end_date');
 });
 jQuery(function($) {
 	$('input[type="file"]').change(function() {
@@ -556,7 +563,7 @@ $('#addcampaign').bootstrapValidator({
            		}
            	}
            },
-           start_camp_date: {
+           start_date: {
                validators: {
                    callback: {
                        message: 'Wrong Campaign Start Date',
@@ -571,7 +578,7 @@ $('#addcampaign').bootstrapValidator({
                    }
                }
            },
-           end_camp_date: {
+           end_date: {
                validators: {
                    callback: {
                        message: 'Wrong Campaign End Date',
@@ -642,7 +649,6 @@ $('#addcampaign').bootstrapValidator({
    	saveCampaign();
 }).on('error.form.bv', function(event,data) {
    	// Prevent form submission
-   	alert("Hello");
    	event.preventDefault();
 });
 	 
@@ -677,6 +683,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
+        window.location.href="${baseUrl}/builder/campaign/campaignlist.jsp";
   	}
 }
 	    
@@ -694,5 +701,25 @@ $(".todolist").keyup(function(event){
 	if(txtval.substr(txtval.length - 1) == '\n'){
 		document.getElementById('tc').value = txtval.substring(0,txtval.length - 1);
 	}
+});
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#blah').attr('src', e.target.result);
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+$("#uploadfile").change(function(){
+    readURL(this);
+});
+
+$("#closeimg").click(function(){
+	$("#demo").removeClass('co')
 });
   </script>
