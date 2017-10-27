@@ -20,12 +20,7 @@ if(session!=null)
 		session_id = builder.getBuilder().getId();
 		access_id = builder.getBuilderEmployeeAccessType().getId();
 		if(session_id > 0){
-			if (request.getParameterMap().containsKey("project_id")) {
-				projectId = Integer.parseInt(request.getParameter("project_id"));
-				if(projectId != 0) {
-					campaignLists = new CampaignDAO().getMyCampaignsByProjectId(projectId);
-				}
-			}
+			campaignLists = new CampaignDAO().getMyAssignedProjectCampaigns(builder);
 		}
 	}
 
@@ -41,21 +36,22 @@ Date date = new Date();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="../../plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
-    <link href="../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
     <!-- Menu CSS -->
-    <link href="../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+    <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../../css/style.css" rel="stylesheet">
-    <link href="../../css/common.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/common.css" rel="stylesheet">
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../../css/projectheadcampaign.css">
-    <link href="../../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../css/projectheadcampaign.css">
+    <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
-    <script src="../../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<!--     <script src="../bootstrap/dist/js/bootstrap-3.3.7.min.js"></script> -->
 </head>
 
 <body class="fix-sidebar">
@@ -66,26 +62,19 @@ Date date = new Date();
     <div id="wrapper">
         <!-- Top Navigation -->
        	<div id="header">
-        <%@include file="../../partial/header.jsp"%>
+        <%@include file="../partial/header.jsp"%>
         </div>
         <!-- End Top Navigation -->
         <!-- Left navbar-header -->
         <div id="sidebar1"> 
-        <%@include file="../../partial/sidebar.jsp"%>
+        <%@include file="../partial/sidebar.jsp"%>
         </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
-        <div id="page-wrapper">
+        <div id="page-wrapper" style="min-height: 2038px;">
            <div class="container-fluid">
                <!-- /.row -->
-	                <div class="row bspace">
-		                <div class="col-md-3 col-sm-3 col-lg-3">
-		                    <button type="button" id="marketing_campaign" class="btn11 btn-submit waves-effect waves-light m-t-10" id="project_status_btn">Campaign</button>
-		                </div>
-		                 <div class="col-md-3 col-sm-3 col-lg-3">
-		                    <button type="button" id="marketing_newcampaign" class="btn11 btn-info waves-effect waves-light m-t-10" id="inventory_btn">New Campaign +</button>
-		                 </div>
-	                </div>
+	                <div class="row"></div>
                <!-- row -->
                <!-- row -->
                <div class="white-box">
@@ -113,23 +102,23 @@ Date date = new Date();
 					                       <div class="right">
 					                       <% if(campaign.getEndDate() != null){
 				                       		   	if(date.after(campaign.getEndDate())){ %>
-					                          		<img src="../../images/red.png" alt="inactive" title="inactive" class="icon"/>
+					                          		<img src="../images/red.png" alt="inactive" title="inactive" class="icon"/>
 					                          	<% } else { %>
-					                          		<img src="../../images/green.png" alt="active" title="active" class="icon"/>
+					                          		<img src="../images/green.png" alt="active" title="active" class="icon"/>
 					                          	<% } %>
 					                       	<% } else { %>
-					                       		<img src="../../images/green.png" alt="active" title="active" class="icon"/>
+					                       		<img src="../images/green.png" alt="active" title="active" class="icon"/>
 					                       	<% } %>
 					                        </div>
 						                    <div class="bottom">
 						                       <div class="row">
 						                          <div class="col-xs-6">
-						                      		<img src="../../images/key.png" alt="cancle" class="icon"/>
+						                      		<img src="../images/key.png" alt="cancle" class="icon"/>
 						                      		<span class="span-style">BOOKED</span>
 						                      		<h4><% out.print(campaign.getBooking()); %></h4>
 						                          </div>
 						                          <div class="col-xs-6">
-								                      <img src="../../images/click.png" alt="cancle" class="icon"/>
+								                      <img src="../images/click.png" alt="cancle" class="icon"/>
 								                      <span class="span-style">LEADS</span>
 						                      		 <h4><% out.print(campaign.getLeads()); %></h4>
 						                          </div>
@@ -149,7 +138,7 @@ Date date = new Date();
          </div>
       </div>
   	  <div id="sidebar1"> 
-	     <%@include file="../../partial/footer.jsp"%>
+	     <%@include file="../partial/footer.jsp"%>
 	  </div> 
   </body>
 </html>
@@ -172,10 +161,4 @@ function openTermsModal(tc) {
 	$("#myterms_popup").html(tc);
 	$("#myCampainTermsModal").modal('show');
 }
-$("#marketing_newcampaign").click(function(){
-	ajaxindicatorstart("Please wait while.. we load ...");
-	window.location.href="${baseUrl}/builder/marketinghead/newcampaign/newcampaign.jsp?project_id=<% out.print(projectId);%>";
-});
-
 </script>
-

@@ -72,7 +72,6 @@ public class BuilderController {
 		return projectDAO.getBuildingByProjectId(project_id);
 	}
 
-	
 	@POST
 	@Path("/building/update")
 	@Produces(MediaType.APPLICATION_JSON)
