@@ -211,18 +211,15 @@ Date date = new Date();
 			                       <div class="overlay">
 				                       <div class="row">
 					                       <div class="col-md-6 col-sm-9 col-xs-9 left">
-						                       <h3>Rohan Lehare</h3>
+						                       <h3 id="cprojectname"></h3>
 						                        <br>
 							                    <div class="bottom">
 							                      <h4><span>T&amp;C</span></h4>
 							                      <h6>Duration</h6>
-							                      <h4>22 July 2017 to till date</h4>
+							                      <h4 id="campdate"></h4>
 							                    </div>
 					                        </div>
-					                        <h3 class="center-tag">
-					                           Get MARUTI SUZUKI FREE <br>
-					                           <span>on your next booking</span>
-											</h3>
+					                        <h3 class="center-tag" id="camptitle"></h3>
 					                        <div class="col-md-6 col-sm-3 col-xs-3 right">
 						                       <div class="right">
 						                            <button type="button" class="close" data-dismiss="modal">
@@ -718,8 +715,25 @@ function readURL(input) {
 $("#uploadfile").change(function(){
     readURL(this);
 });
+var inputBox = document.getElementById('title');
 
-$("#closeimg").click(function(){
-	$("#demo").removeClass('co')
+inputBox.onkeyup = function(){
+    document.getElementById('camptitle').innerHTML = inputBox.value;
+}
+
+$("#start_date").on('change',function(){
+	if($(this).val() != "" && $("#end_date").val() !=""){
+		document.getElementById('campdate').innerHTML = $(this).val()+" to "+$("#end_date").val();
+	}else if($(this).val() != "" && $("#end_date").val() ==""){
+		document.getElementById('campdate').innerHTML =$(this).val()+" to till date";
+	}
 });
-  </script>
+$("#end_date").on('change',function(){
+	if( $("#start_date").val() != "" && $(this).val() !=""){
+		document.getElementById('campdate').innerHTML = $("#start_date").val()+" to "+$(this).val();
+	}else if($("#start_date").val() != "" && $(this).val() ==""){
+		document.getElementById('campdate').innerHTML =$(this).val()+" to till date";
+	}
+});
+document.getElementById('cprojectname').innerHTML = $("#filter_project_id :selected").text();
+</script>

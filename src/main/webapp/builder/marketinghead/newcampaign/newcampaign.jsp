@@ -156,25 +156,23 @@ Date date = new Date();
 					 	         <button type="button" href="#demo" data-toggle="collapse"> 
  								    Preview
  								 </button>
+<!--  								  <a href="#demo" class="btn11 apadding" data-toggle="collapse"> Preview </a> -->
 					 	        <button type="button" data-toggle="modal" data-target="#myModal">Recipients +</button>
 					 	        <div class="smallsection">
 					 	           <div id="demo" class="collapse">
 					 	             <div class="projectsection">
-	                                    <div class="image">
-		                                   <img src="../../plugins/images/Untitled-1.png" alt="Project image">
+	                                    <div class="image" id="campimg">
+		                                   <img id="blah" src="#" alt="Project image">
 		                                   <div class="overlay">
 					                          <div class="row">
 						                          <div class="col-md-10 col-sm-10 col-xs-10">
-						                              <h3>Park Royale, Pimple Saudagar, Pune</h3>
+						                              <h3><%out.print(projectName); %></h3>
 							                       </div>
 							                        <div class="col-md-2 col-sm-2 col-xs-2">
-							                          <img src="../../images/error.png" alt="cancle" class="icon1 close1">
+							                          <img id="closeimg" src="../../images/error.png" alt="cancle" class="icon1 close1">
 							                        </div>
 						                        </div>
-						                        <h3 class="center-tag"><br>
-						                           Get MARUTI SUZUKI FREE <br>
-						                           <span>on your next booking</span>
-												</h3>
+						                        <h3 class="center-tag" id="camptitle"></h3>
 					                        </div>
 	                           			 </div>
 				                       </div>
@@ -461,8 +459,8 @@ function getBuyerList(element){
 		 ajaxindicatorstart("Please wait, while loading...");
 		 $.get("${baseUrl}/webapi/builder/buyer/data/"+building_ids,{},function(data){
 			 if(data != ""){
-					 $('#buyer_ids').multiselect('loadOptions',data);
-			    	 $('#buyer_ids').multiselect('reload');
+				$('#buyer_ids').multiselect('loadOptions',data);
+		    	$('#buyer_ids').multiselect('reload');
 		 	}else{
 			 alert("Sorry No data found");
 		 	}
@@ -642,4 +640,24 @@ function getBuyerList(element){
     		document.getElementById('tc').value = txtval.substring(0,txtval.length - 1);
     	}
     });
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#blah').attr('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#uploadBtn").change(function(){
+        readURL(this);
+    });
+    var inputBox = document.getElementById('title');
+
+    inputBox.onkeyup = function(){
+        document.getElementById('camptitle').innerHTML = inputBox.value;
+    }
 </Script>
