@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import org.bluepigeon.admin.dao.AgreementDAO;
 import org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
+import org.bluepigeon.admin.dao.CampaignDAO;
 import org.bluepigeon.admin.dao.DemandLettersDAO;
 import org.bluepigeon.admin.dao.PossessionDAO;
 import org.bluepigeon.admin.dao.ProjectDAO;
@@ -2217,6 +2218,36 @@ public class BuyerController {
 			//resp.setMessage("Fail to add buyer's documenmt. Please select at leat one document..");
 		}
 		return resp;
+	}
+	
+	@GET
+	@Path("/gendoc/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteGeneralDocument(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		BuyerDAO buyerDAO = new BuyerDAO();
+		msg = buyerDAO.deleteDocumentById(id);
+		return msg;
+	}
+	
+	@GET
+	@Path("/demanddoc/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteDemandDocument(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		BuyerDAO buyerDAO = new BuyerDAO();
+		msg = buyerDAO.deleteDocumentById(id);
+		return msg;
+	}
+	
+	@GET
+	@Path("/paymentdoc/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deletePaymentDocument(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		BuyerDAO buyerDAO = new BuyerDAO();
+		msg = buyerDAO.deleteDocumentById(id);
+		return msg;
 	}
 }
 	

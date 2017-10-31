@@ -220,22 +220,22 @@ border-radius: 5px;}
                		<div class="row clearfix">
 			    		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                       		<div class="button-demo">
-                                <button type="button" class="btn btn-success waves-effect" style="width: 100%; ">DOCUMENT</button>
+                                <button type="button" id="postsaledocument" class="btn btn-success waves-effect" style="width: 100%; ">DOCUMENT</button>
 							</div>
                 		</div>
                 		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                      		<div class="button-demo">
-                                <button type="button" class="btn btn-default waves-effect" style="width: 100%;font-size:20px">PAYMENT STATUS</button>
+                                <button type="button" id="postsalepaymentstatus" class="btn btn-default waves-effect" style="width: 100%;font-size:20px">PAYMENT STATUS</button>
 							</div>
                 		</div>
 				 		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                       		<div class="button-demo">
-                                <button type="button" class="btn btn-default waves-effect" style="width: 100%;font-size:20px">PROJECT STATUS</button>
+                                <button type="button" id="postsaleprojectstatus" class="btn btn-default waves-effect" style="width: 100%;font-size:20px">PROJECT STATUS</button>
 							</div>
                 		</div>
 				 		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                       		<div class="button-demo">
-                                <button type="button" class="btn btn-default waves-effect" style="width: 100%;font-size:20px">POSSESSION</button>
+                                <button type="button" id="postsalepossession" class="btn btn-default waves-effect" style="width: 100%;font-size:20px">POSSESSION</button>
 							</div>
                 		</div>
             		</div>
@@ -270,7 +270,9 @@ border-radius: 5px;}
 							  					%>
 							  					<ul >
 								   					<li  class="col-lg-4 col-xs-12" style="list-style: none;">
-								    					<a href=""><img src="../../../images/docpdf.png" alt="User" width="150px"/></a>
+								    					<a href="javascript:deleteGenDocument(<%out.print(buyerUploadDocuments2.getId());%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
+														<br/>
+														<img src="../../../images/docpdf.png" alt="User" width="150px"/>
 														<br/><h5><% out.print(buyerUploadDocuments2.getName());%></h5>
 								   					</li>
 								   				</ul>
@@ -293,7 +295,9 @@ border-radius: 5px;}
 							  				%>
 							  				<ul>
 							   					<li  class="col-lg-4 col-xs-12" style="list-style: none;">
-							    					<a href=""><img src="../../../images/docpdf.png" alt="User" width="150px"/></a>
+							    					<a href="javascript:deleteDemandDocument(<%out.print(buyerUploadDocuments2.getId());%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
+													<br/>
+													<img src="../../../images/docpdf.png" alt="User" width="150px"/>
 													<br/><h5><% out.print(buyerUploadDocuments2.getName());%></h5>
 							   					</li>
 							   				</ul>
@@ -321,7 +325,9 @@ border-radius: 5px;}
 							  				%>
 							  					<ul>
 								   					<li  class="col-lg-4 col-xs-12" style="list-style: none;">
-								    					<a href=""><img src="../../../images/docpdf.png" alt="User" width="150px"/></a>
+								    					<a href="javascript:deletePaymentDocument(<%out.print(buyerUploadDocuments2.getId());%>)"><img src="../../../images/error.png" alt="User" width="35px"style="margin-left:108px;" /></a>
+														<br/>
+														<img src="../../../images/docpdf.png" alt="User" width="150px"/>
 														<br/><h5><%out.print(buyerUploadDocuments2.getName());%></h5>
 								   					</li>
 								   				</ul>
@@ -801,9 +807,9 @@ function savePaymentDoc(){
 	}
 
 function showAddPaymentDocumentRequest(formData, jqForm, options){
-$("#paymentresponse").hide();
+	$("#paymentresponse").hide();
 	var queryString = $.param(formData);
-return true;
+	return true;
 }
 	
 function showAddPaymentDocumentResponse(resp, statusText, xhr, $form){
@@ -906,7 +912,6 @@ function showPriceResponse(resp, statusText, xhr, $form){
         $("#pricingresponse").show();
         alert(resp.message);
         ajaxindicatorstop();
-      //  window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
         $.get('${baseUrl}/builder/postsale/buyerlist/document/partialinbox.jsp?emp_id=<% out.print(empId);%>',{},function(data) {
 	    	$("#replymsg").html(data);
 	    	ajaxindicatorstop();
@@ -914,13 +919,11 @@ function showPriceResponse(resp, statusText, xhr, $form){
   	}
 }
 
-
 function getInboxMsg(id){
-//	$("#message").empty();
+	$("#replymessagemodal").empty();
 	var replymsg = '';
 	ajaxindicatorstart("Loading...");
 	$.post("${baseUrl}/webapi/builder/inbox/reply",{id: id},function(data){
-		alert(data.message);
 		replymsg = '<span onclick="document.getElementById(message).style.display=none" class="close" title="Close Modal">×</span>'
 				+'<form class="modal-content animate" action="" method="post" id="addnewreply" name="addnewreply"  enctype="multipart/form-data">'
 				+'<input type="hidden" id="emp_id" name="emp_id" value="'+data.empId+'" />'
@@ -972,11 +975,8 @@ function getInboxMsg(id){
 		 		+'</div>'
 		 		+'</div>'
 		 		+'</form>';
-		 	
     		$("#replymessagemodal").append(replymsg);
-    		
 			 ajaxindicatorstop();
-			
 			 $('#addnewreply').bootstrapValidator({
 				container: function($field, validator) {
 					return $field.parent().next('.messageContainer');
@@ -1011,9 +1011,7 @@ function getInboxMsg(id){
 			}).on('success.form.bv', function(event,data) {
 					// Prevent form submission
 				event.preventDefault();
-					
 				addReply();
-					
 			}).on('error.form.bv',function(event,data){
 					event.preventDefault();
 					alert("Error during submit data");
@@ -1062,5 +1060,57 @@ function showReplyResponse(resp, statusText, xhr, $form){
         //window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
   	}
 }
+
+function deleteGenDocument(id) {
+
+	var flag = confirm("Are you sure ? You want to delete this document ?");
+ 	if(flag) {
+ 		ajaxindicatorstart("Loading...");
+ 		$.get("${baseUrl}/webapi/buyer/gendoc/delete/"+id, { }, function(data){
+ 			alert(data.message);
+ 			if(data.status == 1) {
+ 				$.get('${baseUrl}/builder/postsale/buyerlist/document/partialgendoc.jsp?buyer_id=<% out.print(primary_buyer_id);%>',{},function(data) {
+ 		   	    	$("#gendocupload").html(data);
+ 		   	    	ajaxindicatorstop();
+ 		   	    },'html');
+ 			}
+ 		});
+ 	}
+ }
+function deleteDemandDocument(id) {
+ 	var flag = confirm("Are you sure ? You want to delete this document ?");
+ 	if(flag) {
+ 		ajaxindicatorstart("Loading...");
+ 		$.get("${baseUrl}/webapi/buyer/demanddoc/delete/"+id, { }, function(data){
+ 			alert(data.message);
+ 			if(data.status == 1) {
+ 				$.get('${baseUrl}/builder/postsale/buyerlist/document/partialdemanddoc.jsp?buyer_id=<% out.print(primary_buyer_id);%>',{},function(data) {
+ 		   	    	$("#demanddocupload").html(data);
+ 		   	    	ajaxindicatorstop();
+ 		   	    },'html');
+ 			}
+ 		});
+ 	}
+ }
+function deletePaymentDocument(id) {
+	
+ 	var flag = confirm("Are you sure ? You want to delete this document ?");
+ 	if(flag) {
+ 		ajaxindicatorstart("Loading...");
+ 		$.get("${baseUrl}/webapi/buyer/paymentdoc/delete/"+id, { }, function(data){
+ 			alert(data.message);
+ 			if(data.status == 1) {
+ 				$.get('${baseUrl}/builder/postsale/buyerlist/document/partialpaymentdoc.jsp?buyer_id=<% out.print(primary_buyer_id);%>',{},function(data) {
+ 			    	$("#paymentdocupload").html(data);
+ 			    	ajaxindicatorstop();
+ 				},'html');
+ 			}
+ 		});
+ 	}
+ }
+ 
+ $("#postsalepaymentstatus").click(function(){
+	window.location.href = "${baseUrl}/builder/postsale/buyerlist/paymentstatus/paymentstatus.jsp?flat_id=<%out.print(flat_id);%>";
+ });
 </script>
     

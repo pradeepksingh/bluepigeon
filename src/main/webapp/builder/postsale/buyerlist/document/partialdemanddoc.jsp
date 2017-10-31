@@ -36,7 +36,7 @@
 %>
 <ul>
 	<li  class="col-lg-4 col-xs-12" style="list-style: none;">
-		<a href=""><img src="../../../images/docpdf.png" alt="User" width="150px"/></a>
+		<a href="javascript:deleteDemandDocument(<%out.print(buyerUploadDocuments2.getId());%>)"><img src="../../../images/docpdf.png" alt="User" width="150px"/></a>
 		<br/><h5><%out.print(buyerUploadDocuments2.getName());%></h5>
 	</li>
 </ul>

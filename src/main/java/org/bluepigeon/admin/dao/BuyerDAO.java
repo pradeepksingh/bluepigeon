@@ -1362,5 +1362,20 @@ public class BuyerDAO {
 				return json;
 			}
 	 }
+	 public ResponseMessage deleteDocumentById(int id){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		ResponseMessage responseMessage = new ResponseMessage(); 
+		String delete_project_type = "DELETE from BuyerUploadDocuments where id = :id";
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		Query smdelete = newsession.createQuery(delete_project_type);
+		smdelete.setParameter("id", id);
+		smdelete.executeUpdate();
+		newsession.getTransaction().commit();
+		newsession.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Document deleted successfully");
+		return responseMessage;
+	 }
 	 
 }
