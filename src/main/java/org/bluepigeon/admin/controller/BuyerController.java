@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import org.bluepigeon.admin.dao.AgreementDAO;
 import org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
+import org.bluepigeon.admin.dao.CampaignDAO;
 import org.bluepigeon.admin.dao.DemandLettersDAO;
 import org.bluepigeon.admin.dao.PossessionDAO;
 import org.bluepigeon.admin.dao.ProjectDAO;
@@ -2153,6 +2154,100 @@ public class BuyerController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<FlatData> getFlatPayment(@PathParam("flat_id") int flat_id) {
 		return new BuyerDAO().getBuilderProjectBuildingFlats(flat_id);
+	}
+	
+	@POST
+	@Path("/update/gendoc")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateBuyerGenUploadDoc (
+			@FormDataParam("buyer_id") int buyer_id,
+			@FormDataParam("doc_type") int doctype,
+			@FormDataParam("doc_id[]") List<FormDataBodyPart> doc_id,
+			@FormDataParam("doc_name[]") List<FormDataBodyPart> doc_name,
+			@FormDataParam("doc_url[]") List<FormDataBodyPart> doc_url
+	){
+			ResponseMessage resp = new ResponseMessage();
+		 Buyer primaryBuyer = new Buyer();
+		 BuyerDAO buyerDAO = new BuyerDAO();
+		 if(buyer_id > 0){
+			 primaryBuyer.setId(buyer_id);
+		 }
+			 
+		try {
+			List<BuyerUploadDocuments> buyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
+			List<BuyerUploadDocuments> newbuyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
+			int i = 0;
+			for(FormDataBodyPart title : doc_name)
+			{
+				BuyerUploadDocuments buDocuments = new BuyerUploadDocuments();
+				if(doc_url.get(i).getFormDataContentDisposition().getFileName() != null && !doc_url.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+					String gallery_name = doc_url.get(i).getFormDataContentDisposition().getFileName();
+					long millis = System.currentTimeMillis() % 1000;
+					gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+					gallery_name = "images/project/buyer/docs/"+gallery_name;
+					String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+					this.imageUploader.writeToFile(doc_url.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+					buDocuments.setDocUrl(gallery_name);
+					buDocuments.setBuyer(primaryBuyer);
+					buDocuments.setDocType(doctype);
+					if(doc_id.get(i).getValueAs(Integer.class) != 0) {
+						buDocuments.setId(doc_id.get(i).getValueAs(Integer.class));
+					}
+					buDocuments.setName(doc_name.get(i).getValueAs(String.class).toString());
+					buDocuments.setBuilderdoc(true);
+					buDocuments.setUploadedDate(new Date());
+					if(doc_id.get(i).getValueAs(Integer.class) != 0) {
+						buyerUploadDocuments.add(buDocuments);
+					} else {
+						newbuyerUploadDocuments.add(buDocuments);
+					}
+				}
+				i++;
+			}
+			if(buyerUploadDocuments.size() > 0) {
+				resp = buyerDAO.updateBuyerUploadDocuments(buyerUploadDocuments);
+			}
+			if(newbuyerUploadDocuments.size() > 0) {
+				resp = buyerDAO.saveBuyerUploadDouments(newbuyerUploadDocuments);
+			}
+		} catch(Exception e) {
+			//exception
+			//e.printStackTrace();
+		//	resp.setStatus(0);
+			//resp.setMessage("Fail to add buyer's documenmt. Please select at leat one document..");
+		}
+		return resp;
+	}
+	
+	@GET
+	@Path("/gendoc/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteGeneralDocument(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		BuyerDAO buyerDAO = new BuyerDAO();
+		msg = buyerDAO.deleteDocumentById(id);
+		return msg;
+	}
+	
+	@GET
+	@Path("/demanddoc/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deleteDemandDocument(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		BuyerDAO buyerDAO = new BuyerDAO();
+		msg = buyerDAO.deleteDocumentById(id);
+		return msg;
+	}
+	
+	@GET
+	@Path("/paymentdoc/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage deletePaymentDocument(@PathParam("id") int id) {
+		ResponseMessage msg = new ResponseMessage();
+		BuyerDAO buyerDAO = new BuyerDAO();
+		msg = buyerDAO.deleteDocumentById(id);
+		return msg;
 	}
 }
 	

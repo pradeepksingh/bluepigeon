@@ -554,8 +554,8 @@
 								</form>
 						    </div>
 					 	 </div>
-                  </div>
-                  <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 tabcontent">
+                  	</div>
+                  	<div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 tabcontent">
 	                    <%if(bookingFlatList != null){ %>
 	                     <div class="bg1">
 	                     	<div class="user-profile">

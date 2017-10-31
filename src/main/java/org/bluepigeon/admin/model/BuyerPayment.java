@@ -1,5 +1,6 @@
 package org.bluepigeon.admin.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "buyer_payment", catalog = "blue_pigeon")
@@ -23,15 +26,24 @@ public class BuyerPayment implements java.io.Serializable {
 	private Double netPayable;
 	private Double amount;
 	private boolean isPaid;
-
+	private Date scheduleDate;
+	private Date paieddate;
+	private Integer transcationType=0;
+	private String transactionNo;
+	
 	public BuyerPayment() {
 	}
 
-	public BuyerPayment(Buyer buyer, String milestone, Double netPayable, Double amount) {
+	public BuyerPayment(Buyer buyer, String milestone, Double netPayable, Double amount, Date scheduleDate,Date paiedDate,
+			Integer transactionType,String transactionNo ) {
 		this.buyer = buyer;
 		this.milestone = milestone;
 		this.netPayable = netPayable;
 		this.amount = amount;
+		this.scheduleDate = scheduleDate;
+		this.paieddate = paiedDate;
+		this.transactionNo = transactionNo;
+		this.transcationType = transactionType;
 	}
 
 	@Id
@@ -91,5 +103,38 @@ public class BuyerPayment implements java.io.Serializable {
 	public void setPaid(boolean isPaid) {
 		this.isPaid = isPaid;
 	}
-	
+	 @Temporal(TemporalType.TIMESTAMP)
+	 @Column(name="schedule_date")
+	public Date getScheduleDate() {
+		return scheduleDate;
+	}
+
+	public void setScheduleDate(Date scheduleDate) {
+		this.scheduleDate = scheduleDate;
+	}
+	 @Temporal(TemporalType.TIMESTAMP)
+	 @Column(name="paied_date")
+	public Date getPaieddate() {
+		return paieddate;
+	}
+
+	public void setPaieddate(Date paieddate) {
+		this.paieddate = paieddate;
+	}
+	@Column(name="transaction_type")
+	public Integer getTranscationType() {
+		return transcationType;
+	}
+
+	public void setTranscationType(Integer transcationType) {
+		this.transcationType = transcationType;
+	}
+	@Column(name="transaction_no")
+	public String getTransactionNo() {
+		return transactionNo;
+	}
+
+	public void setTransactionNo(String transactionNo) {
+		this.transactionNo = transactionNo;
+	}
 }

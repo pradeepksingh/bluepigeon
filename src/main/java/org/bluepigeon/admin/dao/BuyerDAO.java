@@ -1018,7 +1018,7 @@ public class BuyerDAO {
 	}
 		
 	public List<Buyer> getFlatBuyersByFlatId(int flat_id){
-		String hql = "from Buyer where builderFlat.id = :id and is_deleted=0 order by is_primary desc";
+		String hql = "from Buyer where builderFlat.id = :id and is_deleted=0 and status=0 order by is_primary desc";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -1361,6 +1361,21 @@ public class BuyerDAO {
 				json = gson.toJson(responseMessage);
 				return json;
 			}
+	 }
+	 public ResponseMessage deleteDocumentById(int id){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		ResponseMessage responseMessage = new ResponseMessage(); 
+		String delete_project_type = "DELETE from BuyerUploadDocuments where id = :id";
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		Query smdelete = newsession.createQuery(delete_project_type);
+		smdelete.setParameter("id", id);
+		smdelete.executeUpdate();
+		newsession.getTransaction().commit();
+		newsession.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Document deleted successfully");
+		return responseMessage;
 	 }
 	 
 }

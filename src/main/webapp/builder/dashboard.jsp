@@ -294,8 +294,11 @@
                         </div>
 	                    <%  }  else{ %>
 						<div class="row">
+						 	<div class="col-md-6 left"> 
+                           	   	 <a href="${baseUrl}/builder/postsale/buyerlist/buyerlist.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>
+                           	</div>
                          	<div class="col-md-6 center">
-                          		 <a href="${baseUrl}/builder/sales/projectdetails.jsp?project_id=<% out.print(projectList.getId());%>" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
+                          		 <a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>
 						 	 </div>
 						</div>
 						<%} %>

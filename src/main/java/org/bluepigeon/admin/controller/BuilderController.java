@@ -92,8 +92,7 @@ public class BuilderController {
 		}
 		return msg;
 	}
-	
-	
+ 	
 	@POST
 	@Path("/building/offer/update")
 	@Produces(MediaType.APPLICATION_JSON)
