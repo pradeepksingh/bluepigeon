@@ -30,23 +30,26 @@ if(session!=null)
 		builder_id = builder.getBuilder().getId();
 		emp_id = builder.getId();
 		access_id = builder.getBuilderEmployeeAccessType().getId();
-		if(builder_id > 0){
-			if (request.getParameterMap().containsKey("project_id")) {
-				projectId = Integer.parseInt(request.getParameter("project_id"));
-				if(projectId != 0) {
-					campaignLists = new CampaignDAO().getMyCampaignsByProjectId(projectId);
-					builderProject = new CampaignDAO().getProjectData(projectId);
-					city_list = new CityNamesImp().getCityNames();
-					if(builderProject != null){
-						projectName = builderProject.getName();
-						cityName = builderProject.getCity().getName();
-						localityName = builderProject.getLocalityName();
-						cityId = builderProject.getCity().getId();
-					}		
+		if(builder.getBuilderEmployeeAccessType().getId()==3){
+			if(builder_id > 0){
+				if (request.getParameterMap().containsKey("project_id")) {
+					projectId = Integer.parseInt(request.getParameter("project_id"));
+					if(projectId != 0) {
+						campaignLists = new CampaignDAO().getMyCampaignsByProjectId(projectId);
+						builderProject = new CampaignDAO().getProjectData(projectId);
+						city_list = new CityNamesImp().getCityNames();
+						if(builderProject != null){
+							projectName = builderProject.getName();
+							cityName = builderProject.getCity().getName();
+							localityName = builderProject.getLocalityName();
+							cityId = builderProject.getCity().getId();
+						}		
+					}
 				}
 			}
+		}else{
+			response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 		}
-	
 	}
 }
 SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");

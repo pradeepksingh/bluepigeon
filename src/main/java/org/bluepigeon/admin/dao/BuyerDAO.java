@@ -1018,7 +1018,7 @@ public class BuyerDAO {
 	}
 		
 	public List<Buyer> getFlatBuyersByFlatId(int flat_id){
-		String hql = "from Buyer where builderFlat.id = :id and is_deleted=0 order by is_primary desc";
+		String hql = "from Buyer where builderFlat.id = :id and is_deleted=0 and status=0 order by is_primary desc";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);

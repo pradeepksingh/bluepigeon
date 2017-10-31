@@ -46,20 +46,31 @@
 					<li> <a href="${baseUrl }/builder/ceo/inbox/inbox.jsp">Inbox</a></li>
                     <li> <a href="${baseUrl }/builder/datanalytics/data_analytics.jsp">Data Analytics</a></li>
                     <li> <a href="${baseUrl }/builder/ceo/employeeslist.jsp">Employees</a></li>
-                     <li> <a href="${baseUrl }/builder/leads/leadlist.jsp">Leads</a></li>
+                    <li> <a href="${baseUrl }/builder/leads/leadlist.jsp">Leads</a></li>
                     <li> <a href="${baseUrl }/builder/ceo/addleads.jsp">Add Leads</a></li>
             	</ul>
             </li>
             <%}%>
 			<%if( emp_access_id == 6){ %>
             <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class="ti-layout fa-fw"></i>
-            <span class="hide-menu"> Buyer<span class="fa arrow"></span></span></a>
+            <span class="hide-menu"> Post Sale</span></a>
                  <ul class="nav nav-second-level">
-                     <li> <a href="javascript:void(0)">Manage</a></li>
-                     <li> <a href="javascript:void(0)">Cancellation</a></li>
+                   	<li> <a href="${baseUrl }/builder/inbox/inbox.jsp">Inbox</a></li>
+                   	<li> <a href="${baseUrl }/builder/buyer/Salesman-Buyer-list.jsp">Buyer List</a></li>
+                   	<li> <a href="">Data Analytics</a></li>
+                   	<li> <a href="">Grant Possession List</a></li>
+                   	<li> <a href="">Grant Possession</a></li>
+                   	<li> <a href="${baseUrl }/builder/postsale/massages.jsp">Message</a></li>
+                 	<li> <a href="">Schedule agreement list</a></li>
+                 	<li> <a href="">Schedule agreement</a></li>
+                 	<li> <a href="">Documents List</a></li>
+                 	<li> <a href="${baseUrl }/builder/documents/documents.jsp">Add Documents</a></li>
+                 	<li> <a href="">Demand letter list</a></li>
+                 	<li> <a href="">Demand letter</a></li>
                  </ul>
             </li>
             <% }%>
+             
             <%if(emp_access_id ==2){ %>
             <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="/" class=""></i>
             <span class="hide-menu"> ADMIN<span class=""></span></span></a>
@@ -123,15 +134,7 @@
                 </ul>
            </li>
            <%} %>
-           <% if(emp_access_id==6){%>
-           <li> <a href="javascript:void(0);" class="waves-effect"><i data-icon="F" class="linea-icon linea-software fa-fw"></i><span class="hide-menu"> Inventory<span class="fa arrow"></span></span></a>
-           		<ul class="nav nav-second-level">
-                	<li> <a href="${baseUrl }/builder/agreement/list.jsp">Agreement</a></li>
-                    <li> <a href="${baseUrl }/builder/demandletters/list.jsp">Demand Letter Release</a></li>
-                    <li> <a href="${baseUrl }/builder/possession/list.jsp">Allot Possession</a></li>
-               </ul>
-           </li>
-           <%} %>
+          
 
 		</ul>
 	</div>

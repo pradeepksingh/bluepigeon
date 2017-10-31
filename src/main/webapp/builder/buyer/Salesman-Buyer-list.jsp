@@ -45,7 +45,7 @@
 			p_user_id = builder.getBuilder().getId();
 			emp_id = builder.getId();
 			access_id = builder.getBuilderEmployeeAccessType().getId();
-			if(access_id == 5 || access_id == 7 || access_id == 4){
+			if(access_id == 5 || access_id == 7 || access_id == 4 || access_id == 6){
 				buyerList = new BuilderDetailsDAO().getBookedBuyerList(builder);
 				projectList = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 			}else{

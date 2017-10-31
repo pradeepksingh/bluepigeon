@@ -124,13 +124,13 @@ Date date = new Date();
 										 </div>
 								    </div>
 		                            <div class="form-group row">
-							           <label for="example-tel-input" class="col-sm-5 col-form-label">Campaign Title</label>
-								         <div class="col-sm-7">
-									         <div>
-									         	<input class="form-control  form-control1" type="text"  id="title" name="title"  placeholder="Enter Campaign title">
-										     </div>
-										      <div class="messageContainer"></div>
-									     </div>
+									 <label for="example-search-input" class="col-sm-5 col-form-label">Campaign Type</label>
+										<div class="col-sm-7">
+											<div>
+										    	<textarea id="campaign_type" name="campaign_type" placeholder="Get Maruti Suzuki free on your next booking!"></textarea>
+										    </div>
+										    <div class="messageContainer"></div>
+										</div>
 								    </div>
 								    <div class="form-group row">
 							           <label for="example-tel-input" class="col-sm-5 col-form-label">T&#38;C*</label>
@@ -158,14 +158,14 @@ Date date = new Date();
 										 <input class="form-control form-control1" type="text" name="locality_name" id="locality_name"  placeholder="Kothrud">
 									  </div>
 								  </div>
-								  <div class="form-group row">
-									 <label for="example-search-input" class="col-sm-5 col-form-label">Campaign Type</label>
-										<div class="col-sm-7">
-											<div>
-										    	<textarea id="campaign_type" name="campaign_type" placeholder="Get Maruti Suzuki free on your next booking!"></textarea>
-										    </div>
-										    <div class="messageContainer"></div>
-										</div>
+								   <div class="form-group row">
+							           <label for="example-tel-input" class="col-sm-5 col-form-label">Campaign Title</label>
+								         <div class="col-sm-7">
+									         <div>
+									         	<input class="form-control  form-control1" type="text"  id="title" name="title"  placeholder="Enter Campaign title">
+										     </div>
+										      <div class="messageContainer"></div>
+									     </div>
 								    </div>
 									<div class="form-group row">
 										<label for="example-search-input  form-control1" class="col-sm-5 col-form-label">Offer</label>
