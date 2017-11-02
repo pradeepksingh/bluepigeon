@@ -28,14 +28,15 @@ public class Agreement implements java.io.Serializable {
 	private Date lastDate;
 	private String remind;
 	private String content;
-
+	private Date agreementTime;
+	private Integer buyerId;
 	public Agreement() {
 	}
 
 	public Agreement(//BuilderFloor builderFloor, 
 			BuilderBuilding builderBuilding, BuilderFlat builderFlat,
 			BuilderProject builderProject, String name, String email, String contact, Date lastDate, String remind,
-			String content) {
+			String content, Date agreementTime) {
 		//this.builderFloor = builderFloor;
 		this.builderBuilding = builderBuilding;
 		this.builderFlat = builderFlat;
@@ -46,6 +47,7 @@ public class Agreement implements java.io.Serializable {
 		this.lastDate = lastDate;
 		this.remind = remind;
 		this.content = content;
+		this.agreementTime = agreementTime;
 	}
 
 	@Id
@@ -153,5 +155,22 @@ public class Agreement implements java.io.Serializable {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+	@Temporal(TemporalType.TIME)
+	@Column(name = "agreement_time")
+	public Date getAgreementTime() {
+		return agreementTime;
+	}
+
+	public void setAgreementTime(Date agreementTime) {
+		this.agreementTime = agreementTime;
+	}
+	@Column(name = "buyer_id")
+	public Integer getBuyerId() {
+		return buyerId;
+	}
+
+	public void setBuyerId(Integer buyerId) {
+		this.buyerId = buyerId;
 	}
 }

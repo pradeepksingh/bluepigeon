@@ -41,7 +41,6 @@ if(session!=null)
 			}
 		}
 	}
-
 }
 SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
 Date date = new Date();
@@ -256,9 +255,9 @@ Date date = new Date();
     	ajaxindicatorstart("Please wait while.. we load ...");
     	window.location.href="${baseUrl}/builder/projecthead/projectstatus/projectstatus.jsp?project_id=<% out.print(projectId);%>";
     });
-    $("#inventory_btn").click(function(){
+    $("#campaign_btn").click(function(){
     	ajaxindicatorstart("Please wait while.. we load ...");
-    	window.location.href="${baseUrl}/builder/projecthead/inventory/inventory.jsp?project_id=<% out.print(projectId);%>";
+    	window.location.href="${baseUrl}/builder/projecthead/campaign/mycampaigns.jsp?project_id=<% out.print(projectId);%>";
     });
     $("#revenue_btn").click(function(){
     	ajaxindicatorstart("Please wait while.. we load ...");

@@ -999,7 +999,7 @@ function toggleDropDown() {
 $("#srch-term").keydown(function (e) {
 	if (e.keyCode == 13) {
 		alert("Hello");
-		//getLeadsdetailList();
+		getLeadsdetailList();
 		//return false;
 	}
 });

@@ -62,7 +62,7 @@
                    	<li> <a href="">Grant Possession</a></li>
                    	<li> <a href="${baseUrl }/builder/postsale/massages.jsp">Message</a></li>
                  	<li> <a href="">Schedule agreement list</a></li>
-                 	<li> <a href="">Schedule agreement</a></li>
+                 	<li> <a href="${baseUrl }/builder/postsale/agreement.jsp">Schedule agreement</a></li>
                  	<li> <a href="">Documents List</a></li>
                  	<li> <a href="${baseUrl }/builder/documents/documents.jsp">Add Documents</a></li>
                  	<li> <a href="">Demand letter list</a></li>
