@@ -32,13 +32,16 @@ public class Possession implements java.io.Serializable {
 	private String remind;
 	private String docUrl;
 	private String content;
+	private String reason;
+	private Date possessionTime;
+	private Integer buyerId=0;
 	
 	public Possession() {
 	}
 
 	public Possession(BuilderFloor builderFloor, BuilderBuilding builderBuilding, BuilderFlat builderFlat,
 			BuilderProject builderProject, String name, String email, String contact, Date lastDate, String remind,
-			String docUrl, String content) {
+			String docUrl, String content, String reason,Date possesstionTime, Integer buyerId) {
 	//	this.builderFloor = builderFloor;
 		this.builderBuilding = builderBuilding;
 		this.builderFlat = builderFlat;
@@ -50,6 +53,9 @@ public class Possession implements java.io.Serializable {
 		this.remind = remind;
 		this.docUrl = docUrl;
 		this.content = content;
+		this.reason = reason;
+		this.possessionTime = possessionTime;
+		this.buyerId = buyerId;
 	}
 
 	@Id
@@ -157,5 +163,31 @@ public class Possession implements java.io.Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	@Column(name = "reason")
+	public String getReason() {
+		return reason;
+	}
 
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+	@Temporal(TemporalType.TIME)
+	@Column(name = "possession_time")
+	public Date getPossessionTime() {
+		return possessionTime;
+	}
+
+	public void setPossessionTime(Date possessionTime) {
+		this.possessionTime = possessionTime;
+	}
+	@Column(name = "buyer_id")
+	public Integer getBuyerId() {
+		return buyerId;
+	}
+
+	public void setBuyerId(Integer buyerId) {
+		this.buyerId = buyerId;
+	}
+	
+	
 }

@@ -34,10 +34,12 @@
 		for(BuyerUploadDocuments buyerUploadDocuments2:buyerUploadDocuments){
 			if(buyerUploadDocuments2.getDocType()==1){
 %>
-<ul>
+<ul >
 	<li  class="col-lg-4 col-xs-12" style="list-style: none;">
-		<a href="javascript:deleteGenDocument(<%out.print(buyerUploadDocuments2.getId());%>);"><img src="../../../images/docpdf.png" alt="User" width="150px"/></a>
-		<br/><h5><%out.print(buyerUploadDocuments2.getName());%></h5>
+		<a href="javascript:deleteGenDocument(<%out.print(buyerUploadDocuments2.getId());%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
+		<br/>
+		<img src="../../../images/docpdf.png" alt="User" width="150px"/>
+		<br/><h5><% out.print(buyerUploadDocuments2.getName());%></h5>
 	</li>
 </ul>
 <%

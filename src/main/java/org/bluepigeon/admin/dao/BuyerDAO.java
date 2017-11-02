@@ -259,7 +259,7 @@ public class BuyerDAO {
 			newsession.getTransaction().commit();
 			newsession.close();
 			response.setStatus(1);
-			response.setMessage("Success");
+			response.setMessage("Document uploaded Successfully");
 		}
 		return response;
 		}

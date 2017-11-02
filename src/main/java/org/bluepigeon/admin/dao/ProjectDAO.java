@@ -122,7 +122,7 @@ import org.hibernate.transform.Transformers;
 
 
 public class ProjectDAO { 
-	
+	 
 	public ResponseMessage saveProject(BuilderProject builderProject) {
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -6833,13 +6833,13 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	public List<BuilderFlatList> getProjectFlatListByBuilder(int project_id,int building_id, String keyword){
 		String hql = "";
 		if(keyword == "") {
-			hql = "SELECT a.id,a.flat_no as flatNo,b.floor_no as floorNo,d.name as flatStatus,(select e.name from buyer as e where e.flat_id=a.id and e.is_primary=1 and e.is_deleted = 0 limit 1) as buyerName from builder_flat as a inner join builder_floor as b on a.floor_no=b.id inner join builder_building as c on b.building_id=c.id inner join builder_flat_status as d on a.status_id=d.id where c.project_id = "+project_id+" and c.status = 1 and b.status = 1 and a.status = 1";
+			hql = "SELECT a.id,a.flat_no as flatNo,b.floor_no as floorNo,d.name as flatStatus,(select e.name from buyer as e where e.flat_id=a.id and e.is_primary=1 and e.is_deleted = 0 and e.status=0 limit 1) as buyerName from builder_flat as a inner join builder_floor as b on a.floor_no=b.id inner join builder_building as c on b.building_id=c.id inner join builder_flat_status as d on a.status_id=d.id where c.project_id = "+project_id+" and c.status = 1 and b.status = 1 and a.status = 1";
 		    if(building_id > 0) {
 		    	hql = hql + " AND c.id = "+building_id;
 		    }
 		    hql = hql + " order by b.floor_no ASC";
 		} else {
-			hql = "SELECT a.id,a.flat_no as flatNo,b.floor_no as floorNo,d.name as flatStatus,e.name as buyerName from builder_flat as a inner join builder_floor as b on a.floor_no=b.id inner join builder_building as c on b.building_id=c.id inner join builder_flat_status as d on a.status_id=d.id inner join buyer as e on a.id=e.flat_id where c.project_id = "+project_id+" and c.status = 1 and b.status = 1 and a.status = 1 and e.is_primary = 1 and e.is_deleted = 0 and (e.name like '%"+keyword+"%' OR e.mobile like '%"+keyword+"%')";
+			hql = "SELECT a.id,a.flat_no as flatNo,b.floor_no as floorNo,d.name as flatStatus,e.name as buyerName from builder_flat as a inner join builder_floor as b on a.floor_no=b.id inner join builder_building as c on b.building_id=c.id inner join builder_flat_status as d on a.status_id=d.id inner join buyer as e on a.id=e.flat_id where c.project_id = "+project_id+" and c.status = 1 and b.status = 1 and a.status = 1 and e.is_primary = 1 and e.is_deleted = 0 and e.status=0 and (e.name like '%"+keyword+"%' OR e.mobile like '%"+keyword+"%')";
 			if(building_id > 0) {
 		    	hql = hql + " AND c.id = "+building_id;
 		    }

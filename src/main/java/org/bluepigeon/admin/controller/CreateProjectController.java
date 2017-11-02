@@ -175,7 +175,7 @@ public class CreateProjectController {
 		  Locality locality = new Locality();
 		  locality.setId(3);
 		  BuilderEmployeeAccessType builderEmployeeAccessType = new BuilderEmployeeAccessType();
-		  builderEmployeeAccessType.setId(1);
+		  builderEmployeeAccessType.setId(2);
 		  
 		  BuilderEmployee builderEmployee = new BuilderEmployee();
 		  builderEmployee.setBuilder(builder);

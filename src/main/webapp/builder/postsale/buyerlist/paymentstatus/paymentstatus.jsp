@@ -38,14 +38,16 @@
  	List<BuyerPayment> buyerPayments = new ArrayList<BuyerPayment>();
  	int primary_buyer_id=0;
  	String buyerName = null;
+ 	int access_id=0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
-			empId=builder.getId();;
-			if(builder_id > 0){
+			empId=builder.getId();
+			access_id= builder.getBuilderEmployeeAccessType().getId();
+			if(builder_id > 0 && access_id ==6){
 				if (request.getParameterMap().containsKey("flat_id")) {
 					flat_id = Integer.parseInt(request.getParameter("flat_id"));
 					buyers = new BuyerDAO().getFlatBuyersByFlatId(flat_id);
@@ -60,6 +62,8 @@
 						}
 					}
 				}
+			}else{
+				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 			}
 		}
 		
@@ -100,6 +104,7 @@
     <script type="text/javascript" src="../../../js/selectize.min.js"></script>
      <script src="../../../js/jquery.form.js"></script>
     <script src="../../../js/bootstrapValidator.min.js"></script>
+     <script src="../../../js/bootstrap-datepicker.min.js"></script>
 
     <!-- Custom Css -->
     <link href="../../../css/POSTSALE_Document.css" rel="stylesheet">
@@ -130,22 +135,22 @@
                		<div class="row clearfix">
                 		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                       		<div class="button-demo">
-                                <button type="button" class="btn btn-default waves-effect" style="width: 100%;font-size:20px">DOCUMENT</button>
+                                <button type="button" id="postsaledocument" class="btn btn-default waves-effect" style="width: 100%;font-size:20px">DOCUMENT</button>
 							</div>
                 		</div>
 						<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                       		<div class="button-demo">
-                                <button type="button" class="btn btn-success waves-effect" style="width: 100%; ">PAYMENT STATUS</button>
+                                <button type="button" id="postsalepaymentstatus" class="btn btn-success waves-effect" style="width: 100%; ">PAYMENT STATUS</button>
 							</div>
                 		</div>
 				 		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                       		<div class="button-demo">
-                                <button type="button" class="btn btn-default waves-effect" style="width: 100%;font-size:20px">PROJECT STATUS</button>
+                                <button type="button" id="postsaleprojectstatus" class="btn btn-default waves-effect" style="width: 100%;font-size:20px">PROJECT STATUS</button>
 							</div>
                 		</div>
 				 		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                       		<div class="button-demo">
-                                <button type="button" class="btn btn-default waves-effect" style="width: 100%;font-size:20px">POSSESSION</button>
+                                <button type="button" id="postsalepossession" class="btn btn-default waves-effect" style="width: 100%;font-size:20px">POSSESSION</button>
 							</div>
                 		</div>
             		</div>
@@ -216,44 +221,28 @@
 							   						<a>Transition Type</a>
 							   					</li>
 							   				</ul>
+							   				<%if(buyerPayments.size() >0){
+											    for(BuyerPayment buyerPayment : buyerPayments){
+							   					%>
                              				<ul class="col-lg-12" style="margin-top: 20px;border-bottom: 2px solid beige;">
 							   					<li class="col-lg-3 col-xs-12" style="list-style: none;">
-							    					<input type="text" class="timepicker form-control" placeholder="Rs.5,00,00">
+							    					<input type="text"  class="timepicker form-control" placeholder="Rs.5,00,00">
 							   					</li>
 							   					<li class="col-lg-3 col-xs-12" style="list-style: none;text-align: left;">
-													<input type="text" class="datepicker form-control" placeholder="28-8-2017">
+													<input type="text" onchange="opendate(paied<%out.print(buyerPayment.getId()); %>)" id="paied<%out.print(buyerPayment.getId()); %>" value="<%if(buyerPayment.getPaieddate()!=null){out.print(buyerPayment.getPaieddate());} %>" class=" datedisplay form-control" placeholder="28-8-2017">
 							   					</li>
 							   					<li class="col-lg-3 col-xs-12" style="list-style: none;">
                            							<input type="text" class="form-control" placeholder="1012548">
 							    				</li>
 												<li class="col-lg-3 col-xs-12" style="list-style: none;">
 							 						<select class="form-control show-tick" >
-														<option>Mustard</option>
-														<option>Ketchup</option>
-														<option>Relish</option>
-														<option>Onions</option>
+														<option value="1">Net Banking</option>
+														<option value="2">By Cash</option>
+														<option value="3">By Check</option>
 													</select>
 							    				</li>
 							   				</ul>
-							   				<ul class="col-lg-12" style="margin-top: 20px;border-bottom: 2px solid beige;">
-							   					<li class="col-lg-3 col-xs-12" style="list-style: none;">
-							    					<input type="text" class="timepicker form-control" placeholder="Rs.5,00,00">
-							   					</li>
-							   					<li class="col-lg-3 col-xs-12" style="list-style: none;text-align: left;">
-													<input type="text" class="datepicker form-control" placeholder="28-8-2017">
-							   					</li>
-							   					<li class="col-lg-3 col-xs-12" style="list-style: none;">
-                           							<input type="text" class="form-control" placeholder="1012548">
-							    				</li>
-												<li class="col-lg-3 col-xs-12" style="list-style: none;">
-							 						<select class="form-control show-tick" >
-														<option>Mustard</option>
-														<option>Ketchup</option>
-														<option>Relish</option>
-														<option>Onions</option>
-													</select>
-							    				</li>
-							   				</ul>
+							   				<%}} %>
 							   				<ul class="col-lg-12" style="margin-bottom: 13px;border-bottom: 2px solid beige;">
 							   					<li class="col-lg-3 col-xs-12" style="list-style: none;">
 							    					<p style="color: aqua;font-weight: 600;">Rs. 5,00,000</p>
@@ -326,3 +315,33 @@
 </div> 
 </body>
 </html>
+<script>
+
+function opendate(id){
+	//alert("ID :: "+id.value);
+	
+}
+
+
+
+
+$('.datedisplay').datepicker({
+	autoclose:true,
+	format: "dd MM yyyy"
+});
+
+
+
+$("#postsaledocument").click(function(){
+	window.location.href = "${baseUrl}/builder/postsale/buyerlist/document/document.jsp?flat_id=<%out.print(flat_id);%>";
+});
+
+
+$("#postsaleprojectstatus").click(function(){
+	 window.location.href = "${baseUrl}/builder/postsale/buyerlist/projectstatus/projectstatus.jsp?flat_id=<%out.print(flat_id);%>";
+});
+
+$("#postsalepossession").click(function(){
+	 window.location.href = "${baseUrl}/builder/postsale/buyerlist/possession/possession.jsp?flat_id=<%out.print(flat_id);%>";
+});
+</script>
