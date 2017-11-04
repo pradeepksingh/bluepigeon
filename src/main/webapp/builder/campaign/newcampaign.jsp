@@ -168,7 +168,7 @@ Date date = new Date();
 									     </div>
 								    </div>
 									<div class="form-group row">
-										<label for="example-search-input  form-control1" class="col-sm-5 col-form-label">Offer</label>
+										<label for="example-search-input  form-control1" class="col-sm-5 col-form-label">Offer code</label>
 										<div class="col-sm-7">
 										 	<div>
 										   		<input class="form-control  form-control1" type="text" id="offer" name="offer" placeholder="Enter offer details">
@@ -684,22 +684,6 @@ function showAddResponse(resp, statusText, xhr, $form){
   	}
 }
 	    
-$(".todolist").focus(function() {
-    if(document.getElementById('tc').value == ''){
-        document.getElementById('tc').value +='\u25CF';
-	}
-});
-$(".todolist").keyup(function(event){
-	var keycode = (event.keyCode ? event.keyCode : event.which);
-    if(keycode == '13'){
-        document.getElementById('tc').value +='\u25CF';
-	}
-	var txtval = document.getElementById('tc').value;
-	if(txtval.substr(txtval.length - 1) == '\n'){
-		document.getElementById('tc').value = txtval.substring(0,txtval.length - 1);
-	}
-});
-
 function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();

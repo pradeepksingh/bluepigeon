@@ -19,14 +19,16 @@
 	BuilderEmployee builder = new BuilderEmployee();
 	List<ProjectData> project_list = null;
 	int builder_id = 0;
+	int empId = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
+			empId = builder.getId();
 			if(builder_id > 0){
-				project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+				project_list = new ProjectDAO().getAssigProjects(empId);
 			}
 		}
 		
@@ -57,7 +59,7 @@
     <link href="../css/common.css" rel="stylesheet">
       <link href="../css/jquery.multiselect.css" rel="stylesheet">
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/postsaledocument.css">
+    <link rel="stylesheet" type="text/css" href="../css/postsaleagreement.css">
     <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
@@ -98,7 +100,7 @@
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper">
-    		<section class="content" style="margin-top:75px;">
+    		<section class="content" style="margin-top:60px;">
         		<div class="container-fluid">
                		<h3 style="font-weight: lighter;">AGGREMENT</h3>
             			<div class="row clearfix">
@@ -125,7 +127,7 @@
                                         				<span class="input-group-addon">
                                             				<label for="ig_checkbox" style="float: right;">TIME</label>
                                         				</span>
-                                        				<div class="form-line">
+                                        				<div class="">
                                         					<div>
                                             					<input type="text" id="atime" name="atime" class="timepicker form-control  form-control1" placeholder="">
                                             				</div>
@@ -163,7 +165,7 @@
                                         				<span class="input-group-addon">
                                             				<label for="ig_checkbox">Project Name:</label>
                                         				</span>
-                                           				<select id="filer_project_ids" name="filer_project_ids[]" class="form-control show-tick" multiple>
+                                           				<select id="filer_project_ids" name="filer_project_ids[]" class="form-control show-tick" multiple class="form-control1">
 														<%if(project_list != null){
 					                        				for(ProjectData projectData : project_list){
 					                        			%>
@@ -177,7 +179,7 @@
                                        	 				<span class="input-group-addon">
                                             				<label for="ig_checkbox">Building Name:</label>
                                         				</span>
-                                           				<select id="filer_building_ids" name="filer_building_ids[]" class="form-control show-tick" multiple></select>
+                                           				<select id="filer_building_ids" name="filer_building_ids[]" class="form-control show-tick" multiple class="form-control1"></select>
                                     				</li>
                                     				<div class="messageContainer"></div> 
                                 				</ul>
@@ -188,9 +190,9 @@
                                        						<span class="input-group-addon">
                                            						<label for="ig_checkbox">Flat No. & Buyer Name</label>
                                        						</span>
-                                       						<div class="form-line">
+                                       						<div class="">
                                        							<div>
-                                          							<select id="flat_buyer_ids" name="flat_buyer_ids"  class="form-control show-tick" ></select>
+                                          							<select id="flat_buyer_ids" name="flat_buyer_ids" class="form-control1"></select>
                                        							</div>
                                        						</div>
                                    						</div>
@@ -223,7 +225,8 @@ $('#adate').datepicker({
 });
 
 $('#atime').datetimepicker({
-    format: 'LT'
+    format: 'LT',
+    stepping: 1
 });
 $('#filer_project_ids').multiselect({
     columns: 1,
@@ -253,7 +256,7 @@ $select_buyer = $("#flat_buyer_ids").selectize({
     	 }
      }
 });
-select_buyer = $select_buyer[0].selectize.destroy();
+
 function getBuildingList(element){
 	var ids = "";
 	 $("#selectproject .ms-options li.selected input").each(function(index){
@@ -263,16 +266,18 @@ function getBuildingList(element){
 			ids = ids +","+ $(this).val();
 		 }
 	 });
-	 ajaxindicatorstart("Loading...");
-	$.get("${baseUrl}/webapi/builder/building/data/"+ids,{},function(data){
-		$("#filer_building_ids").multiselect('loadOptions',data);
-		  $("#filer_building_ids").multiselect('reload');
-		  ajaxindicatorstop();
-	});
+	 if(ids != ""){
+		 ajaxindicatorstart("Loading...");
+		$.get("${baseUrl}/webapi/builder/building/data/"+ids,{},function(data){
+			$("#filer_building_ids").multiselect('loadOptions',data);
+			  $("#filer_building_ids").multiselect('reload');
+			  ajaxindicatorstop();
+		});
+	 }
 }
 function getFlatBuyerList(element){
 	var ids = "";
-	var buyerhtml="";
+	var buyerhtml="<option value=''>Enter Flat No and buyer Name</option>";
 	 $("#selectbuilding .ms-options li.selected input").each(function(index){
 		 if(ids == ""){
 			 ids = $(this).val();
@@ -281,14 +286,31 @@ function getFlatBuyerList(element){
 		 }
 	 });
 	// alert(ids);
+	if(ids !=""){
 	 ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/builder/flatbuyer/data/"+ids,{},function(data){
 			$(data).each(function(index){
-				buyerhtml +="<option value="+data[index].id+">"+data[index].name+"</option>"
+				buyerhtml +="<option value="+data[index].value+">"+data[index].name+"</option>"
 			});
+			$select_buyer[0].selectize.destroy();
 			$("#flat_buyer_ids").html(buyerhtml);
+			$select_buyer = $("#flat_buyer_ids").selectize({
+				persist: false,
+				 onChange: function(value) {
+					
+				 },
+				 onDropdownOpen: function(value){
+			    	 var obj = $(this);
+					var textClear =	 $("#flat_buyer_ids :selected").text();
+			    	 if(textClear.trim() == "Enter Flat No and buyer Name"){
+			    		 obj[0].setValue("");
+			    	 }
+			     }
+			});
+
 			  ajaxindicatorstop();
 		});
+	}
 }
 
 $('#addagreement').bootstrapValidator({
@@ -300,10 +322,17 @@ $('#addagreement').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-    	doctype: {
+    	atime: {
             validators: {
                 notEmpty: {
-                    message: 'select Document is required.'
+                    message: 'Please select time and is required.'
+                }
+            }
+        },
+        adate: {
+            validators: {
+                notEmpty: {
+                    message: 'Please select date and is required.'
                 }
             }
         },
@@ -371,6 +400,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
+        location.reload();
       //  window.location.href = "${baseUrl}/builder/leads/leadlist.jsp";
         ajaxindicatorstop();
   	}

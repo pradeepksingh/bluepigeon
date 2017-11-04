@@ -265,6 +265,7 @@ Date date = new Date();
     });
     
     function searchBuyer(){
+    	if($('#filter_building_id').val() != "" && $('#srch-term').val() != "")
     	ajaxindicatorstart("Please wait while.. we search ...");
 	    $.get("${baseUrl}/builder/projecthead/inventory/partialinventory.jsp?project_id=<% out.print(projectId);%>&building_id="+$('#filter_building_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
 	    	$("#flat_landing_area").html(data);

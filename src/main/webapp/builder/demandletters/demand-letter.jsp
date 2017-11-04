@@ -165,7 +165,7 @@
                                     <div class="col-3">
                                         <select name="flat_id" id="flat_id" class="form-control">
 							                    <option value="0">Select Flat</option>
-							                </select>
+							            </select>
                                     </div>
                                     
                                     

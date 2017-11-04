@@ -94,6 +94,7 @@ Date date = new Date();
            <div class="container-fluid">
                <!-- /.row -->
 	               <div class="row"></div>
+	               <h1>BUYER LIST</h1>
 	               <div class="row">
                        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12" style="padding-top:8px;">
 	                        <select id="filter_building_id" name="filter_building_id"  data-style="form-control" >
@@ -149,7 +150,8 @@ Date date = new Date();
      $select_building = $("#filter_building_id").selectize({
     		persist: false,
     		 onChange: function(value) {
-    			 searchBuyer();
+    			 if(value!="")
+    			 	searchBuyer();
     		 },
     		 onDropdownOpen: function(value){
     	    	 var obj = $(this);
@@ -169,11 +171,13 @@ Date date = new Date();
     });
     
     function searchBuyer(){
-    	ajaxindicatorstart("Please wait while.. we search ...");
-	    $.get("${baseUrl}/builder/postsale/buyerlist/partialinventory.jsp?project_id=<% out.print(projectId);%>&building_id="+$('#filter_building_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
-	    	$("#flat_landing_area").html(data);
-	    	ajaxindicatorstop();
-	    },'html');
+    	if($('#filter_building_id').val() != "" && $('#srch-term').val() != ""){
+	    	ajaxindicatorstart("Please wait while.. we search ...");
+		    $.get("${baseUrl}/builder/postsale/buyerlist/partialinventory.jsp?project_id=<% out.print(projectId);%>&building_id="+$('#filter_building_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
+		    	$("#flat_landing_area").html(data);
+		    	ajaxindicatorstop();
+		    },'html');
+    	}
     }
     $("#srch-term").keydown(function(e){
     	if(e.keyCode == 13){

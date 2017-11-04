@@ -4724,7 +4724,7 @@ public class ProjectDAO {
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1|| builderEmployee.getBuilderEmployeeAccessType().getId() ==2){
 			totalLeads = getTotalLeadsByBuilderId(builderEmployee.getBuilder().getId());
 		}if((builderEmployee.getBuilderEmployeeAccessType().getId() >=4 && builderEmployee.getBuilderEmployeeAccessType().getId() <= 6) || builderEmployee.getBuilderEmployeeAccessType().getId() ==7){
-			totalLeads = getTotalLeadsByEmpId(builderEmployee.getId());
+			totalLeads = getTotalLeadsByEmployeeId(builderEmployee.getId());
 		}
 		return totalLeads;
 	}
@@ -7253,7 +7253,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
 			
 		}else{
-			hql="SELECT project.name as name, emp.id as id from builder_project as project "
+			hql="SELECT project.name as name, project.id as id from builder_project as project "
 					+ "inner join allot_project as ap on ap.project_id = project.id "
 					+ "left join builder_employee as emp on emp.id = ap.emp_id"
 					+ " where "
@@ -7266,5 +7266,58 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 		    List<ProjectData> result = query.list();
 		    session.close();
 		    return result;
+	}
+	
+	public List<InboxMessageData> getBookedBuyer(int buyerId){
+		List<InboxMessageData> result = null;
+		//String hql = "SELECT b.name as name, b.photo as image, im.subject as subject, im.im_date as date  ";
+		String hql = " SELECT b.id as id, a.name as name, a.photo as image, b.im_date as date, b.subject as subject  ";
+		String where = "";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		hql += "from buyer as a join inbox_message as b on b.buyer_id=a.id"
+			+ " where"
+			+ " b.buyer_id="+buyerId;
+		hql += where + " AND a.is_primary=1 and a.is_deleted=0 and a.status=0 GROUP by b.id ORDER by b.id DESC";
+		try {
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(InboxMessageData.class));
+		System.err.println(hql);
+		
+		 result = query.list();
+		
+		} catch(Exception e) {
+			//
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * @author pankaj 
+	 * @param empId
+	 * @return
+	 */
+	public Long getTotalLeadsByEmployeeId(int empId){
+		Long totalLeads =(long) 0;
+		String hql = "Select COUNT(lead.id) as totalLeads from builder_lead as lead join builder_project as project on project.id=lead.project_id inner join allot_project as ap on ap.project_id=project.id where ap.emp_id=:emp_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createSQLQuery(hql);
+		System.err.println(hql);
+		query.setParameter("emp_id", empId);
+		try{
+		BigInteger totalLead = (BigInteger) query.uniqueResult();
+		//if(totalLeads != null){
+			totalLeads = Long.parseLong(totalLead.toString());
+			return totalLeads;
+		//}else{
+		//	return (long)0;
+		//}
+		}catch(Exception e){
+			e.printStackTrace();
+			return (long)0;
+		}
+		
 	}
 }

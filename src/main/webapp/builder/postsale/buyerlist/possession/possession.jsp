@@ -51,7 +51,7 @@
 				if (request.getParameterMap().containsKey("flat_id")) {
 					flat_id = Integer.parseInt(request.getParameter("flat_id"));
 					buyers = new BuyerDAO().getFlatBuyersByFlatId(flat_id);
-					project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+					project_list = new ProjectDAO().getAssigProjects(empId);
 					buyerPayments = new BuyerDAO().getBuyerPaymentsByBuyerId(buyers.get(0).getId());
 					inboxMessageList = new ProjectDAO().getBookedBuyerList(empId);
 					buyerData = new ProjectDAO().getAllBuyersByBuilderEmployee(builder);
@@ -271,7 +271,8 @@ $('#pdate').datepicker({
 });
 
 $('#ptime').datetimepicker({
-    format: 'LT'
+    format: 'LT',
+    stepping: 1
 });
 $("#postsaledocument").click(function(){
 	window.location.href = "${baseUrl}/builder/postsale/buyerlist/document/document.jsp?flat_id=<%out.print(flat_id);%>";

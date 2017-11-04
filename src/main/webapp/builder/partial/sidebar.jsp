@@ -58,15 +58,15 @@
                    	<li> <a href="${baseUrl }/builder/inbox/inbox.jsp">Inbox</a></li>
                    	<li> <a href="${baseUrl }/builder/buyer/Salesman-Buyer-list.jsp">Buyer List</a></li>
                    	<li> <a href="">Data Analytics</a></li>
-                   	<li> <a href="">Grant Possession List</a></li>
-                   	<li> <a href="">Grant Possession</a></li>
+<!--                    	<li> <a href="">Grant Possession List</a></li> -->
+                   	<li> <a href="${baseUrl }/builder/postsale/grantpossession.jsp">Grant Possession</a></li>
                    	<li> <a href="${baseUrl }/builder/postsale/massages.jsp">Message</a></li>
-                 	<li> <a href="">Schedule agreement list</a></li>
+<!--                  	<li> <a href="">Schedule agreement list</a></li> -->
                  	<li> <a href="${baseUrl }/builder/postsale/agreement.jsp">Schedule agreement</a></li>
-                 	<li> <a href="">Documents List</a></li>
+<!--                  	<li> <a href="">Documents List</a></li> -->
                  	<li> <a href="${baseUrl }/builder/documents/documents.jsp">Add Documents</a></li>
-                 	<li> <a href="">Demand letter list</a></li>
-                 	<li> <a href="">Demand letter</a></li>
+<!--                  	<li> <a href="">Demand letter list</a></li> -->
+                 	<li> <a href="${baseUrl }/builder/postsale/generatedemandletter.jsp">Demand letter</a></li>
                  </ul>
             </li>
             <% }%>

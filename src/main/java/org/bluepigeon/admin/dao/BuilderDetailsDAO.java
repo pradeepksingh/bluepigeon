@@ -1535,9 +1535,9 @@ public class BuilderDetailsDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() >0 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
-			hql ="SELECT b.name as buyerName, b.mobile as buyerContact, b.email as buyerEmail, project.name as projectName,project.locality_name as localityName, flat.flat_no as flatNo, building.name as buildingName, city.name as cityName FROM buyer as b inner join builder_project as project on project.id = b.project_id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id WHERE b.builder_id="+builderEmployee.getBuilder().getId()+" and b.is_primary=1 and b.is_deleted=0 and project.status=1 group by b.id order by b.id DESC ";
+			hql ="SELECT b.name as buyerName, b.mobile as buyerContact, b.email as buyerEmail, project.name as projectName,project.locality_name as localityName, flat.flat_no as flatNo, building.name as buildingName, city.name as cityName FROM buyer as b inner join builder_project as project on project.id = b.project_id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id WHERE b.builder_id="+builderEmployee.getBuilder().getId()+" and b.is_primary=1 and b.is_deleted=0 and b.status=0 and project.status=1 group by b.id order by b.id DESC ";
 		}else{
-			hql= "SELECT b.name as buyerName, b.mobile as buyerContact, b.email as buyerEmail, project.name as projectName,project.locality_name as localityName, flat.flat_no as flatNo, building.name as buildingName, city.name as cityName FROM buyer as b left join builder_project as project on project.id = b.project_id inner join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id WHERE ap.emp_id="+builderEmployee.getId()+" and b.is_primary=1 and b.is_deleted=0 and project.status=1 group by b.id order by b.id DESC";
+			hql= "SELECT b.name as buyerName, b.mobile as buyerContact, b.email as buyerEmail, project.name as projectName,project.locality_name as localityName, flat.flat_no as flatNo, building.name as buildingName, city.name as cityName FROM buyer as b left join builder_project as project on project.id = b.project_id inner join allot_project as ap on ap.project_id = project.id left join builder_building as building on building.id = b.building_id left join builder_flat as flat on flat.id = b.flat_id left join city as city on city.id = project.city_id WHERE ap.emp_id="+builderEmployee.getId()+" and b.is_primary=1 and b.is_deleted=0 and b.status=0 and project.status=1 group by b.id order by b.id DESC";
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BookedBuyerList.class));
@@ -1609,7 +1609,7 @@ public class BuilderDetailsDAO {
 			}
 		}
 		
-		hql += where + " AND project.status=1 AND b.is_primary=1 AND b.is_deleted=0 GROUP by b.id ORDER BY project.id desc";
+		hql += where + " AND project.status=1 AND b.is_primary=1 AND b.is_deleted=0 AND b.status=0 GROUP by b.id ORDER BY project.id desc";
 		try {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BookedBuyerList.class));

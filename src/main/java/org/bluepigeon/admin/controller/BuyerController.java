@@ -2479,10 +2479,74 @@ public class BuyerController {
 				if(buyerUploadDocumentslist.size()>0){
 					BuyerDAO buyerDAO = new BuyerDAO();
 					responseMessage = buyerDAO.saveBuyerUploadDouments(buyerUploadDocumentslist);
-					
-					//responseMessage=agreementDAO.saveAgreementBuyer(agreementBuyerList);
 				}
 			}
+		}
+		return responseMessage;
+	}
+	
+	@POST
+	@Path("/newpossession/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage savenewPossession(
+			@FormDataParam("ptime") String possessionTime,
+			@FormDataParam("pdate") String last_date,
+			@FormDataParam("doc_url[]")List<FormDataBodyPart> doc_name,
+			@FormDataParam("flat_buyer_ids[]")List<FormDataBodyPart> buyer_ids) throws DocumentException, IOException{
+		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+		SimpleDateFormat ftime = new SimpleDateFormat("h:m a");
+		ResponseMessage responseMessage = new ResponseMessage();
+		Date lastDate = null;
+		try {
+			lastDate = format.parse(last_date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Possession possession = new Possession();
+		possession.setLastDate(lastDate);
+		possession.setRemind("");
+		possession.setBuilderBuilding(null);
+		possession.setBuilderFlat(null);
+		possession.setBuilderProject(null);
+		
+		possession.setName("");
+		possession.setContact("");
+		possession.setEmail("");
+		responseMessage=new PossessionDAO().savePossession(possession);
+		if(responseMessage.getId()>0){
+			List<PossessionBuyer> possessionBuyerList = new ArrayList<PossessionBuyer>();
+			possession.setId(responseMessage.getId());
+			if(buyer_ids.size()>0 || buyer_ids != null ){
+				int i=0;
+				List<BuyerUploadDocuments> buyerUploadDocumentslist = new ArrayList<BuyerUploadDocuments>();
+				for(FormDataBodyPart buyers : buyer_ids){
+					BuyerUploadDocuments buyerUploadDocuments = new BuyerUploadDocuments();
+					if(doc_name.get(i).getFormDataContentDisposition().getFileName() != null && !doc_name.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = doc_name.get(i).getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/buyer/docs/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(doc_name.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+						buyerUploadDocuments.setDocUrl(gallery_name);
+						buyerUploadDocuments.setBuilderdoc(true);
+						buyerUploadDocuments.setDocType(5);
+						Buyer newbuyer = new Buyer();
+						newbuyer.setId(buyers.getValueAs(Integer.class));
+						buyerUploadDocuments.setBuyer(newbuyer);
+						buyerUploadDocuments.setName("Possession");
+						buyerUploadDocuments.setUploadedDate(new Date());
+						buyerUploadDocumentslist.add(buyerUploadDocuments);
+					}
+				}
+			if(buyerUploadDocumentslist.size()>0){
+				BuyerDAO buyerDAO = new BuyerDAO();
+				responseMessage = buyerDAO.saveBuyerUploadDouments(buyerUploadDocumentslist);
+				
+				//responseMessage=agreementDAO.saveAgreementBuyer(agreementBuyerList);
+			}
+		}
 		}
 		return responseMessage;
 	}

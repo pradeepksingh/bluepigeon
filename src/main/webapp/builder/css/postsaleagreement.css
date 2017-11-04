@@ -681,3 +681,10 @@ padding:7%;
 	background: #03a9f3;
     border: 1px solid #03a9f3;
 }
+.ms-options-wrap > .ms-options{
+	left:197px;
+	width:67%;
+}
+.ms-options-wrap>.ms-options>ul li.selected label{
+	background-color:#00bfd6;
+}
