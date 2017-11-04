@@ -185,11 +185,6 @@
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         <select id="project_id" name="project_id">
                              <option value="0">Project</option>
-                             <%
-                             if(project_list != null){
-                             for(ProjectList projectList : project_list){%>
-                             <option value="<%out.print(projectList.getId());%>"><%out.print(projectList.getName()); %></option>
-                             <% }}%>
                         </select>
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -201,6 +196,7 @@
                     </div>
                     <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_id);%>"/>
                     <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
+                    <input type="hidden" id="access_id" name="access_id" value="<%out.print(access_id);%>"/>
                     <div class="container" id="project_list">
                    		<%
                        		if(project_list !=null){
@@ -420,7 +416,7 @@
 		persist: false,
 		 onChange: function(value) {
 			 if(value != "" && value >0)
-			 	getProjectFilterList(value);
+				 getProjectList();;
 		 },
 		 onDropdownOpen: function(value){
 	    	 var obj = $(this);
@@ -447,10 +443,38 @@
 		    		$select_locality[0].selectize.destroy();
 		    		$("#locality_name").html(html);
 		    	//	$('.selectpicker').selectpicker('refresh');
-		    		$select_floor = $("#locality_name").selectize({
+		    		$select_locality = $("#locality_name").selectize({
 						persist: false,
 						 onChange: function(value) {
 							 if(value != ""){
+								 $.post("${baseUrl}/webapi/general/project/list/name",{ locality_name: $("#locality_name").val(),emp_id : $("#emp_id").val(),access_id : $("#access_id").val() }, function(data){
+							    		var html = '<option value="">Project</option>';
+							    		$(data).each(function(index){
+							    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+							    		});
+							    	//	$("#locality_id").html(html);
+							    		$select_project[0].selectize.destroy();
+							    		$("#project_id").html(html);
+							    	//	$('.selectpicker').selectpicker('refresh');
+							    		$select_project = $("#project_id").selectize({
+											persist: false,
+											 onChange: function(value) {
+												 if(value != ""){
+													 getProjectList();
+												 }
+											 },
+											 onDropdownOpen: function(value){
+										   	 var obj = $(this);
+												var textClear =	 $("#project_id :selected").text();
+										   	 if(textClear.trim() == "Project"){
+										   		 obj[0].setValue("");
+										   	 }
+										    }
+										});
+									//}
+							    	
+							    	},'json');
+								 
 								 getProjectList();
 							 }
 						 },
@@ -586,7 +610,7 @@
 		//if($("#city_id").val()>0)
 			//$("#locality_name").attr('disabled',false);
 		ajaxindicatorstart("Please wait while.. we search ...");
-	   $.post("${baseUrl}/webapi/project/data/newlist",{emp_id: $("#emp_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_name : $("#locality_name").val(),project_status : $("#project_status").val() },function(data){
+	   $.post("${baseUrl}/webapi/project/data/filterproject",{emp_id: $("#emp_id").val(), country_id: 1, city_id: $("#city_id").val(),locality_name : $("#locality_name").val(),project_id:$("#project_id").val(),project_status : $("#project_status").val() },function(data){
 		   if(data == ""){
 			   $("#project_list").empty();
 			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
@@ -645,7 +669,7 @@
             		<%}%>
             		<%if(access_id == 3){%>
              		+'<div class="col-md-6 left">' 
-             		+'<a href="${baseUrl}/builder/marketinghead/campaign/mycampaigns.jsp?project_id='+projectId+'"  class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'<a href="${baseUrl}/builder/saleshead/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'"  class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
              		<%if(access_id == 4){%>
@@ -653,9 +677,14 @@
              		+'<a href="${baseUrl}/builder/sales/projectstatus.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
-            		<%if(access_id==5 ||access_id == 7){%>
+            		<%if(access_id==5){%>
+            		+'<div class="col-md-6 left">' 
+             		+'<a href="${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'</div>'
+             		<%}%>
+             		<%if(access_id == 7){%>
              		+'<div class="col-md-6 left">' 
-             		+'<a href="${baseUrl}/builder/buyer/booking.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'<a href="${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
              		<%if(access_id==6){%>
@@ -665,109 +694,6 @@
              		<%}%>
           		+'<div class="col-md-6 center">'
            		+'<a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
-			 	 	+'</div>'
-			 		+'</div>'
-	            	+'</div>';
-	            		$("#project_list").append(html);
-	            		createGraph("graph"+projectId);
-			});
-			ajaxindicatorstop();
-		    },'json');
-	   }
- 
- function getProjectFilterList(project_id){
- 	
- 	var html = "";
-		var image = "";
-		var projectName = "";
-		var cityName = "";
-		var projectId = "";
-		var localtyNames= "";
-		$("#project_list").empty();
-		ajaxindicatorstart("Please wait while.. we search ...");
-	   $.post("${baseUrl}/webapi/project/filter",{project_id:project_id},function(data){
-		   if(data == ""){
-			   $("#project_list").empty();
-			   $("#project_list").append("<h2><center>No Records Found</center></h2>");
-		   }
-			$(data).each(function(index){
-				if(data[index].image != "")
-					image = "${baseUrl}/"+data[index].image;
-				else
-					image="";
-					//image = "${baseUrl}/builder/plugins/images/Untitled-1.png";
-				if(data[index].name != ""){
-					projectName = data[index].name;
-				}
-				if(data[index].city != ""){
-					cityName = data[index].city;
-				}
-				if(data[index].locality != ""){
-					localityName  = data[index].locality;
-				}
-				if(data[index].id != ""){
-					projectId = data[index].id;
-				}
-				html='<div class="col-md-6 col-sm-6 col-xs-12 projectsection" id="projectlist">'
-		    		+'<div class="image">'
-                   	+'<img  src="'+image+'" height="348"  width="438" alt="Project image"/>'
-                   	+'<div class="overlay">'
-                    +'<div class="row">'
-	                +'<div class="col-md-6 left">'
-		            +'<h3>'+projectName+'</h3>'
-		            +'<h4>'+localityName+'</h4>'
-		            +'<br>'
-               		+'<div class="bottom">'
-                	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'
-                	+'</div>'
-	                +'</div>'
-	                +'<div class="col-md-6 right">'
-		            +'<div class="chart" id="graph'+projectId+'" data-percent="'+data[index].completionStatus+'"></div>'
-		            +'<div class="bottom">'
-                    +'<h4>'+data[index].totalLeads+ ' NEW LEADS</h4>'
-                    +'</div>'
-	                +'</div>'
-                    +'</div>'
-                    +'</div>'
-               		+'</div>'
-               		<%if(access_id == 1){%>
-            		+'<div class="col-md-6 left">' 
-            		+'<a href="${baseUrl}/builder/ceo/projectstatus/projectstatus.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
-            		+'</div>'
-            		<%}%>
-               		<%if(access_id == 2){%>
-               		+'<div class="row">'
-               		+'<div class="col-md-6 left">' 
-               		+'<a href="${baseUrl}/builder/admin/project/edit.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
-               		+'</div>'
-               		<%}%>
-               		<%if(access_id == 3){%>
-             		+'<div class="col-md-6 left">' 
-             		+'<a href="${baseUrl}/builder/marketinghead/campaign/mycampaigns.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
-             		+'</div>'
-             		<%}%>
-             		<%if(access_id == 4){%>
-             		+'<div class="col-md-6 left">' 
-             		+'<a href="${baseUrl}/builder/sales/projectstatus.jsp?project_id='+projectId+'"  class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
-             		+'</div>'
-             		<%}%>
-             		<%if(access_id==6){%>
-             		+'<div class="col-md-6 left">' 
-             		+'<a href="${baseUrl}/builder/postsale/buyerlist/buyerlist.jsp?project_id=='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
-             		+'</div>'
-             		<%}%>
-               		<% if(access_id == 5){%>
-             		+'<div class="col-md-6 left">' 
-             		+'<a href="${baseUrl}/builder/salehead/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
-             		+'</div>'
-             		<%}%>
-             		<% if( access_id == 7){%>
-             		+'<div class="col-md-6 left">' 
-             		+'<a href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
-             		+'</div>'
-             		<%}%>
-             		+'<div class="col-md-6 center">'
-              		+'<a href="" class="btn btn11 btn-info-new waves-effect waves-light m-t-1 m-r--65">View</a>'
 			 	 	+'</div>'
 			 		+'</div>'
 	            	+'</div>';

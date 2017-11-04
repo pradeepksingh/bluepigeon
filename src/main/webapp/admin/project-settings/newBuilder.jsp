@@ -310,7 +310,7 @@ $('#ccontact-'+batch_count).keyup(function() {
     	 		target : '#response', 
     	 		beforeSubmit : showAddRequest,
     	 		success :  showAddResponse,
-    	 		url : '${baseUrl}/webapi/create/builder/new/add/',
+    	 		url : '${baseUrl}/webapi/create/builder/new/save/',
     	 		semantic : true,
     	 		dataType : 'json'
     	 	};

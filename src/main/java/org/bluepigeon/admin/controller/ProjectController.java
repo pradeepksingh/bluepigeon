@@ -4846,4 +4846,20 @@ public class ProjectController extends ResourceConfig {
 		List<ConfigData> floorList = projectDAO.getConfigDataByProject(projectIds);
 		return floorList;
 	}
+	
+	@POST
+	@Path("/data/filterproject")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<BuilderProjectList> getFilterProjects(
+			//@FormParam("project_id") int projectId,
+			@FormParam("emp_id") int empId,
+			@FormParam("country_id") int countryId,
+			//@FormParam("state_id") int stateId,
+			@FormParam("city_id") int cityId,
+			@FormParam("locality_name") String localityName,
+			@FormParam("project_id") int projectId,
+			@FormParam("project_status") int projectStatus){
+		
+		return new BuilderDetailsDAO().getProjectFiltersByEmpIds(empId,countryId, cityId, localityName,projectId,projectStatus);
+	}
 }

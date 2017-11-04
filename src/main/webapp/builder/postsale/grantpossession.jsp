@@ -154,11 +154,11 @@
 	                                        </span>
 	                                        <div class="form-line">
 	                                             <div class="file-upload">
-											  		<div class="file-select" style="width: 124%;">
+											  		<div class="file-select">
 														<div class="file-select-button" id="fileName">Choose File</div>
-														<div class="file-select-name" id="noFile">No file chosen...</div> 
-														<input type="file" name="doc_url[]" id="doc_url">
-											  		</div>
+														<p class="file-select-name" id="filepossession">No file chosen...</p>
+														<input type="file" name="doc_url[]" onchange="getPossessionFileData(this);" id="doc_url">
+													</div>
 												</div>
 	                                        </div>
 	                                    </div>
@@ -389,5 +389,12 @@ function showAddResponse(resp, statusText, xhr, $form){
       //  window.location.href = "${baseUrl}/builder/leads/leadlist.jsp";
         ajaxindicatorstop();
   	}
+}
+
+function getPossessionFileData(myFile){
+	  var file = myFile.files[0];  
+	   var filename = file.name;
+	   $("#filepossession").empty();
+	   $("#filepossession").html(filename);
 }
 </script>
