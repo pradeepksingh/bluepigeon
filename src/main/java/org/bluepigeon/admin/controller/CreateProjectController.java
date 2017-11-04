@@ -100,6 +100,7 @@ import org.bluepigeon.admin.model.BuildingStage;
 import org.bluepigeon.admin.model.BuildingSubstage;
 import org.bluepigeon.admin.model.City;
 import org.bluepigeon.admin.model.Country;
+import org.bluepigeon.admin.model.EmployeeRole;
 import org.bluepigeon.admin.model.FlatAmenityIcon;
 import org.bluepigeon.admin.model.FlatStage;
 import org.bluepigeon.admin.model.FlatSubstage;
@@ -2260,5 +2261,133 @@ public class CreateProjectController {
 		FlatSubstagesDAO flatSubstagesDAO = new FlatSubstagesDAO();
 		return flatSubstagesDAO.update(flatSubstage);
 	}
-	
+	@POST
+	@Path("/builder/new/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage addNewBuilder(
+			@FormDataParam("bname") String name,
+			@FormDataParam("status") byte status,
+			@FormDataParam("hoffice") String headOffice,
+			@FormDataParam("hphno") String phone,
+			@FormDataParam("hemail") String uhemail,
+			@FormDataParam("password") String password,
+			@FormDataParam("abuilder") String aboutBuilder,
+			@FormDataParam("cname[]") List<FormDataBodyPart> cname,
+			@FormDataParam("ccontact[]") List<FormDataBodyPart> ccontact,
+			@FormDataParam("cemail[]") List<FormDataBodyPart> cemail,
+			@FormDataParam("builder_logo[]") List<FormDataBodyPart> builder_logo
+			
+			) {
+	  ResponseMessage responseMessage = new ResponseMessage();
+	  Builder builder = new Builder();
+	  builder.setName(name);
+	  builder.setStatus(status);
+	  builder.setAboutBuilder(aboutBuilder);
+	  builder.setEmail(uhemail);
+	  builder.setLoginStatus(0);
+	  builder.setHeadOffice(headOffice);
+	  builder.setMobile(phone);
+	  builder.setPassword(password);
+	  BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+	  responseMessage = builderDetailsDAO.saveBuilder(builder);
+	  if(responseMessage.getId() > 0){
+		  builder.setId(responseMessage.getId());
+		  byte loginStatus = 1;
+		  ResponseMessage responseMessage2 = new ResponseMessage();
+		  boolean empStatus = false;
+		  if(status == 1)
+			  empStatus = true;
+		  City city = new City();
+		  city.setId(1);
+		  Locality locality = new Locality();
+		  locality.setId(3);
+		  BuilderEmployeeAccessType builderEmployeeAccessType = new BuilderEmployeeAccessType();
+		  builderEmployeeAccessType.setId(2);
+		  
+		  BuilderEmployee builderEmployee = new BuilderEmployee();
+		  builderEmployee.setBuilder(builder);
+		  builderEmployee.setBuilderEmployeeAccessType(builderEmployeeAccessType);
+		  builderEmployee.setCity(city);
+		  builderEmployee.setLocality(locality);
+		  builderEmployee.setName(name);
+		  builderEmployee.setLoginStatus(loginStatus);
+		  builderEmployee.setStatus(empStatus);
+		  builderEmployee.setEmail(uhemail);
+		  builderEmployee.setPassword(password);
+		  builderEmployee.setCurrentAddress("");
+		  builderEmployee.setPermanentAddress("");
+		  builderEmployee.setEmployeeId("");
+		  builderEmployee.setMobile(phone);
+		  BuilderDetailsDAO builderDetailsDAO2 = new BuilderDetailsDAO();
+		  responseMessage2 = builderDetailsDAO2.saveEmployee(builderEmployee);
+		  if(responseMessage2.getId() > 0){
+			  BuilderEmployee builderEmployee2 = new BuilderEmployee();
+			  builderEmployee2.setId(responseMessage2.getId());
+			  EmployeeRole employeeRole = new EmployeeRole();
+			  employeeRole.setBuilderEmployee(builderEmployee2);
+			  employeeRole.setBuilderEmployeeAccessType(builderEmployeeAccessType);
+			  new BuilderDetailsDAO().saveNewEmpRole(employeeRole);
+		  }
+		  if(cname.size()>0){
+			  int i=0;
+			  List<BuilderCompanyNames> builderCompanyNames = new ArrayList<BuilderCompanyNames>();
+			  for(FormDataBodyPart company_name : cname){
+				  BuilderCompanyNames builderCompanyNames2 = new BuilderCompanyNames();
+				  builderCompanyNames2.setBuilder(builder);
+				  if(company_name.getValueAs(String.class).toString() != null && !company_name.getValueAs(String.class).toString().isEmpty()) {
+					  builderCompanyNames2.setName(cname.get(i).getValueAs(String.class).toString());
+				  }
+				  if(ccontact.get(i).getValueAs(String.class).toString() != null && !ccontact.get(i).getValueAs(String.class).toString().isEmpty()){
+					  builderCompanyNames2.setContact(ccontact.get(i).getValueAs(String.class).toString());
+				  }
+				  if(cemail.get(i).getValueAs(String.class).toString() != null && !cemail.get(i).getValueAs(String.class).toString().isEmpty()){
+					  builderCompanyNames2.setEmail(cemail.get(i).getValueAs(String.class).toString());
+				  }
+				  builderCompanyNames.add(builderCompanyNames2);
+			  }
+			  if(builderCompanyNames.size() > 0){
+				   new BuilderDetailsDAO().saveBuilderCompany(builderCompanyNames);
+			  }
+		  }
+		  if(builder_logo != null){
+			  try {	
+					List<BuilderLogo> builderLogos = new ArrayList<BuilderLogo>();
+					//for multiple inserting images.
+					if (builder_logo.size() > 0) {
+						for(int i=0 ;i < builder_logo.size();i++)
+						{
+							if(builder_logo.get(i).getFormDataContentDisposition().getFileName() != null && !builder_logo.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+								BuilderLogo builderLogo = new BuilderLogo();
+								String gallery_name = builder_logo.get(i).getFormDataContentDisposition().getFileName();
+								long millis = System.currentTimeMillis() % 1000;
+								gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+								gallery_name = "images/project/builder/"+gallery_name;
+								String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+								//System.out.println("for loop image path: "+uploadGalleryLocation);
+								this.imageUploader.writeToFile(builder_logo.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+								builderLogo.setBuilder(builder);
+								builderLogo.setBuilderUrl(gallery_name);
+								builderLogos.add(builderLogo);
+							}
+						}
+						if(builderLogos.size() > 0) {
+							builderDetailsDAO2.saveBuilderLogo(builderLogos);
+						}
+						responseMessage.setStatus(1);
+						responseMessage.setMessage("Builder added successfully");
+					}
+				} catch(Exception e) {
+					e.printStackTrace();
+					responseMessage.setStatus(0);
+					responseMessage.setMessage("Unable to save image");
+				}
+		  }
+	  }else{
+		  responseMessage.setStatus(0);
+		  responseMessage.setMessage("Fail to add new Builder");
+	  }
+	  
+	  return responseMessage;
+	}
 }

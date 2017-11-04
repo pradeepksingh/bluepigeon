@@ -466,7 +466,7 @@ width:50%;
 					</div>
 					<div class="messageContainer"></div>
                     </div>
-				<div class="col-lg-4" style="margin-top:17px">
+				<div class="col-lg-4" style="margin-top:17px;margin-left:10px;">
 					<label><b>Message</b></label>
 				</div>
 				<div class="col-lg-6" >
@@ -475,16 +475,16 @@ width:50%;
 					</div>
 					<div class="messageContainer"></div>
 				</div>
-				<div class="col-lg-4" style="margin-top:17px">
+				<div class="col-lg-4" style="margin-top:17px;margin-left:10px;">
 					<label><b>Attaches</b></label>
 				</div>
 				<div class="col-lg-4">
 					<div class="file-upload">
 						<div class="file-select">
 							<div class="file-select-button" id="fileName">Choose File</div>
-							<div class="file-select-name" id="noFile">No file chosen...</div> 
-							<input type="file" name="attachment[]" id="chooseFile">
-					 	</div>
+							<p class="file-select-name" id="filenewmsg">No file chosen...</p>
+							<input type="file" name="doc_url[]" onchange="getNewmessageFileData(this);" id="choosenewmsgdoc">
+						</div>
 					</div>
                 </div>
 				<button type="submit" class="signupbtn">Send</button>
@@ -1207,6 +1207,13 @@ function getPaymentFileData(myFile){
    $("#fileselectpayment").empty();
    $("#fileselectpayment").html(filename);
 }
+ 
+ function getNewmessageFileData(myFile){
+	  var file = myFile.files[0];  
+	   var filename = file.name;
+	   $("#filenewmsg").empty();
+	   $("#filenewmsg").html(filename);
+ }
  
  $("#postsalepaymentstatus").click(function(){
 	window.location.href = "${baseUrl}/builder/postsale/buyerlist/paymentstatus/paymentstatus.jsp?flat_id=<%out.print(flat_id);%>";

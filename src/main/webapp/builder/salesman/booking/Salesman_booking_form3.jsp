@@ -121,7 +121,7 @@
          </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
-        <div id="page-wrapper" style="min-height: 2038px;">
+        <div id="page-wrapper">
            <div class="container-fluid">
                <!-- /.row -->
 	                <div class="row bspace">
@@ -705,6 +705,10 @@ function addMoreBuyers(){
 	            validators: {
 	                notEmpty: {
 	                    message: 'Buyer pancard is required and cannot be empty'
+	                },
+	                regexp:{
+	                	regexp: '[A-Z]{5}\d{4}[A-Z]{1}',
+	                	message: 'Invalid pancard number'
 	                }
 	            }
 	        },

@@ -145,9 +145,9 @@
                                             				<div class="file-upload">
 										  						<div class="file-select">
 																	<div class="file-select-button" id="fileName">Choose File</div>
-																	<div class="file-select-name" id="noFile">No file chosen...</div> 
-																	<input type="file" name="doc_url[]" id="doc_url">
-										  						</div>
+																	<p class="file-select-name" id="fileagreement">No file chosen...</p>
+																	<input type="file" name="doc_url[]" onchange="getAgreementFileData(this);" id="doc_url">
+																</div>
 															</div>
                                         				</div>
                                     				</div>
@@ -404,6 +404,13 @@ function showAddResponse(resp, statusText, xhr, $form){
       //  window.location.href = "${baseUrl}/builder/leads/leadlist.jsp";
         ajaxindicatorstop();
   	}
+}
+
+function getAgreementFileData(myFile){
+	  var file = myFile.files[0];  
+	   var filename = file.name;
+	   $("#fileagreement").empty();
+	   $("#fileagreement").html(filename);
 }
 
 </script>

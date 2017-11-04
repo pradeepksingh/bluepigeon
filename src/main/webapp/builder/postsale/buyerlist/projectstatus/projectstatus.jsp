@@ -24,18 +24,6 @@
 <c:set var="uri" value="${req.requestURI}" />
 <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <%
-	List<ProjectList> project_list = null;
-	List<City> cityDataList = null;
-	List<BarGraphData> barGraphDatas = null;
-	ProjectImageGallery imageGaleries = null;
-	Long totalBuyers = (long)0;
-	Long totalInventorySold = (long) 0;
-	Long totalLeads = (long)0;
-	Double totalRevenue = 0.0;
-	//Double totalSaleValue = 0.0;
-	Long totalCampaign = (long)0;
-	//Long totalSoldInventory = (long)0;
-	Long totalProjects = (long)0;
 	session = request.getSession(false);
 	BuilderEmployee builder = new BuilderEmployee();
     DecimalFormat decimalFormat = new DecimalFormat("#.##");
@@ -60,26 +48,13 @@
 				emp_id = builder.getId();
 				access_id = builder.getBuilderEmployeeAccessType().getId();
 				if(builder_id > 0 && access_id==6){
-					totalBuyers = new BuyerDAO().getTotalBuyers(builder);
-					totalInventorySold = new ProjectDAO().getTotalInventory(builder);
-					project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder);
-					cityDataList = new CityNamesImp().getCityActiveNames();
-					totalLeads = new ProjectDAO().getTotalLeads(builder);
-					totalProjects = new ProjectDAO().getTotalNumberOfProjects(builder);
-					barGraphDatas = new BuilderDetailsDAO().getBarGraphByBuilderId(builder);
-					//totalSoldInventory = new ProjectDAO().getTotalSoldInventory(builder);
-					//totalSaleValue = new BuilderProjectPriceInfoDAO().getProjectPriceInfoByBuilderId(builder_id);
-					project_size_list = project_list.size();
-					city_size_list = cityDataList.size();
-				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
-					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
-					totalRevenue = totalPropertySold * totalInventorySold;
+					
 					if (request.getParameterMap().containsKey("flat_id")) {
 						flatId = Integer.parseInt(request.getParameter("flat_id"));
 						if(flatId != 0) {
-							int projectId =new ProjectDAO().getActiveBookedUnbookedFlatById(flatId).get(0).getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
-							projectImages = new ProjectDAO().getProjectStatusImages(projectId);
 							buyers = new BuyerDAO().getFlatBuyersByFlatId(flatId);
+							int projectId = buyers.get(0).getBuilderProject().getId();
+							projectImages = new ProjectDAO().getProjectStatusImages(projectId);
 							for(Buyer buyer :buyers) {
 								if(buyer.getIsPrimary()) {
 									primary_buyer_id = buyer.getId();

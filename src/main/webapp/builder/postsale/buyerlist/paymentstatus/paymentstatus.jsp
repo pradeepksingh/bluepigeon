@@ -199,8 +199,8 @@
 							    				</li>
 							    				<li class="col-lg-3 col-xs-12" style="list-style: none;text-align:center">
 							 						<select class="form-control show-tick" >
-														<option value="0" <%if(buyerPayment.isPaid()==false) {%>selected<%} %>>Not Paied</option>
-														<option value="1" <%if(buyerPayment.isPaid()==true){ %>selected<%} %>>Paied</option>
+														<option value="0" <%if(buyerPayment.isPaid()==false) {%>selected<%} %>>Not Paid</option>
+														<option value="1" <%if(buyerPayment.isPaid()==true){ %>selected<%} %>>Paid</option>
 													</select>
 							    				</li>
 							   				</ul>

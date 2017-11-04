@@ -26,6 +26,7 @@ import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.dao.StateImp;
 import org.bluepigeon.admin.data.CityData;
 import org.bluepigeon.admin.data.LocalityData;
+import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.TaxLabels;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.AreaUnit;
@@ -495,4 +496,23 @@ public class GeneralController {
 		return new CountryDAOImp().getTaxLabels(countryId);
 	}
 	
+//	@GET
+//	@Path("/project/list/name")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public List<ProjectData> getProjectNames(@QueryParam("locality_name") String localityName,@QueryParam("emp_id") int empId,@QueryParam("access_id") int accessId) {
+//		
+//		ProjectDAO projectDAO = new ProjectDAO();
+//		return projectDAO.getProjectNames(localityName,empId,accessId);
+//	}
+	
+	@POST
+	@Path("/project/list/name")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectData> getProjectNamesByEmpIds(
+			@FormParam("locality_name") String localityName, 
+			@FormParam("emp_id") int empId,
+			@FormParam("access_id") int accessId){
+		ProjectDAO projectDAO = new ProjectDAO();
+		return projectDAO.getProjectNames(localityName,empId,accessId);
+	}
 }

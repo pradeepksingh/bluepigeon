@@ -335,7 +335,7 @@
 					  <div class="col-md-10 col-sm-10 col-xs-10">
 					  </div>
 					  <div class="col-md-2 col-sm-2 col-xs-2">
-					     <img src="../../images/error.png" alt="cancle" data-dismiss="modal">
+					     <a href=""><img src="../../images/error.png" alt="cancle" data-dismiss="modal"></a>
 					  </div>
 				    </div>
 				  	<div class="row">
@@ -601,7 +601,7 @@ function showImagewithDetails(id){
 			+'<div class="col-md-10 col-sm-10 col-xs-10">'
 			+'</div>'
 			+'<div class="col-md-2 col-sm-2 col-xs-2">'
-			+'<img src="../../images/error.png" alt="cancle" data-dismiss="modal">'
+			+'<a href=""><img src="../../images/error.png" alt="cancle" data-dismiss="modal"></a>'
 			+'</div>'
 		    +'</div>'
 		  	+'<div class="row">'
