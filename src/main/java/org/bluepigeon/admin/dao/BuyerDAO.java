@@ -1076,7 +1076,7 @@ public class BuyerDAO {
 	 */
 	public Long getTotalBuyersByBuilderId(int builderId){
 		Long totalBuyers = (long) 0;
-		String hql = "select COUNT(*) from Buyer where builder.id = :builder_id and is_deleted = 0";
+		String hql = "select COUNT(*) from Buyer where builder.id = :builder_id and is_deleted = 0 and status=0 and is_primary=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -1091,7 +1091,7 @@ public class BuyerDAO {
 	
 	public Long getTotalBuyersByEmpId(int empId){
 		Long totalBuyers = (long) 0;
-		String hql = "select COUNT(buy.id) from buyer as buy left join  builder_project as project on buy.project_id = project.id left join allot_project as ap on ap.project_id = project.id where ap.emp_id = :emp_id and buy.is_deleted = 0";
+		String hql = "select COUNT(buy.id) from buyer as buy left join  builder_project as project on buy.project_id = project.id left join allot_project as ap on ap.project_id = project.id where ap.emp_id = :emp_id and buy.is_deleted = 0 and buy.status=0 and buy.is_primary=1";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createSQLQuery(hql);

@@ -475,6 +475,7 @@ function getBuyerList(element){
 	 }
 }
 	function saveCampaign() {
+		ajaxindicatorstart("Please wait, while loading...");
     	var options = {
     	 		target : '#response', 
     	 		beforeSubmit : showAddRequest,
@@ -499,6 +500,7 @@ function getBuyerList(element){
     		$("#response").show();
     		alert(resp.message);
     		window.location.reload();
+    		ajaxindicatorstop();
       	} else {
       		$("#response").removeClass('alert-danger');
             $("#response").addClass('alert-success');
@@ -506,6 +508,7 @@ function getBuyerList(element){
             $("#response").show();
             alert(resp.message);
             window.location.href = "${baseUrl}/builder/marketinghead/campaign/mycampaigns.jsp?project_id="+$("#project_id").val();
+            ajaxindicatorstop();
       	}
     }
     

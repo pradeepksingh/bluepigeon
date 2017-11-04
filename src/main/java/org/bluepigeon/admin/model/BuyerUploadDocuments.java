@@ -27,7 +27,7 @@ public class BuyerUploadDocuments implements java.io.Serializable {
 	private String docUrl;
 	private Date uploadedDate;
 	private boolean isBuilderdoc;
-	private Integer docType;
+	private Integer docType=1;
 
 	public BuyerUploadDocuments() {
 	}

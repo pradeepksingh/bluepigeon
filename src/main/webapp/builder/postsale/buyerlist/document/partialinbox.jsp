@@ -23,10 +23,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%
-	int empId=0;
+	int buyerId=0;
 	List<InboxMessageData> inboxMessageList = null;
-	empId = Integer.parseInt(request.getParameter("emp_id"));
-	inboxMessageList = new ProjectDAO().getBookedBuyerList(empId);
+	buyerId = Integer.parseInt(request.getParameter("buyer_id"));
+	inboxMessageList = new ProjectDAO().getBookedBuyer(buyerId);
 	SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
 	SimpleDateFormat dt2 = new SimpleDateFormat("h:m a");
 	if(inboxMessageList != null){

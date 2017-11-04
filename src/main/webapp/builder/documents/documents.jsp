@@ -219,12 +219,14 @@ function getBuildingList(element){
 			ids = ids +","+ $(this).val();
 		 }
 	 });
+	 if(ids != ""){
 	 ajaxindicatorstart("Loading...");
 	$.get("${baseUrl}/webapi/builder/building/data/"+ids,{},function(data){
 		$("#filer_building_ids").multiselect('loadOptions',data);
 		  $("#filer_building_ids").multiselect('reload');
 		  ajaxindicatorstop();
 	});
+	 }
 }
 function getFlatBuyerList(element){
 	var ids = "";
@@ -236,12 +238,14 @@ function getFlatBuyerList(element){
 		 }
 	 });
 	// alert(ids);
+	if(ids != ""){
 	 ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/builder/flatbuyer/data/"+ids,{},function(data){
 			$("#flat_buyer_ids").multiselect('loadOptions',data);
 			  $("#flat_buyer_ids").multiselect('reload');
 			  ajaxindicatorstop();
 		});
+	}
 }
 
 $('#flat_buyer_ids').multiselect({

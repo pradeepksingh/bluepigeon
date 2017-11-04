@@ -46,19 +46,24 @@
 			empId=builder.getId();;
 			access_id= builder.getBuilderEmployeeAccessType().getId();
 			if(builder_id > 0 && access_id ==6){
-				if (request.getParameterMap().containsKey("flat_id")) {
-					flat_id = Integer.parseInt(request.getParameter("flat_id"));
-					buyers = new BuyerDAO().getFlatBuyersByFlatId(flat_id);
-					project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
-					buyerUploadDocuments = new BuyerDAO().getBuyerUploadDocumentsByBuyerId(buyers.get(0).getId());
-					inboxMessageList = new ProjectDAO().getBookedBuyerList(empId);
-					buyerData = new ProjectDAO().getAllBuyersByBuilderEmployee(builder);
-					for(Buyer buyer :buyers) {
-						if(buyer.getIsPrimary()) {
-							primary_buyer_id = buyer.getId();
-							buyerName = buyer.getName();
+				try{
+					if (request.getParameterMap().containsKey("flat_id")) {
+						flat_id = Integer.parseInt(request.getParameter("flat_id"));
+						buyers = new BuyerDAO().getFlatBuyersByFlatId(flat_id);
+						project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+						
+						buyerData = new ProjectDAO().getAllBuyersByBuilderEmployee(builder);
+						for(Buyer buyer :buyers) {
+							if(buyer.getIsPrimary()) {
+								primary_buyer_id = buyer.getId();
+								buyerName = buyer.getName();
+							}
 						}
+						buyerUploadDocuments = new BuyerDAO().getBuyerUploadDocumentsByBuyerId(primary_buyer_id);
+						inboxMessageList = new ProjectDAO().getBookedBuyer(primary_buyer_id);
 					}
+				}catch(Exception e){
+					
 				}
 			}else{
 				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
@@ -76,7 +81,7 @@
     <title>POSTSALE Document</title>
 
     <!-- Favicon-->
-    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -128,7 +133,9 @@ button {
     cursor: pointer;
     width: 100%;
 }
-
+.newsubmit{
+  margin:8px 114px;
+}
 /* Extra styles for the cancel button */
 .cancelbtn {
     padding: 14px 20px;
@@ -165,17 +172,20 @@ border-radius: 5px;}
     background-color: #fefefe;
     margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
     border: 1px solid #888;
-    width: 34%; /* Could be more or less, depending on screen size */
+    width: 50%; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button (x) */
 .close {
     position: absolute;
-    right: 35px;
-    top: 15px;
-    color: #000;
+/*     right: 514px; */
+/*     top: 128px; */
+/*     color: #ff0000; */
+ right: 360px;
+    top: 75px;
     font-size: 40px;
     font-weight: bold;
+    z-index:1;
 }
 
 .close:hover,
@@ -196,6 +206,9 @@ border-radius: 5px;}
     .cancelbtn, .signupbtn {
        width: 100%;
     }
+}
+.closeimg{
+width:50%;
 }
 </style>
 </head>
@@ -284,7 +297,7 @@ border-radius: 5px;}
 											<div class="button-demo row">
 							       				<li class="col-lg-4 col-xs-12" style="list-style: none;"></li>
 							   					<li class="col-lg-4 col-xs-12" style="list-style: none;">
-							   						<button type="button" class="btn btn-success waves-effect" onclick="openGeneralDoc();" style="width: 100%; ">Upload</button>
+							   						<button type="button" class="btn btn-success waves-effect" onclick="openGeneralDoc();" style="width: 89%; ">Upload</button>
 							  	 				</li>
 											</div>
 										</div>
@@ -309,7 +322,7 @@ border-radius: 5px;}
 											<div class="button-demo row">
                                 				<li class="col-lg-2 col-xs-12" style="list-style: none;"></li>
 							   					<li class="col-lg-4 col-xs-12" style="list-style: none;">
-							   						<button type="button" class="btn btn-success waves-effect" onclick="openDemandLetter();" style="width: 100%; ">Upload</button>
+							   						<button type="button" class="btn btn-success waves-effect" onclick="openDemandLetter();" style="width: 89%; ">Upload</button>
 							  	 				</li>
 							   					<li class="col-lg-2 col-xs-12" style="list-style: none;text-align: center; margin-top:8px">
 							  						Or
@@ -339,7 +352,7 @@ border-radius: 5px;}
 											<div class="button-demo row">
                                 				<li class="col-lg-4 col-xs-12" style="list-style: none;"></li>
 							   					<li class="col-lg-4 col-xs-12" style="list-style: none;">
-							   						<button type="button" onclick="openPayment();" class="btn btn-success waves-effect" style="width: 100%; ">Upload</button>
+							   						<button type="button" onclick="openPayment();" class="btn btn-success waves-effect" style="width: 89%; ">Upload</button>
 							   					</li>
 											</div>
 										</div>
@@ -480,65 +493,65 @@ border-radius: 5px;}
 	</form>
 </div>
 <div id="generaldoc" class="modal col-lg-7" >
-	<span onclick="document.getElementById('generaldoc').style.display='none'" class="close" title="Close Modal">×</span>
-	<form class="modal-content animate" action="" id="generaldocform" name="generaldocname" method="post" enctype="multipart/form-data">
-	<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
-	<input type="hidden" id="doc_type" name="doc_type" value="1"/>
-	<input type="hidden" name="doc_id[]" value="0" />
-		<div class="col-lg-12" style="background:white" >
+	<div class="col-lg-12">
+		<span class="close" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
+		<form class="modal-content animate" action="" id="generaldocform" name="generaldocname" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
+			<input type="hidden" id="doc_type" name="doc_type" value="1"/>
+			<input type="hidden" name="doc_id[]" value="0" />
 			<div class="row clearfix" >
-				<div class="col-lg-4" style="margin-top:17px">
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Document Name</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter doc name" name="doc_name[]"  required>
+						<input type="text" placeholder="Enter doc name" name="doc_name[]" style="margin-left:-9px;" required>
 					</div>
 					<div class="messageContainer"></div>
                 </div>
-				<div class="col-lg-4" style="margin-top:17px">
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Upload Document</b></label>
 				</div>
 				<div class="col-lg-4">
 					<div class="file-upload">
 						<div class="file-select">
 							<div class="file-select-button" id="fileName">Choose File</div>
-							<div class="file-select-name" id="noFile">No file chosen...</div> 
-							<input type="file" name="doc_url[]" id="chooseFile">
+							<p class="file-select-name" id="fileselectgeneral">No file chosen...</p>
+							<input type="file" name="doc_url[]" onchange="getGeneralFileData(this);" id="choosegeneraldoc">
 						</div>
 					</div>
-                 	</div>
+                 </div>
 				<button type="submit" class="signupbtn">Submit</button>
 			</div>
+			</form>
 		</div>
-	</form>
 </div>
 <div id="demandlettermodel" class="modal col-lg-7" >
-	<span onclick="document.getElementById('demandlettermodel').style.display='none'" class="close" title="Close Modal">×</span>
+	<span class="close closedemand" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
 	<form class="modal-content animate" action="" id="demanddocform" name="demanddocform"  method="post" enctype="multipart/form-data">
 	<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
 	<input type="hidden" name="doc_id[]" value="0" />
 	<input type="hidden" name="doc_type" id="doc_type" value="2"/>
 		<div class="col-lg-12" style="background:white" >
 			<div class="row clearfix" >
-				<div class="col-lg-4" style="margin-top:17px">
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Document Name</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter doc name" name="doc_name[]"  required>
+						<input type="text" placeholder="Enter doc name" name="doc_name[]" style="margin-left:-9px;" required>
 					</div>
 					<div class="messageContainer"></div>
                 </div>
-				<div class="col-lg-4" style="margin-top:17px">
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Upload Document</b></label>
 				</div>
 				<div class="col-lg-4">
 					<div class="file-upload">
 						<div class="file-select">
 							<div class="file-select-button" id="fileName">Choose File</div>
-							<div class="file-select-name" id="noFile">No file chosen...</div> 
-							<input type="file" name="doc_url[]" id="chooseFile">
+							<p class="file-select-name" id="fileselectdemand">No file chosen...</p>
+							<input type="file" name="doc_url[]" onchange="getDemandFileData(this);" id="choosegeneraldoc">
 						</div>
 					</div>
                 </div>
@@ -548,14 +561,14 @@ border-radius: 5px;}
 	</form>
 </div>
 <div id="genratedemandlettermodel" class="modal col-lg-7" >
-	<span onclick="document.getElementById('genratedemandlettermodel').style.display='none'" class="close" title="Close Modal">×</span>
+	<span class="close closegenerate" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
 	<form class="modal-content animate" action="" id="genratedemanddocform" name="genratedemanddocform"  method="post" enctype="multipart/form-data">
 	<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
 	<input type="hidden" name="doc_id[]" value="0" />
 	<input type="hidden" name="doc_type" id="doc_type" value="2"/>
 		<div class="col-lg-12" style="background:white" >
 			<div class="row clearfix" >
-				<div class="col-lg-4" style="margin-top:17px">
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Document Name</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
@@ -564,25 +577,13 @@ border-radius: 5px;}
 					</div>
 					<div class="messageContainer"></div>
                 </div>
-				<div class="col-lg-4" style="margin-top:17px">
-					<label><b>Upload Document</b></label>
-				</div>
-				<div class="col-lg-4">
-					<div class="file-upload">
-						<div class="file-select">
-							<div class="file-select-button" id="fileName">Choose File</div>
-							<div class="file-select-name" id="noFile">No file chosen...</div> 
-							<input type="file" name="doc_url[]" id="chooseFile">
-						</div>
-					</div>
-                </div>
-				<button type="submit" class="signupbtn">Submit</button>
+				<button type="submit" class="signupbtn submitgenerate">Submit</button>
 			</div>
 		</div>
 	</form>
 </div>
 <div id="paymentrecipetdoc" class="modal col-lg-7" >
-	<span onclick="document.getElementById('paymentrecipetdoc').style.display='none'" class="close" title="Close Modal">×</span>
+	<span class="close closegenerate" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
 	<form class="modal-content animate" action="" id="paymentdocform" method="post" name="paymentdocform" enctype="multipart/form-data">
 	<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
 	<input type="hidden" name="doc_id[]" value="0" />
@@ -594,7 +595,7 @@ border-radius: 5px;}
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter doc name" name="doc_name[]"  required>
+						<input type="text" placeholder="Enter doc name" name="doc_name[]" style="margin-left:-9px;" required>
 					</div>
 					<div class="messageContainer"></div>
                 </div>
@@ -605,8 +606,8 @@ border-radius: 5px;}
 					<div class="file-upload">
 						<div class="file-select">
 							<div class="file-select-button" id="fileName">Choose File</div>
-							<div class="file-select-name" id="noFile">No file chosen...</div> 
-							<input type="file" name="doc_url[]" id="chooseFile">
+							<p class="file-select-name" id="fileselectpayment">No file chosen...</p>
+							<input type="file" name="doc_url[]" onchange="getPaymentFileData(this);" id="choosegeneraldoc">
 						</div>
 					</div>
                 </div>
@@ -687,7 +688,12 @@ function showAddGenDocumentResponse(resp, statusText, xhr, $form){
    	    	ajaxindicatorstop();
    	    },'html');
       	$("input[name='doc_name[]']").val('');
-      	$("#generaldoc").modal('hide');
+      //	$("#generaldoc").modal('hide');
+      	//$("#generaldoc").dialog( "close" );
+      	
+      	$(".modal").on("hidden.bs.modal", function(){
+      	    $("#generaldoc").html("");
+      	});
   	}
 }
 function autogenerateDemandLetter(){
@@ -980,10 +986,13 @@ function showPriceResponse(resp, statusText, xhr, $form){
         $("#pricingresponse").show();
         alert(resp.message);
         ajaxindicatorstop();
-        $.get('${baseUrl}/builder/postsale/buyerlist/document/partialinbox.jsp?emp_id=<% out.print(empId);%>',{},function(data) {
+        $.get('${baseUrl}/builder/postsale/buyerlist/document/partialinbox.jsp?buyer_id=<% out.print(primary_buyer_id);%>',{},function(data) {
 	    	$("#replymsg").html(data);
 	    	ajaxindicatorstop();
 		},'html');
+        $("#subject").val('');
+        $("#message").val('');
+        $("#newmessage").modal('hide');
   	}
 }
 
@@ -1159,9 +1168,8 @@ function deleteDemandDocument(id) {
  			}
  		});
  	}
- }
+}
 function deletePaymentDocument(id) {
-	
  	var flag = confirm("Are you sure ? You want to delete this document ?");
  	if(flag) {
  		ajaxindicatorstart("Loading...");
@@ -1175,7 +1183,30 @@ function deletePaymentDocument(id) {
  			}
  		});
  	}
- }
+}
+ 
+	
+function getGeneralFileData(myFile){
+   var file = myFile.files[0];  
+   var filename = file.name;
+   $("#fileselectgeneral").empty();
+   $("#fileselectgeneral").html(filename);
+}
+
+function getDemandFileData(myFile){
+   var file = myFile.files[0];  
+   var filename = file.name;
+   $("#fileselectdemand").empty();
+   $("#fileselectdemand").html(filename);
+}
+	
+	
+function getPaymentFileData(myFile){
+   var file = myFile.files[0];  
+   var filename = file.name;
+   $("#fileselectpayment").empty();
+   $("#fileselectpayment").html(filename);
+}
  
  $("#postsalepaymentstatus").click(function(){
 	window.location.href = "${baseUrl}/builder/postsale/buyerlist/paymentstatus/paymentstatus.jsp?flat_id=<%out.print(flat_id);%>";
