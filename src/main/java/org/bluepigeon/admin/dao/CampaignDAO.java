@@ -506,5 +506,4 @@ public class CampaignDAO {
 		session.close();
 		return result.get(0);
 	}
-	
 }

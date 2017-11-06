@@ -2387,4 +2387,14 @@ public class BuilderDetailsDAO {
 			session.getTransaction().commit();
 			session.close();
 		}
+		
+		public List<EmployeeRole> getEmployeeRolesByEmployee(int empId){
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			String hql = "from EmployeeRole where builderEmployee.id="+empId;
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			List<EmployeeRole> employeeRoles = query.list();
+			session.close();
+			return employeeRoles;
+		}
 }

@@ -29,7 +29,7 @@ if(session!=null)
 		builder  = (BuilderEmployee)session.getAttribute("ubname");
 		session_id = builder.getBuilder().getId();
 		access_id = builder.getBuilderEmployeeAccessType().getId();
-		if(session_id > 0){
+		if(session_id > 0 && access_id == 6){
 			if (request.getParameterMap().containsKey("project_id")) {
 				projectId = Integer.parseInt(request.getParameter("project_id"));
 				if(projectId != 0) {
@@ -38,6 +38,8 @@ if(session!=null)
 		 			flats = new ProjectDAO().getProjectFlatListByBuilder(projectId, building_id, "");
 				}
 			}
+		}else{
+			response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 		}
 	}
 

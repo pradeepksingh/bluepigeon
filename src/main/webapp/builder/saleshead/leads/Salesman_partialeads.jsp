@@ -20,43 +20,59 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%
- 	int project_size = 0;
-	int type_size = 0;
-	int city_size = 0;
-	int projectId = 0;
-	int emp_id =0 ;
-	int access_id = 0;
- 	List<BuilderEmployee> salesmanList = null;
- 	List<Source> sourceList = null;
- 	BuilderProject builderProject = null;
- 	List<NewLeadList> newLeadLists = null;
- 	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
-   	session = request.getSession(false);
-   	BuilderEmployee builder = new BuilderEmployee();
-   	int builder_id = 0;
-   	String keyword = "";
-   	int empId = 0;
-   	List<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos =null;
-	if (request.getParameterMap().containsKey("project_id")) {
-		projectId = Integer.parseInt(request.getParameter("project_id")); 
-		empId = Integer.parseInt(request.getParameter("emp_id"));
-		keyword = request.getParameter("keyword");
-		builder = new BuilderDetailsDAO().getBuilderEmployeeById(empId);
-		salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
-	 	newLeadLists = new ProjectDAO().getNewLeadList(projectId,empId,keyword);
-	 	
+int project_size = 0;
+int type_size = 0;
+int city_size = 0;
+int projectId = 0;
+int emp_id =0 ;
+int access_id = 0;
+	List<BuilderEmployee> salesmanList = null;
+	List<Source> sourceList = null;
+	BuilderProject builderProject = null;
+	List<NewLeadList> newLeadLists = null;
+	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
+	session = request.getSession(false);
+	BuilderEmployee builder = new BuilderEmployee();
+	int builder_id = 0;
+	List<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos =null;
+
+	if(session!=null)
+	{
+		if(session.getAttribute("ubname") != null)
+		{
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			builder_id = builder.getBuilder().getId();
+			emp_id = builder.getId();
+			access_id = builder.getBuilderEmployeeAccessType().getId();
+			if(builder_id > 0 && access_id ==5){
+				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
+				salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
+				if (request.getParameterMap().containsKey("project_id")) {
+					projectId = Integer.parseInt(request.getParameter("project_id")); 
+					builderProject = new ProjectDAO().getBuilderActiveProjectById(projectId);
+				 	builderProjectPropertyConfigurationInfos = new ProjectDAO().getPropertyConfigByProjectId(projectId);
+				 	newLeadLists = new ProjectDAO().getNewLeadList(projectId,builder);
+				 	if(builderPropertyTypes != null){
+					 	if(builderPropertyTypes.size()>0)
+					 		type_size = builderPropertyTypes.size();
+					}
+				}
+			}else{
+				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
+			}
+		}
 	}
    	if(newLeadLists != null && newLeadLists.size() > 0){
 		for(NewLeadList newLeadList : newLeadLists){ %>
-	                 <div class="border-lead">
-	                  <div class="row">
-	                    <div class="col-md-2 col-sm-2 col-xs-6">
-	                     <h4><%out.print(newLeadList.getLeadName()); %></h4>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6">
-	                     <h4><%out.print(newLeadList.getPhoneNo()); %></h4>
-	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6">
+	     <div class="border-lead">
+	          <div class="row">
+                   <div class="col-md-3 col-sm-2 col-xs-6">
+                    	<h4><%out.print(newLeadList.getLeadName()); %></h4>
+                   </div>
+                    <div class="col-md-2 col-sm-2 col-xs-6">
+                    	<h4><%out.print(newLeadList.getPhoneNo()); %></h4>
+                   </div>
+	                     <div class="col-md-3 col-sm-2 col-xs-6">
 	                     <h4><%out.print(newLeadList.getEmail()); %></h4>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6">
@@ -84,10 +100,10 @@
 	                    <div class="col-md-2 col-sm-2 col-xs-6">
 	                      <div class="dropdown">
 						  		<select id="select_salesman" class="select_salesman" name="select_salesman" data-style="form-control">
-							   <% //if(salesmanList != null ){
+							   <% if(salesmanList != null ){
 	                    		for(BuilderEmployee salesman : salesmanList){%>
 							        <option value="<%out.print(salesman.getId());%>"><%out.print(salesman.getName()); %></option>
-							    <% }//}%>
+							    <% }}%>
 							  	</select>
 						  </div>
 	                    </div>
@@ -95,7 +111,7 @@
 	                 </div>
 	                 <hr>
 	                 <div class="row">
-	                    <div class="col-md-2 col-sm-2 col-xs-6 inline">
+	                    <div class="col-md-3 col-sm-2 col-xs-6 inline">
 	                     <img src="../../images/Saleshead-added.PNG" />
 	                     <h5>Added By :</h5>
 	                    </div>
@@ -103,7 +119,7 @@
 	                      <img src="../../images/Baget.PNG" />
 	                     <h5>Budget:</h5>
 	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
+	                     <div class="col-md-3 col-sm-2 col-xs-6 inline">
 	                      <img src="../../images/Configuration.PNG" />
 	                      <h5>Configuration :</h5>
 	                    </div>
@@ -132,7 +148,7 @@
 	                    </div>
 	                 </div>
 	                 <div class="row">
-	                    <div class="col-md-2 col-sm-2 col-xs-6 inline">
+	                    <div class="col-md-3 col-sm-2 col-xs-6 inline">
 	                     <h6><%out.print(newLeadList.getSalesheadName()); %></h6>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
@@ -144,7 +160,7 @@
 		                     out.print("Rs "+newLeadList.getMin());%> -<%out.print(newLeadList.getMax()+" Lakh");
 	                     } %> </h6>
 	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
+	                     <div class="col-md-3 col-sm-2 col-xs-6 inline">
 	                      <h6>
 	                      <%out.print(newLeadList.getConfigName());
 	                      %>
@@ -158,7 +174,4 @@
 	                    </div>
 	                 </div>
 	               </div>
-<%
-		}
-	}
-%>
+	               <%} }%>

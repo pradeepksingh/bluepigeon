@@ -176,13 +176,13 @@ h3 {
 .input-group-btn {
     padding: 0px 0px;
 }
-.btn {
-    display: inline-block;
-    padding: 16px 20px;
-    margin-bottom: 0;
-    margin-top: 7px;
-    font-size: 14px;
-    }
+/* .btn { */
+/*     display: inline-block; */
+/*     padding: 16px 20px; */
+/*     margin-bottom: 0; */
+/*     margin-top: 7px; */
+/*     font-size: 14px; */
+/*     } */
 
     @media (min-width: 1000px){
  
@@ -477,8 +477,8 @@ font-size: 17px
 
 }
 .white-box{
-	width: 99%;
-    margin-top: 1%;
+/* 	width: 99%; */
+/*     margin-top: 1%; */
 	
 }
 

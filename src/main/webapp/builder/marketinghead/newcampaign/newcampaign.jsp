@@ -155,6 +155,7 @@ Date date = new Date();
 								 <label>End Date<span class="text-danger">*</span></label> <input type="text" id="end_date" name="end_date"><br>
 						 	    <div class="messageContainer"></div>
 					 	     </div>
+					 	     </div>
 					 	     <div class="inline1">
 					 	         <button type="button" href="#demo" data-toggle="collapse"> 
  								    Preview
@@ -630,22 +631,7 @@ function getBuyerList(element){
     	window.location.href="${baseUrl}/builder/marketinghead/campaign/mycampaigns.jsp?project_id=<% out.print(projectId);%>";
     });
     
-    $(".todolist").focus(function() {
-        if(document.getElementById('tc').value == ''){
-            document.getElementById('tc').value +='\u25CF';
-            
-    	}
-    });
-    $(".todolist").keyup(function(event){
-    	var keycode = (event.keyCode ? event.keyCode : event.which);
-        if(keycode == '13'){
-            document.getElementById('tc').value +='\u25CF';
-    	}
-    	var txtval = document.getElementById('tc').value;
-    	if(txtval.substr(txtval.length - 1) == '\n'){
-    		document.getElementById('tc').value = txtval.substring(0,txtval.length - 1);
-    	}
-    });
+   
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -667,3 +653,10 @@ function getBuyerList(element){
         document.getElementById('camptitle').innerHTML = inputBox.value;
     }
 </Script>
+<script>
+$(document).ready(function(){
+	   $("#closeimg").click(function(){
+	       $(".collapse").removeClass("in");
+	   });
+	});
+</script>

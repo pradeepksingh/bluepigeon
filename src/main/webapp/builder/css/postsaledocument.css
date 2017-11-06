@@ -1,3 +1,6 @@
+html {
+    overflow-x: hidden;
+}
 button:focus {outline:0 !important;}
 input:focus {outline:0 !important; }
 textarea:focus {outline:0 !important;}

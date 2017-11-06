@@ -52,6 +52,28 @@ public class BuilderLoginController {
 		//}	
 			return registration;	
 	}
+	
+	@POST
+	@Path("/builder/switch")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage validateBuilderSwitch(@FormParam("access_id") int access_id)//, @FormParam("cityid") int cityid)
+//	public Registration getJson(@Context HttpServletRequest req)
+	{
+		ResponseMessage registration = new ResponseMessage();
+		
+			session = req.getSession();
+			session.getAttribute("ubname");
+			BuilderEmployee builder = new BuilderEmployee();
+			builder  = (BuilderEmployee)session.getAttribute("ubname");
+			BuilderEmployeeAccessType builderEmployeeAccessType = new BuilderEmployeeAccessType();
+			builderEmployeeAccessType.setId(access_id);
+			builder.setBuilderEmployeeAccessType(builderEmployeeAccessType);
+			//session.setAttribute("cityid", cityid);
+			System.out.println("Hi from controller");
+			session.setAttribute("ubname", builder);
+			registration.setStatus(1);
+			return registration;	
+	}
 
 	@POST
 	@Path("/activate/builder")

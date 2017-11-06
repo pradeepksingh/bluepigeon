@@ -1,3 +1,13 @@
+html {
+    overflow-x: hidden;
+}
+.help-block{
+
+    margin-left: 48%;
+    margin-top: -26px;
+    width: 50%;
+    margin-bottom: 30px;
+}
 button:focus {outline:0;}
 input:focus {outline:0;}
 textarea:focus {outline:0;}
@@ -301,11 +311,11 @@ textarea{
     margin-bottom: 18px;
 	}
 	    .bg11{
-	    height: 750px;
+	    height: auto;
 	    }
 		.bspace1 .btn11 {
     text-transform: uppercase;
-    width: 28% !important;
+    width: 30% !important;
     margin: 0% 3% 0% 0%;
 }
 	
@@ -367,9 +377,13 @@ width: 47% !important;
     font-size: 20px;
     cursor: pointer;
     opacity: 0;
+    width: 100% !important;
+    
     filter: alpha(opacity=0);
 }
-
+.fileUpload span{ 
+	 cursor: pointer;
+}
 @media (min-width: 768px)
 {
 	  .bg12 textarea{
@@ -750,7 +764,7 @@ width: 47% !important;
 }
     .btn11 {
     text-transform: uppercase;
-    width: 95% !important;;
+    width: 100% !important;;
     font-size: 21px !important;
     padding: 1.8rem 5rem !important;
     border: none;
@@ -1209,6 +1223,7 @@ h4 span{
     position: relative;
 }
 }
+
 @media screen and (max-width: 768px) {
 .form{
 	padding:5% 5%;

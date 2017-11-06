@@ -20,15 +20,19 @@
 	List<ProjectData> project_list = null;
 	int builder_id = 0;
 	int empId = 0;
+	int access_id =0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
+			access_id=builder.getBuilderEmployeeAccessType().getId();
 			empId = builder.getId();
-			if(builder_id > 0){
+			if(builder_id > 0 && access_id == 6){
 				project_list = new ProjectDAO().getAssigProjects(empId);
+			}else{
+				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 			}
 		}
 		

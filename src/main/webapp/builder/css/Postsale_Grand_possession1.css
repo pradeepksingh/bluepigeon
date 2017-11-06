@@ -7339,3 +7339,7 @@ html.ie11 .bs-searchbox .form-control {
 p {
     margin: 0 0 8px;
 }
+.image img {
+    height: 200px;
+    width: 85%;
+}

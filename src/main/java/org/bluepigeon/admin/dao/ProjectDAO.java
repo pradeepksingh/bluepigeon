@@ -4101,7 +4101,7 @@ public class ProjectDAO {
 	 */
 	public Long getTotalInventory(BuilderEmployee builderEmployee){
 		Long totalInventory= (long) 0;
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1 || builderEmployee.getBuilderEmployeeAccessType().getId()==2){
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() <=3|| builderEmployee.getBuilderEmployeeAccessType().getId()==6){
 			totalInventory = getTotalFlatsByBuilderId(builderEmployee.getBuilder().getId());
 		}
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==4 || builderEmployee.getBuilderEmployeeAccessType().getId() ==5 || builderEmployee.getBuilderEmployeeAccessType().getId()==7 ){
@@ -4723,9 +4723,9 @@ public class ProjectDAO {
 	 */
 	public Long getTotalLeads(BuilderEmployee builderEmployee){
 		Long totalLeads =(long) 0;
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1|| builderEmployee.getBuilderEmployeeAccessType().getId() ==2){
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 2){
 			totalLeads = getTotalLeadsByBuilderId(builderEmployee.getBuilder().getId());
-		}if((builderEmployee.getBuilderEmployeeAccessType().getId() >=4 && builderEmployee.getBuilderEmployeeAccessType().getId() <= 6) || builderEmployee.getBuilderEmployeeAccessType().getId() ==7){
+		}if((builderEmployee.getBuilderEmployeeAccessType().getId() >=3 && builderEmployee.getBuilderEmployeeAccessType().getId() <= 6) || builderEmployee.getBuilderEmployeeAccessType().getId() ==7){
 			totalLeads = getTotalLeadsByEmployeeId(builderEmployee.getId());
 		}
 		return totalLeads;
@@ -4778,11 +4778,10 @@ public class ProjectDAO {
 	 */
 	public Long getTotalNumberOfProjects(BuilderEmployee builderEmployee){
 		Long totalProjects =(long) 0;
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1 || builderEmployee.getBuilderEmployeeAccessType().getId() ==2){
-			totalProjects = getTotalNumberOfProjectsByBuilderId(builderEmployee.getBuilder().getId());
-		}
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 4 || builderEmployee.getBuilderEmployeeAccessType().getId() ==5 || builderEmployee.getBuilderEmployeeAccessType().getId()==7){
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() >2){
 			totalProjects = getTotalNumberOfProjectsByEmpId(builderEmployee.getId());
+		}else{
+			totalProjects = getTotalNumberOfProjectsByBuilderId(builderEmployee.getBuilder().getId());
 		}
 		return totalProjects;
 	}
@@ -4870,7 +4869,7 @@ public class ProjectDAO {
 	 */
 	public Double getTotalRevenues(BuilderEmployee builderEmployee){
 		Double totalRevenue = 0.0;
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1 || builderEmployee.getBuilderEmployeeAccessType().getId() ==2){
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() <= 3 || builderEmployee.getBuilderEmployeeAccessType().getId() ==6){
 			totalRevenue = getRevenueOfsoldInventoryByBuilderId(builderEmployee.getBuilder().getId());
 		}
 		else if(builderEmployee.getBuilderEmployeeAccessType().getId() == 4 || builderEmployee.getBuilderEmployeeAccessType().getId() == 5 || builderEmployee.getBuilderEmployeeAccessType().getId() ==7){
@@ -6923,7 +6922,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	 * @return
 	 */
 	public List<EmployeeList> getBuilderEmployeeList(BuilderEmployee builderEmployee){
-		String hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email, access.name as access from builder_employee as emp join builder_employee_access_type as access on access.id=emp.access_type_id where emp.builder_id="+builderEmployee.getBuilder().getId()+" GROUP by emp.id order by emp.id desc";
+		String hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email,GROUP_CONCAT(access.name) as access from builder_employee as emp join employee_role as er on er.emp_id=emp.id join builder_employee_access_type as access on access.id=er.role_id where emp.builder_id="+builderEmployee.getBuilder().getId()+" GROUP by emp.id order by emp.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
@@ -6957,13 +6956,13 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	public List<EmployeeList> getBuilderEmployeeList(int builderId, int roleId, String keyword){
 		String hql = "";
 		if(keyword == "") {
-			 hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email, access.name as access from builder_employee as emp join builder_employee_access_type as access on access.id= emp.access_type_id join builder_project as project on project.group_id=emp.builder_id where emp.builder_id="+builderId;
+			 hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email,GROUP_CONCAT(access.name) as access from builder_employee as emp join employee_role as er on er.emp_id=emp.id join builder_employee_access_type as access on access.id=er.role_id join builder as builder on builder.id=emp.builder_id where emp.builder_id="+builderId;
 			 if(roleId > 0){		
 				 hql=hql+" and access.id="+roleId;
 			 }
 			 hql=hql+ " group by emp.id order by emp.id DESC";
 		}else{
-			 hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email, access.name as access from builder_employee as emp join builder_employee_access_type as access on access.id= emp.access_type_id join builder_project as project on project.group_id=emp.builder_id where emp.builder_id="+builderId+"  and (emp.name like '%"+keyword+"%' OR emp.mobile like '%"+keyword+"%')";
+			 hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email,GROUP_CONCAT(access.name) as access from builder_employee as emp join employee_role as er on er.emp_id=emp.id join builder_employee_access_type as access on access.id=er.role_id join builder as builder on builder.id=emp.builder_id where emp.builder_id="+builderId+"  and (emp.name like '%"+keyword+"%' OR emp.mobile like '%"+keyword+"%')";
 			 if(roleId > 0){
 				 hql=hql+" and access.id="+roleId;
 			 }

@@ -1,3 +1,7 @@
+<%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.bluepigeon.admin.model.EmployeeRole"%>
+<%@page import="java.util.List"%>
 <%@page import="org.bluepigeon.admin.model.BuilderEmployee"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -9,6 +13,7 @@
 <%
 session = request.getSession(false);
 	BuilderEmployee mainadmin = new BuilderEmployee();
+	List<EmployeeRole> employeeRoles = new ArrayList<EmployeeRole>();
 	int session_uid = 0;
 	int access_uid =0;
 	if(session!=null)
@@ -18,6 +23,8 @@ session = request.getSession(false);
 			mainadmin  = (BuilderEmployee)session.getAttribute("ubname");
 			session_uid = mainadmin.getId();
 			access_uid = mainadmin.getBuilderEmployeeAccessType().getId();
+			employeeRoles = new BuilderDetailsDAO().getEmployeeRolesByEmployee(session_uid);
+			
 		}
    	}
 	if(session_uid <= 0) {
@@ -149,6 +156,11 @@ session = request.getSession(false);
 <!--                             <li><a href="javascript:void(0)"><i class="ti-user"></i>  My Profile</a></li> -->
 <!--                             <li><a href="javascript:void(0)"><i class="ti-email"></i>  Inbox</a></li> -->
 <!--                             <li><a href="javascript:void(0)"><i class="ti-settings"></i>  Account Setting</a></li> -->
+							<%if(employeeRoles!=null){ 
+								for(EmployeeRole employeeRole : employeeRoles){
+							%>
+							 <li><a href="javascript:switchRole(<%out.print(employeeRole.getBuilderEmployeeAccessType().getId());%>);"><i class="ti-settings"></i><%out.print("switch As "+employeeRole.getBuilderEmployeeAccessType().getName()); %></a></li>
+							<%}} %>
                             <li><a href="${baseUrl }/webapi/validatebuilder/logoutbuilder"><i class="fa fa-power-off"></i>  Logout</a></li>
                         </ul>
                         <!-- /.dropdown-user -->
@@ -159,7 +171,19 @@ session = request.getSession(false);
             </div>
             <!--  <script src="${baseUrl}/js/bootstrap.min.js"></script>-->
             <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
-           
+           <script>
+           function switchRole(id){
+        	   $.post('${baseUrl}/webapi/validatebuilder/builder/switch',{access_id: id}, function(data){
+        			var success = data.status;
+        			var status =parseInt(success);
+        			if(status==1) {
+        				$("#perror").empty();
+        				$('#error').empty();
+        				window.location.href="${baseUrl }/builder/dashboard.jsp";	
+        			} 
+        		},'json');
+           }
+           </script>
             <!-- /.navbar-header -->
             <!-- /.navbar-top-links -->
             <!-- /.navbar-static-side -->
