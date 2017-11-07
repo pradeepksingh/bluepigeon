@@ -185,7 +185,6 @@ Date date = new Date();
  							  </div>
 					      </div>
 					   </div>
-				  	</div>
 				   <!-- Modal of Recipients +-->
   					<div class="modal fade" id="myModal" role="dialog">
     					<div class="modal-dialog">
@@ -266,6 +265,7 @@ Date date = new Date();
 						</div>
 					</div>
 				</form>
+				
 			</div>
 		</div>
 	</div>

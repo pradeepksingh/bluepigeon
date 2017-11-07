@@ -525,18 +525,13 @@ public class EmployeeController {
 					e.printStackTrace();
 				}
 		}
-		int ap[] = new int[3];
 		responseMessage = new BuilderDetailsDAO().saveEmployee(builderEmployee);
-		int z=0;
 		if(accessIds != null && accessIds.size() >0){
 			for(FormDataBodyPart accessId : accessIds){
 				if(accessId.getValueAs(Integer.class) == 3 || accessId.getValueAs(Integer.class) == 4 || accessId.getValueAs(Integer.class) == 6){
 					isTrue=true;
-					ap[z]=accessId.getValueAs(Integer.class);
-					z++;
-					continue;
+					break;
 				}
-				
 			}
 		}
 		if(responseMessage.getId() > 0 && accessIds != null && accessIds.size() >0){
@@ -555,31 +550,30 @@ public class EmployeeController {
 			if(employeeRoles.size() > 0){
 				responseMessage =  new BuilderDetailsDAO().saveEmpRoles(employeeRoles);
 			}
-	}
-	if(isTrue){
-		if(responseMessage.getId() > 0 && projectId != null && projectId.size() >0){
-			builderEmployee.setId(responseMessage.getId());
-			List<AllotProject> allotProjectList = new ArrayList<>();
-			for(FormDataBodyPart projects : projectId){
-				if(projects.getValueAs(Integer.class) != null ){
-					//for(int k=0;k<ap.length;k++){
-					//	if(ap[k]==3 || ap[k]==4 || ap[k]==6){
-							//System.err.println("ap["+k+"] = "+projects.getValueAs(Integer.class));
-							AllotProject allotProject = new AllotProject();
-							allotProject.setBuilderEmployee(builderEmployee);
-							BuilderProject builderProject = new BuilderProject();
-							builderProject.setId(projects.getValueAs(Integer.class));
-							allotProject.setBuilderProject(builderProject);
-							allotProjectList.add(allotProject);
+			if(responseMessage.getId() > 0 && projectId != null && projectId.size() >0){
+				builderEmployee.setId(responseMessage.getId());
+				List<AllotProject> allotProjectList = new ArrayList<>();
+				for(FormDataBodyPart projects : projectId){
+					if(projects.getValueAs(Integer.class) != null ){
+						//for(int k=0;k<ap.length;k++){
+						//	if(ap[k]==3 || ap[k]==4 || ap[k]==6){
+								//System.err.println("ap["+k+"] = "+projects.getValueAs(Integer.class));
+								AllotProject allotProject = new AllotProject();
+								allotProject.setBuilderEmployee(builderEmployee);
+								BuilderProject builderProject = new BuilderProject();
+								builderProject.setId(projects.getValueAs(Integer.class));
+								allotProject.setBuilderProject(builderProject);
+								allotProjectList.add(allotProject);
+							//}
 						//}
-					//}
+					}
+				}
+				if(allotProjectList.size() > 0){
+					responseMessage =  new BuilderDetailsDAO().saveAllotProjects(allotProjectList);
 				}
 			}
-			if(allotProjectList.size() > 0){
-				responseMessage =  new BuilderDetailsDAO().saveAllotProjects(allotProjectList);
-			}
-		}
 	}
+	
 	return responseMessage;
 	}
 }

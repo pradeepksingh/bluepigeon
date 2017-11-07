@@ -173,9 +173,12 @@ Date date = new Date();
     });
     
     function searchBuyer(){
-    	if($('#filter_building_id').val() != "" && $('#srch-term').val() != ""){
+    	var filter_building = $("#filter_building_id").val();
+    	if(filter_building == "")
+    		filter_building = 0;
+    	if(filter_building != ""){
 	    	ajaxindicatorstart("Please wait while.. we search ...");
-		    $.get("${baseUrl}/builder/postsale/buyerlist/partialinventory.jsp?project_id=<% out.print(projectId);%>&building_id="+$('#filter_building_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
+		    $.get("${baseUrl}/builder/postsale/buyerlist/partialinventory.jsp?project_id=<% out.print(projectId);%>&building_id="+filter_building+"&keyword="+$('#srch-term').val(),{},function(data) {
 		    	$("#flat_landing_area").html(data);
 		    	ajaxindicatorstop();
 		    },'html');

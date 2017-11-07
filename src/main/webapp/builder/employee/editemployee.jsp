@@ -27,6 +27,8 @@
 	List<BuilderEmployeeAccessType> access_list  = null;
 	List<Locality> localityList = null;
 	List<AllotProject> allotProjects = null;
+	int city_size = 0;
+	int area_size = 0;
 	List<EmployeeRole> updateemployeeRoles = null;
 	if(session!=null)
 	{
@@ -47,6 +49,8 @@
 				    localityList = new LocalityNamesImp().getLocalityActiveList();
 				    allotProjects = new BuilderDetailsDAO().getAllotedrojectsByEmpId(emp_id);
 				    updateemployeeRoles = new BuilderDetailsDAO().getEmployeeRolesByEmployee(emp_id);
+				    city_size = cityList.size();
+				    area_size = localityList.size();
 				}
 			}else{
 				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
@@ -74,6 +78,7 @@
     <link href="../css/newstyle.css" rel="stylesheet">
     <link href="../css/common.css" rel="stylesheet">
      <link href="../css/jquery.multiselect.css" rel="stylesheet">
+     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../css/adminaddemployee.css">
     <!-- jQuery -->
@@ -81,6 +86,14 @@
     <script src="../js/jquery.form.js"></script>
     <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
 	<script src="../js/bootstrapValidator.min.js"></script>
+	<style>
+	.selectize-input, .selectize-control.single .selectize-input.input-active {
+	background:#fafafa;
+	}
+	.selectize-input.full {
+    background-color: #fafafa;
+}
+	</style>
 </head>
 
 <body class="fix-sidebar">
@@ -102,12 +115,12 @@
         <div id="page-wrapper">
            <div class="container-fluid addlead">
                <!-- /.row -->
-	            <h1>Add Employee</h1>
+	            <h1>Update Employee</h1>
                <!-- row -->
 				<div class="white-box">
 					<div class="bg11">
                  		<div class="spacer">
-                   			<h3>+ New Employee</h3>
+                   			<h3> Update Employee</h3>
 						</div>
                   		<form class="addlead1" id="addemployee" name="addemployee" action="" method="post" enctype="multipart/form-data">
                   			<input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_uid); %>" />
@@ -185,13 +198,11 @@
 									 <label for="example-search-input" class="col-sm-5 col-form-label">City</label>
 										<div class="col-sm-7">
 											<div>
-											    <select name="city_id" id="city_id" class="form-control">
-													<option value=""> Select City </option>
-													<% 
-													if(cityList != null){
-													for(City city : cityList){ %>
-													<option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
-													<% }} %>
+											    <select name="city_id" id="city_id">
+													<option value="0"> Select City </option>
+													<% for(City city :cityList){%>
+													<option value="<%out.print(city.getId()); %>" <%if(city.getId() == builderEmployee.getCity().getId()){ %>selected<%} %>><%out.print(city.getName()); %></option>
+													<%}%>
 												</select>
 											</div>
 											<div class="messageContainer"></div>
@@ -201,7 +212,7 @@
 							           <label for="example-tel-input" class="col-sm-5 col-form-label">Aadhaar Card No. </label>
 								         <div class="col-sm-7">
 								         	<div>
-									       		<input class="form-control  form-control1" type="text" id="aadhaar" name="aadhaar" placeholder="">
+									       		<input class="form-control  form-control1" type="text" id="aadhaar" name="aadhaar" value="<%if(builderEmployee.getAadhaarNumber() != null){out.print(builderEmployee.getAadhaarNumber());} %>" placeholder="">
 									     	</div>
 									     	<div class="messageContainer"></div>
 									     </div>
@@ -212,7 +223,7 @@
 										<label for="example-text-input" class="col-sm-5 col-form-label"> Contact</label>
 										<div class="col-sm-7">
 									  		<div>
-											 	<input class="form-control form-control1" type="text" id="contact" name="contact"  placeholder="">
+											 	<input class="form-control form-control1" type="text" id="contact" name="contact"  value="<%out.print(builderEmployee.getMobile()); %>" placeholder="">
 											</div>
 											<div class="messageContainer"></div>
 										</div>
@@ -221,7 +232,7 @@
 										<label for="example-search-input" class="col-sm-5 col-form-label">Current Address</label>
 									 	<div class="col-sm-7">
 											<div>
-										     	<textarea placeholder="Enter current address" id="address" name="address"></textarea>
+										     	<textarea placeholder="Enter current address" id="address" name="address"><%out.print(builderEmployee.getCurrentAddress()); %></textarea>
 										  	</div>
 										  	<div class="messageContainer"></div>
 									 	</div>
@@ -230,7 +241,7 @@
 		   					  			<label for="example-text-input" class="col-sm-5 col-form-label">Designation</label>
 		      							<div class="col-sm-7">
 		      								<div>
-			    								<input class="form-control form-control1" type="text" name="designation" id="designation"  placeholder="">
+			    								<input class="form-control form-control1" type="text" name="designation" id="designation"  value="<%out.print(builderEmployee.getDesignation()); %>" placeholder="">
 		      								</div>
 		      								<div class="messageContainer"></div>
 		      							</div>
@@ -239,7 +250,7 @@
 										<label for="example-search-input" class="col-sm-5 col-form-label">Employee ID</label>
 										<div class="col-sm-7">
 											<div>
-		   										<input class="form-control  form-control1" type="text"  id="empid" name="empid" placeholder="">
+		   										<input class="form-control  form-control1" type="text"  id="empid" name="empid" value="<%out.print(builderEmployee.getEmployeeId()); %>" placeholder="">
 		 									</div>
 		 									<div class="messageContainer"></div>
 		 								</div>
@@ -248,7 +259,12 @@
 							   			<label for="example-search-input" class="col-sm-5 col-form-label">Area</label>
 										<div class="col-sm-7">
 											<div>
-										   		<select class="selectpicker selectpicker1" name="area_id" id="area_id"></select>
+										   		<select name="area_id" id="area_id">
+													<option value="0"> Select Area </option>
+													<%for(Locality locality: localityList){ %>
+													<option value="<%out.print(locality.getId()); %>" <%if(locality.getId() == builderEmployee.getLocality().getId()){ %>selected<%} %>><%out.print(locality.getName()); %></option>
+													<%} %>
+												</select>
 					                     	</div>
 					                     	<div class="messageContainer"></div>
 										</div>
@@ -265,12 +281,17 @@
 											</div>
 											<div class="messageContainer"></div>
 										</div>
+										<div class="col-sm-4">
+										<%if(builderEmployee.getPhoto() != null){ %>
+										<img alt="builder logo" src="${baseUrl}/<% out.print(builderEmployee.getPhoto()); %>" width="200px;">
+										<%} %>
+										</div>
 								 	</div>
 								  	<div class="form-group row">
 										<label for="example-search-input" class="col-sm-5 col-form-label">Pan Card No.</label>
 										<div class="col-sm-7">
 											<div>
-											 	<input class="form-control  form-control1" type="text" id="pancard" name="pancard" placeholder="">
+											 	<input class="form-control  form-control1" type="text" id="pancard" name="pancard" value="<%if(builderEmployee.getPancard()!=null){out.print(builderEmployee.getPancard());} %>" placeholder="">
 											 </div>
 											 <div class="messageContainer"></div>
 										</div>
@@ -279,7 +300,7 @@
 							</div>
 						<div class="row">
 							<div class="center">
-				    			<button type="submit" class="btn11">Save</button>
+				    			<button type="submit" class="btn11">Update</button>
 							</div>
 						</div>
 					</form>
@@ -294,8 +315,8 @@
 	</div> 
   </body>
 </html>
+<script type="text/javascript" src="../js/selectize.min.js"></script>
  <script>
-
  $('#accessid').multiselect({
      columns: 1,
      placeholder: 'Select Access Role',
@@ -323,17 +344,63 @@
 	  });
 	});
   
-  $("#city_id").change(function(){
-		if($("#city_id").val() != "") {
-			$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
-				var html = '<option value="">Select Area</option>';
-				$(data).each(function(index){
-					html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-				});
-				$("#area_id").html(html);
-			},'json');
-		}
+  $select_city = $("#city_id").selectize({
+		persist: false,
+		 onChange: function(value) {
+			if( $("#city_id").val() != '' ){
+				$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
+					var html = '<option value="0">Select Area</option>';
+					$(data).each(function(index){
+						html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+					});
+					$select_area[0].selectize.destroy();
+					$("#area_id").html(html);
+					$select_area = $("#area_id").selectize({
+						persist: false,
+						 onChange: function(value) {
+
+						 },
+						 onDropdownOpen: function(value){
+					   	 var obj = $(this);
+							var textClear =	 $("#area_id :selected").text();
+					   	 if(textClear.trim() == "Enter Area Name"){
+					   		 obj[0].setValue("");
+					   	 }
+					    }
+					});
+					
+				},'json');
+			}
+		 },
+		 onDropdownOpen: function(value){
+	    	 var obj = $(this);
+			var textClear =	 $("#city_id :selected").text();
+	    	 if(textClear.trim() == "Enter City Name"){
+	    		 obj[0].setValue("");
+	    	 }
+	     }
 	});
+	<%if(city_size > 0){%>
+		select_city = $select_city[0].selectize;
+	<%}%>
+
+	$select_area = $("#area_id").selectize({
+		persist: false,
+		 onChange: function(value) {
+
+		 },
+		 onDropdownOpen: function(value){
+	   	 var obj = $(this);
+			var textClear =	 $("#area_id :selected").text();
+	   	 if(textClear.trim() == "Enter Area Name"){
+	   		 obj[0].setValue("");
+	   	 }
+	    }
+	});
+  <% if(area_size > 0){%>
+  	select_area = $select_area[0].selectize;
+  <%}%>
+  
 	$('#addemployee').bootstrapValidator({
 		container: function($field, validator) {
 			return $field.parent().next('.messageContainer');
@@ -473,7 +540,7 @@
 		 		target : '#response', 
 		 		beforeSubmit : showAddRequest,
 		 		success :  showAddResponse,
-		 		url : '${baseUrl}/webapi/employee/save2',
+		 		url : '${baseUrl}/webapi/employee/update2',
 		 		semantic : true,
 		 		dataType : 'json'
 		 	};

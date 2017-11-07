@@ -19,6 +19,7 @@
 	List<City> cityList = null;
 	BuilderDetailsDAO builderDetailsDAO = null;
 	List<BuilderEmployeeAccessType> access_list  = null;
+	int city_size = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -32,6 +33,7 @@
 			    builderDetailsDAO = new BuilderDetailsDAO();
 			    access_list = builderDetailsDAO.getBuilderAccessList(builder.getBuilderEmployeeAccessType().getId());
 			    cityList = new CityNamesImp().getCityActiveNames();
+			    city_size = cityList.size();
 			}
 		}
    	}
@@ -56,6 +58,7 @@
     <link href="../css/newstyle.css" rel="stylesheet">
     <link href="../css/common.css" rel="stylesheet">
      <link href="../css/jquery.multiselect.css" rel="stylesheet">
+      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../css/adminaddemployee.css">
     <!-- jQuery -->
@@ -63,6 +66,14 @@
     <script src="../js/jquery.form.js"></script>
     <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
 	<script src="../js/bootstrapValidator.min.js"></script>
+	<style>
+	.selectize-input, .selectize-control.single .selectize-input.input-active {
+	background:#fafafa;
+	}
+	.selectize-input.full {
+    background-color: #fafafa;
+}
+	</style>
 </head>
 
 <body class="fix-sidebar">
@@ -155,7 +166,7 @@
 									 <label for="example-search-input" class="col-sm-5 col-form-label">City</label>
 										<div class="col-sm-7">
 											<div>
-											    <select name="city_id" id="city_id" class="form-control">
+											    <select name="city_id" id="city_id">
 													<option value=""> Select City </option>
 													<% 
 													if(cityList != null){
@@ -218,7 +229,7 @@
 							   			<label for="example-search-input" class="col-sm-5 col-form-label">Area</label>
 										<div class="col-sm-7">
 											<div>
-										   		<select class="selectpicker selectpicker1" name="area_id" id="area_id"></select>
+										   		<select name="area_id" id="area_id"></select>
 					                     	</div>
 					                     	<div class="messageContainer"></div>
 										</div>
@@ -264,6 +275,7 @@
 	</div> 
   </body>
 </html>
+<script type="text/javascript" src="../js/selectize.min.js"></script>
  <script>
 
  $('#accessid').multiselect({
@@ -279,8 +291,62 @@
      selectAll: true
  });
 
+ $select_city = $("#city_id").selectize({
+		persist: false,
+		 onChange: function(value) {
+			if( $("#city_id").val() != '' ){
+				$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
+					var html = '<option value="0">Select Area</option>';
+					$(data).each(function(index){
+						html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+					});
+					$select_area[0].selectize.destroy();
+					$("#area_id").html(html);
+					$select_area = $("#area_id").selectize({
+						persist: false,
+						 onChange: function(value) {
+
+						 },
+						 onDropdownOpen: function(value){
+					   	 var obj = $(this);
+							var textClear =	 $("#area_id :selected").text();
+					   	 if(textClear.trim() == "Enter Area Name"){
+					   		 obj[0].setValue("");
+					   	 }
+					    }
+					});
+					
+				},'json');
+			}
+		 },
+		 onDropdownOpen: function(value){
+	    	 var obj = $(this);
+			var textClear =	 $("#city_id :selected").text();
+	    	 if(textClear.trim() == "Enter City Name"){
+	    		 obj[0].setValue("");
+	    	 }
+	     }
+	});
+	<%if(city_size > 0){%>
+		select_city = $select_city[0].selectize;
+	<%}%>
  
-  jQuery(function($) {
+	$select_area = $("#area_id").selectize({
+		persist: false,
+		 onChange: function(value) {
+
+		 },
+		 onDropdownOpen: function(value){
+	   	 var obj = $(this);
+			var textClear =	 $("#area_id :selected").text();
+	   	 if(textClear.trim() == "Enter Area Name"){
+	   		 obj[0].setValue("");
+	   	 }
+	    }
+	});
+	
+	
+ jQuery(function($) {
 	  $('input[type="file"]').change(function() {
 	    if ($(this).val()) {
 		    error = false;
@@ -293,17 +359,6 @@
 	  });
 	});
   
-  $("#city_id").change(function(){
-		if($("#city_id").val() != "") {
-			$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
-				var html = '<option value="">Select Area</option>';
-				$(data).each(function(index){
-					html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
-				});
-				$("#area_id").html(html);
-			},'json');
-		}
-	});
 	$('#addemployee').bootstrapValidator({
 		container: function($field, validator) {
 			return $field.parent().next('.messageContainer');
@@ -468,7 +523,7 @@
 	        $("#response").html(resp.message);
 	        $("#response").show();
 	        alert(resp.message);
-	        window.location.href = "${baseUrl}/builder/employee/list.jsp";
+	        window.location.href = "${baseUrl}/builder/admin/employeeslist.jsp";
 	  	}
 	}
 	

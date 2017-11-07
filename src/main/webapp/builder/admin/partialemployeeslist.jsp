@@ -68,6 +68,7 @@
 			<p><b><%out.print(employeeList.getMobileNo()); %></b></p>
 			<p class="p-custom">Email</p>
 			<p><b><%out.print(employeeList.getEmail()); %></b></p>
+<%-- 			<p><a href="${baseUrl}/builder/employee/editemployee.jsp?emp_id=<%out.print(employeeList.getId()); %>">Edit</a></p> --%>
 	    </div>
     </div>
 </div>

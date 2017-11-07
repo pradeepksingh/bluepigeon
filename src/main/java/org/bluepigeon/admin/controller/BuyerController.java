@@ -2423,7 +2423,7 @@ public class BuyerController {
 			@FormDataParam("atime") String agreementtime,
 			@FormDataParam("adate") String last_date,
 			@FormDataParam("doc_url[]") List<FormDataBodyPart> doc_name,
-			@FormDataParam("flat_buyer_ids[]") List<FormDataBodyPart> buyer_ids
+			@FormDataParam("flat_buyer_ids") List<FormDataBodyPart> buyer_ids
 			)throws DocumentException, IOException, FileNotFoundException {
 		ResponseMessage responseMessage = new ResponseMessage();
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");

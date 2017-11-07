@@ -66,7 +66,7 @@
 <!--                  	<li> <a href="">Documents List</a></li> -->
                  	<li> <a href="${baseUrl }/builder/documents/documents.jsp">Add Documents</a></li>
 <!--                  	<li> <a href="">Demand letter list</a></li> -->
-                 	<li> <a href="${baseUrl }/builder/postsale/generatedemandletter.jsp">Demand letter</a></li>
+<%--                  	<li> <a href="${baseUrl }/builder/postsale/generatedemandletter.jsp">Demand letter</a></li> --%>
                  </ul>
             </li>
             <% }%>
