@@ -54,7 +54,11 @@
 <div class="col-md-4">
 	<div class="white-box1">
 		<div class="user-profile center">
+			<%if(employeeList.getImage()!=null){ %>
+	        <img src="${baseUrl}/<% out.print(employeeList.getImage());%>" alt="User Image" class="custom-img">
+	        <%}else{ %>
 			<img src="../plugins/images/Untitled-1.png" alt="User Image" class="custom-img">
+			<%} %>
 			<p><b><%out.print(employeeList.getName()); %></b></p>
 			<p class="p-custom"><%out.print(employeeList.getAccess()); %></p>
   			<br>

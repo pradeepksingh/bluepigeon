@@ -292,26 +292,21 @@ function getProjectList(element){
 		 }else{
 			ids = ids +","+ $(this).val();
 		 }
-			
-	       
-	    });
+	 });
+	 ajaxindicatorstart("Please wait, while loading...");
 	$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:ids,emp_id : $("#emp_id").val()},function(data){
 		var assign = "";
 		var a1="";
 			if(data.status==1){
 				alert(data.message);
-				//window.location.reload();
 				assign = '<span class="assign1">Assign Projects : </span>';
-					a1+=data.errors; 
-					assign+=a1.replace(","," | ");
+				assign+=data.data.value; 
 				$(".assign").empty();
 				$(".assign").html(assign);
 			}else{
 				alert(data.message);
 			}
-	// 		ajaxindicatorstop();
+	 		ajaxindicatorstop();
 	},'json');
-
-
 }
 </script>
