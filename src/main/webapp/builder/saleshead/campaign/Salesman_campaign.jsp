@@ -132,7 +132,7 @@
                    		<div class="col-md-6 col-sm-6 col-xs-12 projectsection">
 	                       <div class="image">
 		                        <% if(campaignListNew.getImage() != ""  && campaignListNew.getImage() !=null){ %>
-		                       <img src="${baseUrl}/builder/<%out.print(campaignListNew.getImage()); %>" alt="Campaign image" />
+		                       <img src="${baseUrl}/<%out.print(campaignListNew.getImage()); %>" alt="Campaign image" />
 		                       <%}else{ if(count%2 ==0){%>
 		                        <img src="../../images/images.jpg" alt="Campaign image" />
 		                       <%} else{
