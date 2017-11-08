@@ -122,7 +122,7 @@
                  		<div class="spacer">
                    			<h3> Update Employee</h3>
 						</div>
-                  		<form class="addlead1" id="addemployee" name="addemployee" action="" method="post" enctype="multipart/form-data">
+                  		<form class="addlead1" id="updateemployee" name="updateemployee" action="" method="post" enctype="multipart/form-data">
                   			<input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_uid); %>" />
                             <input type="hidden" id="reporting_id" name="reporting_id" value="<%out.print(builderEmployee.getId());%>"/>
                             <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>" />
@@ -281,7 +281,8 @@
 											</div>
 											<div class="messageContainer"></div>
 										</div>
-										<div class="col-sm-4">
+										<div class="col-sm-6"></div>
+										<div class="col-sm-6">
 										<%if(builderEmployee.getPhoto() != null){ %>
 										<img alt="builder logo" src="${baseUrl}/<% out.print(builderEmployee.getPhoto()); %>" width="200px;">
 										<%} %>
@@ -401,7 +402,7 @@
   	select_area = $select_area[0].selectize;
   <%}%>
   
-	$('#addemployee').bootstrapValidator({
+	$('#updateemployee').bootstrapValidator({
 		container: function($field, validator) {
 			return $field.parent().next('.messageContainer');
 	   	},
@@ -414,7 +415,11 @@
 	            validators: {
 	                notEmpty: {
 	                    message: 'Name is required and cannot be empty'
-	                }
+	                },
+	                regexp: {
+                        regexp: '^[a-zA-Z0-9_\.]+$',
+                        message: 'The username can only consist of alphabetical, number, dot and underscore'
+                    }
 	            }
 	        },
 	        contact:{
@@ -461,32 +466,18 @@
 	        		}
 	        	}
 	        },
-	        access: {
+	        'accessid[]': {
 	            validators: {
 	                notEmpty: {
 	                    message: 'Access type is required and cannot be empty'
 	                }
 	            }
 	        },
-	        empid: {
-	            validators: {
-	                notEmpty: {
-	                    message: 'Empoyee id is required and cannot be empty'
-	                }
-	            }
-	        }
-	        ,
-	        project: {
+	        
+	        'projects[]': {
 	            validators: {
 	                notEmpty: {
 	                    message: 'minimum one project must be selected'
-	                }
-	            }
-	        },
-	        empid:{
-	        	validators: {
-	                notEmpty: {
-	                    message: 'Employee Id is required and cannot be empty'
 	                }
 	            }
 	        },
@@ -537,35 +528,35 @@
 //	          }
 //	    });
 		var options = {
-		 		target : '#response', 
-		 		beforeSubmit : showAddRequest,
-		 		success :  showAddResponse,
-		 		url : '${baseUrl}/webapi/employee/update2',
+		 		target : '#updateresponse', 
+		 		beforeSubmit : showUpdateRequest,
+		 		success :  showUpdateResponse,
+		 		url : '${baseUrl}/webapi/employee/builder/update1',
 		 		semantic : true,
 		 		dataType : 'json'
 		 	};
-	   	$('#addemployee').ajaxSubmit(options);
+	   	$('#updateemployee').ajaxSubmit(options);
 	}
 
-	function showAddRequest(formData, jqForm, options){
-		$("#response").hide();
+	function showUpdateRequest(formData, jqForm, options){
+		$("#updateresponse").hide();
 	   	var queryString = $.param(formData);
 		return true;
 	}
 	   	
-	function showAddResponse(resp, statusText, xhr, $form){
+	function showUpdateResponse(resp, statusText, xhr, $form){
 		if(resp.status == '0') {
-			$("#response").removeClass('alert-success');
-	       	$("#response").addClass('alert-danger');
-			$("#response").html(resp.message);
-			$("#response").show();
+			$("#updateresponse").removeClass('alert-success');
+	       	$("#updateresponse").addClass('alert-danger');
+			$("#updateresponse").html(resp.message);
+			$("#updateresponse").show();
 	  	} else {
-	  		$("#response").removeClass('alert-danger');
-	        $("#response").addClass('alert-success');
-	        $("#response").html(resp.message);
-	        $("#response").show();
+	  		$("#updateresponse").removeClass('alert-danger');
+	        $("#updateresponse").addClass('alert-success');
+	        $("#updateresponse").html(resp.message);
+	        $("#updateresponse").show();
 	        alert(resp.message);
-	        window.location.href = "${baseUrl}/builder/employee/list.jsp";
+	       // window.location.href = "${baseUrl}/builder/employee/list.jsp";
 	  	}
 	}
 	

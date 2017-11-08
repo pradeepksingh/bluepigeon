@@ -7418,4 +7418,5 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 			return result;
 		}
 		
+		
 }

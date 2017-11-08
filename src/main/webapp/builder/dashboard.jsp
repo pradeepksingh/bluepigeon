@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.text.DateFormat"%>
@@ -63,7 +64,6 @@
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
 					totalRevenue = totalPropertySold * totalInventorySold;
-					
 				}
 		}
 	}
@@ -169,7 +169,7 @@
                    <div class="row">
                     <div class="col-md-3 col-sm-6 col-xs-12">
                       <select  id="city_id" name="city_id">
-                       		<option value="0">City</option>
+                       		<option value="0">All City</option>
                             <%
                             if(cityDataList != null){
                             for(City city : cityDataList){ %>
@@ -781,7 +781,7 @@
                  		<%}%>
                  		<% if(access_id == 5){%>
 	             		+'<div class="col-md-6 left">' 
-	             		+'<a href="${baseUrl}/builder/salehead/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+	             		+'<a href="${baseUrl}/builder/saleshead/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
 	             		+'</div>'
 	             		<%}%>
 	             		<%if(access_id==6){%>

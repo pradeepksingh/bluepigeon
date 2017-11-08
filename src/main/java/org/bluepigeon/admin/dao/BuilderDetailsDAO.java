@@ -2410,4 +2410,15 @@ public class BuilderDetailsDAO {
 			session.close();
 			return employeeRoles;
 		}
+		public void deleteEmployeeRolesByEmpId(int emp_id){
+			String hql = "delete from AllotProject where builderEmployee.id = :emp_id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setParameter("emp_id", emp_id);
+			query.executeUpdate();
+			session.getTransaction().commit();
+			session.close();
+		}
 }
