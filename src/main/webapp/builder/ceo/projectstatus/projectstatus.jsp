@@ -188,7 +188,7 @@
                <div class="white-box">
                    <div class="row">
                    <div class="col-md-8">
-                   <div class="row blue-bg">
+                     <div class="row blue-bg">
                     <%
                     	if(projectImages != null){
                     		for(ProjectImageGallery projectImage :projectImages) { %>
@@ -197,7 +197,7 @@
 		                      <img src="${baseUrl}/<% out.print(projectImage.getImage()); %>" alt="Project image" class="img2">
 		                       <div class="overlay">
 		                        <a href="javascript:openImageModal(<%out.print(projectImage.getId());%>);">
-			                       <div class="row margin-bottom1"  data-toggle="modal" data-target="#myModal">
+			                       <div class="row margin-bottom1"  data-toggle="modal" data-target="#mySliderModal">
 				                       <div class="col-md-9 col-sm-8 col-xs-8 left">
 					                       <h3><% out.print(projectImage.getTitle()); %></h3>
 				                        </div>
@@ -210,7 +210,7 @@
 				                       </div>
 			                       </div>
 			                      </a>
-			                       <div class="row bottom-layer">
+			                       <div class="row bottom-layer" style="margin-top:-28px;">
 			                         <div class="col-sm-8 col-xs-8">
 			                           <h3>Date- <% out.print(dt1.format(projectImage.getCreatedDate())); %></h3>
 			                         </div>
@@ -264,12 +264,12 @@
          </div>
       </div>
       <!-- Modal -->
-		<div id="myModal" class="modal fade" role="dialog" style="top:10%;">
+		<div id="mySliderModal" class="modal fade" role="dialog" style="top:10%;">
 		  <div class="modal-dialog modal-dialog1">
 		    <!-- Modal content-->
 		    <div class="modal-content modal-lg">
 		       <div class="modal-body modal-body1">
-		       	  <div id="myCarousel" class="carousel slide" data-ride="carousel" style="position: absolute;">
+		       	  <div id="myCarousel" class="carousel slide" data-ride="carousel" style="position: absolute;margin-left:30%;">
   					 <!-- Wrapper for slides -->
 					    <div class="carousel-inner">
 					    <% 
@@ -277,7 +277,7 @@
 					     		for(ProjectImageGallery projectImage :projectImages) { %>
 					      <div class="item" id="modal-img-<% out.print(projectImage.getId()); %>">
 					        <div class="image">
-		                      <img src="${baseUrl}/<% out.print(projectImage.getImage()); %>" alt="Project image" class="img1" style="height:auto;">
+		                      <img src="${baseUrl}/<% out.print(projectImage.getImage()); %>" alt="Project image" class="img1" style="height:auto;max-width:500px;">
 		                        <div class="overlay">
 				                       <div class="row margin-bottom1"  data-toggle="modal" data-target="#myModal">  
 					                       <div class="col-md-9 col-sm-8 col-xs-8 left">
@@ -291,7 +291,7 @@
 						                        </div>
 					                       </div>
 				                       </div>
-				                       <div class="row bottom-layer">
+				                       <div class="row bottom-layer" style="position:absolute;bottom:-30px;width:100%;">
 				                         <div class="col-sm-8 col-xs-8">
 				                           <h3>Date- <% out.print(dt1.format(projectImage.getCreatedDate())); %></h3>
 				                         </div>

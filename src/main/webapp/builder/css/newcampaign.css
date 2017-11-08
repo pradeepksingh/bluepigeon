@@ -1,8 +1,21 @@
+ .selectize-input.full{
+/* 	height:35px; */
+	    border: 1px solid #e4e7ea;
+    border-radius: 0;
+    box-shadow: none;
+    color: #565656;
+    height: 38px;
+    padding: 7px 12px;
+    width: 90% !important;
+    margin: 8px 0px !important;
+    background: #fafafa !important;
+        font-size: 17px;
+
+}
  .selectpicker1{
     padding: 2.2%;
     border-radius: 0px !important;
     width: 90%;
-    
     cursor: pointer;
     background: #fafafa;
     margin: 8px 0px !important;

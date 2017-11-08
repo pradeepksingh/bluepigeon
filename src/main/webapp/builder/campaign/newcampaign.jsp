@@ -327,6 +327,13 @@ Date date = new Date();
 <script src="../js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="../js/selectize.min.js"></script>
 <script>
+$(document).ready(function(){
+	   $("#closeimg").click(function(){
+	       $(".collapse").removeClass("in");
+	   });
+	});
+</script>
+<script>
 $select_project = $("#filter_project_id").selectize({
 	persist: false,
 	 onChange: function(value) {

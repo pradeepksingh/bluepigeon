@@ -30,7 +30,7 @@ if(session!=null)
 		builder  = (BuilderEmployee)session.getAttribute("ubname");
 		session_id = builder.getBuilder().getId();
 		access_id = builder.getBuilderEmployeeAccessType().getId();
-		if(session_id > 0){
+		if(session_id > 0 && access_id == 4){
 			if (request.getParameterMap().containsKey("project_id")) {
 				projectId = Integer.parseInt(request.getParameter("project_id"));
 				if(projectId != 0) {
@@ -39,9 +39,12 @@ if(session!=null)
 		 			flats = new ProjectDAO().getProjectFlatListByBuilder(projectId, building_id, "");
 				}
 			}
+		}else{
+			response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 		}
 	}
 }
+
 SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
 Date date = new Date();
 %>
@@ -145,7 +148,7 @@ Date date = new Date();
 	                   		<% floor_no = flat.getFloorNo(); %>
 	                   		<% } %>
 	                   		</div>
-	                   		<% } %>
+	                   		<% }%>
                    		</div>
                    		<div class="unholdsection center">
                      		<button class="un-hold" id="unhold">Unhold</button>
@@ -174,7 +177,7 @@ Date date = new Date();
     	    	 var obj = $(this);
     			var textClear =	 $("#filter_building_id :selected").text();
     	    	 if(textClear.trim() == "Enter Building Name"){
-    	    		 obj[0].setValue("");
+    	    		 obj[0].setValue("0");
     	    	 }
     	     }
     	});
@@ -265,12 +268,17 @@ Date date = new Date();
     });
     
     function searchBuyer(){
-    	if($('#filter_building_id').val() != "" && $('#srch-term').val() != "")
+    	var local_building_id = $('#filter_building_id').val();
+    	if(local_building_id == ""){
+    		local_building_id="0";
+    	}
+    	
     	ajaxindicatorstart("Please wait while.. we search ...");
-	    $.get("${baseUrl}/builder/projecthead/inventory/partialinventory.jsp?project_id=<% out.print(projectId);%>&building_id="+$('#filter_building_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
+	    $.get("${baseUrl}/builder/projecthead/inventory/partialinventory.jsp?project_id=<% out.print(projectId);%>&building_id="+local_building_id+"&keyword="+$('#srch-term').val(),{},function(data) {
 	    	$("#flat_landing_area").html(data);
 	    	ajaxindicatorstop();
 	    },'html');
+    	
     }
     $("#srch-term").keydown(function(e){
     	if(e.keyCode == 13){

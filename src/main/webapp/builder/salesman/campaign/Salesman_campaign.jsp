@@ -155,15 +155,15 @@
 				                        	if(campaignListNew.getEndDate() != null){
 				                       		   if(date.after(campaignListNew.getEndDate())){ %>
 					                       <div class="right">
-					                          <img src="../../images/red.png" alt="inactive" class="icon"/>
+					                          <img src="../../images/red.png" alt="inactive" title="inactive" class="icon"/>
 					                        </div>
 					                        <%}else{ %>
 					                        <div class="right">
-					                          <img src="../../images/green.png" alt="active" class="icon"/>
+					                          <img src="../../images/green.png" alt="active" title="active" class="icon"/>
 					                        </div>
 					                        <%}}else{ %>
 					                        <div class="right">
-					                          <img src="../../images/green.png" alt="active" class="icon"/>
+					                          <img src="../../images/green.png" alt="active" title="active" class="icon"/>
 					                        </div>
 					                        <%} %>
 						                    <div class="bottom">

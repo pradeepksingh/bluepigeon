@@ -99,6 +99,9 @@ Date date = new Date();
                    <div class="row">
                    <%if(campaignLists != null) { %>
                    <% for(CampaignListNew campaign:campaignLists) { %>
+						<input type="hidden" id="campId<%out.print(campaign.getId()); %>" name="campId"   value="<%out.print(campaign.getId());%>"/>                	
+						<input type="hidden" id="campenddate<%out.print(campaign.getId()); %>" name="campenddate"   value="<%out.print(dt1.format(campaign.getEndDate()));%>"/>
+						<input type="hidden" id="campstartdate<%out.print(campaign.getId()); %>" name="campstartdate"   value="<%out.print(dt1.format(campaign.getStartDate()));%>"/>
                        <div class="col-md-6 col-sm-6 col-xs-12 projectsection">
 	                       <div class="image">
 		                       <img src="${baseUrl}/<% out.print(campaign.getImage());%>" alt="Project image">
@@ -120,12 +123,12 @@ Date date = new Date();
 					                       <div class="right">
 					                       <% if(campaign.getEndDate() != null){
 				                       		   	if(date.after(campaign.getEndDate())){ %>
-					                          		<img src="../images/red.png" alt="inactive" title="inactive" class="icon"/>
+					                          		<img src="../images/red.png" alt="inactive" title="inactive" class="aicon"/>
 					                          	<% } else { %>
-					                          		<img src="../images/green.png" alt="active" title="active" class="icon"/>
+					                          		<img src="../images/green.png" alt="active" title="active" class="aicon"/>
 					                          	<% } %>
 					                       	<% } else { %>
-					                       		<img src="../images/green.png" alt="active" title="active" class="icon"/>
+					                       		<img src="../images/green.png" alt="active" title="active" class="aicon"/>
 					                       	<% } %>
 					                        </div>
 						                    <div class="bottom">
@@ -174,6 +177,7 @@ Date date = new Date();
 	  	</div>
  	</div>
 </div>
+
 <script type="text/javascript">
 function openTermsModal(tc) {
 	$("#myterms_popup").html(tc);

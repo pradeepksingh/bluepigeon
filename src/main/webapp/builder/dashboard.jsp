@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.text.DateFormat"%>
@@ -63,7 +64,6 @@
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
 					totalRevenue = totalPropertySold * totalInventorySold;
-					
 				}
 		}
 	}
@@ -169,7 +169,7 @@
                    <div class="row">
                     <div class="col-md-3 col-sm-6 col-xs-12">
                       <select  id="city_id" name="city_id">
-                       		<option value="0">City</option>
+                       		<option value="0">All City</option>
                             <%
                             if(cityDataList != null){
                             for(City city : cityDataList){ %>
@@ -446,7 +446,7 @@
 		    		$select_locality = $("#locality_name").selectize({
 						persist: false,
 						 onChange: function(value) {
-							 if(value != ""){
+							 
 								 $.post("${baseUrl}/webapi/general/project/list/name",{ locality_name: $("#locality_name").val(),emp_id : $("#emp_id").val(),access_id : $("#access_id").val() }, function(data){
 							    		var html = '<option value="">Project</option>';
 							    		$(data).each(function(index){
@@ -476,7 +476,7 @@
 							    	},'json');
 								 
 								 getProjectList();
-							 }
+							 
 						 },
 						 onDropdownOpen: function(value){
 					   	 var obj = $(this);
@@ -674,12 +674,12 @@
              		<%}%>
              		<%if(access_id == 4){%>
              		+'<div class="col-md-6 left">' 
-             		+'<a href="${baseUrl}/builder/sales/projectstatus.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'<a href="${baseUrl}/builder/projecthead/projectstatus/projectstatus.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
             		<%if(access_id==5){%>
             		+'<div class="col-md-6 left">' 
-             		+'<a href="${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+             		+'<a href="${baseUrl}/builder/saleshead/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
              		+'</div>'
              		<%}%>
              		<%if(access_id == 7){%>
@@ -776,12 +776,12 @@
                  		<%}%>
                  		<%if(access_id == 4){%>
                  		+'<div class="col-md-6 left">' 
-                 		+'<a href="${baseUrl}/builder/sales/projectstatus.jsp?project_id='+projectId+'"  class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+                 		+'<a href="${baseUrl}/builder/projecthead/projectstatus/projectstatus.jsp?project_id='+projectId+'"  class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
                  		+'</div>'
                  		<%}%>
                  		<% if(access_id == 5){%>
 	             		+'<div class="col-md-6 left">' 
-	             		+'<a href="${baseUrl}/builder/salehead/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+	             		+'<a href="${baseUrl}/builder/saleshead/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
 	             		+'</div>'
 	             		<%}%>
 	             		<%if(access_id==6){%>
@@ -791,7 +791,7 @@
 	             		<%}%>
 	             		<% if( access_id == 7){%>
 	             		+'<div class="col-md-6 left">' 
-	             		+'<a href="${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
+	             		+'<a href="${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id='+projectId+'" class="btn btn11 btn-submit waves-effect waves-light m-t-1">Manage</a>'
 	             		+'</div>'
 	             		<%}%>
                			+'<div class="col-md-6 center">'

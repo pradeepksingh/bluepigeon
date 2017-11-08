@@ -671,11 +671,11 @@ padding:7%;
 }
 
 .selectize-control.single .selectize-input:after {
-	border-color: #24bcd3 transparent transparent transparent !important;
+/* 	border-color: #24bcd3 transparent transparent transparent !important; */
 }
 .selectize-input {
-    border: 1px solid #24bcd3 !important;
-    padding: 6px 10px !important;
+/*     border: 1px solid #24bcd3 !important; */
+/*     padding: 6px 10px !important; */
 }
 .hold {
 	background: #03a9f3;
@@ -687,4 +687,7 @@ padding:7%;
 }
 .ms-options-wrap>.ms-options>ul li.selected label{
 	background-color:#00bfd6;
+}
+.selectize-input .items .not-full{
+	background-color: #ece9e9;
 }

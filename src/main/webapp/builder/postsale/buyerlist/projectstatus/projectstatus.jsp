@@ -88,7 +88,7 @@
     <!-- Menu CSS -->
     <link href="../../../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../../../css/newstyle.css" rel="stylesheet">
+    <link href="../../../css/style.css" rel="stylesheet">
     <link href="../../../css/common.css" rel="stylesheet">
      <link href="../../../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
     <!-- color CSS -->
@@ -118,7 +118,7 @@
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper">
-        <section class="content" style="margin-top:60px;">
+        <section class="content" style="margin-top:60px;padding-top:10px">
            <div class="container-fluid">
            
                <!-- /.row -->
@@ -126,7 +126,7 @@
 	                <div class="row clearfix">
 			    		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                       		<div class="button-demo">
-                                <button type="button" id="postsaledocument" class="btn btn-default waves-effect" style="width: 100%; ">DOCUMENT</button>
+                                <button type="button" id="postsaledocument" class="btn btn-default waves-effect" style="width: 100%;font-size:20px ">DOCUMENT</button>
 							</div>
                 		</div>
                 		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
@@ -147,9 +147,9 @@
             		</div>
                <!-- row -->
                <!-- row -->
-               <div class="white-box">
-                   <div class="row">
-                   <div class="col-md-8">
+<!--                <div class="white-box"> -->
+                   <div class="row clearfix" style="background: white;">
+                   <div class="col-lg-9">
                    <div class="row blue-bg">
                     <%
                     	if(projectImages != null){
@@ -159,7 +159,7 @@
 		                      <img src="${baseUrl}/<% out.print(projectImage.getImage()); %>" alt="Project image" class="img2">
 		                       <div class="overlay">
 		                        <a href="javascript:openImageModal(<%out.print(projectImage.getId());%>);">
-			                       <div class="row margin-bottom1"  data-toggle="modal" data-target="#myModal">
+			                       <div class="row margin-bottom1"  data-toggle="modal" data-target="#mySliderModal">
 				                       <div class="col-md-9 col-sm-8 col-xs-8 left">
 					                       <h3><% out.print(projectImage.getTitle()); %></h3>
 				                        </div>
@@ -172,7 +172,7 @@
 				                       </div>
 			                       </div>
 			                      </a>
-			                       <div class="row bottom-layer">
+			                       <div class="row bottom-layer" style="margin-top:-39px;">
 			                         <div class="col-sm-8 col-xs-8">
 			                           <h3>Date- <% out.print(dt1.format(projectImage.getCreatedDate())); %></h3>
 			                         </div>
@@ -232,18 +232,18 @@
 						 	</div>
                         </div>
 	                </div>
-	             </div>
+<!-- 	             </div> -->
 	          </div>
 	          </section>
             </div>
          </div>
       <!-- Modal -->
-		<div id="myModal" class="modal fade" role="dialog" style="top:10%;">
+		<div id="mySliderModal" class="modal fade" role="dialog" style="top:10%;">
 		  <div class="modal-dialog modal-dialog1">
 		    <!-- Modal content-->
 		    <div class="modal-content modal-lg">
 		       <div class="modal-body modal-body1">
-		       	  <div id="myCarousel" class="carousel slide" data-ride="carousel" style="position: absolute;">
+		       	  <div id="myCarousel" class="carousel slide" data-ride="carousel" style="position: absolute;margin-left:30%;">
   					 <!-- Wrapper for slides -->
 					    <div class="carousel-inner">
 					    <% 
@@ -251,7 +251,7 @@
 					     		for(ProjectImageGallery projectImage :projectImages) { %>
 					      <div class="item" id="modal-img-<% out.print(projectImage.getId()); %>">
 					        <div class="image">
-		                      <img src="${baseUrl}/<% out.print(projectImage.getImage()); %>" alt="Project image" class="img1" style="height:auto;">
+		                      <img src="${baseUrl}/<% out.print(projectImage.getImage()); %>" alt="Project image" class="img1" style="height:auto;max-width:500px;">
 		                        <div class="overlay">
 				                       <div class="row margin-bottom1"  data-toggle="modal" data-target="#myModal">  
 					                       <div class="col-md-9 col-sm-8 col-xs-8 left">
@@ -265,7 +265,7 @@
 						                        </div>
 					                       </div>
 				                       </div>
-				                       <div class="row bottom-layer">
+				                       <div class="row bottom-layer" style="position:absolute;bottom:-30px;width:100%;">
 				                         <div class="col-sm-8 col-xs-8">
 				                           <h3>Date- <% out.print(dt1.format(projectImage.getCreatedDate())); %></h3>
 				                         </div>
@@ -316,7 +316,7 @@
 function openImageModal(id) {
 	$(".item").removeClass("active");
 	$("#modal-img-"+id).addClass("active");
-	$("#myModal").modal("show");
+	$("#mySliderModal").modal("show");
 }
 <%
 if(projectImages !=null){

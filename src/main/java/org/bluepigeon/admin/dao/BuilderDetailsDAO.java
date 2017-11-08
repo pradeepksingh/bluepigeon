@@ -1972,7 +1972,20 @@ public class BuilderDetailsDAO {
 		for(int a=0;a<projectdata.size();a++){
 			projectNames.add(projectdata.get(a).getName());
 		}
-		 response.setErrors(projectNames);
+		String projectnames="";
+		if(projectdata != null){
+      	  int i=1;
+      	  for(ProjectData assignProject : projectdata){
+      		  if(i>1){
+      	  		System.out.print(" "+assignProject.getName()+" |");
+      	  		projectnames +=" "+assignProject.getName()+" | ";
+      	  		i--;
+      		  }else{
+      			  System.out.print(assignProject.getName()+" |");
+      			  projectnames +=assignProject.getName()+" |";
+      		  }
+       	i++;}} 
+		 response.setData(projectnames);
 		return response;
 	}
 	
@@ -2384,6 +2397,27 @@ public class BuilderDetailsDAO {
 			Session session = hibernateUtil.openSession();
 			session.beginTransaction();
 			session.save(empRoleList);
+			session.getTransaction().commit();
+			session.close();
+		}
+		
+		public List<EmployeeRole> getEmployeeRolesByEmployee(int empId){
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			String hql = "from EmployeeRole where builderEmployee.id="+empId;
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			List<EmployeeRole> employeeRoles = query.list();
+			session.close();
+			return employeeRoles;
+		}
+		public void deleteEmployeeRolesByEmpId(int emp_id){
+			String hql = "delete from AllotProject where builderEmployee.id = :emp_id";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.openSession();
+			session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setParameter("emp_id", emp_id);
+			query.executeUpdate();
 			session.getTransaction().commit();
 			session.close();
 		}

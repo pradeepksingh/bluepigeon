@@ -116,6 +116,7 @@ select{
 }
 .book-flat-button{
     margin: 20px 8px 0px ;
+    min-width: 200px;
     font-size: 15px;
     padding: 5px 17px;
     font-weight: 400;
@@ -560,7 +561,7 @@ font-size: 17px
     color: #312f2f;
     background-color: #fff;
     border: 1px solid #03a9f3;
-    min-width: 100px;
+    min-width: 200px;
 }
 .btn-info:focus {
     color: #312f2f;

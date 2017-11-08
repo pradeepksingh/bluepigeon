@@ -248,6 +248,10 @@ padding-top:85%;
 }
 
 @media screen and (min-width: 768px) {
+	.image {
+position: relative;
+min-height: 350px;
+}
 
 .form{
 

@@ -52,7 +52,7 @@
 				builder_id = builder.getBuilder().getId();
 				emp_id = builder.getId();
 				access_id = builder.getBuilderEmployeeAccessType().getId();
-				if(builder_id > 0){
+				if(builder_id > 0 && access_id==4){
 					totalBuyers = new BuyerDAO().getTotalBuyers(builder);
 					totalInventorySold = new ProjectDAO().getTotalInventory(builder);
 					project_list = new ProjectDAO().getBuilderFirstFourActiveProjectsByBuilderId(builder);
@@ -79,7 +79,8 @@
 							booked += projectWiseData.getBookingCount();
 						}
 					}
-					
+				}else{
+					response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 				}
 		}
 	}

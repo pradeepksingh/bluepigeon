@@ -29,7 +29,7 @@ if(session!=null)
 		builder  = (BuilderEmployee)session.getAttribute("ubname");
 		session_id = builder.getBuilder().getId();
 		access_id = builder.getBuilderEmployeeAccessType().getId();
-		if(session_id > 0){
+		if(session_id > 0 && access_id == 6){
 			if (request.getParameterMap().containsKey("project_id")) {
 				projectId = Integer.parseInt(request.getParameter("project_id"));
 				if(projectId != 0) {
@@ -38,6 +38,8 @@ if(session!=null)
 		 			flats = new ProjectDAO().getProjectFlatListByBuilder(projectId, building_id, "");
 				}
 			}
+		}else{
+			response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 		}
 	}
 
@@ -171,9 +173,12 @@ Date date = new Date();
     });
     
     function searchBuyer(){
-    	if($('#filter_building_id').val() != "" && $('#srch-term').val() != ""){
+    	var filter_building = $("#filter_building_id").val();
+    	if(filter_building == "")
+    		filter_building = 0;
+    	if(filter_building != ""){
 	    	ajaxindicatorstart("Please wait while.. we search ...");
-		    $.get("${baseUrl}/builder/postsale/buyerlist/partialinventory.jsp?project_id=<% out.print(projectId);%>&building_id="+$('#filter_building_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
+		    $.get("${baseUrl}/builder/postsale/buyerlist/partialinventory.jsp?project_id=<% out.print(projectId);%>&building_id="+filter_building+"&keyword="+$('#srch-term').val(),{},function(data) {
 		    	$("#flat_landing_area").html(data);
 		    	ajaxindicatorstop();
 		    },'html');

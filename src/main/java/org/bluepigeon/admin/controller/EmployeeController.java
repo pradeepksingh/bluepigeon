@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -456,7 +457,6 @@ public class EmployeeController {
 			@FormDataParam("pancard") String pancard,
 			@FormDataParam("empphoto[]") List<FormDataBodyPart> empPhoto
 			){
-		boolean isTrue = false;
 		BuilderEmployeeAccessType employeeAccessType = new BuilderEmployeeAccessType();
 		ResponseMessage responseMessage = new ResponseMessage();
 		Builder builder = new Builder();
@@ -465,7 +465,7 @@ public class EmployeeController {
 		reportingEmployee.setId(reporting_id);
 		Locality locality = new Locality();
 		boolean status = false;
-		
+		boolean isAssign = false;
 		if(builderId > 0){
 			builder.setId(builderId);
 			builderEmployee.setBuilder(builder); 
@@ -477,15 +477,13 @@ public class EmployeeController {
 			builderEmployee.setCity(city); 
 		}
 			
-			employeeAccessType.setId(1);
+			employeeAccessType.setId(accessIds.get(0).getValueAs(Integer.class));
 			builderEmployee.setBuilderEmployeeAccessType(employeeAccessType);
 		if(areaId > 0){
 			locality.setId(areaId);
 			builderEmployee.setLocality(locality);
 		}
 	
-		Random random = new Random();
-		//random.doubles();
 		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
 		String pwd = RandomStringUtils.random( 15, characters );
 		//System.out.println( pwd );
@@ -504,7 +502,6 @@ public class EmployeeController {
 		if(empPhoto != null){
 			//add gallery images
 			try{	
-				List<AdminUserPhotos> buildingImageGalleries = new ArrayList<AdminUserPhotos>();
 				//for multiple inserting images.
 					if (empPhoto.size() > 0) {
 						for(int i=0 ;i < empPhoto.size();i++)
@@ -525,22 +522,18 @@ public class EmployeeController {
 					e.printStackTrace();
 				}
 		}
-		int ap[] = new int[3];
 		responseMessage = new BuilderDetailsDAO().saveEmployee(builderEmployee);
-		int z=0;
-		if(accessIds != null && accessIds.size() >0){
-			for(FormDataBodyPart accessId : accessIds){
+		if(responseMessage.getId() > 0)
+			builderEmployee.setId(responseMessage.getId());
+		for(FormDataBodyPart accessId : accessIds){
+			if(accessId.getValueAs(Integer.class) != null ){
 				if(accessId.getValueAs(Integer.class) == 3 || accessId.getValueAs(Integer.class) == 4 || accessId.getValueAs(Integer.class) == 6){
-					isTrue=true;
-					ap[z]=accessId.getValueAs(Integer.class);
-					z++;
-					continue;
+					isAssign = true;
+					break;
 				}
-				
 			}
 		}
-		if(responseMessage.getId() > 0 && accessIds != null && accessIds.size() >0){
-			builderEmployee.setId(responseMessage.getId());
+		if(accessIds != null && accessIds.size() >0){
 			List<EmployeeRole> employeeRoles = new ArrayList<EmployeeRole>();
 			for(FormDataBodyPart accessId : accessIds){
 				if(accessId.getValueAs(Integer.class) != null ){
@@ -555,31 +548,157 @@ public class EmployeeController {
 			if(employeeRoles.size() > 0){
 				responseMessage =  new BuilderDetailsDAO().saveEmpRoles(employeeRoles);
 			}
-	}
-	if(isTrue){
-		if(responseMessage.getId() > 0 && projectId != null && projectId.size() >0){
-			builderEmployee.setId(responseMessage.getId());
-			List<AllotProject> allotProjectList = new ArrayList<>();
-			for(FormDataBodyPart projects : projectId){
-				if(projects.getValueAs(Integer.class) != null ){
-					//for(int k=0;k<ap.length;k++){
-					//	if(ap[k]==3 || ap[k]==4 || ap[k]==6){
-							//System.err.println("ap["+k+"] = "+projects.getValueAs(Integer.class));
-							AllotProject allotProject = new AllotProject();
-							allotProject.setBuilderEmployee(builderEmployee);
-							BuilderProject builderProject = new BuilderProject();
-							builderProject.setId(projects.getValueAs(Integer.class));
-							allotProject.setBuilderProject(builderProject);
-							allotProjectList.add(allotProject);
+		}
+		if(isAssign){
+			if(projectId != null && projectId.size() >0){
+				List<AllotProject> allotProjectList = new ArrayList<>();
+				for(FormDataBodyPart projects : projectId){
+					if(projects.getValueAs(Integer.class) != null ){
+						//for(int k=0;k<ap.length;k++){
+						//	if(ap[k]==3 || ap[k]==4 || ap[k]==6){
+								//System.err.println("ap["+k+"] = "+projects.getValueAs(Integer.class));
+								AllotProject allotProject = new AllotProject();
+								allotProject.setBuilderEmployee(builderEmployee);
+								BuilderProject builderProject = new BuilderProject();
+								builderProject.setId(projects.getValueAs(Integer.class));
+								allotProject.setBuilderProject(builderProject);
+								allotProjectList.add(allotProject);
+							//}
 						//}
-					//}
+					}
+				}
+				if(allotProjectList.size() > 0){
+					responseMessage =  new BuilderDetailsDAO().saveAllotProjects(allotProjectList);
 				}
 			}
-			if(allotProjectList.size() > 0){
-				responseMessage =  new BuilderDetailsDAO().saveAllotProjects(allotProjectList);
-			}
 		}
-	}
 	return responseMessage;
 	}
+	@POST
+	@Path("/builder/update1")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateBuilderEmployees(
+			@FormDataParam("emp_id") int emp_id,
+			@FormDataParam("name") String name,
+			@FormDataParam("contact") String mobile,
+			@FormDataParam("email") String email,
+			@FormDataParam("address") String currentAddress,
+			@FormDataParam("address1") String permanentAddress,
+			@FormDataParam("designation") String designation,
+			@FormDataParam("accessid[]") List<FormDataBodyPart> accessIds,
+			@FormDataParam("empid") String employeeId,
+			@FormDataParam("project[]") List<FormDataBodyPart> projectId,
+			@FormDataParam("area_id") int areaId,
+			@FormDataParam("city_id") int cityId,
+			@FormDataParam("builder_id") int builderId,
+			@FormDataParam("reporting_id") int reporting_id,
+			@FormDataParam("allot_id")List<FormDataBodyPart> allotprojectIds,
+			@FormDataParam("empphoto[]") List<FormDataBodyPart> empPhoto
+			){
+		
+		BuilderEmployeeAccessType employeeAccessType = new BuilderEmployeeAccessType();
+		ResponseMessage responseMessage = new ResponseMessage();
+		Builder builder = new Builder();
+		BuilderEmployee builderEmployee = new BuilderEmployee();
+		Locality locality = new Locality();
+		boolean status = false;
+		BuilderEmployee reportingEmployee = new BuilderEmployee();
+		reportingEmployee.setId(reporting_id);
+		if(builderId > 0){
+			builder.setId(builderId);
+			builderEmployee.setBuilder(builder); 
+		}
+		
+		if(cityId > 0){
+			City city = new City();
+			city.setId(cityId);
+			builderEmployee.setCity(city); 
+		}
+		if(accessIds !=null){
+			
+			employeeAccessType.setId(accessIds.get(0).getValueAs(Integer.class));
+			builderEmployee.setBuilderEmployeeAccessType(employeeAccessType);
+		}
+		if(areaId > 0){
+			locality.setId(areaId);
+			builderEmployee.setLocality(locality);
+		}
+		builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
+		builderEmployee.setId(emp_id);
+		builderEmployee.setName(name);
+		builderEmployee.setEmail(email);
+		builderEmployee.setMobile(mobile);
+		builderEmployee.setCurrentAddress(currentAddress);
+		builderEmployee.setPermanentAddress(permanentAddress);
+		builderEmployee.setDesignation(designation);
+		builderEmployee.setEmployeeId(employeeId);
+		builderEmployee.setBuilderEmployee(reportingEmployee);
+		if(empPhoto != null){
+			//add gallery images
+			try{	
+				//for multiple inserting images.
+					if (empPhoto.size() > 0) {
+						for(int i=0 ;i < empPhoto.size();i++)
+						{
+							if(empPhoto.get(i).getFormDataContentDisposition().getFileName() != null && !empPhoto.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+								String gallery_name = empPhoto.get(i).getFormDataContentDisposition().getFileName();
+								long millis = System.currentTimeMillis() % 1000;
+								gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+								gallery_name = "images/project/builder/employee/images/"+gallery_name;
+								String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+								System.out.println("for loop image path: "+uploadGalleryLocation);
+								this.imageUploader.writeToFile(empPhoto.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+								builderEmployee.setPhoto(gallery_name);
+							}
+						}
+					}
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+		}
+		responseMessage = new BuilderDetailsDAO().updateBuilderEmployee(builderEmployee);
+		if(accessIds != null){
+			if(accessIds.size() > 0){
+				List<EmployeeRole> savemployeeRoles = new ArrayList<>();
+				for(FormDataBodyPart accessId : accessIds){
+					if(accessId.getValueAs(Integer.class) != null && accessId.getValueAs(Integer.class) > 0){
+						EmployeeRole employeeRole = new EmployeeRole();
+						BuilderEmployeeAccessType builderEmployeeAccessType = new BuilderEmployeeAccessType();
+						builderEmployeeAccessType.setId(accessId.getValueAs(Integer.class));
+						employeeRole.setBuilderEmployee(builderEmployee);
+						employeeRole.setBuilderEmployeeAccessType(builderEmployeeAccessType);
+						savemployeeRoles.add(employeeRole);
+					}
+				}
+				if(savemployeeRoles.size() > 0){
+					new BuilderDetailsDAO().deleteEmployeeRolesByEmpId(emp_id);
+					new BuilderDetailsDAO().saveEmpRoles(savemployeeRoles);
+				}
+			}
+		}
+		if(projectId != null){
+			if(projectId.size()>0){
+				List<AllotProject> saveallotProjectList = new ArrayList<>();
+				int i=0;
+				for(FormDataBodyPart projects : projectId){
+					if(projects.getValueAs(Integer.class) != null ){
+						AllotProject allotProject = new AllotProject();
+						allotProject.setBuilderEmployee(builderEmployee);
+						BuilderProject builderProject = new BuilderProject();
+						builderProject.setId(projects.getValueAs(Integer.class));
+						allotProject.setBuilderProject(builderProject);
+						saveallotProjectList.add(allotProject);
+					}
+					i++;
+				}
+				if(saveallotProjectList.size() > 0){
+					new BuilderDetailsDAO().deleteAllotedrojectsByEmpId(emp_id);
+					new BuilderDetailsDAO().saveAllotProjects(saveallotProjectList);
+				}
+			}
+		}
+	return responseMessage;
+	}
+
 }

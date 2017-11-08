@@ -19,13 +19,15 @@ if(session!=null)
 		builder  = (BuilderEmployee)session.getAttribute("ubname");
 		session_id = builder.getBuilder().getId();
 		access_id = builder.getBuilderEmployeeAccessType().getId();
-		if(session_id > 0){
+		if(session_id > 0 && access_id == 4){
 			if (request.getParameterMap().containsKey("project_id")) {
 				projectId = Integer.parseInt(request.getParameter("project_id"));
 				if(projectId != 0) {
 					campaignLists = new CampaignDAO().getMyCampaignsByProjectId(projectId);
 				}
 			}
+		}else{
+			response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 		}
 	}
 

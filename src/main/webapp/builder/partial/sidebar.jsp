@@ -66,7 +66,7 @@
 <!--                  	<li> <a href="">Documents List</a></li> -->
                  	<li> <a href="${baseUrl }/builder/documents/documents.jsp">Add Documents</a></li>
 <!--                  	<li> <a href="">Demand letter list</a></li> -->
-                 	<li> <a href="${baseUrl }/builder/postsale/generatedemandletter.jsp">Demand letter</a></li>
+<%--                  	<li> <a href="${baseUrl }/builder/postsale/generatedemandletter.jsp">Demand letter</a></li> --%>
                  </ul>
             </li>
             <% }%>
@@ -76,7 +76,7 @@
             <span class="hide-menu"> ADMIN<span class=""></span></span></a>
 				<ul class="nav nav-second-level">
                 	<li> <a href="${baseUrl }/builder/employee/addemployee.jsp">Add Employee</a></li>
-                    <li> <a href="${baseUrl }/builder/employee/list.jsp">Employees</a></li>
+                    <li> <a href="${baseUrl }/builder/admin/employeeslist.jsp">Employees</a></li>
                     <li> <a href="${baseUrl }/builder/documents/documents.jsp">Add Document</a></li>
 <%--                     <li> <a href="${baseUrl }/builder/inbox/inbox.jsp">Inbox</a></li> --%>
                     <li> <a href="${baseUrl }/builder/project/newproject.jsp">Project Start Request</a></li>

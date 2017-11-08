@@ -1,3 +1,6 @@
+<%@page import="org.bluepigeon.admin.model.AllotProject"%>
+<%@page import="org.bluepigeon.admin.model.Locality"%>
+<%@page import="org.bluepigeon.admin.dao.LocalityNamesImp"%>
 <%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
 <%@page import="org.bluepigeon.admin.model.City"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
@@ -18,22 +21,39 @@
 	int builder_size =0;
 	List<City> cityList = null;
 	BuilderDetailsDAO builderDetailsDAO = null;
+	int emp_id =0;
+	int access_id = 0;
+	BuilderEmployee builderEmployee = new BuilderEmployee();
 	List<BuilderEmployeeAccessType> access_list  = null;
+	List<Locality> localityList = null;
+	List<AllotProject> allotProjects = null;
 	int city_size = 0;
+	int area_size = 0;
+	List<EmployeeRole> updateemployeeRoles = null;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_uid = builder.getBuilder().getId();
-			if(builder_uid > 0){
-				project_list = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
-			    builder_size = project_list.size();
-			    
-			    builderDetailsDAO = new BuilderDetailsDAO();
-			    access_list = builderDetailsDAO.getBuilderAccessList(builder.getBuilderEmployeeAccessType().getId());
-			    cityList = new CityNamesImp().getCityActiveNames();
-			    city_size = cityList.size();
+			access_id = builder.getBuilderEmployeeAccessType().getId();
+			if(builder_uid > 0 && access_id == 2){
+				if (request.getParameterMap().containsKey("emp_id")) {
+					emp_id = Integer.parseInt(request.getParameter("emp_id"));
+					builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(emp_id);
+					project_list = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
+				    builder_size = project_list.size();
+				    builderDetailsDAO = new BuilderDetailsDAO();
+				    access_list = builderDetailsDAO.getBuilderAccessList(builder.getBuilderEmployeeAccessType().getId());
+				    cityList = new CityNamesImp().getCityActiveNames();
+				    localityList = new LocalityNamesImp().getLocalityActiveList();
+				    allotProjects = new BuilderDetailsDAO().getAllotedrojectsByEmpId(emp_id);
+				    updateemployeeRoles = new BuilderDetailsDAO().getEmployeeRolesByEmployee(emp_id);
+				    city_size = cityList.size();
+				    area_size = localityList.size();
+				}
+			}else{
+				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 			}
 		}
    	}
@@ -58,7 +78,7 @@
     <link href="../css/newstyle.css" rel="stylesheet">
     <link href="../css/common.css" rel="stylesheet">
      <link href="../css/jquery.multiselect.css" rel="stylesheet">
-      <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
+     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
     <!-- color CSS -->
     <link rel="stylesheet" type="text/css" href="../css/adminaddemployee.css">
     <!-- jQuery -->
@@ -95,23 +115,24 @@
         <div id="page-wrapper">
            <div class="container-fluid addlead">
                <!-- /.row -->
-	            <h1>Add Employee</h1>
+	            <h1>Update Employee</h1>
                <!-- row -->
 				<div class="white-box">
 					<div class="bg11">
                  		<div class="spacer">
-                   			<h3>+ New Employee</h3>
+                   			<h3> Update Employee</h3>
 						</div>
-                  		<form class="addlead1" id="addemployee" name="addemployee" action="" method="post" enctype="multipart/form-data">
+                  		<form class="addlead1" id="updateemployee" name="updateemployee" action="" method="post" enctype="multipart/form-data">
                   			<input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_uid); %>" />
-                            <input type="hidden" id="reporting_id" name="reporting_id" value="<%out.print(builder.getId());%>"/>
+                            <input type="hidden" id="reporting_id" name="reporting_id" value="<%out.print(builderEmployee.getId());%>"/>
+                            <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>" />
                     		<div class="row">
                     			<div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
                         			<div class="form-group row">
 										<label for="example-text-input" class="col-sm-5 col-form-label"> Name</label>
 										<div class="col-sm-7">
 											<div>
-								 				<input class="form-control  form-control1" type="text" id="name" name="name"  placeholder="employee name">
+								 				<input class="form-control  form-control1" type="text" id="name" name="name" value="<%out.print(builderEmployee.getName()); %>"  placeholder="employee name">
 											</div>
 											<div class="messageContainer"></div>
 							  			</div>
@@ -120,7 +141,7 @@
 							 			<label for="example-search-input" class="col-sm-5 col-form-label">Email ID</label>
 							 			<div class="col-sm-7">
 											<div>
-								   				<input class="form-control  form-control1" type="text" id="email" name="email" placeholder="employee email id">
+								   				<input class="form-control  form-control1" type="text" id="email" name="email" value="<%out.print(builderEmployee.getEmail()); %>" placeholder="employee email id">
 											</div>
 											<div class="messageContainer"></div>
 							 			</div>
@@ -129,7 +150,7 @@
 									   <label for="example-search-input" class="col-sm-5 col-form-label">Permanent Address</label>
 										  <div class="col-sm-7">
 										  	<div>
-										     	<textarea placeholder="Enter permanents address" id="address1" name="address1"></textarea>
+										     	<textarea placeholder="Enter permanents address" id="address1" name="address1"><%out.print(builderEmployee.getPermanentAddress()); %></textarea>
 										  	</div>
 										  	<div class="messageContainer"></div>
 										</div>
@@ -141,9 +162,15 @@
 												 <select  id="accessid" name="accessid[]" multiple>
 							                     <%if(access_list != null){
 			                        					for(BuilderEmployeeAccessType builderEmployeeAccessType : access_list){
+			                        						String is_selected ="";
+			                        						for(EmployeeRole employeeRole : updateemployeeRoles){
+			                        							if(employeeRole.getBuilderEmployeeAccessType().getId()==builderEmployeeAccessType.getId()){
+			                        								is_selected = "selected";
+			                        							}
+			                        						}
 			                        			 %>
-			                        				<option value="<%out.print(builderEmployeeAccessType.getId()); %>"><%out.print(builderEmployeeAccessType.getName()); %></option>
-			                        			<%} }%>
+			                        				<option value="<%out.print(builderEmployeeAccessType.getId()); %>"  <%out.print(is_selected); %>><%out.print(builderEmployeeAccessType.getName()); %></option>
+			                        			<%}} %>
 						                        </select>
 											</div>
 										</div>
@@ -153,11 +180,16 @@
 										<div class="col-sm-7">
 											<div id="assignproject">
 											    <select  id="projects" name="projects[]" multiple>
-						                          <% 
-						                          if(project_list != null){
-						                          for (ProjectData project : project_list) { %>
-														<option value="<%out.print(project.getId());%>"> <% out.print(project.getName()); %> </option>
-												  <% }} %>
+						                         <% if(project_list!=null){
+													for(ProjectData project : project_list){
+													String is_selected = "";	
+														for(AllotProject allotProject : allotProjects){
+															if(allotProject.getBuilderProject().getId() == project.getId())
+																is_selected = "selected";
+														}
+												%>
+												<option value="<%out.print(project.getId());%>" <%out.print(is_selected); %> > <% out.print(project.getName()); %> </option>
+												<%}} %>
 						                        </select>
 						                     </div>
 										 </div>
@@ -167,12 +199,10 @@
 										<div class="col-sm-7">
 											<div>
 											    <select name="city_id" id="city_id">
-													<option value=""> Select City </option>
-													<% 
-													if(cityList != null){
-													for(City city : cityList){ %>
-													<option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
-													<% }} %>
+													<option value="0"> Select City </option>
+													<% for(City city :cityList){%>
+													<option value="<%out.print(city.getId()); %>" <%if(city.getId() == builderEmployee.getCity().getId()){ %>selected<%} %>><%out.print(city.getName()); %></option>
+													<%}%>
 												</select>
 											</div>
 											<div class="messageContainer"></div>
@@ -182,7 +212,7 @@
 							           <label for="example-tel-input" class="col-sm-5 col-form-label">Aadhaar Card No. </label>
 								         <div class="col-sm-7">
 								         	<div>
-									       		<input class="form-control  form-control1" type="text" id="aadhaar" name="aadhaar" placeholder="">
+									       		<input class="form-control  form-control1" type="text" id="aadhaar" name="aadhaar" value="<%if(builderEmployee.getAadhaarNumber() != null){out.print(builderEmployee.getAadhaarNumber());} %>" placeholder="">
 									     	</div>
 									     	<div class="messageContainer"></div>
 									     </div>
@@ -193,7 +223,7 @@
 										<label for="example-text-input" class="col-sm-5 col-form-label"> Contact</label>
 										<div class="col-sm-7">
 									  		<div>
-											 	<input class="form-control form-control1" type="text" id="contact" name="contact"  placeholder="">
+											 	<input class="form-control form-control1" type="text" id="contact" name="contact"  value="<%out.print(builderEmployee.getMobile()); %>" placeholder="">
 											</div>
 											<div class="messageContainer"></div>
 										</div>
@@ -202,7 +232,7 @@
 										<label for="example-search-input" class="col-sm-5 col-form-label">Current Address</label>
 									 	<div class="col-sm-7">
 											<div>
-										     	<textarea placeholder="Enter current address" id="address" name="address"></textarea>
+										     	<textarea placeholder="Enter current address" id="address" name="address"><%out.print(builderEmployee.getCurrentAddress()); %></textarea>
 										  	</div>
 										  	<div class="messageContainer"></div>
 									 	</div>
@@ -211,7 +241,7 @@
 		   					  			<label for="example-text-input" class="col-sm-5 col-form-label">Designation</label>
 		      							<div class="col-sm-7">
 		      								<div>
-			    								<input class="form-control form-control1" type="text" name="designation" id="designation"  placeholder="">
+			    								<input class="form-control form-control1" type="text" name="designation" id="designation"  value="<%out.print(builderEmployee.getDesignation()); %>" placeholder="">
 		      								</div>
 		      								<div class="messageContainer"></div>
 		      							</div>
@@ -220,7 +250,7 @@
 										<label for="example-search-input" class="col-sm-5 col-form-label">Employee ID</label>
 										<div class="col-sm-7">
 											<div>
-		   										<input class="form-control  form-control1" type="text"  id="empid" name="empid" placeholder="">
+		   										<input class="form-control  form-control1" type="text"  id="empid" name="empid" value="<%out.print(builderEmployee.getEmployeeId()); %>" placeholder="">
 		 									</div>
 		 									<div class="messageContainer"></div>
 		 								</div>
@@ -229,7 +259,12 @@
 							   			<label for="example-search-input" class="col-sm-5 col-form-label">Area</label>
 										<div class="col-sm-7">
 											<div>
-										   		<select name="area_id" id="area_id"></select>
+										   		<select name="area_id" id="area_id">
+													<option value="0"> Select Area </option>
+													<%for(Locality locality: localityList){ %>
+													<option value="<%out.print(locality.getId()); %>" <%if(locality.getId() == builderEmployee.getLocality().getId()){ %>selected<%} %>><%out.print(locality.getName()); %></option>
+													<%} %>
+												</select>
 					                     	</div>
 					                     	<div class="messageContainer"></div>
 										</div>
@@ -246,12 +281,18 @@
 											</div>
 											<div class="messageContainer"></div>
 										</div>
+										<div class="col-sm-6"></div>
+										<div class="col-sm-6">
+										<%if(builderEmployee.getPhoto() != null){ %>
+										<img alt="builder logo" src="${baseUrl}/<% out.print(builderEmployee.getPhoto()); %>" width="200px;">
+										<%} %>
+										</div>
 								 	</div>
 								  	<div class="form-group row">
 										<label for="example-search-input" class="col-sm-5 col-form-label">Pan Card No.</label>
 										<div class="col-sm-7">
 											<div>
-											 	<input class="form-control  form-control1" type="text" id="pancard" name="pancard" placeholder="">
+											 	<input class="form-control  form-control1" type="text" id="pancard" name="pancard" value="<%if(builderEmployee.getPancard()!=null){out.print(builderEmployee.getPancard());} %>" placeholder="">
 											 </div>
 											 <div class="messageContainer"></div>
 										</div>
@@ -260,7 +301,7 @@
 							</div>
 						<div class="row">
 							<div class="center">
-				    			<button type="submit" class="btn11">Save</button>
+				    			<button type="submit" class="btn11">Update</button>
 							</div>
 						</div>
 					</form>
@@ -277,7 +318,6 @@
 </html>
 <script type="text/javascript" src="../js/selectize.min.js"></script>
  <script>
-
  $('#accessid').multiselect({
      columns: 1,
      placeholder: 'Select Access Role',
@@ -291,7 +331,21 @@
      selectAll: true
  });
 
- $select_city = $("#city_id").selectize({
+ 
+  jQuery(function($) {
+	  $('input[type="file"]').change(function() {
+	    if ($(this).val()) {
+		    error = false;
+	      var filename = $(this).val();
+				$(this).closest('.file-upload').find('.file-name').html(filename);
+	      if (error) {
+	        parent.addClass('error').prepend.after('<div class="alert alert-error">' + error + '</div>');
+	      }
+	    }
+	  });
+	});
+  
+  $select_city = $("#city_id").selectize({
 		persist: false,
 		 onChange: function(value) {
 			if( $("#city_id").val() != '' ){
@@ -330,7 +384,7 @@
 	<%if(city_size > 0){%>
 		select_city = $select_city[0].selectize;
 	<%}%>
- 
+
 	$select_area = $("#area_id").selectize({
 		persist: false,
 		 onChange: function(value) {
@@ -344,22 +398,11 @@
 	   	 }
 	    }
 	});
-	
-	
- jQuery(function($) {
-	  $('input[type="file"]').change(function() {
-	    if ($(this).val()) {
-		    error = false;
-	      var filename = $(this).val();
-				$(this).closest('.file-upload').find('.file-name').html(filename);
-	      if (error) {
-	        parent.addClass('error').prepend.after('<div class="alert alert-error">' + error + '</div>');
-	      }
-	    }
-	  });
-	});
+  <% if(area_size > 0){%>
+  	select_area = $select_area[0].selectize;
+  <%}%>
   
-	$('#addemployee').bootstrapValidator({
+	$('#updateemployee').bootstrapValidator({
 		container: function($field, validator) {
 			return $field.parent().next('.messageContainer');
 	   	},
@@ -372,7 +415,11 @@
 	            validators: {
 	                notEmpty: {
 	                    message: 'Name is required and cannot be empty'
-	                }
+	                },
+	                regexp: {
+                        regexp: '^[a-zA-Z0-9_\.]+$',
+                        message: 'The username can only consist of alphabetical, number, dot and underscore'
+                    }
 	            }
 	        },
 	        contact:{
@@ -419,32 +466,18 @@
 	        		}
 	        	}
 	        },
-	        access: {
+	        'accessid[]': {
 	            validators: {
 	                notEmpty: {
 	                    message: 'Access type is required and cannot be empty'
 	                }
 	            }
 	        },
-	        empid: {
-	            validators: {
-	                notEmpty: {
-	                    message: 'Empoyee id is required and cannot be empty'
-	                }
-	            }
-	        }
-	        ,
-	        project: {
+	        
+	        'projects[]': {
 	            validators: {
 	                notEmpty: {
 	                    message: 'minimum one project must be selected'
-	                }
-	            }
-	        },
-	        empid:{
-	        	validators: {
-	                notEmpty: {
-	                    message: 'Employee Id is required and cannot be empty'
 	                }
 	            }
 	        },
@@ -495,35 +528,35 @@
 //	          }
 //	    });
 		var options = {
-		 		target : '#response', 
-		 		beforeSubmit : showAddRequest,
-		 		success :  showAddResponse,
-		 		url : '${baseUrl}/webapi/employee/save2',
+		 		target : '#updateresponse', 
+		 		beforeSubmit : showUpdateRequest,
+		 		success :  showUpdateResponse,
+		 		url : '${baseUrl}/webapi/employee/builder/update1',
 		 		semantic : true,
 		 		dataType : 'json'
 		 	};
-	   	$('#addemployee').ajaxSubmit(options);
+	   	$('#updateemployee').ajaxSubmit(options);
 	}
 
-	function showAddRequest(formData, jqForm, options){
-		$("#response").hide();
+	function showUpdateRequest(formData, jqForm, options){
+		$("#updateresponse").hide();
 	   	var queryString = $.param(formData);
 		return true;
 	}
 	   	
-	function showAddResponse(resp, statusText, xhr, $form){
+	function showUpdateResponse(resp, statusText, xhr, $form){
 		if(resp.status == '0') {
-			$("#response").removeClass('alert-success');
-	       	$("#response").addClass('alert-danger');
-			$("#response").html(resp.message);
-			$("#response").show();
+			$("#updateresponse").removeClass('alert-success');
+	       	$("#updateresponse").addClass('alert-danger');
+			$("#updateresponse").html(resp.message);
+			$("#updateresponse").show();
 	  	} else {
-	  		$("#response").removeClass('alert-danger');
-	        $("#response").addClass('alert-success');
-	        $("#response").html(resp.message);
-	        $("#response").show();
+	  		$("#updateresponse").removeClass('alert-danger');
+	        $("#updateresponse").addClass('alert-success');
+	        $("#updateresponse").html(resp.message);
+	        $("#updateresponse").show();
 	        alert(resp.message);
-	        window.location.href = "${baseUrl}/builder/admin/employeeslist.jsp";
+	       // window.location.href = "${baseUrl}/builder/employee/list.jsp";
 	  	}
 	}
 	

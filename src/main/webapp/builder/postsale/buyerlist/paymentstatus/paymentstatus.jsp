@@ -130,7 +130,7 @@
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper">
-    		<section class="content" style="margin-top:70px;">
+    		<section class="content" style="margin-top:60px;padding-top:10px">
         		<div class="container-fluid">
                		<div class="row clearfix">
                 		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >

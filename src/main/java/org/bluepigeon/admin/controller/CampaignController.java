@@ -380,4 +380,38 @@ public class CampaignController {
 		
 		return new CampaignDAO().getCityLocalityName(projectId);
 	}
+	
+	@POST
+	@Path("/new/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updateNewCampaign (
+			@FormDataParam("terms") String  terms,
+			@FormDataParam("camp_id") int campId,
+			@FormDataParam("startdate") String setDate,
+			@FormDataParam("enddate") String endDate
+			){
+				ResponseMessage msg = new ResponseMessage();
+				CampaignDAO campaignDAO = new CampaignDAO();
+				Campaign campaign  = campaignDAO.getCampaignById(campId);
+					SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+					Date startDate = null;
+					try {
+						startDate = format.parse(setDate);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					Date endCampaignDate = null;
+					try {
+						endCampaignDate = format.parse(endDate);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					campaign.setSetDate(startDate);
+					campaign.setEndDate(endCampaignDate);
+					campaign.setTerms(terms);
+					msg=campaignDAO.updateCampaign(campaign);
+				return msg;
+	}
+	
 }

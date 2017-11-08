@@ -55,10 +55,10 @@
 	<div class="white-box1">
 		<div class="user-profile center">
 			<%if(employeeList.getImage()!=null){ %>
-	        <img src="${baseUrl}/<% out.print(employeeList.getImage());%>" alt="User Image" class="custom-img">
-	        <%}else{ %>
-			<img src="../plugins/images/Untitled-1.png" alt="User Image" class="custom-img">
-			<%} %>
+       		<img src="${baseUrl}/<% out.print(employeeList.getImage());%>" alt="User Image" class="custom-img">
+       		<%}else{ %>
+            <img src="../plugins/images/Untitled-1.png" alt="User Image" class="custom-img">
+            <%} %>
 			<p><b><%out.print(employeeList.getName()); %></b></p>
 			<p class="p-custom"><%out.print(employeeList.getAccess()); %></p>
   			<br>
@@ -68,6 +68,7 @@
 			<p><b><%out.print(employeeList.getMobileNo()); %></b></p>
 			<p class="p-custom">Email</p>
 			<p><b><%out.print(employeeList.getEmail()); %></b></p>
+			<p><a href="${baseUrl}/builder/employee/editemployee.jsp?emp_id=<%out.print(employeeList.getId()); %>">Edit</a></p>
 	    </div>
     </div>
 </div>

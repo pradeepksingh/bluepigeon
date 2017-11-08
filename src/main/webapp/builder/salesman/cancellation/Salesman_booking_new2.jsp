@@ -347,6 +347,7 @@ $(document).ready(function () {
 });
 <% } %>
 function showFlats(id){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/cancellation/Salesman_cancelation_form_open3.jsp?flat_id="+id;
 }
 function activeInactiveFlats(){
@@ -366,6 +367,7 @@ $select_building = $("#filter_building_id").selectize({
 	persist: false,
 	 onChange: function(value) {
 		if($("#filter_building_id").val() != '' ){
+			ajaxindicatorstart("Loading...");
 			$.get("${baseUrl}/webapi/project/building/floor/list/",{ building_id: value }, function(data){
 				getFlatDetails();
 				var html = '<option value="0">All Floor</option>';
@@ -413,7 +415,7 @@ $select_building = $("#filter_building_id").selectize({
 					    }
 					});
 				}
-				
+				ajaxindicatorstop();
 			},'json');
 			//window.location.href = "${baseUrl}/builder/project/building/edit.jsp?project_id="+$("#project_id").val()+"&building_id="+value;
 			
@@ -483,6 +485,7 @@ function showFlatwithImage(id){
 	$("#home").empty();
 	var htmlFlat ="";
 	if( id != ''){
+		ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id,emp_id:$("#emp_id").val()},function(data){
 			var image = '';
 			if(data.buyerPhoto != ''){
@@ -545,7 +548,7 @@ function showFlatwithImage(id){
 		 	  +'<button type="button" onclick="updateCancel('+data.cancellationId+');" class="button red">Approve</button>';
   	}
       			$("#home").append(htmlFlat);
-		   
+      			ajaxindicatorstop();
 		},'json');
 		activeInactiveFlats();
 	}

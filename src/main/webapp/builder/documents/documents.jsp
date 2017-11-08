@@ -19,17 +19,27 @@
 	BuilderEmployee builder = new BuilderEmployee();
 	List<ProjectData> project_list = null;
 	int builder_id = 0;
+	int emp_id = 0;
+	int access_id = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
+			emp_id = builder.getId();
+			access_id = builder.getBuilderEmployeeAccessType().getId();
 			if(builder_id > 0){
-				project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+				if(access_id == 6){
+					project_list = new ProjectDAO().getAssigProjects(emp_id);
+				}
+				if(access_id == 2){
+					project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
+				}else{
+					response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
+				}
 			}
 		}
-		
    }
 %>
 

@@ -131,7 +131,7 @@
 	                       <div class="col-md-4">
 	                         <div class="white-box1">
 	                           <div class="user-profile center">
-						            <%if(employeeList.getImage()!=null){ %>
+	                           		<%if(employeeList.getImage()!=null){ %>
 	                           		<img src="${baseUrl}/<% out.print(employeeList.getImage());%>" alt="User Image" class="custom-img">
 	                           		<%}else{ %>
 						            <img src="../plugins/images/Untitled-1.png" alt="User Image" class="custom-img">
@@ -145,6 +145,7 @@
 								        <p><b><%out.print(employeeList.getMobileNo()); %></b></p>
 								        <p class="p-custom">Email</p>
 								        <p><b><%out.print(employeeList.getEmail()); %></b></p>
+								         <p><a href="${baseUrl}/builder/employee/editemployee.jsp?emp_id=<%out.print(employeeList.getId()); %>">Edit</a></p>
 								    </div>
 						       </div>
 						  </div>
@@ -178,7 +179,7 @@ $("#srch-term").keydown(function(e){
 });
 function searchEmployees(){
 	ajaxindicatorstart("Please wait while.. we search ...");
-    $.get("${baseUrl}/builder/ceo/partialemployeeslist.jsp?builder_id=<%out.print(builder_id);%>&role_id="+$('#filter_role_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
+    $.get("${baseUrl}/builder/admin/partialemployeeslist.jsp?builder_id=<%out.print(builder_id);%>&role_id="+$('#filter_role_id').val()+"&keyword="+$('#srch-term').val(),{},function(data) {
     	$("#emplist").html(data);
     	ajaxindicatorstop();
     },'html');
