@@ -101,7 +101,6 @@
      </style>
     <!-- jQuery -->
     <script src="${baseUrl}/builder/plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    
 </head>
 
 <body class="fix-sidebar">

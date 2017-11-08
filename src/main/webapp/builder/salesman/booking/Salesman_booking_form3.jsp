@@ -456,14 +456,14 @@
 						     	<div class="col-sm-12">
 								    <div class="form-group row">
 								    	 <input type="hidden" name="doc_name[]" value="Agreement" />
-								        <label for="example-text-input" class="col-5 col-form-label"> Agreement*</label>
+								        <label for="example-text-input" class="col-5 col-form-label"> Aadhaar Card *</label>
 								        <div class="col-7">
 								           <input type="file" class="form-control" name="doc_url[]" />
 								        </div>
 								    </div>
 								    <div class="form-group row">
 								      <input type="hidden" name="doc_name[]" value="Index 2" />
-								        <label for="example-text-input" class="col-5 col-form-label"> Index 2*</label>
+								        <label for="example-text-input" class="col-5 col-form-label"> Pan Card *</label>
 								        <div class="col-7">
 								            <input type="file" class="form-control" name="doc_url[]" />
 								        </div>

@@ -147,7 +147,7 @@
 	                 <div class="border-lead1">
 	                   <div class="row">
 	                     <div class="col-md-3 col-sm-3 col-xs-3">
-	                       <h4><%out.print(bookedBuyerList.getBuildingName()); %>-<%out.print(bookedBuyerList.getFlatNo()); %> <%out.print(bookedBuyerList.getProjectName()); %>, <%out.print(bookedBuyerList.getLocalityName()); %>, <%out.print(bookedBuyerList.getCityName()); %></h4>
+	                       <h4><%out.print(bookedBuyerList.getBuildingName()); %>, <%out.print(bookedBuyerList.getFlatNo()); %>, <%out.print(bookedBuyerList.getProjectName()); %>, <%out.print(bookedBuyerList.getLocalityName()); %>, <%out.print(bookedBuyerList.getCityName()); %></h4>
 	                     </div>
 	                     <div class="col-md-3 col-sm-3 col-xs-3">
 	                       <h4><%out.print(bookedBuyerList.getBuyerName()); %></h4>
@@ -208,7 +208,7 @@ function getBookedBuyerFilterList(){
 				 htmlBookedBuyers ='<div class="border-lead1">'
 				 	+'<div class="row">'
                    +'<div class="col-md-3 col-sm-3 col-xs-3">'
-                     +'<h4>'+data[index].buildingName+'-'+data[index].flatNo+' '+data[index].projectName+', '+data[index].localityName+', '+data[index].cityName+'</h4>'
+                     +'<h4>'+data[index].buildingName+','+data[index].flatNo+', '+data[index].projectName+', '+data[index].localityName+', '+data[index].cityName+'</h4>'
                    +'</div>'  
                    +'<div class="col-md-3 col-sm-3 col-xs-3">'
                     +'<h4>'+data[index].buyerName+'</h4>'

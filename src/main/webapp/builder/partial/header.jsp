@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.dao.CancellationDAO"%>
+<%@page import="org.bluepigeon.admin.model.Notification"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.bluepigeon.admin.model.EmployeeRole"%>
@@ -14,6 +16,7 @@
 session = request.getSession(false);
 	BuilderEmployee mainadmin = new BuilderEmployee();
 	List<EmployeeRole> employeeRoles = new ArrayList<EmployeeRole>();
+	List<Notification> notifications = new ArrayList<Notification>();
 	int session_uid = 0;
 	int access_uid =0;
 	if(session!=null)
@@ -24,7 +27,7 @@ session = request.getSession(false);
 			session_uid = mainadmin.getId();
 			access_uid = mainadmin.getBuilderEmployeeAccessType().getId();
 			employeeRoles = new BuilderDetailsDAO().getEmployeeRolesByEmployee(session_uid);
-			
+			notifications = new CancellationDAO().getAssignedToByEmployee(session_uid);
 		}
    	}
 	if(session_uid <= 0) {
@@ -98,53 +101,19 @@ session = request.getSession(false);
                     <div class="notify"><span class="heartbit"></span><span class="point"></span></div>
                 </a>
                         <ul class="dropdown-menu dropdown-tasks animated slideInUp">
+                        <%if(access_uid == 5){ 
+                        	if(notifications !=null){
+                        		for(Notification notification : notifications){
+                        %>
                             <li>
                                 <a href="#">
                                     <div>
-                                        <p> <strong>Task 1</strong> <span class="pull-right text-muted">Cancel Flat Notification</span> </p>
-                                        <div class="progress progress-striped active">
-                                            <div class="progress-bar progress-bar-success"  style="width: 40%"> <span class="sr-only">This buyer wants to cancel Flat</span> </div>
-                                        </div>
+                                        <p> <strong>Task <%out.print(notification.getId()); %></strong> <span class="pull-right text-muted"><%out.print(notification.getDescription()); %></span> </p>
                                     </div>
                                 </a>
                             </li>
                             <li class="divider"></li>
-                            <li>
-                                <a href="#">
-                                    <div>
-                                        <p> <strong>Task 2</strong> <span class="pull-right text-muted">20% Complete</span> </p>
-                                        <div class="progress progress-striped active">
-                                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%"> <span class="sr-only">20% Complete</span> </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#">
-                                    <div>
-                                        <p> <strong>Task 3</strong> <span class="pull-right text-muted">60% Complete</span> </p>
-                                        <div class="progress progress-striped active">
-                                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%"> <span class="sr-only">60% Complete (warning)</span> </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#">
-                                    <div>
-                                        <p> <strong>Task 4</strong> <span class="pull-right text-muted">80% Complete</span> </p>
-                                        <div class="progress progress-striped active">
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%"> <span class="sr-only">80% Complete (danger)</span> </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a class="text-center" href="#"> <strong>See All Tasks</strong> <i class="fa fa-angle-right"></i> </a>
-                            </li>
+                            <%}} }%>
                         </ul>
 <!--                         /.dropdown-tasks -->
                     </li>

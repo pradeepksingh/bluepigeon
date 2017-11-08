@@ -4797,7 +4797,7 @@ public class ProjectController extends ResourceConfig {
 		msg = projectDAO.deleteFlatOfferInfo(id);
 		return msg;
 	}
-	
+	 
 	@GET
 	@Path("/building/floor/flat/detail")
 	@Produces(MediaType.APPLICATION_JSON)

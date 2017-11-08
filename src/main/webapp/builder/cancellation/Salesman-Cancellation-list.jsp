@@ -150,7 +150,7 @@
 	                 <div class="border-lead1">
 	                  <div class="row">
 	                    <div class="col-md-2 col-sm-2 col-xs-2">
-	                     <h4><%out.print(bookedBuyerList.getBuildingName()); %>-<%out.print(bookedBuyerList.getFlatNo()); %> <%out.print(bookedBuyerList.getProjectName()); %>, <%out.print(bookedBuyerList.getLocalityName()); %>, <%out.print(bookedBuyerList.getCityName()); %></h4>
+	                     <h4><%out.print(bookedBuyerList.getBuildingName()); %>, <%out.print(bookedBuyerList.getFlatNo()); %>, <%out.print(bookedBuyerList.getProjectName()); %>, <%out.print(bookedBuyerList.getLocalityName()); %>, <%out.print(bookedBuyerList.getCityName()); %></h4>
 	                    </div>
 	                     <div class="col-md-4 col-sm-4 col-xs-4">
 	                     <h4><%out.print(bookedBuyerList.getBuyerName()); %></h4>
