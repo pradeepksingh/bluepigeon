@@ -425,7 +425,6 @@ public class BuyerController {
 			@FormDataParam("document_pan[]") List<FormDataBodyPart> douments,
 			@FormDataParam("document_aadhar[]") List<FormDataBodyPart> aadhar,
 			@FormDataParam("document_passport[]") List<FormDataBodyPart> passport,
-			//@FormDataParam("document_rra[]") List<FormDataBodyPart> rra,
 			@FormDataParam("document_voterid[]") List<FormDataBodyPart> voterid,
 			@FormDataParam("builder_id") int builder_id,
 			@FormDataParam("project_id") int project_id,
@@ -443,9 +442,6 @@ public class BuyerController {
 			@FormDataParam("tax") Double tax,
 			@FormDataParam("vat") Double vat,
 			@FormDataParam("total_sale_value") Double totalCost,
-			//@FormDataParam("offer_title[]") List<FormDataBodyPart> offer_title,
-			//@FormDataParam("discount[]") List<FormDataBodyPart> discount,
-			//@FormDataParam("discount_amount[]") List<FormDataBodyPart> discount_amount,
 			@FormDataParam("applicable_on[]") List<FormDataBodyPart> applicable_on,
 			@FormDataParam("apply[]") List<FormDataBodyPart> apply,
 			@FormDataParam("schedule[]") List<FormDataBodyPart> schedule,
@@ -487,7 +483,6 @@ public class BuyerController {
 					buyer.setBuilderProject(builderProject);
 				}
 				
-			//	int building_id = new ProjectDAO().getBuildingFlatById(flat_id).get(0).getBuilderFloor().getBuilderBuilding().getId();
 				if(building_id > 0){
 					BuilderBuilding builderBuilding = new BuilderBuilding();
 					builderBuilding.setId(building_id);
@@ -547,48 +542,6 @@ public class BuyerController {
 				}
 				msg = buyerDAO.addBuyer(buyer);
 				buyer.setId(msg.getId());
-//				List<BuyerDocuments> buyerDocumentsList = new ArrayList<BuyerDocuments>();
-//				if(douments != null && douments.size() > 0) {
-//					if(douments.get(i).getValueAs(String.class).toString()!=null && !douments.get(i).getValueAs(String.class).isEmpty()){
-//						BuyerDocuments buyerDocuments = new BuyerDocuments();
-//						buyerDocuments.setDocuments(douments.get(i).getValueAs(String.class).toString());
-//						buyerDocuments.setBuyer(buyer);
-//						buyerDocumentsList.add(buyerDocuments);
-//					}
-//				}
-//				if(aadhar != null && aadhar.size() > 0) {
-//					if(aadhar.get(i).getValueAs(String.class).toString()!=null && !aadhar.get(i).getValueAs(String.class).isEmpty()){
-//						BuyerDocuments buyerDocuments = new BuyerDocuments();
-//						buyerDocuments.setDocuments(aadhar.get(i).getValueAs(String.class).toString());
-//						buyerDocuments.setBuyer(buyer);
-//						buyerDocumentsList.add(buyerDocuments);
-//					}
-//				}
-//				if(passport != null && passport.size() > 0) {
-//					if(passport.get(i).getValueAs(String.class).toString()!=null && !passport.get(i).getValueAs(String.class).isEmpty()){
-//						BuyerDocuments buyerDocuments = new BuyerDocuments();
-//						buyerDocuments.setDocuments(passport.get(i).getValueAs(String.class).toString());
-//						buyerDocuments.setBuyer(buyer);
-//						buyerDocumentsList.add(buyerDocuments);
-//					}
-//				}
-//				if(rra != null && rra.size() > 0) {
-//					if(rra.get(i).getValueAs(String.class).toString()!=null && !rra.get(i).getValueAs(String.class).isEmpty()){
-//						BuyerDocuments buyerDocuments = new BuyerDocuments();
-//						buyerDocuments.setDocuments(rra.get(i).getValueAs(String.class).toString());
-//						buyerDocuments.setBuyer(buyer);
-//						buyerDocumentsList.add(buyerDocuments);
-//					}
-//				}
-//				if(voterid != null && voterid.size() > 0) {
-//					if(voterid.get(i).getValueAs(String.class).toString()!=null && !voterid.get(i).getValueAs(String.class).isEmpty()){
-//						BuyerDocuments buyerDocuments = new BuyerDocuments();
-//						buyerDocuments.setDocuments(voterid.get(i).getValueAs(String.class).toString());
-//						buyerDocuments.setBuyer(buyer);
-//						buyerDocumentsList.add(buyerDocuments);
-//					}
-//				}
-//				buyerDAO.saveBuyerDocuments(buyerDocumentsList);
 				System.out.println("Primary ID:"+buyer.getIsPrimary());
 				if(buyer.getIsPrimary()) {
 					primaryBuyer = buyer;
@@ -643,53 +596,7 @@ public class BuyerController {
 					}
 				}
 			}
-			
-//			if (offer_title.size() > 0) {
-//				List<BuyerOffer> buyerOffers = new ArrayList<BuyerOffer>();
-//				i = 0;
-//				for(FormDataBodyPart title : offer_title)
-//				{
-//					if(title.getValueAs(String.class).toString() != null && !title.getValueAs(String.class).toString().isEmpty()) {
-//						BuyerOffer buyerOffer = new BuyerOffer();
-//						buyerOffer.setTitle(title.getValueAs(String.class).toString());
-//						buyerOffer.setOfferAmount(discount_amount.get(i).getValueAs(Double.class));
-//						buyerOffer.setOfferPercentage(discount.get(i).getValueAs(Double.class));
-//						buyerOffer.setApplicable(applicable_on.get(i).getValueAs(Byte.class));
-//						buyerOffer.setStatus(apply.get(i).getValueAs(Byte.class));
-//						buyerOffer.setBuyer(primaryBuyer);
-//						buyerOffers.add(buyerOffer);
-//					}
-//					i++;
-//				}
-//				if(buyerOffers.size() > 0) {
-//					buyerDAO.saveBuyerOffers(buyerOffers);
-//				}
-//			}
-//			try {
-//				List<BuyerUploadDocuments> buyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
-//				i = 0;
-//				for(FormDataBodyPart title : offer_title)
-//				{
-//					BuyerUploadDocuments buDocuments = new BuyerUploadDocuments();
-//					if(doc_url.get(i).getFormDataContentDisposition().getFileName() != null && !doc_url.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-//						String gallery_name = doc_url.get(i).getFormDataContentDisposition().getFileName();
-//						long millis = System.currentTimeMillis() % 1000;
-//						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-//						gallery_name = "images/project/buyer/docs/"+gallery_name;
-//						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-//						this.imageUploader.writeToFile(photos.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-//						buDocuments.setDocUrl(gallery_name);
-//						buDocuments.setBuyer(primaryBuyer);
-//						buDocuments.setName(doc_name.get(i).getValueAs(String.class).toString());
-//						buDocuments.setBuilderdoc(true);
-//						buDocuments.setUploadedDate(new Date());
-//					}
-//					buyerUploadDocuments.add(buDocuments);
-//				}
-//				buyerDAO.saveBuyerUploadDouments(buyerUploadDocuments);
-//			} catch(Exception e) {
-//				buyer.setPhoto("");
-//			}
+
 		}
 		return msg;
 	}
