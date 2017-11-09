@@ -203,7 +203,8 @@
 							      <% for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().size();floor_size++){  %>
 							      <ul class="nav nav-pills custom-button-nav"> 
                	 						<%for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){ 
- 							     if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("booked")) {%>
+ 							     if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("booked") 
+ 							    	|| flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("hold")) {%>
  							     
  							     <li class="grey item"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
  							      
@@ -236,7 +237,7 @@
 							   <%}%>	
 						          <img src="../../images/camera_icon.PNG" alt="camera " class="camera"/>
 						          <p><b><%out.print(bookingFlatList2.getBuyerName()); %></b></p>
-						          <p class="p-custom"><%out.print(bookingFlatList2.getBuildingName()); %>-<%out.print(bookingFlatList2.getFlatNo()); %>, <%out.print(bookingFlatList2.getProjectName()); %></p>
+						          <p class="p-custom"><%out.print(bookingFlatList2.getBuildingName()); %>,<%out.print(" "+bookingFlatList2.getFlatNo()); %>, <%out.print(" "+bookingFlatList2.getProjectName()); %></p>
 						          <hr>
 						       </div>
 							   <div class="row custom-row user-row">
@@ -543,11 +544,10 @@ function showFlatwithImage(id){
 	}
 }
 function updateCancel(id){
-	alert("id "+id);
 	if($("#cancel_amount").val() != '' && $("#cancel_amount").val() > 0){
 		var flag = confirm("Are you sure ? You want to Cancel booked flat ?");
 		if(flag){
-			$.post("${baseUrl}/webapi/project/cancel/primarybuyer/remove/", { id:id, cancel_amount:$("#cancel_amount").val()}, function(data){
+			$.post("${baseUrl}/webapi/project/cancel/primarybuyer/remove/", { id:id, cancel_amount:$("#cancel_amount").val(),emp_id:$("#emp_id").val()}, function(data){
 	 			alert(data.message);
 	 			if(data.status == 1) {
 	 				window.location.reload();

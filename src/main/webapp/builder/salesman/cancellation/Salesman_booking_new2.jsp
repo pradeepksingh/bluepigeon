@@ -240,7 +240,7 @@
 							   <%}%>	
 						          <img src="../../images/camera_icon.PNG" alt="camera " class="camera"/>
 						          <p><b><%out.print(bookingFlatList2.getBuyerName()); %></b></p>
-						          <p class="p-custom"><%out.print(bookingFlatList2.getBuildingName()); %>-<%out.print(bookingFlatList2.getFlatNo()); %>, <%out.print(bookingFlatList2.getProjectName()); %></p>
+						          <p class="p-custom"><%out.print(bookingFlatList2.getBuildingName()); %>,<%out.print(" "+bookingFlatList2.getFlatNo()); %>, <%out.print(bookingFlatList2.getProjectName()); %></p>
 						          <hr>
 						       </div>
 							   <div class="row custom-row user-row">
@@ -267,7 +267,7 @@
 							   <%}%>	
 						          <img src="images/camera_icon.PNG" alt="camera " class="camera"/>
 						          <p><b><%out.print(bookingFlatList2.getBuyerName()); %></b></p>
-						          <p class="p-custom"><%out.print(bookingFlatList2.getBuildingName()); %>-<%out.print(bookingFlatList2.getFlatNo()); %>, <%out.print(bookingFlatList2.getProjectName()); %></p>
+						          <p class="p-custom"><%out.print(bookingFlatList2.getBuildingName()); %>,<%out.print(" "+bookingFlatList2.getFlatNo()); %>, <%out.print(" "+bookingFlatList2.getProjectName()); %></p>
 						          <hr>
 						       </div>
 							   <div class="row custom-row user-row">
@@ -348,7 +348,7 @@ $(document).ready(function () {
 <% } %>
 function showFlats(id){
 	ajaxindicatorstart("Loading...");
-	window.location.href="${baseUrl}/builder/cancellation/Salesman_cancelation_form_open3.jsp?flat_id="+id;
+	window.location.href="${baseUrl}/builder/salesman/cancellation/Salesman_cancelation_form_open3.jsp?flat_id="+id;
 }
 function activeInactiveFlats(){
 	$('.nav li a').click(function(e) {
@@ -496,7 +496,7 @@ function showFlatwithImage(id){
 		          +'<img src="'+image+'" alt="User Image" class="custom-img">'
 		          +'<img src="../../images/camera_icon.PNG" alt="camera " class="camera"/>'
 		          +'<p><b>'+data.buyerName+'</b></p>'
-		          +'<p class="p-custom">'+data.buildingName+'-'+data.flatNo+', '+data.projectName+'</p>'
+		          +'<p class="p-custom">'+data.buildingName+', '+data.flatNo+', '+data.projectName+'</p>'
 		          +'<hr>'
 		       	  +'</div>'
 			      +'<div class="row custom-row user-row">'
@@ -522,7 +522,7 @@ function showFlatwithImage(id){
 	          +'<img src="'+image+'" alt="User Image" class="custom-img">'
 	          +'<img src="../../images/camera_icon.PNG" alt="camera " class="camera"/>'
 	          +'<p><b>'+data.buyerName+'</b></p>'
-	          +'<p class="p-custom">'+data.buildingName+'-'+data.flatNo+', '+data.projectName+'</p>'
+	          +'<p class="p-custom">'+data.buildingName+', '+data.flatNo+', '+data.projectName+'</p>'
 	          +'<hr>'
 	       	  +'</div>'
 		      +'<div class="row custom-row user-row">'
@@ -558,7 +558,7 @@ function showFlatwithImage(id){
 function updateCancel(id){
 	alert("id "+id);
 	if($("#cancel_amount").val() != '' && $("#cancel_amount").val() > 0){
-		var flag = confirm("Are you sure ? You want to Delete Buyer ?");
+		var flag = confirm("Are you sure ? You want to Cancel Booked Flat?");
 		if(flag){
 			$.post("${baseUrl}/webapi/project/cancel/primarybuyer/remove/", { id:id, cancel_amount:$("#cancel_amount").val()}, function(data){
 	 			alert(data.message);

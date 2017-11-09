@@ -6083,13 +6083,18 @@ public class ProjectDAO {
     }
     
     public Buyer getBuyerByFlatId(int flatId){
-    	String hql = "from Buyer where builderFlat.id = :flat_id and isPrimary = 1 and isDeleted=0";
+    	String hql = "from Buyer where builderFlat.id = :flat_id and isPrimary = 1 and isDeleted=0 and (status=0 or status=1)";
     	HibernateUtil hibernateUtil = new HibernateUtil();
     	Session session = hibernateUtil.openSession();
     	Query query = session.createQuery(hql);
     	query.setParameter("flat_id", flatId);
-    	Buyer buyer = (Buyer) query.list().get(0);
-    	return buyer;
+    	try{
+	    	Buyer buyer = (Buyer) query.list().get(0);
+	    	session.close();
+	    	return buyer;
+    	}catch(Exception e){
+    		return null;
+    	}
     }
     
     /**
@@ -6105,6 +6110,7 @@ public class ProjectDAO {
     	Query query = session.createQuery(hql);
     	query.setParameter("builder_id", builderId);
     	List<Source> sourceList =  query.list();
+    	session.close();
     	return sourceList;
     }
     
@@ -6143,6 +6149,7 @@ public Buyer getBuyerById(int id){
 	Query query = session.createQuery(hql);
 	query.setParameter("id",id);
 	Buyer buyer = (Buyer) query.list().get(0);
+	session.close();
 	return buyer;
 }
 
@@ -6159,6 +6166,7 @@ public List<InboxMessage> getInboxMessagesByEmpId(int empId){
 	Query query = session.createQuery(hql);
 	query.setParameter("emp_id",empId);
 	List<InboxMessage> result = query.list();
+	session.close();
 	return result;
 }
 
@@ -6199,7 +6207,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	System.err.println(hql);
 	
 	 result = query.list();
-	
+	 session.close();
 	} catch(Exception e) {
 		//
 		e.printStackTrace();
