@@ -1378,4 +1378,58 @@ public class BuyerDAO {
 		return responseMessage;
 	 }
 	 
+	 public List<BuyerPayment> getBuyerPymentsByBuyerId(int buyerId){
+		String hql = "from BuyerPayment where buyer.id = :buyer_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("buyer_id", buyerId);
+		List<BuyerPayment> result = query.list();
+		session.close();
+		return result;
+	}
+	 public List<BuyerPayment> getBuyerPayments(int buyerId){
+		String hql = "from BuyerPayment where buyer.id = :buyer_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("buyer_id", buyerId);
+		List<BuyerPayment> result = query.list();
+		List<BuyerPayment> buyerPayments = new ArrayList<BuyerPayment>();
+		for(BuyerPayment buyerPaymentList : result){
+			BuyerPayment buyerPayment = new BuyerPayment();
+			buyerPayment.setId(buyerPaymentList.getId());
+			buyerPayment.setPaid(buyerPaymentList.isPaid());
+			buyerPayment.setAmount(buyerPaymentList.getAmount());
+			buyerPayments.add(buyerPayment);
+		}
+		session.close();
+		return buyerPayments;
+	}
+	 
+	 public BuyerPayment getBuyerPymentsById(int id){
+		String hql = "from BuyerPayment where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<BuyerPayment> result = query.list();
+		session.close();
+		return result.get(0);
+	}
+	 public ResponseMessage updateBuyerPayment(BuyerPayment buyerPayment){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		ResponseMessage responseMessage = new ResponseMessage();
+		
+		
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.update(buyerPayment);
+		newsession.getTransaction().commit();
+		newsession.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Buyer Payment Updated Successfully");
+	
+		return responseMessage;
+	}
 }

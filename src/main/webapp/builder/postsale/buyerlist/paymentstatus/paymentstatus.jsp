@@ -321,10 +321,6 @@ function opendate(id){
 	//alert("ID :: "+id.value);
 	
 }
-
-
-
-
 $('.datedisplay').datepicker({
 	autoclose:true,
 	format: "dd MM yyyy"

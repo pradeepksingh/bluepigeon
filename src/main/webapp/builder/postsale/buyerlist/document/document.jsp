@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.model.BuyerPayment"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="org.bluepigeon.admin.data.InboxBuyerData"%>
 <%@page import="java.util.Date"%>
@@ -34,6 +35,7 @@
 	int empId=0;
  	Date date = new Date();
  	List<InboxBuyerData> buyerData = null;
+ 	List<BuyerPayment> paymentList = null;
  	int primary_buyer_id=0;
  	String buyerName = null;
  	int access_id=0;
@@ -59,8 +61,10 @@
 								buyerName = buyer.getName();
 							}
 						}
+						
 						buyerUploadDocuments = new BuyerDAO().getBuyerUploadDocumentsByBuyerId(primary_buyer_id);
 						inboxMessageList = new ProjectDAO().getBookedBuyer(primary_buyer_id);
+						paymentList = new BuyerDAO().getBuyerPaymentsByBuyerId(primary_buyer_id);
 					}
 				}catch(Exception e){
 					
@@ -69,7 +73,6 @@
 				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 			}
 		}
-		
    }
 %>
 <!DOCTYPE html>
@@ -107,6 +110,8 @@
     <script type="text/javascript" src="../../../js/selectize.min.js"></script>
      <script src="../../../js/jquery.form.js"></script>
     <script src="../../../js/bootstrapValidator.min.js"></script>
+     <script src="../../../js/Moment.js"></script>
+    <script src="../../../js/bootstrap-datepicker.min.js"></script>
 
     <!-- Custom Css -->
     <link href="../../../css/POSTSALE_Document.css" rel="stylesheet">
@@ -211,6 +216,7 @@ border-radius: 5px;}
 width:50%;
 }
 </style>
+
 </head>
 <body class="fix-sidebar">
     <!-- Preloader -->
@@ -311,7 +317,7 @@ width:50%;
 							  				%>
 							  				<ul>
 							   					<li  class="col-lg-4 col-xs-12" style="list-style: none;">
-							    					<a href="javascript:deleteDemandDocument(<%out.print(buyerUploadDocuments2.getId());%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
+							    					<a href="javascript:deleteDemandDocument(<%if(buyerUploadDocuments2.getPaymentId() > 0){out.print(buyerUploadDocuments2.getPaymentId());}%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
 													<br/>
 													<img src="../../../images/docpdf.png" alt="User" width="150px"/>
 													<br/><h5><% out.print(buyerUploadDocuments2.getName());%></h5>
@@ -525,10 +531,9 @@ width:50%;
                  <div class="col-lg-6">
                  	<button type="submit" class="signupbtn">Submit</button>
                  </div>
-				
 			</div>
-			</form>
-		</div>
+		</form>
+	</div>
 </div>
 <div id="demandlettermodel" class="modal col-lg-7" >
 	<span class="close closedemand" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
@@ -539,27 +544,101 @@ width:50%;
 		<div class="col-lg-12" style="background:white" >
 			<div class="row clearfix" >
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
-					<label><b>Document Name</b></label>
+					<label><b>Payment schedule *</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter doc name" name="doc_name[]" style="margin-left:-9px;" required>
+						<select id="payment_id" name="payment_id" class="col-sm-6">
+							<option value="">Select Payment Schedule</option>
+							<%if(paymentList!=null){ 
+							 for(BuyerPayment buyerPayment : paymentList){
+							%>
+							<option value="<%out.print(buyerPayment.getId());%>"><%out.print(buyerPayment.getMilestone()); %></option>
+							<%}}%>
+						</select>
 					</div>
 					<div class="messageContainer"></div>
                 </div>
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
-					<label><b>Upload Document</b></label>
+					<label><b>Previous demand</b></label>
+				</div>
+				<div class="col-lg-4">
+					<div>
+						<input type="text" placeholder="Previous demand" readonly name="previous_demand" id="previous_demand" style="margin-left:-9px;" required>
+					</div>
+                </div>
+			</div>
+			<div class="row clearfix" >
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
+					<label><b>Current demand</b></label>
+				</div>
+				<div class="col-lg-6" style="margin: 9px;">
+					<input type="text" placeholder="Enter current demand" readonly name="current_demand" id="current_demand" style="margin-left:-9px;" required>
+                </div>
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
+					<label><b>Total Demand Value</b></label>
+				</div>
+				<div class="col-lg-6" style="margin: 9px;">
+					<input type="text" placeholder="total demand value"  readonly name="total_demand_value" id="total_demand_value" style="margin-left:-9px;" required>
+                </div>
+			</div>
+			<div class="row clearfix" >
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
+					<label><b>Demand name *</b></label>
+				</div>
+				<div class="col-lg-6" style="margin: 9px;">
+					<div>
+						<input type="text" placeholder="Enter demand name" name="demand_name" id="demand_name" style="margin-left:-9px;" required>
+					</div>
+					<div class="messageContainer"></div>
+                </div>
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
+					<label><b>Payment date *</b></label>
+				</div>
+				<div class="col-lg-6" style="margin: 9px;">
+					<div>
+						<input type="text" placeholder="Enter payment date" name="paymentdate" id="paymentdate" style="margin-left:-9px;" required>
+					</div>
+					<div class="messageContainer"></div>
+                </div>
+			</div>
+			<div class="row clearfix" >
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
+					<label><b>Remind every</b></label>
+				</div>
+				<div class="col-lg-6" style="margin: 9px;">
+					<div>
+						<select id="remind_day" name="remind_day" class="col-sm-6">
+								<option value="0">Select Remind days</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+						</select>
+					</div>
+					<div class="messageContainer"></div>
+                </div>
+                <div class="col-lg-4" style="margin-top:17px;margin-left:10px;">
+					<label><b>Attaches</b></label>
 				</div>
 				<div class="col-lg-4">
 					<div class="file-upload">
 						<div class="file-select">
 							<div class="file-select-button" id="fileName">Choose File</div>
 							<p class="file-select-name" id="fileselectdemand">No file chosen...</p>
-							<input type="file" name="doc_url[]" onchange="getDemandFileData(this);" id="choosegeneraldoc">
+							<input type="file" name="doc_url[]" onchange="getDemandFileData(this);" id="choosenewdemanddoc">
 						</div>
 					</div>
                 </div>
-				<button type="submit" class="signupbtn">Submit</button>
+			</div>
+			<div class="row clearfix" >
+				<div class="col-sm-4"></div>
+				<div class="col-sm-6">
+					<button type="submit" class="signupbtn">Submit</button>
+				</div>
 			</div>
 		</div>
 	</form>
@@ -611,7 +690,7 @@ width:50%;
 						<div class="file-select">
 							<div class="file-select-button" id="fileName">Choose File</div>
 							<p class="file-select-name" id="fileselectpayment">No file chosen...</p>
-							<input type="file" name="doc_url[]" onchange="getPaymentFileData(this);" id="choosegeneraldoc">
+							<input type="file" name="doc_url[]" onchange="getPaymentFileData(this);" id="choosepaymentdoc">
 						</div>
 					</div>
                 </div>
@@ -623,8 +702,43 @@ width:50%;
 <div class="modal col-lg-7"  id="replymessagemodal"></div>
   <!-- Jquery Core Js -->
 <script>
-// Get the modal
 
+$('#paymentdate').datepicker({
+	autoclose:true,
+	format: "dd MM yyyy"
+});
+
+
+$("#payment_id").change(function(){
+	//alert("Hello"+$("#buyer_id").val()+" "+$("#payment_id").val());
+	var current_value ="0";
+	var previous_value = "0";
+	if($("#payment_id").val() != ''){
+		$.post('${baseUrl}/webapi/buyer/payment/',{buyer_id : $("#buyer_id").val()},function(data){
+			 $(data).each(function(index){
+				 if(data[index].paid == false){
+					 if($("#payment_id").val() == data[index].id){
+						 current_value = parseInt(data[index].amount);
+					 }else{
+						 previous_value += parseInt(data[index].amount);
+					 }
+				 }
+			 });
+			 
+			 $("#current_demand").val(Math.round(current_value));
+			 $("#previous_demand").val(Math.round(previous_value));
+			 var total = parseInt($("#previous_demand").val())+parseInt($("#current_demand").val());
+				$("#total_demand_value").val(total);
+		},'json');
+	}else{
+		if($("#payment_id").val() == ''){
+			$("#current_demand").val('');
+			$("#previous_demand").val('');
+			$("#total_demand_value").val('');
+		}
+	}
+});
+// Get the modal
 function openGeneralDoc(){
 	$("#generaldoc").modal('show');
 	$('#generaldocform').bootstrapValidator({
@@ -651,7 +765,6 @@ function openGeneralDoc(){
 	}).on('error.form.bv',function(event,data){
 		event.preventDefault();
 	});
-	
 }
 
 function saveGeneralDoc(){
@@ -701,33 +814,33 @@ function showAddGenDocumentResponse(resp, statusText, xhr, $form){
   	}
 }
 function autogenerateDemandLetter(){
-	$("#genratedemandlettermodel").modal('show');
-	$("#genratedemanddocform").bootstrapValidator({
-		container: function($field, validator) {
-			return $field.parent().next('.messageContainer');
-	   	},
-		feedbackIcons: {
-		    validating: 'glyphicon glyphicon-refresh'
-		},
-		excluded: ':disabled',
-		fields: {
-			'doc_name[]': {
-		        validators: {
-		            notEmpty: {
-		                message: 'Please enter document name'
-		            }
-		        }
-		    }
-		}
-	}).on('success.form.bv', function(event,data) {
-			// Prevent form submission
-		event.preventDefault();
-		saveAutoGenerateDemandDoc();
+//	$("#genratedemandlettermodel").modal('show');
+// 	$("#genratedemanddocform").bootstrapValidator({
+// 		container: function($field, validator) {
+// 			return $field.parent().next('.messageContainer');
+// 	   	},
+// 		feedbackIcons: {
+// 		    validating: 'glyphicon glyphicon-refresh'
+// 		},
+// 		excluded: ':disabled',
+// 		fields: {
+// 			'doc_name[]': {
+// 		        validators: {
+// 		            notEmpty: {
+// 		                message: 'Please enter document name'
+// 		            }
+// 		        }
+// 		    }
+// 		}
+// 	}).on('success.form.bv', function(event,data) {
+// 			// Prevent form submission
+// 		event.preventDefault();
+// 		saveAutoGenerateDemandDoc();
 		
-	}).on('error.form.bv',function(event,data){
-		event.preventDefault();
-		//alert("Error during submit data");
-	});
+// 	}).on('error.form.bv',function(event,data){
+// 		event.preventDefault();
+// 		//alert("Error during submit data");
+// 	});
 	
 }
 function saveAutoGenerateDemandDoc(){
@@ -782,10 +895,46 @@ function openDemandLetter(){
 		},
 		excluded: ':disabled',
 		fields: {
-			'doc_name[]': {
-		        validators: {
+// 			'doc_name[]': {
+// 		        validators: {
+// 		            notEmpty: {
+// 		                message: 'Please enter document name'
+// 		            }
+// 		        }
+// 		    },
+// 		    paymentdate: {
+// 		    	validators: {
+// 	                callback: {
+// 	                    message: 'Wrong payment Date',
+// 	                    callback: function (value, validator) {
+// 	                        var m = new moment(value, 'DD MMM YYYY', true);
+// 	                        if (!m.isValid()) {
+// 	                            return false;
+// 	                        } else {
+// 	                        	return true;
+// 	                        }
+// 	                    }
+// 	                }
+// 	            }
+// 		    },
+  			paymentdate: {
+		    	validators: {
+	                notEmpty:{
+	                	message: 'Please select Payment date'
+	                }
+	            }
+		    },
+		    payment_id:{
+		    	validators: {
 		            notEmpty: {
-		                message: 'Please enter document name'
+		                message: 'Please select payment schedule'
+		            }
+		        }
+		    },
+		    demand_name:{
+		    	validators: {
+		            notEmpty: {
+		                message: 'Please enter demand name'
 		            }
 		        }
 		    }
@@ -807,7 +956,7 @@ function saveDemandDoc(){
 	 		target : '#demandresponse', 
 	 		beforeSubmit : showAddDemandDocumentRequest,
 	 		success :  showAddDemandDocumentResponse,
-	 		url : '${baseUrl}/webapi/buyer/update/gendoc',
+ 	 		url : '${baseUrl}/webapi/buyer/update/demanddoc',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -1110,10 +1259,8 @@ function addReply() {
 	 		url : '${baseUrl}/webapi/builder/inbox/new/reply',
 	 		semantic : true,
 	 		dataType : 'json'
-	 		//return false;
 	 	};
    	$('#addnewreply').ajaxSubmit(options);
-   	//return false;
 }
 function showReplyRequest(formData, jqForm, options){
 	$("#replyresponse").hide();
@@ -1128,7 +1275,6 @@ function showReplyResponse(resp, statusText, xhr, $form){
 		$("#replyresponse").html(resp.message);
 		$("#replyresponse").show();
 		alert(resp.message);
-		//return false;
 		 ajaxindicatorstop();
   	} else {
   		$("#replyresponse").removeClass('alert-danger');
@@ -1136,9 +1282,7 @@ function showReplyResponse(resp, statusText, xhr, $form){
         $("#replyresponse").html(resp.message);
         $("#replyresponse").show();
         alert(resp.message);
-        //return false;
         ajaxindicatorstop();
-        //window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
   	}
 }
 
@@ -1193,6 +1337,11 @@ function deletePaymentDocument(id) {
 function getGeneralFileData(myFile){
    var file = myFile.files[0];  
    var filename = file.name;
+   
+   if(['application/pdf'].indexOf($("#choosegeneraldoc").get(0).files[0].type) == -1) {
+       alert('Please upload only PDF file');
+       return;
+   }
    $("#fileselectgeneral").empty();
    $("#fileselectgeneral").html(filename);
 }
@@ -1200,6 +1349,10 @@ function getGeneralFileData(myFile){
 function getDemandFileData(myFile){
    var file = myFile.files[0];  
    var filename = file.name;
+   if(['application/pdf'].indexOf($("#choosenewdemanddoc").get(0).files[0].type) == -1) {
+       alert('Please upload only PDF file');
+       return;
+   }
    $("#fileselectdemand").empty();
    $("#fileselectdemand").html(filename);
 }
@@ -1208,6 +1361,10 @@ function getDemandFileData(myFile){
 function getPaymentFileData(myFile){
    var file = myFile.files[0];  
    var filename = file.name;
+   if(['application/pdf'].indexOf($("#choosepaymentdoc").get(0).files[0].type) == -1) {
+       alert('Please upload only PDF file');
+       return;
+   }
    $("#fileselectpayment").empty();
    $("#fileselectpayment").html(filename);
 }
