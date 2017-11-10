@@ -402,7 +402,7 @@ function showCancellationResponse(resp, statusText, xhr, $form){
         $("#response").addClass('alert-success');
         $("#response").html(resp.message);
         $("#response").show();
-       // alert(resp.message);
+        alert("Flat Cancellation request is sent");
         window.location.href = "${baseUrl}/builder/salesman/cancellation/Salesman_booking_new2.jsp?project_id="+$("#project_id").val();
   	}
 }

@@ -133,4 +133,14 @@ public class CancellationController {
 		return new CancellationDAO().getCancelledBuyerList(empId,projectId,keyword);
 		
 	}
+	
+	@POST
+	@Path("notification/isread")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage getCancelledBuyerList(@FormParam("id") int notificationid
+		){
+	
+		return new CancellationDAO().updateNotificationStatus(notificationid);
+		
+	}
 }

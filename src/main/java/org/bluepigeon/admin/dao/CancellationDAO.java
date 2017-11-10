@@ -53,11 +53,7 @@ public class CancellationDAO {
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 7)
 			updateBuyerStatus(cancellation.getBuilderFlat().getId());
 			saveNewNotification(builderEmployee,cancellation);
-		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 1 ||
-		   builderEmployee.getBuilderEmployeeAccessType().getId() ==2 ||
-		   builderEmployee.getBuilderEmployeeAccessType().getId()==4||
-		   builderEmployee.getBuilderEmployeeAccessType().getId()==5||
-		   builderEmployee.getBuilderEmployeeAccessType().getId()==6){
+		if(builderEmployee.getBuilderEmployeeAccessType().getId()==5){
 			updateFlatStatus(cancellation.getBuilderFlat().getId());
 			updatePrimaryBuyer(cancellation.getBuilderFlat().getId());
 		}
@@ -270,7 +266,7 @@ public class CancellationDAO {
 		String hql = "";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() >0 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
-			hql ="select project.name as projectName,project.locality_name as localityName, city.name as cityName, building.name as buildingName, flat.flat_no as flatNo,cancel.buyer_name as buyerName, cancel.buyer_contact as buyerContact, cancel.reason as cancelReason, cancel.charges as charges from cancellation as cancel inner join builder_flat as flat on flat.id = cancel.flat_id left join buyer as buy on buy.flat_id = flat.id left join builder_floor as floor on floor.id = flat.floor_no left join builder_building as building on building.id = floor.building_id left join builder_project as project on project.id = building.project_id left join city as city on city.id = project.city_id where buy.builder_id ="+builderEmployee.getBuilder().getId()+" and buy.is_primary=1 and buy.is_deleted=1 and project.status=1 GROUP by cancel.id order by project.id DESC";
+			hql ="select project.name as projectName,project.locality_name as localityName, city.name as cityName, building.name as buildingName, flat.flat_no as flatNo,cancel.buyer_name as buyerName, cancel.buyer_contact as buyerContact, cancel.reason as cancelReason, cancel.charges as charges from cancellation as cancel inner join builder_flat as flat on flat.id = cancel.flat_id left join buyer as buy on buy.flat_id = flat.id left join builder_floor as floor on floor.id = flat.floor_no left join builder_building as building on building.id = floor.building_id left join builder_project as project on project.id = building.project_id left join city as city on city.id = project.city_id where buy.builder_id ="+builderEmployee.getBuilder().getId()+" and buy.is_primary=1 and buy.is_deleted=1 and project.status=1  GROUP by cancel.id order by project.id DESC";
 		}else{
 			hql= "select project.name as projectName,project.locality_name as localityName, city.name as cityName, building.name as buildingName, flat.flat_no as flatNo,cancel.buyer_name as buyerName, cancel.buyer_contact as buyerContact, cancel.reason as cancelReason, cancel.charges as charges from cancellation as cancel inner join builder_flat as flat on flat.id = cancel.flat_id left join buyer as buy on buy.flat_id = flat.id left join builder_floor as floor on floor.id = flat.floor_no left join builder_building as building on building.id = floor.building_id left join builder_project as project on project.id = building.project_id inner join allot_project as ap on ap.project_id = project.id left join city as city on city.id = project.city_id where ap.emp_id ="+builderEmployee.getId()+" and buy.is_primary=1 and buy.is_deleted=1 and project.status=1 GROUP by cancel.id order by project.id DESC";
 		}
@@ -278,6 +274,7 @@ public class CancellationDAO {
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BookedBuyerList.class));
 		System.err.println(hql);
 		List<BookedBuyerList> result = query.list();
+		session.close();
 		return result;
 	}
 	/**
@@ -377,6 +374,7 @@ public class CancellationDAO {
 		query.setParameter("flat_id", flatId);
 		try{
 			cancellation =(Cancellation) query.list().get(0);
+			session.close();
 			return cancellation;
 		}catch(Exception e){
 			return cancellation;
@@ -392,13 +390,14 @@ public class CancellationDAO {
 		query.setParameter("id", id);
 		try{
 			cancellation =(Cancellation) query.list().get(0);
+			session.close();
 			return cancellation;
 		}catch(Exception e){
 			return cancellation;
 		}
 	}
 	
-	public ResponseMessage updateCancelStatus(Cancellation cancellation){
+	public ResponseMessage updateCancelStatus(Cancellation cancellation,int empId){
 		ResponseMessage responseMessage = new ResponseMessage();
 		String hql = "UPDATE Cancellation set charges=:cancel_amount where id = :id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -415,6 +414,7 @@ public class CancellationDAO {
 		updateBuyerStatus(cancellation2.getBuilderFlat().getId());
 		updateCancelStatus(cancellation2.getBuilderFlat().getId());
 		updateFlatStatus(cancellation2.getBuilderFlat().getId());
+		saveApprovedCancellation(cancellation,empId);
 		responseMessage.setStatus(1);
 		responseMessage.setMessage("Booked Flat is cancelled Successfully");
 		return responseMessage;
@@ -428,6 +428,7 @@ public class CancellationDAO {
 		query.setParameter("flat_id", flatId);
 		try{
 			List<Cancellation> cancellation = query.list();
+			session.close();
 			return cancellation;
 		}catch(Exception e){
 			return null;
@@ -447,7 +448,7 @@ public class CancellationDAO {
 			notification.setBuyerId(0);
 			notification.setRead(false);
 			notification.setType(1);
-			notification.setDescription("Flat "+cancellation.getBuilderFlat().getId()+" cancellation Request");
+			notification.setDescription("Flat No "+flatData.getName()+" cancellation Request");
 			notifications.add(notification);
 		}
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -474,7 +475,7 @@ public class CancellationDAO {
 			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
 			System.err.println(hql);
 			 result = query.list();
-			
+			 session.close();
 			} catch(Exception e) {
 				//
 				e.printStackTrace();
@@ -489,11 +490,12 @@ public class CancellationDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("emp_id", empId);
 		List<Notification> notification = query.list();
+		session.close();
 		return notification;
 	}
 	
 	public FlatData getFlatById(int flatId){
-		String hql = " select flat.id as id, flat.flat_no as name from builder_flat where id="+flatId;
+		String hql = " select flat.id as id, flat.flat_no as name from builder_flat as flat where flat.id="+flatId;
 		FlatData flatData = new FlatData();
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		try {
@@ -501,13 +503,74 @@ public class CancellationDAO {
 			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(FlatData.class));
 			System.err.println(hql);
 			flatData = (FlatData)query.list().get(0);
+			session.close();
 			return flatData;
 			} catch(Exception e) {
 				//
 				e.printStackTrace();
 				return null;
 			}
-		
-		
+	}
+	
+	public ResponseMessage updateNotificationStatus(int id){
+		ResponseMessage responseMessage = new ResponseMessage();
+		String hql = "UPDATE Notification set is_read=1 WHERE id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("id",id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		responseMessage.setStatus(1);
+		return responseMessage;
+	}
+	
+	public void saveApprovedCancellation(Cancellation cancellation,int empId){
+		List<Notification> notifications = new ArrayList<Notification>();
+		List<EmployeeList> empIds = getAssignedProjectSalesman(cancellation.getBuilderProject().getId());
+		FlatData flatData = getFlatById(cancellation.getBuilderFlat().getId());
+		for(EmployeeList employeeList : empIds){
+			Notification notification = new Notification();
+			notification.setAssignedBy(empId);
+			notification.setAssignedTo(employeeList.getId());
+			notification.setBuilderProject(cancellation.getBuilderProject());
+			notification.setBuyerId(0);
+			notification.setRead(false);
+			notification.setType(1);
+			notification.setDescription("Flat No "+flatData.getName()+" is available for booking");
+			notifications.add(notification);
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		for(Notification notification : notifications){
+			session.save(notification);
+		}
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public  List<EmployeeList> getAssignedProjectSalesman(int projectId){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		List<EmployeeList> result = null;
+		String hql = "select emp.id as id from builder_employee as emp "
+				+ "join employee_role as er on er.emp_id=emp.id "
+				+ "join buyer as buy on buy.emp_id=emp.id "
+				+ "join builder_project as project on project.id=buy.project_id "
+				+ "inner join allot_project as ap on ap.project_id=project.id "
+				+ "where er.role_id=7 and ap.project_id="+projectId+" GROUP by emp.id order by emp.id DESC";
+		try {
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
+			System.err.println(hql);
+			 result = query.list();
+			session.close();
+			} catch(Exception e) {
+				//
+				e.printStackTrace();
+			}
+		return result;
 	}
 }

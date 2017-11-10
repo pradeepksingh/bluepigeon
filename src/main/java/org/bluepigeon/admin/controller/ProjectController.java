@@ -4823,7 +4823,8 @@ public class ProjectController extends ResourceConfig {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage removePrimaryBuyerByCancelId(
 			@FormParam("id") int id,
-		@FormParam("cancel_amount") Double cancelAmount
+		@FormParam("cancel_amount") Double cancelAmount,
+		@FormParam("emp_id") int empId
 			)
 	{
 		System.err.println("cancel amount :: "+cancelAmount);
@@ -4831,7 +4832,7 @@ public class ProjectController extends ResourceConfig {
 		CancellationDAO cancellationDAO = new CancellationDAO();
 		Cancellation cancellation = cancellationDAO.getCancellationById(id);
 		cancellation.setCharges(cancelAmount);
-		responseMessage = cancellationDAO.updateCancelStatus(cancellation);
+		responseMessage = cancellationDAO.updateCancelStatus(cancellation,empId);
 		return responseMessage; 
 	}
 	

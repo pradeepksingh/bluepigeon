@@ -268,6 +268,8 @@
 $('#pdate').datepicker({
 	autoclose:true,
 	format: "dd MM yyyy"
+}).on('change',function(e){
+	 $('#buyerpossession').data('bootstrapValidator').revalidateField('pdate');
 });
 
 $('#ptime').datetimepicker({
@@ -294,11 +296,19 @@ $('#buyerpossession').bootstrapValidator({
 	excluded: ':disabled',
 	fields: {
 		pdate: {
-	        validators: {
-	            notEmpty: {
-	                message: 'Please select date'
-	            }
-	        }
+			validators: {
+                callback: {
+                    message: 'Wrong Possession Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
+                }
+            }
 	    },
 	    ptime:{
 	    	 validators: {

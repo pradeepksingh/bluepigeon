@@ -103,17 +103,32 @@ session = request.getSession(false);
                         <ul class="dropdown-menu dropdown-tasks animated slideInUp">
                         <%if(access_uid == 5){ 
                         	if(notifications !=null){
+                        		int count=1;
                         		for(Notification notification : notifications){
                         %>
                             <li>
-                                <a href="#">
+                                <a href="javascript:isReadSaleshead(<%out.print(notification.getId());%>,<%out.print(notification.getBuilderProject().getId());%>);">
                                     <div>
-                                        <p> <strong>Task <%out.print(notification.getId()); %></strong> <span class="pull-right text-muted"><%out.print(notification.getDescription()); %></span> </p>
+                                        <p> <strong><%out.print(count); %></strong> <span class="pull-right text-muted"><%out.print(notification.getDescription()); %></span> </p>
                                     </div>
                                 </a>
                             </li>
                             <li class="divider"></li>
-                            <%}} }%>
+                            <%count++;}} }%>
+                            <%if(access_uid == 7){ 
+                        	if(notifications !=null){
+                        		int count=1;
+                        		for(Notification notification : notifications){
+                        %>
+                            <li>
+                                <a href="javascript:isReadSalesman(<%out.print(notification.getId());%>,<%out.print(notification.getBuilderProject().getId());%>);">
+                                    <div>
+                                        <p> <strong><%out.print(count); %></strong> <span class="pull-right text-muted"><%out.print(notification.getDescription()); %></span> </p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <%count++;}} }%>
                         </ul>
 <!--                         /.dropdown-tasks -->
                     </li>
@@ -151,6 +166,25 @@ session = request.getSession(false);
         				window.location.href="${baseUrl }/builder/dashboard.jsp";	
         			} 
         		},'json');
+           }
+           
+           function isReadSaleshead(id,projectId){
+        	   $.post('${baseUrl}/webapi/cancellation/notification/isread',{id:id}, function(data){
+        		   var success = data.status;
+        		   var status = parseInt(success);
+        		   if(status == 1){
+        			   window.location.href = "${baseUrl}/builder/saleshead/cancellation/Salesman_booking_new2.jsp?project_id="+projectId;
+        		   }
+        	   },'json');
+           }
+           function isReadSalesman(id,projectId){
+        	   $.post('${baseUrl}/webapi/cancellation/notification/isread',{id:id}, function(data){
+        		   var success = data.status;
+        		   var status = parseInt(success);
+        		   if(status == 1){
+        			   window.location.href = "${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id="+projectId;
+        		   }
+        	   },'json');
            }
            </script>
             <!-- /.navbar-header -->

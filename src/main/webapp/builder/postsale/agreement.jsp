@@ -226,6 +226,8 @@
 $('#adate').datepicker({
 	autoclose:true,
 	format: "dd MM yyyy"
+}).on('change',function(e){
+	 $('#addagreement').data('bootstrapValidator').revalidateField('adate');
 });
 
 $('#atime').datetimepicker({
@@ -334,9 +336,17 @@ $('#addagreement').bootstrapValidator({
             }
         },
         adate: {
-            validators: {
-                notEmpty: {
-                    message: 'Please select date and is required.'
+        	validators: {
+                callback: {
+                    message: 'Wrong agreemnet Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
                 }
             }
         },

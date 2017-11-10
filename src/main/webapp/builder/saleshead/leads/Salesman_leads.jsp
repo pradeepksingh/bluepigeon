@@ -243,13 +243,13 @@ color: #ccc;
                    <div class="lead-bg">
                    <!-- buyer information end -->
 	                 <div class="row blue-border">
-	                   <div class="col-md-2 col-sm-2 col-xs-6">
+	                   <div class="col-md-3 col-sm-2 col-xs-6">
 	                     <h2>Name</h2>
 	                   </div>
 	                   <div class="col-md-2 col-sm-2 col-xs-6">
 	                     <h2>Phone no.</h2>
 	                   </div>
-	                   <div class="col-md-2 col-sm-2 col-xs-6">
+	                   <div class="col-md-3 col-sm-2 col-xs-6">
 	                     <h2>Email Id</h2>
 	                   </div>
 	                   <div class="col-md-2 col-sm-2 col-xs-6">
@@ -272,13 +272,13 @@ color: #ccc;
 	                 for(NewLeadList newLeadList : newLeadLists){ %>
 	                 <div class="border-lead">
 	                  <div class="row">
-	                    <div class="col-md-2 col-sm-2 col-xs-6">
+	                    <div class="col-md-3 col-sm-2 col-xs-6">
 	                     <h4><%out.print(newLeadList.getLeadName()); %></h4>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6">
 	                     <h4><%out.print(newLeadList.getPhoneNo()); %></h4>
 	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6">
+	                     <div class="col-md-3 col-sm-2 col-xs-6">
 	                     <h4><%out.print(newLeadList.getEmail()); %></h4>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6">
@@ -317,7 +317,7 @@ color: #ccc;
 	                 </div>
 	                 <hr>
 	                 <div class="row">
-	                    <div class="col-md-2 col-sm-2 col-xs-6 inline">
+	                    <div class="col-md-3 col-sm-2 col-xs-6 inline">
 	                     <img src="../../images/Saleshead-added.PNG" />
 	                     <h5>Added By :</h5>
 	                    </div>
@@ -325,7 +325,7 @@ color: #ccc;
 	                      <img src="../../images/Baget.PNG" />
 	                     <h5>Budget:</h5>
 	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
+	                     <div class="col-md-3 col-sm-2 col-xs-6 inline">
 	                      <img src="../../images/Configuration.PNG" />
 	                      <h5>Configuration :</h5>
 	                    </div>
@@ -354,7 +354,7 @@ color: #ccc;
 	                    </div>
 	                 </div>
 	                 <div class="row">
-	                    <div class="col-md-2 col-sm-2 col-xs-6 inline">
+	                    <div class="col-md-3 col-sm-2 col-xs-6 inline">
 	                     <h6><%out.print(newLeadList.getSalesheadName()); %></h6>
 	                    </div>
 	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
@@ -366,7 +366,7 @@ color: #ccc;
 		                     out.print("Rs "+newLeadList.getMin());%> -<%out.print(newLeadList.getMax()+" Lakh");
 	                     } %> </h6>
 	                    </div>
-	                     <div class="col-md-2 col-sm-2 col-xs-6 inline">
+	                     <div class="col-md-3 col-sm-2 col-xs-6 inline">
 	                      <h6>
 	                      <%out.print(newLeadList.getConfigName());
 	                      %>

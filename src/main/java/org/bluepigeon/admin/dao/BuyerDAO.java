@@ -1378,4 +1378,81 @@ public class BuyerDAO {
 		return responseMessage;
 	 }
 	 
+	 public List<BuyerPayment> getBuyerPymentsByBuyerId(int buyerId){
+		String hql = "from BuyerPayment where buyer.id = :buyer_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("buyer_id", buyerId);
+		List<BuyerPayment> result = query.list();
+		session.close();
+		return result;
+	}
+	 public List<BuyerPayment> getBuyerPayments(int buyerId){
+		String hql = "from BuyerPayment where buyer.id = :buyer_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("buyer_id", buyerId);
+		List<BuyerPayment> result = query.list();
+		List<BuyerPayment> buyerPayments = new ArrayList<BuyerPayment>();
+		for(BuyerPayment buyerPaymentList : result){
+			BuyerPayment buyerPayment = new BuyerPayment();
+			buyerPayment.setId(buyerPaymentList.getId());
+			buyerPayment.setPaid(buyerPaymentList.isPaid());
+			buyerPayment.setAmount(buyerPaymentList.getAmount());
+			buyerPayments.add(buyerPayment);
+		}
+		session.close();
+		return buyerPayments;
+	}
+	 
+	 public BuyerPayment getBuyerPymentsById(int id){
+		String hql = "from BuyerPayment where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		List<BuyerPayment> result = query.list();
+		session.close();
+		return result.get(0);
+	}
+	 public ResponseMessage updateBuyerPayment(BuyerPayment buyerPayment){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		ResponseMessage responseMessage = new ResponseMessage();
+		
+		
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		newsession.update(buyerPayment);
+		newsession.getTransaction().commit();
+		newsession.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Buyer Payment Updated Successfully");
+	
+		return responseMessage;
+	}
+	 public ResponseMessage deleteDemandByPaymentId(int id){
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			ResponseMessage responseMessage = new ResponseMessage(); 
+			String delete_uploaded_document = "DELETE from BuyerUploadDocuments where payment_id = :id";
+			Session newsession = hibernateUtil.openSession();
+			newsession.beginTransaction();
+			Query smdelete = newsession.createQuery(delete_uploaded_document);
+			smdelete.setParameter("id", id);
+			smdelete.executeUpdate();
+			newsession.getTransaction().commit();
+			newsession.close();
+			String delete_demand_letter = "DELETE from DemandLetters where paymentId = :id";
+			Session demandsession = hibernateUtil.openSession();
+			demandsession.beginTransaction();
+			Query demanddelete = demandsession.createQuery(delete_demand_letter);
+			demanddelete.setParameter("id", id);
+			demanddelete.executeUpdate();
+			demandsession.getTransaction().commit();
+			demandsession.close();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Demand letter deleted successfully");
+			return responseMessage;
+		 }
 }

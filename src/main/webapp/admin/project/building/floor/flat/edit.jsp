@@ -1514,14 +1514,14 @@ $('#updatePayment').bootstrapValidator({
                      }
                  },
 		        notEmpty: {
-		    		message: 'Payable is required and cannot be empty'
+		    		message: 'Payable required and cannot be empty'
 		        },
             }
         },
         'amount[]':{
         	validators:{
         		notEmpty :{
-        			message: 'amount is required and cannot be empty'
+        			message: 'amount required and cannot be empty'
         		}
         	}
         }
@@ -1566,7 +1566,7 @@ function showPaymentSlabResponse(resp, statusText, xhr, $form){
 }
 
 function deletePayment(id) {
-	var flag = confirm("Are you sure ? You want to delete payment slab ?");
+	var flag = confirm("Are you sure, you want to delete payment slab ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/floor/flat/payment/delete/"+id, { }, function(data){
 			alert(data.message);
@@ -1867,7 +1867,7 @@ function updateBuildingOffers() {
 }
 
 function deleteOffer(id){
-	var flag = confirm("Are you sure ? You want to delete offers ?");
+	var flag = confirm("Are you sure, you want to delete offer ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/floor/flat/offer/delete/"+id, { }, function(data){
 			alert(data.message);
