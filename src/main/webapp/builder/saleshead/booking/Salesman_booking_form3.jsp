@@ -43,21 +43,22 @@
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
-			builder_id1 = builder.getBuilder().getId();
-			if(builder.getBuilderEmployeeAccessType().getId()==5){
-				emp_id = builder.getId();
-				if(builder_id1> 0 ){
-					project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id1);
+			if(builder !=null){
+				builder_id1 = builder.getBuilder().getId();
+				if(builder.getBuilderEmployeeAccessType().getId()==5){
+					emp_id = builder.getId();
+					if(builder_id1> 0 ){
+						project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id1);
+					}
+					if(project_list != null){
+					 	builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
+					 		
+					 	}
+					}
+				}else{
+					response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 				}
-				if(project_list != null){
-				 	builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
-				 		
-				 	}
-				}
-			}else{
-				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 			}
-			 
 		}
    
 	if (request.getParameterMap().containsKey("flat_id")) {
@@ -167,7 +168,7 @@
 								        <label for="example-text-input" class="col-sm-5 col-form-label"> Buyers Name*</label>
 								        <div class="col-sm-7 custom-col">
 								        	<div>
-								            	<input class="form-control" type="text" autocomplete="off" id="buyer_name" name="buyer_name[]" placeholder="owner name">
+								            	<input class="form-control" type="text" autocomplete="off" id="buyer_name1" name="buyer_name[]" onkeyup="validateBuyername(1);" placeholder="owner name">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -176,7 +177,7 @@
 								        <label for="example-text-input" class="col-sm-5 col-form-label"> Buyers Photo*</label>
 								        <div class="col-sm-7 custom-col">
 								        	<div>
-								            	<input class="form-control" type="file" autocomplete="off" id="photo" name="photo[]" placeholder="owner picture">
+								            	<input class="form-control" type="file" autocomplete="off" id="photo1" name="photo[]" placeholder="owner picture">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -185,7 +186,7 @@
 								        <label for="example-search-input" class="col-sm-5 col-form-label">Email*</label>
 								        <div class="col-sm-7 custom-col">
 								        	<div>
-								            	<input class="form-control" type="text" autocomplete="off" name="email[]" id="email" placeholder="owner emailid">
+								            	<input class="form-control" type="text" autocomplete="off" name="email[]" id="email1" onkeyup ="validateBuyerEmailId(1);" placeholder="owner emailid">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -195,7 +196,7 @@
 								        <label for="example-search-input" class="col-sm-5 col-form-label">Permanent Address*</label>
 								        <div class="col-sm-7 custom-col">
 								        	<div>
-								            	<input class="form-control" type="text" autocomplete="off" id="address" name="address[]" placeholder="Permanent address">
+								            	<input class="form-control" type="text" autocomplete="off" id="address1" name="address[]" placeholder="Permanent address">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -204,7 +205,7 @@
 								        <label for="example-search-input" class="col-sm-5 col-form-label">Current Address*</label>
 								        <div class="col-sm-7 custom-col">
 								        	<div>
-								            	<input class="form-control" type="text" autocomplete="off" id="current_address" name="current_address[]" placeholder="current address">
+								            	<input class="form-control" type="text" autocomplete="off" id="current_address1" name="current_address[]" placeholder="current address">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -213,7 +214,7 @@
 								        <label for="example-tel-input" class="col-sm-5 col-form-label">Contact*</label>
 								        <div class="col-sm-7 custom-col">
 								        	<div>
-								            	<input class="form-control" type="text" autocomplete="off" id="contact" name="contact[]" placeholder="contact number">
+								            	<input class="form-control" type="text" autocomplete="off" id="contact1" name="contact[]" placeholder="contact number">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -222,7 +223,7 @@
 								        <label for="example-tel-input" class="col-sm-5 col-form-label">Pan*</label>
 								        <div class="col-sm-7 custom-col">
 								        	<div>
-								            	<input class="form-control" type="text" autocomplete="off" id="pan" name="pan[]" placeholder="PAN Card No.">
+								            	<input class="form-control" type="text" autocomplete="off" id="pan1" name="pan[]" placeholder="PAN Card No.">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -231,7 +232,7 @@
 								        <label for="example-tel-input" class="col-sm-5 col-form-label">Aadhaar No.*</label>
 								        <div class="col-sm-7 custom-col">
 								        	<div>
-								            	<input class="form-control" type="text" autocomplete="off" id="aadhaar_no" name="aadhaar_no[]" placeholder="enter aadhaar card no.">
+								            	<input class="form-control" type="text" autocomplete="off" id="aadhaar_no1" name="aadhaar_no[]" placeholder="enter aadhaar card no.">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -240,7 +241,7 @@
 								        <label for="example-tel-input" class="col-sm-5 col-form-label">Refferal Id*</label>
 								        <div class="col-sm-7 custom-col">
 								        	<div>
-								            	<input class="form-control" type="text" autocomplete="off"  id="refferal_id" name="refferal_id[]"  placeholder="enter refferal id.">
+								            	<input class="form-control" type="text" autocomplete="off"  id="refferal_id1" name="refferal_id[]"  placeholder="enter refferal id.">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -579,7 +580,7 @@ function addMoreBuyers(){
 	    +'<label for="example-text-input" class="col-5 col-form-label"> Buyers Name*</label>'
 	    +'<div class="col-7 custom-col">'
 	    +'<div>'
-        +'<input class="form-control" type="text" value="" id="buyer_name" name="buyer_name[]" autocomplete="off" placeholder="Co-owner name">'
+        +'<input class="form-control" type="text" value="" id="buyer_name'+buyers+'" name="buyer_name[]" onkeyup="validateBuyername('+buyers+');" autocomplete="off" placeholder="Co-owner name">'
     	+'</div>'
     	+'<div class="messageContainer"></div>'
 		+'</div>'
@@ -588,7 +589,7 @@ function addMoreBuyers(){
 	    +'<label for="example-text-input" class="col-5 col-form-label"> Buyers Photo*</label>'
 	    +'<div class="col-7 custom-col">'
 	    +'<div>'
-        +'<input class="form-control" type="file" value="" id="photo" name="photo[]" autocomplete="off" placeholder="Co-owner name">'
+        +'<input class="form-control" type="file" value="" id="photo'+buyers+'" name="photo[]" autocomplete="off" placeholder="Co-owner name">'
     	+'</div>'
     	+'<div class="messageContainer"></div>'
 		+'</div>'
@@ -597,7 +598,7 @@ function addMoreBuyers(){
 	    +'<label for="example-search-input" class="col-5 col-form-label">Email*</label>'
 	    +'<div class="col-7 custom-col">'
 	    +'<div>'
-        +'<input class="form-control" type="text" value="" name="email[]" id="email" autocomplete="off" placeholder="co-owner email id">'
+        +'<input class="form-control" type="text" value="" name="email[]" id="email'+buyers+'" autocomplete="off" placeholder="co-owner email id">'
     	+'</div>'
     	+'<div class="messageContainer"></div>'
 		+'</div>'
@@ -607,7 +608,7 @@ function addMoreBuyers(){
 	    +'<label for="example-search-input" class="col-5 col-form-label">Permanent Address*</label>'
 	    +'<div class="col-7 custom-col">'
 	    +'<div>'
-        +'<input class="form-control" type="text" value="" placeholder="" autocomplete="off" id="address" name="address[]">'
+        +'<input class="form-control" type="text" value="" placeholder="" autocomplete="off" id="address'+buyers+'" name="address[]">'
     	+'</div>'
     	+'<div class="messageContainer"></div>'
     	+'</div>'
@@ -616,7 +617,7 @@ function addMoreBuyers(){
 	    +'<label for="example-search-input" class="col-5 col-form-label">Current Address*</label>'
 	    +'<div class="col-7">'
 	    +'<div>'
-        +'<input class="form-control" type="text" value="" id="current_address" name="current_address[]" autocomplete="off" >'
+        +'<input class="form-control" type="text" value="" id="current_address'+buyers+'" name="current_address[]" autocomplete="off" >'
     	+'</div>'
     	+'<div class="messageContainer"></div>'
 		+'</div>'
@@ -625,7 +626,7 @@ function addMoreBuyers(){
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Contact*</label>'
 	    +'<div class="col-7 custom-col">'
 	    +'<div>'
-        +'<input class="form-control" type="text"  autocomplete="off" value="" id="contact" name="contact[]" placeholder="contact number">'
+        +'<input class="form-control" type="text"  autocomplete="off" value="" id="contact'+buyers+'" name="contact[]" placeholder="contact number">'
     	+'</div>'
     	+'<div class="messageContainer"></div>'
     	+'</div>'
@@ -634,7 +635,7 @@ function addMoreBuyers(){
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Pan*</label>'
 	    +'<div class="col-7 custom-col">'
 	    +'<div>'
-        +'<input class="form-control" type="text" autocomplete="off" value="" id="pan" name="pan[]"  placeholder="Pan card number">'
+        +'<input class="form-control" type="text" autocomplete="off" value="" id="pan'+buyers+'" name="pan[]"  placeholder="Pan card number">'
     	+'</div>'
     	+'<div class="messageContainer"></div>'
     	+'</div>'
@@ -643,7 +644,7 @@ function addMoreBuyers(){
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Aadhaar No.*</label>'
 	    +'<div class="col-7 custom-col">'
 	    +'<div>'
-        +'<input class="form-control" type="text" autocomplete="off" value="" id="aadhaar_no" name="aadhaar_no[]" placeholder="Aadhaar card number">'
+        +'<input class="form-control" type="text" autocomplete="off" value="" id="aadhaar_no'+buyers+'" name="aadhaar_no[]" placeholder="Aadhaar card number">'
     	+'</div>'
     	+'<div class="messageContainer"></div>'
 		+'</div>'
@@ -652,7 +653,7 @@ function addMoreBuyers(){
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Refferal Id*</label>'
 	    +'<div class="col-7 custom-col">'
 	    +'<div>'
-        +'<input class="form-control" type="text" autocomplete="off" value="" id="refferal_id" name="refferal_id[]">'
+        +'<input class="form-control" type="text" autocomplete="off" value="" id="refferal_id'+buyers+'" name="refferal_id[]">'
     	+'</div>'
     	+'<div class="messageContainer"></div>'
     	+'</div>'
@@ -664,6 +665,20 @@ function addMoreBuyers(){
 }
 function removeBuyer(id) {
 	$("#buyer-"+id).remove();
+}
+
+function validateBuyername(id){
+	  $("#buyer_name"+id).val( $("#buyer_name"+id).val().replace(/[^a-zA-Z ]/g, function(str) { return ''; } ) );
+}
+
+function validateBuyerEmailId(id){
+	 var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+	 var emailid = $("#email"+id).val();
+	 if(reg.test(emailid)){
+		 return true;
+	 }else{
+		 return false;
+	 }
 }
 
 function isNumber(evt, element) {
@@ -690,11 +705,228 @@ function previous1()
      $("#home").show();
 }
 function show(){
-	$("#home").hide();
-	//$("#menu1").show();
-	 $('.active').removeClass('active').next('li').addClass('active');
-     $("#menu1").addClass('active');
-     $("#menu1").show();
+	var buyercount = false;
+	var photos = false;
+	var email=false;
+	var address=false;
+	var current_address = false;
+	var contact = false;
+	var pan = false;
+	var aadhaar = false;
+	var refferal = false;
+	
+	var buyers = parseInt($("#buyer_count").val());
+	for(var i=1;i<=buyers;i++){
+		if($("#buyer_name"+i).val() == ""){
+			buyercount = true;
+		}
+		if($("#photo"+i).val() == "")
+			photos = true;
+		if($("#email"+i).val() == "")
+			email = true;
+		if($("#address"+i).val() == "")
+			address = true;
+		if($("#current_address"+i).val() == "")
+			current_address = true;
+		if($("#contact"+i).val() == "")
+			contact = true;
+		if($("#pan"+i).val() == "")
+			pan = true;
+		if($("#aadhaar_no"+i).val() == "")
+			aadhaar = true;
+		if($("#refferal_id"+i).val() == "")
+			refferal = true;
+	}
+	if(buyercount && photos && email && address && current_address && contact && pan && aadhaar && refferal){
+		alert("All fields are mendetory");
+	}else if(buyercount && photos && email && address && current_address && contact && pan && aadhaar){
+		alert("Please select photo and enter buyer name, email id, permanent address, current address, contact number, pan card number and aadhaar number");
+	}
+	else if(buyercount && photos && email && address && current_address && contact && pan && refferal){
+		alert("Please select photo and enter Buyer Name, email id,permanent address, current address, contact number, pan card number and refferal id");
+	}else if(buyercount && photos && email && address && current_address && contact && aadhaar && refferal){
+		alert("Please select photo and enter buyer name, email id, permanent address, current address, contact number, aadhaar number and refferal id");
+	}else if(buyercount && photos && email && address && current_address && pan && aadhaar && refferal){
+		alert("Please select photo and enter buyer name, email id, permanent address, current address, pan card number, aadhaar number and refferal id ")
+	}else if(buyercount && photos && email && address && contact && pan && aadhaar && refferal){
+		alert("Please select photo and enter buyer name, email id, permanent address, contact number, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && photos && email && current_address && contact && pan && aadhaar && refferal){
+		alert("Plase  select photo and enter buyer name,  email id, current address, contact number, pan card number, aadhaar number and refferal id ")
+	}else if(buyercount && photos && address && current_address && contact && pan && aadhaar && refferal){
+		alert("Please select photo and enter buyer name, permanent address, current address, contact number, pan card number, aadhaar number and refferal id")
+	}else if(buyercount && email && address && current_address && contact && pan && aadhaar && refferal){
+		alert("Plase enter buyer name, email, permanent address, current address, contact number, pan card number, aadhaar number and refferal id");
+	}else if(photos && email && address && current_address && contact && pan && aadhaar && refferal){
+		alert("Plase select photo and enter email, permanent address, current address, contact number, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && photos && email && address && current_address && contact && pan){
+		alert("Plase select photo and enter buyer name, email, permanent address, current address, contact number and pan card number");
+	}else if(buyercount && photos && email && address && current_address && contact &&  aadhaar && refferal){
+		alert("Plase select photo and enter buyer name, email, permanent address, current address, contact number, aadhaar number and refferal id");
+	}
+	else if(buyercount && photos && email && address && current_address && pan && aadhaar && refferal){
+		alert("Plase select photo and enter buyer name, email, permanent address, current address, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && photos && email && address && contact && pan && aadhaar && refferal){
+		alert("Plase select photo and enter buyer name, email, permanent address, contact number, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && photos && email && current_address && contact && pan && aadhaar && refferal){
+		alert("Plase select photo and enter buyer name, email, current address, contact number, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && photos && address && current_address && contact && pan && aadhaar && refferal){
+		alert("Plase select photo and enter buyer name, permanent address, current address, contact number, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && email && address && current_address && contact && pan && aadhaar && refferal){
+		alert("Plase enter buyer name, email, permanent address, current address, contact number, pan card number, aadhaar number and refferal id");
+	}else if(photos && email && address && current_address && contact && pan && aadhaar && refferal){
+		alert("Plase select photo and enter email, permanent address, current address, contact number, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && photos && email && address && current_address && contact && pan && aadhaar && refferal){
+		alert("Plase select photo and enter buyer name, email, permanent address, current address, contact number, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && photos && email && address && current_address && contact && pan && aadhaar && refferal){
+		alert("Plase select photo and enter buyer name, email, permanent address, current address, contact number, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && photos && email && address && current_address && contact && pan){
+		alert("Please select photo and enter buyer name, email id, permanent address, current address, contact number and pan card number");
+	}else if(buyercount && photos && email && address && current_address && contact && refferal){
+		alert("Please slect photo and enter buyer name, email id, permanent address, current address and refferal id")
+	}else if(buyercount && photos && email && address && current_address && aadhaar && refferal){
+		alert("Please select photo and enter buyer name, email id, permanent address, current address, aadhaar number and refferal id");
+	}else if(buyercount && photos && email && address && pan && aadhaar && refferal){
+		alert("Please select photos and enter buyer name, email, permanent address, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && photos && email && address && current_address && contact){
+		alert("Please select photo and enter buyer name, email id, permanent address, current address, contact number");
+	}else if(buyercount && photos && email && address && current_address && refferal){
+		alert("Please select photo and enter buyer name, email id, permanent address, current address and refferal id");
+	}else if(buyercount && photos && email && address && aadhaar && refferal){
+		alert("Please select photo and enter buyer name, email id, permanent address, aadhaar number and refferal id");
+	}else if(buyercount && photos && email && pan && aadhaar && refferal){
+		alert("Please select buyer photo and enter buyer name, email id, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && photos && contact && pan && aadhaar && refferal){
+		alert("Please select buyer photo and enter buyer name, contact number");
+	}else if(buyercount && current_address && contact && pan && aadhaar && refferal){
+		alert("Please enter buyer name, current address, contact number, pan card number, aadhaar number and refferal id");
+	}else if(address && current_address && contact && pan && aadhaar && refferal){
+		alert("Please enter permanent address, current address, contact number, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && photos && email && address && current_address){
+		alert("Please select buyer photo and enter buyer name, email id, permanent address, current address");
+	}else if(buyercount && photos && email && address  && refferal){
+		alert("Plase select buyer photo and enter buyer name, email id, permanent address and refferal id");
+	}else if(buyercount && photos && email && aadhaar && refferal){
+		alert("Please select buyer photo and enter buyer name, email id, aadhaar number and refferal id");
+	}else if(buyercount && photos && pan && aadhaar && refferal){
+		alert("Please select buyer photo and enter buyer name, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && contact && pan && aadhaar && refferal){
+		alert("Please enter buyer name, contact number, pan card number and refferal id");
+	}else if(current_address && contact && pan && aadhaar && refferal){
+		alert("Please enter current address, contact number, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && photos && email && address){
+		alert("Please select buyer photo and enter buyer name, email id, permanent address");
+	}else if(buyercount && photos && email && refferal){
+		alert("Please select buyer photo and enter buyer name, email id, refferal id");
+	}else if(buyercount && photos && aadhaar && refferal){
+		alert("Please select buyer photo and enter buyer name, aadhaar number, refferal id");
+	}else if(buyercount && pan && aadhaar && refferal){
+		alert("Please enter buyer name, pan card number, aadhaar number and refferal id");
+	}else if(contact && pan && aadhaar && refferal){
+		alert("Please enter contact number, pan card number, aadhaar number and refferal id");
+	}else if(buyercount && photos && email){
+		alert("Please select buyer photo and enter buyer name, email id");
+	}else if(buyercount && photos && refferal){
+		alert("Please select buyer photo and enter buyer name and refferal id");
+	}else if(buyercount && aadhaar && refferal){
+		alert("Please enter buyer name, aadhaar number and refferal id");
+	}else if(pan && aadhaar && refferal){
+		alert("Please enter pan card number and refferal id");
+	}else if(buyercount && photos){
+		alert("Please select buyer photo and enter buyer name");
+	}else if(buyercount && email){
+		alert("please enter buyer name and email id");
+	}else if(buyercount && address){
+		alert("Please enter buyer name and permanent address");
+	}else if(buyercount && current_address){
+		alert("Please enter buyer name and current address");
+	}else if(buyercount && contact){
+		alert("Please enter buyer name and contact number");
+	}else if(buyercount && pan ){
+		alert("Please buyer name and pan card number");
+	}else if(buyercount && aadhaar){
+		alert("Please buyer name and aadhaar number");
+	}else if(buyercount && refferal){
+		alert("Please enter buyer name and refferal id");
+	}else if(photos && email ){
+		alert("Please select buyer photo and enter email id");
+	}else if(photos && address){
+		alert("Please select buyer photo and enter permanent address");
+	}else if(photos && current_address){
+		alert("Please select buyuer photo and enter current address");
+	}else if(photos && contact){
+		alert("Please select buyer photo and enter contact number");
+	}else if(photos && pan){
+		alert("Please select buyer photo and enter pan card number");
+	}else if(photos && aadhaar){
+		alert("Please select buyer photo and enter aadhaar number");
+	}else if(photos && refferal){
+		alert("Please select buyer photo and enter refferal id");
+	}else if(email && address ){
+		alert("Please enter email id and permanent address");
+	}else if(email  && current_address){
+		alert("Please enter email id and current address");
+	}else if(email && contact){
+		alert("Plase enter email id and contact number");
+	}else if( email && pan ){
+		alert("Please enter email id and pan card number");
+	}else if(email && aadhaar){
+		alert("Please enter email id and aadhaar number");
+	}else if(email && refferal){
+		alert("Please enter email id and refferal");
+	}else if(address && current_address){
+		alert("Please enter permanent address and current address");
+	}else if(address && contact){
+		alert("Please enter permanent address and contact number");
+	}else if(address && pan){
+		alert("Please enter permanent address and pan card number");
+	}else if(address && aadhaar){
+		alert("Please enter permanent address and aadhaar number");
+	}else if(address && refferal){
+		alert("Please enter permanent address and refferal id");
+	}else if(current_address && contact){
+		alert("Please enter current address and contact number");
+	}else if(current_address && pan){
+		alert("Please enter current address and pan card number");
+	}else if(current_address && aadhaar ){
+		alert("please enter current address and aadhaar number");
+	}else if(current_address && refferal){
+		alert("Please enter current address and refferal id");
+	}else if(contact && pan){
+		alert("Please enter contact number and pan card number");
+	}else if(contact  && aadhaar ){
+		alert("Please enter conatct number and aadhaar number");
+	}else if(contact && refferal){
+		alert("Please enter contact number and refferal id");
+	}else if(pan && aadhaar){
+		alert("Please enter pan card number and aadhaar number");
+	}else if(pan && refferal){
+		alert("Please enter pan card number and refferal id");
+	}else if(aadhaar && refferal){
+		alert("Please enter aadhaar number and refferal id");
+	}else if(buyercount){
+		alert("Please enter buyer name");
+	}else if(photos){
+		alert("Please select buyer photo");
+	}else if(email){
+		alert("Please enter email id");
+	}else if(address){
+		alert("Please enter permanent address");
+	}else if(current_address){
+		alert("Please enter current address");
+	}else if(contact){
+		alert("Please enter contact number");
+	}else if( pan ){
+		alert("Please enter pan card number");
+	}else if(aadhaar){
+		alert("Please enter aadhaar number");
+	}else if(refferal){
+		alert("Please enter refferal id");
+	}
+// 	$("#home").hide();
+// 	//$("#menu1").show();
+// 	 $('.active').removeClass('active').next('li').addClass('active');
+//      $("#menu1").addClass('active');
+//      $("#menu1").show();
      
 }
 function showNext(){
