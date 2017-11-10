@@ -1322,30 +1322,30 @@ $("#updatepricing").bootstrapValidator({
         tax: {
             validators: {
             	notEmpty: {
-                    message: 'Tax is required'
+                    message: 'Tax required'
                 },
         		numeric: {
-        			message: 'Tax is invalid'
+        			message: 'Invalid tax'
         		}
             }
         },
         vat: {
             validators: {
             	notEmpty: {
-                    message: 'Vat is required'
+                    message: 'vat required'
                 },
         		numeric: {
-        			message: 'Vat is invalid'
+        			message: 'Invalid vat'
         		}
             }
         },
         tech_fee : {
         	 validators: {
              	notEmpty: {
-                     message: 'Tech fee is required'
+                     message: 'Tech fee required'
                  },
          		numeric: {
-         			message: 'Tech fee is invalid'
+         			message: 'Invalid tech fee'
          		}
              }
         }
@@ -1513,7 +1513,7 @@ $('#updatepayment').bootstrapValidator({
 	updateBuildingPayments();
 });
 function deleteOffer(id){
-	var flag = confirm("Are you sure ? You want to delete offers ?");
+	var flag = confirm("Are you sure, you want to delete offer ?");
 	if(flag) {
 		ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/building/offer/delete/"+id, { }, function(data){
@@ -1642,7 +1642,7 @@ $('#updateoffer').bootstrapValidator({
 	});;
 	
 function deleteImage(id) {
-	var flag = confirm("Are you sure ? You want to delete image ?");
+	var flag = confirm("Are you sure, you want to delete image ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/image/delete/"+id, { }, function(data){
 			alert(data.message);
@@ -1654,7 +1654,7 @@ function deleteImage(id) {
 }
 
 function deleteElvImage(id) {
-	var flag = confirm("Are you sure ? You want to delete Elevation Image ?");
+	var flag = confirm("Are you sure, you want to delete Elevation Image ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/elevationimage/delete/"+id, { }, function(data){
 			alert(data.message);
@@ -1666,7 +1666,7 @@ function deleteElvImage(id) {
 }
 
 function deletePayment(id) {
-	var flag = confirm("Are you sure ? You want to delete payment slab ?");
+	var flag = confirm("Are you sure, you want to delete payment slab ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/payment/delete/"+id, { }, function(data){
 			alert(data.message);
@@ -1678,7 +1678,7 @@ function deletePayment(id) {
 }
 
 function deleteOffer(id) {
-	var flag = confirm("Are you sure ? You want to delete offer ?");
+	var flag = confirm("Are you sure, you want to delete offer ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/offer/delete/"+id, { }, function(data){
 			alert(data.message);

@@ -1838,7 +1838,7 @@ function removeSchedule(id) {
 }
 function deleteOffer(id) {
 	
-	var flag = confirm("Are you sure ? You want to delete offer ?");
+	var flag = confirm("Are you sure, you want to delete offer ?");
 	if(flag) {
 		ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/offer/delete/"+id, { }, function(data){
@@ -1853,7 +1853,7 @@ function deleteOffer(id) {
 
 function deleteSchudle(id){
 	
-	var flag = confirm("Are you sure ? You want to delete schedule ?");
+	var flag = confirm("Are you sure , you want to delete schedule ?");
 	if(flag){
 		ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/payment/delete/"+id,{}, function(data){

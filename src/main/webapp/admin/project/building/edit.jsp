@@ -1480,7 +1480,7 @@ function deleteElvImage(id) {
 }
 
 function deletePayment(id) {
-	var flag = confirm("Are you sure ? You want to delete payment slab ?");
+	var flag = confirm("Are you sure, you want to delete payment slab ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/payment/delete/"+id, { }, function(data){
 			alert(data.message);
@@ -1492,7 +1492,7 @@ function deletePayment(id) {
 }
 
 function deleteOffer(id) {
-	var flag = confirm("Are you sure ? You want to delete offer ?");
+	var flag = confirm("Are you sure, you want to delete offer ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/offer/delete/"+id, { }, function(data){
 			alert(data.message);

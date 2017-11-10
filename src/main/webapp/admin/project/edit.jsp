@@ -2115,7 +2115,7 @@ function removeSchedule(id) {
 }
 function deleteSchudle(id){
 	
-	var flag = confirm("Are you sure ? You want to delete schedule ?");
+	var flag = confirm("Are you sure, you want to delete schedule ?");
 	if(flag){
 		$.get("${baseUrl}/webapi/project/payment/delete/"+id,{}, function(data){
 			alert(data.message);
@@ -2172,7 +2172,7 @@ $("#subpbtn").click(function(){
 
 function deleteOffer(id) {
 	var b=$("#offer").val();
-	var flag = confirm("Are you sure ? You want to delete offer ?");
+	var flag = confirm("Are you sure, you want to delete offer ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/offer/delete/"+id, { }, function(data){
 			alert(data.message);

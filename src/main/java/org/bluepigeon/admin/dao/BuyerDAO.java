@@ -1432,4 +1432,27 @@ public class BuyerDAO {
 	
 		return responseMessage;
 	}
+	 public ResponseMessage deleteDemandByPaymentId(int id){
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			ResponseMessage responseMessage = new ResponseMessage(); 
+			String delete_uploaded_document = "DELETE from BuyerUploadDocuments where payment_id = :id";
+			Session newsession = hibernateUtil.openSession();
+			newsession.beginTransaction();
+			Query smdelete = newsession.createQuery(delete_uploaded_document);
+			smdelete.setParameter("id", id);
+			smdelete.executeUpdate();
+			newsession.getTransaction().commit();
+			newsession.close();
+			String delete_demand_letter = "DELETE from DemandLetters where paymentId = :id";
+			Session demandsession = hibernateUtil.openSession();
+			demandsession.beginTransaction();
+			Query demanddelete = demandsession.createQuery(delete_demand_letter);
+			demanddelete.setParameter("id", id);
+			demanddelete.executeUpdate();
+			demandsession.getTransaction().commit();
+			demandsession.close();
+			responseMessage.setStatus(1);
+			responseMessage.setMessage("Demand letter deleted successfully");
+			return responseMessage;
+		 }
 }

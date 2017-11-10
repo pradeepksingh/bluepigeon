@@ -2144,7 +2144,14 @@ public class BuyerController {
 	public ResponseMessage deleteDemandDocument(@PathParam("id") int id) {
 		ResponseMessage msg = new ResponseMessage();
 		BuyerDAO buyerDAO = new BuyerDAO();
-		msg = buyerDAO.deleteDocumentById(id);
+		BuyerPayment buyerPayment  = new BuyerDAO().getBuyerPymentsById(id);
+		if(!buyerPayment.isPaid()){
+			msg = buyerDAO.deleteDemandByPaymentId(id);
+			
+		}else{
+			msg.setStatus(0);
+			msg.setMessage("Can not deleted paid demand letter documnet");
+		}
 		return msg;
 	}
 	
@@ -2536,6 +2543,7 @@ public class BuyerController {
 					}
 					buDocuments.setName(demandName);
 					buDocuments.setBuilderdoc(true);
+					buDocuments.setPaymentId(paymentId);
 					buDocuments.setUploadedDate(new Date());
 					if(doc_id.get(i).getValueAs(Integer.class) != 0) {
 						buyerUploadDocuments.add(buDocuments);

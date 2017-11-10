@@ -741,7 +741,7 @@ function showAddResponse(resp, statusText, xhr, $form){
 }
 
 function deleteImage(id) {
-	var flag = confirm("Are you sure ? You want to delete plan ?");
+	var flag = confirm("Are you sure, you want to delete plan ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/floor/plan/delete/"+id, { }, function(data){
 			alert(data.message);
