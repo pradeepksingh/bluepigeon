@@ -418,6 +418,7 @@
 					 	       </div>
 						    </div>
 						    <div id="menu3" class="tab-pane">
+						     <input type="hidden" name="h_sale_value" id="h_sale_value" value="<% if(flatPricingDetails.size() > 0 && flatPricingDetails.get(0).getTotalCost() != null){ out.print(flatPricingDetails.get(0).getTotalCost());}%>"/>
 						     <% int a=1;
                                  for(FlatPaymentSchedule flatPayment: flatPayments ) {%> 
                                  <div class="col-sm-12">
@@ -1007,6 +1008,43 @@ $('#addnewbuyer').bootstrapValidator({
                 }
             }
         },
+        'payable[]': {
+            validators: {
+            	between: {
+                    min: 0,
+                    max: 100,
+                    message: 'The percentage must be between 0 and 100'
+	        	},
+	        	 callback: {
+                     message: 'The sum of percentages must be 100',
+                     callback: function(value, validator, $field) {
+                         var percentage = validator.getFieldElements('payable[]'),
+                             length     = percentage.length,
+                             sum        = 0;
+
+                         for (var i = 0; i < length; i++) {
+                             sum += parseFloat($(percentage[i]).val());
+                         }
+                         if (sum === 100) {
+                             validator.updateStatus('payable[]', 'VALID', 'callback');
+                             return true;
+                         }
+
+                         return false;
+                     }
+                 },
+		        notEmpty: {
+		    		message: 'Payable required and cannot be empty'
+		        },
+            }
+        },
+        'amount[]':{
+        	validators:{
+        		notEmpty :{
+        			message: 'amount required and cannot be empty'
+        		}
+        	}
+        }
         
     }
 }).on('success.form.bv', function(event,data) {
@@ -1061,6 +1099,23 @@ function showAddResponse(resp, statusText, xhr, $form){
         ajaxindicatorstop();
         window.location.href = "${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>
   	}
+}
+function calculateAmount(id){
+	alert("Per :: "+$("#payable"+id).val()+" Amt :: "+$("#amount"+id).val()+" Sale value "+$("#h_sale_value").val());
+	if($("#payable"+id).val() <0 || $("#payable"+id).val() >100){
+		alert("The percentage must be between 0 and 100");
+		$("#payable"+id).val('');
+	}else{
+	var amount = $("#payable"+id).val()*$("#h_sale_value").val()/100;
+		$("#amount"+id).val(amount.toFixed(0));
+	}
+}
+function calcultatePercentage(id){
+	alert("Per :: "+$("#payable"+id).val()+"Amt :: "+$("#amount"+id).val()+"Sale value "+$("#h_sale_value").val());
+	var $th = $("#amount"+id);
+	$th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
+	var percentage = $("#amount"+id).val()/$("#h_sale_value").val()*100;
+	$("#payable"+id).val(percentage.toFixed(1));
 }
 
 </script>

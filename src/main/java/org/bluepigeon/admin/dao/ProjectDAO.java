@@ -6011,7 +6011,7 @@ public class ProjectDAO {
 	    			System.err.println("From cancellation if condtion");
 	    		}else{
 	    			booking.setIsApproved(false);
-	    			booking.setCancelStatus(0);
+	    			booking.setCancelStatus(cancellation.getCancelStatus());
 	    			booking.setCancelReason("");
 	    			booking.setCharges(0.0);
 	    			System.err.println("From cancellation else");

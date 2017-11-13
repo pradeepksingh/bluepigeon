@@ -120,6 +120,8 @@ public class BuyerDAO {
 		updateFlatStatus(buyer.getBuilderFlat().getId());
 		updateProject(buyer);
 		new ProjectDAO().updateProjectInventory(buyer.getBuilderFlat().getId());
+		updateBuilding(buyer);
+		updateBuildingInventory(buyer.getBuilderFlat().getId());
 		buyerSession.close();
 		
 		response.setId(buyer.getId());
@@ -1433,26 +1435,112 @@ public class BuyerDAO {
 		return responseMessage;
 	}
 	 public ResponseMessage deleteDemandByPaymentId(int id){
-			HibernateUtil hibernateUtil = new HibernateUtil();
-			ResponseMessage responseMessage = new ResponseMessage(); 
-			String delete_uploaded_document = "DELETE from BuyerUploadDocuments where payment_id = :id";
-			Session newsession = hibernateUtil.openSession();
-			newsession.beginTransaction();
-			Query smdelete = newsession.createQuery(delete_uploaded_document);
-			smdelete.setParameter("id", id);
-			smdelete.executeUpdate();
-			newsession.getTransaction().commit();
-			newsession.close();
-			String delete_demand_letter = "DELETE from DemandLetters where paymentId = :id";
-			Session demandsession = hibernateUtil.openSession();
-			demandsession.beginTransaction();
-			Query demanddelete = demandsession.createQuery(delete_demand_letter);
-			demanddelete.setParameter("id", id);
-			demanddelete.executeUpdate();
-			demandsession.getTransaction().commit();
-			demandsession.close();
-			responseMessage.setStatus(1);
-			responseMessage.setMessage("Demand letter deleted successfully");
-			return responseMessage;
-		 }
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		ResponseMessage responseMessage = new ResponseMessage(); 
+		String delete_uploaded_document = "DELETE from BuyerUploadDocuments where payment_id = :id";
+		Session newsession = hibernateUtil.openSession();
+		newsession.beginTransaction();
+		Query smdelete = newsession.createQuery(delete_uploaded_document);
+		smdelete.setParameter("id", id);
+		smdelete.executeUpdate();
+		newsession.getTransaction().commit();
+		newsession.close();
+		String delete_demand_letter = "DELETE from DemandLetters where paymentId = :id";
+		Session demandsession = hibernateUtil.openSession();
+		demandsession.beginTransaction();
+		Query demanddelete = demandsession.createQuery(delete_demand_letter);
+		demanddelete.setParameter("id", id);
+		demanddelete.executeUpdate();
+		demandsession.getTransaction().commit();
+		demandsession.close();
+		responseMessage.setStatus(1);
+		responseMessage.setMessage("Demand letter deleted successfully");
+		return responseMessage;
+	 }
+	 
+	 public void updateBuilding(Buyer buyer){
+		String buildinghql = "from BuilderBuilding where id = :id";
+		String flatTotal = "from FlatPricingDetails where builderFlat.id = :flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session buildingSession = hibernateUtil.openSession();
+		Query buildingQuery = buildingSession.createQuery(buildinghql);
+		buildingQuery.setParameter("id", buyer.getBuilderBuilding().getId());
+		BuilderBuilding builderBuilding = (BuilderBuilding) buildingQuery.list().get(0);
+		buildingSession.close();
+		Session flatSession = hibernateUtil.openSession();
+		Query flatQuery = flatSession.createQuery(flatTotal);
+		//Session updateSession = hibernateUtil.openSession();
+		if(builderBuilding != null){
+			flatQuery.setParameter("flat_id",buyer.getBuilderFlat().getId() );
+			FlatPricingDetails flatPricingDetails = (FlatPricingDetails)flatQuery.list().get(0);
+			double revenue = builderBuilding.getRevenue() + flatPricingDetails.getTotalCost();
+			builderBuilding.setRevenue(revenue);
+			Session updateBuilding = hibernateUtil.openSession();
+			updateBuilding.beginTransaction();
+			updateBuilding.update(builderBuilding);
+			updateBuilding.getTransaction().commit();
+			updateBuilding.close();
+		}
+		flatSession.close();
+	 }
+	 
+	 public void updateBuildingInventory(int flatId){
+		String hql = "UPDATE BuilderBuilding set inventorySold =:soldInventory, totalInventory = :totalInventory where id = :building_id ";
+		double totalInventory = 0.0;
+		double soldInventory = 0.0;
+		BuilderFlat builderFlat = getFlatById(flatId);
+		int buildingId = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
+		totalInventory = getTotalFlatCount(buildingId);
+		soldInventory = getSoldFlatCount(buildingId);
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setParameter("soldInventory", soldInventory);
+		query.setParameter("totalInventory",totalInventory );
+		query.setParameter("building_id",buildingId );
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+	}
+ 
+	public int getTotalFlatCount(int buildingId){
+		String hql = "select id from BuilderFlat where builderFloor.builderBuilding.id = :building_id  AND status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", buildingId);
+		int totalInventory = query.list().size();
+		return totalInventory;
+	}
+	
+	public int getSoldFlatCount(int buildingId){
+		String hql = "Select id from BuilderFlat where builderFloor.builderBuilding.id = :building_id and builderFlatStatus =2 and status=1";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("building_id", buildingId);
+		int soldInventory =  query.list().size();
+		return soldInventory;
+	}
+	public BuilderFlat getFlatById(int flatId){
+		String hql = "From BuilderFlat where id=:flat_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flatId);
+		List<BuilderFlat> result = query.list();
+		return result.get(0);
+				
+	}
+	
+	public Buyer getBuyerByFlat(int flatId){
+		String hql = "From Buyer where builderFlat.id = :flat_id and isPrimary=1 and isDeleted=0 and status=0";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id",flatId);
+		List<Buyer> buyers = query.list();
+		return buyers.get(0);
+	}
 }
