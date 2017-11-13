@@ -454,6 +454,7 @@ public class CancellationDAO {
 			notification.setAssignedTo(employeeList.getId());
 			notification.setBuilderProject(cancellation.getBuilderProject());
 			notification.setBuyerId(0);
+			notification.setFlatId(cancellation.getBuilderFlat().getId());
 			notification.setRead(false);
 			notification.setType(1);
 			notification.setDescription("Flat No "+flatData.getName()+" cancellation Request");
