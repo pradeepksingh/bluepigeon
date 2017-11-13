@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.dao.BuyerDAO"%>
+<%@page import="org.bluepigeon.admin.model.BuilderFlat"%>
 <%@page import="org.bluepigeon.admin.dao.CancellationDAO"%>
 <%@page import="org.bluepigeon.admin.model.Notification"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
@@ -58,77 +60,94 @@ session = request.getSession(false);
                 <ul class="nav navbar-top-links navbar-right pull-right">
                     <li class="dropdown">
                         <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#"><i class="icon-envelope"></i>
-                    <div class="notify"><span class="heartbit"></span><span class="point"></span></div>
+<!--                     <div class="notify"><span class="heartbit"></span><span class=""></span></div> -->
                 </a>
                         <ul class="dropdown-menu mailbox animated bounceInDown">
-                            <li>
-                                <div class="drop-title">You have 4 new messages</div>
-                            </li>
-                            <li>
-                                <div class="message-center">
-                                    <a href="#">
-                                        <div class="user-img"> <img src="${baseUrl}/builder/plugins/images/users/pawandeep.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
-                                        <div class="mail-contnet">
-                                            <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:30 AM</span> </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="user-img"> <img src="${baseUrl}/builder/plugins/images/users/sonu.jpg" alt="user" class="img-circle"> <span class="profile-status busy pull-right"></span> </div>
-                                        <div class="mail-contnet">
-                                            <h5>Sonu Nigam</h5> <span class="mail-desc">I've sung a song! See you at</span> <span class="time">9:10 AM</span> </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="user-img"> <img src="${baseUrl}/builder/plugins/images/users/arijit.jpg" alt="user" class="img-circle"> <span class="profile-status away pull-right"></span> </div>
-                                        <div class="mail-contnet">
-                                            <h5>Arijit Sinh</h5> <span class="mail-desc">I am a singer!</span> <span class="time">9:08 AM</span> </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="user-img"> <img src="${baseUrl}/builder/plugins/images/users/pawandeep.jpg" alt="user" class="img-circle"> <span class="profile-status offline pull-right"></span> </div>
-                                        <div class="mail-contnet">
-                                            <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span> </div>
-                                    </a>
-                                </div>
-                            </li>
-                            <li>
-                                <a class="text-center" href="javascript:void(0);"> <strong>See all notifications</strong> <i class="fa fa-angle-right"></i> </a>
-                            </li>
+<!--                             <li> -->
+<!--                                 <div class="drop-title">You have 4 new messages</div> -->
+<!--                             </li> -->
+<!--                             <li> -->
+<!--                                 <div class="message-center"> -->
+<!--                                     <a href="#"> -->
+<%--                                         <div class="user-img"> <img src="${baseUrl}/builder/plugins/images/users/pawandeep.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div> --%>
+<!--                                         <div class="mail-contnet"> -->
+<!--                                             <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:30 AM</span> </div> -->
+<!--                                     </a> -->
+<!--                                     <a href="#"> -->
+<%--                                         <div class="user-img"> <img src="${baseUrl}/builder/plugins/images/users/sonu.jpg" alt="user" class="img-circle"> <span class="profile-status busy pull-right"></span> </div> --%>
+<!--                                         <div class="mail-contnet"> -->
+<!--                                             <h5>Sonu Nigam</h5> <span class="mail-desc">I've sung a song! See you at</span> <span class="time">9:10 AM</span> </div> -->
+<!--                                     </a> -->
+<!--                                     <a href="#"> -->
+<%--                                         <div class="user-img"> <img src="${baseUrl}/builder/plugins/images/users/arijit.jpg" alt="user" class="img-circle"> <span class="profile-status away pull-right"></span> </div> --%>
+<!--                                         <div class="mail-contnet"> -->
+<!--                                             <h5>Arijit Sinh</h5> <span class="mail-desc">I am a singer!</span> <span class="time">9:08 AM</span> </div> -->
+<!--                                     </a> -->
+<!--                                     <a href="#"> -->
+<%--                                         <div class="user-img"> <img src="${baseUrl}/builder/plugins/images/users/pawandeep.jpg" alt="user" class="img-circle"> <span class="profile-status offline pull-right"></span> </div> --%>
+<!--                                         <div class="mail-contnet"> -->
+<!--                                             <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span> </div> -->
+<!--                                     </a> -->
+<!--                                 </div> -->
+<!--                             </li> -->
+<!--                             <li> -->
+<!--                                 <a class="text-center" href="javascript:void(0);"> <strong>See all notifications</strong> <i class="fa fa-angle-right"></i> </a> -->
+<!--                             </li> -->
                         </ul>
                         
                     </li>
                    
-                 
+                 <%
+                        %>
                     <li class="dropdown">
                         <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#"><i class="fa fa-bell-o"></i>
-                    <div class="notify"><span class="heartbit"></span><span class="point"></span></div>
-                </a>
+                   <%if(notifications !=null){ 
+                	   for(Notification newnotification : notifications){
+                		   if(newnotification.isRead()){%> 
+                   
+                   			
+                   <%		}else{%>
+                	    	<div class="notify"><span class="heartbit"></span><span class="point"></span></div>
+                   <%		}
+                	   }
+                   }
+                   %>
+                		</a>
                         <ul class="dropdown-menu dropdown-tasks animated slideInUp">
                         <%if(access_uid == 5){ 
-                        	if(notifications !=null){
                         		int count=1;
-                        		for(Notification notification : notifications){
+                        		if(notifications !=null){
+                                    for(Notification notification : notifications){
+                                    	if(notification.getFlatId() > 0){
+                                    		BuilderFlat notificationBuilderFlat = new BuyerDAO().getFlatById(notification.getFlatId());
                         %>
                             <li>
-                                <a href="javascript:isReadSaleshead(<%out.print(notification.getId());%>,<%out.print(notification.getBuilderProject().getId());%>);">
-                                    <div>
-                                        <p> <strong><%out.print(count); %></strong> <span class="pull-right text-muted"><%out.print(notification.getDescription()); %></span> </p>
+                                <a href="javascript:isReadSaleshead(<%out.print(notification.getId());%>,<%out.print(notificationBuilderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId());%>,<%out.print(notificationBuilderFlat.getBuilderFloor().getBuilderBuilding().getId());%>,<%out.print(notificationBuilderFlat.getBuilderFloor().getId());%>, <%out.print(notificationBuilderFlat.getId());%>);">
+                                
+                                    <div class="col-sm-6">
+                                        <p> <span class="text-muted"><%out.print(notification.getDescription()); %></span> </p>
                                     </div>
                                 </a>
                             </li>
                             <li class="divider"></li>
-                            <%count++;}} }%>
+                            <%count++;}}}} %>
                             <%if(access_uid == 7){ 
-                        	if(notifications !=null){
                         		int count=1;
-                        		for(Notification notification : notifications){
+                        		if(notifications !=null){
+                                    for(Notification notification : notifications){
+                                    	if(notification.getType()==1){
                         %>
                             <li>
-                                <a href="javascript:isReadSalesman(<%out.print(notification.getId());%>,<%out.print(notification.getBuilderProject().getId());%>);">
-                                    <div>
-                                        <p> <strong><%out.print(count); %></strong> <span class="pull-right text-muted"><%out.print(notification.getDescription()); %></span> </p>
-                                    </div>
+                                <a href="javascript:isReadSalesman(<%out.print(notification.getId());%>);">
+                                   
+                                        <div class="col-sm-12"> <strong>*</strong> <span class="text-muted"><%out.print(notification.getDescription()); %></span></div> 
+                                    
                                 </a>
                             </li>
-                            <li class="divider"></li>
-                            <%count++;}} }%>
+                            
+                            <%count++;}%>
+                                 	
+                                    <%}} }%>
                         </ul>
 <!--                         /.dropdown-tasks -->
                     </li>
@@ -141,10 +160,11 @@ session = request.getSession(false);
 <!--                             <li><a href="javascript:void(0)"><i class="ti-email"></i>  Inbox</a></li> -->
 <!--                             <li><a href="javascript:void(0)"><i class="ti-settings"></i>  Account Setting</a></li> -->
 							<%if(employeeRoles!=null){ 
+								if(employeeRoles.size()>1){
 								for(EmployeeRole employeeRole : employeeRoles){
 							%>
 							 <li><a href="javascript:switchRole(<%out.print(employeeRole.getBuilderEmployeeAccessType().getId());%>);"><i class="ti-settings"></i><%out.print("switch As "+employeeRole.getBuilderEmployeeAccessType().getName()); %></a></li>
-							<%}} %>
+							<%}}} %>
                             <li><a href="${baseUrl }/webapi/validatebuilder/logoutbuilder"><i class="fa fa-power-off"></i>  Logout</a></li>
                         </ul>
                         <!-- /.dropdown-user -->
@@ -168,22 +188,24 @@ session = request.getSession(false);
         		},'json');
            }
            
-           function isReadSaleshead(id,projectId){
+           function isReadSaleshead(id,flatId){
         	   $.post('${baseUrl}/webapi/cancellation/notification/isread',{id:id}, function(data){
         		   var success = data.status;
         		   var status = parseInt(success);
         		   if(status == 1){
+        			   <%
+        			 //  int flatId = Integer.parseInt(out.print(""));
+        			   //BuilderFlat builderFlat = new CancellationDAO().getFlatDetailId(flatId);%>
         			   window.location.href = "${baseUrl}/builder/saleshead/cancellation/Salesman_booking_new2.jsp?project_id="+projectId;
         		   }
         	   },'json');
            }
-           function isReadSalesman(id,projectId){
+           function isReadSalesman(id){
         	   $.post('${baseUrl}/webapi/cancellation/notification/isread',{id:id}, function(data){
         		   var success = data.status;
         		   var status = parseInt(success);
-        		   if(status == 1){
-        			   window.location.href = "${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id="+projectId;
-        		   }
+        		   if(status==1)
+        		  	 window.location.reload();
         	   },'json');
            }
            </script>

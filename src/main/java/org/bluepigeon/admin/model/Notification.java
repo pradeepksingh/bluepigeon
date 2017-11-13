@@ -22,6 +22,7 @@ public class Notification {
 	private Integer assignedBy = 0;
 	private Integer assignedTo = 0;
 	private boolean isRead = false;
+	private Integer flatId=0;
 	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -82,4 +83,12 @@ public class Notification {
 	public void setRead(boolean isRead) {
 		this.isRead = isRead;
 	}
+	@Column(name = "flat_id")
+	public Integer getFlatId() {
+		return flatId;
+	}
+	public void setFlatId(Integer flatId) {
+		this.flatId = flatId;
+	}
+	
 }

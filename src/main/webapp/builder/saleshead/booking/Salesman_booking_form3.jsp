@@ -49,10 +49,28 @@
 					emp_id = builder.getId();
 					if(builder_id1> 0 ){
 						project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id1);
+						if (request.getParameterMap().containsKey("flat_id")) {
+							flat_id = Integer.parseInt(request.getParameter("flat_id"));
+							flatPayments = new ProjectDAO().getFlatPaymentByFlatId(flat_id);
+							builderFlat = new ProjectDAO().getBuilderFlatById(flat_id);
+							flatPricingDetails = new ProjectDAO().getFlatPriceInfos(flat_id);
+							building_id = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
+							project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
+							 bookingFlatList = new ProjectDAO().getFlatdetails(flat_id,emp_id);
+							 if(builderFlat != null){
+								 projectName = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName();
+								 buildingName = builderFlat.getBuilderFloor().getBuilderBuilding().getName();
+								 flatNo = builderFlat.getFlatNo();
+								 localityName = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getLocalityName();
+								 taxLabel1 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel1();
+									taxLabel2 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel2();
+									taxLabel3 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel3();
+								 
+							 }
+						}
 					}
 					if(project_list != null){
-					 	builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
-					 		
+					 	builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);	
 					 	}
 					}
 				}else{
@@ -60,26 +78,6 @@
 				}
 			}
 		}
-   
-	if (request.getParameterMap().containsKey("flat_id")) {
-		flat_id = Integer.parseInt(request.getParameter("flat_id"));
-		flatPayments = new ProjectDAO().getFlatPaymentByFlatId(flat_id);
-		builderFlat = new ProjectDAO().getBuilderFlatById(flat_id);
-		flatPricingDetails = new ProjectDAO().getFlatPriceInfos(flat_id);
-		building_id = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
-		project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
-		 bookingFlatList = new ProjectDAO().getFlatdetails(flat_id,emp_id);
-		 if(builderFlat != null){
-			 projectName = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName();
-			 buildingName = builderFlat.getBuilderFloor().getBuilderBuilding().getName();
-			 flatNo = builderFlat.getFlatNo();
-			 localityName = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getLocalityName();
-			 taxLabel1 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel1();
-				taxLabel2 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel2();
-				taxLabel3 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel3();
-			 
-		 }
-	}
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -186,7 +184,7 @@
 								        <label for="example-search-input" class="col-sm-5 col-form-label">Email*</label>
 								        <div class="col-sm-7 custom-col">
 								        	<div>
-								            	<input class="form-control" type="text" autocomplete="off" name="email[]" id="email1" onkeyup ="validateBuyerEmailId(1);" placeholder="owner emailid">
+								            	<input class="form-control" type="text" autocomplete="off" name="email[]" id="email1"  placeholder="owner emailid">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -250,7 +248,7 @@
 					 	        <div id="co-buyer"></div>
 					 	       	<div class="centerbutton">
 					 	        	<a href="javascript:addMoreBuyers();">   <button type="button" class="add-co-buyer">+ Co-Buyer</button></a>
-					 	           	<button onclick="show();" type="button">Next</button>
+					 	           	<button onclick="show();" id="newbuyer" type="button">Next</button>
 					 	       </div>
 					        </div>
 						    <div id="menu1" class="tab-pane" aria-expanded="false">
@@ -410,7 +408,7 @@
 								        </div>
 								    </div>
 								 </div>
-								 <input type="hidden" id="h_sale_vale" name="h_sale_value" value="<%out.print(flatPricingDetails.get(0).getTotalCost());%>"/>
+<%-- 								 <input type="hidden" id="h_sale_vale" name="h_sale_value" value="<%out.print(flatPricingDetails.get(0).getTotalCost());%>"/> --%>
 								 <%} %>
 								  <div class="centerbutton">
 					 	           <button onclick="showPrev();" type="button">Previous</button>
@@ -418,6 +416,7 @@
 					 	       </div>
 						    </div>
 						    <div id="menu3" class="tab-pane">
+						    <input type="hidden" name="h_sale_value" id="h_sale_value" value="<% if(flatPricingDetails.size() > 0 && flatPricingDetails.get(0).getTotalCost() != null){ out.print(flatPricingDetails.get(0).getTotalCost());}%>"/>
 						     <% int a=1;
                                  for(FlatPaymentSchedule flatPayment: flatPayments ) {%> 
                                  <div class="col-sm-12">
@@ -431,7 +430,7 @@
 								        <label for="example-search-input" class="col-5 col-form-label">% of net payable</label>
 								        <div class="col-7 custom-col">
 								        	<div>
-								            	<input type="text" autocomplete="off" class="form-control" id="payable<%out.print(a); %>" onkeyup="calculateAmount(<%out.print(a); %>);" onkeypress=" return isNumber(event, this);" name="payable[]" value="<%out.print(flatPayment.getPayable());%>">
+								            	<input type="text" autocomplete="off" class="form-control" id="payable<%out.print(a); %>" onkeyup="calculateAmount(<%out.print(a); %>);" onkeypress=" return isNumber(event, this);" name="payable[]" value="<%out.print(Math.round(flatPayment.getPayable()));%>">
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -440,7 +439,7 @@
 								        <label for="example-search-input" class="col-5 col-form-label">Amount</label>
 								        <div class="col-7 custom-col">
 								        	<div>
-								            	<input type="text" autocomplete="off" class="form-control" id="amount<%out.print(a); %>" onkeyup="calculateAmount(<%out.print(a); %>);" onkeypress=" return isNumber(event, this);" name="amount[]" value="<%out.print(flatPayment.getAmount());%>"/>
+								            	<input type="text" autocomplete="off" class="form-control" id="amount<%out.print(a); %>" onkeyup="calcultatePercentage(<%out.print(a); %>);"  name="amount[]" value="<%out.print(Math.round(flatPayment.getAmount()));%>"/>
 								        	</div>
 								        	<div class="messageContainer"></div>
 								        </div>
@@ -580,9 +579,9 @@ function addMoreBuyers(){
 	    +'<label for="example-text-input" class="col-5 col-form-label"> Buyers Name*</label>'
 	    +'<div class="col-7 custom-col">'
 	    +'<div>'
-        +'<input class="form-control" type="text" value="" id="buyer_name'+buyers+'" name="buyer_name[]" onkeyup="validateBuyername('+buyers+');" autocomplete="off" placeholder="Co-owner name">'
+        +'<input class="form-control" type="text" value="" id="buyer_name'+buyers+'" name="buyer_name[]" autocomplete="off" placeholder="Co-owner name">'
     	+'</div>'
-    	+'<div class="messageContainer"></div>'
+    	+'<div id="ename'+buyers+'"></div>'
 		+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
@@ -600,7 +599,7 @@ function addMoreBuyers(){
 	    +'<div>'
         +'<input class="form-control" type="text" value="" name="email[]" id="email'+buyers+'" autocomplete="off" placeholder="co-owner email id">'
     	+'</div>'
-    	+'<div class="messageContainer"></div>'
+    	+'<div id="eemail'+buyers+'"></div>'
 		+'</div>'
 		+'</div>'
 		+'<input type="hidden" name="is_primary[]" id="is_primary" value="0" class="form-control">'
@@ -610,7 +609,7 @@ function addMoreBuyers(){
 	    +'<div>'
         +'<input class="form-control" type="text" value="" placeholder="" autocomplete="off" id="address'+buyers+'" name="address[]">'
     	+'</div>'
-    	+'<div class="messageContainer"></div>'
+    	+'<div id="eaddress'+buyers+'"></div>'
     	+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
@@ -619,25 +618,25 @@ function addMoreBuyers(){
 	    +'<div>'
         +'<input class="form-control" type="text" value="" id="current_address'+buyers+'" name="current_address[]" autocomplete="off" >'
     	+'</div>'
-    	+'<div class="messageContainer"></div>'
+    	+'<div id="ecaddress'+buyers+'"></div>'
 		+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Contact*</label>'
 	    +'<div class="col-7 custom-col">'
 	    +'<div>'
-        +'<input class="form-control" type="text"  autocomplete="off" value="" id="contact'+buyers+'" name="contact[]" placeholder="contact number">'
+        +'<input class="form-control" type="text"  autocomplete="off" value="" maxlength="10" id="contact'+buyers+'" name="contact[]" placeholder="contact number">'
     	+'</div>'
-    	+'<div class="messageContainer"></div>'
+    	+'<div id="econtact'+buyers+'"></div>'
     	+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
 	    +'<label for="example-tel-input" class="col-5 col-form-label">Pan*</label>'
 	    +'<div class="col-7 custom-col">'
 	    +'<div>'
-        +'<input class="form-control" type="text" autocomplete="off" value="" id="pan'+buyers+'" name="pan[]"  placeholder="Pan card number">'
+        +'<input class="form-control" type="text" autocomplete="off" value="" maxlength="10" id="pan'+buyers+'" name="pan[]"  placeholder="Pan card number">'
     	+'</div>'
-    	+'<div class="messageContainer"></div>'
+    	+'<div id="epan'+buyers+'"></div>'
     	+'</div>'
 		+'</div>'
  		+'<div class="form-group row">'
@@ -646,7 +645,7 @@ function addMoreBuyers(){
 	    +'<div>'
         +'<input class="form-control" type="text" autocomplete="off" value="" id="aadhaar_no'+buyers+'" name="aadhaar_no[]" placeholder="Aadhaar card number">'
     	+'</div>'
-    	+'<div class="messageContainer"></div>'
+    	+'<div id="eaadhaar'+buyers+'"></div>'
 		+'</div>'
 		+'</div>'
 		+'<div class="form-group row">'
@@ -655,13 +654,141 @@ function addMoreBuyers(){
 	    +'<div>'
         +'<input class="form-control" type="text" autocomplete="off" value="" id="refferal_id'+buyers+'" name="refferal_id[]">'
     	+'</div>'
-    	+'<div class="messageContainer"></div>'
+    	+'<div id="erefferal'+buyers+'"></div>'
     	+'</div>'
 		+'</div>'
 		+'</div>'
 		+'</div>';
 	$("#co-buyer").append(html);
 	$("#buyer_count").val(buyers);
+	$("#email"+buyers).keyup(function () {	
+	    var email = $(this).val();
+		var re = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/igm;
+	    if($("#email"+buyers).val() == ""){
+	    	$("#eemail"+buyers).html("<p><font color='#A9442;'>Email required and cannot be empty</font></p>");
+	    	$("#newbuyer").attr('disable',true);
+	    }else if($("#email"+buyers).val()!=""){			
+			$("#eemail"+buyers).html("");
+			if (re.test(email)) {
+				$("#eemail"+buyers).html("");
+				$("#newbuyer").attr('disabled',false);
+			} else {
+				$("#eemail"+buyers).html("<p><font color='#A9442;'>invalid email id</font></p>");
+				$("#newbuyer").attr('disabled',true);
+			}
+		}
+	});
+	$("#buyer_name"+buyers).keyup(function(){
+		var patt = new RegExp("/[^a-zA-Z ]/g");
+	    var res = patt.test($("#buyer_name"+buyers).val());
+		
+		if($("#buyer_name"+buyers).val() == "" || $("#buyer_name"+buyers).val().length == 0){
+			$("#ename"+buyers).html("<p><font color='#A9442;'>Buyer Name required and cannot be empty</font></p>");
+			$("#newbuyer").attr('disabled',true);
+		}
+		$("#buyer_name"+buyers).val( $("#buyer_name"+buyers).val().replace(/[^a-zA-Z ]/g, function(str) { $("#newbuyer").attr('disabled',true); return ''; } ) );
+	});	
+	$("#contact"+buyers).keyup(function(e){
+		
+		var patt = new RegExp("^[7-9][0-9]{9}$");
+	    var res = patt.test($("#contact"+buyers).val());
+		if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+	        //display error message
+	        $("#econtact"+buyers).html("<p><font color='#A94442;'>Invalid contact number.</font></p>");
+	        $("#newbuyer").attr('disabled',true);
+	               return '';
+	    }else{
+	    	//$("#econtact"+buyers).html("<p>J "+res+"</p>");
+	    	if(res==true){
+	    		var len = $("#contact"+buyers).val();
+	    		if($("#contact"+buyers).val().length == 10){
+	    			$("#econtact"+buyers).html("");
+	    			$("#newbuyer").attr('disabled',false);
+	    		}else{
+	    			$("#econtact"+buyers).html("<p><font color='#A94442;'>Invalid contact number</font></p>");
+	    			$("#newbuyer").attr('disabled',true);
+	    		}
+	    	}else{
+	    		$("#econtact"+buyers).html("<p><font color='#A94442;'>Invalid contact number.</font></p>");
+	    		$("#newbuyer").attr('disabled',true);
+	    	}
+	    }
+		if($("#contact"+buyers).val().length==0){
+			 $("#econtact"+buyers).html("<p><font color='#A94442;'>Contact number required and cannot be empty.</font></p>");
+			 $("#newbuyer").attr('disabled',true);
+		}
+	});
+	$("#address"+buyers).keyup(function(){
+		if($("#address"+buyers).val()==""){
+			$("#eaddress"+buyers).html("<p><font color='#A94442;'>Permanent address required and cannot be empty.</font></p>");
+			$("#newbuyer").attr('disabled',true);
+		}else{
+			$("#eaddress"+buyers).html("");
+			$("#newbuyer").attr('disabled',false);
+		}
+	});
+	$("#current_address"+buyers).keyup(function(){
+		if($("#current_address"+buyers).val()==""){
+			$("#ecaddress"+buyers).html("<p><font color='#A94442;'>Current address required and cannot be empty.</font></p>");
+			$("#newbuyer").attr('disabled',true);
+		}else{
+			$("#ecaddress"+buyers).html("");
+			$("#newbuyer").attr('disabled',false);
+		}
+	});
+	
+	$("#pan"+buyers).keyup(function(){
+		var patt = new RegExp("^[A-Z]{5}[0-9]{4}[A-Z]{1}$");
+	    var res = patt.test($("#pan"+buyers).val());
+		if($("#pan"+buyers).val() ==""){
+			$("#epan"+buyers).html("<p><font color='#A94442;'>Pan card required and cannot be empty.</font></p>");
+			$("#newbuyer").attr('disabled',true);
+		}else{
+			if(res==true){
+				if($("#pan"+buyers).val().length==10){
+					$("#epan"+buyers).html("");
+					$("#newbuyer").attr('disabled',false);
+				}else{
+					$("#epan"+buyers).html("<p><font color='#A94442;'>Invalid pan card number</font></p>");
+					$("#newbuyer").attr('disabled',true);
+				}
+			}else{
+				$("#epan"+buyers).html("<p><font color='#A94442;'>Invalid pan card number</font></p>");
+				$("#newbuyer").attr('disabled',true);
+			}
+		}
+	});
+	$("#aadhaar_no"+buyers).keyup(function(){
+		var patt = new RegExp("^[0-9]{12}$");
+	    var res = patt.test($("#aadhaar_no"+buyers).val());
+		if($("#aadhaar_no"+buyers).val() ==""){
+			$("#eaadhaar"+buyers).html("<p><font color='#A94442;'>Adhaar number required and cannot be empty</font></p>");
+			$("#newbuyer").attr('disabled',true);
+		}else{
+			if($("#aadhaar_no"+buyers).val().length ==12){
+				$("#eaadhaar"+buyers).html("");
+				$("#newbuyer").attr('disabled',false);
+			}else{
+				$("#eaadhaar"+buyers).html("<p><font color='#A94442;'>Invalid aadhaar number</font></p>");
+				$("#newbuyer").attr('disabled',true);
+			}
+		}
+	});
+	$("#refferal_id"+buyers).keyup(function(){
+		if($("#refferal_id"+buyers).val() == ""){
+			$("erefferal"+buyers).html("<p><font color='#A94442'>Refferal id required and cannot be empty</font></p>");
+			$("#newbuyer").attr('disabled',true);
+		}else{
+			if($("#refferal_id"+buyers).val().length == 0){
+				$("erefferal"+buyers).html("<p><font color='#A94442'>Refferal id required and cannot be empty</font></p>");
+				$("#newbuyer").attr('disabled',true);
+			}else{
+				$("#erefferal"+buyers).html("");
+				$("#newbuyer").attr('disabled',false);
+			}
+			
+		}
+	});
 }
 function removeBuyer(id) {
 	$("#buyer-"+id).remove();
@@ -669,16 +796,6 @@ function removeBuyer(id) {
 
 function validateBuyername(id){
 	  $("#buyer_name"+id).val( $("#buyer_name"+id).val().replace(/[^a-zA-Z ]/g, function(str) { return ''; } ) );
-}
-
-function validateBuyerEmailId(id){
-	 var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-	 var emailid = $("#email"+id).val();
-	 if(reg.test(emailid)){
-		 return true;
-	 }else{
-		 return false;
-	 }
 }
 
 function isNumber(evt, element) {
@@ -979,7 +1096,7 @@ $('#addnewbuyer').bootstrapValidator({
         'buyer_name[]': {
             validators: {
                 notEmpty: {
-                    message: 'Buyer Name is required and cannot be empty'
+                    message: 'Buyer Name required and cannot be empty'
                 }
             }
         },
@@ -987,7 +1104,7 @@ $('#addnewbuyer').bootstrapValidator({
         	excluded: false,
             validators: {
            	 notEmpty: {
-                    message: 'Email is required and cannot be empty'
+                    message: 'Email required and cannot be empty'
                 },
                 regexp: {
                     regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
@@ -998,51 +1115,61 @@ $('#addnewbuyer').bootstrapValidator({
         'contact[]': {
         	validators: {
             	notEmpty: {
-                    message: 'The Mobile is required and cannot be empty'
+                    message: 'Contact no. required and cannot be empty'
                 },
                 regexp: {
                     regexp: '^[7-9][0-9]{9}$',
-                    message: 'Invalid Mobile Number'
+                    message: 'Invalid contact number',
+                    maxlength:10,
+                    minlength:10
                 }
             }
         },
         'pan[]': {
             validators: {
                 notEmpty: {
-                    message: 'Buyer pancard is required and cannot be empty'
+                    message: 'PAN card number required and cannot be empty'
+                },
+                regexp:{
+                	regexp:'^[A-Z]{5}[0-9]{4}[A-Z]{1}$',
+                	message:'Invalid PAN card number',
+                	maxlength:10,
+                	minlength:10
                 }
             }
         },
         'address[]': {
             validators: {
                 notEmpty: {
-                    message: 'Permanent address is required and cannot be empty'
+                    message: 'Permanent address required and cannot be empty'
                 }
             }
         },
         'current_address[]':{
         	 validators: {
                  notEmpty: {
-                     message: 'Current address is required and cannot be empty'
+                     message: 'Current address required and cannot be empty'
                  }
              }
         },
         'photo[]': {
             validators: {
                 notEmpty: {
-                    message: 'Buyer photo is required and cannot be empty'
+                    message: 'Buyer photo required and cannot be empty'
                 }
             }
         },
         'aadhaar_no[]':{
         	validators: {
                 notEmpty: {
-                    message: 'Aadhaar Card number is required and cannot be empty'
+                    message: 'Aadhaar Card number required and cannot be empty'
                 },
                 numeric: {
-                 	message: 'Aadhaar Card number is invalid',
+                 	message: 'Invalid Aadhaar Card number',
                     thousandsSeparator: '',
-                    decimalSeparator: '.'
+                    decimalSeparator: '.',
+                    maxlength:12,
+                    minlength:12
               	}
             },
         },
@@ -1131,6 +1258,43 @@ $('#addnewbuyer').bootstrapValidator({
                 }
             }
         },
+        'payable[]': {
+            validators: {
+            	between: {
+                    min: 0,
+                    max: 100,
+                    message: 'The percentage must be between 0 and 100'
+	        	},
+	        	 callback: {
+                     message: 'The sum of percentages must be 100',
+                     callback: function(value, validator, $field) {
+                         var percentage = validator.getFieldElements('payable[]'),
+                             length     = percentage.length,
+                             sum        = 0;
+
+                         for (var i = 0; i < length; i++) {
+                             sum += parseFloat($(percentage[i]).val());
+                         }
+                         if (sum === 100) {
+                             validator.updateStatus('payable[]', 'VALID', 'callback');
+                             return true;
+                         }
+
+                         return false;
+                     }
+                 },
+		        notEmpty: {
+		    		message: 'Payable required and cannot be empty'
+		        },
+            }
+        },
+        'amount[]':{
+        	validators:{
+        		notEmpty :{
+        			message: 'amount required and cannot be empty'
+        		}
+        	}
+        }
         
     }
 }).on('success.form.bv', function(event,data) {
@@ -1186,5 +1350,21 @@ function showAddResponse(resp, statusText, xhr, $form){
         window.location.href = "${baseUrl}/builder/saleshead/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>
   	}
 }
-
+function calculateAmount(id){
+	alert("Per :: "+$("#payable"+id).val()+" Amt :: "+$("#amount"+id).val()+" Sale value "+$("#h_sale_value").val());
+	if($("#payable"+id).val() <0 || $("#payable"+id).val() >100){
+		alert("The percentage must be between 0 and 100");
+		$("#payable"+id).val('');
+	}else{
+	var amount = $("#payable"+id).val()*$("#h_sale_value").val()/100;
+		$("#amount"+id).val(amount.toFixed(0));
+	}
+}
+function calcultatePercentage(id){
+	alert("Per :: "+$("#payable"+id).val()+"Amt :: "+$("#amount"+id).val()+"Sale value "+$("#h_sale_value").val());
+	var $th = $("#amount"+id);
+	$th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
+	var percentage = $("#amount"+id).val()/$("#h_sale_value").val()*100;
+	$("#payable"+id).val(percentage.toFixed(1));
+}
 </script>

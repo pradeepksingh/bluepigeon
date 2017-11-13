@@ -46,9 +46,10 @@
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
-				builder_id = builder.getBuilder().getId();
-				emp_id = builder.getId();
-				access_id = builder.getBuilderEmployeeAccessType().getId();
+			builder_id = builder.getBuilder().getId();
+			emp_id = builder.getId();
+			access_id = builder.getBuilderEmployeeAccessType().getId();
+			if(builder != null){
 				if(builder_id > 0){
 					totalBuyers = new BuyerDAO().getTotalBuyers(builder);
 					totalInventorySold = new ProjectDAO().getTotalInventory(builder);
@@ -65,6 +66,7 @@
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
 					totalRevenue = totalPropertySold * totalInventorySold;
 				}
+			}
 		}
 	}
 %>

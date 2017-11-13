@@ -210,7 +210,7 @@
  							     
  							     <li class="grey item"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" onclick="javascript:showFlatwithImage(<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>)" href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>
  							      
- 							     <%} else if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("available")) {%>
+ 							     <%} else if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("available") || flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getFlatStaus().equalsIgnoreCase("hold")) {%>
  		              					
                	 					 <li class="" style="pointer-events:none;"><a  data-toggle="pill" id="<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId()); %>" disabled href=""><% out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getName());%></a></li>	
                	 						<%}
@@ -517,7 +517,7 @@ function showFlatwithImage(id){
 			      +'<button type="button" onclick="showFlats('+data.flatId+')" class="button red">Cancel</button>';
 			     
 		}
-  	if(data.flatStatus == 2 &&  data.isDeleted  == 0 && (data.isApproved==false) && (data.cancelStatus == 1) ){
+  	if( data.accessId == 7 && data.flatStatus == 2 &&  data.isDeleted  == 0 && (data.isApproved==false) && (data.cancelStatus == 1) ){
         htmlFlat ='<div class="user-profile">'
 	          +'<img src="'+image+'" alt="User Image" class="custom-img">'
 	          +'<img src="../../images/camera_icon.PNG" alt="camera " class="camera"/>'
@@ -526,7 +526,7 @@ function showFlatwithImage(id){
 	          +'<hr>'
 	       	  +'</div>'
 		      +'<div class="row custom-row user-row">'
-		      +'<p class="p-custom">Mobile No Ajax.</p>'
+		      +'<p class="p-custom">Mobile No.</p>'
 		      +'<p><b>'+data.buyerMobile+'</b></p>'
 		      +'<p class="p-custom">Email</p>'
 		      +'<p><b>'+data.buyerEmail+'</b></p>'
@@ -541,11 +541,9 @@ function showFlatwithImage(id){
 	          +'<hr>'
 	      	  +'</div>'
 			  +'<div class="row custom-row user-row red">'
-		      +'<p>Reason of Cancellation</p>'
-		      +'<p><b>'+data.cancelReason+'</b></p>'
-		      +'<p>Amount <input type="text" id="cancel_amount" name="cancel_amount" placeholder="cncellation charges" value="'+data.charges+'" /></p>'
-		  	  +'</div>'
-		 	  +'<button type="button" onclick="updateCancel('+data.cancellationId+');" class="button red">Approve</button>';
+		      +'<p>Cancellation request already sent</p>'
+		  	  +'</div>';
+		 	  
   	}
       			$("#home").append(htmlFlat);
       			ajaxindicatorstop();
@@ -558,7 +556,7 @@ function showFlatwithImage(id){
 function updateCancel(id){
 	alert("id "+id);
 	if($("#cancel_amount").val() != '' && $("#cancel_amount").val() > 0){
-		var flag = confirm("Are you sure ? You want to Cancel Booked Flat?");
+		var flag = confirm("Are you sure, you want to Cancel Booked Flat?");
 		if(flag){
 			$.post("${baseUrl}/webapi/project/cancel/primarybuyer/remove/", { id:id, cancel_amount:$("#cancel_amount").val()}, function(data){
 	 			alert(data.message);

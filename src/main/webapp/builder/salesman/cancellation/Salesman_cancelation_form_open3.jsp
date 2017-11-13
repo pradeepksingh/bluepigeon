@@ -254,7 +254,7 @@
 						           <%} %>
 						          <img src="../../images/camera_icon.PNG" alt="camera " class="camera"/>
 						          <p><b><%out.print(buyerName); %></b></p>
-						          <p class="p-custom"><%out.print(buildingName); %>-<%out.print(flatNo); %>, <%out.print(projectName); %></p>
+						          <p class="p-custom"><%out.print(buildingName); %>,<%out.print(" "+flatNo); %>, <%out.print(projectName); %></p>
 						          <hr>
 					            </div>
 						        <div class="row custom-row user-row">
@@ -402,7 +402,7 @@ function showCancellationResponse(resp, statusText, xhr, $form){
         $("#response").addClass('alert-success');
         $("#response").html(resp.message);
         $("#response").show();
-        alert("Flat Cancellation request is sent");
+        alert("Flat Cancellation request sent");
         window.location.href = "${baseUrl}/builder/salesman/cancellation/Salesman_booking_new2.jsp?project_id="+$("#project_id").val();
   	}
 }

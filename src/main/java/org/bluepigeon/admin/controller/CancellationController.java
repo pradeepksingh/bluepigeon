@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
+import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.CampaignDAO;
 import org.bluepigeon.admin.dao.CancellationDAO;
 import org.bluepigeon.admin.data.BookedBuyerList;
@@ -46,7 +47,7 @@ public class CancellationController {
 			@FormDataParam("charges") Double charges,
 			@FormDataParam("builder_id") int builderId,
 			@FormDataParam("emp_id") int empId){
-		
+		int buyerId = 0;
 		Cancellation cancellation = new Cancellation();
 		if(projectId > 0){
 			BuilderProject builderProject = new BuilderProject();
@@ -64,13 +65,14 @@ public class CancellationController {
 			BuilderFlat builderFlat = new BuilderFlat();
 			builderFlat.setId(flatId);
 			cancellation.setBuilderFlat(builderFlat);
+			buyerId = new BuyerDAO().getBuyerByFlat(flatId).getId();
 		}
 		cancellation.setBuyerName(name);
 		cancellation.setBuyerContact(mobile);
 		cancellation.setReason(reason);
 		cancellation.setCharges(charges);
 		cancellation.setPanCard(pancard);
-		
+		cancellation.setBuyerId(buyerId);
 		BuilderEmployee builderEmployee = null;
 		if(empId >0){
 			builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(empId);

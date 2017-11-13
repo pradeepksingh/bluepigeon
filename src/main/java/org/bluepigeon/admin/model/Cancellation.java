@@ -29,7 +29,7 @@ public class Cancellation implements java.io.Serializable {
 	private Double charges;
 	private boolean isApproved = false;
 	private Integer cancelStatus =0;
-
+    private Integer buyerId = 0;
 	public Cancellation() {
 	}
 
@@ -40,7 +40,7 @@ public class Cancellation implements java.io.Serializable {
 	}
 
 	public Cancellation(BuilderBuilding builderBuilding, BuilderFlat builderFlat, BuilderProject builderProject,
-			String buyerName, String panCard, String buyerContact, String reason, Double charges, Boolean isApproved, Integer cancelStatus) {
+			String buyerName, String panCard, String buyerContact, String reason, Double charges, Boolean isApproved, Integer cancelStatus,Integer buyerId) {
 		this.builderBuilding = builderBuilding;
 		this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
@@ -51,6 +51,7 @@ public class Cancellation implements java.io.Serializable {
 		this.charges = charges;
 		this.isApproved = isApproved;
 		this.cancelStatus = cancelStatus;
+		this.buyerId = buyerId;
 	}
 
 	@Id
@@ -155,5 +156,14 @@ public class Cancellation implements java.io.Serializable {
 	public void setCancelStatus(Integer cancelStatus) {
 		this.cancelStatus = cancelStatus;
 	}
+	@Column(name = "buyer_id")
+	public Integer getBuyerId() {
+		return buyerId;
+	}
+
+	public void setBuyerId(Integer buyerId) {
+		this.buyerId = buyerId;
+	}
+	
 	
 }
