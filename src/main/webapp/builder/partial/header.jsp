@@ -122,7 +122,7 @@ session = request.getSession(false);
                                     		BuilderFlat notificationBuilderFlat = new BuyerDAO().getFlatById(notification.getFlatId());
                         %>
                             <li>
-                                <a href="javascript:isReadSaleshead(<%out.print(notification.getId());%>,<%out.print(notificationBuilderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId());%>,<%out.print(notificationBuilderFlat.getBuilderFloor().getBuilderBuilding().getId());%>,<%out.print(notificationBuilderFlat.getBuilderFloor().getId());%>, <%out.print(notificationBuilderFlat.getId());%>);">
+                                <a href="javascript:isReadSaleshead(<%out.print(notification.getId());%>,<%out.print(notificationBuilderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId());%>);">
                                 
                                     <div class="col-sm-6">
                                         <p> <span class="text-muted"><%out.print(notification.getDescription()); %></span> </p>
@@ -165,7 +165,7 @@ session = request.getSession(false);
 							%>
 							 <li><a href="javascript:switchRole(<%out.print(employeeRole.getBuilderEmployeeAccessType().getId());%>);"><i class="ti-settings"></i><%out.print("switch As "+employeeRole.getBuilderEmployeeAccessType().getName()); %></a></li>
 							<%}}} %>
-                            <li><a href="${baseUrl }/webapi/validatebuilder/logoutbuilder"><i class="fa fa-power-off"></i>  Logout</a></li>
+                            <li><a href="${baseUrl }/webapi/validatebuilder/logoutbuilder"><i class="fa fa-power-off"></i>Logout</a></li>
                         </ul>
                         <!-- /.dropdown-user -->
                     </li>
@@ -188,7 +188,7 @@ session = request.getSession(false);
         		},'json');
            }
            
-           function isReadSaleshead(id,flatId){
+           function isReadSaleshead(id,projectId){
         	   $.post('${baseUrl}/webapi/cancellation/notification/isread',{id:id}, function(data){
         		   var success = data.status;
         		   var status = parseInt(success);

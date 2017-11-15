@@ -254,7 +254,7 @@
 						           <%} %>
 						          <img src="../../images/camera_icon.PNG" alt="camera " class="camera"/>
 						          <p><b><%out.print(buyerName); %></b></p>
-						          <p class="p-custom"><%out.print(buildingName); %>-<%out.print(flatNo); %>, <%out.print(projectName); %></p>
+						          <p class="p-custom"><%out.print(buildingName); %>,<%out.print(" "+flatNo); %>, <%out.print(" "+projectName); %></p>
 						          <hr>
 					            </div>
 						        <div class="row custom-row user-row">

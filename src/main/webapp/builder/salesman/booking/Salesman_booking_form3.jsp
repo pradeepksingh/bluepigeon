@@ -1101,7 +1101,6 @@ function showAddResponse(resp, statusText, xhr, $form){
   	}
 }
 function calculateAmount(id){
-	alert("Per :: "+$("#payable"+id).val()+" Amt :: "+$("#amount"+id).val()+" Sale value "+$("#h_sale_value").val());
 	if($("#payable"+id).val() <0 || $("#payable"+id).val() >100){
 		alert("The percentage must be between 0 and 100");
 		$("#payable"+id).val('');
@@ -1111,7 +1110,6 @@ function calculateAmount(id){
 	}
 }
 function calcultatePercentage(id){
-	alert("Per :: "+$("#payable"+id).val()+"Amt :: "+$("#amount"+id).val()+"Sale value "+$("#h_sale_value").val());
 	var $th = $("#amount"+id);
 	$th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('Please use only numbers.'); return ''; } ) );
 	var percentage = $("#amount"+id).val()/$("#h_sale_value").val()*100;
