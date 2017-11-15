@@ -79,7 +79,7 @@
                     <li> <a href="${baseUrl }/builder/admin/employeeslist.jsp">Employees</a></li>
                     <li> <a href="${baseUrl }/builder/documents/documents.jsp">Add Document</a></li>
 <%--                     <li> <a href="${baseUrl }/builder/inbox/inbox.jsp">Inbox</a></li> --%>
-                    <li> <a href="${baseUrl }/builder/project/newproject.jsp">Project Start Request</a></li>
+<%--                     <li> <a href="${baseUrl }/builder/project/newproject.jsp">Project Start Request</a></li> --%>
                 </ul>
            </li>
            <%} %>
