@@ -421,6 +421,7 @@ public class ProjectController extends ResourceConfig {
 		BuilderProject builderProject = new BuilderProject();
 		ProjectDAO projectDAO = new ProjectDAO();
 		builderProject.setId(project_id);
+		int sum =0;
 		if(schudles.size() > 0){
 			List<BuilderProjectPaymentInfo> updateProjectPaymentInfos = new ArrayList<BuilderProjectPaymentInfo>();
 			List<BuilderProjectPaymentInfo> saveProjectPaymentInfos = new ArrayList<BuilderProjectPaymentInfo>();
@@ -436,6 +437,7 @@ public class ProjectController extends ResourceConfig {
 					}
 					if(payables.get(i).getValueAs(Double.class) != 0 && payables.get(i).getValueAs(Double.class) !=null){
 						builderProjectPaymentInfo.setPayable(payables.get(i).getValueAs(Double.class));
+						sum+=payables.get(i).getValueAs(Double.class);
 					}
 //					if(amounts.get(i).getValueAs(Double.class) !=0 && amounts.get(i).getValueAs(Double.class) != null){
 //						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
@@ -449,7 +451,9 @@ public class ProjectController extends ResourceConfig {
 					}
 					if(payables.get(i).getValueAs(Double.class) != 0 && payables.get(i).getValueAs(Double.class) !=null){
 						builderProjectPaymentInfo.setPayable(payables.get(i).getValueAs(Double.class));
+						sum+=payables.get(i).getValueAs(Double.class);
 					}
+					
 //					if(amounts.get(i).getValueAs(Double.class) !=0 && amounts.get(i).getValueAs(Double.class) != null){
 //						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
 //					}
@@ -458,13 +462,26 @@ public class ProjectController extends ResourceConfig {
 				i++;
 			}
 			if(updateProjectPaymentInfos.size() > 0){
-				projectDAO.updateProjectPaymentInfo(updateProjectPaymentInfos);
+				if(sum<0 || sum>100){
+					responseMessage.setStatus(0);
+					responseMessage.setMessage("The percentage must be between 0 and 100");
+				}else{
+					projectDAO.updateProjectPaymentInfo(updateProjectPaymentInfos);
+					responseMessage.setStatus(1);
+					responseMessage.setMessage("Project payment Info updated successfully");
+				}
 			}
 			if(saveProjectPaymentInfos.size() > 0){
-				projectDAO.saveProjectPaymentInfo(saveProjectPaymentInfos);
+				if(sum<0 || sum>100){
+					responseMessage.setStatus(0);
+					responseMessage.setMessage("The percentage must be between 0 and 100");
+				}else{
+					projectDAO.saveProjectPaymentInfo(saveProjectPaymentInfos);
+					responseMessage.setStatus(1);
+					responseMessage.setMessage("Project payment Info updated successfully");
+				}
 			}
-			responseMessage.setStatus(1);
-			responseMessage.setMessage("Project payment Info updated successfully");
+			
 		}
 		return responseMessage;
 	}
@@ -1106,8 +1123,6 @@ public class ProjectController extends ResourceConfig {
 			buildingPriceInfo.setTax(tax);
 			buildingPriceInfo.setTenure(tenure);
 			projectDAO.addBuildingPriceInfo(buildingPriceInfo);
-			
-			if(amenity_type != null){
 				if (amenity_type.size() > 0) {
 					List<BuildingAmenityInfo> buildingAmenityInfos = new ArrayList<BuildingAmenityInfo>();
 					int i = 0;
@@ -1129,7 +1144,7 @@ public class ProjectController extends ResourceConfig {
 					}
 				}
 				
-				if(amenity_wts != "") {
+				if(amenity_wts != "" ) {
 					for(String aw :amenityWeightages) {
 						BuildingAmenityWeightage baw = new BuildingAmenityWeightage();
 						Double amenity_weightage = 0.0;
@@ -1145,9 +1160,9 @@ public class ProjectController extends ResourceConfig {
 						Integer substage_id = Integer.parseInt(amenityWeightage[4]);
 						Double substage_weightage = Double.parseDouble(amenityWeightage[5]);
 						Boolean wstatus = Boolean.parseBoolean(amenityWeightage[6]);
+						//System.err.println("Status : "+wstatus+" Amenity wtage: "+amenityWeightage[6]);
 						if(amenity_id >0){
 							BuilderBuildingAmenity builderBuildingAmenity = new BuilderBuildingAmenity();
-							
 							builderBuildingAmenity.setId(amenity_id);
 							BuilderBuildingAmenityStages builderBuildingAmenityStages = new BuilderBuildingAmenityStages();
 							builderBuildingAmenityStages.setId(stage_id);
@@ -1167,7 +1182,6 @@ public class ProjectController extends ResourceConfig {
 					if(baws.size() >0 && baws != null){
 						projectDAO.addBuildingAmenityWeightage(baws);
 					}
-				}
 			}
 			if (schedule.size() > 0) {
 				List<BuildingPaymentInfo> buildingPaymentInfos = new ArrayList<BuildingPaymentInfo>();

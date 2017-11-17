@@ -899,9 +899,11 @@
 									<div class="panel-body">
 										<div id="payment_schedule">
 											<% 	int i = 1;
+											int sum = 0;
   												for(BuilderProjectPaymentInfo projectPaymentInfo :projectPaymentInfos) {  
  											%> 
  											<input type="hidden" id="schedule_id" name="schedule_id[]" value="<%out.print(projectPaymentInfo.getId());%>"/>
+ 											<% if(projectPaymentInfo.getPayable() != null){sum += projectPaymentInfo.getPayable();}  %>
 											<div class="row" id="schedule-<% out.print(i); %>">
 												<% if(i > 1) { %>
 												<hr/>
@@ -940,7 +942,8 @@
 												</div>
 											</div>
 											<% i++; } %>
-											<% if(i <= 1) { %>
+											<input type="hidden" value="<%out.print(sum);%>" id="hsum" name="hsum" />
+ 											<% if(i <= 1) { %>
 											<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>
 											<div class="row" id="schedule-0">
 												<div class="col-lg-5 margin-bottom-5">
@@ -1197,9 +1200,39 @@ $("input.errorMsg").keypress(function(event){
 });
 function vaildPayablePer(id){
 	var x = $("#payable"+id).val();
+	var sum =parseInt($("#hsum").val());
+	 if(sum >100){
+		 alert("The sum of percentages must be 100");
+	 }
 	if( x<0 || x >100){
 		alert("The percentage must be between 0 and 100");
 		$("#payable"+id).val('');
+	}
+}
+var sum =0;
+function vaildateSum(){
+ var count=1;
+ //var sum =0;
+ var isEmpty = false;
+	$("input[name='payable[]']").each(function(){
+		//alert($("#payable"+count).val());
+		if($("#payable"+count).val()!=""){
+		sum +=parseInt($("#payable"+count).val());
+		}else{
+			isEmpty=true;
+		}
+		count++;
+	});
+	if(sum<0 || sum>100){
+		alert("The percentage must be between 0 and 100");
+		$("#paymentbtn").attr('disabled',true);
+	}else{
+		if(isEmpty){
+			alert("Payable is required and cannot be empty");
+			$("#paymentbtn").attr('disabled',false);
+		}else{
+			$("#paymentbtn").attr('disabled',false);
+		}
 	}
 }
 
@@ -1826,24 +1859,22 @@ $('#paymentfrm').bootstrapValidator({
                     max: 100,
                     message: 'The percentage must be between 0 and 100'
 	        	},
-// 	        	 callback: {
-//                      message: 'The sum of percentages must be 100',
-//                      callback: function(value, validator, $field) {
-//                          var percentage = validator.getFieldElements('payable[]'),
-//                              length     = percentage.length,
-//                              sum        = 0;
-
-//                          for (var i = 0; i < length; i++) {
-//                              sum += parseFloat($(percentage[i]).val());
-//                          }
-//                          if (sum === 100) {
-//                              validator.updateStatus('payable[]', 'VALID', 'callback');
-//                              return true;
-//                          }
-
-//                          return false;
-//                      }
-//                  },
+	        	 callback: {
+                     message: 'The sum of percentages must be 100',
+                     callback: function(value, validator, $field) {
+                         var percentage = validator.getFieldElements('payable[]'),
+                             length     = percentage.length,
+                             sum        = 0;
+                         for (var i = 0; i < length; i++) {
+                             sum += parseFloat($(percentage[i]).val());
+                         }
+                         if (sum === 100) {
+                             validator.updateStatus('payable[]', 'VALID', 'callback');
+                             return true;
+                         }
+                         return false;
+                     }
+                 },
 		        notEmpty: {
 		    		message: 'Payable is required and cannot be empty'
 		        },
@@ -2069,7 +2100,7 @@ function txtEnabaleDisable(id){
 
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
-	schedule_count++;
+	
 	var html = '<div class="row" id="schedule-'+schedule_count+'">'
 				+'<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>'
 				+'<hr/>'
@@ -2089,7 +2120,8 @@ function addMoreSchedule() {
 				+'<div class="form-group" id="error-payable">'
 				+'<label class="control-label col-sm-8">% of Net Payable <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-4">'
-				+'<input type="text" class="form-control" required=true id="payable'+schedule_count+'" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress="return isNumber(event, this);" name="payable[]"/>'
+// 				+'<input type="text" class="form-control" required=true id="payable'+schedule_count+'" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress="return isNumber(event, this);" name="payable[]"/>'
+				+'<input type="text" class="form-control" required=true id="payable'+schedule_count+'" onkeypress="return isNumber(event, this);"   name="payable[]"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 				+'</div>'
@@ -2109,8 +2141,20 @@ function addMoreSchedule() {
 			+'</div>';
 	$("#payment_schedule").append(html);
 	$("#schedule_count").val(schedule_count);
+	$("#payable"+schedule_count).keyup(function(){
+		
+		//$('#paymentfrm').bootstrapValidator('revalidateField', $(this).prop('name'));
+		//alert($("#payable"+schedule_count).val());
+		//var value = $("#payable"+schedule_count).val();
+		//alert(value+"Count :: "+schedule_count);
+		vaildateSum();
+	//	 $('#paymentfrm').data('bootstrapValidator').revalidateField('payable[]');
+		
+	});
+	schedule_count++;
 }
 function removeSchedule(id) {
+	$("#schedule_count").val();
 	$("#schedule-"+id).remove();
 }
 function deleteSchudle(id){

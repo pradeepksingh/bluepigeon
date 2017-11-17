@@ -293,20 +293,22 @@ function getProjectList(element){
 			ids = ids +","+ $(this).val();
 		 }
 	 });
-	 ajaxindicatorstart("Please wait, while loading...");
-	$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:ids,emp_id : $("#emp_id").val()},function(data){
-		var assign = "";
-		var a1="";
-			if(data.status==1){
-				alert(data.message);
-				assign = '<span class="assign1">Assign Projects : </span>';
-				assign+=data.data.value; 
-				$(".assign").empty();
-				$(".assign").html(assign);
-			}else{
-				alert(data.message);
-			}
-	 		ajaxindicatorstop();
-	},'json');
+	 if(ids !=""){
+		 ajaxindicatorstart("Please wait, while loading...");
+		$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:ids,emp_id : $("#emp_id").val()},function(data){
+			var assign = "";
+			var a1="";
+				if(data.status==1){
+					alert(data.message);
+					assign = '<span class="assign1">Assign Projects : </span>';
+					assign+=data.data.value; 
+					$(".assign").empty();
+					$(".assign").html(assign);
+				}else{
+					alert(data.message);
+				}
+		 		ajaxindicatorstop();
+		},'json');
+	 }
 }
 </script>

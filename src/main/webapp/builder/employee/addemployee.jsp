@@ -31,7 +31,7 @@
 			    builder_size = project_list.size();
 			    
 			    builderDetailsDAO = new BuilderDetailsDAO();
-			    access_list = builderDetailsDAO.getBuilderAccessList(builder.getBuilderEmployeeAccessType().getId());
+			    access_list = builderDetailsDAO.getBuilderAccessList();
 			    cityList = new CityNamesImp().getCityActiveNames();
 			    city_size = cityList.size();
 			}

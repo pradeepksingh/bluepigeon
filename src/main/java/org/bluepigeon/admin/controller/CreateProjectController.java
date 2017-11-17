@@ -612,7 +612,7 @@ public class CreateProjectController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage addBuilderBuildingAmenitySubstages(@FormParam("stage_id") int stageId,
 			@FormParam("name") String name, @FormParam("status") byte status) {
-
+		byte isDeleted = 0;
 		BuilderBuildingAmenityStages builderBuildingAmenityStages = new BuilderBuildingAmenityStages();
 		builderBuildingAmenityStages.setId(stageId);
 
@@ -620,6 +620,7 @@ public class CreateProjectController {
 
 		builderBuildingAmenitySubstages.setName(name);
 		builderBuildingAmenitySubstages.setStatus(status);
+		builderBuildingAmenitySubstages.setIsDeleted(isDeleted);
 		builderBuildingAmenitySubstages.setBuilderBuildingAmenityStages(builderBuildingAmenityStages);
 		BuilderBuildingAmenitySubstagesDAO builderBuildingAmenitySubstagesDAO = new BuilderBuildingAmenitySubstagesDAO();
 		return builderBuildingAmenitySubstagesDAO.save(builderBuildingAmenitySubstages);

@@ -106,12 +106,12 @@ public class CancellationController {
 	}
 	
 	@GET
-	@Path("/approve/{id}")
+	@Path("/approve/{id}/{amount}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage approveCancelation(@PathParam("id") int id) {
+	public ResponseMessage approveCancelation(@PathParam("id") int id,@PathParam("amount") double amount) {
 		ResponseMessage msg = new ResponseMessage();
 		CancellationDAO cancellationDAO = new CancellationDAO();
-		msg = cancellationDAO.deletePrimaryBuyerByFlatId(id);
+		msg = cancellationDAO.deletePrimaryBuyerByFlatId(id,amount);
 		return msg;
 	}
 	@GET

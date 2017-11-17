@@ -59,7 +59,7 @@ public class CancellationDAO {
 			saveNewNotification(builderEmployee,cancellation);
 		if(builderEmployee.getBuilderEmployeeAccessType().getId()==5){
 			updateFlatStatus(cancellation.getBuilderFlat().getId());
-			updatePrimaryBuyer(cancellation.getBuilderFlat().getId());
+			updatePrimaryBuyer(cancellation.getBuilderFlat().getId(),cancellation.getBuyerId());
 			updateProjectInventory(cancellation.getBuilderFlat().getId());
 			updateBuildingInventory(cancellation.getBuilderFlat().getId());
 			updateProjectRevenue(cancellation.getCharges(),cancellation.getBuilderProject().getId(),cancellation.getBuilderFlat().getId());
@@ -97,13 +97,14 @@ public class CancellationDAO {
 		session.getTransaction().commit();
 		session.close();
 	}
-	public void updatePrimaryBuyer(int flatId){
-		String hql ="UPDATE Buyer set isDeleted=1, status=1 where builderFlat.id = :flat_id ";
+	public void updatePrimaryBuyer(int flatId,int buyerId){
+		String hql ="UPDATE Buyer set isDeleted=1, status=1 where builderFlat.id = :flat_id and id=:id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
 		Query query = session.createQuery(hql);
 		query.setParameter("flat_id", flatId);
+		query.setParameter("id", buyerId);
 		query.executeUpdate();
 		session.getTransaction().commit();
 		session.close();
@@ -230,11 +231,19 @@ public class CancellationDAO {
 		return result;
 	}
 	
-	public ResponseMessage deletePrimaryBuyerByFlatId(int flatId){
+	public ResponseMessage deletePrimaryBuyerByFlatId(int flatId, double charges){
 		ResponseMessage responseMessage = new ResponseMessage();
-		updateBuyerStatus(flatId);
-		updateCancelStatus(flatId);
+		//updateBuyerStatus(flatId);
+		//updateCancelStatus(flatId);
+		//updateFlatStatus(flatId);
+		BuilderFlat builderFlat = getFlatDetailId(flatId);
+		Buyer buyer = getPrimaryBuyerByFlat(flatId);
 		updateFlatStatus(flatId);
+		updatePrimaryBuyer(flatId,buyer.getId());
+		updateProjectInventory(flatId);
+		updateBuildingInventory(flatId);
+		updateProjectRevenue(charges,builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId(),builderFlat.getId());
+		updateBuildingRevenue(charges,builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId(),builderFlat.getId());
 		responseMessage.setStatus(1);
 		responseMessage.setMessage("Buyer is Deleted Successfully");
 		return responseMessage;
@@ -738,5 +747,18 @@ public class CancellationDAO {
 			updateBuilding.close();
 		}
 		flatSession.close();
+	}
+	
+	public Buyer getPrimaryBuyerByFlat(int flatId){
+		String hql = "from Buyer where builderFlat.id = :flat_id and is_primary=1 and is_deleted=0 and status=1";
+		Buyer buyer = new Buyer();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("flat_id", flatId);
+		List<Buyer> buyer_list = query.list();
+		
+		session.close();
+		return buyer_list.get(0);
 	}
 }

@@ -56,9 +56,13 @@
 	List<BuilderProjectPropertyType> projectPropertyTypes = new BuilderProjectPropertyTypeDAO().getBuilderProjectPropertyTypes(project_id); 
  	List<BuilderProjectPropertyConfigurationInfo> projectConfigurationInfos = new BuilderProjectPropertyConfigurationInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id); 
  	List<BuilderProjectApprovalInfo> projectApprovalInfos = new BuilderProjectApprovalInfoDAO().getBuilderProjectPropertyConfigurationInfos(project_id); 
-	
+ 	if (request.getParameterMap().containsKey("building_id")) {
+ 		building_id = Integer.parseInt(request.getParameter("building_id")); 
+ 	}
+ 	if (request.getParameterMap().containsKey("flat_id")) {
+ 		flat_id = Integer.parseInt(request.getParameter("flat_id")); 
+ 	}
  	session = request.getSession(false); 
-	
  	BuilderEmployee builder = new BuilderEmployee(); 
  	if(session!=null) 
  	{ 
@@ -316,7 +320,7 @@ $("#leads").click(function(){
 $("#cancellation").click(function(){
 	window.location.href="${baseUrl}/builder/saleshead/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(project_id);%>
 });
-<% if(flatListDatas !=null){%>
+<% if(flatListDatas !=null && flat_id==0){%>
 $(document).ready(function () {
 		 <%for(int i=0;i<flatListDatas.size();i++){
 			 for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){
@@ -328,8 +332,8 @@ $(document).ready(function () {
     $("#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>").click(function (e) {
         e.preventDefault();
     });
-    $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click');
-    $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').addClass("red");
+<%--     $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click'); --%>
+<%--     $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').addClass("red"); --%>
     
     <%						}
                	  		}
@@ -339,7 +343,32 @@ $(document).ready(function () {
 		}
 	 %>
 });
-<% } %>
+<% } else if(flat_id > 0){%>
+$(window).load(function () {
+	 <%for(int i=0;i<flatListDatas.size();i++){
+		 for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){
+			 for(int floor_size = 0; floor_size<flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().size();floor_size++){
+			 	for(int flat_count=0;flat_count < flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().size();flat_count++){
+			 		//if(bookingFlatList2 != null){
+          	  			//if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
+%>
+$("#<%out.print(flat_id);%>").click(function (e) {
+   e.preventDefault();
+});
+<%-- /$('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click'); --%>
+$('#<%out.print(flat_id);%>').addClass("red");
+
+<%						}
+          	  		//}
+			 	//}
+			}
+		}
+	}
+%>
+});
+
+
+<%}%>
 function showFlats(id){
 	window.location.href="${baseUrl}/builder/saleshead/cancellation/Salesman_cancelation_form_open3.jsp?flat_id="+id;
 }
@@ -469,6 +498,17 @@ function getFlatDetails(){
 			}
 		},'html');
 }
+<% if(building_id != 0) { %>
+$.get("${baseUrl}/builder/saleshead/cancellation/cancelflat.jsp?project_id="+<%out.print(project_id);%>+"&building_id=<% out.print(building_id);%>&floor_id=0&evenOrodd=0",{ }, function(data){
+	if($.trim(data)){
+		$("#cancalflat").html(data);
+		$("#<%out.print(flat_id);%>").trigger("click");
+	}else{
+		$("#cancalflat").html("<span class='text-danger'>Sorry No Flat found.</span>");
+	}
+},'html');
+
+<% } %>
 	
 function showFlatwithImage(id){
 	$("#home").empty();
