@@ -464,7 +464,7 @@ public class EmployeeController {
 		BuilderEmployee reportingEmployee = new BuilderEmployee();
 		reportingEmployee.setId(reporting_id);
 		Locality locality = new Locality();
-		boolean status = false;
+		boolean status = true;
 		boolean isAssign = false;
 		if(builderId > 0){
 			builder.setId(builderId);
@@ -499,6 +499,7 @@ public class EmployeeController {
 		builderEmployee.setAadhaarNumber(aadhaar);
 		builderEmployee.setPancard(pancard);
 		builderEmployee.setStatus(status);
+		builderEmployee.setLoginStatus(1);
 		if(empPhoto != null){
 			//add gallery images
 			try{	
@@ -549,7 +550,7 @@ public class EmployeeController {
 				responseMessage =  new BuilderDetailsDAO().saveEmpRoles(employeeRoles);
 			}
 		}
-		if(isAssign){
+		//if(isAssign){
 			if(projectId != null && projectId.size() >0){
 				List<AllotProject> allotProjectList = new ArrayList<>();
 				for(FormDataBodyPart projects : projectId){
@@ -571,11 +572,11 @@ public class EmployeeController {
 					responseMessage =  new BuilderDetailsDAO().saveAllotProjects(allotProjectList);
 				}
 			}
-		}
+		//}
 	return responseMessage;
 	}
 	@POST
-	@Path("/builder/update1")
+	@Path("/newupdate")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public ResponseMessage updateBuilderEmployees(
@@ -588,7 +589,7 @@ public class EmployeeController {
 			@FormDataParam("designation") String designation,
 			@FormDataParam("accessid[]") List<FormDataBodyPart> accessIds,
 			@FormDataParam("empid") String employeeId,
-			@FormDataParam("project[]") List<FormDataBodyPart> projectId,
+			@FormDataParam("projects[]") List<FormDataBodyPart> projectId,
 			@FormDataParam("area_id") int areaId,
 			@FormDataParam("city_id") int cityId,
 			@FormDataParam("builder_id") int builderId,
@@ -672,8 +673,7 @@ public class EmployeeController {
 					}
 				}
 				if(savemployeeRoles.size() > 0){
-					new BuilderDetailsDAO().deleteEmployeeRolesByEmpId(emp_id);
-					new BuilderDetailsDAO().saveEmpRoles(savemployeeRoles);
+					new BuilderDetailsDAO().updateEmpRoles(savemployeeRoles);
 				}
 			}
 		}
@@ -697,6 +697,8 @@ public class EmployeeController {
 					new BuilderDetailsDAO().saveAllotProjects(saveallotProjectList);
 				}
 			}
+		}else if(projectId == null){
+			new BuilderDetailsDAO().deleteAllotedrojectsByEmpId(emp_id); 
 		}
 	return responseMessage;
 	}

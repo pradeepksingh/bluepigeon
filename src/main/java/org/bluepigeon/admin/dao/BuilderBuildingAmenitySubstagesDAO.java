@@ -29,29 +29,29 @@ public class BuilderBuildingAmenitySubstagesDAO {
              response.setMessage("Please select Amenity stage name");
         }
         else {
-            String hql = "from BuilderBuildingAmenitySubstages where name = :name";
-            Session session = hibernateUtil.openSession();
-            Query query = session.createQuery(hql);
-            query.setParameter("name", builderBuildingAmenitySubstages.getName());
-            List<BuilderBuildingAmenitySubstages> result = query.list();
-            session.close();
-            if (result.size() > 0) {
-            	if(result.get(0).getIsDeleted() ==1){
-					byte isDeleted=0;
-					builderBuildingAmenitySubstages.setId(result.get(0).getId());
-					builderBuildingAmenitySubstages.setIsDeleted(isDeleted);
-					Session newsession = hibernateUtil.openSession();
-					newsession.beginTransaction();
-					newsession.update(builderBuildingAmenitySubstages);
-					newsession.getTransaction().commit();
-					newsession.close();
-					response.setStatus(1);
-					response.setMessage("Building Amenity Ssubstage Added Successfully");
-				}else{
-				response.setStatus(0);
-				response.setMessage("Building Amenity Substage name already exists");
-				}
-            } else {
+//            String hql = "from BuilderBuildingAmenitySubstages where name = :name";
+//            Session session = hibernateUtil.openSession();
+//            Query query = session.createQuery(hql);
+//            query.setParameter("name", builderBuildingAmenitySubstages.getName());
+//            List<BuilderBuildingAmenitySubstages> result = query.list();
+//            session.close();
+//            if (result.size() > 0) {
+//            	if(result.get(0).getIsDeleted() ==1){
+//					byte isDeleted=0;
+//					builderBuildingAmenitySubstages.setId(result.get(0).getId());
+//					builderBuildingAmenitySubstages.setIsDeleted(isDeleted);
+//					Session newsession = hibernateUtil.openSession();
+//					newsession.beginTransaction();
+//					newsession.update(builderBuildingAmenitySubstages);
+//					newsession.getTransaction().commit();
+//					newsession.close();
+//					response.setStatus(1);
+//					response.setMessage("Building Amenity Ssubstage Added Successfully");
+//				}else{
+//				response.setStatus(0);
+//				response.setMessage("Building Amenity Substage name already exists");
+//				}
+//            } else {
                 Session newsession = hibernateUtil.openSession();
                 newsession.beginTransaction();
                 newsession.save(builderBuildingAmenitySubstages);
@@ -59,7 +59,7 @@ public class BuilderBuildingAmenitySubstagesDAO {
                 newsession.close();
                 response.setStatus(1);
                 response.setMessage("Building Amenity Substage added Successfully");
-            }
+            //}
         }
         return response;
     }

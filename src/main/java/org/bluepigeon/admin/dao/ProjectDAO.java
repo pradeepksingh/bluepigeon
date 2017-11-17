@@ -458,6 +458,7 @@ public class ProjectDAO {
 		HibernateUtil hibernateUtil =new HibernateUtil();
 		Session session =hibernateUtil.openSession();
 		session.beginTransaction();
+	    
 		for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
 			session.update(builderProjectPaymentInfo);
 		}
@@ -1115,7 +1116,7 @@ public class ProjectDAO {
 	 * @return List<BuildingAmenityWeightage>
 	 */
 	public List<BuildingAmenityWeightage> getActiveBuilderBuildingAmenityWeightageById(int building_id) {
-		String hql = "from BuildingAmenityWeightage where builderBuilding.id = :building_id and status=1";
+		String hql = "from BuildingAmenityWeightage where builderBuilding.id = :building_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -7268,13 +7269,13 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 					+ " where "
 					+ "project.status=1 and ap.emp_id="+builderEmployee.getId();
 		}
-		    Session session = hibernateUtil.getSessionFactory().openSession();
-		    Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectData.class));
-		    System.err.println(hql);
-		   // query.setMaxResults(4);
-		    List<ProjectData> result = query.list();
-		    session.close();
-		    return result;
+	    Session session = hibernateUtil.getSessionFactory().openSession();
+	    Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectData.class));
+	    System.err.println(hql);
+	   // query.setMaxResults(4);
+	    List<ProjectData> result = query.list();
+	    session.close();
+	    return result;
 	}
 	
 	public List<InboxMessageData> getBookedBuyer(int buyerId){

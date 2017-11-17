@@ -118,11 +118,11 @@ session = request.getSession(false);
                         		int count=1;
                         		if(notifications !=null){
                                     for(Notification notification : notifications){
-                                    	if(notification.getFlatId() > 0){
+                                    	if(notification.getFlatId() > 0 && !notification.isRead()){
                                     		BuilderFlat notificationBuilderFlat = new BuyerDAO().getFlatById(notification.getFlatId());
                         %>
                             <li>
-                                <a href="javascript:isReadSaleshead(<%out.print(notification.getId());%>,<%out.print(notificationBuilderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId());%>);">
+                                <a href="javascript:isReadSaleshead('<%out.print(notification.getId());%>','<%out.print(notificationBuilderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId());%>','<%out.print(notificationBuilderFlat.getBuilderFloor().getBuilderBuilding().getId());%>','<%out.print(notificationBuilderFlat.getBuilderFloor().getId());%>','<%out.print(notificationBuilderFlat.getId());%>');">
                                 
                                     <div class="col-sm-6">
                                         <p> <span class="text-muted"><%out.print(notification.getDescription()); %></span> </p>
@@ -188,7 +188,9 @@ session = request.getSession(false);
         		},'json');
            }
            
-           function isReadSaleshead(id,projectId){
+           function isReadSaleshead(id,projectId,buildingId,floorId,flatId){
+        	   
+        	   
         	   $.post('${baseUrl}/webapi/cancellation/notification/isread',{id:id}, function(data){
         		   var success = data.status;
         		   var status = parseInt(success);
@@ -196,7 +198,7 @@ session = request.getSession(false);
         			   <%
         			 //  int flatId = Integer.parseInt(out.print(""));
         			   //BuilderFlat builderFlat = new CancellationDAO().getFlatDetailId(flatId);%>
-        			   window.location.href = "${baseUrl}/builder/saleshead/cancellation/Salesman_booking_new2.jsp?project_id="+projectId;
+        			   window.location.href = "${baseUrl}/builder/saleshead/cancellation/Salesman_booking_new2.jsp?project_id="+projectId+"&building_id="+buildingId+"&floor_id="+floorId+"&flat_id="+flatId;
         		   }
         	   },'json');
            }

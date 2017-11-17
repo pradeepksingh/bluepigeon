@@ -447,7 +447,7 @@
 								        </div>
 								    </div>
 								 </div>
-                                 <%} %>
+                                 <%a++;} %>
                                  <div class="centerbutton">
 					 	           <button onclick="showPrev1();" type="button">Previous</button>
 					 	           <button type="button" onclick="showNext2();">Next</button>
@@ -1097,7 +1097,7 @@ function showAddResponse(resp, statusText, xhr, $form){
         
         alert(resp.message);
         ajaxindicatorstop();
-        window.location.href = "${baseUrl}/builder/buyer/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>
+        window.location.href = "${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>
   	}
 }
 function calculateAmount(id){

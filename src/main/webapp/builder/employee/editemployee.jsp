@@ -44,7 +44,7 @@
 					project_list = new ProjectDAO().getActiveProjectsByBuilderEmployees(builder);
 				    builder_size = project_list.size();
 				    builderDetailsDAO = new BuilderDetailsDAO();
-				    access_list = builderDetailsDAO.getBuilderAccessList(builder.getBuilderEmployeeAccessType().getId());
+				    access_list = builderDetailsDAO.getBuilderAccessList();
 				    cityList = new CityNamesImp().getCityActiveNames();
 				    localityList = new LocalityNamesImp().getLocalityActiveList();
 				    allotProjects = new BuilderDetailsDAO().getAllotedrojectsByEmpId(emp_id);
@@ -473,14 +473,7 @@
 	                }
 	            }
 	        },
-	        
-	        'projects[]': {
-	            validators: {
-	                notEmpty: {
-	                    message: 'minimum one project must be selected'
-	                }
-	            }
-	        },
+	       
 	        aadhaar:{
 	        	validators:{
 	        		notEmpty:{
@@ -517,9 +510,14 @@
 }).on('success.form.bv', function(event,data) {
 		// Prevent form submission
 		event.preventDefault();
-		addEmployee();
+	  updateEmployee();
+	}).on('error.form.bv', function(event,data) {
+		// Prevent form submission
+		event.preventDefault();
+		alert("Error..");
+		//addEmployee();
 	});
-	function addEmployee() {
+	function updateEmployee() {
 //	 	 $('#addemployee').submit(function(){
 //	          var multipleoptions = $('#project > option:selected');
 //	          if(multipleoptions.length == 0){
@@ -531,7 +529,7 @@
 		 		target : '#updateresponse', 
 		 		beforeSubmit : showUpdateRequest,
 		 		success :  showUpdateResponse,
-		 		url : '${baseUrl}/webapi/employee/builder/update1',
+		 		url : '${baseUrl}/webapi/employee/newupdate',
 		 		semantic : true,
 		 		dataType : 'json'
 		 	};
@@ -550,13 +548,14 @@
 	       	$("#updateresponse").addClass('alert-danger');
 			$("#updateresponse").html(resp.message);
 			$("#updateresponse").show();
+			 alert(resp.message);
 	  	} else {
 	  		$("#updateresponse").removeClass('alert-danger');
 	        $("#updateresponse").addClass('alert-success');
 	        $("#updateresponse").html(resp.message);
 	        $("#updateresponse").show();
 	        alert(resp.message);
-	       // window.location.href = "${baseUrl}/builder/employee/list.jsp";
+	        window.location.href = "${baseUrl}/builder/admin/employeeslist.jsp";
 	  	}
 	}
 	

@@ -982,6 +982,7 @@ function addBuilding() {
 	var amenityWeightage = "";
 	$('input[name="amenity_type[]"]:checked').each(function() {
 		amenity_id = $(this).val();
+		
 		$('input[name="stage_weightage'+amenity_id+'[]"]').each(function() {
 			stage_id = $(this).attr("id");
 			stage_weightage = $(this).val();
@@ -1138,12 +1139,12 @@ function addMoreOffer() {
 		+'</div>';
 	$("#offer_area").append(html);
 	$("#offer_count").val(offers);
-// 	$("#addbuilding").formValidation('addField', 'discount_amount' + offers, {
-//         validators: {
-//             // Here, add your field validators.
-//             notEmpty: {message: 'Please enter value for this field' }
-//         }
-//     });
+	$("#addbuilding").formValidation('addField', 'discount_amount' + offers, {
+        validators: {
+            // Here, add your field validators.
+            notEmpty: {message: 'Please enter value for this field' }
+        }
+    });
 }
 function removeOffer(id) {
 	$("#offer-"+id).remove();
