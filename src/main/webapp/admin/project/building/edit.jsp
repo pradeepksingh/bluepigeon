@@ -1217,6 +1217,22 @@ $('#updatepayment').bootstrapValidator({
                     max: 100,
                     message: 'The percentage must be between 0 and 100'
 	        	},
+	        	 callback: {
+                  message: 'The sum of percentages must be 100',
+                  callback: function(value, validator, $field) {
+                      var percentage = validator.getFieldElements('payable[]'),
+                          length     = percentage.length,
+                          sum        = 0;
+                      for (var i = 0; i < length; i++) {
+                          sum += parseFloat($(percentage[i]).val());
+                      }
+                      if (sum === 100) {
+                          validator.updateStatus('payable[]', 'VALID', 'callback');
+                          return true;
+                      }
+                      return false;
+                  }
+              },
                 notEmpty: {
                     message: 'Payable is required and cannot be empty'
                 }

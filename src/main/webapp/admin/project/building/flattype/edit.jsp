@@ -432,7 +432,8 @@ function showAddResponse(resp, statusText, xhr, $form){
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/admin/project/building/flattype/list.jsp?building_id="+$("#building_id").val();
+//         window.location.href = "${baseUrl}/admin/project/building/flattype/list.jsp?building_id="+$("#building_id").val();
+        window.location.href = "${baseUrl}/admin/project/building/flattype/list.jsp?project_id="+$("#project_id").val();
   	}
 }
 
@@ -464,7 +465,7 @@ function showDetailTab() {
 }
 
 function deleteImage(id) {
-	var flag = confirm("Are you sure ? You want to delete image ?");
+	var flag = confirm("Are you sure, you want to delete image ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/flattype/image/delete/"+id, { }, function(data){
 			alert(data.message);

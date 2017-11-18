@@ -320,7 +320,7 @@ public class BuyerDAO {
 	}
 	
 	public List<Buyer> getPrimaryBuyerList(){
-		String hql = "from Buyer where is_primary=1 order by id desc ";
+		String hql = "from Buyer where is_primary=1 and is_deleted=0 order by id desc ";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);

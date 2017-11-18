@@ -124,4 +124,20 @@ public class BuilderLoginController {
 		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
 		return builderDetailsDAO.updateBuilderPassword(oldPassword,password);
 	}
+	
+	@POST
+	@Path("/builder/email")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage getRegisteredEmailId(@FormParam("emailid") String emailid){
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		return builderDetailsDAO.getRegisteredEmailId(emailid);
+	}
+	
+	@POST
+	@Path("/builder/contact")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage getRegisteredMobileNumber(@FormParam("contactno") String contact){
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		return builderDetailsDAO.getRegisteredMobileNumber(contact);
+	}
 }

@@ -35,7 +35,7 @@
 <!--                         input-group -->
             </li>
             <li class="user-pro">
-            	<a href="#" class="waves-effect"><img src="${baseUrl }/builder/plugins/images/users/d1.jpg" alt="user-img" class="img-circle"> <span class="hide-menu"><%out.print(builder_new.getName()); %></span></a>
+            	<a href="#" class="waves-effect"><img src="<%if(builder_new.getPhoto()!=null){%>${baseUrl}/<%out.print(builder_new.getPhoto());}else{%>${baseUrl}/builder/plugins/images/users/1.jpg" <% }%>" alt="user-img" class="img-circle"> <span class="hide-menu"><%out.print(builder_new.getName()); %></span></a>
             </li>
             <li class="nav-small-cap m-t-10">--Main Menu--</li>
             <li> <a href="${baseUrl }/builder/dashboard.jsp" class="waves-effect"><i class="ti-dashboard p-r-10">

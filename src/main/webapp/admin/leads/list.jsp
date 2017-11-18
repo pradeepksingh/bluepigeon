@@ -52,6 +52,7 @@ builderLeads = new ProjectDAO().getBuilderProjectLeads();
                                     </thead>
                                     <tbody>
                                     	<%
+                                    	if(builderLeads != null){
                                         for(int i=0; i < builderLeads.size(); i++){
                                         	BuilderLead builderLead = builderLeads.get(i);
                                         	BuilderProject builderProject = builderLead.getBuilderProject();
@@ -69,7 +70,7 @@ builderLeads = new ProjectDAO().getBuilderProjectLeads();
                                             </td>
                                             
                                         </tr>
-                                        <% } %>
+                                        <% }} %>
                                     </tbody>
                                 </table>
                             </div>

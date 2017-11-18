@@ -195,19 +195,20 @@
 										 </div>
 								    </div>
 								    <div class="form-group row">
-									 <label for="example-search-input" class="col-sm-5 col-form-label">City</label>
+							   			<label for="example-search-input" class="col-sm-5 col-form-label">Area</label>
 										<div class="col-sm-7">
 											<div>
-											    <select name="city_id" id="city_id">
-													<option value="0"> Select City </option>
-													<% for(City city :cityList){%>
-													<option value="<%out.print(city.getId()); %>" <%if(city.getId() == builderEmployee.getCity().getId()){ %>selected<%} %>><%out.print(city.getName()); %></option>
-													<%}%>
+										   		<select name="area_id" id="area_id">
+													<option value="0"> Select Area </option>
+													<%if(localityList !=null){
+													for(Locality locality: localityList){ %>
+													<option value="<%out.print(locality.getId()); %>" <%if(locality.getId() == builderEmployee.getLocality().getId()){ %>selected<%} %>><%out.print(locality.getName()); %></option>
+													<%}} %>
 												</select>
-											</div>
-											<div class="messageContainer"></div>
-										 </div>
-								    </div>
+					                     	</div>
+					                     	<div class="messageContainer"></div>
+										</div>
+							  		</div>
 		                            <div class="form-group row">
 							           <label for="example-tel-input" class="col-sm-5 col-form-label">Aadhaar Card No. </label>
 								         <div class="col-sm-7">
@@ -256,20 +257,31 @@
 		 								</div>
 							   		</div>
 							   		<div class="form-group row">
-							   			<label for="example-search-input" class="col-sm-5 col-form-label">Area</label>
+										<label for="example-search-input" class="col-sm-5 col-form-label">City</label>
 										<div class="col-sm-7">
 											<div>
-										   		<select name="area_id" id="area_id">
-													<option value="0"> Select Area </option>
-													<%for(Locality locality: localityList){ %>
-													<option value="<%out.print(locality.getId()); %>" <%if(locality.getId() == builderEmployee.getLocality().getId()){ %>selected<%} %>><%out.print(locality.getName()); %></option>
-													<%} %>
+											    <select name="city_id" id="city_id">
+													<option value="0"> Select City </option>
+													<% 
+													if(cityList != null){
+													for(City city :cityList){%>
+													<option value="<%out.print(city.getId()); %>" <%if(city.getId() == builderEmployee.getCity().getId()){ %>selected<%} %>><%out.print(city.getName()); %></option>
+													<%}}%>
 												</select>
-					                     	</div>
-					                     	<div class="messageContainer"></div>
+											</div>
+											<div class="messageContainer"></div>
+										 </div>
+								    </div>
+								  	<div class="form-group row">
+										<label for="example-search-input" class="col-sm-5 col-form-label">Pan Card No.</label>
+										<div class="col-sm-7">
+											<div>
+											 	<input class="form-control  form-control1" type="text" id="pancard" name="pancard" value="<%if(builderEmployee.getPancard()!=null){out.print(builderEmployee.getPancard());} %>" placeholder="">
+											 </div>
+											 <div class="messageContainer"></div>
 										</div>
-							  		</div>
-							  		<div class="form-group row">
+								  	</div>
+								  	<div class="form-group row">
 										<label for="example-search-input" class="col-sm-5 col-form-label">Upload Photo</label>
 										<div class="col-sm-7">
 											<div>
@@ -288,15 +300,6 @@
 										<%} %>
 										</div>
 								 	</div>
-								  	<div class="form-group row">
-										<label for="example-search-input" class="col-sm-5 col-form-label">Pan Card No.</label>
-										<div class="col-sm-7">
-											<div>
-											 	<input class="form-control  form-control1" type="text" id="pancard" name="pancard" value="<%if(builderEmployee.getPancard()!=null){out.print(builderEmployee.getPancard());} %>" placeholder="">
-											 </div>
-											 <div class="messageContainer"></div>
-										</div>
-								  	</div>
 								</div>
 							</div>
 						<div class="row">
@@ -442,6 +445,18 @@
 	                 regexp: {
 	                     regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
 	                     message: 'The value is not a valid email address'
+	                 }
+	             }
+	        },
+	        pancard:{
+	        	 excluded: false,
+	             validators: {
+	            	 notEmpty: {
+	                     message: 'PAN card required and cannot be empty'
+	                 },
+	                 regexp: {
+	                     regexp: '^[A-Z]{5}[0-9]{4}[A-Z]{1}$',
+	                     message: 'Invalid PAN Card Number'
 	                 }
 	             }
 	        },

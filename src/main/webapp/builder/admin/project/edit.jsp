@@ -828,7 +828,7 @@
 				                                    			<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class='text-danger'>*</span></label>
 				                                    			<div class="col-sm-6">
 				                                    				<div>
-				                                        				<input class="form-control project" type="text" autocomplete="off" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
+				                                        				<input class="form-control project" type="text" autocomplete="off" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable<%out.print(i); %>" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 					                                    			</div>
 					                                    			<div class="messageContainer"></div>
 					                                  			</div>
@@ -986,12 +986,73 @@ function onlyNumber(id){
 }
 function vaildPayablePer(id){
 	var x = $("#payable"+id).val();
-	if( x<0 || x >100){
+	
+	var count=1;
+	 var sum =0;
+	 var isEmpty = false;
+		$("input[name='payable[]']").each(function(){
+			//alert($("#payable"+count).val());
+			if($("#payable"+count).val()!=""){
+			sum +=parseFloat($("#payable"+count).val());
+			//alert($("#payable"+count).val());
+			}else{
+				isEmpty=true;
+			}
+			count++;
+		});
+		
+		if(sum>100){
+			alert("The sum of percentages must be 100");
+			$("#paymentbtn").attr('disabled',true);
+		}else if(sum<100){
+			alert("The percentage must be between 0 and 100");
+			$("#paymentbtn").attr('disabled',true);
+		}else	if(sum<0 || sum>100){
+			alert("The percentage must be between 0 and 100");
+			$("#paymentbtn").attr('disabled',true);
+		}else if( x<0 || x >100){
+			alert("The percentage must be between 0 and 100");
+			$("#payable"+id).val('');
+			$("#paymentbtn").attr('disabled',true);
+		}else{
+			if(isEmpty){
+				alert("Payable is required and cannot be empty");
+				$("#paymentbtn").attr('disabled',false);
+			}else{
+				$("#paymentbtn").attr('disabled',false);
+			}
+		}
+}
+function vaildateSum(){
+	var count=1;
+ 	var sum =0;
+ 	var isEmpty = false;
+	$("input[name='payable[]']").each(function(){
+		if($("#payable"+count).val()!=""){
+		sum +=parseFloat($("#payable"+count).val());
+		}else{
+			isEmpty=true;
+		}
+		count++;
+	});
+	if(sum>100){
+		alert("The sum of percentages must be 100");
+		$("#paymentbtn").attr('disabled',true);
+	}else if(sum<100){
 		alert("The percentage must be between 0 and 100");
-		$("#payable"+id).val('');
+		$("#paymentbtn").attr('disabled',true);
+	}else	if(sum<0 || sum>100){
+		alert("The percentage must be between 0 and 100");
+		$("#paymentbtn").attr('disabled',true);
+	}else{
+		if(isEmpty){
+			alert("Payable is required and cannot be empty");
+			$("#paymentbtn").attr('disabled',false);
+		}else{
+			$("#paymentbtn").attr('disabled',false);
+		}
 	}
 }
-
 $("#detailbtn").click(function(){
 	$('.active').removeClass('active').next('li').addClass('active');
     $("#vimessages2").addClass('active');
@@ -1823,7 +1884,7 @@ function addMoreSchedule() {
 	   			+'<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class="text-danger">*</span></label>'
 	   			+'<div class="col-sm-6">'
 	   			+'<div>'
-	       		+'<input class="form-control project" type="text" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value=""/>'
+	       		+'<input class="form-control project" type="text" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress=" return isNumber(event, this);" id="payable'+schedule_count+'" name="payable[]" value=""/>'
        			+'</div>'
        			+'<div class="messageContainer"></div>'
      			+'</div>'
@@ -1832,6 +1893,9 @@ function addMoreSchedule() {
 				+'</div>';
 	$("#payment_schedule").append(html);
 	$("#schedule_count").val(schedule_count);
+	$("#payable"+schedule_count).keyup(function(){
+		vaildateSum();
+	});
 }
 function removeSchedule(id) {
 	$("#schedule-"+id).remove();

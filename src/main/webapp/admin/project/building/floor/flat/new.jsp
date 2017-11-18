@@ -560,7 +560,7 @@
 													<div class="form-group" id="error-payable">
 														<label class="control-label col-sm-8">% of Net Payable </label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control errorMsg" id="payable<%out.print(j); %>" onkeyup="javascript:validPer(<%out.print(j); %>"  onkeypress=" return isNumber(event, this);" name="payable[]" value="<%out.print(paymentInfoData.getPayable());%>"/>
+															<input type="text" class="form-control" id="payable<%out.print(j); %>" onkeyup="javascript:validPer(<%out.print(j); %>);"  onkeypress=" return isNumber(event, this);" name="payable[]" value="<%out.print(paymentInfoData.getPayable());%>" autocomplete="false"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -577,7 +577,7 @@
 											</div>
 										</div>
 										<%	
-												}
+												j++;}
 											}
 										}
 										%>
@@ -587,7 +587,7 @@
 							</div>
 							<div class="col-sm-12">
 								<span class="pull-right">
-									<button type="submit" name="flooradd" class="btn btn-success btn-sm" >Submit</button>
+									<button type="submit" name="flooradd" id="newpayment" class="btn btn-success btn-sm" >Submit</button>
 								</span>
 							</div>
 						</div>
@@ -822,12 +822,30 @@ function isNumber(evt, element) {
     return true;
 } 
 function validPer(id){
-	//alert($("#discount"+id).val());
 	var x = $("#payable"+id).val();
-	//alert(x);
-	if( x<0 || x >100){
+	var sum =0;
+	var count =1;
+	$("input[name='payable[]']").each(function(){
+		sum+=parseFloat($("#payable"+count).val());
+		//alert($("#payable"+count).val());
+		count++;
+	});
+	if(sum<100){
+		alert("The percentage must be between 0 and 100");
+		//$("#payable"+id).val('');
+		$("#newpayment").attr('disabled',true);
+	}
+	else if(sum < 0 || sum>100){
+		alert("The sum of percentages must be 100");
+		$("#payable"+id).val('');
+		$("#newpayment").attr('disabled',true);
+	}
+	else if( x<0 || x >100){
 		alert("The percentage must be between 0 and 100");
 		$("#payable"+id).val('');
+		$("#newpayment").attr('disabled',true);
+	}else{
+		$("#newpayment").attr('disabled',false);
 	}
 }
 

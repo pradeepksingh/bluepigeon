@@ -163,21 +163,14 @@
 										 </div>
 								    </div>
 								    <div class="form-group row">
-									 <label for="example-search-input" class="col-sm-5 col-form-label">City</label>
+							   			<label for="example-search-input" class="col-sm-5 col-form-label">Area</label>
 										<div class="col-sm-7">
 											<div>
-											    <select name="city_id" id="city_id">
-													<option value=""> Select City </option>
-													<% 
-													if(cityList != null){
-													for(City city : cityList){ %>
-													<option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
-													<% }} %>
-												</select>
-											</div>
-											<div class="messageContainer"></div>
-										 </div>
-								    </div>
+										   		<select name="area_id" id="area_id"></select>
+					                     	</div>
+					                     	<div class="messageContainer"></div>
+										</div>
+							  		</div>
 		                            <div class="form-group row">
 							           <label for="example-tel-input" class="col-sm-5 col-form-label">Aadhaar Card No. </label>
 								         <div class="col-sm-7">
@@ -226,14 +219,21 @@
 		 								</div>
 							   		</div>
 							   		<div class="form-group row">
-							   			<label for="example-search-input" class="col-sm-5 col-form-label">Area</label>
+									 	<label for="example-search-input" class="col-sm-5 col-form-label">City</label>
 										<div class="col-sm-7">
 											<div>
-										   		<select name="area_id" id="area_id"></select>
-					                     	</div>
-					                     	<div class="messageContainer"></div>
-										</div>
-							  		</div>
+											    <select name="city_id" id="city_id">
+													<option value=""> Select City </option>
+													<% 
+													if(cityList != null){
+													for(City city : cityList){ %>
+													<option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
+													<% }} %>
+												</select>
+											</div>
+											<div class="messageContainer"></div>
+										 </div>
+								    </div>
 							  		<div class="form-group row">
 										<label for="example-search-input" class="col-sm-5 col-form-label">Upload Photo</label>
 										<div class="col-sm-7">
@@ -395,6 +395,18 @@
 	                 regexp: {
 	                     regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
 	                     message: 'The value is not a valid email address'
+	                 }
+	             }
+	        },
+	        pancard:{
+	        	 excluded: false,
+	             validators: {
+	            	 notEmpty: {
+	                     message: 'PAN card required and cannot be empty'
+	                 },
+	                 regexp: {
+	                     regexp: '^[A-Z]{5}[0-9]{4}[A-Z]{1}$',
+	                     message: 'Invalid PAN Card Number'
 	                 }
 	             }
 	        },

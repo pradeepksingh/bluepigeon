@@ -428,9 +428,13 @@ public class CancellationDAO {
 		session.getTransaction().commit();
 		session.close();
 		cancellation2 = getCancellationById(cancellation.getId());
-		updateBuyerStatus(cancellation2.getBuilderFlat().getId());
+		updateFlatStatus(cancellation.getBuilderFlat().getId());
+		updatePrimaryBuyer(cancellation.getBuilderFlat().getId(),cancellation.getBuyerId());
+		updateProjectInventory(cancellation.getBuilderFlat().getId());
+		updateBuildingInventory(cancellation.getBuilderFlat().getId());
+		updateProjectRevenue(cancellation.getCharges(),cancellation.getBuilderProject().getId(),cancellation.getBuilderFlat().getId());
+		updateBuildingRevenue(cancellation.getCharges(),cancellation.getBuilderProject().getId(),cancellation.getBuilderFlat().getId());
 		updateCancelStatus(cancellation2.getBuilderFlat().getId());
-		updateFlatStatus(cancellation2.getBuilderFlat().getId());
 		saveApprovedCancellation(cancellation,empId);
 		responseMessage.setStatus(1);
 		responseMessage.setMessage("Booked Flat is cancelled Successfully");

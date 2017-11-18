@@ -131,8 +131,9 @@
 	                       <div class="col-md-4">
 	                         <div class="white-box1">
 	                           <div class="user-profile center">
-	                           		<%if(employeeList.getImage()!=null){ %>
-	                           		<img src="${baseUrl}/<% out.print(employeeList.getImage());%>" alt="User Image" class="custom-img">
+	                           		<%if(employeeList.getImage()!=null){ 
+	                           		%>
+	                           		<img src="${baseUrl}/<% out.print(employeeList.getImage());%>" alt="User Image" class="custom-img" width="200px">
 	                           		<%}else{ %>
 						            <img src="../plugins/images/Untitled-1.png" alt="User Image" class="custom-img">
 						            <%} %>

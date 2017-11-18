@@ -45,7 +45,7 @@
   <center>
     <div class="white-box padtop1">
       <form class="form-horizontal form-material" id="loginform" action="">
-        <h2 class="box-title m-b-20">Blue Pigeon</h2>
+        <h2 class="box-title m-b-20" style="color:#00bfd6;font-size:28px;">Blue Pigeon</h2>
         <br>
         <div class="form-group ">
           <div class="col-xs-12">
@@ -59,9 +59,19 @@
               <p id="perror" class="nopadding" ></p>
           </div>
         </div>
+        <div class="form-group">
+          <div class="row">
+			<div class="col-xs-6">
+			 <a href="${baseUrl}/builder/forgotpassword.jsp">Forgot Password ?</a>
+			</div>
+			<div class="col-xs-6">
+			 <a href = "${baseUrl}/builder/forgotusername.jsp">Forgot Username ?</a>
+			</div>
+          </div>
+        </div>
         <div class="form-group text-center m-t-20">
           <div class="col-xs-12">
-            <button class="btn btn-submit btn-lg btn-block text-uppercase waves-effect waves-light"id="blogin" type="button">Log In</button>
+            <button class="btn btn-submit btn-lg btn-block text-uppercase waves-effect waves-light"id="blogin" type="button">SUBMIT</button>
           </div>
         </div>
       </form>

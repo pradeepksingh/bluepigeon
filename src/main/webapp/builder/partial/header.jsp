@@ -154,7 +154,7 @@ session = request.getSession(false);
                    
                     <!-- /.dropdown -->
                     <li class="dropdown">
-                        <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="${baseUrl}/builder/plugins/images/users/1.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs"><%out.print(mainadmin.getName()); %></b> </a>
+                        <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="<%if(mainadmin.getPhoto()!=null){ %>${baseUrl}/<%out.print(mainadmin.getPhoto());}else{%>${baseUrl}/builder/plugins/images/users/1.jpg" <% }%>" alt="user-img" width="36" class="img-circle"><b class="hidden-xs"><%out.print(mainadmin.getName()); %></b> </a>
                         <ul class="dropdown-menu dropdown-user animated flipInY">
 <!--                             <li><a href="javascript:void(0)"><i class="ti-user"></i>  My Profile</a></li> -->
 <!--                             <li><a href="javascript:void(0)"><i class="ti-email"></i>  Inbox</a></li> -->

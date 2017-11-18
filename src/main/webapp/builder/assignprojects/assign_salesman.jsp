@@ -97,24 +97,6 @@
 <!--      <script src="js/bootstrap-multiselect.js"></script> -->
 <!--     <link rel="stylesheet" href="css/bootstrap-multiselect.css"> -->
 	<script src="../js/jquery.multiselect.js"></script>
-   
-  	<script type="text/javascript">
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes').multiselect();
-// 		    });
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes-2').multiselect();
-// 		    });
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes-3').multiselect();
-// 		    });
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes-4').multiselect();
-// 		    });
-// 		    $(document).ready(function() {
-// 		        $('#multiple-checkboxes-5').multiselect();
-// 		    });
-		</script>
 </head>
 
 <body class="fix-sidebar">
@@ -171,7 +153,6 @@
 	                 <%if(salesmanList != null){
 	                	 for(BuilderEmployee builderEmployee : salesmanList){
 	                	 %>
-	                 <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(builderEmployee.getId()); %>"/>
 	                 <div class="border-lead">
 	                  <div class="row">
 	                    <div class="col-md-3 col-sm-2 col-xs-6">
@@ -184,8 +165,8 @@
 	                     <h4><%out.print(builderEmployee.getEmail()); %></h4>
 	                    </div>
 	                    <div class="col-md-3 col-sm-2 col-xs-6">
-	                    	<div id="selectprojects">
-		                     	<select id="second" data-placeholder="Choose projects"  class="chosen-select" multiple style="width:350px;" tabindex="4">
+	                    	<div id="selectsalesheadprojects<%out.print(builderEmployee.getId());%>">
+		                     	<select id="assignsaleshead<%out.print(builderEmployee.getId()); %>" data-placeholder="Choose projects"  class="chosen-select" multiple style="width:350px;" tabindex="4">
 	         						<%if(projectLists != null){ 
 	         							for(ProjectData projectData : projectLists){
 	         						%>
@@ -196,19 +177,22 @@
 	                    </div>
 	                 </div>
 	                 <div class="row">
-	                  <h3 class="assign"><span class="assign1">Assign Projects : </span>
+	                  <h3 class="assign" id="assignsalesman<%out.print(builderEmployee.getId());%>"><span class="assign1">Assign Projects : </span>
 	                  <%if(assignProjects != null){
 	                	  int i=1;
 	                	  for(ProjectData assignProject : assignProjects){
-	                		  if(i>1){
-	                	  		out.print(" "+assignProject.getName()+" |");
-	                	  		i--;
+	                		  if(assignProject.getId() == builderEmployee.getId()){
+		                		  if(i>1){
+		                	  		out.print(" "+assignProject.getName()+" |");
+		                	  		i--;
+		                		  }else{
+		                			  out.print(assignProject.getName()+" |");
+		                		  }
 	                		  }else{
-	                			  out.print(assignProject.getName()+" |");
+	                			  out.print("");
 	                		  }
  	                	i++;}}  %></h3> 
 	                 </div>
-	                
 	               </div>
 	               <%} }}%>
 	               <%
@@ -216,7 +200,6 @@
 						if(salesheadList != null){
 	                	 for(BuilderEmployee builderEmployee : salesheadList){
 	                	 %>
-	                 <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(builderEmployee.getId()); %>"/>
 	                 <div class="border-lead">
 	                  <div class="row">
 	                    <div class="col-md-3 col-sm-2 col-xs-6">
@@ -229,8 +212,8 @@
 	                     <h4><%out.print(builderEmployee.getEmail()); %></h4>
 	                    </div>
 	                    <div class="col-md-3 col-sm-2 col-xs-6">
-	                    	<div id="selectprojects">
-		                     	<select id="second" data-placeholder="Choose projects"  class="chosen-select" multiple style="width:350px;" tabindex="4">
+	                    	<div id="selectsalesmanprojects<%out.print(builderEmployee.getId());%>">
+		                     	<select id="assignsalesman<%out.print(builderEmployee.getId()); %>" data-placeholder="Choose projects"  class="chosen-select " multiple style="width:350px;" tabindex="4">
 	         						<%if(projectLists != null){ 
 	         							for(ProjectData projectData : projectLists){
 	         						%>
@@ -241,15 +224,19 @@
 	                    </div>
 	                 </div>
 	                 <div class="row">
-	                  <h3 class="assign"><span class="assign1">Assign Projects : </span>
+	                  <h3 class="assign" id="assign<%out.print(builderEmployee.getId());%>"><span class="assign1">Assign Projects : </span>
 	                  <%if(assignProjects != null){
 	                	  int i=1;
 	                	  for(ProjectData assignProject : assignProjects){
-	                		  if(i>1){
-	                	  		out.print(" "+assignProject.getName()+" |");
-	                	  		i--;
+	                		  if(assignProject.getId() == builderEmployee.getId()){
+		                		  if(i>1){
+		                	  		out.print(" "+assignProject.getName()+" |");
+		                	  		i--;
+		                		  }else{
+		                			  out.print(assignProject.getName()+" |");
+		                		  }
 	                		  }else{
-	                			  out.print(assignProject.getName()+" |");
+	                			  out.print("");
 	                		  }
  	                	i++;}}  %></h3> 
 	                 </div>
@@ -260,7 +247,6 @@
                </div>
             </div>
        </div>
-       
     </div>
     <!-- /.container-fluid -->
     <div id="sidebar1"> 
@@ -269,24 +255,35 @@
   </body>
 </html>
 <script>
-$("#second").change(function(){
-	var projectId = $(this).val();
-	//ajaxindicatorstart("Loading...");
-	
-	
-});
-
-$('#second').multiselect({
+<%if(access_id == 5){
+	if(salesmanList != null){
+   	 for(BuilderEmployee builderEmployee : salesmanList){
+%>
+$('#assignsaleshead<%out.print(builderEmployee.getId()); %>').multiselect({
     columns: 1,
     placeholder: 'assign projects',
     search: true,
     selectAll: true,
-    onControlClose : function(element){getProjectList(element);}
+    onControlClose : function(element){getProjectSalesheadList(element,<%out.print(builderEmployee.getId());%>);}
 });
-
-function getProjectList(element){
+<%}}}%>
+<%if(access_id == 4){
+	if(salesheadList != null){
+   	 for(BuilderEmployee builderEmployee : salesheadList){
+%>
+$('#assignsalesman<%out.print(builderEmployee.getId());%>').multiselect({
+    columns: 1,
+    placeholder: 'assign projects',
+    search: true,
+    selectAll: true,
+    onControlClose : function(element){getProjectSalesmanList(element,<%out.print(builderEmployee.getId());%>);}
+});
+<%}}}%>
+<%if(access_id == 5){%>
+function getProjectSalesheadList(element,id){
 	var ids = "";
-	 $("#selectprojects .ms-options li.selected input").each(function(index){
+	var empId = 0;
+	 $("#selectsalesheadprojects"+id+" .ms-options li.selected input").each(function(index){
 		 if(ids == ""){
 			 ids = $(this).val();
 		 }else{
@@ -295,15 +292,15 @@ function getProjectList(element){
 	 });
 	 if(ids !=""){
 		 ajaxindicatorstart("Please wait, while loading...");
-		$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:ids,emp_id : $("#emp_id").val()},function(data){
+		$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:ids,emp_id : id},function(data){
 			var assign = "";
 			var a1="";
 				if(data.status==1){
 					alert(data.message);
 					assign = '<span class="assign1">Assign Projects : </span>';
 					assign+=data.data.value; 
-					$(".assign").empty();
-					$(".assign").html(assign);
+					$("#assignsalesman"+id).empty();
+					$("#assignsalesman"+id).html(assign);
 				}else{
 					alert(data.message);
 				}
@@ -311,4 +308,35 @@ function getProjectList(element){
 		},'json');
 	 }
 }
+<%}%>
+<%if(access_id == 4){%>
+function getProjectList(element,id){
+	var ids = "";
+	var empId = 0;
+	 $("#selectsalesmanprojects"+id+" .ms-options li.selected input").each(function(index){
+		 if(ids == ""){
+			 ids = $(this).val();
+		 }else{
+			ids = ids +","+ $(this).val();
+		 }
+	 });
+	 if(ids !=""){
+		 ajaxindicatorstart("Please wait, while loading...");
+		$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:ids,emp_id : id},function(data){
+			var assign = "";
+			var a1="";
+				if(data.status==1){
+					alert(data.message);
+					assign = '<span class="assign1">Assign Projects : </span>';
+					assign+=data.data.value; 
+					$("#assign"+id).empty();
+					$("#assign"+id).html(assign);
+				}else{
+					alert(data.message);
+				}
+		 		ajaxindicatorstop();
+		},'json');
+	 }
+}
+<%}%>
 </script>

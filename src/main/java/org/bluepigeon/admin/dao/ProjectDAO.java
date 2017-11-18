@@ -3962,7 +3962,7 @@ public class ProjectDAO {
 					+ "inner join allot_project as ap on ap.project_id = project.id "
 					+ "left join builder_employee as emp on emp.id = ap.emp_id"
 					+ " where "
-					+ "project.status=1 and emp.reporting_id="+builderEmployee.getId()+" and emp.id<>"+builderEmployee.getId();
+					+ "project.status=1 and emp.id<>"+builderEmployee.getId();
 		}
 		 HibernateUtil hibernateUtil = new HibernateUtil();
 		    Session session = hibernateUtil.getSessionFactory().openSession();
@@ -4081,15 +4081,18 @@ public class ProjectDAO {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		List<NewProject> newProjects = query.list();
-		for(NewProject newProject : newProjects){
-			NewProjectList newProjectList = new NewProjectList();
-			newProjectList.setBuilderName(newProject.getBuilder().getName());
-			newProjectList.setProjectName(newProject.getName());
-			newProjectList.setContactNumber(newProject.getBuilder().getMobile());
-			newProjectList.setEmail(newProject.getBuilder().getEmail());
-			newProjectList.setLocalityName(newProject.getLocality().getName());
-			newProjectLists.add(newProjectList);
+		if(newProjects != null){
+			for(NewProject newProject : newProjects){
+				NewProjectList newProjectList = new NewProjectList();
+				newProjectList.setBuilderName(newProject.getBuilder().getName());
+				newProjectList.setProjectName(newProject.getName());
+				newProjectList.setContactNumber(newProject.getBuilder().getMobile());
+				newProjectList.setEmail(newProject.getBuilder().getEmail());
+				newProjectList.setLocalityName(newProject.getLocality().getName());
+				newProjectLists.add(newProjectList);
+			}
 		}
+		session.close();
 		return newProjectLists;
 		
 	}
@@ -6931,7 +6934,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	 * @return
 	 */
 	public List<EmployeeList> getBuilderEmployeeList(BuilderEmployee builderEmployee){
-		String hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email,GROUP_CONCAT(access.name) as access from builder_employee as emp join employee_role as er on er.emp_id=emp.id join builder_employee_access_type as access on access.id=er.role_id where emp.builder_id="+builderEmployee.getBuilder().getId()+" GROUP by emp.id order by emp.id DESC";
+		String hql = "select emp.id as id, emp.name as name, emp.photo as image, emp.mobile as mobileNo, emp.email as email,GROUP_CONCAT(access.name) as access from builder_employee as emp join employee_role as er on er.emp_id=emp.id join builder_employee_access_type as access on access.id=er.role_id where emp.builder_id="+builderEmployee.getBuilder().getId()+" GROUP by emp.id order by emp.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
@@ -6947,7 +6950,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	 * @return
 	 */
 	public List<EmployeeList> getBuilderEmployeeList(BuilderEmployee builderEmployee,int projectId){
-		String hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email, access.name as access from builder_employee as emp join builder_employee_access_type as access on access.id= emp.access_type_id join builder_project as project on project.group_id=emp.builder_id where emp.access_type_id in(3,4,5) and emp.builder_id="+builderEmployee.getBuilder().getId()+" and project.id="+projectId+" group by emp.id order by emp.id DESC";
+		String hql = "select emp.id as id, emp.name as name,  emp.photo as image, emp.mobile as mobileNo, emp.email as email, access.name as access from builder_employee as emp join builder_employee_access_type as access on access.id= emp.access_type_id join builder_project as project on project.group_id=emp.builder_id where emp.access_type_id in(3,4,5) and emp.builder_id="+builderEmployee.getBuilder().getId()+" and project.id="+projectId+" group by emp.id order by emp.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
@@ -6965,7 +6968,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	public List<EmployeeList> getBuilderEmployeeList(int builderId, int roleId, String keyword){
 		String hql = "";
 		if(keyword == "") {
-			 hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email,GROUP_CONCAT(access.name) as access from builder_employee as emp join employee_role as er on er.emp_id=emp.id join builder_employee_access_type as access on access.id=er.role_id join builder as builder on builder.id=emp.builder_id where emp.builder_id="+builderId;
+			 hql = "select emp.id as id, emp.name as name,  emp.photo as image, emp.mobile as mobileNo, emp.email as email,GROUP_CONCAT(access.name) as access from builder_employee as emp join employee_role as er on er.emp_id=emp.id join builder_employee_access_type as access on access.id=er.role_id join builder as builder on builder.id=emp.builder_id where emp.builder_id="+builderId;
 			 if(roleId > 0){		
 				 hql=hql+" and access.id="+roleId;
 			 }
