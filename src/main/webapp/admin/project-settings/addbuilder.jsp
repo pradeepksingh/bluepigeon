@@ -81,6 +81,7 @@ $(document).ready(function(){
     });
 });
 function editBuilder(id){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/project-settings/editBuilder.jsp?id="+id;
 }
 </script>

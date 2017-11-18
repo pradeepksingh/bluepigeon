@@ -183,6 +183,7 @@ $('#addProjectAmenity').bootstrapValidator({
 
 
 function addProjectAmenity() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -206,6 +207,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
@@ -227,9 +229,11 @@ function showAddResponse(resp, statusText, xhr, $form){
 
 
 function editProjectAmenity(amenityid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderprojectamenity.jsp?amenity_id="+amenityid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editProjectAmenity").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
@@ -242,6 +246,7 @@ function editProjectAmenity(amenityid) {
 function deleteProjectAmenity(amenityid){
 	var yes = confirm("Do you want to delete ?");
 	if(yes==true){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.ajax({
 			url: "${baseUrl}/webapi/create/builder/project/amenity/delete",
 			data:{amenityid:amenityid},

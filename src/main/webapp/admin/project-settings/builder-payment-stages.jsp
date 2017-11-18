@@ -133,6 +133,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease enter only alphanumeric.'); return ''; } ) );
 });
 function addPaymentStages() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/payment/satges/save/",{ name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -140,13 +141,16 @@ function addPaymentStages() {
 }
 
 function editPaymentStages(paymentid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderpaymentstages.jsp?payment_id="+paymentid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editPaymentStages").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updatePaymentStages() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/payment/satges/update/",{ id: $("#upayment_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -155,6 +159,7 @@ function updatePaymentStages() {
 function deleteFloorAmenity(amenityid){
 	var yes = confirm("Do you want to delete ?");
 	if(yes==true){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.ajax({
 			url: "${baseUrl}/webapi/create/builder/payment/satges/delete",
 			data:{amenityid:amenityid},

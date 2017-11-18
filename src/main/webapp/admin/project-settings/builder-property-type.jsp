@@ -131,6 +131,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
 });
 function addPropertyType() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/property/type/save",{ name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -138,13 +139,16 @@ function addPropertyType() {
 }
 
 function editPropertyType(typeid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderpropertytype.jsp?type_id="+typeid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editPropertyType").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updatePropertyType() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/property/type/update",{ id: $("#utype_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();

@@ -163,6 +163,7 @@ $('input').keyup(function() {
 });
 
 function addCountry() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 		$.post("${baseUrl}/webapi/general/country/save",{ name: $("#name").val(), tax1:$("#tax1").val(), tax2:$("#tax2").val(),tax3 : $("#tax3").val(),status: $("#status").val()}, function(data){
 			if(data.status == 1){
 				$('#error').empty();
@@ -173,17 +174,21 @@ function addCountry() {
 				$('#error').empty();
 				$("#error").append(data.message);
 			}
+			ajaxindicatorstop();
 		},'json');
 }
 
 function editCountry(countryid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/general/editcountry.jsp?country_id="+countryid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editCountry").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateCountry() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/general/country/update/",{ id: $("#ucountry_id").val(), name: $("#uname").val(), tax1: $("#utax1").val(), tax2 : $("#utax2").val(), tax3 : $("#utax3").val(),  status: $("#ustatus").val(), sortOrder:1}, function(data){
 		alert(data.message);
 		window.location.reload();

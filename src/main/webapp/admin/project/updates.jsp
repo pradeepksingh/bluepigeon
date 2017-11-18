@@ -326,12 +326,13 @@ function showAddRequest(formData, jqForm, options){
 }
    	
 function showAddResponse(resp, statusText, xhr, $form){
-	ajaxindicatorstop();
 	if(resp.status == '0') {
 		$("#response").removeClass('alert-success');
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
+
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
@@ -349,6 +350,8 @@ function deleteImage(id) {
 			alert(data.message);
 			if(data.status == 1) {
 				$("#b_image"+id).remove();
+				ajaxindicatorstop();
+
 			}
 		},'json');
 	}

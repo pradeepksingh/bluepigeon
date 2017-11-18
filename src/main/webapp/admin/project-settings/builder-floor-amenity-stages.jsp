@@ -174,6 +174,7 @@ $(document).ready(function(){
     });
 });
 function addFloorAmenityStage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/floor/amenity/stages/save/",{ amenity_id: $("#amenity_id").val(), name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -181,6 +182,7 @@ function addFloorAmenityStage() {
 }
 
 $("#searchamenityId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/project-settings/builder-floor-amenity-stages.jsp?amenity_id="+$("#searchamenityId").val();
 });
 
@@ -191,15 +193,16 @@ $('#name').keyup(function() {
 
 
 function editFloorAmenityStages(amenity_stage_id) {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editflooramenitystage.jsp?amenity_stage_id="+amenity_stage_id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editFloorAmenityStages").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateFloorAmenityStages() {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/floor/amenity/stages/update/",{ id: $("#uamenity_stage_id").val(), amenity_id: $("#uamenity_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();

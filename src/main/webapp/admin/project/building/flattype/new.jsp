@@ -366,6 +366,7 @@ function isNumber(evt, element) {
     return true;
 } 
 function addFloor() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -389,6 +390,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
@@ -427,12 +429,14 @@ function showDetailTab() {
 }
 
 $("#project_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{},function(data){
 		var html = "";
 		$(data).each(function(index){
 			html = html + '<div class="col-sm-3"><input type="checkbox" name="building_id[]" value="'+data[index].id+'"> '+data[index].name+'</div>';
 		});
 		$("#buildings").html(html);
+		ajaxindicatorstop();
 	},'json');
 	
 });

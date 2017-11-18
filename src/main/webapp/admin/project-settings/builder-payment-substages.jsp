@@ -178,6 +178,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 function addPaymentSubstage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/payment/substages/save/",{ payment_id: $("#payment_id").val(), name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -185,21 +186,23 @@ function addPaymentSubstage() {
 }
 
 $("#searchpaymentId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/project-settings/builder-payment-substages.jsp?payment_id="+$("#searchpaymentId").val();
 });
 
 
 
 function editPaymentSubstages(payment_stage_id) {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderpaymentsubstage.jsp?payment_stage_id="+payment_stage_id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editPaymentSubstage").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updatePaymentSubstages() {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/payment/substages/update/",{ id: $("#ustage_id").val(), payment_id: $("#upayment_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();

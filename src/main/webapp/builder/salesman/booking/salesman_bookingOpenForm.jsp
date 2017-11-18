@@ -607,19 +607,35 @@ function showImagewithDetails(id){
 		  	+'<div class="row">'
 		  	+'<div class="col-sm-7 col-md-7 col-xs-7">'
 			+'<img src="'+image+'" alt="Flat image" class="custom-img" >'
-		  	+'</div>'
-		  	+'<div class="col-sm-5 col-md-5 col-xs-5">'
+		  	+'</div>';
+		  	flatdetails +='<div class="col-sm-5 col-md-5 col-xs-5">';
+		  	flatdetails	+='<div class="row custom-row">'
+			  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+			  	+'<p class="p-custom">Flat Type</p>'
+			  	+'<p><b>'+data.flatType+'</b></p>'
+			  	+'</div>'
+			  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+			  	+'<p class="p-custom">Carpet Area</p>'
+			  	+'<p><b>'+data.carpetArea+' '+data.carpetAreaUnit+'</b></p>'
+			  	+'</div>'
+			  	+'</div>';
+		  	$(data.builderBuildingFlatTypeRooms).each(function(index){
+		  		alert("Length :: "+data.builderBuildingFlatTypeRooms[index].length+" breadth :"+data.builderBuildingFlatTypeRooms[index].breadth+" lengthUnit :"+data.builderBuildingFlatTypeRooms[index].lengthUnit+" roomName:"+data.builderBuildingFlatTypeRooms[index].roomName);
+		  		flatdetails +='<div class="row custom-row">'
+			  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+			  	+'<p class="p-custom">'+data.builderBuildingFlatTypeRooms[index].roomName+'</p>'
+			  	+'<p><b>'+data.builderBuildingFlatTypeRooms[index].length+' x '+data.builderBuildingFlatTypeRooms[index].breadth+' '+data.builderBuildingFlatTypeRooms[index].lengthUnit+'</b></p>'
+			  	+'</div>'
+			  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+			  	+'<p class="p-custom">Carpet Area</p>'
+			  	+'<p><b>'+data.carpetArea+' '+data.carpetAreaUnit+'</b></p>'
+			  	+'</div>'
+			  	+'</div>';
+			  	
+		  	});
+		  	//flatdetails +='<div class="col-sm-5 col-md-5 col-xs-5">'
+		  
 		  	+'<div class="row custom-row">'
-		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
-		  	+'<p class="p-custom">Flat Type</p>'
-		  	+'<p><b>'+data.flatType+'</b></p>'
-		  	+'</div>'
-		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
-		  	+'<p class="p-custom">Carpet Area</p>'
-		  	+'<p><b>'+data.carpetArea+' '+data.carpetAreaUnit+'</b></p>'
-		  	+'</div>'
-		  	+'</div>'
-		  	+'<div class="row custom-row">';
 		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
 		  	+'<p class="p-custom">Flat Type</p>'
 		  	+'<p><b>1BHK</b></p>'

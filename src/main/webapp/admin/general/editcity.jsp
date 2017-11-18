@@ -90,12 +90,14 @@ $('#uname').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
 });
 $("#ucountry_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#ucountry_id").val() }, function(data){
 		var html = '<option value="">Select State</optio>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 		});
 		$("#ustate_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 </script>

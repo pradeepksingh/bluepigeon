@@ -786,6 +786,7 @@ $(".errorMsg").keypress(function(event){
 $("#flat_type_id").change(function(){
 	var row = "";
 	if($("#flat_type_id").val() > 0){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/project/flattype/list",{ flat_type_id: $("#flat_type_id").val() }, function(data){
 			$("#bathroom").val(data.bathRoom);
 			$("#balcony").val(data.balcony);
@@ -800,13 +801,14 @@ $("#flat_type_id").change(function(){
 				+'</div>';
 				$("#rooms").html(row);
 			});
-			
+			ajaxindicatorstop();
 		},'json');
 	}else{
 		$("#bathroom").val('');
 		$("#balcony").val('');
 		$("#bedroom").val('');
 		$("#rooms").empty();
+		ajaxindicatorstop();
 	}
 });
 
@@ -1143,6 +1145,7 @@ function addFloor() {
 		});
 	});
 	$("#amenity_wt").val(amenityWeightage);
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -1228,12 +1231,14 @@ function showDetailTab() {
 	$('#buildingTabs a[href="#payment"]').tab('show');
 }
 $("#project_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{},function(data){
 		var html = '<option value="0">Select Building</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
 		});
 		$("#building_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 	
 });

@@ -108,21 +108,26 @@
               	</div>
 <script type="text/javascript">
 $("#ucountry_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
+	
 	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#ucountry_id").val() }, function(data){
 		var html = '<option value="">Select State</optio>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 		});
 		$("#ustate_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 $("#ustate_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/general/city/list",{ state_id: $("#ustate_id").val() }, function(data){
 		var html = '<option value="">Select City</optio>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 		});
 		$("#ucity_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 $('#uname').keyup(function() {

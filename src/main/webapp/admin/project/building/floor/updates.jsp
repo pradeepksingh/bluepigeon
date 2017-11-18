@@ -275,6 +275,7 @@ $('#addproject').bootstrapValidator({
 });
 
 function updateProject() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -298,6 +299,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
@@ -309,13 +311,15 @@ function showAddResponse(resp, statusText, xhr, $form){
 }
 
 function deleteImage(id) {
-	var flag = confirm("Are you sure ? You want to delete image ?");
+	var flag = confirm("Are you sure, you want to delete image ?");
 	if(flag) {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/project/building/floor/image/delete/"+id, { }, function(data){
 			alert(data.message);
 			if(data.status == 1) {
 				$("#b_image"+id).remove();
 			}
+			ajaxindicatorstop();
 		},'json');
 	}
 }
@@ -323,11 +327,13 @@ function deleteImage(id) {
 function deleteElvImage(id) {
 	var flag = confirm("Are you sure ? You want to delete Elevation Image ?");
 	if(flag) {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/project/building/floor/elevationimage/delete/"+id, { }, function(data){
 			alert(data.message);
 			if(data.status == 1) {
 				$("#b_elv_image"+id).remove();
 			}
+			ajaxindicatorstop();
 		});
 	}
 }

@@ -131,6 +131,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 .]/g, function(str) { alert('\n\nPlease use only Alphanumeric.'); return ''; } ) );
 });
 function addProjectPropertyConfig() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/project/propertyconfig/save",{ name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -138,13 +139,16 @@ function addProjectPropertyConfig() {
 }
 
 function editProjectPropertyConfig(configid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderprojectpropertyconfig.jsp?config_id="+configid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editProjectPropertyConfig").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateProjectPropertyConfig() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/project/propertyconfig/update",{ id: $("#uconfig_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();

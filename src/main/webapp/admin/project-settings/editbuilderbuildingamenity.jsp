@@ -101,6 +101,7 @@ $('#editBuildingAmenity').bootstrapValidator({
 
 
 function updateBuildingAmenity() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showUpdateRequest,
@@ -124,6 +125,7 @@ function showUpdateResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');

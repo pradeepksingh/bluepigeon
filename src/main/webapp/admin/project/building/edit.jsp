@@ -1168,6 +1168,7 @@ function validPercentage(id){
 	 }
 }
 function updateBuildingPricing() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#priceresponse', 
 	 		beforeSubmit : showAddPriceRequest,
@@ -1191,12 +1192,14 @@ function showAddPriceResponse(resp, statusText, xhr, $form){
        	$("#priceresponse").addClass('alert-danger');
 		$("#priceresponse").html(resp.message);
 		$("#priceresponse").show();
+		ajaxindicatorstop();
   	} else {
   		$("#priceresponse").removeClass('alert-danger');
         $("#priceresponse").addClass('alert-success');
         $("#priceresponse").html(resp.message);
         $("#priceresponse").show();
         alert(resp.message);
+    	ajaxindicatorstop();
   	}
 }
 
@@ -1472,7 +1475,7 @@ function showAddOfferResponse(resp, statusText, xhr, $form){
 }
 
 function deleteImage(id) {
-	var flag = confirm("Are you sure ? You want to delete image ?");
+	var flag = confirm("Are you sure, you want to delete image ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/image/delete/"+id, { }, function(data){
 			alert(data.message);
@@ -1484,7 +1487,7 @@ function deleteImage(id) {
 }
 
 function deleteElvImage(id) {
-	var flag = confirm("Are you sure ? You want to delete Elevation Image ?");
+	var flag = confirm("Are you sure,  you want to delete Elevation Image ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/elevationimage/delete/"+id, { }, function(data){
 			alert(data.message);

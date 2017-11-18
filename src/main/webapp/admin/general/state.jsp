@@ -171,6 +171,7 @@ $(document).ready(function(){
     });
 });
 function addState() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/general/state/save/",{ country_id: $("#country_id").val(), name: $("#name").val(), status: $("#status").val(), sortorder: 1}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -181,20 +182,25 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
 });
 $("#searchcountryId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/general/state.jsp?country_id="+$("#searchcountryId").val();
 });
 
 function editState(stateid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/general/editstate.jsp?state_id="+stateid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editState").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateState() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/general/state/update/",{ id: $("#ustate_id").val(), country_id: $("#ucountry_id").val(), name: $("#uname").val(), status: $("#ustatus").val(), sortorder: 1}, function(data){
 		alert(data.message);
 		window.location.reload();
+		ajaxindicatorstop();
 	},'json');
 }
 

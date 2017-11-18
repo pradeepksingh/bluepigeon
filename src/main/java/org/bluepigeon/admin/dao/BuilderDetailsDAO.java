@@ -2468,14 +2468,14 @@ public class BuilderDetailsDAO {
 				List<BuilderEmployee> result = query.list();
 				if(result.size() > 0 && result !=null){
 					responseMessage.setStatus(1);
-					responseMessage.setMessage("Your will receive your password on your registered mobile number and email id");
+					responseMessage.setMessage("Your will receive your password on your registered mobile number and email id.");
 				}else{
 					responseMessage.setStatus(0);
-					responseMessage.setMessage("Please enter your registered email id");
+					responseMessage.setMessage("Please enter your registered email id.");
 				}
 			}else{
 				responseMessage.setStatus(0);
-				responseMessage.setMessage("Registered email id is required");
+				responseMessage.setMessage("Registered email id is required.");
 			}
 			return responseMessage;
 		}
@@ -2491,20 +2491,20 @@ public class BuilderDetailsDAO {
 					List<BuilderEmployee> result = query.list();
 					if(result.size() > 0 && result !=null){
 						responseMessage.setStatus(1);
-						responseMessage.setMessage("Your will receive your username on your registered mobile number and email id");
+						responseMessage.setMessage("Your will receive your username on your registered mobile number and email id.");
 					}else{
 						responseMessage.setStatus(0);
-						responseMessage.setMessage("Please enter your registered mobile number");
+						responseMessage.setMessage("Please enter your registered mobile number.");
 					}
 					return responseMessage;
 				}catch(Exception e){
 					responseMessage.setStatus(0);
-					responseMessage.setMessage("Please enter numbers only");
+					responseMessage.setMessage("Please enter numbers only.");
 					return responseMessage;
 				}
 			}else{
 				responseMessage.setStatus(0);
-				responseMessage.setMessage("Registered mobile number is required");
+				responseMessage.setMessage("Registered mobile number is required.");
 				return responseMessage;
 			}
 			

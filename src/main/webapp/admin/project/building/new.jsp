@@ -1012,7 +1012,7 @@ function addBuilding() {
 		});
 	});
 	$("#amenity_wt").val(amenityWeightage);
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -1036,6 +1036,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
@@ -1345,6 +1346,7 @@ function getProjectShedule(){
 	$("#payment_schedule").empty();
     var html = "";
 	var project_id = $("#project_id").val();
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/project/building/payments/"+project_id, { }, function(data){
 		$(data).each(function(index){
 		html=+'<div class="col-lg-12">'
@@ -1387,6 +1389,7 @@ function getProjectShedule(){
 		});
 		html = html.replace("NaN","");
 		$("#paymentresponse").html(html);
+		ajaxindicatorstop();
 	});
 }
 function addMoreSchedule() {

@@ -177,6 +177,7 @@ $(document).ready(function(){
     });
 });
 function addFlatAmenityStage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/flat/amenity/stages/save/",{ amenity_id: $("#amenity_id").val(), name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -184,6 +185,7 @@ function addFlatAmenityStage() {
 }
 
 $("#searchamenityId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/project-settings/builder-flat-amenity-stages.jsp?amenity_id="+$("#searchamenityId").val();
 });
 
@@ -194,15 +196,16 @@ $('#name').keyup(function() {
 
 
 function editFlatAmenityStages(amenity_stage_id) {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editflatamenitystage.jsp?amenity_stage_id="+amenity_stage_id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editFlatAmenityStages").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateFlatAmenityStages() {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/flat/amenity/stages/update/",{ id: $("#uamenity_stage_id").val(), amenity_id: $("#uamenity_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -212,6 +215,7 @@ function updateFlatAmenityStages() {
 function deleteFlatAmenityStages(amenity_stage_id){
 	var yes = confirm("Do you want to delete ?");
 	if(yes==true){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.ajax({
 			url: "${baseUrl}/webapi/create/builder/flat/amenity/stages/delete",
 			data:{amenity_stage_id:amenity_stage_id},

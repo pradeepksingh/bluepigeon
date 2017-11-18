@@ -1082,13 +1082,15 @@ function onlyNumber(id){
 	    $th.val( $th.val().replace(/[^0-9]/g, function(str) { alert('\n\nPlease enter only numbers.'); return ''; } ) );
 }
 function deleteOffer(id){
-	var flag = confirm("Are you sure ? You want to delete offers ?");
+	var flag = confirm("Are you sure, you want to delete offers ?");
 	if(flag) {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/project/building/floor/flat/offer/delete/"+id, { }, function(data){
 			alert(data.message);
 			if(data.status == 1) {
 				$("#offer-"+id).remove();
 			}
+			ajaxindicatorstop();
 		},'json');
 	}
 }
@@ -1233,6 +1235,7 @@ function updateFlat() {
 		});
 	});
 	$("#amenity_wt").val(amenityWeightage);
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -1256,6 +1259,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
@@ -1267,6 +1271,7 @@ function showAddResponse(resp, statusText, xhr, $form){
 }
 
 $("#flatupdateimage").click(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 			target: '#imageresponse',
 			beforeSubmit : showPriceAddRequest,
@@ -1289,6 +1294,7 @@ function showPriceAddResponse(resp, statusText, xhr, $form){
        	$("#imageresponse").addClass('alert-danger');
 		$("#imageresponse").html(resp.message);
 		$("#imageresponse").show();
+		ajaxindicatorstop();
   	} else {
   		$("#imageresponse").removeClass('alert-danger');
         $("#imageresponse").addClass('alert-success');
@@ -1440,6 +1446,7 @@ $("#updateprice").bootstrapValidator({
 
 
 function updateFlatPricing(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showPriceAddRequest,
@@ -1462,6 +1469,7 @@ function showPriceAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
@@ -1533,6 +1541,7 @@ $('#updatePayment').bootstrapValidator({
 });
 
 function updatePaymentSchudle(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showPaymentSlabRequest,
@@ -1555,6 +1564,7 @@ function showPaymentSlabResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
@@ -1568,11 +1578,13 @@ function showPaymentSlabResponse(resp, statusText, xhr, $form){
 function deletePayment(id) {
 	var flag = confirm("Are you sure, you want to delete payment slab ?");
 	if(flag) {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/project/building/floor/flat/payment/delete/"+id, { }, function(data){
 			alert(data.message);
 			if(data.status == 1) {
 				$("#schedule-"+id).remove();
 			}
+			ajaxindicatorstop();
 		},'json');
 	}
 }
@@ -1582,29 +1594,35 @@ function showDetailTab() {
 }
 
 $("#project_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{},function(data){
 		var html = '<option value="0">Select Building</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
 		});
 		$("#building_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 	
 });
 $("#building_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/project/building/floor/names/"+$("#building_id").val(),{},function(data){
 		var html = '<option value="0">Select Floor</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
 		});
 		$("#floor_id").html(html);
+		ajaxindicatorstop();
 	},'json');
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/project/building/flattype/names/"+$("#building_id").val(),{},function(data){
 		var html = '<option value="0">Select Flat Type</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
 		});
 		$("#flat_type_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 	
 });
@@ -1628,6 +1646,7 @@ $("#subpbtn").click(function(){
 	});
 	
 	var final_data = {flatId: $("#flat_id").val(),amenityWeightage : $("#flat_amenity_weightage").val(),flatWeightages:amenityWeightage}
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.ajax({
 	    url: '${baseUrl}/webapi/project/flat/substage/update',
 	    type: 'POST',
@@ -1641,10 +1660,12 @@ $("#subpbtn").click(function(){
 			} else {
 				alert(data.message);
 			}
+			ajaxindicatorstop();
 		},
 		error : function(data)
 		{
 			alert("Fail to save data");
+			ajaxindicatorstop();
 		}
 		
 	});
@@ -1653,6 +1674,7 @@ $("#subpbtn").click(function(){
 $("#flat_type_id").change(function(){
 	var row = "";
 	if($("#flat_type_id").val() > 0){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/project/flattype/list",{ flat_type_id: $("#flat_type_id").val() }, function(data){
 			$("#bathroom").val(data.bathRoom);
 			$("#balcony").val(data.balcony);
@@ -1667,13 +1689,14 @@ $("#flat_type_id").change(function(){
 				+'</div>';
 				$("#rooms").html(row);
 			});
-			
+			ajaxindicatorstop();
 		},'json');
 	}else{
 		$("#bathroom").val('');
 		$("#balcony").val('');
 		$("#bedroom").val('');
 		$("#rooms").empty();
+		ajaxindicatorstop();
 	}
 });
 
@@ -1855,6 +1878,7 @@ $('#updateoffer').bootstrapValidator({
 		updateBuildingOffers();
 	});
 function updateBuildingOffers() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#imageresponse', 
 	 		beforeSubmit : showAddOfferRequest,
@@ -1869,11 +1893,13 @@ function updateBuildingOffers() {
 function deleteOffer(id){
 	var flag = confirm("Are you sure, you want to delete offer ?");
 	if(flag) {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/project/building/floor/flat/offer/delete/"+id, { }, function(data){
 			alert(data.message);
 			if(data.status == 1) {
 				$("#offer-"+id).remove();
 			}
+			ajaxindicatorstop();
 		},'json');
 	}
 }
@@ -1890,6 +1916,7 @@ function showAddOfferResponse(resp, statusText, xhr, $form){
        	$("#offerresponse").addClass('alert-danger');
 		$("#offerresponse").html(resp.message);
 		$("#offerresponse").show();
+		ajaxindicatorstop();
   	} else {
   		$("#offerresponse").removeClass('alert-danger');
         $("#offerresponse").addClass('alert-success');

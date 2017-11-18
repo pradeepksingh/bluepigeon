@@ -134,6 +134,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
 });
 function addProjectApprovalType() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/project/approval/type/save/",{ name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -141,13 +142,16 @@ function addProjectApprovalType() {
 }
 
 function editProjectApprovalType(project_approval_id) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderprojectapprovaltype.jsp?project_approval_id="+project_approval_id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editProjectApprovalType").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateProjectApprovalType() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/project/approval/type/update/",{ id: $("#uproject_approval_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();

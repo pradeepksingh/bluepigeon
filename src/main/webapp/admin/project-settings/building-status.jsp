@@ -134,6 +134,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 function addBuildingStatus() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/building/status/save/",{ name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -141,13 +142,16 @@ function addBuildingStatus() {
 }
 
 function editBuildingStatus(building_status_id) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderbuildingstatus.jsp?building_status_id="+building_status_id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editBuildingStatus").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateBuildingStatus() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/building/status/update/",{ id: $("#ubuilding_status_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();

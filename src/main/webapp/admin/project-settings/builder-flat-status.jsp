@@ -130,6 +130,7 @@ $(document).ready(function(){
     });
 });
 function addFlatStatus() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/flat/status/save/",{ name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -140,9 +141,11 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 function editFlatStatus(flat_status_id) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderflatstatus.jsp?flat_status_id="+flat_status_id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editFlatStatus").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 

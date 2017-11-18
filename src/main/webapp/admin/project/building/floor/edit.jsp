@@ -525,6 +525,7 @@ function addFloor() {
 		});
 	});
 	$("#amenity_wt").val(amenityWeightage);
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -548,6 +549,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
@@ -559,13 +561,15 @@ function showAddResponse(resp, statusText, xhr, $form){
 }
 
 function deleteImage(id) {
-	var flag = confirm("Are you sure ? You want to delete plan ?");
+	var flag = confirm("Are you sure, you want to delete plan ?");
 	if(flag) {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/project/building/floor/plan/delete/"+id, { }, function(data){
 			alert(data.message);
 			if(data.status == 1) {
 				$("#b_image"+id).remove();
 			}
+			ajaxindicatorstop();
 		},'json');
 	}
 }
@@ -596,12 +600,14 @@ function showDetailTab() {
 	$('#buildingTabs a[href="#floorimages"]').tab('show');
 }
 $("#project_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{},function(data){
 		var html = "";
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
 		});
 		$("#building_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 	
 });
@@ -634,6 +640,7 @@ $("#subpbtn").click(function(){
 	});
 	var floors = {id:$("#floor_id").val(),amenityWeightage : $("#amenity_weightage").val(),flatWeightage:$("#flat_weightage").val()};
 	var final_data = {floorId: $("#floor_id").val(),floorWeightages:amenityWeightage, builderFloor:floors,builderFlats : flats};
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.ajax({
 	    url: '${baseUrl}/webapi/project/floor/substage/update',
 	    type: 'POST',
@@ -644,13 +651,16 @@ $("#subpbtn").click(function(){
 	    success: function(data) {
 			if (data.status == 0) {
 				alert(data.message);
+				ajaxindicatorstop();
 			} else {
 				alert(data.message);
+				ajaxindicatorstop();
 			}
 		},
 		error : function(data)
 		{
 			alert("Fail to save data");
+			ajaxindicatorstop();
 		}
 		
 	});

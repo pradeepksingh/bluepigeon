@@ -177,6 +177,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 function addBuildingSubstage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/building/substage/save/",{ stage_id: $("#stage_id").val(), name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -184,19 +185,21 @@ function addBuildingSubstage() {
 }
 
 $("#searchbuildingstageId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/project-settings/building-substages.jsp?stage_id="+$("#searchbuildingstageId").val();
 });
 
 function editBuildingSubstages(building_substage_id) {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuildingsubstage.jsp?building_substage_id="+building_substage_id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editBuildingSubstages").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateBuildingSubstages() {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/building/substage/update/",{ id: $("#ubuilding_substage_id").val(), stage_id: $("#ustage_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();

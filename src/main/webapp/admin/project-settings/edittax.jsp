@@ -113,6 +113,7 @@ $("#ucountry_id").change(function(){
 	var ptax2 = $("#usduty").attr('placeholder');
 	var ptax3 = $("#uvat").attr('placeholder');
 	if($("#ucountry_id").val() > 0){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.post("${baseUrl}/webapi/general/uchangeLabel",{country_id : $("#ucountry_id").val()}, function(data){
 			if(data != "" && data != null){
 				if(data.taxLabel1 != "" && data.taxLabel1 != "undefined"){
@@ -154,6 +155,7 @@ $("#ucountry_id").change(function(){
 				$("#uhtax2").hide();
 				$("#uhtax3").hide();
 			}
+			ajaxindicatorstop();
 		});
 	}
 });

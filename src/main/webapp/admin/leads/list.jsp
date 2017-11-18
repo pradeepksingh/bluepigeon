@@ -88,9 +88,11 @@ builderLeads = new ProjectDAO().getBuilderProjectLeads();
 		<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 		<script type="text/javascript">
 			function editProject(id){
+				ajaxindicatorstart("Please wait while.. we load ...");
 				window.location.href = "${baseUrl}/projectdetails/editproject.jsp?project_id="+id;
 			}
 			function editProjects(id){
+				ajaxindicatorstart("Please wait while.. we load ...");
 				window.location.href = "${baseUrl}/projectconfigtabs.jsp?project_id="+id;
 			}
 		</script>

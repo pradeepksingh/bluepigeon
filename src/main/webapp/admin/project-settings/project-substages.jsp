@@ -177,6 +177,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 function addProjectSubstage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/project/substage/save/",{ stage_id: $("#stage_id").val(), name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -184,19 +185,21 @@ function addProjectSubstage() {
 }
 
 $("#searchprojectstageId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/project-settings/project-substages.jsp?stage_id="+$("#searchprojectstageId").val();
 });
 
 function editProjectSubstages(project_substage_id) {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editprojectsubstage.jsp?project_substage_id="+project_substage_id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editProjectSubstages").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateProjectSubstages() {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/project/substage/update/",{ id: $("#uproject_substage_id").val(), stage_id: $("#ustage_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
