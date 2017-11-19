@@ -1269,7 +1269,7 @@ $("#building").click(function(){
 });
 $("#flat").click(function(){
 	ajaxindicatorstart("Loading...");
-	window.location.href = "${baseUrl}/admin/builder/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>&flat_id=<%out.print(flat_id); %>";
+	window.location.href = "${baseUrl}/builder/admin/project/building/floor/flat/edit.jsp?project_id=<%out.print(project_id); %>&building_id=<%out.print(building_id);%>&floor_id=<%out.print(floor_id); %>&flat_id=<%out.print(flat_id); %>";
 });
 
 

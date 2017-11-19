@@ -610,7 +610,6 @@ $("#leads").click(function(){
 	window.location.href="${baseUrl}/builder/salesman/leads/Salesman_leads.jsp?project_id="+$("#project_id").val();
 });
 function calculateAmount(id){
-	alert($("#h_sale_value").val());
 	if($("#payable"+id).val() <0 || $("#payable"+id).val() >100){
 		alert("The percentage must be between 0 and 100");
 		$("#payable"+id).val('');
@@ -659,8 +658,8 @@ function calcultatePercentage(id){
 		$("#payable"+id).val(percentage.toFixed(1));
 	}else{
 		alert("Please Enter correct flat sale amount");
-		$("#payable"+id).val("");
-		$("#amount"+id).val("");
+// 		$("#payable"+id).val("");
+// 		$("#amount"+id).val("");
 	}
 }
 function addMoreBuyers(){
