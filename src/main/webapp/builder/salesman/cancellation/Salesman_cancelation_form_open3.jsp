@@ -373,6 +373,7 @@ $('#newcancellation').bootstrapValidator({
 
 function addCancellation() {
 	//alert("Hello again");
+	ajaxindicatorstart("Loading...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showCancellationRequest,
@@ -397,6 +398,7 @@ function showCancellationResponse(resp, statusText, xhr, $form){
 		$("#response").html(resp.message);
 		$("#response").show();
 		alert(resp.message);
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
@@ -408,15 +410,19 @@ function showCancellationResponse(resp, statusText, xhr, $form){
 }
 
 $("#booking").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/salesman/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
 });
 $("#cancellation").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/salesman/cancellation/Salesman_booking_new2.jsp?project_id="+$("#project_id").val();
 });
 $("#leads").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/salesman/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
 });
 $("#campaign").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/salesman/campaign/Salesman_campaign.jsp?project_id="+$("#project_id").val();
 });
 </script>

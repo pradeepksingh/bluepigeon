@@ -588,6 +588,7 @@ function showFlatwithImage(id){
 	}
 }
 function showImagewithDetails(id){
+	var unitname = "";
 	if( id != ''){
 		ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/project/building/floor/flat/detail/",{flat_id : id, emp_id:$("#emp_id").val()},function(data){
@@ -616,57 +617,26 @@ function showImagewithDetails(id){
 			  	+'</div>'
 			  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
 			  	+'<p class="p-custom">Carpet Area</p>'
-			  	+'<p><b>'+data.carpetArea+' '+data.carpetAreaUnit+'</b></p>'
+			  	+'<p><b>'+data.carpetArea+' '+data.areaUint+'</b></p>'
 			  	+'</div>'
-			  	+'</div>';
+			  	+'</div>'
+			  	+'<div class="row custom-row">';
 		  	$(data.builderBuildingFlatTypeRooms).each(function(index){
-		  		alert("Length :: "+data.builderBuildingFlatTypeRooms[index].length+" breadth :"+data.builderBuildingFlatTypeRooms[index].breadth+" lengthUnit :"+data.builderBuildingFlatTypeRooms[index].lengthUnit+" roomName:"+data.builderBuildingFlatTypeRooms[index].roomName);
-		  		flatdetails +='<div class="row custom-row">'
-			  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
+		  	if(data.builderBuildingFlatTypeRooms[index].lengthUnit ==1){
+		  		unitname = "Feet";
+		  	}else if(data.builderBuildingFlatTypeRooms[index].lengthUnit ==2){
+		  		unitname = "Meter";
+		  	}else if(data.builderBuildingFlatTypeRooms[index].lengthUnit ==3){
+		  		unitname = "inch";
+		  	}else if(data.builderBuildingFlatTypeRooms[index].lengthUnit ==4){
+		  		unitname = "Yard";
+		  	}
+		  		flatdetails +='<div class="col-md-6 col-sm-6 col-xs-6">'
 			  	+'<p class="p-custom">'+data.builderBuildingFlatTypeRooms[index].roomName+'</p>'
-			  	+'<p><b>'+data.builderBuildingFlatTypeRooms[index].length+' x '+data.builderBuildingFlatTypeRooms[index].breadth+' '+data.builderBuildingFlatTypeRooms[index].lengthUnit+'</b></p>'
-			  	+'</div>'
-			  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
-			  	+'<p class="p-custom">Carpet Area</p>'
-			  	+'<p><b>'+data.carpetArea+' '+data.carpetAreaUnit+'</b></p>'
-			  	+'</div>'
+			  	+'<p><b>'+data.builderBuildingFlatTypeRooms[index].length+' x '+data.builderBuildingFlatTypeRooms[index].breadth+' '+unitname+'</b></p>'
 			  	+'</div>';
-			  	
 		  	});
-		  	//flatdetails +='<div class="col-sm-5 col-md-5 col-xs-5">'
-		  
-		  	+'<div class="row custom-row">'
-		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
-		  	+'<p class="p-custom">Flat Type</p>'
-		  	+'<p><b>1BHK</b></p>'
-		  	+'</div>'
-		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
-		  	+'<p class="p-custom">Carpet Area</p>'
-		  	+'<p><b>500 SQ/FT</b></p>'
-		  	+'</div>'
-		  	+'</div>'
-		  	+'<div class="row custom-row">'
-		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
-		  	+'<p class="p-custom">Flat Type</p>'
-		  	+'<p><b>1BHK</b></p>'
-		  	+'</div>'
-		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
-		  	+'<p class="p-custom">Carpet Area</p>'
-		  	+'<p><b>500 SQ/FT</b></p>'
-		  	+'</div>'
-		  	+'</div>'
-		  	+'<div class="row custom-row">'
-		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
-		  	+'<p class="p-custom">Flat Type</p>'
-		  	+'<p><b>1BHK</b></p>'
-		  	+'</div>'
-		  	+'<div class="col-md-6 col-sm-6 col-xs-6">'
-		  	+'<p class="p-custom">Carpet Area</p>'
-		  	+'<p><b>500 SQ/FT</b></p>'
-		  	+'</div>'
-		  	+'</div>'
-		  	+'</div>'
-		  	+'</div>';
+		  	flatdetails +='</div>';
 		$("#flatList").append(flatdetails);
 	  	$('#zoomimg').modal('show');
 			}

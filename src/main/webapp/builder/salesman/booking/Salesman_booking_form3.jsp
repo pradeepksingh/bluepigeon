@@ -705,11 +705,13 @@ function addMoreBuyers(){
 	        'pan[]': {
 	            validators: {
 	                notEmpty: {
-	                    message: 'Buyer pancard is required and cannot be empty'
+	                    message: 'PAN card number required and cannot be empty'
 	                },
 	                regexp:{
-	                	regexp: '[A-Z]{5}\d{4}[A-Z]{1}',
-	                	message: 'Invalid pancard number'
+	                	regexp:'^[A-Z]{5}[0-9]{4}[A-Z]{1}$',
+	                	message:'Invalid PAN card number',
+	                	maxlength:10,
+	                	minlength:10
 	                }
 	            }
 	        },
