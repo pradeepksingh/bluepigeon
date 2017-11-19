@@ -214,7 +214,7 @@ function getBookedBuyerFilterList(){
 				 htmlBookedBuyers ='<div class="border-lead1">'
 	                  +'<div class="row">'
                  +'<div class="col-md-2 col-sm-2 col-xs-2">'
-                 +'<h4>'+data[index].buildingName+'-'+data[index].flatNo+' '+data[index].projectName+', '+data[index].localityName+', '+data[index].cityName+'</h4>'
+                 +'<h4>'+data[index].buildingName+', '+data[index].flatNo+', '+data[index].projectName+', '+data[index].localityName+', '+data[index].cityName+'</h4>'
                  +'</div>'
                  +' <div class="col-md-4 col-sm-4 col-xs-4">'
                   +'<h4>'+data[index].buyerName+'</h4>'

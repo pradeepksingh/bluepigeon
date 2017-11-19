@@ -1597,7 +1597,7 @@ public class BuilderDetailsDAO {
 			}
 		}
 		
-		hql += where + " AND project.status=1 AND b.is_primary=1 AND b.is_deleted=0 AND b.status=0 GROUP by b.id ORDER BY project.id desc";
+		hql += where + " AND project.status=1 AND b.is_primary=1 AND b.is_deleted=0 GROUP by b.id ORDER BY project.id desc";
 		try {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BookedBuyerList.class));
