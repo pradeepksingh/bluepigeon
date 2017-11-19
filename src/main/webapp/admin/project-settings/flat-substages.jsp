@@ -181,6 +181,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 function addFlatSubstage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/flat/substage/save/",{ stage_id: $("#stage_id").val(), name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -188,19 +189,21 @@ function addFlatSubstage() {
 }
 
 $("#searchflatstageId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/project-settings/flat-substages.jsp?stage_id="+$("#searchflatstageId").val();
 });
 
 function editFlatSubstages(flat_substage_id) {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editflatsubstage.jsp?flat_substage_id="+flat_substage_id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editFlatSubstages").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateFlatSubstages() {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/flat/substage/update/",{ id: $("#uflat_substage_id").val(), stage_id: $("#ustage_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();

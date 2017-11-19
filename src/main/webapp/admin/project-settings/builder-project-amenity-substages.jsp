@@ -212,44 +212,52 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 function addProjectAmenitySubstage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/project/amenity/substages/save",{ stage_id: $("#stage_id").val(), name: $("#name").val(), status: $("#status").val(), sortorder: 1}, function(data){
 		alert(data.message);
 		window.location.reload();
 	},'json');
 }
 $("#amenity_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/create/builder/project/amenity/stages/list",{ amenity_id: $("#amenity_id").val() }, function(data){
 		var html = '<option value="">Select Project Amenity Stage</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		});
 		$("#stage_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 
 $("#searchamenityId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/create/builder/project/amenity/stages/list",{ amenity_id: $("#searchamenityId").val() }, function(data){
 		var html = '<option value="">Select Project Amenity Stage</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		});
 		$("#searchstageId").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 
 $("#searchstageId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/project-settings/builder-project-amenity-substages.jsp?stage_id="+$("#searchstageId").val();
 });
 
 function editProjectAmenitySubstage(substageid) {
-
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderprojectamenitysubstages.jsp?substage_id="+substageid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editProjectAmenitySubstage").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateProjectAmenitySubstage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/project/amenity/substages/update/",{ id: $("#usubstage_id").val(), stage_id: $("#ustage_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -259,6 +267,7 @@ function updateProjectAmenitySubstage() {
 function deleteProjectAmenitySubstage(substage_id){
 	var yes = confirm("Do you want to delete ?");
 	if(yes==true){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.ajax({
 			url: "${baseUrl}/webapi/create/builder/project/amenity/substages/delete",
 			data:{substage_id:substage_id},

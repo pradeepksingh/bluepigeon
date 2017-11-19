@@ -213,44 +213,52 @@ $('#name').keyup(function() {
 });
 
 function addBuildingAmenitySubstage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/building/amenity/substages/save",{ stage_id: $("#stage_id").val(), name: $("#name").val(), status: $("#status").val(), sortorder: 1}, function(data){
 		alert(data.message);
 		window.location.reload();
 	},'json');
 }
 $("#amenity_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/create/builder/building/amenity/stages/list",{ amenity_id: $("#amenity_id").val() }, function(data){
 		var html = '<option value="">Select Building Amenity Stage</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		});
 		$("#stage_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 
 $("#searchamenityId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/create/builder/building/amenity/stages/list",{ amenity_id: $("#searchamenityId").val() }, function(data){
 		var html = '<option value="">Select Building Amenity Stage</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		});
 		$("#searchstageId").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 
 $("#searchstageId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/project-settings/builder-building-amenity-substages.jsp?stage_id="+$("#searchstageId").val();
 });
 
 function editBuildingAmenitySubstage(substageid) {
-
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderbuildingamenitysubstages.jsp?substage_id="+substageid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editBuildingAmenitySubstage").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateBuildingAmenitySubstage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/building/amenity/substages/update/",{ id: $("#usubstage_id").val(), stage_id: $("#ustage_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -260,6 +268,7 @@ function updateBuildingAmenitySubstage() {
 function deleteBuildingAmenitySubstage(substage_id){
 	var yes = confirm("Do you want to delete ?");
 	if(yes==true){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.ajax({
 			url: "${baseUrl}/webapi/create/builder/building/amenity/substages/delete",
 			data:{substage_id:substage_id},

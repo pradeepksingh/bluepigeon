@@ -283,9 +283,9 @@ public class CancellationDAO {
 		String hql = "";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() >0 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
-			hql ="select project.name as projectName,project.locality_name as localityName, city.name as cityName, building.name as buildingName, flat.flat_no as flatNo,cancel.buyer_name as buyerName, cancel.buyer_contact as buyerContact, cancel.reason as cancelReason, cancel.charges as charges from cancellation as cancel inner join builder_flat as flat on flat.id = cancel.flat_id left join buyer as buy on buy.flat_id = flat.id left join builder_floor as floor on floor.id = flat.floor_no left join builder_building as building on building.id = floor.building_id left join builder_project as project on project.id = building.project_id left join city as city on city.id = project.city_id where buy.builder_id ="+builderEmployee.getBuilder().getId()+" and buy.is_primary=1 and buy.is_deleted=1 and project.status=1  GROUP by cancel.id order by project.id DESC";
+			hql ="select project.name as projectName,project.locality_name as localityName, city.name as cityName, building.name as buildingName, flat.flat_no as flatNo,cancel.buyer_name as buyerName, cancel.buyer_contact as buyerContact, cancel.reason as cancelReason, cancel.charges as charges from cancellation as cancel inner join builder_flat as flat on flat.id = cancel.flat_id left join buyer as buy on buy.flat_id = flat.id left join builder_floor as floor on floor.id = flat.floor_no left join builder_building as building on building.id = floor.building_id left join builder_project as project on project.id = building.project_id left join city as city on city.id = project.city_id where buy.builder_id ="+builderEmployee.getBuilder().getId()+" and buy.is_primary=1 and buy.is_deleted=1 and project.status=1  GROUP by cancel.id order by cancel.id DESC";
 		}else{
-			hql= "select project.name as projectName,project.locality_name as localityName, city.name as cityName, building.name as buildingName, flat.flat_no as flatNo,cancel.buyer_name as buyerName, cancel.buyer_contact as buyerContact, cancel.reason as cancelReason, cancel.charges as charges from cancellation as cancel inner join builder_flat as flat on flat.id = cancel.flat_id left join buyer as buy on buy.flat_id = flat.id left join builder_floor as floor on floor.id = flat.floor_no left join builder_building as building on building.id = floor.building_id left join builder_project as project on project.id = building.project_id inner join allot_project as ap on ap.project_id = project.id left join city as city on city.id = project.city_id where ap.emp_id ="+builderEmployee.getId()+" and buy.is_primary=1 and buy.is_deleted=1 and project.status=1 GROUP by cancel.id order by project.id DESC";
+			hql= "select project.name as projectName,project.locality_name as localityName, city.name as cityName, building.name as buildingName, flat.flat_no as flatNo,cancel.buyer_name as buyerName, cancel.buyer_contact as buyerContact, cancel.reason as cancelReason, cancel.charges as charges from cancellation as cancel inner join builder_flat as flat on flat.id = cancel.flat_id left join buyer as buy on buy.flat_id = flat.id left join builder_floor as floor on floor.id = flat.floor_no left join builder_building as building on building.id = floor.building_id left join builder_project as project on project.id = building.project_id inner join allot_project as ap on ap.project_id = project.id left join city as city on city.id = project.city_id where ap.emp_id ="+builderEmployee.getId()+" and buy.is_primary=1 and buy.is_deleted=1 and project.status=1 GROUP by cancel.id order by cancel.id DESC";
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BookedBuyerList.class));
@@ -428,9 +428,13 @@ public class CancellationDAO {
 		session.getTransaction().commit();
 		session.close();
 		cancellation2 = getCancellationById(cancellation.getId());
-		updateBuyerStatus(cancellation2.getBuilderFlat().getId());
+		updateFlatStatus(cancellation.getBuilderFlat().getId());
+		updatePrimaryBuyer(cancellation.getBuilderFlat().getId(),cancellation.getBuyerId());
+		updateProjectInventory(cancellation.getBuilderFlat().getId());
+		updateBuildingInventory(cancellation.getBuilderFlat().getId());
+		updateProjectRevenue(cancellation.getCharges(),cancellation.getBuilderProject().getId(),cancellation.getBuilderFlat().getId());
+		updateBuildingRevenue(cancellation.getCharges(),cancellation.getBuilderProject().getId(),cancellation.getBuilderFlat().getId());
 		updateCancelStatus(cancellation2.getBuilderFlat().getId());
-		updateFlatStatus(cancellation2.getBuilderFlat().getId());
 		saveApprovedCancellation(cancellation,empId);
 		responseMessage.setStatus(1);
 		responseMessage.setMessage("Booked Flat is cancelled Successfully");

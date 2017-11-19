@@ -218,44 +218,52 @@ $('#name').keyup(function() {
 });
 
 function addCity() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/general/city/save/",{ state_id: $("#state_id").val(), name: $("#name").val(), status: $("#status").val(), sortorder: 1}, function(data){
 		alert(data.message);
 		window.location.reload();
 	},'json');
 }
 $("#country_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#country_id").val() }, function(data){
 		var html = '<option value="">Select State</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		});
 		$("#state_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 
 $("#searchcountryId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#searchcountryId").val() }, function(data){
 		var html = '<option value="">Select State</optio>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 		});
 		$("#searchstateId").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 
 $("#searchstateId").change(function(){
-
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/general/city.jsp?state_id="+$("#searchstateId").val();
 });
 
 function editCity(cityid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/general/editcity.jsp?city_id="+cityid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editCity").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateCity() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/general/city/update/",{ id: $("#ucity_id").val(), state_id: $("#ustate_id").val(), name: $("#uname").val(), status: $("#ustatus").val(), sortorder: 1}, function(data){
 		alert(data.message);
 		window.location.reload();

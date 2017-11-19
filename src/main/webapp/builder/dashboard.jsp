@@ -744,7 +744,7 @@
                       +'<div class="row">'
   	                +'<div class="col-md-6 left">'
   		            +'<h3>'+projectName+'</h3>'
-  		            +'<h4>'+cityName+'</h4>'
+  		            +'<h4>'+localityName+'</h4>'
   		            +'<br>'
                  		+'<div class="bottom">'
                   	+'<h4>'+data[index].sold+'/'+data[index].totalSold+' SOLD</h4>'

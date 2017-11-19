@@ -870,23 +870,27 @@ $('#launch_date').datepicker({
 });
 $("#project_id").change(function(){
 	if($("#project_id").val() != "") {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/buyer/building/list/",{ project_id: $("#project_id").val() }, function(data){
 			var html = '<option value="">Select Building</option>';
 			$(data).each(function(index){
 				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 			});
 			$("#building_id").html(html);
+			ajaxindicatorstop();
 		},'json');
 	}
 });
 
 $("#building_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/buyer/floor/list/",{ building_id: $("#building_id").val() }, function(data){
 		var html = '<option value="">Select Flat</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		});
 		$("#flat_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 // $("#floor_id").change(function(){
@@ -1059,7 +1063,7 @@ function updateBuyer() {
 		}
 	});
 	$("#doc_voterid").val(doc_voterid);
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#basicresponse', 
 	 		beforeSubmit : showAddRequest,
@@ -1083,6 +1087,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#basicresponse").addClass('alert-danger');
 		$("#basicresponse").html(resp.message);
 		$("#basicresponse").show();
+		ajaxindicatorstop();
   	} else {
   		$("#basicresponse").removeClass('alert-danger');
         $("#basicresponse").addClass('alert-success');
@@ -1093,6 +1098,7 @@ function showAddResponse(resp, statusText, xhr, $form){
   	}
 }
 function updateBuyerOffer(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#offerresponse', 
 	 		beforeSubmit : showAddOfferRequest,
@@ -1115,6 +1121,7 @@ function showAddOfferResponse(resp, statusText, xhr, $form){
        	$("#offerresponse").addClass('alert-danger');
 		$("#offerresponse").html(resp.message);
 		$("#offerresponse").show();
+		ajaxindicatorstop();
   	} else {
   		$("#offerresponse").removeClass('alert-danger');
         $("#offerresponse").addClass('alert-success');
@@ -1160,6 +1167,7 @@ $('#pricingfrm').bootstrapValidator({
 });
 
 function updateProjectPrice() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#pricingresponse', 
 	 		beforeSubmit : showPriceRequest,
@@ -1183,17 +1191,20 @@ function showPriceResponse(resp, statusText, xhr, $form){
        	$("#pricingresponse").addClass('alert-danger');
 		$("#pricingresponse").html(resp.message);
 		$("#pricingresponse").show();
+		ajaxindicatorstop();
   	} else {
   		$("#pricingresponse").removeClass('alert-danger');
         $("#pricingresponse").addClass('alert-success');
         $("#pricingresponse").html(resp.message);
         $("#pricingresponse").show();
         alert(resp.message);
+    	ajaxindicatorstop();
   	}
 }
 
 
 function updateBuyerPayments() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#imageresponse', 
 	 		beforeSubmit : showAddPaymentRequest,
@@ -1216,12 +1227,14 @@ function showAddPaymentResponse(resp, statusText, xhr, $form){
        	$("#paymentresponse").addClass('alert-danger');
 		$("#paymentresponse").html(resp.message);
 		$("#paymentresponse").show();
+		ajaxindicatorstop();
   	} else {
   		$("#paymentresponse").removeClass('alert-danger');
         $("#paymentresponse").addClass('alert-success');
         $("#paymentresponse").html(resp.message);
         $("#paymentresponse").show();
         alert(resp.message);
+    	ajaxindicatorstop();
   	}
 }
 function addMoreBuyers() {
@@ -1345,6 +1358,7 @@ function removeOffer(id) {
 function deleteBuyer(id){
 	var flag = confirm("Are you sure? You want to delete buyer ?");
 	if(flag){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/project/buyer/delete/"+id,{ }, function(data){
 			if(data.status == 1){
 				alert(data.message);
@@ -1399,11 +1413,13 @@ function removeSchedule(id) {
 function deleteSchedule(id){
 	var flag = confirm("Are you sure ? You want to delete offer ?");
 	if(flag) {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/buyer/payment/delete/"+id, { }, function(data){
 			
 			if(data.status == 1) {
 				alert(data.message);
 				$("#schedule-"+id).remove();
+				ajaxindicatorstop();
 			}
 		});
 	}
@@ -1470,13 +1486,15 @@ function removeOffer(id) {
 }
 
 function deleteOffer(id) {
-	var flag = confirm("Are you sure ? You want to delete offer ?");
+	var flag = confirm("Are you sure, You want to delete offer ?");
 	if(flag) {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/buyer/offer/delete/"+id, { }, function(data){
 			
 			if(data.status == 1) {
 				alert(data.message);
 				$("#offer-"+id).remove();
+				ajaxindicatorstop();
 			}
 		});
 	}

@@ -565,7 +565,7 @@ $("#leads").click(function(){
 	window.location.href="${baseUrl}/builder/saleshead/leads/Salesman_leads.jsp?project_id="+<%out.print(project_id);%>
 });
 $("#booking").click(function(){
-	window.location.href="${baseUrl}/builder/saleshead/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
+	window.location.href="${baseUrl}/builder/saleshead/booking/salesman_bookingOpenForm.jsp?project_id="+<%out.print(project_id);%>;
 });
 function addMoreBuyers(){
 	var buyers = parseInt($("#buyer_count").val());

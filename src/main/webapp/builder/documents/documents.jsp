@@ -68,6 +68,7 @@
     <script src="../plugins/bower_components/jquery/dist/newjquery.min.js"></script>
     <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
     <script src="../js/jquery.form.js"></script>
+     <script src="../js/Moment.js"></script>
     <script src="../js/bootstrapValidator.min.js"></script>
 </head>
 
@@ -132,9 +133,9 @@
 							<div class="col-sm-7">
 								<div>
 									<div class="file-upload">
-										<p class="file-name"></p>
-									    <label for="doc_url" class="btn">Choose File</label>
-									   	<input type="file" id="doc_url" name="doc_url[]">
+										<p class="file-name" id="fileselectgeneral"></p>
+									    <label for="choosegeneraldoc" class="btn">Choose File</label>
+									   	<input type="file"  name="doc_url[]"  onchange="getGeneralFileData(this);" id="choosegeneraldoc">
 									</div>
 								</div>
 								<div class="messageContainer"></div>
@@ -266,18 +267,7 @@ $('#flat_buyer_ids').multiselect({
     selectAll: true,
 	    
 });
-  jQuery(function($) {
-	  $('input[type="file"]').change(function() {
-	    if ($(this).val()) {
-		    error = false;
-	      var filename = $(this).val();
-				$(this).closest('.file-upload').find('.file-name').html(filename);
-	      if (error) {
-	        parent.addClass('error').prepend.after('<div class="alert alert-error">' + error + '</div>');
-	      }
-	    }
-	  });
-	});
+  
   
   $('#addocument').bootstrapValidator({
 		container: function($field, validator) {
@@ -364,41 +354,16 @@ $('#flat_buyer_ids').multiselect({
 	  	}
 	}
 	
-// 	$("#filer_project_ids").change(function(){
-// 		var htmlconfig = "";
-// 		ajaxindicatorstart("Loading...");
-// 		$.get("${baseUrl}/webapi/builder/building/data",{project_ids:$(this).val()},function(data){
-// 			  $(data).each(function(index){
-// 				  htmlconfig=htmlconfig+'<option value="'+data[index].id+'">'+data[index].name+'</option>';
-// 			  });
-// 			  $("#filer_building_ids").multiselect({
-// 				    columns: 1,
-// 				    placeholder: 'Select Building',
-// 				    search: true,
-// 				    selectAll: true,
-// 				});
-// 			  $("#filer_building_ids").html(htmlconfig);
-// 			  $("#filer_building_ids").multiselect('reload');
-// 			  ajaxindicatorstop();
-// 		});
-// 	});
-	
-// 	$("#filer_building_ids").change(function(){
-// 		var htmlconfig = "";
-// 		ajaxindicatorstart("Loading...");
-// 		$.get("${baseUrl}/webapi/builder/flatbuyer/data",{building_ids:$(this).val()},function(data){
-// 			  $(data).each(function(index){
-// 				  htmlconfig=htmlconfig+'<option value="'+data[index].id+'">'+data[index].flatNumber+' & '+data[index].name+'</option>';
-// 			  });
-// 			  $("#flat_buyer_ids").multiselect({
-// 				    columns: 1,
-// 				    placeholder: 'Select Building',
-// 				    search: true,
-// 				    selectAll: true,
-// 				});
-// 			  $("#flat_buyer_ids").html(htmlconfig);
-// 			  $("#flat_buyer_ids").multiselect('reload');
-// 			  ajaxindicatorstop();
-// 		});
-//	});
+	function getGeneralFileData(myFile){
+		   var file = myFile.files[0];  
+		   var filename = file.name;
+		   
+		   if(['application/pdf'].indexOf($("#choosegeneraldoc").get(0).files[0].type) == -1) {
+		       alert('Please upload only PDF file');
+		       return;
+		   }
+		   $("#fileselectgeneral").empty();
+		   $("#fileselectgeneral").html(filename);
+		}
+
 </script>

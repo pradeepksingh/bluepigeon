@@ -247,15 +247,18 @@
 <script src="${baseUrl}/js/jquery.form.js"></script>
 <script type="text/javascript">
 $("#project_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Building</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 		});
 		$("#building_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 $("#building_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/project/building/flat/names/"+$("#building_id").val(),{ }, function(data){
 		var html = '<option value="0">Select Flat</option>';
 		$(data).each(function(index){
@@ -263,6 +266,7 @@ $("#building_id").change(function(){
 			html = html + '<option value="'+data[index].id+'">'+data[index].flatNo+'</option>';
 		});
 		$("#flat_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 						
@@ -334,6 +338,7 @@ $('#updatelead').bootstrapValidator({
 });
 
 function updateLead() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -357,6 +362,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');

@@ -3962,7 +3962,7 @@ public class ProjectDAO {
 					+ "inner join allot_project as ap on ap.project_id = project.id "
 					+ "left join builder_employee as emp on emp.id = ap.emp_id"
 					+ " where "
-					+ "project.status=1 and emp.reporting_id="+builderEmployee.getId()+" and emp.id<>"+builderEmployee.getId();
+					+ "project.status=1 and emp.id<>"+builderEmployee.getId();
 		}
 		 HibernateUtil hibernateUtil = new HibernateUtil();
 		    Session session = hibernateUtil.getSessionFactory().openSession();
@@ -4081,15 +4081,18 @@ public class ProjectDAO {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		List<NewProject> newProjects = query.list();
-		for(NewProject newProject : newProjects){
-			NewProjectList newProjectList = new NewProjectList();
-			newProjectList.setBuilderName(newProject.getBuilder().getName());
-			newProjectList.setProjectName(newProject.getName());
-			newProjectList.setContactNumber(newProject.getBuilder().getMobile());
-			newProjectList.setEmail(newProject.getBuilder().getEmail());
-			newProjectList.setLocalityName(newProject.getLocality().getName());
-			newProjectLists.add(newProjectList);
+		if(newProjects != null){
+			for(NewProject newProject : newProjects){
+				NewProjectList newProjectList = new NewProjectList();
+				newProjectList.setBuilderName(newProject.getBuilder().getName());
+				newProjectList.setProjectName(newProject.getName());
+				newProjectList.setContactNumber(newProject.getBuilder().getMobile());
+				newProjectList.setEmail(newProject.getBuilder().getEmail());
+				newProjectList.setLocalityName(newProject.getLocality().getName());
+				newProjectLists.add(newProjectList);
+			}
 		}
+		session.close();
 		return newProjectLists;
 		
 	}
@@ -6931,7 +6934,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	 * @return
 	 */
 	public List<EmployeeList> getBuilderEmployeeList(BuilderEmployee builderEmployee){
-		String hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email,GROUP_CONCAT(access.name) as access from builder_employee as emp join employee_role as er on er.emp_id=emp.id join builder_employee_access_type as access on access.id=er.role_id where emp.builder_id="+builderEmployee.getBuilder().getId()+" GROUP by emp.id order by emp.id DESC";
+		String hql = "select emp.id as id, emp.name as name, emp.photo as image, emp.mobile as mobileNo, emp.email as email,GROUP_CONCAT(access.name) as access from builder_employee as emp join employee_role as er on er.emp_id=emp.id join builder_employee_access_type as access on access.id=er.role_id where emp.builder_id="+builderEmployee.getBuilder().getId()+" GROUP by emp.id order by emp.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
@@ -6947,7 +6950,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	 * @return
 	 */
 	public List<EmployeeList> getBuilderEmployeeList(BuilderEmployee builderEmployee,int projectId){
-		String hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email, access.name as access from builder_employee as emp join builder_employee_access_type as access on access.id= emp.access_type_id join builder_project as project on project.group_id=emp.builder_id where emp.access_type_id in(3,4,5) and emp.builder_id="+builderEmployee.getBuilder().getId()+" and project.id="+projectId+" group by emp.id order by emp.id DESC";
+		String hql = "select emp.id as id, emp.name as name,  emp.photo as image, emp.mobile as mobileNo, emp.email as email, access.name as access from builder_employee as emp join builder_employee_access_type as access on access.id= emp.access_type_id join builder_project as project on project.group_id=emp.builder_id where emp.access_type_id in(3,4,5) and emp.builder_id="+builderEmployee.getBuilder().getId()+" and project.id="+projectId+" group by emp.id order by emp.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
@@ -6965,7 +6968,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	public List<EmployeeList> getBuilderEmployeeList(int builderId, int roleId, String keyword){
 		String hql = "";
 		if(keyword == "") {
-			 hql = "select emp.id as id, emp.name as name, emp.mobile as mobileNo, emp.email as email,GROUP_CONCAT(access.name) as access from builder_employee as emp join employee_role as er on er.emp_id=emp.id join builder_employee_access_type as access on access.id=er.role_id join builder as builder on builder.id=emp.builder_id where emp.builder_id="+builderId;
+			 hql = "select emp.id as id, emp.name as name,  emp.photo as image, emp.mobile as mobileNo, emp.email as email,GROUP_CONCAT(access.name) as access from builder_employee as emp join employee_role as er on er.emp_id=emp.id join builder_employee_access_type as access on access.id=er.role_id join builder as builder on builder.id=emp.builder_id where emp.builder_id="+builderId;
 			 if(roleId > 0){		
 				 hql=hql+" and access.id="+roleId;
 			 }
@@ -7427,5 +7430,182 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 			return result;
 		}
 		
+		
+		  public List<BookingFlatList> getFlatdetailsByFlatEmpIds(int flatId,int empId){
+		    	
+		    	String emphql = " from BuilderEmployee where id=:id";
+		      //  System.err.println("flat id "+flatId);
+		    	
+		    	List<BookingFlatList> bookings = new ArrayList<BookingFlatList>(); 
+		    	BookingFlatList booking = new BookingFlatList();
+		    	String hql =" from BuilderFlat where id = :flat_id AND builderFloor.builderBuilding.builderProject.status = 1 AND "
+		    			+ " builderFloor.builderBuilding.status = 1 AND builderFloor.status = 1 ";
+		    	hql += " AND status = 1 ORDER BY builderFloor.builderBuilding.builderProject.id DESC, builderFloor.builderBuilding.id DESC, builderFloor.floorNo DESC, flatNo DESC";
+		    	HibernateUtil hibernateUtil = new HibernateUtil();
+		    	Session session = hibernateUtil.openSession();
+		    	Query query = session.createQuery(hql);
+		    	query.setParameter("flat_id", flatId);
+		    	
+		    	Session empSession = hibernateUtil.openSession();
+		    	Query empQuery = empSession.createQuery(emphql);
+		    	empQuery.setParameter("id", empId);
+		    	BuilderEmployee employee = (BuilderEmployee) empQuery.list().get(0);
+		    	empSession.close();
+		    	booking.setAccessId(employee.getBuilderEmployeeAccessType().getId());
+		    	try{
+			    	BuilderFlat builderFlat = (BuilderFlat) query.list().get(0);
+			    	if(builderFlat != null){
+			    		if(builderFlat.getBuilderFlatStatus().getId() == 1){
+			    			System.err.println("FlatStatus :: "+builderFlat.getBuilderFlatStatus().getName());
+			    		booking.setFlatId(builderFlat.getId());
+			    		booking.setFlatNo(builderFlat.getFlatNo());
+			    		booking.setBalcony(builderFlat.getBalcony());
+			    		booking.setBathroom(builderFlat.getBathroom());
+			    		booking.setBedroom(builderFlat.getBedroom());
+			    		booking.setCarpetArea(builderFlat.getBuilderFlatType().getCarpetArea());
+			    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
+			    		if(builderFlat.getImage() != null && builderFlat.getImage() != "")
+			    			booking.setImage(builderFlat.getImage());
+			    		else
+			    			booking.setImage("");
+			    		booking.setFlatType(builderFlat.getBuilderFlatType().getBuilderProjectPropertyConfiguration().getName());
+			    		List<BuilderBuildingFlatTypeRoom> room = getFlatTypeRoom(builderFlat.getBuilderFlatType().getId());
+			    		List<BuilderBuildingFlatTypeRoom>  roomList = new ArrayList<BuilderBuildingFlatTypeRoom>();
+			    		for(BuilderBuildingFlatTypeRoom builderBuildingFlatTypeRoom: room){
+			    		BuilderBuildingFlatTypeRoom builderBuildingFlatTypeRoom2 = new BuilderBuildingFlatTypeRoom();
+			    			builderBuildingFlatTypeRoom2.setRoomName(builderBuildingFlatTypeRoom.getRoomName());
+			    			builderBuildingFlatTypeRoom2.setLength(builderBuildingFlatTypeRoom.getLength());
+			    			builderBuildingFlatTypeRoom2.setBreadth(builderBuildingFlatTypeRoom.getBreadth());
+			    			builderBuildingFlatTypeRoom2.setLengthUnit(builderBuildingFlatTypeRoom.getLengthUnit());
+			    			roomList.add(builderBuildingFlatTypeRoom2);
+			    		}
+			    		booking.setBuilderBuildingFlatTypeRooms(roomList);
+			    		booking.setBreadth(room.get(0).getBreadth());
+			    		booking.setLength(room.get(0).getLength());
+			    		if(room.get(0).getLengthUnit() == 1)
+			    			booking.setAreaUint("Feet");
+			    		if(room.get(0).getLengthUnit() == 2)
+			    			booking.setAreaUint("Meter");
+			    		if(room.get(0).getLengthUnit() == 3)
+			    			booking.setAreaUint("Inch");
+			    		if(room.get(0).getLengthUnit() == 4)
+			    			booking.setRoomName("Yard");
+			    	//	booking.setCarpetAreaunit(builderFlat.getBuilderFlatType().);
+			    	}
+			    	else if(builderFlat.getBuilderFlatStatus().getId() == 2){
+			    		try{
+			    		Buyer buyer = getBuyerByFlatId(builderFlat.getId());
+			    		Cancellation cancellation = new CancellationDAO().getCancellationByFlatId(builderFlat.getId());
+			    		
+			    		booking.setFlatId(builderFlat.getId());
+			    		booking.setFlatNo(builderFlat.getFlatNo());
+			    		booking.setBuildingName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
+			    		booking.setProjectName(builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName());
+			    		booking.setBuyerName(buyer.getName());
+			    		booking.setBuyerEmail(buyer.getEmail());
+			    		booking.setBuyerMobile(buyer.getMobile());
+			    		booking.setBuyerPanNo(buyer.getPancard());
+			    		if(buyer.getAadhaarNumber() != null)
+			    			booking.setBuyerAadhaarNumber(buyer.getAadhaarNumber());
+			    		else
+			    			booking.setBuyerAadhaarNumber("");
+			    		if(buyer.getCurrentAddress()!=null)
+			    			booking.setBuyerCurrentAddress(buyer.getCurrentAddress());
+			    		else
+			    			booking.setBuyerCurrentAddress("");
+			    		booking.setBuyerPermanentAddress(buyer.getAddress());
+			    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
+			    		if(buyer.getIsDeleted() != null){
+			    			booking.setIsDeleted(buyer.getIsDeleted());
+			    		}else{
+			    			Short isDeleted =1;
+			    			booking.setIsDeleted(isDeleted);
+			    		}
+			    		
+			    		if(buyer.getPhoto() != null){
+			    		booking.setBuyerPhoto(buyer.getPhoto());
+			    		}else{
+			    			booking.setBuyerPhoto("");
+			    		}
+			    		if(cancellation != null && employee.getBuilderEmployeeAccessType().getId() == 5){
+			    			booking.setCancellationId(cancellation.getId());
+			    			booking.setIsApproved(cancellation.isApproved());
+			    			booking.setCancelStatus(cancellation.getCancelStatus());
+			    			booking.setCancelReason(cancellation.getReason());
+			    			booking.setCharges(cancellation.getCharges());
+			    			System.err.println("From cancellation if condtion");
+			    		}else{
+			    			booking.setIsApproved(false);
+			    			booking.setCancelStatus(cancellation.getCancelStatus());
+			    			booking.setCancelReason("");
+			    			booking.setCharges(0.0);
+			    			System.err.println("From cancellation else");
+			    		}
+		    		}catch(Exception e){
+		    			e.printStackTrace();
+		    			System.err.println("From exception of cancellation");
+		    			Buyer buyer = getBuyerByFlatId(builderFlat.getId());
+			    		booking.setFlatNo(builderFlat.getFlatNo());
+			    		booking.setBuildingName(builderFlat.getBuilderFloor().getBuilderBuilding().getName());
+			    		booking.setProjectName(builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName());
+			    		booking.setBuyerName(buyer.getName());
+			    		booking.setBuyerEmail(buyer.getEmail());
+			    		booking.setBuyerMobile(buyer.getMobile());
+			    		booking.setBuyerPanNo(buyer.getPancard());
+			    		booking.setBuyerAadhaarNumber(buyer.getAadhaarNumber());
+			    		booking.setBuyerCurrentAddress(buyer.getCurrentAddress());
+			    		booking.setBuyerPermanentAddress(buyer.getAddress());
+			    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
+			    		if(buyer.getPhoto() != null){
+			    		booking.setBuyerPhoto(buyer.getPhoto());
+			    		}else{
+			    			booking.setBuyerPhoto("");
+			    		}
+		    		}
+			    }else if( builderFlat.getBuilderFlatStatus().getId() == 3){
+					System.err.println("FlatStatus :: "+builderFlat.getBuilderFlatStatus().getName());
+		    		booking.setFlatId(builderFlat.getId());
+		    		booking.setFlatNo(builderFlat.getFlatNo());
+		    		booking.setBalcony(builderFlat.getBalcony());
+		    		booking.setBathroom(builderFlat.getBathroom());
+		    		booking.setBedroom(builderFlat.getBedroom());
+		    		booking.setCarpetArea(builderFlat.getBuilderFlatType().getCarpetArea());
+		    		booking.setFlatStatus(builderFlat.getBuilderFlatStatus().getId());
+		    		if(builderFlat.getImage() != null && builderFlat.getImage() != "")
+		    			booking.setImage(builderFlat.getImage());
+		    		else
+		    			booking.setImage("");
+		    		booking.setFlatType(builderFlat.getBuilderFlatType().getBuilderProjectPropertyConfiguration().getName());
+		    		List<BuilderBuildingFlatTypeRoom> room = getFlatTypeRoom(builderFlat.getBuilderFlatType().getId());
+		    		List<BuilderBuildingFlatTypeRoom>  roomList = new ArrayList<BuilderBuildingFlatTypeRoom>();
+		    		for(BuilderBuildingFlatTypeRoom builderBuildingFlatTypeRoom: room){
+		    		BuilderBuildingFlatTypeRoom builderBuildingFlatTypeRoom2 = new BuilderBuildingFlatTypeRoom();
+		    			builderBuildingFlatTypeRoom2.setRoomName(builderBuildingFlatTypeRoom.getRoomName());
+		    			builderBuildingFlatTypeRoom2.setLength(builderBuildingFlatTypeRoom.getLength());
+		    			builderBuildingFlatTypeRoom2.setBreadth(builderBuildingFlatTypeRoom.getBreadth());
+		    			builderBuildingFlatTypeRoom2.setLengthUnit(builderBuildingFlatTypeRoom.getLengthUnit());
+		    			roomList.add(builderBuildingFlatTypeRoom2);
+		    		}
+		    		booking.setBuilderBuildingFlatTypeRooms(roomList);
+		    		booking.setBreadth(room.get(0).getBreadth());
+		    		booking.setLength(room.get(0).getLength());
+		    		if(room.get(0).getLengthUnit() == 1)
+		    			booking.setAreaUint("Feet");
+		    		if(room.get(0).getLengthUnit() == 2)
+		    			booking.setAreaUint("Meter");
+		    		if(room.get(0).getLengthUnit() == 3)
+		    			booking.setAreaUint("Inch");
+		    		if(room.get(0).getLengthUnit() == 4)
+		    			booking.setRoomName("Yard");
+			    	
+			    }
+		    }}catch(Exception e){
+		    		e.printStackTrace();
+		    		booking = null;
+		    	}
+		    	//System.err.println(hql);
+		    	bookings.add(booking);
+		    	return bookings;
+		    }
 		
 }

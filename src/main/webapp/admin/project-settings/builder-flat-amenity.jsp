@@ -154,9 +154,11 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 function editFlatAmenity(amenityid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderflatamenity.jsp?amenity_id="+amenityid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editFlatAmenity").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
@@ -169,6 +171,7 @@ function editFlatAmenity(amenityid) {
 function deleteFlatAmenity(amenityid){
 	var yes = confirm("Do you want to delete ?");
 	if(yes==true){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.ajax({
 			url: "${baseUrl}/webapi/create/builder/flat/amenity/delete",
 			data:{amenityid:amenityid},
@@ -214,6 +217,7 @@ $('#newFlatAmenity').bootstrapValidator({
 
 
 function addFlatAmenity() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -237,6 +241,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');

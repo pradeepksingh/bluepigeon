@@ -199,6 +199,7 @@ function isNumber(evt, element) {
     return true;
 }    
 function addTax() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/tax/save/",{ pincode: $("#pincode").val(),country_id : $("#country_id").val(), tax: $("#tax").val(),sduty: $("#sduty").val(),vat: $("#vat").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -206,13 +207,16 @@ function addTax() {
 }
 
 function editTax(taxid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/edittax.jsp?tax_id="+taxid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#edittax").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateTax() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/tax/update/",{ id: $("#utax_id").val(), country_id : $("#ucountry_id").val(), pincode: $("#upincode").val(), tax: $("#utax").val(),sduty: $("#usduty").val(),vat: $("#uvat").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -225,6 +229,7 @@ $("#country_id").change(function(){
 	var ptax2 = $("#sduty").attr('placeholder');
 	var ptax3 = $("#vat").attr('placeholder');
 	if($("#country_id").val() > 0){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.post("${baseUrl}/webapi/general/changeLabel",{country_id : $("#country_id").val()}, function(data){
 			if(data != "" && data != null){
 				if(data.taxLabel1 != "" && data.taxLabel1 != "undefined"){
@@ -264,6 +269,7 @@ $("#country_id").change(function(){
 				$("#htax2").hide();
 				$("#htax3").hide();
 			}
+			ajaxindicatorstop();
 		});
 	}
 });

@@ -421,7 +421,7 @@ public class ProjectController extends ResourceConfig {
 		BuilderProject builderProject = new BuilderProject();
 		ProjectDAO projectDAO = new ProjectDAO();
 		builderProject.setId(project_id);
-		int sum =0;
+		double sum =0;
 		if(schudles.size() > 0){
 			List<BuilderProjectPaymentInfo> updateProjectPaymentInfos = new ArrayList<BuilderProjectPaymentInfo>();
 			List<BuilderProjectPaymentInfo> saveProjectPaymentInfos = new ArrayList<BuilderProjectPaymentInfo>();
@@ -462,9 +462,14 @@ public class ProjectController extends ResourceConfig {
 				i++;
 			}
 			if(updateProjectPaymentInfos.size() > 0){
-				if(sum<0 || sum>100){
+				System.err.println("update sum :: "+sum);
+				if(sum<100){
 					responseMessage.setStatus(0);
 					responseMessage.setMessage("The percentage must be between 0 and 100");
+				}else
+				if( sum>100){
+					responseMessage.setStatus(0);
+					responseMessage.setMessage("The percentage must be 100");
 				}else{
 					projectDAO.updateProjectPaymentInfo(updateProjectPaymentInfos);
 					responseMessage.setStatus(1);
@@ -472,9 +477,14 @@ public class ProjectController extends ResourceConfig {
 				}
 			}
 			if(saveProjectPaymentInfos.size() > 0){
-				if(sum<0 || sum>100){
+				System.err.println("Save sum :: "+sum);
+				if(sum<100){
 					responseMessage.setStatus(0);
 					responseMessage.setMessage("The percentage must be between 0 and 100");
+				}else
+				if( sum>100){
+					responseMessage.setStatus(0);
+					responseMessage.setMessage("The percentage must be 100");
 				}else{
 					projectDAO.saveProjectPaymentInfo(saveProjectPaymentInfos);
 					responseMessage.setStatus(1);

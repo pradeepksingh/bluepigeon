@@ -132,6 +132,7 @@ $(document).ready(function(){
 });
 
 function addProjectStages() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 		$.post("${baseUrl}/webapi/create/builder/project/satges/save",{ name: $("#name").val(), status: $("#status").val()}, function(data){
 			if(data.status == 1){
 				$('#error').empty();
@@ -142,16 +143,20 @@ function addProjectStages() {
 				$('#error').empty();
 				$("#error").append(data.message);
 			}
+			ajaxindicatorstop();
 		},'json');
 }
 
 function editProjectStages(id) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editprojectstagesandsubstages.jsp?stage_id="+id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editCountry").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 function updateProjectStages() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/project/satges/update/",{ id: $("#ustage_id").val(), name: $("#uname").val(), status: $("#ustatus").val(), sortOrder:1}, function(data){
 		alert(data.message);
 		window.location.reload();

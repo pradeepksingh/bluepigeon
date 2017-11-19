@@ -149,6 +149,7 @@ $('#sqft_value').keyup(function() {
 });
 
 function addAreaUnit() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/general/area/save/",{ name: $("#name").val(), sqft_value: $("#sqft_value").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -156,9 +157,11 @@ function addAreaUnit() {
 }
 
 function editAreaUnit(areaunitid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/general/editareaunit.jsp?areaunit_id="+areaunitid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editAreaUnit").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 

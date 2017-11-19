@@ -1168,6 +1168,7 @@ function validPercentage(id){
 	 }
 }
 function updateBuildingPricing() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#priceresponse', 
 	 		beforeSubmit : showAddPriceRequest,
@@ -1191,12 +1192,14 @@ function showAddPriceResponse(resp, statusText, xhr, $form){
        	$("#priceresponse").addClass('alert-danger');
 		$("#priceresponse").html(resp.message);
 		$("#priceresponse").show();
+		ajaxindicatorstop();
   	} else {
   		$("#priceresponse").removeClass('alert-danger');
         $("#priceresponse").addClass('alert-success');
         $("#priceresponse").html(resp.message);
         $("#priceresponse").show();
         alert(resp.message);
+    	ajaxindicatorstop();
   	}
 }
 
@@ -1217,6 +1220,22 @@ $('#updatepayment').bootstrapValidator({
                     max: 100,
                     message: 'The percentage must be between 0 and 100'
 	        	},
+	        	 callback: {
+                  message: 'The sum of percentages must be 100',
+                  callback: function(value, validator, $field) {
+                      var percentage = validator.getFieldElements('payable[]'),
+                          length     = percentage.length,
+                          sum        = 0;
+                      for (var i = 0; i < length; i++) {
+                          sum += parseFloat($(percentage[i]).val());
+                      }
+                      if (sum === 100) {
+                          validator.updateStatus('payable[]', 'VALID', 'callback');
+                          return true;
+                      }
+                      return false;
+                  }
+              },
                 notEmpty: {
                     message: 'Payable is required and cannot be empty'
                 }
@@ -1456,7 +1475,7 @@ function showAddOfferResponse(resp, statusText, xhr, $form){
 }
 
 function deleteImage(id) {
-	var flag = confirm("Are you sure ? You want to delete image ?");
+	var flag = confirm("Are you sure, you want to delete image ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/image/delete/"+id, { }, function(data){
 			alert(data.message);
@@ -1468,7 +1487,7 @@ function deleteImage(id) {
 }
 
 function deleteElvImage(id) {
-	var flag = confirm("Are you sure ? You want to delete Elevation Image ?");
+	var flag = confirm("Are you sure,  you want to delete Elevation Image ?");
 	if(flag) {
 		$.get("${baseUrl}/webapi/project/building/elevationimage/delete/"+id, { }, function(data){
 			alert(data.message);

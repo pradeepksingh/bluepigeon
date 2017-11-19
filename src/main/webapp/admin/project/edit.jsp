@@ -890,7 +890,7 @@
 				</div>
 				<div id="payment" class="tab-pane fade">
 					<form id="paymentfrm" name="paymentfrm" method="post" action=""  enctype="multipart/form-data">
-						<input type="hidden" name="schedule_count" id="schedule_count" value="<% out.print(projectPaymentInfos.size()+1);%>"/>
+						<input type="hidden" name="schedule_count" id="schedule_count" value="<%if(projectPaymentInfos.size() > 0 && projectPaymentInfos !=null){ out.print(projectPaymentInfos.size()+1);}else{out.print("1");}%>"/>
 						<input type="hidden" name="project_id" id="project_id[]" value="<%out.print(project_id);%>"/>
 			 			<div class="row">
 			 				<div id="paymentresponse"></div>
@@ -961,7 +961,7 @@
 													<div class="form-group" id="error-payable">
 														<label class="control-label col-sm-8">% of Net Payable <span class='text-danger'>*</span></label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control"  onkeypress=" return isNumber(event, this);" id="payable" name="payable[]" value=""/>
+															<input type="text" class="form-control"  onkeypress=" return isNumber(event, this);" id="payable<% out.print(i);%>" name="payable[]" value=""/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -1198,32 +1198,84 @@
 $("input.errorMsg").keypress(function(event){
 	return isNumber(event, this)
 });
+
 function vaildPayablePer(id){
 	var x = $("#payable"+id).val();
-	var sum =parseInt($("#hsum").val());
-	 if(sum >100){
-		 alert("The sum of percentages must be 100");
-	 }
-	if( x<0 || x >100){
-		alert("The percentage must be between 0 and 100");
-		$("#payable"+id).val('');
-	}
+	
+	var count=1;
+	 var sum =0;
+	 var isEmpty = false;
+// 		$("input[name='payable[]']").each(function(){
+// 			//alert($("#payable"+count).val());
+// 			if($("#payable"+count).val()!=""){
+// 			sum +=parseFloat($("#payable"+count).val());
+// 			//alert($("#payable"+count).val());
+// 			}else{
+// 				isEmpty=true;
+// 			}
+// 			count++;
+// 		});
+		
+		$("input[name^='payable']").each(function() { 
+			if($(this).val()!=""){
+			sum +=parseFloat($(this).val()); 
+			}else{
+				isEmpty = true;
+			}
+		})
+		
+		if(sum>100){
+			alert("The sum of percentages must be 100");
+			$("#paymentbtn").attr('disabled',true);
+		}else if(sum<100){
+			alert("The percentage must be between 0 and 100");
+			$("#paymentbtn").attr('disabled',true);
+		}else	if(sum<0 || sum>100){
+			alert("The percentage must be between 0 and 100");
+			$("#paymentbtn").attr('disabled',true);
+		}else if( x<0 || x >100){
+			alert("The percentage must be between 0 and 100");
+			$("#payable"+id).val('');
+			$("#paymentbtn").attr('disabled',true);
+		}else{
+			if(isEmpty){
+				alert("Payable is required and cannot be empty");
+				$("#paymentbtn").attr('disabled',false);
+			}else{
+				$("#paymentbtn").attr('disabled',false);
+			}
+		}
 }
-var sum =0;
+
 function vaildateSum(){
  var count=1;
- //var sum =0;
+ var sum =0;
  var isEmpty = false;
-	$("input[name='payable[]']").each(function(){
-		//alert($("#payable"+count).val());
-		if($("#payable"+count).val()!=""){
-		sum +=parseInt($("#payable"+count).val());
+// 	$("input[name='payable[]']").each(function(){
+// 		if($("#payable"+count).val()!=""){
+// 		sum +=parseFloat($("#payable"+count).val());
+// 		}else{
+// 			isEmpty=true;
+// 		}
+// 		count++;
+// 	});
+	
+	$("input[name^='payable']").each(function() { 
+		if($(this).val()!=""){
+		sum +=parseFloat($(this).val()); 
 		}else{
-			isEmpty=true;
+			isEmpty = true;
 		}
-		count++;
-	});
-	if(sum<0 || sum>100){
+	})
+	
+	alert(sum);
+	if(sum>100){
+		alert("The sum of percentages must be 100");
+		$("#paymentbtn").attr('disabled',true);
+	}else if(sum<100){
+		alert("The percentage must be between 0 and 100");
+		$("#paymentbtn").attr('disabled',true);
+	}else	if(sum<0 || sum>100){
 		alert("The percentage must be between 0 and 100");
 		$("#paymentbtn").attr('disabled',true);
 	}else{
@@ -1388,35 +1440,41 @@ $('#launch_date').datepicker({
 });
 $("#builder_id").change(function(){
 	if($("#builder_id").val() != "") {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/create/project/list/",{ builder_id: $("#builder_id").val() }, function(data){
 			var html = '<option value="">Select Builder Comapny</optio>';
 			$(data).each(function(index){
 				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 			});
 			$("#company_id").html(html);
+			ajaxindicatorstop();
 		},'json');
 	}
 });
 $("#country_id").change(function(){
 	if($("#country_id").val() != "") {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#country_id").val() }, function(data){
 			var html = '<option value="">Select State</optio>';
 			$(data).each(function(index){
 				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 			});
 			$("#state_id").html(html);
+			ajaxindicatorstop();
 		},'json');
 	}
 });
 
 $("#state_id").change(function(){
 	if($("#state_id").val() != "") {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/general/city/list",{ state_id: $("#state_id").val() }, function(data){
 			var html = '<option value="">Select City</option>';
 			$(data).each(function(index){
 				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 			});
 			$("#city_id").html(html);
+			ajaxindicatorstop();
 		},'json');
 	}
 });
@@ -1432,6 +1490,7 @@ $("#state_id").change(function(){
 // 	}
 // });
 function updateProjectImages() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#imageresponse', 
 	 		beforeSubmit : showAddImageRequest,
@@ -1455,12 +1514,14 @@ function showAddImageResponse(resp, statusText, xhr, $form){
        	$("#imageresponse").addClass('alert-danger');
 		$("#imageresponse").html(resp.message);
 		$("#imageresponse").show();
+		ajaxindicatorstop();
   	} else {
   		$("#imageresponse").removeClass('alert-danger');
         $("#imageresponse").addClass('alert-success');
         $("#imageresponse").html(resp.message);
         $("#imageresponse").show();
         alert(resp.message);
+    	ajaxindicatorstop();
   	}
 }
 $('#basicfrm').bootstrapValidator({
@@ -1569,6 +1630,7 @@ $('#basicfrm').bootstrapValidator({
 });
 
 function updateProject() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#basicresponse', 
 	 		beforeSubmit : showAddRequest,
@@ -1592,12 +1654,14 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#basicresponse").addClass('alert-danger');
 		$("#basicresponse").html(resp.message);
 		$("#basicresponse").show();
+		ajaxindicatorstop();
   	} else {
   		$("#basicresponse").removeClass('alert-danger');
         $("#basicresponse").addClass('alert-success');
         $("#basicresponse").html(resp.message);
         $("#basicresponse").show();
         alert(resp.message);
+    	ajaxindicatorstop();
   	}
 }
 
@@ -1734,6 +1798,7 @@ $('#pricingfrm').bootstrapValidator({
 });
 
 function updateProjectPrice() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#pricingresponse', 
 	 		beforeSubmit : showPriceRequest,
@@ -1757,12 +1822,14 @@ function showPriceResponse(resp, statusText, xhr, $form){
        	$("#pricingresponse").addClass('alert-danger');
 		$("#pricingresponse").html(resp.message);
 		$("#pricingresponse").show();
+		ajaxindicatorstop();
   	} else {
   		$("#pricingresponse").removeClass('alert-danger');
         $("#pricingresponse").addClass('alert-success');
         $("#pricingresponse").html(resp.message);
         $("#pricingresponse").show();
         alert(resp.message);
+    	ajaxindicatorstop();
   	}
 }
 
@@ -1814,6 +1881,7 @@ function saveProjectDetails(){
 		homeLoanInfo.push({homeLoanBanks:{id:$(this).val()},builderProject:{id:$("#id").val()}});
 	});
 	var final_data = {builderProject:project,builderProjectProjectTypes:projectType,builderProjectPropertyTypes:propertyType,builderProjectPropertyConfigurationInfos:configuration,builderProjectAmenityInfos:amenityType,builderProjectApprovalInfos:approvalType,builderProjectBankInfos:homeLoanInfo,projectAmenityWeightages:amenityWeightage}
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.ajax({
 	    url: '${baseUrl}/webapi/project/detail/update',
 	    type: 'POST',
@@ -1824,13 +1892,16 @@ function saveProjectDetails(){
 	    success: function(data) {
 			if (data.status == 0) {
 				alert(data.message);
+				ajaxindicatorstop();
 			} else {
 				alert(data.message);
+				ajaxindicatorstop();
 			}
 		},
 		error : function(data)
 		{
 			alert("Fail to save data");
+			ajaxindicatorstop();
 		}
 		
 	});
@@ -1859,22 +1930,22 @@ $('#paymentfrm').bootstrapValidator({
                     max: 100,
                     message: 'The percentage must be between 0 and 100'
 	        	},
-	        	 callback: {
-                     message: 'The sum of percentages must be 100',
-                     callback: function(value, validator, $field) {
-                         var percentage = validator.getFieldElements('payable[]'),
-                             length     = percentage.length,
-                             sum        = 0;
-                         for (var i = 0; i < length; i++) {
-                             sum += parseFloat($(percentage[i]).val());
-                         }
-                         if (sum === 100) {
-                             validator.updateStatus('payable[]', 'VALID', 'callback');
-                             return true;
-                         }
-                         return false;
-                     }
-                 },
+// 	        	 callback: {
+//                      message: 'The sum of percentages must be 100',
+//                      callback: function(value, validator, $field) {
+//                          var percentage = validator.getFieldElements('payable[]'),
+//                              length     = percentage.length,
+//                              sum        = 0;
+//                          for (var i = 0; i < length; i++) {
+//                              sum += parseFloat($(percentage[i]).val());
+//                          }
+//                          if (sum === 100) {
+//                              validator.updateStatus('payable[]', 'VALID', 'callback');
+//                              return true;
+//                          }
+//                          return false;
+//                      }
+//                  },
 		        notEmpty: {
 		    		message: 'Payable is required and cannot be empty'
 		        },
@@ -1888,6 +1959,7 @@ $('#paymentfrm').bootstrapValidator({
 });
  
 function updatePaymentSchudle(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 		var options = {
 		 		target : '#paymentresponse', 
 		 		beforeSubmit : showPaymentRequest,
@@ -1910,19 +1982,19 @@ function showPaymentResponse(resp, statusText, xhr, $form){
        	$("#paymentresponse").addClass('alert-danger');
 		$("#paymentresponse").html(resp.message);
 		$("#paymentresponse").show();
+		ajaxindicatorstop();
   	} else {
   		$("#paymentresponse").removeClass('alert-danger');
         $("#paymentresponse").addClass('alert-success');
         $("#paymentresponse").html(resp.message);
         $("#paymentresponse").show();
         alert(resp.message);
+    	ajaxindicatorstop();
   	}
 }
 
 function validPer(id){
-	//alert($("#discount"+id).val());
 	var x = $("#discount"+id).val();
-	//alert(x);
 	if( x<0 || x >100){
 		alert("The percentage must be between 0 and 100");
 		$("#discount"+id).val('');
@@ -1990,6 +2062,7 @@ $('#offerfrm').bootstrapValidator({
 	updateProjectOffers();
 });
 function updateProjectOffers(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 		var options = {
 		 		target : '#offerresponse', 
 		 		beforeSubmit : showOfferRequest,
@@ -2012,12 +2085,14 @@ function showOfferResponse(resp, statusText, xhr, $form){
        	$("#offerresponse").addClass('alert-danger');
 		$("#offerresponse").html(resp.message);
 		$("#offerresponse").show();
+		ajaxindicatorstop();
   	} else {
   		$("#offerresponse").removeClass('alert-danger');
         $("#offerresponse").addClass('alert-success');
         $("#offerresponse").html(resp.message);
         $("#offerresponse").show();
         alert(resp.message);
+    	ajaxindicatorstop();
   	}
 }
 function addMoreOffer() {
@@ -2100,7 +2175,7 @@ function txtEnabaleDisable(id){
 
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
-	
+	schedule_count++;
 	var html = '<div class="row" id="schedule-'+schedule_count+'">'
 				+'<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>'
 				+'<hr/>'
@@ -2142,7 +2217,6 @@ function addMoreSchedule() {
 	$("#payment_schedule").append(html);
 	$("#schedule_count").val(schedule_count);
 	$("#payable"+schedule_count).keyup(function(){
-		
 		//$('#paymentfrm').bootstrapValidator('revalidateField', $(this).prop('name'));
 		//alert($("#payable"+schedule_count).val());
 		//var value = $("#payable"+schedule_count).val();
@@ -2151,11 +2225,15 @@ function addMoreSchedule() {
 	//	 $('#paymentfrm').data('bootstrapValidator').revalidateField('payable[]');
 		
 	});
-	schedule_count++;
+	
 }
 function removeSchedule(id) {
-	$("#schedule_count").val();
+	
 	$("#schedule-"+id).remove();
+	var schedule_count = parseInt($("#schedule_count").val());
+	schedule_count--;
+	$("#schedule_count").val(schedule_count);
+	vaildateSum();
 }
 function deleteSchudle(id){
 	
@@ -2165,6 +2243,7 @@ function deleteSchudle(id){
 			alert(data.message);
 			if(data.status == 1){
 				$("#schedule-"+id).remove();
+				vaildateSum();
 			}
 		})
 	}
@@ -2191,7 +2270,7 @@ $("#subpbtn").click(function(){
     });
     var projects = {id:$("#id").val(),amenityWeightage : $("#amenity_weightage").val(),buildingWeightage:$("#building_weightage").val()};
     var final_data = {builderProject:projects, builderBuildings:buildings};
-	
+    ajaxindicatorstart("Please wait while.. we load ...");
 	$.ajax({
 	    url: '${baseUrl}/webapi/project/substage/update',
 	    type: 'POST',
@@ -2202,13 +2281,16 @@ $("#subpbtn").click(function(){
 	    success: function(data) {
 			if (data.status == 0) {
 				alert(data.message);
+				ajaxindicatorstop();
 			} else {
 				alert(data.message);
+				ajaxindicatorstop();
 			}
 		},
 		error : function(data)
 		{
 			alert("Fail to save data");
+			ajaxindicatorstop();
 		}
 		
 	});
@@ -2218,10 +2300,12 @@ function deleteOffer(id) {
 	var b=$("#offer").val();
 	var flag = confirm("Are you sure, you want to delete offer ?");
 	if(flag) {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/project/offer/delete/"+id, { }, function(data){
 			alert(data.message);
 			if(data.status == 1) {
 				$("#offer-"+id).remove();
+				ajaxindicatorstop();
 			}
 		});
 	}

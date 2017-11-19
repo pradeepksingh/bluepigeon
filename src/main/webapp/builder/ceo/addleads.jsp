@@ -348,7 +348,6 @@ function getConfigData( element ){
 			ids = ids+","+$(this).val();
 		}	
     });
-    alert(ids.length);
    ajaxindicatorstart("Please wait, while loading...");
    if(ids.length > 0){
 	    $.get("${baseUrl}/webapi/project/configdata/"+ids,{},function(data){

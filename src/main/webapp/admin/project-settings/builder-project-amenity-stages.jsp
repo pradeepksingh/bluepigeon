@@ -180,6 +180,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 function addProjectAmenityStage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/project/amenity/stages/save/",{ amenity_id: $("#amenity_id").val(), name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -187,21 +188,23 @@ function addProjectAmenityStage() {
 }
 
 $("#searchamenityId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/project-settings/builder-project-amenity-stages.jsp?amenity_id="+$("#searchamenityId").val();
 });
 
 
 
 function editProjectAmenityStages(amenity_stage_id) {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editprojectamenitystage.jsp?amenity_stage_id="+amenity_stage_id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editProjectAmenityStages").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateProjectAmenityStages() {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/project/amenity/stages/update/",{ id: $("#uamenity_stage_id").val(), amenity_id: $("#uamenity_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();

@@ -132,6 +132,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 function addFloorStage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/floor/stage/save/",{ name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -139,13 +140,16 @@ function addFloorStage() {
 }
 
 function editFloorStage(stageid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editfloorstage.jsp?stage_id="+stageid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editFloorStage").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateFloorStage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/floor/stage/update/",{ id: $("#ustage_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -154,6 +158,7 @@ function updateFloorStage() {
 function deleteBuildingAmenity(amenityid){
 	var yes = confirm("Do you want to delete ?");
 	if(yes==true){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.ajax({
 			url: "${baseUrl}/webapi/create/builder/building/amenity/delete",
 			data:{amenityid:amenityid},

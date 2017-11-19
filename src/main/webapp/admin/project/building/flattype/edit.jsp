@@ -403,6 +403,7 @@ $('#addfloor').bootstrapValidator({
 });
 
 function addFloor() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -426,13 +427,15 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
         $("#response").html(resp.message);
         $("#response").show();
         alert(resp.message);
-        window.location.href = "${baseUrl}/admin/project/building/flattype/list.jsp?building_id="+$("#building_id").val();
+//         window.location.href = "${baseUrl}/admin/project/building/flattype/list.jsp?building_id="+$("#building_id").val();
+        window.location.href = "${baseUrl}/admin/project/building/flattype/list.jsp?project_id="+$("#project_id").val();
   	}
 }
 
@@ -464,12 +467,14 @@ function showDetailTab() {
 }
 
 function deleteImage(id) {
-	var flag = confirm("Are you sure ? You want to delete image ?");
+	var flag = confirm("Are you sure, you want to delete image ?");
 	if(flag) {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/project/building/flattype/image/delete/"+id, { }, function(data){
 			alert(data.message);
 			if(data.status == 1) {
 				$("#b_image"+id).remove();
+				ajaxindicatorstop();
 			}
 		},'json');
 	}

@@ -1597,7 +1597,7 @@ public class BuilderDetailsDAO {
 			}
 		}
 		
-		hql += where + " AND project.status=1 AND b.is_primary=1 AND b.is_deleted=0 AND b.status=0 GROUP by b.id ORDER BY project.id desc";
+		hql += where + " AND project.status=1 AND b.is_primary=1 AND b.is_deleted=0 GROUP by b.id ORDER BY project.id desc";
 		try {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BookedBuyerList.class));
@@ -2444,7 +2444,6 @@ public class BuilderDetailsDAO {
 			sessionDelete.getTransaction().commit();
 			sessionDelete.close();
 			
-			
 			ResponseMessage responseMessage = new ResponseMessage();
 			Session session = hibernateUtil.openSession();
 			session.beginTransaction();
@@ -2456,6 +2455,58 @@ public class BuilderDetailsDAO {
 			responseMessage.setStatus(1);
 			responseMessage.setMessage("Empolyee Updated Successfully.");
 			return responseMessage;
+			
+		}
+		
+		public ResponseMessage getRegisteredEmailId(String emailId){
+			ResponseMessage responseMessage = new ResponseMessage();
+			if(emailId != null && emailId.trim().length()>0){
+				String hql = "from BuilderEmployee where email = '"+emailId+"'";
+				HibernateUtil hibernateUtil = new HibernateUtil();
+				Session session = hibernateUtil.openSession();
+				Query query = session.createQuery(hql);
+				List<BuilderEmployee> result = query.list();
+				if(result.size() > 0 && result !=null){
+					responseMessage.setStatus(1);
+					responseMessage.setMessage("Your will receive your password on your registered mobile number and email id.");
+				}else{
+					responseMessage.setStatus(0);
+					responseMessage.setMessage("Please enter your registered email id.");
+				}
+			}else{
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("Registered email id is required.");
+			}
+			return responseMessage;
+		}
+		
+		public ResponseMessage getRegisteredMobileNumber(String mobileNo){
+			ResponseMessage responseMessage = new ResponseMessage();
+			if(mobileNo.trim().length() > 0){
+				try{
+					String hql = "from BuilderEmployee where mobile = '"+mobileNo+"'";
+					HibernateUtil hibernateUtil = new HibernateUtil();
+					Session session = hibernateUtil.openSession();
+					Query query = session.createQuery(hql);
+					List<BuilderEmployee> result = query.list();
+					if(result.size() > 0 && result !=null){
+						responseMessage.setStatus(1);
+						responseMessage.setMessage("Your will receive your username on your registered mobile number and email id.");
+					}else{
+						responseMessage.setStatus(0);
+						responseMessage.setMessage("Please enter your registered mobile number.");
+					}
+					return responseMessage;
+				}catch(Exception e){
+					responseMessage.setStatus(0);
+					responseMessage.setMessage("Please enter numbers only.");
+					return responseMessage;
+				}
+			}else{
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("Registered mobile number is required.");
+				return responseMessage;
+			}
 			
 		}
 }

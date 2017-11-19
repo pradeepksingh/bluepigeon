@@ -234,6 +234,8 @@
 </div>
 <%@include file="../../footer.jsp"%>
 <!-- inline scripts related to this page -->
+</body>
+</html>
 <style>
 	.row {
 		margin-bottom:5px;
@@ -276,46 +278,54 @@ $('#sublocation').keyup(function() {
 
 $("#builder_id").change(function(){
 	if($("#builder_id").val() != "") {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/create/project/list/",{ builder_id: $("#builder_id").val() }, function(data){
 			var html = '<option value="">Select Builder Comapny</optio>';
 			$(data).each(function(index){
 				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 			});
 			$("#company_id").html(html);
+			ajaxindicatorstop();
 		},'json');
 	}
 });
 $("#country_id").change(function(){
 	if($("#country_id").val() != "") {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#country_id").val() }, function(data){
 			var html = '<option value="">Select State</optio>';
 			$(data).each(function(index){
 				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 			});
 			$("#state_id").html(html);
+			ajaxindicatorstop();
 		},'json');
 	}
 });
 
 $("#state_id").change(function(){
 	if($("#state_id").val() != "") {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/general/city/list",{ state_id: $("#state_id").val() }, function(data){
 			var html = '<option value="">Select City</optio>';
 			$(data).each(function(index){
 				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 			});
 			$("#city_id").html(html);
+			ajaxindicatorstop();
 		},'json');
 	}
 });
 $("#city_id").change(function(){
 	if($("#city_id").val() != "") {
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/general/locality/list",{ city_id: $("#city_id").val() }, function(data){
 			var html = '<option value="">Select Locality</optio>';
 			$(data).each(function(index){
 				html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 			});
 			$("#locality_id").html(html);
+			ajaxindicatorstop();
 		},'json');
 	}
 });
@@ -428,6 +438,7 @@ $('#addproject').bootstrapValidator({
 });
 
 function addProject() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -451,6 +462,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
@@ -460,8 +472,4 @@ function showAddResponse(resp, statusText, xhr, $form){
         window.location.href = "${baseUrl}/admin/project/list.jsp";
   	}
 }
-
-
 </script>
-</body>
-</html>

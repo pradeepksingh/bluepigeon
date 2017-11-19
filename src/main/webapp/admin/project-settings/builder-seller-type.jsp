@@ -131,6 +131,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
 });
 function addProjectSellerType() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/seller/type/save",{ name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -138,13 +139,16 @@ function addProjectSellerType() {
 }
 
 function editProjectSellerType(sellerid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderprojectsellertype.jsp?seller_id="+sellerid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editProjectSellerType").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateProjectSellerType() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/seller/type/update",{ id: $("#useller_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();

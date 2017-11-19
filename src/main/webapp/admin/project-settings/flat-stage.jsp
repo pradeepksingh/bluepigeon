@@ -132,6 +132,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 function addFlatStage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/flat/stage/save/",{ name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -139,13 +140,16 @@ function addFlatStage() {
 }
 
 function editFlatStage(stageid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editflatstage.jsp?stage_id="+stageid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editFlatStage").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateFlatStage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/flat/stage/update/",{ id: $("#ustage_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -154,6 +158,7 @@ function updateFlatStage() {
 function deleteBuildingAmenity(amenityid){
 	var yes = confirm("Do you want to delete ?");
 	if(yes==true){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.ajax({
 			url: "${baseUrl}/webapi/create/builder/building/amenity/delete",
 			data:{amenityid:amenityid},

@@ -250,63 +250,76 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z ]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
 });
 function addLocality() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/general/locality/save/",{ city_id: $("#city_id").val(), name: $("#name").val(), status: $("#status").val(), sortorder: 1, latitude: '', longitude: ''}, function(data){
 		alert(data.message);
 		window.location.href = "${baseUrl}/admin/general/locality.jsp?city_id="+$("#city_id").val();
 	},'json');
 }
 $("#country_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#country_id").val() }, function(data){
 		var html = '<option value="">Select State</optio>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 		});
 		$("#state_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 
 $("#state_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/general/city/list",{ state_id: $("#state_id").val() }, function(data){
 		var html = '<option value="">Select City</optio>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 		});
 		$("#city_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 
 $("#searchcountryId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/general/state/list",{ country_id: $("#searchcountryId").val() }, function(data){
 		var html = '<option value="">Select State</optio>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 		});
 		$("#searchstateId").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 
 $("#searchstateId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/general/city/list",{ state_id: $("#searchstateId").val() }, function(data){
 		var html = '<option value="">Select City</optio>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</optio>';
 		});
 		$("#searchcityId").html(html);
+		ajaxindicatorstop();
 	},'json');
 });
 
 $("#searchcityId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/general/locality.jsp?city_id="+$("#searchcityId").val();
 });
 
 function editLocality(locality_id) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/general/editlocality.jsp?locality_id="+locality_id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editCity").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateLocality() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/general/locality/update/",{ id: $("#ulocality_id").val(), city_id: $("#ucity_id").val(), name: $("#uname").val(), status: $("#ustatus").val(), sortorder: 1, latitude: '', longitude: ''}, function(data){
 		alert(data.message);
 		window.location.reload();

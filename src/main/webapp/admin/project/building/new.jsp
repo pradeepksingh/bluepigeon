@@ -966,6 +966,22 @@ $('#addbuilding').bootstrapValidator({
                     max: 100,
                     message: 'The percentage must be between 0 and 100'
 	        	},
+	        	 callback: {
+                  message: 'The sum of percentages must be 100',
+                  callback: function(value, validator, $field) {
+                      var percentage = validator.getFieldElements('payable[]'),
+                          length     = percentage.length,
+                          sum        = 0;
+                      for (var i = 0; i < length; i++) {
+                          sum += parseFloat($(percentage[i]).val());
+                      }
+                      if (sum === 100) {
+                          validator.updateStatus('payable[]', 'VALID', 'callback');
+                          return true;
+                      }
+                      return false;
+                  }
+              },
                 notEmpty: {
                     message: 'Payable is required and cannot be empty'
                 }
@@ -996,7 +1012,7 @@ function addBuilding() {
 		});
 	});
 	$("#amenity_wt").val(amenityWeightage);
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -1020,6 +1036,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');
@@ -1329,6 +1346,7 @@ function getProjectShedule(){
 	$("#payment_schedule").empty();
     var html = "";
 	var project_id = $("#project_id").val();
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/project/building/payments/"+project_id, { }, function(data){
 		$(data).each(function(index){
 		html=+'<div class="col-lg-12">'
@@ -1371,6 +1389,7 @@ function getProjectShedule(){
 		});
 		html = html.replace("NaN","");
 		$("#paymentresponse").html(html);
+		ajaxindicatorstop();
 	});
 }
 function addMoreSchedule() {

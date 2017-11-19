@@ -306,6 +306,7 @@ $('#ccontact-'+batch_count).keyup(function() {
     });
 
     function addBuilder() {
+    	ajaxindicatorstart("Please wait while.. we load ...");
     	var options = {
     	 		target : '#response', 
     	 		beforeSubmit : showAddRequest,
@@ -329,6 +330,7 @@ $('#ccontact-'+batch_count).keyup(function() {
            	$("#response").addClass('alert-danger');
     		$("#response").html(resp.message);
     		$("#response").show();
+    		ajaxindicatorstop();
       	} else {
       		$("#response").removeClass('alert-danger');
             $("#response").addClass('alert-success');

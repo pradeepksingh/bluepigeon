@@ -178,6 +178,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 function addFloorSubstage() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/floor/substage/save/",{ stage_id: $("#stage_id").val(), name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -185,19 +186,21 @@ function addFloorSubstage() {
 }
 
 $("#searchfloorstageId").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	window.location.href = "${baseUrl}/admin/project-settings/floor-substages.jsp?stage_id="+$("#searchfloorstageId").val();
 });
 
 function editFloorSubstages(floor_substage_id) {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editfloorsubstage.jsp?floor_substage_id="+floor_substage_id,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editFloorSubstages").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateFloorSubstages() {
-	
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/floor/substage/update/",{ id: $("#ufloor_substage_id").val(), stage_id: $("#ustage_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();

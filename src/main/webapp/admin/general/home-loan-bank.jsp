@@ -201,9 +201,11 @@ $('#location').keyup(function() {
 // }
 
 function editHomeLoanBank(bankid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/general/edithomeloanbank.jsp?bank_id="+bankid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editHomeLoanBank").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
@@ -275,6 +277,7 @@ $('#newHomeLoanBank').bootstrapValidator({
 
 
 function addHomeLoanBank() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -298,6 +301,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');

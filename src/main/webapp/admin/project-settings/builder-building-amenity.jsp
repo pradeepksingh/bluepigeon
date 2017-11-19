@@ -157,9 +157,11 @@ $('#name').keyup(function() {
 // }
 
 function editBuildingAmenity(amenityid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderbuildingamenity.jsp?amenity_id="+amenityid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editBuildingAmenity").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
@@ -172,6 +174,7 @@ function editBuildingAmenity(amenityid) {
 function deleteBuildingAmenity(amenityid){
 	var yes = confirm("Do you want to delete ?");
 	if(yes==true){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.ajax({
 			url: "${baseUrl}/webapi/create/builder/building/amenity/delete",
 			data:{amenityid:amenityid},
@@ -218,6 +221,7 @@ $('#newBuildingAmenity').bootstrapValidator({
 
 
 function addBuildingAmenity() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -241,6 +245,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');

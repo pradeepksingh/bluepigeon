@@ -150,9 +150,11 @@ $(document).ready(function(){
 // }
 
 function editFloorAmenity(amenityid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderflooramenity.jsp?amenity_id="+amenityid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editFloorAmenity").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 $('#name').keyup(function() {
@@ -169,6 +171,7 @@ $('#name').keyup(function() {
 function deleteFloorAmenity(amenityid){
 	var yes = confirm("Do you want to delete ?");
 	if(yes==true){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.ajax({
 			url: "${baseUrl}/webapi/create/builder/floor/amenity/delete",
 			data:{amenityid:amenityid},
@@ -214,6 +217,7 @@ $('#newFloorAmenity').bootstrapValidator({
 
 
 function addFloorAmenity() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -237,6 +241,7 @@ function showAddResponse(resp, statusText, xhr, $form){
        	$("#response").addClass('alert-danger');
 		$("#response").html(resp.message);
 		$("#response").show();
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');

@@ -560,7 +560,7 @@
 													<div class="form-group" id="error-payable">
 														<label class="control-label col-sm-8">% of Net Payable </label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control errorMsg" id="payable<%out.print(j); %>" onkeyup="javascript:validPer(<%out.print(j); %>"  onkeypress=" return isNumber(event, this);" name="payable[]" value="<%out.print(paymentInfoData.getPayable());%>"/>
+															<input type="text" class="form-control" id="payable<%out.print(j); %>" onkeyup="javascript:validPer(<%out.print(j); %>);"  onkeypress=" return isNumber(event, this);" name="payable[]" value="<%out.print(paymentInfoData.getPayable());%>" autocomplete="false"/>
 														</div>
 														<div class="messageContainer"></div>
 													</div>
@@ -577,7 +577,7 @@
 											</div>
 										</div>
 										<%	
-												}
+												j++;}
 											}
 										}
 										%>
@@ -587,7 +587,7 @@
 							</div>
 							<div class="col-sm-12">
 								<span class="pull-right">
-									<button type="submit" name="flooradd" class="btn btn-success btn-sm" >Submit</button>
+									<button type="submit" name="flooradd" id="newpayment" class="btn btn-success btn-sm" >Submit</button>
 								</span>
 							</div>
 						</div>
@@ -786,6 +786,7 @@ $(".errorMsg").keypress(function(event){
 $("#flat_type_id").change(function(){
 	var row = "";
 	if($("#flat_type_id").val() > 0){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/project/flattype/list",{ flat_type_id: $("#flat_type_id").val() }, function(data){
 			$("#bathroom").val(data.bathRoom);
 			$("#balcony").val(data.balcony);
@@ -800,13 +801,14 @@ $("#flat_type_id").change(function(){
 				+'</div>';
 				$("#rooms").html(row);
 			});
-			
+			ajaxindicatorstop();
 		},'json');
 	}else{
 		$("#bathroom").val('');
 		$("#balcony").val('');
 		$("#bedroom").val('');
 		$("#rooms").empty();
+		ajaxindicatorstop();
 	}
 });
 
@@ -822,12 +824,30 @@ function isNumber(evt, element) {
     return true;
 } 
 function validPer(id){
-	//alert($("#discount"+id).val());
 	var x = $("#payable"+id).val();
-	//alert(x);
-	if( x<0 || x >100){
+	var sum =0;
+	var count =1;
+	$("input[name='payable[]']").each(function(){
+		sum+=parseFloat($("#payable"+count).val());
+		//alert($("#payable"+count).val());
+		count++;
+	});
+	if(sum<100){
+		alert("The percentage must be between 0 and 100");
+		//$("#payable"+id).val('');
+		$("#newpayment").attr('disabled',true);
+	}
+	else if(sum < 0 || sum>100){
+		alert("The sum of percentages must be 100");
+		$("#payable"+id).val('');
+		$("#newpayment").attr('disabled',true);
+	}
+	else if( x<0 || x >100){
 		alert("The percentage must be between 0 and 100");
 		$("#payable"+id).val('');
+		$("#newpayment").attr('disabled',true);
+	}else{
+		$("#newpayment").attr('disabled',false);
 	}
 }
 
@@ -1125,6 +1145,7 @@ function addFloor() {
 		});
 	});
 	$("#amenity_wt").val(amenityWeightage);
+	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showAddRequest,
@@ -1210,12 +1231,14 @@ function showDetailTab() {
 	$('#buildingTabs a[href="#payment"]').tab('show');
 }
 $("#project_id").change(function(){
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/webapi/project/building/names/"+$("#project_id").val(),{},function(data){
 		var html = '<option value="0">Select Building</option>';
 		$(data).each(function(index){
 			html = html + '<option value="'+data[index].id+'"> '+data[index].name+'</option>';
 		});
 		$("#building_id").html(html);
+		ajaxindicatorstop();
 	},'json');
 	
 });

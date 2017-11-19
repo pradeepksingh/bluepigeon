@@ -132,6 +132,7 @@ $('#name').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only letters.'); return ''; } ) );
 });
 function addProjectLevel() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/project/level/save",{ name: $("#name").val(), status: $("#status").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
@@ -139,13 +140,16 @@ function addProjectLevel() {
 }
 
 function editProjectLevel(levelid) {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.get("${baseUrl}/admin/project-settings/editbuilderprojectlevel.jsp?level_id="+levelid,{ }, function(data){
 		$("#modalarea").html(data);
 		$("#editProjectLevel").modal('show');
+		ajaxindicatorstop();
 	},'html');
 }
 
 function updateProjectLevel() {
+	ajaxindicatorstart("Please wait while.. we load ...");
 	$.post("${baseUrl}/webapi/create/builder/project/level/update",{ id: $("#ulevel_id").val(), name: $("#uname").val(), status: $("#ustatus").val()}, function(data){
 		alert(data.message);
 		window.location.reload();
