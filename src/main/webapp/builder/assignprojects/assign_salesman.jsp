@@ -97,6 +97,11 @@
 <!--      <script src="js/bootstrap-multiselect.js"></script> -->
 <!--     <link rel="stylesheet" href="css/bootstrap-multiselect.css"> -->
 	<script src="../js/jquery.multiselect.js"></script>
+	<style>
+	.ms-options-wrap > .ms-options > ul label.focused, .ms-options-wrap > .ms-options > ul label:hover {
+    background-color: #00bfd6;
+    }
+	</style>
 </head>
 
 <body class="fix-sidebar">
