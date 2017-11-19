@@ -103,13 +103,15 @@ session = request.getSession(false);
                         <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#"><i class="fa fa-bell-o"></i>
                    <%if(notifications !=null){ 
                 	   for(Notification newnotification : notifications){
-                		   if(newnotification.isRead()){%> 
+                		   if(access_uid == 4 || access_uid ==7){
+                		   		if(newnotification.isRead()){%> 
                    
                    			
-                   <%		}else{%>
+                   <%			}else{%>
                 	    	<div class="notify"><span class="heartbit"></span><span class="point"></span></div>
-                   <%		}
-                	   }
+                   <%			}
+                	   		}
+                	   	}
                    }
                    %>
                 		</a>
@@ -177,6 +179,7 @@ session = request.getSession(false);
             <script src="${baseUrl}/js/bootstrapValidator.min.js"></script>
            <script>
            function switchRole(id){
+        	   ajaxindicatorstart("Loading...");
         	   $.post('${baseUrl}/webapi/validatebuilder/builder/switch',{access_id: id}, function(data){
         			var success = data.status;
         			var status =parseInt(success);
@@ -189,20 +192,17 @@ session = request.getSession(false);
            }
            
            function isReadSaleshead(id,projectId,buildingId,floorId,flatId){
-        	   
-        	   
+        	   ajaxindicatorstart("Loading...");
         	   $.post('${baseUrl}/webapi/cancellation/notification/isread',{id:id}, function(data){
         		   var success = data.status;
         		   var status = parseInt(success);
         		   if(status == 1){
-        			   <%
-        			 //  int flatId = Integer.parseInt(out.print(""));
-        			   //BuilderFlat builderFlat = new CancellationDAO().getFlatDetailId(flatId);%>
         			   window.location.href = "${baseUrl}/builder/saleshead/cancellation/Salesman_booking_new2.jsp?project_id="+projectId+"&building_id="+buildingId+"&floor_id="+floorId+"&flat_id="+flatId;
         		   }
         	   },'json');
            }
            function isReadSalesman(id){
+        	   ajaxindicatorstart("Loading...");
         	   $.post('${baseUrl}/webapi/cancellation/notification/isread',{id:id}, function(data){
         		   var success = data.status;
         		   var status = parseInt(success);
