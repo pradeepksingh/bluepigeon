@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.dao.CampaignDAO"%>
+<%@page import="org.bluepigeon.admin.model.Campaign"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectPropertyConfigurationInfo"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.model.Source"%>
@@ -31,6 +33,7 @@
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
    	session = request.getSession(false);
    	BuilderEmployee builder = new BuilderEmployee();
+    List<Campaign> campaigns = null;
    	List< BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos =null;
    	projectId = Integer.parseInt(request.getParameter("project_id"));
    	int builder_id = 0;
@@ -48,6 +51,7 @@
 				if (request.getParameterMap().containsKey("project_id")) {
 					salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
 					 builderProject = new ProjectDAO().getBuilderActiveProjectById(projectId);
+					 campaigns = new CampaignDAO().getCampaignList(projectId);
 					 builderProjectPropertyConfigurationInfos = new ProjectDAO().getPropertyConfigByProjectId(projectId);
 				}
 				if(builderProjects.size()>0)
@@ -161,7 +165,7 @@ color: #ccc;
     </div>
     <div id="wrapper">
         <!-- Top Navigation -->
-        <div id="header">
+    	<div id="header">
          <%@include file="../../partial/header.jsp"%>
         </div>
         <!-- End Top Navigation -->
@@ -182,25 +186,25 @@ color: #ccc;
                    <form class="addlead1" id="addnewlead" name="addnewlead" action="" method="post"  enctype="multipart/form-data">
                   		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id);%>"/>
                   		<input type="hidden" id="project_id" name="project_id" value="<%out.print(projectId);%>"/>
-                     <div class="col-md-6 col-sm-6 col-xs-12">
-                         <div class="form-group row">
-							<label for="example-text-input" class="col-5 col-form-label">Name</label>
-							  <div class="col-7">
+						<div class="col-md-6 col-sm-6 col-xs-12">
+                        	<div class="form-group row">
+								<label for="example-text-input" class="col-5 col-form-label">Name</label>
+							  	<div class="col-7">
 							  		<div>
 								 		<input class="form-control" type="text" id="leadname" name="leadname"  placeholder="Please enter name">
 								 	</div>
 								  	<div class="messageContainer"></div>
-							  </div>
-						  </div>
-						  <div class="form-group row">
-							 <label for="example-search-input" class="col-5 col-form-label">Email ID</label>
+							  	</div>
+						  	</div>
+						  	<div class="form-group row">
+								<label for="example-search-input" class="col-5 col-form-label">Email ID</label>
 								<div class="col-7">
 									<div>
 								   		<input class="form-control" type="text" id="email" name="email" placeholder="Please enter email id">
 								    </div>
 								    <div class="messageContainer"></div>
 							    </div>
-						 </div>
+						 	</div>
 							<div class="form-group row">
 							   <label for="example-search-input" class="col-5 col-form-label">Configuration</label>
 								  <div class="col-7">
@@ -308,7 +312,7 @@ color: #ccc;
 						      </div>
 						    </div>
 						  </div>
-							 <%if(access_id ==5){ %>
+							 
 							 <div class="form-group row">
 							 <label for="example-search-input" class="col-5 col-form-label">Assign Salesman</label>
 								<div class="col-7">
@@ -322,7 +326,20 @@ color: #ccc;
 								     </div>
 								 </div>
 						    </div>
-						    <%} %>
+						    <div class="form-group row">
+							 <label for="example-search-input" class="col-5 col-form-label">Campaign</label>
+								<div class="col-7">
+									<div>
+								   		<select id="campaign_id" name="campaign_id">
+									    <%if(campaigns != null){
+								    	  for(Campaign  campaign: campaigns){%>
+								      		<option value="<%out.print(campaign.getId());%>"><%out.print(campaign.getTitle()); %></option>
+								      	 <%}} %>
+									     </select>
+								     </div>
+								 </div>
+						    </div>
+						   
 						</div>
 						<div class="center bcenter">
 					  	   <button type="submit" id="save" class="button1">Save</button>
@@ -396,6 +413,23 @@ $select_scorce = $("#source_id").selectize({
      }
 });
 select_scorce = $select_scorce[0].selectize;
+
+$select_campaign = $("#campaign_id").selectize({
+	persist: false,
+	 onChange: function(value) {
+		if($("#campaign_id").val() > 0 || $("#campaign_id").val() != '' ){
+			
+		}
+	 },
+	 onDropdownOpen: function(value){
+    	 var obj = $(this);
+		var textClear =	 $("#campaign_id :selected").text();
+    	 if(textClear.trim() == "Enter Campaign Name"){
+    		 obj[0].setValue("0");
+    	 }
+     }
+});
+select_campaign = $select_campaign[0].selectize;
 
 $('#addnewlead').bootstrapValidator({
 	container: function($field, validator) {

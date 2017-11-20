@@ -370,6 +370,8 @@ $('#newcancellation').bootstrapValidator({
 });
 
 function addCancellation() {
+	ajaxindicatorstart("Loading...");
+	ajaxindicatorstop();
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showCancellationRequest,
@@ -394,6 +396,7 @@ function showCancellationResponse(resp, statusText, xhr, $form){
 		$("#response").html(resp.message);
 		$("#response").show();
 		alert(resp.message);
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');

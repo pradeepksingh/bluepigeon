@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.dao.CampaignDAO"%>
+<%@page import="org.bluepigeon.admin.model.Campaign"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.data.NewLeadList"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectPropertyConfigurationInfo"%>
@@ -35,7 +37,6 @@
    	BuilderEmployee builder = new BuilderEmployee();
    	int builder_id = 0;
    	List<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos =null;
-   
    	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -388,171 +389,7 @@ color: #ccc;
 		</div>
 	</div>
         <!-- Modal -->
-		  <div class="modal fade" id="myModal1" role="dialog">
-		   <div class="modal-dialog lead">
-		      <div class="modal-content">
-		        <div class="modal-body">
-		           	  <div class="row">
-						  <div class="col-md-10 col-sm-10 col-xs-10">
-							<h3>Add Lead</h3>
-						  </div>
-						  <div class="col-md-2 col-sm-2 col-xs-2">
-							<img src="../../images/error.png" alt="cancle" data-dismiss="modal">
-						  </div>
-						</div>
-				  		<div class="row bg12">
-				  		 <form class="addlead1 addlead" id="addnewlead" name="addnewlead" action="" method="post"  enctype="multipart/form-data" >
-				  		 	<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>"/>
-		                     <div class="col-md-6 col-sm-6 col-xs-12">
-		                         <div class="form-group row">
-									<label for="example-text-input" class="col-5 col-form-label"> Name <span class="text-danger">*</span></label>
-									  <div class="col-7">
-										  <div>
-											 <input class="form-control" type="text"  id="leadname" name="leadname"  placeholder="Please enter lead name">
-										  </div>
-										  <div class="messageContainer"></div>
-								  	 </div>
-								 </div>
-								 <div class="form-group row">
-									 <label for="example-search-input" class="col-5 col-form-label">Email ID <span class="text-danger">*</span></label>
-										<div class="col-7">
-											<div>
-										   		<input class="form-control" type="text" id="email" name="email" placeholder="Please enter email id">
-										 	</div>
-										   <div class="messageContainer"></div>
-									   </div>
-								    </div>
-									<div class="form-group row">
-									   <label for="example-search-input" class="col-5 col-form-label">Configuration <span class="text-danger">*</span></label>
-										  <div class="col-7">
-										  	<div>
-										      <select id="configuration" name="configuration[]"  multiple>
-									           <% if(builderProjectPropertyConfigurationInfos != null){ 
-									           	for(BuilderProjectPropertyConfigurationInfo builderProjectPropertyConfigurationInfo : builderProjectPropertyConfigurationInfos){
-									           %>
-									            <option value="<%out.print(builderProjectPropertyConfigurationInfo.getBuilderProjectPropertyConfiguration().getId());%>"><%out.print(builderProjectPropertyConfigurationInfo.getBuilderProjectPropertyConfiguration().getName()); %></option>
-									           <%}} %>
-										     </select>
-										     </div>
-										     <div class="messageContainer"></div>
-										  </div>
-									 </div>
-		                            <div class="form-group row">
-							           <label for="example-tel-input" class="col-5 col-form-label">Source <span class="text-danger">*</span></label>
-								         <div class="col-7">
-								         	<div>
-										        <select id="select_source" name="select_source" data-style="form-control">
-										        <%if(sourceList != null){
-										        for(Source source: sourceList) {%>
-						                          <option value="<%out.print(source.getId());%>"><%out.print(source.getName()); %></option>
-						                          <%}} %>
-						                        </select>
-					                        </div>
-					                         <div class="messageContainer"></div>
-									     </div>
-								    </div>
-						       </div>
-		                       <div class="col-md-6 col-sm-6 col-xs-12">
-		                       	  <div class="form-group row">
-									<label for="example-text-input" class="col-5 col-form-label"> Phone No. <span class="text-danger">*</span></label>
-									  <div class="col-7">
-									  	<div>
-										 <input class="form-control" type="text" id="mobile" name="mobile"  placeholder="Enter Phone number">
-									  </div>
-									   <div class="messageContainer"></div>
-									  </div>
-								  </div>
-								  <input type="hidden" id="project_id" name="project_id" value="<%out.print(projectId);%>"/>
- 								  <div class="form-group row">
-									 <label for="example-search-input" class="col-5 col-form-label">Interested Project</label>
-										<div class="col-7">
-										   <select id="multiple-checkboxes-2" class="select-bg" disabled>
-									           <% if(builderProject != null){%>
-									           <option value="<%out.print(builderProject.getId());%>" selected><%out.print(builderProject.getName()); %></option>
-									           <%} %>
-										     </select>
-										 </div>
-								    </div>
-									<div class="span2 investRange">
-									<label for="example-search-input" class="col-5 col-form-label">Budget</label>
-						    			<div class="btn-group">
-										      <button id="min-max-price-range" class="form-control selectpicker select-btn  dropdown-toggle searchParams" href="#" data-toggle="dropdown" tabindex="6">
-										        <div class="filter-option pull-left span_price">
-										          <span id="price_range1"> </span> - <span id="price_range2">Price Range</span> </div>
-										        <span class="bs-caret" style="float: right;"><span class="caret"></span></span>
-										      </button>
-										      <div class="dropdown-menu ddRange" role="menu" style="width: 295px;padding-top: 12px;">
-										        <div class="rangemenu">
-										          <div class="freeformPrice">
-										            <div class="col-md-5">
-										              <input name="minprice" id="minprice" type="text" class="min_input form-control" placeholder="Min Price">
-										            </div>
-										            <div class="col-md-2 "><span class="arrow"></span></div>
-										            <div class="col-md-5">
-										              <input name="maxprice" id="maxprice" type="text" class="max_input form-control" placeholder="Max Price">
-										            </div>
-										          </div>
-										          <div class="price_Ranges rangesMax col-md-5">
-										            <a class="max_value" value="" href="javascript:void(0)">Any Max</a>
-										            <a class="max_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
-										            <a class="max_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
-										            <a class="max_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
-										            <a class="max_value" value="10000000" href="javascript:void(0)">1 cr</a>
-										            <a class="max_value" value="50000000" href="javascript:void(0)">5 cr</a>
-										            <a class="max_value" value="100000000" href="javascript:void(0)">10 cr</a>
-										            <a class="max_value" value="500000000" href="javascript:void(0)">50 cr</a>
-										            <a class="max_value" value="1000000000" href="javascript:void(0)">100 cr</a>
-										            <a class="max_value" value="2000000000" href="javascript:void(0)">200 cr</a>
-										            <a class="max_value" value="5000000000" href="javascript:void(0)">500 cr</a>
-										          </div>
-										          <div class="col-md-2"> </div>
-										          <div class="price_Ranges rangesMin col-md-5">
-										            <a class="min_value" value="" href="javascript:void(0)">Any Min</a>
-										            <a class="min_value" value="1000000" href="javascript:void(0)">10 lakhs</a>
-										            <a class="min_value" value="2500000" href="javascript:void(0)">25 lakhs</a>
-										            <a class="min_value" value="5000000" href="javascript:void(0)">50 lakhs</a>
-										            <a class="min_value" value="10000000" href="javascript:void(0)">1 cr</a>
-										            <a class="min_value" value="50000000" href="javascript:void(0)">5 cr</a>
-										            <a class="min_value" value="100000000" href="javascript:void(0)">10 cr</a>
-										            <a class="min_value" value="500000000" href="javascript:void(0)">50 cr</a>
-										            <a class="min_value" value="1000000000" href="javascript:void(0)">100 cr</a>
-										            <a class="min_value" value="2000000000" href="javascript:void(0)">200 cr</a>
-										            <a class="min_value" value="5000000000" href="javascript:void(0)">500 cr</a>
-										          </div>
-										        </div>
-										        <div class="btnClear">
-										          <a href="javascript:void(0)" class="btn btn-link">Clear</a>
-										        </div>
-										      </div>
-						    			</div>
-						  			</div>
-								
-						   			<%if(access_id ==5){ %>
-							 
-									 <div class="form-group row">
-									 <label for="example-search-input" class="col-5 col-form-label">Assign Salesman</label>
-										<div class="col-7">
-											<div>
-										   		<select id="assignsalemans" name="assignsalemans[]" multiple>
-											    <%if(salesmanList != null){
-										    	  for(BuilderEmployee  builderEmployee: salesmanList){%>
-										      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
-										      	 <%}} %>
-											     </select>
-										     </div>
-										 </div>
-								    </div>
-						    		<%} %>
-						    	</div>
-								<div class="center bcenter">
-							  	   <button type="submit" class="button1">Save</button>
-							  	</div>
-		                     </form>
-				  		</div>
-			  		</div>
-		 	  	</div>
-          	</div>
-		</div>
+		
     </div>
     <!-- /.container-fluid -->
    <div id="sidebar1"> 
@@ -562,53 +399,20 @@ color: #ccc;
 </html>
 <script>
 $("#booking").click(function(){
+	ajaxindicatorstart("Loading...");
 	 window.location.href="${baseUrl}/builder/saleshead/booking/salesman_bookingOpenForm.jsp?project_id="+$("#project_id").val();
 });
 $("#cancellation").click(function(){
+	ajaxindicatorstart("Loading...");
 	 window.location.href="${baseUrl}/builder/saleshead/cancellation/Salesman_booking_new2.jsp?project_id="+<%out.print(projectId);%>
 });
 $("#campaign").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/saleshead/campaign/Salesman_campaign.jsp?project_id="+<%out.print(projectId);%>
 });
-$select_source = $("#select_source").selectize({
-	persist: false,
-	 onChange: function(value) {
-		if($("#select_source").val() > 0 || $("#select_source").val() != '' ){
-			
-		}
-	 },
-	 onDropdownOpen: function(value){
-    	 var obj = $(this);
-		var textClear =	 $("#select_source :selected").text();
-    	 if(textClear.trim() == "Enter Source Name"){
-    		 obj[0].setValue("0");
-    	 }
-     }
-});
-select_source = $select_source[0].selectize;
-<%
-	if(access_id == 5){
-%>
-$assign_salesman = $("#assignsalemans").selectize({
-	persist: false,
-	onChange: function(value){
-		if($("#assignsalemans").val() > 0 || $("#assignsalemans").val() != ''){
-			alert($("#assignsalemans").val());
-		}
-	}
-});
-assign_salesman = $assign_salesman[0].selectize;
-$select_salesman = $("#select_salesman").selectize({
-	persist: false,
-	onChange: function(value){
-		if($("#select_salesman").val() > 0 || $("#select_salesman").val() != ''){
-			alert($("#select_salesman").val());
-			
-		}
-	}
-});
-select_salesman = $select_salesman[0].selectize;
-<%}%>
+
+
+
 $('#configuration').multiselect({
     columns: 1,
     placeholder: 'Select Configuration',

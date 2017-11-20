@@ -49,7 +49,9 @@
  	String image  = ""; 
  	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>(); 
  	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList(); 
- 	project_id = Integer.parseInt(request.getParameter("project_id")); 
+ 	if (request.getParameterMap().containsKey("project_id")) {
+ 		project_id = Integer.parseInt(request.getParameter("project_id")); 
+ 	}
  	projectList = new ProjectDAO().getBuilderActiveProjectById(project_id);
 //  	List<BuilderProjectAmenityInfo> projectAmenityInfos = new BuilderProjectAmenityInfoDAO().getBuilderProjectAmenityInfo(project_id); 
 	List<BuilderProjectProjectType> projectProjectTypes = new BuilderProjectProjectTypeDAO().getBuilderProjectProjectTypes(project_id);
@@ -370,6 +372,7 @@ $('#<%out.print(flat_id);%>').addClass("red");
 
 <%}%>
 function showFlats(id){
+	ajaxindicatorstart("Loading...");
 	window.location.href="${baseUrl}/builder/saleshead/cancellation/Salesman_cancelation_form_open3.jsp?flat_id="+id;
 }
 function activeInactiveFlats(){

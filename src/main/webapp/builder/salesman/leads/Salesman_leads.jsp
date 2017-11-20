@@ -1,3 +1,5 @@
+<%@page import="org.bluepigeon.admin.model.Campaign"%>
+<%@page import="org.bluepigeon.admin.dao.CampaignDAO"%>
 <%@page import="org.bluepigeon.admin.dao.BuilderDetailsDAO"%>
 <%@page import="org.bluepigeon.admin.data.NewLeadList"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProjectPropertyConfigurationInfo"%>
@@ -33,6 +35,7 @@
  	List<NewLeadList> newLeadLists = null;
  	List<BuilderPropertyType> builderPropertyTypes = new ProjectLeadDAO().getBuilderPropertyType();
    	session = request.getSession(false);
+    List<Campaign> campaigns = null;
    	BuilderEmployee builder = new BuilderEmployee();
    	int builder_id = 0;
    	List<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos =null;
@@ -50,6 +53,7 @@
 				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
 					 builderProject = new ProjectDAO().getBuilderActiveProjectById(projectId);
 					 builderProjectPropertyConfigurationInfos = new ProjectDAO().getPropertyConfigByProjectId(projectId);
+					 campaigns = new CampaignDAO().getCampaignList(projectId);
 					 newLeadLists = new ProjectDAO().getNewLeadList(projectId,builder);
 			}
 			if(builderPropertyTypes != null){
@@ -529,23 +533,19 @@ color: #ccc;
 										      </div>
 						    			</div>
 						  			</div>
-								
-						   			<%if(access_id ==5){ %>
-							 
-									 <div class="form-group row">
-									 <label for="example-search-input" class="col-5 col-form-label">Assign Salesman</label>
+									<div class="form-group row">
+										<label for="example-search-input" class="col-5 col-form-label">Campaign</label>
 										<div class="col-7">
 											<div>
-										   		<select id="assignsalemans" name="assignsalemans[]" multiple>
-											    <%if(salesmanList != null){
-										    	  for(BuilderEmployee  builderEmployee: salesmanList){%>
-										      		<option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
+										   		<select id="campaign_id" name="campaign_id">
+											    <%if(campaigns != null){
+										    	  for(Campaign  campaign: campaigns){%>
+										      		<option value="<%out.print(campaign.getId());%>"><%out.print(campaign.getTitle()); %></option>
 										      	 <%}} %>
 											     </select>
 										     </div>
 										 </div>
 								    </div>
-						    		<%} %>
 						    	</div>
 								<div class="center bcenter">
 							  	   <button type="submit" class="button1">Save</button>
@@ -591,19 +591,23 @@ $select_source = $("#select_source").selectize({
 
 select_source = $select_source[0].selectize;
 
-<%
-	if(access_id == 5){
-%>
-$select_salesman = $(".select_salesman").selectize({
+$select_campaign = $("#campaign_id").selectize({
 	persist: false,
-	onChange: function(value){
-		if($(".select_salesman").val() > 0 || $(".select_salesman").val() != ''){
-		//	alert($(".select_salesman").val());
+	 onChange: function(value) {
+		if($("#campaign_id").val() > 0 || $("#campaign_id").val() != '' ){
+			
 		}
-	}
+	 },
+	 onDropdownOpen: function(value){
+    	 var obj = $(this);
+		var textClear =	 $("#campaign_id :selected").text();
+    	 if(textClear.trim() == "Enter campaign Name"){
+    		 obj[0].setValue("0");
+    	 }
+     }
 });
-select_salesman = $select_salesman[0].selectize;
-<%}%>
+
+select_campaign = $select_campaign[0].selectize;
 
 $('#configuration').multiselect({
     columns: 1,

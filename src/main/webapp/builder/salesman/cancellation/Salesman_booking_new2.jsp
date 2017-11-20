@@ -49,7 +49,9 @@
  	String image  = ""; 
  	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>(); 
  	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList(); 
- 	project_id = Integer.parseInt(request.getParameter("project_id")); 
+ 	if (request.getParameterMap().containsKey("project_id")) {
+ 		project_id = Integer.parseInt(request.getParameter("project_id")); 
+ 	}
  	projectList = new ProjectDAO().getBuilderActiveProjectById(project_id);
 	
  	session = request.getSession(false); 

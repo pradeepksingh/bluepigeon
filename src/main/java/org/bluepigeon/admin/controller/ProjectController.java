@@ -3821,6 +3821,7 @@ public class ProjectController extends ResourceConfig {
 			//@FormParam("city") String city,
 			//@FormParam("area") String area,
 			@FormDataParam("select_source") int source_id,
+			@FormDataParam("campaign_id") int campaign_id,
 			@FormDataParam("minprice") int min,
 			@FormDataParam("maxprice") int max,
 			@FormDataParam("assignsalemans[]") List<FormDataBodyPart> salesmans
@@ -3858,6 +3859,7 @@ public class ProjectController extends ResourceConfig {
 			builderLead.setDiscountOffered("");
 			builderLead.setIntrestedIn(1);
 			builderLead.setStatus(1);
+			builderLead.setCampaignId(campaign_id);
 			resp = new ProjectDAO().addProjectLead(builderLead); 
 			
 			if(resp.getId() > 0){
@@ -3975,6 +3977,7 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("email") String email,
 			@FormDataParam("configuration[]") List<FormDataBodyPart> configs,
 			@FormDataParam("source_id") int source_id,
+			@FormDataParam("campaign_id") int campaign_id,
 			@FormDataParam("minprice") int min,
 			@FormDataParam("maxprice") int max,
 			@FormDataParam("assignsalemans[]") List<FormDataBodyPart> salesmans
@@ -4016,6 +4019,7 @@ public class ProjectController extends ResourceConfig {
 						builderLead.setDiscountOffered("");
 						builderLead.setIntrestedIn(1);
 						builderLead.setStatus(1);
+						builderLead.setCampaignId(campaign_id);
 					
 						resp = new ProjectDAO().addProjectLead(builderLead); 
 					
