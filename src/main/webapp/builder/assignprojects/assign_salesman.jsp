@@ -101,6 +101,9 @@
 	.ms-options-wrap > .ms-options > ul label.focused, .ms-options-wrap > .ms-options > ul label:hover {
     background-color: #00bfd6;
     }
+    .ms-options-wrap > .ms-options > ul li.selected label {
+    background-color: #00bfd6;
+    }
 	</style>
 </head>
 

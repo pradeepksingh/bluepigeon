@@ -103,7 +103,7 @@ session = request.getSession(false);
                         <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#"><i class="fa fa-bell-o"></i>
                    <%if(notifications !=null){ 
                 	   for(Notification newnotification : notifications){
-                		   if(access_uid == 4 || access_uid ==7){
+                		   if(access_uid == 5 || access_uid ==7){
                 		   		if(newnotification.isRead()){%> 
                    
                    			
