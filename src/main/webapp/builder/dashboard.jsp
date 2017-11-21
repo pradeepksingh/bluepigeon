@@ -169,7 +169,7 @@
                             <h3 class="box-title">Total Revenue (Rs in cr)</h3>
                             <ul class="list-inline two-part">
 									 <li><i class="ti-wallet text-info-new"></i></li>
-                                <li class="text-right"><span class="counter dashboard-text"> <%out.print(Math.round(totalRevenue)); %></span></li>
+                                <li class="text-right"><span class="counter dashboard-text"> <%out.print(Math.round(totalPropertySold)); %></span></li>
                             </ul>
                         </div>
                     </div>
