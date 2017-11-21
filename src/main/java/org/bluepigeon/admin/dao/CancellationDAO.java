@@ -514,11 +514,12 @@ public class CancellationDAO {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("emp_id", empId);
+		query.setMaxResults(5);
 		List<Notification> notification = query.list();
 		session.close();
 		return notification;
 	}
-	
+
 	public FlatData getFlatById(int flatId){
 		String hql = " select flat.id as id, flat.flat_no as name from builder_flat as flat where flat.id="+flatId;
 		FlatData flatData = new FlatData();

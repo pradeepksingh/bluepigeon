@@ -318,7 +318,7 @@ function getProjectSalesheadList(element,id){
 }
 <%}%>
 <%if(access_id == 4){%>
-function getProjectList(element,id){
+function getProjectSalesmanList(element,id){
 	var ids = "";
 	var empId = 0;
 	 $("#selectsalesmanprojects"+id+" .ms-options li.selected input").each(function(index){
