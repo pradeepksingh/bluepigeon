@@ -506,4 +506,14 @@ public class CampaignDAO {
 		session.close();
 		return result.get(0);
 	}
+	
+	public List<Campaign> getCampaignList(int projectId){
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			String hql = "from Campaign where builderProject.id= :project_id";
+			Session session = hibernateUtil.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("project_id", projectId);
+			List<Campaign> campaign = query.list();
+			return campaign;
+	}
 }

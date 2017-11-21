@@ -38,6 +38,7 @@
 	String taxLabel1 = "";
 	String taxLabel2 = "";
 	String taxLabel3 = "";
+	List<BuilderEmployee> salesmanList = null;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -56,6 +57,7 @@
 							flatPricingDetails = new ProjectDAO().getFlatPriceInfos(flat_id);
 							building_id = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
 							project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
+							salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
 							 bookingFlatList = new ProjectDAO().getFlatdetails(flat_id,emp_id);
 							 if(builderFlat != null){
 								 projectName = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName();
@@ -271,11 +273,16 @@
 								            <input class="form-control" readonly="true" value="<%out.print(builderFlat.getFlatNo());%>">
 								        </div>
 								    </div>
-								    <input type="hidden" id="admin_id" name="admin_id" value="<% out.print(builder.getId());%>"/>
 								    <div class="form-group row">
 								        <label for="example-search-input" class="col-5 col-form-label">Assign Manager</label>
 								        <div class="col-7 custom-col">
-								            <input class="form-control" readonly="true" value="<% out.print(builder.getName());%>">
+								        	<select id="admin_id" name="admin_id">
+									           <% if(salesmanList != null){ 
+									           	for(BuilderEmployee builderEmployee : salesmanList){
+									           %>
+									            <option value="<%out.print(builderEmployee.getId());%>"><%out.print(builderEmployee.getName()); %></option>
+									           <%}} %>
+										     </select>
 								        </div>
 								    </div>
 					 	     	</div>

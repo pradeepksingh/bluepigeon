@@ -925,7 +925,7 @@
 														<div class="col-sm-4">
 															<input type="text" class="form-control" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable<%out.print(i); %>" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 														</div>
-														<div class="messageContainer"></div>
+														<div class="epayable<%out.print(i);%>"></div>
 													</div>
 												</div>
 												<!-- div class="col-lg-3 margin-bottom-5">
@@ -963,7 +963,7 @@
 														<div class="col-sm-4">
 															<input type="text" class="form-control"  onkeypress=" return isNumber(event, this);" id="payable<% out.print(i);%>" name="payable[]" value=""/>
 														</div>
-														<div class="messageContainer"></div>
+														<div id="epayable<%out.print(i);%>"></div>
 													</div>
 												</div>
 												<div class="col-lg-1">
@@ -1267,8 +1267,6 @@ function vaildateSum(){
 			isEmpty = true;
 		}
 	})
-	
-	alert(sum);
 	if(sum>100){
 		alert("The sum of percentages must be 100");
 		$("#paymentbtn").attr('disabled',true);
@@ -2156,6 +2154,7 @@ function addMoreOffer() {
 		+'</div>';
 	$("#offer_area").append(html);
 	$("#offer_count").val(offers);
+	
 }
 function removeOffer(id) {
 	$("#offer-"+id).remove();
@@ -2216,7 +2215,7 @@ function addMoreSchedule() {
 			+'</div>';
 	$("#payment_schedule").append(html);
 	$("#schedule_count").val(schedule_count);
-	$("#payable"+schedule_count).keyup(function(){
+	$("#payable"+schedule_count).blur(function(){
 		//$('#paymentfrm').bootstrapValidator('revalidateField', $(this).prop('name'));
 		//alert($("#payable"+schedule_count).val());
 		//var value = $("#payable"+schedule_count).val();

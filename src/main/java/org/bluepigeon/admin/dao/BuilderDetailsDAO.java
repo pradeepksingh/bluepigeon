@@ -35,6 +35,7 @@ import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuyerList;
 import org.bluepigeon.admin.data.EmployeeList;
 import org.bluepigeon.admin.data.InboxMessageData;
+import org.bluepigeon.admin.data.NameList;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectWiseData;
 import org.bluepigeon.admin.util.HibernateUtil;
@@ -1099,9 +1100,9 @@ public class BuilderDetailsDAO {
 		empQuery.setParameter("id", empId);
 		BuilderEmployee builderEmployee=(BuilderEmployee)empQuery.list().get(0);
 		if(builderEmployee.getBuilderEmployeeAccessType().getId() ==1){
-			hql = "select elt(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue,m.bookingCount,m.avaliable from(select COUNT(c.id) as bookingCount, project.total_inventory as avaliable, MONTH(a.booking_date) as name,round(sum(a.total_cost)) as revenue FROM buying_details as a join buyer as b on b.id=a.buyer_id join builder_flat as c on c.id=b.flat_id join builder_floor as f on f.id=c.floor_no join builder_building as building on building.id=f.building_id join builder_project as project on project.id=building.project_id left join builder as builder on builder.id=project.group_id where project.group_id="+builderEmployee.getBuilder().getId()+" and b.is_primary=1 and b.is_deleted=0 and b.status=0 and c.status_id=2 group by MONTH(a.booking_date)) as m order by FIELD(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')";
+			hql = "select elt(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue,m.bookingCount,m.avaliable from(select COUNT(c.id) as bookingCount, project.total_inventory as avaliable, MONTH(a.booking_date) as name,round(sum(a.total_cost)) as revenue FROM buying_details as a join buyer as b on b.id=a.buyer_id join builder_flat as c on c.id=b.flat_id join builder_floor as f on f.id=c.floor_no join builder_building as building on building.id=f.building_id join builder_project as project on project.id=building.project_id left join builder as builder on builder.id=project.group_id where project.group_id="+builderEmployee.getBuilder().getId()+" and b.is_primary=1 and b.is_deleted=0 and c.status_id=2 group by MONTH(a.booking_date)) as m order by FIELD(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')";
 		}else{
-			hql = "select elt(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue,m.bookingCount,m.avaliable from(select COUNT(c.id) as bookingCount, project.total_inventory as avaliable, MONTH(a.booking_date) as name,round(sum(a.total_cost)) as revenue FROM buying_details as a join buyer as b on b.id=a.buyer_id join builder_flat as c on c.id=b.flat_id join builder_floor as f on f.id=c.floor_no join builder_building as building on building.id=f.building_id join builder_project as project on project.id=building.project_id inner join allot_project as e on e.project_id=project.id where e.emp_id="+builderEmployee.getId()+" and b.is_primary=1 and b.is_deleted=0 and b.status=0 and c.status_id=2 group by MONTH(a.booking_date)) as m order by FIELD(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')";
+			hql = "select elt(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec') as name,m.revenue,m.bookingCount,m.avaliable from(select COUNT(c.id) as bookingCount, project.total_inventory as avaliable, MONTH(a.booking_date) as name,round(sum(a.total_cost)) as revenue FROM buying_details as a join buyer as b on b.id=a.buyer_id join builder_flat as c on c.id=b.flat_id join builder_floor as f on f.id=c.floor_no join builder_building as building on building.id=f.building_id join builder_project as project on project.id=building.project_id inner join allot_project as e on e.project_id=project.id where e.emp_id="+builderEmployee.getId()+" and b.is_primary=1 and b.is_deleted=0 and c.status_id=2 group by MONTH(a.booking_date)) as m order by FIELD(m.name,'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')";
 		}
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql)
@@ -2391,6 +2392,7 @@ public class BuilderDetailsDAO {
 			}
 			return builderProjectLists;
 		}
+		
 		public void saveNewEmpRole(EmployeeRole empRoleList){
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.openSession();
@@ -2508,5 +2510,305 @@ public class BuilderDetailsDAO {
 				return responseMessage;
 			}
 			
+		}
+		
+		 //City names for dashboard
+		  /**
+		   * Get list of city with alloted projects or with builder id from project table
+		   * @author pankaj
+		   * @param builderEmployee
+		   * @return List<NameList>
+		   */
+		public List<NameList> getProjectCityList(BuilderEmployee builderEmployee){
+			String hql = "";
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+				hql = "SELECT DISTINCT(city.name) as cityName, project.city_id as cityid "
+						+ "from builder_project as project "
+						+ "left join builder as b on b.id=project.group_id "
+						+ "left join city as city on city.id=project.city_id "
+						+ "where b.id="+builderEmployee.getBuilder().getId();
+			}else{
+				hql = "SELECT DISTINCT(city.name) as name,city.id as id from builder_project as project "
+						+ "left join city as city on city.id=project.city_id "
+						+ "inner join allot_project as ap on ap.project_id=project.id "
+						+ "where ap.emp_id="+builderEmployee.getId();						
+			}
+			hql +=" and project.status=1 group  by project.id order by city.name desc";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(NameList.class));
+			List<NameList> result = query.list();
+			session.close();
+			return result;
+		}
+		
+		public List<NameList> getProjectLocalityList(BuilderEmployee builderEmployee){
+			String hql = "";
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+				hql = "SELECT DISTINCT(project.locality_name) as name from builder_project as project "
+						+ "left join builder as b on b.id=project.group_id "
+						+ "where b.id="+builderEmployee.getBuilder().getId();
+			}else{
+				hql = "SELECT DISTINCT(project.locality_name) as name from builder_project as project "
+						+ "inner join allot_project as ap on ap.project_id=project.id "
+						+ "where ap.emp_id="+builderEmployee.getId();
+			}
+			hql +=" and project.status=1 group by project.id order by project.locality_name desc";
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(NameList.class));
+			List<NameList> result = query.list();
+			session.close();
+			return result;
+		}
+		
+		public List<NameList> getAllotedProjectDetails(BuilderEmployee builderEmployee){
+			String hql = "";
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+				hql = "SELECT project.name as name, project.id as id "
+						+ "from builder_project as project "
+						+ "join builder as b on b.id=project.group_id "
+						+ "join city as city on city.id=project.city_id "
+						+ "where b.id="+builderEmployee.getBuilder().getId()+" "
+						+ "and project.status=1";
+			}else{
+				hql = "SELECT project.name as name,project.id as id from builder_project as project "
+						+ "join city as city on city.id=project.city_id "
+						+ "inner join allot_project as ap on ap.project_id=project.id "
+						+ "where ap.emp_id="+builderEmployee.getId()+" and "
+						+ "project.status=1 "
+						+ "group by project.id order by city.name desc";
+			}
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(NameList.class));
+			List<NameList> result = query.list();
+			session.close();
+			return result;
+		}
+		
+		
+		public List<NameList> getProjectCityList(int empId){
+			String empHql = "from BuilderEmployee where id ="+empId;
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session empSession = hibernateUtil.openSession();
+			Query empQuery = empSession.createQuery(empHql);
+			BuilderEmployee builderEmployee = (BuilderEmployee)empQuery.list().get(0);
+			String hql = "";
+			if(builderEmployee != null){
+				if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+					hql = "SELECT DISTINCT(city.name) as name, project.city_id as id "
+							+ "from builder_project as project "
+							+ "left join builder as b on b.id=project.group_id "
+							+ "left join city as city on city.id=project.city_id "
+							+ "where b.id="+builderEmployee.getBuilder().getId();
+				}else{
+					hql = "SELECT DISTINCT(city.name) as name,city.id as id from builder_project as project "
+							+ "left join city as city on city.id=project.city_id "
+							+ "inner join allot_project as ap on ap.project_id=project.id "
+							+ "where ap.emp_id="+builderEmployee.getId();						
+				}
+			}
+			hql +=" and project.status=1 group  by project.id order by city.name desc";
+			
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(NameList.class));
+			List<NameList> result = query.list();
+			session.close();
+			return result;
+		}
+		
+		public List<NameList> getProjectLocalityList(int cityId,int empId){
+			String empHql = "from BuilderEmployee where id ="+empId;
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session empSession = hibernateUtil.openSession();
+			Query empQuery = empSession.createQuery(empHql);
+			BuilderEmployee builderEmployee = (BuilderEmployee)empQuery.list().get(0);
+			String hql = "";
+			if(builderEmployee != null){
+				if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+					hql = "SELECT DISTINCT(project.locality_name) as name from builder_project as project "
+						+ "left join builder as b on b.id=project.group_id "
+						+ "where b.id="+builderEmployee.getBuilder().getId();
+					if(cityId > 0){
+						hql +=" and project.city_id="+cityId;
+					}
+				}else{
+					hql = "SELECT DISTINCT(project.locality_name) as name from builder_project as project "
+						+ "inner join allot_project as ap on ap.project_id=project.id "
+						+ "where ap.emp_id="+builderEmployee.getId();
+					if(cityId > 0){
+						hql +=" and project.city_id="+cityId;
+					}
+				}
+			}
+			hql +=" and project.status=1 group by project.id order by project.locality_name desc";
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(NameList.class));
+			List<NameList> result = query.list();
+			session.close();
+			return result;
+		}
+		
+		public List<NameList> getAllotedProjectDetails(int cityId,int empId){
+			String empHql = "from BuilderEmployee where id ="+empId;
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session empSession = hibernateUtil.openSession();
+			Query empQuery = empSession.createQuery(empHql);
+			BuilderEmployee builderEmployee = (BuilderEmployee)empQuery.list().get(0);
+			String hql = "";
+			if(builderEmployee != null){
+				if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+					hql = "SELECT project.name as name, project.id as id from builder_project as project "
+						+ "join builder as b on b.id=project.group_id "
+						+ "where b.id="+builderEmployee.getBuilder().getId();
+					if(cityId > 0){
+						hql +=" and project.city_id = "+cityId;
+					}
+				}else{
+					hql = "SELECT project.name as name,project.id as id from builder_project as project "
+						+ "inner join allot_project as ap on ap.project_id=project.id "
+						+ "where ap.emp_id="+builderEmployee.getId();
+					if(cityId > 0){
+						hql +=" and project.city_id = "+cityId;
+					}
+				}
+			}
+			hql +=" and project.status=1 group by project.id order by project.name desc";
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(NameList.class));
+			List<NameList> result = query.list();
+			session.close();
+			return result;
+		}
+		public List<NameList> getAllotedProjectDetails(String localityName,int empId){
+			String empHql = "from BuilderEmployee where id ="+empId;
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session empSession = hibernateUtil.openSession();
+			Query empQuery = empSession.createQuery(empHql);
+			BuilderEmployee builderEmployee = (BuilderEmployee)empQuery.list().get(0);
+			String hql = "";
+			if(builderEmployee != null){
+				if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
+					hql = "SELECT project.name as name, project.id as id from builder_project as project "
+						+ "join builder as b on b.id=project.group_id "
+						+ "where b.id="+builderEmployee.getBuilder().getId();
+					if(localityName != ""){
+						hql +=" and project.locality_name = '"+localityName+"'";
+					}
+				}else{
+					hql = "SELECT project.name as name,project.id as id from builder_project as project "
+						+ "inner join allot_project as ap on ap.project_id=project.id "
+						+ "where ap.emp_id="+builderEmployee.getId();
+					if(!localityName.isEmpty() || localityName.trim().length() > 0){
+						hql +=" and project.locality_name = '"+localityName+"'";
+					}
+				}
+			}
+			hql +=" and project.status=1 group by project.id order by project.name desc";
+			System.err.println(hql);
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(NameList.class));
+			List<NameList> result = query.list();
+			session.close();
+			return result;
+		}
+		
+		/**
+		 * @author pankaj
+		 * @param empId
+		 * @param countryId
+		 * @param stateId
+		 * @param cityId
+		 * @param localityName
+		 * @return
+		 */
+		
+		public List<BuilderProjectList> getProjectFiltersByEmpIds(int empId,int cityId, String localityName,int projectId, int projectStatus){
+			List<BuilderProjectList> builderProjectLists = new ArrayList<BuilderProjectList>();
+			String hqlnew = "from BuilderEmployee where id = "+empId;
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session sessionnew = hibernateUtil.openSession();
+			Query querynew = sessionnew.createQuery(hqlnew);
+			List<BuilderEmployee> employees = querynew.list();
+			BuilderEmployee builderEmployee = employees.get(0);
+			sessionnew.close();
+			String hql = "SELECT project.id as id, project.name as name, project.image as image, "
+					+"project.completion_status as completionStatus,project.inventory_sold as sold, "
+					+"project.total_inventory as totalSold, "
+					+"c.name as city, project.locality_name as locality, "
+					+"count(lead.id) as totalLeads ";
+			String where = "";
+			if(builderEmployee.getBuilderEmployeeAccessType().getId() > 2){
+				hql = hql + "FROM  builder_project as project inner join allot_project as ap on project.id=ap.project_id "
+						+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+						+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id WHERE ";
+				where +="ap.emp_id = "+builderEmployee.getId();
+			} else {
+				hql = hql + "FROM  builder_project as project "
+				+"left join builder as build ON project.group_id = build.id left join city as c ON project.city_id = c.id "
+				+"left join locality as l ON project.area_id = l.id left join builder_lead as lead ON project.id = lead.project_id WHERE ";
+				where +="build.id = "+builderEmployee.getBuilder().getId();
+			}
+		
+			
+			if(cityId > 0){
+				if(where != "")
+					where +=" AND project.city_id = :city_id";
+				else
+					where +="project.city_id = :city_id";
+			}
+			if(localityName != null){
+				if(where != "")
+					where +=" AND project.locality_name like :locality_name";
+				else
+					where +="project.locality_name like :locality_name";
+			}
+			if(projectId > 0){
+				if(where != ""){
+					where +=" AND  project.id = :id";
+				}else{
+					where +=" project.id = :id";
+				}
+			}
+			if(projectStatus > 0){
+				if(projectStatus == 1){
+					if(where != ""){
+						where +=" AND project.completion_status BETWEEN 0 AND 100 ";
+					}
+					else{
+						where +=" project.completion_status BETWEEN 0 AND 100 ";
+					}
+				}
+				if(projectStatus == 2){
+					if(where != ""){
+						where +=" AND project.completion_status=100";
+					}
+					else{
+						where +=" project.completion_status=100";
+					}
+				}
+			}
+			
+			hql += where + " AND project.status=1 GROUP by project.id order by project.id desc";
+			try {
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(BuilderProjectList.class));
+			System.err.println("hql : "+hql);
+			
+			if(cityId > 0)
+				query.setParameter("city_id",cityId);
+			
+			if(localityName != null)
+				query.setParameter("locality_name", localityName+"%");
+			if(projectId > 0){
+				query.setParameter("id", projectId);
+			}
+				builderProjectLists = query.list();
+			} catch(Exception e) {
+				//
+				e.printStackTrace();
+			}
+			return builderProjectLists;
 		}
 }

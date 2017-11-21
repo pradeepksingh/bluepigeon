@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.NameList"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -41,6 +42,9 @@
 	int project_size_list = 0;
 	int city_size_list =0 ;
 	Double totalPropertySold = 0.0;
+	List<NameList> cityNames = null;
+	List<NameList> localityNames = null;
+	List<NameList> projectNames = null;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
@@ -65,6 +69,10 @@
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
 					totalRevenue = totalPropertySold * totalInventorySold;
+					cityNames = new BuilderDetailsDAO().getProjectCityList(builder);
+					localityNames = new BuilderDetailsDAO().getProjectLocalityList(builder);
+					projectNames = new BuilderDetailsDAO().getAllotedProjectDetails(builder);
+					
 				}
 			}
 		}
@@ -161,7 +169,7 @@
                             <h3 class="box-title">Total Revenue (Rs in cr)</h3>
                             <ul class="list-inline two-part">
 									 <li><i class="ti-wallet text-info-new"></i></li>
-                                <li class="text-right"><span class="counter dashboard-text"> <%out.print(Math.round(totalRevenue)); %></span></li>
+                                <li class="text-right"><span class="counter dashboard-text"> <%out.print(Math.round(totalPropertySold)); %></span></li>
                             </ul>
                         </div>
                     </div>
@@ -172,20 +180,32 @@
                       <select  id="city_id" name="city_id">
                        		<option value="0">All City</option>
                             <%
-                            if(cityDataList != null){
-                            for(City city : cityDataList){ %>
+                            if(cityNames != null){
+                            for(NameList city : cityNames){ %>
                             <option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
                             <%}} %>
                           </select>
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
 							<select id="locality_name" name="locality_name">
-                                        <option value="">Locality</option>
+                                 <option value="">All Localities</option>
+                                 <%
+                                 if(localityNames != null){
+                                 	for(NameList locality : localityNames){
+                                 %>
+                                 <option value="<%out.print(locality.getName());%>"><%out.print(locality.getName()); %></option>
+                                 <%}} %>
                         	</select>
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         <select id="project_id" name="project_id">
-                             <option value="0">Project</option>
+                             <option value="0">All Projects</option>
+                             <%
+                             	if(projectNames != null){
+                             		for(NameList projectName : projectNames){
+                             %>
+                             <option value="<%out.print(projectName.getId());%>"><%out.print(projectName.getName()); %></option>
+                             <%}} %>
                         </select>
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -416,14 +436,15 @@
     $select_project = $("#project_id").selectize({
 		persist: false,
 		 onChange: function(value) {
-			 if(value != "" && value >0)
+			 if(value != "")
 				 getProjectList();;
 		 },
 		 onDropdownOpen: function(value){
 	    	 var obj = $(this);
     		var textClear =	 $("#project_id :selected").text();
 	    	 if(textClear.trim() == "Enter Project Name"){
-	    		 obj[0].setValue("");
+	    		 obj[0].setValue("0");
+	    		 obj[0].setText("All Projects");
 	    	 }
 	     }
 });
@@ -435,28 +456,23 @@
 	  onChange:function(value){
 		  
 	  	if(value !=''){
-			  $.get("${baseUrl}/webapi/general/locality/list/name",{ city_id: $("#city_id").val() }, function(data){
-		    		var html = '<option value="">Locality</option>';
+			  $.get("${baseUrl}/webapi/general/locality/newlist/name",{ city_id: $("#city_id").val(),emp_id:$("#emp_id").val() }, function(data){
+		    		var html = '<option value=""> All Localities</option>';
 		    		$(data).each(function(index){
 		    			html = html + '<option value="'+data[index].name+'">'+data[index].name+'</option>';
 		    		});
-		    	//	$("#locality_id").html(html);
 		    		$select_locality[0].selectize.destroy();
 		    		$("#locality_name").html(html);
-		    	//	$('.selectpicker').selectpicker('refresh');
 		    		$select_locality = $("#locality_name").selectize({
 						persist: false,
 						 onChange: function(value) {
-							 
-								 $.post("${baseUrl}/webapi/general/project/list/name",{ locality_name: $("#locality_name").val(),emp_id : $("#emp_id").val(),access_id : $("#access_id").val() }, function(data){
-							    		var html = '<option value="">Project</option>';
+								 $.post("${baseUrl}/webapi/general/filterproject/list/name",{ locality_name: $("#locality_name").val(),emp_id : $("#emp_id").val() }, function(data){
+							    		var html = '<option value="0">All Projects</option>';
 							    		$(data).each(function(index){
 							    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
 							    		});
-							    	//	$("#locality_id").html(html);
 							    		$select_project[0].selectize.destroy();
 							    		$("#project_id").html(html);
-							    	//	$('.selectpicker').selectpicker('refresh');
 							    		$select_project = $("#project_id").selectize({
 											persist: false,
 											 onChange: function(value) {
@@ -468,28 +484,48 @@
 										   	 var obj = $(this);
 												var textClear =	 $("#project_id :selected").text();
 										   	 if(textClear.trim() == "Project"){
-										   		 obj[0].setValue("");
+										   		 obj[0].setValue("0");
+										   		 obj[0].setText("All Projects");
 										   	 }
 										    }
 										});
-									//}
-							    	
 							    	},'json');
-								 
 								 getProjectList();
-							 
 						 },
 						 onDropdownOpen: function(value){
 					   	 var obj = $(this);
 							var textClear =	 $("#locality_name :selected").text();
 					   	 if(textClear.trim() == "Locality"){
 					   		 obj[0].setValue("");
+					   		 obj[0].setText("Localities")
 					   	 }
 					    }
 					});
-				//}
-		    	
 		    	},'json');
+			  $.get("${baseUrl}/webapi/general/project/newlist/name",{ city_id: $("#city_id").val(),emp_id : $("#emp_id").val() }, function(data){
+				    		var html = '<option value="0"> All Project</option>';
+				    		$(data).each(function(index){
+				    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+				    		});
+				    		$select_project[0].selectize.destroy();
+				    		$("#project_id").html(html);
+				    		$select_project = $("#project_id").selectize({
+								persist: false,
+								 onChange: function(value) {
+									 if(value != ""){
+										 getProjectList();
+									 }
+								 },
+								 onDropdownOpen: function(value){
+							   	 var obj = $(this);
+									var textClear =	 $("#project_id :selected").text();
+							   	 if(textClear.trim() == "Project"){
+							   		 obj[0].setValue("0");
+							   		 obj[0].setText("All Projects");
+							   	 }
+							    }
+							});
+				    	},'json');
 		    	getProjectList();
 		  }
 	  },
@@ -497,7 +533,7 @@
 	    	 var obj = $(this);
  			 var textClear =	 $("#city_id :selected").text();
 	    	 if(textClear.trim() == "City"){
-	    		 obj[0].setValue("");
+	    		 obj[0].setValue("0");
 	    	 }
 	     }
    });
@@ -508,15 +544,40 @@
     $select_locality = $("#locality_name").selectize({
     	persist: false,
     	 onChange: function(value) {
-    		 if(value != ""){
+    		
+    			 $.post("${baseUrl}/webapi/general/filterproject/list/name",{ locality_name: $("#locality_name").val(),emp_id : $("#emp_id").val() }, function(data){
+			    		var html = '<option value="0">All Projects</option>';
+			    		$(data).each(function(index){
+			    			html = html + '<option value="'+data[index].id+'">'+data[index].name+'</option>';
+			    		});
+			    		$select_project[0].selectize.destroy();
+			    		$("#project_id").html(html);
+			    		$select_project = $("#project_id").selectize({
+							persist: false,
+							 onChange: function(value) {
+								 if(value != ""){
+									 getProjectList();
+								 }
+							 },
+							 onDropdownOpen: function(value){
+						   	 var obj = $(this);
+								var textClear =	 $("#project_id :selected").text();
+						   	 if(textClear.trim() == "Project"){
+						   		 obj[0].setValue("0");
+						   		 obj[0].setText("All Projects");
+						   	 }
+						   }
+						});
+			    	},'json');
     		 	getProjectList();
-    		 }
+    		 
     	 },
     	 onDropdownOpen: function(value){
        	 var obj = $(this);
     		var textClear =	 $("#locality_name :selected").text();
        	 if(textClear.trim() == "Locality"){
        		 obj[0].setValue("");
+       		 obj[0].setText("All Localities");
        	 }
         }
     });

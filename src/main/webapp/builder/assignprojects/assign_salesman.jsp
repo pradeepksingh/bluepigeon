@@ -97,6 +97,14 @@
 <!--      <script src="js/bootstrap-multiselect.js"></script> -->
 <!--     <link rel="stylesheet" href="css/bootstrap-multiselect.css"> -->
 	<script src="../js/jquery.multiselect.js"></script>
+	<style>
+	.ms-options-wrap > .ms-options > ul label.focused, .ms-options-wrap > .ms-options > ul label:hover {
+    background-color: #00bfd6;
+    }
+    .ms-options-wrap > .ms-options > ul li.selected label {
+    background-color: #00bfd6;
+    }
+	</style>
 </head>
 
 <body class="fix-sidebar">
@@ -310,7 +318,7 @@ function getProjectSalesheadList(element,id){
 }
 <%}%>
 <%if(access_id == 4){%>
-function getProjectList(element,id){
+function getProjectSalesmanList(element,id){
 	var ids = "";
 	var empId = 0;
 	 $("#selectsalesmanprojects"+id+" .ms-options li.selected input").each(function(index){

@@ -38,6 +38,7 @@
  	int building_id = 0; 
 	int floor_id = 0; 
 	int flat_id = 0;
+	int nflatid = 0;
 	String floor_status_name = "";
  	List<BookingFlatList> bookingFlatList = null;
  	List<BuilderFloor> floorList = null; 
@@ -73,6 +74,9 @@
 						}
 					}
 			 	}
+	 			if (request.getParameterMap().containsKey("flat_id")) {
+				 	nflatid = Integer.parseInt(request.getParameter("flat_id")); 
+	 			}
 	 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
 	 			projectList = new ProjectDAO().getBuilderActiveProjectById(project_id);
 	 			try{
@@ -202,7 +206,7 @@
                     </div>
                   </div>
                   <%} %>
-                  <% if(flatListDatas !=null){%>
+                  <% if(flatListDatas !=null && nflatid == 0){%>
                  
 		 <%for(int i=0;i<flatListDatas.size();i++){
 			 for(int j=0;j<flatListDatas.get(i).getBuildingListDatas().size();j++){
@@ -213,12 +217,12 @@
                	  			if(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId() == bookingFlatList2.getFlatId()){
 	 %>
 	  <script type="text/javascript">
-$(document).ready(function () {
+	  $(window).load(function () {
     $("#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>").click(function (e) {
         e.preventDefault();
     });
     $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').trigger('click');
-    $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').addClass("red");
+    $('#<%out.print(flatListDatas.get(i).getBuildingListDatas().get(j).getFloorListDatas().get(floor_size).getFlatStatusDatas().get(flat_count).getId());%>').addClass("active");
 });
     </script>
     <%						}
@@ -229,5 +233,4 @@ $(document).ready(function () {
 		}
 	}
 	%>
-
-<% } %>		
+<%}%>		

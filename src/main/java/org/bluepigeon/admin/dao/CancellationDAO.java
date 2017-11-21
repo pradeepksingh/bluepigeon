@@ -465,8 +465,9 @@ public class CancellationDAO {
 			Notification notification = new Notification();
 			notification.setAssignedBy(builderEmployee.getId());
 			notification.setAssignedTo(employeeList.getId());
-			notification.setBuilderProject(cancellation.getBuilderProject());
-			notification.setBuyerId(0);
+			BuilderProject builderProject = cancellation.getBuilderProject();
+			notification.setBuilderProject(builderProject);
+			notification.setBuyerId(cancellation.getBuyerId());
 			notification.setFlatId(cancellation.getBuilderFlat().getId());
 			notification.setRead(false);
 			notification.setType(1);
@@ -476,8 +477,10 @@ public class CancellationDAO {
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		session.beginTransaction();
-		for(Notification notification : notifications){
-			session.save(notification);
+		if(notifications != null){
+			for(Notification notification : notifications){
+				session.save(notification);
+			}
 		}
 		session.getTransaction().commit();
 		session.close();
@@ -486,12 +489,12 @@ public class CancellationDAO {
 	public  List<EmployeeList> getAssignedProjectSalesHead(int projectId){
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		List<EmployeeList> result = null;
-		String hql = "select emp.id as id from builder_employee as emp "
-				+ "join employee_role as er on er.emp_id=emp.id "
-				+ "join buyer as buy on buy.emp_id=emp.id "
-				+ "join builder_project as project on project.id=buy.project_id "
+		String hql = "select emp.id as id from builder_employee as emp join employee_role as er on er.emp_id=emp.id "
+				+ " join builder_project as project on project.group_id = emp.builder_id "
 				+ "inner join allot_project as ap on ap.project_id=project.id "
-				+ "where er.role_id=5 and ap.project_id="+projectId+" GROUP by emp.id order by emp.id DESC";
+				+ "where "
+				+ "ap.project_id="+projectId+" and er.role_id=5 "
+				+ "GROUP by emp.id order by emp.id DESC";
 		try {
 			Session session = hibernateUtil.getSessionFactory().openSession();
 			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
@@ -511,11 +514,12 @@ public class CancellationDAO {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("emp_id", empId);
+		query.setMaxResults(5);
 		List<Notification> notification = query.list();
 		session.close();
 		return notification;
 	}
-	
+
 	public FlatData getFlatById(int flatId){
 		String hql = " select flat.id as id, flat.flat_no as name from builder_flat as flat where flat.id="+flatId;
 		FlatData flatData = new FlatData();
@@ -727,12 +731,12 @@ public class CancellationDAO {
 	}
 
 	public void updateBuildingRevenue(double charges,int projectId, int flatId){
-		String buildinghql = "from BuilderBuilding where id = :id";
+		String buildinghql = "from BuilderBuilding where builderProject.id = :project_id";
 		String flatTotal = "from FlatPricingDetails where builderFlat.id = :flat_id";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session buildingSession = hibernateUtil.openSession();
 		Query buildingQuery = buildingSession.createQuery(buildinghql);
-		buildingQuery.setParameter("id", projectId);
+		buildingQuery.setParameter("project_id", projectId);
 		BuilderBuilding builderBuilding = (BuilderBuilding) buildingQuery.list().get(0);
 		buildingSession.close();
 		Session flatSession = hibernateUtil.openSession();

@@ -297,29 +297,7 @@ $('#newcancellation').bootstrapValidator({
     },
     excluded: ':disabled',
     fields: {
-    	
-//     	project_id: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'Project is required and cannot be empty'
-//                 }
-//             }
-//         },
-        
-//         building_id: {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'building is required and cannot be empty'
-//                 }
-//             }
-//         },
-//         flat_id : {
-//             validators: {
-//                 notEmpty: {
-//                     message: 'flat is required and cannot be empty'
-//                 }
-//             }
-//         },
+
     	buyer_name: {
             validators: {
                 notEmpty: {
@@ -358,7 +336,7 @@ $('#newcancellation').bootstrapValidator({
                     message: 'Charges is required and cannot be empty'
                 },
                 numeric: {
-         			message: 'Charges is invalid'
+         			message: 'Invalid cancelation'
          		}
             }
         }
@@ -370,6 +348,8 @@ $('#newcancellation').bootstrapValidator({
 });
 
 function addCancellation() {
+	ajaxindicatorstart("Loading...");
+	ajaxindicatorstop();
 	var options = {
 	 		target : '#response', 
 	 		beforeSubmit : showCancellationRequest,
@@ -394,6 +374,7 @@ function showCancellationResponse(resp, statusText, xhr, $form){
 		$("#response").html(resp.message);
 		$("#response").show();
 		alert(resp.message);
+		ajaxindicatorstop();
   	} else {
   		$("#response").removeClass('alert-danger');
         $("#response").addClass('alert-success');

@@ -43,6 +43,7 @@ public class BuilderLead implements java.io.Serializable {
 	private Integer max=0;
 	private Integer leadStatus = 1;
 	private Date lDate;
+	private Integer campaignId=0;
 	public BuilderLead() {
 	}
 
@@ -75,7 +76,7 @@ public class BuilderLead implements java.io.Serializable {
 	public BuilderLead( BuilderProject builderProject,
 			 String name, String mobile, String email, String area, String city,
 			Source source, Integer intrestedIn, String discountOffered, Integer addedBy,
-			Integer status,Integer min,Integer max, Integer leadStatus, Date lDate) {
+			Integer status,Integer min,Integer max, Integer leadStatus, Date lDate, Integer campaignId) {
 		//this.builderBuilding = builderBuilding;
 		//this.builderFlat = builderFlat;
 		this.builderProject = builderProject;
@@ -94,6 +95,7 @@ public class BuilderLead implements java.io.Serializable {
 		this.max = max;
 		this.leadStatus = leadStatus;
 		this.lDate = lDate;
+		this.campaignId = campaignId;
 	}
 
 	@Id
@@ -291,4 +293,13 @@ public class BuilderLead implements java.io.Serializable {
 	public void setLdate(Date lDate) {
 		this.lDate = lDate;
 	}
+	@Column(name="campaign_id")
+	public Integer getCampaignId() {
+		return campaignId;
+	}
+
+	public void setCampaignId(Integer campaignId) {
+		this.campaignId = campaignId;
+	}
+	
 }
