@@ -18,6 +18,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.AreaUnitDAO;
+import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.CityNamesImp;
 import org.bluepigeon.admin.dao.CountryDAOImp;
 import org.bluepigeon.admin.dao.HomeLoanBanksDAO;
@@ -26,6 +27,7 @@ import org.bluepigeon.admin.dao.ProjectDAO;
 import org.bluepigeon.admin.dao.StateImp;
 import org.bluepigeon.admin.data.CityData;
 import org.bluepigeon.admin.data.LocalityData;
+import org.bluepigeon.admin.data.NameList;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.TaxLabels;
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -514,5 +516,36 @@ public class GeneralController {
 			@FormParam("access_id") int accessId){
 		ProjectDAO projectDAO = new ProjectDAO();
 		return projectDAO.getProjectNames(localityName,empId,accessId);
+	}
+	
+	@GET
+	@Path("/locality/newlist/name")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<NameList> getnewAllotedLocalityNames(@QueryParam("city_id") int city_id,@QueryParam("emp_id") int empId) {
+		
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		return  builderDetailsDAO.getProjectLocalityList(city_id,empId);
+		//return localityNamesImp.getLocalityByCityId(city_id);
+	}
+	
+	@GET
+	@Path("/project/newlist/name")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<NameList> getnewAllotedProjectNames(@QueryParam("city_id") int city_id,@QueryParam("emp_id") int empId) {
+		
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		return  builderDetailsDAO.getAllotedProjectDetails(city_id,empId);
+		//return localityNamesImp.getLocalityByCityId(city_id);
+	}
+	
+	@POST
+	@Path("/filterproject/list/name")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<NameList> getProjectNamesByEmpIds(
+			@FormParam("locality_name") String localityName, 
+			@FormParam("emp_id") int empId
+		){
+		BuilderDetailsDAO builderDetailsDAO = new BuilderDetailsDAO();
+		return builderDetailsDAO.getAllotedProjectDetails(localityName,empId);
 	}
 }

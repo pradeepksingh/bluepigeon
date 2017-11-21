@@ -38,43 +38,50 @@
 	String taxLabel1 = "";
 	String taxLabel2 = "";
 	String taxLabel3 = "";
+	int access_id = 0;
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id1 = builder.getBuilder().getId();
+			access_id = builder.getBuilderEmployeeAccessType().getId();
 			emp_id = builder.getId();
-			if(builder_id1> 0 ){
+			if(builder_id1> 0 && access_id == 7 ){
 				project_list = new ProjectDetailsDAO().getBuilderActiveProjectList(builder_id1);
+				
+				if (request.getParameterMap().containsKey("flat_id")) {
+					flat_id = Integer.parseInt(request.getParameter("flat_id"));
+					flatPayments = new ProjectDAO().getFlatPaymentByFlatId(flat_id);
+					builderFlat = new ProjectDAO().getBuilderFlatById(flat_id);
+					flatPricingDetails = new ProjectDAO().getFlatPriceInfos(flat_id);
+					building_id = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
+					project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
+					 bookingFlatList = new ProjectDAO().getFlatdetails(flat_id,emp_id);
+					 if(builderFlat != null){
+						 projectName = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName();
+						 buildingName = builderFlat.getBuilderFloor().getBuilderBuilding().getName();
+						 flatNo = builderFlat.getFlatNo();
+						 localityName = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getLocalityName();
+						 taxLabel1 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel1();
+							taxLabel2 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel2();
+							taxLabel3 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel3();
+						 
+					 }
+				}
+				if(project_list != null){
+				 	builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
+				 		
+				 	}
+			}else{
+				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 			}
-			if(project_list != null){
-			 	builderEmployees = new BuilderDetailsDAO().getBuilderEmployees(builder_id1);
-			 		
-			 	}
+			
 			}
 			 
 		}
    
-	if (request.getParameterMap().containsKey("flat_id")) {
-		flat_id = Integer.parseInt(request.getParameter("flat_id"));
-		flatPayments = new ProjectDAO().getFlatPaymentByFlatId(flat_id);
-		builderFlat = new ProjectDAO().getBuilderFlatById(flat_id);
-		flatPricingDetails = new ProjectDAO().getFlatPriceInfos(flat_id);
-		building_id = builderFlat.getBuilderFloor().getBuilderBuilding().getId();
-		project_id = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getId();
-		 bookingFlatList = new ProjectDAO().getFlatdetails(flat_id,emp_id);
-		 if(builderFlat != null){
-			 projectName = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getName();
-			 buildingName = builderFlat.getBuilderFloor().getBuilderBuilding().getName();
-			 flatNo = builderFlat.getFlatNo();
-			 localityName = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getLocalityName();
-			 taxLabel1 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel1();
-				taxLabel2 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel2();
-				taxLabel3 = builderFlat.getBuilderFloor().getBuilderBuilding().getBuilderProject().getCountry().getTaxLabel3();
-			 
-		 }
-	}
+	
 %>
 <!DOCTYPE html>
 <html lang="en">
