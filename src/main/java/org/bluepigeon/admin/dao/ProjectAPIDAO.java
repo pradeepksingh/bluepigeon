@@ -9,6 +9,7 @@ import org.bluepigeon.admin.data.Project;
 import org.bluepigeon.admin.data.ProjectAPI;
 import org.bluepigeon.admin.data.ProjectAddress;
 import org.bluepigeon.admin.data.ProjectCount;
+import org.bluepigeon.admin.data.Projects;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -17,7 +18,9 @@ import org.hibernate.transform.Transformers;
 import com.sun.org.apache.regexp.internal.recompile;
 
 public class ProjectAPIDAO {
-	public List<ProjectAddress> getProjectAddresses(String pancard){
+	public Projects getProjectAddresses(String pancard){
+		Projects projects = new Projects();
+		int projectId = 0;
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		String hql ="SELECT project.id as id, project.name as projectName, floor.name as floorName, project.locality_name as localityName from builder_project as project "
 				+ "join builder_building as building on building.project_id=project.id "
@@ -27,7 +30,28 @@ public class ProjectAPIDAO {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectAddress.class));
 		List<ProjectAddress> result = query.list();
-		return result;
+		projectId = result.get(0).getId();
+		ProjectAPI projectAPI = getProjectDetails(projectId);
+		projects.setArea(projectAPI.getArea());
+		projects.setAreaUnitName(projectAPI.getAreaUnitName());
+		projects.setBookingDate(projectAPI.getBookingDate());
+		projects.setCompletionStatus(projectAPI.getCompletionStatus());
+		projects.setConfigName(projectAPI.getConfigName());
+		projects.setFloorName(projectAPI.getFloorName());
+		projects.setId(projectAPI.getId());
+		projects.setImage(projectAPI.getImage());
+		projects.setLocalityName(projectAPI.getLocalityName());
+		projects.setTotalCost(projectAPI.getTotalCost());
+		Project project = getProjectlevelCount(projectId);
+		Building building = getBuildingLevelCount(projectId);
+		Floor floor = getFloorLevelCount(projectId);
+		Flat flat = getFlatLevelCount(projectId);
+		projects.setProject(project);
+		projects.setBuilding(building);
+		projects.setFloor(floor);
+		projects.setFlat(flat);
+		projects.setProjectAddresses(result);
+		return projects;
 	}
 	public ProjectAPI getProjectDetails(int id){
 		HibernateUtil hibernateUtil = new HibernateUtil();

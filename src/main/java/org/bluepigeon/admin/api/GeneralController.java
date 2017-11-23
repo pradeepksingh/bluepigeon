@@ -172,9 +172,8 @@ public class GeneralController extends ResourceConfig {
 	@Path("projectaddress.json/{pancard}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Projects getProjectAddress(@PathParam("pancard") String pancard){
-		List<ProjectAddress> projectAddresses = new ProjectAPIDAO().getProjectAddresses(pancard);
-		Projects projects = new Projects();
-		projects.setProjectAddresses(projectAddresses);
+		Projects projects = new ProjectAPIDAO().getProjectAddresses(pancard);
+		projects.setImage(context.getInitParameter("api_url")+projects.getImage());
 		return projects;
 	}
 	@GET 
