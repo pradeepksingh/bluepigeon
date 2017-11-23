@@ -38,7 +38,12 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
+import org.bluepigeon.admin.dao.ProjectAPIDAO;
 import org.bluepigeon.admin.data.ContactUs;
+import org.bluepigeon.admin.data.ProjectAPI;
+import org.bluepigeon.admin.data.ProjectAddress;
+import org.bluepigeon.admin.data.ProjectCount;
+import org.bluepigeon.admin.data.Projects;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.GlobalBuyer;
 
@@ -51,7 +56,7 @@ public class GeneralController extends ResourceConfig {
     }
 	
 	@POST
-	@Path("signup")
+	@Path("signup.json")
 	@Produces(MediaType.APPLICATION_JSON)
 //	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseMessage signupUser(
@@ -67,7 +72,7 @@ public class GeneralController extends ResourceConfig {
 	}
 	
 	@POST
-	@Path("login")
+	@Path("login.json")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage loginUser(@FormParam("pancard") String pancard,
 			@FormParam("password") String password){
@@ -80,7 +85,7 @@ public class GeneralController extends ResourceConfig {
 	}
 	
 	@POST
-	@Path("otp")
+	@Path("otp.json")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage verifyOtp(@FormParam("otp") String otp){
 		ResponseMessage responseMessage = new ResponseMessage();
@@ -88,15 +93,15 @@ public class GeneralController extends ResourceConfig {
 		return responseMessage;
 	}
 	
-	@POST
-	@Path("forgotpassword")
+	@GET
+	@Path("forgotpassword.json/{pancard}/{email}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage retrivePassword(@FormParam("pancard") String pancard,@FormParam("email") String emailId){
+	public ResponseMessage retrivePassword(@PathParam("pancard") String pancard,@PathParam("email") String emailId){
 		return new BuyerDAO().getForgotPasswod(pancard,emailId);
 	}
 	
 	@POST
-	@Path("changepassword")
+	@Path("changepassword.json")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String changePassword(
 			@FormParam("pancard") String pancard,
@@ -107,17 +112,17 @@ public class GeneralController extends ResourceConfig {
 		return responseMessage;
 	}
 	
-	@POST
-	@Path("accountsettings")
+	@GET
+	@Path("accountsettings.json/{pancard}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getBuyerDetails(@FormParam("pancard") String pancard){
+	public String getBuyerDetails(@PathParam("pancard") String pancard){
 		String response = new String();
 		response = new BuyerDAO().getBuyerAccountDetailsByPancard(pancard);
 		return response;
 	}
 	
 	@POST
-	@Path("updateaccount")
+	@Path("updateaccount.json")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuyerAccount(@FormParam("pancard") String pancard,
 			@FormParam("name") String name,
@@ -157,9 +162,35 @@ public class GeneralController extends ResourceConfig {
 		ContactUs contactUs = new BuilderDetailsDAO().getContactDetails(id);
 		ContactUs result = new ContactUs();
 		result.setEmail(contactUs.getEmail());
-		result.setImage(context.getInitParameter("s3_base_url")+contactUs.getImage());
+		result.setImage(context.getInitParameter("api_url")+contactUs.getImage());
 		result.setMobile(contactUs.getMobile());
 		
 		return result;
+	}
+	
+	@GET 
+	@Path("projectaddress.json/{pancard}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Projects getProjectAddress(@PathParam("pancard") String pancard){
+		List<ProjectAddress> projectAddresses = new ProjectAPIDAO().getProjectAddresses(pancard);
+		Projects projects = new Projects();
+		projects.setProjectAddresses(projectAddresses);
+		return projects;
+	}
+	@GET 
+	@Path("projectdetails.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ProjectAPI getProjectAddress(@PathParam("id") int id){
+		ProjectAPI projectAddresses = new ProjectAPIDAO().getProjectDetails(id);
+		projectAddresses.setImage(context.getInitParameter("api_url")+projectAddresses.getImage());
+		return projectAddresses;
+	}
+	
+	@GET 
+	@Path("projectcount.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ProjectCount getProjectCount(@PathParam("id") int id){
+		ProjectCount projectAddresses = new ProjectAPIDAO().getProjectlevelDetails(id);
+		return projectAddresses;
 	}
 }
