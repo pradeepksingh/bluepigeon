@@ -17,6 +17,8 @@ import org.bluepigeon.admin.data.BuyerList;
 import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.ProjectData;
+import org.bluepigeon.admin.exception.EmailValidator;
+import org.bluepigeon.admin.exception.NameValidator;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.Builder;
 import org.bluepigeon.admin.model.BuilderBuilding;
@@ -43,6 +45,7 @@ import org.hibernate.Transaction;
 import org.hibernate.transform.Transformers;
 
 import com.google.gson.Gson;
+import com.sun.org.apache.xml.internal.security.utils.resolver.ResourceResolverSpi;
 
 public class BuyerDAO {
 	
@@ -1164,6 +1167,8 @@ public class BuyerDAO {
 	}
 	
 	public ResponseMessage validateOtp(String otp){
+		Gson gson = new Gson();
+		String json = null;
 		ResponseMessage responseMessage = new ResponseMessage();
 		String hql = "from GlobalBuyer where otp = :otp";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -1172,8 +1177,10 @@ public class BuyerDAO {
 		query.setParameter("otp", otp);
 		GlobalBuyer globalBuyer = (GlobalBuyer) query.uniqueResult();
 		if(globalBuyer != null){
+			json = gson.toJson(globalBuyer);
 			responseMessage.setStatus(1);
 			responseMessage.setMessage("User registered sucessfully.");
+			responseMessage.setData(json);
 		}else{
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("Unregisted user");
@@ -1263,6 +1270,7 @@ public class BuyerDAO {
 					buyer.setAddress(buyerList.get(0).getAddress());
 					buyer.setEmail(buyerList.get(0).getEmail());
 					buyer.setMobile(buyerList.get(0).getMobile());
+					buyer.setAadhaarNumber(buyerList.get(0).getAadhaarNumber());
 					if(buyerList.get(0).getIsDeleted() == 0)
 						buyer.setIsDeleted(buyerList.get(0).getIsDeleted());
 					if(buyerList.get(0).getIsPrimary())
@@ -1542,5 +1550,147 @@ public class BuyerDAO {
 		query.setParameter("flat_id",flatId);
 		List<Buyer> buyers = query.list();
 		return buyers.get(0);
+	}
+	
+	public ResponseMessage getForgotPasswod(String pancard, String emailId){
+		ResponseMessage responseMessage = new ResponseMessage();
+		String hql = "from GlobalBuyer where pancard = :pancard";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		if(emailId !="" && emailId != null){
+			query.setParameter("pancard", pancard);
+		}else{
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("Please enter your email id");
+		}
+		try{
+		GlobalBuyer result =(GlobalBuyer) query.list().get(0);
+			if(result !=null){
+				if(result.getEmail().equals(emailId)){
+					responseMessage.setStatus(1);
+					responseMessage.setMessage("New password sent to your email."); 
+				}else{
+					responseMessage.setStatus(0);
+					responseMessage.setMessage("invalid email id");
+				}
+			}
+		}catch(Exception e){
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("User dosn't exist");
+		}
+		return responseMessage;
+	}
+	
+	public ResponseMessage updateBuyerAccount(String pancard, String name, String email, String contactNumber,String aadhaarNumber,String address){
+		ResponseMessage responseMessage = new ResponseMessage();
+		String hql ="";
+		boolean validate = false;
+		if(name.trim().length() ==0 || email.trim().length() ==0 || contactNumber.trim().length() ==0 || aadhaarNumber.trim().length()==0 || address.trim().length() ==0){
+			responseMessage.setStatus(0);
+			System.out.println("All fields are mandatory");
+			responseMessage.setMessage("All fields are mandatory");
+			return responseMessage;
+		} 
+		else{
+			if(email!=null){
+				validate = new EmailValidator().validate(email);
+				if(!validate){
+					System.out.println("Invalid email id");
+					responseMessage.setStatus(0);
+					responseMessage.setMessage("Invalid email id");
+					return responseMessage;
+				}
+			}
+			if(contactNumber != "" && contactNumber != null){
+				if(contactNumber.trim().length() < 10 || contactNumber.trim().length() >10){
+					try{
+						double d = Double.parseDouble(contactNumber);
+						responseMessage.setStatus(0);
+						responseMessage.setMessage("mobile number must be 10 digits");
+						return responseMessage;
+					}
+					catch(Exception e){
+						responseMessage.setStatus(0);
+						responseMessage.setMessage("Please enter your 10 digit mobile number");
+						return responseMessage;
+					}
+				}else {
+					if(contactNumber.trim().length() == 10){
+						try{
+							double d= Double.parseDouble(contactNumber);
+						}catch(Exception e){
+							e.printStackTrace();
+							responseMessage.setStatus(0);
+							responseMessage.setMessage("Invalid mobile number");
+							return responseMessage;
+						}
+					}
+				}
+			}
+			if(aadhaarNumber != "" && aadhaarNumber != null){
+				if(aadhaarNumber.trim().length()<12 || aadhaarNumber.trim().length()>12){
+					try{
+						double d = Double.parseDouble(aadhaarNumber);
+						System.err.println("Aadhaar number must be 12 digits");
+						responseMessage.setStatus(0);
+						responseMessage.setMessage("Aadhaar number must be 12 digits");
+						return responseMessage;
+					}catch(Exception e){
+						responseMessage.setStatus(0);
+						responseMessage.setMessage("Invalid aadhaar number");
+						return responseMessage;
+					}
+				}else if(aadhaarNumber.trim().length() == 12){
+					try{
+						double d = Double.parseDouble(aadhaarNumber);
+					}catch(Exception e){
+						e.printStackTrace();
+						responseMessage.setStatus(0);
+						responseMessage.setMessage("Please enter your 12 digit aadhaar number");
+						return responseMessage;
+					}
+				}
+			}
+			try{
+				 hql = "UPDATE GlobalBuyer set name =:name, email = :email, mobile = :mobile where pancard = :pancard ";
+				System.out.println("Your are in update buyer");
+				HibernateUtil hibernateUtil = new HibernateUtil();
+				Session session = hibernateUtil.openSession();
+				session.beginTransaction();
+				Query query = session.createQuery(hql);
+				query.setParameter("name", name);
+				query.setParameter("email",email );
+				query.setParameter("mobile", contactNumber);
+				query.setParameter("pancard",pancard );
+				query.executeUpdate();
+				session.getTransaction().commit();
+				session.close();
+				
+				String buyerHql = "UPDATE Buyer set name = :name, email = :email,mobile =:mobile, aadhaar_number = :aadhaar, address = :address where pancard = :pancard";
+				Session buyerSession = hibernateUtil.openSession();
+				buyerSession.beginTransaction();
+				Query buyerQuery = buyerSession.createQuery(buyerHql);
+				buyerQuery.setParameter("name", name);
+				buyerQuery.setParameter("email", email);
+				buyerQuery.setParameter("mobile", contactNumber);
+				buyerQuery.setParameter("aadhaar", aadhaarNumber);
+				buyerQuery.setParameter("address", address);
+				buyerQuery.setParameter("pancard", pancard);
+				buyerQuery.executeUpdate();
+				buyerSession.getTransaction().commit();
+				buyerSession.close();
+				responseMessage.setStatus(1);
+				responseMessage.setMessage("Account settings updated successfully.");
+				
+			}catch(Exception e){
+				e.printStackTrace();
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("Fail to update account settings. Please try again");
+				return responseMessage;
+			}
+		return responseMessage;
+		}
+		
 	}
 }

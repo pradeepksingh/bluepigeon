@@ -24,6 +24,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -35,11 +36,13 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
+import org.bluepigeon.admin.data.ContactUs;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.GlobalBuyer;
 
-@Path("api1.0/post/")
+@Path("api1.0/bp/")
 public class GeneralController extends ResourceConfig {
 	@Context ServletContext context;
 	GlobalBuyer globalBuyer=new GlobalBuyer();
@@ -81,22 +84,15 @@ public class GeneralController extends ResourceConfig {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage verifyOtp(@FormParam("otp") String otp){
 		ResponseMessage responseMessage = new ResponseMessage();
-	
 		responseMessage = new BuyerDAO().validateOtp(otp);
 		return responseMessage;
 	}
 	
-	
 	@POST
 	@Path("forgotpassword")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage retrivePassword(@FormParam("pancard") String pancard){
-		ResponseMessage responseMessage = new ResponseMessage();
-		
-		
-		return responseMessage;
-		
-		
+	public ResponseMessage retrivePassword(@FormParam("pancard") String pancard,@FormParam("email") String emailId){
+		return new BuyerDAO().getForgotPasswod(pancard,emailId);
 	}
 	
 	@POST
@@ -121,6 +117,21 @@ public class GeneralController extends ResourceConfig {
 	}
 	
 	@POST
+	@Path("updateaccount")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage updateBuyerAccount(@FormParam("pancard") String pancard,
+			@FormParam("name") String name,
+			@FormParam("email") String email,
+			@FormParam("contactno") String contactNumber,
+			@FormParam("aadhaar") String aadhaarnumber,
+			@FormParam("address") String address
+			){
+		ResponseMessage responseMessage =  new BuyerDAO().updateBuyerAccount(pancard,name,email,contactNumber,aadhaarnumber,address);
+		return responseMessage;
+	}
+	
+	
+	@POST
 	@Path("project")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getProjectdetails(@FormParam("pancard") String pancard){
@@ -136,5 +147,19 @@ public class GeneralController extends ResourceConfig {
 		String response = new String();
 		response = new BuyerDAO().getBuildingDetails(pancard);
 		return response;
+	}
+	
+	@GET
+	@Path("contactus.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ContactUs getClassInfoDetails(@PathParam("id") int id)
+	{
+		ContactUs contactUs = new BuilderDetailsDAO().getContactDetails(id);
+		ContactUs result = new ContactUs();
+		result.setEmail(contactUs.getEmail());
+		result.setImage(context.getInitParameter("s3_base_url")+contactUs.getImage());
+		result.setMobile(contactUs.getMobile());
+		
+		return result;
 	}
 }
