@@ -33,6 +33,7 @@ import org.bluepigeon.admin.data.BuilderDetails;
 import org.bluepigeon.admin.data.BuilderProjectList;
 import org.bluepigeon.admin.data.BuildingData;
 import org.bluepigeon.admin.data.BuyerList;
+import org.bluepigeon.admin.data.ContactUs;
 import org.bluepigeon.admin.data.EmployeeList;
 import org.bluepigeon.admin.data.InboxMessageData;
 import org.bluepigeon.admin.data.NameList;
@@ -2810,5 +2811,14 @@ public class BuilderDetailsDAO {
 				e.printStackTrace();
 			}
 			return builderProjectLists;
+		}
+		
+		public ContactUs getContactDetails(int id){
+			HibernateUtil hibernateUtil = new HibernateUtil();
+			String hql = "select  builder.mobile as mobile, builder.email as email, builder_logo.builder_url as image from builder_project as project join builder as builder on builder.id = project.group_id join builder_logo as builder_logo on builder_logo.builder_id=builder.id where project.id="+id+" GROUP by builder.id";
+			Session session = hibernateUtil.getSessionFactory().openSession();
+			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ContactUs.class));
+			List<ContactUs> result = query.list();
+			return result.get(0);
 		}
 }

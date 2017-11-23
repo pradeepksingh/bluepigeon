@@ -9,6 +9,7 @@ import org.bluepigeon.admin.data.BuyerProjectList;
 import org.bluepigeon.admin.data.CampaignList;
 import org.bluepigeon.admin.data.CampaignListNew;
 import org.bluepigeon.admin.data.CityData;
+import org.bluepigeon.admin.data.NameList;
 import org.bluepigeon.admin.data.ProjectData;
 import org.bluepigeon.admin.data.ProjectList;
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -515,5 +516,40 @@ public class CampaignDAO {
 			query.setParameter("project_id", projectId);
 			List<Campaign> campaign = query.list();
 			return campaign;
+	}
+	
+	public List<NameList> getCityData(int projectId){
+		String hql = "select DISTINCT(city.name) as name, city.id as id from builder_project as project "
+				+ "inner join allot_project as ap on ap.project_id = project.id "
+				+ "join city as city on city.id=project.city_id "
+				+ "where "
+				+ "ap.project_id="+projectId;
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql)
+				.addScalar("id", IntegerType.INSTANCE)
+	            .addScalar("name", StringType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(NameList.class));
+		List<NameList> result = query.list();
+		return result;
+	}
+	
+	public List<NameList> getCityData(BuilderEmployee builderEmployee){
+		String hql = "";
+		if(builderEmployee.getBuilderEmployeeAccessType().getId() == 3){
+		 hql = "select DISTINCT(city.name) as name, city.id as id from builder_project as project "
+				+ "inner join allot_project as ap on ap.project_id = project.id "
+				+ "join city as city on city.id=project.city_id "
+				+ "where "
+				+ "ap.emp_id="+builderEmployee.getId();
+		}
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql)
+				.addScalar("id", IntegerType.INSTANCE)
+	            .addScalar("name", StringType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(NameList.class));
+		List<NameList> result = query.list();
+		return result;
 	}
 }

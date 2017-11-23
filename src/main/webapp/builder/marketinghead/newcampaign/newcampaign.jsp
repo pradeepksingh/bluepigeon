@@ -1,3 +1,4 @@
+<%@page import="org.bluepigeon.admin.data.NameList"%>
 <%@page import="org.bluepigeon.admin.dao.CityNamesImp"%>
 <%@page import="org.bluepigeon.admin.model.City"%>
 <%@page import="org.bluepigeon.admin.model.BuilderProject"%>
@@ -16,11 +17,12 @@ int builder_id = 0;
 int access_id = 0;
 int projectId = 0;
 int emp_id=0;
-List<City> city_list = null;
+//List<City> city_list = null;
 BuilderProject builderProject = null;
 String projectName ="";
 String cityName = "";
 String localityName ="";
+List<NameList> cityname =null;
 int cityId = 0;
 if(session!=null)
 {
@@ -36,14 +38,7 @@ if(session!=null)
 					projectId = Integer.parseInt(request.getParameter("project_id"));
 					if(projectId != 0) {
 						campaignLists = new CampaignDAO().getMyCampaignsByProjectId(projectId);
-						builderProject = new CampaignDAO().getProjectData(projectId);
-						city_list = new CityNamesImp().getCityNames();
-						if(builderProject != null){
-							projectName = builderProject.getName();
-							cityName = builderProject.getCity().getName();
-							localityName = builderProject.getLocalityName();
-							cityId = builderProject.getCity().getId();
-						}		
+						cityname = new CampaignDAO().getCityData(projectId);
 					}
 				}
 			}
@@ -216,8 +211,8 @@ Date date = new Date();
 	   		 									<label class="col-sm-4">City</label> 
 	   		 									<div class="col-sm-8" id="selectcity">
 							   		 				<select id="city_names" name="city_names[]" multiple="multiple">
-								 		           <%if(city_list!=null){ 
-								 		           		for(City city : city_list){
+								 		           <%if(cityname!=null){ 
+								 		           		for(NameList city : cityname){
 								 		           %>
 														<option value="<%out.print(city.getId());%>"><%out.print(city.getName()); %></option>
 								 		           <%}} %>
