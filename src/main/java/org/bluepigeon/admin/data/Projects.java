@@ -19,6 +19,9 @@ public class Projects {
 	private Building building;
 	private Floor floor;
 	private Flat flat;
+	private String buyerName;
+	private String pancard;
+	private String buyerImage;
 	public List<ProjectAddress> getProjectAddresses() {
 		return projectAddresses;
 	}
@@ -146,4 +149,31 @@ public class Projects {
 	public void setFlat(Flat flat) {
 		this.flat = flat;
 	}
+
+	
+	public String getBuyerName() {
+		return buyerName;
+	}
+
+	public void setBuyerName(String buyerName) {
+		this.buyerName = buyerName;
+	}
+
+	public String getPancard() {
+		return pancard;
+	}
+
+	public void setPancard(String pancard) {
+		this.pancard = pancard;
+	}
+
+	
+	public String getBuyerImage() {
+		return buyerImage;
+	}
+
+	public void setBuyerImage(String buyerImage) {
+		this.buyerImage = buyerImage;
+	}
+
 }

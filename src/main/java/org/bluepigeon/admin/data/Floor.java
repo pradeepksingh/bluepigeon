@@ -17,5 +17,4 @@ public class Floor {
 	public void setAmenityCount(BigInteger amenityCount) {
 		this.amenityCount = amenityCount;
 	}
-	
 }

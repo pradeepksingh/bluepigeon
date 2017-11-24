@@ -4,10 +4,12 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.data.BuildingData;
@@ -17,6 +19,7 @@ import org.bluepigeon.admin.data.BuyerList;
 import org.bluepigeon.admin.data.FlatData;
 import org.bluepigeon.admin.data.FloorData;
 import org.bluepigeon.admin.data.ProjectData;
+import org.bluepigeon.admin.data.Projects;
 import org.bluepigeon.admin.exception.EmailValidator;
 import org.bluepigeon.admin.exception.NameValidator;
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -48,7 +51,7 @@ import com.google.gson.Gson;
 import com.sun.org.apache.xml.internal.security.utils.resolver.ResourceResolverSpi;
 
 public class BuyerDAO {
-	
+	@Context ServletContext context;
 	public ResponseMessage saveBuyer(List<Buyer> buyers){
 		ResponseMessage response = new ResponseMessage();
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -1111,29 +1114,50 @@ public class BuyerDAO {
 	}
 	
 	
-	public ResponseMessage validateBuyer(GlobalBuyer globalBuyer){
+	public String validateBuyer(String pancard, String password){
+		Gson gson = new Gson();
+		String json ="";
+		Projects projects = null;
 		ResponseMessage responseMessage = new ResponseMessage();
 		String hql = "from GlobalBuyer where pancard = :pancard";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
-		query.setParameter("pancard", globalBuyer.getPancard());
+		query.setParameter("pancard", pancard);
 		try{
 		GlobalBuyer globalBuyer2 = (GlobalBuyer) query.list().get(0);
 		if(globalBuyer2 != null){
+			if(globalBuyer2.getPassword().equals(password)){
+				projects = new ProjectAPIDAO().getProjectAddresses(globalBuyer2.getPancard());
+				projects.setBuyerName(globalBuyer2.getName());
+				projects.setPancard(globalBuyer2.getPancard());
+				if(globalBuyer2.getAvatar()!=null){
+				projects.setBuyerImage(globalBuyer2.getAvatar());
+				}else{
+					projects.setBuyerImage("");
+				}
+				json = gson.toJson(projects);
+				return json;
+			}else{
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("invalid password");
+				json = gson.toJson(responseMessage);
+				return json;
+			}
+		}else{
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("User doesn't exists");
-		}else{
-			responseMessage.setStatus(1);
-			responseMessage.setMessage("Login successfully");
-			responseMessage.setData(globalBuyer2);
+			json = gson.toJson(responseMessage);
+			return json;
 		}
 		}catch(Exception e){
+			e.printStackTrace();
 			responseMessage.setStatus(0);
-			responseMessage.setMessage("User doesn't exists");
+			responseMessage.setMessage("Invaid userid");
+			json = gson.toJson(responseMessage);
+			return json;
 			//e.printStackTrace();
 		}
-		return responseMessage;
 	}
 	
 	public ResponseMessage isUserExist(GlobalBuyer globalBuyer){
@@ -1166,9 +1190,10 @@ public class BuyerDAO {
 		return responseMessage;
 	}
 	
-	public ResponseMessage validateOtp(String otp){
+	public String validateOtp(String otp){
 		Gson gson = new Gson();
 		String json = null;
+		Projects projects = null;
 		ResponseMessage responseMessage = new ResponseMessage();
 		String hql = "from GlobalBuyer where otp = :otp";
 		HibernateUtil hibernateUtil = new HibernateUtil();
@@ -1177,16 +1202,22 @@ public class BuyerDAO {
 		query.setParameter("otp", otp);
 		GlobalBuyer globalBuyer = (GlobalBuyer) query.uniqueResult();
 		if(globalBuyer != null){
-			json = gson.toJson(globalBuyer);
-			responseMessage.setStatus(1);
-			responseMessage.setMessage("User registered sucessfully.");
-			responseMessage.setData(json);
+			projects = new ProjectAPIDAO().getProjectAddresses(globalBuyer.getPancard());
+			projects.setBuyerName(globalBuyer.getName());
+			projects.setPancard(globalBuyer.getPancard());
+			if(globalBuyer.getAvatar()!=null){
+			projects.setBuyerImage(globalBuyer.getAvatar());
+			}else{
+				projects.setBuyerImage("");
+			}
+			json = gson.toJson(projects);
 		}else{
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("Unregisted user");
+			json=gson.toJson(responseMessage);
 		}
 		
-		return responseMessage;
+		return json;
 	}
 	
 	public String userChangePassword(String pancard,String oldPassword, String newPassword){

@@ -39,7 +39,11 @@ public class ProjectAPIDAO {
 		projects.setConfigName(projectAPI.getConfigName());
 		projects.setFloorName(projectAPI.getFloorName());
 		projects.setId(projectAPI.getId());
+		if(projectAPI.getImage()!=null){
 		projects.setImage(projectAPI.getImage());
+		}else{
+			projects.setImage("");
+		}
 		projects.setLocalityName(projectAPI.getLocalityName());
 		projects.setTotalCost(projectAPI.getTotalCost());
 		Project project = getProjectlevelCount(projectId);
@@ -67,8 +71,17 @@ public class ProjectAPIDAO {
 				+ "buy.is_primary=1 and buy.is_deleted=0 and project.id="+id;
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectAPI.class));
-		List<ProjectAPI> result = query.list();
-		return result.get(0);
+	    ProjectAPI result = (ProjectAPI)query.list().get(0);
+	    ProjectAPI projectAPI = result;
+	    Project project = getProjectlevelCount(id);
+	    Building building = getBuildingLevelCount(id);
+	    Floor floor = getFloorLevelCount(id);
+	    Flat flat = getFlatLevelCount(id);
+	    projectAPI.setProject(project);
+	    projectAPI.setBuilding(building);
+	    projectAPI.setFloor(floor);
+	    projectAPI.setFlat(flat);
+		return projectAPI;
 	}
 	
 	public ProjectCount getProjectlevelDetails(int projectId){

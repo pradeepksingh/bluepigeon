@@ -36,6 +36,9 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+
+import com.google.gson.Gson;
+
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.ProjectAPIDAO;
@@ -60,8 +63,8 @@ public class GeneralController extends ResourceConfig {
 	@Produces(MediaType.APPLICATION_JSON)
 //	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseMessage signupUser(
-			@FormParam("pancard") String pancard,
-			@FormParam("password") String password){
+			@FormParam("pancard") String pancard
+			){
 		ResponseMessage responseMessage = new ResponseMessage();
 		String characters = "0123456789";
 		String otp = RandomStringUtils.random( 6, characters );
@@ -74,23 +77,57 @@ public class GeneralController extends ResourceConfig {
 	@POST
 	@Path("login.json")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage loginUser(@FormParam("pancard") String pancard,
+	public String loginUser(@FormParam("pancard") String pancard,
 			@FormParam("password") String password){
-		ResponseMessage responseMessage = new ResponseMessage();
-		GlobalBuyer globalBuyer = new GlobalBuyer();
-		globalBuyer.setPancard(pancard);
-		globalBuyer.setPassword(password);
-		responseMessage = new BuyerDAO().validateBuyer(globalBuyer);
-		 return responseMessage;
+		Gson gson = new Gson();
+		String json = "";
+		json = new BuyerDAO().validateBuyer(pancard,password);
+	
+			Projects projects = gson.fromJson(json, Projects.class);
+			if(projects != null && projects.getId() > 0){
+				if(projects.getBuyerImage()!=null){
+					projects.setBuyerImage(context.getInitParameter("api_url")+projects.getBuyerImage());
+				}else{
+					projects.setBuyerImage("");
+				}
+				if(projects.getImage()!=null){
+					projects.setImage(context.getInitParameter("api_url")+projects.getImage());
+				}else{
+					projects.setImage("");
+				}
+				json = gson.toJson(projects);
+				return json;
+			}else{
+				return json;
+			}
+		
 	}
 	
 	@POST
 	@Path("otp.json")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage verifyOtp(@FormParam("otp") String otp){
-		ResponseMessage responseMessage = new ResponseMessage();
-		responseMessage = new BuyerDAO().validateOtp(otp);
-		return responseMessage;
+	public String verifyOtp(@FormParam("otp") String otp){
+		String json = "";
+		Gson gson = new Gson();
+		json = new BuyerDAO().validateOtp(otp);
+		
+			Projects projects = gson.fromJson(json, Projects.class);
+			if(projects != null && projects.getId()>0){
+				if(projects.getBuyerImage()!=null){
+					projects.setBuyerImage(context.getInitParameter("api_url")+projects.getBuyerImage());
+				}else{
+					projects.setBuyerImage("");
+				}
+				if(projects.getImage()!=null){
+					projects.setImage(context.getInitParameter("api_url")+projects.getImage());
+				}else{
+					projects.setImage("");
+				}
+				json = gson.toJson(projects);
+				return json;
+			}else{
+				return json;
+			}
 	}
 	
 	@GET
