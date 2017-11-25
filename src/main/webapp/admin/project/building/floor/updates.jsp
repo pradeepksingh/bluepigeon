@@ -175,6 +175,13 @@
 												</div>
 												<div class="messageContainer col-sm-offset-3"></div>
 											</div>
+											<div class="form-group" id="error-landmark">
+												<label class="control-label col-sm-4">Status / Title </label>
+												<div class="col-sm-8" style="padding:0px 12px;">
+													<input type="text" class="form-control" id="image_title" name="image_title" maxlength="50"/>
+												</div>
+												<div class="messageContainer col-sm-offset-4"></div>
+											</div>
 										</div>
 <!-- 										<div class="col-lg-6 margin-bottom-5" id="imgdiv-n2334"> -->
 <!-- 											<div class="form-group" id="error-landmark"> -->
@@ -187,9 +194,9 @@
 <!-- 											</div> -->
 <!-- 										</div> -->
 									</div>
-									<div class="row">
-										<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-xs"> + Add More</a></span>
-									</div>
+<!-- 									<div class="row"> -->
+<!-- 										<span class="pull-right"><a href="javascript:addMoreImages();" class="btn btn-info btn-xs"> + Add More</a></span> -->
+<!-- 									</div> -->
 									<hr/>
 									<h3>Upload Elevation Images</h3>
 									<br>

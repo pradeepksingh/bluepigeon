@@ -28,6 +28,7 @@ public class FlatImageGallery implements java.io.Serializable {
 	private String image;
 	private float completion;
 	private Date createdDate;
+	private String title;
 	public FlatImageGallery() {
 	}
 
@@ -83,5 +84,14 @@ public class FlatImageGallery implements java.io.Serializable {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
+	@Column(name = "title")
+	public String getTitle() {
+		return title;
+	}
 
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	
 }

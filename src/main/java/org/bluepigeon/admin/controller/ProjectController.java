@@ -1790,7 +1790,8 @@ public class ProjectController extends ResourceConfig {
 		//	@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
 			@FormDataParam("building_image") FormDataBodyPart building_images,
 			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
-			@FormDataParam("admin_id") int admin_id
+			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("image_title") String title
 	) {
 		Boolean bstatus = true;
 		ResponseMessage msg = new ResponseMessage();
@@ -1865,7 +1866,7 @@ public class ProjectController extends ResourceConfig {
 			if(!msg.getMessage().isEmpty()) {
 				completion = Float.parseFloat(msg.getMessage());
 			}
-			buildingImageGallery.setTitle("New Image");
+			buildingImageGallery.setTitle(title);
 			buildingImageGallery.setCompletion(completion);
 			buildingImageGallery.setCreatedDate(new Date());
 			buildingImageGallery.setBuilderBuilding(builderBuilding);
@@ -2460,7 +2461,8 @@ public class ProjectController extends ResourceConfig {
 			//@FormDataParam("floor_image[]") List<FormDataBodyPart> building_images,
 			@FormDataParam("floor_image") FormDataBodyPart building_images,
 			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
-			@FormDataParam("admin_id") int admin_id
+			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("image_title") String title
 	) {
 		Boolean bstatus = true;
 		ResponseMessage msg = new ResponseMessage();
@@ -2528,6 +2530,7 @@ public class ProjectController extends ResourceConfig {
 			//System.out.println("for loop image path: "+uploadGalleryLocation);
 			this.imageUploader.writeToFile(building_images.getValueAs(InputStream.class), uploadGalleryLocation);
 			floorImageGallery.setImage(gallery_name);
+			floorImageGallery.setTitle(title);
 			floorImageGallery.setCompletion(completion);
 			floorImageGallery.setCreatedDate(new Date());
 			floorImageGallery.setBuilderFloor(builderFloor);
@@ -3616,7 +3619,8 @@ public class ProjectController extends ResourceConfig {
 			//@FormDataParam("flat_image[]") List<FormDataBodyPart> building_images,
 			@FormDataParam("flat_image") FormDataBodyPart building_images,
 			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
-			@FormDataParam("admin_id") int admin_id
+			@FormDataParam("admin_id") int admin_id,
+			@FormDataParam("image_title") String title
 	) {
 		Boolean bstatus = true;
 		ResponseMessage msg = new ResponseMessage();
@@ -3685,6 +3689,7 @@ public class ProjectController extends ResourceConfig {
 			this.imageUploader.writeToFile(building_images.getValueAs(InputStream.class), uploadGalleryLocation);
 			flatImageGallery.setImage(gallery_name);
 			flatImageGallery.setCompletion(completion);
+			flatImageGallery.setTitle(title);
 			flatImageGallery.setCreatedDate(new Date());
 			flatImageGallery.setBuilderFlat(builderFlat);
 			flatImageGalleries.add(flatImageGallery);

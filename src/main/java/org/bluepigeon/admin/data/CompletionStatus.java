@@ -5,7 +5,7 @@ public class CompletionStatus {
 	private String name;
 	private String image;
 	private float percentage;
-	private String statusName;
+	private String title;
 	public int getId() {
 		return id;
 	}
@@ -30,10 +30,11 @@ public class CompletionStatus {
 	public void setPercentage(float percentage) {
 		this.percentage = percentage;
 	}
-	public String getStatusName() {
-		return statusName;
+	public String getTitle() {
+		return title;
 	}
-	public void setStatusName(String statusName) {
-		this.statusName = statusName;
+	public void setTitle(String title) {
+		this.title = title;
 	}
+	
 }

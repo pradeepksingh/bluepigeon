@@ -259,5 +259,34 @@ public class GeneralController extends ResourceConfig {
 		
 	}
 	
+	@GET
+	@Path("floorlist.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public CompletionList getFloorList(@PathParam("id") int projectId){
+		CompletionList completionList = new ProjectAPIDAO().getFloorListByProject(projectId);
+		List<CompletionStatus> completionStatusList = new ArrayList<>();
+		for(CompletionStatus completionStatus: completionList.getCompletionStatus()){
+			completionStatus.setImage(context.getInitParameter("api_url")+completionStatus.getImage());
+			completionStatusList.add(completionStatus);
+		}
+		completionList.setCompletionStatus(completionStatusList);
+		return completionList;
+		
+	}
+	
+	@GET
+	@Path("flatlist.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public CompletionList getFlatList(@PathParam("id") int projectId){
+		CompletionList completionList = new ProjectAPIDAO().getFlatListByProject(projectId);
+		List<CompletionStatus> completionStatusList = new ArrayList<>();
+		for(CompletionStatus completionStatus: completionList.getCompletionStatus()){
+			completionStatus.setImage(context.getInitParameter("api_url")+completionStatus.getImage());
+			completionStatusList.add(completionStatus);
+		}
+		completionList.setCompletionStatus(completionStatusList);
+		return completionList;
+		
+	}
 	
 }

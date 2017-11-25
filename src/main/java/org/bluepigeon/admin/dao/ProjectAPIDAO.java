@@ -137,7 +137,30 @@ public class ProjectAPIDAO {
 	}
 	public CompletionList getBuildingListByProjcet(int projectId){
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		String hql = "SELECT a.completion as percentage, a.image as image,b.id as id, b.name as name, d.name as statusName FROM building_image_gallery as a join builder_building as b on b.id=a.building_id join builder_project as c on c.id = b.project_id join builder_floor as d on d.building_id = b.id WHERE c.id="+projectId+" and c.status=1 and b.status=1 and d.status=1 and d.completion_status BETWEEN 0 and 100 GROUP by a.id order by a.id DESC";
+		String hql = "SELECT a.completion as percentage, a.image as image, a.title as title, b.id as id, b.name as name FROM building_image_gallery as a join builder_building as b on b.id=a.building_id join builder_project as c on c.id = b.project_id WHERE c.id="+projectId+" and c.status=1 and b.status=1 GROUP by a.id order by a.id DESC";
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(CompletionStatus.class));
+		List<CompletionStatus> result = query.list();
+		CompletionList completionList = new CompletionList();
+		completionList.setCompletionStatus(result);
+		return completionList;
+	}
+	
+	public CompletionList getFloorListByProject(int projectId){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "SELECT a.completion as percentage, a.image as image, a.title as title, b.id as id, b.name as name FROM floor_image_gallery as a join builder_floor as b on b.id=a.floor_id join builder_building as c on c.id=b.building_id join builder_project as d on d.id=c.project_id where d.id="+projectId+" and d.status=1 and b.status=1 and c.status=1 GROUP by a.id order by a.id DESC";
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(CompletionStatus.class));
+		List<CompletionStatus> result = query.list();
+		CompletionList completionList = new CompletionList();
+		completionList.setCompletionStatus(result);
+		return completionList;
+	}
+	
+	//
+	public CompletionList getFlatListByProject(int projectId){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "SELECT a.completion as percentage, a.image as image, a.title as title, b.id as id, b.flat_no as name FROM flat_image_gallery as a join builder_flat as b on b.id=a.flat_id JOIN builder_floor as c on c.id=b.floor_no JOIN builder_building as d on d.id=c.building_id JOIN builder_project as e on e.id=d.project_id where e.id="+projectId+" and e.status=1 and d.status=1 and c.status=1 and b.status=1 GROUP by a.id ORDER by a.id DESC";
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(CompletionStatus.class));
 		List<CompletionStatus> result = query.list();
