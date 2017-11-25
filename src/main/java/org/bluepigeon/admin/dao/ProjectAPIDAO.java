@@ -3,6 +3,8 @@ package org.bluepigeon.admin.dao;
 import java.util.List;
 
 import org.bluepigeon.admin.data.Building;
+import org.bluepigeon.admin.data.CompletionList;
+import org.bluepigeon.admin.data.CompletionStatus;
 import org.bluepigeon.admin.data.Flat;
 import org.bluepigeon.admin.data.Floor;
 import org.bluepigeon.admin.data.Project;
@@ -132,5 +134,15 @@ public class ProjectAPIDAO {
 		return result.get(0);
 		
 		
+	}
+	public CompletionList getBuildingListByProjcet(int projectId){
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "SELECT a.completion as percentage, a.image as image,b.id as id, b.name as name, d.name as statusName FROM building_image_gallery as a join builder_building as b on b.id=a.building_id join builder_project as c on c.id = b.project_id join builder_floor as d on d.building_id = b.id WHERE c.id="+projectId+" and c.status=1 and b.status=1 and d.status=1 and d.completion_status BETWEEN 0 and 100 GROUP by a.id order by a.id DESC";
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(CompletionStatus.class));
+		List<CompletionStatus> result = query.list();
+		CompletionList completionList = new CompletionList();
+		completionList.setCompletionStatus(result);
+		return completionList;
 	}
 }

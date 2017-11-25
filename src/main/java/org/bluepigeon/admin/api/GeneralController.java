@@ -42,6 +42,8 @@ import com.google.gson.Gson;
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.ProjectAPIDAO;
+import org.bluepigeon.admin.data.CompletionList;
+import org.bluepigeon.admin.data.CompletionStatus;
 import org.bluepigeon.admin.data.ContactUs;
 import org.bluepigeon.admin.data.ProjectAPI;
 import org.bluepigeon.admin.data.ProjectAddress;
@@ -241,4 +243,21 @@ public class GeneralController extends ResourceConfig {
 		responseMessage = new BuyerDAO().isUserExist(globalBuyer);
 		return responseMessage;
 	}
+	
+	@GET
+	@Path("buildinglist.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public CompletionList getBuildingList(@PathParam("id") int projectId){
+		CompletionList completionList = new ProjectAPIDAO().getBuildingListByProjcet(projectId);
+		List<CompletionStatus> completionStatusList = new ArrayList<>();
+		for(CompletionStatus completionStatus: completionList.getCompletionStatus()){
+			completionStatus.setImage(context.getInitParameter("api_url")+completionStatus.getImage());
+			completionStatusList.add(completionStatus);
+		}
+		completionList.setCompletionStatus(completionStatusList);
+		return completionList;
+		
+	}
+	
+	
 }

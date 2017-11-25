@@ -831,6 +831,7 @@ public class ProjectController extends ResourceConfig {
 			builderBuilding.setId(msg.getId());
 			//add gallery images
 			try {	
+				
 				List<BuildingImageGallery> buildingImageGalleries = new ArrayList<BuildingImageGallery>();
 				//for multiple inserting images.
 				if (building_images.size() > 0) {
@@ -1786,7 +1787,8 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("building_id") int building_id,
 			@FormDataParam("substagewt_id[]") List<FormDataBodyPart> substagewt_id,
 			@FormDataParam("ssubstagewt_id[]") List<FormDataBodyPart> ssubstagewt_id,
-			@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
+		//	@FormDataParam("building_image[]") List<FormDataBodyPart> building_images,
+			@FormDataParam("building_image") FormDataBodyPart building_images,
 			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
 			@FormDataParam("admin_id") int admin_id
 	) {
@@ -1807,7 +1809,7 @@ public class ProjectController extends ResourceConfig {
 			if(buildingAmenityWeightages.size() > 0) {
 				msg = projectDAO.updateBuildingAmenityWeightage(buildingAmenityWeightages, building_id);
 			}
-		
+		if(ssubstagewt_id !=null){
 			List<BuildingWeightage> buildingWeightages = new ArrayList<BuildingWeightage>();
 			for(int i=0 ;i < ssubstagewt_id.size();i++) {
 				BuildingWeightage paw = new BuildingWeightage();
@@ -1819,30 +1821,57 @@ public class ProjectController extends ResourceConfig {
 				msg = projectDAO.updateBuildingWeightageStatus(buildingWeightages, building_id);
 			}
 		}
+		}
 		try {	
+			msg = projectDAO.updateBuildingCompletion(building_id);
 			List<BuildingImageGallery> buildingImageGalleries = new ArrayList<BuildingImageGallery>();
 			//for multiple inserting images.
-			if (building_images.size() > 0) {
-				for(int i=0 ;i < building_images.size();i++)
-				{
-					if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-						BuildingImageGallery buildingImageGallery = new BuildingImageGallery();
-						String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
-						long millis = System.currentTimeMillis() % 1000;
-						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-						gallery_name = "images/project/building/images/"+gallery_name;
-						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-						//System.out.println("for loop image path: "+uploadGalleryLocation);
-						this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-						buildingImageGallery.setImage(gallery_name);
-						buildingImageGallery.setTitle("New Image");
-						buildingImageGallery.setBuilderBuilding(builderBuilding);
-						buildingImageGalleries.add(buildingImageGallery);
-					}
-				}
-				if(buildingImageGalleries.size() > 0) {
-					projectDAO.addBuildingImageGallery(buildingImageGalleries);
-				}
+//			if (building_images.size() > 0) {
+//				for(int i=0 ;i < building_images.size();i++)
+//				{
+//					if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+//						BuildingImageGallery buildingImageGallery = new BuildingImageGallery();
+//						String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
+//						long millis = System.currentTimeMillis() % 1000;
+//						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+//						gallery_name = "images/project/building/images/"+gallery_name;
+//						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+//						//System.out.println("for loop image path: "+uploadGalleryLocation);
+//						this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+//						buildingImageGallery.setImage(gallery_name);
+//						float completion = 0;
+//						if(!msg.getMessage().isEmpty()) {
+//							completion = Float.parseFloat(msg.getMessage());
+//						}
+//						buildingImageGallery.setTitle("New Image");
+//						buildingImageGallery.setBuilderBuilding(builderBuilding);
+//						buildingImageGalleries.add(buildingImageGallery);
+//					}
+//				}
+//				if(buildingImageGalleries.size() > 0) {
+//					projectDAO.addBuildingImageGallery(buildingImageGalleries);
+//				}
+//			}
+			BuildingImageGallery buildingImageGallery = new BuildingImageGallery();
+			String gallery_name = building_images.getFormDataContentDisposition().getFileName();
+			long millis = System.currentTimeMillis() % 1000;
+			gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+			gallery_name = "images/project/building/images/"+gallery_name;
+			String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+			//System.out.println("for loop image path: "+uploadGalleryLocation);
+			this.imageUploader.writeToFile(building_images.getValueAs(InputStream.class), uploadGalleryLocation);
+			buildingImageGallery.setImage(gallery_name);
+			float completion = 0;
+			if(!msg.getMessage().isEmpty()) {
+				completion = Float.parseFloat(msg.getMessage());
+			}
+			buildingImageGallery.setTitle("New Image");
+			buildingImageGallery.setCompletion(completion);
+			buildingImageGallery.setCreatedDate(new Date());
+			buildingImageGallery.setBuilderBuilding(builderBuilding);
+			buildingImageGalleries.add(buildingImageGallery);
+			if(buildingImageGalleries.size() > 0) {
+				projectDAO.addBuildingImageGallery(buildingImageGalleries);
 			}
 		} catch(Exception e) {
 			msg.setStatus(0);
@@ -2428,7 +2457,8 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("floor_id") int floor_id,
 			@FormDataParam("substagewt_id[]") List<FormDataBodyPart> substagewt_id,
 			@FormDataParam("ssubstagewt_id[]") List<FormDataBodyPart> ssubstagewt_id,
-			@FormDataParam("floor_image[]") List<FormDataBodyPart> building_images,
+			//@FormDataParam("floor_image[]") List<FormDataBodyPart> building_images,
+			@FormDataParam("floor_image") FormDataBodyPart building_images,
 			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
 			@FormDataParam("admin_id") int admin_id
 	) {
@@ -2447,41 +2477,63 @@ public class ProjectController extends ResourceConfig {
 		if(floorAmenityWeightages.size() > 0) {
 			msg = projectDAO.updateFloorAmenityWeightage(floorAmenityWeightages, floor_id);
 		}
-		
-		List<FloorWeightage> floorWeightages = new ArrayList<FloorWeightage>();
-		for(int i=0 ;i < ssubstagewt_id.size();i++) {
-			FloorWeightage paw = new FloorWeightage();
-			paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
-			paw.setStatus(bstatus);
-			floorWeightages.add(paw);
+		if(ssubstagewt_id !=null){
+			List<FloorWeightage> floorWeightages = new ArrayList<FloorWeightage>();
+			for(int i=0 ;i < ssubstagewt_id.size();i++) {
+				FloorWeightage paw = new FloorWeightage();
+				paw.setId(ssubstagewt_id.get(i).getValueAs(Integer.class));
+				paw.setStatus(bstatus);
+				floorWeightages.add(paw);
+			}
+			if(floorWeightages.size() > 0) {
+				msg = projectDAO.updateFloorWeightageStatus(floorWeightages, floor_id);
+			}
 		}
-		if(floorWeightages.size() > 0) {
-			msg = projectDAO.updateFloorWeightageStatus(floorWeightages, floor_id);
-		}
-		
 		try {	
 			List<FloorImageGallery> floorImageGalleries = new ArrayList<FloorImageGallery>();
+			msg = projectDAO.updateFloorCompletion(floor_id);
+			System.err.println("Completion % :: "+msg.getMessage());
 			//for multiple inserting images.
-			if (building_images.size() > 0) {
-				for(int i=0 ;i < building_images.size();i++)
-				{
-					if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-						FloorImageGallery floorImageGallery = new FloorImageGallery();
-						String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
-						long millis = System.currentTimeMillis() % 1000;
-						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-						gallery_name = "images/project/floor/"+gallery_name;
-						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-						//System.out.println("for loop image path: "+uploadGalleryLocation);
-						this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-						floorImageGallery.setImage(gallery_name);
-						floorImageGallery.setBuilderFloor(builderFloor);
-						floorImageGalleries.add(floorImageGallery);
-					}
-				}
-				if(floorImageGalleries.size() > 0) {
-					projectDAO.addFloorImageGallery(floorImageGalleries);
-				}
+//			if (building_images.size() > 0) {
+//				for(int i=0 ;i < building_images.size();i++)
+//				{
+//					if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+//						FloorImageGallery floorImageGallery = new FloorImageGallery();
+//						String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
+//						long millis = System.currentTimeMillis() % 1000;
+//						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+//						gallery_name = "images/project/floor/"+gallery_name;
+//						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+//						//System.out.println("for loop image path: "+uploadGalleryLocation);
+//						this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+//						floorImageGallery.setImage(gallery_name);
+//						floorImageGallery.setBuilderFloor(builderFloor);
+//						floorImageGalleries.add(floorImageGallery);
+//					}
+//				}
+//				if(floorImageGalleries.size() > 0) {
+//					projectDAO.addFloorImageGallery(floorImageGalleries);
+//				}
+//			}
+			float completion = 0;
+			if(!msg.getMessage().isEmpty() && msg.getMessage()!=null){
+				completion = Float.parseFloat(msg.getMessage());
+			}
+			FloorImageGallery floorImageGallery = new FloorImageGallery();
+			String gallery_name = building_images.getFormDataContentDisposition().getFileName();
+			long millis = System.currentTimeMillis() % 1000;
+			gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+			gallery_name = "images/project/floor/"+gallery_name;
+			String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+			//System.out.println("for loop image path: "+uploadGalleryLocation);
+			this.imageUploader.writeToFile(building_images.getValueAs(InputStream.class), uploadGalleryLocation);
+			floorImageGallery.setImage(gallery_name);
+			floorImageGallery.setCompletion(completion);
+			floorImageGallery.setCreatedDate(new Date());
+			floorImageGallery.setBuilderFloor(builderFloor);
+			floorImageGalleries.add(floorImageGallery);
+			if(floorImageGalleries.size() > 0) {
+				projectDAO.addFloorImageGallery(floorImageGalleries);
 			}
 		} catch(Exception e) {
 			msg.setStatus(0);
@@ -3561,7 +3613,8 @@ public class ProjectController extends ResourceConfig {
 			@FormDataParam("flat_id") int flat_id,
 			@FormDataParam("substagewt_id[]") List<FormDataBodyPart> substagewt_id,
 			@FormDataParam("ssubstagewt_id[]") List<FormDataBodyPart> ssubstagewt_id,
-			@FormDataParam("flat_image[]") List<FormDataBodyPart> building_images,
+			//@FormDataParam("flat_image[]") List<FormDataBodyPart> building_images,
+			@FormDataParam("flat_image") FormDataBodyPart building_images,
 			@FormDataParam("elevation_image[]") List<FormDataBodyPart> elevation_images,
 			@FormDataParam("admin_id") int admin_id
 	) {
@@ -3593,28 +3646,50 @@ public class ProjectController extends ResourceConfig {
 		}
 		
 		try {	
+			msg = projectDAO.updateFlatCompletion(flat_id);
+			System.err.println("Flat % :: "+msg.getMessage());
 			List<FlatImageGallery> flatImageGalleries = new ArrayList<FlatImageGallery>();
 			//for multiple inserting images.
-			if (building_images.size() > 0) {
-				for(int i=0 ;i < building_images.size();i++)
-				{
-					if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-						FlatImageGallery flatImageGallery = new FlatImageGallery();
-						String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
-						long millis = System.currentTimeMillis() % 1000;
-						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-						gallery_name = "images/project/flat/"+gallery_name;
-						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-						//System.out.println("for loop image path: "+uploadGalleryLocation);
-						this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
-						flatImageGallery.setImage(gallery_name);
-						flatImageGallery.setBuilderFlat(builderFlat);
-						flatImageGalleries.add(flatImageGallery);
-					}
-				}
-				if(flatImageGalleries.size() > 0) {
-					projectDAO.addFlatImageGallery(flatImageGalleries);
-				}
+//			if (building_images.size() > 0) {
+//				for(int i=0 ;i < building_images.size();i++)
+//				{
+//					if(building_images.get(i).getFormDataContentDisposition().getFileName() != null && !building_images.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
+//						FlatImageGallery flatImageGallery = new FlatImageGallery();
+//						String gallery_name = building_images.get(i).getFormDataContentDisposition().getFileName();
+//						long millis = System.currentTimeMillis() % 1000;
+//						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+//						gallery_name = "images/project/flat/"+gallery_name;
+//						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+//						//System.out.println("for loop image path: "+uploadGalleryLocation);
+//						this.imageUploader.writeToFile(building_images.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+//						flatImageGallery.setImage(gallery_name);
+//						flatImageGallery.setBuilderFlat(builderFlat);
+//						flatImageGalleries.add(flatImageGallery);
+//					}
+//				}
+//				if(flatImageGalleries.size() > 0) {
+//					projectDAO.addFlatImageGallery(flatImageGalleries);
+//				}
+//			}
+			float completion =0;
+			if(!msg.getMessage().isEmpty()){
+				completion = Float.parseFloat(msg.getMessage());
+			}
+			FlatImageGallery flatImageGallery = new FlatImageGallery();
+			String gallery_name = building_images.getFormDataContentDisposition().getFileName();
+			long millis = System.currentTimeMillis() % 1000;
+			gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+			gallery_name = "images/project/flat/"+gallery_name;
+			String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+			//System.out.println("for loop image path: "+uploadGalleryLocation);
+			this.imageUploader.writeToFile(building_images.getValueAs(InputStream.class), uploadGalleryLocation);
+			flatImageGallery.setImage(gallery_name);
+			flatImageGallery.setCompletion(completion);
+			flatImageGallery.setCreatedDate(new Date());
+			flatImageGallery.setBuilderFlat(builderFlat);
+			flatImageGalleries.add(flatImageGallery);
+			if(flatImageGalleries.size() > 0) {
+				projectDAO.addFlatImageGallery(flatImageGalleries);
 			}
 		} catch(Exception e) {
 			msg.setStatus(0);
