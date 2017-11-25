@@ -131,10 +131,10 @@ public class GeneralController extends ResourceConfig {
 	}
 	
 	@GET
-	@Path("forgotpassword.json/{pancard}/{email}")
+	@Path("forgotpassword.json/{email}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage retrivePassword(@PathParam("pancard") String pancard,@PathParam("email") String emailId){
-		return new BuyerDAO().getForgotPasswod(pancard,emailId);
+	public ResponseMessage retrivePassword(@PathParam("email") String emailId){
+		return new BuyerDAO().getForgotPasswod(emailId);
 	}
 	
 	@POST
@@ -149,12 +149,12 @@ public class GeneralController extends ResourceConfig {
 		return responseMessage;
 	}
 	
-	@GET
-	@Path("accountsettings.json/{pancard}")
+	@POST
+	@Path("accountsettings.json")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getBuyerDetails(@PathParam("pancard") String pancard){
+	public String getBuyerDetails(@FormParam("accountotp") String otp){
 		String response = new String();
-		response = new BuyerDAO().getBuyerAccountDetailsByPancard(pancard);
+		response = new BuyerDAO().getBuyerAccountDetailsByPancard(otp);
 		return response;
 	}
 	
@@ -228,5 +228,17 @@ public class GeneralController extends ResourceConfig {
 	public ProjectCount getProjectCount(@PathParam("id") int id){
 		ProjectCount projectAddresses = new ProjectAPIDAO().getProjectlevelDetails(id);
 		return projectAddresses;
+	}
+	@GET
+	@Path("accountotp.json/{pancard}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage getAccountOTP(@PathParam("pancard") String pancard){
+		ResponseMessage responseMessage = new ResponseMessage();
+		String characters = "0123456789";
+		String otp = RandomStringUtils.random( 6, characters );
+		globalBuyer.setPancard(pancard);
+		globalBuyer.setOtp(otp);
+		responseMessage = new BuyerDAO().isUserExist(globalBuyer);
+		return responseMessage;
 	}
 }

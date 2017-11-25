@@ -1153,7 +1153,7 @@ public class BuyerDAO {
 		}catch(Exception e){
 			e.printStackTrace();
 			responseMessage.setStatus(0);
-			responseMessage.setMessage("Invaid userid");
+			responseMessage.setMessage("User doesn't exists");
 			json = gson.toJson(responseMessage);
 			return json;
 			//e.printStackTrace();
@@ -1284,18 +1284,20 @@ public class BuyerDAO {
 		return result.get(0);
 	}
 	
-	 public String getBuyerAccountDetailsByPancard(String pancard){
+	 public String getBuyerAccountDetailsByPancard(String otp){
 		 ResponseMessage responseMessage = new ResponseMessage();
 			Gson gson = new Gson();
 			String json = null;
 			Buyer buyer = new Buyer();
-			String hql = "from Buyer where pancard = :pancard";
+			String hql = "from GlobalBuyer where otp = :otp";
 			HibernateUtil hibernateUtil = new HibernateUtil();
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
-			query.setParameter("pancard", pancard);
-			List<Buyer> buyerList = query.list();
+			query.setParameter("otp", otp);
+			List<GlobalBuyer> result = query.list();
+			System.err.println("user is prsent :: "+result.size());
 			try{
+				List<Buyer> buyerList = getBuyerByPancard(result.get(0).getPancard());
 				if(buyerList != null){
 					buyer.setName(buyerList.get(0).getName());
 					buyer.setAddress(buyerList.get(0).getAddress());
@@ -1310,6 +1312,7 @@ public class BuyerDAO {
 				}
 				return json;
 			}catch(Exception e){
+				e.printStackTrace();
 				responseMessage.setStatus(0);
 				responseMessage.setMessage("No account Detail found");
 				json = gson.toJson(responseMessage);
@@ -1583,14 +1586,14 @@ public class BuyerDAO {
 		return buyers.get(0);
 	}
 	
-	public ResponseMessage getForgotPasswod(String pancard, String emailId){
+	public ResponseMessage getForgotPasswod(String emailId){
 		ResponseMessage responseMessage = new ResponseMessage();
-		String hql = "from GlobalBuyer where pancard = :pancard";
+		String hql = "from GlobalBuyer where email = :email";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		if(emailId !="" && emailId != null){
-			query.setParameter("pancard", pancard);
+			query.setParameter("email", emailId);
 		}else{
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("Please enter your email id");
@@ -1598,17 +1601,13 @@ public class BuyerDAO {
 		try{
 		GlobalBuyer result =(GlobalBuyer) query.list().get(0);
 			if(result !=null){
-				if(result.getEmail().equals(emailId)){
+				
 					responseMessage.setStatus(1);
 					responseMessage.setMessage("New password sent to your email."); 
-				}else{
-					responseMessage.setStatus(0);
-					responseMessage.setMessage("invalid email id");
-				}
 			}
 		}catch(Exception e){
 			responseMessage.setStatus(0);
-			responseMessage.setMessage("User dosn't exist");
+			responseMessage.setMessage("invalid email id");
 		}
 		return responseMessage;
 	}
@@ -1722,6 +1721,15 @@ public class BuyerDAO {
 			}
 		return responseMessage;
 		}
-		
 	}
-}
+	
+	public List<Buyer> getBuyerByPancard(String pancard){
+		String hql ="FROM Buyer where pancard = :pancard";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("pancard", pancard);
+		List<Buyer> result = query.list();
+		return result;
+	}
+ }
