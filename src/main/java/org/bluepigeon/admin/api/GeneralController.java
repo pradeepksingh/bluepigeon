@@ -36,9 +36,19 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+
+import com.google.gson.Gson;
+
 import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
+import org.bluepigeon.admin.dao.ProjectAPIDAO;
+import org.bluepigeon.admin.data.CompletionList;
+import org.bluepigeon.admin.data.CompletionStatus;
 import org.bluepigeon.admin.data.ContactUs;
+import org.bluepigeon.admin.data.ProjectAPI;
+import org.bluepigeon.admin.data.ProjectAddress;
+import org.bluepigeon.admin.data.ProjectCount;
+import org.bluepigeon.admin.data.Projects;
 import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.GlobalBuyer;
 
@@ -51,12 +61,12 @@ public class GeneralController extends ResourceConfig {
     }
 	
 	@POST
-	@Path("signup")
+	@Path("signup.json")
 	@Produces(MediaType.APPLICATION_JSON)
 //	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseMessage signupUser(
-			@FormParam("pancard") String pancard,
-			@FormParam("password") String password){
+			@FormParam("pancard") String pancard
+			){
 		ResponseMessage responseMessage = new ResponseMessage();
 		String characters = "0123456789";
 		String otp = RandomStringUtils.random( 6, characters );
@@ -67,36 +77,70 @@ public class GeneralController extends ResourceConfig {
 	}
 	
 	@POST
-	@Path("login")
+	@Path("login.json")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage loginUser(@FormParam("pancard") String pancard,
+	public String loginUser(@FormParam("pancard") String pancard,
 			@FormParam("password") String password){
-		ResponseMessage responseMessage = new ResponseMessage();
-		GlobalBuyer globalBuyer = new GlobalBuyer();
-		globalBuyer.setPancard(pancard);
-		globalBuyer.setPassword(password);
-		responseMessage = new BuyerDAO().validateBuyer(globalBuyer);
-		 return responseMessage;
+		Gson gson = new Gson();
+		String json = "";
+		json = new BuyerDAO().validateBuyer(pancard,password);
+	
+			Projects projects = gson.fromJson(json, Projects.class);
+			if(projects != null && projects.getId() > 0){
+				if(projects.getBuyerImage()!=null){
+					projects.setBuyerImage(context.getInitParameter("api_url")+projects.getBuyerImage());
+				}else{
+					projects.setBuyerImage("");
+				}
+				if(projects.getImage()!=null){
+					projects.setImage(context.getInitParameter("api_url")+projects.getImage());
+				}else{
+					projects.setImage("");
+				}
+				json = gson.toJson(projects);
+				return json;
+			}else{
+				return json;
+			}
+		
 	}
 	
 	@POST
-	@Path("otp")
+	@Path("otp.json")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage verifyOtp(@FormParam("otp") String otp){
-		ResponseMessage responseMessage = new ResponseMessage();
-		responseMessage = new BuyerDAO().validateOtp(otp);
-		return responseMessage;
+	public String verifyOtp(@FormParam("otp") String otp){
+		String json = "";
+		Gson gson = new Gson();
+		json = new BuyerDAO().validateOtp(otp);
+		
+			Projects projects = gson.fromJson(json, Projects.class);
+			if(projects != null && projects.getId()>0){
+				if(projects.getBuyerImage()!=null){
+					projects.setBuyerImage(context.getInitParameter("api_url")+projects.getBuyerImage());
+				}else{
+					projects.setBuyerImage("");
+				}
+				if(projects.getImage()!=null){
+					projects.setImage(context.getInitParameter("api_url")+projects.getImage());
+				}else{
+					projects.setImage("");
+				}
+				json = gson.toJson(projects);
+				return json;
+			}else{
+				return json;
+			}
 	}
 	
-	@POST
-	@Path("forgotpassword")
+	@GET
+	@Path("forgotpassword.json/{email}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage retrivePassword(@FormParam("pancard") String pancard,@FormParam("email") String emailId){
-		return new BuyerDAO().getForgotPasswod(pancard,emailId);
+	public ResponseMessage retrivePassword(@PathParam("email") String emailId){
+		return new BuyerDAO().getForgotPasswod(emailId);
 	}
 	
 	@POST
-	@Path("changepassword")
+	@Path("changepassword.json")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String changePassword(
 			@FormParam("pancard") String pancard,
@@ -108,16 +152,16 @@ public class GeneralController extends ResourceConfig {
 	}
 	
 	@POST
-	@Path("accountsettings")
+	@Path("accountsettings.json")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getBuyerDetails(@FormParam("pancard") String pancard){
+	public String getBuyerDetails(@FormParam("accountotp") String otp){
 		String response = new String();
-		response = new BuyerDAO().getBuyerAccountDetailsByPancard(pancard);
+		response = new BuyerDAO().getBuyerAccountDetailsByPancard(otp);
 		return response;
 	}
 	
 	@POST
-	@Path("updateaccount")
+	@Path("updateaccount.json")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseMessage updateBuyerAccount(@FormParam("pancard") String pancard,
 			@FormParam("name") String name,
@@ -157,9 +201,92 @@ public class GeneralController extends ResourceConfig {
 		ContactUs contactUs = new BuilderDetailsDAO().getContactDetails(id);
 		ContactUs result = new ContactUs();
 		result.setEmail(contactUs.getEmail());
-		result.setImage(context.getInitParameter("s3_base_url")+contactUs.getImage());
+		result.setImage(context.getInitParameter("api_url")+contactUs.getImage());
 		result.setMobile(contactUs.getMobile());
 		
 		return result;
 	}
+	
+	@GET 
+	@Path("projectaddress.json/{pancard}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Projects getProjectAddress(@PathParam("pancard") String pancard){
+		Projects projects = new ProjectAPIDAO().getProjectAddresses(pancard);
+		projects.setImage(context.getInitParameter("api_url")+projects.getImage());
+		return projects;
+	}
+	@GET 
+	@Path("projectdetails.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ProjectAPI getProjectAddress(@PathParam("id") int id){
+		ProjectAPI projectAddresses = new ProjectAPIDAO().getProjectDetails(id);
+		projectAddresses.setImage(context.getInitParameter("api_url")+projectAddresses.getImage());
+		return projectAddresses;
+	}
+	
+	@GET 
+	@Path("projectcount.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ProjectCount getProjectCount(@PathParam("id") int id){
+		ProjectCount projectAddresses = new ProjectAPIDAO().getProjectlevelDetails(id);
+		return projectAddresses;
+	}
+	@GET
+	@Path("accountotp.json/{pancard}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseMessage getAccountOTP(@PathParam("pancard") String pancard){
+		ResponseMessage responseMessage = new ResponseMessage();
+		String characters = "0123456789";
+		String otp = RandomStringUtils.random( 6, characters );
+		globalBuyer.setPancard(pancard);
+		globalBuyer.setOtp(otp);
+		responseMessage = new BuyerDAO().isUserExist(globalBuyer);
+		return responseMessage;
+	}
+	
+	@GET
+	@Path("buildinglist.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public CompletionList getBuildingList(@PathParam("id") int projectId){
+		CompletionList completionList = new ProjectAPIDAO().getBuildingListByProjcet(projectId);
+		List<CompletionStatus> completionStatusList = new ArrayList<>();
+		for(CompletionStatus completionStatus: completionList.getCompletionStatus()){
+			completionStatus.setImage(context.getInitParameter("api_url")+completionStatus.getImage());
+			completionStatusList.add(completionStatus);
+		}
+		completionList.setCompletionStatus(completionStatusList);
+		return completionList;
+		
+	}
+	
+	@GET
+	@Path("floorlist.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public CompletionList getFloorList(@PathParam("id") int projectId){
+		CompletionList completionList = new ProjectAPIDAO().getFloorListByProject(projectId);
+		List<CompletionStatus> completionStatusList = new ArrayList<>();
+		for(CompletionStatus completionStatus: completionList.getCompletionStatus()){
+			completionStatus.setImage(context.getInitParameter("api_url")+completionStatus.getImage());
+			completionStatusList.add(completionStatus);
+		}
+		completionList.setCompletionStatus(completionStatusList);
+		return completionList;
+		
+	}
+	
+	@GET
+	@Path("flatlist.json/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public CompletionList getFlatList(@PathParam("id") int projectId){
+		CompletionList completionList = new ProjectAPIDAO().getFlatListByProject(projectId);
+		List<CompletionStatus> completionStatusList = new ArrayList<>();
+		for(CompletionStatus completionStatus: completionList.getCompletionStatus()){
+			completionStatus.setImage(context.getInitParameter("api_url")+completionStatus.getImage());
+			completionStatusList.add(completionStatus);
+		}
+		completionList.setCompletionStatus(completionStatusList);
+		return completionList;
+		
+	}
+	
 }

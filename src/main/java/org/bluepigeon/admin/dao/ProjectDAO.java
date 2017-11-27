@@ -4476,6 +4476,7 @@ public class ProjectDAO {
 		Query newquery = newsession.createQuery(newhql);
 		newquery.setParameter("flat_id", flat_id);
 		List<BuilderFlat> resultnew = newquery.list();
+		System.err.println("Builder flat :: "+resultnew.size());
 		newsession.close();
 		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from flat_weightage as a where a.flat_id = "+flat_id+" group by a.stage_id";
 		System.err.println(hql);
@@ -4483,12 +4484,14 @@ public class ProjectDAO {
 		Query query = session.createSQLQuery(hql)
 				.setResultTransformer(Transformers.aliasToBean(FlatTotal.class));
 		List<FlatTotal> resultRaw = query.list();
+		System.err.println("Flat total :: "+resultRaw.size());
 		session.close();
 		Double finalWeightage = 0.0;
 		Double percent = 100.00;
 		for(FlatTotal flatTotal :resultRaw) {
 			finalWeightage += (flatTotal.getTotalSubstageWeight()/percent*flatTotal.getStageWeight());
 		}
+		System.err.println("Final weightage :: "+finalWeightage);
 		String hql2 = "SELECT a.amenity_id as amenityId,a.amenity_weightage as amenityWeightage,sum(IF(a.status=1,a.substage_weightage,0)*a.stage_weightage/100) as totalSubstageWeightage from flat_amenity_weightage as a where a.flat_id = "+flat_id+" group by a.amenity_id";
 		Session session2 = hibernateUtil.getSessionFactory().openSession();
 		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
@@ -4507,6 +4510,7 @@ public class ProjectDAO {
 		query1.executeUpdate();
 		session1.getTransaction().commit();
 		session1.close();
+		resp.setMessage(finalWeightage.toString());
 		return resp;
 	}
 	
@@ -4518,6 +4522,7 @@ public class ProjectDAO {
 		Query newquery = newsession.createQuery(newhql);
 		newquery.setParameter("floor_id", floor_id);
 		List<BuilderFloor> resultnew = newquery.list();
+		System.err.println("builderFloor size :: "+resultnew.size());
 		newsession.close();
 		String flathql = "SELECT sum(a.completion_status*a.weightage/100) as completionStatus from builder_flat as a where a.floor_no = :floor_id";
 		Session flatsession = hibernateUtil.getSessionFactory().openSession();
@@ -4525,12 +4530,14 @@ public class ProjectDAO {
 				.setResultTransformer(Transformers.aliasToBean(BuilderCompletionStatus.class));
 		flatquery.setParameter("floor_id", floor_id);
 		List<BuilderCompletionStatus> flatresult = flatquery.list();
+		System.err.println("Building Completion status :: "+flatresult.size());
 		flatsession.close();
 		String hql = "SELECT a.stage_id as stageId,a.stage_weightage as stageWeight,sum(IF(a.status=1,a.substage_weightage,0.0)) as totalSubstageWeight from floor_weightage as a where a.floor_id = "+floor_id+" group by a.stage_id";
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql)
 				.setResultTransformer(Transformers.aliasToBean(FlatTotal.class));
 		List<FlatTotal> resultRaw = query.list();
+		System.err.println("Flat total :: "+resultRaw.size());
 		session.close();
 		Double finalWeightage = 0.0;
 		Double percent = 100.00;
@@ -4542,6 +4549,7 @@ public class ProjectDAO {
 		Session session2 = hibernateUtil.getSessionFactory().openSession();
 		Query query2 = session2.createSQLQuery(hql2).setResultTransformer(Transformers.aliasToBean(FlatAmenityTotal.class));
 		List<FlatAmenityTotal> resultRaw2 = query2.list();
+		System.err.println("Flat Amenity total :: "+resultRaw2.size());
 		session2.close();
 		Double amenity_weightage = 0.0;
 		for(FlatAmenityTotal flatAmenityTotal :resultRaw2) {
@@ -4549,6 +4557,7 @@ public class ProjectDAO {
 		}
 		amenity_weightage = amenity_weightage * resultnew.get(0).getAmenityWeightage()/100;
 		finalWeightage = finalWeightage + amenity_weightage + flatWeightage;
+		System.err.println("Final Weightage :: "+finalWeightage+" floor id :: "+floor_id);
 		Session session1 = hibernateUtil.openSession();
 		session1.beginTransaction();
 		String hql1 = "UPDATE BuilderFloor set completionStatus = "+finalWeightage+" where id = "+floor_id;
@@ -4556,6 +4565,7 @@ public class ProjectDAO {
 		query1.executeUpdate();
 		session1.getTransaction().commit();
 		session1.close();
+		resp.setMessage(finalWeightage.toString());
 		return resp;
 	}
 	
@@ -4608,6 +4618,7 @@ public class ProjectDAO {
 		query1.executeUpdate();
 		session1.getTransaction().commit();
 		session1.close();
+		resp.setMessage(finalWeightage.toString());
 		return resp;
 	}
 	
