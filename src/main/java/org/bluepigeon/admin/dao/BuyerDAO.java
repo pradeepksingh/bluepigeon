@@ -39,6 +39,8 @@ import org.bluepigeon.admin.model.BuyerOffer;
 import org.bluepigeon.admin.model.BuyerPayment;
 import org.bluepigeon.admin.model.BuyerUploadDocuments;
 import org.bluepigeon.admin.model.BuyingDetails;
+import org.bluepigeon.admin.model.Campaign;
+import org.bluepigeon.admin.model.CampaignBuyer;
 import org.bluepigeon.admin.model.FlatPricingDetails;
 import org.bluepigeon.admin.model.GlobalBuyer;
 import org.bluepigeon.admin.util.HibernateUtil;
@@ -1026,7 +1028,7 @@ public class BuyerDAO {
 	}
 		
 	public List<Buyer> getFlatBuyersByFlatId(int flat_id){
-		String hql = "from Buyer where builderFlat.id = :id and is_deleted=0 and status=0 order by is_primary desc";
+		String hql = "from Buyer where builderFlat.id = :id and is_deleted=0 order by is_primary desc";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
@@ -1133,8 +1135,19 @@ public class BuyerDAO {
 				projects.setPancard(globalBuyer2.getPancard());
 				if(globalBuyer2.getAvatar()!=null){
 				projects.setBuyerImage(globalBuyer2.getAvatar());
+				
 				}else{
 					projects.setBuyerImage("");
+				}
+				List<Campaign> campaign = new CampaignDAO().getCampaignList(projects.getId());
+				if(campaign !=null){
+				projects.setCampaignId(campaign.get(0).getId());
+				projects.setTitle(campaign.get(0).getTitle());
+				projects.setCampaignImage(campaign.get(0).getImage());
+				}else{
+					projects.setCampaignId(0);
+					projects.setTitle("");
+					projects.setCampaignImage("");
 				}
 				json = gson.toJson(projects);
 				return json;
@@ -1210,6 +1223,27 @@ public class BuyerDAO {
 			}else{
 				projects.setBuyerImage("");
 			}
+			List<Campaign> campaigns = new CampaignDAO().getCampaignList(projects.getId());
+			CampaignBuyer campaignBuyer = new CampaignDAO().getCamapignBuyer(projects.getPancard(),projects.getId());
+			if(campaignBuyer !=null){
+			projects.setClick(campaignBuyer.getClicks());
+			projects.setView(campaignBuyer.getView());
+			}else{
+				responseMessage.setStatus(0);
+				responseMessage.setMessage("Unregisted user");
+				json=gson.toJson(responseMessage);
+			}
+			
+			if(campaigns!=null){
+				projects.setCampaignId(campaigns.get(0).getId());
+				projects.setCampaignImage(campaigns.get(0).getImage());
+				projects.setTitle(campaigns.get(0).getTitle());
+			}else{
+				projects.setCampaignId(0);
+				projects.setCampaignImage("");
+				projects.setTitle("");
+			}
+			
 			json = gson.toJson(projects);
 		}else{
 			responseMessage.setStatus(0);
@@ -1464,8 +1498,6 @@ public class BuyerDAO {
 	 public ResponseMessage updateBuyerPayment(BuyerPayment buyerPayment){
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		ResponseMessage responseMessage = new ResponseMessage();
-		
-		
 		Session newsession = hibernateUtil.openSession();
 		newsession.beginTransaction();
 		newsession.update(buyerPayment);

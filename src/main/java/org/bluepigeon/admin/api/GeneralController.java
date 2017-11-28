@@ -1,25 +1,8 @@
 package org.bluepigeon.admin.api;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.print.attribute.standard.DateTimeAtCompleted;
 import javax.servlet.ServletContext;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -30,10 +13,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.tomcat.jni.Time;
-import org.glassfish.jersey.media.multipart.FormDataBodyPart;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -46,7 +25,6 @@ import org.bluepigeon.admin.data.CompletionList;
 import org.bluepigeon.admin.data.CompletionStatus;
 import org.bluepigeon.admin.data.ContactUs;
 import org.bluepigeon.admin.data.ProjectAPI;
-import org.bluepigeon.admin.data.ProjectAddress;
 import org.bluepigeon.admin.data.ProjectCount;
 import org.bluepigeon.admin.data.Projects;
 import org.bluepigeon.admin.exception.ResponseMessage;
@@ -97,6 +75,9 @@ public class GeneralController extends ResourceConfig {
 				}else{
 					projects.setImage("");
 				}
+				if(projects.getCampaignImage() != null && projects.getCampaignImage() != ""){
+					projects.setCampaignImage(context.getInitParameter("api_url")+projects.getCampaignImage());
+				}
 				json = gson.toJson(projects);
 				return json;
 			}else{
@@ -112,7 +93,6 @@ public class GeneralController extends ResourceConfig {
 		String json = "";
 		Gson gson = new Gson();
 		json = new BuyerDAO().validateOtp(otp);
-		
 			Projects projects = gson.fromJson(json, Projects.class);
 			if(projects != null && projects.getId()>0){
 				if(projects.getBuyerImage()!=null){
@@ -124,6 +104,11 @@ public class GeneralController extends ResourceConfig {
 					projects.setImage(context.getInitParameter("api_url")+projects.getImage());
 				}else{
 					projects.setImage("");
+				}
+				if(projects.getCampaignImage() != null || projects.getCampaignImage() != ""){
+					projects.setCampaignImage(context.getInitParameter("api_url")+projects.getCampaignImage());
+				}else{
+					projects.setCampaignImage("");
 				}
 				json = gson.toJson(projects);
 				return json;
@@ -288,5 +273,7 @@ public class GeneralController extends ResourceConfig {
 		return completionList;
 		
 	}
+	
+	
 	
 }
