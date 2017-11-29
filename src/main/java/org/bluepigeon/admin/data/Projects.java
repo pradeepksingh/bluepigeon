@@ -22,6 +22,11 @@ public class Projects {
 	private String buyerName;
 	private String pancard;
 	private String buyerImage;
+	private String title;
+	private String campaignImage;
+	private int campaignId;
+	private int click;
+	private int view;
 	public List<ProjectAddress> getProjectAddresses() {
 		return projectAddresses;
 	}
@@ -176,4 +181,45 @@ public class Projects {
 		this.buyerImage = buyerImage;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getCampaignImage() {
+		return campaignImage;
+	}
+
+	public void setCampaignImage(String campaignImage) {
+		this.campaignImage = campaignImage;
+	}
+
+	public int getCampaignId() {
+		return campaignId;
+	}
+
+	public void setCampaignId(int campaignId) {
+		this.campaignId = campaignId;
+	}
+
+	public int getClick() {
+		return click;
+	}
+
+	public void setClick(int click) {
+		this.click = click;
+	}
+
+	public int getView() {
+		return view;
+	}
+
+	public void setView(int view) {
+		this.view = view;
+	}
+	
+	
 }

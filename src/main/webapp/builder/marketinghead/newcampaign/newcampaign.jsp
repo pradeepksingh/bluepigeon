@@ -39,6 +39,8 @@ if(session!=null)
 					if(projectId != 0) {
 						campaignLists = new CampaignDAO().getMyCampaignsByProjectId(projectId);
 						cityname = new CampaignDAO().getCityData(projectId);
+						cityName = cityname.get(0).getName();
+						projectName = new CampaignDAO().getProjectData(projectId).getName();
 					}
 				}
 			}
@@ -119,7 +121,7 @@ Date date = new Date();
 						 	   <label> Project Name<span class="text-danger">*</span></label>
 						 	    <input type="text" id="project_name" name="prjecct_name" readonly value="<%if(projectName != "")out.print(projectName); %>" placeholder="Enter Project Name"/><br>
 						 	    <div class="messageContainer"></div>
-						 	   <label>City<span class="text-danger">*</span></label> <input type="text" id="city" readonly value="<%if(cityName != "")out.print(cityName); %>" name="city' placeholder="Enter City Name"/><br>
+						 	   <label>City<span class="text-danger">*</span></label> <input type="text" id="city" readonly value="<%if(cityName != null)out.print(cityName); %>" name="city' placeholder="Enter City Name"/><br>
 						 	    <div class="messageContainer"></div>
 						 	    <div>
 						 	   <label> Campaign Title<span class="text-danger">*</span></label> 

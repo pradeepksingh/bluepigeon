@@ -2190,8 +2190,13 @@ public class BuilderDetailsDAO {
 		
 		public List<ProjectData> getProjectList(String cityIds, int empId){
 			String hql = "";
-			hql = "SELECT a.id as value, a.name as name FROM builder_project as a inner join allot_project as b on b.project_id=a.id WHERE a.city_id in ("+cityIds+") and a.status=1 and a.group_id=1 and b.emp_id="+empId;
+			String hqlnew = "from BuilderEmployee where id = "+empId;
 			HibernateUtil hibernateUtil = new HibernateUtil();
+			Session sessionnew = hibernateUtil.openSession();
+			Query querynew = sessionnew.createQuery(hqlnew);
+			List<BuilderEmployee> employees = querynew.list();
+			BuilderEmployee builderEmployee = employees.get(0);
+			hql = "SELECT a.id as value, a.name as name FROM builder_project as a inner join allot_project as b on b.project_id=a.id WHERE a.city_id in ("+cityIds+") and a.status=1 and a.group_id="+builderEmployee.getBuilder().getId()+" and b.emp_id="+empId;
 			Session session = hibernateUtil.getSessionFactory().openSession();
 			Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(ProjectData.class));
 			List<ProjectData> result = query.list();
@@ -2523,7 +2528,7 @@ public class BuilderDetailsDAO {
 		public List<NameList> getProjectCityList(BuilderEmployee builderEmployee){
 			String hql = "";
 			if(builderEmployee.getBuilderEmployeeAccessType().getId() >=1 && builderEmployee.getBuilderEmployeeAccessType().getId() <=2){
-				hql = "SELECT DISTINCT(city.name) as cityName, project.city_id as cityid "
+				hql = "SELECT DISTINCT(city.name) as name, project.city_id as id "
 						+ "from builder_project as project "
 						+ "left join builder as b on b.id=project.group_id "
 						+ "left join city as city on city.id=project.city_id "

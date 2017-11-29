@@ -23,6 +23,8 @@ public class CampaignBuyer implements java.io.Serializable {
 	private Integer buyerId=0;
 	private Integer userType=0;
 	private Integer projectId=0;
+	private Integer clicks = 0;
+	private Integer view = 0;
 	public CampaignBuyer() {
 	}
 
@@ -78,6 +80,22 @@ public class CampaignBuyer implements java.io.Serializable {
 
 	public void setProjectId(Integer projectId) {
 		this.projectId = projectId;
+	}
+	@Column(name = "clicks")
+	public Integer getClicks() {
+		return clicks;
+	}
+
+	public void setClicks(Integer clicks) {
+		this.clicks = clicks;
+	}
+	@Column(name = "view")
+	public Integer getView() {
+		return view;
+	}
+
+	public void setView(Integer view) {
+		this.view = view;
 	}
 	
 }

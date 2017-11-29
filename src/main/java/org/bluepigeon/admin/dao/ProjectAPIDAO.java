@@ -1,10 +1,13 @@
 package org.bluepigeon.admin.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bluepigeon.admin.data.Building;
 import org.bluepigeon.admin.data.CompletionList;
 import org.bluepigeon.admin.data.CompletionStatus;
+import org.bluepigeon.admin.data.DocumentList;
+import org.bluepigeon.admin.data.DocumentType;
 import org.bluepigeon.admin.data.Flat;
 import org.bluepigeon.admin.data.Floor;
 import org.bluepigeon.admin.data.Project;
@@ -12,6 +15,7 @@ import org.bluepigeon.admin.data.ProjectAPI;
 import org.bluepigeon.admin.data.ProjectAddress;
 import org.bluepigeon.admin.data.ProjectCount;
 import org.bluepigeon.admin.data.Projects;
+import org.bluepigeon.admin.data.PropertyDocument;
 import org.bluepigeon.admin.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -57,6 +61,7 @@ public class ProjectAPIDAO {
 		projects.setFloor(floor);
 		projects.setFlat(flat);
 		projects.setProjectAddresses(result);
+		session.close();
 		return projects;
 	}
 	public ProjectAPI getProjectDetails(int id){
@@ -83,6 +88,7 @@ public class ProjectAPIDAO {
 	    projectAPI.setBuilding(building);
 	    projectAPI.setFloor(floor);
 	    projectAPI.setFlat(flat);
+	    session.close();
 		return projectAPI;
 	}
 	
@@ -105,6 +111,7 @@ public class ProjectAPIDAO {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(Project.class));
 		List<Project> result = query.list();
+		session.close();
 		return result.get(0);
 	}
 	
@@ -114,6 +121,7 @@ public class ProjectAPIDAO {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(Building.class));
 		List<Building> result = query.list();
+		session.close();
 		return result.get(0);
 	}
 	public Floor getFloorLevelCount(int projectId){
@@ -122,6 +130,7 @@ public class ProjectAPIDAO {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(Floor.class));
 		List<Floor> result = query.list();
+		session.close();
 		return result.get(0);
 		
 	}
@@ -131,6 +140,7 @@ public class ProjectAPIDAO {
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(Flat.class));
 		List<Flat> result = query.list();
+		session.close();
 		return result.get(0);
 		
 		
@@ -143,6 +153,7 @@ public class ProjectAPIDAO {
 		List<CompletionStatus> result = query.list();
 		CompletionList completionList = new CompletionList();
 		completionList.setCompletionStatus(result);
+		session.close();
 		return completionList;
 	}
 	
@@ -154,6 +165,7 @@ public class ProjectAPIDAO {
 		List<CompletionStatus> result = query.list();
 		CompletionList completionList = new CompletionList();
 		completionList.setCompletionStatus(result);
+		session.close();
 		return completionList;
 	}
 	
@@ -166,6 +178,20 @@ public class ProjectAPIDAO {
 		List<CompletionStatus> result = query.list();
 		CompletionList completionList = new CompletionList();
 		completionList.setCompletionStatus(result);
+		session.close();
 		return completionList;
 	}
+	
+	public List<DocumentList> getPropertyDocument(String pancard,int projectId){
+		PropertyDocument propertyDocument = new PropertyDocument();
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String hql = "SELECT a.id as id, a.name as name, a.doc_url as url, a.doc_type as docType, b.flat_id as flatId, e.flat_no as flatNo FROM buyer_upload_documents as a join buyer as b on b.id=a.buyer_id join builder_project as d on d.id=b.project_id join builder_flat as e on e.id=b.flat_id where d.id="+projectId+" and b.pancard='"+pancard+"' and b.is_primary=1 and b.is_deleted=0 GROUP by a.id order by a.id desc";
+		Session session = hibernateUtil.getSessionFactory().openSession();
+		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(DocumentList.class));
+		System.err.println(hql);
+		List<DocumentList> result = query.list();
+		session.close();
+		return result;
+	}
+	
 }

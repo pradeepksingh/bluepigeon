@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bluepigeon.admin.data.BuyerBuildingList;
 import org.bluepigeon.admin.data.BuyerFlatList;
+import org.bluepigeon.admin.data.BuyerList;
 import org.bluepigeon.admin.data.BuyerProjectList;
 import org.bluepigeon.admin.data.CampaignList;
 import org.bluepigeon.admin.data.CampaignListNew;
@@ -271,7 +272,7 @@ public class CampaignDAO {
 						+ " left join builder_lead as lead on project.id = lead.project_id "
 						+ " left join buyer as b on b.project_id = project.id "
 						+" left join builder as build ON project.group_id = build.id "
-						+ " where project.status = 1 AND build.id = "+builderEmployee.getBuilder().getId()+" group by project.id";
+						+ " where project.status = 1 AND build.id = "+builderEmployee.getBuilder().getId()+" group by project.id order by camp.id desc";
 			}
 			else if(builderEmployee.getBuilderEmployeeAccessType().getId() == 3){
 				hql = "SELECT camp.id as id, camp.content as content, camp.terms as terms, camp.set_date as startDate, camp.till_date as endDate, camp.image as image,"
@@ -280,7 +281,7 @@ public class CampaignDAO {
 						+ " left join builder_lead as lead on project.id = lead.project_id "
 						+ " left join buyer as b on project.id = b.project_id  "
 						+" inner join allot_project as ap on project.id = ap.project_id "
-						+ " where project.status=1 AND ap.emp_id = "+builderEmployee.getId()+" group by project.id";
+						+ " where project.status=1 AND ap.emp_id = "+builderEmployee.getId()+" group by camp.id order by camp.id desc";
 			}else{
 //				hql = "SELECT camp.id as id, camp.content as content, camp.set_date as startDate, camp.end_date as endDate, camp.image as image, "
 //						+ " project.name as name, 0 as leads, 0 as booking FROM  campaign as camp "
@@ -290,7 +291,7 @@ public class CampaignDAO {
 				hql = "SELECT camp.id as id, camp.content as content, camp.terms as terms, camp.image as image, camp.set_date as startDate,camp.end_date as endDate, project.name as name "
 						+ "FROM campaign as camp "
 						+ "inner join builder_project as project on project.id = camp.project_id "
-						+ "WHERE project.id="+projectId+" and camp.is_deleted=0 GROUP by camp.id order by project.id";
+						+ "WHERE project.id="+projectId+" and camp.is_deleted=0 GROUP by camp.id order by camp.id desc";
 			}
 			    Session sessionCampaign = hibernateUtil.getSessionFactory().openSession();
 			    Query queryCampaign = sessionCampaign.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(CampaignListNew.class));
@@ -510,11 +511,12 @@ public class CampaignDAO {
 	
 	public List<Campaign> getCampaignList(int projectId){
 			HibernateUtil hibernateUtil = new HibernateUtil();
-			String hql = "from Campaign where builderProject.id= :project_id";
+			String hql = "from Campaign where builderProject.id= :project_id order by id desc";
 			Session session = hibernateUtil.openSession();
 			Query query = session.createQuery(hql);
 			query.setParameter("project_id", projectId);
 			List<Campaign> campaign = query.list();
+			System.err.println("Campaign size :: "+campaign.size());
 			return campaign;
 	}
 	
@@ -531,6 +533,7 @@ public class CampaignDAO {
 	            .addScalar("name", StringType.INSTANCE)
 				.setResultTransformer(Transformers.aliasToBean(NameList.class));
 		List<NameList> result = query.list();
+		session.close();
 		return result;
 	}
 	
@@ -550,6 +553,71 @@ public class CampaignDAO {
 	            .addScalar("name", StringType.INSTANCE)
 				.setResultTransformer(Transformers.aliasToBean(NameList.class));
 		List<NameList> result = query.list();
+		session.close();
 		return result;
+	}
+	
+	public CampaignBuyer getCamapignBuyer(String pancard,int projectId){
+		String buyerHql ="from Buyer where pancard = :pancard and builderProject.id=:projectId and is_primary=1 and is_deleted=0";
+		String hql = "from CampaignBuyer where buyerId = :buyer_id and projectId = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session buyerSession = hibernateUtil.openSession();
+		Query buyerQuery = buyerSession.createQuery(buyerHql);
+		buyerQuery.setParameter("pancard",pancard);
+		buyerQuery.setParameter("projectId", projectId);
+		List<Buyer> buyerList = buyerQuery.list();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		if(buyerList!=null){
+			try{
+			query.setParameter("buyer_id", buyerList.get(0).getId());
+			query.setParameter("project_id", projectId);
+			}catch(Exception e){
+				return null;
+			}
+		}
+		try{
+		CampaignBuyer campaignBuyer = (CampaignBuyer) query.list().get(0);
+		return campaignBuyer;
+		}catch(Exception e){
+			return null;
+		}
+		
+	}
+	
+	public ResponseMessage updateCampaignBuyer(String pancard,int projectId, int view){
+		ResponseMessage responseMessage = new ResponseMessage();
+		String buyerHql = "from Buyer where pancard=:pancard and builderProject.id = :project_id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session buyerSesssion = hibernateUtil.openSession();
+		Query buyerQuery = buyerSesssion.createQuery(buyerHql);
+		buyerQuery.setParameter("pancard", pancard);
+		buyerQuery.setParameter("project_id", projectId);
+		try{
+		List<Buyer> buyerList = buyerQuery.list();
+		if(buyerList != null){
+			
+			String campaignBuyerHql = "update CampaignBuyer set view=:view where buyerId=:buyer_id";
+			Session session = hibernateUtil.openSession();
+			session.beginTransaction();
+			Query query = session.createQuery(campaignBuyerHql);
+			for(Buyer buyer: buyerList){
+				query.setParameter("view",view);
+				query.setParameter("buyer_id",buyer.getId() );
+			}
+			query.executeUpdate();
+			session.getTransaction().commit();
+			session.close();
+			responseMessage.setStatus(1);
+			return responseMessage;
+		}
+		buyerSesssion.close();
+		return responseMessage;
+		}catch(Exception e){
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("User don't exist");
+			return responseMessage;
+		}
+				
 	}
 }
