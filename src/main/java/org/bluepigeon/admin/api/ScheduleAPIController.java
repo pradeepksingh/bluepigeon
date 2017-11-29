@@ -10,7 +10,10 @@ import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.ScheduleAPIDAO;
 import org.bluepigeon.admin.data.ScheduleList;
+import org.bluepigeon.admin.exception.ResponseMessage;
 import org.bluepigeon.admin.model.GlobalBuyer;
+
+import com.google.gson.Gson;
 
 @Path("api1.0/bp/schedule")
 public class ScheduleAPIController {
@@ -20,8 +23,18 @@ public class ScheduleAPIController {
 	@GET
 	@Path("schedule.json/{pancard}/{projectid}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ScheduleList getScheduleDetails(@PathParam("pancard") String pancard,@PathParam("projectid") int projectId){
-		ScheduleList payableList = new ScheduleAPIDAO().getScheduleDetails(pancard, projectId);
-		return payableList;
+	public String getScheduleDetails(@PathParam("pancard") String pancard,@PathParam("projectid") int projectId){
+		Gson gson = new Gson();
+		String json ="";
+		ResponseMessage responseMessage = new ResponseMessage();
+		try{
+			ScheduleList scheduleList = new ScheduleAPIDAO().getScheduleDetails(pancard, projectId);
+			json = gson.toJson(scheduleList);
+		}catch(Exception e){
+			responseMessage.setStatus(0);
+			responseMessage.setMessage("User doesn't exist");
+			json = gson.toJson(responseMessage);
+		}
+		return json;
 	}
 }
