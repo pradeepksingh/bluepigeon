@@ -30,21 +30,21 @@ public class ReferEarnController {
 	
 	
 	
-	@GET
-	@Path("refer.json/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public ReferEarnList getReferEarn(@PathParam("id") int projectId){
-		List<Refer> referList = new ReferEarnDAO().getReferEarnProjectId(projectId);
-		List<Refer> newReferList = new ArrayList<>();
-		ReferEarnList referEarnList = new ReferEarnList();
-		for(Refer refer : referList){
-			refer.setImage(context.getInitParameter("api_url")+refer.getImage());
-			newReferList.add(refer);
-		}
-		referEarnList.setRefers(newReferList);
-		
-		return referEarnList;
-	}
+//	@GET
+//	@Path("refer.json/{id}")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public ReferEarnList getReferEarn(@PathParam("id") int projectId){
+//		List<Refer> referList = new ReferEarnDAO().getReferEarnProjectId(projectId);
+//		List<Refer> newReferList = new ArrayList<>();
+//		ReferEarnList referEarnList = new ReferEarnList();
+//		for(Refer refer : referList){
+//			refer.setImage(context.getInitParameter("api_url")+refer.getImage());
+//			newReferList.add(refer);
+//		}
+//		referEarnList.setRefers(newReferList);
+//		
+//		return referEarnList;
+//	}
 	
 	
 	@POST
@@ -54,22 +54,27 @@ public class ReferEarnController {
 		String json ="";
 		ResponseMessage responseMessage= new ResponseMessage();
 		Gson gson = new Gson();
-		List<Refer> referList = new ReferEarnDAO().getReferEarnProjectId(projectId);
+		List<Refer> referList = new ReferEarnDAO().getReferEarnProjectId(pancard,projectId);
 		List<Refer> newReferList = new ArrayList<Refer>();
 		ReferEarnList referEarnList = new ReferEarnList();
+		if(referList != null){
 		for(Refer refer : referList){
 			refer.setImage(context.getInitParameter("api_url")+refer.getImage());
 			newReferList.add(refer);
 		}
+		}
+		
 		referEarnList.setRefers(newReferList);
 		json = gson.toJson(referEarnList);
-		new CampaignDAO().updateCampaignBuyer(pancard,projectId,view);
-		CampaignBuyer campaignBuyer = new CampaignDAO().getCamapignBuyer(pancard, projectId);
-		if(campaignBuyer != null){
-			ReferEarnList newreferEarnList = gson.fromJson(json, ReferEarnList.class);
-			newreferEarnList.setClicked(campaignBuyer.getClicks());
-			newreferEarnList.setView(campaignBuyer.getView());
-			json = gson.toJson(newreferEarnList);
+		responseMessage = new CampaignDAO().updateCampaignBuyer(pancard,projectId,view);
+		if(responseMessage.getStatus()>0){
+			CampaignBuyer campaignBuyer = new CampaignDAO().getCamapignBuyer(pancard, projectId);
+			if(campaignBuyer != null){
+				ReferEarnList newreferEarnList = gson.fromJson(json, ReferEarnList.class);
+				newreferEarnList.setClicked(campaignBuyer.getClicks());
+				newreferEarnList.setView(campaignBuyer.getView());
+				json = gson.toJson(newreferEarnList);
+			}
 		}else{
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("User doesn't exist");
