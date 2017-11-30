@@ -1272,20 +1272,21 @@ public class BuyerDAO {
 				int result = query.executeUpdate();
 				session.getTransaction().commit();
 				session.close();
-				GlobalBuyer globalBuyer2 = new GlobalBuyer();
-				globalBuyer2.setAvatar(globalBuyer.getAvatar());
-				globalBuyer2.setName(globalBuyer.getName());
-				 
-			     json = gson.toJson(globalBuyer2);
-				responseMessage.setData(json);
+//				GlobalBuyer globalBuyer2 = new GlobalBuyer();
+//				globalBuyer2.setAvatar(globalBuyer.getAvatar());
+//				globalBuyer2.setName(globalBuyer.getName());
+//				 
+			    // json = gson.toJson(globalBuyer2);
 				responseMessage.setStatus(1);
 				responseMessage.setMessage("Password Rest Successfully");
+				json = gson.toJson(responseMessage);
 			}else{
 				responseMessage.setStatus(0);
 				responseMessage.setMessage("Invalid Password");
 				json = gson.toJson(responseMessage);
 			}
 		}catch(Exception e){
+			e.printStackTrace();
 			responseMessage.setStatus(0);
 			responseMessage.setMessage("Invalid Password");
 			json = gson.toJson(responseMessage);
@@ -1300,11 +1301,18 @@ public class BuyerDAO {
 		Session session = hibernateUtil.openSession();
 		Query query = session.createQuery(hql);
 		query.setString("password", password);
+		try{
 		List<Builder> result = query.list();
+		session.close();
 		if(result.size()>0)
 			isValid = true;
-		session.close();
-		return isValid;
+			return isValid;
+		}catch(Exception e){
+			e.printStackTrace();
+			isValid = false;
+			return isValid;
+		}
+		
 	}
 	
 	public GlobalBuyer getGlobalBuyerByPancard(String pancard) {

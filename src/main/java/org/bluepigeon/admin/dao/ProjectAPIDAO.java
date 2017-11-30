@@ -66,7 +66,7 @@ public class ProjectAPIDAO {
 	}
 	public ProjectAPI getProjectDetails(int id){
 		HibernateUtil hibernateUtil = new HibernateUtil();
-		String hql ="SELECT project.id as id, project.name as projectName, floor.name as floorName, project.locality_name as localityName, project.completion_status as CompletionStatus, project.image as image, projectconfig.name as configName, project.project_area as area, area.name as areaUnitName, DATE_FORMAT(bdetails.booking_date,'%D %b %Y') as bookingDate, bdetails.total_cost as totalCost from builder_project as project "
+		String hql ="SELECT project.id as id, project.name as projectName, floor.name as floorName, project.locality_name as localityName, ROUND(project.completion_status,2) as CompletionStatus, project.image as image, projectconfig.name as configName, project.project_area as area, area.name as areaUnitName, DATE_FORMAT(bdetails.booking_date,'%D %b %Y') as bookingDate, bdetails.total_cost as totalCost from builder_project as project "
 				+ "join builder_building as building on building.project_id=project.id "
 				+ "join builder_floor as floor on floor.building_id=building.id "
 				+ "join builder_flat as flat on flat.floor_no = floor.id "
