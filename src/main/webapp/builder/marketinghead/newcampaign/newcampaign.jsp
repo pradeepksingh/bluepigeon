@@ -230,6 +230,7 @@ Date date = new Date();
   				 								<div class="col-sm-8" id="selectProjects">
   				 	 								<select id="project_ids" name="project_ids[]" multiple="multiple"></select>
   				 								</div>
+  				 								<div class="messageContainer"></div>
 	  										</div>
 	  									</div>
 	  									<div class="col-sm-6">
@@ -610,6 +611,13 @@ function getBuyerList(element){
                 validators: {
                     notEmpty: {
                         message: 'City Name is required and cannot be empty'
+                    }
+                }
+            },
+            'project_ids[]': {
+                validators: {
+                    notEmpty: {
+                        message: 'Project Name is required and cannot be empty'
                     }
                 }
             }
