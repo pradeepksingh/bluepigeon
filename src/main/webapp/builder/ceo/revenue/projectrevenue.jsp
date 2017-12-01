@@ -29,6 +29,7 @@
 	int projectId = 0;
 	List<EmployeeList> employeeLists = null;
 	Double totalRevenue = 0.0;
+	Double totalRevenue1 = 0.0;
 	//Double totalSaleValue = 0.0;
 	Long totalCampaign = (long)0;
 	//Long totalSoldInventory = (long)0;
@@ -73,7 +74,7 @@
 					city_size_list = cityDataList.size();
 				//	totalCampaign = new ProjectDAO().getTotalCampaignByEmpId(builder.getId());
 					totalPropertySold = new ProjectDAO().getTotalRevenues(builder);
-					//totalRevenue = totalPropertySold * totalInventorySold;
+					totalRevenue1 = totalPropertySold * totalInventorySold;
 					List<ProjectWiseData> projectWiseDatas2 = new BuilderDetailsDAO().getEmployeeBarGraphByProject(emp_id);
 					if(projectWiseDatas !=null){
 						for(ProjectWiseData projectWiseData : projectWiseDatas){
@@ -195,7 +196,7 @@
                                <h3 class="box-title">Total Revenue (Rs in cr)</h3>
                                  <ul class="list-inline two-part">
                                   <li><i class="ti-wallet"></i></li>
-                                  <li class="text-right"><span class="counter"><%out.print(Math.round(totalRevenue)); %></span></li>
+                                  <li class="text-right"><span class="counter"><%out.print(Math.round(totalRevenue1)); %></span></li>
                                  </ul>
                              </div>
 		                </div>

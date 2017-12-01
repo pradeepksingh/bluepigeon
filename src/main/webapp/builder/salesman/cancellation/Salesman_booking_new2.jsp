@@ -49,10 +49,9 @@
  	String image  = ""; 
  	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>(); 
  	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList(); 
- 	if (request.getParameterMap().containsKey("project_id")) {
- 		project_id = Integer.parseInt(request.getParameter("project_id")); 
- 	}
- 	projectList = new ProjectDAO().getBuilderActiveProjectById(project_id);
+ 	
+ 	
+ 	
 	
  	session = request.getSession(false); 
 	
@@ -65,6 +64,10 @@
  			p_user_id = builder.getBuilder().getId(); 
  			emp_id = builder.getId();
  			access_id = builder.getBuilderEmployeeAccessType().getId(); 
+ 			try{
+ 			if (request.getParameterMap().containsKey("project_id")) {
+ 		 		project_id = Integer.parseInt(request.getParameter("project_id")); 
+ 		 		projectList = new ProjectDAO().getBuilderActiveProjectById(project_id);
  			//buildingList =  new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
  			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
  			building_id = builderBuildingList.get(0).getId(); 
@@ -88,7 +91,11 @@
 					floor_id = floorList.get(0).getId();
 					floor_size_list = floorList.size(); 
  				} 
+ 			}
  			} 
+ 			}catch(Exception e){
+ 				
+ 			}
  		} 
  	} 
  %>
