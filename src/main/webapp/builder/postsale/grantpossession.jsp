@@ -1,4 +1,4 @@
-﻿<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
 <%@page import="org.bluepigeon.admin.data.ProjectData"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -38,39 +38,33 @@
 		
    }
 %>
+
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" sizes="16x16"  href="../plugins/images/favicon.png">
     <title>Postsale GRANT POSSESSION</title>
-
-    <!-- Favicon-->
-    <link rel="icon" href="../favicon.ico" type="image/x-icon">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-
-    <!-- Bootstrap Core Css -->
-    <link href="../css/postsaleDocbootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Core CSS -->
+    <link href="../bootstrap/dist/css/newbootstrap.min.css" rel="stylesheet">
     <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
     <!-- Menu CSS -->
     <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/newstyle.css" rel="stylesheet">
     <link href="../css/common.css" rel="stylesheet">
-      <link href="../css/jquery.multiselect.css" rel="stylesheet">
-    <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/postsaleagreement.css">
-    <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
-    <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap-datetimepicker.min.css" />
+    <link href="../css/jquery.multiselect.css" rel="stylesheet">
+     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
+     <link rel="stylesheet" type="text/css" href="../css/bootstrap-datetimepicker.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-datetimepicker.css" />
+    <!-- color CSS -->
+    <link rel="stylesheet" type="text/css" href="../css/grantpossession.css">
     <!-- jQuery -->
-    <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+       <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
     <script type="text/javascript" src="../js/selectize.min.js"></script>
     <script src="../js/jquery.form.js"></script>
@@ -79,14 +73,6 @@
     <script src="../js/bootstrap-datepicker.min.js"></script>
     <script src="../js/bootstrap-datetimepicker.js"></script>
     <script src="../js/bootstrap-datetimepicker.min.js"></script>
-    <!-- Custom Css -->
-    <link href="../css/PostalSale_Aggrement.css" rel="stylesheet">
-
-    <!-- Custom Css -->
-<!--     <link href="../../css/Postsale_Passession.css" rel="stylesheet"> -->
-
-    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
-<!--     <link href="../../css/themes/all-themes.css" rel="stylesheet" /> -->
 </head>
 
 <body class="fix-sidebar">
@@ -96,146 +82,130 @@
     </div>
     <div id="wrapper">
         <!-- Top Navigation -->
-        <div id="header">
-        <%@include file="../partial/header.jsp"%>
+         <div id="header">
+         <%@include file="../partial/header.jsp"%>
         </div>
         <!-- End Top Navigation -->
         <!-- Left navbar-header -->
         <div id="sidebar1"> 
-        <%@include file="../partial/sidebar.jsp"%>
+        	<%@include file="../partial/sidebar.jsp"%>
         </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
-        <div id="page-wrapper">
-    		<section class="content" style="margin-top:60px;">
-        <div class="container-fluid">
-           
-              <h3 style="font-weight:lighter"> GRANT POSSESSION</h3> 
-            <!-- Color Pickers -->
-              
-            <!-- #END# Color Pickers -->
-            <!-- File Upload | Drag & Drop OR With Click & Choose -->
-            <div class="row clearfix">
-				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-					<form class="addlead1" name="addpossession" id="addpossession" action="" method="post" enctype="multipart/form-data">
-	                    <div class="card">
-	                        <div class="header">
-	                            <h2 style="color: #24bcd3;margin-left: 8px;">
-	                                POSSESSION
-	                            </h2>
-								<div class="row clearfix" style="margin-top:20px; border-bottom:2px solid #f1f1f1">
-									<div class="col-md-6">
-	                                    <div class="input-group input-group-lg">
-	                                        <span class="input-group-addon"style="width: 0%;">
-	                                            <label for="ig_checkbox">DATE</label>
-	                                        </span>
-	                                        <div class="form-line">
-	                                        	<div>
-	                                            	<input type="text" id="pdate" name="pdate" class="datepicker form-control form-control1" placeholder="">
-	                                            </div>
-	                                            <div class="messageContainer"></div> 
-	                                        </div>
-	                                    </div>
-	                                </div>
-					      			<div class="col-md-6">
-	                                    <div class="input-group input-group-lg">
-	                                        <span class="input-group-addon" style="width: 0%;">
-	                                            <label for="ig_checkbox">TIME</label>
-	                                        </span>
-	                                        <div class="form-line">
-	                                        	<div>
-	                                            	<input type="text" id="ptime" name="ptime" class="timepicker form-control form-control1"  placeholder="">
-	                                            </div>
-	                                            <div class="messageContainer"></div> 
-	                                        </div>
-	                                    </div>
-	                                </div>
-									<div class="col-md-4"></div>
-									<div class="col-md-4">
-										<div class="input-group input-group-lg">
-	                                        <span class="input-group-addon" style="width: 27%;">
-	                                            <label for="ig_checkbox">Upload Document</label>
-	                                        </span>
-	                                        <div class="form-line">
-	                                             <div class="file-upload">
-											  		<div class="file-select">
-														<div class="file-select-button" id="fileName">Choose File</div>
-														<p class="file-select-name" id="filepossession">No file chosen...</p>
-														<input type="file" name="doc_url[]" onchange="getPossessionFileData(this);" id="doc_url">
-													</div>
-												</div>
-	                                        </div>
-	                                    </div>
-									 </div>
-									 <div class="col-md-12"></div>
+        <div id="page-wrapper" style="min-height: 238px;">
+           <div class="container-fluid addlead">
+               <!-- /.row -->
+	            <h1>GRANT POSSESSION</h1>
+               <!-- row -->
+               <div class="white-box">
+               <div class="bg11">
+                  <form class="addlead1" name="addpossession" id="addpossession" action="" method="post" enctype="multipart/form-data">
+                    <div class="spacer">
+                      <h3>POSSESSION</h3>
+                   </div>
+                    <div class="row">
+                     <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
+                         <div class="form-group row">
+							<label for="example-text-input" class="col-sm-2 col-form-label"> DATE</label>
+							  <div class="col-sm-10">
+							  	<div>
+								  <input type="text" id="pdate" name="pdate" class="datepicker form-control form-control1" placeholder="">
+			                      </div>
+			                      <div class="messageContainer"></div>
+							  </div>
+						  </div>
+					</div>
+                    <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
+                       <div class="form-group row">
+							<label for="example-text-input" class="col-sm-2 col-form-label">TIME</label>
+							  <div class="col-sm-10">
+								 <input type="text" id="ptime" name="ptime" class="timepicker form-control form-control1"  placeholder="">
+							  </div>
+						  </div>
+						</div>
+				   </div>
+				    <div class="row center">
+				       <div class="form-group row spacer1">
+							<label for="example-search-input" class="col-sm-5 col-form-label">Upload Document</label>
+							<div class="col-sm-7">
+								<div>
+									<div class="file-upload">
+										<p class="file-name" id="filepossession"></p>
+									    <label for="doc_url" class="btn">Choose File</label>
+									   	<input type="file"  name="doc_url[]"  onchange="getPossessionFileData(this)" id="doc_url">
+									</div>
 								</div>
-								<div class="row clearfix" style="margin-top:20px">
+								<div class="messageContainer"></div>
+							</div>
+					   </div>
+				    </div>
+				      <hr>
+				 <div class="spacer">
+                   <h3>Add Recipients</h3>
+                 </div>
+				   <div class="row">
+                     <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
+                         <div class="form-group row">
+							<label for="example-text-input" class="col-sm-4 col-form-label"> Project Name</label>
+							<div class="col-sm-8">
+								<div id="selectproject">
+									<select  id="filer_project_ids" name="filter_project_ids[]" multiple>
+			                        	<%if(project_list != null){
+			                        		for(ProjectData projectData : project_list){
+			                        		%>
+			                        	<option value="<%out.print(projectData.getId()); %>"><%out.print(projectData.getName()); %></option>
+			                        	<%} }%>
+			                      	</select>
+			                   </div>
+			                   <div class="messageContainer"></div>
+							</div>
+						</div>
+					</div>
+                    <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
+                      	<label for="example-text-input" class="col-sm-4 col-form-label"> Building Name</label>
+                      	 <div class="col-sm-8">
+                      		<div id="selectbuilding">
+							 
+								  <select id="filer_building_ids" name="filter_building_ids[]" multiple></select>
+							 </div>
+							 <div class="messageContainer"></div> 
+						</div>
+				   </div>
+				   </div>
+				    <div class="row center">
+				       <div class="form-group row spacer1">
+							  <label for="example-search-input" class="col-sm-5 col-form-label">Flat No. &#38; Buyer Name</label>
+								<div class="col-sm-7">
 									<div>
-								  		<h2 style="color: #24bcd3;margin-left: 8px;">
-	                                		ADD RECIPITENT
-	                            		</h2>
-									</div>
-					               	<ul class="col-md-6" style="margin-top:15px">
-	                                    <li class="input-group " id="selectproject">
-	                                        <span class="input-group-addon">
-	                                            <label for="ig_checkbox">Project Name:</label>
-	                                        </span>
-	                                        <select id="filer_project_ids" name="filer_project_ids[]" class="form-control show-tick form-control1" multiple >
-											<%if(project_list != null){
-						                    	for(ProjectData projectData : project_list){
-						                    %>
-						                    	<option value="<%out.print(projectData.getId()); %>"><%out.print(projectData.getName()); %></option>
-						                    <%} }%>
-											</select>
-	                                    </li>
-	                                    <div class="messageContainer"></div> 
-	                                </ul>
-					     			<ul class="col-md-6" style="margin-top:15px">
-	                                    <li class="input-group " id="selectbuilding">
-	                                        <span class="input-group-addon">
-	                                            <label for="ig_checkbox">Building Name:</label>
-	                                        </span>
-	                                        <select id="filer_building_ids" name="filer_building_ids[]" class="form-control show-tick form-control1" multiple></select>
-	                                    </li>
-	                                    <div class="messageContainer"></div> 
-	                                </ul>
-									<div class="row clearfix">
-										<div class="col-md-3"></div>
-									 	<div class="col-md-6">
-	                                    	<div class="input-group input-group-lg" id="selectbuyer">
-	                                        	<span class="input-group-addon">
-	                                           		<label for="ig_checkbox">Flat No. & Buyer Name</label>
-	                                        	</span>
-	                                        	<div class="">
-	                                           		<select id="flat_buyer_ids" name="flat_buyer_ids[]" class="form-control show-tick form-control1" multiple></select>
-	                                        	</div>
-	                                    	</div>
-											<br/>
-											<div class="button-demo">
-	                                			<button type="submit" class="btn btn-success  waves-effect" style="font-size: 22px;margin-left: 100px;">submit</button>
-	                            			</div>
-	                                	</div>
-									 	<div class="col-md-3"></div>
-									</div>
-								 </div>
-	                      	</div>
-	                	</div>
-	                </form>
-				</div>
-         	</div>
+									 <select id="flat_buyer_ids" name="flat_buyer_ids[]" class="form-control show-tick form-control1" multiple></select>
+								 	</div>
+								 	<div class="messageContainer"></div>
+							  </div>
+						   </div>
+				      </div>
+					   <div class="row">
+						   <div class="center">
+					  	     <button type="submit" class="btn11">Save</button>
+					  	  </div>
+						</div>
+					</form>
+                  </div>
+               </div>
+            </div>
+          </div>
         </div>
-    </section>
-</div>
-</div>
-<div id="sidebar1"> 
-	<%@include file="../partial/footer.jsp"%>
-</div> 
-</body>
+    <!-- /.container-fluid -->
+   <div id="sidebar1"> 
+    	<%@include file="../partial/footer.jsp"%>
+    </div>
+  </body>
 </html>
 <script>
 $('#pdate').datepicker({
 	autoclose:true,
-	format: "dd MM yyyy"
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#addpossession').data('bootstrapValidator').revalidateField('pdate');
 });
 
 $('#ptime').datetimepicker({
@@ -319,10 +289,18 @@ $('#addpossession').bootstrapValidator({
                 }
             }
         },
-        adate: {
-            validators: {
-                notEmpty: {
-                    message: 'Please select date and is required.'
+        pdate: {
+        	validators: {
+                callback: {
+                    message: 'Wrong agreemnet Date',
+                    callback: function (value, validator) {
+                        var m = new moment(value, 'DD MMM YYYY', true);
+                        if (!m.isValid()) {
+                            return false;
+                        } else {
+                        	return true;
+                        }
+                    }
                 }
             }
         },

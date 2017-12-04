@@ -5,6 +5,13 @@
 <c:set var="req" value="${pageContext.request}" />
 <c:set var="url">${req.requestURL}</c:set>
 <c:set var="uri" value="${req.requestURI}" />
+<%@page import="org.bluepigeon.admin.dao.ProjectDAO"%>
+<%@page import="org.bluepigeon.admin.data.ProjectData"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri" value="${req.requestURI}" />
 <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 <%@page import="org.bluepigeon.admin.model.Builder"%>
 <%@page import="org.bluepigeon.admin.dao.ProjectDetailsDAO"%>
@@ -38,39 +45,33 @@
 		
    }
 %>
+
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>PostalSale_Aggrement</title>
-
-    <!-- Favicon-->
-    <link rel="icon" href="../favicon.ico" type="image/x-icon">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-
-    <!-- Bootstrap Core Css -->
-    <link href="../css/postsaleDocbootstrap.min.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" sizes="16x16"  href="../plugins/images/favicon.png">
+    <title>PostalSale Aggrement</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="../bootstrap/dist/css/newbootstrap.min.css" rel="stylesheet">
     <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
     <!-- Menu CSS -->
     <link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/newstyle.css" rel="stylesheet">
     <link href="../css/common.css" rel="stylesheet">
-      <link href="../css/jquery.multiselect.css" rel="stylesheet">
-    <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/postsaleagreement.css">
-    <link href="../plugins/bower_components/custom-select/custom-select.css" rel="stylesheet" type="text/css" />
-    <link href="../plugins/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap-datetimepicker.min.css" />
+    <link href="../css/jquery.multiselect.css" rel="stylesheet">
+     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
+     <link rel="stylesheet" type="text/css" href="../css/bootstrap-datetimepicker.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-datetimepicker.css" />
+    <!-- color CSS -->
+    <link rel="stylesheet" type="text/css" href="../css/agreement.css">
     <!-- jQuery -->
-    <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+     <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
     <script type="text/javascript" src="../js/selectize.min.js"></script>
     <script src="../js/jquery.form.js"></script>
@@ -79,11 +80,15 @@
     <script src="../js/bootstrap-datepicker.min.js"></script>
     <script src="../js/bootstrap-datetimepicker.js"></script>
     <script src="../js/bootstrap-datetimepicker.min.js"></script>
-    <!-- Custom Css -->
-    <link href="../css/PostalSale_Aggrement.css" rel="stylesheet">
-
-    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
-<!--     <link href="../../css/themes/all-themes.css" rel="stylesheet" /> -->
+    <style>
+    .selectize-dropdown, .selectize-input, .selectize-input input {
+     font-size:17px;
+    }
+    .selectize-input, .selectize-control.single .selectize-input.input-active {
+    background: #efefef;
+    background-color:#fafafa;
+    }
+    </style>
 </head>
 
 <body class="fix-sidebar">
@@ -93,143 +98,131 @@
     </div>
     <div id="wrapper">
         <!-- Top Navigation -->
-        <div id="header">
-        <%@include file="../partial/header.jsp"%>
+         <div id="header">
+         <%@include file="../partial/header.jsp"%>
         </div>
         <!-- End Top Navigation -->
         <!-- Left navbar-header -->
         <div id="sidebar1"> 
-        <%@include file="../partial/sidebar.jsp"%>
+        	<%@include file="../partial/sidebar.jsp"%>
         </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
-        <div id="page-wrapper">
-    		<section class="content" style="margin-top:60px;">
-        		<div class="container-fluid">
-               		<h3 style="font-weight: lighter;">AGGREMENT</h3>
-            			<div class="row clearfix">
-					 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-					 			<form class="addlead1" name="addagreement" id="addagreement" action="" method="post" enctype="multipart/form-data">
-                    				<div class="card" style="border: 2px solid #24bcd3;">
-                        				<div class="header">
-                            				<h2 style="color: #24bcd3;margin-left: 8px;">
-                                				SCHEDULE AGREEMENT
-                            				</h2>
-                    						<div class="row clearfix" style="margin-top:20px; border-bottom:2px solid #f1f1f1">
-				     							<div class="col-md-6">
-                                    				<div class="input-group input-group-lg">
-                                        				<span class="input-group-addon">
-                                            				<label for="ig_checkbox" style="float: right;">DATE:</label>
-                                        				</span>
-                                        				<div class="form-line">
-                                            				<input type="text" id="adate" name="adate" class="datepicker form-control  form-control1" placeholder="">
-                                        				</div>
-                                    				</div>
-                                				</div>
-				      							<div class="col-md-6">
-                                    				<div class="input-group input-group-lg">
-                                        				<span class="input-group-addon">
-                                            				<label for="ig_checkbox" style="float: right;">TIME</label>
-                                        				</span>
-                                        				<div class="">
-                                        					<div>
-                                            					<input type="text" id="atime" name="atime" class="timepicker form-control  form-control1" placeholder="">
-                                            				</div>
-                                            				<div class="messageContainer"></div> 
-                                        				</div>
-                                    				</div>
-                                				</div>
-								 				<div class="col-md-3"></div>
-								 				<div class="col-md-6">
-                                    				<div class="input-group input-group-lg">
-                                        				<span class="input-group-addon">
-                                            				<label for="ig_checkbox">Upload Document:</label>
-                                        				</span>
-                                       					<div class="form-line">
-                                            				<div class="file-upload">
-										  						<div class="file-select">
-																	<div class="file-select-button" id="fileName">Choose File</div>
-																	<p class="file-select-name" id="fileagreement">No file chosen...</p>
-																	<input type="file" name="doc_url[]" onchange="getAgreementFileData(this);" id="doc_url">
-																</div>
-															</div>
-                                        				</div>
-                                    				</div>
-                                				</div>
-								 				<div class="col-md-3"></div>
-							 				</div>
-							 				<div class="row clearfix" style="margin-top:20px">
-							 					<div>
-							  						<h2 style="color: #24bcd3;margin-left: 18px;">
-                               	 						ADD RECIPITENT
-                            						</h2>
-												</div>
-				      							<ul class="col-md-6" style="margin-top:15px">
-                                    				<li class="input-group " id="selectproject">
-                                        				<span class="input-group-addon">
-                                            				<label for="ig_checkbox">Project Name:</label>
-                                        				</span>
-                                           				<select id="filer_project_ids" name="filer_project_ids[]" class="form-control show-tick" multiple class="form-control1">
-														<%if(project_list != null){
-					                        				for(ProjectData projectData : project_list){
-					                        			%>
-					                        				<option value="<%out.print(projectData.getId()); %>"><%out.print(projectData.getName()); %></option>
-					                        			<%} }%>
-														</select>
-                                    				</li>
-                                				</ul>
-				     							<ul class="col-md-6" style="margin-top:15px">
-                                    				<li class="input-group  form-line" id="selectbuilding">
-                                       	 				<span class="input-group-addon">
-                                            				<label for="ig_checkbox">Building Name:</label>
-                                        				</span>
-                                           				<select id="filer_building_ids" name="filer_building_ids[]" class="form-control show-tick" multiple class="form-control1"></select>
-                                    				</li>
-                                    				<div class="messageContainer"></div> 
-                                				</ul>
-												<div class="row clearfix">
-								 					<div class="col-md-3"></div>
-							 						<div class="col-md-6">
-                                   						<div class="input-group input-group-lg">
-                                       						<span class="input-group-addon">
-                                           						<label for="ig_checkbox">Flat No. & Buyer Name</label>
-                                       						</span>
-                                       						<div class="">
-                                       							<div>
-                                          							<select id="flat_buyer_ids" name="flat_buyer_ids" class="form-control1"></select>
-                                       							</div>
-                                       						</div>
-                                   						</div>
-														<br/>
-									 					<div class="button-demo">
-                               								<button type="submit" class="btn btn-success  waves-effect" style="font-size: 22px;margin-left: 100px;">submit</button>
-                           								</div>
-                               						</div>
-							 						<div class="col-md-3"></div>
-												</div>
-                                			</div>
-							 			</div>
-                      				</div>
-								</form>
-                			</div>
-				   		</div>
-         			</div>
-    			</section>
-			</div>
-		</div>
-<div id="sidebar1"> 
-	<%@include file="../partial/footer.jsp"%>
-</div> 
-</body>
+        <div id="page-wrapper" style="min-height: 238px;">
+           <div class="container-fluid addlead">
+               <!-- /.row -->
+	            <h1>AGREEMENT</h1>
+               <!-- row -->
+               <div class="white-box">
+               <div class="bg11">
+                  <form class="addlead1" name="addagreement" id="addagreement" action="" method="post" enctype="multipart/form-data">
+                    <div class="spacer">
+                      <h3>SCHEDULE AGREEMENT</h3>
+                   </div>
+                    <div class="row">
+                     <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
+                         <div class="form-group row">
+							<label for="example-text-input" class="col-sm-2 col-form-label"> Date:</label>
+							  <div class="col-sm-10">
+							  	<div>
+								 	<input type="text" id="adate" name="adate" class="datepicker form-control  form-control1" placeholder="">
+			                      </div>
+			                      <div class="messageContainer"></div>
+							  </div>
+						  </div>
+					</div>
+                    <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
+                       <div class="form-group row">
+							<label for="example-text-input" class="col-sm-2 col-form-label"> TIME</label>
+							  <div class="col-sm-10">
+								<input type="text" id="atime" name="atime" class="timepicker form-control  form-control1" placeholder="">
+							  </div>
+						  </div>
+						</div>
+				   </div>
+				    <div class="row center">
+				       <div class="form-group row spacer1">
+							<label for="example-search-input" class="col-sm-5 col-form-label">Upload Document</label>
+							<div class="col-sm-7">
+								<div>
+									<div class="file-upload">
+										<p class="file-name" id="fileagreement"></p>
+									    <label for="doc_url" class="btn">Choose File</label>
+									   	<input type="file"  name="doc_url[]"  onchange="getAgreementFileData(this);" id="doc_url">
+									</div>
+								</div>
+								<div class="messageContainer"></div>
+							</div>
+					   </div>
+				    </div>
+				      <hr>
+				 <div class="spacer">
+                   <h3>Add Recipients</h3>
+                 </div>
+				   <div class="row">
+                     <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
+                         <div class="form-group row">
+							<label for="example-text-input" class="col-sm-4 col-form-label"> Project Name</label>
+							<div class="col-sm-8">
+								<div id="selectproject">
+									<select  id="filer_project_ids" name="filter_project_ids[]" multiple>
+			                        	<%if(project_list != null){
+			                        		for(ProjectData projectData : project_list){
+			                        		%>
+			                        	<option value="<%out.print(projectData.getId()); %>"><%out.print(projectData.getName()); %></option>
+			                        	<%} }%>
+			                      	</select>
+			                   </div>
+			                   <div class="messageContainer"></div>
+							</div>
+						</div>
+					</div>
+                    <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
+                      	<label for="example-text-input" class="col-sm-4 col-form-label"> Building Name</label>
+                      	  <div class="col-sm-8">
+                      		<div id="selectbuilding">
+							
+								  <select id="filer_building_ids" name="filter_building_ids[]" multiple></select>
+							 </div>
+							 <div class="messageContainer"></div> 
+						</div>
+				   </div>
+				   </div>
+				    <div class="row left">
+				       <div class="form-group row spacer1">
+							  <label for="example-search-input" class="col-sm-5 col-form-label">Flat No. &#38; Buyer Name</label>
+								<div class="col-sm-7">
+									<div>
+									  <select id="flat_buyer_ids" name="flat_buyer_ids"></select>
+								 	</div>
+								 	<div class="messageContainer"></div>
+							  </div>
+						   </div>
+				      </div>
+					   <div class="row">
+						   <div class="center">
+					  	     <button type="submit" class="btn11">submit</button>
+					  	  </div>
+						</div>
+					</form>
+                  </div>
+               </div>
+            </div>
+          </div>
+        </div>
+    <!-- /.container-fluid -->
+   <div id="sidebar1"> 
+    	<%@include file="../partial/footer.jsp"%>
+    </div>
+  </body>
 </html>
 <script>
 $('#adate').datepicker({
 	autoclose:true,
-	format: "dd MM yyyy"
+	format: "dd M yyyy"
 }).on('change',function(e){
 	 $('#addagreement').data('bootstrapValidator').revalidateField('adate');
 });
-
 $('#atime').datetimepicker({
     format: 'LT',
     stepping: 1
@@ -426,5 +419,6 @@ function getAgreementFileData(myFile){
 	   $("#fileagreement").empty();
 	   $("#fileagreement").html(filename);
 }
+
 
 </script>
