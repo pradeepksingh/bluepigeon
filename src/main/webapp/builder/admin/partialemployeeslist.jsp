@@ -41,9 +41,13 @@
    	if (request.getParameterMap().containsKey("builder_id")) {
    		builderId = Integer.parseInt(request.getParameter("builder_id"));
    		if(builderId != 0) {
-   			roleId = Integer.parseInt(request.getParameter("role_id"));
-   			keyword = request.getParameter("keyword");
-   			employeeLists = new ProjectDAO().getBuilderEmployeeList(builderId,roleId,keyword);
+   			try{
+	   			roleId = Integer.parseInt(request.getParameter("role_id"));
+	   			keyword = request.getParameter("keyword");
+	   			employeeLists = new ProjectDAO().getBuilderEmployeeList(builderId,roleId,keyword);
+   			}catch(Exception e){
+   				
+   			}
    		}
    	}
    
@@ -60,7 +64,7 @@
             <img src="../plugins/images/Untitled-1.png" alt="User Image" class="custom-img">
             <%} %>
 			<p><b><%out.print(employeeList.getName()); %></b></p>
-			<p class="p-custom"><%out.print(employeeList.getAccess()); %></p>
+			<div style="font-size:17px;"><%out.print(employeeList.getAccess()); %></div>
   			<br>
 		</div>
 		<div class="row custom-row user-row">

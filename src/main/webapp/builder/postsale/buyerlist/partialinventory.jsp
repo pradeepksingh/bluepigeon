@@ -12,9 +12,13 @@ List<BuilderFlatList> flats = null;
 if (request.getParameterMap().containsKey("project_id")) {
 	projectId = Integer.parseInt(request.getParameter("project_id"));
 	if(projectId != 0) {
-		building_id = Integer.parseInt(request.getParameter("building_id"));
-		keyword = request.getParameter("keyword");
-		flats = new ProjectDAO().getProjectFlatListByBuilder(projectId, building_id, keyword);
+		try{
+			building_id = Integer.parseInt(request.getParameter("building_id"));
+			keyword = request.getParameter("keyword");
+			flats = new ProjectDAO().getProjectFlatListByBuilder(projectId, building_id, keyword);
+		}catch(Exception e){
+			
+		}
 	}
 }
 SimpleDateFormat dt1 = new SimpleDateFormat("dd MMM yyyy");
