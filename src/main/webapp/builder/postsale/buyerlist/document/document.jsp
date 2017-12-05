@@ -318,7 +318,7 @@ width:50%;
 							  				%>
 							  				<ul>
 							   					<li  class="col-lg-4 col-xs-12" style="list-style: none;">
-							    					<a href="javascript:deleteDemandDocument(<%if(buyerUploadDocuments2.getPaymentId() > 0){out.print(buyerUploadDocuments2.getPaymentId());}%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
+							    					<a href="javascript:deleteDemandDocument(<%if(buyerUploadDocuments2.getPaymentId() > 0){out.print(buyerUploadDocuments2.getPaymentId()+","+buyerUploadDocuments2.getId());}%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
 													<br/>
 													<img src="../../../images/docpdf.png" alt="User" width="150px"/>
 													<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;"/></a>
@@ -454,10 +454,12 @@ width:50%;
 </body>
 </html>
 <div id="newmessage" class="modal col-lg-7" >
-	<span  class="close" title="Close Modal">×</span>
+	<
 	<form class="modal-content animate" action="" method="post" id="addinbox" name="addinbox"  enctype="multipart/form-data" >
 		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(empId);%>"/>
+		
 		<div class="col-lg-12" style="background:white" >
+		<span class="pull-right" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
 			<div class="row clearfix" >
 				<div class="col-lg-4" style="margin-top:17px">
 					<label><b>To</b></label>
@@ -647,23 +649,99 @@ width:50%;
 	</form>
 </div>
 <div id="genratedemandlettermodel" class="modal col-lg-7" >
-	<span class="close closegenerate" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
+	<span class="close closedemand" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
 	<form class="modal-content animate" action="" id="genratedemanddocform" name="genratedemanddocform"  method="post" enctype="multipart/form-data">
 	<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
+	<input type="hidden" name="emp_id" id="emp_id" value="<%out.print(empId); %>"/>
 	<input type="hidden" name="doc_id[]" value="0" />
 	<input type="hidden" name="doc_type" id="doc_type" value="2"/>
 		<div class="col-lg-12" style="background:white" >
 			<div class="row clearfix" >
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
-					<label><b>Document Name</b></label>
+					<label><b>Payment schedule *</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter doc name" name="doc_name[]"  required>
+						<select id="gpayment_id" name="gpayment_id" class="col-sm-6" style="height:40px">
+							<option value="">Select Payment Schedule</option>
+							<%if(paymentList!=null){ 
+							 for(BuyerPayment buyerPayment : paymentList){
+							%>
+							<option value="<%out.print(buyerPayment.getId());%>"><%out.print(buyerPayment.getMilestone()); %></option>
+							<%}}%>
+						</select>
 					</div>
 					<div class="messageContainer"></div>
                 </div>
-				<button type="submit" class="signupbtn submitgenerate">Submit</button>
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
+					<label><b>Previous demand</b></label>
+				</div>
+				<div class="col-lg-4">
+					<div>
+						<input type="text" placeholder="Previous demand" readonly name="gprevious_demand" id="gprevious_demand" style="margin-left:-9px;" required>
+					</div>
+                </div>
+			</div>
+			<div class="row clearfix" >
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
+					<label><b>Current demand</b></label>
+				</div>
+				<div class="col-lg-6" style="margin: 9px;">
+					<input type="text" placeholder="Enter current demand" readonly name="gcurrent_demand" id="gcurrent_demand" style="margin-left:-9px;" required>
+                </div>
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
+					<label><b>Total Demand Value</b></label>
+				</div>
+				<div class="col-lg-6" style="margin: 9px;">
+					<input type="text" placeholder="total demand value"  readonly name="gtotal_demand_value" id="gtotal_demand_value" style="margin-left:-9px;" required>
+                </div>
+			</div>
+			<div class="row clearfix" >
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
+					<label><b>Demand name *</b></label>
+				</div>
+				<div class="col-lg-6" style="margin: 9px;">
+					<div>
+						<input type="text" placeholder="Enter demand name" name="gdemand_name" id="gdemand_name" style="margin-left:-9px;" required>
+					</div>
+					<div class="messageContainer"></div>
+                </div>
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
+					<label><b>Payment date *</b></label>
+				</div>
+				<div class="col-lg-6" style="margin: 9px;">
+					<div>
+						<input type="text" placeholder="Enter payment date" name="gpaymentdate" id="gpaymentdate" style="margin-left:-9px;" required>
+					</div>
+					<div class="messageContainer"></div>
+                </div>
+			</div>
+			<div class="row clearfix" >
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
+					<label><b>Remind every</b></label>
+				</div>
+				<div class="col-lg-6" style="margin: 9px;">
+					<div>
+						<select id="gremind_day" name="gremind_day" class="col-sm-6" style="height:40px;">
+								<option value="0">Select Remind days</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+						</select>
+					</div>
+					<div class="messageContainer"></div>
+                </div>
+                
+			</div>
+			<div class="row clearfix" >
+				<div class="col-sm-4"></div>
+				<div class="col-sm-6">
+					<button type="submit" class="signupbtn">GENERATE</button>
+				</div>
 			</div>
 		</div>
 	</form>
@@ -711,6 +789,10 @@ $('#paymentdate').datepicker({
 	format: "dd MM yyyy"
 });
 
+$('#gpaymentdate').datepicker({
+	autoclose:true,
+	format: "dd MM yyyy"
+});
 
 $("#payment_id").change(function(){
 	//alert("Hello"+$("#buyer_id").val()+" "+$("#payment_id").val());
@@ -741,6 +823,37 @@ $("#payment_id").change(function(){
 		}
 	}
 });
+
+$("#gpayment_id").change(function(){
+	//alert("Hello"+$("#buyer_id").val()+" "+$("#payment_id").val());
+	var current_value ="0";
+	var previous_value = "0";
+	if($("#gpayment_id").val() != ''){
+		$.post('${baseUrl}/webapi/buyer/payment/',{buyer_id : $("#buyer_id").val()},function(data){
+			 $(data).each(function(index){
+				 if(data[index].paid == false){
+					 if($("#gpayment_id").val() == data[index].id){
+						 current_value = parseInt(data[index].amount);
+					 }else{
+						 previous_value += parseInt(data[index].amount);
+					 }
+				 }
+			 });
+			 
+			 $("#gcurrent_demand").val(Math.round(current_value));
+			 $("#gprevious_demand").val(Math.round(previous_value));
+			 var total = parseInt($("#gprevious_demand").val())+parseInt($("#gcurrent_demand").val());
+				$("#gtotal_demand_value").val(total);
+		},'json');
+	}else{
+		if($("#gpayment_id").val() == ''){
+			$("#gcurrent_demand").val('');
+			$("#gprevious_demand").val('');
+			$("#gtotal_demand_value").val('');
+		}
+	}
+});
+
 // Get the modal
 function openGeneralDoc(){
 	$("#generaldoc").modal('show');
@@ -838,8 +951,8 @@ function autogenerateDemandLetter(){
 	}).on('success.form.bv', function(event,data) {
 			// Prevent form submission
 		event.preventDefault();
-			alert("Success msg");
-	//	saveAutoGenerateDemandDoc();
+		//	alert("Success msg");
+		saveAutoGenerateDemandDoc();
 		
 	}).on('error.form.bv',function(event,data){
 		event.preventDefault();
@@ -1158,11 +1271,11 @@ function getInboxMsg(id){
 	var replymsg = '';
 	ajaxindicatorstart("Loading...");
 	$.post("${baseUrl}/webapi/builder/inbox/reply",{id: id},function(data){
-		replymsg = '<span onclick="document.getElementById(message).style.display=none" class="close" title="Close Modal">×</span>'
-				+'<form class="modal-content animate" action="" method="post" id="addnewreply" name="addnewreply"  enctype="multipart/form-data">'
+		replymsg = '<form class="modal-content animate" action="" method="post" id="addnewreply" name="addnewreply"  enctype="multipart/form-data">'
 				+'<input type="hidden" id="emp_id" name="emp_id" value="'+data.empId+'" />'
 		   		+'<input type="hidden" id="inbox_id" name="inbox_id" value="'+id+'" />'
 		   		+'<div class="col-lg-12" style="background:white" >'
+		   		+'<span class="pull-right" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>'
 		 		+'<div class="row clearfix" >'
 		 		+'<div class="col-lg-4" style="margin-top:17px">'
 		 		+'<label><b>To</b></label>'
@@ -1306,11 +1419,11 @@ function deleteGenDocument(id) {
  		});
  	}
  }
-function deleteDemandDocument(id) {
+function deleteDemandDocument(id,docid) {
  	var flag = confirm("Are you sure ? You want to delete this document ?");
  	if(flag) {
  		ajaxindicatorstart("Loading...");
- 		$.get("${baseUrl}/webapi/buyer/demanddoc/delete/"+id, { }, function(data){
+ 		$.get("${baseUrl}/webapi/buyer/demanddoc/delete/"+id+"/"+docid, { }, function(data){
  			alert(data.message);
  			if(data.status == 1) {
  				$.get('${baseUrl}/builder/postsale/buyerlist/document/partialdemanddoc.jsp?buyer_id=<% out.print(primary_buyer_id);%>',{},function(data) {
