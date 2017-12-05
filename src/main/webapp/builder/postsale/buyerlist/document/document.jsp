@@ -295,6 +295,7 @@ width:50%;
 								    					<a href="javascript:deleteGenDocument(<%out.print(buyerUploadDocuments2.getId());%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
 														<br/>
 														<img src="../../../images/docpdf.png" alt="User" width="150px"/>
+														<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;"/></a>
 														<br/><h5><% out.print(buyerUploadDocuments2.getName());%></h5>
 								   					</li>
 								   				</ul>
@@ -320,6 +321,7 @@ width:50%;
 							    					<a href="javascript:deleteDemandDocument(<%if(buyerUploadDocuments2.getPaymentId() > 0){out.print(buyerUploadDocuments2.getPaymentId());}%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
 													<br/>
 													<img src="../../../images/docpdf.png" alt="User" width="150px"/>
+													<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;"/></a>
 													<br/><h5><% out.print(buyerUploadDocuments2.getName());%></h5>
 							   					</li>
 							   				</ul>
@@ -350,6 +352,7 @@ width:50%;
 								    					<a href="javascript:deletePaymentDocument(<%out.print(buyerUploadDocuments2.getId());%>)"><img src="../../../images/error.png" alt="User" width="35px"style="margin-left:108px;" /></a>
 														<br/>
 														<img src="../../../images/docpdf.png" alt="User" width="150px"/>
+														<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;"/></a>
 														<br/><h5><%out.print(buyerUploadDocuments2.getName());%></h5>
 								   					</li>
 								   				</ul>
@@ -548,7 +551,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<select id="payment_id" name="payment_id" class="col-sm-6">
+						<select id="payment_id" name="payment_id" class="col-sm-6" style="height:40px">
 							<option value="">Select Payment Schedule</option>
 							<%if(paymentList!=null){ 
 							 for(BuyerPayment buyerPayment : paymentList){
@@ -608,7 +611,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<select id="remind_day" name="remind_day" class="col-sm-6">
+						<select id="remind_day" name="remind_day" class="col-sm-6" style="height:40px;">
 								<option value="0">Select Remind days</option>
 								<option value="1">1</option>
 								<option value="2">2</option>

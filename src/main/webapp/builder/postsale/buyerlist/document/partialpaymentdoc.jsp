@@ -39,6 +39,7 @@
 		<a href="javascript:deletePaymentDocument(<%out.print(buyerUploadDocuments2.getId());%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
 		<br/>
 		<img src="../../../images/docpdf.png" alt="User" width="150px"/>
+		<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;"/></a>
 		<br/><h5><% out.print(buyerUploadDocuments2.getName());%></h5>
 	</li>
 </ul>
