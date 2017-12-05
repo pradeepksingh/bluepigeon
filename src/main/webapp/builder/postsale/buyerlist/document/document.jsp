@@ -799,6 +799,7 @@ $("#payment_id").change(function(){
 	var current_value ="0";
 	var previous_value = "0";
 	if($("#payment_id").val() != ''){
+		ajaxindicatorstart("Loading...");
 		$.post('${baseUrl}/webapi/buyer/payment/',{buyer_id : $("#buyer_id").val()},function(data){
 			 $(data).each(function(index){
 				 if(data[index].paid == false){
@@ -814,6 +815,7 @@ $("#payment_id").change(function(){
 			 $("#previous_demand").val(Math.round(previous_value));
 			 var total = parseInt($("#previous_demand").val())+parseInt($("#current_demand").val());
 				$("#total_demand_value").val(total);
+				ajaxindicatorstop();
 		},'json');
 	}else{
 		if($("#payment_id").val() == ''){
@@ -829,6 +831,7 @@ $("#gpayment_id").change(function(){
 	var current_value ="0";
 	var previous_value = "0";
 	if($("#gpayment_id").val() != ''){
+		ajaxindicatorstart("Loading...");
 		$.post('${baseUrl}/webapi/buyer/payment/',{buyer_id : $("#buyer_id").val()},function(data){
 			 $(data).each(function(index){
 				 if(data[index].paid == false){
@@ -844,6 +847,7 @@ $("#gpayment_id").change(function(){
 			 $("#gprevious_demand").val(Math.round(previous_value));
 			 var total = parseInt($("#gprevious_demand").val())+parseInt($("#gcurrent_demand").val());
 				$("#gtotal_demand_value").val(total);
+				ajaxindicatorstop();
 		},'json');
 	}else{
 		if($("#gpayment_id").val() == ''){
@@ -1405,7 +1409,7 @@ function showReplyResponse(resp, statusText, xhr, $form){
 
 function deleteGenDocument(id) {
 
-	var flag = confirm("Are you sure ? You want to delete this document ?");
+	var flag = confirm("Are you sure, you want to delete this document ?");
  	if(flag) {
  		ajaxindicatorstart("Loading...");
  		$.get("${baseUrl}/webapi/buyer/gendoc/delete/"+id, { }, function(data){
@@ -1420,7 +1424,7 @@ function deleteGenDocument(id) {
  	}
  }
 function deleteDemandDocument(id,docid) {
- 	var flag = confirm("Are you sure ? You want to delete this document ?");
+ 	var flag = confirm("Are you sure, you want to delete this document ?");
  	if(flag) {
  		ajaxindicatorstart("Loading...");
  		$.get("${baseUrl}/webapi/buyer/demanddoc/delete/"+id+"/"+docid, { }, function(data){
@@ -1435,7 +1439,7 @@ function deleteDemandDocument(id,docid) {
  	}
 }
 function deletePaymentDocument(id) {
- 	var flag = confirm("Are you sure ? You want to delete this document ?");
+ 	var flag = confirm("Are you sure, you want to delete this document ?");
  	if(flag) {
  		ajaxindicatorstart("Loading...");
  		$.get("${baseUrl}/webapi/buyer/paymentdoc/delete/"+id, { }, function(data){
