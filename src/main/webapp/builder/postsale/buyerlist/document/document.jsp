@@ -84,7 +84,7 @@
     <title>POSTSALE Document</title>
 
     <!-- Favicon-->
-    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" href="../../../plugins/images/favicon.png" sizes="16x16">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -318,7 +318,7 @@ width:50%;
 							  				%>
 							  				<ul>
 							   					<li  class="col-lg-4 col-xs-12" style="list-style: none;">
-							    					<a href="javascript:deleteDemandDocument(<%if(buyerUploadDocuments2.getPaymentId() > 0){out.print(buyerUploadDocuments2.getPaymentId()+","+buyerUploadDocuments2.getId());}%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
+							    					<a href="javascript:deleteDemandDocument(<%if(buyerUploadDocuments2.getPaymentId() > 0 && buyerUploadDocuments2.getDemandId() > 0){out.print(buyerUploadDocuments2.getPaymentId()+","+buyerUploadDocuments2.getId()+","+buyerUploadDocuments2.getDemandId());}%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
 													<br/>
 													<img src="../../../images/docpdf.png" alt="User" width="150px"/>
 													<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;"/></a>
@@ -1494,11 +1494,11 @@ function deleteGenDocument(id) {
  		});
  	}
  }
-function deleteDemandDocument(id,docid) {
+function deleteDemandDocument(id,docid,demandid) {
  	var flag = confirm("Are you sure, you want to delete this document ?");
  	if(flag) {
  		ajaxindicatorstart("Loading...");
- 		$.get("${baseUrl}/webapi/buyer/demanddoc/delete/"+id+"/"+docid, { }, function(data){
+ 		$.get("${baseUrl}/webapi/buyer/demanddoc/delete/"+id+"/"+docid+"/"+demandid, { }, function(data){
  			alert(data.message);
  			if(data.status == 1) {
  				$.get('${baseUrl}/builder/postsale/buyerlist/document/partialdemanddoc.jsp?buyer_id=<% out.print(primary_buyer_id);%>',{},function(data) {

@@ -36,7 +36,7 @@
 %>
 <ul >
 	<li  class="col-lg-4 col-xs-12" style="list-style: none;">
-		<a href="javascript:deleteDemandDocument(<%if(buyerUploadDocuments2.getPaymentId() > 0){out.print(buyerUploadDocuments2.getPaymentId()+","+buyerUploadDocuments2.getId());}%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
+		<a href="javascript:deleteDemandDocument(<%if(buyerUploadDocuments2.getPaymentId() > 0 && buyerUploadDocuments2.getDemandId() > 0){out.print(buyerUploadDocuments2.getPaymentId()+","+buyerUploadDocuments2.getId()+","+buyerUploadDocuments2.getDemandId());}%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
 		<br/>
 		<img src="../../../images/docpdf.png" alt="User" width="150px"/>
 		<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;"/></a>
