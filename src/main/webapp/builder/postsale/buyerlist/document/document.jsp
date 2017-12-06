@@ -505,10 +505,9 @@ width:50%;
 </div>
 <div id="generaldoc" class="modal col-lg-7" >
 	<div class="col-lg-12">
-		<form class="modal-content animate" action="" id="generaldocform" name="generaldocname" method="post" enctype="multipart/form-data">
+		<form class="modal-content animate" action="" id="generaldocform" name="generaldocform" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
 			<input type="hidden" id="doc_type" name="doc_type" value="1"/>
-			<input type="hidden" name="doc_id[]" value="0" />
 			<div class="row clearfix" style="padding:20px 10px;">
 				<span class="pull-right" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
@@ -516,7 +515,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter doc name" name="doc_name[]" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Enter doc name" name="generaldocname" id="generaldocname" style="margin-left:-9px;" required>
 					</div>
 					<div class="messageContainer"></div>
                 </div>
@@ -528,8 +527,9 @@ width:50%;
 						<div class="file-select">
 							<div class="file-select-button" id="fileName">Choose File</div>
 							<p class="file-select-name" id="fileselectgeneral">No file chosen...</p>
-							<input type="file" name="doc_url[]" onchange="getGeneralFileData(this);" id="choosegeneraldoc">
+							<input type="file" name="choosegeneraldoc" onchange="getGeneralFileData(this);" id="choosegeneraldoc">
 						</div>
+						<div class="messageContainer"></div>
 					</div>
                  </div>
                  <div class="col-lg-4"></div>
@@ -544,7 +544,6 @@ width:50%;
 	<span class="close closedemand" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
 	<form class="modal-content animate" action="" id="demanddocform" name="demanddocform"  method="post" enctype="multipart/form-data">
 	<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
-	<input type="hidden" name="doc_id[]" value="0" />
 	<input type="hidden" name="doc_type" id="doc_type" value="2"/>
 		<div class="col-lg-12" style="background:white" >
 			<div class="row clearfix" >
@@ -569,7 +568,7 @@ width:50%;
 				</div>
 				<div class="col-lg-4">
 					<div>
-						<input type="text" placeholder="Previous demand" readonly name="previous_demand" id="previous_demand" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Previous demand" readonly name="previous_demand" id="previous_demand" style="margin-left:-9px;">
 					</div>
                 </div>
 			</div>
@@ -578,13 +577,13 @@ width:50%;
 					<label><b>Current demand</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
-					<input type="text" placeholder="Enter current demand" readonly name="current_demand" id="current_demand" style="margin-left:-9px;" required>
+					<input type="text" placeholder="Enter current demand" readonly name="current_demand" id="current_demand" style="margin-left:-9px;">
                 </div>
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Total Demand Value</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
-					<input type="text" placeholder="total demand value"  readonly name="total_demand_value" id="total_demand_value" style="margin-left:-9px;" required>
+					<input type="text" placeholder="total demand value"  readonly name="total_demand_value" id="total_demand_value" style="margin-left:-9px;">
                 </div>
 			</div>
 			<div class="row clearfix" >
@@ -593,7 +592,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter demand name" name="demand_name" id="demand_name" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Enter demand name" name="demand_name" id="demand_name" style="margin-left:-9px;">
 					</div>
 					<div class="messageContainer"></div>
                 </div>
@@ -602,7 +601,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter payment date" name="paymentdate" id="paymentdate" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Enter payment date" name="paymentdate" id="paymentdate" style="margin-left:-9px;">
 					</div>
 					<div class="messageContainer"></div>
                 </div>
@@ -634,8 +633,9 @@ width:50%;
 						<div class="file-select">
 							<div class="file-select-button" id="fileName">Choose File</div>
 							<p class="file-select-name" id="fileselectdemand">No file chosen...</p>
-							<input type="file" name="doc_url[]" onchange="getDemandFileData(this);" id="choosenewdemanddoc">
+							<input type="file" name="choosenewdemanddoc" onchange="getDemandFileData(this);" id="choosenewdemanddoc">
 						</div>
+						<div class="messageContainer"></div>
 					</div>
                 </div>
 			</div>
@@ -678,7 +678,7 @@ width:50%;
 				</div>
 				<div class="col-lg-4">
 					<div>
-						<input type="text" placeholder="Previous demand" readonly name="gprevious_demand" id="gprevious_demand" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Previous demand" readonly name="gprevious_demand" id="gprevious_demand" style="margin-left:-9px;">
 					</div>
                 </div>
 			</div>
@@ -687,13 +687,13 @@ width:50%;
 					<label><b>Current demand</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
-					<input type="text" placeholder="Enter current demand" readonly name="gcurrent_demand" id="gcurrent_demand" style="margin-left:-9px;" required>
+					<input type="text" placeholder="Enter current demand" readonly name="gcurrent_demand" id="gcurrent_demand" style="margin-left:-9px;">
                 </div>
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Total Demand Value</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
-					<input type="text" placeholder="total demand value"  readonly name="gtotal_demand_value" id="gtotal_demand_value" style="margin-left:-9px;" required>
+					<input type="text" placeholder="total demand value"  readonly name="gtotal_demand_value" id="gtotal_demand_value" style="margin-left:-9px;">
                 </div>
 			</div>
 			<div class="row clearfix" >
@@ -702,7 +702,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter demand name" name="gdemand_name" id="gdemand_name" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Enter demand name" name="gdemand_name" id="gdemand_name" style="margin-left:-9px;">
 					</div>
 					<div class="messageContainer"></div>
                 </div>
@@ -711,7 +711,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter payment date" name="gpaymentdate" id="gpaymentdate" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Enter payment date" name="gpaymentdate" id="gpaymentdate" style="margin-left:-9px;">
 					</div>
 					<div class="messageContainer"></div>
                 </div>
@@ -721,7 +721,6 @@ width:50%;
 					<label><b>Remind every</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
-					<div>
 						<select id="gremind_day" name="gremind_day" class="col-sm-6" style="height:40px;">
 								<option value="0">Select Remind days</option>
 								<option value="1">1</option>
@@ -732,10 +731,7 @@ width:50%;
 								<option value="6">6</option>
 								<option value="7">7</option>
 						</select>
-					</div>
-					<div class="messageContainer"></div>
                 </div>
-                
 			</div>
 			<div class="row clearfix" >
 				<div class="col-sm-4"></div>
@@ -747,23 +743,22 @@ width:50%;
 	</form>
 </div>
 <div id="paymentrecipetdoc" class="modal col-lg-7" >
-	<span class="close closegenerate" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
+	<div class="col-lg-12">
 	<form class="modal-content animate" action="" id="paymentdocform" method="post" name="paymentdocform" enctype="multipart/form-data">
 	<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
-	<input type="hidden" name="doc_id[]" value="0" />
 	<input type="hidden" name="doc_type" id="doc_type" value="3"/>
-		<div class="col-lg-12" style="background:white" >
-			<div class="row clearfix" >
-				<div class="col-lg-4" style="margin-top:17px">
+			<div class="row clearfix" style="padding:20px 10px;" >
+			<span class="pull-right" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Document Name</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter doc name" name="doc_name[]" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Enter doc name" name="paymentdocname"  id="paymentdocname" style="margin-left:-9px;" required>
 					</div>
 					<div class="messageContainer"></div>
                 </div>
-				<div class="col-lg-4" style="margin-top:17px">
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Upload Document</b></label>
 				</div>
 				<div class="col-lg-4">
@@ -771,14 +766,18 @@ width:50%;
 						<div class="file-select">
 							<div class="file-select-button" id="fileName">Choose File</div>
 							<p class="file-select-name" id="fileselectpayment">No file chosen...</p>
-							<input type="file" name="doc_url[]" onchange="getPaymentFileData(this);" id="choosepaymentdoc">
+							<input type="file" name="choosepaymentdoc" onchange="getPaymentFileData(this);" id="choosepaymentdoc">
 						</div>
+						<div class="messageContainer"></div>
 					</div>
                 </div>
-				<button type="submit" class="signupbtn">Submit</button>
+				<div class="col-sm-4"></div>
+				<div class="col-sm-6">
+					<button type="submit" class="signupbtn">Submit</button>
+				</div>
 			</div>
-		</div>
-	</form>
+		</form>
+	</div>
 </div>
 <div class="modal col-lg-7"  id="replymessagemodal"></div>
   <!-- Jquery Core Js -->
@@ -786,13 +785,18 @@ width:50%;
 
 $('#paymentdate').datepicker({
 	autoclose:true,
-	format: "dd MM yyyy"
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#demanddocform').data('bootstrapValidator').revalidateField('paymentdate');
 });
 
 $('#gpaymentdate').datepicker({
 	autoclose:true,
-	format: "dd MM yyyy"
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#genratedemanddocform').data('bootstrapValidator').revalidateField('gpaymentdate');
 });
+
 
 $("#payment_id").change(function(){
 	//alert("Hello"+$("#buyer_id").val()+" "+$("#payment_id").val());
@@ -870,12 +874,25 @@ function openGeneralDoc(){
 		},
 		excluded: ':disabled',
 		fields: {
-			'doc_name[]': {
+			generaldocname : {
 		        validators: {
 		            notEmpty: {
 		                message: 'Please enter document name'
 		            }
 		        }
+		    },
+		    choosegeneraldoc :{
+		    	validators: {
+		    		 notEmpty: {
+			                message: 'Please select document'
+			            },
+                    file: {
+                        extension: 'pdf',
+                        type: 'application/pdf',
+                      //  maxSize: 5 * 1024 * 1024, // 5 MB
+                        message: 'The selected file is not valid, it should be pdf.'
+                    }
+                }
 		    }
 		}
 	}).on('success.form.bv', function(event,data) {
@@ -884,6 +901,7 @@ function openGeneralDoc(){
 		saveGeneralDoc();
 	}).on('error.form.bv',function(event,data){
 		event.preventDefault();
+		//alert("Error in gen doc update");
 	});
 }
 
@@ -924,9 +942,11 @@ function showAddGenDocumentResponse(resp, statusText, xhr, $form){
    	    	$("#gendocupload").html(data);
    	    	ajaxindicatorstop();
    	    },'html');
-      	$("input[name='doc_name[]']").val('');
+      	$("#generaldocname").val('');
+      	$("#choosegeneraldoc").val('');
+      	$("#fileselectgeneral").html('No file chosen...');
       	$("#generaldoc").modal('hide');
-      	//$("#generaldoc").dialog( "close" );
+      //	$("#generaldoc").dialog( "close" );
       	
 //       	$(".modal").on("hidden.bs.modal", function(){
 //       	    $("#generaldoc").html("");
@@ -944,12 +964,34 @@ function autogenerateDemandLetter(){
 		},
 		excluded: ':disabled',
 		fields: {
-			'doc_name[]': {
+			gpayment_id: {
 		        validators: {
 		            notEmpty: {
-		                message: 'Please enter document name'
+		                message: 'Please select payment schedule'
 		            }
 		        }
+		    },
+		    gdemand_name: {
+		        validators: {
+		            notEmpty: {
+		                message: 'Please enter demand name'
+		            }
+		        }
+		    },
+		    gpaymentdate: {
+		    	validators: {
+  	                callback: {
+  	                    message: 'Wrong payment Date',
+  	                    callback: function (value, validator) {
+  	                        var m = new moment(value, 'DD MMM YYYY', true);
+  	                        if (!m.isValid()) {
+  	                            return false;
+  	                        } else {
+  	                        	return true;
+  	                        }
+  	                    }
+  	                }
+  	            }
 		    }
 		}
 	}).on('success.form.bv', function(event,data) {
@@ -960,7 +1002,6 @@ function autogenerateDemandLetter(){
 		
 	}).on('error.form.bv',function(event,data){
 		event.preventDefault();
-		alert("Error during submit data");
 	});
 	
 }
@@ -1001,7 +1042,14 @@ function showAddAutoDemandDocumentResponse(resp, statusText, xhr, $form){
    	    	$("#demanddocupload").html(data);
    	    	ajaxindicatorstop();
    	    },'html');
-      	$("input[name='doc_name[]']").val('');
+      //	$("input[name='doc_name[]']").val('');
+      	$('#gpayment_id').val('');
+      	$('#gprevious_demand').val('');
+      	$('#gcurrent_demand').val('');
+      	$('#gtotal_demand_value').val('');
+      	$('#gdemand_name').val('');
+      	$('#gpaymentdate').val('');
+      	$('#gremind_day').val(0);
       	$("#genratedemandlettermodel").modal('hide');
   	}
 }
@@ -1016,34 +1064,21 @@ function openDemandLetter(){
 		},
 		excluded: ':disabled',
 		fields: {
-// 			'doc_name[]': {
-// 		        validators: {
-// 		            notEmpty: {
-// 		                message: 'Please enter document name'
-// 		            }
-// 		        }
-// 		    },
-// 		    paymentdate: {
-// 		    	validators: {
-// 	                callback: {
-// 	                    message: 'Wrong payment Date',
-// 	                    callback: function (value, validator) {
-// 	                        var m = new moment(value, 'DD MMM YYYY', true);
-// 	                        if (!m.isValid()) {
-// 	                            return false;
-// 	                        } else {
-// 	                        	return true;
-// 	                        }
-// 	                    }
-// 	                }
-// 	            }
-// 		    },
+
   			paymentdate: {
-		    	validators: {
-	                notEmpty:{
-	                	message: 'Please select Payment date'
-	                }
-	            }
+  				validators: {
+  	                callback: {
+  	                    message: 'Wrong payment Date',
+  	                    callback: function (value, validator) {
+  	                        var m = new moment(value, 'DD MMM YYYY', true);
+  	                        if (!m.isValid()) {
+  	                            return false;
+  	                        } else {
+  	                        	return true;
+  	                        }
+  	                    }
+  	                }
+  	            }
 		    },
 		    payment_id:{
 		    	validators: {
@@ -1058,6 +1093,19 @@ function openDemandLetter(){
 		                message: 'Please enter demand name'
 		            }
 		        }
+		    },
+		    choosenewdemanddoc: {
+		    	validators: {
+		    		 notEmpty: {
+			                message: 'Please select document'
+			            },
+                   file: {
+                       extension: 'pdf',
+                       type: 'application/pdf',
+                     //  maxSize: 5 * 1024 * 1024, // 5 MB
+                       message: 'The selected file is not valid, it should be pdf.'
+                   }
+               }
 		    }
 		}
 	}).on('success.form.bv', function(event,data) {
@@ -1067,7 +1115,6 @@ function openDemandLetter(){
 		
 	}).on('error.form.bv',function(event,data){
 		event.preventDefault();
-		//alert("Error during submit data");
 	});
 }
 
@@ -1108,7 +1155,16 @@ function showAddDemandDocumentResponse(resp, statusText, xhr, $form){
    	    	$("#demanddocupload").html(data);
    	    	ajaxindicatorstop();
    	    },'html');
-      	$("input[name='doc_name[]']").val('');
+      	//$("input[name='doc_name[]']").val('');
+      	$("#payment_id").val('');
+      	$('#previous_demand').val('');
+      	$('#current_demand').val('');
+      	$("#total_demand_value").val('');
+      	$('#demand_name').val('');
+      	$('#paymentdate').val('');
+      	$('#choosenewdemanddoc').val('');
+      	$('#remind_day').val(0);
+      	$('#fileselectdemand').html('No file chosen...');
       	$("#demandlettermodel").modal('hide');
   	}
 }
@@ -1124,12 +1180,25 @@ function openPayment(){
 		},
 		excluded: ':disabled',
 		fields: {
-			'doc_name[]': {
+			paymentdocname: {
 		        validators: {
 		            notEmpty: {
 		                message: 'Please enter document name'
 		            }
 		        }
+		    },
+		    choosepaymentdoc :{
+		    	validators: {
+		    		 notEmpty: {
+			                message: 'Please select document'
+			            },
+                    file: {
+                        extension: 'pdf',
+                        type: 'application/pdf',
+                      //  maxSize: 5 * 1024 * 1024, // 5 MB
+                        message: 'The selected file is not valid, it should be pdf.'
+                    }
+                }
 		    }
 		}
 	}).on('success.form.bv', function(event,data) {
@@ -1147,7 +1216,7 @@ function savePaymentDoc(){
 	 		target : '#paymentresponse', 
 	 		beforeSubmit : showAddPaymentDocumentRequest,
 	 		success :  showAddPaymentDocumentResponse,
-	 		url : '${baseUrl}/webapi/buyer/update/gendoc',
+	 		url : '${baseUrl}/webapi/buyer/update/paymentdoc',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -1178,7 +1247,9 @@ function showAddPaymentDocumentResponse(resp, statusText, xhr, $form){
 	    	$("#paymentdocupload").html(data);
 	    	ajaxindicatorstop();
 		},'html');
-	  	$("input[name='doc_name[]']").val('');
+	  	$("#paymentdocname").val('');
+      	$("#choosepaymentdoc").val('');
+      	$("#fileselectpayment").html('No file chosen...');
 	  	$("#paymentrecipetdoc").modal('hide');
 	}
 }
@@ -1460,7 +1531,8 @@ function getGeneralFileData(myFile){
    var filename = file.name;
    
    if(['application/pdf'].indexOf($("#choosegeneraldoc").get(0).files[0].type) == -1) {
-       alert('Please upload only PDF file');
+      // alert('Please upload only PDF file');
+       $("#fileselectgeneral").empty();
        return;
    }
    $("#fileselectgeneral").empty();
@@ -1471,7 +1543,8 @@ function getDemandFileData(myFile){
    var file = myFile.files[0];  
    var filename = file.name;
    if(['application/pdf'].indexOf($("#choosenewdemanddoc").get(0).files[0].type) == -1) {
-       alert('Please upload only PDF file');
+      // alert('Please upload only PDF file');
+       $("#fileselectdemand").empty();
        return;
    }
    $("#fileselectdemand").empty();
@@ -1483,7 +1556,8 @@ function getPaymentFileData(myFile){
    var file = myFile.files[0];  
    var filename = file.name;
    if(['application/pdf'].indexOf($("#choosepaymentdoc").get(0).files[0].type) == -1) {
-       alert('Please upload only PDF file');
+     //  alert('Please upload only PDF file');
+       $("#fileselectpayment").empty();
        return;
    }
    $("#fileselectpayment").empty();
