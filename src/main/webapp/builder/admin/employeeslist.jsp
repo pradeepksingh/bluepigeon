@@ -44,8 +44,12 @@
 			builder_id = builder.getBuilder().getId();
 			empId = builder.getId();
 			if(empId > 0){
-				employeeLists = new ProjectDAO().getBuilderEmployeeList(builder);
-				builderEmployeeAccessTypes = new BuilderDetailsDAO().getBuilderAccessType();
+				try{
+					employeeLists = new ProjectDAO().getBuilderEmployeeList(builder);
+					builderEmployeeAccessTypes = new BuilderDetailsDAO().getBuilderAccessType();
+				}catch(Exception e){
+					
+				}
 			}
 		}
    }
@@ -138,7 +142,7 @@
 						            <img src="../plugins/images/Untitled-1.png" alt="User Image" class="custom-img">
 						            <%} %>
 						            <p><b><%out.print(employeeList.getName()); %></b></p>
-						            <p class="p-custom"><%out.print(employeeList.getAccess()); %></p>
+						            <div style="font-size:17px;"><%out.print(employeeList.getAccess()); %></div>
 						            <br>
 						          </div>
 						             <div class="row custom-row user-row">

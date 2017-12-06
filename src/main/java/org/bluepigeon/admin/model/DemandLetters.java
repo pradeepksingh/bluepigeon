@@ -30,7 +30,7 @@ public class DemandLetters implements java.io.Serializable {
 	private Date lastDate;
 	private String remind;
 	private String content;
-	private Integer paymentStatus;
+	private Integer paymentStatus=0;
 	private Integer paymentMethod;
 	private double amount;
 	public DemandLetters() {

@@ -33,9 +33,13 @@ if(session!=null)
 			if (request.getParameterMap().containsKey("project_id")) {
 				projectId = Integer.parseInt(request.getParameter("project_id"));
 				if(projectId != 0) {
-					builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(projectId);
-					building_id = builderBuildingList.get(0).getId(); 
-		 			flats = new ProjectDAO().getProjectFlatListByBuilder(projectId, building_id, "");
+					try{
+						builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(projectId);
+						building_id = builderBuildingList.get(0).getId(); 
+			 			flats = new ProjectDAO().getProjectFlatListByBuilder(projectId, building_id, "");
+					}catch(Exception e){
+						
+					}
 				}
 			}
 		}else{

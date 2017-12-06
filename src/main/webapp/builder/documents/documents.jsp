@@ -33,7 +33,7 @@
 				if(access_id == 6){
 					project_list = new ProjectDAO().getAssigProjects(emp_id);
 				}
-				if(access_id == 2){
+				else if(access_id == 2){
 					project_list = new ProjectDAO().getActiveProjectsByBuilderId(builder_id);
 				}else{
 					response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");

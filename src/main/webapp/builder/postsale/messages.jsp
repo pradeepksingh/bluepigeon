@@ -19,7 +19,7 @@
 	BuilderEmployee builder = new BuilderEmployee();
 	List<ProjectData> project_list = null;
 	int builder_id = 0;
-	int empId = 0;
+	int emp_id=0;
 	int access_id =0;
 	if(session!=null)
 	{
@@ -27,10 +27,10 @@
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
-			empId = builder.getId();
+			emp_id= builder.getId();
 			access_id = builder.getBuilderEmployeeAccessType().getId();
 			if(builder_id > 0 && access_id == 6){
-				project_list = new ProjectDAO().getAssigProjects(empId);
+				project_list = new ProjectDAO().getAssigProjects(emp_id);
 			}else{
 				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
 			}
@@ -48,7 +48,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16"  href="../plugins/images/favicon.png">
-    <title>Postsale GRANT POSSESSION</title>
+    <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/dist/css/newbootstrap.min.css" rel="stylesheet">
     <link href="../plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
@@ -58,21 +58,14 @@
     <link href="../css/newstyle.css" rel="stylesheet">
     <link href="../css/common.css" rel="stylesheet">
     <link href="../css/jquery.multiselect.css" rel="stylesheet">
-     <link rel="stylesheet" type="text/css" href="../css/selectize.css" />
-     <link rel="stylesheet" type="text/css" href="../css/bootstrap-datetimepicker.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap-datetimepicker.css" />
     <!-- color CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/grantpossession.css">
+    <link rel="stylesheet" type="text/css" href="../css/adminadddocument.css">
     <!-- jQuery -->
-       <script src="../plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../plugins/bower_components/jquery/dist/newjquery.min.js"></script>
     <script type="text/javascript" src="../js/jquery.multiselect.js"></script>
-    <script type="text/javascript" src="../js/selectize.min.js"></script>
     <script src="../js/jquery.form.js"></script>
+     <script src="../js/Moment.js"></script>
     <script src="../js/bootstrapValidator.min.js"></script>
-      <script src="../js/Moment.js"></script>
-    <script src="../js/bootstrap-datepicker.min.js"></script>
-    <script src="../js/bootstrap-datetimepicker.js"></script>
-    <script src="../js/bootstrap-datetimepicker.min.js"></script>
 </head>
 
 <body class="fix-sidebar">
@@ -95,50 +88,56 @@
         <div id="page-wrapper" style="min-height: 238px;">
            <div class="container-fluid addlead">
                <!-- /.row -->
-	            <h1>GRANT POSSESSION</h1>
+	            <h1>MESSAGES</h1>
                <!-- row -->
                <div class="white-box">
                <div class="bg11">
-                  <form class="addlead1" name="addpossession" id="addpossession" action="" method="post" enctype="multipart/form-data">
+                  <form class="addlead1" name="addinbox" id="addinbox" action="" method="post" enctype="multipart/form-data">
+                   <input type="hidden" id="emp_id" name="emp_id" value="<%out.print(emp_id); %>"/>
                     <div class="spacer">
-                      <h3>POSSESSION</h3>
+                      <h3>COMPOSE</h3>
                    </div>
                     <div class="row">
-                     <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
+                     <div class="col-sm-12 col-xs-12 padding-left-right">
                          <div class="form-group row">
-							<label for="example-text-input" class="col-sm-2 col-form-label"> DATE</label>
+							<label for="example-text-input" class="col-sm-2 col-form-label"> Subject</label>
 							  <div class="col-sm-10">
 							  	<div>
-								  <input type="text" id="pdate" name="pdate" class="datepicker form-control form-control1" placeholder="">
+								   <input type="text" class="form-control form-control1" id="subject" name="subject"  placeholder="">
 			                      </div>
 			                      <div class="messageContainer"></div>
 							  </div>
 						  </div>
 					</div>
-                    <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
+                    <div class="col-sm-12 col-xs-12 padding-left-right">
                        <div class="form-group row">
-							<label for="example-text-input" class="col-sm-2 col-form-label">TIME</label>
+							<label for="example-text-input" class="col-sm-2 col-form-label"> Message</label>
 							  <div class="col-sm-10">
-								 <input type="text" id="ptime" name="ptime" class="timepicker form-control form-control1"  placeholder="">
+							  	<div>
+								 <textarea type="text"  id="message"  name="message" placeholder="Enter your message here."class="form-control form-control1"  placeholder=""></textarea>
+							  </div>
+							   <div class="messageContainer"></div>
 							  </div>
 						  </div>
 						</div>
 				   </div>
-				    <div class="row center">
-				       <div class="form-group row spacer1">
-							<label for="example-search-input" class="col-sm-5 col-form-label">Upload Document</label>
-							<div class="col-sm-7">
+				   <div class="row">
+                     <div class="col-sm-12 col-xs-12 padding-left-right">
+                         <div class="form-group row">
+							<label for="example-text-input" class="col-sm-2 col-form-label"> Attachment</label>
+							  <div class="col-sm-7">
 								<div>
 									<div class="file-upload">
-										<p class="file-name" id="filepossession"></p>
-									    <label for="doc_url" class="btn">Choose File</label>
-									   	<input type="file"  name="doc_url[]"  onchange="getPossessionFileData(this)" id="doc_url">
+										<p class="file-name" id="noFile"></p>
+									    <label for="file" id="fileName" class="btn">Choose File</label>
+									   	<input type="file"  name="attachment[]" id="file">
 									</div>
 								</div>
 								<div class="messageContainer"></div>
 							</div>
-					   </div>
-				    </div>
+						  </div>
+					</div>
+				   </div>
 				      <hr>
 				 <div class="spacer">
                    <h3>Add Recipients</h3>
@@ -146,10 +145,10 @@
 				   <div class="row">
                      <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
                          <div class="form-group row">
-							<label for="example-text-input" class="col-sm-4 col-form-label"> Project Name</label>
-							<div class="col-sm-8">
+							<label for="example-text-input" class="col-sm-5 col-form-label"> Project Name</label>
+							<div class="col-sm-7">
 								<div id="selectproject">
-									<select  id="filer_project_ids" name="filter_project_ids[]" multiple>
+									<select id="filer_project_ids" name="filter_project_ids[]"  multiple>
 			                        	<%if(project_list != null){
 			                        		for(ProjectData projectData : project_list){
 			                        		%>
@@ -162,22 +161,21 @@
 						</div>
 					</div>
                     <div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
-                      	<label for="example-text-input" class="col-sm-4 col-form-label"> Building Name</label>
-                      	 <div class="col-sm-8">
+                      	<label for="example-text-input" class="col-sm-5 col-form-label"> Building Name</label>
                       		<div id="selectbuilding">
-							 
+							  <div class="col-sm-7">
 								  <select id="filer_building_ids" name="filter_building_ids[]" multiple></select>
 							 </div>
 							 <div class="messageContainer"></div> 
 						</div>
 				   </div>
 				   </div>
-				    <div class="row center">
+				    <div class="row">
 				       <div class="form-group row spacer1">
 							  <label for="example-search-input" class="col-sm-5 col-form-label">Flat No. &#38; Buyer Name</label>
 								<div class="col-sm-7">
 									<div>
-									 <select id="flat_buyer_ids" name="flat_buyer_ids[]" class="form-control show-tick form-control1" multiple></select>
+									   <select id="filter_buyer_id" name="filter_buyer_id[]" multiple></select>
 								 	</div>
 								 	<div class="messageContainer"></div>
 							  </div>
@@ -201,17 +199,6 @@
   </body>
 </html>
 <script>
-$('#pdate').datepicker({
-	autoclose:true,
-	format: "dd M yyyy"
-}).on('change',function(e){
-	 $('#addpossession').data('bootstrapValidator').revalidateField('pdate');
-});
-
-$('#ptime').datetimepicker({
-    format: 'LT',
-    stepping: 1
-});
 $('#filer_project_ids').multiselect({
     columns: 1,
     placeholder: 'Select Project',
@@ -227,12 +214,7 @@ $('#filer_building_ids').multiselect({
     selectAll: true,
     onControlClose : function(element){getFlatBuyerList(element);}  
 });
-$('#flat_buyer_ids').multiselect({
-    columns: 1,
-    placeholder: 'Flat No. & Buyer Name',
-    search: true,
-    selectAll: true
-});
+
 
 function getBuildingList(element){
 	var ids = "";
@@ -244,17 +226,16 @@ function getBuildingList(element){
 		 }
 	 });
 	 if(ids != ""){
-		 ajaxindicatorstart("Loading...");
-		$.get("${baseUrl}/webapi/builder/building/data/"+ids,{},function(data){
-			$("#filer_building_ids").multiselect('loadOptions',data);
-			  $("#filer_building_ids").multiselect('reload');
-			  ajaxindicatorstop();
-		});
+	 ajaxindicatorstart("Loading...");
+	$.get("${baseUrl}/webapi/builder/building/data/"+ids,{},function(data){
+		$("#filer_building_ids").multiselect('loadOptions',data);
+		  $("#filer_building_ids").multiselect('reload');
+		  ajaxindicatorstop();
+	});
 	 }
 }
 function getFlatBuyerList(element){
 	var ids = "";
-	var buyerhtml="<option value=''>Enter Flat No and buyer Name</option>";
 	 $("#selectbuilding .ms-options li.selected input").each(function(index){
 		 if(ids == ""){
 			 ids = $(this).val();
@@ -263,120 +244,125 @@ function getFlatBuyerList(element){
 		 }
 	 });
 	// alert(ids);
-	if(ids !=""){
+	if(ids != ""){
 	 ajaxindicatorstart("Loading...");
 		$.get("${baseUrl}/webapi/builder/flatbuyer/data/"+ids,{},function(data){
-			$("#flat_buyer_ids").multiselect('loadOptions',data);
-			  $("#flat_buyer_ids").multiselect('reload');
+			$("#filter_buyer_id").multiselect('loadOptions',data);
+			  $("#filter_buyer_id").multiselect('reload');
 			  ajaxindicatorstop();
 		});
 	}
 }
 
-$('#addpossession').bootstrapValidator({
-	container: function($field, validator) {
-		return $field.parent().next('.messageContainer');
-   	},
-    feedbackIcons: {
-        validating: 'glyphicon glyphicon-refresh'
-    },
-    excluded: ':disabled',
-    fields: {
-    	atime: {
-            validators: {
-                notEmpty: {
-                    message: 'Please select time and is required.'
-                }
-            }
-        },
-        pdate: {
-        	validators: {
-                callback: {
-                    message: 'Wrong agreemnet Date',
-                    callback: function (value, validator) {
-                        var m = new moment(value, 'DD MMM YYYY', true);
-                        if (!m.isValid()) {
-                            return false;
-                        } else {
-                        	return true;
-                        }
-                    }
-                }
-            }
-        },
-        'filter_project_ids[]': {
-        	validators: {
-            	notEmpty: {
-                    message: 'Select at least one project'
-                }
-            }
-        },
-        
-        'filter_building_ids[]': {
-        	validators: {
-            	notEmpty: {
-                    message: 'Select at least one building from dropdown'
-                }
-            }
-        },
-        'flat_buyer_ids[]': {
-        	validators: {
-            	notEmpty: {
-                    message: 'Select at least one falt & buyer from dropwown'
-                }
-            }
-        }
-    }
-}).on('success.form.bv', function(event,data) {
-	// Prevent form submission
-	event.preventDefault();
-	uploadDocument();
-}).on('error.form.bv',function(event,data){
+$('#filter_buyer_id').multiselect({
+
+    columns: 1,
+    placeholder: 'Select Flat & Buyer',
+    search: true,
+    selectAll: true,
+	    
 });
+  jQuery(function($) {
+	  $('input[type="file"]').change(function() {
+	    if ($(this).val()) {
+		    error = false;
+	      var filename = $(this).val();
+				$(this).closest('.file-upload').find('.file-name').html(filename);
+	      if (error) {
+	        parent.addClass('error').prepend.after('<div class="alert alert-error">' + error + '</div>');
+	      }
+	    }
+	  });
+	});
+  
+  $('#addinbox').bootstrapValidator({
+		container: function($field, validator) {
+			return $field.parent().next('.messageContainer');
+	   	},
+	    feedbackIcons: {
+	        validating: 'glyphicon glyphicon-refresh'
+	    },
+	    excluded: ':disabled',
+	    fields: {
+	    	'filter_buyer_id[]': {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Please select buyer'
+	                }
+	            }
+	        },
+	        'filter_project_ids[]': {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Please select atleat one project'
+	                }
+	            }
+	        },
+	        'filter_building_ids[]': {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Please select atleat one building'
+	                }
+	            }
+	        },
+	        
+	        subject: {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Please enter subject'
+	                }
+	            }
+	        },
+	        message: {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Please enter message'
+	                }
+	            }
+	        }
+	    }
+	}).on('success.form.bv', function(event,data) {
+		// Prevent form submission
+		event.preventDefault();
+		addInboxMessage();
+		
+	});
 
-function uploadDocument() {
-	ajaxindicatorstart("Loading...");
-	var options = {
-	 		target : '#response', 
-	 		beforeSubmit : showAddRequest,
-	 		success :  showAddResponse,
-	 		url : '${baseUrl}/webapi/buyer/newpossession/save',
-	 		semantic : true,
-	 		dataType : 'json'
-	 	};
-   	$('#addpossession').ajaxSubmit(options);
-}
+	function addInboxMessage() {
+		ajaxindicatorstart("Loading...");
+		var options = {
+		 		target : '#pricingresponse', 
+		 		beforeSubmit : showPriceRequest,
+		 		success :  showPriceResponse,
+		 		url : '${baseUrl}/webapi/builder/inbox/new',
+		 		semantic : true,
+		 		dataType : 'json'
+		 	};
+	   	$('#addinbox').ajaxSubmit(options);
+	}
 
-function showAddRequest(formData, jqForm, options){
-	$("#response").hide();
-   	var queryString = $.param(formData);
-	return true;
-}
-   	
-function showAddResponse(resp, statusText, xhr, $form){
-	if(resp.status == '0') {
-		$("#response").removeClass('alert-success');
-       	$("#response").addClass('alert-danger');
-		$("#response").html(resp.message);
-		$("#response").show();
-		alert(resp.message);
-		 ajaxindicatorstop();
-  	} else {
-  		$("#response").removeClass('alert-danger');
-        $("#response").addClass('alert-success');
-        $("#response").html(resp.message);
-        $("#response").show();
-        alert(resp.message);
-        location.reload();
-      //  window.location.href = "${baseUrl}/builder/leads/leadlist.jsp";
-        ajaxindicatorstop();
-  	}
-}
+	function showPriceRequest(formData, jqForm, options){
+		$("#pricingresponse").hide();
+	   	var queryString = $.param(formData);
+		return true;
+	}
 
-function getPossessionFileData(myFile){
-	  var file = myFile.files[0];  
-	   var filename = file.name;
-	   $("#filepossession").empty();
-	   $("#filepossession").html(filename);
-}
+	function showPriceResponse(resp, statusText, xhr, $form){
+		if(resp.status == '0') {
+			$("#pricingresponse").removeClass('alert-success');
+	       	$("#pricingresponse").addClass('alert-danger');
+			$("#pricingresponse").html(resp.message);
+			$("#pricingresponse").show();
+			alert(resp.message);
+			 ajaxindicatorstop();
+	  	} else {
+	  		$("#pricingresponse").removeClass('alert-danger');
+	        $("#pricingresponse").addClass('alert-success');
+	        $("#pricingresponse").html(resp.message);
+	        $("#pricingresponse").show();
+	        alert(resp.message);
+	        ajaxindicatorstop();
+	        window.location.href = "${baseUrl}/builder/inbox/inbox.jsp";
+	  	}
+	}
 </script>

@@ -25,6 +25,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.bluepigeon.admin.dao.AgreementDAO;
+import org.bluepigeon.admin.dao.BuilderDetailsDAO;
 import org.bluepigeon.admin.dao.BuilderProjectPriceInfoDAO;
 import org.bluepigeon.admin.dao.BuyerDAO;
 import org.bluepigeon.admin.dao.CampaignDAO;
@@ -69,9 +70,17 @@ import org.bluepigeon.admin.service.ImageUploader;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 @Path("buyer")
@@ -2139,14 +2148,14 @@ public class BuyerController {
 	}
 	
 	@GET
-	@Path("/demanddoc/delete/{id}")
+	@Path("/demanddoc/delete/{id}/{docid}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage deleteDemandDocument(@PathParam("id") int id) {
+	public ResponseMessage deleteDemandDocument(@PathParam("id") int id,@PathParam("docid") int docid) {
 		ResponseMessage msg = new ResponseMessage();
 		BuyerDAO buyerDAO = new BuyerDAO();
 		BuyerPayment buyerPayment  = new BuyerDAO().getBuyerPymentsById(id);
 		if(!buyerPayment.isPaid()){
-			msg = buyerDAO.deleteDemandByPaymentId(id);
+			msg = buyerDAO.deleteDemandByPaymentId(id,docid);
 			
 		}else{
 			msg.setStatus(0);
@@ -2173,7 +2182,13 @@ public class BuyerController {
 			@FormDataParam("buyer_id") int buyer_id,
 			@FormDataParam("doc_type") int doctype,
 			@FormDataParam("doc_id[]") List<FormDataBodyPart> doc_id,
-			@FormDataParam("doc_name[]") List<FormDataBodyPart> doc_name
+			@FormDataParam("gdemand_name") FormDataBodyPart doc_name,
+			@FormDataParam("gpayment_id") int paymentId,
+			@FormDataParam("gprevious_demand") float previousDemand,
+			@FormDataParam("gcurrent_demand") float currentDemand,
+			@FormDataParam("gtotal_demand_value") float totalDemandValue,
+			@FormDataParam("emp_id") int empId,
+			@FormDataParam("gpaymentdate") String duedate
 			)throws DocumentException, IOException, FileNotFoundException {
 		ResponseMessage responseMessage = new ResponseMessage();
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
@@ -2190,19 +2205,24 @@ public class BuyerController {
 			List<BuyerUploadDocuments> buyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
 			List<BuyerUploadDocuments> newbuyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
 			int i = 0;
-			for(FormDataBodyPart title : doc_name)
+			//for(FormDataBodyPart title : doc_name)
+				if(doc_name != null && doc_name.getValueAs(String.class)!=null)
 			{
 				Buyer newbuyer = new BuyerDAO().getBuyerById(buyer_id);
+				String gallery_name = doc_name.getValueAs(String.class).toString();
+				long millis = System.currentTimeMillis() % 1000;
+				gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
 				BuyerUploadDocuments buDocuments = new BuyerUploadDocuments();
-				String url = "images/project/buyer/docs/"+title.getValueAs(String.class)+"-"+newbuyer.getName()+"-"+newbuyer.getId()+".pdf";
-				createDemandPdf(title.getValueAs(String.class),url,newbuyer);
+				String url = "images/project/buyer/docs/"+gallery_name+"_"+newbuyer.getId()+".pdf";
+				createDemandPdf(doc_name.getValueAs(String.class),url,newbuyer,empId,previousDemand, currentDemand, totalDemandValue,duedate);
 				buDocuments.setDocUrl(url);
 				buDocuments.setBuyer(primaryBuyer);
 				buDocuments.setDocType(doctype);
+				buDocuments.setPaymentId(paymentId);
 				if(doc_id.get(i).getValueAs(Integer.class) != 0) {
 					buDocuments.setId(doc_id.get(i).getValueAs(Integer.class));
 				}
-				buDocuments.setName(doc_name.get(i).getValueAs(String.class).toString());
+				buDocuments.setName(doc_name.getValueAs(String.class).toString());
 				buDocuments.setBuilderdoc(true);
 				buDocuments.setUploadedDate(new Date());
 				if(doc_id.get(i).getValueAs(Integer.class) != 0) {
@@ -2220,7 +2240,7 @@ public class BuyerController {
 			}
 		} catch(Exception e) {
 			//exception
-			//e.printStackTrace();
+			e.printStackTrace();
 		//	resp.setStatus(0);
 			//resp.setMessage("Fail to add buyer's documenmt. Please select at leat one document..");
 		}
@@ -2234,35 +2254,215 @@ public class BuyerController {
 	 * @throws DocumentException
 	 * @throws IOException
 	 */
-	public void createDemandPdf(String fileName,String url,Buyer buyer) throws DocumentException, IOException, FileNotFoundException{
+	public void createDemandPdf(String fileName,String url,Buyer buyer,int empId,float previousDemand,float currentDemand,float totalDemandValue,String duedate) throws DocumentException, IOException, FileNotFoundException{
 		String RESULT = this.context.getInitParameter("building_image_url")+url;
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		String p1="This is to remind you of your unsettled obligation amounting to 7000 which is already due and demandable.";
-		String p2 = "You have been given previous notices of your default on payments of this note. Under the terms of the note and by this notice, I am making a formal demand for payment by you of the full unpaid obligation of this note including interest and penalty within ten (10) days of receipt of this letter. If payment is not received within ten (10) days from the date of this demand, the note shall be forwarded to my attorney for legal collection proceedings and you will be immediately liable for all costs of collection. Thank you very much for your prompt attention to this matter.";
-		String p3 = "Truly yours, ";
-		Document document = new Document();
-		PdfWriter.getInstance(document, new FileOutputStream(RESULT));
-		document.open();
-		document.add(new Paragraph(dateFormat.format(new Date())));
-		document.add(new Paragraph(""));
-		document.add(new Paragraph("To : buyer"));
-		document.add(new Paragraph(""));
-		document.add(new Paragraph("Re: Payment Due on Installment of Flat"));
-		document.add(new Paragraph(""));
-		document.add(new Paragraph("Dear : "+buyer.getName()));
-		document.add(new Paragraph(""));
-		document.add(new Paragraph(p1));
-		document.add(new Paragraph(""));
-		document.add(new Paragraph(p2));
-		document.add(new Paragraph(""));
-		document.add(new Paragraph(""));
-		document.add(new Paragraph(p3));
-		document.add(new Paragraph(""));
-		document.add(new Paragraph(""));
-		document.add(new Paragraph(""));
-		document.add(new Paragraph(buyer.getBuilder().getName()));
-		document.add(new Paragraph(""));
-		document.close();
+//		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//		String p1="This is to remind you of your unsettled obligation amounting to 7000 which is already due and demandable.";
+//		String p2 = "You have been given previous notices of your default on payments of this note. Under the terms of the note and by this notice, I am making a formal demand for payment by you of the full unpaid obligation of this note including interest and penalty within ten (10) days of receipt of this letter. If payment is not received within ten (10) days from the date of this demand, the note shall be forwarded to my attorney for legal collection proceedings and you will be immediately liable for all costs of collection. Thank you very much for your prompt attention to this matter.";
+//		String p3 = "Truly yours, ";
+//		Document document = new Document();
+//		PdfWriter.getInstance(document, new FileOutputStream(RESULT));
+//		document.open();
+//		document.add(new Paragraph(dateFormat.format(new Date())));
+//		document.add(new Paragraph(""));
+//		document.add(new Paragraph("To : buyer"));
+//		document.add(new Paragraph(""));
+//		document.add(new Paragraph("Re: Payment Due on Installment of Flat"));
+//		document.add(new Paragraph(""));
+//		document.add(new Paragraph("Dear : "+buyer.getName()));
+//		document.add(new Paragraph(""));
+//		document.add(new Paragraph(p1));
+//		document.add(new Paragraph(""));
+//		document.add(new Paragraph(p2));
+//		document.add(new Paragraph(""));
+//		document.add(new Paragraph(""));
+//		document.add(new Paragraph(p3));
+//		document.add(new Paragraph(""));
+//		document.add(new Paragraph(""));
+//		document.add(new Paragraph(""));
+//		document.add(new Paragraph(buyer.getBuilder().getName()));
+//		document.add(new Paragraph(""));
+//		document.close();
+		
+		BuilderEmployee builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(empId);
+		BuyingDetails buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyer.getId());
+		 Rectangle small = new Rectangle(400,400);
+		    Document document = new Document(small);
+
+		    try {
+		    	 PdfWriter writer = com.itextpdf.text.pdf.PdfWriter.getInstance(document,
+		        new FileOutputStream(RESULT));
+		      
+		          Font font1 = new Font(Font.FontFamily.TIMES_ROMAN  , 5, Font.BOLD|Font.UNDERLINE);
+		          Font font2 = new Font(Font.FontFamily.COURIER,5,Font.ITALIC | Font.UNDERLINE);
+		          
+		          Font font3 = new Font(Font.FontFamily.TIMES_ROMAN, 8,Font.BOLD);
+		          Font font4 = new Font(Font.FontFamily.TIMES_ROMAN,5,Font.NORMAL);
+		          Font font5 = new Font(Font.FontFamily.TIMES_ROMAN,5,Font.NORMAL|Font.UNDERLINE);
+		          Font font6 = new Font(Font.FontFamily.TIMES_ROMAN,5,Font.NORMAL|Font.BOLD);
+		          
+		          Phrase phrase1 = new Phrase(buyer.getName()+",", font4);
+		          Phrase phrase2 = new Phrase(buyer.getAddress(), font4);
+			      Phrase phrase3 = new Phrase(buyer.getBuilderProject().getName()+","+buyer.getBuilderProject().getAddr1()+","+buyer.getBuilderProject().getAddr2()+","+buyer.getBuilderBuilding().getName()+","+buyer.getBuilderFlat().getFlatNo()+","+buyer.getBuilderProject().getCity().getName()+","+buyer.getBuilderProject().getLocalityName(), font6);
+			      Phrase phrase4 = new Phrase("", font5);
+		         
+		          Paragraph paragraph = new Paragraph(buyer.getBuilderProject().getName(), font3);
+		          paragraph.setAlignment(Element.ALIGN_CENTER);
+		          
+		          Paragraph paragraph1 = new Paragraph("Dear "+buyer.getName()+",",font4);
+		          paragraph1.setAlignment(Element.ALIGN_LEFT);
+		          
+		          Paragraph p2 = new Paragraph(buyer.getBuilderProject().getAddr1()+", "+buyer.getBuilderProject().getAddr2()+", "+buyer.getBuilderProject().getCity().getName()+","+buyer.getBuilderProject().getLocalityName()+","+buyer.getBuilderProject().getPincode(),font1);
+		          p2.setAlignment(Element.ALIGN_CENTER);
+		          Paragraph p3= new Paragraph("Demand Letter",font1);
+		          p3.setAlignment(Element.ALIGN_CENTER);
+		          Paragraph p4 = new Paragraph("Site Development / Preconstruction / Excavation / Foundation / Plinth / RCC / Brick Work / Masonry/ Plastering / Flooring / Fitting / Finishing / Possession",font6);
+		         
+		          Chunk totalAgreement = new Chunk("Total Agreement Cost  ",font6);
+		          totalAgreement.setBackground(BaseColor.BLUE);
+		          Paragraph p5 = new Paragraph("Total Agreement Cost         "+buyingDetails.getTotalCost().toString(),font6);
+		          p5.setAlignment(Element.ALIGN_LEFT);
+		          
+		          Chunk dueAmount = new Chunk("Amount due at this satge     "+previousDemand,font6);
+		          dueAmount.setBackground(BaseColor.LIGHT_GRAY);
+		         
+		          
+		          Paragraph p6 = new Paragraph(dueAmount);
+		          p6.setAlignment(Element.ALIGN_LEFT);
+		          Paragraph p7 = new Paragraph("Total Outstanding      "+totalDemandValue,font6);
+		          p7.setAlignment(Element.ALIGN_LEFT);
+		         
+		          Chunk chunk2 = new Chunk("We are glad to inform you that the project is at ",font4);
+		          Chunk chunk7 = new Chunk("We request you to make the payment of ",font4);
+		          Chunk chunk8 = new Chunk("INR("+previousDemand+")",font6);
+		          Chunk chunk9 = new Chunk(" by ",font4);
+		          Chunk chunk10 = new Chunk(duedate,font6);
+		          Chunk chunk11 = new Chunk(". Payments may be made to the following bank accounts via NEFT/RTGS",font4);
+		          Paragraph p8 = new Paragraph("Favour of: "+buyer.getBuilderProject().getName(),font6);
+		          Paragraph p9= new  Paragraph("Bank name",font6);
+		          Paragraph p10 = new Paragraph("Branch",font6);
+		          Paragraph p11= new Paragraph("Account No",font6);
+		          Paragraph p12 = new Paragraph("IFSC Code",font6);
+		          Paragraph newline = new Paragraph("\n",font4);
+		          
+		          Chunk chunk12 = new Chunk("Alternatively you can send us a cheque in favour of ",font4);
+		          Chunk chunk13 = new Chunk("\""+buyer.getBuilderProject().getName()+"\"",font6);
+		          Chunk chunk14 = new Chunk(" to the following address",font4);
+		          
+		          Paragraph p13 = new Paragraph("Site Office Address : "+buyer.getBuilderProject().getAddr1(),font6);
+		          Paragraph p14 = new Paragraph("Landmark/Road : "+buyer.getBuilderProject().getAddr2(),font6);
+		          Paragraph p15 = new Paragraph("City/Pincode : "+buyer.getBuilderProject().getPincode(),font6);
+		          Paragraph p16 = new Paragraph("Please note that delay in making payment beound the due date will incur a penalty of 18% per annum",font4);
+		          
+		          Chunk chunk15 = new Chunk("If you have any questions regarding this bill, feel free to reach us at ",font4);
+		          Chunk chunk16 = new Chunk(builderEmployee.getMobile(),font6);
+		          Chunk chunk17 = new Chunk(". Thank you for your cooperation! We hope to continue serving you and ensure the best service at all times.",font4);
+		          Chunk chunk18 = new Chunk("For ",font4);
+		          Chunk chunk19 = new Chunk(" "+buyer.getBuilderProject().getName(),font6);
+		          
+		          Paragraph p17 = new Paragraph("Authorized signatory Stamp",font6);
+		          PdfPTable table = new PdfPTable(2);
+		          table.setTotalWidth(new float[]{120,160});
+		          table.setLockedWidth(true);
+		          PdfPCell cell = new PdfPCell(phrase1);
+		          cell.setBorder(Rectangle.NO_BORDER);
+		          cell.setColspan(2);
+		          table.addCell(cell);
+		          
+		          cell = new PdfPCell(phrase2);
+		          cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		        
+		          cell.setBorder(Rectangle.NO_BORDER);
+		          table.addCell(cell);
+		        
+		          cell = new PdfPCell(phrase3);
+		          cell.setBorder(Rectangle.NO_BORDER);
+		          cell.setVerticalAlignment(Element.ALIGN_LEFT);
+		          table.addCell(cell);
+		          
+		          PdfPTable table2 = new PdfPTable(1);
+		          table2.setTotalWidth(120);
+		          table2.setLockedWidth(true);
+		          
+		          PdfPCell cell2 = new PdfPCell(phrase4);
+		         
+		          cell2.setBorder(Rectangle.NO_BORDER);
+		          cell2.setVerticalAlignment(Element.ALIGN_RIGHT);
+		          table2.addCell(cell2);
+		          table2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		       
+		      Chunk chunk3 =    new Chunk(buyer.getBuilderProject().getCompletionStatus()+"%work completion");
+		          chunk3.setFont(font6);
+		      Chunk chunk5 = new Chunk("pick one");
+		      chunk5.setFont(font6);
+		      Chunk chunk4 = new Chunk(". The current stage of project is as follows (");
+		      chunk4.setFont(font4);
+		      Chunk chunk6 = new Chunk(")");
+		      chunk6.setFont(font6);
+		     
+		      
+		      document.open();
+		      document.add(paragraph);
+		      document.add(p2);
+		      document.add(p3);
+		     // document.add(phrase);
+		      //document.add(chunk1);
+		     document.add(table);
+		     document.add(table2);
+		     document.add(newline);
+		     document.add(paragraph1);
+		     document.add(newline);
+		     document.add(chunk2);
+		     document.add(chunk3);
+		     document.add(chunk4);
+		     document.add(chunk5);
+		     document.add(chunk6);
+		     document.add(newline);
+		     document.add(p4);
+		     document.add(newline);
+		     document.add(p5);
+		     document.add(p6);
+		     document.add(p7);
+		     document.add(newline);
+		     document.add(chunk7);
+		     document.add(chunk8);
+		     document.add(chunk9);
+		     document.add(chunk10);
+		     document.add(chunk11);
+		     document.add(newline);
+		     document.add(p8);
+		     document.add(p9);
+		     document.add(p10);
+		     document.add(p11);
+		     document.add(p12);
+		     document.add(newline);
+		     document.add(chunk12);
+		     document.add(chunk13);
+		     document.add(chunk14);
+		     document.add(newline);
+		     document.add(p13);
+		     document.add(p14);
+		     document.add(p15);
+		     document.add(newline);
+		     document.add(p16);
+		     document.add(newline);
+		     document.add(chunk15);
+		     document.add(chunk16);
+		     document.add(chunk17);
+		     document.add(newline);
+		     document.add(chunk18);
+		     document.add(chunk19);
+		     document.add(newline);
+		     document.add(newline);
+		     document.add(newline);
+		     document.add(p17);
+		     document.close();
+
+		    } catch (DocumentException e) {
+		      e.printStackTrace();
+		    } catch (FileNotFoundException e) {
+		      e.printStackTrace();
+		    }
 	}
 	
 	@POST
