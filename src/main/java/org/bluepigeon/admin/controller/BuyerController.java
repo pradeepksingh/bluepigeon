@@ -2278,10 +2278,7 @@ public class BuyerController {
 					buDocuments.setName(doc_name);
 					buDocuments.setBuilderdoc(true);
 					buDocuments.setUploadedDate(new Date());
-					
-						newbuyerUploadDocuments.add(buDocuments);
-					
-					
+					newbuyerUploadDocuments.add(buDocuments);
 				}
 				
 				if(newbuyerUploadDocuments.size() > 0) {
@@ -2316,7 +2313,7 @@ public class BuyerController {
 		        new FileOutputStream(RESULT));
 		      
 		          Font font1 = new Font(Font.FontFamily.TIMES_ROMAN  , 5, Font.BOLD|Font.UNDERLINE);
-		          Font font2 = new Font(Font.FontFamily.COURIER,5,Font.ITALIC | Font.UNDERLINE);
+		    //      Font font2 = new Font(Font.FontFamily.COURIER,5,Font.ITALIC | Font.UNDERLINE);
 		          
 		          Font font3 = new Font(Font.FontFamily.TIMES_ROMAN, 8,Font.BOLD);
 		          Font font4 = new Font(Font.FontFamily.TIMES_ROMAN,5,Font.NORMAL);
