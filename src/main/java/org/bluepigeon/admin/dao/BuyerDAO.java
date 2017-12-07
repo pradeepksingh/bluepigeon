@@ -1516,7 +1516,7 @@ public class BuyerDAO {
 	
 		return responseMessage;
 	}
-	 public ResponseMessage deleteDemandByPaymentId(int id, int docid){
+	 public ResponseMessage deleteDemandByPaymentId(int id, int docid,int demandId){
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		ResponseMessage responseMessage = new ResponseMessage(); 
 		String delete_uploaded_document = "DELETE from BuyerUploadDocuments where id = :id";
@@ -1527,11 +1527,12 @@ public class BuyerDAO {
 		smdelete.executeUpdate();
 		newsession.getTransaction().commit();
 		newsession.close();
-		String delete_demand_letter = "DELETE from DemandLetters where paymentId = :id and paymentStatus=0";
+		String delete_demand_letter = "DELETE from DemandLetters where paymentId = :payment_id and paymentStatus = 0 and id = :id";
 		Session demandsession = hibernateUtil.openSession();
 		demandsession.beginTransaction();
 		Query demanddelete = demandsession.createQuery(delete_demand_letter);
-		demanddelete.setParameter("id", id);
+		demanddelete.setParameter("id", demandId);
+		demanddelete.setParameter("payment_id", id);
 		demanddelete.executeUpdate();
 		demandsession.getTransaction().commit();
 		demandsession.close();
@@ -1771,5 +1772,16 @@ public class BuyerDAO {
 		query.setParameter("pancard", pancard);
 		List<Buyer> result = query.list();
 		return result;
+	}
+	
+	public BuyerUploadDocuments getBuyerUploadDocument(int id){
+		String hql = "from BuyerUploadDocuments where id = :id";
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		Session session = hibernateUtil.openSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		BuyerUploadDocuments buyerUploadDocuments = (BuyerUploadDocuments) query.list().get(0);
+		return buyerUploadDocuments;
+		
 	}
  }

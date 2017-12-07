@@ -1,6 +1,7 @@
 package org.bluepigeon.admin.controller;
 
 import java.util.Date;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -2080,9 +2081,9 @@ public class BuyerController {
 	public ResponseMessage updateBuyerGenUploadDoc (
 			@FormDataParam("buyer_id") int buyer_id,
 			@FormDataParam("doc_type") int doctype,
-			@FormDataParam("doc_id[]") List<FormDataBodyPart> doc_id,
-			@FormDataParam("doc_name[]") List<FormDataBodyPart> doc_name,
-			@FormDataParam("doc_url[]") List<FormDataBodyPart> doc_url
+		//	@FormDataParam("doc_id[]") List<FormDataBodyPart> doc_id,
+			@FormDataParam("generaldocname") String doc_name,
+			@FormDataParam("choosegeneraldoc") FormDataBodyPart doc_url
 	){
 			ResponseMessage resp = new ResponseMessage();
 		 Buyer primaryBuyer = new Buyer();
@@ -2095,30 +2096,27 @@ public class BuyerController {
 			List<BuyerUploadDocuments> buyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
 			List<BuyerUploadDocuments> newbuyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
 			int i = 0;
-			for(FormDataBodyPart title : doc_name)
+			//for(FormDataBodyPart title : doc_name)
+			if(doc_name != null && !doc_name.isEmpty()){
 			{
 				BuyerUploadDocuments buDocuments = new BuyerUploadDocuments();
-				if(doc_url.get(i).getFormDataContentDisposition().getFileName() != null && !doc_url.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-					String gallery_name = doc_url.get(i).getFormDataContentDisposition().getFileName();
+				if(doc_url.getFormDataContentDisposition().getFileName() != null && !doc_url.getFormDataContentDisposition().getFileName().isEmpty()) {
+					String gallery_name = doc_url.getFormDataContentDisposition().getFileName();
 					long millis = System.currentTimeMillis() % 1000;
 					gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
 					gallery_name = "images/project/buyer/docs/"+gallery_name;
 					String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-					this.imageUploader.writeToFile(doc_url.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+					this.imageUploader.writeToFile(doc_url.getValueAs(InputStream.class), uploadGalleryLocation);
 					buDocuments.setDocUrl(gallery_name);
 					buDocuments.setBuyer(primaryBuyer);
 					buDocuments.setDocType(doctype);
-					if(doc_id.get(i).getValueAs(Integer.class) != 0) {
-						buDocuments.setId(doc_id.get(i).getValueAs(Integer.class));
-					}
-					buDocuments.setName(doc_name.get(i).getValueAs(String.class).toString());
+					
+					buDocuments.setName(doc_name);
 					buDocuments.setBuilderdoc(true);
 					buDocuments.setUploadedDate(new Date());
-					if(doc_id.get(i).getValueAs(Integer.class) != 0) {
-						buyerUploadDocuments.add(buDocuments);
-					} else {
+					
 						newbuyerUploadDocuments.add(buDocuments);
-					}
+					
 				}
 				i++;
 			}
@@ -2128,11 +2126,13 @@ public class BuyerController {
 			if(newbuyerUploadDocuments.size() > 0) {
 				resp = buyerDAO.saveBuyerUploadDouments(newbuyerUploadDocuments);
 			}
+			
+			}
 		} catch(Exception e) {
 			//exception
-			//e.printStackTrace();
-		//	resp.setStatus(0);
-			//resp.setMessage("Fail to add buyer's documenmt. Please select at leat one document..");
+			e.printStackTrace();
+			resp.setStatus(0);
+			resp.setMessage("Fail to add buyer's documenmt. Please select at leat one document..");
 		}
 		return resp;
 	}
@@ -2143,19 +2143,43 @@ public class BuyerController {
 	public ResponseMessage deleteGeneralDocument(@PathParam("id") int id) {
 		ResponseMessage msg = new ResponseMessage();
 		BuyerDAO buyerDAO = new BuyerDAO();
-		msg = buyerDAO.deleteDocumentById(id);
+		try{
+			BuyerUploadDocuments buyerUploadDocuments = new BuyerDAO().getBuyerUploadDocument(id);
+				if(buyerUploadDocuments != null){
+					File file = new File(context.getInitParameter("building_image_url")+buyerUploadDocuments.getDocUrl());
+					if(file.exists()){
+						if(file.delete()){
+								msg = buyerDAO.deleteDocumentById(id);
+						}
+					}
+				}
+		}catch(Exception e){
+			
+		}
 		return msg;
 	}
 	
 	@GET
-	@Path("/demanddoc/delete/{id}/{docid}")
+	@Path("/demanddoc/delete/{id}/{docid}/{demandid}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseMessage deleteDemandDocument(@PathParam("id") int id,@PathParam("docid") int docid) {
+	public ResponseMessage deleteDemandDocument(@PathParam("id") int id,@PathParam("docid") int docid,@PathParam("demandid") int demandId) {
 		ResponseMessage msg = new ResponseMessage();
 		BuyerDAO buyerDAO = new BuyerDAO();
 		BuyerPayment buyerPayment  = new BuyerDAO().getBuyerPymentsById(id);
 		if(!buyerPayment.isPaid()){
-			msg = buyerDAO.deleteDemandByPaymentId(id,docid);
+			try{
+			BuyerUploadDocuments buyerUploadDocuments = new BuyerDAO().getBuyerUploadDocument(docid);
+				if(buyerUploadDocuments != null){
+					File file = new File(context.getInitParameter("building_image_url")+buyerUploadDocuments.getDocUrl());
+					if(file.exists()){
+						if(file.delete()){
+							msg = buyerDAO.deleteDemandByPaymentId(id,docid,demandId);
+						}
+					}
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 			
 		}else{
 			msg.setStatus(0);
@@ -2170,7 +2194,19 @@ public class BuyerController {
 	public ResponseMessage deletePaymentDocument(@PathParam("id") int id) {
 		ResponseMessage msg = new ResponseMessage();
 		BuyerDAO buyerDAO = new BuyerDAO();
-		msg = buyerDAO.deleteDocumentById(id);
+		try{
+			BuyerUploadDocuments buyerUploadDocuments = new BuyerDAO().getBuyerUploadDocument(id);
+				if(buyerUploadDocuments != null){
+					File file = new File(context.getInitParameter("building_image_url")+buyerUploadDocuments.getDocUrl());
+					if(file.exists()){
+						if(file.delete()){
+							msg = buyerDAO.deleteDocumentById(id);
+						}
+					}
+				}
+		}catch(Exception e){
+			
+		}
 		return msg;
 	}
 	
@@ -2181,64 +2217,75 @@ public class BuyerController {
 	public ResponseMessage saveAutoGeneratedDemandLetter(
 			@FormDataParam("buyer_id") int buyer_id,
 			@FormDataParam("doc_type") int doctype,
-			@FormDataParam("doc_id[]") List<FormDataBodyPart> doc_id,
-			@FormDataParam("gdemand_name") FormDataBodyPart doc_name,
+			@FormDataParam("gdemand_name") String doc_name,
 			@FormDataParam("gpayment_id") int paymentId,
 			@FormDataParam("gprevious_demand") float previousDemand,
 			@FormDataParam("gcurrent_demand") float currentDemand,
-			@FormDataParam("gtotal_demand_value") float totalDemandValue,
+			@FormDataParam("gtotal_demand_value") double totalDemandValue,
 			@FormDataParam("emp_id") int empId,
-			@FormDataParam("gpaymentdate") String duedate
+			@FormDataParam("gpaymentdate") String duedate,
+			@FormDataParam("gremind_day") String remindDay
 			)throws DocumentException, IOException, FileNotFoundException {
-		ResponseMessage responseMessage = new ResponseMessage();
-		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
-		
-		
 		ResponseMessage resp = new ResponseMessage();
+		
+		
 		 Buyer primaryBuyer = new Buyer();
 		 BuyerDAO buyerDAO = new BuyerDAO();
 		 if(buyer_id > 0){
 			 primaryBuyer.setId(buyer_id);
 		 }
+		 SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+		 Date paymentDate = null;
+		 try{
+			 paymentDate = format.parse(duedate);
+		 }catch(Exception e){
 			 
-		try {
-			List<BuyerUploadDocuments> buyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
-			List<BuyerUploadDocuments> newbuyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
-			int i = 0;
-			//for(FormDataBodyPart title : doc_name)
-				if(doc_name != null && doc_name.getValueAs(String.class)!=null)
-			{
-				Buyer newbuyer = new BuyerDAO().getBuyerById(buyer_id);
-				String gallery_name = doc_name.getValueAs(String.class).toString();
-				long millis = System.currentTimeMillis() % 1000;
-				gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
-				BuyerUploadDocuments buDocuments = new BuyerUploadDocuments();
-				String url = "images/project/buyer/docs/"+gallery_name+"_"+newbuyer.getId()+".pdf";
-				createDemandPdf(doc_name.getValueAs(String.class),url,newbuyer,empId,previousDemand, currentDemand, totalDemandValue,duedate);
-				buDocuments.setDocUrl(url);
-				buDocuments.setBuyer(primaryBuyer);
-				buDocuments.setDocType(doctype);
-				buDocuments.setPaymentId(paymentId);
-				if(doc_id.get(i).getValueAs(Integer.class) != 0) {
-					buDocuments.setId(doc_id.get(i).getValueAs(Integer.class));
-				}
-				buDocuments.setName(doc_name.getValueAs(String.class).toString());
-				buDocuments.setBuilderdoc(true);
-				buDocuments.setUploadedDate(new Date());
-				if(doc_id.get(i).getValueAs(Integer.class) != 0) {
-					buyerUploadDocuments.add(buDocuments);
-				} else {
+		 }
+		 DemandLetters demandLetters = new DemandLetters();
+		 demandLetters.setAmount(totalDemandValue);
+		 demandLetters.setBuilderBuilding(null);
+		 demandLetters.setBuilderFlat(null);
+		 demandLetters.setBuilderProject(null);
+		 demandLetters.setLastDate(paymentDate);
+		 demandLetters.setPaymentId(paymentId);
+		 demandLetters.setRemind(remindDay);
+		 demandLetters.setName(doc_name);
+		 
+		 resp = new DemandLettersDAO().saveDemaindLetter(demandLetters);
+		 BuyerPayment buyerPayment = new BuyerDAO().getBuyerPymentsById(paymentId);
+		 buyerPayment.setPaid(false);
+		 buyerPayment.setPaieddate(paymentDate);
+		 new BuyerDAO().updateBuyerPayment(buyerPayment); 
+		try{
+			if(resp.getId() > 0){
+				List<BuyerUploadDocuments> newbuyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
+				int i = 0;
+					//for(FormDataBodyPart title : doc_name)
+				if(doc_name != null && !doc_name.isEmpty())
+				{
+					Buyer newbuyer = new BuyerDAO().getBuyerById(buyer_id);
+					String gallery_name = doc_name;
+					long millis = System.currentTimeMillis() % 1000;
+					gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+					BuyerUploadDocuments buDocuments = new BuyerUploadDocuments();
+					String url = "images/project/buyer/docs/"+gallery_name+"_"+newbuyer.getId()+".pdf";
+					createDemandPdf(doc_name,url,newbuyer,empId,previousDemand, currentDemand, totalDemandValue,duedate);
+					buDocuments.setDocUrl(url);
+					buDocuments.setBuyer(primaryBuyer);
+					buDocuments.setDocType(doctype);
+					buDocuments.setPaymentId(paymentId);
+					buDocuments.setDemandId(resp.getId());
+					buDocuments.setName(doc_name);
+					buDocuments.setBuilderdoc(true);
+					buDocuments.setUploadedDate(new Date());
 					newbuyerUploadDocuments.add(buDocuments);
 				}
-				i++;
+				
+				if(newbuyerUploadDocuments.size() > 0) {
+					resp = buyerDAO.saveBuyerUploadDouments(newbuyerUploadDocuments);
+				}
 			}
-			if(buyerUploadDocuments.size() > 0) {
-				resp = buyerDAO.updateBuyerUploadDocuments(buyerUploadDocuments);
-			}
-			if(newbuyerUploadDocuments.size() > 0) {
-				resp = buyerDAO.saveBuyerUploadDouments(newbuyerUploadDocuments);
-			}
-		} catch(Exception e) {
+		}catch(Exception e) {
 			//exception
 			e.printStackTrace();
 		//	resp.setStatus(0);
@@ -2254,36 +2301,8 @@ public class BuyerController {
 	 * @throws DocumentException
 	 * @throws IOException
 	 */
-	public void createDemandPdf(String fileName,String url,Buyer buyer,int empId,float previousDemand,float currentDemand,float totalDemandValue,String duedate) throws DocumentException, IOException, FileNotFoundException{
+	public void createDemandPdf(String fileName,String url,Buyer buyer,int empId,float previousDemand,float currentDemand,double totalDemandValue,String duedate) throws DocumentException, IOException, FileNotFoundException{
 		String RESULT = this.context.getInitParameter("building_image_url")+url;
-//		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//		String p1="This is to remind you of your unsettled obligation amounting to 7000 which is already due and demandable.";
-//		String p2 = "You have been given previous notices of your default on payments of this note. Under the terms of the note and by this notice, I am making a formal demand for payment by you of the full unpaid obligation of this note including interest and penalty within ten (10) days of receipt of this letter. If payment is not received within ten (10) days from the date of this demand, the note shall be forwarded to my attorney for legal collection proceedings and you will be immediately liable for all costs of collection. Thank you very much for your prompt attention to this matter.";
-//		String p3 = "Truly yours, ";
-//		Document document = new Document();
-//		PdfWriter.getInstance(document, new FileOutputStream(RESULT));
-//		document.open();
-//		document.add(new Paragraph(dateFormat.format(new Date())));
-//		document.add(new Paragraph(""));
-//		document.add(new Paragraph("To : buyer"));
-//		document.add(new Paragraph(""));
-//		document.add(new Paragraph("Re: Payment Due on Installment of Flat"));
-//		document.add(new Paragraph(""));
-//		document.add(new Paragraph("Dear : "+buyer.getName()));
-//		document.add(new Paragraph(""));
-//		document.add(new Paragraph(p1));
-//		document.add(new Paragraph(""));
-//		document.add(new Paragraph(p2));
-//		document.add(new Paragraph(""));
-//		document.add(new Paragraph(""));
-//		document.add(new Paragraph(p3));
-//		document.add(new Paragraph(""));
-//		document.add(new Paragraph(""));
-//		document.add(new Paragraph(""));
-//		document.add(new Paragraph(buyer.getBuilder().getName()));
-//		document.add(new Paragraph(""));
-//		document.close();
-		
 		BuilderEmployee builderEmployee = new BuilderDetailsDAO().getBuilderEmployeeById(empId);
 		BuyingDetails buyingDetails = new BuyerDAO().getBuyingDetailsByBuyerId(buyer.getId());
 		 Rectangle small = new Rectangle(400,400);
@@ -2294,7 +2313,7 @@ public class BuyerController {
 		        new FileOutputStream(RESULT));
 		      
 		          Font font1 = new Font(Font.FontFamily.TIMES_ROMAN  , 5, Font.BOLD|Font.UNDERLINE);
-		          Font font2 = new Font(Font.FontFamily.COURIER,5,Font.ITALIC | Font.UNDERLINE);
+		    //      Font font2 = new Font(Font.FontFamily.COURIER,5,Font.ITALIC | Font.UNDERLINE);
 		          
 		          Font font3 = new Font(Font.FontFamily.TIMES_ROMAN, 8,Font.BOLD);
 		          Font font4 = new Font(Font.FontFamily.TIMES_ROMAN,5,Font.NORMAL);
@@ -2682,9 +2701,8 @@ public class BuyerController {
 	public ResponseMessage updateBuyerDemandUploadDoc (
 			@FormDataParam("buyer_id") int buyer_id,
 			@FormDataParam("doc_type") int doctype,
-			@FormDataParam("doc_id[]") List<FormDataBodyPart> doc_id,
-			@FormDataParam("doc_name[]") List<FormDataBodyPart> doc_name,
-			@FormDataParam("doc_url[]") List<FormDataBodyPart> doc_url,
+			@FormDataParam("demand_name") String doc_name,
+			@FormDataParam("choosenewdemanddoc") FormDataBodyPart doc_url,
 			@FormDataParam("payment_id") int paymentId,
 			@FormDataParam("total_demand_value") double amount,
 			@FormDataParam("demand_name") String demandName,
@@ -2715,41 +2733,94 @@ public class BuyerController {
 		 demandLetters.setRemind(remindDay);
 		 demandLetters.setName(demandName);
 		 
-		 new DemandLettersDAO().saveDemaindLetter(demandLetters);
+		 resp = new DemandLettersDAO().saveDemaindLetter(demandLetters);
 		 BuyerPayment buyerPayment = new BuyerDAO().getBuyerPymentsById(paymentId);
 		 buyerPayment.setPaid(false);
 		 buyerPayment.setPaieddate(paymentDate);
 		 new BuyerDAO().updateBuyerPayment(buyerPayment);
 		
 		try {
+			if(resp.getId() >0){
+				List<BuyerUploadDocuments> newbuyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
+					if(doc_url !=null && !doc_url.getFormDataContentDisposition().getFileName().isEmpty() )
+				{
+					BuyerUploadDocuments buDocuments = new BuyerUploadDocuments();
+					if(doc_url.getFormDataContentDisposition().getFileName() != null && !doc_url.getFormDataContentDisposition().getFileName().isEmpty()) {
+						String gallery_name = doc_url.getFormDataContentDisposition().getFileName();
+						long millis = System.currentTimeMillis() % 1000;
+						gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
+						gallery_name = "images/project/buyer/docs/"+gallery_name;
+						String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
+						this.imageUploader.writeToFile(doc_url.getValueAs(InputStream.class), uploadGalleryLocation);
+						buDocuments.setDocUrl(gallery_name);
+						buDocuments.setBuyer(primaryBuyer);
+						buDocuments.setDocType(doctype);
+						buDocuments.setDemandId(resp.getId());
+						buDocuments.setName(demandName);
+						buDocuments.setBuilderdoc(true);
+						buDocuments.setPaymentId(paymentId);
+						buDocuments.setUploadedDate(new Date());
+						
+							newbuyerUploadDocuments.add(buDocuments);
+						
+					}
+				}else{
+					resp.setStatus(0);
+					resp.setMessage("Please select pdf file");
+				}
+				
+				if(newbuyerUploadDocuments.size() > 0) {
+					resp = buyerDAO.saveBuyerUploadDouments(newbuyerUploadDocuments);
+				}
+			}
+		} catch(Exception e) {
+		}
+		return resp;
+	}
+	
+	@POST
+	@Path("/update/paymentdoc")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public ResponseMessage updatePaymentUploadDoc (
+			@FormDataParam("buyer_id") int buyer_id,
+			@FormDataParam("doc_type") int doctype,
+		//	@FormDataParam("doc_id[]") List<FormDataBodyPart> doc_id,
+			@FormDataParam("paymentdocname") String doc_name,
+			@FormDataParam("choosepaymentdoc") FormDataBodyPart doc_url
+	){
+			ResponseMessage resp = new ResponseMessage();
+		 Buyer primaryBuyer = new Buyer();
+		 BuyerDAO buyerDAO = new BuyerDAO();
+		 if(buyer_id > 0){
+			 primaryBuyer.setId(buyer_id);
+		 }
+			 
+		try {
 			List<BuyerUploadDocuments> buyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
 			List<BuyerUploadDocuments> newbuyerUploadDocuments = new ArrayList<BuyerUploadDocuments>();
 			int i = 0;
-			for(FormDataBodyPart title : doc_url)
+			//for(FormDataBodyPart title : doc_name)
+			if(doc_name != null && !doc_name.isEmpty()){
 			{
 				BuyerUploadDocuments buDocuments = new BuyerUploadDocuments();
-				if(doc_url.get(i).getFormDataContentDisposition().getFileName() != null && !doc_url.get(i).getFormDataContentDisposition().getFileName().isEmpty()) {
-					String gallery_name = doc_url.get(i).getFormDataContentDisposition().getFileName();
+				if(doc_url.getFormDataContentDisposition().getFileName() != null && !doc_url.getFormDataContentDisposition().getFileName().isEmpty()) {
+					String gallery_name = doc_url.getFormDataContentDisposition().getFileName();
 					long millis = System.currentTimeMillis() % 1000;
 					gallery_name = Long.toString(millis) + gallery_name.replaceAll(" ", "_").toLowerCase();
 					gallery_name = "images/project/buyer/docs/"+gallery_name;
 					String uploadGalleryLocation = this.context.getInitParameter("building_image_url")+gallery_name;
-					this.imageUploader.writeToFile(doc_url.get(i).getValueAs(InputStream.class), uploadGalleryLocation);
+					this.imageUploader.writeToFile(doc_url.getValueAs(InputStream.class), uploadGalleryLocation);
 					buDocuments.setDocUrl(gallery_name);
 					buDocuments.setBuyer(primaryBuyer);
 					buDocuments.setDocType(doctype);
-					if(doc_id.get(i).getValueAs(Integer.class) != 0) {
-						buDocuments.setId(doc_id.get(i).getValueAs(Integer.class));
-					}
-					buDocuments.setName(demandName);
+					
+					buDocuments.setName(doc_name);
 					buDocuments.setBuilderdoc(true);
-					buDocuments.setPaymentId(paymentId);
 					buDocuments.setUploadedDate(new Date());
-					if(doc_id.get(i).getValueAs(Integer.class) != 0) {
-						buyerUploadDocuments.add(buDocuments);
-					} else {
+					
 						newbuyerUploadDocuments.add(buDocuments);
-					}
+					
 				}
 				i++;
 			}
@@ -2759,11 +2830,13 @@ public class BuyerController {
 			if(newbuyerUploadDocuments.size() > 0) {
 				resp = buyerDAO.saveBuyerUploadDouments(newbuyerUploadDocuments);
 			}
+			
+			}
 		} catch(Exception e) {
 			//exception
-			//e.printStackTrace();
-		//	resp.setStatus(0);
-			//resp.setMessage("Fail to add buyer's documenmt. Please select at leat one document..");
+			e.printStackTrace();
+			resp.setStatus(0);
+			resp.setMessage("Fail to add buyer's documenmt. Please select at leat one document..");
 		}
 		return resp;
 	}

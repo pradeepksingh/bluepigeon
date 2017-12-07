@@ -84,7 +84,7 @@
     <title>POSTSALE Document</title>
 
     <!-- Favicon-->
-    <link rel="icon" href="../../../favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" href="../../../plugins/images/favicon.png" sizes="16x16">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -294,8 +294,12 @@ width:50%;
 								   					<li  class="col-lg-4 col-xs-12" style="list-style: none;">
 								    					<a href="javascript:deleteGenDocument(<%out.print(buyerUploadDocuments2.getId());%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
 														<br/>
-														<img src="../../../images/docpdf.png" alt="User" width="150px"/>
-														<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;"/></a>
+<!-- 														<img src="../../../images/docpdf.png" alt="User" width="150px"/> -->
+<%-- 														<embed src="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" width="150px" height="200px" /> --%>
+														<object data="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" type="application/pdf" width="150" height="200">
+<%-- 														<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>">test.pdf</a> --%>
+														</object>
+														<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;margin-top:45px;"/></a>
 														<br/><h5><% out.print(buyerUploadDocuments2.getName());%></h5>
 								   					</li>
 								   				</ul>
@@ -318,9 +322,12 @@ width:50%;
 							  				%>
 							  				<ul>
 							   					<li  class="col-lg-4 col-xs-12" style="list-style: none;">
-							    					<a href="javascript:deleteDemandDocument(<%if(buyerUploadDocuments2.getPaymentId() > 0){out.print(buyerUploadDocuments2.getPaymentId()+","+buyerUploadDocuments2.getId());}%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
+							    					<a href="javascript:deleteDemandDocument(<%if(buyerUploadDocuments2.getPaymentId() > 0 && buyerUploadDocuments2.getDemandId() > 0){out.print(buyerUploadDocuments2.getPaymentId()+","+buyerUploadDocuments2.getId()+","+buyerUploadDocuments2.getDemandId());}%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
 													<br/>
 													<img src="../../../images/docpdf.png" alt="User" width="150px"/>
+<%-- 													<object data="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" type="application/pdf" width="150" height="200"> --%>
+<%-- 														<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>">test.pdf</a> --%>
+<!-- 														</object> -->
 													<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;"/></a>
 													<br/><h5><% out.print(buyerUploadDocuments2.getName());%></h5>
 							   					</li>
@@ -351,8 +358,11 @@ width:50%;
 								   					<li  class="col-lg-4 col-xs-12" style="list-style: none;">
 								    					<a href="javascript:deletePaymentDocument(<%out.print(buyerUploadDocuments2.getId());%>)"><img src="../../../images/error.png" alt="User" width="35px"style="margin-left:108px;" /></a>
 														<br/>
-														<img src="../../../images/docpdf.png" alt="User" width="150px"/>
-														<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;"/></a>
+<!-- 														<img src="../../../images/docpdf.png" alt="User" width="150px"/> -->
+															<object data="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" type="application/pdf" width="150" height="200">
+<%-- 														<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>">test.pdf</a> --%>
+															</object>
+														<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;margin-top:45px;"/></a>
 														<br/><h5><%out.print(buyerUploadDocuments2.getName());%></h5>
 								   					</li>
 								   				</ul>
@@ -454,21 +464,19 @@ width:50%;
 </body>
 </html>
 <div id="newmessage" class="modal col-lg-7" >
-	<
 	<form class="modal-content animate" action="" method="post" id="addinbox" name="addinbox"  enctype="multipart/form-data" >
 		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(empId);%>"/>
-		
-		<div class="col-lg-12" style="background:white" >
+		<div class="col-lg-12" style="background:white;padding-top:15px;" >
 		<span class="pull-right" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
 			<div class="row clearfix" >
-				<div class="col-lg-4" style="margin-top:17px">
+				<div class="col-lg-4" style="margin-top:17px;padding-left:15px;">
 					<label><b>To</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<input type="hidden" id="filter_buyer_id" name="filter_buyer_id[]" value="<%out.print(primary_buyer_id);%>" />
 					<input type="text" placeholder="" readonly value="<%out.print(buyerName); %>" required>
                 </div>
-				<div class="col-lg-4" style="margin-top:17px">
+				<div class="col-lg-4" style="margin-top:17px;padding-left:15px;">
 					<label><b>Subject</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
@@ -482,7 +490,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" >
 					<div>
-						<textarea placeholder="Enter your message here" name="message" id="message" style="heigth:150px;width:240px;" required></textarea>
+						<textarea placeholder="Enter your message here" name="message" id="message" style="heigth:150px;width:360px;"></textarea>
 					</div>
 					<div class="messageContainer"></div>
 				</div>
@@ -498,17 +506,19 @@ width:50%;
 						</div>
 					</div>
                 </div>
-				<button type="submit" class="signupbtn">Send</button>
+				<div class="col-lg-4"></div>
+                 <div class="col-lg-6">
+                 	<button type="submit" class="signupbtn">Submit</button>
+                 </div>
 			</div>
 		</div>
 	</form>
 </div>
 <div id="generaldoc" class="modal col-lg-7" >
 	<div class="col-lg-12">
-		<form class="modal-content animate" action="" id="generaldocform" name="generaldocname" method="post" enctype="multipart/form-data">
+		<form class="modal-content animate" action="" id="generaldocform" name="generaldocform" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
 			<input type="hidden" id="doc_type" name="doc_type" value="1"/>
-			<input type="hidden" name="doc_id[]" value="0" />
 			<div class="row clearfix" style="padding:20px 10px;">
 				<span class="pull-right" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
@@ -516,7 +526,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter doc name" name="doc_name[]" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Enter doc name" name="generaldocname" id="generaldocname" style="margin-left:-9px;" required>
 					</div>
 					<div class="messageContainer"></div>
                 </div>
@@ -528,8 +538,9 @@ width:50%;
 						<div class="file-select">
 							<div class="file-select-button" id="fileName">Choose File</div>
 							<p class="file-select-name" id="fileselectgeneral">No file chosen...</p>
-							<input type="file" name="doc_url[]" onchange="getGeneralFileData(this);" id="choosegeneraldoc">
+							<input type="file" name="choosegeneraldoc" onchange="getGeneralFileData(this);" id="choosegeneraldoc">
 						</div>
+						<div class="messageContainer"></div>
 					</div>
                  </div>
                  <div class="col-lg-4"></div>
@@ -544,16 +555,15 @@ width:50%;
 	<span class="close closedemand" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
 	<form class="modal-content animate" action="" id="demanddocform" name="demanddocform"  method="post" enctype="multipart/form-data">
 	<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
-	<input type="hidden" name="doc_id[]" value="0" />
 	<input type="hidden" name="doc_type" id="doc_type" value="2"/>
-		<div class="col-lg-12" style="background:white" >
+		<div class="col-lg-12" style="background:white;padding-top:15px;" >
 			<div class="row clearfix" >
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Payment schedule *</b></label>
 				</div>
-				<div class="col-lg-6" style="margin: 9px;">
+				<div class="col-lg-6" style="margin: 9px 0px;">
 					<div>
-						<select id="payment_id" name="payment_id" class="col-sm-6" style="height:40px">
+						<select id="payment_id" name="payment_id" class="col-sm-6" style="height:40px;">
 							<option value="">Select Payment Schedule</option>
 							<%if(paymentList!=null){ 
 							 for(BuyerPayment buyerPayment : paymentList){
@@ -567,9 +577,9 @@ width:50%;
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Previous demand</b></label>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-6">
 					<div>
-						<input type="text" placeholder="Previous demand" readonly name="previous_demand" id="previous_demand" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Previous demand" readonly name="previous_demand" id="previous_demand" style="">
 					</div>
                 </div>
 			</div>
@@ -578,13 +588,13 @@ width:50%;
 					<label><b>Current demand</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
-					<input type="text" placeholder="Enter current demand" readonly name="current_demand" id="current_demand" style="margin-left:-9px;" required>
+					<input type="text" placeholder="Enter current demand" readonly name="current_demand" id="current_demand" style="margin-left:-9px;">
                 </div>
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Total Demand Value</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
-					<input type="text" placeholder="total demand value"  readonly name="total_demand_value" id="total_demand_value" style="margin-left:-9px;" required>
+					<input type="text" placeholder="total demand value"  readonly name="total_demand_value" id="total_demand_value" style="margin-left:-9px;">
                 </div>
 			</div>
 			<div class="row clearfix" >
@@ -593,7 +603,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter demand name" name="demand_name" id="demand_name" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Enter demand name" name="demand_name" id="demand_name" style="margin-left:-9px;">
 					</div>
 					<div class="messageContainer"></div>
                 </div>
@@ -602,7 +612,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter payment date" name="paymentdate" id="paymentdate" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Enter payment date" name="paymentdate" id="paymentdate" style="margin-left:-9px;">
 					</div>
 					<div class="messageContainer"></div>
                 </div>
@@ -611,7 +621,7 @@ width:50%;
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Remind every</b></label>
 				</div>
-				<div class="col-lg-6" style="margin: 9px;">
+				<div class="col-lg-6" style="margin: 9px 0px;">
 					<div>
 						<select id="remind_day" name="remind_day" class="col-sm-6" style="height:40px;">
 								<option value="0">Select Remind days</option>
@@ -626,7 +636,7 @@ width:50%;
 					</div>
 					<div class="messageContainer"></div>
                 </div>
-                <div class="col-lg-4" style="margin-top:17px;margin-left:10px;">
+                <div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Attaches</b></label>
 				</div>
 				<div class="col-lg-4">
@@ -634,13 +644,14 @@ width:50%;
 						<div class="file-select">
 							<div class="file-select-button" id="fileName">Choose File</div>
 							<p class="file-select-name" id="fileselectdemand">No file chosen...</p>
-							<input type="file" name="doc_url[]" onchange="getDemandFileData(this);" id="choosenewdemanddoc">
+							<input type="file" name="choosenewdemanddoc" onchange="getDemandFileData(this);" id="choosenewdemanddoc">
 						</div>
+						<div class="messageContainer"></div>
 					</div>
                 </div>
 			</div>
 			<div class="row clearfix" >
-				<div class="col-sm-4"></div>
+				<div class="col-sm-4" style="margin-left:25px;"></div>
 				<div class="col-sm-6">
 					<button type="submit" class="signupbtn">Submit</button>
 				</div>
@@ -655,12 +666,12 @@ width:50%;
 	<input type="hidden" name="emp_id" id="emp_id" value="<%out.print(empId); %>"/>
 	<input type="hidden" name="doc_id[]" value="0" />
 	<input type="hidden" name="doc_type" id="doc_type" value="2"/>
-		<div class="col-lg-12" style="background:white" >
+		<div class="col-lg-12" style="background:white;padding-top:15px;" >
 			<div class="row clearfix" >
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Payment schedule *</b></label>
 				</div>
-				<div class="col-lg-6" style="margin: 9px;">
+				<div class="col-lg-6" style="margin: 9px 0px;">
 					<div>
 						<select id="gpayment_id" name="gpayment_id" class="col-sm-6" style="height:40px">
 							<option value="">Select Payment Schedule</option>
@@ -676,9 +687,9 @@ width:50%;
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Previous demand</b></label>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-6">
 					<div>
-						<input type="text" placeholder="Previous demand" readonly name="gprevious_demand" id="gprevious_demand" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Previous demand" readonly name="gprevious_demand" id="gprevious_demand">
 					</div>
                 </div>
 			</div>
@@ -687,13 +698,13 @@ width:50%;
 					<label><b>Current demand</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
-					<input type="text" placeholder="Enter current demand" readonly name="gcurrent_demand" id="gcurrent_demand" style="margin-left:-9px;" required>
+					<input type="text" placeholder="Enter current demand" readonly name="gcurrent_demand" id="gcurrent_demand" style="margin-left:-9px;">
                 </div>
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Total Demand Value</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
-					<input type="text" placeholder="total demand value"  readonly name="gtotal_demand_value" id="gtotal_demand_value" style="margin-left:-9px;" required>
+					<input type="text" placeholder="total demand value"  readonly name="gtotal_demand_value" id="gtotal_demand_value" style="margin-left:-9px;">
                 </div>
 			</div>
 			<div class="row clearfix" >
@@ -702,7 +713,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter demand name" name="gdemand_name" id="gdemand_name" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Enter demand name" name="gdemand_name" id="gdemand_name" style="margin-left:-9px;">
 					</div>
 					<div class="messageContainer"></div>
                 </div>
@@ -711,7 +722,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter payment date" name="gpaymentdate" id="gpaymentdate" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Enter payment date" name="gpaymentdate" id="gpaymentdate" style="margin-left:-9px;">
 					</div>
 					<div class="messageContainer"></div>
                 </div>
@@ -720,8 +731,7 @@ width:50%;
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Remind every</b></label>
 				</div>
-				<div class="col-lg-6" style="margin: 9px;">
-					<div>
+				<div class="col-lg-6" style="margin: 9px 0px;">
 						<select id="gremind_day" name="gremind_day" class="col-sm-6" style="height:40px;">
 								<option value="0">Select Remind days</option>
 								<option value="1">1</option>
@@ -732,13 +742,10 @@ width:50%;
 								<option value="6">6</option>
 								<option value="7">7</option>
 						</select>
-					</div>
-					<div class="messageContainer"></div>
                 </div>
-                
 			</div>
 			<div class="row clearfix" >
-				<div class="col-sm-4"></div>
+				<div class="col-sm-4" style="margin-left:25px;"></div>
 				<div class="col-sm-6">
 					<button type="submit" class="signupbtn">GENERATE</button>
 				</div>
@@ -747,23 +754,22 @@ width:50%;
 	</form>
 </div>
 <div id="paymentrecipetdoc" class="modal col-lg-7" >
-	<span class="close closegenerate" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
+	<div class="col-lg-12">
 	<form class="modal-content animate" action="" id="paymentdocform" method="post" name="paymentdocform" enctype="multipart/form-data">
 	<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
-	<input type="hidden" name="doc_id[]" value="0" />
 	<input type="hidden" name="doc_type" id="doc_type" value="3"/>
-		<div class="col-lg-12" style="background:white" >
-			<div class="row clearfix" >
-				<div class="col-lg-4" style="margin-top:17px">
+			<div class="row clearfix" style="padding:20px 10px;" >
+			<span class="pull-right" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Document Name</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<div>
-						<input type="text" placeholder="Enter doc name" name="doc_name[]" style="margin-left:-9px;" required>
+						<input type="text" placeholder="Enter doc name" name="paymentdocname"  id="paymentdocname" style="margin-left:-9px;" required>
 					</div>
 					<div class="messageContainer"></div>
                 </div>
-				<div class="col-lg-4" style="margin-top:17px">
+				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Upload Document</b></label>
 				</div>
 				<div class="col-lg-4">
@@ -771,14 +777,18 @@ width:50%;
 						<div class="file-select">
 							<div class="file-select-button" id="fileName">Choose File</div>
 							<p class="file-select-name" id="fileselectpayment">No file chosen...</p>
-							<input type="file" name="doc_url[]" onchange="getPaymentFileData(this);" id="choosepaymentdoc">
+							<input type="file" name="choosepaymentdoc" onchange="getPaymentFileData(this);" id="choosepaymentdoc">
 						</div>
+						<div class="messageContainer"></div>
 					</div>
                 </div>
-				<button type="submit" class="signupbtn">Submit</button>
+				<div class="col-sm-4"></div>
+				<div class="col-sm-6">
+					<button type="submit" class="signupbtn">Submit</button>
+				</div>
 			</div>
-		</div>
-	</form>
+		</form>
+	</div>
 </div>
 <div class="modal col-lg-7"  id="replymessagemodal"></div>
   <!-- Jquery Core Js -->
@@ -786,13 +796,18 @@ width:50%;
 
 $('#paymentdate').datepicker({
 	autoclose:true,
-	format: "dd MM yyyy"
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#demanddocform').data('bootstrapValidator').revalidateField('paymentdate');
 });
 
 $('#gpaymentdate').datepicker({
 	autoclose:true,
-	format: "dd MM yyyy"
+	format: "dd M yyyy"
+}).on('change',function(e){
+	 $('#genratedemanddocform').data('bootstrapValidator').revalidateField('gpaymentdate');
 });
+
 
 $("#payment_id").change(function(){
 	//alert("Hello"+$("#buyer_id").val()+" "+$("#payment_id").val());
@@ -857,10 +872,7 @@ $("#gpayment_id").change(function(){
 		}
 	}
 });
-
-// Get the modal
-function openGeneralDoc(){
-	$("#generaldoc").modal('show');
+$(document).ready(function(){
 	$('#generaldocform').bootstrapValidator({
 		container: function($field, validator) {
 			return $field.parent().next('.messageContainer');
@@ -870,12 +882,25 @@ function openGeneralDoc(){
 		},
 		excluded: ':disabled',
 		fields: {
-			'doc_name[]': {
+			generaldocname : {
 		        validators: {
 		            notEmpty: {
 		                message: 'Please enter document name'
 		            }
 		        }
+		    },
+		    choosegeneraldoc :{
+		    	validators: {
+		    		 notEmpty: {
+			                message: 'Please select document'
+			            },
+                    file: {
+                        extension: 'pdf',
+                        type: 'application/pdf',
+                      //  maxSize: 5 * 1024 * 1024, // 5 MB
+                        message: 'The selected file is not valid, it should be pdf.'
+                    }
+                }
 		    }
 		}
 	}).on('success.form.bv', function(event,data) {
@@ -884,7 +909,204 @@ function openGeneralDoc(){
 		saveGeneralDoc();
 	}).on('error.form.bv',function(event,data){
 		event.preventDefault();
+		//alert("Error in gen doc update");
 	});
+	
+	
+	$("#genratedemanddocform").bootstrapValidator({
+		container: function($field, validator) {
+			return $field.parent().next('.messageContainer');
+	   	},
+		feedbackIcons: {
+		    validating: 'glyphicon glyphicon-refresh'
+		},
+		excluded: ':disabled',
+		fields: {
+			gpayment_id: {
+		        validators: {
+		            notEmpty: {
+		                message: 'Please select payment schedule'
+		            }
+		        }
+		    },
+		    gdemand_name: {
+		        validators: {
+		            notEmpty: {
+		                message: 'Please enter demand name'
+		            }
+		        }
+		    },
+		    gpaymentdate: {
+		    	validators: {
+  	                callback: {
+  	                    message: 'Wrong payment Date',
+  	                    callback: function (value, validator) {
+  	                        var m = new moment(value, 'DD MMM YYYY', true);
+  	                        if (!m.isValid()) {
+  	                            return false;
+  	                        } else {
+  	                        	return true;
+  	                        }
+  	                    }
+  	                }
+  	            }
+		    }
+		}
+	}).on('success.form.bv', function(event,data) {
+			// Prevent form submission
+		event.preventDefault();
+		//	alert("Success msg");
+		saveAutoGenerateDemandDoc();
+		
+	}).on('error.form.bv',function(event,data){
+		event.preventDefault();
+	});
+	
+	
+	$('#demanddocform').bootstrapValidator({
+		container: function($field, validator) {
+			return $field.parent().next('.messageContainer');
+	   	},
+		feedbackIcons: {
+		    validating: 'glyphicon glyphicon-refresh'
+		},
+		excluded: ':disabled',
+		fields: {
+
+  			paymentdate: {
+  				validators: {
+  	                callback: {
+  	                    message: 'Wrong payment Date',
+  	                    callback: function (value, validator) {
+  	                        var m = new moment(value, 'DD MMM YYYY', true);
+  	                        if (!m.isValid()) {
+  	                            return false;
+  	                        } else {
+  	                        	return true;
+  	                        }
+  	                    }
+  	                }
+  	            }
+		    },
+		    payment_id:{
+		    	validators: {
+		            notEmpty: {
+		                message: 'Please select payment schedule'
+		            }
+		        }
+		    },
+		    demand_name:{
+		    	validators: {
+		            notEmpty: {
+		                message: 'Please enter demand name'
+		            }
+		        }
+		    },
+		    choosenewdemanddoc: {
+		    	validators: {
+		    		 notEmpty: {
+			                message: 'Please select document'
+			            },
+                   file: {
+                       extension: 'pdf',
+                       type: 'application/pdf',
+                     //  maxSize: 5 * 1024 * 1024, // 5 MB
+                       message: 'The selected file is not valid, it should be pdf.'
+                   }
+               }
+		    }
+		}
+	}).on('success.form.bv', function(event,data) {
+			// Prevent form submission
+		event.preventDefault();
+		saveDemandDoc();
+		
+	}).on('error.form.bv',function(event,data){
+		event.preventDefault();
+	});
+	
+	
+	$('#paymentdocform').bootstrapValidator({
+		container: function($field, validator) {
+			return $field.parent().next('.messageContainer');
+	   	},
+		feedbackIcons: {
+		    validating: 'glyphicon glyphicon-refresh'
+		},
+		excluded: ':disabled',
+		fields: {
+			paymentdocname: {
+		        validators: {
+		            notEmpty: {
+		                message: 'Please enter document name'
+		            }
+		        }
+		    },
+		    choosepaymentdoc :{
+		    	validators: {
+		    		 notEmpty: {
+			                message: 'Please select document'
+			            },
+                    file: {
+                        extension: 'pdf',
+                        type: 'application/pdf',
+                      //  maxSize: 5 * 1024 * 1024, // 5 MB
+                        message: 'The selected file is not valid, it should be pdf.'
+                    }
+                }
+		    }
+		}
+	}).on('success.form.bv', function(event,data) {
+			// Prevent form submission
+	event.preventDefault();
+	savePaymentDoc();
+	}).on('error.form.bv',function(event,data){
+		event.preventDefault();
+	});
+	
+	$('#addinbox').bootstrapValidator({
+		container: function($field, validator) {
+			return $field.parent().next('.messageContainer');
+	   	},
+	    feedbackIcons: {
+	        validating: 'glyphicon glyphicon-refresh'
+	    },
+	    excluded: ':disabled',
+	    fields: {
+	    	'filter_buyer_id[]': {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Please select buyer'
+	                }
+	            }
+	        },
+	        
+	        subject: {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Please enter subject'
+	                }
+	            }
+	        },
+	        message: {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Please enter message'
+	                }
+	            }
+	        }
+	    }
+	}).on('success.form.bv', function(event,data) {
+		// Prevent form submission
+		event.preventDefault();
+		addInboxMessage();
+		
+	});
+});
+// Get the modal
+function openGeneralDoc(){
+	$("#generaldoc").modal('show');
+	
 }
 
 function saveGeneralDoc(){
@@ -924,9 +1146,11 @@ function showAddGenDocumentResponse(resp, statusText, xhr, $form){
    	    	$("#gendocupload").html(data);
    	    	ajaxindicatorstop();
    	    },'html');
-      	$("input[name='doc_name[]']").val('');
+      	$("#generaldocname").val('');
+      	$("#choosegeneraldoc").val('');
+      	$("#fileselectgeneral").html('No file chosen...');
       	$("#generaldoc").modal('hide');
-      	//$("#generaldoc").dialog( "close" );
+      //	$("#generaldoc").dialog( "close" );
       	
 //       	$(".modal").on("hidden.bs.modal", function(){
 //       	    $("#generaldoc").html("");
@@ -935,33 +1159,6 @@ function showAddGenDocumentResponse(resp, statusText, xhr, $form){
 }
 function autogenerateDemandLetter(){
 	$("#genratedemandlettermodel").modal('show');
-	$("#genratedemanddocform").bootstrapValidator({
-		container: function($field, validator) {
-			return $field.parent().next('.messageContainer');
-	   	},
-		feedbackIcons: {
-		    validating: 'glyphicon glyphicon-refresh'
-		},
-		excluded: ':disabled',
-		fields: {
-			'doc_name[]': {
-		        validators: {
-		            notEmpty: {
-		                message: 'Please enter document name'
-		            }
-		        }
-		    }
-		}
-	}).on('success.form.bv', function(event,data) {
-			// Prevent form submission
-		event.preventDefault();
-		//	alert("Success msg");
-		saveAutoGenerateDemandDoc();
-		
-	}).on('error.form.bv',function(event,data){
-		event.preventDefault();
-		alert("Error during submit data");
-	});
 	
 }
 function saveAutoGenerateDemandDoc(){
@@ -1001,74 +1198,19 @@ function showAddAutoDemandDocumentResponse(resp, statusText, xhr, $form){
    	    	$("#demanddocupload").html(data);
    	    	ajaxindicatorstop();
    	    },'html');
-      	$("input[name='doc_name[]']").val('');
+      //	$("input[name='doc_name[]']").val('');
+      	$('#gpayment_id').val('');
+      	$('#gprevious_demand').val('');
+      	$('#gcurrent_demand').val('');
+      	$('#gtotal_demand_value').val('');
+      	$('#gdemand_name').val('');
+      	$('#gpaymentdate').val('');
+      	$('#gremind_day').val(0);
       	$("#genratedemandlettermodel").modal('hide');
   	}
 }
 function openDemandLetter(){
 	$("#demandlettermodel").modal('show');
-	$('#demanddocform').bootstrapValidator({
-		container: function($field, validator) {
-			return $field.parent().next('.messageContainer');
-	   	},
-		feedbackIcons: {
-		    validating: 'glyphicon glyphicon-refresh'
-		},
-		excluded: ':disabled',
-		fields: {
-// 			'doc_name[]': {
-// 		        validators: {
-// 		            notEmpty: {
-// 		                message: 'Please enter document name'
-// 		            }
-// 		        }
-// 		    },
-// 		    paymentdate: {
-// 		    	validators: {
-// 	                callback: {
-// 	                    message: 'Wrong payment Date',
-// 	                    callback: function (value, validator) {
-// 	                        var m = new moment(value, 'DD MMM YYYY', true);
-// 	                        if (!m.isValid()) {
-// 	                            return false;
-// 	                        } else {
-// 	                        	return true;
-// 	                        }
-// 	                    }
-// 	                }
-// 	            }
-// 		    },
-  			paymentdate: {
-		    	validators: {
-	                notEmpty:{
-	                	message: 'Please select Payment date'
-	                }
-	            }
-		    },
-		    payment_id:{
-		    	validators: {
-		            notEmpty: {
-		                message: 'Please select payment schedule'
-		            }
-		        }
-		    },
-		    demand_name:{
-		    	validators: {
-		            notEmpty: {
-		                message: 'Please enter demand name'
-		            }
-		        }
-		    }
-		}
-	}).on('success.form.bv', function(event,data) {
-			// Prevent form submission
-		event.preventDefault();
-		saveDemandDoc();
-		
-	}).on('error.form.bv',function(event,data){
-		event.preventDefault();
-		//alert("Error during submit data");
-	});
 }
 
 function saveDemandDoc(){
@@ -1108,37 +1250,22 @@ function showAddDemandDocumentResponse(resp, statusText, xhr, $form){
    	    	$("#demanddocupload").html(data);
    	    	ajaxindicatorstop();
    	    },'html');
-      	$("input[name='doc_name[]']").val('');
+      	//$("input[name='doc_name[]']").val('');
+      	$("#payment_id").val('');
+      	$('#previous_demand').val('');
+      	$('#current_demand').val('');
+      	$("#total_demand_value").val('');
+      	$('#demand_name').val('');
+      	$('#paymentdate').val('');
+      	$('#choosenewdemanddoc').val('');
+      	$('#remind_day').val(0);
+      	$('#fileselectdemand').html('No file chosen...');
       	$("#demandlettermodel").modal('hide');
   	}
 }
 
 function openPayment(){
 	$("#paymentrecipetdoc").modal('show');
-	$('#paymentdocform').bootstrapValidator({
-		container: function($field, validator) {
-			return $field.parent().next('.messageContainer');
-	   	},
-		feedbackIcons: {
-		    validating: 'glyphicon glyphicon-refresh'
-		},
-		excluded: ':disabled',
-		fields: {
-			'doc_name[]': {
-		        validators: {
-		            notEmpty: {
-		                message: 'Please enter document name'
-		            }
-		        }
-		    }
-		}
-	}).on('success.form.bv', function(event,data) {
-			// Prevent form submission
-	event.preventDefault();
-	savePaymentDoc();
-	}).on('error.form.bv',function(event,data){
-		event.preventDefault();
-	});
 }
 
 function savePaymentDoc(){
@@ -1147,7 +1274,7 @@ function savePaymentDoc(){
 	 		target : '#paymentresponse', 
 	 		beforeSubmit : showAddPaymentDocumentRequest,
 	 		success :  showAddPaymentDocumentResponse,
-	 		url : '${baseUrl}/webapi/buyer/update/gendoc',
+	 		url : '${baseUrl}/webapi/buyer/update/paymentdoc',
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
@@ -1178,7 +1305,9 @@ function showAddPaymentDocumentResponse(resp, statusText, xhr, $form){
 	    	$("#paymentdocupload").html(data);
 	    	ajaxindicatorstop();
 		},'html');
-	  	$("input[name='doc_name[]']").val('');
+	  	$("#paymentdocname").val('');
+      	$("#choosepaymentdoc").val('');
+      	$("#fileselectpayment").html('No file chosen...');
 	  	$("#paymentrecipetdoc").modal('hide');
 	}
 }
@@ -1186,44 +1315,6 @@ function showAddPaymentDocumentResponse(resp, statusText, xhr, $form){
 
 function openMessageModal(){
 	$("#newmessage").modal('show');
-	$('#addinbox').bootstrapValidator({
-		container: function($field, validator) {
-			return $field.parent().next('.messageContainer');
-	   	},
-	    feedbackIcons: {
-	        validating: 'glyphicon glyphicon-refresh'
-	    },
-	    excluded: ':disabled',
-	    fields: {
-	    	'filter_buyer_id[]': {
-	            validators: {
-	                notEmpty: {
-	                    message: 'Please select buyer'
-	                }
-	            }
-	        },
-	        
-	        subject: {
-	            validators: {
-	                notEmpty: {
-	                    message: 'Please enter subject'
-	                }
-	            }
-	        },
-	        message: {
-	            validators: {
-	                notEmpty: {
-	                    message: 'Please enter message'
-	                }
-	            }
-	        }
-	    }
-	}).on('success.form.bv', function(event,data) {
-		// Prevent form submission
-		event.preventDefault();
-		addInboxMessage();
-		
-	});
 }
 
 function addInboxMessage() {
@@ -1423,11 +1514,11 @@ function deleteGenDocument(id) {
  		});
  	}
  }
-function deleteDemandDocument(id,docid) {
+function deleteDemandDocument(id,docid,demandid) {
  	var flag = confirm("Are you sure, you want to delete this document ?");
  	if(flag) {
  		ajaxindicatorstart("Loading...");
- 		$.get("${baseUrl}/webapi/buyer/demanddoc/delete/"+id+"/"+docid, { }, function(data){
+ 		$.get("${baseUrl}/webapi/buyer/demanddoc/delete/"+id+"/"+docid+"/"+demandid, { }, function(data){
  			alert(data.message);
  			if(data.status == 1) {
  				$.get('${baseUrl}/builder/postsale/buyerlist/document/partialdemanddoc.jsp?buyer_id=<% out.print(primary_buyer_id);%>',{},function(data) {
@@ -1460,7 +1551,8 @@ function getGeneralFileData(myFile){
    var filename = file.name;
    
    if(['application/pdf'].indexOf($("#choosegeneraldoc").get(0).files[0].type) == -1) {
-       alert('Please upload only PDF file');
+      // alert('Please upload only PDF file');
+       $("#fileselectgeneral").empty();
        return;
    }
    $("#fileselectgeneral").empty();
@@ -1471,7 +1563,8 @@ function getDemandFileData(myFile){
    var file = myFile.files[0];  
    var filename = file.name;
    if(['application/pdf'].indexOf($("#choosenewdemanddoc").get(0).files[0].type) == -1) {
-       alert('Please upload only PDF file');
+      // alert('Please upload only PDF file');
+       $("#fileselectdemand").empty();
        return;
    }
    $("#fileselectdemand").empty();
@@ -1483,7 +1576,8 @@ function getPaymentFileData(myFile){
    var file = myFile.files[0];  
    var filename = file.name;
    if(['application/pdf'].indexOf($("#choosepaymentdoc").get(0).files[0].type) == -1) {
-       alert('Please upload only PDF file');
+     //  alert('Please upload only PDF file');
+       $("#fileselectpayment").empty();
        return;
    }
    $("#fileselectpayment").empty();
@@ -1498,15 +1592,18 @@ function getPaymentFileData(myFile){
  }
  
  $("#postsalepaymentstatus").click(function(){
+	 ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/postsale/buyerlist/paymentstatus/paymentstatus.jsp?flat_id=<%out.print(flat_id);%>";
  });
  
  
  $("#postsaleprojectstatus").click(function(){
+	 ajaxindicatorstart("Loading...");
 	 window.location.href = "${baseUrl}/builder/postsale/buyerlist/projectstatus/projectstatus.jsp?flat_id=<%out.print(flat_id);%>";
  });
  
  $("#postsalepossession").click(function(){
+	 ajaxindicatorstart("Loading...");
 	 window.location.href = "${baseUrl}/builder/postsale/buyerlist/possession/possession.jsp?flat_id=<%out.print(flat_id);%>";
  });
 </script>

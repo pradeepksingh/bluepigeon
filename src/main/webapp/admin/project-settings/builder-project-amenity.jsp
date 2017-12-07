@@ -169,7 +169,7 @@ $('#addProjectAmenity').bootstrapValidator({
         status: {
             validators: {
                 notEmpty: {
-                    message: 'Status  is required and cannot be empty'
+                    message: 'Status is required and cannot be empty'
                 }
             }
         }

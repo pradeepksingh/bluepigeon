@@ -15,10 +15,11 @@
 	if (amenity_id > 0) {
 		amenity_list = builderBuildingAmenityDAO.getBuilderBuildingAmenityById(amenity_id);
 		builderBuildingAmenity = amenity_list.get(0);
+		//buildingAmenityIcon =  builderBuildingAmenityDAO.getBuildingAmenityIconById(amenity_id);
 	}
 %>
 
-<form class="form-horizontal" role="form" method="post" action="" id="editBuildingAmenity" name="editBuildingAmenity" enctype="multipart/form-data">		
+<form class="form-horizontal" role="form" method="post" action="" id="editMyBuildingAmenity" name="editMyBuildingAmenity" enctype="multipart/form-data">		
 		<input type="hidden" name="uamenity_id" id="uamenity_id" value="<% out.print(builderBuildingAmenity.getId()); %>"/>
               	<div class="row">
               		<div class="col-xs-12">
@@ -32,7 +33,7 @@
               		<div class="col-xs-12">
                   		<div class="form-group">
                        		<label for="password" class="control-label"><% if(builderBuildingAmenity.getIconUrl() != null && !builderBuildingAmenity.getIconUrl().equals("")) {%>Select New<% } else { %>Building<% } %> Amenity Icon</label>
-							<input type="hidden" id="building_amenity_id" name="building_amenity_id[]" value="0"/>
+							<input type="hidden" id="building_amenity_id" name="building_amenity_id[]" value="<%out.print(builderBuildingAmenity.getId());%>"/>
 							<div class="col-sm-8" style="padding-left:0px;">
                        			<input type="file" class="form-control" id="building_amenity_icon" name="building_amenity_icon[]" />
                        		</div>
@@ -68,7 +69,7 @@ $('#uname').keyup(function() {
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
 
-$('#editBuildingAmenity').bootstrapValidator({
+$('#editMyBuildingAmenity').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},
@@ -110,7 +111,7 @@ function updateBuildingAmenity() {
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
-   	$('#editBuildingAmenity').ajaxSubmit(options);
+   	$('#editMyBuildingAmenity').ajaxSubmit(options);
 }
 
 function showUpdateRequest(formData, jqForm, options){

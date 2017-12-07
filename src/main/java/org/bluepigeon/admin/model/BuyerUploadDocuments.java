@@ -29,12 +29,13 @@ public class BuyerUploadDocuments implements java.io.Serializable {
 	private boolean isBuilderdoc;
 	private Integer docType=1;
 	private Integer paymentId = 0;
+	private Integer demandId = 0;
 	public BuyerUploadDocuments() {
 	}
 
 
 	public BuyerUploadDocuments(Buyer buyer, String name, String docUrl, Date uploadedDate, boolean isBuilderdoc,Integer docType,
-			Integer paymentId) {
+			Integer paymentId, Integer demandId) {
 		this.buyer = buyer;
 		this.name = name;
 		this.docUrl = docUrl;
@@ -42,6 +43,7 @@ public class BuyerUploadDocuments implements java.io.Serializable {
 		this.isBuilderdoc = isBuilderdoc;
 		this.docType = docType;
 		this.paymentId = paymentId; 
+		this.demandId = demandId;
 	}
 
 	@Id
@@ -117,6 +119,14 @@ public class BuyerUploadDocuments implements java.io.Serializable {
 	}
 	public void setPaymentId(Integer paymentId) {
 		this.paymentId = paymentId;
+	}
+
+	@Column(name = "demand_id")
+	public Integer getDemandId() {
+		return demandId;
+	}
+	public void setDemandId(Integer demandId) {
+		this.demandId = demandId;
 	}
 	
 }

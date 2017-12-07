@@ -80,7 +80,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="../../plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../../plugins/images/favicon.png">
     <title>Blue Pigeon</title>
     <!-- Bootstrap Core CSS -->
     <link href="../../../bootstrap/dist/css/newbootstrap.min.css" rel="stylesheet">
@@ -371,12 +371,15 @@ function createGraph(graphId){
 
 
 $("#postsaledocument").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/postsale/buyerlist/document/document.jsp?flat_id=<%out.print(flatId);%>";
 });
 $("#postsalepaymentstatus").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/postsale/buyerlist/paymentstatus/paymentstatus.jsp?flat_id=<%out.print(flatId);%>";
  });
 $("#postsalepossession").click(function(){
+	ajaxindicatorstart("Loading...");
 	 window.location.href = "${baseUrl}/builder/postsale/buyerlist/possession/possession.jsp?flat_id=<%out.print(flatId);%>";
 });
 </script>
