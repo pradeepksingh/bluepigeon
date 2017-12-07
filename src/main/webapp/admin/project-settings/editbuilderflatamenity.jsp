@@ -18,7 +18,7 @@
 		builderFlatAmenity = amenity_list.get(0);
 	}
 %>
-<form class="form-horizontal" role="form" method="post" action="" id="editFlatAmenity" name="editFlatAmenity" enctype="multipart/form-data">		
+<form class="form-horizontal" role="form" method="post" action="" id="editMyFlatAmenity" name="editMyFlatAmenity" enctype="multipart/form-data">		
 	<input type="hidden" name="uamenity_id" id="uamenity_id" value="<% out.print(builderFlatAmenity.getId()); %>"/>
     <div class="row">
   		<div class="col-xs-12">
@@ -68,7 +68,7 @@ $('#uname').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
-$('#editFlatAmenity').bootstrapValidator({
+$('#editMyFlatAmenity').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},
@@ -110,7 +110,7 @@ function updateFlatAmenity() {
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
-   	$('#editFlatAmenity').ajaxSubmit(options);
+   	$('#editMyFlatAmenity').ajaxSubmit(options);
 }
 
 function showUpdateRequest(formData, jqForm, options){

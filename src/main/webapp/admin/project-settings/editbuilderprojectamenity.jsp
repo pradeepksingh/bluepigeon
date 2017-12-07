@@ -16,7 +16,7 @@
 	if (amenity_id > 0) {
 		amenity_list = builderProjectAmenityDAO.getBuilderProjectAmenityById(amenity_id);
 		builderProjectAmenity = amenity_list.get(0);
-		projectAmenityIcon = builderProjectAmenityDAO.getProjectAmenityIconById(amenity_id);
+		//projectAmenityIcon = builderProjectAmenityDAO.getProjectAmenityIconById(amenity_id);
 	}
 %>	
 	<form class="form-horizontal" role="form" method="post" action="" id="editMyProjectAmenity" name="editMyProjectAmenity" enctype="multipart/form-data">

@@ -324,11 +324,11 @@ width:50%;
 							   					<li  class="col-lg-4 col-xs-12" style="list-style: none;">
 							    					<a href="javascript:deleteDemandDocument(<%if(buyerUploadDocuments2.getPaymentId() > 0 && buyerUploadDocuments2.getDemandId() > 0){out.print(buyerUploadDocuments2.getPaymentId()+","+buyerUploadDocuments2.getId()+","+buyerUploadDocuments2.getDemandId());}%>)"><img src="../../../images/error.png" alt="User" width="35px" style="margin-left:108px;"/></a>
 													<br/>
-<!-- 													<img src="../../../images/docpdf.png" alt="User" width="150px"/> -->
-													<object data="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" type="application/pdf" width="150" height="200">
+													<img src="../../../images/docpdf.png" alt="User" width="150px"/>
+<%-- 													<object data="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" type="application/pdf" width="150" height="200"> --%>
 <%-- 														<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>">test.pdf</a> --%>
-														</object>
-													<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;margin-top:45px;"/></a>
+<!-- 														</object> -->
+													<a href="${baseUrl}/<% out.print(buyerUploadDocuments2.getDocUrl().toString()); %>" download><img src="../../../images/Downloads-icon.png" alt="User" style="margin-left:-108px;"/></a>
 													<br/><h5><% out.print(buyerUploadDocuments2.getName());%></h5>
 							   					</li>
 							   				</ul>
@@ -464,21 +464,19 @@ width:50%;
 </body>
 </html>
 <div id="newmessage" class="modal col-lg-7" >
-	<
 	<form class="modal-content animate" action="" method="post" id="addinbox" name="addinbox"  enctype="multipart/form-data" >
 		<input type="hidden" id="emp_id" name="emp_id" value="<%out.print(empId);%>"/>
-		
-		<div class="col-lg-12" style="background:white" >
+		<div class="col-lg-12" style="background:white;padding-top:15px;" >
 		<span class="pull-right" title="Close Modal"><a href=""><img src="../../../images/error.png" alt="cancle" class="closeimg" data-dismiss="modal"></a></span>
 			<div class="row clearfix" >
-				<div class="col-lg-4" style="margin-top:17px">
+				<div class="col-lg-4" style="margin-top:17px;padding-left:15px;">
 					<label><b>To</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
 					<input type="hidden" id="filter_buyer_id" name="filter_buyer_id[]" value="<%out.print(primary_buyer_id);%>" />
 					<input type="text" placeholder="" readonly value="<%out.print(buyerName); %>" required>
                 </div>
-				<div class="col-lg-4" style="margin-top:17px">
+				<div class="col-lg-4" style="margin-top:17px;padding-left:15px;">
 					<label><b>Subject</b></label>
 				</div>
 				<div class="col-lg-6" style="margin: 9px;">
@@ -492,7 +490,7 @@ width:50%;
 				</div>
 				<div class="col-lg-6" >
 					<div>
-						<textarea placeholder="Enter your message here" name="message" id="message" style="heigth:150px;width:240px;" required></textarea>
+						<textarea placeholder="Enter your message here" name="message" id="message" style="heigth:150px;width:360px;"></textarea>
 					</div>
 					<div class="messageContainer"></div>
 				</div>
@@ -508,7 +506,10 @@ width:50%;
 						</div>
 					</div>
                 </div>
-				<button type="submit" class="signupbtn">Send</button>
+				<div class="col-lg-4"></div>
+                 <div class="col-lg-6">
+                 	<button type="submit" class="signupbtn">Submit</button>
+                 </div>
 			</div>
 		</div>
 	</form>
@@ -555,14 +556,14 @@ width:50%;
 	<form class="modal-content animate" action="" id="demanddocform" name="demanddocform"  method="post" enctype="multipart/form-data">
 	<input type="hidden" name="buyer_id" id="buyer_id" value="<%out.print(primary_buyer_id);%>" />
 	<input type="hidden" name="doc_type" id="doc_type" value="2"/>
-		<div class="col-lg-12" style="background:white" >
+		<div class="col-lg-12" style="background:white;padding-top:15px;" >
 			<div class="row clearfix" >
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Payment schedule *</b></label>
 				</div>
-				<div class="col-lg-6" style="margin: 9px;">
+				<div class="col-lg-6" style="margin: 9px 0px;">
 					<div>
-						<select id="payment_id" name="payment_id" class="col-sm-6" style="height:40px">
+						<select id="payment_id" name="payment_id" class="col-sm-6" style="height:40px;">
 							<option value="">Select Payment Schedule</option>
 							<%if(paymentList!=null){ 
 							 for(BuyerPayment buyerPayment : paymentList){
@@ -576,9 +577,9 @@ width:50%;
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Previous demand</b></label>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-6">
 					<div>
-						<input type="text" placeholder="Previous demand" readonly name="previous_demand" id="previous_demand" style="margin-left:-9px;">
+						<input type="text" placeholder="Previous demand" readonly name="previous_demand" id="previous_demand" style="">
 					</div>
                 </div>
 			</div>
@@ -620,7 +621,7 @@ width:50%;
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Remind every</b></label>
 				</div>
-				<div class="col-lg-6" style="margin: 9px;">
+				<div class="col-lg-6" style="margin: 9px 0px;">
 					<div>
 						<select id="remind_day" name="remind_day" class="col-sm-6" style="height:40px;">
 								<option value="0">Select Remind days</option>
@@ -635,7 +636,7 @@ width:50%;
 					</div>
 					<div class="messageContainer"></div>
                 </div>
-                <div class="col-lg-4" style="margin-top:17px;margin-left:10px;">
+                <div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Attaches</b></label>
 				</div>
 				<div class="col-lg-4">
@@ -650,7 +651,7 @@ width:50%;
                 </div>
 			</div>
 			<div class="row clearfix" >
-				<div class="col-sm-4"></div>
+				<div class="col-sm-4" style="margin-left:25px;"></div>
 				<div class="col-sm-6">
 					<button type="submit" class="signupbtn">Submit</button>
 				</div>
@@ -665,12 +666,12 @@ width:50%;
 	<input type="hidden" name="emp_id" id="emp_id" value="<%out.print(empId); %>"/>
 	<input type="hidden" name="doc_id[]" value="0" />
 	<input type="hidden" name="doc_type" id="doc_type" value="2"/>
-		<div class="col-lg-12" style="background:white" >
+		<div class="col-lg-12" style="background:white;padding-top:15px;" >
 			<div class="row clearfix" >
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Payment schedule *</b></label>
 				</div>
-				<div class="col-lg-6" style="margin: 9px;">
+				<div class="col-lg-6" style="margin: 9px 0px;">
 					<div>
 						<select id="gpayment_id" name="gpayment_id" class="col-sm-6" style="height:40px">
 							<option value="">Select Payment Schedule</option>
@@ -686,9 +687,9 @@ width:50%;
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Previous demand</b></label>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-6">
 					<div>
-						<input type="text" placeholder="Previous demand" readonly name="gprevious_demand" id="gprevious_demand" style="margin-left:-9px;">
+						<input type="text" placeholder="Previous demand" readonly name="gprevious_demand" id="gprevious_demand">
 					</div>
                 </div>
 			</div>
@@ -730,7 +731,7 @@ width:50%;
 				<div class="col-lg-4" style="margin-top:17px;margin-left:25px;">
 					<label><b>Remind every</b></label>
 				</div>
-				<div class="col-lg-6" style="margin: 9px;">
+				<div class="col-lg-6" style="margin: 9px 0px;">
 						<select id="gremind_day" name="gremind_day" class="col-sm-6" style="height:40px;">
 								<option value="0">Select Remind days</option>
 								<option value="1">1</option>
@@ -744,7 +745,7 @@ width:50%;
                 </div>
 			</div>
 			<div class="row clearfix" >
-				<div class="col-sm-4"></div>
+				<div class="col-sm-4" style="margin-left:25px;"></div>
 				<div class="col-sm-6">
 					<button type="submit" class="signupbtn">GENERATE</button>
 				</div>
@@ -871,10 +872,7 @@ $("#gpayment_id").change(function(){
 		}
 	}
 });
-
-// Get the modal
-function openGeneralDoc(){
-	$("#generaldoc").modal('show');
+$(document).ready(function(){
 	$('#generaldocform').bootstrapValidator({
 		container: function($field, validator) {
 			return $field.parent().next('.messageContainer');
@@ -913,58 +911,8 @@ function openGeneralDoc(){
 		event.preventDefault();
 		//alert("Error in gen doc update");
 	});
-}
-
-function saveGeneralDoc(){
-	ajaxindicatorstart("Loading...");
-	var options = {
-	 		target : '#generalresponse', 
-	 		beforeSubmit : showAddGenDocumentRequest,
-	 		success :  showAddGenDocumentResponse,
-	 		url : '${baseUrl}/webapi/buyer/update/gendoc',
-	 		semantic : true,
-	 		dataType : 'json'
-	 	};
-   	$('#generaldocform').ajaxSubmit(options);
-}
-
-function showAddGenDocumentRequest(formData, jqForm, options){
-	$("#generalresponse").hide();
-   	var queryString = $.param(formData);
-	return true;
-}
-   	
-function showAddGenDocumentResponse(resp, statusText, xhr, $form){
-	if(resp.status == '0') {
-		$("#generalresponse").removeClass('alert-success');
-       	$("#generalresponse").addClass('alert-danger');
-		$("#generalresponse").html(resp.message);
-		$("#generalresponse").show();
-		alert(resp.message);
-		ajaxindicatorstop();
-  	} else {
-  		$("#generalresponse").removeClass('alert-danger');
-        $("#generalresponse").addClass('alert-success');
-        $("#generalresponse").html(resp.message);
-        $("#generalresponse").show();
-        alert(resp.message);
-      	$.get('${baseUrl}/builder/postsale/buyerlist/document/partialgendoc.jsp?buyer_id=<% out.print(primary_buyer_id);%>',{},function(data) {
-   	    	$("#gendocupload").html(data);
-   	    	ajaxindicatorstop();
-   	    },'html');
-      	$("#generaldocname").val('');
-      	$("#choosegeneraldoc").val('');
-      	$("#fileselectgeneral").html('No file chosen...');
-      	$("#generaldoc").modal('hide');
-      //	$("#generaldoc").dialog( "close" );
-      	
-//       	$(".modal").on("hidden.bs.modal", function(){
-//       	    $("#generaldoc").html("");
-//       	});
-  	}
-}
-function autogenerateDemandLetter(){
-	$("#genratedemandlettermodel").modal('show');
+	
+	
 	$("#genratedemanddocform").bootstrapValidator({
 		container: function($field, validator) {
 			return $field.parent().next('.messageContainer');
@@ -1014,57 +962,7 @@ function autogenerateDemandLetter(){
 		event.preventDefault();
 	});
 	
-}
-function saveAutoGenerateDemandDoc(){
-	ajaxindicatorstart("Loading...");
-	var options = {
-	 		target : '#autodemandresponse', 
-	 		beforeSubmit : showAddAutoDemandDocumentRequest,
-	 		success :  showAddAutoDemandDocumentResponse,
-	 		url : '${baseUrl}/webapi/buyer/demand/autogenrate/save',
-	 		semantic : true,
-	 		dataType : 'json'
-	 	};
-   	$('#genratedemanddocform').ajaxSubmit(options);
-}
-
-function showAddAutoDemandDocumentRequest(formData, jqForm, options){
-	$("#autodemandresponse").hide();
-   	var queryString = $.param(formData);
-	return true;
-}
-   	
-function showAddAutoDemandDocumentResponse(resp, statusText, xhr, $form){
-	if(resp.status == '0') {
-		$("#autodemandresponse").removeClass('alert-success');
-       	$("#autodemandresponse").addClass('alert-danger');
-		$("#autodemandresponse").html(resp.message);
-		$("#autodemandresponse").show();
-		alert(resp.message);
-		ajaxindicatorstop();
-  	} else {
-  		$("#autodemandresponse").removeClass('alert-danger');
-        $("#autodemandresponse").addClass('alert-success');
-        $("#autodemandresponse").html(resp.message);
-        $("#autodemandresponse").show();
-        alert(resp.message);
-    	$.get('${baseUrl}/builder/postsale/buyerlist/document/partialdemanddoc.jsp?buyer_id=<% out.print(primary_buyer_id);%>',{},function(data) {
-   	    	$("#demanddocupload").html(data);
-   	    	ajaxindicatorstop();
-   	    },'html');
-      //	$("input[name='doc_name[]']").val('');
-      	$('#gpayment_id').val('');
-      	$('#gprevious_demand').val('');
-      	$('#gcurrent_demand').val('');
-      	$('#gtotal_demand_value').val('');
-      	$('#gdemand_name').val('');
-      	$('#gpaymentdate').val('');
-      	$('#gremind_day').val(0);
-      	$("#genratedemandlettermodel").modal('hide');
-  	}
-}
-function openDemandLetter(){
-	$("#demandlettermodel").modal('show');
+	
 	$('#demanddocform').bootstrapValidator({
 		container: function($field, validator) {
 			return $field.parent().next('.messageContainer');
@@ -1126,6 +1024,193 @@ function openDemandLetter(){
 	}).on('error.form.bv',function(event,data){
 		event.preventDefault();
 	});
+	
+	
+	$('#paymentdocform').bootstrapValidator({
+		container: function($field, validator) {
+			return $field.parent().next('.messageContainer');
+	   	},
+		feedbackIcons: {
+		    validating: 'glyphicon glyphicon-refresh'
+		},
+		excluded: ':disabled',
+		fields: {
+			paymentdocname: {
+		        validators: {
+		            notEmpty: {
+		                message: 'Please enter document name'
+		            }
+		        }
+		    },
+		    choosepaymentdoc :{
+		    	validators: {
+		    		 notEmpty: {
+			                message: 'Please select document'
+			            },
+                    file: {
+                        extension: 'pdf',
+                        type: 'application/pdf',
+                      //  maxSize: 5 * 1024 * 1024, // 5 MB
+                        message: 'The selected file is not valid, it should be pdf.'
+                    }
+                }
+		    }
+		}
+	}).on('success.form.bv', function(event,data) {
+			// Prevent form submission
+	event.preventDefault();
+	savePaymentDoc();
+	}).on('error.form.bv',function(event,data){
+		event.preventDefault();
+	});
+	
+	$('#addinbox').bootstrapValidator({
+		container: function($field, validator) {
+			return $field.parent().next('.messageContainer');
+	   	},
+	    feedbackIcons: {
+	        validating: 'glyphicon glyphicon-refresh'
+	    },
+	    excluded: ':disabled',
+	    fields: {
+	    	'filter_buyer_id[]': {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Please select buyer'
+	                }
+	            }
+	        },
+	        
+	        subject: {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Please enter subject'
+	                }
+	            }
+	        },
+	        message: {
+	            validators: {
+	                notEmpty: {
+	                    message: 'Please enter message'
+	                }
+	            }
+	        }
+	    }
+	}).on('success.form.bv', function(event,data) {
+		// Prevent form submission
+		event.preventDefault();
+		addInboxMessage();
+		
+	});
+});
+// Get the modal
+function openGeneralDoc(){
+	$("#generaldoc").modal('show');
+	
+}
+
+function saveGeneralDoc(){
+	ajaxindicatorstart("Loading...");
+	var options = {
+	 		target : '#generalresponse', 
+	 		beforeSubmit : showAddGenDocumentRequest,
+	 		success :  showAddGenDocumentResponse,
+	 		url : '${baseUrl}/webapi/buyer/update/gendoc',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#generaldocform').ajaxSubmit(options);
+}
+
+function showAddGenDocumentRequest(formData, jqForm, options){
+	$("#generalresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddGenDocumentResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#generalresponse").removeClass('alert-success');
+       	$("#generalresponse").addClass('alert-danger');
+		$("#generalresponse").html(resp.message);
+		$("#generalresponse").show();
+		alert(resp.message);
+		ajaxindicatorstop();
+  	} else {
+  		$("#generalresponse").removeClass('alert-danger');
+        $("#generalresponse").addClass('alert-success');
+        $("#generalresponse").html(resp.message);
+        $("#generalresponse").show();
+        alert(resp.message);
+      	$.get('${baseUrl}/builder/postsale/buyerlist/document/partialgendoc.jsp?buyer_id=<% out.print(primary_buyer_id);%>',{},function(data) {
+   	    	$("#gendocupload").html(data);
+   	    	ajaxindicatorstop();
+   	    },'html');
+      	$("#generaldocname").val('');
+      	$("#choosegeneraldoc").val('');
+      	$("#fileselectgeneral").html('No file chosen...');
+      	$("#generaldoc").modal('hide');
+      //	$("#generaldoc").dialog( "close" );
+      	
+//       	$(".modal").on("hidden.bs.modal", function(){
+//       	    $("#generaldoc").html("");
+//       	});
+  	}
+}
+function autogenerateDemandLetter(){
+	$("#genratedemandlettermodel").modal('show');
+	
+}
+function saveAutoGenerateDemandDoc(){
+	ajaxindicatorstart("Loading...");
+	var options = {
+	 		target : '#autodemandresponse', 
+	 		beforeSubmit : showAddAutoDemandDocumentRequest,
+	 		success :  showAddAutoDemandDocumentResponse,
+	 		url : '${baseUrl}/webapi/buyer/demand/autogenrate/save',
+	 		semantic : true,
+	 		dataType : 'json'
+	 	};
+   	$('#genratedemanddocform').ajaxSubmit(options);
+}
+
+function showAddAutoDemandDocumentRequest(formData, jqForm, options){
+	$("#autodemandresponse").hide();
+   	var queryString = $.param(formData);
+	return true;
+}
+   	
+function showAddAutoDemandDocumentResponse(resp, statusText, xhr, $form){
+	if(resp.status == '0') {
+		$("#autodemandresponse").removeClass('alert-success');
+       	$("#autodemandresponse").addClass('alert-danger');
+		$("#autodemandresponse").html(resp.message);
+		$("#autodemandresponse").show();
+		alert(resp.message);
+		ajaxindicatorstop();
+  	} else {
+  		$("#autodemandresponse").removeClass('alert-danger');
+        $("#autodemandresponse").addClass('alert-success');
+        $("#autodemandresponse").html(resp.message);
+        $("#autodemandresponse").show();
+        alert(resp.message);
+    	$.get('${baseUrl}/builder/postsale/buyerlist/document/partialdemanddoc.jsp?buyer_id=<% out.print(primary_buyer_id);%>',{},function(data) {
+   	    	$("#demanddocupload").html(data);
+   	    	ajaxindicatorstop();
+   	    },'html');
+      //	$("input[name='doc_name[]']").val('');
+      	$('#gpayment_id').val('');
+      	$('#gprevious_demand').val('');
+      	$('#gcurrent_demand').val('');
+      	$('#gtotal_demand_value').val('');
+      	$('#gdemand_name').val('');
+      	$('#gpaymentdate').val('');
+      	$('#gremind_day').val(0);
+      	$("#genratedemandlettermodel").modal('hide');
+  	}
+}
+function openDemandLetter(){
+	$("#demandlettermodel").modal('show');
 }
 
 function saveDemandDoc(){
@@ -1181,43 +1266,6 @@ function showAddDemandDocumentResponse(resp, statusText, xhr, $form){
 
 function openPayment(){
 	$("#paymentrecipetdoc").modal('show');
-	$('#paymentdocform').bootstrapValidator({
-		container: function($field, validator) {
-			return $field.parent().next('.messageContainer');
-	   	},
-		feedbackIcons: {
-		    validating: 'glyphicon glyphicon-refresh'
-		},
-		excluded: ':disabled',
-		fields: {
-			paymentdocname: {
-		        validators: {
-		            notEmpty: {
-		                message: 'Please enter document name'
-		            }
-		        }
-		    },
-		    choosepaymentdoc :{
-		    	validators: {
-		    		 notEmpty: {
-			                message: 'Please select document'
-			            },
-                    file: {
-                        extension: 'pdf',
-                        type: 'application/pdf',
-                      //  maxSize: 5 * 1024 * 1024, // 5 MB
-                        message: 'The selected file is not valid, it should be pdf.'
-                    }
-                }
-		    }
-		}
-	}).on('success.form.bv', function(event,data) {
-			// Prevent form submission
-	event.preventDefault();
-	savePaymentDoc();
-	}).on('error.form.bv',function(event,data){
-		event.preventDefault();
-	});
 }
 
 function savePaymentDoc(){
@@ -1267,44 +1315,6 @@ function showAddPaymentDocumentResponse(resp, statusText, xhr, $form){
 
 function openMessageModal(){
 	$("#newmessage").modal('show');
-	$('#addinbox').bootstrapValidator({
-		container: function($field, validator) {
-			return $field.parent().next('.messageContainer');
-	   	},
-	    feedbackIcons: {
-	        validating: 'glyphicon glyphicon-refresh'
-	    },
-	    excluded: ':disabled',
-	    fields: {
-	    	'filter_buyer_id[]': {
-	            validators: {
-	                notEmpty: {
-	                    message: 'Please select buyer'
-	                }
-	            }
-	        },
-	        
-	        subject: {
-	            validators: {
-	                notEmpty: {
-	                    message: 'Please enter subject'
-	                }
-	            }
-	        },
-	        message: {
-	            validators: {
-	                notEmpty: {
-	                    message: 'Please enter message'
-	                }
-	            }
-	        }
-	    }
-	}).on('success.form.bv', function(event,data) {
-		// Prevent form submission
-		event.preventDefault();
-		addInboxMessage();
-		
-	});
 }
 
 function addInboxMessage() {
@@ -1582,15 +1592,18 @@ function getPaymentFileData(myFile){
  }
  
  $("#postsalepaymentstatus").click(function(){
+	 ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/postsale/buyerlist/paymentstatus/paymentstatus.jsp?flat_id=<%out.print(flat_id);%>";
  });
  
  
  $("#postsaleprojectstatus").click(function(){
+	 ajaxindicatorstart("Loading...");
 	 window.location.href = "${baseUrl}/builder/postsale/buyerlist/projectstatus/projectstatus.jsp?flat_id=<%out.print(flat_id);%>";
  });
  
  $("#postsalepossession").click(function(){
+	 ajaxindicatorstart("Loading...");
 	 window.location.href = "${baseUrl}/builder/postsale/buyerlist/possession/possession.jsp?flat_id=<%out.print(flat_id);%>";
  });
 </script>

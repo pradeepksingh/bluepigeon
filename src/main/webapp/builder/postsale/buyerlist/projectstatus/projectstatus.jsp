@@ -371,12 +371,15 @@ function createGraph(graphId){
 
 
 $("#postsaledocument").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/postsale/buyerlist/document/document.jsp?flat_id=<%out.print(flatId);%>";
 });
 $("#postsalepaymentstatus").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/postsale/buyerlist/paymentstatus/paymentstatus.jsp?flat_id=<%out.print(flatId);%>";
  });
 $("#postsalepossession").click(function(){
+	ajaxindicatorstart("Loading...");
 	 window.location.href = "${baseUrl}/builder/postsale/buyerlist/possession/possession.jsp?flat_id=<%out.print(flatId);%>";
 });
 </script>

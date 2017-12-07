@@ -277,12 +277,15 @@ $('#ptime').datetimepicker({
     stepping: 1
 });
 $("#postsaledocument").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/postsale/buyerlist/document/document.jsp?flat_id=<%out.print(flat_id);%>";
 });
 $("#postsaleprojectstatus").click(function(){
+	ajaxindicatorstart("Loading...");
 	 window.location.href = "${baseUrl}/builder/postsale/buyerlist/projectstatus/projectstatus.jsp?flat_id=<%out.print(flat_id);%>";
 });
 $("#postsalepaymentstatus").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/postsale/buyerlist/paymentstatus/paymentstatus.jsp?flat_id=<%out.print(flat_id);%>";
  });
  

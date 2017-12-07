@@ -104,10 +104,11 @@
     <script type="text/javascript" src="../../../js/selectize.min.js"></script>
      <script src="../../../js/jquery.form.js"></script>
     <script src="../../../js/bootstrapValidator.min.js"></script>
-     <script src="../../../js/bootstrap-datepicker.min.js"></script>
+     <script src="../../../js/Moment.js"></script>
+    <script src="../../../js/bootstrap-datepicker.min.js"></script>
 
     <!-- Custom Css -->
-    <link href="../../../css/POSTSALE_Document.css" rel="stylesheet">
+    <link href="../../../css/paymentstatus.css" rel="stylesheet">
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
 </head>
@@ -170,99 +171,96 @@
 									</div>
 							 		<div class="tab-content">
 							     		<div class="row clearfix tab-pane fade in active" id="PaymentSchedule" >
-								 			<div class="row clearfix" style="margin-top:20px">
-                               					<ul >
-							   						<li class="col-lg-3 col-xs-12 listpstsale">
-							   							<a>Stage</a>
-							   						</li>
-													<li class="col-lg-3 col-xs-12 listpstsale">
-														<a>Date</a>
-													</li>
-													<li class="col-lg-3 col-xs-12 listpstsale">
-														<a>Amount</a>
-													</li>
+<!-- 								 			<div class="row clearfix" style="margin-top:20px"> -->
+<!--                                					<ul > -->
+<!-- 							   						<li class="col-lg-3 col-xs-12 listpstsale"> -->
+<!-- 							   							<a>Stage</a> -->
+<!-- 							   						</li> -->
+<!-- 													<li class="col-lg-3 col-xs-12 listpstsale"> -->
+<!-- 														<a>Date</a> -->
+<!-- 													</li> -->
+<!-- 													<li class="col-lg-3 col-xs-12 listpstsale"> -->
+<!-- 														<a>Amount</a> -->
+<!-- 													</li> -->
 													
-							   					</ul>
-											</div>
+<!-- 							   					</ul> -->
+<!-- 											</div> -->
 											<%if(buyerPayments.size() >0){
 											    for(BuyerPayment buyerPayment : buyerPayments){
+											    	if(!buyerPayment.isPaid()){
 												%>
+												<input type="hidden" id="payid<%out.print(buyerPayment.getId()); %>" name="payid[]" value="<%out.print(buyerPayment.getId());%>"/>
+												<input type="hidden" id="slab<%out.print(buyerPayment.getId()); %>" name="slab[]" value="<%out.print(buyerPayment.getMilestone());%>"/>
 							   				<ul class="col-lg-12" style="margin-bottom: 13px;border-bottom: 2px solid beige;">
 							   					<li class="col-lg-3 col-xs-12" style="list-style: none;text-align:center">
-							    					<p style="color: aqua;font-weight: 600;"><%out.print(buyerPayment.getMilestone()); %></p>
+							    					<p style="font-weight: 600;"><%out.print(buyerPayment.getMilestone()); %></p>
 							   					</li>
 							   					<li class="col-lg-3 col-xs-12" style="list-style: none;text-align:center;">
-													<p><%if(buyerPayment.getScheduleDate()!=null)out.print(buyerPayment.getScheduleDate());%></p>
+													<p><%if(buyerPayment.getNetPayable()!=null)out.print(buyerPayment.getNetPayable()+" %");%></p>
+							   					</li>
+							   					<li class="col-lg-3 col-xs-12" style="list-style: none;text-align:center;">
+                          							<p><%out.print(Math.round(buyerPayment.getAmount())); %></p>
+							    				</li>
+							    				<li class="col-lg-3 col-xs-12" style="list-style: none;text-align:center">
+							 						<input type="button" id="update<%out.print(buyerPayment.getId()); %>" onclick="updateMypayment(<%out.print(buyerPayment.getId()); %>);" value="Update" class="btn-submit"/>
+							    				</li>
+							   				</ul>
+							   				<div id="payment<%out.print(buyerPayment.getId());%>"></div>
+							   				<%}}} %>
+<!-- 							   				<div id="bpayment"></div> -->
+										</div>
+										<div class="row clearfix tab-pane fade" id="Paid">
+<!-- 								 			<ul > -->
+<!-- 							   					<li class="col-lg-3 col-xs-12 " style="list-style: none;"> -->
+<!-- 							   						<a>Amount</a> -->
+<!-- 							   					</li> -->
+<!-- 							   					<li class="col-lg-3 col-xs-12 " style="list-style: none;"> -->
+<!-- 							   						<a>Date</a> -->
+<!-- 							   					</li> -->
+<!-- 							   					<li class="col-lg-3 col-xs-12 " style="list-style: none;"> -->
+<!-- 							   						<a>Transition No</a> -->
+<!-- 							   					</li> -->
+<!-- 							   					<li class="col-lg-3 col-xs-12 " style="list-style: none;"> -->
+<!-- 							   						<a>Transition Type</a> -->
+<!-- 							   					</li> -->
+<!-- 							   				</ul> -->
+							   				<%if(buyerPayments.size() >0){
+											    for(BuyerPayment buyerPayment : buyerPayments){
+											    	if(buyerPayment.isPaid()){
+							   					%>
+                             				<ul class="col-lg-12" style="margin-bottom: 13px;border-bottom: 2px solid beige;">
+							   					<li class="col-lg-3 col-xs-12" style="list-style: none;text-align:center">
+							    					<p style="font-weight: 600;"><%out.print(buyerPayment.getMilestone()); %></p>
+							   					</li>
+							   					<li class="col-lg-3 col-xs-12" style="list-style: none;text-align:center;">
+													<p><%if(buyerPayment.getNetPayable()!=null)out.print(buyerPayment.getNetPayable()+" %");%></p>
 							   					</li>
 							   					<li class="col-lg-3 col-xs-12" style="list-style: none;text-align:center;">
                           							<p><%out.print(Math.round( buyerPayment.getAmount())); %></p>
 							    				</li>
-							    				<li class="col-lg-3 col-xs-12" style="list-style: none;text-align:center">
-							 						<select class="form-control show-tick" >
-														<option value="0" <%if(buyerPayment.isPaid()==false) {%>selected<%} %>>Not Paid</option>
-														<option value="1" <%if(buyerPayment.isPaid()==true){ %>selected<%} %>>Paid</option>
-													</select>
-							    				</li>
+							    				
 							   				</ul>
-							   				<%}} %>
-										</div>
-										<div class="row clearfix tab-pane fade" id="Paid">
-								 			<ul >
-							   					<li class="col-lg-3 col-xs-12 " style="list-style: none;">
-							   						<a>Amount</a>
-							   					</li>
-							   					<li class="col-lg-3 col-xs-12 " style="list-style: none;">
-							   						<a>Date</a>
-							   					</li>
-							   					<li class="col-lg-3 col-xs-12 " style="list-style: none;">
-							   						<a>Transition No</a>
-							   					</li>
-							   					<li class="col-lg-3 col-xs-12 " style="list-style: none;">
-							   						<a>Transition Type</a>
-							   					</li>
-							   				</ul>
-							   				<%if(buyerPayments.size() >0){
-											    for(BuyerPayment buyerPayment : buyerPayments){
-							   					%>
-                             				<ul class="col-lg-12" style="margin-top: 20px;border-bottom: 2px solid beige;">
-							   					<li class="col-lg-3 col-xs-12" style="list-style: none;">
-							    					<input type="text"  class="timepicker form-control" placeholder="Rs.5,00,00">
-							   					</li>
-							   					<li class="col-lg-3 col-xs-12" style="list-style: none;text-align: left;">
-													<input type="text" onchange="opendate(paied<%out.print(buyerPayment.getId()); %>)" id="paied<%out.print(buyerPayment.getId()); %>" value="<%if(buyerPayment.getPaieddate()!=null){out.print(buyerPayment.getPaieddate());} %>" class=" datedisplay form-control" placeholder="28-8-2017">
-							   					</li>
-							   					<li class="col-lg-3 col-xs-12" style="list-style: none;">
-                           							<input type="text" class="form-control" placeholder="1012548">
-							    				</li>
-												<li class="col-lg-3 col-xs-12" style="list-style: none;">
-							 						<select class="form-control show-tick" >
-														<option value="1">Net Banking</option>
-														<option value="2">By Cash</option>
-														<option value="3">By Check</option>
-													</select>
-							    				</li>
-							   				</ul>
-							   				<%}} %>
-							   				<ul class="col-lg-12" style="margin-bottom: 13px;border-bottom: 2px solid beige;">
-							   					<li class="col-lg-3 col-xs-12" style="list-style: none;">
-							    					<p style="color: aqua;font-weight: 600;">Rs. 5,00,000</p>
-							   					</li>
-							   					<li class="col-lg-3 col-xs-12" style="list-style: none;text-align: left;">
-													<p>Pending (till date)</p>
-							   					</li>
-							   					<li class="col-lg-3 col-xs-12" style="list-style: none;"></li>
-												<li class="col-lg-3 col-xs-12" style="list-style: none;"></li>
-							   				</ul>
-							   				<ul class="col-lg-12" style="margin-bottom: 13px;border-bottom: 2px solid beige;">
-							   					<li class="col-lg-3 col-xs-12" style="list-style: none;">
-							    					<p style="color: aqua;font-weight: 600;">Rs. 5,00,000</p>
-							   					</li>
-							   					<li class="col-lg-3 col-xs-12" style="list-style: none;text-align: left;">
-													<p>Net Pending(bss)</p>
-							  					 </li>
-							   					<li class="col-lg-3 col-xs-12" style="list-style: none;"></li>
-												<li class="col-lg-3 col-xs-12" style="list-style: none;"></li>
-							   				</ul>
+							   				<%}} }%>
+<!-- 							   				<ul class="col-lg-12" style="margin-bottom: 13px;border-bottom: 2px solid beige;"> -->
+<!-- 							   					<li class="col-lg-3 col-xs-12" style="list-style: none;"> -->
+<!-- 							    					<p style="color: aqua;font-weight: 600;">Rs. 5,00,000</p> -->
+<!-- 							   					</li> -->
+<!-- 							   					<li class="col-lg-3 col-xs-12" style="list-style: none;text-align: left;"> -->
+<!-- 													<p>Pending (till date)</p> -->
+<!-- 							   					</li> -->
+<!-- 							   					<li class="col-lg-3 col-xs-12" style="list-style: none;"></li> -->
+<!-- 												<li class="col-lg-3 col-xs-12" style="list-style: none;"></li> -->
+<!-- 							   				</ul> -->
+<!-- 							   				<ul class="col-lg-12" style="margin-bottom: 13px;border-bottom: 2px solid beige;"> -->
+<!-- 							   					<li class="col-lg-3 col-xs-12" style="list-style: none;"> -->
+<!-- 							    					<p style="color: aqua;font-weight: 600;">Rs. 5,00,000</p> -->
+<!-- 							   					</li> -->
+<!-- 							   					<li class="col-lg-3 col-xs-12" style="list-style: none;text-align: left;"> -->
+<!-- 													<p>Net Pending(bss)</p> -->
+<!-- 							  					 </li> -->
+<!-- 							   					<li class="col-lg-3 col-xs-12" style="list-style: none;"></li> -->
+<!-- 												<li class="col-lg-3 col-xs-12" style="list-style: none;"></li> -->
+<!-- 							   				</ul> -->
 										</div>
 									</div>
 								</div>
@@ -316,28 +314,85 @@
 </body>
 </html>
 <script>
-
-function opendate(id){
-	//alert("ID :: "+id.value);
-	
+function updateMypayment(id){
+	//$("#bpayment").empty();
+	ajaxindicatorstart("Loading...");
+		 $.get('${baseUrl}/builder/postsale/buyerlist/paymentstatus/partialpayment.jsp?id='+id+'&buyer_id=<% out.print(primary_buyer_id);%>',{},function(data) {
+	   	    	$("#payment"+id).html(data);
+	   	    	$("#payment"+id).show();
+	   	    	$('#payment_date').datepicker({
+					autoclose:true,
+					format: "dd M yyyy"
+				}).on('change',function(e){
+					 $('#updatepayment').data('bootstrapValidator').revalidateField('payment_date');
+				});
+				$('#updatepayment').bootstrapValidator({
+					container: function($field, validator) {
+						return $field.parent().next('.messageContainer');
+				   	},
+				    feedbackIcons: {
+				        validating: 'glyphicon glyphicon-refresh'
+				    },
+				    excluded: ':disabled',
+				    fields: {
+				    	demand_name: {
+				            validators: {
+				                notEmpty: {
+				                    message: 'Please enter demand name'
+				                }
+				            }
+				        },
+				        payment_date : {
+				        	validators: {
+					                callback: {
+					                    message: 'Wrong payment Date',
+					                    callback: function (value, validator) {
+					                        var m = new moment(value, 'DD MMM YYYY', true);
+					                        if (!m.isValid()) {
+					                            return false;
+					                        } else {
+					                        	return true;
+					                        }
+					                    }
+					                }
+					            }
+				        },
+				        message: {
+				            validators: {
+				                notEmpty: {
+				                    message: 'Please enter message'
+				                }
+				            }
+				        }
+				    }
+				}).on('success.form.bv', function(event,data) {
+					// Prevent form submission
+					event.preventDefault();
+					//addInboxMessage();
+					
+				});
+	   	    	ajaxindicatorstop();
+	   	    },'html');
+		 
 }
-$('.datedisplay').datepicker({
-	autoclose:true,
-	format: "dd MM yyyy"
-});
 
-
+function closepayment(id){
+	$("#payment"+id).hide();
+}
 
 $("#postsaledocument").click(function(){
+	ajaxindicatorstart("Loading...");
 	window.location.href = "${baseUrl}/builder/postsale/buyerlist/document/document.jsp?flat_id=<%out.print(flat_id);%>";
 });
 
 
 $("#postsaleprojectstatus").click(function(){
+	ajaxindicatorstart("Loading...");
 	 window.location.href = "${baseUrl}/builder/postsale/buyerlist/projectstatus/projectstatus.jsp?flat_id=<%out.print(flat_id);%>";
 });
 
 $("#postsalepossession").click(function(){
+	ajaxindicatorstart("Loading...");
 	 window.location.href = "${baseUrl}/builder/postsale/buyerlist/possession/possession.jsp?flat_id=<%out.print(flat_id);%>";
 });
 </script>

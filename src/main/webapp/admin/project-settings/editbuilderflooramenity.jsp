@@ -17,7 +17,7 @@
 		builderFloorAmenity = amenity_list.get(0);
 	}
 %>
-<form class="form-horizontal" role="form" method="post" action="" id="updateFloorAmenity" name="updateFloorAmenity" enctype="multipart/form-data">			
+<form class="form-horizontal" role="form" method="post" action="" id="updateMyFloorAmenity" name="updateMyFloorAmenity" enctype="multipart/form-data">			
 	<input type="hidden" name="uamenity_id" id="uamenity_id" value="<% out.print(builderFloorAmenity.getId()); %>"/>
               	<div class="row">
               		<div class="col-xs-12">
@@ -67,7 +67,7 @@ $('#uname').keyup(function() {
     var $th = $(this);
     $th.val( $th.val().replace(/[^a-zA-Z0-9 -]/g, function(str) { alert('\n\nPlease use only alphanumeric.'); return ''; } ) );
 });
-$('#updateFloorAmenity').bootstrapValidator({
+$('#updateMyFloorAmenity').bootstrapValidator({
 	container: function($field, validator) {
 		return $field.parent().next('.messageContainer');
    	},
@@ -109,7 +109,7 @@ function updateFloorAmenity() {
 	 		semantic : true,
 	 		dataType : 'json'
 	 	};
-   	$('#editFloorAmenity').ajaxSubmit(options);
+   	$('#updateMyFloorAmenity').ajaxSubmit(options);
 }
 
 function showUpdateRequest(formData, jqForm, options){
