@@ -41,14 +41,20 @@
    	if (request.getParameterMap().containsKey("builder_id")) {
    		builderId = Integer.parseInt(request.getParameter("builder_id"));
    		if(builderId != 0) {
+   			try{
    			roleId = Integer.parseInt(request.getParameter("role_id"));
    			keyword = request.getParameter("keyword");
    			employeeLists = new ProjectDAO().getBuilderEmployeeList(builderId,roleId,keyword);
+   			}catch(Exception e){
+   				
+   			}
    		}
    	}
    
 %>
+<div class="row">
 <%if(employeeLists != null){
+	int i=1;
 	for(EmployeeList employeeList : employeeLists){
 %>
 <div class="col-md-4">
@@ -71,4 +77,10 @@
 	    </div>
     </div>
 </div>
- <%}} %>
+ <%
+	if(i%3 ==0){%>
+	</div>
+	<div class="row">
+<%}
+i++;}} %>
+</div>

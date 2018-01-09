@@ -212,7 +212,7 @@
                        <select id="project_status" name="project_status">
                             <option value="0">Status</option>
                             <option value="1">Pending Projects</option>
-                            <option value="2">Complete Projects</option>
+                            <option value="2">Completed Projects</option>
                          </select>
                     </div>
                     <input type="hidden" id="builder_id" name="builder_id" value="<%out.print(builder_id);%>"/>

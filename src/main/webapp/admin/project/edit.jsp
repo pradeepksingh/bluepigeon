@@ -925,7 +925,7 @@
 														<div class="col-sm-4">
 															<input type="text" class="form-control" onblur="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable<%out.print(i); %>" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 														</div>
-														<div class="epayable<%out.print(i);%>"></div>
+														<div id="epayable<%out.print(i);%>"></div>
 													</div>
 												</div>
 												<!-- div class="col-lg-3 margin-bottom-5">
@@ -961,7 +961,7 @@
 													<div class="form-group" id="error-payable">
 														<label class="control-label col-sm-8">% of Net Payable <span class='text-danger'>*</span></label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control"  onkeypress=" return isNumber(event, this);" id="payable<% out.print(i);%>" name="payable[]" value=""/>
+															<input type="text" class="form-control" onblur="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable<% out.print(i);%>" name="payable[]" value=""/>
 														</div>
 														<div id="epayable<%out.print(i);%>"></div>
 													</div>
@@ -1205,16 +1205,7 @@ function vaildPayablePer(id){
 	var count=1;
 	 var sum =0;
 	 var isEmpty = false;
-// 		$("input[name='payable[]']").each(function(){
-// 			//alert($("#payable"+count).val());
-// 			if($("#payable"+count).val()!=""){
-// 			sum +=parseFloat($("#payable"+count).val());
-// 			//alert($("#payable"+count).val());
-// 			}else{
-// 				isEmpty=true;
-// 			}
-// 			count++;
-// 		});
+
 		
 		$("input[name^='payable']").each(function() { 
 			if($(this).val()!=""){
@@ -1222,26 +1213,45 @@ function vaildPayablePer(id){
 			}else{
 				isEmpty = true;
 			}
-		})
+		});
 		
 		if(sum>100){
-			alert("The sum of percentages must be 100");
+			$("#paymentresponse").removeClass('alert-success');
+       	$("#paymentresponse").addClass('alert-danger');
+		$("#paymentresponse").html("The sum of percentages must be 100");
+		$("#paymentresponse").show();
 			$("#paymentbtn").attr('disabled',true);
 		}else if(sum<100){
-			alert("The percentage must be between 0 and 100");
+			//alert("The percentage must be between 0 and 100");
+			$("#paymentresponse").removeClass('alert-success');
+       	$("#paymentresponse").addClass('alert-danger');
+		$("#paymentresponse").html("The percentage must be between 0 and 100");
+		$("#paymentresponse").show();
 			$("#paymentbtn").attr('disabled',true);
 		}else	if(sum<0 || sum>100){
-			alert("The percentage must be between 0 and 100");
+			$("#paymentresponse").removeClass('alert-success');
+	       	$("#paymentresponse").addClass('alert-danger');
+			$("#paymentresponse").html("The percentage must be between 0 and 100");
+			$("#paymentresponse").show();
 			$("#paymentbtn").attr('disabled',true);
 		}else if( x<0 || x >100){
-			alert("The percentage must be between 0 and 100");
+			$("#paymentresponse").removeClass('alert-success');
+	       	$("#paymentresponse").addClass('alert-danger');
+			$("#paymentresponse").html("The percentage must be between 0 and 100");
+			$("#paymentresponse").show();
 			$("#payable"+id).val('');
 			$("#paymentbtn").attr('disabled',true);
 		}else{
 			if(isEmpty){
-				alert("Payable is required and cannot be empty");
+				$("#paymentresponse").removeClass('alert-success');
+		       	$("#paymentresponse").addClass('alert-danger');
+		        $("#paymentresponse").html("Payable is required and cannot be empty");
+		        $("#paymentresponse").show();
 				$("#paymentbtn").attr('disabled',false);
 			}else{
+				$("#paymentresponse").removeClass('alert-danger');
+		        $("#paymentresponse").html("");
+		        $("#paymentresponse").show();
 				$("#paymentbtn").attr('disabled',false);
 			}
 		}
@@ -1268,16 +1278,31 @@ function vaildateSum(){
 		}
 	})
 	if(sum>100){
-		alert("The sum of percentages must be 100");
+		//alert("The sum of percentages must be 100");
+		$("#paymentresponse").removeClass('alert-success');
+       	$("#paymentresponse").addClass('alert-danger');
+		$("#paymentresponse").html("The sum of percentages must be 100");
+		$("#paymentresponse").show();
 		$("#paymentbtn").attr('disabled',true);
 	}else if(sum<100){
-		alert("The sum of percentages must be 100");
+		$("#paymentresponse").removeClass('alert-success');
+       	$("#paymentresponse").addClass('alert-danger');
+		$("#paymentresponse").html("The sum of percentages must be 100");
+		$("#paymentresponse").show();
+	//	alert("The sum of percentages must be 100");
 		$("#paymentbtn").attr('disabled',true);
 	}else{
 		if(isEmpty){
-			alert("Payable is required and cannot be empty");
+			$("#paymentresponse").removeClass('alert-success');
+	       	$("#paymentresponse").addClass('alert-danger');
+			$("#paymentresponse").html("The sum of percentages must be 100");
+			$("#paymentresponse").show();
+			//alert("Payable is required and cannot be empty");
 			$("#paymentbtn").attr('disabled',false);
 		}else{
+			$("#paymentresponse").removeClass('alert-danger');
+			$("#paymentresponse").html("");
+			$("#paymentresponse").show();
 			$("#paymentbtn").attr('disabled',false);
 		}
 	}
@@ -1489,6 +1514,8 @@ $("#paymentbtn").click(function(){
 		$("input[name^='payable']").each(function() { 
 			if($(this).val()==""){
 				isEmpty = true;
+			}else{
+				//$("#epayable"+id).html('');
 			}
 		});
 		$("input[name^='schedule']").each(function() { 
@@ -1497,7 +1524,10 @@ $("#paymentbtn").click(function(){
 			}
 		});
 	if(isEmpty){		
-		alert("Please fill All mandatory fields");
+		$("#paymentresponse").removeClass('alert-success');
+       	$("#paymentresponse").addClass('alert-danger');
+		$("#paymentresponse").html("Please fill All mandatory fields");
+		$("#paymentresponse").show();
 	}else{
 		updatePaymentSchudle();
 	}
@@ -2008,8 +2038,8 @@ function showPaymentResponse(resp, statusText, xhr, $form){
    	    	$("#payment_schedule").html(data);
    	    	ajaxindicatorstop();
    	    },'html');
-    	$('#paymentfrm').data('bootstrapValidator').revalidateField('schedule[]');
-    	$('#paymentfrm').data('bootstrapValidator').revalidateField('payable[]');
+    //	$('#paymentfrm').data('bootstrapValidator').revalidateField('schedule[]');
+    //	$('#paymentfrm').data('bootstrapValidator').revalidateField('payable[]');
   	}
 }
 
@@ -2196,6 +2226,34 @@ function txtEnabaleDisable(id){
 
 function addMoreSchedule() {
 	var schedule_count = parseInt($("#schedule_count").val());
+	var sum =0;
+	 var isEmpty = false;
+		$("input[name^='payable']").each(function() { 
+			if($(this).val()==""){
+				isEmpty = true;
+			}else{
+				sum +=parseFloat($(this).val()); 
+			}
+		});
+		$("input[name^='schedule']").each(function() { 
+			if($(this).val()==""){
+				isEmpty = true;
+			}
+		});
+	if(isEmpty){	
+		$("#paymentresponse").removeClass('alert-success');
+       	$("#paymentresponse").addClass('alert-danger');
+        $("#paymentresponse").html("Please fill All mandatory fields");
+        $("#paymentresponse").show();
+	}
+	else if(sum>100){
+			$("#paymentresponse").removeClass('alert-success');
+       	$("#paymentresponse").addClass('alert-danger');
+		$("#paymentresponse").html("The sum of percentages must be 100");
+		$("#paymentresponse").show();
+	}	else{
+		$("#paymentresponse").removeClass('alert-danger');
+		 $("#paymentresponse").html("");
 	schedule_count++;
 	var html = '<div class="row" id="schedule-'+schedule_count+'">'
 				+'<input type="hidden" id="schedule_id" name="schedule_id[]" value="0"/>'
@@ -2217,9 +2275,9 @@ function addMoreSchedule() {
 				+'<label class="control-label col-sm-8">% of Net Payable <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-4">'
 // 				+'<input type="text" class="form-control" required=true id="payable'+schedule_count+'" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress="return isNumber(event, this);" name="payable[]"/>'
-				+'<input type="text" class="form-control" required=true id="payable'+schedule_count+'"    onkeypress="return isNumber(event, this);"   name="payable[]"/>'
+				+'<input type="text" class="form-control" required=true id="payable'+schedule_count+'" onblur="javascript:vaildPayablePer('+schedule_count+')"    onkeypress="return isNumber(event, this);"   name="payable[]"/>'
 				+'</div>'
-				+'<div class="messageContainer"></div>'
+				+'<div id="epayable"'+schedule_count+'></div>'
 				+'</div>'
 				+'</div>'
 				+'<!--div class="col-lg-3 margin-bottom-5">'
@@ -2237,16 +2295,8 @@ function addMoreSchedule() {
 			+'</div>';
 	$("#payment_schedule").append(html);
 	$("#schedule_count").val(schedule_count);
-	$("#payable"+schedule_count).blur(function(){
-		//$('#paymentfrm').bootstrapValidator('revalidateField', $(this).prop('name'));
-		//alert($("#payable"+schedule_count).val());
-		//var value = $("#payable"+schedule_count).val();
-		//alert(value+"Count :: "+schedule_count);
-		vaildateSum();
-	//	 $('#paymentfrm').data('bootstrapValidator').revalidateField('payable[]');
-		
-	});
 	
+	}
 }
 function removeSchedule(id) {
 	
@@ -2268,8 +2318,8 @@ function deleteSchudle(id){
 	   	    },'html');
 			vaildateSum();
 		});
-		$('#paymentfrm').data('bootstrapValidator').revalidateField('schedule[]');
-    	$('#paymentfrm').data('bootstrapValidator').revalidateField('payable[]');
+		//$('#paymentfrm').data('bootstrapValidator').revalidateField('schedule[]');
+    	//$('#paymentfrm').data('bootstrapValidator').revalidateField('payable[]');
 	}
 }
 

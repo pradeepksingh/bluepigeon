@@ -595,7 +595,9 @@ public class EmployeeController {
 			@FormDataParam("builder_id") int builderId,
 			@FormDataParam("reporting_id") int reporting_id,
 			@FormDataParam("allot_id")List<FormDataBodyPart> allotprojectIds,
-			@FormDataParam("empphoto[]") List<FormDataBodyPart> empPhoto
+			@FormDataParam("empphoto[]") List<FormDataBodyPart> empPhoto,
+			@FormDataParam("aadhaar")String aadhaarNumber,
+			@FormDataParam("pancard") String pancard
 			){
 		
 		BuilderEmployeeAccessType employeeAccessType = new BuilderEmployeeAccessType();
@@ -635,6 +637,8 @@ public class EmployeeController {
 		builderEmployee.setDesignation(designation);
 		builderEmployee.setEmployeeId(employeeId);
 		builderEmployee.setBuilderEmployee(reportingEmployee);
+		builderEmployee.setAadhaarNumber(aadhaarNumber);
+		builderEmployee.setPancard(pancard);
 		if(empPhoto != null){
 			//add gallery images
 			try{	
@@ -697,9 +701,10 @@ public class EmployeeController {
 					new BuilderDetailsDAO().saveAllotProjects(saveallotProjectList);
 				}
 			}
-		}else if(projectId == null){
-			new BuilderDetailsDAO().deleteAllotedrojectsByEmpId(emp_id); 
 		}
+//		}else if(projectId == null){
+//			new BuilderDetailsDAO().deleteAllotedrojectsByEmpId(emp_id); 
+//		}
 	return responseMessage;
 	}
 
