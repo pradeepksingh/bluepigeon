@@ -122,10 +122,11 @@
                <div class="white-box">
                  <!-- row -->
                 
-                   <div class="row">
+                  
 	                   <div id ="emplist">
+	                    <div class="row">
 	                    <%if(employeeLists != null){
-	                	 
+	                	 int i=1;
 	                	 for(EmployeeList employeeList : employeeLists){
 	                	 %>
 	                       <div class="col-md-4">
@@ -148,7 +149,12 @@
 								    </div>
 						       </div>
 						  </div>
-						   <%}} %>
+						  <%
+						  if(i%3 ==0){%>
+							  </div>
+							  <div class="row">
+						  <%}
+	                	 i++;}} %>
 					
 		              </div>
 	             </div>

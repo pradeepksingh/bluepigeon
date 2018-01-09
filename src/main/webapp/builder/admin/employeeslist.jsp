@@ -126,13 +126,16 @@
                <div class="white-box">
                  <!-- row -->
                 
-                   <div class="row">
+                 
 	                   <div id ="emplist">
+	                     <div class="row">
 	                    <%if(employeeLists != null){
-	                	 
+	                	 int i=1;
 	                	 for(EmployeeList employeeList : employeeLists){
+	                		 
 	                	 %>
-	                       <div class="col-md-4">
+	                	 
+	                       <div class="col-md-4 col-sm-4 col-xs-12">
 	                         <div class="white-box1">
 	                           <div class="user-profile center">
 	                           		<%if(employeeList.getImage()!=null){ 
@@ -142,10 +145,9 @@
 						            <img src="../plugins/images/Untitled-1.png" alt="User Image" class="custom-img">
 						            <%} %>
 						            <p><b><%out.print(employeeList.getName()); %></b></p>
-						            <div style="font-size:17px;"><%out.print(employeeList.getAccess()); %></div>
-						            <br>
+						            <p style="font-size:17px;"><%out.print(employeeList.getAccess()); %></p>
 						          </div>
-						             <div class="row custom-row user-row">
+						             <div class="row">
 								        <p class="p-custom">Mobile No.</p>
 								        <p><b><%out.print(employeeList.getMobileNo()); %></b></p>
 								        <p class="p-custom">Email</p>
@@ -154,9 +156,15 @@
 								    </div>
 						       </div>
 						  </div>
-						   <%}} %>
-					
+						  
+						  <%
+						  if(i%3 ==0){%>
+							  </div>
+							  <div class="row">
+						  <%}
+	                	 i++;}} %>
 		              </div>
+		            
 	             </div>
                 <!-- row -->
             </div>

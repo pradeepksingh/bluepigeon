@@ -6984,7 +6984,7 @@ public List<InboxMessageData> getBookedBuyerList(int empId){
 	 * @return
 	 */
 	public List<EmployeeList> getBuilderEmployeeList(BuilderEmployee builderEmployee){
-		String hql = "select emp.id as id, emp.name as name, emp.photo as image, emp.mobile as mobileNo, emp.email as email,GROUP_CONCAT(access.name) as access from builder_employee as emp join employee_role as er on er.emp_id=emp.id join builder_employee_access_type as access on access.id=er.role_id where emp.builder_id="+builderEmployee.getBuilder().getId()+" GROUP by emp.id order by emp.id DESC";
+		String hql = "select emp.id as id, emp.name as name, emp.photo as image, emp.mobile as mobileNo, emp.email as email,GROUP_CONCAT(access.name SEPARATOR ', ') as access from builder_employee as emp join employee_role as er on er.emp_id=emp.id join builder_employee_access_type as access on access.id=er.role_id where emp.builder_id="+builderEmployee.getBuilder().getId()+" GROUP by emp.id order by emp.id DESC";
 		HibernateUtil hibernateUtil = new HibernateUtil();
 		Session session = hibernateUtil.getSessionFactory().openSession();
 		Query query = session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(EmployeeList.class));
