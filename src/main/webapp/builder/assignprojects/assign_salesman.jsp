@@ -300,7 +300,7 @@ function getProjectSalesheadList(element,id){
 	 });
 	 if(ids !=""){
 		 ajaxindicatorstart("Please wait, while loading...");
-		$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:ids,emp_id : id},function(data){
+		$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:ids,emp_id : id, reporting_id : <%out.print(emp_id);%>},function(data){
 			var assign = "";
 			var a1="";
 				if(data.status==1){
@@ -330,7 +330,7 @@ function getProjectSalesmanList(element,id){
 	 });
 	 if(ids !=""){
 		 ajaxindicatorstart("Please wait, while loading...");
-		$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:ids,emp_id : id},function(data){
+		$.post("${baseUrl}/webapi/builder/allot/projects",{project_ids:ids,emp_id : id, reporting_id : <%out.print(emp_id);%>},function(data){
 			var assign = "";
 			var a1="";
 				if(data.status==1){

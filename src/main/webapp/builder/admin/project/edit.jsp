@@ -828,7 +828,7 @@
 				                                    			<label for="example-search-input" class="col-sm-4 control-label">% of net payable<span class='text-danger'>*</span></label>
 				                                    			<div class="col-sm-6">
 				                                    				<div>
-				                                        				<input class="form-control project" type="text" autocomplete="off" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable<%out.print(i); %>" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
+				                                        				<input class="form-control project" type="text" autocomplete="off" onblur="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable<%out.print(i); %>" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 					                                    			</div>
 					                                    			<div class="messageContainer"></div>
 					                                  			</div>
@@ -1042,9 +1042,8 @@ function vaildateSum(){
 			}else{
 				isEmpty = true;
 			}
-		})
+		});
 		
-		alert(sum);
 		if(sum>100){
 			alert("The sum of percentages must be 100");
 			$("#paymentbtn").attr('disabled',true);
@@ -1657,24 +1656,24 @@ $('#paymentfrm').bootstrapValidator({
                     max: 100,
                     message: 'The percentage must be between 0 and 100'
 	        	},
-	        	 callback: {
-                     message: 'The sum of percentages must be 100',
-                     callback: function(value, validator, $field) {
-                         var percentage = validator.getFieldElements('payable[]'),
-                             length     = percentage.length,
-                             sum        = 0;
+// 	        	 callback: {
+//                      message: 'The sum of percentages must be 100',
+//                      callback: function(value, validator, $field) {
+//                          var percentage = validator.getFieldElements('payable[]'),
+//                              length     = percentage.length,
+//                              sum        = 0;
 
-                         for (var i = 0; i < length; i++) {
-                             sum += parseFloat($(percentage[i]).val());
-                         }
-                         if (sum === 100) {
-                             validator.updateStatus('payable[]', 'VALID', 'callback');
-                             return true;
-                         }
+//                          for (var i = 0; i < length; i++) {
+//                              sum += parseFloat($(percentage[i]).val());
+//                          }
+//                          if (sum === 100) {
+//                              validator.updateStatus('payable[]', 'VALID', 'callback');
+//                              return true;
+//                          }
 
-                         return false;
-                     }
-                 },
+//                          return false;
+//                      }
+//                  },
 		        notEmpty: {
 		    		message: 'Payable is required and cannot be empty'
 		        },

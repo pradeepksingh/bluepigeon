@@ -35,23 +35,25 @@ int access_id = 0;
 	BuilderEmployee builder = new BuilderEmployee();
 	int builder_id = 0;
 	List<BuilderProjectPropertyConfigurationInfo> builderProjectPropertyConfigurationInfos =null;
-
+	String keyword ="";
 	if(session!=null)
 	{
 		if(session.getAttribute("ubname") != null)
 		{
 			builder  = (BuilderEmployee)session.getAttribute("ubname");
 			builder_id = builder.getBuilder().getId();
-			emp_id = builder.getId();
+			//emp_id = builder.getId();
 			access_id = builder.getBuilderEmployeeAccessType().getId();
 			if(builder_id > 0 && access_id ==5){
 				sourceList = new ProjectDAO().getAllSourcesByBuilderId(builder_id);
 				salesmanList = new BuilderDetailsDAO().getBuilderSalesman(builder);
 				if (request.getParameterMap().containsKey("project_id")) {
 					projectId = Integer.parseInt(request.getParameter("project_id")); 
+					emp_id = Integer.parseInt(request.getParameter("emp_id")); 
+					keyword = request.getParameter("keyword");
 					builderProject = new ProjectDAO().getBuilderActiveProjectById(projectId);
 				 	builderProjectPropertyConfigurationInfos = new ProjectDAO().getPropertyConfigByProjectId(projectId);
-				 	newLeadLists = new ProjectDAO().getNewLeadList(projectId,builder);
+				 	newLeadLists = new ProjectDAO().getNewLeadList(projectId,emp_id,keyword);
 				 	if(builderPropertyTypes != null){
 					 	if(builderPropertyTypes.size()>0)
 					 		type_size = builderPropertyTypes.size();

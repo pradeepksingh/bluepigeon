@@ -52,10 +52,8 @@
  	String image  = ""; 
  	List<ProjectImageGallery> imageGaleries = new ArrayList<ProjectImageGallery>(); 
  	List<Locality> localities = new LocalityNamesImp().getLocalityActiveList(); 
- 	if (request.getParameterMap().containsKey("project_id")) {
- 		project_id = Integer.parseInt(request.getParameter("project_id")); 
- 	}
- 	projectList = new ProjectDAO().getBuilderActiveProjectById(project_id);
+ 	
+ 
  	if (request.getParameterMap().containsKey("building_id")) {
  		if(request.getParameter("building_id").trim().length()>0){
  			nbuilding_id = Integer.parseInt(request.getParameter("building_id")); 
@@ -78,8 +76,13 @@
  			emp_id = builder.getId();
  			access_id = builder.getBuilderEmployeeAccessType().getId(); 
  			if(access_id == 5){
+ 				try{
+ 				if (request.getParameterMap().containsKey("project_id")) {
+ 			 		project_id = Integer.parseInt(request.getParameter("project_id")); 
+ 			 		projectList = new ProjectDAO().getBuilderActiveProjectById(project_id);
+ 			 	
 	 			builderBuildingList = new ProjectDAO().getBuilderActiveProjectBuildings(project_id); 
-	 			
+	 		
 	 				building_id = builderBuildingList.get(0).getId(); 
 				flatListDatas = new ProjectDAO().getFlatDetails(project_id,building_id,floor_id,0); 
 	 			bookingFlatList2 = new ProjectDAO().getFlatBookeddetails(project_id,building_id,floor_id,0); 
@@ -98,6 +101,12 @@
 						floor_size_list = floorList.size(); 
 	 				} 
 	 			} 
+ 			 		
+ 			 		
+ 			}
+ 				}catch(Exception e){
+ 					
+ 				}
  			}else{
  				response.sendRedirect(request.getContextPath()+"/builder/dashboard.jsp");
  			}

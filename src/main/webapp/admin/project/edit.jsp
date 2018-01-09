@@ -923,7 +923,7 @@
 													<div class="form-group" id="error-payable">
 														<label class="control-label col-sm-8">% of Net Payable <span class='text-danger'>*</span></label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control" onkeyup="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable<%out.print(i); %>" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
+															<input type="text" class="form-control" onblur="javascript:vaildPayablePer(<%out.print(i); %>)" onkeypress=" return isNumber(event, this);" id="payable<%out.print(i); %>" name="payable[]" value="<% if(projectPaymentInfo.getPayable() != null) { out.print(projectPaymentInfo.getPayable());}%>"/>
 														</div>
 														<div class="epayable<%out.print(i);%>"></div>
 													</div>
@@ -983,7 +983,7 @@
 											<div class="row">
 												<div class="col-lg-12">
 													<div class="col-sm-12">
-														<button type="submit" class="btn btn-success btn-sm" id="paymentbtn">SAVE</button>
+														<button type="button" class="btn btn-success btn-sm" id="paymentbtn">SAVE</button>
 													</div>
 												</div>
 											</div>
@@ -1271,10 +1271,7 @@ function vaildateSum(){
 		alert("The sum of percentages must be 100");
 		$("#paymentbtn").attr('disabled',true);
 	}else if(sum<100){
-		alert("The percentage must be between 0 and 100");
-		$("#paymentbtn").attr('disabled',true);
-	}else	if(sum<0 || sum>100){
-		alert("The percentage must be between 0 and 100");
+		alert("The sum of percentages must be 100");
 		$("#paymentbtn").attr('disabled',true);
 	}else{
 		if(isEmpty){
@@ -1487,6 +1484,26 @@ $("#state_id").change(function(){
 // 		},'json');
 // 	}
 // });
+$("#paymentbtn").click(function(){
+	 var isEmpty = false;
+		$("input[name^='payable']").each(function() { 
+			if($(this).val()==""){
+				isEmpty = true;
+			}
+		});
+		$("input[name^='schedule']").each(function() { 
+			if($(this).val()==""){
+				isEmpty = true;
+			}
+		});
+	if(isEmpty){		
+		alert("Please fill All mandatory fields");
+	}else{
+		updatePaymentSchudle();
+	}
+	
+	//alert("Clicked");
+});
 function updateProjectImages() {
 	ajaxindicatorstart("Please wait while.. we load ...");
 	var options = {
@@ -1905,29 +1922,29 @@ function saveProjectDetails(){
 	});
 }
 
-$('#paymentfrm').bootstrapValidator({
-	container: function($field, validator) {
-		return $field.parent().next('.messageContainer');
-   	},
-    feedbackIcons: {
-        validating: 'glyphicon glyphicon-refresh'
-    },
-    excluded: ':disabled',
-    fields: {
-    	'schedule[]': {
-            validators: {
-		    	notEmpty: {
-		    		message: 'Schedule is required and cannot be empty'
-		        },
-            }
-        },
-        'payable[]': {
-            validators: {
-            	between: {
-                    min: 0,
-                    max: 100,
-                    message: 'The percentage must be between 0 and 100'
-	        	},
+// $('#paymentfrm').bootstrapValidator({
+// 	container: function($field, validator) {
+// 		return $field.parent().next('.messageContainer');
+//    	},
+//     feedbackIcons: {
+//         validating: 'glyphicon glyphicon-refresh'
+//     },
+//     excluded: ':disabled',
+//     fields: {
+//     	'schedule[]': {
+//             validators: {
+// 		    	notEmpty: {
+// 		    		message: 'Schedule is required and cannot be empty'
+// 		        },
+//             }
+//         },
+//         'payable[]': {
+//             validators: {
+//             	between: {
+//                     min: 0,
+//                     max: 100,
+//                     message: 'The percentage must be between 0 and 100'
+// 	        	},
 // 	        	 callback: {
 //                      message: 'The sum of percentages must be 100',
 //                      callback: function(value, validator, $field) {
@@ -1944,17 +1961,17 @@ $('#paymentfrm').bootstrapValidator({
 //                          return false;
 //                      }
 //                  },
-		        notEmpty: {
-		    		message: 'Payable is required and cannot be empty'
-		        },
-            }
-        },
-    }
-}).on('success.form.bv', function(event,data) {
-	// Prevent form submission
-	event.preventDefault();
-	updatePaymentSchudle();
-});
+// 		        notEmpty: {
+// 		    		message: 'Payable is required and cannot be empty'
+// 		        },
+//             }
+//         },
+//     }
+// }).on('success.form.bv', function(event,data) {
+// 	// Prevent form submission
+// 	event.preventDefault();
+// 	updatePaymentSchudle();
+// });
  
 function updatePaymentSchudle(){
 	ajaxindicatorstart("Please wait while.. we load ...");
@@ -1987,7 +2004,12 @@ function showPaymentResponse(resp, statusText, xhr, $form){
         $("#paymentresponse").html(resp.message);
         $("#paymentresponse").show();
         alert(resp.message);
-    	ajaxindicatorstop();
+    	$.get('${baseUrl}/admin/project/partialedit.jsp?project_id=<% out.print(project_id);%>',{},function(data) {
+   	    	$("#payment_schedule").html(data);
+   	    	ajaxindicatorstop();
+   	    },'html');
+    	$('#paymentfrm').data('bootstrapValidator').revalidateField('schedule[]');
+    	$('#paymentfrm').data('bootstrapValidator').revalidateField('payable[]');
   	}
 }
 
@@ -2195,7 +2217,7 @@ function addMoreSchedule() {
 				+'<label class="control-label col-sm-8">% of Net Payable <span class="text-danger">*</span></label>'
 				+'<div class="col-sm-4">'
 // 				+'<input type="text" class="form-control" required=true id="payable'+schedule_count+'" onkeyup="javascript:vaildPayablePer('+schedule_count+')" onkeypress="return isNumber(event, this);" name="payable[]"/>'
-				+'<input type="text" class="form-control" required=true id="payable'+schedule_count+'" onkeypress="return isNumber(event, this);"   name="payable[]"/>'
+				+'<input type="text" class="form-control" required=true id="payable'+schedule_count+'"    onkeypress="return isNumber(event, this);"   name="payable[]"/>'
 				+'</div>'
 				+'<div class="messageContainer"></div>'
 				+'</div>'
@@ -2238,13 +2260,16 @@ function deleteSchudle(id){
 	
 	var flag = confirm("Are you sure, you want to delete schedule ?");
 	if(flag){
+		ajaxindicatorstart("Please wait while.. we load ...");
 		$.get("${baseUrl}/webapi/project/payment/delete/"+id,{}, function(data){
-			alert(data.message);
-			if(data.status == 1){
-				$("#schedule-"+id).remove();
-				vaildateSum();
-			}
-		})
+			$.get('${baseUrl}/admin/project/partialedit.jsp?project_id=<% out.print(project_id);%>',{},function(data) {
+	   	    	$("#payment_schedule").html(data);
+	   	    	ajaxindicatorstop();
+	   	    },'html');
+			vaildateSum();
+		});
+		$('#paymentfrm').data('bootstrapValidator').revalidateField('schedule[]');
+    	$('#paymentfrm').data('bootstrapValidator').revalidateField('payable[]');
 	}
 }
 
