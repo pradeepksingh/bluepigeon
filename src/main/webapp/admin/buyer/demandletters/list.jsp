@@ -71,7 +71,7 @@
  											<% out.print(demandLetterList.getBuyerName()); %> 
 										</td>
 										<td>
- 											<a href="${baseUrl}/admin/buyer/demandletters/edit.jsp?demandletter_id=<% out.print(demandLetterList.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+ 											<a href="${baseUrl}/<% out.print(demandLetterList.getId());%>" class="btn btn-success icon-btn btn-xs"><i class="fa fa-download"></i>Download</a>
 										</td>
 									</tr>
  									<% } %> 

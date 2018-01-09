@@ -449,11 +449,12 @@ public class ProjectController extends ResourceConfig {
 					if(names.getValueAs(String.class) != null || names.getValueAs(String.class).trim().length() > 0){
 						builderProjectPaymentInfo.setSchedule(names.getValueAs(String.class).toString());
 					}
+					if(payables.get(i) != null){
 					if(payables.get(i).getValueAs(Double.class) != 0 && payables.get(i).getValueAs(Double.class) !=null){
 						builderProjectPaymentInfo.setPayable(payables.get(i).getValueAs(Double.class));
 						sum+=payables.get(i).getValueAs(Double.class);
 					}
-					
+					}
 //					if(amounts.get(i).getValueAs(Double.class) !=0 && amounts.get(i).getValueAs(Double.class) != null){
 //						builderProjectPaymentInfo.setAmount(amounts.get(i).getValueAs(Double.class));
 //					}
@@ -465,11 +466,11 @@ public class ProjectController extends ResourceConfig {
 				System.err.println("update sum :: "+sum);
 				if(sum<100){
 					responseMessage.setStatus(0);
-					responseMessage.setMessage("The percentage must be between 0 and 100");
+					responseMessage.setMessage("The sum of percentages must be 100");
 				}else
 				if( sum>100){
 					responseMessage.setStatus(0);
-					responseMessage.setMessage("The percentage must be 100");
+					responseMessage.setMessage("The sum of percentages must be 100");
 				}else{
 					projectDAO.updateProjectPaymentInfo(updateProjectPaymentInfos);
 					responseMessage.setStatus(1);
@@ -480,11 +481,11 @@ public class ProjectController extends ResourceConfig {
 				System.err.println("Save sum :: "+sum);
 				if(sum<100){
 					responseMessage.setStatus(0);
-					responseMessage.setMessage("The percentage must be between 0 and 100");
+					responseMessage.setMessage("The sum of percentages must be 100");
 				}else
 				if( sum>100){
 					responseMessage.setStatus(0);
-					responseMessage.setMessage("The percentage must be 100");
+					responseMessage.setMessage("The sum of percentages must be 100");
 				}else{
 					projectDAO.saveProjectPaymentInfo(saveProjectPaymentInfos);
 					responseMessage.setStatus(1);

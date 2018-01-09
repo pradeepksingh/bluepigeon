@@ -811,7 +811,7 @@ public class BuilderController {
 	@Path("/allot/projects")
 	@Produces(MediaType.APPLICATION_JSON)
 //	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseMessage saveAllotedProjets(	@FormParam("project_ids") String projectId, @FormParam("emp_id") int empId){
+	public ResponseMessage saveAllotedProjets(	@FormParam("project_ids") String projectId, @FormParam("emp_id") int empId, @FormParam("reporting_id") int reporting_id){
 		ResponseMessage responseMessage = new ResponseMessage();
 		String strProject [] = projectId.split(",");
 		System.err.println(projectId);
@@ -831,6 +831,13 @@ public class BuilderController {
 			
 			if(allotProjectList.size() > 0){
 				responseMessage =  new BuilderDetailsDAO().saveAllotedProjects(allotProjectList);
+				BuilderEmployee empreporting = new BuilderEmployee();
+				empreporting.setId(reporting_id);
+				
+				BuilderEmployee builderEmployee2 = new BuilderDetailsDAO().getBuilderEmployeeById(empId);
+				builderEmployee2.setId(empId);
+				builderEmployee2.setBuilderEmployee(empreporting);
+				new BuilderDetailsDAO().updateBuilderEmployee(builderEmployee2);
 			}
 		}else{
 			responseMessage.setStatus(0);

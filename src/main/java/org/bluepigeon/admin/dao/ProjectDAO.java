@@ -451,20 +451,58 @@ public class ProjectDAO {
 	}
 	/******************************************Update Project Payment Info *****************************/
 	/**
-	 * Update Project payment info
+	 * Update Project payment info (old code)
 	 * @param builderProjectPaymentInfos
 	 */
-	public void updateProjectPaymentInfo(List<BuilderProjectPaymentInfo> builderProjectPaymentInfos){
-		HibernateUtil hibernateUtil =new HibernateUtil();
-		Session session =hibernateUtil.openSession();
-		session.beginTransaction();
-	    
+//	public void updateProjectPaymentInfo(List<BuilderProjectPaymentInfo> builderProjectPaymentInfos){
+//		HibernateUtil hibernateUtil =new HibernateUtil();
+//		Session session =hibernateUtil.openSession();
+//		session.beginTransaction();
+//	    
+//		for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
+//			session.update(builderProjectPaymentInfo);
+//		}
+//		session.getTransaction().commit();
+//		session.close();
+//	}
+	/**
+	 *  @author pankaj
+	 * Update Project payment info (new code)
+	 * @param builderProjectPaymentInfos
+	 */
+	public ResponseMessage updateProjectPaymentInfo(List<BuilderProjectPaymentInfo> builderProjectPaymentInfos){
+		ResponseMessage response = new ResponseMessage();
+		BuilderProject builderProject = builderProjectPaymentInfos.get(0).getBuilderProject();
+		
+		/******* delete enteries **********/
+		
+		
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		String delete_project_type = "DELETE from BuilderProjectPaymentInfo where builderProject.id = :project_id";
+		Session newsession1 = hibernateUtil.openSession();
+		newsession1.beginTransaction();
+		Query smdelete = newsession1.createQuery(delete_project_type);
+		smdelete.setParameter("project_id", builderProject.getId());
+		smdelete.executeUpdate();
+		newsession1.getTransaction().commit();
+		newsession1.close();
+		
+		/***** Add New Enteries *******/
+		
+		Session session1 = hibernateUtil.openSession();
+		session1.beginTransaction();
 		for(BuilderProjectPaymentInfo builderProjectPaymentInfo : builderProjectPaymentInfos){
-			session.update(builderProjectPaymentInfo);
+			session1.save(builderProjectPaymentInfo);
 		}
-		session.getTransaction().commit();
-		session.close();
+		session1.getTransaction().commit();
+		session1.close();
+		
+		response.setId(builderProject.getId());
+		response.setStatus(1);
+		response.setMessage("Project Payment Updated Successfully.");
+		return response;
 	}
+	
 	public void saveProjectPaymentInfo(List<BuilderProjectPaymentInfo> builderProjectPaymentInfos){
 		HibernateUtil hibernateUtil =new HibernateUtil();
 		Session session =hibernateUtil.openSession();
@@ -776,6 +814,7 @@ public class ProjectDAO {
 		//query.executeUpdate();
 		transaction.commit();
 		session.close();
+		resp.setId(projectId);
 		resp.setMessage("Project Payment Schedule deleted successfully.");
 		resp.setStatus(1);
 		return resp;

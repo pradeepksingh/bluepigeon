@@ -108,7 +108,7 @@
                     		<div class="row">
                     			<div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
                         			<div class="form-group row">
-										<label for="example-text-input" class="col-sm-5 col-form-label"> Name</label>
+										<label for="example-text-input" class="col-sm-5 col-form-label"> Name <span class='text-danger'>*</span></label>
 										<div class="col-sm-7">
 											<div>
 								 				<input class="form-control  form-control1" type="text" id="name" name="name"  placeholder="employee name">
@@ -117,7 +117,7 @@
 							  			</div>
 						  			</div>
 						   			<div class="form-group row">
-							 			<label for="example-search-input" class="col-sm-5 col-form-label">Email ID</label>
+							 			<label for="example-search-input" class="col-sm-5 col-form-label">Email ID <span class='text-danger'>*</span></label>
 							 			<div class="col-sm-7">
 											<div>
 								   				<input class="form-control  form-control1" type="text" id="email" name="email" placeholder="employee email id">
@@ -126,7 +126,7 @@
 							 			</div>
 						   			</div>
 									<div class="form-group row">
-									   <label for="example-search-input" class="col-sm-5 col-form-label">Permanent Address</label>
+									   <label for="example-search-input" class="col-sm-5 col-form-label">Permanent Address <span class='text-danger'>*</span></label>
 										  <div class="col-sm-7">
 										  	<div>
 										     	<textarea placeholder="Enter permanents address" id="address1" name="address1"></textarea>
@@ -135,7 +135,7 @@
 										</div>
 									 </div>
 									 <div class="form-group row">
-									  <label for="example-search-input" class="col-sm-5 col-form-label">Access Type</label>
+									  <label for="example-search-input" class="col-sm-5 col-form-label">Access Type <span class='text-danger'>*</span></label>
 										<div class="col-sm-7">
 											<div id="accessrole">
 												 <select  id="accessid" name="accessid[]" multiple>
@@ -149,7 +149,7 @@
 										</div>
 								    </div>
 								    <div class="form-group row">
-									  <label for="example-search-input" class="col-sm-5 col-form-label">Project </label>
+									  <label for="example-search-input" class="col-sm-5 col-form-label">Project <span class='text-danger'>*</span></label>
 										<div class="col-sm-7">
 											<div id="assignproject">
 											    <select  id="projects" name="projects[]" multiple>
@@ -163,7 +163,7 @@
 										 </div>
 								    </div>
 								    <div class="form-group row">
-							   			<label for="example-search-input" class="col-sm-5 col-form-label">Area</label>
+							   			<label for="example-search-input" class="col-sm-5 col-form-label">Area <span class='text-danger'>*</span></label>
 										<div class="col-sm-7">
 											<div>
 										   		<select name="area_id" id="area_id"></select>
@@ -172,7 +172,7 @@
 										</div>
 							  		</div>
 		                            <div class="form-group row">
-							           <label for="example-tel-input" class="col-sm-5 col-form-label">Aadhaar Card No. </label>
+							           <label for="example-tel-input" class="col-sm-5 col-form-label">Aadhaar Card No. <span class='text-danger'>*</span></label>
 								         <div class="col-sm-7">
 								         	<div>
 									       		<input class="form-control  form-control1" type="text" id="aadhaar" name="aadhaar" placeholder="">
@@ -183,7 +183,7 @@
 						       </div>
 								<div class="col-md-6 col-sm-12 col-xs-12 padding-left-right">
 									<div class="form-group row">
-										<label for="example-text-input" class="col-sm-5 col-form-label"> Contact</label>
+										<label for="example-text-input" class="col-sm-5 col-form-label"> Contact <span class='text-danger'>*</span></label>
 										<div class="col-sm-7">
 									  		<div>
 											 	<input class="form-control form-control1" type="text" id="contact" name="contact"  placeholder="">
@@ -192,7 +192,7 @@
 										</div>
 							   		</div>
 							   		<div class="form-group row">
-										<label for="example-search-input" class="col-sm-5 col-form-label">Current Address</label>
+										<label for="example-search-input" class="col-sm-5 col-form-label">Current Address <span class='text-danger'>*</span></label>
 									 	<div class="col-sm-7">
 											<div>
 										     	<textarea placeholder="Enter current address" id="address" name="address"></textarea>
@@ -201,7 +201,7 @@
 									 	</div>
 							   		</div>
 							   		<div class="form-group row">
-		   					  			<label for="example-text-input" class="col-sm-5 col-form-label">Designation</label>
+		   					  			<label for="example-text-input" class="col-sm-5 col-form-label">Designation <span class='text-danger'>*</span></label>
 		      							<div class="col-sm-7">
 		      								<div>
 			    								<input class="form-control form-control1" type="text" name="designation" id="designation"  placeholder="">
@@ -210,7 +210,7 @@
 		      							</div>
 		 							</div>
 		  							<div class="form-group row">
-										<label for="example-search-input" class="col-sm-5 col-form-label">Employee ID</label>
+										<label for="example-search-input" class="col-sm-5 col-form-label">Employee ID <span class='text-danger'>*</span></label>
 										<div class="col-sm-7">
 											<div>
 		   										<input class="form-control  form-control1" type="text"  id="empid" name="empid" placeholder="">
@@ -219,7 +219,7 @@
 		 								</div>
 							   		</div>
 							   		<div class="form-group row">
-									 	<label for="example-search-input" class="col-sm-5 col-form-label">City</label>
+									 	<label for="example-search-input" class="col-sm-5 col-form-label">City <span class='text-danger'>*</span></label>
 										<div class="col-sm-7">
 											<div>
 											    <select name="city_id" id="city_id">
@@ -235,7 +235,7 @@
 										 </div>
 								    </div>
 							  		<div class="form-group row">
-										<label for="example-search-input" class="col-sm-5 col-form-label">Upload Photo</label>
+										<label for="example-search-input" class="col-sm-5 col-form-label">Upload Photo <span class='text-danger'>*</span></label>
 										<div class="col-sm-7">
 											<div>
 											 	<div class="file-upload">
@@ -248,7 +248,7 @@
 										</div>
 								 	</div>
 								  	<div class="form-group row">
-										<label for="example-search-input" class="col-sm-5 col-form-label">Pan Card No.</label>
+										<label for="example-search-input" class="col-sm-5 col-form-label">Pan Card No. <span class='text-danger'>*</span></label>
 										<div class="col-sm-7">
 											<div>
 											 	<input class="form-control  form-control1" type="text" id="pancard" name="pancard" placeholder="">
